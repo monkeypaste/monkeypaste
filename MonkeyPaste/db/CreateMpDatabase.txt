@@ -1,0 +1,51 @@
+create database Mp;
+
+use database Mp;
+
+create table MpDevice(
+MpDeviceId int auto_increment not null primary key,
+IpAddress varchar(30) not null
+); 
+create table MpDeviceType( 
+MpDeviceTypeId int not null auto_increment primary key, 
+DeviceTypeName varchar(15) 
+);
+create table MpPlatformType( 
+MpPlatformTypeId int not null auto_increment primary key, 
+PlatformName varchar(30) not null, 
+MpDeviceTypeId int not null, 
+foreign key(MpDeviceTypeId) references MpDeviceType(MpDeviceTypeId) 
+); 
+
+create table MpPlatform( 
+MpPlatformId int auto_increment not null primary key, 
+MpPlatformTypeId int not null, 
+VersionId varchar(30), 
+foreign key(MpPlatformTypeId) references MpPlatformType(MpPlatformTypeId) 
+);
+
+create table MpCopyItem(
+MpCopyItemId int not null auto_increment primary key,
+CreationDateTime datetime not null default current_timestamp
+);
+
+create table MpApp (
+MpAppId int not null auto_increment primary key,
+MpDeviceId int not null,
+AppPath varchar(255),
+UrlPath varchar(255),
+foreign key (MpDeviceId) references MpDevice(MpDeviceId)
+);
+
+create table MpTextItem(
+MpTextItemId int auto_increment not null primary key,
+MpCopyItemId int not null,
+ItemText longtext not null default 'No Text',
+MpAppId int not null,
+MpDeviceId int not null,
+foreign key (MpCopyItemId) references MpCopyItem(MpCopyItemId),
+foreign key (MpAppId) references MpApp(MpAppId)
+);
+
+
+

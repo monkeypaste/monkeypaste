@@ -1,0 +1,138 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MonkeyPasteStoreContainer" CdmEntityContainer="mainEntities">
+    <EntitySetMapping Name="MpApps">
+      <EntityTypeMapping TypeName="MonkeyPaste.MpApp">
+        <MappingFragment StoreEntitySet="MpApp">
+          <ScalarProperty Name="pk_MpAppId" ColumnName="pk_MpAppId" />
+          <ScalarProperty Name="fk_MpIconId" ColumnName="fk_MpIconId" />
+          <ScalarProperty Name="SourcePath" ColumnName="SourcePath" />
+          <ScalarProperty Name="IsAppRejected" ColumnName="IsAppRejected" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MpClients">
+      <EntityTypeMapping TypeName="MonkeyPaste.MpClient">
+        <MappingFragment StoreEntitySet="MpClient">
+          <ScalarProperty Name="pk_MpClientId" ColumnName="pk_MpClientId" />
+          <ScalarProperty Name="fk_MpPlatformId" ColumnName="fk_MpPlatformId" />
+          <ScalarProperty Name="Ip4Address" ColumnName="Ip4Address" />
+          <ScalarProperty Name="AccessToken" ColumnName="AccessToken" />
+          <ScalarProperty Name="LoginDateTime" ColumnName="LoginDateTime" />
+          <ScalarProperty Name="LogoutDateTime" ColumnName="LogoutDateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MpCopyItems">
+      <EntityTypeMapping TypeName="MonkeyPaste.MpCopyItem">
+        <MappingFragment StoreEntitySet="MpCopyItem">
+          <ScalarProperty Name="pk_MpCopyItemId" ColumnName="pk_MpCopyItemId" />
+          <ScalarProperty Name="fk_MpCopyItemTypeId" ColumnName="fk_MpCopyItemTypeId" />
+          <ScalarProperty Name="fk_MpClientId" ColumnName="fk_MpClientId" />
+          <ScalarProperty Name="fk_MpAppId" ColumnName="fk_MpAppId" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="CopyDateTime" ColumnName="CopyDateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MpCopyItemTypes">
+      <EntityTypeMapping TypeName="MonkeyPaste.MpCopyItemType">
+        <MappingFragment StoreEntitySet="MpCopyItemType">
+          <ScalarProperty Name="pk_MpCopyItemTypeId" ColumnName="pk_MpCopyItemTypeId" />
+          <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MpDeviceTypes">
+      <EntityTypeMapping TypeName="MonkeyPaste.MpDeviceType">
+        <MappingFragment StoreEntitySet="MpDeviceType">
+          <ScalarProperty Name="pk_MpDeviceTypeId" ColumnName="pk_MpDeviceTypeId" />
+          <ScalarProperty Name="DeviceTypeName" ColumnName="DeviceTypeName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MpFileDropListItems">
+      <EntityTypeMapping TypeName="MonkeyPaste.MpFileDropListItem">
+        <MappingFragment StoreEntitySet="MpFileDropListItem">
+          <ScalarProperty Name="pk_MpFileDropListItemId" ColumnName="pk_MpFileDropListItemId" />
+          <ScalarProperty Name="fk_MpCopyItemId" ColumnName="fk_MpCopyItemId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MpFileDropListSubItems">
+      <EntityTypeMapping TypeName="MonkeyPaste.MpFileDropListSubItem">
+        <MappingFragment StoreEntitySet="MpFileDropListSubItem">
+          <ScalarProperty Name="pk_MpFileDropListSubItemId" ColumnName="pk_MpFileDropListSubItemId" />
+          <ScalarProperty Name="fk_MpFileDropListItemId" ColumnName="fk_MpFileDropListItemId" />
+          <ScalarProperty Name="ItemPath" ColumnName="ItemPath" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MpIcons">
+      <EntityTypeMapping TypeName="MonkeyPaste.MpIcon">
+        <MappingFragment StoreEntitySet="MpIcon">
+          <ScalarProperty Name="pk_MpIconId" ColumnName="pk_MpIconId" />
+          <ScalarProperty Name="IconBlob" ColumnName="IconBlob" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MpImageItems">
+      <EntityTypeMapping TypeName="MonkeyPaste.MpImageItem">
+        <MappingFragment StoreEntitySet="MpImageItem">
+          <ScalarProperty Name="pk_MpImageItemId" ColumnName="pk_MpImageItemId" />
+          <ScalarProperty Name="fk_MpCopyItemId" ColumnName="fk_MpCopyItemId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MpPasteHistories">
+      <EntityTypeMapping TypeName="MonkeyPaste.MpPasteHistory">
+        <MappingFragment StoreEntitySet="MpPasteHistory">
+          <ScalarProperty Name="pk_MpPasteHistoryId" ColumnName="pk_MpPasteHistoryId" />
+          <ScalarProperty Name="fk_MpCopyItemId" ColumnName="fk_MpCopyItemId" />
+          <ScalarProperty Name="fk_MpClientId" ColumnName="fk_MpClientId" />
+          <ScalarProperty Name="fk_MpAppId" ColumnName="fk_MpAppId" />
+          <ScalarProperty Name="PasteDateTime" ColumnName="PasteDateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MpPlatforms">
+      <EntityTypeMapping TypeName="MonkeyPaste.MpPlatform">
+        <MappingFragment StoreEntitySet="MpPlatform">
+          <ScalarProperty Name="pk_MpPlatformId" ColumnName="pk_MpPlatformId" />
+          <ScalarProperty Name="fk_MpPlatformTypeId" ColumnName="fk_MpPlatformTypeId" />
+          <ScalarProperty Name="fk_MpDeviceTypeId" ColumnName="fk_MpDeviceTypeId" />
+          <ScalarProperty Name="Version" ColumnName="Version" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MpPlatformTypes">
+      <EntityTypeMapping TypeName="MonkeyPaste.MpPlatformType">
+        <MappingFragment StoreEntitySet="MpPlatformType">
+          <ScalarProperty Name="pk_MpPlatformTypeId" ColumnName="pk_MpPlatformTypeId" />
+          <ScalarProperty Name="PlatformName" ColumnName="PlatformName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MpSubTextTokens">
+      <EntityTypeMapping TypeName="MonkeyPaste.MpSubTextToken">
+        <MappingFragment StoreEntitySet="MpSubTextToken">
+          <ScalarProperty Name="pk_MpSubTextTokenId" ColumnName="pk_MpSubTextTokenId" />
+          <ScalarProperty Name="fk_MpCopyItemId" ColumnName="fk_MpCopyItemId" />
+          <ScalarProperty Name="fk_MpCopyItemTypeId" ColumnName="fk_MpCopyItemTypeId" />
+          <ScalarProperty Name="StartIdx" ColumnName="StartIdx" />
+          <ScalarProperty Name="EndIdx" ColumnName="EndIdx" />
+          <ScalarProperty Name="InstanceIdx" ColumnName="InstanceIdx" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MpTextItems">
+      <EntityTypeMapping TypeName="MonkeyPaste.MpTextItem">
+        <MappingFragment StoreEntitySet="MpTextItem">
+          <ScalarProperty Name="pk_MpTextItemId" ColumnName="pk_MpTextItemId" />
+          <ScalarProperty Name="fk_MpCopyItemId" ColumnName="fk_MpCopyItemId" />
+          <ScalarProperty Name="ItemText" ColumnName="ItemText" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

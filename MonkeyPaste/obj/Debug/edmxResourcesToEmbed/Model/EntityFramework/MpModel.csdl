@@ -1,0 +1,426 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MonkeyPaste" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="MpApp">
+    <Key>
+      <PropertyRef Name="pk_MpAppId" />
+    </Key>
+    <Property Name="pk_MpAppId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fk_MpIconId" Type="Int64" Nullable="false" />
+    <Property Name="SourcePath" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IsAppRejected" Type="Int64" Nullable="false" />
+    <NavigationProperty Name="MpIcon" Relationship="Self.FK_MpApp_0_0" FromRole="MpApp" ToRole="MpIcon" />
+    <NavigationProperty Name="MpCopyItems" Relationship="Self.FK_MpCopyItem_0_0" FromRole="MpApp" ToRole="MpCopyItem" />
+    <NavigationProperty Name="MpPasteHistories" Relationship="Self.FK_MpPasteHistory_0_0" FromRole="MpApp" ToRole="MpPasteHistory" />
+  </EntityType>
+  <EntityType Name="MpClient">
+    <Key>
+      <PropertyRef Name="pk_MpClientId" />
+    </Key>
+    <Property Name="pk_MpClientId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fk_MpPlatformId" Type="Int64" Nullable="false" />
+    <Property Name="Ip4Address" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="AccessToken" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="LoginDateTime" Type="DateTime" Nullable="false" />
+    <Property Name="LogoutDateTime" Type="DateTime" />
+    <NavigationProperty Name="MpPlatform" Relationship="Self.FK_MpClient_0_0" FromRole="MpClient" ToRole="MpPlatform" />
+    <NavigationProperty Name="MpCopyItems" Relationship="Self.FK_MpCopyItem_1_0" FromRole="MpClient" ToRole="MpCopyItem" />
+    <NavigationProperty Name="MpPasteHistories" Relationship="Self.FK_MpPasteHistory_1_0" FromRole="MpClient" ToRole="MpPasteHistory" />
+  </EntityType>
+  <EntityType Name="MpCopyItem">
+    <Key>
+      <PropertyRef Name="pk_MpCopyItemId" />
+    </Key>
+    <Property Name="pk_MpCopyItemId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fk_MpCopyItemTypeId" Type="Int64" Nullable="false" />
+    <Property Name="fk_MpClientId" Type="Int64" Nullable="false" />
+    <Property Name="fk_MpAppId" Type="Int64" Nullable="false" />
+    <Property Name="Title" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="false" />
+    <Property Name="CopyDateTime" Type="DateTime" Nullable="false" />
+    <NavigationProperty Name="MpApp" Relationship="Self.FK_MpCopyItem_0_0" FromRole="MpCopyItem" ToRole="MpApp" />
+    <NavigationProperty Name="MpClient" Relationship="Self.FK_MpCopyItem_1_0" FromRole="MpCopyItem" ToRole="MpClient" />
+    <NavigationProperty Name="MpCopyItemType" Relationship="Self.FK_MpCopyItem_2_0" FromRole="MpCopyItem" ToRole="MpCopyItemType" />
+    <NavigationProperty Name="MpFileDropListItems" Relationship="Self.FK_MpFileDropListItem_0_0" FromRole="MpCopyItem" ToRole="MpFileDropListItem" />
+    <NavigationProperty Name="MpImageItems" Relationship="Self.FK_MpImageItem_0_0" FromRole="MpCopyItem" ToRole="MpImageItem" />
+    <NavigationProperty Name="MpPasteHistories" Relationship="Self.FK_MpPasteHistory_2_0" FromRole="MpCopyItem" ToRole="MpPasteHistory" />
+    <NavigationProperty Name="MpSubTextTokens" Relationship="Self.FK_MpSubTextToken_1_0" FromRole="MpCopyItem" ToRole="MpSubTextToken" />
+    <NavigationProperty Name="MpTextItems" Relationship="Self.FK_MpTextItem_0_0" FromRole="MpCopyItem" ToRole="MpTextItem" />
+  </EntityType>
+  <EntityType Name="MpCopyItemType">
+    <Key>
+      <PropertyRef Name="pk_MpCopyItemTypeId" />
+    </Key>
+    <Property Name="pk_MpCopyItemTypeId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TypeName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="MpCopyItems" Relationship="Self.FK_MpCopyItem_2_0" FromRole="MpCopyItemType" ToRole="MpCopyItem" />
+    <NavigationProperty Name="MpSubTextTokens" Relationship="Self.FK_MpSubTextToken_0_0" FromRole="MpCopyItemType" ToRole="MpSubTextToken" />
+  </EntityType>
+  <EntityType Name="MpDeviceType">
+    <Key>
+      <PropertyRef Name="pk_MpDeviceTypeId" />
+    </Key>
+    <Property Name="pk_MpDeviceTypeId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DeviceTypeName" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="MpPlatforms" Relationship="Self.FK_MpPlatform_0_0" FromRole="MpDeviceType" ToRole="MpPlatform" />
+  </EntityType>
+  <EntityType Name="MpFileDropListItem">
+    <Key>
+      <PropertyRef Name="pk_MpFileDropListItemId" />
+    </Key>
+    <Property Name="pk_MpFileDropListItemId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fk_MpCopyItemId" Type="Int64" Nullable="false" />
+    <NavigationProperty Name="MpCopyItem" Relationship="Self.FK_MpFileDropListItem_0_0" FromRole="MpFileDropListItem" ToRole="MpCopyItem" />
+    <NavigationProperty Name="MpFileDropListSubItems" Relationship="Self.FK_MpFileDropListSubItem_0_0" FromRole="MpFileDropListItem" ToRole="MpFileDropListSubItem" />
+  </EntityType>
+  <EntityType Name="MpFileDropListSubItem">
+    <Key>
+      <PropertyRef Name="pk_MpFileDropListSubItemId" />
+    </Key>
+    <Property Name="pk_MpFileDropListSubItemId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fk_MpFileDropListItemId" Type="Int64" Nullable="false" />
+    <Property Name="ItemPath" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="MpFileDropListItem" Relationship="Self.FK_MpFileDropListSubItem_0_0" FromRole="MpFileDropListSubItem" ToRole="MpFileDropListItem" />
+  </EntityType>
+  <EntityType Name="MpIcon">
+    <Key>
+      <PropertyRef Name="pk_MpIconId" />
+    </Key>
+    <Property Name="pk_MpIconId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="IconBlob" Type="Binary" MaxLength="2147483647" FixedLength="false" Nullable="false" />
+    <NavigationProperty Name="MpApps" Relationship="Self.FK_MpApp_0_0" FromRole="MpIcon" ToRole="MpApp" />
+  </EntityType>
+  <EntityType Name="MpImageItem">
+    <Key>
+      <PropertyRef Name="pk_MpImageItemId" />
+    </Key>
+    <Property Name="pk_MpImageItemId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fk_MpCopyItemId" Type="Int64" Nullable="false" />
+    <NavigationProperty Name="MpCopyItem" Relationship="Self.FK_MpImageItem_0_0" FromRole="MpImageItem" ToRole="MpCopyItem" />
+  </EntityType>
+  <EntityType Name="MpPasteHistory">
+    <Key>
+      <PropertyRef Name="pk_MpPasteHistoryId" />
+    </Key>
+    <Property Name="pk_MpPasteHistoryId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fk_MpCopyItemId" Type="Int64" Nullable="false" />
+    <Property Name="fk_MpClientId" Type="Int64" Nullable="false" />
+    <Property Name="fk_MpAppId" Type="Int64" Nullable="false" />
+    <Property Name="PasteDateTime" Type="DateTime" Nullable="false" />
+    <NavigationProperty Name="MpApp" Relationship="Self.FK_MpPasteHistory_0_0" FromRole="MpPasteHistory" ToRole="MpApp" />
+    <NavigationProperty Name="MpClient" Relationship="Self.FK_MpPasteHistory_1_0" FromRole="MpPasteHistory" ToRole="MpClient" />
+    <NavigationProperty Name="MpCopyItem" Relationship="Self.FK_MpPasteHistory_2_0" FromRole="MpPasteHistory" ToRole="MpCopyItem" />
+  </EntityType>
+  <EntityType Name="MpPlatform">
+    <Key>
+      <PropertyRef Name="pk_MpPlatformId" />
+    </Key>
+    <Property Name="pk_MpPlatformId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fk_MpPlatformTypeId" Type="Int64" Nullable="false" />
+    <Property Name="fk_MpDeviceTypeId" Type="Int64" Nullable="false" />
+    <Property Name="Version" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="MpClients" Relationship="Self.FK_MpClient_0_0" FromRole="MpPlatform" ToRole="MpClient" />
+    <NavigationProperty Name="MpDeviceType" Relationship="Self.FK_MpPlatform_0_0" FromRole="MpPlatform" ToRole="MpDeviceType" />
+    <NavigationProperty Name="MpPlatformType" Relationship="Self.FK_MpPlatform_1_0" FromRole="MpPlatform" ToRole="MpPlatformType" />
+  </EntityType>
+  <EntityType Name="MpPlatformType">
+    <Key>
+      <PropertyRef Name="pk_MpPlatformTypeId" />
+    </Key>
+    <Property Name="pk_MpPlatformTypeId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PlatformName" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="MpPlatforms" Relationship="Self.FK_MpPlatform_1_0" FromRole="MpPlatformType" ToRole="MpPlatform" />
+  </EntityType>
+  <EntityType Name="MpSubTextToken">
+    <Key>
+      <PropertyRef Name="pk_MpSubTextTokenId" />
+    </Key>
+    <Property Name="pk_MpSubTextTokenId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fk_MpCopyItemId" Type="Int64" Nullable="false" />
+    <Property Name="fk_MpCopyItemTypeId" Type="Int64" Nullable="false" />
+    <Property Name="StartIdx" Type="Int64" Nullable="false" />
+    <Property Name="EndIdx" Type="Int64" Nullable="false" />
+    <Property Name="InstanceIdx" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="MpCopyItem" Relationship="Self.FK_MpSubTextToken_1_0" FromRole="MpSubTextToken" ToRole="MpCopyItem" />
+    <NavigationProperty Name="MpCopyItemType" Relationship="Self.FK_MpSubTextToken_0_0" FromRole="MpSubTextToken" ToRole="MpCopyItemType" />
+  </EntityType>
+  <EntityType Name="MpTextItem">
+    <Key>
+      <PropertyRef Name="pk_MpTextItemId" />
+    </Key>
+    <Property Name="pk_MpTextItemId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fk_MpCopyItemId" Type="Int64" Nullable="false" />
+    <Property Name="ItemText" Type="String" MaxLength="2147483647" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="MpCopyItem" Relationship="Self.FK_MpTextItem_0_0" FromRole="MpTextItem" ToRole="MpCopyItem" />
+  </EntityType>
+  <Association Name="FK_MpApp_0_0">
+    <End Role="MpIcon" Type="Self.MpIcon" Multiplicity="1" />
+    <End Role="MpApp" Type="Self.MpApp" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MpIcon">
+        <PropertyRef Name="pk_MpIconId" />
+      </Principal>
+      <Dependent Role="MpApp">
+        <PropertyRef Name="fk_MpIconId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MpCopyItem_0_0">
+    <End Role="MpApp" Type="Self.MpApp" Multiplicity="1" />
+    <End Role="MpCopyItem" Type="Self.MpCopyItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MpApp">
+        <PropertyRef Name="pk_MpAppId" />
+      </Principal>
+      <Dependent Role="MpCopyItem">
+        <PropertyRef Name="fk_MpAppId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MpPasteHistory_0_0">
+    <End Role="MpApp" Type="Self.MpApp" Multiplicity="1" />
+    <End Role="MpPasteHistory" Type="Self.MpPasteHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MpApp">
+        <PropertyRef Name="pk_MpAppId" />
+      </Principal>
+      <Dependent Role="MpPasteHistory">
+        <PropertyRef Name="fk_MpAppId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MpClient_0_0">
+    <End Role="MpPlatform" Type="Self.MpPlatform" Multiplicity="1" />
+    <End Role="MpClient" Type="Self.MpClient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MpPlatform">
+        <PropertyRef Name="pk_MpPlatformId" />
+      </Principal>
+      <Dependent Role="MpClient">
+        <PropertyRef Name="fk_MpPlatformId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MpCopyItem_1_0">
+    <End Role="MpClient" Type="Self.MpClient" Multiplicity="1" />
+    <End Role="MpCopyItem" Type="Self.MpCopyItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MpClient">
+        <PropertyRef Name="pk_MpClientId" />
+      </Principal>
+      <Dependent Role="MpCopyItem">
+        <PropertyRef Name="fk_MpClientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MpPasteHistory_1_0">
+    <End Role="MpClient" Type="Self.MpClient" Multiplicity="1" />
+    <End Role="MpPasteHistory" Type="Self.MpPasteHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MpClient">
+        <PropertyRef Name="pk_MpClientId" />
+      </Principal>
+      <Dependent Role="MpPasteHistory">
+        <PropertyRef Name="fk_MpClientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MpCopyItem_2_0">
+    <End Role="MpCopyItemType" Type="Self.MpCopyItemType" Multiplicity="1" />
+    <End Role="MpCopyItem" Type="Self.MpCopyItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MpCopyItemType">
+        <PropertyRef Name="pk_MpCopyItemTypeId" />
+      </Principal>
+      <Dependent Role="MpCopyItem">
+        <PropertyRef Name="fk_MpCopyItemTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MpFileDropListItem_0_0">
+    <End Role="MpCopyItem" Type="Self.MpCopyItem" Multiplicity="1" />
+    <End Role="MpFileDropListItem" Type="Self.MpFileDropListItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MpCopyItem">
+        <PropertyRef Name="pk_MpCopyItemId" />
+      </Principal>
+      <Dependent Role="MpFileDropListItem">
+        <PropertyRef Name="fk_MpCopyItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MpImageItem_0_0">
+    <End Role="MpCopyItem" Type="Self.MpCopyItem" Multiplicity="1" />
+    <End Role="MpImageItem" Type="Self.MpImageItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MpCopyItem">
+        <PropertyRef Name="pk_MpCopyItemId" />
+      </Principal>
+      <Dependent Role="MpImageItem">
+        <PropertyRef Name="fk_MpCopyItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MpPasteHistory_2_0">
+    <End Role="MpCopyItem" Type="Self.MpCopyItem" Multiplicity="1" />
+    <End Role="MpPasteHistory" Type="Self.MpPasteHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MpCopyItem">
+        <PropertyRef Name="pk_MpCopyItemId" />
+      </Principal>
+      <Dependent Role="MpPasteHistory">
+        <PropertyRef Name="fk_MpCopyItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MpSubTextToken_1_0">
+    <End Role="MpCopyItem" Type="Self.MpCopyItem" Multiplicity="1" />
+    <End Role="MpSubTextToken" Type="Self.MpSubTextToken" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MpCopyItem">
+        <PropertyRef Name="pk_MpCopyItemId" />
+      </Principal>
+      <Dependent Role="MpSubTextToken">
+        <PropertyRef Name="fk_MpCopyItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MpTextItem_0_0">
+    <End Role="MpCopyItem" Type="Self.MpCopyItem" Multiplicity="1" />
+    <End Role="MpTextItem" Type="Self.MpTextItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MpCopyItem">
+        <PropertyRef Name="pk_MpCopyItemId" />
+      </Principal>
+      <Dependent Role="MpTextItem">
+        <PropertyRef Name="fk_MpCopyItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MpSubTextToken_0_0">
+    <End Role="MpCopyItemType" Type="Self.MpCopyItemType" Multiplicity="1" />
+    <End Role="MpSubTextToken" Type="Self.MpSubTextToken" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MpCopyItemType">
+        <PropertyRef Name="pk_MpCopyItemTypeId" />
+      </Principal>
+      <Dependent Role="MpSubTextToken">
+        <PropertyRef Name="fk_MpCopyItemTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MpPlatform_0_0">
+    <End Role="MpDeviceType" Type="Self.MpDeviceType" Multiplicity="1" />
+    <End Role="MpPlatform" Type="Self.MpPlatform" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MpDeviceType">
+        <PropertyRef Name="pk_MpDeviceTypeId" />
+      </Principal>
+      <Dependent Role="MpPlatform">
+        <PropertyRef Name="fk_MpDeviceTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MpFileDropListSubItem_0_0">
+    <End Role="MpFileDropListItem" Type="Self.MpFileDropListItem" Multiplicity="1" />
+    <End Role="MpFileDropListSubItem" Type="Self.MpFileDropListSubItem" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MpFileDropListItem">
+        <PropertyRef Name="pk_MpFileDropListItemId" />
+      </Principal>
+      <Dependent Role="MpFileDropListSubItem">
+        <PropertyRef Name="fk_MpFileDropListItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_MpPlatform_1_0">
+    <End Role="MpPlatformType" Type="Self.MpPlatformType" Multiplicity="1" />
+    <End Role="MpPlatform" Type="Self.MpPlatform" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MpPlatformType">
+        <PropertyRef Name="pk_MpPlatformTypeId" />
+      </Principal>
+      <Dependent Role="MpPlatform">
+        <PropertyRef Name="fk_MpPlatformTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="mainEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="MpApps" EntityType="Self.MpApp" />
+    <EntitySet Name="MpClients" EntityType="Self.MpClient" />
+    <EntitySet Name="MpCopyItems" EntityType="Self.MpCopyItem" />
+    <EntitySet Name="MpCopyItemTypes" EntityType="Self.MpCopyItemType" />
+    <EntitySet Name="MpDeviceTypes" EntityType="Self.MpDeviceType" />
+    <EntitySet Name="MpFileDropListItems" EntityType="Self.MpFileDropListItem" />
+    <EntitySet Name="MpFileDropListSubItems" EntityType="Self.MpFileDropListSubItem" />
+    <EntitySet Name="MpIcons" EntityType="Self.MpIcon" />
+    <EntitySet Name="MpImageItems" EntityType="Self.MpImageItem" />
+    <EntitySet Name="MpPasteHistories" EntityType="Self.MpPasteHistory" />
+    <EntitySet Name="MpPlatforms" EntityType="Self.MpPlatform" />
+    <EntitySet Name="MpPlatformTypes" EntityType="Self.MpPlatformType" />
+    <EntitySet Name="MpSubTextTokens" EntityType="Self.MpSubTextToken" />
+    <EntitySet Name="MpTextItems" EntityType="Self.MpTextItem" />
+    <AssociationSet Name="FK_MpApp_0_0" Association="Self.FK_MpApp_0_0">
+      <End Role="MpIcon" EntitySet="MpIcons" />
+      <End Role="MpApp" EntitySet="MpApps" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MpCopyItem_0_0" Association="Self.FK_MpCopyItem_0_0">
+      <End Role="MpApp" EntitySet="MpApps" />
+      <End Role="MpCopyItem" EntitySet="MpCopyItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MpPasteHistory_0_0" Association="Self.FK_MpPasteHistory_0_0">
+      <End Role="MpApp" EntitySet="MpApps" />
+      <End Role="MpPasteHistory" EntitySet="MpPasteHistories" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MpClient_0_0" Association="Self.FK_MpClient_0_0">
+      <End Role="MpPlatform" EntitySet="MpPlatforms" />
+      <End Role="MpClient" EntitySet="MpClients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MpCopyItem_1_0" Association="Self.FK_MpCopyItem_1_0">
+      <End Role="MpClient" EntitySet="MpClients" />
+      <End Role="MpCopyItem" EntitySet="MpCopyItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MpPasteHistory_1_0" Association="Self.FK_MpPasteHistory_1_0">
+      <End Role="MpClient" EntitySet="MpClients" />
+      <End Role="MpPasteHistory" EntitySet="MpPasteHistories" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MpCopyItem_2_0" Association="Self.FK_MpCopyItem_2_0">
+      <End Role="MpCopyItemType" EntitySet="MpCopyItemTypes" />
+      <End Role="MpCopyItem" EntitySet="MpCopyItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MpFileDropListItem_0_0" Association="Self.FK_MpFileDropListItem_0_0">
+      <End Role="MpCopyItem" EntitySet="MpCopyItems" />
+      <End Role="MpFileDropListItem" EntitySet="MpFileDropListItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MpImageItem_0_0" Association="Self.FK_MpImageItem_0_0">
+      <End Role="MpCopyItem" EntitySet="MpCopyItems" />
+      <End Role="MpImageItem" EntitySet="MpImageItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MpPasteHistory_2_0" Association="Self.FK_MpPasteHistory_2_0">
+      <End Role="MpCopyItem" EntitySet="MpCopyItems" />
+      <End Role="MpPasteHistory" EntitySet="MpPasteHistories" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MpSubTextToken_1_0" Association="Self.FK_MpSubTextToken_1_0">
+      <End Role="MpCopyItem" EntitySet="MpCopyItems" />
+      <End Role="MpSubTextToken" EntitySet="MpSubTextTokens" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MpTextItem_0_0" Association="Self.FK_MpTextItem_0_0">
+      <End Role="MpCopyItem" EntitySet="MpCopyItems" />
+      <End Role="MpTextItem" EntitySet="MpTextItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MpSubTextToken_0_0" Association="Self.FK_MpSubTextToken_0_0">
+      <End Role="MpCopyItemType" EntitySet="MpCopyItemTypes" />
+      <End Role="MpSubTextToken" EntitySet="MpSubTextTokens" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MpPlatform_0_0" Association="Self.FK_MpPlatform_0_0">
+      <End Role="MpDeviceType" EntitySet="MpDeviceTypes" />
+      <End Role="MpPlatform" EntitySet="MpPlatforms" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MpFileDropListSubItem_0_0" Association="Self.FK_MpFileDropListSubItem_0_0">
+      <End Role="MpFileDropListItem" EntitySet="MpFileDropListItems" />
+      <End Role="MpFileDropListSubItem" EntitySet="MpFileDropListSubItems" />
+    </AssociationSet>
+    <AssociationSet Name="FK_MpPlatform_1_0" Association="Self.FK_MpPlatform_1_0">
+      <End Role="MpPlatformType" EntitySet="MpPlatformTypes" />
+      <End Role="MpPlatform" EntitySet="MpPlatforms" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
