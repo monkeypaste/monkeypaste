@@ -10,6 +10,7 @@ namespace MonkeyPaste {
         private Dictionary<string,object> _settingDictionary = new Dictionary<string,object>();
 
         public MpSettings() {
+            SetSetting("MaxDbPasswordAttempts",3);
             SetSetting("LogPanelDefaultVisibleTileCount",5);
             SetSetting("LogPanelDefaultHeightRatio",0.3f);
             SetSetting("LogPanelDefaultTilePadRatio",0.02f);
@@ -21,8 +22,8 @@ namespace MonkeyPaste {
             SetSetting("LogPanelTileTitleFontSize",18.0f);
             SetSetting("LogPanelTileActiveColor",MpColorPallete.Red);
             SetSetting("LogPanelTileColor1",MpColorPallete.DarkGreen);
-            SetSetting("LogPanelTileColor2",MpColorPallete.LightGreen);
-            SetSetting("LogPanelTileTitleTextBoxBgColor",MpColorPallete.Yellow);
+            SetSetting("LogPanelTileColor2",MpColorPallete.Yellow);
+            SetSetting("LogPanelTileTitleTextBoxBgColor",MpColorPallete.LightGreen);
             SetSetting("LogPanelTileTitleIconBorderColor",MpColorPallete.Blue);
         }
 

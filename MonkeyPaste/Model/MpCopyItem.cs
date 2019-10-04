@@ -8,6 +8,8 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {   
     public class MpCopyItem : MpDBObject {
+        public static int TotalCopyItemCount = 0;
+
         public List<MpSubTextToken> subTextTokenList = new List<MpSubTextToken>();
 
         public int copyItemId { get; set; }
@@ -24,6 +26,9 @@ namespace MonkeyPaste {
         //public string ColorStr { get; set; }
         //public Color Color { get; set; }
         private IntPtr sourceHandle;
+
+        private MpApp _app { get; set; }
+        public MpApp App { get { return _app; } set { _app = value; } }             
 
         public MpCopyItem() { }
 
@@ -127,7 +132,7 @@ namespace MonkeyPaste {
                 case MpCopyItemType.Text:
                 case MpCopyItemType.HTMLText:
                 case MpCopyItemType.RichText:
-                    copyItemData = MpSingletonController.Instance.GetMpData().Execute("select * from MpTextItem where fk_MpCopyItemId=" + this.copyItemId);
+                    copyItemData = MpSingletonController.Instance.GetMpData().Db.Execute("select * from MpTextItem where fk_MpCopyItemId=" + this.copyItemId);
                     if(copyItemData == null || copyItemData.Rows.Count == 0) {
                         Console.WriteLine("Error reading MpTextItem " + this.copyItemId);
                         break;
@@ -136,13 +141,13 @@ namespace MonkeyPaste {
                     this.DataObject = copyItemData.Rows[0]["ItemText"].ToString();
                     break;
                 case MpCopyItemType.FileList:
-                    copyItemData = MpSingletonController.Instance.GetMpData().Execute("select * from MpFileDropListItem where fk_MpCopyItemId=" + this.copyItemId);
+                    copyItemData = MpSingletonController.Instance.GetMpData().Db.Execute("select * from MpFileDropListItem where fk_MpCopyItemId=" + this.copyItemId);
                     if(copyItemData == null || copyItemData.Rows.Count == 0) {
                         Console.WriteLine("Error reading MpFileDropListItem " + this.copyItemId);
                         break;
                     }
                     this.SubItemId = Convert.ToInt32(copyItemData.Rows[0]["pk_MpFileDropListItemId"].ToString());
-                    copyItemData = MpSingletonController.Instance.GetMpData().Execute("select * from MpFileDropListSubItem where fk_MpFileDropListItemId=" + this.SubItemId);
+                    copyItemData = MpSingletonController.Instance.GetMpData().Db.Execute("select * from MpFileDropListSubItem where fk_MpFileDropListItemId=" + this.SubItemId);
                     if(copyItemData == null || copyItemData.Rows.Count == 0) {
                         Console.WriteLine("Error reading MpFileDropListSubItem for  MpFileDropListItemId=" + this.copyItemId);
                         break;
@@ -154,7 +159,7 @@ namespace MonkeyPaste {
                     }
                     break;
                 case MpCopyItemType.Image:
-                    copyItemData = MpSingletonController.Instance.GetMpData().Execute("select * from MpImageItem where fk_MpCopyItemId=" + this.copyItemId);
+                    copyItemData = MpSingletonController.Instance.GetMpData().Db.Execute("select * from MpImageItem where fk_MpCopyItemId=" + this.copyItemId);
                     if(copyItemData == null || copyItemData.Rows.Count == 0) {
                         Console.WriteLine("Error reading MpImageItem for Id=" + this.copyItemId);
                         break;
@@ -168,17 +173,19 @@ namespace MonkeyPaste {
             Console.WriteLine(ToString());
         }
         public override void WriteToDatabase() {
+            
             bool isNew = false;
 
             if(this.appId == 0) {
-                MpApp newApp = new MpApp(0,0,sourceHandle,false);
-                this.appId = newApp.appId;                
+                App = new MpApp(0,0,sourceHandle,false);
+                this.appId = App.appId;
+                MpSingletonController.Instance.GetMpData().AddMpApp(App);
             }
             //if copyitem already exists
             if(this.copyItemId > 0) {
-                DataTable dt = MpSingletonController.Instance.GetMpData().Execute("select * from MpCopyItem where pk_MpCopyItemId=" + this.copyItemId);
+                DataTable dt = MpSingletonController.Instance.GetMpData().Db.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + this.copyItemId);
                 if(dt.Rows.Count > 0) {
-                    MpSingletonController.Instance.GetMpData().ExecuteNonQuery("update MpCopyItem set fk_MpCopyItemTypeId=" + (int)this.copyItemTypeId + ", fk_MpClientId=" + this.clientId + ", fk_MpAppId=" + this.appId + ", Title='"+this.Title+"', CopyCount="+this.CopyCount+" where pk_MpCopyItemId=" + this.copyItemId);
+                    MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("update MpCopyItem set fk_MpCopyItemTypeId=" + (int)this.copyItemTypeId + ", fk_MpClientId=" + this.clientId + ", fk_MpAppId=" + this.appId + ", Title='"+this.Title+"', CopyCount="+this.CopyCount+" where pk_MpCopyItemId=" + this.copyItemId);
                 }
                 else {
                     Console.WriteLine("MpCopyItem error cannot find pk of existing item");
@@ -187,8 +194,13 @@ namespace MonkeyPaste {
                 isNew = false;
             }
             else {
-                MpSingletonController.Instance.GetMpData().ExecuteNonQuery("insert into MpCopyItem(fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,Title,CopyDateTime,CopyCount) values (" + (int)this.copyItemTypeId + "," + MpSingletonController.Instance.GetMpData().GetMpClient().MpClientId + "," + this.appId + ",'"+this.Title+"','" + this.CopyDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "',"+this.CopyCount+");");
-                this.copyItemId = MpSingletonController.Instance.GetMpData().GetLastRowId("MpCopyItem","pk_MpCopyItemId");
+                if(MpSingletonController.Instance.GetMpData().Db.NoDb) {
+                    this.copyItemId = ++TotalCopyItemCount;
+                    MapDataToColumns();
+                    return;
+                }
+                MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("insert into MpCopyItem(fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,Title,CopyDateTime,CopyCount) values (" + (int)this.copyItemTypeId + "," + MpSingletonController.Instance.GetMpData().GetMpClient().MpClientId + "," + this.appId + ",'"+this.Title+"','" + this.CopyDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "',"+this.CopyCount+");");
+                this.copyItemId = MpSingletonController.Instance.GetMpData().Db.GetLastRowId("MpCopyItem","pk_MpCopyItemId");
                 isNew = true;
             }
             if(isNew) {
@@ -200,17 +212,18 @@ namespace MonkeyPaste {
                     //case MpCopyItemType.WebLink:
                     //case MpCopyItemType.Email:
                     case MpCopyItemType.Text:
-                        MpSingletonController.Instance.GetMpData().ExecuteNonQuery("insert into MpTextItem(fk_MpCopyItemId,ItemText) values (" + this.copyItemId + ",@1)",new List<string>() { "@1" },new List<object>() { this.DataObject });
+                        MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("insert into MpTextItem(fk_MpCopyItemId,ItemText) values (" + this.copyItemId + ",@1)",new List<string>() { "@1" },new List<object>() { this.DataObject });
+                        this.SubItemId = MpSingletonController.Instance.GetMpData().Db.GetLastRowId("MpTextItem","pk_MpTextItemId");
                         break;
                     case MpCopyItemType.FileList:
-                        MpSingletonController.Instance.GetMpData().ExecuteNonQuery("insert into MpFileDropListItem(fk_MpCopyItemId) values(" + this.copyItemId + ")");
-                        this.SubItemId = MpSingletonController.Instance.GetMpData().GetLastRowId("MpFileDropListItem","pk_MpFileDropListItemId");
+                        MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("insert into MpFileDropListItem(fk_MpCopyItemId) values(" + this.copyItemId + ")");
+                        this.SubItemId = MpSingletonController.Instance.GetMpData().Db.GetLastRowId("MpFileDropListItem","pk_MpFileDropListItemId");
                         foreach(string fileOrPath in (string[])this.DataObject) {
-                            MpSingletonController.Instance.GetMpData().ExecuteNonQuery("insert into MpFileDropListSubItem(fk_MpFileDropListItemId,ItemPath) values (" + this.SubItemId + ",'" + fileOrPath + "')");
+                            MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("insert into MpFileDropListSubItem(fk_MpFileDropListItemId,ItemPath) values (" + this.SubItemId + ",'" + fileOrPath + "')");
                         }
                         break;
                     case MpCopyItemType.Image:
-                        MpSingletonController.Instance.GetMpData().ExecuteNonQuery("insert into MpImageItem(fk_MpCopyItemId,ItemImage) values (" + this.copyItemId + ",@0)",new List<string>() { "@0" },new List<object>() { this.DataObject });
+                        MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("insert into MpImageItem(fk_MpCopyItemId,ItemImage) values (" + this.copyItemId + ",@0)",new List<string>() { "@0" },new List<object>() { this.DataObject });
                         break;
                 }
             }

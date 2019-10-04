@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MonkeyPaste.View {
+namespace MonkeyPaste {
     public partial class MpSetDbPasswordForm:Form {
         public MpSetDbPasswordForm() {
             InitializeComponent();

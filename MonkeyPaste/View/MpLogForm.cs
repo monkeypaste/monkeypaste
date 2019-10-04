@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -17,8 +18,10 @@ namespace MonkeyPaste {
         public static extern int SetProcessDPIAware();
 
         public MpLogForm() : base() {
+            this.DoubleBuffered = true;
             //SetProcessDPIAware();
             InitializeComponent();
         }
+        
     }
 }

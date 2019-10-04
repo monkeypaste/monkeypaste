@@ -16,7 +16,10 @@ namespace MonkeyPaste {
             _key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\MonkeyPaste",true);
             if(_key == null) {
                 _key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\MonkeyPaste");
-            }
+            } /*else {
+                Registry.CurrentUser.DeleteSubKey(@"SOFTWARE\MonkeyPaste");
+                _key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\MonkeyPaste");
+            }*/
         }
         public void SetValue(string key,object value) {            
             _key.SetValue(key,value);

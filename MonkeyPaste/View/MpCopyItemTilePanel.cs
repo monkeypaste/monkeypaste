@@ -9,17 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public partial class MpCopyItemTilePanel : MpRoundedPanel {
+    public class MpCopyItemTilePanel : MpRoundedPanel {
         public MpCopyItemTilePanel() : base() {
-            InitializeComponent();
+            this.DoubleBuffered = true;
         }
 
-        protected override void OnPaint(PaintEventArgs pe) {
-            base.OnPaint(pe);
-        }
-
-        private void MpCopyItemTilePanel_Paint(object sender,PaintEventArgs e) {
-            base.OnPaint(e);
-        }
     }
 }

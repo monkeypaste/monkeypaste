@@ -274,6 +274,7 @@
     <Compile Include="Controller\CopyItemControllers\MpCopyItemTileController.cs" />
     <Compile Include="Helpers\MpColorPallete.cs" />
     <Compile Include="Helpers\MpCursorPosition.cs" />
+    <Compile Include="Helpers\MpDb.cs" />
     <Compile Include="Helpers\MpHelperFunctions.cs" />
     <Compile Include="Controller\CopyItemControllers\MpFileListItemRowPanelController.cs" />
     <Compile Include="Controller\CopyItemControllers\MpCopyItemControlController.cs" />
@@ -288,6 +289,12 @@
     <Compile Include="Helpers\ProgramInfo.cs" />
     <Compile Include="Helpers\SingleInstance.cs" />
     <Compile Include="Helpers\WinAPI.cs" />
+    <Compile Include="Model\IconHelper.cs" />
+    <Compile Include="Model\IconListManager.cs" />
+    <Compile Include="Model\MpDb.cs" />
+    <Compile Include="View\MpRoundedPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Model\MpApp.cs" />
     <Compile Include="Model\MpClient.cs" />
     <Compile Include="Model\MpColor.cs" />
@@ -307,9 +314,6 @@
     </Compile>
     <Compile Include="View\MpCopyItemTilePanel.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="View\MpCopyItemTilePanel.Designer.cs">
-      <DependentUpon>MpCopyItemTilePanel.cs</DependentUpon>
     </Compile>
     <Compile Include="View\MpCopyItemTileTitleIconPanel.cs">
       <SubType>Component</SubType>
@@ -351,9 +355,6 @@
     <Compile Include="View\MpResizableBorderlessForm.Designer.cs">
       <DependentUpon>MpResizableBorderlessForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\MpRoundedPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="View\MpEnterDbPasswordForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -374,9 +375,6 @@
     </Compile>
     <EmbeddedResource Include="Helpers\MpClipboardHelper.resx">
       <DependentUpon>MpClipboardHelper.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\MpCopyItemTilePanel.resx">
-      <DependentUpon>MpCopyItemTilePanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\MpHelpForm.resx">
       <DependentUpon>MpHelpForm.cs</DependentUpon>

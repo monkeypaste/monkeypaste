@@ -17,7 +17,7 @@ namespace MonkeyPaste {
         public MpCopyItemTileTitleIconPanelController(int titleHeight,MpCopyItem ci) {
             CopyItemTileTitleIconPanel = new MpCopyItemTileTitleIconPanel() {
                 //FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight,
-                BackColor = (Color)MpSingletonController.Instance.GetSetting("LogPanelTileTitleIconBorderColor"),
+                BackColor = Color.Transparent// (Color)MpSingletonController.Instance.GetSetting("LogPanelTileTitleIconBorderColor"),
                 //Anchor = AnchorStyles.Top,
                 //Location = new Point(),
                 //AutoSize = true,
@@ -26,7 +26,7 @@ namespace MonkeyPaste {
             CopyItemTileTitleIconPanel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
 
             CopyItemTitleIconBox = new PictureBox() {
-                BackColor = Color.White,
+                BackColor = Color.Transparent,
                 SizeMode = PictureBoxSizeMode.StretchImage,
                 //BorderStyle = BorderStyle.FixedSingle,
                 //Margin = new Padding(10),
@@ -46,7 +46,7 @@ namespace MonkeyPaste {
             CopyItemTileTitleIconPanel.Location = new Point(ip,ip);
             CopyItemTileTitleIconPanel.Size = new Size(titleHeight - ip*2,titleHeight - ip*2);
 
-            CopyItemTitleIconBox.Location = new Point(ip,ip);
+            CopyItemTitleIconBox.Location = new Point(ip*2,ip*2);
             CopyItemTitleIconBox.Size = new Size(titleHeight - (ip * 4),titleHeight - (ip * 4));
         }
     }

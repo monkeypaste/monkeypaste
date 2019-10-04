@@ -7,5 +7,8 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {
     public class MpCopyItemTileTitlePanel : Panel {
+        public MpCopyItemTileTitlePanel() : base() {
+            this.DoubleBuffered = true;
+        }
     }
 }

@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpCopyItemTileTitleIconPanel : MpRoundedPanel {
-        public MpCopyItemTileTitleIconPanel() : base() { }
+    public class MpCopyItemTileTitleIconPanel : Panel {
+        public MpCopyItemTileTitleIconPanel() : base() {
+            this.DoubleBuffered = true;
+        }
+        
     }
 }

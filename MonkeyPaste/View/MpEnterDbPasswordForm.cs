@@ -16,11 +16,11 @@ namespace MonkeyPaste {
         }
         private void SetPasswordButton_Click(object sender,EventArgs e) {
             if(RememberPasswordCheckbox.Checked) {
-                MpRegistryHelper.Instance.SetValue("Password",PasswordTextBox.Text);
+                MpRegistryHelper.Instance.SetValue("DBPassword",PasswordTextBox.Text);
             } else {
-                MpRegistryHelper.Instance.SetValue("Password","");
+                MpRegistryHelper.Instance.SetValue("DBPassword","");
             }
-            MpSingletonController.Instance.GetMpData().SetDbPassword(PasswordTextBox.Text);
+            MpSingletonController.Instance.GetMpData().Db.SetDbPassword(PasswordTextBox.Text);
             this.DialogResult = DialogResult.OK;
             this.Close();
         }

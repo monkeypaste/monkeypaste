@@ -24,7 +24,6 @@ namespace MonkeyPaste {
         private MpSettingsForm settingsForm;
         private MpHelpForm helpForm;
         private NotifyIcon notifyIcon;				            // the icon that sits in the system tray      
-        private bool _showingModal = false;
 
         private System.ComponentModel.IContainer components;	// a list of components to dispose when the context is disposed
         //MpResizableBorderlessForm testForm = null;
@@ -100,34 +99,7 @@ namespace MonkeyPaste {
             string dbPassword = (string)MpRegistryHelper.Instance.GetValue("DBPassword");
 
             if(dbPath == null) {
-                DialogResult result = MessageBox.Show("No Database found would you like to load a file?","No DB Found",MessageBoxButtons.YesNo);
-                if(result == DialogResult.Yes) {
-                    OpenFileDialog openFileDialog = new OpenFileDialog() {
-                        FileName = "Select a db file",
-                        Filter = "Db files (*.db)|*.db",
-                        Title = "Open DB File"
-                    };
-                    DialogResult openResult = openFileDialog.ShowDialog();
-                    if(openResult == DialogResult.OK) {
-                        dbPath = openFileDialog.FileName;
-                        DialogResult autoLoadResult = MessageBox.Show("Would you like to remember this next time?","Remember Database?",MessageBoxButtons.YesNo);
-                        if(autoLoadResult == DialogResult.Yes) {
-                            MpRegistryHelper.Instance.SetValue("DBPath",dbPath);
-                        }
-                    }
-                } else {
-                    DialogResult newDbResult = MessageBox.Show("Would you like to create a new database and store your history?","New Database?",MessageBoxButtons.YesNo);                    
-                    if(newDbResult == DialogResult.Yes) {
-                        dbPath = AppDomain.CurrentDomain.BaseDirectory + @"\mp.db";
-                        MpRegistryHelper.Instance.SetValue("DBPath",dbPath);
-                        DialogResult newDbPasswordResult = MessageBox.Show("Would you like to encrypt database with a password?","Encrypt?",MessageBoxButtons.YesNo);
-                        if(newDbPasswordResult == DialogResult.Yes) {
-                            MpSetDbPasswordForm setDbPasswordForm = new MpSetDbPasswordForm();
-                            setDbPasswordForm.ShowDialog();
-                            dbPassword = setDbPasswordForm.PasswordTextBox.Text;
-                        }
-                    }
-                }
+                
                 
             }
             MpSingletonController.Instance.Init(dbPath,dbPassword,idToken,accessToken);
@@ -203,37 +175,22 @@ namespace MonkeyPaste {
         private void toggleSaveHistory_Click(object sender,EventArgs e) { Console.WriteLine("Save History clicked"); }
         private void clearHistory_Click(object sender,EventArgs e) {
             Console.WriteLine("Clear History clicked");
-            MpSingletonController.Instance.GetMpData().DeleteDb();
+            MpSingletonController.Instance.GetMpData().ResetData();
         }
         private void toggleEncrypt_Click(object sender,EventArgs e) {
             Console.WriteLine("Encrypt clicked");
             MpSetDbPasswordForm setPwDialog = new MpSetDbPasswordForm();
-            setPwDialog.Load += Setting_Load;
-            setPwDialog.FormClosed += Setting_FormClosed;
-
-            // Show testDialog as a modal dialog and determine if DialogResult = OK.
-            if(setPwDialog.ShowDialog() == DialogResult.OK) {
-                // Read the contents of testDialog's TextBox.
-                //this.txtResult.Text = setPwDialog.TextBox1.Text;
-            }
-            else {
-               // this.txtResult.Text = "Cancelled";
-            }
-            setPwDialog.Dispose();
+            DialogResult setPwResult = setPwDialog.ShowDialog();
         }
-
-        private void Setting_Load(object sender,EventArgs e) {
-            _showingModal = true;
+        private void showFileLocation_Click(object sender,EventArgs e) {
+            Console.WriteLine("Show File Location clicked");
         }
-
-        private void Setting_FormClosed(object sender,FormClosedEventArgs e) {
-            _showingModal = false;
+        private void ShowDetails_Click(object sender,EventArgs e) {
+            Console.WriteLine("Show Details clicked");
         }
-
-        private void showFileLocation_Click(object sender,EventArgs e) { Console.WriteLine("Show File Location clicked"); }
-        private void ShowDetails_Click(object sender,EventArgs e) { Console.WriteLine("Show Details clicked"); }
-
-        private void autoLoad_Click(object sender,EventArgs e) { Console.WriteLine("Auto-Load clicked"); }
+        private void autoLoad_Click(object sender,EventArgs e) {
+            Console.WriteLine("Auto-Load clicked");
+        }
         #endregion
 
         #region events
@@ -259,7 +216,6 @@ namespace MonkeyPaste {
         #region generic code framework
         //private void notifyIcon_DoubleClick(object sender, EventArgs e) { _mpLogFormController.ShowLogForm(); }
         // From http://stackoverflow.com/questions/2208690/invoke-notifyicons-context-menu
-
         private void NotifyIcon_MouseUp(object sender,MouseEventArgs e) {
             if(e.Button == MouseButtons.Right) {
                 MethodInfo mi = typeof(NotifyIcon).GetMethod("ShowContextMenu",BindingFlags.Instance | BindingFlags.NonPublic);
@@ -276,9 +232,7 @@ namespace MonkeyPaste {
             notifyIcon.ContextMenuStrip.Hide();
             notifyIcon.ContextMenuStrip = null;
         }
-        private void ContextMenuStrip_Opening(object sender,System.ComponentModel.CancelEventArgs e) {
-            
-        }
+        private void ContextMenuStrip_Opening(object sender,System.ComponentModel.CancelEventArgs e) {  }
         private void InitializeContext() {
             components = new System.ComponentModel.Container();
             notifyIcon = new NotifyIcon(components)
@@ -286,15 +240,9 @@ namespace MonkeyPaste {
                 ContextMenuStrip = new ContextMenuStrip(),
                 Icon = new Icon(IconFileName),
                 Text = DefaultTooltip,
-                Visible = true
-               
+                Visible = true               
             };            
         }
-
-        
-
-
-
         /// <summary>
         /// When the application context is disposed, dispose things like the notify icon.
         /// </summary>

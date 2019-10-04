@@ -1,4 +1,4 @@
-﻿namespace MonkeyPaste.View {
+﻿namespace MonkeyPaste {
     partial class MpSetDbPasswordForm {
         /// <summary>
         /// Required designer variable.
