@@ -16,6 +16,10 @@ namespace MonkeyPaste {
         private static readonly Lazy<MpHelperFunctions> lazy = new Lazy<MpHelperFunctions>(() => new MpHelperFunctions());
         public static MpHelperFunctions Instance { get { return lazy.Value; } }
 
+        public Icon GetIconFromBitmap(Bitmap bmp) {
+           IntPtr Hicon = bmp.GetHicon();
+           return Icon.FromHandle(Hicon);
+        }
         public string GetColorString(Color c) {
             return (int)c.A + "," + (int)c.R + "," + (int)c.G + "," + (int)c.B;
         }
@@ -23,11 +27,14 @@ namespace MonkeyPaste {
             if(colorStr == null || colorStr == String.Empty) {
                 colorStr = GetColorString(GetRandomColor());
             }
-            int[] c = new int[4];
-            for(int i = 0;i < 4;i++) {
+            int[] c = new int[colorStr.Split(',').Length];
+            for(int i = 0;i < c.Length;i++) {
                 c[i] = Convert.ToInt32(colorStr.Split(',')[i]);
             }
-            return Color.FromArgb(255/*c[3]*/,c[0],c[1],c[2]);
+            if(c.Length == 3) {
+                return Color.FromArgb(255/*c[3]*/,c[0],c[1],c[2]);
+            }
+            return Color.FromArgb(c[3],c[0],c[1],c[2]);
         }
         public Color GetRandomColor() {
             var random = new Random();

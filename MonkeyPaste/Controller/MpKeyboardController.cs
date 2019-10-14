@@ -23,9 +23,11 @@ namespace MonkeyPaste {
     }
     public class MpKeyboardController {
         
-        private Dictionary<MpInputEventType,MpKeyboardHotKey> _keyboardkDictionary;
+        private Dictionary<MpInputEventType,MpKeyboardHotKey> _keyboardkDictionary { get; set; }
+        public Dictionary<MpInputEventType,MpKeyboardHotKey> KeyboardDictionary { get { return _keyboardkDictionary; } set { _keyboardkDictionary = value; } }
 
         public MpKeyboardController() {
+            KeyboardDictionary = new Dictionary<MpInputEventType,MpKeyboardHotKey>();
         }
 
         private Keys _keyCode;
@@ -46,7 +48,6 @@ namespace MonkeyPaste {
             if(mbl == null || mbl.Count == 0) {
                 m_GlobalHook = Hook.GlobalEvents();
                 m_GlobalHook.MouseMove += M_GlobalHook_MouseMove;
-
             }
             EventName = ename;
             Console.WriteLine("Mouse event '" + EventName + "' created w/ buttons: " + _mouseButtonList.ToString());

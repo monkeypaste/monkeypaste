@@ -40,7 +40,7 @@ namespace MonkeyPaste {
             this.DataObject = data;
             this.CopyDateTime = DateTime.Now;
             this.sourceHandle = sourceHandle;
-            this.Title = Enum.GetName(typeof(MpCopyItemType),this.copyItemTypeId);
+            this.Title = "Untitled";// Enum.GetName(typeof(MpCopyItemType),this.copyItemTypeId);
             //this.Color = MpHelperFunctions.Instance.GetRandomColor();
             this.CopyCount = 1;
 
@@ -247,7 +247,7 @@ namespace MonkeyPaste {
     }
 
     public enum MpCopyItemType {
-        None,
+        None=0,
         Text,
         RichText,
         HTMLText,

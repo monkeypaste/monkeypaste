@@ -50,11 +50,12 @@ namespace MonkeyPaste {
                     if(newDbResult == DialogResult.Yes) {
                         SaveFileDialog saveFileDialog = new SaveFileDialog() {
                             InitialDirectory = AppDomain.CurrentDomain.BaseDirectory,
-                            
+
                             FileName = "mp.db",
                             Filter = "Db files (*.db)|*.db",
                             Title = "Create new DB File"
                         };
+
                         DialogResult saveResult = saveFileDialog.ShowDialog();
                         if(saveResult == DialogResult.OK) {
                             _dbPath = saveFileDialog.FileName;
@@ -115,6 +116,7 @@ namespace MonkeyPaste {
                 conn = new SQLiteConnection(connStr);
             }
             catch(Exception e) {
+                Console.WriteLine("Error during SQL connection: " + connStr + "\n" + "With error: " + e.ToString());
                 conn = null;
                 _dbPath = null;
                 InitDb();
@@ -212,6 +214,7 @@ namespace MonkeyPaste {
                 sql_con.Close();
             }
             catch(SQLiteException ex) {
+                Console.WriteLine("Error during executing sql: " + sql + "\n" + "With error: " + ex.ToString());
                 wasError = true;
                 MpEnterDbPasswordForm enterPasswordForm = new MpEnterDbPasswordForm();
                 DialogResult enterPasswordResult = enterPasswordForm.ShowDialog();
@@ -244,8 +247,9 @@ namespace MonkeyPaste {
             return (int)lastRowID64;*/
         }
         public void ResetDb() {
-            File.Delete(DbPath);
-            InitDb();
+            // File.Delete(DbPath);
+            //InitDb();
+            ExecuteNonQuery(GetClearString());
         }
         public void DeleteDb() {
             File.Delete(DbPath);
@@ -303,7 +307,7 @@ namespace MonkeyPaste {
                         pk_MpCopyItemTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , TypeName text NULL 
                     );
-                    INSERT INTO MpCopyItemType(TypeName) VALUES('text'),('rich_text'),('html_text'),('image'),('file_list');
+                    INSERT INTO MpCopyItemType(TypeName) VALUES('text'),('rich_text'),('html_text'),('image'),('file_list'),('append');
                     CREATE TABLE MpCommandType (
                         pk_MpCommandTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , CommandName text NOT NULL
@@ -410,6 +414,12 @@ namespace MonkeyPaste {
                 delete from MpFileDropListSubItem where pk_MpFileDropListSubItemId > 0;
                 delete from MpPasteHistory where pk_MpPasteHistoryId > 0;
                 delete from MpSubTextToken where pk_MpSubTextTokenId > 0;
+                delete from MpTagType where pk_MpTagType > 0;
+                delete from MpTag where pk_MpTag > 0; 
+                delete from MpSetting where pk_MpSetting > 0; 
+                delete from MpHotKey where pk_MpHotKey > 0; 
+                delete from MpCommand where pk_MpCommand > 0; 
+                delete from MpColor where pk_MpColor > 0
             ";
         }
         private string GetDropString() {

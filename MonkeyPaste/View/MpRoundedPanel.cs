@@ -8,11 +8,20 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpRoundedPanel:Panel {
-        public int Radius { get; set; }
-        public float Thickness { get; set; }
+    public class MpRoundedPanel : Panel {
+        private float _thickness = 5;
+        public float Thickness {
+            get {
+                return _thickness;
+            }
+            set {
+                _thickness = value;
+                _pen = new Pen(_borderColor,Thickness);
+                Invalidate();
+            }
+        }
 
-        private Color _borderColor { get; set; }
+        private Color _borderColor = Color.White;
         public Color BorderColor {
             get {
                 return _borderColor;
@@ -20,33 +29,26 @@ namespace MonkeyPaste {
             set {
                 _borderColor = value;
                 _pen = new Pen(_borderColor,Thickness);
-            }
-        }
-
-        private int _edge = 50;
-        public int Edge {
-            get {
-                return _edge;
-            }
-            set {
-                _edge = value;
                 Invalidate();
             }
         }
 
-        public Color FillColor { get; set; }
-        public bool Fill { get; set; }
-        public bool AntiAlias { get; set; }
+        private int _radius = 20;
+        public int Radius {
+            get {
+                return _radius;
+            }
+            set {
+                _radius = value;
+                Invalidate();
+            }
+        }
+
         private Pen _pen;
 
         public MpRoundedPanel() : base() {
             _pen = new Pen(BorderColor,Thickness);
-            BackColor = Color.White;
-            FillColor = Color.Transparent;
-            Fill = false;
-            AntiAlias = true;
-            DoubleBuffered = true;
-            Radius = 18;
+            DoubleBuffered = true;            
         }
         private Rectangle GetLeftUpper(int e) {
             return new Rectangle(0,0,e,e);
@@ -65,22 +67,22 @@ namespace MonkeyPaste {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             GraphicsPath path = new GraphicsPath();
             path.StartFigure();
-            path.AddArc(GetLeftUpper(Edge),180,90);
-            path.AddLine(Edge,0,Width - Edge,0);
-            path.AddArc(GetRightUpper(Edge),270,90);
-            path.AddLine(Width,Edge,Width,Height - Edge);
-            path.AddArc(GetRightLower(Edge),0,90);
-            path.AddLine(Width - Edge,Height,Edge,Height);
-            path.AddArc(GetLeftLower(Edge),90,90);
-            path.AddLine(0,Height - Edge,0,Edge);
+            path.AddArc(GetLeftUpper(Radius),180,90);
+            path.AddLine(Radius,0,Width - Radius,0);
+            path.AddArc(GetRightUpper(Radius),270,90);
+            path.AddLine(Width,Radius,Width,Height - Radius);
+            path.AddArc(GetRightLower(Radius),0,90);
+            path.AddLine(Width - Radius,Height,Radius,Height);
+            path.AddArc(GetLeftLower(Radius),90,90);
+            path.AddLine(0,Height - Radius,0,Radius);
             path.CloseFigure();
             Region = new Region(path);
         }
         private void DrawSingleBorder(Graphics graphics) {
-            graphics.DrawArc(_pen,new Rectangle(0,0,Edge,Edge),180,90);
-            graphics.DrawArc(_pen,new Rectangle(Width - Edge - 1,-1,Edge,Edge),270,90);
-            graphics.DrawArc(_pen,new Rectangle(Width - Edge - 1,Height - Edge - 1,Edge,Edge),0,90);
-            graphics.DrawArc(_pen,new Rectangle(0,Height - Edge - 1,Edge,Edge),90,90);
+            graphics.DrawArc(_pen,new Rectangle(0,0,Radius,Radius),180,90);
+            graphics.DrawArc(_pen,new Rectangle(Width - Radius - 1,-1,Radius,Radius),270,90);
+            graphics.DrawArc(_pen,new Rectangle(Width - Radius - 1,Height - Radius - 1,Radius,Radius),0,90);
+            graphics.DrawArc(_pen,new Rectangle(0,Height - Radius - 1,Radius,Radius),90,90);
             graphics.DrawRectangle(_pen,0.0f,0.0f,(float)Width - 1.0f,(float)Height - 1.0f);
         }
         private void Draw3DBorder(Graphics graphics) {

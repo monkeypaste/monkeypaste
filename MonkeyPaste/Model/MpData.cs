@@ -32,7 +32,10 @@ namespace MonkeyPaste {
             InitMpApp();
             InitMpCopyItem();
         }
-        
+        public bool Load(string path,string password,bool isNew) {
+            ResetData();
+            return true;
+        }
         public void AddOnDataListChangeListener(MpCopyItemTileChooserPanelController lf) {
             //_mpIconList.CollectionChanged += lf.CopyItemCollection_CollectionChanged;
             //_mpAppList.CollectionChanged += lf.CopyItemCollection_CollectionChanged;

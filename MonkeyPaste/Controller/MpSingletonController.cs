@@ -6,15 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    //    public class MpInputEvent2 {
-    //        public string ToggleLog = "ToggleLog";
-    //        public string HideLog = "HideLog";
-    //        public string SelectLeftTile = "SelectLeftTile";
-    //        public string SelectRightTile = "SelectRightTile";
-    //        public string PasteTile = "PasteTile";
-    //        public string EditTile = "EditTile";
-    //        public string ToggleSettings = "ToggleSettings";
-    //    }
     public class MpSingletonController {
         private static readonly Lazy<MpSingletonController> lazy = new Lazy<MpSingletonController>(() => new MpSingletonController());
         public static MpSingletonController Instance { get { return lazy.Value; } }
@@ -22,7 +13,10 @@ namespace MonkeyPaste {
         //public MpInputEventType InputEvent = new MpInputEventType();
         private Dictionary<string,MpKeyboardHook> _hotkeyHookDictionary;
         private MpData _data;
-        private MpSettings _settings;
+
+        private MpSettings _settings { get; set; }
+        public MpSettings Settings { get { return _settings; } set { _settings = value; } }
+
         private bool _ignoreNextClipboardEvent;
         private int _scrollWheelDelta { get; set; }
         public int ScrollWheelDelta { get { return _scrollWheelDelta; } set { _scrollWheelDelta = value; } }
@@ -56,7 +50,7 @@ namespace MonkeyPaste {
             return _settings.GetSetting(key);
         }
         public void SetSetting(string key,object val) {
-            _settings.SetSetting(key,val);
+            _settings.SetSetting(key,val,Settings.SettingValueTypeDictionary[key]);
         }
         
         public MpData GetMpData() {

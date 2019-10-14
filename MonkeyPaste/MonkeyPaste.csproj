@@ -260,24 +260,45 @@
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="WpfRichText, Version=1.0.16.0, Culture=neutral, PublicKeyToken=75ccead1e6af2af3, processorArchitecture=MSIL">
+      <HintPath>..\packages\WpfRichText.1.0.16.2\lib\net45\WpfRichText.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.5.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.5.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.5.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.5.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.5.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
     <Reference Include="YamlDotNet, Version=6.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
       <HintPath>..\packages\YamlDotNet.6.1.2\lib\net45\YamlDotNet.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\CopyItemControllers\MpCopyItemTileTitleIconPanelController.cs" />
-    <Compile Include="Controller\CopyItemControllers\MpCopyItemTileTitlePanelController.cs" />
+    <Compile Include="Controller\MpTaskbarIconController.cs" />
+    <Compile Include="Controller\MpController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpCopyItemTileTitleIconPanelController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpCopyItemTileTitlePanelController.cs" />
     <Compile Include="Controller\MpScreenController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpImageEditorControlController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpOverlayPanelController.cs" />
     <Compile Include="Helpers\IconHelper.cs" />
     <Compile Include="Helpers\IconListManager.cs" />
-    <Compile Include="Controller\CopyItemControllers\MpCopyItemTileChooserPanelController.cs" />
-    <Compile Include="Controller\CopyItemControllers\MpCopyItemTileController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpCopyItemTileChooserPanelController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpCopyItemTileController.cs" />
     <Compile Include="Helpers\MpColorPallete.cs" />
     <Compile Include="Helpers\MpCursorPosition.cs" />
-    <Compile Include="Helpers\MpDb.cs" />
     <Compile Include="Helpers\MpHelperFunctions.cs" />
-    <Compile Include="Controller\CopyItemControllers\MpFileListItemRowPanelController.cs" />
-    <Compile Include="Controller\CopyItemControllers\MpCopyItemControlController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpFileListItemRowPanelController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpCopyItemControlController.cs" />
     <Compile Include="Controller\MpKeyboardController.cs" />
     <Compile Include="Controller\MpLogFormController.cs" />
     <Compile Include="Controller\MpSDbConnection.cs" />
@@ -286,12 +307,18 @@
     </Compile>
     <Compile Include="Controller\MpSingletonController.cs" />
     <Compile Include="Helpers\MpRegistryHelper.cs" />
+    <Compile Include="Controller\Tile Controllers\MpRichTextEditorControlController.cs" />
     <Compile Include="Helpers\ProgramInfo.cs" />
     <Compile Include="Helpers\SingleInstance.cs" />
     <Compile Include="Helpers\WinAPI.cs" />
-    <Compile Include="Model\IconHelper.cs" />
-    <Compile Include="Model\IconListManager.cs" />
     <Compile Include="Model\MpDb.cs" />
+    <Compile Include="Model\MpModel.cs" />
+    <Compile Include="View\MpOverlayPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\MpRichTextEditorPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="View\MpRoundedPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -373,6 +400,9 @@
     <Compile Include="View\MpSettingsForm.Designer.cs">
       <DependentUpon>MpSettingsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\MpView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <EmbeddedResource Include="Helpers\MpClipboardHelper.resx">
       <DependentUpon>MpClipboardHelper.cs</DependentUpon>
     </EmbeddedResource>
@@ -430,6 +460,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\monkey.png" />
+    <None Include="Resources\monkey %281%29.png" />
+    <None Include="Resources\monkey %282%29.png" />
+    <None Include="Resources\MonkeyIcon1.png" />
     <EmbeddedResource Include="database%401x.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
@@ -437,7 +471,20 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Image-Editor-Control-for-WinForms-master\CraftSynth.ImageEditor\CraftSynth.ImageEditor.csproj">
+      <Project>{c2f951d8-2cb6-4ab5-9029-1ee3fcdb910a}</Project>
+      <Name>CraftSynth.ImageEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RTFEditor\ColorPicker\ColorPicker.csproj">
+      <Project>{6813ecb1-b6b3-49f4-9070-9e4dfef34fae}</Project>
+      <Name>ColorPicker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RTFEditor\RTFEditor\RTFEditor.csproj">
+      <Project>{6aec74bd-eee6-4402-93b0-4d4163e15e98}</Project>
+      <Name>RTFEditor</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>

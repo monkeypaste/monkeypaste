@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 
 namespace MonkeyPaste {
-    public class MpLogFormController {
+    public class MpLogFormController : MpController {
         [DllImport("user32.dll")]
         static extern bool SetActiveWindow(IntPtr hWnd);
         
@@ -29,8 +29,12 @@ namespace MonkeyPaste {
         private int _customHeight = 0;
         private bool _isVisible = false;
         private bool _isInit = true;
+        private IKeyboardMouseEvents _clickHook;
 
-        public MpLogFormController() {
+        public MpLogFormController(MpController parentController) : base(parentController) {
+            _clickHook = Hook.GlobalEvents();
+            _clickHook.MouseClick += _clickHook_MouseClick;
+
             _logForm = new MpLogForm() {
                 AutoSize = false,
                 AutoScaleMode = AutoScaleMode.None
@@ -51,13 +55,30 @@ namespace MonkeyPaste {
             _toggleLogHook.RegisterHotKey(ModifierKeys.Control,Keys.D);
             _toggleLogHook.RegisterHotKey(ModifierKeys.None,Keys.CapsLock);
             MpSingletonController.Instance.SetKeyboardHook(MpInputCommand.ToggleLog,_toggleLogHook);
-
-            _copyItemTileChooserController = new MpCopyItemTileChooserPanelController();
+            
+            _copyItemTileChooserController = new MpCopyItemTileChooserPanelController(null);
             _logForm.Controls.Add(_copyItemTileChooserController.GetCopyItemPanel());
             UpdateLogFormBounds();
             _logForm.Show();
             _logForm.Hide();
         }
+
+        private void _clickHook_MouseClick(object sender,MouseEventArgs e) {
+            if(!_isVisible) {
+                return;
+            }
+            MpCopyItemTileController clickedTileController = null;
+            foreach(MpCopyItemTileController citc in _copyItemTileChooserController.CopyItemTileControllerList) {
+                Rectangle tileRect = citc.CopyItemTilePanel.RectangleToScreen(citc.CopyItemTilePanel.ClientRectangle);
+                if(tileRect.Contains(e.Location) || citc.CopyItemTilePanel.ClientRectangle.Contains(e.Location)) {
+                    clickedTileController = citc;
+                }
+            }
+            if(clickedTileController != null) {
+                _copyItemTileChooserController.SelectedCopyItemTileController = clickedTileController;
+            }
+        }
+
         #region Events
         private void LogForm_Load(object sender,EventArgs e) {
             UpdateLogFormBounds();
@@ -145,6 +166,7 @@ namespace MonkeyPaste {
             if(_copyItemTileChooserController != null) {
                 _copyItemTileChooserController.OnFormResize(_logForm.Bounds);
             }
+            
         }       
         public MpCopyItemTileChooserPanelController GetCopyItemPanelController() {
             return _copyItemTileChooserController;

@@ -23,85 +23,116 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.tabControl2 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.tabControl2.SuspendLayout();
+            this.Key1ComboBox = new System.Windows.Forms.ComboBox();
+            this.Key2ComboBox = new System.Windows.Forms.ComboBox();
+            this.Key3ComboBox = new System.Windows.Forms.ComboBox();
+            this.Key4ComboBox = new System.Windows.Forms.ComboBox();
+            this.LoadOnLoginCheckBox = new System.Windows.Forms.CheckBox();
+            this.resetDbButton = new System.Windows.Forms.Button();
+            this.deleteDbButton = new System.Windows.Forms.Button();
+            this.MaxStoredClipBoardEntries = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.MaxStoredClipBoardEntries)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // Key1ComboBox
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(26, 66);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(525, 122);
-            this.dataGridView1.TabIndex = 0;
+            this.Key1ComboBox.FormattingEnabled = true;
+            this.Key1ComboBox.Location = new System.Drawing.Point(126, 92);
+            this.Key1ComboBox.Name = "Key1ComboBox";
+            this.Key1ComboBox.Size = new System.Drawing.Size(121, 33);
+            this.Key1ComboBox.TabIndex = 0;
             // 
-            // tabControl2
+            // Key2ComboBox
             // 
-            this.tabControl2.Controls.Add(this.tabPage1);
-            this.tabControl2.Controls.Add(this.tabPage3);
-            this.tabControl2.Controls.Add(this.tabPage2);
-            this.tabControl2.Location = new System.Drawing.Point(113, 238);
-            this.tabControl2.Name = "tabControl2";
-            this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(290, 211);
-            this.tabControl2.TabIndex = 3;
+            this.Key2ComboBox.FormattingEnabled = true;
+            this.Key2ComboBox.Location = new System.Drawing.Point(126, 162);
+            this.Key2ComboBox.Name = "Key2ComboBox";
+            this.Key2ComboBox.Size = new System.Drawing.Size(121, 33);
+            this.Key2ComboBox.TabIndex = 1;
             // 
-            // tabPage1
+            // Key3ComboBox
             // 
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(282, 185);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.Key3ComboBox.FormattingEnabled = true;
+            this.Key3ComboBox.Location = new System.Drawing.Point(126, 213);
+            this.Key3ComboBox.Name = "Key3ComboBox";
+            this.Key3ComboBox.Size = new System.Drawing.Size(121, 33);
+            this.Key3ComboBox.TabIndex = 2;
             // 
-            // tabPage3
+            // Key4ComboBox
             // 
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(282, 185);
-            this.tabPage3.TabIndex = 1;
-            this.tabPage3.Text = "tabPage3";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.Key4ComboBox.FormattingEnabled = true;
+            this.Key4ComboBox.Location = new System.Drawing.Point(126, 272);
+            this.Key4ComboBox.Name = "Key4ComboBox";
+            this.Key4ComboBox.Size = new System.Drawing.Size(121, 33);
+            this.Key4ComboBox.TabIndex = 3;
             // 
-            // tabPage2
+            // LoadOnLoginCheckBox
             // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(282, 185);
-            this.tabPage2.TabIndex = 2;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.LoadOnLoginCheckBox.AutoSize = true;
+            this.LoadOnLoginCheckBox.Location = new System.Drawing.Point(126, 40);
+            this.LoadOnLoginCheckBox.Name = "LoadOnLoginCheckBox";
+            this.LoadOnLoginCheckBox.Size = new System.Drawing.Size(185, 29);
+            this.LoadOnLoginCheckBox.TabIndex = 4;
+            this.LoadOnLoginCheckBox.Text = "Load On Login";
+            this.LoadOnLoginCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // resetDbButton
+            // 
+            this.resetDbButton.Location = new System.Drawing.Point(878, 92);
+            this.resetDbButton.Name = "resetDbButton";
+            this.resetDbButton.Size = new System.Drawing.Size(171, 47);
+            this.resetDbButton.TabIndex = 5;
+            this.resetDbButton.Text = "Reset DB";
+            this.resetDbButton.UseVisualStyleBackColor = true;
+            // 
+            // deleteDbButton
+            // 
+            this.deleteDbButton.Location = new System.Drawing.Point(878, 199);
+            this.deleteDbButton.Name = "deleteDbButton";
+            this.deleteDbButton.Size = new System.Drawing.Size(171, 47);
+            this.deleteDbButton.TabIndex = 6;
+            this.deleteDbButton.Text = "Delete DB";
+            this.deleteDbButton.UseVisualStyleBackColor = true;
+            // 
+            // MaxStoredClipBoardEntries
+            // 
+            this.MaxStoredClipBoardEntries.Location = new System.Drawing.Point(828, 510);
+            this.MaxStoredClipBoardEntries.Name = "MaxStoredClipBoardEntries";
+            this.MaxStoredClipBoardEntries.Size = new System.Drawing.Size(120, 31);
+            this.MaxStoredClipBoardEntries.TabIndex = 8;
             // 
             // MpInputActionForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(610, 450);
-            this.Controls.Add(this.tabControl2);
-            this.Controls.Add(this.dataGridView1);
+            this.ClientSize = new System.Drawing.Size(1220, 865);
+            this.Controls.Add(this.MaxStoredClipBoardEntries);
+            this.Controls.Add(this.deleteDbButton);
+            this.Controls.Add(this.resetDbButton);
+            this.Controls.Add(this.LoadOnLoginCheckBox);
+            this.Controls.Add(this.Key4ComboBox);
+            this.Controls.Add(this.Key3ComboBox);
+            this.Controls.Add(this.Key2ComboBox);
+            this.Controls.Add(this.Key1ComboBox);
+            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "MpInputActionForm";
             this.Text = "-";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.tabControl2.ResumeLayout(false);
+            this.Load += new System.EventHandler(this.MpInputActionForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.MaxStoredClipBoardEntries)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.TabControl tabControl2;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage3;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.ComboBox Key1ComboBox;
+        private System.Windows.Forms.ComboBox Key2ComboBox;
+        private System.Windows.Forms.ComboBox Key3ComboBox;
+        private System.Windows.Forms.ComboBox Key4ComboBox;
+        private System.Windows.Forms.CheckBox LoadOnLoginCheckBox;
+        private System.Windows.Forms.Button resetDbButton;
+        private System.Windows.Forms.Button deleteDbButton;
+        private System.Windows.Forms.NumericUpDown MaxStoredClipBoardEntries;
     }
 }

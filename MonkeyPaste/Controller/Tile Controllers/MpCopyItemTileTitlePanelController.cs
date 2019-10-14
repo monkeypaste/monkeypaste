@@ -1,0 +1,134 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace MonkeyPaste {
+    public class MpCopyItemTileTitlePanelController : MpController {
+        private MpCopyItemTileTitlePanel _copyItemTileTitlePanel { get; set; }
+        public MpCopyItemTileTitlePanel CopyItemTileTitlePanel { get { return _copyItemTileTitlePanel; } set { _copyItemTileTitlePanel = value; } }
+        
+        private MpCopyItemTileTitleIconPanelController _copyItemTileTitleIconPanelController { get; set; }
+        public MpCopyItemTileTitleIconPanelController CopyItemTileTitleIconPanelController { get { return _copyItemTileTitleIconPanelController; } set { _copyItemTileTitleIconPanelController = value; } }
+
+        private TextBox _copyItemTitleTextBox { get; set; }
+        public TextBox CopyItemTitleTextBox { get { return _copyItemTitleTextBox; } set { _copyItemTitleTextBox = value; } }
+
+        private string _orgTitle;
+        private int _copyItemId;
+        private MpKeyboardHook _escKeyHook;
+
+        public MpCopyItemTileTitlePanelController(int tileSize,MpCopyItem ci,Color tileColor,MpController parentController) : base(parentController) {
+            _orgTitle = ci.Title;
+            _copyItemId = ci.copyItemId;
+            _escKeyHook = new MpKeyboardHook();
+            _escKeyHook.KeyPressed += _escKeyHook_KeyPressed;
+
+            CopyItemTileTitlePanel = new MpCopyItemTileTitlePanel() {
+                //FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight,
+                BackColor = tileColor,
+                BorderStyle = BorderStyle.None
+                //Anchor = AnchorStyles.Top,
+                //Location = new Point(),
+                //AutoSize = true,
+                //Size = new Size(tileSize,(int)((float)tileSize* (float)MpSingletonController.Instance.GetSetting("LogPanelTileTitleRatio")))
+            };
+            CopyItemTileTitlePanel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
+
+            int titleHeight = (int)((float)tileSize * (float)MpSingletonController.Instance.GetSetting("LogPanelTileTitleRatio"));
+            CopyItemTileTitleIconPanelController = new MpCopyItemTileTitleIconPanelController(titleHeight,ci,this);
+            CopyItemTileTitlePanel.Controls.Add(CopyItemTileTitleIconPanelController.CopyItemTileTitleIconPanel);
+
+            //float conScale = 1.0f;
+            //Font titleFont = new Font((string)MpSingletonController.Instance.GetSetting("LogPanelTileTitleFontFace"),(float)MpSingletonController.Instance.GetSetting("LogPanelTileTitleFontSize"));
+
+            int tfs = (int)((float)titleHeight * (float)MpSingletonController.Instance.GetSetting("LogPanelTileTitleFontRatio"));
+            Font titleFont = new Font((string)MpSingletonController.Instance.GetSetting("LogPanelTileTitleFontFace"),tfs,GraphicsUnit.Pixel);
+            CopyItemTitleTextBox = new TextBox() {
+                Text = ci.Title,
+                //Anchor = AnchorStyles.Right,                
+                ReadOnly = true,
+                BackColor = tileColor,
+                Font = titleFont,
+                BorderStyle = BorderStyle.None
+            };
+            CopyItemTitleTextBox.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
+            CopyItemTitleTextBox.MouseEnter += _titleTextBox_MouseEnter;
+            //CopyItemTitleTextBox.Enter += _titleTextBox_LostFocus;
+            CopyItemTitleTextBox.MouseLeave += _titleTextBox_LostFocus;
+            CopyItemTitleTextBox.Click += _titleTextBox_Click;
+            CopyItemTitleTextBox.Leave += _titleTextBox_MouseLeave;
+
+            CopyItemTileTitlePanel.Controls.Add(CopyItemTitleTextBox);
+            
+            CopyItemTitleTextBox.BringToFront();
+
+            UpdateTileSize(tileSize);
+        }
+
+        private void _escKeyHook_KeyPressed(object sender,KeyPressedEventArgs e) {
+            throw new NotImplementedException();
+        }
+        private void ActivateHotKeys() {
+            _escKeyHook.RegisterHotKey(ModifierKeys.None,Keys.Escape);
+        }
+        private void DeactivateHotKeys() {
+            _escKeyHook.UnregisterHotKey();
+        }
+        public void UpdateTileSize(int tileSize) {
+            int tp = (int)((float)MpSingletonController.Instance.GetSetting("LogPanelDefaultTilePadRatio") * (float)tileSize);
+            int ts = tileSize;
+            int tth = (int)((float)ts * (float)MpSingletonController.Instance.GetSetting("LogPanelTileTitleRatio"));
+
+            CopyItemTileTitlePanel.Location = new Point(tp,tp);
+            CopyItemTileTitlePanel.Size = new Size(ts-tp,tth);
+
+            int tfs = (int)((float)tth * (float)MpSingletonController.Instance.GetSetting("LogPanelTileTitleFontRatio"));
+            CopyItemTitleTextBox.Location = new Point(tth+tp,(int)((CopyItemTileTitlePanel.Height/2)-(CopyItemTitleTextBox.Height/2)));
+            CopyItemTitleTextBox.Size = new Size(ts-tth-tp-tp-tp,tth);
+            CopyItemTitleTextBox.Font = new Font((string)MpSingletonController.Instance.GetSetting("LogPanelTileTitleFontFace"),tfs,GraphicsUnit.Pixel);
+
+            CopyItemTileTitleIconPanelController.UpdatePanelSize(tth-tp);
+        }
+        private void _titleTextBox_LostFocus(object sender,EventArgs e) {
+            if(_orgTitle != _copyItemTitleTextBox.Text) {
+                MpCopyItem ci = MpSingletonController.Instance.GetMpData().GetMpCopyItem(_copyItemId);
+                ci.Title = CopyItemTitleTextBox.Text;                
+                ci.WriteToDatabase();
+            }
+            if(!CopyItemTitleTextBox.Focused) {
+                CopyItemTitleTextBox.Cursor = Cursors.Arrow;
+                CopyItemTitleTextBox.BorderStyle = BorderStyle.None;
+                CopyItemTitleTextBox.BackColor = CopyItemTileTitlePanel.BackColor;
+                CopyItemTitleTextBox.ReadOnly = true;
+                CopyItemTileTitlePanel.Focus();
+                DeactivateHotKeys();
+            }            
+        }
+
+        private void _titleTextBox_Click(object sender,EventArgs e) {
+            _orgTitle = CopyItemTitleTextBox.Text;
+            CopyItemTitleTextBox.ReadOnly = false;
+            CopyItemTitleTextBox.BorderStyle = BorderStyle.Fixed3D;
+            CopyItemTitleTextBox.BackColor = (Color)MpSingletonController.Instance.GetSetting("LogPanelTileTitleTextBoxBgColor");
+            ActivateHotKeys();
+        }
+
+        private void _titleTextBox_MouseLeave(object sender,EventArgs e) {
+            CopyItemTitleTextBox.Cursor = Cursors.Arrow;
+            CopyItemTitleTextBox.BorderStyle = BorderStyle.None;
+            CopyItemTitleTextBox.ReadOnly = true;
+            CopyItemTitleTextBox.BackColor = CopyItemTileTitlePanel.BackColor;
+            CopyItemTileTitlePanel.Focus();
+            DeactivateHotKeys();
+        }
+
+        private void _titleTextBox_MouseEnter(object sender,EventArgs e) {
+            CopyItemTitleTextBox.Cursor = Cursors.IBeam;
+            CopyItemTitleTextBox.BorderStyle = BorderStyle.Fixed3D;
+        }
+    }
+}

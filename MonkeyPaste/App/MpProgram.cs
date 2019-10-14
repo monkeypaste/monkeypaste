@@ -20,7 +20,7 @@ namespace MonkeyPaste {
             Application.SetCompatibleTextRenderingDefault(false);
             try {
                 var applicationContext = new MpApplicationContext();
-                Application.Run(applicationContext);
+                 Application.Run(applicationContext);
             }
             catch(Exception ex) {
                 MessageBox.Show(ex.ToString(),"Program Terminated Unexpectedly",MessageBoxButtons.OK,MessageBoxIcon.Error);
