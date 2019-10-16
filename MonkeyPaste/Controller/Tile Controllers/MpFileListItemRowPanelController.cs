@@ -9,7 +9,7 @@ namespace MonkeyPaste {
 
         private Panel _fileListItemRowPanel;
         private PictureBox _iconPictureBox;
-        private Label _pathRichTextBox;
+        private Label _pathTextBox;
 
         public MpFileListItemRowPanelController(int rowId, string path,MpController parentController) : base(parentController) {
             _rowId = rowId;
@@ -38,8 +38,8 @@ namespace MonkeyPaste {
             float w = fontSize * Path.GetFileName(path).Length;
             _fileListItemRowPanel.Bounds = new Rectangle(0,0,(int)w,_iconPictureBox.Height);
 
-            _pathRichTextBox = new Label() {
-                Font = new Font((string)MpSingletonController.Instance.GetSetting("LogPanelTileFontFace"),fontSize),
+            _pathTextBox = new Label() {
+                Font = new Font((string)MpSingletonController.Instance.GetSetting("LogFont"),fontSize),
                 //ReadOnly = true,
                 Text = Path.GetFileName(path),
                 BackColor = (_rowId + 1) % 2 == 0 ? Color.AliceBlue : Color.Bisque,
@@ -49,7 +49,7 @@ namespace MonkeyPaste {
                 //BorderStyle = BorderStyle.None,
                 //WordWrap = true                
             };
-            _fileListItemRowPanel.Controls.Add(_pathRichTextBox);
+            _fileListItemRowPanel.Controls.Add(_pathTextBox);
 
             //_fileListItemRowPanel.SetBounds(0,0,_fileListItemRowPanel.Width,_iconPictureBox.Height);
         }
@@ -57,11 +57,19 @@ namespace MonkeyPaste {
         public Panel GetFileListItemRowPanel() {
             return _fileListItemRowPanel;
         }
-        public Label GetPathRichTextBox() {
-            return _pathRichTextBox;
+        public Label GetPathTextBox() {
+            return _pathTextBox;
         }
         public PictureBox GetIconPictureBox() {
             return _iconPictureBox;
+        }
+
+        public override void UpdateBounds() {
+            throw new NotImplementedException();
+        }
+
+        protected override void View_KeyPress(object sender,KeyPressEventArgs e) {
+            base.View_KeyPress(sender,e);
         }
     }
 }

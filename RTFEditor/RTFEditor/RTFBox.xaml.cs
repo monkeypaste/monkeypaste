@@ -248,7 +248,7 @@ namespace RTFEditor
 
             if (fontHeight != null)
             {                
-                RichTextControl.Selection.ApplyPropertyValue(System.Windows.Controls.RichTextBox.FontSizeProperty, fontHeight);
+                RichTextControl.Selection.ApplyPropertyValue(System.Windows.Controls.TextBox.FontSizeProperty, fontHeight);
                 RichTextControl.Focus();
             }
         }
@@ -262,7 +262,7 @@ namespace RTFEditor
 
             if (fontName != null)
             {                
-                RichTextControl.Selection.ApplyPropertyValue(System.Windows.Controls.RichTextBox.FontFamilyProperty, fontName);
+                RichTextControl.Selection.ApplyPropertyValue(System.Windows.Controls.TextBox.FontFamilyProperty, fontName);
                 RichTextControl.Focus();
             }
         }
@@ -307,7 +307,7 @@ namespace RTFEditor
 
         #endregion private ToolBarHandler
         
-        #region private RichTextBoxHandler
+        #region private TextBoxHandler
         
         //
         // Formatierungen des markierten Textes anzeigen
@@ -422,8 +422,8 @@ namespace RTFEditor
         {
             dataChanged = true;
 
-            string fontName = (string)Fonttype.SelectedValue;
-            string fontHeight = (string)Fontheight.SelectedValue;
+            string fontName = "Calibri";// (string)Fonttype.SelectedValue;
+            string fontHeight = "18";// (string)Fontheight.SelectedValue;
             TextRange range = new TextRange(RichTextControl.Selection.Start, RichTextControl.Selection.End);
 
             range.ApplyPropertyValue(TextElement.FontFamilyProperty, fontName);
@@ -481,7 +481,7 @@ namespace RTFEditor
             }
         }
 
-        #endregion private RichTextBoxHandler
+        #endregion private TextBoxHandler
 
         #region private Funktionen
 
@@ -537,7 +537,7 @@ namespace RTFEditor
         }
 
         //
-        // Inhalt der RichTextBox als RTF setzen
+        // Inhalt der TextBox als RTF setzen
         //
         public void SetRTF(string rtf)
         {
@@ -566,7 +566,7 @@ namespace RTFEditor
         }
 
         //
-        // RTF Inhalt der RichTextBox als RTF-String zurückgeben
+        // RTF Inhalt der TextBox als RTF-String zurückgeben
         //
         public string GetRTF()
         {

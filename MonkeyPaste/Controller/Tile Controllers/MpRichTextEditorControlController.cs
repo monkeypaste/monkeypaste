@@ -29,5 +29,13 @@ namespace MonkeyPaste {
             RichTextEditorPanel.Controls.Add(host);
             RtfBoxWpfUserControl.SetRTF(rt);
         }
+
+        public override void UpdateBounds() {
+            throw new NotImplementedException();
+        }
+
+        protected override void View_KeyPress(object sender,KeyPressEventArgs e) {
+            base.View_KeyPress(sender,e);
+        }
     }
 }

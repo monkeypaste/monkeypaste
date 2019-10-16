@@ -41,7 +41,7 @@ namespace MonkeyPaste {
                         _dbPath = openFileDialog.FileName;
                         DialogResult autoLoadResult = MessageBox.Show("Would you like to remember this next time?","Remember Database?",MessageBoxButtons.YesNo);
                         if(autoLoadResult == DialogResult.Yes) {
-                            MpRegistryHelper.Instance.SetValue("DBPath",_dbPath);
+                            MpRegistrySingleton.Instance.SetValue("DBPath",_dbPath);
                         }
                     }
                 }
@@ -61,7 +61,7 @@ namespace MonkeyPaste {
                             _dbPath = saveFileDialog.FileName;
                             DialogResult autoLoadResult = MessageBox.Show("Would you like to remember this next time?","Remember Database?",MessageBoxButtons.YesNo);
                             if(autoLoadResult == DialogResult.Yes) {
-                                MpRegistryHelper.Instance.SetValue("DBPath",_dbPath);
+                                MpRegistrySingleton.Instance.SetValue("DBPath",_dbPath);
                             }
                             SQLiteConnection.CreateFile(_dbPath);
                             DialogResult newDbPasswordResult = MessageBox.Show("Would you like to encrypt database with a password?","Encrypt?",MessageBoxButtons.YesNo);

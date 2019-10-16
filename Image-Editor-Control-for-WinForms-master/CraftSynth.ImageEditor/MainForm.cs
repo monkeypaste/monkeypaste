@@ -1320,7 +1320,7 @@ namespace CraftSynth.ImageEditor
 				//Application.DoEvents();
 				//Thread.Sleep(500);
 
-				using (RichTextBox tempRtb = new RichTextBox())
+				using (TextBox tempRtb = new TextBox())
 				{
 					tempRtb.WordWrap = false;
 

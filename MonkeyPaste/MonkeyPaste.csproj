@@ -286,8 +286,8 @@
     <Compile Include="Controller\MpTaskbarIconController.cs" />
     <Compile Include="Controller\MpController.cs" />
     <Compile Include="Controller\Tile Controllers\MpCopyItemTileTitleIconPanelController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpCopyItemTileTitleMenuPanelController.cs" />
     <Compile Include="Controller\Tile Controllers\MpCopyItemTileTitlePanelController.cs" />
-    <Compile Include="Controller\MpScreenController.cs" />
     <Compile Include="Controller\Tile Controllers\MpImageEditorControlController.cs" />
     <Compile Include="Controller\Tile Controllers\MpOverlayPanelController.cs" />
     <Compile Include="Helpers\IconHelper.cs" />
@@ -296,7 +296,7 @@
     <Compile Include="Controller\Tile Controllers\MpCopyItemTileController.cs" />
     <Compile Include="Helpers\MpColorPallete.cs" />
     <Compile Include="Helpers\MpCursorPosition.cs" />
-    <Compile Include="Helpers\MpHelperFunctions.cs" />
+    <Compile Include="Singletons\MpHelperSingleton.cs" />
     <Compile Include="Controller\Tile Controllers\MpFileListItemRowPanelController.cs" />
     <Compile Include="Controller\Tile Controllers\MpCopyItemControlController.cs" />
     <Compile Include="Controller\MpKeyboardController.cs" />
@@ -305,14 +305,19 @@
     <Compile Include="Helpers\MpClipboardHelper.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controller\MpSingletonController.cs" />
-    <Compile Include="Helpers\MpRegistryHelper.cs" />
-    <Compile Include="Controller\Tile Controllers\MpRichTextEditorControlController.cs" />
-    <Compile Include="Helpers\ProgramInfo.cs" />
-    <Compile Include="Helpers\SingleInstance.cs" />
-    <Compile Include="Helpers\WinAPI.cs" />
+    <Compile Include="Singletons\MpSingletonController.cs" />
+    <Compile Include="Singletons\MpRegistrySingleton.cs" />
+    <Compile Include="App\ProgramInfo.cs" />
+    <Compile Include="App\SingleInstance.cs" />
+    <Compile Include="App\WinAPI.cs" />
     <Compile Include="Model\MpDb.cs" />
     <Compile Include="Model\MpModel.cs" />
+    <Compile Include="View\MpControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\MpCopyItemTileTitleMenuPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="View\MpOverlayPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -406,6 +411,9 @@
     <EmbeddedResource Include="Helpers\MpClipboardHelper.resx">
       <DependentUpon>MpClipboardHelper.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="View\MpCopyItemTileTitleMenuPanel.resx">
+      <DependentUpon>MpCopyItemTileTitleMenuPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\MpHelpForm.resx">
       <DependentUpon>MpHelpForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -479,10 +487,6 @@
     <ProjectReference Include="..\RTFEditor\ColorPicker\ColorPicker.csproj">
       <Project>{6813ecb1-b6b3-49f4-9070-9e4dfef34fae}</Project>
       <Name>ColorPicker</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RTFEditor\RTFEditor\RTFEditor.csproj">
-      <Project>{6aec74bd-eee6-4402-93b0-4d4163e15e98}</Project>
-      <Name>RTFEditor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

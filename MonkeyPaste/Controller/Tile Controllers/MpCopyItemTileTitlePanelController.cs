@@ -8,14 +8,19 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {
     public class MpCopyItemTileTitlePanelController : MpController {
+        //title panel
         private MpCopyItemTileTitlePanel _copyItemTileTitlePanel { get; set; }
         public MpCopyItemTileTitlePanel CopyItemTileTitlePanel { get { return _copyItemTileTitlePanel; } set { _copyItemTileTitlePanel = value; } }
         
+        //icon controller
         private MpCopyItemTileTitleIconPanelController _copyItemTileTitleIconPanelController { get; set; }
         public MpCopyItemTileTitleIconPanelController CopyItemTileTitleIconPanelController { get { return _copyItemTileTitleIconPanelController; } set { _copyItemTileTitleIconPanelController = value; } }
 
-        private TextBox _copyItemTitleTextBox { get; set; }
-        public TextBox CopyItemTitleTextBox { get { return _copyItemTitleTextBox; } set { _copyItemTitleTextBox = value; } }
+        //title menu controller 
+        private MpCopyItemTileTitleMenuPanelController _copyItemTileTitleMenuPanelController { get; set; }
+        public MpCopyItemTileTitleMenuPanelController CopyItemTileTitleMenuPanelController { get { return _copyItemTileTitleMenuPanelController; } set { _copyItemTileTitleMenuPanelController = value; } }
+        //private TextBox _copyItemTitleTextBox { get; set; }
+        // public TextBox CopyItemTitleTextBox { get { return _copyItemTitleTextBox; } set { _copyItemTitleTextBox = value; } }
 
         private string _orgTitle;
         private int _copyItemId;
@@ -27,27 +32,21 @@ namespace MonkeyPaste {
             _escKeyHook = new MpKeyboardHook();
             _escKeyHook.KeyPressed += _escKeyHook_KeyPressed;
 
+            //parent panel
             CopyItemTileTitlePanel = new MpCopyItemTileTitlePanel() {
-                //FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight,
                 BackColor = tileColor,
                 BorderStyle = BorderStyle.None
-                //Anchor = AnchorStyles.Top,
-                //Location = new Point(),
-                //AutoSize = true,
-                //Size = new Size(tileSize,(int)((float)tileSize* (float)MpSingletonController.Instance.GetSetting("LogPanelTileTitleRatio")))
+                
             };
             CopyItemTileTitlePanel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
 
-            int titleHeight = (int)((float)tileSize * (float)MpSingletonController.Instance.GetSetting("LogPanelTileTitleRatio"));
-            CopyItemTileTitleIconPanelController = new MpCopyItemTileTitleIconPanelController(titleHeight,ci,this);
-            CopyItemTileTitlePanel.Controls.Add(CopyItemTileTitleIconPanelController.CopyItemTileTitleIconPanel);
-
-            //float conScale = 1.0f;
-            //Font titleFont = new Font((string)MpSingletonController.Instance.GetSetting("LogPanelTileTitleFontFace"),(float)MpSingletonController.Instance.GetSetting("LogPanelTileTitleFontSize"));
-
-            int tfs = (int)((float)titleHeight * (float)MpSingletonController.Instance.GetSetting("LogPanelTileTitleFontRatio"));
-            Font titleFont = new Font((string)MpSingletonController.Instance.GetSetting("LogPanelTileTitleFontFace"),tfs,GraphicsUnit.Pixel);
-            CopyItemTitleTextBox = new TextBox() {
+            //tile height
+            int th = (int)((float)tileSize * (float)MpSingletonController.Instance.GetSetting("TileMenuHeightRatio"));
+            CopyItemTileTitleIconPanelController = new MpCopyItemTileTitleIconPanelController(th,ci,this);
+           
+            CopyItemTileTitleMenuPanelController = new MpCopyItemTileTitleMenuPanelController(this);
+            /*
+            CopyItemTitleTextBox = new TextBint w x() {
                 Text = ci.Title,
                 //Anchor = AnchorStyles.Right,                
                 ReadOnly = true,
@@ -62,11 +61,13 @@ namespace MonkeyPaste {
             CopyItemTitleTextBox.Click += _titleTextBox_Click;
             CopyItemTitleTextBox.Leave += _titleTextBox_MouseLeave;
 
-            CopyItemTileTitlePanel.Controls.Add(CopyItemTitleTextBox);
-            
+            CopyItemTileTitlePanel.Controls.Add(CopyItemTitleTextBox);            
             CopyItemTitleTextBox.BringToFront();
+            */
 
-            UpdateTileSize(tileSize);
+            CopyItemTileTitlePanel.Controls.Add(CopyItemTileTitleIconPanelController.CopyItemTileTitleIconPanel);           
+
+            UpdateBounds();
         }
 
         private void _escKeyHook_KeyPressed(object sender,KeyPressedEventArgs e) {
@@ -78,18 +79,18 @@ namespace MonkeyPaste {
         private void DeactivateHotKeys() {
             _escKeyHook.UnregisterHotKey();
         }
-        public void UpdateTileSize(int tileSize) {
-            int tp = (int)((float)MpSingletonController.Instance.GetSetting("LogPanelDefaultTilePadRatio") * (float)tileSize);
+       /* public void UpdateTileSize(int tileSize) {
+            int tp = (int)((float)MpSingletonController.Instance.GetSetting("TileOuterPadScreenWidthRatio") * (float)tileSize);
             int ts = tileSize;
-            int tth = (int)((float)ts * (float)MpSingletonController.Instance.GetSetting("LogPanelTileTitleRatio"));
+            int tth = (int)((float)ts * (float)MpSingletonController.Instance.GetSetting("TileMenuHeightRatio"));
 
             CopyItemTileTitlePanel.Location = new Point(tp,tp);
             CopyItemTileTitlePanel.Size = new Size(ts-tp,tth);
 
-            int tfs = (int)((float)tth * (float)MpSingletonController.Instance.GetSetting("LogPanelTileTitleFontRatio"));
+            int tfs = (int)((float)tth * (float)MpSingletonController.Instance.GetSetting("TileMenuFontRatio"));
             CopyItemTitleTextBox.Location = new Point(tth+tp,(int)((CopyItemTileTitlePanel.Height/2)-(CopyItemTitleTextBox.Height/2)));
             CopyItemTitleTextBox.Size = new Size(ts-tth-tp-tp-tp,tth);
-            CopyItemTitleTextBox.Font = new Font((string)MpSingletonController.Instance.GetSetting("LogPanelTileTitleFontFace"),tfs,GraphicsUnit.Pixel);
+            CopyItemTitleTextBox.Font = new Font((string)MpSingletonController.Instance.GetSetting("TileMenuFont"),tfs,GraphicsUnit.Pixel);
 
             CopyItemTileTitleIconPanelController.UpdatePanelSize(tth-tp);
         }
@@ -113,7 +114,7 @@ namespace MonkeyPaste {
             _orgTitle = CopyItemTitleTextBox.Text;
             CopyItemTitleTextBox.ReadOnly = false;
             CopyItemTitleTextBox.BorderStyle = BorderStyle.Fixed3D;
-            CopyItemTitleTextBox.BackColor = (Color)MpSingletonController.Instance.GetSetting("LogPanelTileTitleTextBoxBgColor");
+            CopyItemTitleTextBox.BackColor = (Color)MpSingletonController.Instance.GetSetting("TileMenuColor");
             ActivateHotKeys();
         }
 
@@ -129,6 +130,16 @@ namespace MonkeyPaste {
         private void _titleTextBox_MouseEnter(object sender,EventArgs e) {
             CopyItemTitleTextBox.Cursor = Cursors.IBeam;
             CopyItemTitleTextBox.BorderStyle = BorderStyle.Fixed3D;
+        }**/
+
+        public override void UpdateBounds() {
+            int tileSize = ((MpCopyItemTileChooserPanelController)((MpCopyItemTileController)ParentController).ParentController).CopyItemTileChooserPanel.Bounds.Height;
+            int tp = (int)((float)MpSingletonController.Instance.GetSetting("TileOuterPadScreenWidthRatio") * (float)tileSize);
+            int ts = tileSize;
+            int tth = (int)((float)ts * (float)MpSingletonController.Instance.GetSetting("TileMenuHeightRatio"));
+
+            CopyItemTileTitlePanel.Location = new Point(tp,tp);
+            CopyItemTileTitlePanel.Size = new Size(ts - tp,tth);          
         }
     }
 }

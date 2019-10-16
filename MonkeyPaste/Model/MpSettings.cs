@@ -29,21 +29,26 @@ namespace MonkeyPaste {
         }
         public void Reset() {
             SetSetting("MaxDbPasswordAttempts",3,MpSettingValueType.Int);
-            SetSetting("LogPanelDefaultVisibleTileCount",5,MpSettingValueType.Int);
-            SetSetting("LogPanelDefaultHeightRatio",0.3f,MpSettingValueType.Float);
-            SetSetting("LogPanelDefaultTilePadRatio",0.02f,MpSettingValueType.Float);
+            //SetSetting("LogPanelDefaultVisibleTileCount",5,MpSettingValueType.Int);
+            SetSetting("LogScreenHeightRatio",0.3f,MpSettingValueType.Float);
             SetSetting("LogPanelBgColor",MpColorPallete.LightBlue,MpSettingValueType.Color);
-            SetSetting("LogPanelTileFontFace","Calibri",MpSettingValueType.String);
+            SetSetting("LogFont","Calibri",MpSettingValueType.String);
             SetSetting("LogPanelTileFontSize",10.0f,MpSettingValueType.Float);
-            SetSetting("LogPanelTileTitleRatio",0.2f,MpSettingValueType.Float);
-            SetSetting("LogPanelTileTitleFontFace","Calibri",MpSettingValueType.String);
-            SetSetting("LogPanelTileTitleFontRatio",0.75f,MpSettingValueType.Float);
-            SetSetting("LogPanelTileActiveColor",MpColorPallete.Red,MpSettingValueType.Color);
-            SetSetting("LogPanelTileColor1",MpColorPallete.DarkGreen,MpSettingValueType.Color);
-            SetSetting("LogPanelTileColor2",MpColorPallete.Yellow,MpSettingValueType.Color);
-            SetSetting("LogPanelTileTitleTextBoxBgColor",MpColorPallete.LightGreen,MpSettingValueType.Color);
-            SetSetting("LogPanelTileTitleIconBorderColor",MpColorPallete.Blue,MpSettingValueType.Color);
-            SetSetting("LogPanelTileCornerRadius",10,MpSettingValueType.Int);
+
+            SetSetting("TileMenuHeightRatio",0.2f,MpSettingValueType.Float);
+            SetSetting("TileMenuFont","Impact",MpSettingValueType.String);
+            SetSetting("TileMenuFontRatio",0.75f,MpSettingValueType.Float);
+            SetSetting("TileMenuColor",MpColorPallete.LightGreen,MpSettingValueType.Color);
+
+            SetSetting("TileActiveColor",MpColorPallete.Red,MpSettingValueType.Color);
+            SetSetting("TileColor1",MpColorPallete.DarkGreen,MpSettingValueType.Color);
+            SetSetting("TileColor2",MpColorPallete.Yellow,MpSettingValueType.Color);
+            SetSetting("TileIconBorderColor",MpColorPallete.Blue,MpSettingValueType.Color);
+            SetSetting("TileBorderRadius",10,MpSettingValueType.Int);
+            SetSetting("TileFont","OpenSans",MpSettingValueType.String);
+            SetSetting("TileMinLineCount",10,MpSettingValueType.Int);
+            SetSetting("TileOuterPadScreenWidthRatio",0.02f,MpSettingValueType.Float);
+            SetSetting("TileInnerPadTileWidthRatio",0.04f,MpSettingValueType.Float);
         }
         public void SetSetting(string key,object val,MpSettingValueType svt) {
             if(SettingDictionary.Keys.Contains(key)) {

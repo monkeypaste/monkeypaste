@@ -29,8 +29,35 @@ namespace MonkeyPaste {
         private Panel _overlayPanel { get; set; }
         public Panel OverlayPanel { get { return _overlayPanel; } set { _overlayPanel = value; } }
 
-        private bool _hasFocus  {get;set;}
-        public bool HasFocus { get { return _hasFocus; } set { _hasFocus = value; } }
+        /*private bool _hasFocus = false;
+        public bool HasFocus {
+            get {                
+                return _hasFocus;
+            }
+            set {
+                if(OverlayPanel == null) {
+                    OverlayPanel = new MpRoundedPanel() {
+                        AutoSize = false,
+                        Bounds = CopyItemTilePanel.Bounds,
+                        BackColor = Color.FromArgb(200,128,128,0)
+                    };
+                    CopyItemTilePanel.Controls.Add(OverlayPanel);
+                    OverlayPanel.Click += OverlayPanel_Click;
+                }
+                _hasFocus = value;
+                OverlayPanel.Bounds = CopyItemTilePanel.Bounds;
+                if(_hasFocus) {
+                    OverlayPanel.SendToBack();
+                } else {
+                    OverlayPanel.BringToFront();
+                }
+                OverlayPanel.BringToFront();
+            }
+        }*/
+
+        private void OverlayPanel_Click(object sender,EventArgs e) {
+            //HasFocus = !HasFocus;
+        }
 
         private bool _isEditable { get; set; }
         public bool IsEditable { get { return _isEditable; } set { _isEditable = value; } }
@@ -45,8 +72,6 @@ namespace MonkeyPaste {
 
         public MpCopyItemTileController(int tileSize,MpCopyItem ci,Color tileColor,MpController parentController) : base(parentController) {
             TileId = ++TotalTileCount;
-            IsEditable = false;
-            HasFocus = false;
             IsEditable = ci.copyItemTypeId == MpCopyItemType.RichText || ci.copyItemTypeId == MpCopyItemType.Text;
             _copyItem = ci;
 
@@ -70,42 +95,40 @@ namespace MonkeyPaste {
 
             CopyItemTileTitlePanelController = new MpCopyItemTileTitlePanelController(tileSize,ci,tileColor,this);
             CopyItemTilePanel.Controls.Add(CopyItemTileTitlePanelController.CopyItemTileTitlePanel);
-            
+
             CopyItemControlController = new MpCopyItemControlController(tileSize,ci,this);
             CopyItemTilePanel.Controls.Add(CopyItemControlController.ItemControl);
             CopyItemControlController.ItemControl.BringToFront();
 
-            UpdateTileSize(tileSize);
-        }
 
-        private void _spaceKeyHook_KeyPressed(object sender,KeyPressedEventArgs e) {
-            ((RichTextBox)CopyItemControlController.ItemControl).ReadOnly = false;
+            UpdateBounds();
         }
+        public override void UpdateBounds() {
+            //tile chooser panel rect
+            Rectangle tcp = ((MpCopyItemTileChooserPanelController)ParentController).CopyItemTileChooserPanel.Bounds;
 
-        private void _escKeyHook_KeyPressed(object sender,KeyPressedEventArgs e) {
-            ((RichTextBox)CopyItemControlController.ItemControl).ReadOnly = true;
-        }
-
-        public void UpdateTileSize(int tileSize) {
+            int tileSize = ((MpCopyItemTileChooserPanelController)ParentController).CopyItemTileChooserPanel.Bounds.Height;
             int tp = (int)((float)MpSingletonController.Instance.GetSetting("LogPanelDefaultTilePadRatio") * (float)tileSize);
             int ts = tileSize - (tp * 2);
             int tth = ts - tp;// (int)((float)ts * (float)MpSingletonController.Instance.GetSetting("LogPanelTileTitleRatio"));
             int x = ((TotalTileCount - _tileId) * ts) + ((TotalTileCount - _tileId + 1) * (tp*2));
             int y = tp;
             CopyItemTilePanel.SetBounds(x,y,ts,ts);
-            CopyItemTileTitlePanelController.UpdateTileSize(tth);
-            CopyItemControlController.UpdateTileSize(tth);
+
+            CopyItemTileTitlePanelController.UpdateBounds();
+            CopyItemControlController.UpdateBounds();
+            //HasFocus = _hasFocus;
             //_titlePanel.SetBounds(x-tp,y-tp,tileSize,tth);
             //_contentPanel.SetBounds(tp,tth,ts - (tp * 2),ts - tp * 2 - tth);
             
 
-            //_titleTextBox.Font = new Font((string)MpSingletonController.Instance.GetSetting("LogPanelTileTitleFontFace"),(float)MpSingletonController.Instance.GetSetting("LogPanelTileTitleFontSize"));
+            //_titleTextBox.Font = new Font((string)MpSingletonController.Instance.GetSetting("LogPanelTileMenuFontFace"),(float)MpSingletonController.Instance.GetSetting("LogPanelTileMenuFontSize"));
 
            /* Font f = new Font((string)MpSingletonController.Instance.GetSetting("LogPanelTileFontFace"),(float)MpSingletonController.Instance.GetSetting("LogPanelTileFontSize"));
             //_titleTextBox.Scale(new SizeF(1.0f,1.0f));
-            if(_itemControl.GetType() == typeof(RichTextBox)) {
-                ((RichTextBox)_itemControl).Font = f;
-                ((RichTextBox)_itemControl).Scale(new SizeF(1.0f,1.0f));
+            if(_itemControl.GetType() == typeof(TextBox)) {
+                ((TextBox)_itemControl).Font = f;
+                ((TextBox)_itemControl).Scale(new SizeF(1.0f,1.0f));
             }
             else if(_itemControl.GetType() == typeof(TextBox)) {
                 ((TextBox)_itemControl).Font = f;
@@ -116,17 +139,14 @@ namespace MonkeyPaste {
                 ((WebBrowser)_itemControl).Scale(new SizeF(1.0f,1.0f));
             }*/
         }
-        public void SetFocus(bool newFocus) {
-            this._hasFocus = newFocus;
-            _copyItemTilePanel.BackColor = (this._hasFocus) ? (Color)MpSingletonController.Instance.GetSetting("LogPanelTileActiveColor") : _tileColor;
-            if(newFocus) {
-                //ActivateHotKeys();
-            } else {
-                //DeactivateHotKeys();
-                //CopyItemControlController.IsReadOnly = true;
-            }
+
+        private void _spaceKeyHook_KeyPressed(object sender,KeyPressedEventArgs e) {
+            ((TextBox)CopyItemControlController.ItemControl).ReadOnly = false;
         }
-        
+
+        private void _escKeyHook_KeyPressed(object sender,KeyPressedEventArgs e) {
+            ((TextBox)CopyItemControlController.ItemControl).ReadOnly = true;
+        }
         public void ActivateHotKeys() {
             if(IsEditable) {
                 _escKeyHook.RegisterHotKey(ModifierKeys.None,Keys.Escape);

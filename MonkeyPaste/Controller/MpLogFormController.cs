@@ -16,7 +16,8 @@ namespace MonkeyPaste {
     public class MpLogFormController : MpController {
         [DllImport("user32.dll")]
         static extern bool SetActiveWindow(IntPtr hWnd);
-        
+
+        public Rectangle sb;
         private MpClipboardHelper _clipboardController;
         private MpLogForm _logForm;
 
@@ -56,7 +57,7 @@ namespace MonkeyPaste {
             _toggleLogHook.RegisterHotKey(ModifierKeys.None,Keys.CapsLock);
             MpSingletonController.Instance.SetKeyboardHook(MpInputCommand.ToggleLog,_toggleLogHook);
             
-            _copyItemTileChooserController = new MpCopyItemTileChooserPanelController(null);
+            _copyItemTileChooserController = new MpCopyItemTileChooserPanelController(this);
             _logForm.Controls.Add(_copyItemTileChooserController.GetCopyItemPanel());
             UpdateLogFormBounds();
             _logForm.Show();
@@ -176,8 +177,8 @@ namespace MonkeyPaste {
         }
         public void UpdateLogFormBounds() {
             //Process.GetCurrentProcess().Refresh();
-            Rectangle sb = MpScreenController.GetScreenBoundsWithMouse();
-            int h = _customHeight > 0 ? _customHeight : (int)((float)sb.Height * (float)MpSingletonController.Instance.GetSetting("LogPanelDefaultHeightRatio"));
+            sb = MpHelperSingleton.Instance.GetScreenBoundsWithMouse();
+            int h = _customHeight > 0 ? _customHeight : (int)((float)sb.Height * (float)MpSingletonController.Instance.GetSetting("LogScreenHeightRatio"));
 
             _customHeight = h;
 
@@ -218,23 +219,31 @@ namespace MonkeyPaste {
             MpCopyItem copyItem = _copyItemTileChooserController.GetSelectedCopyItem();
 
             if(copyItem.copyItemTypeId == MpCopyItemType.Text) {
-                System.Windows.Clipboard.SetData(DataFormats.Text,copyItem.GetText());
+                System.Windows.Clipboard.SetData(DataFormats.Text,(string)copyItem.GetData());
             } else if(copyItem.copyItemTypeId == MpCopyItemType.RichText) {
-                System.Windows.Clipboard.SetData(DataFormats.Text,copyItem.GetText());
+                System.Windows.Clipboard.SetData(DataFormats.Text,(string)copyItem.GetData());
             }
             else if(copyItem.copyItemTypeId == MpCopyItemType.HTMLText) {
-                System.Windows.Clipboard.SetData(DataFormats.Text,copyItem.GetText());
+                System.Windows.Clipboard.SetData(DataFormats.Text,(string)copyItem.GetData());
             }
             else if(copyItem.copyItemTypeId == MpCopyItemType.Image) {
-                System.Windows.Clipboard.SetImage((BitmapSource)copyItem.DataObject);
+                System.Windows.Clipboard.SetImage((BitmapSource)copyItem.GetData());
             }
             else if(copyItem.copyItemTypeId == MpCopyItemType.FileList) {
-                System.Windows.Clipboard.SetFileDropList((StringCollection)copyItem.DataObject);
+                System.Windows.Clipboard.SetFileDropList((StringCollection)copyItem.GetData());
             }
             SetActiveWindow(_clipboardController.GetLastWindowWatcher().LastHandle);
             SendKeys.Send("^v");
 
             MpSingletonController.Instance.SetIgnoreNextClipboardEvent(false);
+        }
+
+        public override void UpdateBounds() {
+            throw new NotImplementedException();
+        }
+
+        protected override void View_KeyPress(object sender,KeyPressEventArgs e) {
+            
         }
     }
 }

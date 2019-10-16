@@ -64,16 +64,16 @@ namespace MonkeyPaste {
                     value = 0;
                 }
 
-                if(_selectedCopyItemIdx >= 0) {
+                /*if(_selectedCopyItemIdx >= 0) {
                     if(_copyItemTileControllerList[_selectedCopyItemIdx].IsEditable) {
-                        ((RichTextBox)_copyItemTileControllerList[_selectedCopyItemIdx].CopyItemControlController.ItemControl).ReadOnly = true;
-                    }                    
-                    _copyItemTileControllerList[_selectedCopyItemIdx].SetFocus(false);
+                        ((TextBox)_copyItemTileControllerList[_selectedCopyItemIdx].CopyItemControlController.ItemControl).ReadOnly = true;
+                    }
+                    //_copyItemTileControllerList[_selectedCopyItemIdx].HasFocus = false;
                 }
                 if(_copyItemTileControllerList[value].IsEditable) {
-                    ((RichTextBox)_copyItemTileControllerList[value].CopyItemControlController.ItemControl).ReadOnly = true;
-                }
-                _copyItemTileControllerList[value].SetFocus(true);
+                    ((TextBox)_copyItemTileControllerList[value].CopyItemControlController.ItemControl).ReadOnly = true;
+                }*/
+                //_copyItemTileControllerList[value].HasFocus = true;
                 int pw = _copyItemTileChooserPanel.Width;
                 int tr = _copyItemTileControllerList[value].CopyItemTilePanel.Right;
                 int tl = _copyItemTileControllerList[value].CopyItemTilePanel.Left;
@@ -111,12 +111,12 @@ namespace MonkeyPaste {
             _selectedCopyItemIdx = -1;
             _panelId = ++_PanelCount;
 
-            TileColor1 = (Color)MpSingletonController.Instance.GetSetting("LogPanelTileColor1");
-            TileColor2 = (Color)MpSingletonController.Instance.GetSetting("LogPanelTileColor2");
+            TileColor1 = (Color)MpSingletonController.Instance.GetSetting("TileColor1");
+            TileColor2 = (Color)MpSingletonController.Instance.GetSetting("TileColor2");
 
             //Process.GetCurrentProcess().Refresh();
-            Rectangle sb = MpScreenController.GetScreenBoundsWithMouse();// Screen.FromHandle(Process.GetCurrentProcess().MainWindowHandle).WorkingArea;            
-            int h = (int)((float)sb.Height * (float)MpSingletonController.Instance.GetSetting("LogPanelDefaultHeightRatio"));            
+            Rectangle sb = MpHelperSingleton.Instance.GetScreenBoundsWithMouse();// Screen.FromHandle(Process.GetCurrentProcess().MainWindowHandle).WorkingArea;            
+            int h = (int)((float)sb.Height * (float)MpSingletonController.Instance.GetSetting("LogScreenHeightRatio"));            
 
             CopyItemTileChooserPanel = new MpCopyItemTileChooserPanel() {
                 BackColor = (Color)MpSingletonController.Instance.GetSetting("LogPanelBgColor"),
@@ -207,7 +207,15 @@ namespace MonkeyPaste {
             UpdatePanelBounds(newBounds);
             CopyItemTileChooserPanel.Refresh();
         }
+        public void FilterTiles(string filterStr) {
 
+        }
+        public void SearchStrCollection_CollectionChanged(object sender,NotifyCollectionChangedEventArgs e) {
+            if(e.NewItems != null) {
+                FilterTiles((string)e.NewItems[0]);
+            }
+            Console.WriteLine("Searching for: " + (string)e.NewItems[0]);
+        }
         public void CopyItemCollection_CollectionChanged(object sender,NotifyCollectionChangedEventArgs e) {
             if(e.NewItems != null) {
                 foreach(MpCopyItem ci in e.NewItems) {
@@ -240,19 +248,20 @@ namespace MonkeyPaste {
             return -1;
         }
         public void UpdatePanelBounds(Rectangle newBounds) {
-            int p = newBounds.Height - (int)((float)newBounds.Height-((float)MpSingletonController.Instance.GetSetting("LogPanelDefaultTilePadRatio")*(float)newBounds.Height));
+            int p = newBounds.Height - (int)((float)newBounds.Height-((float)MpSingletonController.Instance.GetSetting("TileOuterPadScreenWidthRatio")*(float)newBounds.Height));
             _copyItemTileChooserPanel.Bounds = new Rectangle(0,p,newBounds.Width,newBounds.Height - p);
             foreach(MpCopyItemTileController citc in _copyItemTileControllerList) {
-                citc.UpdateTileSize(_copyItemTileChooserPanel.Bounds.Height);
+                citc.UpdateBounds();
             }
         }
         private void AddNewCopyItemPanel(MpCopyItem ci) {
             //shift older items right by one panel
             foreach(MpCopyItemTileController citc in _copyItemTileControllerList) {
                 //get tile size offset based of logpanel size times tile ratio
-                int p = (int)((float)MpSingletonController.Instance.GetSetting("LogPanelDefaultTilePadRatio") * (float)citc.CopyItemTilePanel.Bounds.Width);
+                int p = (int)((float)MpSingletonController.Instance.GetSetting("TileOuterPadScreenWidthRatio") * (float)citc.CopyItemTilePanel.Bounds.Width);
                 Point np = new Point(citc.CopyItemTilePanel.Location.X + citc.CopyItemTilePanel.Bounds.Width + (p * 2),citc.CopyItemTilePanel.Location.Y);
                 citc.CopyItemTilePanel.Location = np;
+                //citc.HasFocus = false;
             }
             //create new tile
             MpCopyItemTileController ncitc = new MpCopyItemTileController(
@@ -260,7 +269,7 @@ namespace MonkeyPaste {
                 ci,_copyItemTileControllerList.Count % 2 == 0 ? TileColor1:TileColor2,
                 this
             );
-           
+
             if(ncitc != null) {
                 /*ncitc.CopyItemTilePanel.MouseClick += OnTileClick;
                 ncitc.CopyItemTilePanel.MouseDoubleClick += OnTileDoubleClick;
@@ -272,6 +281,7 @@ namespace MonkeyPaste {
                 ncitc.CopyItemTileTitlePanelController.CopyItemTileTitleIconPanelController.CopyItemTileTitleIconPanel.MouseDoubleClick += OnTileDoubleClick;
                 ncitc.CopyItemTileTitlePanelController.CopyItemTileTitleIconPanelController.CopyItemTitleIconBox.MouseClick += OnTileClick;*/
 
+                //ncitc.HasFocus = true;
                 CopyItemTileControllerList.Add(ncitc);
                 //ncitc.SetFocus(true);
                 CopyItemTileChooserPanel.Controls.Add(ncitc.CopyItemTilePanel);
@@ -304,6 +314,14 @@ namespace MonkeyPaste {
                 SelectedCopyItemTileController = clickedTileController;
                 ((MpLogFormController)ParentController).PasteCopyItem();
             }
+        }
+
+        public override void UpdateBounds() {
+            throw new NotImplementedException();
+        }
+
+        protected override void View_KeyPress(object sender,KeyPressEventArgs e) {
+            base.View_KeyPress(sender,e);
         }
     }
 }

@@ -17,7 +17,7 @@ namespace MonkeyPaste {
         static void Main() {
             if(!SingleInstance.Start()) { return; }
             Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+            //Application.SetCompatibleTextRenderingDefault(false);
             try {
                 var applicationContext = new MpApplicationContext();
                  Application.Run(applicationContext);

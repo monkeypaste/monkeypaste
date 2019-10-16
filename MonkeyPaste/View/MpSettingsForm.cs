@@ -38,7 +38,7 @@ namespace MonkeyPaste
                     Font = new Font("Calibri",ts,GraphicsUnit.Pixel),
                     Bounds = new Rectangle(newLabel.Right+p,0,(int)(sPanel.Width / 2)-p*2,sPanel.Height),
                     Tag = (object)s.Key,
-                    Text = s.Value.GetType() == typeof(Color) ? MpHelperFunctions.Instance.GetColorString((Color)s.Value): Convert.ToString(s.Value)
+                    Text = s.Value.GetType() == typeof(Color) ? MpHelperSingleton.Instance.GetColorString((Color)s.Value): Convert.ToString(s.Value)
                 };
                 sTextBox.LostFocus += STextBox_LostFocus;
                 sPanel.Controls.Add(sTextBox);
@@ -105,7 +105,7 @@ namespace MonkeyPaste
                         MpSingletonController.Instance.SetSetting((string)tb.Tag,(float)Convert.ToDouble(tb.Text));
                         break;
                     case MpSettingValueType.Color:
-                        MpSingletonController.Instance.SetSetting((string)tb.Tag,MpHelperFunctions.Instance.GetColorFromString(tb.Text));
+                        MpSingletonController.Instance.SetSetting((string)tb.Tag,MpHelperSingleton.Instance.GetColorFromString(tb.Text));
                         break;
                     case MpSettingValueType.String:
                         MpSingletonController.Instance.SetSetting((string)tb.Tag,tb.Text);

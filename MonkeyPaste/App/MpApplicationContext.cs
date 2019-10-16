@@ -20,7 +20,7 @@ namespace MonkeyPaste {
         /// </summary>
         public MpApplicationContext() {
             InitializeContext();
-            _taskbarController = new MpTaskbarIconController(this,null,(string)MpRegistryHelper.Instance.GetValue("DBPath"),(string)MpRegistryHelper.Instance.GetValue("DBPassword"));
+            _taskbarController = new MpTaskbarIconController(this,null,(string)MpRegistrySingleton.Instance.GetValue("DBPath"),(string)MpRegistrySingleton.Instance.GetValue("DBPassword"));
         }
 
         public void ExitCore() {

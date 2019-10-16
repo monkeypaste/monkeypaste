@@ -21,6 +21,21 @@ namespace MonkeyPaste {
         private ObservableCollection<MpApp> _appList = new ObservableCollection<MpApp>();
         private ObservableCollection<MpCopyItem> _copyItemList = new ObservableCollection<MpCopyItem>();
 
+        private ObservableCollection<string> _searchStringList = new ObservableCollection<string>();
+        public ObservableCollection<string> SearchStringList {
+            get {
+                return _searchStringList;
+            }
+            set {
+                if(value == null) {
+                    _searchStringList = null;
+                } else {
+                    _searchStringList = new ObservableCollection<string>();
+                    _searchStringList.Add(value[0]);
+                }                
+            }
+        }
+
         public MpData(string dbPath,string dbPassword,string identityToken,string accessToken) {
             Db = new MpDb(dbPath,dbPassword);
             InitUser(identityToken);
@@ -39,6 +54,7 @@ namespace MonkeyPaste {
         public void AddOnDataListChangeListener(MpCopyItemTileChooserPanelController lf) {
             //_mpIconList.CollectionChanged += lf.CopyItemCollection_CollectionChanged;
             //_mpAppList.CollectionChanged += lf.CopyItemCollection_CollectionChanged;
+            _searchStringList.CollectionChanged += lf.SearchStrCollection_CollectionChanged;
             _copyItemList.CollectionChanged += lf.CopyItemCollection_CollectionChanged;
         }
         public MpClient GetMpClient() {

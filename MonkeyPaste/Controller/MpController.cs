@@ -6,7 +6,30 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpController {
+    public abstract class MpController {
+        //margin ratio
+        private float _mr = 0.00f;
+        public float Mr {
+            get {
+                return _mr;
+            }
+            set {
+                _mr = value;
+                UpdateBounds();
+            }
+        }
+        //pad ratio
+        private float _pr = 0.05f;
+        public float Pr {
+            get {
+                return _pr;
+            }
+            set {
+                _pr = value;
+                UpdateBounds();
+            }
+        }
+
         private Dictionary<string,MpView> _view { get; set; }
         public Dictionary<string,MpView> View { get { return _view; } set { _view = value; } }
 
@@ -22,13 +45,21 @@ namespace MonkeyPaste {
             Model = model == null ? new Dictionary<string,MpModel>() : (Dictionary<string,MpModel>)model;
             if(View != null && View.GetType() == typeof(Dictionary<string,MpView>)) {
                 foreach(KeyValuePair<string,MpView> v in ((Dictionary<string,MpView>)View)) {
-                    v.Value.KeyPress += Vc_KeyPress;
+                    v.Value.KeyPress += View_KeyPress;
+                    v.Value.Click += View_Click;
                 }
             }
         }
 
-        protected virtual void Vc_KeyPress(object sender,KeyPressEventArgs e) {
-            Console.WriteLine("MpController keypress: " + e.ToString());
+        //uses ParentController and children to define rect
+        public abstract void UpdateBounds();
+
+        protected virtual void View_KeyPress(object sender,KeyPressEventArgs e) {
+            MpSingletonController.Instance.GetMpData().SearchStringList.Add(e.KeyChar.ToString());
+        }
+
+        private void View_Click(object sender,EventArgs e) {
+            Console.WriteLine("MpController view clicked w/ sender: " + sender.ToString());
         }
     }
 }

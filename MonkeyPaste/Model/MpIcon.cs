@@ -25,7 +25,7 @@ namespace MonkeyPaste {
         }
         public override void LoadDataRow(DataRow dr) {
             this.iconId = Convert.ToInt32(dr["pk_MpIconId"].ToString());
-            this.IconImage = MpHelperFunctions.Instance.ConvertByteArrayToImage((byte[])dr["IconBlob"]);
+            this.IconImage = MpHelperSingleton.Instance.ConvertByteArrayToImage((byte[])dr["IconBlob"]);
             MapDataToColumns();
             Console.WriteLine("Loaded MpIcon");
             Console.WriteLine(ToString());
@@ -43,20 +43,20 @@ namespace MonkeyPaste {
                     MapDataToColumns();
                     return;
                 }
-                DataTable dt = MpSingletonController.Instance.GetMpData().Db.Execute("select * from MpIcon where IconBlob=@0",new List<string>() { "@0" },new List<object>() { MpHelperFunctions.Instance.ConvertImageToByteArray(this.IconImage) });
+                DataTable dt = MpSingletonController.Instance.GetMpData().Db.Execute("select * from MpIcon where IconBlob=@0",new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertImageToByteArray(this.IconImage) });
                 if(dt.Rows.Count > 0) {
                     this.iconId = Convert.ToInt32(dt.Rows[0]["pk_MpIconId"]);
-                    MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("update MpIcon set IconBlob=@0 where pk_MpIconId=" + this.iconId,new List<string>() { "@0" },new List<object>() { MpHelperFunctions.Instance.ConvertImageToByteArray(this.IconImage) });
+                    MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("update MpIcon set IconBlob=@0 where pk_MpIconId=" + this.iconId,new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertImageToByteArray(this.IconImage) });
                     isNew = false;
                 }
                 else {
-                    MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("insert into MpIcon(IconBlob) values(@0)",new List<string>() { "@0" },new List<object>() { MpHelperFunctions.Instance.ConvertImageToByteArray(this.IconImage) });
+                    MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("insert into MpIcon(IconBlob) values(@0)",new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertImageToByteArray(this.IconImage) });
                     this.iconId = MpSingletonController.Instance.GetMpData().Db.GetLastRowId("MpIcon","pk_MpIconId");
                     isNew = true;
                 }
             }
             else {
-                MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("update MpIcon set IconBlob=@0 where pk_MpIconId="+this.iconId,new List<string>() { "@0" },new List<object>() { MpHelperFunctions.Instance.ConvertImageToByteArray(this.IconImage) });                
+                MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("update MpIcon set IconBlob=@0 where pk_MpIconId="+this.iconId,new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertImageToByteArray(this.IconImage) });                
             }
             MapDataToColumns();
             MpSingletonController.Instance.GetMpData().AddMpIcon(this);

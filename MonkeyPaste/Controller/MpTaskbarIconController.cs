@@ -33,7 +33,7 @@ namespace MonkeyPaste {
             InitTrayMenu();
             //testForm = new MpResizableBorderlessForm();
             //testForm.Show();
-            if(MpHelperFunctions.Instance.CheckForInternetConnection()) {
+            if(MpHelperSingleton.Instance.CheckForInternetConnection()) {
                 ShowLoginForm();
             }
             else {
@@ -55,7 +55,7 @@ namespace MonkeyPaste {
             
             notifyIcon = new NotifyIcon() {
                 ContextMenuStrip = new ContextMenuStrip(),
-                Icon = MpHelperFunctions.Instance.GetIconFromBitmap(Properties.Resources.monkey3),
+                Icon = MpHelperSingleton.Instance.GetIconFromBitmap(Properties.Resources.monkey3),
                 Text = DefaultTooltip,
                 Visible = true
             };
@@ -72,7 +72,7 @@ namespace MonkeyPaste {
                 notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
             }*/
             ToolStripMenuItem settingsSubMenu = new ToolStripMenuItem("&Settings");
-            settingsSubMenu.Font = new Font((string)MpSingletonController.Instance.GetSetting("LogPanelTileFontFace"),(float)MpSingletonController.Instance.GetSetting("LogPanelTileFontSize"));
+            settingsSubMenu.Font = new Font((string)MpSingletonController.Instance.GetSetting("LogFont"),(float)MpSingletonController.Instance.GetSetting("LogPanelTileFontSize"));
 
             ToolStripMenuItem fileSubMenu = new ToolStripMenuItem("&File");
             //fileSubMenu.DropDownItems.Add(ToolStripMenuItemWithHandler("&Open History File...",openFile_Click));
@@ -209,5 +209,12 @@ namespace MonkeyPaste {
         }
         private void ContextMenuStrip_Opening(object sender,System.ComponentModel.CancelEventArgs e) { }
 
+        public override void UpdateBounds() {
+            throw new NotImplementedException();
+        }
+
+        protected override void View_KeyPress(object sender,KeyPressEventArgs e) {
+            base.View_KeyPress(sender,e);
+        }
     }
 }
