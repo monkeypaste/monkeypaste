@@ -34,21 +34,41 @@ namespace MonkeyPaste {
             SetSetting("LogPanelBgColor",MpColorPallete.LightBlue,MpSettingValueType.Color);
             SetSetting("LogFont","Calibri",MpSettingValueType.String);
             SetSetting("LogPanelTileFontSize",10.0f,MpSettingValueType.Float);
+            SetSetting("LogResizeHandleHeight",5,MpSettingValueType.Int);
+            SetSetting("LogPadRatio",0.001f,MpSettingValueType.Float);
 
-            SetSetting("TileMenuHeightRatio",0.2f,MpSettingValueType.Float);
-            SetSetting("TileMenuFont","Impact",MpSettingValueType.String);
-            SetSetting("TileMenuFontRatio",0.75f,MpSettingValueType.Float);
-            SetSetting("TileMenuColor",MpColorPallete.LightGreen,MpSettingValueType.Color);
 
-            SetSetting("TileActiveColor",MpColorPallete.Red,MpSettingValueType.Color);
-            SetSetting("TileColor1",MpColorPallete.DarkGreen,MpSettingValueType.Color);
-            SetSetting("TileColor2",MpColorPallete.Yellow,MpSettingValueType.Color);
-            SetSetting("TileIconBorderColor",MpColorPallete.Blue,MpSettingValueType.Color);
+            SetSetting("TileChooserPadHeightRatio",0.02f,MpSettingValueType.Float);
+            SetSetting("TileChooserBgColor1",MpColorPallete.Blue,MpSettingValueType.Color);
+            SetSetting("TileChooserBgColor2",MpColorPallete.DarkGreen,MpSettingValueType.Color);
+            SetSetting("TileChooserBgColor3",MpColorPallete.LightBlue,MpSettingValueType.Color);
+
+            SetSetting("TileTitleFontRatio",0.9f,MpSettingValueType.Float);
+            SetSetting("TileTitleFont","Consolas",MpSettingValueType.String);
+            SetSetting("TileTitleHeightRatio",0.2f,MpSettingValueType.Float);
+            SetSetting("TileTitleFontColor",Color.Black,MpSettingValueType.Color);
+
+            SetSetting("TileDetailFontSizeRatio",0.7f,MpSettingValueType.Float);
+            SetSetting("TileDetailFont","Consolas",MpSettingValueType.String);
+            SetSetting("TileDetailFontColor",Color.White,MpSettingValueType.Color);
+            SetSetting("TileDetailTitlePad",15,MpSettingValueType.Int);
+
+            SetSetting("TileMenuHeightRatio",0.1f,MpSettingValueType.Float);
+            SetSetting("TileMenuFont","Consolas",MpSettingValueType.String);
+            SetSetting("TileMenuFontRatio",0.6f,MpSettingValueType.Float);
+            SetSetting("TileMenuColor",Color.FromArgb(50,0,0,0),MpSettingValueType.Color);
+
+            SetSetting("TileFocusColor",MpColorPallete.Red,MpSettingValueType.Color);
+            SetSetting("TileUnfocusColor",Color.White,MpSettingValueType.Color);
+            SetSetting("TileBorderThickness",20,MpSettingValueType.Int);
+            SetSetting("TileColor1",MpColorPallete.Yellow,MpSettingValueType.Color);
+            SetSetting("TileColor2",MpColorPallete.Blue,MpSettingValueType.Color);
+            SetSetting("TileIconBorderColor",MpColorPallete.DarkGreen,MpSettingValueType.Color);
+            SetSetting("TileIconBorderRatio",0.1f,MpSettingValueType.Float);
             SetSetting("TileBorderRadius",10,MpSettingValueType.Int);
-            SetSetting("TileFont","OpenSans",MpSettingValueType.String);
+            SetSetting("TileFont","Consolas",MpSettingValueType.String);
             SetSetting("TileMinLineCount",10,MpSettingValueType.Int);
-            SetSetting("TileOuterPadScreenWidthRatio",0.02f,MpSettingValueType.Float);
-            SetSetting("TileInnerPadTileWidthRatio",0.04f,MpSettingValueType.Float);
+            SetSetting("TilePadWidthRatio",0.04f,MpSettingValueType.Float);
         }
         public void SetSetting(string key,object val,MpSettingValueType svt) {
             if(SettingDictionary.Keys.Contains(key)) {
@@ -64,12 +84,14 @@ namespace MonkeyPaste {
         }
 
         public object GetSetting(string key) {
-            if(SettingDictionary.ContainsKey(key)) {
+            try {
                 object val;
                 SettingDictionary.TryGetValue(key,out val);
                 return val;
             }
-            Console.WriteLine("Settings error, no value for key: " + key);
+            catch(Exception ex) {
+                Console.WriteLine("Settings error, no value for key: " + key+"\nActual Error: "+ex.ToString());
+            }
             return null;
         }
         public MpSettingValueType GetSettingValueType(string key) {

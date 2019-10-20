@@ -29,7 +29,7 @@ namespace MonkeyPaste {
         public void InitDb() {
             if(_dbPath == null || _dbPath == String.Empty || !Directory.Exists(Path.GetDirectoryName(_dbPath)) || !File.Exists(_dbPath)) {
                 Console.WriteLine(_dbPath + " does not exist...");
-                DialogResult result = MessageBox.Show("No Database found would you like to load a file?","No DB Found",MessageBoxButtons.YesNo);
+                DialogResult result = MessageBox.Show("No Database found would you like to load a file?","No DB Found",MessageBoxButtons.YesNo,MessageBoxIcon.Question,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
                 if(result == DialogResult.Yes) {
                     OpenFileDialog openFileDialog = new OpenFileDialog() {
                         FileName = "Select a db file",
@@ -39,14 +39,14 @@ namespace MonkeyPaste {
                     DialogResult openResult = openFileDialog.ShowDialog();
                     if(openResult == DialogResult.OK) {
                         _dbPath = openFileDialog.FileName;
-                        DialogResult autoLoadResult = MessageBox.Show("Would you like to remember this next time?","Remember Database?",MessageBoxButtons.YesNo);
+                        DialogResult autoLoadResult = MessageBox.Show("Would you like to remember this next time?","Remember Database?",MessageBoxButtons.YesNo,MessageBoxIcon.Question,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
                         if(autoLoadResult == DialogResult.Yes) {
-                            MpRegistrySingleton.Instance.SetValue("DBPath",_dbPath);
+                            MpRegistryHelper.Instance.SetValue("DBPath",_dbPath);
                         }
                     }
                 }
                 else {
-                    DialogResult newDbResult = MessageBox.Show("Would you like to create a new database and store your history?","New Database?",MessageBoxButtons.YesNo);
+                    DialogResult newDbResult = MessageBox.Show("Would you like to create a new database and store your history?","New Database?",MessageBoxButtons.YesNo,MessageBoxIcon.Question,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
                     if(newDbResult == DialogResult.Yes) {
                         SaveFileDialog saveFileDialog = new SaveFileDialog() {
                             InitialDirectory = AppDomain.CurrentDomain.BaseDirectory,
@@ -59,12 +59,12 @@ namespace MonkeyPaste {
                         DialogResult saveResult = saveFileDialog.ShowDialog();
                         if(saveResult == DialogResult.OK) {
                             _dbPath = saveFileDialog.FileName;
-                            DialogResult autoLoadResult = MessageBox.Show("Would you like to remember this next time?","Remember Database?",MessageBoxButtons.YesNo);
+                            DialogResult autoLoadResult = MessageBox.Show("Would you like to remember this next time?","Remember Database?",MessageBoxButtons.YesNo,MessageBoxIcon.Question,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
                             if(autoLoadResult == DialogResult.Yes) {
-                                MpRegistrySingleton.Instance.SetValue("DBPath",_dbPath);
+                                MpRegistryHelper.Instance.SetValue("DBPath",_dbPath);
                             }
                             SQLiteConnection.CreateFile(_dbPath);
-                            DialogResult newDbPasswordResult = MessageBox.Show("Would you like to encrypt database with a password?","Encrypt?",MessageBoxButtons.YesNo);
+                            DialogResult newDbPasswordResult = MessageBox.Show("Would you like to encrypt database with a password?","Encrypt?",MessageBoxButtons.YesNo,MessageBoxIcon.Question,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
                             if(newDbPasswordResult == DialogResult.Yes) {
                                 MpSetDbPasswordForm setDbPasswordForm = new MpSetDbPasswordForm();
                                 setDbPasswordForm.ShowDialog();

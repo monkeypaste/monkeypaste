@@ -38,7 +38,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationManifest>App\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Auth0.OidcClient, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -285,20 +285,23 @@
   <ItemGroup>
     <Compile Include="Controller\MpTaskbarIconController.cs" />
     <Compile Include="Controller\MpController.cs" />
-    <Compile Include="Controller\Tile Controllers\MpCopyItemTileTitleIconPanelController.cs" />
-    <Compile Include="Controller\Tile Controllers\MpCopyItemTileTitleMenuPanelController.cs" />
-    <Compile Include="Controller\Tile Controllers\MpCopyItemTileTitlePanelController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpTileDetailsPanelController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpTileMenuButtonController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpTileTitleIconPanelController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpTileMenuPanelController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpTileTitlePanelController.cs" />
     <Compile Include="Controller\Tile Controllers\MpImageEditorControlController.cs" />
     <Compile Include="Controller\Tile Controllers\MpOverlayPanelController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpTileTitleTextBoxController.cs" />
     <Compile Include="Helpers\IconHelper.cs" />
     <Compile Include="Helpers\IconListManager.cs" />
-    <Compile Include="Controller\Tile Controllers\MpCopyItemTileChooserPanelController.cs" />
-    <Compile Include="Controller\Tile Controllers\MpCopyItemTileController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpTileChooserPanelController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpTilePanelController.cs" />
     <Compile Include="Helpers\MpColorPallete.cs" />
     <Compile Include="Helpers\MpCursorPosition.cs" />
     <Compile Include="Singletons\MpHelperSingleton.cs" />
     <Compile Include="Controller\Tile Controllers\MpFileListItemRowPanelController.cs" />
-    <Compile Include="Controller\Tile Controllers\MpCopyItemControlController.cs" />
+    <Compile Include="Controller\Tile Controllers\MpTileControlController.cs" />
     <Compile Include="Controller\MpKeyboardController.cs" />
     <Compile Include="Controller\MpLogFormController.cs" />
     <Compile Include="Controller\MpSDbConnection.cs" />
@@ -306,16 +309,22 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Singletons\MpSingletonController.cs" />
-    <Compile Include="Singletons\MpRegistrySingleton.cs" />
+    <Compile Include="Helpers\MpRegistryHelper.cs" />
     <Compile Include="App\ProgramInfo.cs" />
-    <Compile Include="App\SingleInstance.cs" />
+    <Compile Include="App\MpSingleInstance.cs" />
     <Compile Include="App\WinAPI.cs" />
     <Compile Include="Model\MpDb.cs" />
     <Compile Include="Model\MpModel.cs" />
+    <Compile Include="View\GlossyPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\MpButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="View\MpControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpCopyItemTileTitleMenuPanel.cs">
+    <Compile Include="View\MpTileMenuPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpOverlayPanel.cs">
@@ -338,19 +347,19 @@
     <Compile Include="Model\MpIcon.cs" />
     <Compile Include="Model\MpSettings.cs" />
     <Compile Include="Model\MpUser.cs" />
-    <Compile Include="View\MpCopyItemControl.cs">
+    <Compile Include="View\MpTileControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="View\MpCopyItemTileChooserPanel.cs">
+    <Compile Include="View\MpTileChooserPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpCopyItemTilePanel.cs">
+    <Compile Include="View\MpTilePanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpCopyItemTileTitleIconPanel.cs">
+    <Compile Include="View\MpTileIconPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpCopyItemTileTitlePanel.cs">
+    <Compile Include="View\MpTileTitlePanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpHelpForm.cs">
@@ -411,8 +420,8 @@
     <EmbeddedResource Include="Helpers\MpClipboardHelper.resx">
       <DependentUpon>MpClipboardHelper.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\MpCopyItemTileTitleMenuPanel.resx">
-      <DependentUpon>MpCopyItemTileTitleMenuPanel.cs</DependentUpon>
+    <EmbeddedResource Include="View\MpTileMenuPanel.resx">
+      <DependentUpon>MpTileMenuPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\MpHelpForm.resx">
       <DependentUpon>MpHelpForm.cs</DependentUpon>
@@ -448,10 +457,10 @@
     <EmbeddedResource Include="View\MpSettingsForm.resx">
       <DependentUpon>MpSettingsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="app.manifest">
+    <None Include="App\app.manifest">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
+    <None Include="App\packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -463,7 +472,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
+    <None Include="App\App.config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
@@ -472,12 +481,6 @@
     <None Include="Resources\monkey %281%29.png" />
     <None Include="Resources\monkey %282%29.png" />
     <None Include="Resources\MonkeyIcon1.png" />
-    <EmbeddedResource Include="database%401x.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <Content Include="monkeyIcon16x16.ico">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Image-Editor-Control-for-WinForms-master\CraftSynth.ImageEditor\CraftSynth.ImageEditor.csproj">

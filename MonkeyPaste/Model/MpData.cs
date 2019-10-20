@@ -39,10 +39,10 @@ namespace MonkeyPaste {
         public MpData(string dbPath,string dbPassword,string identityToken,string accessToken) {
             Db = new MpDb(dbPath,dbPassword);
             InitUser(identityToken);
-            InitClient(accessToken);
+            InitClient(accessToken);            
         }
         public void Init() {            
-            _db.InitDb();
+            Db.InitDb();
             InitMpIcon();
             InitMpApp();
             InitMpCopyItem();
@@ -51,7 +51,7 @@ namespace MonkeyPaste {
             ResetData();
             return true;
         }
-        public void AddOnDataListChangeListener(MpCopyItemTileChooserPanelController lf) {
+        public void AddOnDataListChangeListener(MpTileChooserPanelController lf) {
             //_mpIconList.CollectionChanged += lf.CopyItemCollection_CollectionChanged;
             //_mpAppList.CollectionChanged += lf.CopyItemCollection_CollectionChanged;
             _searchStringList.CollectionChanged += lf.SearchStrCollection_CollectionChanged;

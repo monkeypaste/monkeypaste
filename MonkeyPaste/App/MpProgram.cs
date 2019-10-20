@@ -9,24 +9,24 @@ using System.Runtime.InteropServices;
 namespace MonkeyPaste {
     static class MpProgram {
         public static string AppName = "MonkeyPaste";
-        public static string SettingsFileName = "Settings.txt";
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
+
         [STAThread]
         static void Main() {
-            if(!SingleInstance.Start()) { return; }
+            if(!MpSingleInstance.Start()) {
+                return;
+            }
             Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
             try {
                 var applicationContext = new MpApplicationContext();
-                 Application.Run(applicationContext);
+                Application.Run(applicationContext);
             }
             catch(Exception ex) {
-                MessageBox.Show(ex.ToString(),"Program Terminated Unexpectedly",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                Console.WriteLine("Program terminated: " + ex.ToString());
+                //MessageBox.Show(ex.ToString(),"Program Terminated Unexpectedly",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
-            SingleInstance.Stop();
+            MpSingleInstance.Stop();
         }
         static void CurrentDomain_ProcessExit(object sender,EventArgs e) {
             MessageBox.Show("Exiting");

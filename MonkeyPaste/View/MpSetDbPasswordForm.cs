@@ -30,9 +30,9 @@ namespace MonkeyPaste {
                 return;
             }
             if(RememberPasswordCheckbox.Checked) {
-                MpRegistrySingleton.Instance.SetValue("DBPassword",PasswordTextBox.Text);
+                MpRegistryHelper.Instance.SetValue("DBPassword",PasswordTextBox.Text);
             } else {
-                MpRegistrySingleton.Instance.SetValue("DBPassword","");                
+                MpRegistryHelper.Instance.SetValue("DBPassword","");                
             }
            // MpSingletonController.Instance.GetMpData().SetDbPassword(PasswordTextBox.Text);
             this.Close();

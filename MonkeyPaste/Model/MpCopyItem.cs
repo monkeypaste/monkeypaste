@@ -42,7 +42,7 @@ namespace MonkeyPaste {
                 DataObject = rtb.Text;
                 copyItemTypeId = MpCopyItemType.Text;
             } else if(copyItemTypeId == MpCopyItemType.HTMLText) {
-                string dataStr = (string)DataObject;
+                string dataStr = (string)data;
                 int idx0 = dataStr.IndexOf("<html>") < 0 ? 0 : dataStr.IndexOf("<html>");
                 int idx1 = dataStr.IndexOf("/<html>") < 0 ? dataStr.Length - 1 : dataStr.IndexOf("/<html>");
                 dataStr = dataStr.Substring(idx0,idx1 - idx0);
@@ -51,8 +51,15 @@ namespace MonkeyPaste {
                     AutoSize = true,
                     DocumentText = dataStr
                 };
+                MpSingletonController.Instance.SetIgnoreNextClipboardEvent(true);
+                ((WebBrowser)_wb).Document.ExecCommand("SelectAll",false,null);
+                ((WebBrowser)_wb).Document.ExecCommand("Copy",false,null);
+                MpSingletonController.Instance.SetIgnoreNextClipboardEvent(false);
+                TextBox temp = new TextBox();
+                temp.Paste();
+                DataObject = (string)temp.Text;
+                ((WebBrowser)_wb).Document.ExecCommand("UNSELECT",false,Type.Missing);
                 copyItemTypeId = MpCopyItemType.Text;
-                ((WebBrowser)_wb).DocumentCompleted += MpCopyItem_DocumentCompleted;
             } else if(copyItemTypeId == MpCopyItemType.Text) {
                 DataObject = (string)data;
             } else {
@@ -87,7 +94,7 @@ namespace MonkeyPaste {
                 case MpCopyItemType.RichText:
                 case MpCopyItemType.HTMLText:
                     //case MpCopyItemType.RichText:
-                    return ((string)DataObject).Trim();
+                    return DataObject;
                 //case MpCopyItemType.HTMLText:
                 //    return ((string)DataObject).Trim();
                 //case MpCopyItemType.RichText:
@@ -109,16 +116,6 @@ namespace MonkeyPaste {
             return "Error unknown copyitem format!";
         }
 
-        private void MpCopyItem_DocumentCompleted(object sender,WebBrowserDocumentCompletedEventArgs e) {
-            MpSingletonController.Instance.SetIgnoreNextClipboardEvent(true);
-            ((WebBrowser)_wb).Document.ExecCommand("SelectAll",false,null);
-            ((WebBrowser)_wb).Document.ExecCommand("Copy",false,null);
-            MpSingletonController.Instance.SetIgnoreNextClipboardEvent(false);
-            TextBox temp = new TextBox();
-            temp.Paste();
-            DataObject = (object)temp.Text;
-            ((WebBrowser)_wb).Document.ExecCommand("UNSELECT",false,Type.Missing);
-        }
         public MpCopyItem(DataRow dr) {
             LoadDataRow(dr);
         }
@@ -267,7 +264,7 @@ namespace MonkeyPaste {
         FileList,
         StreetAddress,
         Email,
-        PhoneNumber
+       PhoneNumber
     }
 
     public class MpSubTextToken {

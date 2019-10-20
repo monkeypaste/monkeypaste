@@ -6,6 +6,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
+    public interface MpIController {
+        MpController ParentController { get; set; }
+        Dictionary<string,MpModel> Model { get; set; }
+        Dictionary<string,MpView> View { get; set; }
+        float Pr { get; set; }
+        float Mr { get; set; }
+        }
     public abstract class MpController {
         //margin ratio
         private float _mr = 0.00f;

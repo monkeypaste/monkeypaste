@@ -10,6 +10,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -18,6 +19,65 @@ namespace MonkeyPaste {
         private static readonly Lazy<MpHelperSingleton> lazy = new Lazy<MpHelperSingleton>(() => new MpHelperSingleton());
         public static MpHelperSingleton Instance { get { return lazy.Value; } }
 
+        public long FileListSize(string[] paths) {
+            long total = 0;
+            foreach(string path in paths) {
+                if(Directory.Exists(path)) {
+                    total += CalcDirSize(path,true);
+                } else if(File.Exists(path)) {
+                    total += (new FileInfo(path)).Length;
+                }
+            }
+            return total;
+        }
+        private long CalcDirSize(string sourceDir,bool recurse = true) {
+            return _CalcDirSize(new DirectoryInfo(sourceDir),recurse);
+        }
+        private long _CalcDirSize(DirectoryInfo di,bool recurse = true) {
+            long size = 0;
+            FileInfo[] fiEntries = di.GetFiles();
+            foreach(var fiEntry in fiEntries) {
+                Interlocked.Add(ref size,fiEntry.Length);
+            }
+
+            if(recurse) {
+                DirectoryInfo[] diEntries = di.GetDirectories("*.*",SearchOption.TopDirectoryOnly);
+                System.Threading.Tasks.Parallel.For<long>(0,diEntries.Length,() => 0,(i,loop,subtotal) =>
+                {
+                    if((diEntries[i].Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint) return 0;
+                    subtotal += _CalcDirSize(diEntries[i],true);
+                    return subtotal;
+                },
+                    (x) => Interlocked.Add(ref size,x)
+                );
+
+            }
+            return size;
+        }
+       /* public long DirSize(string sourceDir,bool recurse) {
+            long size = 0;
+            string[] fileEntries = Directory.GetFiles(sourceDir);
+
+            foreach(string fileName in fileEntries) {
+                Interlocked.Add(ref size,(new FileInfo(fileName)).Length);
+            }
+
+            if(recurse) {
+                string[] subdirEntries = Directory.GetDirectories(sourceDir);
+
+                Parallel.For<long>(0,subdirEntries.Length,() => 0,(i,loop,subtotal) =>
+                {
+                    if((File.GetAttributes(subdirEntries[i]) & FileAttributes.ReparsePoint) != FileAttributes.ReparsePoint) {
+                        subtotal += DirSize(subdirEntries[i],true);
+                        return subtotal;
+                    }
+                    return 0;
+                },
+                    (x) => Interlocked.Add(ref size,x)
+                );
+            }
+            return size;
+        }*/
         public int GetLineCount(string str) {
             char CR = '\r';
             char LF = '\n';

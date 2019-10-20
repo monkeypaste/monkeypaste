@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,8 @@ namespace MonkeyPaste {
 
         private int _scrollWheelDelta { get; set; }
         public int ScrollWheelDelta { get { return _scrollWheelDelta; } set { _scrollWheelDelta = value; } }
-        
+
+        public MpRegistryHelper Rh { get; set; } = new MpRegistryHelper();
 
         private bool _ignoreNextClipboardEvent;
         
@@ -27,9 +29,9 @@ namespace MonkeyPaste {
             ScrollWheelDelta += e.Delta;
         }
         public void Init(string dbPath,string dbPassword,string idToken,string accessToken) {
+            _settings = new MpSettings();
             _data = new MpData(dbPath,dbPassword,idToken,accessToken);
-            _scrollWheelDelta = 0;
-            _settings = new MpSettings();            
+            _scrollWheelDelta = 0;       
             _hotkeyHookDictionary = new Dictionary<string,MpKeyboardHook>();
             _data.Init();
         }

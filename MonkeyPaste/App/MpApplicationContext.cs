@@ -14,13 +14,12 @@ namespace MonkeyPaste {
 
     public class MpApplicationContext : ApplicationContext  {
         MpTaskbarIconController _taskbarController;
-        public System.ComponentModel.IContainer components;    // a list of components to dispose when the context is disposed
-                                                                /// <summary>
+        public System.ComponentModel.IContainer components;
         ///////////// This class should be created and passed into Application.Run( ... )
         /// </summary>
         public MpApplicationContext() {
             InitializeContext();
-            _taskbarController = new MpTaskbarIconController(this,null,(string)MpRegistrySingleton.Instance.GetValue("DBPath"),(string)MpRegistrySingleton.Instance.GetValue("DBPassword"));
+            _taskbarController = new MpTaskbarIconController(this,null);
         }
 
         public void ExitCore() {

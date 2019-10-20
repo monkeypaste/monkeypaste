@@ -17,78 +17,85 @@ namespace MonkeyPaste {
         [DllImport("user32.dll")]
         static extern bool SetActiveWindow(IntPtr hWnd);
 
-        public Rectangle sb;
         private MpClipboardHelper _clipboardController;
-        private MpLogForm _logForm;
 
-        private MpCopyItemTileChooserPanelController _copyItemTileChooserController;
+        public MpLogForm LogForm { get; set; }
 
-        private MpKeyboardHook _toggleLogHook;
-        private MpKeyboardHook _escHook;
-        private MpKeyboardHook _enterHook, _spaceHook;
+        public MpTileChooserPanelController TileChooserPanelController { get; set; }
 
-        private int _customHeight = 0;
-        private bool _isVisible = false;
-        private bool _isInit = true;
+        private MpKeyboardHook _toggleLogHook,_escHook,_enterHook, _spaceHook;
         private IKeyboardMouseEvents _clickHook;
 
+        private int _customHeight = 0;
+
         public MpLogFormController(MpController parentController) : base(parentController) {
+            LogForm = new MpLogForm() {
+                AutoSize = false,                
+                AutoScaleMode = AutoScaleMode.None
+            };
+            LogForm.Load += LogForm_Load;
+            LogForm.FormClosing += logForm_Closing;
+            LogForm.FormClosed += logForm_Closed;
+            LogForm.Leave += LogForm_Leave;
+            LogForm.Deactivate += LogForm_Leave;
+            LogForm.Resize += LogForm_Resize;
+            LogForm.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
+
+            //these events do not get deactivated
             _clickHook = Hook.GlobalEvents();
             _clickHook.MouseClick += _clickHook_MouseClick;
-
-            _logForm = new MpLogForm() {
-                AutoSize = false,
-                AutoScaleMode = AutoScaleMode.None
-                //Visible = false,
-                //Opacity = 0
-            };
-            
-            _logForm.Load += LogForm_Load;
-            _logForm.FormClosing += logForm_Closing;
-            _logForm.FormClosed += logForm_Closed;
-            _logForm.Leave += LogForm_Leave;
-            _logForm.Deactivate += LogForm_Leave;
-            _logForm.Resize += _logForm_Resize;
-            _logForm.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
 
             _toggleLogHook = new MpKeyboardHook();
             _toggleLogHook.KeyPressed += _toggleLogHook_KeyPressed;
             _toggleLogHook.RegisterHotKey(ModifierKeys.Control,Keys.D);
             _toggleLogHook.RegisterHotKey(ModifierKeys.None,Keys.CapsLock);
-            MpSingletonController.Instance.SetKeyboardHook(MpInputCommand.ToggleLog,_toggleLogHook);
+
+            UpdateBounds();
+
+            TileChooserPanelController = new MpTileChooserPanelController(this);
+            LogForm.Controls.Add(TileChooserPanelController.TileChooserPanel);
             
-            _copyItemTileChooserController = new MpCopyItemTileChooserPanelController(this);
-            _logForm.Controls.Add(_copyItemTileChooserController.GetCopyItemPanel());
-            UpdateLogFormBounds();
-            _logForm.Show();
-            _logForm.Hide();
+            LogForm.Show();
+            LogForm.Hide();
+        }
+
+        public override void UpdateBounds() {
+            //current screen rect
+            Rectangle sr = MpHelperSingleton.Instance.GetScreenBoundsWithMouse();
+            int h = _customHeight > 0 ? _customHeight : (int)((float)sr.Height * (float)MpSingletonController.Instance.GetSetting("LogScreenHeightRatio"));
+            _customHeight = h;
+
+            LogForm.SetBounds(0,sr.Height - h,sr.Width,h);
+
+            if(TileChooserPanelController != null) {
+                TileChooserPanelController.UpdateBounds();
+            }
         }
 
         private void _clickHook_MouseClick(object sender,MouseEventArgs e) {
-            if(!_isVisible) {
+            if(!LogForm.Visible) {
                 return;
             }
-            MpCopyItemTileController clickedTileController = null;
-            foreach(MpCopyItemTileController citc in _copyItemTileChooserController.CopyItemTileControllerList) {
-                Rectangle tileRect = citc.CopyItemTilePanel.RectangleToScreen(citc.CopyItemTilePanel.ClientRectangle);
-                if(tileRect.Contains(e.Location) || citc.CopyItemTilePanel.ClientRectangle.Contains(e.Location)) {
+            MpTilePanelController clickedTileController = null;
+            foreach(MpTilePanelController citc in TileChooserPanelController.TileControllerList) {
+                Rectangle tileRect = citc.TilePanel.RectangleToScreen(citc.TilePanel.ClientRectangle);
+                if(tileRect.Contains(e.Location) || citc.TilePanel.ClientRectangle.Contains(e.Location)) {
                     clickedTileController = citc;
                 }
             }
             if(clickedTileController != null) {
-                _copyItemTileChooserController.SelectedCopyItemTileController = clickedTileController;
+                TileChooserPanelController.SelectedTileController = clickedTileController;
             }
         }
 
         #region Events
         private void LogForm_Load(object sender,EventArgs e) {
-            UpdateLogFormBounds();
+            UpdateBounds();
 
             ShowLogForm();
             _clipboardController = new MpClipboardHelper();
             _clipboardController.Init();
             HideLogForm();
-            _isInit = false;
         }
         private void logForm_Closing(object sender,FormClosingEventArgs e) {
             HideLogForm();
@@ -108,6 +115,7 @@ namespace MonkeyPaste {
             if(_escHook != null) {
                 DeactivateHotKeys();
             }
+
             _escHook = new MpKeyboardHook();
             _escHook.KeyPressed += _escHook_KeyPressed;
             _escHook.RegisterHotKey(ModifierKeys.None,Keys.Escape);
@@ -124,7 +132,7 @@ namespace MonkeyPaste {
            // _spaceHook.RegisterHotKey(ModifierKeys.None,Keys.Space);
             //MpSingletonController.Instance.SetKeyboardHook(MpInputCommand.EditTile,_spaceHook);
 
-            _copyItemTileChooserController.ActivateHotKeys();
+            TileChooserPanelController.ActivateHotKeys();
         }
         public void DeactivateHotKeys() {
             if(_escHook != null) {
@@ -139,16 +147,16 @@ namespace MonkeyPaste {
                 _spaceHook.UnregisterHotKey();
                 _spaceHook = null;
             }
-            _copyItemTileChooserController.DeactivateHotKeys();
+            TileChooserPanelController.DeactivateHotKeys();
         }
         private void _escHook_KeyPressed(object sender,KeyPressedEventArgs e) {
-            if(_logForm.Visible) {
+            if(LogForm.Visible) {
                 HideLogForm();
                 return;
             }
         }
         private void _toggleLogHook_KeyPressed(object sender,KeyPressedEventArgs e) {
-            if(_logForm.Visible) {
+            if(LogForm.Visible) {
                 HideLogForm();
                 return;
             }
@@ -162,61 +170,44 @@ namespace MonkeyPaste {
             _toggleLogHook_KeyPressed(null,null);
             PasteCopyItem();
         }
-        private void _logForm_Resize(object sender,EventArgs e) {
-            _customHeight = _logForm.Bounds.Height;
-            if(_copyItemTileChooserController != null) {
-                _copyItemTileChooserController.OnFormResize(_logForm.Bounds);
+        private void LogForm_Resize(object sender,EventArgs e) {
+            _customHeight = LogForm.Bounds.Height;
+            if(TileChooserPanelController != null) {
+                TileChooserPanelController.OnFormResize(LogForm.Bounds);
             }
             
         }       
-        public MpCopyItemTileChooserPanelController GetCopyItemPanelController() {
-            return _copyItemTileChooserController;
+        public MpTileChooserPanelController GetCopyItemPanelController() {
+            return TileChooserPanelController;
         }
         public MpLogForm GetLogForm() {
-            return _logForm;
-        }
-        public void UpdateLogFormBounds() {
-            //Process.GetCurrentProcess().Refresh();
-            sb = MpHelperSingleton.Instance.GetScreenBoundsWithMouse();
-            int h = _customHeight > 0 ? _customHeight : (int)((float)sb.Height * (float)MpSingletonController.Instance.GetSetting("LogScreenHeightRatio"));
-
-            _customHeight = h;
-
-            _logForm.Bounds = new Rectangle(0,sb.Height - h,sb.Width,h);
-            _logForm.ClientSize = _logForm.Bounds.Size;
-            _copyItemTileChooserController.UpdatePanelBounds(_logForm.Bounds);
+            return LogForm;
         }
         public void ShowLogForm() {
-            _logForm.Show();
-            _logForm.Activate();
-            if(!_isInit) {
-                _logForm.Opacity = 100;
-                _logForm.Visible = true;
-            }
+            LogForm.Show();
+            LogForm.Activate();
             ActivateHotKeys();
-            _isVisible = true;
         }
         public void HideLogForm() {
-            _logForm.Hide();
-            _logForm.Visible = false;
+            LogForm.Hide();
+            LogForm.Visible = false;
             DeactivateHotKeys();
-            _isVisible = false;
         }
         public void ToggleLogForm() {
-            if(_isVisible) {
+            if(LogForm.Visible) {
                 HideLogForm();
             } else {
                 ShowLogForm();
             }
         }
         public void CloseLogForm() {
-            _logForm.Close();
-            _logForm = null;
+            LogForm.Close();
+            LogForm = null;
         }
         
         public void PasteCopyItem() {
             MpSingletonController.Instance.SetIgnoreNextClipboardEvent(true);
-            MpCopyItem copyItem = _copyItemTileChooserController.GetSelectedCopyItem();
+            MpCopyItem copyItem = TileChooserPanelController.GetSelectedCopyItem();
 
             if(copyItem.copyItemTypeId == MpCopyItemType.Text) {
                 System.Windows.Clipboard.SetData(DataFormats.Text,(string)copyItem.GetData());
@@ -236,11 +227,12 @@ namespace MonkeyPaste {
             SendKeys.Send("^v");
 
             MpSingletonController.Instance.SetIgnoreNextClipboardEvent(false);
+
+            copyItem.CopyCount++;
+            MpSingletonController.Instance.GetMpData().UpdateMpCopyItem(copyItem);
         }
 
-        public override void UpdateBounds() {
-            throw new NotImplementedException();
-        }
+        
 
         protected override void View_KeyPress(object sender,KeyPressEventArgs e) {
             

@@ -21,18 +21,18 @@ namespace MonkeyPaste {
         private MpSettingsForm settingsForm;
         private MpHelpForm helpForm;
         private NotifyIcon notifyIcon;				            // the icon that sits in the system tray      
-        private MpApplicationContext _context;
+        private MpApplicationContext _context = null;
 
-        public MpTaskbarIconController(MpApplicationContext _context,MpController parent,string dbPath = null,string dbPassword = null) : base(parent) {
-            MpSingletonController.Instance.Init(dbPath,dbPassword,null,null);
+        public MpTaskbarIconController(MpApplicationContext _context,MpController parent) : base(parent) {
+            MpSingletonController.Instance.Init((string)MpSingletonController.Instance.Rh.GetValue("DBPath"),(string)MpSingletonController.Instance.Rh.GetValue("DBPassword"),null,null);
+
             _toggleSettingsHook = new MpKeyboardHook();
             _toggleSettingsHook.RegisterHotKey(ModifierKeys.Alt,Keys.D);
             _toggleSettingsHook.KeyPressed += _toggleSettingsHook_KeyPressed;
             _logFormController = new MpLogFormController(null);
             
             InitTrayMenu();
-            //testForm = new MpResizableBorderlessForm();
-            //testForm.Show();
+
             if(MpHelperSingleton.Instance.CheckForInternetConnection()) {
                 ShowLoginForm();
             }
@@ -43,16 +43,20 @@ namespace MonkeyPaste {
         }
         private void Exit() {
             // before we exit, let forms clean themselves up.
-            if(helpForm != null) { helpForm.Close(); }
-            if(settingsForm != null) { settingsForm.Close(); }
-            if(_logFormController != null) { _logFormController.CloseLogForm(); }
+            if(helpForm != null) {
+                helpForm.Close();
+            }
+            if(settingsForm != null) {
+                settingsForm.Close();
+            }
+            if(_logFormController != null) {
+                _logFormController.CloseLogForm();
+            }
             notifyIcon.Visible = false; // should remove lingering tray icon
 
             _context.ExitCore();
         }
         private void InitTrayMenu() {
-            MpSingletonController.Instance.SetKeyboardHook(MpInputCommand.ToggleSettings,_toggleSettingsHook);
-            
             notifyIcon = new NotifyIcon() {
                 ContextMenuStrip = new ContextMenuStrip(),
                 Icon = MpHelperSingleton.Instance.GetIconFromBitmap(Properties.Resources.monkey3),
@@ -63,20 +67,11 @@ namespace MonkeyPaste {
             notifyIcon.MouseDoubleClick += NotifyIcon_DoubleClick;
 
             notifyIcon.ContextMenuStrip.Items.Clear();
-            /*if(MpSingletonController.Instance.GetMpData().GetMpClient() != null) {
-                notifyIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("&Logout",logoutItem_Click));
-                notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
-            }
-            else {
-                notifyIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("&Login",loginItem_Click));
-                notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
-            }*/
+
             ToolStripMenuItem settingsSubMenu = new ToolStripMenuItem("&Settings");
             settingsSubMenu.Font = new Font((string)MpSingletonController.Instance.GetSetting("LogFont"),(float)MpSingletonController.Instance.GetSetting("LogPanelTileFontSize"));
 
             ToolStripMenuItem fileSubMenu = new ToolStripMenuItem("&File");
-            //fileSubMenu.DropDownItems.Add(ToolStripMenuItemWithHandler("&Open History File...",openFile_Click));
-            //fileSubMenu.DropDownItems.Add(ToolStripMenuItemWithHandler("&Save History",toggleSaveHistory_Click));
             fileSubMenu.DropDownItems.Add(ToolStripMenuItemWithHandler("&Clear History",clearHistory_Click));
             fileSubMenu.DropDownItems.Add(ToolStripMenuItemWithHandler("&Set Password",toggleEncrypt_Click));
             fileSubMenu.DropDownItems.Add(ToolStripMenuItemWithHandler("&Details",ShowDetails_Click));
@@ -89,7 +84,7 @@ namespace MonkeyPaste {
             settingsSubMenu.DropDownItems.Add(systemSubMenu);
 
             notifyIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("&Pause",toggleActive_Click));
-            notifyIcon.ContextMenuStrip.Items.Add(settingsSubMenu);//ToolStripMenuItemWithHandler("&Settings", showSettingsItem_Click));
+            notifyIcon.ContextMenuStrip.Items.Add(settingsSubMenu);
             notifyIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("&Help/About",showHelpItem_Click));
             notifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
             notifyIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("&Exit",exitItem_Click));
@@ -97,7 +92,6 @@ namespace MonkeyPaste {
         private async void ShowLoginForm() {
             if(_skipAuth) {
                 Console.WriteLine("Skipping auth0 authorization");
-                //Init("Test","root");
             }
             else {
                 var client = new Auth0Client(new Auth0ClientOptions {
@@ -199,9 +193,6 @@ namespace MonkeyPaste {
         }
         private void NotifyIcon_DoubleClick(object sender,MouseEventArgs e) {
             _logFormController.ToggleLogForm();
-            //logForm._animationTimer.Start();
-            //MethodInfo mi = typeof(MpLogFormController).GetMethod("ToggleLogForm",BindingFlags.Instance | BindingFlags.Public | BindingFlags.InvokeMethod);
-            //mi.Invoke(_logFormController,null);
         }
         private void ContextMenuStrip_Closing(object sender,ToolStripDropDownClosingEventArgs e) {
             notifyIcon.ContextMenuStrip.Hide();

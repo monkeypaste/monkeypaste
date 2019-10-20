@@ -15,7 +15,7 @@ namespace MonkeyPaste
     /// 
     /// From http://www.codeproject.com/KB/cs/SingleInstanceAppMutex.aspx
     /// </remarks>
-    static public class WinApi
+    public static class WinApi
     {
         [DllImport("user32")]
         public static extern int RegisterWindowMessage(string message);
@@ -43,5 +43,8 @@ namespace MonkeyPaste
             ShowWindow(window, SW_SHOWNORMAL);
             SetForegroundWindow(window);
         }
+
+        [DllImport("user32.dll")]
+        static extern bool SetActiveWindow(IntPtr hWnd);
     }
 }

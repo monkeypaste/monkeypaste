@@ -16,9 +16,9 @@ namespace MonkeyPaste {
         }
         private void SetPasswordButton_Click(object sender,EventArgs e) {
             if(RememberPasswordCheckbox.Checked) {
-                MpRegistrySingleton.Instance.SetValue("DBPassword",PasswordTextBox.Text);
+                MpRegistryHelper.Instance.SetValue("DBPassword",PasswordTextBox.Text);
             } else {
-                MpRegistrySingleton.Instance.SetValue("DBPassword","");
+                MpRegistryHelper.Instance.SetValue("DBPassword","");
             }
             MpSingletonController.Instance.GetMpData().Db.SetDbPassword(PasswordTextBox.Text);
             this.DialogResult = DialogResult.OK;
