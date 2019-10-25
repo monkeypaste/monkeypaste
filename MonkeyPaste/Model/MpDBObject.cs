@@ -42,6 +42,9 @@ namespace MonkeyPaste {
         public override string ToString() {
             string outstr = "| "+tableName + "\n";
             foreach(KeyValuePair<string,object> cd in columnData) {
+                if(cd.Value == null) {
+                    continue;
+                }
                 outstr += "| " + cd.Key.ToString() + ": \n";
                 if(cd.Value.GetType() == typeof(Image)) {
                     outstr += "| " + ((Image)cd.Value).Width + " x " + ((Image)cd.Value).Height + " \n";

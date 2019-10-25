@@ -19,7 +19,8 @@ namespace MonkeyPaste {
             //parent panel
             TileTitlePanel = new MpTileTitlePanel() {
                 BorderStyle = BorderStyle.None,
-                BackColor = ((MpTilePanelController)ParentController).TilePanel.BackColor
+                BackColor = Color.Transparent,//((MpTilePanelController)ParentController).TilePanel.BackColor,
+                Margin = new Padding(20)
             };
             TileTitlePanel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;            
 
@@ -41,7 +42,7 @@ namespace MonkeyPaste {
             int tth = (int)((float)tr.Height * (float)MpSingletonController.Instance.GetSetting("TileTitleHeightRatio"));
             TileTitlePanel.SetBounds(0,0,tr.Width,tth);
 
-            TileTitlePanel.BackColor = ((MpTilePanelController)ParentController).TilePanel.BackColor;
+            TileTitlePanel.BackColor = Color.Transparent;// ((MpTilePanelController)ParentController).TilePanel.BackColor;
 
             TileTitleIconPanelController.UpdateBounds();
             TileTitleTextBoxController.UpdateBounds();

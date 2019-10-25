@@ -16,8 +16,8 @@ namespace MonkeyPaste {
                 BackColor = Color.Green//((MpTileTitlePanelController)ParentController).TileTitlePanel.BackColor
             };
 
-            DetailsTextBox = new TextBox() {                
-                BackColor = ((MpTileTitlePanelController)ParentController).TileTitlePanel.BackColor,
+            DetailsTextBox = new TextBox() {
+                BackColor = ((MpTilePanelController)((MpTileTitlePanelController)this.ParentController).ParentController).TilePanel.BackColor,
                 BorderStyle = BorderStyle.None
             };
             TileDetailsPanel.Controls.Add(DetailsTextBox);

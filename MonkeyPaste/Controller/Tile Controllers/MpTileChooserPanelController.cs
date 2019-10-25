@@ -138,6 +138,10 @@ namespace MonkeyPaste {
         }
         private void _focusTimer_Tick(object sender,EventArgs e) {
             ScrollTiles(MpSingletonController.Instance.ScrollWheelDelta);
+            Rectangle mb = ((MpLogFormController)ParentController).LogForm.Bounds;
+            if(mb.Height < 100) {
+                //((MpLogFormController)ParentController).LogForm.Bounds = new Rectangle(mb.X,mb.Y,mb.Width,100);
+            }
         }
         public MpCopyItem GetSelectedCopyItem() {
             if(_selectedTileIdx >= 0) {

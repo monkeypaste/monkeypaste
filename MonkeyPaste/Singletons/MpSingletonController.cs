@@ -23,6 +23,12 @@ namespace MonkeyPaste {
 
         public MpRegistryHelper Rh { get; set; } = new MpRegistryHelper();
 
+        public bool InAppendMode { get; set; } = false;
+
+        public bool InCopySelectionMode { get; set; } = false;
+
+        public bool InRightClickPasteMode { get; set; } = false;
+
         private bool _ignoreNextClipboardEvent;
         
         public void ScrollWheelListener(object sender, MouseEventArgs e) {

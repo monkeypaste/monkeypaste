@@ -157,7 +157,7 @@ namespace MonkeyPaste {
             try {
                 sql_cmd.ExecuteNonQuery();
             }
-            catch(Exception ex) {
+            catch(SQLiteException ex) { 
                 wasError = true;
                 Console.WriteLine("Error in executenonquery w/ parameter list: " + ex.ToString());
                 MpEnterDbPasswordForm enterPasswordForm = new MpEnterDbPasswordForm();
@@ -307,7 +307,7 @@ namespace MonkeyPaste {
                         pk_MpCopyItemTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , TypeName text NULL 
                     );
-                    INSERT INTO MpCopyItemType(TypeName) VALUES('text'),('rich_text'),('html_text'),('image'),('file_list'),('append');
+                    INSERT INTO MpCopyItemType(TypeName) VALUES('text'),('rich_text'),('html_text'),('image'),('file_list');
                     CREATE TABLE MpCommandType (
                         pk_MpCommandTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , CommandName text NOT NULL
@@ -352,6 +352,7 @@ namespace MonkeyPaste {
                     , fk_ColorId integer 
                     , Title text NULL 
                     , CopyCount integer not null default 1
+                    , PasteCount integer not null default 0
                     , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL
                     , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
                     , CONSTRAINT FK_MpCopyItem_1_0 FOREIGN KEY (fk_MpClientId) REFERENCES MpClient (pk_MpClientId)
@@ -400,7 +401,8 @@ namespace MonkeyPaste {
                     , fk_MpCopyItemId integer NOT NULL
                     , ItemText text NOT NULL 
                     , CONSTRAINT FK_MpTextItem_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
-                    );";            
+                    );
+            ";            
         }
         private string GetClearString() {
             return @"   

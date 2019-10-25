@@ -6,15 +6,72 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace MonkeyPaste {   
-    public class MpCopyItem : MpDBObject {
+namespace MonkeyPaste {
+    public class MpCopyItem:MpDBObject {
+        private static string[] _DefaultTileNames =new string[]{
+            "Achilles",
+            "Aeacus",
+            "Aeneas",
+            "Amphion",
+            "Arcas",
+            "Asclepius",
+            "Athis",
+            "Bellerophon",
+            "Dardanus",
+            "Dionysus",
+            "Epaphus",
+            "Harmonia",
+            "Heracles",
+            "Hippolyta",
+            "Helen",
+            "Iasus",
+            "Memnon",
+            "Orion",
+            "Orpheus",
+            "Penthesilea",
+            "Perseus",
+            "Polydeuces",
+            "Theseus",
+            "Tityos",
+            "Zethes",
+            "Zethus",
+            "Bacchus",
+            "Romulus",
+            "Remus",
+            "Turnus",
+            "Arjuna",
+            "Bhima",
+            "Bhishma",
+            "Dhristadyumna",
+            "Draupadi",
+            "Drona",
+            "Ghatotkacha",
+            "Hanuman",
+            "Iravan",
+            "Karna",
+            "Lakshmana",
+            "Nakula",
+            "Pradyumna",
+            "Sahadeva",
+            "Devavrata",
+            "Sugreeva",
+            "Vali",
+            "Yudhishthira",
+            "Sæmingr",
+            "Bragi",
+            "Cú",
+            "Diarmuid",
+            "Amirani",
+            "Gilgamesh",
+            "Māui",
+            "Semiramis"
+            };
+
         public static int TotalCopyItemCount = 0;
 
         public List<MpSubTextToken> subTextTokenList = new List<MpSubTextToken>();
 
         private Object DataObject { get; set; }
-        //private string DataText { get; set; }
-        //private string DataRichText { get; set; }
 
         public int copyItemId { get; set; }
         public int SubItemId { get; set; }
@@ -24,8 +81,7 @@ namespace MonkeyPaste {
         public int appId { get; set; }
         public DateTime CopyDateTime { get; set; }
         public int CopyCount { get; set; }
-        //public string ColorStr { get; set; }
-        //public Color Color { get; set; }
+        public int PasteCount { get; set; }
         private IntPtr sourceHandle;
 
         private MpApp _app { get; set; }
@@ -68,14 +124,10 @@ namespace MonkeyPaste {
             this.appId = appId;
             this.CopyDateTime = DateTime.Now;
             this.sourceHandle = sourceHandle;
-            this.Title = "Untitled";// Enum.GetName(typeof(MpCopyItemType),this.copyItemTypeId);
-            //this.Color = MpHelperFunctions.Instance.GetRandomColor();
-            this.CopyCount = 1;
+            Random r = new Random(Convert.ToInt32(DateTime.Now.Second));
+            this.Title = _DefaultTileNames[r.Next(0,_DefaultTileNames.Length-1)];
 
-            /*this.subTextTokenList.AddRange(MpHelperFunctions.Instance.ContainsEmail(GetText()));
-            this.subTextTokenList.AddRange(MpHelperFunctions.Instance.ContainsPhoneNumber(GetText()));
-            this.subTextTokenList.AddRange(MpHelperFunctions.Instance.ContainsStreetAddress(GetText()));
-            this.subTextTokenList.AddRange(MpHelperFunctions.Instance.ContainsWebLink(GetText()));*/
+            this.CopyCount = 1;
 
             WriteToDatabase();
         }
@@ -111,7 +163,7 @@ namespace MonkeyPaste {
                     }
                     return new string[1] { "Misreferenced" };
                 case MpCopyItemType.Image:
-                    return "Image"+this.copyItemId+"_"+this.SubItemId;                
+                    return (byte[])DataObject;           
             }
             return "Error unknown copyitem format!";
         }
@@ -180,8 +232,8 @@ namespace MonkeyPaste {
             Console.WriteLine("Loaded MpCopyItem");
             Console.WriteLine(ToString());
         }
-        public override void WriteToDatabase() {
-            
+
+        public override void WriteToDatabase() {            
             bool isNew = false;
 
             if(this.appId == 0) {
@@ -211,29 +263,41 @@ namespace MonkeyPaste {
                 this.copyItemId = MpSingletonController.Instance.GetMpData().Db.GetLastRowId("MpCopyItem","pk_MpCopyItemId");
                 isNew = true;
             }
-            if(isNew) {
-                switch(this.copyItemTypeId) {
-                    case MpCopyItemType.RichText:
-                    case MpCopyItemType.HTMLText:
-                    //case MpCopyItemType.PhoneNumber:
-                    //case MpCopyItemType.StreetAddress:
-                    //case MpCopyItemType.WebLink:
-                    //case MpCopyItemType.Email:
-                    case MpCopyItemType.Text:
+
+            switch(this.copyItemTypeId) {
+                case MpCopyItemType.RichText:
+                case MpCopyItemType.HTMLText:
+                //case MpCopyItemType.PhoneNumber:
+                //case MpCopyItemType.StreetAddress:
+                //case MpCopyItemType.WebLink:
+                //case MpCopyItemType.Email:
+                case MpCopyItemType.Text:
+                    if(isNew) {
                         MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("insert into MpTextItem(fk_MpCopyItemId,ItemText) values (" + this.copyItemId + ",@1)",new List<string>() { "@1" },new List<object>() { this.DataObject });
                         this.SubItemId = MpSingletonController.Instance.GetMpData().Db.GetLastRowId("MpTextItem","pk_MpTextItemId");
-                        break;
-                    case MpCopyItemType.FileList:
+                    } else {
+                        MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("update MpTextItem set ItemText='" + (string)GetData() + "' where pk_MpTextItemId=" + this.SubItemId);
+                    }                    
+                    break;
+                case MpCopyItemType.FileList:
+                    if(isNew) {
                         MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("insert into MpFileDropListItem(fk_MpCopyItemId) values(" + this.copyItemId + ")");
                         this.SubItemId = MpSingletonController.Instance.GetMpData().Db.GetLastRowId("MpFileDropListItem","pk_MpFileDropListItemId");
                         foreach(string fileOrPath in (string[])this.DataObject) {
                             MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("insert into MpFileDropListSubItem(fk_MpFileDropListItemId,ItemPath) values (" + this.SubItemId + ",'" + fileOrPath + "')");
                         }
-                        break;
-                    case MpCopyItemType.Image:
+                    } else {
+                        //file lists are not editable
+                    }                    
+                    break;
+                case MpCopyItemType.Image:
+                    if(isNew) {
                         MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("insert into MpImageItem(fk_MpCopyItemId,ItemImage) values (" + this.copyItemId + ",@0)",new List<string>() { "@0" },new List<object>() { this.DataObject });
-                        break;
-                }
+                    } else {
+                        MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("update MpImageItem set ItemImage=@0 where pk_MpImageItemId="+this.SubItemId,new List<string>() { "@0" },new List<object>() { this.DataObject });
+                    }
+                    
+                    break;
             }
             MapDataToColumns();
             Console.WriteLine(isNew ? "Created ":"Updated " + " MpCopyItem");
@@ -251,6 +315,7 @@ namespace MonkeyPaste {
             columnData.Add("Title",this.Title);
             columnData.Add("DataObject",this.DataObject);
             columnData.Add("CopyCount",this.CopyCount);
+            columnData.Add("PasteCount",this.PasteCount);
         }
     }
 
@@ -264,7 +329,7 @@ namespace MonkeyPaste {
         FileList,
         StreetAddress,
         Email,
-       PhoneNumber
+        PhoneNumber
     }
 
     public class MpSubTextToken {

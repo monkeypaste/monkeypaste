@@ -19,7 +19,6 @@ namespace MonkeyPaste {
             TileTitleTextBox = new TextBox() {
                 Text = ci.Title,               
                 ReadOnly = true,
-                BackColor = (Color)MpSingletonController.Instance.GetSetting("TileColor1"),
                 BorderStyle = BorderStyle.None
             };
             TileTitleTextBox.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
@@ -41,6 +40,8 @@ namespace MonkeyPaste {
             float fontSize = (float)MpSingletonController.Instance.GetSetting("TileTitleFontRatio") * (float)(ttpr.Height-hip*2);
             TileTitleTextBox.SetBounds(ttipr.Right+hip,hip,ttpr.Width-ttipr.Width-(hip*3),ttpr.Height-hip-hip);
             TileTitleTextBox.Font = new Font((string)MpSingletonController.Instance.GetSetting("TileTitleFont"),fontSize,GraphicsUnit.Pixel);
+
+            TileTitleTextBox.BackColor = ((MpTilePanelController)((MpTileTitlePanelController)ParentController).ParentController).TilePanel.BackColor;
         }
         private void _escKeyHook_KeyPressed(object sender,KeyPressedEventArgs e) {
             throw new NotImplementedException();
@@ -48,13 +49,15 @@ namespace MonkeyPaste {
         private void _titleTextBox_LostFocus(object sender,EventArgs e) {
             if(_orgTitle != TileTitleTextBox.Text) {
                 MpCopyItem ci = MpSingletonController.Instance.GetMpData().GetMpCopyItem(_copyItemId);
-                ci.Title = TileTitleTextBox.Text;
-                ci.WriteToDatabase();
+                if(ci.Title != TileTitleTextBox.Text) {
+                    ci.Title = TileTitleTextBox.Text;
+                    ci.WriteToDatabase();
+                }
             }
             if(!TileTitleTextBox.Focused) {
                 TileTitleTextBox.Cursor = Cursors.Arrow;
                 TileTitleTextBox.BorderStyle = BorderStyle.None;
-                TileTitleTextBox.BackColor = ((MpTileTitlePanelController)ParentController).TileTitlePanel.BackColor;
+                TileTitleTextBox.BackColor = ((MpTilePanelController)((MpTileTitlePanelController)ParentController).ParentController).TilePanel.BackColor;
                 TileTitleTextBox.ReadOnly = true;
                 ((MpTileTitlePanelController)ParentController).TileTitlePanel.Focus();
             }
@@ -71,7 +74,7 @@ namespace MonkeyPaste {
             TileTitleTextBox.Cursor = Cursors.Arrow;
             TileTitleTextBox.BorderStyle = BorderStyle.None;
             TileTitleTextBox.ReadOnly = true;
-            TileTitleTextBox.BackColor = ((MpTileTitlePanelController)ParentController).TileTitlePanel.BackColor;
+            TileTitleTextBox.BackColor = ((MpTilePanelController)((MpTileTitlePanelController)ParentController).ParentController).TilePanel.BackColor;
             ((MpTileTitlePanelController)ParentController).TileTitlePanel.Focus();
         }
 

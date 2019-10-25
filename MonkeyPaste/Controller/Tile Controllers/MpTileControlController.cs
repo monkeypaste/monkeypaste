@@ -15,10 +15,9 @@ namespace MonkeyPaste {
                 case MpCopyItemType.HTMLText:
                 case MpCopyItemType.RichText:
                 case MpCopyItemType.Text:
-                    ItemControl = new TextBox() { 
-                        WordWrap = true,
+                    ItemControl = new RichTextBox() { 
+                        WordWrap = false,
                         Enabled = false,
-                        ScrollBars = ScrollBars.Both,
                         Multiline = true,
                         Text = (string)ci.GetData(),
                         AutoSize = false,
@@ -51,14 +50,13 @@ namespace MonkeyPaste {
                 case MpCopyItemType.Image:
                     ItemControl = new PictureBox() {
                         Image = MpHelperSingleton.Instance.ConvertByteArrayToImage((byte[])ci.GetData()),
-                        BorderStyle = BorderStyle.None,
+                        BorderStyle = BorderStyle.None,                       
                         AutoSize = false,                  
                         SizeMode = PictureBoxSizeMode.StretchImage
                     };
                     break;
             }
             ItemControl.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
-                        
             UpdateBounds();
         }
 
@@ -71,18 +69,18 @@ namespace MonkeyPaste {
             Rectangle ttr = ((MpTilePanelController)ParentController).TileTitlePanelController.TileTitlePanel.Bounds;
             ItemControl.SetBounds(icp,icp+ttr.Height,tr.Width - (icp*2),tr.Height-ttr.Height-(icp*2));
 
-            if(ItemControl.GetType() == typeof(TextBox)) {
+            if(ItemControl.GetType() == typeof(RichTextBox)) {
                 int minLineCount = (int)MpSingletonController.Instance.GetSetting("TileMinLineCount");
                 float fontSize = ItemControl.Height / minLineCount;
-                ((TextBox)ItemControl).Font = new Font((string)MpSingletonController.Instance.GetSetting("TileFont"),fontSize,GraphicsUnit.Pixel);
+                ((RichTextBox)ItemControl).Font = new Font((string)MpSingletonController.Instance.GetSetting("TileFont"),fontSize,GraphicsUnit.Pixel);
             }
             ItemControl.Refresh();
         }
-
         protected override void View_KeyPress(object sender,KeyPressEventArgs e) {
             base.View_KeyPress(sender,e);
         }
-        /*private void ItemControl_MouseDoubleClick(object sender,MouseEventArgs e) {
+        /*
+         * private void ItemControl_MouseDoubleClick(object sender,MouseEventArgs e) {
             //perform paste
             ((MpLogFormController)((MpCopyItemTileChooserPanelController)((MpCopyItemTileController)ParentController).ParentController).ParentController).PasteCopyItem();
             // return tile to readonly state

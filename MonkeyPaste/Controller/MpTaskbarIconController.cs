@@ -13,7 +13,7 @@ namespace MonkeyPaste {
         private static readonly string IconFileName = "monkeyIcon16x16.ico";
         private static readonly string DefaultTooltip = "Monkey Paste";
 
-        private MpKeyboardHook _toggleSettingsHook;
+        private MpKeyboardHook _toggleSettingsHook,_toggleAppendModeHook;
         private bool _skipAuth = true;
 
         private MpLogFormController _logFormController;
@@ -29,11 +29,16 @@ namespace MonkeyPaste {
             _toggleSettingsHook = new MpKeyboardHook();
             _toggleSettingsHook.RegisterHotKey(ModifierKeys.Alt,Keys.D);
             _toggleSettingsHook.KeyPressed += _toggleSettingsHook_KeyPressed;
+
+            _toggleAppendModeHook = new MpKeyboardHook();
+            _toggleAppendModeHook.RegisterHotKey(ModifierKeys.Control | ModifierKeys.Shift,Keys.A);
+            _toggleAppendModeHook.KeyPressed += _toggleAppendModeHook_KeyPressed;
+
             _logFormController = new MpLogFormController(null);
             
             InitTrayMenu();
 
-            if(MpHelperSingleton.Instance.CheckForInternetConnection()) {
+            if(true/*MpHelperSingleton.Instance.CheckForInternetConnection()*/) {
                 ShowLoginForm();
             }
             else {
@@ -41,6 +46,18 @@ namespace MonkeyPaste {
                 Exit();
             }
         }
+
+        private void _toggleAppendModeHook_KeyPressed(object sender,KeyPressedEventArgs e) {
+            MpSingletonController.Instance.InAppendMode = !MpSingletonController.Instance.InAppendMode;
+            if(MpSingletonController.Instance.InAppendMode) {
+                notifyIcon.BalloonTipText = "Append mode activated";
+                notifyIcon.ShowBalloonTip(3000);
+            } else {
+                notifyIcon.BalloonTipText = "Append mode deactivated";
+                notifyIcon.ShowBalloonTip(3000);
+            }
+        }
+
         private void Exit() {
             // before we exit, let forms clean themselves up.
             if(helpForm != null) {
@@ -67,7 +84,8 @@ namespace MonkeyPaste {
             notifyIcon.MouseDoubleClick += NotifyIcon_DoubleClick;
 
             notifyIcon.ContextMenuStrip.Items.Clear();
-
+            notifyIcon.BalloonTipText = "Howdy there";
+            notifyIcon.ShowBalloonTip(30000);
             ToolStripMenuItem settingsSubMenu = new ToolStripMenuItem("&Settings");
             settingsSubMenu.Font = new Font((string)MpSingletonController.Instance.GetSetting("LogFont"),(float)MpSingletonController.Instance.GetSetting("LogPanelTileFontSize"));
 

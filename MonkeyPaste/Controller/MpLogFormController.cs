@@ -17,7 +17,7 @@ namespace MonkeyPaste {
         [DllImport("user32.dll")]
         static extern bool SetActiveWindow(IntPtr hWnd);
 
-        private MpClipboardHelper _clipboardController;
+        public MpClipboardHelper ClipboardController { get; set; }
 
         public MpLogForm LogForm { get; set; }
 
@@ -31,7 +31,8 @@ namespace MonkeyPaste {
         public MpLogFormController(MpController parentController) : base(parentController) {
             LogForm = new MpLogForm() {
                 AutoSize = false,                
-                AutoScaleMode = AutoScaleMode.None
+                AutoScaleMode = AutoScaleMode.None,
+                MinimumSize = new Size(15,200)
             };
             LogForm.Load += LogForm_Load;
             LogForm.FormClosing += logForm_Closing;
@@ -93,8 +94,8 @@ namespace MonkeyPaste {
             UpdateBounds();
 
             ShowLogForm();
-            _clipboardController = new MpClipboardHelper();
-            _clipboardController.Init();
+            ClipboardController = new MpClipboardHelper();
+            ClipboardController.Init();
             HideLogForm();
         }
         private void logForm_Closing(object sender,FormClosingEventArgs e) {
@@ -129,9 +130,6 @@ namespace MonkeyPaste {
 
             _spaceHook = new MpKeyboardHook();
             _spaceHook.KeyPressed += _spaceHook_KeyPressed;
-           // _spaceHook.RegisterHotKey(ModifierKeys.None,Keys.Space);
-            //MpSingletonController.Instance.SetKeyboardHook(MpInputCommand.EditTile,_spaceHook);
-
             TileChooserPanelController.ActivateHotKeys();
         }
         public void DeactivateHotKeys() {
@@ -170,8 +168,9 @@ namespace MonkeyPaste {
             _toggleLogHook_KeyPressed(null,null);
             PasteCopyItem();
         }
-        private void LogForm_Resize(object sender,EventArgs e) {
+        private void LogForm_Resize(object sender,EventArgs e) {            
             _customHeight = LogForm.Bounds.Height;
+            
             if(TileChooserPanelController != null) {
                 TileChooserPanelController.OnFormResize(LogForm.Bounds);
             }
@@ -223,7 +222,7 @@ namespace MonkeyPaste {
             else if(copyItem.copyItemTypeId == MpCopyItemType.FileList) {
                 System.Windows.Clipboard.SetFileDropList((StringCollection)copyItem.GetData());
             }
-            SetActiveWindow(_clipboardController.GetLastWindowWatcher().LastHandle);
+            SetActiveWindow(ClipboardController.GetLastWindowWatcher().LastHandle);
             SendKeys.Send("^v");
 
             MpSingletonController.Instance.SetIgnoreNextClipboardEvent(false);

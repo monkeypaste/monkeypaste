@@ -24,7 +24,7 @@ namespace MonkeyPaste {
     }
     public partial class MpResizableBorderlessForm : Form {
         private const int _dragPad = 10;
-
+        private const int _minHeight = 150;
         public MpResizableBorderlessForm() {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.None;

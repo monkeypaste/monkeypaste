@@ -61,25 +61,34 @@ namespace MonkeyPaste {
 
             TilePanel.SetBounds(((tidx-idx-1)*tcpr.Height+tp),tp,ts,ts);
             TilePanel.Thickness = (int)MpSingletonController.Instance.GetSetting("TileBorderThickness");
-            TileTitlePanelController.TileTitlePanel.Thickness = (int)MpSingletonController.Instance.GetSetting("TileBorderThickness");
+            //TileTitlePanelController.TileTitlePanel.Thickness = (int)MpSingletonController.Instance.GetSetting("TileBorderThickness");
             TileTitlePanelController.UpdateBounds();
             TileControlController.UpdateBounds();
             TileMenuPanelController.UpdateBounds();
 
             TilePanel.Refresh();
         }
-        public void SetFocus(bool isFocused) {
-            if(isFocused) {
-                TilePanel.BorderColor = (Color)MpSingletonController.Instance.GetSetting("TileFocusColor");
+        public void ShowMenu() {            
                 TileMenuPanelController.TileMenuPanel.Visible = true;
                 TileMenuPanelController.TileMenuButtonControllerList[0].TileMenuButton.ButtonOver();
                 TileMenuPanelController.TileMenuButtonControllerList[0].TileMenuButton.Refresh();
                 TileMenuPanelController.TileMenuPanel.BringToFront();
+        }
+        public void HideMenu() {
+            TileMenuPanelController.TileMenuPanel.Visible = false;
+        }
+
+        public void SetFocus(bool isFocused) {
+            if(isFocused) {
+                TilePanel.BorderColor = (Color)MpSingletonController.Instance.GetSetting("TileFocusColor");
+                TileControlController.ItemControl.Enabled = true;
+                //ShowMenu();
             } else {
                 TilePanel.BorderColor = (Color)MpSingletonController.Instance.GetSetting("TileUnfocusColor");
-                TileMenuPanelController.TileMenuPanel.Visible = false;
+                TileControlController.ItemControl.Enabled = false;
+                //HideMenu();
             }
-            TileTitlePanelController.TileTitlePanel.BorderColor = TilePanel.BorderColor;
+            //TileTitlePanelController.TileTitlePanel.BorderColor = TilePanel.BorderColor;
         }
         public void ActivateHotKeys() {
         }      

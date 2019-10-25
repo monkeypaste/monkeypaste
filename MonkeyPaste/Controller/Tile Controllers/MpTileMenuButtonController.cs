@@ -13,7 +13,7 @@ namespace MonkeyPaste {
             this.buttonId = buttonId;
             TileMenuButton = new MpButton() {
                 Text = title,
-                FlatStyle = System.Windows.Forms.FlatStyle.Flat,
+                //FlatStyle = System.Windows.Forms.FlatStyle.Flat,
                 BackColor = (Color)MpSingletonController.Instance.GetSetting("TileMenuColor")
             };
         }
