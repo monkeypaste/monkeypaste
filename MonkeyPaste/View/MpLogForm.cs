@@ -12,7 +12,12 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 
 namespace MonkeyPaste {
-    public partial class MpLogForm : MpResizableBorderlessForm {
+    public partial class MpLogForm : MpResizableBorderlessForm, MpIView {
+        public string ViewType {get;set;}
+        public string ViewName {get;set;}
+        public int ViewId {get;set;}
+        public object ViewData {get;set;}
+
         /*const int AW_SLIDE = 0X00040000;
         const int AW_HOR_POSITIVE = 0x00000001;
         const int AW_HOR_NEGATIVE = 0x00000002;
@@ -36,6 +41,10 @@ namespace MonkeyPaste {
         }*/
         public MpLogForm() : base() {
             this.DoubleBuffered = true;
+            ViewType = this.GetType().ToString();
+            ViewName = ViewType;
+            ViewId = MpSingletonController.Instance.Rand.Next(1,int.MaxValue);
+            ViewData = this;
             //SetProcessDPIAware();
             InitializeComponent();
         }

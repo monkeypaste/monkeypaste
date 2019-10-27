@@ -8,28 +8,18 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpTileChooserPanel : ScrollableControl {
-        public Color C1 { get; set; }
-        public Color C2 { get; set; }
-        public Color C3 { get; set; }  
-
-        public MpTileChooserPanel() : base() {
-            C1 = (Color)MpSingletonController.Instance.GetSetting("TileChooserBgColor1");
-            C2 = (Color)MpSingletonController.Instance.GetSetting("TileChooserBgColor2");
-            C3 = (Color)MpSingletonController.Instance.GetSetting("TileChooserBgColor3");
+    public class MpTileChooserPanel : ScrollableControl,MpIView {
+        public MpTileChooserPanel(int panelId) : base() {
             this.DoubleBuffered = true;
+            ViewType = this.GetType().ToString();
+            ViewName = ViewType + panelId;
+            ViewId = MpSingletonController.Instance.Rand.Next(1,int.MaxValue);
+            ViewData = this;
         }
-        protected override void OnPaint(PaintEventArgs e) {
-            base.OnPaint(e);
-            LinearGradientBrush linearGradientBrush = new LinearGradientBrush(this.ClientRectangle,C1,C2,90);
 
-            ColorBlend cblend = new ColorBlend(3);
-            cblend.Colors = new Color[3] { C1,C2,C3 };
-            cblend.Positions = new float[3] { 0f,0.5f,1f };
-
-            linearGradientBrush.InterpolationColors = cblend;
-
-            e.Graphics.FillRectangle(linearGradientBrush,this.ClientRectangle);
-        }
+        public string ViewType { get; set; }
+        public string ViewName { get; set; }
+        public int ViewId { get; set; }
+        public object ViewData { get; set; }
     }
 }

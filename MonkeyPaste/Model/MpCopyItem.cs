@@ -81,23 +81,22 @@ namespace MonkeyPaste {
         public int appId { get; set; }
         public DateTime CopyDateTime { get; set; }
         public int CopyCount { get; set; }
-        public int PasteCount { get; set; }
         private IntPtr sourceHandle;
 
-        private MpApp _app { get; set; }
-        public MpApp App { get { return _app; } set { _app = value; } }             
+        public MpApp App { get; set; }
 
         public MpCopyItem() { }
 
         private WebBrowser _wb;
+
         public MpCopyItem(int itemId, MpCopyItemType itemType,int clientId,int appId,object data,IntPtr sourceHandle) {
-            this.copyItemId = itemId;
             this.copyItemTypeId = itemType;
             if(copyItemTypeId == MpCopyItemType.RichText) {
                 RichTextBox rtb = new RichTextBox() { Rtf = (string)data };
                 DataObject = rtb.Text;
                 copyItemTypeId = MpCopyItemType.Text;
-            } else if(copyItemTypeId == MpCopyItemType.HTMLText) {
+            }
+            else if(copyItemTypeId == MpCopyItemType.HTMLText) {
                 string dataStr = (string)data;
                 int idx0 = dataStr.IndexOf("<html>") < 0 ? 0 : dataStr.IndexOf("<html>");
                 int idx1 = dataStr.IndexOf("/<html>") < 0 ? dataStr.Length - 1 : dataStr.IndexOf("/<html>");
@@ -116,16 +115,32 @@ namespace MonkeyPaste {
                 DataObject = (string)temp.Text;
                 ((WebBrowser)_wb).Document.ExecCommand("UNSELECT",false,Type.Missing);
                 copyItemTypeId = MpCopyItemType.Text;
-            } else if(copyItemTypeId == MpCopyItemType.Text) {
+            }
+            else if(copyItemTypeId == MpCopyItemType.Text) {
                 DataObject = (string)data;
-            } else {
+            }
+            else {
                 DataObject = data;
             }
+
+            if(MpSingletonController.Instance.InAppendMode && copyItemTypeId == MpCopyItemType.Text) {
+                if(MpSingletonController.Instance.AppendItem == null) {
+                    MpSingletonController.Instance.AppendItem = this;
+                } else {
+                    string appendedStr = (string)MpSingletonController.Instance.AppendItem.GetData() + Environment.NewLine + (string)DataObject;
+                    MpSingletonController.Instance.AppendItem.SetData((object)appendedStr);
+                    MpSingletonController.Instance.GetMpData().UpdateMpCopyItem(MpSingletonController.Instance.AppendItem);
+                    copyItemId = -2;
+                    return;
+                }
+            } 
+            this.copyItemId = itemId;
+           
             this.appId = appId;
             this.CopyDateTime = DateTime.Now;
             this.sourceHandle = sourceHandle;
-            Random r = new Random(Convert.ToInt32(DateTime.Now.Second));
-            this.Title = _DefaultTileNames[r.Next(0,_DefaultTileNames.Length-1)];
+            
+            this.Title = _DefaultTileNames[MpSingletonController.Instance.Rand.Next(0,_DefaultTileNames.Length-1)];
 
             this.CopyCount = 1;
 
@@ -136,6 +151,10 @@ namespace MonkeyPaste {
         public MpCopyItem(Image img,IntPtr sourceHandle) :this((object)MpHelperSingleton.Instance.ConvertImageToByteArray(img),MpCopyItemType.Image,sourceHandle) {}
         public MpCopyItem(string[] fileDropList,IntPtr sourceHandle) : this((object)fileDropList,MpCopyItemType.FileList,sourceHandle) {}
 
+        public void SetData(object newData) {
+            DataObject = newData;
+            WriteToDatabase();
+        }
         public object GetData() {
             switch(this.copyItemTypeId) {
                 //case MpCopyItemType.PhoneNumber:
@@ -180,9 +199,9 @@ namespace MonkeyPaste {
             this.CopyDateTime = DateTime.Parse(dr["CopyDateTime"].ToString());
             this.Title = dr["Title"].ToString();
             this.CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
-            //this.ColorStr = dr["Color"].ToString();
-            //this.Color = MpHelperFunctions.Instance.GetColorFromString(this.ColorStr);
-            this.appId = Convert.ToInt32(dr["fk_MpAppId"].ToString());
+
+            App = new MpApp(MpSingletonController.Instance.GetMpData().Db.Execute("select * from MpApp where pk_MpAppId=" + appId).Rows[0]);
+
             DataTable copyItemData = null;
             switch(this.copyItemTypeId) {
                 //case MpCopyItemType.PhoneNumber:
@@ -232,7 +251,7 @@ namespace MonkeyPaste {
             Console.WriteLine("Loaded MpCopyItem");
             Console.WriteLine(ToString());
         }
-
+        // still req'd if NoDb=true
         public override void WriteToDatabase() {            
             bool isNew = false;
 
@@ -254,8 +273,25 @@ namespace MonkeyPaste {
                 isNew = false;
             }
             else {
-                if(MpSingletonController.Instance.GetMpData().Db.NoDb) {
-                    this.copyItemId = ++TotalCopyItemCount;
+                //ensure not a dup
+                foreach(MpCopyItem ci in MpSingletonController.Instance.GetMpData().GetMpCopyItemList()) {
+                    if(ci.copyItemTypeId != copyItemTypeId) {
+                        continue;
+                    }
+                    //if this new item is a duplicate update original and return
+                    if(ci.GetData() == GetData() && ci.appId == appId) {
+                        ci.CopyCount++;
+                        if(MpSingletonController.Instance.GetMpData().Db.NoDb) {
+                            ci.WriteToDatabase();
+                        }
+                        MpSingletonController.Instance.GetMpData().UpdateMpCopyItem(ci);
+                        copyItemId = -1;
+                        return;
+                    }
+                }
+                ++TotalCopyItemCount;
+                if(MpSingletonController.Instance.GetMpData().Db.NoDb) {                    
+                    copyItemId = TotalCopyItemCount;
                     MapDataToColumns();
                     return;
                 }
@@ -315,7 +351,6 @@ namespace MonkeyPaste {
             columnData.Add("Title",this.Title);
             columnData.Add("DataObject",this.DataObject);
             columnData.Add("CopyCount",this.CopyCount);
-            columnData.Add("PasteCount",this.PasteCount);
         }
     }
 

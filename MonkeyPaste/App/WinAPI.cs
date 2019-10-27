@@ -19,7 +19,6 @@ namespace MonkeyPaste
     {
         [DllImport("user32")]
         public static extern int RegisterWindowMessage(string message);
-
         internal static int RegisterWindowMessage(string format, params object[] args)
         {
             string message = String.Format(format, args);
@@ -46,5 +45,13 @@ namespace MonkeyPaste
 
         [DllImport("user32.dll")]
         static extern bool SetActiveWindow(IntPtr hWnd);
+
+        // Registers a hot key with Windows.
+        [DllImport("user32.dll")]
+        public static extern bool RegisterHotKey(IntPtr hWnd,int id,uint fsModifiers,uint vk);
+
+        // Unregisters the hot key with Windows.
+        [DllImport("user32.dll")]
+        public static extern bool UnregisterHotKey(IntPtr hWnd,int id);
     }
 }

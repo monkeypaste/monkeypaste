@@ -29,14 +29,16 @@ namespace MonkeyPaste {
         }
         public void Reset() {
             SetSetting("MaxDbPasswordAttempts",3,MpSettingValueType.Int);
-            //SetSetting("LogPanelDefaultVisibleTileCount",5,MpSettingValueType.Int);
             SetSetting("LogScreenHeightRatio",0.3f,MpSettingValueType.Float);
-            SetSetting("LogPanelBgColor",MpColorPallete.LightBlue,MpSettingValueType.Color);
+            SetSetting("LogPanelBgColor",MpColorPallete.Blue,MpSettingValueType.Color);
             SetSetting("LogFont","Calibri",MpSettingValueType.String);
             SetSetting("LogPanelTileFontSize",10.0f,MpSettingValueType.Float);
             SetSetting("LogResizeHandleHeight",5,MpSettingValueType.Int);
             SetSetting("LogPadRatio",0.001f,MpSettingValueType.Float);
 
+            SetSetting("LogMenuHeightRatio",0.1f,MpSettingValueType.Float);
+            SetSetting("LogMenuSearchFont","Calibri",MpSettingValueType.String);
+            SetSetting("LogMenuSearchFontSizeRatio",0.85f,MpSettingValueType.Float);
 
             SetSetting("TileChooserPadHeightRatio",0.02f,MpSettingValueType.Float);
             SetSetting("TileChooserBgColor1",MpColorPallete.Blue,MpSettingValueType.Color);
@@ -60,15 +62,20 @@ namespace MonkeyPaste {
 
             SetSetting("TileFocusColor",MpColorPallete.Red,MpSettingValueType.Color);
             SetSetting("TileUnfocusColor",Color.White,MpSettingValueType.Color);
-            SetSetting("TileBorderThickness",20,MpSettingValueType.Int);
+            SetSetting("TileBorderThickness",10,MpSettingValueType.Int);
             SetSetting("TileColor1",MpColorPallete.Yellow,MpSettingValueType.Color);
             SetSetting("TileColor2",MpColorPallete.Blue,MpSettingValueType.Color);
             SetSetting("TileIconBorderColor",MpColorPallete.DarkGreen,MpSettingValueType.Color);
-            SetSetting("TileIconBorderRatio",0.1f,MpSettingValueType.Float);
+            SetSetting("TileIconBorderRatio",0.03f,MpSettingValueType.Float);
             SetSetting("TileBorderRadius",10,MpSettingValueType.Int);
             SetSetting("TileFont","Consolas",MpSettingValueType.String);
             SetSetting("TileMinLineCount",10,MpSettingValueType.Int);
             SetSetting("TilePadWidthRatio",0.04f,MpSettingValueType.Float);
+
+            SetSetting("SearchTextBoxWidthRatio",0.15f,MpSettingValueType.Float);
+            SetSetting("SearchTextBoxHeightRatio",0.15f,MpSettingValueType.Float);
+            SetSetting("SearchTextBoxFont","Consolas",MpSettingValueType.String);
+            SetSetting("SearchTextBoxFontSizeRatio",0.85f,MpSettingValueType.Float);
         }
         public void SetSetting(string key,object val,MpSettingValueType svt) {
             if(SettingDictionary.Keys.Contains(key)) {

@@ -16,17 +16,22 @@ namespace MonkeyPaste {
         private string _dbPassword { get; set; }
         public string DbPassword { get { return _dbPassword; } set { _dbPassword = value; } }
 
-        private bool _noDb { get; set; }
-        public bool NoDb { get { return _noDb; } set { _noDb = value; } }
+        public bool NoDb { get; set; }
 
         private int _passwordAttempts = 0;
+        private bool _isLoaded = false;
 
         public MpDb(string dbPath,string dbPassword) {
-            _noDb = false;
+            NoDb = MpCompatibility.IsRunningOnMono();
+            Console.WriteLine("Running mono: " + NoDb);
             DbPath = dbPath;
             DbPassword = dbPassword;
         }
         public void InitDb() {
+            if(NoDb) {
+                Console.WriteLine("Skipping Db Init");
+                return;
+            }
             if(_dbPath == null || _dbPath == String.Empty || !Directory.Exists(Path.GetDirectoryName(_dbPath)) || !File.Exists(_dbPath)) {
                 Console.WriteLine(_dbPath + " does not exist...");
                 DialogResult result = MessageBox.Show("No Database found would you like to load a file?","No DB Found",MessageBoxButtons.YesNo,MessageBoxIcon.Question,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
@@ -73,15 +78,16 @@ namespace MonkeyPaste {
                             ExecuteNonQuery(GetCreateString());
                         }
                         else {
-                            _noDb = true;
+                            NoDb = true;
                         }
                     }
                     else {
-                        _noDb = true;
+                        NoDb = true;
                     }
                 }
             }
             Console.WriteLine("Database successfully initialized at " + _dbPath);
+            _isLoaded = true;
         }
         public void SetDbPassword(string newPassword) {
             if(_dbPassword != newPassword) {
@@ -101,7 +107,7 @@ namespace MonkeyPaste {
             }
         }
         private SQLiteConnection SetConnection() {
-            if(_noDb) {
+            if(NoDb) {
                 return null;
             }
             // see https://stackoverflow.com/questions/1381264/password-protect-a-sqlite-db-is-it-possible
@@ -125,7 +131,7 @@ namespace MonkeyPaste {
             return conn;
         }
         public void ExecuteNonQuery(string sql,List<string> paramList = null,List<object> paramValueList = null) {
-            if(_noDb || _passwordAttempts > (int)MpSingletonController.Instance.GetSetting("MaxDbPasswordAttempts")) {
+            if(NoDb || _passwordAttempts > (int)MpSingletonController.Instance.GetSetting("MaxDbPasswordAttempts")) {
                 return;
             }
             if((paramList != null && paramValueList != null) && (paramList.Count > 0 && paramValueList.Count > 0 && paramList.Count != paramValueList.Count)) {
@@ -159,16 +165,21 @@ namespace MonkeyPaste {
             }
             catch(SQLiteException ex) { 
                 wasError = true;
-                Console.WriteLine("Error in executenonquery w/ parameter list: " + ex.ToString());
-                MpEnterDbPasswordForm enterPasswordForm = new MpEnterDbPasswordForm();
-                DialogResult enterPasswordResult = enterPasswordForm.ShowDialog();
-                _passwordAttempts++;
-                if(_passwordAttempts < (int)MpSingletonController.Instance.GetSetting("MaxDbPasswordAttempts")) {
-                    MpSingletonController.Instance.GetMpData().Init();
-                }
-                else {
-                    return;
-                }
+                Console.WriteLine("Error in executenonquery: " + ex.ToString());
+                if(_isLoaded) {
+                    DialogResult warnDbErrorResult = MessageBox.Show("Error writing data to " + _dbPath + " and program terminating","IO Error",MessageBoxButtons.OK,MessageBoxIcon.Error,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
+                    MpSingletonController.Instance.ExitApplication();
+                } else {
+                    MpEnterDbPasswordForm enterPasswordForm = new MpEnterDbPasswordForm();
+                    DialogResult enterPasswordResult = enterPasswordForm.ShowDialog();
+                    _passwordAttempts++;
+                    if(_passwordAttempts < (int)MpSingletonController.Instance.GetSetting("MaxDbPasswordAttempts")) {
+                        MpSingletonController.Instance.GetMpData().Init();
+                    }
+                    else {
+                        return;
+                    }
+                }              
             }
             if(!wasError) {
                 _passwordAttempts = 0;
@@ -176,7 +187,7 @@ namespace MonkeyPaste {
             sql_con.Close();
         }
         public DataTable Execute(string sql,List<string> paramList = null,List<object> paramValueList = null) {
-            if(_noDb || _passwordAttempts > (int)MpSingletonController.Instance.GetSetting("MaxDbPasswordAttempts")) {
+            if(NoDb || _passwordAttempts > (int)MpSingletonController.Instance.GetSetting("MaxDbPasswordAttempts")) {
                 return null;
             }
             if((paramList != null && paramValueList != null) && (paramList.Count > 0 && paramValueList.Count > 0 && paramList.Count != paramValueList.Count)) {
@@ -214,16 +225,22 @@ namespace MonkeyPaste {
                 sql_con.Close();
             }
             catch(SQLiteException ex) {
-                Console.WriteLine("Error during executing sql: " + sql + "\n" + "With error: " + ex.ToString());
                 wasError = true;
-                MpEnterDbPasswordForm enterPasswordForm = new MpEnterDbPasswordForm();
-                DialogResult enterPasswordResult = enterPasswordForm.ShowDialog();
-                _passwordAttempts++;
-                if(_passwordAttempts < (int)MpSingletonController.Instance.GetSetting("MaxDbPasswordAttempts")) {
-                    MpSingletonController.Instance.GetMpData().Init();
+                Console.WriteLine("Error in sql execute  " + ex.ToString());
+                if(_isLoaded) {
+                    DialogResult warnDbErrorResult = MessageBox.Show("Error writing data to " + _dbPath + " and program terminating","IO Error",MessageBoxButtons.OK,MessageBoxIcon.Error,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
+                    MpSingletonController.Instance.ExitApplication();
                 }
                 else {
-                    return null;
+                    MpEnterDbPasswordForm enterPasswordForm = new MpEnterDbPasswordForm();
+                    DialogResult enterPasswordResult = enterPasswordForm.ShowDialog();
+                    _passwordAttempts++;
+                    if(_passwordAttempts < (int)MpSingletonController.Instance.GetSetting("MaxDbPasswordAttempts")) {
+                        MpSingletonController.Instance.GetMpData().Init();
+                    }
+                    else {
+                        return null;
+                    }
                 }
             }
             if(!wasError) {
@@ -352,7 +369,6 @@ namespace MonkeyPaste {
                     , fk_ColorId integer 
                     , Title text NULL 
                     , CopyCount integer not null default 1
-                    , PasteCount integer not null default 0
                     , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL
                     , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
                     , CONSTRAINT FK_MpCopyItem_1_0 FOREIGN KEY (fk_MpClientId) REFERENCES MpClient (pk_MpClientId)

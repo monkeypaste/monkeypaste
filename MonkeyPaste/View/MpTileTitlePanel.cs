@@ -6,9 +6,19 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpTileTitlePanel : Panel {
-        public MpTileTitlePanel() : base() {
+    public class MpTileTitlePanel : Panel, MpIView {
+
+        public MpTileTitlePanel(int tileId,int panelId) : base() {
             this.DoubleBuffered = true;
+            ViewType = this.GetType().ToString();
+            ViewName = ViewType + panelId + "_" + tileId;
+            ViewId = MpSingletonController.Instance.Rand.Next(1,int.MaxValue);
+            ViewData = this;
         }
+
+        public string ViewType {get;set;}
+        public string ViewName {get;set;}
+        public int ViewId {get;set;}
+        public object ViewData {get;set;}
     }
 }

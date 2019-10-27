@@ -12,17 +12,19 @@ using System.IO;
 
 namespace MonkeyPaste {
 
-    public class MpApplicationContext : ApplicationContext  {
-        MpTaskbarIconController _taskbarController;
+    public class MpApplicationContext : ApplicationContext  {    
+        public MpApplicationController ApplicationController { get; set; }
+
         public System.ComponentModel.IContainer components;
         ///////////// This class should be created and passed into Application.Run( ... )
         /// </summary>
         public MpApplicationContext() {
             InitializeContext();
-            _taskbarController = new MpTaskbarIconController(this,null);
+            ApplicationController = new MpApplicationController(this,null);
         }
 
         public void ExitCore() {
+            Console.WriteLine("Application exiting " + DateTime.Now.ToString());
             ExitThreadCore();
         }
         #region generic code framework

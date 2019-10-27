@@ -7,14 +7,15 @@ using System.Data;
 using System.Runtime.InteropServices;
 
 namespace MonkeyPaste {
-    static class MpProgram {
+   
+    public static class MpProgram {
         public static string AppName = "MonkeyPaste";
 
         [STAThread]
         static void Main() {
-            if(!MpSingleInstance.Start()) {
+            /*if(!MpSingleInstance.Start()) {
                 return;
-            }
+            }*/
             Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
             try {
@@ -26,7 +27,7 @@ namespace MonkeyPaste {
                 //MessageBox.Show(ex.ToString(),"Program Terminated Unexpectedly",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
-            MpSingleInstance.Stop();
+           // MpSingleInstance.Stop();
         }
         static void CurrentDomain_ProcessExit(object sender,EventArgs e) {
             MessageBox.Show("Exiting");

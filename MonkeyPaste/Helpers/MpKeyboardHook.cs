@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Gtk;
 
 namespace MonkeyPaste {   
-    public sealed class MpKeyboardHook : IDisposable {
-        // Registers a hot key with Windows.
-        [DllImport("user32.dll")]
-        private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
-        // Unregisters the hot key with Windows.
-        [DllImport("user32.dll")]
-        private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
-
+    public class MpKeyboardHook : IDisposable {        
         /// <summary>
         /// Represents the window that is used internally to get the messages.
         /// </summary>
@@ -19,7 +13,7 @@ namespace MonkeyPaste {
 
             public Window()  {
                 // create the handle for the window.
-                this.CreateHandle(new CreateParams());
+                this.CreateHandle(new CreateParams());                
             }
 
             /// <summary>
@@ -34,8 +28,9 @@ namespace MonkeyPaste {
                     ModifierKeys modifier = (ModifierKeys)((int)m.LParam & 0xFFFF);
 
                     // invoke the event to notify the parent.
-                    if (KeyPressed != null)
-                        KeyPressed(this, new KeyPressedEventArgs(modifier, key));
+                    if(KeyPressed != null) {
+                        KeyPressed(this,new KeyPressedEventArgs(modifier,key));
+                    }
                 }
                 base.WndProc(ref m);
             }
@@ -50,53 +45,146 @@ namespace MonkeyPaste {
 
             #endregion
         }
-
-        private Window _window = new Window();
+        private Window _window;
         private int _currentId;
+        private const int GrabModeAsync = 1;
+        private const int KeyPress = 2;
+
+        private Gdk.ModifierType modifier;
+        private ModifierKeys modifierWin;
+        private Gdk.Key key;
+        private Keys keyWin;
 
         public MpKeyboardHook() {
+            if(MpCompatibility.IsRunningOnMono()) {
+                InitGdk();
+            } else {
+                InitWin();
+            }            
+        }
+        private void InitGdk() {
+            Gdk.Window rootWin = Gdk.Global.DefaultRootWindow;
+            IntPtr xDisplay = GetXDisplay(rootWin);
+        }
+        private void InitWin() {
+            _window = new Window();
             // register the event of the inner native window.
-            _window.KeyPressed += delegate (object sender, KeyPressedEventArgs args) {
-                if (KeyPressed != null)
-                    KeyPressed(this, args);
+            _window.KeyPressed += delegate (object sender,KeyPressedEventArgs args) {
+                if(KeyPressed != null)
+                    KeyPressed(this,args);
             };
         }
-
         /// <summary>
         /// Registers a hot key in the system.
         /// </summary>
         /// <param name="modifier">The modifiers that are associated with the hot key.</param>
         /// <param name="key">The key itself that is associated with the hot key.</param>
-        public void RegisterHotKey(ModifierKeys modifier, Keys key) {
+        public void RegisterHotKey(ModifierKeys modifier, Keys key) {            
+            if(MpCompatibility.IsRunningOnMono()) {
+                modifierWin = modifier;
+                keyWin = key;
+                RegisterHotKeyGdk(MpCompatibility.GetGdkModifierFromWin(modifier),key);
+            } else {
+                RegisterHotKeyWin(modifier,key);
+            }
+        }
+        private void RegisterHotKeyGdk(Gdk.ModifierType modifier,Keys key) {
+            Gdk.Window rootWin = Gdk.Global.DefaultRootWindow;
+            IntPtr xDisplay = GetXDisplay(rootWin);
+            this.key = (Gdk.Key)GdkApi.XKeysymToKeycode(xDisplay,(int)this.key);
+            rootWin.AddFilter(new Gdk.FilterFunc(FilterFunction));
+            this.modifier = modifier;
+            GdkApi.XGrabKey(
+             xDisplay,
+             (int)key,
+             (uint)modifier,
+             GetXWindow(rootWin),
+             false,
+             GrabModeAsync,
+             GrabModeAsync
+            );
+        }
+        private void RegisterHotKeyWin(ModifierKeys modifier,Keys key) {
             // increment the counter.
             _currentId = _currentId + 1;
-
             // register the hot key.
-            if (!RegisterHotKey(_window.Handle, _currentId, (uint)modifier, (uint)key))
+            if(!WinApi.RegisterHotKey(_window.Handle,_currentId,(uint)modifier,(uint)key))
                 throw new InvalidOperationException("Couldn’t register the hot key.");
+
         }
         public void UnregisterHotKey() {
-            // unregister all the registered hot keys.
-            for (int i = _currentId; i > 0; i--) {
-                UnregisterHotKey(_window.Handle, i);
+            if(MpCompatibility.IsRunningOnMono()) {
+                UnregisterHotKeyGdk();
             }
+            else {
+                UnregisterHotKeyWin();
+            }
+        }
+        private void UnregisterHotKeyGdk() {
+            Gdk.Window rootWin = Gdk.Global.DefaultRootWindow;
+            IntPtr xDisplay = GetXDisplay(rootWin);
+            GdkApi.XUngrabKey(
+                 xDisplay,
+                 (int)key,
+                 (uint)modifier,
+                 GetXWindow(rootWin));
+        }
+        private void UnregisterHotKeyWin() {
+            // unregister all the registered hot keys.
+            for(int i = _currentId;i > 0;i--) {
+                WinApi.UnregisterHotKey(_window.Handle,i);
+            }
+        }
+        private Gdk.FilterReturn FilterFunction(IntPtr xEvent,Gdk.Event evnt) {
+            XKeyEvent xKeyEvent = (XKeyEvent)Marshal.PtrToStructure(xEvent,typeof(XKeyEvent));
+
+            if(xKeyEvent.type == KeyPress) {
+                if(xKeyEvent.keycode == (int)key && xKeyEvent.state == (uint)modifier) {
+                    KeyPressed(this,new KeyPressedEventArgs(modifierWin,keyWin));
+                }
+            }
+            return Gdk.FilterReturn.Continue;
         }
         /// <summary>
         /// A hot key has been pressed.
         /// </summary>
         public event EventHandler<KeyPressedEventArgs> KeyPressed;
-
+        
         #region IDisposable Members
 
-        public void Dispose()
-        {
+        public void Dispose() {
             UnregisterHotKey();
-
             // dispose the inner native window.
-            _window.Dispose();
+            if(!MpCompatibility.IsRunningOnMono()) {
+                _window.Dispose();
+            }            
         }
 
         #endregion
+        private static IntPtr GetXDisplay(Gdk.Window window) {
+            return GdkApi.gdk_x11_drawable_get_xdisplay(GdkApi.gdk_x11_window_get_drawable_impl(window.Handle));
+        }
+        private static IntPtr GetXWindow(Gdk.Window window) {
+            return GdkApi.gdk_x11_drawable_get_xid(window.Handle);
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        internal struct XKeyEvent
+        {
+            public short type;
+            public uint serial;
+            public short send_event;
+            public IntPtr display;
+            public uint window;
+            public uint root;
+            public uint subwindow;
+            public uint time;
+            public int x, y;
+            public int x_root, y_root;
+            public uint state;
+            public uint keycode;
+            public short same_screen;
+        }       
     }
 
     /// <summary>

@@ -14,27 +14,14 @@ namespace MonkeyPaste {
         private MpClient _client;
         private MpUser _user;
 
-        private MpDb _db { get; set; }
-        public MpDb Db { get { return _db; } set { _db = value; } }
+        public MpDb Db { get; set; }
 
+        private ObservableCollection<MpPasteHistory> _pasteList = new ObservableCollection<MpPasteHistory>();
         private ObservableCollection<MpIcon> _iconList = new ObservableCollection<MpIcon>();
         private ObservableCollection<MpApp> _appList = new ObservableCollection<MpApp>();
         private ObservableCollection<MpCopyItem> _copyItemList = new ObservableCollection<MpCopyItem>();
 
         private ObservableCollection<string> _searchStringList = new ObservableCollection<string>();
-        public ObservableCollection<string> SearchStringList {
-            get {
-                return _searchStringList;
-            }
-            set {
-                if(value == null) {
-                    _searchStringList = null;
-                } else {
-                    _searchStringList = new ObservableCollection<string>();
-                    _searchStringList.Add(value[0]);
-                }                
-            }
-        }
 
         public MpData(string dbPath,string dbPassword,string identityToken,string accessToken) {
             Db = new MpDb(dbPath,dbPassword);
@@ -46,6 +33,8 @@ namespace MonkeyPaste {
             InitMpIcon();
             InitMpApp();
             InitMpCopyItem();
+            InitPasteHistory();
+            InitSearchString();
         }
         public bool Load(string path,string password,bool isNew) {
             ResetData();
@@ -59,6 +48,22 @@ namespace MonkeyPaste {
         }
         public MpClient GetMpClient() {
             return _client;
+        }
+        private void InitSearchString() {
+            _searchStringList = new ObservableCollection<string>();
+        }
+        private void InitPasteHistory() {
+            _pasteList = new ObservableCollection<MpPasteHistory>();
+
+            if(Db.NoDb) {
+                DataTable dt = Db.Execute("select * from MpPasteHistory");
+                if(dt != null) {
+                    foreach(DataRow dr in dt.Rows) {
+                        _pasteList.Add(new MpPasteHistory(dr));
+                    }
+                }
+                Console.WriteLine("Init w/ " + _pasteList.Count + " pasted history items.");
+            }
         }
         private void InitUser(string idToken) {
             _user = new MpUser() { IdentityToken = idToken };
@@ -108,7 +113,15 @@ namespace MonkeyPaste {
                 Console.WriteLine("Init w/ " + _copyItemList.Count + " copyitems added");
             }
         }
-       
+       public void AddPasteHistory(MpPasteHistory newPasteHistory) {
+            foreach(MpPasteHistory ph in _pasteList) {
+                if(ph.CopyItemId == newPasteHistory.CopyItemId && ph.PasteDateTime == newPasteHistory.PasteDateTime) {
+                    _pasteList[_pasteList.IndexOf(ph)] = newPasteHistory;
+                    return;
+                }
+            }
+            _pasteList.Add(newPasteHistory);
+        }
         public void AddMpIcon(IntPtr sourceHandle) {
             int lastId = 0;
             if(_iconList.Count > 0) {
@@ -171,18 +184,26 @@ namespace MonkeyPaste {
                 Console.WriteLine("MpData error clipboard data is not known format");
                 return;
             }
+           //if ci is a duplicate ignore it
+           if(ci.copyItemId < 0) {
+                return;
+            }
 
             AddMpApp(ci.App);
             foreach(MpCopyItem mpci in _copyItemList) {
-                if(ci.copyItemId == mpci.copyItemId)
+                if(ci.copyItemId == mpci.copyItemId) {
+                    UpdateMpCopyItem(ci);
                     return;
+                }
             }
             _copyItemList.Add(ci);
         }
+        
         public void UpdateMpIcon(MpIcon updatedMpIcon) {
             for(int i = 0;i < _iconList.Count;i++) {
                 if(_iconList[i].iconId == updatedMpIcon.iconId) {
                     _iconList[i] = updatedMpIcon;
+                    _iconList[i].WriteToDatabase();
                     break;
                 }
             }
@@ -191,6 +212,7 @@ namespace MonkeyPaste {
             for(int i = 0;i < _appList.Count;i++) {
                 if(_appList[i].appId == updatedMpApp.appId) {
                     _appList[i] = updatedMpApp;
+                    _appList[i].WriteToDatabase();
                     break;
                 }
             }
@@ -198,10 +220,38 @@ namespace MonkeyPaste {
         public void UpdateMpCopyItem(MpCopyItem updatedMpCopyItem) {
             for(int i = 0;i < _copyItemList.Count;i++) {
                 if(_copyItemList[i].copyItemId == updatedMpCopyItem.copyItemId) {
-                    _copyItemList[i] = updatedMpCopyItem;
+                    _copyItemList.Remove(_copyItemList[i]);
+                    _copyItemList.Insert(i,updatedMpCopyItem);
+                    updatedMpCopyItem.WriteToDatabase();
                     break;
                 }
             }
+        }
+        public void UpdateSearchString(string newStr) {
+            string temp = string.Empty;
+            if(_searchStringList.Count > 0) {
+                temp = _searchStringList[0];
+            }
+            temp += newStr;
+            _searchStringList.Clear();
+            _searchStringList.Add(temp);
+        }
+        public MpPasteHistory GetPasteHistory(int MpPasteHistoryId) {
+            foreach(MpPasteHistory ph in _pasteList) {
+                if(ph.PasteHistoryId == MpPasteHistoryId) {
+                    return ph;
+                }
+            }
+            return null;
+        }
+        public List<MpPasteHistory> GetPasteHistoryList(int MpCopyItemId) {
+            List<MpPasteHistory> pl = new List<MpPasteHistory>();
+            foreach(MpPasteHistory ph in _pasteList) {
+                if(ph.CopyItemId == MpCopyItemId) {
+                    pl.Add(ph);
+                }
+            }
+            return pl;
         }
         public MpIcon GetMpIcon(int MpIconId) {
             foreach(MpIcon mpi in _iconList) {
@@ -248,11 +298,19 @@ namespace MonkeyPaste {
             }
             return null;
         }
+        public string GetSearchString() {
+            if(_searchStringList.Count > 0) {
+                return _searchStringList[0];
+            }
+            return string.Empty;
+        }
         public void ResetData() {
             Db.ResetDb();
             _iconList.Clear();
             _copyItemList.Clear();
             _appList.Clear();
+            _pasteList.Clear();
+            _searchStringList.Clear();
         }
     }
 }

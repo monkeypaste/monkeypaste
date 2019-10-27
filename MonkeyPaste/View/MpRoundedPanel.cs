@@ -48,7 +48,7 @@ namespace MonkeyPaste {
 
         public MpRoundedPanel() : base() {
             _pen = new Pen(BorderColor,Thickness);
-            DoubleBuffered = true;            
+            DoubleBuffered = true;
         }
         private Rectangle GetLeftUpper(int e) {
             return new Rectangle(0,0,e,e);
@@ -62,7 +62,6 @@ namespace MonkeyPaste {
         private Rectangle GetLeftLower(int e) {
             return new Rectangle(0,Height - e,e,e);
         }
-
         private void ExtendedDraw(PaintEventArgs e) {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             GraphicsPath path = new GraphicsPath();
