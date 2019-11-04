@@ -9,14 +9,14 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {
     public class MpRoundedPanel : Panel {
-        private float _thickness = 5;
-        public float Thickness {
+        private int _thickness = 5;
+        public int Thickness {
             get {
                 return _thickness;
             }
             set {
                 _thickness = value;
-                _pen = new Pen(_borderColor,Thickness);
+                _pen = new Pen(_borderColor,(float)Thickness);
                 Invalidate();
             }
         }
@@ -63,7 +63,6 @@ namespace MonkeyPaste {
             return new Rectangle(0,Height - e,e,e);
         }
         private void ExtendedDraw(PaintEventArgs e) {
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             GraphicsPath path = new GraphicsPath();
             path.StartFigure();
             path.AddArc(GetLeftUpper(Radius),180,90);
@@ -91,6 +90,7 @@ namespace MonkeyPaste {
             DrawSingleBorder(graphics);
         }
         protected override void OnPaint(PaintEventArgs e) {
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             base.OnPaint(e);
             ExtendedDraw(e);
             DrawBorder(e.Graphics);

@@ -28,16 +28,17 @@ namespace MonkeyPaste {
             Reset();
         }
         public void Reset() {
+            string appFont = "Calibri";
             SetSetting("MaxDbPasswordAttempts",3,MpSettingValueType.Int);
             SetSetting("LogScreenHeightRatio",0.3f,MpSettingValueType.Float);
             SetSetting("LogPanelBgColor",MpColorPallete.Blue,MpSettingValueType.Color);
-            SetSetting("LogFont","Calibri",MpSettingValueType.String);
+            SetSetting("LogFont",appFont,MpSettingValueType.String);
             SetSetting("LogPanelTileFontSize",10.0f,MpSettingValueType.Float);
             SetSetting("LogResizeHandleHeight",5,MpSettingValueType.Int);
             SetSetting("LogPadRatio",0.001f,MpSettingValueType.Float);
 
             SetSetting("LogMenuHeightRatio",0.1f,MpSettingValueType.Float);
-            SetSetting("LogMenuSearchFont","Calibri",MpSettingValueType.String);
+            SetSetting("LogMenuSearchFont",appFont,MpSettingValueType.String);
             SetSetting("LogMenuSearchFontSizeRatio",0.85f,MpSettingValueType.Float);
 
             SetSetting("TileChooserPadHeightRatio",0.02f,MpSettingValueType.Float);
@@ -46,35 +47,36 @@ namespace MonkeyPaste {
             SetSetting("TileChooserBgColor3",MpColorPallete.LightBlue,MpSettingValueType.Color);
 
             SetSetting("TileTitleFontRatio",0.9f,MpSettingValueType.Float);
-            SetSetting("TileTitleFont","Consolas",MpSettingValueType.String);
-            SetSetting("TileTitleHeightRatio",0.2f,MpSettingValueType.Float);
+            SetSetting("TileTitleFont",appFont,MpSettingValueType.String);
+            SetSetting("TileTitleHeightRatio",0.15f,MpSettingValueType.Float);
             SetSetting("TileTitleFontColor",Color.Black,MpSettingValueType.Color);
 
+            SetSetting("TileDetailHeightRatio",0.05f,MpSettingValueType.Float);
             SetSetting("TileDetailFontSizeRatio",0.7f,MpSettingValueType.Float);
-            SetSetting("TileDetailFont","Consolas",MpSettingValueType.String);
+            SetSetting("TileDetailFont",appFont,MpSettingValueType.String);
             SetSetting("TileDetailFontColor",Color.White,MpSettingValueType.Color);
             SetSetting("TileDetailTitlePad",15,MpSettingValueType.Int);
 
             SetSetting("TileMenuHeightRatio",0.1f,MpSettingValueType.Float);
-            SetSetting("TileMenuFont","Consolas",MpSettingValueType.String);
+            SetSetting("TileMenuFont",appFont,MpSettingValueType.String);
             SetSetting("TileMenuFontRatio",0.6f,MpSettingValueType.Float);
             SetSetting("TileMenuColor",Color.FromArgb(50,0,0,0),MpSettingValueType.Color);
 
             SetSetting("TileFocusColor",MpColorPallete.Red,MpSettingValueType.Color);
             SetSetting("TileUnfocusColor",Color.White,MpSettingValueType.Color);
-            SetSetting("TileBorderThickness",10,MpSettingValueType.Int);
+            SetSetting("TileBorderThickness",5,MpSettingValueType.Int);
             SetSetting("TileColor1",MpColorPallete.Yellow,MpSettingValueType.Color);
             SetSetting("TileColor2",MpColorPallete.Blue,MpSettingValueType.Color);
             SetSetting("TileIconBorderColor",MpColorPallete.DarkGreen,MpSettingValueType.Color);
             SetSetting("TileIconBorderRatio",0.03f,MpSettingValueType.Float);
             SetSetting("TileBorderRadius",10,MpSettingValueType.Int);
-            SetSetting("TileFont","Consolas",MpSettingValueType.String);
+            SetSetting("TileFont",appFont,MpSettingValueType.String);
             SetSetting("TileMinLineCount",10,MpSettingValueType.Int);
             SetSetting("TilePadWidthRatio",0.04f,MpSettingValueType.Float);
 
             SetSetting("SearchTextBoxWidthRatio",0.15f,MpSettingValueType.Float);
             SetSetting("SearchTextBoxHeightRatio",0.15f,MpSettingValueType.Float);
-            SetSetting("SearchTextBoxFont","Consolas",MpSettingValueType.String);
+            SetSetting("SearchTextBoxFont",appFont,MpSettingValueType.String);
             SetSetting("SearchTextBoxFontSizeRatio",0.85f,MpSettingValueType.Float);
         }
         public void SetSetting(string key,object val,MpSettingValueType svt) {

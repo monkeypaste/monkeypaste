@@ -29,7 +29,6 @@ namespace MonkeyPaste {
         Up1,
         Up2,
         Move,
-        HitBox,
         SDragL,
         SDragR,
         SDragM,
@@ -39,7 +38,8 @@ namespace MonkeyPaste {
         EDragR,
         EDragM,
         EDrag1,
-        EDrag2
+        EDrag2,
+        HitBox,
     }
     public class MpMouseHook : IDisposable {
         private IKeyboardMouseEvents _mouseHook = null;
@@ -50,11 +50,13 @@ namespace MonkeyPaste {
         public bool IsMouseInHitBox { get; set; } = false;
         public bool IsMouseEnterHitBox { get; set; } = false;
         public bool IsMouseLeaveHitBox { get; set; } = false;
+        private bool _eventRaised = false;
 
         public MpMouseHook() {
             MouseEvent += delegate (object sender,MouseEventExtArgs args) {
-                if(MouseEvent != null) {
-                    MouseEvent(this,args);
+                if(MouseEvent != null && _eventRaised) {
+                    _eventRaised = false;
+                    MouseEvent(sender,args);
                 }
             };
         }
@@ -88,6 +90,9 @@ namespace MonkeyPaste {
             _mouseHook.Dispose();
         }
         private void _mouseHook_MouseEventExt(object sender,MouseEventExtArgs e) {
+            if(_eventRaised) {
+                return;
+            }
             switch(_me) {
                 case MpMouseEvent.Wheel:
                     Console.WriteLine("Mouse Wheel delta: " + e.Delta);
@@ -104,10 +109,6 @@ namespace MonkeyPaste {
                             eh = false;
                             lh = false;
                         }
-
-                        if(MouseEvent != null) {
-                            MouseEvent(sender,e);
-                        }
                     } else {
                         //prev hit
                         if(IsMouseInHitBox) {
@@ -122,6 +123,7 @@ namespace MonkeyPaste {
                     IsMouseInHitBox = isHit; IsMouseEnterHitBox = eh; IsMouseLeaveHitBox = lh;
                     if(raiseEvent) {
                         if(MouseEvent != null) {
+                            _eventRaised = true;
                             MouseEvent(this,e);
                         }
                     }

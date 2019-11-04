@@ -14,7 +14,6 @@ namespace MonkeyPaste {
 
         private MpKeyboardHook _toggleSettingsHook,_toggleAppendModeHook;
         private MpMouseHook _mouseHitScreenTopHook;
-
         private bool _skipAuth = true;
 
         public MpLogFormController LogFormController { get; set; }
@@ -22,7 +21,7 @@ namespace MonkeyPaste {
         public MpSettingsForm settingsForm { get; set; }
         public MpHelpForm helpForm { get; set; }
         public NotifyIcon notifyIcon { get; set; }				            // the icon that sits in the system tray      
-        //private MpApplicationContext _context = null;
+       
 
         public MpTaskbarIconController(object context,MpController parent) : base(parent) {
             MpSingletonController.Instance.Init(context,(string)MpSingletonController.Instance.Rh.GetValue("DBPath"),(string)MpSingletonController.Instance.Rh.GetValue("DBPassword"),null,null);
@@ -41,11 +40,12 @@ namespace MonkeyPaste {
             _toggleAppendModeHook.RegisterHotKey(ModifierKeys.Control | ModifierKeys.Shift,Keys.A);
             _toggleAppendModeHook.KeyPressed += _toggleAppendModeHook_KeyPressed;
 
-            LogFormController = new MpLogFormController(this);
             helpForm = new MpHelpForm();
             settingsForm = new MpSettingsForm();
             InitTrayMenu();
-            
+
+            LogFormController = new MpLogFormController(this);
+            LogFormController.LogForm.Load += LogForm_Load;
             if(true/*MpHelperSingleton.Instance.CheckForInternetConnection()*/) {
                 ShowLoginForm();
             }
@@ -54,12 +54,14 @@ namespace MonkeyPaste {
                 Exit();
             }
             Link(new List<MpIView>()/* { helpForm,settingsForm,notifyIcon }*/);
+        }
+
+        private void LogForm_Load(object sender,EventArgs e) {
             LogFormController.ShowLogForm();
         }
 
         private void _mouseHitScreenTopHook_MouseEvent(object sender,Gma.System.MouseKeyHook.MouseEventExtArgs e) {
-           
-            Console.WriteLine("Mouse hit top! Sender: "+sender.GetType().ToString());
+            LogFormController.ShowLogForm();
         }
 
         private void _toggleAppendModeHook_KeyPressed(object sender,KeyPressedEventArgs e) {
@@ -101,7 +103,7 @@ namespace MonkeyPaste {
             notifyIcon.BalloonTipText = "Howdy there";
             notifyIcon.ShowBalloonTip(30000);
             ToolStripMenuItem settingsSubMenu = new ToolStripMenuItem("&Settings");
-            settingsSubMenu.Font = new Font((string)MpSingletonController.Instance.GetSetting("LogFont"),(float)MpSingletonController.Instance.GetSetting("LogPanelTileFontSize"));
+            settingsSubMenu.Font = new Font(Properties.Settings.Default.LogFont,Properties.Settings.Default.LogPanelTileFontSize);
 
             ToolStripMenuItem fileSubMenu = new ToolStripMenuItem("&File");
             fileSubMenu.DropDownItems.Add(ToolStripMenuItemWithHandler("&Clear History",clearHistory_Click));
@@ -232,7 +234,7 @@ namespace MonkeyPaste {
         }
         private void ContextMenuStrip_Opening(object sender,System.ComponentModel.CancelEventArgs e) { }
 
-        public override void UpdateView() {
+        public override void Update() {
             throw new NotImplementedException();
         }
 

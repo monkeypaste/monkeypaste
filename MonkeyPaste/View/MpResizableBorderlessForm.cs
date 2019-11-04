@@ -29,7 +29,7 @@ namespace MonkeyPaste {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.None;
             this.DoubleBuffered = true;
-            this.SetStyle(ControlStyles.ResizeRedraw,true);            
+            this.SetStyle(/*ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.ContainerControl | */ControlStyles.ResizeRedraw,true);            
         }
 
         private void MpResizableBorderlessForm_Load(object sender,EventArgs e) {

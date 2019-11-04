@@ -13,7 +13,7 @@ namespace MonkeyPaste {
             _context = appContext;
             _taskbarController = new MpTaskbarIconController(_context,this);            
         }
-        public override void UpdateView() {
+        public override void Update() {
             //no view do nothing
         }
     }

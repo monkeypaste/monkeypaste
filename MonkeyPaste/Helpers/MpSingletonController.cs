@@ -15,9 +15,6 @@ namespace MonkeyPaste {
         private Dictionary<string,MpKeyboardHook> _hotkeyHookDictionary;
         private MpData _data;
 
-        private MpSettings _settings { get; set; }
-        public MpSettings Settings { get { return _settings; } set { _settings = value; } }
-
         private int _scrollWheelDelta { get; set; }
         public int ScrollWheelDelta { get { return _scrollWheelDelta; } set { _scrollWheelDelta = value; } }
 
@@ -46,7 +43,6 @@ namespace MonkeyPaste {
         public void Init(object context,string dbPath,string dbPassword,string idToken,string accessToken) {
             _appContext = context;
             Rand = new Random(Convert.ToInt32(DateTime.Now.Second));
-            _settings = new MpSettings();
             _data = new MpData(dbPath,dbPassword,idToken,accessToken);
             _scrollWheelDelta = 0;       
             _hotkeyHookDictionary = new Dictionary<string,MpKeyboardHook>();
@@ -69,12 +65,6 @@ namespace MonkeyPaste {
             else {
                 _hotkeyHookDictionary.Add(key,newHook);
             }
-        }
-        public object GetSetting(string key) {
-            return _settings.GetSetting(key);
-        }
-        public void SetSetting(string key,object val) {
-            _settings.SetSetting(key,val,Settings.SettingValueTypeDictionary[key]);
         }
         
         public MpData GetMpData() {

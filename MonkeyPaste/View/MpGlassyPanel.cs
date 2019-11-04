@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class GlassyPanel:Panel {
+    public class MpGlassyPanel:Panel {
         const int WS_EX_TRANSPARENT = 0x20;
 
         int opacity = 50;

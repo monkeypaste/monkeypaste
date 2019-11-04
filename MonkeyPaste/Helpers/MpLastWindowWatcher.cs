@@ -10,16 +10,13 @@ using System.Timers;
 namespace MonkeyPaste
 {
     public class MpLastWindowWatcher {
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetForegroundWindow();
-
         private IntPtr _thisAppHandle;
         private Timer _timer;
         private IntPtr _previousHandle;
 
         public MpLastWindowWatcher() {
             //Process.GetCurrentProcess().Refresh();
-            _thisAppHandle = GetForegroundWindow();// Process.GetCurrentProcess().MainWindowHandle;
+            _thisAppHandle = WinApi.GetForegroundWindow();// Process.GetCurrentProcess().MainWindowHandle;
             _previousHandle = IntPtr.Zero;
 
             _timer = new Timer(100);
@@ -32,7 +29,7 @@ namespace MonkeyPaste
             }
         }
         private void SetLastActive(object sender,ElapsedEventArgs e) {
-            IntPtr currentHandle = GetForegroundWindow();
+            IntPtr currentHandle = WinApi.GetForegroundWindow();
             if(_thisAppHandle == IntPtr.Zero) {
                 //Process.GetCurrentProcess().Refresh();
                 _thisAppHandle = Process.GetCurrentProcess().MainWindowHandle;

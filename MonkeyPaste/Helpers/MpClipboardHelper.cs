@@ -8,36 +8,6 @@ using System.Windows.Media.Imaging;
 
 namespace MonkeyPaste {
     public class MpClipboardHelper : Form {
-        #region WIN32 API  
-        [DllImport("User32.dll")]
-        protected static extern int SetClipboardViewer(int hWndNewViewer);
-
-        [DllImport("User32.dll",CharSet = CharSet.Auto)]
-        public static extern bool ChangeClipboardChain(IntPtr hWndRemove,IntPtr hWndNewNext);
-
-        [DllImport("user32.dll",CharSet = CharSet.Auto)]
-        public static extern int SendMessage(IntPtr hwnd,int wMsg,IntPtr wParam,IntPtr lParam);
-
-        /// <summary>
-        /// Places the given window in the system-maintained clipboard format listener list.
-        /// </summary>
-        [DllImport("user32.dll",SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool AddClipboardFormatListener(IntPtr hwnd);
-        /// <summary>
-        /// Removes the given window from the system-maintained clipboard format listener list.
-        /// </summary>
-        [DllImport("user32.dll",SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool RemoveClipboardFormatListener(IntPtr hwnd);
-
-        /// <summary>
-        /// Sent when the contents of the clipboard have changed.
-        /// </summary>
-        private const int WM_CLIPBOARDUPDATE = 0x031D;
-
-        #endregion
-
         private MpLastWindowWatcher _lastWindowWatcher;
         private IntPtr _nextClipboardViewer;
 
@@ -58,7 +28,7 @@ namespace MonkeyPaste {
             MpSingletonController.Instance.SetIgnoreNextClipboardEvent(true);
             //AddClipboardFormatListener(this.Handle);    // Add our window to the clipboard's format listener list.
             this.SetBounds(0,0,0,0);
-            _nextClipboardViewer = (IntPtr)SetClipboardViewer((int)this.Handle);
+            _nextClipboardViewer = (IntPtr)WinApi.SetClipboardViewer((int)this.Handle);
             MpSingletonController.Instance.SetIgnoreNextClipboardEvent(false);
         }
         
@@ -94,14 +64,14 @@ namespace MonkeyPaste {
                     catch(Exception e) {
                         Console.WriteLine(e.ToString());
                     }
-                    SendMessage(_nextClipboardViewer,m.Msg,m.WParam,m.LParam);
+                    WinApi.SendMessage(_nextClipboardViewer,m.Msg,m.WParam,m.LParam);
                     break;
 
                 case WM_CHANGECBCHAIN:
                     if(m.WParam == _nextClipboardViewer)
                         _nextClipboardViewer = m.LParam;
                     else
-                        SendMessage(_nextClipboardViewer,m.Msg,m.WParam,m.LParam);
+                        WinApi.SendMessage(_nextClipboardViewer,m.Msg,m.WParam,m.LParam);
                     break;
 
                 default:
@@ -110,7 +80,7 @@ namespace MonkeyPaste {
             }            
         }
         protected override void Dispose(bool disposing) {
-            ChangeClipboardChain(this.Handle,_nextClipboardViewer);
+            WinApi.ChangeClipboardChain(this.Handle,_nextClipboardViewer);
             //RemoveClipboardFormatListener(this.Handle);
             if(disposing && (_components != null)) {
                 _components.Dispose();

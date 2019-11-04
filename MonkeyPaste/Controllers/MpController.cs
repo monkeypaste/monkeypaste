@@ -8,7 +8,7 @@ using System.Windows.Forms;
 namespace MonkeyPaste {
     public interface MpIController {
         void Link(List<MpIView> viewList = null,List<object> modelList = null);
-        void UpdateView();
+        void Update();
         object Find(string name);
     }   
 
@@ -31,10 +31,10 @@ namespace MonkeyPaste {
             ControllerName = ControllerType + (ControllerId == -1 ? ControllerCount : ControllerId);
         }
 
-        public abstract void UpdateView();
+        public abstract void Update();
 
         public void Link(List<MpIView> viewList = null,List<object> modelList = null) {
-            return;
+            //return;
             //add controller type as sub-dicitonary
             if(!ControllerDictionary.ContainsKey(ControllerType)) {
                 ControllerDictionary.Add(ControllerType,new Dictionary<string,object>());                
@@ -62,79 +62,44 @@ namespace MonkeyPaste {
             List<object> cl = new List<object>();
             // loop controller types
             foreach(KeyValuePair<string,Dictionary<string,object>> ctkvp in ControllerDictionary) {
-                if(ctkvp.Key.Contains(name)) {
+                if(ctkvp.Key.ToLower().Contains(name.ToLower())) {
                     foreach(KeyValuePair<string,object> ckvp in ControllerDictionary[ctkvp.Key]) {
-                        if(ckvp.Key.Contains(name)) {
+                        if(ckvp.Key.ToLower().Contains(name.ToLower())) {
                             cl.Add(ckvp.Value);
                         }
                     }
                 }
                 //loop controller sub components
                 foreach(KeyValuePair<string,object> ckvp in ControllerDictionary[ctkvp.Key]) {
-                    if(ckvp.Key.Contains(name)) {
+                    if(ckvp.Key.ToLower().Contains(name.ToLower())) {
                         cl.Add(ckvp.Value);
                     }
                 }
             }
-            if(cl.Count > 1) {
+            if(cl.Count > 0) {
+                //if exact match return that object
+                foreach(object c in cl) {
+                    if(c.GetType().ToString() == name) {
+                        return c;
+                    }
+                }
+                if(cl.Count == 1) {
+                    return cl[0];
+                }
                 return cl;
-            }
-            else if(cl.Count == 1) {
-                return cl[0];
             }
             return null;
         }
 
         protected virtual void View_KeyPress(object sender,KeyPressEventArgs e) {
-            if(MpSingletonController.Instance.GetMpData().GetSearchString() == string.Empty) {
-                MpSingletonController.Instance.GetMpData().UpdateSearchString(e.KeyChar.ToString());
+            if(((MpLogMenuSearchBox)Find("MpLogMenuSearchBox")).Focused) {
+                return;
             }
+            ((MpLogMenuSearchBox)Find("MpLogMenuSearchBox")).AppendText(e.KeyChar.ToString());
+            ((MpLogMenuSearchBox)Find("MpLogMenuSearchBox")).Focus();
         }
 
         protected void View_Click(object sender,EventArgs e) {
-            Console.WriteLine("MpController view clicked w/ sender: " + sender.ToString());
-        }
-    }
-
-    public abstract class MpController2 {
-        public static Dictionary<string,object> ViewDictionary { get; set; } = new Dictionary<string,object>();
-
-        public static Dictionary<string,object> Model { get; set; }
-
-        public MpController2 Parent { get; set; }
-
-        public MpController2(MpController2 Parent) {
-            Parent = Parent;
-        }
-
-        protected void Link(List<object> vl) {
-            foreach(object v in vl) {
-                if(v.GetType().IsSubclassOf(typeof(Form)) || v.GetType().IsSubclassOf(typeof(Panel)) || v.GetType().IsSubclassOf(typeof(Control)) || v.GetType().IsSubclassOf(typeof(NotifyIcon))) {
-                    string vn = v.GetType().ToString();
-                    int count = 1;
-                    while(ViewDictionary.ContainsKey(vn)) {                        
-                        vn = v.GetType().ToString()+count++;
-                    }
-                    ViewDictionary.Add(vn,v);
-                    if(!v.GetType().IsSubclassOf(typeof(NotifyIcon))) {
-                        ((Control)v).KeyPress += View_KeyPress;
-                    }                    
-                    ((Control)v).Click += View_Click;
-                } else {
-                    Console.WriteLine("Warning, could not link view named: " + nameof(v) + " of type: " + v.GetType());
-                }
-            }
-        }
-        //uses Parent and children to define rect
-        public abstract void UpdateView();
-
-        protected virtual void View_KeyPress(object sender,KeyPressEventArgs e) {
-            if(MpSingletonController.Instance.GetMpData().GetSearchString() == string.Empty) {
-                MpSingletonController.Instance.GetMpData().UpdateSearchString(e.KeyChar.ToString());
-            }            
-        }
-
-        private void View_Click(object sender,EventArgs e) {
             Console.WriteLine("MpController view clicked w/ sender: " + sender.ToString());
         }
     }

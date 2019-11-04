@@ -131,7 +131,7 @@ namespace MonkeyPaste {
             return conn;
         }
         public void ExecuteNonQuery(string sql,List<string> paramList = null,List<object> paramValueList = null) {
-            if(NoDb || _passwordAttempts > (int)MpSingletonController.Instance.GetSetting("MaxDbPasswordAttempts")) {
+            if(NoDb || _passwordAttempts > Properties.Settings.Default.MaxDbPasswordAttempts) {
                 return;
             }
             if((paramList != null && paramValueList != null) && (paramList.Count > 0 && paramValueList.Count > 0 && paramList.Count != paramValueList.Count)) {
@@ -173,7 +173,7 @@ namespace MonkeyPaste {
                     MpEnterDbPasswordForm enterPasswordForm = new MpEnterDbPasswordForm();
                     DialogResult enterPasswordResult = enterPasswordForm.ShowDialog();
                     _passwordAttempts++;
-                    if(_passwordAttempts < (int)MpSingletonController.Instance.GetSetting("MaxDbPasswordAttempts")) {
+                    if(_passwordAttempts < Properties.Settings.Default.MaxDbPasswordAttempts) {
                         MpSingletonController.Instance.GetMpData().Init();
                     }
                     else {
@@ -187,7 +187,7 @@ namespace MonkeyPaste {
             sql_con.Close();
         }
         public DataTable Execute(string sql,List<string> paramList = null,List<object> paramValueList = null) {
-            if(NoDb || _passwordAttempts > (int)MpSingletonController.Instance.GetSetting("MaxDbPasswordAttempts")) {
+            if(NoDb || _passwordAttempts > Properties.Settings.Default.MaxDbPasswordAttempts) {
                 return null;
             }
             if((paramList != null && paramValueList != null) && (paramList.Count > 0 && paramValueList.Count > 0 && paramList.Count != paramValueList.Count)) {
@@ -235,7 +235,7 @@ namespace MonkeyPaste {
                     MpEnterDbPasswordForm enterPasswordForm = new MpEnterDbPasswordForm();
                     DialogResult enterPasswordResult = enterPasswordForm.ShowDialog();
                     _passwordAttempts++;
-                    if(_passwordAttempts < (int)MpSingletonController.Instance.GetSetting("MaxDbPasswordAttempts")) {
+                    if(_passwordAttempts < Properties.Settings.Default.MaxDbPasswordAttempts) {
                         MpSingletonController.Instance.GetMpData().Init();
                     }
                     else {

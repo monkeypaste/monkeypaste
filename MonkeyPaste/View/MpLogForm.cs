@@ -28,8 +28,7 @@ namespace MonkeyPaste {
 
         [DllImport("user32")]
         static extern bool AnimateWindow(IntPtr hwnd,int time,int flags);*/
-        [DllImport("User32.dll")]
-        public static extern int SetProcessDPIAware();
+        
 
         /*protected override void OnLoad(EventArgs e) {
             base.OnLoad(e);
@@ -45,8 +44,8 @@ namespace MonkeyPaste {
             ViewName = ViewType;
             ViewId = MpSingletonController.Instance.Rand.Next(1,int.MaxValue);
             ViewData = this;
-            //SetProcessDPIAware();
             InitializeComponent();
+            WinApi.SetProcessDPIAware();
         }
         
     }

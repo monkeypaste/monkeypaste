@@ -17,7 +17,7 @@ namespace MonkeyPaste {
                 return;
             }*/
             Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(false);
+            //Application.SetCompatibleTextRenderingDefault(true);
             try {
                 var applicationContext = new MpApplicationContext();
                 Application.Run(applicationContext);

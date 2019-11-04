@@ -21,8 +21,6 @@ namespace MonkeyPaste {
         private ObservableCollection<MpApp> _appList = new ObservableCollection<MpApp>();
         private ObservableCollection<MpCopyItem> _copyItemList = new ObservableCollection<MpCopyItem>();
 
-        private ObservableCollection<string> _searchStringList = new ObservableCollection<string>();
-
         public MpData(string dbPath,string dbPassword,string identityToken,string accessToken) {
             Db = new MpDb(dbPath,dbPassword);
             InitUser(identityToken);
@@ -34,7 +32,6 @@ namespace MonkeyPaste {
             InitMpApp();
             InitMpCopyItem();
             InitPasteHistory();
-            InitSearchString();
         }
         public bool Load(string path,string password,bool isNew) {
             ResetData();
@@ -43,14 +40,10 @@ namespace MonkeyPaste {
         public void AddOnDataListChangeListener(MpTileChooserPanelController lf) {
             //_mpIconList.CollectionChanged += lf.CopyItemCollection_CollectionChanged;
             //_mpAppList.CollectionChanged += lf.CopyItemCollection_CollectionChanged;
-            _searchStringList.CollectionChanged += lf.SearchStrCollection_CollectionChanged;
             _copyItemList.CollectionChanged += lf.CopyItemCollection_CollectionChanged;
         }
         public MpClient GetMpClient() {
             return _client;
-        }
-        private void InitSearchString() {
-            _searchStringList = new ObservableCollection<string>();
         }
         private void InitPasteHistory() {
             _pasteList = new ObservableCollection<MpPasteHistory>();
@@ -227,15 +220,6 @@ namespace MonkeyPaste {
                 }
             }
         }
-        public void UpdateSearchString(string newStr) {
-            string temp = string.Empty;
-            if(_searchStringList.Count > 0) {
-                temp = _searchStringList[0];
-            }
-            temp += newStr;
-            _searchStringList.Clear();
-            _searchStringList.Add(temp);
-        }
         public MpPasteHistory GetPasteHistory(int MpPasteHistoryId) {
             foreach(MpPasteHistory ph in _pasteList) {
                 if(ph.PasteHistoryId == MpPasteHistoryId) {
@@ -298,19 +282,12 @@ namespace MonkeyPaste {
             }
             return null;
         }
-        public string GetSearchString() {
-            if(_searchStringList.Count > 0) {
-                return _searchStringList[0];
-            }
-            return string.Empty;
-        }
         public void ResetData() {
             Db.ResetDb();
             _iconList.Clear();
             _copyItemList.Clear();
             _appList.Clear();
             _pasteList.Clear();
-            _searchStringList.Clear();
         }
     }
 }

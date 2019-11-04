@@ -8,6 +8,7 @@ using System.Linq;
 using System.Management;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -19,6 +20,48 @@ namespace MonkeyPaste {
         private static readonly Lazy<MpHelperSingleton> lazy = new Lazy<MpHelperSingleton>(() => new MpHelperSingleton());
         public static MpHelperSingleton Instance { get { return lazy.Value; } }
 
+        private static readonly int LOGPIXELSX = 88;    // Used for GetDeviceCaps().
+        private static readonly int LOGPIXELSY = 90;    // Used for GetDeviceCaps().
+
+        /// <summary>Determines the current screen resolution in DPI.</summary>
+        /// <returns>Point.X is the X DPI, Point.Y is the Y DPI.</returns>
+        public Point GetSystemDpi() {
+            Point result = new Point();
+
+            IntPtr hDC = WinApi.GetDC(IntPtr.Zero);
+
+            result.X = WinApi.GetDeviceCaps(hDC,LOGPIXELSX);
+            result.Y = WinApi.GetDeviceCaps(hDC,LOGPIXELSY);
+
+            WinApi.ReleaseDC(IntPtr.Zero,hDC);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Checks if font is not default.
+        /// </summary>
+        /// <returns>True if font DPI is not 96.</returns>
+        public bool IsDifferentFont() {
+            Point result = GetSystemDpi();
+
+            return result.X != 96 || result.Y != 96;
+        }
+
+        
+
+        public string GetMainModuleFilepath(int processId) {
+            string wmiQueryString = "SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId = " + processId;
+            using(var searcher = new ManagementObjectSearcher(wmiQueryString)) {
+                using(var results = searcher.Get()) {
+                    ManagementObject mo = results.Cast<ManagementObject>().FirstOrDefault();
+                    if(mo != null) {
+                        return (string)mo["ExecutablePath"];
+                    }
+                }
+            }
+            return null;
+        }
         public void ColorToHSV(Color color,out double hue,out double saturation,out double value) {
             int max = Math.Max(color.R,Math.Max(color.G,color.B));
             int min = Math.Min(color.R,Math.Min(color.G,color.B));
@@ -50,7 +93,6 @@ namespace MonkeyPaste {
             else
                 return Color.FromArgb(255,v,p,q);
         }
-
         public Color GetInvertedColor(Color c) {
             double h, s, v;
             ColorToHSV(c,out h,out s,out v);
@@ -67,6 +109,65 @@ namespace MonkeyPaste {
             var random = new Random();
             return Color.FromArgb((int)(0xFF000000 + (MpSingletonController.Instance.Rand.Next(0xFFFFFF) & 0x7F7F7F)));
         }*/
+        public int GetMaxLine(string text) {
+            int cr = 0, mr = 0,mc = int.MinValue,cc = 0;
+            char LF = '\n';
+            foreach(char c in text.ToCharArray()) {
+                if(c == LF) {
+                    if(cc > mc) {
+                        mc = cc;
+                        mr = cr;
+                    }
+                    cc = 0;
+                    cr++;
+                } else {
+                    cc++;
+                }
+            }
+            return mr;
+        }
+        public int GetRowCount(string text,int lineNum) {
+            int ccount = 0,cr = 0;
+            char LF = '\n';
+            foreach(char c in text.ToCharArray()) {
+                if(cr == lineNum) {
+                    ccount++;
+                }
+                if(c == LF) {
+                    if(cr == lineNum) {
+                        return ccount;
+                    }
+                    cr++;
+                }
+            }
+            return ccount;
+        }
+        public Size GetTextDimensions(string text) {
+            int rcount = 0, ccount = int.MinValue;
+            char LF = '\n';
+            //cur col count
+            int  ccc = 0;
+            foreach(char c in text.ToCharArray()) {
+                ccc++;
+                if(c == LF) {
+                    rcount++;
+                    if(ccc > ccount) {
+                        ccount = ccc;
+                    }
+                    ccc = 0;
+                }
+            }
+            ccount = ccount == 0 ? 1 : ccount;
+            rcount = rcount == 0 ? 1 : rcount;
+            return new Size(ccount,rcount);
+        }
+        public Size GetTextSize(string text,Font f) {
+            //Font font = new Font("Courier New",10.0F);
+            Image fakeImage = new Bitmap(1,1);
+            Graphics graphics = Graphics.FromImage(fakeImage);
+            SizeF s = graphics.MeasureString(text,f);
+            return new Size((int)s.Width,(int)s.Height);
+        }
         public bool IsBright(Color c) {
             return (int)Math.Sqrt(
             c.R * c.R * .299 +
@@ -120,7 +221,7 @@ namespace MonkeyPaste {
                     if((diEntries[i].Attributes & FileAttributes.ReparsePoint) == FileAttributes.ReparsePoint) return 0;
                     subtotal += _CalcDirSize(diEntries[i],true);
                     return subtotal;
-                },
+                }, 
                     (x) => Interlocked.Add(ref size,x)
                 );
 
@@ -181,10 +282,15 @@ namespace MonkeyPaste {
             foreach(Screen screen in Screen.AllScreens) {
                 Point mp = MpCursorPosition.GetCursorPosition();
                 if(screen.WorkingArea.Contains(mp)) {
-                    return screen.WorkingArea;
+                    return screen.Bounds;
                 }
             }
-            return Screen.FromHandle(Process.GetCurrentProcess().Handle).WorkingArea;
+            return Screen.FromHandle(Process.GetCurrentProcess().Handle).Bounds;
+        }
+        public void SetPadding(TextBoxBase textBox,Padding padding) {
+            var rect = new Rectangle(padding.Left,padding.Top,textBox.ClientSize.Width - padding.Left - padding.Right,textBox.ClientSize.Height - padding.Top - padding.Bottom);
+            RECT rc = new RECT(rect);
+            WinApi.SendMessageRefRect(textBox.Handle,WinApi.EM_SETRECT,0,ref rc);
         }
         public Icon GetIconFromBitmap(Bitmap bmp) {
            IntPtr Hicon = bmp.GetHicon();

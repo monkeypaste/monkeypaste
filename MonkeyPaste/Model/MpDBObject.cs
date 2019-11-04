@@ -36,8 +36,9 @@ namespace MonkeyPaste {
         protected string GetProcessPath(IntPtr hwnd) {
             uint pid = 0;
             GetWindowThreadProcessId(hwnd,out pid);
-            Process proc = Process.GetProcessById((int)pid);
-            return proc.MainModule.FileName.ToString();
+            return MpHelperSingleton.Instance.GetMainModuleFilepath((int)pid);
+            //Process proc = Process.GetProcessById((int)pid);
+            //return proc.MainModule.FileName.ToString();
         }
         public override string ToString() {
             string outstr = "| "+tableName + "\n";

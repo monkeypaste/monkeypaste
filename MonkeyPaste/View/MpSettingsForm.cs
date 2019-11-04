@@ -18,7 +18,7 @@ namespace MonkeyPaste
             int ts = 50;
             int p = 15;
             int curY = p;
-            foreach(KeyValuePair<string,object> s in MpSingletonController.Instance.Settings.SettingDictionary) {
+           /* foreach(KeyValuePair<string,object> s in MpSingletonController.Instance.Settings.SettingDictionary) {
                 Panel sPanel = new Panel() {
                     AutoSize = false,
                     Bounds = new Rectangle(p,curY,this.Width-p*2,ts+(int)(p/2))
@@ -44,7 +44,7 @@ namespace MonkeyPaste
                 sPanel.Controls.Add(sTextBox);
                 this.Controls.Add(sPanel);
                 curY += sPanel.Height+p;
-            }
+            }*/
             curY += (p * 4);
 
             Button cancelButton = new Button() {
@@ -85,7 +85,7 @@ namespace MonkeyPaste
         }
 
         private void ResetButton_Click(object sender,EventArgs e) {
-            MpSingletonController.Instance.Settings.Reset();
+            //MpSingletonController.Instance.Settings.Reset();
             InitSettings();
         }
 
@@ -96,7 +96,7 @@ namespace MonkeyPaste
         private void STextBox_LostFocus(object sender,EventArgs e) {
             if(sender.GetType() == typeof(TextBox)) {
                 TextBox tb = (TextBox)sender;
-                MpSettingValueType st = MpSingletonController.Instance.Settings.GetSettingValueType((string)tb.Tag);
+               /* MpSettingValueType st = MpSingletonController.Instance.Settings.GetSettingValueType((string)tb.Tag);
                 switch(st) {
                     case MpSettingValueType.Int:
                         MpSingletonController.Instance.SetSetting((string)tb.Tag,Convert.ToInt32(tb.Text));
@@ -110,7 +110,7 @@ namespace MonkeyPaste
                     case MpSettingValueType.String:
                         MpSingletonController.Instance.SetSetting((string)tb.Tag,tb.Text);
                         break;
-                }
+                }**/
                 
             }
             
