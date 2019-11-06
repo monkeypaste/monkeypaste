@@ -61,18 +61,18 @@ namespace MonkeyPaste {
             TileMenuPanelController = new MpTileMenuPanelController(tileId,panelId,this);
             //TilePanel.Controls.Add(TileMenuPanelController.TileMenuPanel);
 
-            testPanel = new MpGlassyPanel() {
-               // FormBorderStyle = FormBorderStyle.None,
-                //TopLevel = false,
-                //Opacity = 0.5,
-                BorderStyle = BorderStyle.None,
-                //BackgroundImage = Properties.Resources.texture,
-                Opacity = 55,
-               // BackgroundImageLayout = ImageLayout.Stretch,
-                BackColor = Color.Green,
+            //testPanel = new MpGlassyPanel() {
+            //   // FormBorderStyle = FormBorderStyle.None,
+            //    //TopLevel = false,
+            //    //Opacity = 0.5,
+            //    BorderStyle = BorderStyle.None,
+            //    //BackgroundImage = Properties.Resources.texture,
+            //    Opacity = 55,
+            //   // BackgroundImageLayout = ImageLayout.Stretch,
+            //    BackColor = Color.Green,
                 
-                AutoSize = false
-            };
+            //    AutoSize = false
+            //};
             //TilePanel.Controls.Add(testPanel);
             //testPanel.BringToFront();
 
@@ -124,16 +124,6 @@ namespace MonkeyPaste {
             Rectangle icr = TileControlController.ItemPanel.Bounds;
 
             TileMenuPanelController.TileMenuPanel.BringToFront();
-
-            //testPanel.SetBounds(tp,tp + ttr.Height,TilePanel.Width - (tp * 2),TilePanel.Height - tdr.Height - ttr.Height - (tp * 4));
-            //testPanel.ClientSize = TileControlController.ItemPanel.ClientSize;
-            //testPanel.Location = TileControlController.ItemPanel.Location;
-            //testPanel.BringToFront();
-            //TilePanel.ResumeLayout(true);
-            //TilePanel.Invalidate();
-            //testPanel.Invalidate();
-            TilePanel.Refresh();
-           // testPanel.Refresh();
         }
         public void ShowMenu() {            
             TileMenuPanelController.TileMenuPanel.Visible = true;
@@ -166,8 +156,10 @@ namespace MonkeyPaste {
             _isFocused = isFocused;
             //TileTitlePanelController.TileTitlePanel.BorderColor = TilePanel.BorderColor;
         }
-        public void ActivateHotKeys() {        }      
+        public void ActivateHotKeys() {}      
 
-        public void DeactivateHotKeys() {        }
+        public void DeactivateHotKeys() {}
+
+        
     }   
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,8 @@ namespace MonkeyPaste {
     public interface MpIController {
         void Link(List<MpIView> viewList = null,List<object> modelList = null);
         void Update();
+        //void UpdateBounds(Rectangle refRect,float refRatio,bool xRatio,bool yRatio);
+        //void UpdateContent(Rectangle refRect,float refRatio,bool xRatio,bool yRatio);
         object Find(string name);
     }   
 
@@ -32,6 +35,8 @@ namespace MonkeyPaste {
         }
 
         public abstract void Update();
+        //public abstract void UpdateBounds(Rectangle refRectangle,float refRatio,bool xRatio,bool yRatio);
+        //public abstract void UpdateContent(Rectangle refRect,float refRatio,bool xRatio,bool yRatio);
 
         public void Link(List<MpIView> viewList = null,List<object> modelList = null) {
             //return;
@@ -102,5 +107,7 @@ namespace MonkeyPaste {
         protected void View_Click(object sender,EventArgs e) {
             Console.WriteLine("MpController view clicked w/ sender: " + sender.ToString());
         }
+
+        
     }
 }

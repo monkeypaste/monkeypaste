@@ -45,7 +45,6 @@ namespace MonkeyPaste {
             ViewId = MpSingletonController.Instance.Rand.Next(1,int.MaxValue);
             ViewData = this;
             InitializeComponent();
-            WinApi.SetProcessDPIAware();
         }
         
     }

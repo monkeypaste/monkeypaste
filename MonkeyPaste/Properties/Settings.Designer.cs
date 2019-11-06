@@ -52,7 +52,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Calibri")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Candera")]
         public string LogFont {
             get {
                 return ((string)(this["LogFont"]));
@@ -88,7 +88,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Calibri")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Candera")]
         public string LogMenuSearchFont {
             get {
                 return ((string)(this["LogMenuSearchFont"]));
@@ -115,16 +115,16 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.9")]
-        public float TileTitleFontRatio {
+        [global::System.Configuration.DefaultSettingValueAttribute("0.75")]
+        public float TileTitleHeightFontRatio {
             get {
-                return ((float)(this["TileTitleFontRatio"]));
+                return ((float)(this["TileTitleHeightFontRatio"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Calibri")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Candera")]
         public string TileTitleFont {
             get {
                 return ((string)(this["TileTitleFont"]));
@@ -160,7 +160,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Calibri")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Candera")]
         public string TileDetailFont {
             get {
                 return ((string)(this["TileDetailFont"]));
@@ -178,7 +178,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Calibri")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Candera")]
         public string TileMenuFont {
             get {
                 return ((string)(this["TileMenuFont"]));
@@ -250,7 +250,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Calibri")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Candera")]
         public string TileFont {
             get {
                 return ((string)(this["TileFont"]));
@@ -295,7 +295,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Calibri")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Candera")]
         public string SearchTextBoxFont {
             get {
                 return ((string)(this["SearchTextBoxFont"]));
@@ -335,6 +335,24 @@ namespace MonkeyPaste.Properties {
         public global::System.Drawing.Color TileItemBgColor {
             get {
                 return ((global::System.Drawing.Color)(this["TileItemBgColor"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.25")]
+        public float TileTitleIconWidthRatio {
+            get {
+                return ((float)(this["TileTitleIconWidthRatio"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int TileItemPadding {
+            get {
+                return ((int)(this["TileItemPadding"]));
             }
         }
     }

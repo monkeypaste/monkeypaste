@@ -64,6 +64,9 @@ namespace MonkeyPaste {
             _mouseHook = Hook.GlobalEvents();
             _me = me;
             switch(me) {
+                case MpMouseEvent.UpL:
+                    _mouseHook.MouseUpExt += _mouseHook_MouseUp;
+                    break;
                 case MpMouseEvent.Wheel:
                     _mouseHook.MouseWheelExt += _mouseHook_MouseEventExt;
                     break;
@@ -81,6 +84,11 @@ namespace MonkeyPaste {
                 break;
             }
         }
+
+        private void _mouseHook_MouseUp(object sender,MouseEventExtArgs e) {
+            MouseEvent(this,e);
+        }
+
         public void UnregisterMouseEvent() {
             IsMouseEnterHitBox = false;
             IsMouseInHitBox = false;

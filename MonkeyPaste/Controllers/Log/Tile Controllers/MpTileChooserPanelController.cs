@@ -156,7 +156,6 @@ namespace MonkeyPaste {
         }
         private void _focusTimer_Tick(object sender,EventArgs e) {
             ScrollTiles(MpSingletonController.Instance.ScrollWheelDelta);
-            TileChooserPanel.ResumeLayout(true);
         }
         public MpCopyItem GetSelectedCopyItem() {
             if(_selectedTileIdx >= 0) {

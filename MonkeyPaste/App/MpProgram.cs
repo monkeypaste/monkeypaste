@@ -13,11 +13,12 @@ namespace MonkeyPaste {
 
         [STAThread]
         static void Main() {
-            /*if(!MpSingleInstance.Start()) {
-                return;
-            }*/
+            if(Environment.OSVersion.Version.Major >= 6) {
+                bool result = WinApi.SetProcessDPIAware();
+                Console.WriteLine("DPI Awareness: " + result.ToString());
+            }
             Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(true);
+            Application.SetCompatibleTextRenderingDefault(false);
             try {
                 var applicationContext = new MpApplicationContext();
                 Application.Run(applicationContext);

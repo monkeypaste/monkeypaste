@@ -64,7 +64,8 @@ namespace MonkeyPaste {
             Console.WriteLine(ToString());
         }
         private Image GetIconImage(IntPtr sourceHandle) {
-            return Icon.ExtractAssociatedIcon(GetProcessPath(sourceHandle)).ToBitmap();
+            return IconReader.GetFileIcon(GetProcessPath(sourceHandle),IconReader.IconSize.Large,false).ToBitmap();
+            //return Icon.ExtractAssociatedIcon(GetProcessPath(sourceHandle)).ToBitmap();
         }
         private void MapDataToColumns() {
             tableName = "MpIcon";

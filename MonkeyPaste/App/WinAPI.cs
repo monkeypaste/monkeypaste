@@ -103,7 +103,7 @@ namespace MonkeyPaste {
         public static extern int SendMessageRefRect(IntPtr hWnd,uint msg,int wParam,ref RECT rect);
 
         [DllImport("User32.dll")]
-        public static extern int SetProcessDPIAware();
+        public static extern bool SetProcessDPIAware();
 
         [DllImport("gdi32.dll")]
         public static extern int GetDeviceCaps(IntPtr hdc,int nIndex);

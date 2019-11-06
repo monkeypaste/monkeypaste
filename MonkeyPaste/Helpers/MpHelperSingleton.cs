@@ -20,8 +20,33 @@ namespace MonkeyPaste {
         private static readonly Lazy<MpHelperSingleton> lazy = new Lazy<MpHelperSingleton>(() => new MpHelperSingleton());
         public static MpHelperSingleton Instance { get { return lazy.Value; } }
 
-        private static readonly int LOGPIXELSX = 88;    // Used for GetDeviceCaps().
-        private static readonly int LOGPIXELSY = 90;    // Used for GetDeviceCaps().
+        public Color GetDominantColor(Bitmap bmp) {
+            //Used for tally
+            int r = 0;
+            int g = 0;
+            int b = 0;
+
+            int total = 0;
+
+            for(int x = 0;x < bmp.Width;x++) {
+                for(int y = 0;y < bmp.Height;y++) {
+                    Color clr = bmp.GetPixel(x,y);
+
+                    r += clr.R;
+                    g += clr.G;
+                    b += clr.B;
+
+                    total++;
+                }
+            }
+
+            //Calculate average
+            r /= total;
+            g /= total;
+            b /= total;
+
+            return Color.FromArgb(r,g,b);
+        }
 
         /// <summary>Determines the current screen resolution in DPI.</summary>
         /// <returns>Point.X is the X DPI, Point.Y is the Y DPI.</returns>
@@ -30,8 +55,8 @@ namespace MonkeyPaste {
 
             IntPtr hDC = WinApi.GetDC(IntPtr.Zero);
 
-            result.X = WinApi.GetDeviceCaps(hDC,LOGPIXELSX);
-            result.Y = WinApi.GetDeviceCaps(hDC,LOGPIXELSY);
+            result.X = WinApi.GetDeviceCaps(hDC,88); //LOGPIXELSX
+            result.Y = WinApi.GetDeviceCaps(hDC,90); //LOGPIXELSY
 
             WinApi.ReleaseDC(IntPtr.Zero,hDC);
 

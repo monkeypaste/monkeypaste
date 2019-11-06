@@ -13,7 +13,7 @@ namespace MonkeyPaste {
         private static readonly string DefaultTooltip = "Monkey Paste";
 
         private MpKeyboardHook _toggleSettingsHook,_toggleAppendModeHook;
-        private MpMouseHook _mouseHitScreenTopHook;
+        private MpMouseHook _mouseHitScreenTopHook,_mouseUpHook;
         private bool _skipAuth = true;
 
         public MpLogFormController LogFormController { get; set; }
@@ -31,6 +31,10 @@ namespace MonkeyPaste {
             _mouseHitScreenTopHook = new MpMouseHook();
             _mouseHitScreenTopHook.RegisterMouseEvent(MpMouseEvent.HitBox,new Rectangle(0,0,ascr.Width,15));
             _mouseHitScreenTopHook.MouseEvent += _mouseHitScreenTopHook_MouseEvent;
+
+            _mouseUpHook = new MpMouseHook();
+            _mouseUpHook.RegisterMouseEvent(MpMouseEvent.UpL);
+            _mouseUpHook.MouseEvent += _mouseUpHook_MouseEvent;
 
             _toggleSettingsHook = new MpKeyboardHook();
             _toggleSettingsHook.RegisterHotKey(ModifierKeys.Alt,Keys.D);
@@ -54,6 +58,10 @@ namespace MonkeyPaste {
                 Exit();
             }
             Link(new List<MpIView>()/* { helpForm,settingsForm,notifyIcon }*/);
+        }
+
+        private void _mouseUpHook_MouseEvent(object sender,Gma.System.MouseKeyHook.MouseEventExtArgs e) {
+            Console.WriteLine("Mouse up event occured");
         }
 
         private void LogForm_Load(object sender,EventArgs e) {

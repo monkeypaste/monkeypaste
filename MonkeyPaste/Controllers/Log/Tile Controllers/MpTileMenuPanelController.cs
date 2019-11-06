@@ -35,7 +35,7 @@ namespace MonkeyPaste {
                 TileMenuPanel.Controls.Add(bc.TileMenuButton);
             }*/
 
-            Update();
+            //Update();
 
             Link(new List<MpIView> { TileMenuPanel});
         }
@@ -53,9 +53,9 @@ namespace MonkeyPaste {
             //TileMenuPanel.BackColor = Color.Transparent;
             //TileMenuPanel.ForeColor = Color.Transparent;
             //TileMenuPanel.SetBounds(ir.Left,ir.Top,ir.Width,(int)((float)ir.Height * Properties.Settings.Default.TileMenuHeightRatio));
-            Point tp = ((MpTilePanelController)Parent).TilePanel.PointToScreen(ir.Location);
-            Point cp = ((MpTileChooserPanelController)((MpTilePanelController)Parent).Parent).TileChooserPanel.PointToScreen(tp);
-            Point lp = ((MpLogFormController)((MpTileChooserPanelController)((MpTilePanelController)Parent).Parent).Parent).LogForm.PointToScreen(cp);
+            //Point tp = ((MpTilePanelController)Parent).TilePanel.PointToScreen(ir.Location);
+            //Point cp = ((MpTileChooserPanelController)((MpTilePanelController)Parent).Parent).TileChooserPanel.PointToScreen(tp);
+            //Point lp = ((MpLogFormController)((MpTileChooserPanelController)((MpTilePanelController)Parent).Parent).Parent).LogForm.PointToScreen(cp);
             TileMenuPanel.Location = ir.Location;
             TileMenuPanel.Size = ir.Size;
             //TileMenuPanel.Show();

@@ -31,7 +31,7 @@ namespace MonkeyPaste {
         public MpLogFormController(MpController Parent) : base(Parent) {
             LogForm = new MpLogForm() {
                 AutoSize = false,                
-                AutoScaleMode = AutoScaleMode.None,
+                AutoScaleMode = AutoScaleMode.Dpi,
                 MinimumSize = new Size(15,200)                
             };
             LogForm.Load += LogForm_Load;
@@ -60,9 +60,9 @@ namespace MonkeyPaste {
             TileChooserPanelController = new MpTileChooserPanelController(this);
             LogForm.Controls.Add(TileChooserPanelController.TileChooserPanel);
                        
-            //Update();
-            //LogForm.Show();
-            //LogForm.Hide();
+            Update();
+            LogForm.Show();
+            LogForm.Hide();
             Link(new List<MpIView> { LogForm });            
         }
         public override void Update() {
@@ -127,7 +127,7 @@ namespace MonkeyPaste {
         }
 
         private void LogForm_Load(object sender,EventArgs e) {
-            //Update();
+            Update();
             ClipboardController = new MpClipboardHelper();
             ClipboardController.Init();
             //HideLogForm();

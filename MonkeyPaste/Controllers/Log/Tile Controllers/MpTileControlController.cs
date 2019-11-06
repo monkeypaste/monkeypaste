@@ -29,7 +29,7 @@ namespace MonkeyPaste {
                         Cursor = Cursors.Arrow,                        
                         BorderStyle = BorderStyle.None
                     };
-                    MpHelperSingleton.Instance.SetPadding((TextBoxBase)ItemControl,new Padding(5));
+                    MpHelperSingleton.Instance.SetPadding((TextBoxBase)ItemControl,new Padding(Properties.Settings.Default.TileItemPadding));
                     //ItemControl.BringToFront();                    
                     break;
                 case MpCopyItemType.FileList:

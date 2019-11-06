@@ -19,17 +19,19 @@ namespace MonkeyPaste {
             //parent panel
             TileTitlePanel = new MpTileTitlePanel(tileId,panelId) {
                 BorderStyle = BorderStyle.None,
+                Margin = Padding.Empty,
+                Padding = Padding.Empty,
                 BackColor = Color.Transparent,//((MpTilePanelController)Parent).TilePanel.BackColor,
             };
             TileTitlePanel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;            
+            
+            TileTitleIconPanelController = new MpTileTitleIconPanelController(tileId,panelId,ci,this);
+            TileTitlePanel.Controls.Add(TileTitleIconPanelController.TileTitleIconBox);
 
             TileTitleTextBoxController = new MpTileTitleTextBoxController(tileId,panelId,ci,this);
             TileTitlePanel.Controls.Add(TileTitleTextBoxController.TileTitleTextBox);
 
-            TileTitleIconPanelController = new MpTileTitleIconPanelController(tileId,panelId,ci,this);
-            TileTitlePanel.Controls.Add(TileTitleIconPanelController.TileTitleIconPanel);
-                        
-            Update();
+            //Update();
 
             Link(new List<MpIView> { TileTitlePanel});
         }
