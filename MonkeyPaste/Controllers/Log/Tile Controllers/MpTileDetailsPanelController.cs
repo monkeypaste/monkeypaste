@@ -42,7 +42,6 @@ namespace MonkeyPaste {
 
             Link(new List<MpIView> { DetailsTextBox,TileDetailsPanel });
         }
-
         public override void Update() {
             //tile  rect
             Rectangle tr = ((MpTilePanelController)Parent).TilePanel.Bounds;

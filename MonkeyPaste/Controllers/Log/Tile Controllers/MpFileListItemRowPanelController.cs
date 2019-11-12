@@ -67,7 +67,6 @@ namespace MonkeyPaste {
         public override void Update() {
             throw new NotImplementedException();
         }
-
         protected override void View_KeyPress(object sender,KeyPressEventArgs e) {
             base.View_KeyPress(sender,e);
         }

@@ -20,8 +20,7 @@ namespace MonkeyPaste {
             TileTitlePanel = new MpTileTitlePanel(tileId,panelId) {
                 BorderStyle = BorderStyle.None,
                 Margin = Padding.Empty,
-                Padding = Padding.Empty,
-                BackColor = Color.Transparent,//((MpTilePanelController)Parent).TilePanel.BackColor,
+                Padding = Padding.Empty
             };
             TileTitlePanel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;            
             
@@ -31,7 +30,12 @@ namespace MonkeyPaste {
             TileTitleTextBoxController = new MpTileTitleTextBoxController(tileId,panelId,ci,this);
             TileTitlePanel.Controls.Add(TileTitleTextBoxController.TileTitleTextBox);
 
-            //Update();
+            TileTitlePanel.BackColor = MpHelperSingleton.Instance.GetDominantColor((Bitmap)TileTitleIconPanelController.TileTitleIconBox.Image);
+            if(MpHelperSingleton.Instance.IsBright(TileTitlePanel.BackColor)) {
+                TileTitlePanel.BackColor = MpHelperSingleton.Instance.ChangeColorBrightness(TileTitlePanel.BackColor,-0.5f);
+            } else {
+                TileTitlePanel.BackColor = MpHelperSingleton.Instance.ChangeColorBrightness(TileTitlePanel.BackColor,0.5f);
+            }
 
             Link(new List<MpIView> { TileTitlePanel});
         }
@@ -41,10 +45,10 @@ namespace MonkeyPaste {
             //tile title height
             int tth = (int)((float)tr.Height * Properties.Settings.Default.TileTitleHeightRatio);
             //tile padding
-            int tp = (int)(Properties.Settings.Default.TilePadWidthRatio * (float)tr.Width);
-            TileTitlePanel.SetBounds(tp,tp,tr.Width-tp,tth);
+            int tp = (int)(Properties.Settings.Default.TilePadWidthRatio * (float)tr.Width);            
+            TileTitlePanel.Location = new Point(tp,tp);
+            TileTitlePanel.Size = new Size(tr.Width - tp,tth);
 
-            TileTitlePanel.BackColor = Color.Transparent;// ((MpTilePanelController)Parent).TilePanel.BackColor;
             TileTitleIconPanelController.Update();
             TileTitleTextBoxController.Update();
         }

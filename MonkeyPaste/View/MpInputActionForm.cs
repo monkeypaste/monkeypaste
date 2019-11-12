@@ -25,8 +25,8 @@ namespace MonkeyPaste.View {
         }
 
         private void MpInputActionForm_Load(object sender,EventArgs e) {
-            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\" + MpProgram.AppName);
-
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\" + Properties.Settings.Default.AppName);
+            
             Key1ComboBox.DataSource = Enum.GetValues(typeof(Keys)).OfType<Keys>().ToList();
             Key2ComboBox.DataSource = Enum.GetValues(typeof(Keys)).OfType<Keys>().ToList();
             Key3ComboBox.DataSource = Enum.GetValues(typeof(Keys)).OfType<Keys>().ToList();
@@ -54,7 +54,7 @@ namespace MonkeyPaste.View {
 
             RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",true);
             foreach(string vn in rk.GetValueNames()) {
-                if(vn == MpProgram.AppName) {
+                if(vn == Properties.Settings.Default.AppName) {
                     this.LoadOnLoginCheckBox.Checked = true;
                 }
                 else {
@@ -69,7 +69,7 @@ namespace MonkeyPaste.View {
         }
 
         private void SettingsForm_Deactivate(object sender,EventArgs e) {
-            RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\" + MpProgram.AppName);
+            RegistryKey key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\" + Properties.Settings.Default.AppName);
             key.SetValue("StoreHistory",storeHistoryMaxCount.ToString());
             key.SetValue("HotKey",Key1ComboBox.SelectedIndex + " " + Key2ComboBox.SelectedIndex + " " + Key3ComboBox.SelectedIndex + " " + Key4ComboBox.SelectedIndex);
             key.Close();
@@ -78,10 +78,10 @@ namespace MonkeyPaste.View {
             loadOnLogin = ((CheckBox)sender).Checked;
             RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",true);
             if(loadOnLogin) {
-                rk.SetValue(MpProgram.AppName,Application.ExecutablePath);
+                rk.SetValue(Properties.Settings.Default.AppName,Application.ExecutablePath);
             }
             else {
-                rk.DeleteValue(MpProgram.AppName,false);
+                rk.DeleteValue(Properties.Settings.Default.AppName,false);
             }
         }
 

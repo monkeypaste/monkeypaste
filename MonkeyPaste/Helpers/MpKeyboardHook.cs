@@ -54,6 +54,7 @@ namespace MonkeyPaste {
         private ModifierKeys modifierWin;
         private Gdk.Key key;
         private Keys keyWin;
+        private bool _isRegistered = false;
 
         public MpKeyboardHook() {
             if(MpCompatibility.IsRunningOnMono()) {
@@ -69,10 +70,10 @@ namespace MonkeyPaste {
         private void InitWin() {
             _window = new Window();
             // register the event of the inner native window.
-            _window.KeyPressed += delegate (object sender,KeyPressedEventArgs args) {
+            /*_window.KeyPressed += delegate (object sender,KeyPressedEventArgs args) {
                 if(KeyPressed != null)
                     KeyPressed(this,args);
-            };
+            };*/
         }
         /// <summary>
         /// Registers a hot key in the system.
@@ -87,6 +88,7 @@ namespace MonkeyPaste {
             } else {
                 RegisterHotKeyWin(modifier,key);
             }
+            _isRegistered = true;
         }
         private void RegisterHotKeyGdk(Gdk.ModifierType modifier,Keys key) {
             Gdk.Window rootWin = Gdk.Global.DefaultRootWindow;
@@ -110,7 +112,13 @@ namespace MonkeyPaste {
             // register the hot key.
             if(!WinApi.RegisterHotKey(_window.Handle,_currentId,(uint)modifier,(uint)key))
                 throw new InvalidOperationException("Couldn’t register the hot key.");
-
+            _window.KeyPressed += delegate (object sender,KeyPressedEventArgs args) {
+                if(KeyPressed != null)
+                    KeyPressed(this,args);
+            };
+        }
+        public bool IsRegistered() {
+            return _isRegistered;
         }
         public void UnregisterHotKey() {
             if(MpCompatibility.IsRunningOnMono()) {
@@ -119,6 +127,7 @@ namespace MonkeyPaste {
             else {
                 UnregisterHotKeyWin();
             }
+            _isRegistered = false;
         }
         private void UnregisterHotKeyGdk() {
             Gdk.Window rootWin = Gdk.Global.DefaultRootWindow;
@@ -134,6 +143,10 @@ namespace MonkeyPaste {
             for(int i = _currentId;i > 0;i--) {
                 WinApi.UnregisterHotKey(_window.Handle,i);
             }
+            _window.KeyPressed -= delegate (object sender,KeyPressedEventArgs args) {
+                if(KeyPressed != null)
+                    KeyPressed(this,args);
+            };
         }
         private Gdk.FilterReturn FilterFunction(IntPtr xEvent,Gdk.Event evnt) {
             XKeyEvent xKeyEvent = (XKeyEvent)Marshal.PtrToStructure(xEvent,typeof(XKeyEvent));

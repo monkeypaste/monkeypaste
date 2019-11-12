@@ -41,8 +41,6 @@ namespace MonkeyPaste {
 
             //Link(new List<MpIView> { TileMenuButton});
         }
-
-
         public override void Update() {
             int totalButtons = ((MpTileMenuPanelController)Parent).TileMenuButtonControllerList.Count;
             int rc = ((MpTileMenuPanelController)Parent).RowCount;

@@ -12,10 +12,13 @@ namespace MonkeyPaste {
         public MpLogMenuPanel LogMenuPanel { get; set; }
         public PictureBox SearchIconBox { get; set; }
         public MpLogMenuSearchTextBoxController LogMenuSearchTextBoxController { get; set; }
+        public MpLogMenuTileTokenChooserPanelController LogMenuTileTokenChooserPanelController { get; set; }
 
         public MpLogMenuPanelController(MpController Parent) : base(Parent) {
             LogMenuPanel = new MpLogMenuPanel() {
-                BorderStyle = BorderStyle.None
+                BorderStyle = BorderStyle.None,
+                Margin = Padding.Empty,
+                Padding = Padding.Empty
             };
 
             SearchIconBox = new PictureBox() {
@@ -27,6 +30,9 @@ namespace MonkeyPaste {
 
             LogMenuSearchTextBoxController = new MpLogMenuSearchTextBoxController(this);
             LogMenuPanel.Controls.Add(LogMenuSearchTextBoxController.SearchTextBox);
+
+            LogMenuTileTokenChooserPanelController = new MpLogMenuTileTokenChooserPanelController(this);
+            LogMenuPanel.Controls.Add(LogMenuTileTokenChooserPanelController.LogMenuTileTokenChooserPanel);
 
             Link(new List<MpIView> { LogMenuPanel });
         }
@@ -41,9 +47,11 @@ namespace MonkeyPaste {
             //menu height
             int mh = (int)((float)lfr.Height * Properties.Settings.Default.LogMenuHeightRatio);
 
-            LogMenuPanel.SetBounds(lfp,lfp + lfdhh,lfr.Width - (lfp * 2),mh-(lfp*2)-lfdhh);
+            LogMenuPanel.SetBounds(0, lfdhh,lfr.Width,mh-lfdhh);
             SearchIconBox.SetBounds(0,0,mh,mh);
+
             LogMenuSearchTextBoxController.Update();
+            LogMenuTileTokenChooserPanelController.Update();
         }
     }
 }

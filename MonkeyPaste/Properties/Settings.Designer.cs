@@ -206,18 +206,18 @@ namespace MonkeyPaste.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Red")]
-        public global::System.Drawing.Color TileFocusColor {
+        public global::System.Drawing.Color TileSelectedColor {
             get {
-                return ((global::System.Drawing.Color)(this["TileFocusColor"]));
+                return ((global::System.Drawing.Color)(this["TileSelectedColor"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
-        public int TileBorderThickness {
+        [global::System.Configuration.DefaultSettingValueAttribute("0.1")]
+        public float TileBorderThicknessRatio {
             get {
-                return ((int)(this["TileBorderThickness"]));
+                return ((float)(this["TileBorderThicknessRatio"]));
             }
         }
         
@@ -241,7 +241,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
         public int TileBorderRadius {
             get {
                 return ((int)(this["TileBorderRadius"]));
@@ -340,7 +340,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.25")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.4")]
         public float TileTitleIconWidthRatio {
             get {
                 return ((float)(this["TileTitleIconWidthRatio"]));
@@ -353,6 +353,69 @@ namespace MonkeyPaste.Properties {
         public int TileItemPadding {
             get {
                 return ((int)(this["TileItemPadding"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("MonkeyPaste")]
+        public string AppName {
+            get {
+                return ((string)(this["AppName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.07")]
+        public float ScrollDampner {
+            get {
+                return ((float)(this["ScrollDampner"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DoCrossAppDuplication {
+            get {
+                return ((bool)(this["DoCrossAppDuplication"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Tahoma")]
+        public string LogMenuTileTokenFont {
+            get {
+                return ((string)(this["LogMenuTileTokenFont"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.9")]
+        public float LogMenuTileTokenFontSizeRatio {
+            get {
+                return ((float)(this["LogMenuTileTokenFontSizeRatio"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.9")]
+        public float LogMenuTileTokenPanelHeightRatio {
+            get {
+                return ((float)(this["LogMenuTileTokenPanelHeightRatio"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Red")]
+        public global::System.Drawing.Color LogMenuTileTokenChooserBgColor {
+            get {
+                return ((global::System.Drawing.Color)(this["LogMenuTileTokenChooserBgColor"]));
             }
         }
     }

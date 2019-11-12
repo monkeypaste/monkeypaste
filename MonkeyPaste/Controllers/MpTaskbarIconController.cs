@@ -20,9 +20,9 @@ namespace MonkeyPaste {
 
         public MpSettingsForm settingsForm { get; set; }
         public MpHelpForm helpForm { get; set; }
-        public NotifyIcon notifyIcon { get; set; }				            // the icon that sits in the system tray      
-       
+        public NotifyIcon notifyIcon { get; set; }                          // the icon that sits in the system tray      
 
+        public static IntPtr AppHandle;
         public MpTaskbarIconController(object context,MpController parent) : base(parent) {
             MpSingletonController.Instance.Init(context,(string)MpSingletonController.Instance.Rh.GetValue("DBPath"),(string)MpSingletonController.Instance.Rh.GetValue("DBPassword"),null,null);
 
@@ -49,25 +49,21 @@ namespace MonkeyPaste {
             InitTrayMenu();
 
             LogFormController = new MpLogFormController(this);
-            LogFormController.LogForm.Load += LogForm_Load;
-            if(true/*MpHelperSingleton.Instance.CheckForInternetConnection()*/) {
-                ShowLoginForm();
-            }
-            else {
-                MessageBox.Show("Error, must be connected to internet to use, exiting");
-                Exit();
-            }
+            LogFormController.ShowLogForm();
+            AppHandle = LogFormController.LogForm.Handle;
+            //if(MpHelperSingleton.Instance.CheckForInternetConnection()) {
+            //    ShowLoginForm();
+            //}
+            //else {
+            //    MessageBox.Show("Error, must be connected to internet to use, exiting");
+            //    Exit();
+            //}
             Link(new List<MpIView>()/* { helpForm,settingsForm,notifyIcon }*/);
         }
-
         private void _mouseUpHook_MouseEvent(object sender,Gma.System.MouseKeyHook.MouseEventExtArgs e) {
             Console.WriteLine("Mouse up event occured");
         }
-
-        private void LogForm_Load(object sender,EventArgs e) {
-            LogFormController.ShowLogForm();
-        }
-
+        
         private void _mouseHitScreenTopHook_MouseEvent(object sender,Gma.System.MouseKeyHook.MouseEventExtArgs e) {
             LogFormController.ShowLogForm();
         }

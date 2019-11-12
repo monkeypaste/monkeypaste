@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -24,7 +25,7 @@ namespace MonkeyPaste {
             return _lastWindowWatcher;
         }
         private void MpClipboardController_Load(object sender,EventArgs e) {
-            _lastWindowWatcher = new MpLastWindowWatcher();
+            _lastWindowWatcher = new MpLastWindowWatcher(this.Handle);
             MpSingletonController.Instance.SetIgnoreNextClipboardEvent(true);
             //AddClipboardFormatListener(this.Handle);    // Add our window to the clipboard's format listener list.
             this.SetBounds(0,0,0,0);

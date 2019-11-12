@@ -113,5 +113,13 @@ namespace MonkeyPaste {
 
         [DllImport("user32.dll")]
         public static extern int ReleaseDC(IntPtr hWnd,IntPtr hDC);
+
+
+        [DllImport("user32.dll",CharSet = CharSet.Auto,SetLastError = true)]
+        public static extern int GetWindowThreadProcessId(IntPtr handle,out uint processId);
+
+        [DllImport("user32.dll",EntryPoint = "FindWindow",SetLastError = true)]
+        public static extern IntPtr FindWindowByCaption(IntPtr zeroOnly,string lpWindowName);
+
     }
 }

@@ -14,11 +14,11 @@ namespace MonkeyPaste
         private Timer _timer;
         private IntPtr _previousHandle;
 
-        public MpLastWindowWatcher() {
+        public MpLastWindowWatcher(IntPtr appHandle) {
             //Process.GetCurrentProcess().Refresh();
-            _thisAppHandle = WinApi.GetForegroundWindow();// Process.GetCurrentProcess().MainWindowHandle;
+            _thisAppHandle = appHandle;
             _previousHandle = IntPtr.Zero;
-
+            Console.WriteLine("This app's exe: " + MpHelperSingleton.Instance.GetProcessPath(_thisAppHandle));
             _timer = new Timer(100);
             _timer.Elapsed += new ElapsedEventHandler(SetLastActive);
             _timer.Start();
@@ -31,10 +31,9 @@ namespace MonkeyPaste
         private void SetLastActive(object sender,ElapsedEventArgs e) {
             IntPtr currentHandle = WinApi.GetForegroundWindow();
             if(_thisAppHandle == IntPtr.Zero) {
-                //Process.GetCurrentProcess().Refresh();
                 _thisAppHandle = Process.GetCurrentProcess().MainWindowHandle;
             }
-            if (currentHandle != _previousHandle && currentHandle != _thisAppHandle && _thisAppHandle != IntPtr.Zero) {
+            if (currentHandle != _previousHandle && currentHandle != _thisAppHandle && _thisAppHandle != IntPtr.Zero && currentHandle != IntPtr.Zero) {
                 _previousHandle = currentHandle;
             }
         }        

@@ -10,8 +10,6 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public abstract class MpDBObject : ICloneable {
-        [DllImport("user32.dll",CharSet = CharSet.Auto,SetLastError = true)]
-        private static extern int GetWindowThreadProcessId(IntPtr handle,out uint processId);
 
         public string databaseName = "mp.db";
         public string tableName = "abstract";
@@ -33,13 +31,7 @@ namespace MonkeyPaste {
         public object Clone() {
             return this.MemberwiseClone();
         }
-        protected string GetProcessPath(IntPtr hwnd) {
-            uint pid = 0;
-            GetWindowThreadProcessId(hwnd,out pid);
-            return MpHelperSingleton.Instance.GetMainModuleFilepath((int)pid);
-            //Process proc = Process.GetProcessById((int)pid);
-            //return proc.MainModule.FileName.ToString();
-        }
+        
         public override string ToString() {
             string outstr = "| "+tableName + "\n";
             foreach(KeyValuePair<string,object> cd in columnData) {

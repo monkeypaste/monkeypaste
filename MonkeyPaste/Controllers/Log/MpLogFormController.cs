@@ -22,10 +22,12 @@ namespace MonkeyPaste {
 
         public MpLogMenuPanelController LogMenuPanelController { get; set; }
 
-        private MpKeyboardHook _toggleLogHook,_escHook,_enterHook, _spaceHook;
+        public static MpKeyboardHook EnterHook { get; set; }
+        private MpKeyboardHook _toggleLogHook,_escHook, _spaceHook;
         private IKeyboardMouseEvents _clickHook,_moveHook;
 
         private bool _isFirstLoad = true;
+        private bool _isResizing = false;
        // private int _customHeight = 0;
 
         public MpLogFormController(MpController Parent) : base(Parent) {
@@ -40,6 +42,7 @@ namespace MonkeyPaste {
             LogForm.Leave += LogForm_Leave;
             LogForm.Deactivate += LogForm_Leave;
             LogForm.Resize += LogForm_Resize;
+            LogForm.MouseUp += LogForm_MouseUp;
             LogForm.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
 
             //these events do not get deactivated
@@ -60,10 +63,17 @@ namespace MonkeyPaste {
             TileChooserPanelController = new MpTileChooserPanelController(this);
             LogForm.Controls.Add(TileChooserPanelController.TileChooserPanel);
                        
-            Update();
-            LogForm.Show();
-            LogForm.Hide();
+            //Update();
+            //LogForm.Show();
+            //LogForm.Hide();
             Link(new List<MpIView> { LogForm });            
+        }
+
+        private void LogForm_MouseUp(object sender,MouseEventArgs e) {
+            if(_isResizing) {
+                _isResizing = false;
+                TileChooserPanelController.ShowTiles();
+            }
         }
         public override void Update() {
             //current screen rect
@@ -123,6 +133,7 @@ namespace MonkeyPaste {
                     );
                 }
                 TileChooserPanelController.SelectedTileController = clickedTileController;
+                TileChooserPanelController.Update();
             }
         }
 
@@ -130,7 +141,7 @@ namespace MonkeyPaste {
             Update();
             ClipboardController = new MpClipboardHelper();
             ClipboardController.Init();
-            //HideLogForm();
+            ShowLogForm();
         }
         
         private void logForm_Closing(object sender,FormClosingEventArgs e) {
@@ -155,9 +166,9 @@ namespace MonkeyPaste {
             _escHook.KeyPressed += _escHook_KeyPressed;
             _escHook.RegisterHotKey(ModifierKeys.None,Keys.Escape);
 
-            _enterHook = new MpKeyboardHook();
-            _enterHook.KeyPressed += _enterHook_KeyPressed;
-            _enterHook.RegisterHotKey(ModifierKeys.None,Keys.Enter);
+            EnterHook = new MpKeyboardHook();
+            EnterHook.KeyPressed += EnterHook_KeyPressed;
+            EnterHook.RegisterHotKey(ModifierKeys.None,Keys.Enter);
 
             _spaceHook = new MpKeyboardHook();
             _spaceHook.KeyPressed += _spaceHook_KeyPressed;
@@ -168,9 +179,9 @@ namespace MonkeyPaste {
                 _escHook.UnregisterHotKey();
                 _escHook = null;
             }
-            if(_enterHook != null) {
-                _enterHook.UnregisterHotKey();
-                _enterHook = null;
+            if(EnterHook != null) {
+                EnterHook.UnregisterHotKey();
+                EnterHook = null;
             }
             if(_spaceHook != null) {
                 _spaceHook.UnregisterHotKey();
@@ -191,7 +202,7 @@ namespace MonkeyPaste {
             }
             ShowLogForm();
         }
-        private void _enterHook_KeyPressed(object sender,KeyPressedEventArgs e) {
+        private void EnterHook_KeyPressed(object sender,KeyPressedEventArgs e) {
             _toggleLogHook_KeyPressed(null,null);
             PasteCopyItem();
         }
@@ -200,6 +211,10 @@ namespace MonkeyPaste {
             PasteCopyItem();
         }
         private void LogForm_Resize(object sender,EventArgs e) {
+            if(_isResizing == false) {
+                _isResizing = true;
+                TileChooserPanelController.HideTiles();
+            }
             MpSingletonController.Instance.CustomLogHeight = LogForm.Bounds.Height;
             Update();
         }       
@@ -207,15 +222,10 @@ namespace MonkeyPaste {
             if(_isFirstLoad) {
                 Update();
                 _isFirstLoad = false;
-                //LogForm.Size = new Size(LogForm.Size.Width+1,LogForm.Size.Height+1);
             }
-            Console.WriteLine("Current DPI: " + MpHelperSingleton.Instance.GetSystemDpi().ToString());
-            //Update();
             LogForm.Show();
             LogForm.Activate();
             ActivateHotKeys();
-            
-            //LogMenuPanelController.LogMenuSearchTextBoxController.SearchTextBox.Focus();
         }
         public void HideLogForm() {
             LogForm.Hide();

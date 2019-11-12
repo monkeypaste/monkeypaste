@@ -17,7 +17,7 @@ namespace MonkeyPaste {
         public MpIcon(int iconId,IntPtr sourceHandle) : base() {
             this.iconId = iconId;
             this.IconImage = GetIconImage(sourceHandle);
-            this._path = GetProcessPath(sourceHandle);
+            this._path = MpHelperSingleton.Instance.GetProcessPath(sourceHandle);
             WriteToDatabase();
         }
         public MpIcon(DataRow dr) {
@@ -64,8 +64,7 @@ namespace MonkeyPaste {
             Console.WriteLine(ToString());
         }
         private Image GetIconImage(IntPtr sourceHandle) {
-            return IconReader.GetFileIcon(GetProcessPath(sourceHandle),IconReader.IconSize.Large,false).ToBitmap();
-            //return Icon.ExtractAssociatedIcon(GetProcessPath(sourceHandle)).ToBitmap();
+            return IconReader.GetFileIcon(MpHelperSingleton.Instance.GetProcessPath(sourceHandle),IconReader.IconSize.Large,false).ToBitmap();
         }
         private void MapDataToColumns() {
             tableName = "MpIcon";

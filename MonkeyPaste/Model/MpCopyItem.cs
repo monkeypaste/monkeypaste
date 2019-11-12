@@ -8,65 +8,6 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {
     public class MpCopyItem:MpDBObject {
-        private static string[] _DefaultTileNames =new string[]{
-            "Achilles",
-            "Aeacus",
-            "Aeneas",
-            "Amphion",
-            "Arcas",
-            "Asclepius",
-            "Athis",
-            "Bellerophon",
-            "Dardanus",
-            "Dionysus",
-            "Epaphus",
-            "Harmonia",
-            "Heracles",
-            "Hippolyta",
-            "Helen",
-            "Iasus",
-            "Memnon",
-            "Orion",
-            "Orpheus",
-            "Penthesilea",
-            "Perseus",
-            "Polydeuces",
-            "Theseus",
-            "Tityos",
-            "Zethes",
-            "Zethus",
-            "Bacchus",
-            "Romulus",
-            "Remus",
-            "Turnus",
-            "Arjuna",
-            "Bhima",
-            "Bhishma",
-            "Dhristadyumna",
-            "Draupadi",
-            "Drona",
-            "Ghatotkacha",
-            "Hanuman",
-            "Iravan",
-            "Karna",
-            "Lakshmana",
-            "Nakula",
-            "Pradyumna",
-            "Sahadeva",
-            "Devavrata",
-            "Sugreeva",
-            "Vali",
-            "Yudhishthira",
-            "Sæmingr",
-            "Bragi",
-            "Cú",
-            "Diarmuid",
-            "Amirani",
-            "Gilgamesh",
-            "Māui",
-            "Semiramis"
-            };
-
         public static int TotalCopyItemCount = 0;
 
         public List<MpSubTextToken> subTextTokenList = new List<MpSubTextToken>();
@@ -134,17 +75,16 @@ namespace MonkeyPaste {
                     return;
                 }
             } 
-            this.copyItemId = itemId;
-           
-            this.appId = appId;
+            this.copyItemId = itemId;   
             this.CopyDateTime = DateTime.Now;
             this.sourceHandle = sourceHandle;
-            
-            this.Title = _DefaultTileNames[MpSingletonController.Instance.Rand.Next(0,_DefaultTileNames.Length-1)];
-
+            this.Title = Enum.GetName(typeof(MpCopyItemType),copyItemId).ToString();
             this.CopyCount = 1;
+            App = new MpApp(0,0,sourceHandle,false);
+            this.appId = App.appId;
+            MpSingletonController.Instance.GetMpData().AddMpApp(App);
 
-            WriteToDatabase();
+            //WriteToDatabase();
         }
         public MpCopyItem(object data,MpCopyItemType mpType,IntPtr sourceHandle) : this(0,mpType,MpSingletonController.Instance.GetMpData().GetMpClient().MpClientId,0,data,sourceHandle) { }
         public MpCopyItem(string copyText,MpCopyItemType textType,IntPtr sourceHandle) :this((object)copyText,textType,sourceHandle) {}

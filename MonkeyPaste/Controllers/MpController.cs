@@ -10,7 +10,7 @@ namespace MonkeyPaste {
     public interface MpIController {
         void Link(List<MpIView> viewList = null,List<object> modelList = null);
         void Update();
-        //void UpdateBounds(Rectangle refRect,float refRatio,bool xRatio,bool yRatio);
+        void Update(Rectangle r,List<float> refRatio,List<bool> xRatio,List<bool> yRatio);
         //void UpdateContent(Rectangle refRect,float refRatio,bool xRatio,bool yRatio);
         object Find(string name);
     }   
@@ -24,20 +24,50 @@ namespace MonkeyPaste {
         public string ControllerName { get; set; } = string.Empty;
         public int ControllerId { get; set; }
 
+        public List<MpIView> ViewList { get; set; } = new List<MpIView>();
+
         public MpController Parent { get; set; }
 
-        public MpController(MpController p,int cid = -1) {
+        public MpController(MpController p,int cid = -1,List<object> viewList = null) {
             ++ControllerCount;
             Parent = p;
             ControllerType = GetType().ToString();
             ControllerId = cid;
             ControllerName = ControllerType + (ControllerId == -1 ? ControllerCount : ControllerId);
+            if(viewList != null) {
+                foreach(object vlo in viewList) {
+                    ViewList.Add((MpIView)vlo);
+                }
+            }
         }
-
         public abstract void Update();
         //public abstract void UpdateBounds(Rectangle refRectangle,float refRatio,bool xRatio,bool yRatio);
         //public abstract void UpdateContent(Rectangle refRect,float refRatio,bool xRatio,bool yRatio);
 
+        public virtual void Update(Rectangle r,List<float> refRatio,List<bool> xRatio,List<bool> yRatio) {
+            if(refRatio.Count != xRatio.Count && refRatio.Count != yRatio.Count) {
+                throw new Exception("MpController Exception: ref value lists not same sizes");
+            }
+            for(int i = 0;i < refRatio.Count;i++) {
+                MpIView cv = ViewList[i];
+                float rx = 1.0f, ry = 1.0f;
+                int px = 0, py = 0;
+                if(xRatio[i]) {
+                    rx = r.Width * refRatio[i];
+                    px = r.Width - (int)(rx*0.5f);
+                } else if(yRatio[i]) {
+                    ry = r.Height * refRatio[i];
+                    py = r.Height - (int)(ry * 0.5f);
+                }
+                Control c = ((Control)cv);
+                c.Bounds = new Rectangle(
+                   c.Location.X + px,
+                   c.Location.Y + py,
+                   (int)((float)c.Width * rx),
+                   (int)((float)c.Height * ry)
+                );
+            }
+        }
         public void Link(List<MpIView> viewList = null,List<object> modelList = null) {
             //return;
             //add controller type as sub-dicitonary
@@ -108,6 +138,5 @@ namespace MonkeyPaste {
             Console.WriteLine("MpController view clicked w/ sender: " + sender.ToString());
         }
 
-        
     }
 }

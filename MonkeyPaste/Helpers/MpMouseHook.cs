@@ -5,42 +5,6 @@ using System.Windows.Forms;
 using Gma.System.MouseKeyHook;
 
 namespace MonkeyPaste {    
-    public enum MpMouseEvent {
-        None,
-        Wheel,
-        ClickL,
-        ClickR,
-        ClickM,
-        Click1,
-        Click2,
-        DClickL,
-        DClickR,
-        DClickM,
-        DClick1,
-        DClick2,
-        DownL,
-        DownR,
-        DownM,
-        Down1,
-        Down2,
-        UpR,
-        UpL,
-        UpM,
-        Up1,
-        Up2,
-        Move,
-        SDragL,
-        SDragR,
-        SDragM,
-        SDrag1,
-        SDrag2,
-        EDragL,
-        EDragR,
-        EDragM,
-        EDrag1,
-        EDrag2,
-        HitBox,
-    }
     public class MpMouseHook : IDisposable {
         private IKeyboardMouseEvents _mouseHook = null;
         private MpMouseEvent _me = MpMouseEvent.None;
@@ -144,5 +108,41 @@ namespace MonkeyPaste {
         public void Dispose() {
             UnregisterMouseEvent();
         }
+    }
+    public enum MpMouseEvent {
+        None,
+        Wheel,
+        ClickL,
+        ClickR,
+        ClickM,
+        Click1,
+        Click2,
+        DClickL,
+        DClickR,
+        DClickM,
+        DClick1,
+        DClick2,
+        DownL,
+        DownR,
+        DownM,
+        Down1,
+        Down2,
+        UpR,
+        UpL,
+        UpM,
+        Up1,
+        Up2,
+        Move,
+        SDragL,
+        SDragR,
+        SDragM,
+        SDrag1,
+        SDrag2,
+        EDragL,
+        EDragR,
+        EDragM,
+        EDrag1,
+        EDrag2,
+        HitBox,
     }
 }

@@ -9,13 +9,10 @@ using System.Runtime.InteropServices;
 namespace MonkeyPaste {
    
     public static class MpProgram {
-        public static string AppName = "MonkeyPaste";
-
         [STAThread]
         static void Main() {
             if(Environment.OSVersion.Version.Major >= 6) {
                 bool result = WinApi.SetProcessDPIAware();
-                Console.WriteLine("DPI Awareness: " + result.ToString());
             }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -25,10 +22,8 @@ namespace MonkeyPaste {
             }
             catch(Exception ex) {
                 Console.WriteLine("Program terminated: " + ex.ToString());
-                //MessageBox.Show(ex.ToString(),"Program Terminated Unexpectedly",MessageBoxButtons.OK,MessageBoxIcon.Error);
             }
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
-           // MpSingleInstance.Stop();
         }
         static void CurrentDomain_ProcessExit(object sender,EventArgs e) {
             MessageBox.Show("Exiting");

@@ -9,14 +9,14 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {
     public class MpRoundedPanel : Panel {
-        private int _thickness = 5;
-        public int Thickness {
+        private int _borderThickness = 0;
+        public int BorderThickness {
             get {
-                return _thickness;
+                return _borderThickness;
             }
             set {
-                _thickness = value;
-                _pen = new Pen(_borderColor,(float)Thickness);
+                _borderThickness = value;
+                _pen = new Pen(_borderColor,(float)BorderThickness);
                 Invalidate();
             }
         }
@@ -28,12 +28,12 @@ namespace MonkeyPaste {
             }
             set {
                 _borderColor = value;
-                _pen = new Pen(_borderColor,Thickness);
+                _pen = new Pen(_borderColor,BorderThickness);
                 Invalidate();
             }
         }
 
-        private int _radius = 20;
+        private int _radius =50;
         public int Radius {
             get {
                 return _radius;
@@ -47,8 +47,7 @@ namespace MonkeyPaste {
         private Pen _pen;
 
         public MpRoundedPanel() : base() {
-            _pen = new Pen(BorderColor,Thickness);
-            DoubleBuffered = true;
+            _pen = new Pen(BorderColor,BorderThickness);
         }
         private Rectangle GetLeftUpper(int e) {
             return new Rectangle(0,0,e,e);
@@ -63,6 +62,7 @@ namespace MonkeyPaste {
             return new Rectangle(0,Height - e,e,e);
         }
         private void ExtendedDraw(PaintEventArgs e) {
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             GraphicsPath path = new GraphicsPath();
             path.StartFigure();
             path.AddArc(GetLeftUpper(Radius),180,90);
@@ -83,17 +83,15 @@ namespace MonkeyPaste {
             graphics.DrawArc(_pen,new Rectangle(0,Height - Radius - 1,Radius,Radius),90,90);
             graphics.DrawRectangle(_pen,0.0f,0.0f,(float)Width - 1.0f,(float)Height - 1.0f);
         }
-        private void Draw3DBorder(Graphics graphics) {
-            DrawSingleBorder(graphics);
-        }
         private void DrawBorder(Graphics graphics) {
             DrawSingleBorder(graphics);
         }
         protected override void OnPaint(PaintEventArgs e) {
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             base.OnPaint(e);
             ExtendedDraw(e);
-            DrawBorder(e.Graphics);
+            if(BorderThickness > 0) {
+                DrawBorder(e.Graphics);
+            }
         }
     }
 }

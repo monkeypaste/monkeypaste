@@ -21,7 +21,6 @@ namespace MonkeyPaste {
 
             Link(new List<MpIView>() { SearchTextBox });
         }
-
         public override void Update() {
             //log menu panel rect
             Rectangle lmpr = ((MpLogMenuPanelController)Parent).LogMenuPanel.Bounds;

@@ -183,11 +183,20 @@ namespace MonkeyPaste {
             }
 
             AddMpApp(ci.App);
+            bool isDuplicate = false;
             foreach(MpCopyItem mpci in _copyItemList) {
-                if(ci.copyItemId == mpci.copyItemId) {
+                if(mpci.GetData() == ci.GetData()) {
+                    //if clips are from different apps but user doesn't care about cross app dups
+                    if(mpci.appId != ci.appId && !Properties.Settings.Default.DoCrossAppDuplication) {
+                        continue;
+                    }
                     UpdateMpCopyItem(ci);
+                    isDuplicate = true;
                     return;
                 }
+            }
+            if(!isDuplicate && ci.copyItemId == 0) {
+                ci.WriteToDatabase();
             }
             _copyItemList.Add(ci);
         }

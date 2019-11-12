@@ -39,7 +39,6 @@ namespace MonkeyPaste {
 
             Link(new List<MpIView> { TileMenuPanel});
         }
-
         public override void Update() {
             if(TileMenuPanel.Visible == false) {
                 //TileMenuPanel.Hide();

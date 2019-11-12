@@ -25,7 +25,7 @@ namespace MonkeyPaste {
         public MpApp(int appId,int iconId,IntPtr sourceHandle,bool isAppRejected) {            
             this.appId = appId;
             this.iconId = iconId;
-            this.SourcePath = GetProcessPath(sourceHandle);
+            this.SourcePath = MpHelperSingleton.Instance.GetProcessPath(sourceHandle);
             this.IsAppRejected = isAppRejected;
             this._sourceHandle = sourceHandle;
 
