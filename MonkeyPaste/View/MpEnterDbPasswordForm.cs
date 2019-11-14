@@ -20,7 +20,7 @@ namespace MonkeyPaste {
             } else {
                 MpRegistryHelper.Instance.SetValue("DBPassword","");
             }
-            MpSingletonController.Instance.GetMpData().Db.SetDbPassword(PasswordTextBox.Text);
+            MpLogFormController.Db.SetDbPassword(PasswordTextBox.Text);
             this.DialogResult = DialogResult.OK;
             this.Close();
         }

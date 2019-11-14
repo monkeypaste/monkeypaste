@@ -88,7 +88,6 @@ namespace MonkeyPaste {
             } else {
                 RegisterHotKeyWin(modifier,key);
             }
-            _isRegistered = true;
         }
         private void RegisterHotKeyGdk(Gdk.ModifierType modifier,Keys key) {
             Gdk.Window rootWin = Gdk.Global.DefaultRootWindow;
@@ -105,17 +104,22 @@ namespace MonkeyPaste {
              GrabModeAsync,
              GrabModeAsync
             );
+            _isRegistered = true;
         }
         private void RegisterHotKeyWin(ModifierKeys modifier,Keys key) {
             // increment the counter.
             _currentId = _currentId + 1;
             // register the hot key.
-            if(!WinApi.RegisterHotKey(_window.Handle,_currentId,(uint)modifier,(uint)key))
-                throw new InvalidOperationException("Couldn’t register the hot key.");
+            if(!WinApi.RegisterHotKey(_window.Handle,_currentId,(uint)modifier,(uint)key)) {
+                // throw new InvalidOperationException("Couldn’t register the hot key.");
+                _isRegistered = false;
+                return;
+            }               
             _window.KeyPressed += delegate (object sender,KeyPressedEventArgs args) {
                 if(KeyPressed != null)
                     KeyPressed(this,args);
             };
+            _isRegistered = true;
         }
         public bool IsRegistered() {
             return _isRegistered;

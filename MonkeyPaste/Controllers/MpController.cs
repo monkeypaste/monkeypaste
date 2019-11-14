@@ -127,11 +127,11 @@ namespace MonkeyPaste {
         }
 
         protected virtual void View_KeyPress(object sender,KeyPressEventArgs e) {
-            if(((MpLogMenuSearchBox)Find("MpLogMenuSearchBox")).Focused) {
+            if(((MpSearchBox)Find("MpLogMenuSearchBox")).Focused) {
                 return;
             }
-            ((MpLogMenuSearchBox)Find("MpLogMenuSearchBox")).AppendText(e.KeyChar.ToString());
-            ((MpLogMenuSearchBox)Find("MpLogMenuSearchBox")).Focus();
+            ((MpSearchBox)Find("MpLogMenuSearchBox")).AppendText(e.KeyChar.ToString());
+            ((MpSearchBox)Find("MpLogMenuSearchBox")).Focus();
         }
 
         protected void View_Click(object sender,EventArgs e) {

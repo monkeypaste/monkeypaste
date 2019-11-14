@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,30 +11,42 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {
     public class MpDb {
-        private string _dbPath { get; set; }
-        public string DbPath { get { return _dbPath; } set { _dbPath = value; } }
+        public MpClient Client { get; set; }
+        public MpUser User { get; set; }
 
-        private string _dbPassword { get; set; }
-        public string DbPassword { get { return _dbPassword; } set { _dbPassword = value; } }
+        public string DbPath { get; set; }
+        public string DbPassword { get; set; }
+
+        public string IdentityToken { get; set; }
+        public string AccessToken { get; set; }
 
         public bool NoDb { get; set; }
 
         private int _passwordAttempts = 0;
         private bool _isLoaded = false;
 
-        public MpDb(string dbPath,string dbPassword) {
+        public MpDb(string dbPath,string dbPassword,string identityToken,string accessToken) {
             NoDb = MpCompatibility.IsRunningOnMono();
             Console.WriteLine("Running mono: " + NoDb);
+
             DbPath = dbPath;
             DbPassword = dbPassword;
+            IdentityToken = identityToken;
+            AccessToken = accessToken;
+            Init();
+        }
+        public void Init() {
+            InitUser(IdentityToken);
+            InitClient(AccessToken);
+            InitDb();
         }
         public void InitDb() {
             if(NoDb) {
                 Console.WriteLine("Skipping Db Init");
                 return;
             }
-            if(_dbPath == null || _dbPath == String.Empty || !Directory.Exists(Path.GetDirectoryName(_dbPath)) || !File.Exists(_dbPath)) {
-                Console.WriteLine(_dbPath + " does not exist...");
+            if(DbPath == null || DbPath == String.Empty || !Directory.Exists(Path.GetDirectoryName(DbPath)) || !File.Exists(DbPath)) {
+                Console.WriteLine(DbPath + " does not exist...");
                 DialogResult result = MessageBox.Show("No Database found would you like to load a file?","No DB Found",MessageBoxButtons.YesNo,MessageBoxIcon.Question,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
                 if(result == DialogResult.Yes) {
                     OpenFileDialog openFileDialog = new OpenFileDialog() {
@@ -43,10 +56,10 @@ namespace MonkeyPaste {
                     };
                     DialogResult openResult = openFileDialog.ShowDialog();
                     if(openResult == DialogResult.OK) {
-                        _dbPath = openFileDialog.FileName;
+                        DbPath = openFileDialog.FileName;
                         DialogResult autoLoadResult = MessageBox.Show("Would you like to remember this next time?","Remember Database?",MessageBoxButtons.YesNo,MessageBoxIcon.Question,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
                         if(autoLoadResult == DialogResult.Yes) {
-                            MpRegistryHelper.Instance.SetValue("DBPath",_dbPath);
+                            MpRegistryHelper.Instance.SetValue("DBPath",DbPath);
                         }
                     }
                 }
@@ -63,12 +76,12 @@ namespace MonkeyPaste {
 
                         DialogResult saveResult = saveFileDialog.ShowDialog();
                         if(saveResult == DialogResult.OK) {
-                            _dbPath = saveFileDialog.FileName;
+                            DbPath = saveFileDialog.FileName;
                             DialogResult autoLoadResult = MessageBox.Show("Would you like to remember this next time?","Remember Database?",MessageBoxButtons.YesNo,MessageBoxIcon.Question,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
                             if(autoLoadResult == DialogResult.Yes) {
-                                MpRegistryHelper.Instance.SetValue("DBPath",_dbPath);
+                                MpRegistryHelper.Instance.SetValue("DBPath",DbPath);
                             }
-                            SQLiteConnection.CreateFile(_dbPath);
+                            SQLiteConnection.CreateFile(DbPath);
                             DialogResult newDbPasswordResult = MessageBox.Show("Would you like to encrypt database with a password?","Encrypt?",MessageBoxButtons.YesNo,MessageBoxIcon.Question,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
                             if(newDbPasswordResult == DialogResult.Yes) {
                                 MpSetDbPasswordForm setDbPasswordForm = new MpSetDbPasswordForm();
@@ -86,14 +99,54 @@ namespace MonkeyPaste {
                     }
                 }
             }
-            Console.WriteLine("Database successfully initialized at " + _dbPath);
+            Console.WriteLine("Database successfully initialized at " + DbPath);
             _isLoaded = true;
         }
+        public void InitUser(string idToken) {
+            User = new MpUser() { IdentityToken = idToken };
+        }
+        public void InitClient(string accessToken) {
+            Client = new MpClient() { AccessToken = accessToken };
+        }
+        public List<MpCopyItem> GetCopyItems() {
+            if(NoDb) {
+                return new List<MpCopyItem>();
+            }
+            if(_isLoaded == false) {
+                InitDb();
+            }
+            List<MpCopyItem> copyItemList = new List<MpCopyItem>();
+            DataTable dt = Execute("select * from MpCopyItem");
+            if(dt != null) {
+                foreach(DataRow dr in dt.Rows) {
+                    copyItemList.Add(new MpCopyItem(dr));
+                }
+            }
+            Console.WriteLine("Init w/ " + copyItemList.Count + " copyitems added");
+            return copyItemList;
+        }
+        public List<MpTag> GetTags() {
+            if(NoDb) {
+                return new List<MpTag>() { new MpTag("History",Color.Green,MpTagType.Default),new MpTag("Favorites",Color.Blue,MpTagType.Default) };
+            }
+            if(_isLoaded == false) {
+                InitDb();
+            }
+            List<MpTag> tagList = new List<MpTag>();
+            DataTable dt = Execute("select * from MpTag");
+            if(dt != null) {
+                foreach(DataRow dr in dt.Rows) {
+                    tagList.Add(new MpTag(dr));
+                }
+            }
+            Console.WriteLine("Init w/ " + tagList.Count + " tags added");
+            return tagList;
+        }
         public void SetDbPassword(string newPassword) {
-            if(_dbPassword != newPassword) {
+            if(DbPassword != newPassword) {
                 // if db is unpassword protected
-                if(_dbPassword == null || _dbPassword == String.Empty) {
-                    SQLiteConnection conn = new SQLiteConnection("Data Source=" + _dbPath + ";Version=3;");
+                if(DbPassword == null || DbPassword == String.Empty) {
+                    SQLiteConnection conn = new SQLiteConnection("Data Source=" + DbPath + ";Version=3;");
                     conn.SetPassword(newPassword);
                     conn.Open();
                     conn.Close();
@@ -103,7 +156,7 @@ namespace MonkeyPaste {
                     conn.Open();
                     conn.ChangePassword(newPassword);
                 }
-                _dbPassword = newPassword;
+                DbPassword = newPassword;
             }
         }
         private SQLiteConnection SetConnection() {
@@ -112,9 +165,9 @@ namespace MonkeyPaste {
             }
             // see https://stackoverflow.com/questions/1381264/password-protect-a-sqlite-db-is-it-possible
             // about passwords
-            string connStr = "Data Source=" + _dbPath + ";Version=3;";
-            if(_dbPassword != null && _dbPassword != String.Empty) {
-                connStr += "Password=" + _dbPassword + ";";
+            string connStr = "Data Source=" + DbPath + ";Version=3;";
+            if(DbPassword != null && DbPassword != String.Empty) {
+                connStr += "Password=" + DbPassword + ";";
             }
             Console.WriteLine("Connection String: " + connStr);
             SQLiteConnection conn = null;
@@ -124,7 +177,7 @@ namespace MonkeyPaste {
             catch(Exception e) {
                 Console.WriteLine("Error during SQL connection: " + connStr + "\n" + "With error: " + e.ToString());
                 conn = null;
-                _dbPath = null;
+                DbPath = null;
                 InitDb();
                 SetConnection();
             }
@@ -167,14 +220,14 @@ namespace MonkeyPaste {
                 wasError = true;
                 Console.WriteLine("Error in executenonquery: " + ex.ToString());
                 if(_isLoaded) {
-                    DialogResult warnDbErrorResult = MessageBox.Show("Error writing data to " + _dbPath + " and program terminating","IO Error",MessageBoxButtons.OK,MessageBoxIcon.Error,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
-                    MpSingletonController.Instance.ExitApplication();
+                    DialogResult warnDbErrorResult = MessageBox.Show("Error writing data to " + DbPath + " and program terminating","IO Error",MessageBoxButtons.OK,MessageBoxIcon.Error,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
+                   // MpSingletonController.Instance.ExitApplication();
                 } else {
                     MpEnterDbPasswordForm enterPasswordForm = new MpEnterDbPasswordForm();
                     DialogResult enterPasswordResult = enterPasswordForm.ShowDialog();
                     _passwordAttempts++;
                     if(_passwordAttempts < Properties.Settings.Default.MaxDbPasswordAttempts) {
-                        MpSingletonController.Instance.GetMpData().Init();
+                        Init();
                     }
                     else {
                         return;
@@ -228,7 +281,7 @@ namespace MonkeyPaste {
                 wasError = true;
                 Console.WriteLine("Error in sql execute  " + ex.ToString());
                 if(_isLoaded) {
-                    DialogResult warnDbErrorResult = MessageBox.Show("Error writing data to " + _dbPath + " and program terminating","IO Error",MessageBoxButtons.OK,MessageBoxIcon.Error,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
+                    DialogResult warnDbErrorResult = MessageBox.Show("Error writing data to " + DbPath + " and program terminating","IO Error",MessageBoxButtons.OK,MessageBoxIcon.Error,MessageBoxDefaultButton.Button1,MessageBoxOptions.DefaultDesktopOnly);
                     MpSingletonController.Instance.ExitApplication();
                 }
                 else {
@@ -236,7 +289,7 @@ namespace MonkeyPaste {
                     DialogResult enterPasswordResult = enterPasswordForm.ShowDialog();
                     _passwordAttempts++;
                     if(_passwordAttempts < Properties.Settings.Default.MaxDbPasswordAttempts) {
-                        MpSingletonController.Instance.GetMpData().Init();
+                        Init();
                     }
                     else {
                         return null;
@@ -274,46 +327,48 @@ namespace MonkeyPaste {
         private string GetCreateString() {
             return @"
                     CREATE TABLE MpTagType (
-                        pk_MpTagTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, 
-                        TagTypeName text NOT NULL
+                      pk_MpTagTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , TagTypeName text NOT NULL
                     );
+                    INSERT INTO MpTagType(TagTypeName) VALUES('None'),('App'),('Device'),('Custom'),('Default');
                     CREATE TABLE MpTag (
-                        pk_MpTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpTagTypeId integer NOT NULL
                     , TagName text NOT NULL
-                    , fk_ColorId integer 
+                    , fk_MpColorId integer 
                     , CONSTRAINT FK_MpTag_0_0 FOREIGN KEY (fk_MpTagTypeId) REFERENCES MpTagType (pk_MpTagTypeId)
-                    , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_ColorId) REFERENCES MpColor (pk_MpColorId)
+                    , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId)
                     );
+                    INSERT INTO MpTag(fk_MpTagTypeId,TagName,fk_MpColorId) VALUES (5,'History',3),(5,'Favorites',2);
                     CREATE TABLE MpSetting (
-                        pk_MpSettingId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpSettingId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , SettingName text NOT NULL
                     , SettingValueType text NOT NULL
                     , SettingValue text NULL
                     , SettingDefaultValue text NULL
                     );
                     CREATE TABLE MpPlatformType (
-                        pk_MpPlatformTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpPlatformTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , PlatformName text NOT NULL 
                     );
                     INSERT INTO MpPlatformType(PlatformName) VALUES('ios'),('android'),('windows'),('mac');
                     CREATE TABLE MpIcon (
-                        pk_MpIconId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpIconId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , IconBlob image NOT NULL
                     );
                     CREATE TABLE MpHotKey (
-                        pk_MpHotKeyId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpHotKeyId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , KeyList text NULL
                     , ModList text NULL
                     );
                     CREATE TABLE MpDeviceType (
-                        pk_MpDeviceTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpDeviceTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , DeviceTypeName text NULL 
                     );
                     INSERT INTO MpDeviceType(DeviceTypeName) VALUES('windows'),('mac'),('android'),('iphone'),('ipad'),('tablet');
 
                     CREATE TABLE MpPlatform (
-                        pk_MpPlatformId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpPlatformId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpPlatformTypeId integer NOT NULL
                     , fk_MpDeviceTypeId integer NOT NULL
                     , Version text NULL 
@@ -321,23 +376,25 @@ namespace MonkeyPaste {
                     , CONSTRAINT FK_MpPlatform_1_0 FOREIGN KEY (fk_MpPlatformTypeId) REFERENCES MpPlatformType (pk_MpPlatformTypeId)
                     );
                     CREATE TABLE MpCopyItemType (
-                        pk_MpCopyItemTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpCopyItemTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , TypeName text NULL 
                     );
                     INSERT INTO MpCopyItemType(TypeName) VALUES('text'),('rich_text'),('html_text'),('image'),('file_list');
+
                     CREATE TABLE MpCommandType (
-                        pk_MpCommandTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpCommandTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , CommandName text NOT NULL
                     );
+
                     CREATE TABLE MpCommand (
-                        pk_MpCommandId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpCommandId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCommandTypeId int NOT NULL
                     , fk_MpHotKey int NOT NULL
                     , CONSTRAINT FK_MpCommand_0_0 FOREIGN KEY (fk_MpHotKey) REFERENCES MpHotKey (pk_MpHotKeyId)
                     , CONSTRAINT FK_MpCommand_1_0 FOREIGN KEY (fk_MpCommandTypeId) REFERENCES MpCommandType (pk_MpCommandTypeId)
                     );
                     CREATE TABLE MpClient (
-                        pk_MpClientId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpClientId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpPlatformId integer NOT NULL
                     , Ip4Address text NULL 
                     , AccessToken text NULL 
@@ -346,14 +403,16 @@ namespace MonkeyPaste {
                     , CONSTRAINT FK_MpClient_0_0 FOREIGN KEY (fk_MpPlatformId) REFERENCES MpPlatform (pk_MpPlatformId)
                     );
                     CREATE TABLE MpColor (
-                        pk_MpColorId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                       pk_MpColorId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     ,  R integer not null default 255
                     ,  G integer not null default 255
                     ,  B integer not null default 255
                     ,  A integer not null default 255
                     );
+                    INSERT INTO MpColor(R,G,B,A) VALUES (255,0,0,255),(0,255,0,255),(0,0,255,255);
+
                     CREATE TABLE MpApp (
-                        pk_MpAppId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpAppId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpIconId integer NOT NULL
                     , SourcePath text NOT NULL 
                     , IsAppRejected integer NOT NULL
@@ -362,7 +421,7 @@ namespace MonkeyPaste {
                     , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_ColorId) REFERENCES MpColor (pk_MpColorId)
                     );
                     CREATE TABLE MpCopyItem (
-                        pk_MpCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemTypeId integer NOT NULL
                     , fk_MpClientId integer NOT NULL
                     , fk_MpAppId integer NOT NULL
@@ -376,7 +435,7 @@ namespace MonkeyPaste {
                     , CONSTRAINT FK_MpCopyItem_3_0 FOREIGN KEY (fk_ColorId) REFERENCES MpColor (pk_MpColorId) 
                     );
                     CREATE TABLE MpSubTextToken (
-                        pk_MpSubTextTokenId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpSubTextTokenId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemId integer NOT NULL
                     , fk_MpCopyItemTypeId integer NOT NULL
                     , StartIdx integer NOT NULL
@@ -386,7 +445,7 @@ namespace MonkeyPaste {
                     , CONSTRAINT FK_MpSubTextToken_1_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );
                     CREATE TABLE MpPasteHistory (
-                        pk_MpPasteHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpPasteHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemId integer NOT NULL
                     , fk_MpClientId integer NOT NULL
                     , fk_MpAppId integer NOT NULL
@@ -396,24 +455,24 @@ namespace MonkeyPaste {
                     , CONSTRAINT FK_MpPasteHistory_2_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );
                     CREATE TABLE MpFileDropListItem (
-                        pk_MpFileDropListItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpFileDropListItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemId integer NOT NULL
                     , CONSTRAINT FK_MpFileDropListItem_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );
                     CREATE TABLE MpFileDropListSubItem (
-                        pk_MpFileDropListSubItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpFileDropListSubItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpFileDropListItemId integer NOT NULL
                     , ItemPath text NOT NULL 
                     , CONSTRAINT FK_MpFileDropListSubItem_0_0 FOREIGN KEY (fk_MpFileDropListItemId) REFERENCES MpFileDropListItem (pk_MpFileDropListItemId)
                     );
                     CREATE TABLE MpImageItem (
-                        pk_MpImageItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpImageItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemId integer NOT NULL
                     , ItemImage longblob NOT NULL
                     , CONSTRAINT FK_MpImageItem_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );
                     CREATE TABLE MpTextItem (
-                        pk_MpTextItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                      pk_MpTextItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemId integer NOT NULL
                     , ItemText text NOT NULL 
                     , CONSTRAINT FK_MpTextItem_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)

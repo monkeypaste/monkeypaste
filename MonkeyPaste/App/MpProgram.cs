@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 namespace MonkeyPaste {
    
     public static class MpProgram {
+        static MpApplicationContext applicationContext = null;
         [STAThread]
         static void Main() {
             if(Environment.OSVersion.Version.Major >= 6) {
@@ -17,16 +18,26 @@ namespace MonkeyPaste {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             try {
-                var applicationContext = new MpApplicationContext();
+                applicationContext = new MpApplicationContext();
                 Application.Run(applicationContext);
             }
             catch(Exception ex) {
+                if(applicationContext != null) {
+                    applicationContext.ApplicationController.TaskbarController.NotifyIcon.Visible = false;
+                    applicationContext.ApplicationController.TaskbarController.NotifyIcon.Dispose();
+                }
+
                 Console.WriteLine("Program terminated: " + ex.ToString());
             }
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
         }
         static void CurrentDomain_ProcessExit(object sender,EventArgs e) {
-            MessageBox.Show("Exiting");
+            if(applicationContext != null) {
+                applicationContext.ApplicationController.TaskbarController.NotifyIcon.Visible = false;
+                applicationContext.ApplicationController.TaskbarController.NotifyIcon.Dispose();
+            }
+
+            Console.WriteLine("Exiting "+DateTime.Now.ToString());
         }
     }
 }

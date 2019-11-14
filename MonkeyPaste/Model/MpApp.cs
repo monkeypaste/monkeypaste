@@ -17,8 +17,7 @@ namespace MonkeyPaste {
         public string SourcePath { get; set; }
         public bool IsAppRejected { get; set; }
 
-        private MpIcon _icon { get; set; }
-        public MpIcon Icon { get { return _icon; } set { _icon = value; } }
+        public MpIcon Icon { get; set; }
 
         private IntPtr _sourceHandle;
         //for new MpApp's set appId and iconId to 0
@@ -37,6 +36,7 @@ namespace MonkeyPaste {
         public override void LoadDataRow(DataRow dr) {
             this.appId = Convert.ToInt32(dr["pk_MpAppId"].ToString());
             this.iconId = Convert.ToInt32(dr["fk_MpIconId"].ToString());
+            Icon = new MpIcon(iconId);
             this.SourcePath = dr["SourcePath"].ToString();
             if(Convert.ToInt32(dr["IsAppRejected"].ToString()) == 0) {
                 this.IsAppRejected = false;
@@ -53,30 +53,32 @@ namespace MonkeyPaste {
             if(this.iconId == 0) {
                 Icon = new MpIcon(0,_sourceHandle);
                 this.iconId = Icon.iconId;
-                MpSingletonController.Instance.GetMpData().AddMpIcon(Icon);
+                //MpSingletonController.Instance.GetMpData().AddMpIcon(Icon);
+            } else {
+                Icon = new MpIcon(iconId);
             }
             if(this.appId == 0) {
-                if(MpSingletonController.Instance.GetMpData().Db.NoDb) {
+                if(MpLogFormController.Db.NoDb) {
                     this.appId = ++TotalAppCount;
                     MapDataToColumns();
                     return;
                 }
-                DataTable dt = MpSingletonController.Instance.GetMpData().Db.Execute("select * from MpApp where SourcePath='" + this.SourcePath + "'");
+                DataTable dt = MpLogFormController.Db.Execute("select * from MpApp where SourcePath='" + this.SourcePath + "'");
                 if(dt.Rows.Count > 0) {
                     this.appId = Convert.ToInt32(dt.Rows[0]["pk_MpAppId"]);
                     this.iconId = Convert.ToInt32(dt.Rows[0]["fk_MpIconId"]);
                     isNew = false;
                 }
                 else {
-                    MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("insert into MpApp(fk_MpIconId,SourcePath,IsAppRejected) values (" + this.iconId + ",'" + SourcePath + "'," + Convert.ToInt32(this.IsAppRejected) + ")");//+ "',"+Convert.ToInt32(this.IsAppRejected)+",@0)",new List<string>() { "@0" },new List<object>() { MpHelperFunctions.Instance.ConvertImageToByteArray(MpSingletonController.Instance.GetMpLastWindowWatcher().LastIconImage) });
-                    this.appId = MpSingletonController.Instance.GetMpData().Db.GetLastRowId("MpApp","pk_MpAppId");
+                    MpLogFormController.Db.ExecuteNonQuery("insert into MpApp(fk_MpIconId,SourcePath,IsAppRejected) values (" + this.iconId + ",'" + SourcePath + "'," + Convert.ToInt32(this.IsAppRejected) + ")");//+ "',"+Convert.ToInt32(this.IsAppRejected)+",@0)",new List<string>() { "@0" },new List<object>() { MpHelperFunctions.Instance.ConvertImageToByteArray(MpSingletonController.Instance.GetMpLastWindowWatcher().LastIconImage) });
+                    this.appId = MpLogFormController.Db.GetLastRowId("MpApp","pk_MpAppId");
                     isNew = false;
                 }                
             }
             else {
-                MpSingletonController.Instance.GetMpData().Db.ExecuteNonQuery("update MpApp set fk_MpIconId=" + this.iconId + ",IsAppRejected="+Convert.ToInt32(this.IsAppRejected)+",SourcePath='" + this.SourcePath + "' where pk_MpAppId=" + this.appId);
+                MpLogFormController.Db.ExecuteNonQuery("update MpApp set fk_MpIconId=" + this.iconId + ",IsAppRejected="+Convert.ToInt32(this.IsAppRejected)+",SourcePath='" + this.SourcePath + "' where pk_MpAppId=" + this.appId);
             }
-            MpSingletonController.Instance.GetMpData().AddMpApp(this);
+            //MpSingletonController.Instance.GetMpData().AddMpApp(this);
             MapDataToColumns();
             Console.WriteLine(isNew ? "Created ":"Updated "+ " MpApp");
             Console.WriteLine(ToString());

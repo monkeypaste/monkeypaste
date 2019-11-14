@@ -55,8 +55,9 @@ namespace MonkeyPaste {
                 Console.WriteLine("MpLogMenuTileTokenAddTokenTextBoxController Warning, add invalidation to ui for duplicate/empty tag in CreateToken()");
                 return;
             }
-            ((MpTagChooserPanelController)Parent).TagPanelControllerList.Add(new MpTagPanelController(Parent,LogMenuTileTokenAddTokenTextBox.Text,MpHelperSingleton.Instance.GetRandomColor()));
+            ((MpTagChooserPanelController)Parent).TagPanelControllerList.Add(new MpTagPanelController(Parent,LogMenuTileTokenAddTokenTextBox.Text,MpHelperSingleton.Instance.GetRandomColor(),MpTagType.Custom));
             ((MpTagChooserPanelController)Parent).TagChooserPanel.Controls.Add(((MpTagChooserPanelController)Parent).TagPanelControllerList[((MpTagChooserPanelController)Parent).TagPanelControllerList.Count - 1].TagPanel);
+
             LogMenuTileTokenAddTokenTextBox.Text = string.Empty;
             ((MpTagChooserPanelController)Parent).Update();
         }

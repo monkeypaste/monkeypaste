@@ -11,10 +11,10 @@ using System.Windows.Forms;
 namespace MonkeyPaste {
     public class MpData {
 
-        private MpClient _client;
-        private MpUser _user;
+        //private MpClient _client;
+        //private MpUser _user;
 
-        public MpDb Db { get; set; }
+        //public MpDb Db { get; set; }
 
         private ObservableCollection<MpPasteHistory> _pasteList = new ObservableCollection<MpPasteHistory>();
         private ObservableCollection<MpIcon> _iconList = new ObservableCollection<MpIcon>();
@@ -22,12 +22,12 @@ namespace MonkeyPaste {
         private ObservableCollection<MpCopyItem> _copyItemList = new ObservableCollection<MpCopyItem>();
 
         public MpData(string dbPath,string dbPassword,string identityToken,string accessToken) {
-            Db = new MpDb(dbPath,dbPassword);
-            InitUser(identityToken);
-            InitClient(accessToken);            
+            //Db = new MpDb(dbPath,dbPassword);
+            //InitUser(identityToken);
+            //InitClient(accessToken);            
         }
         public void Init() {            
-            Db.InitDb();
+            //Db.InitDb();
             InitMpIcon();
             InitMpApp();
             InitMpCopyItem();
@@ -42,9 +42,9 @@ namespace MonkeyPaste {
             //_mpAppList.CollectionChanged += lf.CopyItemCollection_CollectionChanged;
             _copyItemList.CollectionChanged += lf.CopyItemCollection_CollectionChanged;
         }
-        public MpClient GetMpClient() {
-            return _client;
-        }
+        //public MpClient GetMpClient() {
+        //    return _client;
+        //}
         private void InitPasteHistory() {
             _pasteList = new ObservableCollection<MpPasteHistory>();
 
@@ -58,12 +58,12 @@ namespace MonkeyPaste {
                 Console.WriteLine("Init w/ " + _pasteList.Count + " pasted history items.");
             }
         }
-        private void InitUser(string idToken) {
-            _user = new MpUser() { IdentityToken = idToken };
-        }
-        private void InitClient(string accessToken) {
-            _client = new MpClient() { AccessToken = accessToken };
-        }
+        //private void InitUser(string idToken) {
+        //    _user = new MpUser() { IdentityToken = idToken };
+        //}
+        //private void InitClient(string accessToken) {
+        //    _client = new MpClient() { AccessToken = accessToken };
+        //}
         
         private void InitMpIcon() {
             _iconList = new ObservableCollection<MpIcon>();
@@ -292,7 +292,7 @@ namespace MonkeyPaste {
             return null;
         }
         public void ResetData() {
-            Db.ResetDb();
+            //Db.ResetDb();
             _iconList.Clear();
             _copyItemList.Clear();
             _appList.Clear();

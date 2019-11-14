@@ -21,6 +21,9 @@ namespace MonkeyPaste {
         private static readonly Lazy<MpHelperSingleton> lazy = new Lazy<MpHelperSingleton>(() => new MpHelperSingleton());
         public static MpHelperSingleton Instance { get { return lazy.Value; } }
 
+        public Image GetIconImage(IntPtr sourceHandle) {
+            return IconReader.GetFileIcon(MpHelperSingleton.Instance.GetProcessPath(sourceHandle),IconReader.IconSize.Large,false).ToBitmap();
+        }
         /// <summary>
         /// Method to rotate an Image object. The result can be one of three cases:
         /// - upsizeOk = true: output image will be larger than the input, and no clipping occurs 

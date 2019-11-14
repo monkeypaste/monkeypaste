@@ -14,6 +14,8 @@ using System.Windows.Media.Imaging;
 
 namespace MonkeyPaste {
     public class MpLogFormController : MpController {
+        public static MpDb Db { get; set; }
+
         public MpClipboardHelper ClipboardController { get; set; }
 
         public MpLogForm LogForm { get; set; }
@@ -30,7 +32,9 @@ namespace MonkeyPaste {
         private bool _isResizing = false;
        // private int _customHeight = 0;
 
-        public MpLogFormController(MpController Parent) : base(Parent) {
+        public MpLogFormController(MpController Parent,string dbPath,string dbPassword) : base(Parent) {
+            Db = new MpDb(dbPath,dbPassword,null,null);
+
             LogForm = new MpLogForm() {
                 AutoSize = false,                
                 AutoScaleMode = AutoScaleMode.Dpi,
@@ -54,13 +58,13 @@ namespace MonkeyPaste {
             _toggleLogHook = new MpKeyboardHook();
             _toggleLogHook.KeyPressed += _toggleLogHook_KeyPressed;
             _toggleLogHook.RegisterHotKey(ModifierKeys.Control,Keys.D);
-            _toggleLogHook.RegisterHotKey(ModifierKeys.None,Keys.CapsLock);
+            //_toggleLogHook.RegisterHotKey(ModifierKeys.None,Keys.CapsLock);
 
             LogMenuPanelController = new MpLogMenuPanelController(this);
             LogMenuPanelController.LogMenuSearchTextBoxController.SearchTextBox.TextChanged += SearchTextBox_TextChanged;
             LogForm.Controls.Add(LogMenuPanelController.LogMenuPanel);
 
-            TileChooserPanelController = new MpTileChooserPanelController(this);
+            TileChooserPanelController = new MpTileChooserPanelController(this,Db.GetCopyItems());
             LogForm.Controls.Add(TileChooserPanelController.TileChooserPanel);
                        
             //Update();
@@ -94,7 +98,7 @@ namespace MonkeyPaste {
 
         #region Events
         private void _moveHook_MouseMove(object sender,MouseEventArgs e) {
-            if(!LogForm.Visible) {
+            if(LogForm == null || !LogForm.Visible) {
                 return;
             }
             foreach(MpTilePanelController citc in TileChooserPanelController.TileControllerList) {
@@ -110,7 +114,7 @@ namespace MonkeyPaste {
             TileChooserPanelController.FilterTiles(searchText);
         }
         private void _clickHook_MouseClick(object sender,MouseEventArgs e) {
-            if(!LogForm.Visible) {
+            if(LogForm == null || !LogForm.Visible) {
                 return;
             }
             MpTilePanelController clickedTileController = null;
@@ -140,10 +144,15 @@ namespace MonkeyPaste {
         private void LogForm_Load(object sender,EventArgs e) {
             Update();
             ClipboardController = new MpClipboardHelper();
+            ClipboardController.ClipboardChangedEvent += ClipboardController_ClipboardChangedEvent;
             ClipboardController.Init();
             ShowLogForm();
         }
-        
+
+        private void ClipboardController_ClipboardChangedEvent(object sender,MpCopyItem copyItem) {
+            TileChooserPanelController.AddNewCopyItemPanel(copyItem);
+        }
+
         private void logForm_Closing(object sender,FormClosingEventArgs e) {
             HideLogForm();
             e.Cancel = true;
@@ -166,9 +175,13 @@ namespace MonkeyPaste {
             _escHook.KeyPressed += _escHook_KeyPressed;
             _escHook.RegisterHotKey(ModifierKeys.None,Keys.Escape);
 
-            EnterHook = new MpKeyboardHook();
-            EnterHook.KeyPressed += EnterHook_KeyPressed;
-            EnterHook.RegisterHotKey(ModifierKeys.None,Keys.Enter);
+            if(EnterHook == null) {
+                EnterHook = new MpKeyboardHook();
+                EnterHook.KeyPressed += EnterHook_KeyPressed;
+            }
+            if(!EnterHook.IsRegistered()) {
+                EnterHook.RegisterHotKey(ModifierKeys.None,Keys.Enter);
+            }
 
             _spaceHook = new MpKeyboardHook();
             _spaceHook.KeyPressed += _spaceHook_KeyPressed;
@@ -224,6 +237,7 @@ namespace MonkeyPaste {
                 _isFirstLoad = false;
             }
             LogForm.Show();
+            LogForm.Visible = true;
             LogForm.Activate();
             ActivateHotKeys();
         }
@@ -240,6 +254,9 @@ namespace MonkeyPaste {
             }
         }
         public void CloseLogForm() {
+            DeactivateHotKeys();
+            _clickHook.Dispose();
+            _moveHook.Dispose();
             LogForm.Close();
             LogForm = null;
         }
@@ -267,7 +284,8 @@ namespace MonkeyPaste {
 
             MpSingletonController.Instance.SetIgnoreNextClipboardEvent(false);
 
-            MpSingletonController.Instance.GetMpData().AddPasteHistory(new MpPasteHistory(copyItem,ClipboardController.GetLastWindowWatcher().LastHandle));
+            //only create to write to db
+            MpPasteHistory pasteHistory = new MpPasteHistory(copyItem,ClipboardController.GetLastWindowWatcher().LastHandle);
 
             MpSingletonController.Instance.AppendItem = null;
         }        

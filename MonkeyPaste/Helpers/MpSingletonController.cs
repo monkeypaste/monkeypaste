@@ -12,11 +12,10 @@ namespace MonkeyPaste {
         public static MpSingletonController Instance { get { return lazy.Value; } }
 
         //public MpInputEventType InputEvent = new MpInputEventType();
-        private Dictionary<string,MpKeyboardHook> _hotkeyHookDictionary;
-        private MpData _data;
+        //private Dictionary<string,MpKeyboardHook> _hotkeyHookDictionary;
+        //private MpData _data;
 
-        private int _scrollWheelDelta { get; set; }
-        public int ScrollWheelDelta { get { return _scrollWheelDelta; } set { _scrollWheelDelta = value; } }
+        public int ScrollWheelDelta { get; set; } = 0;
 
         public MpRegistryHelper Rh { get; set; } = new MpRegistryHelper();
 
@@ -40,36 +39,36 @@ namespace MonkeyPaste {
         public void ScrollWheelListener(object sender, MouseEventArgs e) {
             ScrollWheelDelta += e.Delta;
         }
-        public void Init(object context,string dbPath,string dbPassword,string idToken,string accessToken) {
+        public void Init(object context) {
             _appContext = context;
             Rand = new Random(Convert.ToInt32(DateTime.Now.Second));
-            _data = new MpData(dbPath,dbPassword,idToken,accessToken);
-            _scrollWheelDelta = 0;       
-            _hotkeyHookDictionary = new Dictionary<string,MpKeyboardHook>();
-            _data.Init();
+            //_data = new MpData(dbPath,dbPassword,idToken,accessToken);
+            //_hotkeyHookDictionary = new Dictionary<string,MpKeyboardHook>();
+            //_data.Init();
         }
-        public void ExitApplication() {            
+        //public MpKeyboardHook GetKeyboardHook(string key) {
+        //    if(_hotkeyHookDictionary.ContainsKey(key)) {
+        //        return _hotkeyHookDictionary[key];
+        //    }
+        //    Console.WriteLine("Error, no hotkey found for " + key);
+        //    return null;
+        //}
+        //public void SetKeyboardHook(string key,MpKeyboardHook newHook) {
+        //    if(_hotkeyHookDictionary.ContainsKey(key)) {
+        //        _hotkeyHookDictionary[key] = newHook;
+        //    }
+        //    else {
+        //        _hotkeyHookDictionary.Add(key,newHook);
+        //    }
+        //}
+        
+        //public MpData GetMpData() {
+        //    return _data;
+        //}
+        public void ExitApplication() {
             ((MpApplicationContext)_appContext).ExitCore();
         }
-        public MpKeyboardHook GetKeyboardHook(string key) {
-            if(_hotkeyHookDictionary.ContainsKey(key)) {
-                return _hotkeyHookDictionary[key];
-            }
-            Console.WriteLine("Error, no hotkey found for " + key);
-            return null;
-        }
-        public void SetKeyboardHook(string key,MpKeyboardHook newHook) {
-            if(_hotkeyHookDictionary.ContainsKey(key)) {
-                _hotkeyHookDictionary[key] = newHook;
-            }
-            else {
-                _hotkeyHookDictionary.Add(key,newHook);
-            }
-        }
         
-        public MpData GetMpData() {
-            return _data;
-        }
         public bool GetIgnoreNextClipboardEvent() {
             return _ignoreNextClipboardEvent;
         }

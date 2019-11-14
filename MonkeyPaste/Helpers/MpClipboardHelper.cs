@@ -14,6 +14,9 @@ namespace MonkeyPaste {
 
         private System.ComponentModel.IContainer _components = null;
 
+        public delegate void ClipboardChanged(object sender,MpCopyItem copyItem);
+        public event ClipboardChanged ClipboardChangedEvent;
+
         public MpClipboardHelper() : base() {
             this.Load += MpClipboardController_Load;
         }
@@ -59,7 +62,29 @@ namespace MonkeyPaste {
                             return;
                         }
                         if(iData != null) {
-                            MpSingletonController.Instance.GetMpData().AddMpCopyItem(iData,_lastWindowWatcher.LastHandle);
+                            MpCopyItem ci = null;
+                            if(iData.GetDataPresent(DataFormats.Bitmap)) {
+                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.Image,MpLogFormController.Db.Client.MpClientId,0,(Image)iData.GetData(DataFormats.Bitmap,true),_lastWindowWatcher.LastHandle);// CreateCopyItem(0,MpCopyItemType.None,0,0,null,IntPtr.Zero);// ((Image)iData.GetData(DataFormats.Bitmap,true),sourceHandle);
+                            }
+                            else if(iData.GetDataPresent(DataFormats.FileDrop)) {
+                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.FileList,MpLogFormController.Db.Client.MpClientId,0,(string[])iData.GetData(DataFormats.FileDrop,true),_lastWindowWatcher.LastHandle);
+                            }
+                            else if(iData.GetDataPresent(DataFormats.Rtf)) {
+                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.RichText,MpLogFormController.Db.Client.MpClientId,0,(string)iData.GetData(DataFormats.Rtf),_lastWindowWatcher.LastHandle);
+                            }
+                            else if(iData.GetDataPresent(DataFormats.Html)) {
+                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.HTMLText,MpLogFormController.Db.Client.MpClientId,0,(string)iData.GetData(DataFormats.Html),_lastWindowWatcher.LastHandle);
+                            }
+                            else if(iData.GetDataPresent(DataFormats.Text)) {
+                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.Text,MpLogFormController.Db.Client.MpClientId,0,(string)iData.GetData(DataFormats.Text),_lastWindowWatcher.LastHandle);
+                            }
+                            else {
+                                Console.WriteLine("MpData error clipboard data is not known format");
+                                return;
+                            }
+                            if(ci != null) {
+                                ClipboardChangedEvent(this,ci);
+                            }
                         }
                     }
                     catch(Exception e) {
