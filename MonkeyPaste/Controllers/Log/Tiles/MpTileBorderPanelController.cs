@@ -17,6 +17,7 @@ namespace MonkeyPaste {
                 BorderColor = Properties.Settings.Default.TileSelectedColor,
                 Radius = Properties.Settings.Default.TileBorderRadius
             };
+            Link(new List<MpIView>() { TileBorderPanel });
         }
         public override void Update() {
             //selecred tile panel rect

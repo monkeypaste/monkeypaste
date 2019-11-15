@@ -86,10 +86,11 @@ namespace MonkeyPaste {
                     Console.WriteLine("Warning overriding view: " + vo.ViewName);
                     ControllerDictionary[ControllerType][vo.ViewName] = vo;
                 }
-                if(vo.ViewData.GetType().IsSubclassOf(typeof(ContainerControl)) || vo.ViewData.GetType().IsSubclassOf(typeof(Control))) {
+                if(vo.ViewData.GetType().IsSubclassOf(typeof(Control))) {
                     ((Control)vo.ViewData).KeyPress += View_KeyPress;
+                    ((Control)vo.ViewData).Click += View_Click;
+                    ViewList.Add((MpIView)vo);
                 }
-                ((Control)vo.ViewData).Click += View_Click;
             }
         }
         

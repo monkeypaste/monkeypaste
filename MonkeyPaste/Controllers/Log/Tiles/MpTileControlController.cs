@@ -40,7 +40,7 @@ namespace MonkeyPaste {
                     if(ci.GetData().GetType() == typeof(string[])) {
                         int maxWidth = int.MinValue;
                         foreach(string fileOrPathStr in (string[])ci.GetData()) {
-                            MpFileListItemRowPanelController newFlirp = new MpFileListItemRowPanelController(ItemControl.Controls.Count,fileOrPathStr,this);
+                            MpFileListItemRowPanelController newFlirp = new MpFileListItemRowPanelController(tileId,ItemControl.Controls.Count,fileOrPathStr,this);
                             Point p = newFlirp.GetFileListItemRowPanel().Location;
                             p.Y = newFlirp.GetFileListItemRowPanel().Bottom * ItemControl.Controls.Count;
                             newFlirp.GetFileListItemRowPanel().Location = p;
@@ -76,6 +76,7 @@ namespace MonkeyPaste {
             ItemPanel.Controls.Add(ItemControlPanel);
 
             ItemControl.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
+
             Link(new List<MpIView> { (MpIView)ItemControl});
         }
         public override void Update() {

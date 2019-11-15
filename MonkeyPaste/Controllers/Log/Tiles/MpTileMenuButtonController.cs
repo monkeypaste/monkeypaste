@@ -39,7 +39,7 @@ namespace MonkeyPaste {
             TileMenuButton.KeyDown += TileMenuButton_KeyDown;
             TileMenuButton.KeyUp += TileMenuButton_KeyUp;
 
-            //Link(new List<MpIView> { TileMenuButton});
+            Link(new List<MpIView> { TileMenuButton});
         }
         public override void Update() {
             int totalButtons = ((MpTileMenuPanelController)Parent).TileMenuButtonControllerList.Count;

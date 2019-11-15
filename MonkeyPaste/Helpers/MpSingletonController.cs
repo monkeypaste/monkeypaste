@@ -34,7 +34,7 @@ namespace MonkeyPaste {
 
         public float TileTitleFontSize { get; set; }
 
-        public int CustomLogHeight { get; set; }
+       // public int CustomLogHeight { get; set; }
 
         public void ScrollWheelListener(object sender, MouseEventArgs e) {
             ScrollWheelDelta += e.Delta;

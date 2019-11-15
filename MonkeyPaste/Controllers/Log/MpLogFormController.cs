@@ -82,9 +82,9 @@ namespace MonkeyPaste {
         public override void Update() {
             //current screen rect
             Rectangle sr = MpHelperSingleton.Instance.GetScreenBoundsWithMouse();
-
-            int h = MpSingletonController.Instance.CustomLogHeight > 0 ? MpSingletonController.Instance.CustomLogHeight : (int)((float)sr.Height * Properties.Settings.Default.LogScreenHeightRatio);
-            MpSingletonController.Instance.CustomLogHeight = h;
+            
+            int h = _isFirstLoad ? (int)((float)sr.Height * Properties.Settings.Default.LogScreenHeightRatio) : LogForm.Height;
+            //MpSingletonController.Instance.CustomLogHeight = h;
 
             LogForm.SetBounds(0,sr.Height - h,sr.Width,h);
 
@@ -224,11 +224,12 @@ namespace MonkeyPaste {
             PasteCopyItem();
         }
         private void LogForm_Resize(object sender,EventArgs e) {
-            if(_isResizing == false) {
-                _isResizing = true;
-                TileChooserPanelController.HideTiles();
-            }
-            MpSingletonController.Instance.CustomLogHeight = LogForm.Bounds.Height;
+            //if(_isResizing == false) {
+            //    _isResizing = true;
+            //    TileChooserPanelController.HideTiles();
+            //}
+            //MpSingletonController.Instance.CustomLogHeight = LogForm.Bounds.Height;
+            
             Update();
         }       
         public void ShowLogForm() {

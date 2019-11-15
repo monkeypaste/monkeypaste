@@ -320,13 +320,14 @@
     <Compile Include="App\GdkApi.cs" />
     <Compile Include="App\MpApplicationController.cs" />
     <Compile Include="App\MpCompatibility.cs" />
-    <Compile Include="Controllers\Log\MpLogMenuPanelController.cs" />
-    <Compile Include="Controllers\Log\MpSearchTextBoxController.cs" />
-    <Compile Include="Controllers\Log\Tags\MpAddTagTextBoxController.cs" />
-    <Compile Include="Controllers\Log\Tags\MpTagButtonController.cs" />
-    <Compile Include="Controllers\Log\Tags\MpTagChooserPanelController.cs" />
-    <Compile Include="Controllers\Log\Tags\MpTagTextBoxController.cs" />
-    <Compile Include="Controllers\Log\Tags\MpTagPanelController.cs" />
+    <Compile Include="Controllers\Log\Menu\MpLogMenuPanelController.cs" />
+    <Compile Include="Controllers\Log\Menu\MpSearchIconController.cs" />
+    <Compile Include="Controllers\Log\Menu\MpSearchTextBoxController.cs" />
+    <Compile Include="Controllers\Log\Menu\Tags\MpAddTagTextBoxController.cs" />
+    <Compile Include="Controllers\Log\Menu\Tags\MpTagButtonController.cs" />
+    <Compile Include="Controllers\Log\Menu\Tags\MpTagChooserPanelController.cs" />
+    <Compile Include="Controllers\Log\Menu\Tags\MpTagTextBoxController.cs" />
+    <Compile Include="Controllers\Log\Menu\Tags\MpTagPanelController.cs" />
     <Compile Include="Controllers\Log\Tiles\MpTileBorderPanelController.cs" />
     <Compile Include="Controllers\MpTaskbarIconController.cs" />
     <Compile Include="Controllers\MpController.cs" />
@@ -343,6 +344,7 @@
     <Compile Include="Helpers\MpColorPallete.cs" />
     <Compile Include="Helpers\MpCursorPosition.cs" />
     <Compile Include="Helpers\MpMouseHook.cs" />
+    <Compile Include="Helpers\MpTypeHelper.cs" />
     <Compile Include="Model\MpPasteHistory.cs" />
     <Compile Include="Helpers\MpHelperSingleton.cs" />
     <Compile Include="Controllers\Log\Tiles\MpFileListItemRowPanelController.cs" />
@@ -366,6 +368,15 @@
     <Compile Include="View\MpButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="View\MpFileListItemRowIcon.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\MpFileListItemRowLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\MpFileListItemRowPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="View\MpGlassyPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -375,7 +386,16 @@
     <Compile Include="View\MpLogMenuTileTokenAddTokenTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="View\MpSearchIconBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="View\MpTagButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\MpTagLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\MpTileControlRichTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpTokenChooserPanel.cs">
@@ -391,9 +411,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpTileControlPictureBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="View\MpTileControlRichTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpTileControlScrollableControl.cs">
@@ -418,9 +435,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpTileMenuPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="View\MpRichTextEditorPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpRoundedPanel.cs">
