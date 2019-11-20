@@ -11,7 +11,7 @@ namespace MonkeyPaste {
         public MpSearchBox SearchTextBox { get; set; }
 
         public MpSearchTextBoxController(MpController Parent) : base(Parent) {
-            SearchTextBox = new MpSearchBox(this) {
+            SearchTextBox = new MpSearchBox() {
                 ReadOnly = false,
                 Multiline = false,
                 WordWrap = false,

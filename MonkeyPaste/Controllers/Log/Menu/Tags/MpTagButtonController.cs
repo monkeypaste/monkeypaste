@@ -8,25 +8,26 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {
     public class MpTagButtonController : MpController {
-        public MpTagButton LogMenuTagButton { get; set; }
+        public MpTagButton TagButton { get; set; }
         public delegate void ButtonClicked(object sender,EventArgs e);
         public event ButtonClicked ButtonClickedEvent;
 
-        public MpTagButtonController(MpController parentController) : base(parentController) {
-            LogMenuTagButton = new MpTagButton(this,((MpTagPanelController)parentController).TokenId) {        
+        public MpTagButtonController(MpController parentController,bool isNew) : base(parentController) {
+            TagButton = new MpTagButton(((MpTagChooserPanelController)((MpTagPanelController)parentController).Parent).TagPanelControllerList.IndexOf(((MpTagPanelController)Parent))) {                    
                 Margin = new Padding(3),
                 Padding = Padding.Empty,
+                TabIndex = 1,
                 BackColor =((MpTagPanelController)Parent).TagPanel.BackColor,
                 BorderStyle = BorderStyle.None,
                 SizeMode = PictureBoxSizeMode.StretchImage,
-                Image = Properties.Resources.close2,
-                DefaultImage = Properties.Resources.close2,
-                OverImage = Properties.Resources.close,
-                DownImage = Properties.Resources.close
+                Image = isNew ? Properties.Resources.add2 : Properties.Resources.close2,
+                DefaultImage = isNew ? Properties.Resources.add2 : Properties.Resources.close2,
+                OverImage = isNew ? Properties.Resources.add : Properties.Resources.close,
+                DownImage = isNew ? Properties.Resources.add : Properties.Resources.close
             };
-            LogMenuTagButton.MouseHover += LogMenuTileTokenButton_MouseHover;
-            LogMenuTagButton.MouseLeave += LogMenuTileTokenButton_MouseLeave;
-            LogMenuTagButton.MouseClick += LogMenuTileTokenButton_MouseClick;
+            TagButton.MouseHover += LogMenuTileTokenButton_MouseHover;
+            TagButton.MouseLeave += LogMenuTileTokenButton_MouseLeave;
+            TagButton.MouseClick += LogMenuTileTokenButton_MouseClick;
         }
 
         private void LogMenuTileTokenButton_MouseClick(object sender,MouseEventArgs e) {
@@ -34,11 +35,11 @@ namespace MonkeyPaste {
         }
 
         private void LogMenuTileTokenButton_MouseLeave(object sender,EventArgs e) {
-            LogMenuTagButton.Image = LogMenuTagButton.DefaultImage;
+            TagButton.Image = TagButton.DefaultImage;
         }
 
         private void LogMenuTileTokenButton_MouseHover(object sender,EventArgs e) {
-            LogMenuTagButton.Image = LogMenuTagButton.OverImage;
+            TagButton.Image = TagButton.OverImage;
         }
 
         public override void Update() {
@@ -52,9 +53,11 @@ namespace MonkeyPaste {
             int ttfs = (int)(tph * Properties.Settings.Default.LogMenuTileTokenPanelHeightRatio);
             int h = tpr.Height;// (int)((float)tpr.Height * Properties.Settings.Default.LogMenuTileTokenFontSizeRatio);
             int p = (int)(ttfs/4.0f);// (int)((float)(tpr.Height - h)/2.0f);
-            LogMenuTagButton.Size = new Size(ttfs,ttfs);
-            LogMenuTagButton.Location = new Point(tpr.Width - ttfs - p,(int)((float)p*0.5f));
-            LogMenuTagButton.BringToFront();
+            TagButton.Size = new Size(ttfs,ttfs);
+            TagButton.Location = new Point(tpr.Width - ttfs - p,(int)((float)p*0.5f));
+            TagButton.BringToFront();
+
+            TagButton.Invalidate();
         }
     }
 }

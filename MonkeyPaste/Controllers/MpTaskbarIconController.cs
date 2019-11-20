@@ -20,22 +20,24 @@ namespace MonkeyPaste {
 
         public MpSettingsForm SettingsForm { get; set; }
         public MpHelpForm HelpForm { get; set; }
-        public NotifyIcon NotifyIcon { get; set; }                          // the icon that sits in the system tray      
+        public NotifyIcon TrayIcon;                       // the icon that sits in the system tray      
 
         public static IntPtr AppHandle;
         
-        public MpTaskbarIconController(object context,MpController parent) : base(parent) {            
+        public MpTaskbarIconController(object context,MpController parent) : base(parent) {
+            InitTrayMenu();
             MpSingletonController.Instance.Init(context);//,(string)MpSingletonController.Instance.Rh.GetValue("DBPath"),(string)MpSingletonController.Instance.Rh.GetValue("DBPassword"),null,null);
 
             //client rect of active screen
             Rectangle ascr = MpHelperSingleton.Instance.GetScreenBoundsWithMouse();
-            _mouseHitScreenTopHook = new MpMouseHook();
+
+            /*_mouseHitScreenTopHook = new MpMouseHook();
             _mouseHitScreenTopHook.RegisterMouseEvent(MpMouseEvent.HitBox,new Rectangle(0,0,ascr.Width,15));
             _mouseHitScreenTopHook.MouseEvent += _mouseHitScreenTopHook_MouseEvent;
 
             _mouseUpHook = new MpMouseHook();
             _mouseUpHook.RegisterMouseEvent(MpMouseEvent.UpL);
-            _mouseUpHook.MouseEvent += _mouseUpHook_MouseEvent;
+            _mouseUpHook.MouseEvent += _mouseUpHook_MouseEvent;*/
 
             _toggleSettingsHook = new MpKeyboardHook();
             _toggleSettingsHook.RegisterHotKey(ModifierKeys.Alt,Keys.D);
@@ -47,7 +49,6 @@ namespace MonkeyPaste {
 
             HelpForm = new MpHelpForm();
             SettingsForm = new MpSettingsForm();
-            InitTrayMenu();
 
             LogFormController = new MpLogFormController(
                 this,
@@ -76,15 +77,32 @@ namespace MonkeyPaste {
         }
 
         private void _toggleAppendModeHook_KeyPressed(object sender,KeyPressedEventArgs e) {
-            MpSingletonController.Instance.InAppendMode = !MpSingletonController.Instance.InAppendMode;
-            if(MpSingletonController.Instance.InAppendMode) {
-                NotifyIcon.BalloonTipText = "Append mode activated";
-                NotifyIcon.ShowBalloonTip(3000);
-            } else {
-                MpSingletonController.Instance.AppendItem = null;
-                NotifyIcon.BalloonTipText = "Append mode deactivated";
-                NotifyIcon.ShowBalloonTip(3000);
+            Properties.Settings.Default.IsAppendModeActive = !Properties.Settings.Default.IsAppendModeActive;
+            //LogFormController.LogForm.Invoke((MethodInvoker)delegate {
+            //    if(Properties.Settings.Default.IsAppendModeActive) {
+            //        NotifyIcon.BalloonTipText = "Append mode activated";
+            //        NotifyIcon.ShowBalloonTip(3000);
+            //    }
+            //    else {
+            //        MpSingletonController.Instance.AppendItem = null;
+            //        NotifyIcon.BalloonTipText = "Append mode deactivated";
+            //        NotifyIcon.ShowBalloonTip(3000);
+            //    }
+            //});
+            Console.WriteLine("Append Mode: " + Properties.Settings.Default.IsAppendModeActive);
+            if(Properties.Settings.Default.IsAppendModeActive) {
+                TrayIcon.BalloonTipText = "Append mode activated";
+                TrayIcon.ShowBalloonTip(5000);
+                if(LogFormController.TileChooserPanelController.SelectedTilePanelController != null && LogFormController.TileChooserPanelController.SelectedTilePanelController.CopyItem.copyItemTypeId == MpCopyItemType.Text) {
+                    MpSingletonController.Instance.AppendItem = LogFormController.TileChooserPanelController.SelectedTilePanelController.CopyItem;
+                }
             }
+            else {
+                MpSingletonController.Instance.AppendItem = null;
+                TrayIcon.BalloonTipText = "Append mode deactivated";
+                TrayIcon.ShowBalloonTip(5000);
+            }
+
         }
 
         private void Exit() {
@@ -98,22 +116,23 @@ namespace MonkeyPaste {
             if(LogFormController != null) {
                 LogFormController.CloseLogForm();
             }
-            NotifyIcon.Visible = false; // should remove lingering tray icon
+            TrayIcon.Visible = false; // should remove lingering tray icon
             MpSingletonController.Instance.ExitApplication();            
         }
         private void InitTrayMenu() {
-            NotifyIcon = new NotifyIcon() {
+            TrayIcon = new NotifyIcon() {
                 ContextMenuStrip = new ContextMenuStrip(),
                 Icon = MpHelperSingleton.Instance.GetIconFromBitmap(Properties.Resources.monkey3),
                 Text = DefaultTooltip,
                 Visible = true
             };
-            NotifyIcon.MouseUp += NotifyIcon_MouseUp;
-            NotifyIcon.MouseDoubleClick += NotifyIcon_DoubleClick;
-
-            NotifyIcon.ContextMenuStrip.Items.Clear();
-            NotifyIcon.BalloonTipText = "Howdy there";
-            NotifyIcon.ShowBalloonTip(30000);
+            TrayIcon.MouseUp += NotifyIcon_MouseUp;
+            TrayIcon.MouseDoubleClick += NotifyIcon_DoubleClick;
+            TrayIcon.BalloonTipTitle = "Monkey Paste";
+            TrayIcon.BalloonTipText = "Howdy there";
+            TrayIcon.ShowBalloonTip(5000);
+            TrayIcon.ContextMenuStrip.Items.Clear();
+            
             ToolStripMenuItem settingsSubMenu = new ToolStripMenuItem("&Settings");
             settingsSubMenu.Font = new Font(Properties.Settings.Default.LogFont,Properties.Settings.Default.LogPanelTileFontSize);
             
@@ -129,11 +148,14 @@ namespace MonkeyPaste {
             systemSubMenu.DropDownItems.Add(ToolStripMenuItemWithHandler("&Preferences",preferences_Click));
             settingsSubMenu.DropDownItems.Add(systemSubMenu);
 
-            NotifyIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("&Pause",_toggleActive_Click));
-            NotifyIcon.ContextMenuStrip.Items.Add(settingsSubMenu);
-            NotifyIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("&Help/About",showHelpItem_Click));
-            NotifyIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
-            NotifyIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("&Exit",exitItem_Click));
+            TrayIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("&Pause",_toggleActive_Click));
+            TrayIcon.ContextMenuStrip.Items.Add(settingsSubMenu);
+            TrayIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("&Help/About",showHelpItem_Click));
+            TrayIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
+            TrayIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("&Exit",exitItem_Click));
+
+            //NotifyIcon.BalloonTipText = "Howdy there";
+            //NotifyIcon.ShowBalloonTip(5000);
         }
         private async void ShowLoginForm() {
             if(_skipAuth) {
@@ -176,16 +198,16 @@ namespace MonkeyPaste {
         private void _toggleSettingsHook_KeyPressed(object sender,KeyPressedEventArgs e) {
             Console.WriteLine("Pressed settings toggle");
 
-            if(NotifyIcon.ContextMenuStrip != null) {
+            if(TrayIcon.ContextMenuStrip != null) {
                 MethodInfo mi = typeof(NotifyIcon).GetMethod("HideContextMenu",BindingFlags.Instance | BindingFlags.NonPublic);
-                mi.Invoke(NotifyIcon,null);
-                NotifyIcon.ContextMenuStrip = null;
+                mi.Invoke(TrayIcon,null);
+                TrayIcon.ContextMenuStrip = null;
             }
             else {
                 InitTrayMenu();
                 MethodInfo mi = typeof(NotifyIcon).GetMethod("ShowContextMenu",BindingFlags.Instance | BindingFlags.NonPublic);
-                mi.Invoke(NotifyIcon,null);
-                NotifyIcon.ContextMenuStrip.Items[0].Select();
+                mi.Invoke(TrayIcon,null);
+                TrayIcon.ContextMenuStrip.Items[0].Select();
             }
         }
         private ToolStripMenuItem ToolStripMenuItemWithHandler(string displayText,EventHandler eventHandler) {
@@ -195,7 +217,7 @@ namespace MonkeyPaste {
             }
             return item;
         }
-        private void showHelpItem_Click(object sender,EventArgs e) { ShowHelpForm(); }
+        private void showHelpItem_Click(object sender,EventArgs e) { ShowHelpForm(); } 
         private void showSettingsItem_Click(object sender,EventArgs e) { ShowSettingsForm(); }
         private void exitItem_Click(object sender,EventArgs e) { Exit(); }        
         private void _toggleActive_Click(object sender,EventArgs e) { Console.WriteLine("Pause/Resume clicked"); }
@@ -234,15 +256,15 @@ namespace MonkeyPaste {
         private void NotifyIcon_MouseUp(object sender,MouseEventArgs e) {
             if(e.Button == MouseButtons.Right) {
                 MethodInfo mi = typeof(NotifyIcon).GetMethod("ShowContextMenu",BindingFlags.Instance | BindingFlags.NonPublic);
-                mi.Invoke(NotifyIcon,null);
+                mi.Invoke(TrayIcon,null);
             }
         }
         private void NotifyIcon_DoubleClick(object sender,MouseEventArgs e) {
             LogFormController.ToggleLogForm();
         }
         private void ContextMenuStrip_Closing(object sender,ToolStripDropDownClosingEventArgs e) {
-            NotifyIcon.ContextMenuStrip.Hide();
-            NotifyIcon.ContextMenuStrip = null;
+            TrayIcon.ContextMenuStrip.Hide();
+            TrayIcon.ContextMenuStrip = null;
         }
         private void ContextMenuStrip_Opening(object sender,System.ComponentModel.CancelEventArgs e) { }
 

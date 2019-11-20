@@ -48,7 +48,7 @@ namespace MonkeyPaste {
                     try {
                         if(MpSingletonController.Instance.GetIgnoreNextClipboardEvent()) {
                             //MpSingletonController.Instance.SetIgnoreNextClipboardEvent(false);
-                            //SendMessage(_nextClipboardViewer,m.Msg,m.WParam,m.LParam);
+                            WinApi.SendMessage(_nextClipboardViewer,m.Msg,m.WParam,m.LParam);
                             //base.WndProc(ref m);
                             return;
                             //break;
@@ -70,10 +70,10 @@ namespace MonkeyPaste {
                                 ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.FileList,MpLogFormController.Db.Client.MpClientId,0,(string[])iData.GetData(DataFormats.FileDrop,true),_lastWindowWatcher.LastHandle);
                             }
                             else if(iData.GetDataPresent(DataFormats.Rtf)) {
-                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.RichText,MpLogFormController.Db.Client.MpClientId,0,(string)iData.GetData(DataFormats.Rtf),_lastWindowWatcher.LastHandle);
+                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.Text,MpLogFormController.Db.Client.MpClientId,0,(string)iData.GetData(DataFormats.Text),_lastWindowWatcher.LastHandle);
                             }
                             else if(iData.GetDataPresent(DataFormats.Html)) {
-                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.HTMLText,MpLogFormController.Db.Client.MpClientId,0,(string)iData.GetData(DataFormats.Html),_lastWindowWatcher.LastHandle);
+                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.Text,MpLogFormController.Db.Client.MpClientId,0,(string)iData.GetData(DataFormats.Text),_lastWindowWatcher.LastHandle);
                             }
                             else if(iData.GetDataPresent(DataFormats.Text)) {
                                 ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.Text,MpLogFormController.Db.Client.MpClientId,0,(string)iData.GetData(DataFormats.Text),_lastWindowWatcher.LastHandle);
@@ -81,6 +81,9 @@ namespace MonkeyPaste {
                             else {
                                 Console.WriteLine("MpData error clipboard data is not known format");
                                 return;
+                            }
+                            if(ci.copyItemTypeId == MpCopyItemType.Text && (ci.GetData() == null || (string)ci.GetData() == string.Empty)) {
+                                ci = null;
                             }
                             if(ci != null) {
                                 ClipboardChangedEvent(this,ci);

@@ -28,7 +28,7 @@ namespace MonkeyPaste {
             this.IsAppRejected = isAppRejected;
             this._sourceHandle = sourceHandle;
 
-            WriteToDatabase();
+            //WriteToDatabase();
         }
         public MpApp(DataRow dr) {
             LoadDataRow(dr);
@@ -52,11 +52,11 @@ namespace MonkeyPaste {
             bool isNew = false;
             if(this.iconId == 0) {
                 Icon = new MpIcon(0,_sourceHandle);
-                this.iconId = Icon.iconId;
-                //MpSingletonController.Instance.GetMpData().AddMpIcon(Icon);
             } else {
                 Icon = new MpIcon(iconId);
             }
+            Icon.WriteToDatabase();
+            this.iconId = Icon.iconId;
             if(this.appId == 0) {
                 if(MpLogFormController.Db.NoDb) {
                     this.appId = ++TotalAppCount;
@@ -78,8 +78,9 @@ namespace MonkeyPaste {
             else {
                 MpLogFormController.Db.ExecuteNonQuery("update MpApp set fk_MpIconId=" + this.iconId + ",IsAppRejected="+Convert.ToInt32(this.IsAppRejected)+",SourcePath='" + this.SourcePath + "' where pk_MpAppId=" + this.appId);
             }
-            //MpSingletonController.Instance.GetMpData().AddMpApp(this);
-            MapDataToColumns();
+            if(isNew) {
+                MapDataToColumns();
+            }
             Console.WriteLine(isNew ? "Created ":"Updated "+ " MpApp");
             Console.WriteLine(ToString());
         }

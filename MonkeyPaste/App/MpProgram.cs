@@ -13,7 +13,7 @@ namespace MonkeyPaste {
         [STAThread]
         static void Main() {
             if(Environment.OSVersion.Version.Major >= 6) {
-                bool result = WinApi.SetProcessDPIAware();
+                //bool result = WinApi.SetProcessDPIAware();
             }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -22,21 +22,13 @@ namespace MonkeyPaste {
                 Application.Run(applicationContext);
             }
             catch(Exception ex) {
-                if(applicationContext != null) {
-                    applicationContext.ApplicationController.TaskbarController.NotifyIcon.Visible = false;
-                    applicationContext.ApplicationController.TaskbarController.NotifyIcon.Dispose();
-                }
-
+                
                 Console.WriteLine("Program terminated: " + ex.ToString());
             }
             AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
         }
         static void CurrentDomain_ProcessExit(object sender,EventArgs e) {
-            if(applicationContext != null) {
-                applicationContext.ApplicationController.TaskbarController.NotifyIcon.Visible = false;
-                applicationContext.ApplicationController.TaskbarController.NotifyIcon.Dispose();
-            }
-
+            
             Console.WriteLine("Exiting "+DateTime.Now.ToString());
         }
     }

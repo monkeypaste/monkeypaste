@@ -25,7 +25,7 @@ namespace MonkeyPaste {
         //public MpTileMenuPanelController TileMenuPanelController { get; set; }
         public MpTileDetailsPanelController TileDetailsPanelController { get; set; }
 
-        public MpMouseHook MouseOverItemControlHook { get; set; }
+       // public MpMouseHook MouseOverItemControlHook { get; set; }
 
         public MpCopyItem CopyItem { get; set; }
 
@@ -52,7 +52,7 @@ namespace MonkeyPaste {
             TileTitlePanelController = new MpTileTitlePanelController(tileId,panelId,ci,this);
             TilePanel.Controls.Add(TileTitlePanelController.TileTitlePanel);            
 
-            TileDetailsPanelController = new MpTileDetailsPanelController(tileId,panelId,this);
+            TileDetailsPanelController = new MpTileDetailsPanelController(ci,tileId,panelId,this);
             TilePanel.Controls.Add(TileDetailsPanelController.TileDetailsPanel);
             
             TileControlController = new MpTileControlController(tileId,panelId,ci,this);
@@ -60,8 +60,8 @@ namespace MonkeyPaste {
 
             //TileMenuPanelController = new MpTileMenuPanelController(tileId,panelId,this);
 
-            MouseOverItemControlHook = new MpMouseHook();
-            MouseOverItemControlHook.MouseEvent += _mouseOverItemControlHook_MouseEvent;
+            //MouseOverItemControlHook = new MpMouseHook();
+            //MouseOverItemControlHook.MouseEvent += _mouseOverItemControlHook_MouseEvent;
 
             Link(new List<MpIView> { TilePanel });
         }
@@ -72,13 +72,13 @@ namespace MonkeyPaste {
 
         }
         public override void Update() {
-            Update(((MpTileChooserPanelController)Parent).TileChooserPanel.Bounds,new List<float>() { Properties.Settings.Default.TileChooserPadHeightRatio },new List<bool>() { true },new List<bool> { true });
+            //Update(((MpTileChooserPanelController)Parent).TileChooserPanel.Bounds,new List<float>() { Properties.Settings.Default.TileChooserPadHeightRatio },new List<bool>() { true },new List<bool> { true });
             //if(TilePanel.Visible == false) {
             //    return;
             //}
             //tile chooser panel rect
             Rectangle tcpr = ((MpTileChooserPanelController)Parent).TileChooserPanel.Bounds;
-            int listIdx = ((MpTileChooserPanelController)Parent).TileControllerList.IndexOf(this);
+            int listIdx = ((MpTileChooserPanelController)Parent).GetVisibleTilePanelControllerList().IndexOf(this);
             //tile padding
             int tp = (int)(Properties.Settings.Default.TileChooserPadHeightRatio * tcpr.Height);
            //tile size
@@ -86,10 +86,13 @@ namespace MonkeyPaste {
             TilePanel.Location = new System.Drawing.Point((listIdx * tcpr.Height + tp)+OffsetX,tp);
             TilePanel.Size = new System.Drawing.Size(ts,ts);
 
+            TilePanel.Invalidate();
+
             TileTitlePanelController.Update();
             TileControlController.Update();
             TileDetailsPanelController.Update();
             //TileMenuPanelController.Update();
+
         }
         public void ShowMenu() {            
             //TileMenuPanelController.TileMenuPanel.Visible = true;
@@ -111,17 +114,18 @@ namespace MonkeyPaste {
             }
         }
         public void SetFocus(bool isFocused) {
+            TilePanel.BringToFront();
             if(isFocused) {
                 TilePanel.BorderColor = Properties.Settings.Default.TileSelectedColor;
                // TileControlController.ItemControl.Enabled = true;
 
-                MouseOverItemControlHook.RegisterMouseEvent(MpMouseEvent.HitBox,TileControlController.ItemControl.RectangleToScreen(TileControlController.ItemControl.Bounds));
+                //MouseOverItemControlHook.RegisterMouseEvent(MpMouseEvent.HitBox,TileControlController.ItemControl.RectangleToScreen(TileControlController.ItemControl.Bounds));
 
                 //ShowMenu();
             } else {
                 TilePanel.BorderColor = TilePanel.BackColor;//(Color)MpSingletonController.Instance.GetSetting("TileUnfocusColor");
                 //TileControlController.ItemControl.Enabled = false;
-                MouseOverItemControlHook.UnregisterMouseEvent();
+                //MouseOverItemControlHook.UnregisterMouseEvent();
                 //HideMenu();
             }
             _isSelected = isFocused;

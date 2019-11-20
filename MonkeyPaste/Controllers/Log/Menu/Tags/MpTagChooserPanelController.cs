@@ -14,7 +14,7 @@ namespace MonkeyPaste {
         public List<MpTagPanelController> TagPanelControllerList = new List<MpTagPanelController>();
 
         public MpTagChooserPanelController(MpController parentController,List<MpTag> tagList) : base(parentController) {
-            TagChooserPanel = new MpTokenChooserPanel(this) {
+            TagChooserPanel = new MpTokenChooserPanel() {
                 AutoSize = false,
                 BackColor = Properties.Settings.Default.LogMenuTileTokenChooserBgColor,
                 Margin = Padding.Empty,
@@ -28,7 +28,7 @@ namespace MonkeyPaste {
                 TagChooserPanel.Controls.Add(tpc.TagPanel);                
             }
             AddTagTextBoxController = new MpAddTagTextBoxController(this);
-            TagChooserPanel.Controls.Add(AddTagTextBoxController.LogMenuTileTokenAddTokenTextBox);
+            TagChooserPanel.Controls.Add(AddTagTextBoxController.AddTagTextBox);
 
             //TileTokenPanelControllerList.Add(new MpLogMenuTileTokenPanelController(this,0,"Hi how are you are you ok?",Color.Orange));
             //LogMenuTileTokenChooserPanel.Controls.Add(TileTokenPanelControllerList[0].LogMenuTileTokenPanel);
@@ -44,13 +44,15 @@ namespace MonkeyPaste {
             //int h = (int)((float)lmpr.Height * Properties.Settings.Default.LogMenuTileTokenPanelHeightRatio);
             int h = lmpr.Height;
             int p = 0;
-            TagChooserPanel.Size = new Size(lmpr.Width - lmstr.Width - p * 2,h);
+            TagChooserPanel.Size = new Size(lmpr.Width - lmstr.Right - 10,h);
             TagChooserPanel.Location = new Point(lmstr.Right + 5,0);
 
             foreach(MpTagPanelController ttpc in TagPanelControllerList) {
                 ttpc.Update();
             }
             AddTagTextBoxController.Update();
+
+            TagChooserPanel.Invalidate();
         }
         public int GetTokenId(MpTagPanelController ttpc) {
             for(int i = 0;i < TagPanelControllerList.Count;i++) {
@@ -59,14 +61,6 @@ namespace MonkeyPaste {
                 }
             }
             return -1;
-        }
-        public MpTagPanelController GetToken(int tokenId) {
-            foreach(MpTagPanelController ttpc in TagPanelControllerList) {
-                if(ttpc.TokenId == tokenId) {
-                    return ttpc;
-                }
-            }
-            return null;
         }
     }
 }

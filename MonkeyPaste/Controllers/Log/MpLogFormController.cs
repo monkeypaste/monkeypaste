@@ -46,12 +46,11 @@ namespace MonkeyPaste {
             LogForm.Leave += LogForm_Leave;
             LogForm.Deactivate += LogForm_Leave;
             LogForm.Resize += LogForm_Resize;
-            LogForm.MouseUp += LogForm_MouseUp;
             LogForm.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
 
             //these events do not get deactivated
             _clickHook = Hook.GlobalEvents();
-            _clickHook.MouseClick += _clickHook_MouseClick;
+            _clickHook.MouseUp += _clickHook_MouseClick;
             _moveHook = Hook.GlobalEvents();
             _moveHook.MouseMove += _moveHook_MouseMove;
 
@@ -73,12 +72,6 @@ namespace MonkeyPaste {
             Link(new List<MpIView> { LogForm });            
         }
 
-        private void LogForm_MouseUp(object sender,MouseEventArgs e) {
-            if(_isResizing) {
-                _isResizing = false;
-                TileChooserPanelController.ShowTiles();
-            }
-        }
         public override void Update() {
             //current screen rect
             Rectangle sr = MpHelperSingleton.Instance.GetScreenBoundsWithMouse();
@@ -90,10 +83,13 @@ namespace MonkeyPaste {
 
             if(TileChooserPanelController != null) {
                 TileChooserPanelController.Update();
+                
             }
             if(LogMenuPanelController != null) {
                 LogMenuPanelController.Update();
             }
+
+            LogForm.Invalidate();
         }
 
         #region Events
@@ -125,18 +121,11 @@ namespace MonkeyPaste {
                 }
             }
             if(clickedTileController != null) {
-                if(clickedTileController.CopyItem.copyItemTypeId == MpCopyItemType.Text) {
-                    Console.WriteLine(
-                        "TileId: " +
-                        clickedTileController.TileId +
-                        " clicked with dimensions(px): " +
-                        MpHelperSingleton.Instance.GetTextSize(
-                            (string)clickedTileController.CopyItem.GetData(),
-                            clickedTileController.TileControlController.ItemFont
-                        )
-                    );
-                }
-                TileChooserPanelController.SelectedTileController = clickedTileController;
+                TileChooserPanelController.SelectedTilePanelController = clickedTileController;
+                if(TileChooserPanelController.SelectedTilePanelController.TileTitlePanelController.TileTitleTextBoxController.TileTitleTextBox.ReadOnly) {
+                    TileChooserPanelController.SelectedTilePanelController.TilePanel.Focus();
+                }                
+                TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Visible = true;
                 TileChooserPanelController.Update();
             }
         }
@@ -202,6 +191,13 @@ namespace MonkeyPaste {
             }
             TileChooserPanelController.DeactivateHotKeys();
         }
+        public void ToggleLogVisibility() {
+            if(LogForm.Visible) {
+                HideLogForm();
+                return;
+            }
+            ShowLogForm();
+        }
         private void _escHook_KeyPressed(object sender,KeyPressedEventArgs e) {
             if(LogForm.Visible) {
                 HideLogForm();
@@ -209,14 +205,10 @@ namespace MonkeyPaste {
             }
         }
         private void _toggleLogHook_KeyPressed(object sender,KeyPressedEventArgs e) {
-            if(LogForm.Visible) {
-                HideLogForm();
-                return;
-            }
-            ShowLogForm();
+            ToggleLogVisibility();
         }
-        private void EnterHook_KeyPressed(object sender,KeyPressedEventArgs e) {
-            _toggleLogHook_KeyPressed(null,null);
+        public void EnterHook_KeyPressed(object sender,KeyPressedEventArgs e) {
+            HideLogForm();
             PasteCopyItem();
         }
         private void _spaceHook_KeyPressed(object sender,KeyPressedEventArgs e) {
@@ -264,7 +256,7 @@ namespace MonkeyPaste {
         
         public void PasteCopyItem() {
             MpSingletonController.Instance.SetIgnoreNextClipboardEvent(true);
-            MpCopyItem copyItem = TileChooserPanelController.GetSelectedCopyItem();
+            MpCopyItem copyItem = TileChooserPanelController.SelectedTilePanelController.CopyItem;
 
             if(copyItem.copyItemTypeId == MpCopyItemType.Text) {
                 System.Windows.Clipboard.SetData(DataFormats.Text,(string)copyItem.GetData());

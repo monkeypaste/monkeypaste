@@ -134,5 +134,8 @@
     <Setting Name="LogMenuTileTokenChooserBgColor" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">Red</Value>
     </Setting>
+    <Setting Name="IsAppendModeActive" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

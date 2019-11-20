@@ -11,7 +11,7 @@ namespace MonkeyPaste {
         public MpSearchIconBox SearchIconBox { get; set; }
 
         public MpSearchIconController(MpController parentController) : base(parentController) {
-            SearchIconBox = new MpSearchIconBox(this) {
+            SearchIconBox = new MpSearchIconBox() {
                 Image = Properties.Resources.search,
                 SizeMode = PictureBoxSizeMode.AutoSize,
                 BackColor = Color.Transparent

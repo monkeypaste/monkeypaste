@@ -8,28 +8,25 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {
     public class MpTagPanelController : MpController {
-        public int TokenId {
-            get {
-                return ((MpTagChooserPanelController)Parent).GetTokenId(this);
-            }
-        }
-
         public MpTagPanel TagPanel { get; set; }
         public MpTag Tag { get; set; }
 
         public MpTagTextBoxController TagTextBoxController { get; set; }
         public MpTagButtonController TagButtonController { get; set; }
 
+        private bool _isEdit = false;
+
         public MpTagPanelController(MpController parentController,MpTag tag) : base(parentController) {
             Tag = tag;
             Init();
         }
         public MpTagPanelController(MpController parentController,string tagText,Color tagColor,MpTagType tagType) : base(parentController) {
+            _isEdit = true;
             Tag = new MpTag(tagText,tagColor,tagType);
             Init();            
         }
         private void Init() {
-            TagPanel = new MpTagPanel(this) {
+            TagPanel = new MpTagPanel() {
                 AutoSize = false,
                 Radius = 5,
                 BorderThickness = 0,
@@ -38,26 +35,33 @@ namespace MonkeyPaste {
                 Padding = Padding.Empty
             };
 
-            TagTextBoxController = new MpTagTextBoxController(this,Tag.TagName,TagPanel.BackColor);
+            TagTextBoxController = new MpTagTextBoxController(this,Tag.TagName,TagPanel.BackColor,_isEdit);
             TagPanel.Controls.Add(TagTextBoxController.TagTextBox);
 
-            TagButtonController = new MpTagButtonController(this);
-            TagPanel.Controls.Add(TagButtonController.LogMenuTagButton);
+            TagButtonController = new MpTagButtonController(this,_isEdit);
+            TagPanel.Controls.Add(TagButtonController.TagButton);
             TagButtonController.ButtonClickedEvent += LogMenuTileTokenButtonController_ButtonClickedEvent;
         }
         private void LogMenuTileTokenButtonController_ButtonClickedEvent(object sender,EventArgs e) {
-            TagPanel.Visible = false;
-            ((MpTagChooserPanelController)Parent).TagPanelControllerList.Remove(this);
-            ((MpTagChooserPanelController)Parent).TagChooserPanel.Controls.Remove(TagPanel);            
-            TagPanel.Dispose();
+            if(_isEdit) {
+                CreateTag();
+                _isEdit = false;
+            } else {
+                TagPanel.Visible = false;
+                ((MpTagChooserPanelController)Parent).TagPanelControllerList.Remove(this);
+                ((MpTagChooserPanelController)Parent).TagChooserPanel.Controls.Remove(TagPanel);
+                TagPanel.Dispose();
+                Tag.DeleteFromDatabase();
+            }
             ((MpTagChooserPanelController)Parent).Update();
         }
 
         public override void Update() {
             //tile token chooser panel rect
             Rectangle ttcpr = ((MpTagChooserPanelController)Parent).TagChooserPanel.Bounds;
-            //previous token rect
-            Rectangle ptr = TokenId == 0 ? Rectangle.Empty:((MpTagChooserPanelController)Parent).GetToken(TokenId - 1).TagPanel.Bounds;
+            int thisTagIdx = ((MpTagChooserPanelController)Parent).TagPanelControllerList.IndexOf(this);
+            //previous tag rect
+            Rectangle ptr = thisTagIdx == 0 ? Rectangle.Empty:((MpTagChooserPanelController)Parent).TagPanelControllerList[thisTagIdx - 1].TagPanel.Bounds;
 
             //token panel height
             float tph = (float)ttcpr.Height*Properties.Settings.Default.LogMenuTileTokenPanelHeightRatio;
@@ -77,6 +81,32 @@ namespace MonkeyPaste {
             TagPanel.Size = new Size(TagTextBoxController.TagTextBox.Width + (int)tph,TagPanel.Height);
 
             TagButtonController.Update(); //LogMenuTileTokenButtonController.LogMenuTileTokenButton.BringToFront();
+
+            TagPanel.Invalidate();
+        }
+        public void CreateTag() {
+            bool isDuplicate = false;
+            foreach(MpTagPanelController ttpc in ((MpTagChooserPanelController)Parent).TagPanelControllerList) {
+                if(ttpc.TagTextBoxController.TagTextBox.Text.ToLower() == TagTextBoxController.TagTextBox.Text.ToLower() && ttpc != this) {
+                    isDuplicate = true;
+                }
+            }
+            if(TagTextBoxController.TagTextBox.Text == string.Empty || isDuplicate) {
+                Console.WriteLine("MpLogMenuTileTokenAddTokenTextBoxController Warning, add invalidation to ui for duplicate/empty tag in CreateToken()");
+                return;
+            }
+            Tag.TagName = TagTextBoxController.TagTextBox.Text;
+            Tag.WriteToDatabase();
+
+            TagTextBoxController.TagTextBox.ReadOnly = true;
+            TagButtonController.TagButton.Image = Properties.Resources.close2;
+            TagButtonController.TagButton.DefaultImage = Properties.Resources.close2;
+            TagButtonController.TagButton.OverImage = Properties.Resources.close;
+            TagButtonController.TagButton.DownImage = Properties.Resources.close;
+            ((MpTagChooserPanelController)Parent).AddTagTextBoxController.AddTagTextBox.Visible = true;
+            ((MpTagChooserPanelController)Parent).AddTagTextBoxController.AddTagTextBox.Text = string.Empty;
+            ((MpTagChooserPanelController)Parent).AddTagTextBoxController.AddTagTextBox.Focus();
+            Update();
         }
     }
 }

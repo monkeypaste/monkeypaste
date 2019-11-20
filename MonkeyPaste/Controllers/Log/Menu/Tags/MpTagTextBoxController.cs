@@ -10,10 +10,11 @@ namespace MonkeyPaste {
     public class MpTagTextBoxController:MpController {
         public MpTagTextBox TagTextBox { get; set; }
 
-        public MpTagTextBoxController(MpController parentController,string tokenText,Color tokenColor) : base(parentController) {
-            TagTextBox = new MpTagTextBox(this,((MpTagPanelController)parentController).TokenId) {
-                ReadOnly = true,
+        public MpTagTextBoxController(MpController parentController,string tokenText,Color tokenColor,bool _isEdit) : base(parentController) {
+            TagTextBox = new MpTagTextBox(((MpTagChooserPanelController)((MpTagPanelController)parentController).Parent).TagPanelControllerList.IndexOf(((MpTagPanelController)Parent))) {
+                ReadOnly = !_isEdit,
                 Multiline = false,
+                TabIndex = 0,
                 WordWrap = false,
                 Margin = Padding.Empty,
                 SelectionLength = 0,
@@ -21,6 +22,7 @@ namespace MonkeyPaste {
                 Cursor = Cursors.Arrow,
                 BackColor = tokenColor,
                 BorderStyle = BorderStyle.None,
+                TextAlign = HorizontalAlignment.Left,
                 ForeColor = MpHelperSingleton.Instance.IsBright(tokenColor) ? Color.Black:Color.White,
                 Text = tokenText
             };
@@ -35,8 +37,10 @@ namespace MonkeyPaste {
 
             float fontSize = (float)tpr.Height * Properties.Settings.Default.LogMenuTileTokenFontSizeRatio;
             TagTextBox.Font = new Font(Properties.Settings.Default.LogMenuTileTokenFont,fontSize,GraphicsUnit.Pixel);
-            TagTextBox.Size = TextRenderer.MeasureText(TagTextBox.Text,TagTextBox.Font);
+            TagTextBox.Size = TextRenderer.MeasureText(TagTextBox.Text+"  ",TagTextBox.Font);
             TagTextBox.Location = new Point((int)(fontSize/4.0f),-(int)(fontSize/6.0f));
+
+            TagTextBox.Invalidate();
         }
     }
 }

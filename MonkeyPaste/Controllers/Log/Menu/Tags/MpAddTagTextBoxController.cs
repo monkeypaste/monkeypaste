@@ -8,27 +8,26 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {
     public class MpAddTagTextBoxController:MpController {
-        public MpLogMenuTileTokenAddTokenTextBox LogMenuTileTokenAddTokenTextBox { get; set; }
+        public MpAddTagTextBox AddTagTextBox { get; set; }
 
-        private MpKeyboardHook _enterHook;
+        public MpTagPanelController NewTagPanelController { get; set; }
+
+        private bool _typingTag = false;
 
         public MpAddTagTextBoxController(MpController parentController) : base(parentController) {
-            LogMenuTileTokenAddTokenTextBox = new MpLogMenuTileTokenAddTokenTextBox(this) {
+            AddTagTextBox = new MpAddTagTextBox() {
                 ReadOnly = false,
                 Multiline = false,
                 WordWrap = false,
                 BorderStyle = BorderStyle.None,
                 BackColor = ((MpTagChooserPanelController)Parent).TagChooserPanel.BackColor
             };
-            LogMenuTileTokenAddTokenTextBox.ForeColor = MpHelperSingleton.Instance.IsBright(LogMenuTileTokenAddTokenTextBox.BackColor) ? Color.Black : Color.White;
+            AddTagTextBox.ForeColor = MpHelperSingleton.Instance.IsBright(AddTagTextBox.BackColor) ? Color.Black : Color.White;
 
-            LogMenuTileTokenAddTokenTextBox.Enter += LogMenuTileTokenAddTokenTextBox_Enter;
-            LogMenuTileTokenAddTokenTextBox.Leave += LogMenuTileTokenAddTokenTextBox_Leave;
-            LogMenuTileTokenAddTokenTextBox.KeyPress += LogMenuTileTokenAddTokenTextBox_KeyPress;
+            AddTagTextBox.KeyUp += AddTagTextBox_KeyUp;
+        }
 
-            _enterHook = new MpKeyboardHook();
-            _enterHook.KeyPressed += _enterHook_KeyPressed;
-        }    
+
         public override void Update() {
             //log menu tile token chooser panel rect
             Rectangle lmttcpr = ((MpTagChooserPanelController)Parent).TagChooserPanel.Bounds;
@@ -36,61 +35,57 @@ namespace MonkeyPaste {
             int lastTokenIdx = ((MpTagChooserPanelController)Parent).TagPanelControllerList.Count - 1;
             Rectangle lttr = lastTokenIdx < 0 ? Rectangle.Empty : ((MpTagChooserPanelController)Parent).TagPanelControllerList[lastTokenIdx].TagPanel.Bounds;
 
-            LogMenuTileTokenAddTokenTextBox.Font = new Font(
+            AddTagTextBox.Font = new Font(
                     Properties.Settings.Default.LogMenuTileTokenFont,
                     (lmttcpr.Height * Properties.Settings.Default.LogMenuTileTokenPanelHeightRatio) - 10.0f,
                     GraphicsUnit.Pixel
             );
-            LogMenuTileTokenAddTokenTextBox.Location = new Point(lttr.Right + 10,3);
-            LogMenuTileTokenAddTokenTextBox.Size = lttr == Rectangle.Empty ? new Size(lmttcpr.Width,lmttcpr.Height - 10) : new Size(lmttcpr.Width - lttr.Right+ 5,lttr.Height-10);
-        }
-        private void CreateTag() {
-            bool isDuplicate = false;
-            foreach(MpTagPanelController ttpc in ((MpTagChooserPanelController)Parent).TagPanelControllerList) {
-                if(ttpc.TagTextBoxController.TagTextBox.Text.ToLower() == LogMenuTileTokenAddTokenTextBox.Text.ToLower()) {
-                    isDuplicate = true;
-                }
-            }
-            if(LogMenuTileTokenAddTokenTextBox.Text == string.Empty || isDuplicate) {
-                Console.WriteLine("MpLogMenuTileTokenAddTokenTextBoxController Warning, add invalidation to ui for duplicate/empty tag in CreateToken()");
-                return;
-            }
-            ((MpTagChooserPanelController)Parent).TagPanelControllerList.Add(new MpTagPanelController(Parent,LogMenuTileTokenAddTokenTextBox.Text,MpHelperSingleton.Instance.GetRandomColor(),MpTagType.Custom));
-            ((MpTagChooserPanelController)Parent).TagChooserPanel.Controls.Add(((MpTagChooserPanelController)Parent).TagPanelControllerList[((MpTagChooserPanelController)Parent).TagPanelControllerList.Count - 1].TagPanel);
+            AddTagTextBox.Location = new Point(lttr.Right + 10,3);
+            AddTagTextBox.Size = lttr == Rectangle.Empty ? new Size(lmttcpr.Width,lmttcpr.Height - 10) : new Size(lmttcpr.Width - lttr.Right+ 5,lttr.Height-10);
 
-            LogMenuTileTokenAddTokenTextBox.Text = string.Empty;
+            if(NewTagPanelController != null) {
+                NewTagPanelController.Update();
+            }
+
+            AddTagTextBox.Invalidate();
+        }
+        
+        private void AddTagTextBox_KeyUp(object sender,KeyEventArgs e) {
+            if(_typingTag) {
+                return;
+            } else {
+                _typingTag = true;
+            }
+            //old size
+            Size os = AddTagTextBox.Size;
+            //new size
+            Size ns = TextRenderer.MeasureText(AddTagTextBox.Text,AddTagTextBox.Font);
+
+            AddTagTextBox.Size = new Size(Math.Max(os.Width,ns.Width),Math.Max(os.Height,ns.Height));
+            if(AddTagTextBox.Text.Length > 0) {
+                NewTagPanelController = new MpTagPanelController(Parent,AddTagTextBox.Text,MpHelperSingleton.Instance.GetRandomColor(),MpTagType.Custom);
+                ((MpTagChooserPanelController)Parent).TagChooserPanel.Controls.Add(NewTagPanelController.TagPanel);
+                ((MpTagChooserPanelController)Parent).TagPanelControllerList.Add(NewTagPanelController);                
+                NewTagPanelController.TagTextBoxController.TagTextBox.Focus();
+                NewTagPanelController.TagTextBoxController.TagTextBox.DeselectAll();
+                NewTagPanelController.TagTextBoxController.TagTextBox.SelectionStart = NewTagPanelController.TagTextBoxController.TagTextBox.Text.Length;
+                NewTagPanelController.TagTextBoxController.TagTextBox.KeyUp += TagTextBox_KeyUp;
+                AddTagTextBox.Visible = false;
+                Update();                
+            }
+            _typingTag = false;
+        }
+
+        private void TagTextBox_KeyUp(object sender,KeyEventArgs e) {
+            if(NewTagPanelController.TagTextBoxController.TagTextBox.Text == string.Empty) {
+                ((MpTagChooserPanelController)Parent).TagChooserPanel.Controls.Remove(NewTagPanelController.TagPanel);
+                ((MpTagChooserPanelController)Parent).TagPanelControllerList.Remove(NewTagPanelController);
+                NewTagPanelController = null;
+                AddTagTextBox.Visible = true;
+                AddTagTextBox.Text = string.Empty;
+                AddTagTextBox.Focus();
+            }
             ((MpTagChooserPanelController)Parent).Update();
         }
-        private void LogMenuTileTokenAddTokenTextBox_KeyPress(object sender,KeyPressEventArgs e) {
-            //old size
-            Size os = LogMenuTileTokenAddTokenTextBox.Size;
-            //new size
-            Size ns = TextRenderer.MeasureText(LogMenuTileTokenAddTokenTextBox.Text,LogMenuTileTokenAddTokenTextBox.Font);
-
-            LogMenuTileTokenAddTokenTextBox.Size = new Size(Math.Max(os.Width,ns.Width),Math.Max(os.Height,ns.Height));
-        }
-        private void LogMenuTileTokenAddTokenTextBox_Leave(object sender,EventArgs e) {
-            if(_enterHook.IsRegistered()) {
-                _enterHook.UnregisterHotKey();
-                //CreateToken();
-            }
-            if(!MpLogFormController.EnterHook.IsRegistered()) {
-                MpLogFormController.EnterHook.RegisterHotKey(ModifierKeys.None,Keys.Enter);
-            }
-        }
-
-        private void LogMenuTileTokenAddTokenTextBox_Enter(object sender,EventArgs e) {
-            if(MpLogFormController.EnterHook.IsRegistered()) {
-                MpLogFormController.EnterHook.UnregisterHotKey();
-            }
-            if(!_enterHook.IsRegistered()) {
-                _enterHook.RegisterHotKey(ModifierKeys.None,Keys.Enter);
-            }
-        }
-
-        private void _enterHook_KeyPressed(object sender,KeyPressedEventArgs e) {
-            CreateTag();
-            ((MpLogMenuPanelController)((MpTagChooserPanelController)Parent).Parent).LogMenuSearchTextBoxController.SearchTextBox.Focus();
-        }       
     }
 }

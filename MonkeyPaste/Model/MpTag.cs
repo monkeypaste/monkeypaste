@@ -28,7 +28,7 @@ namespace MonkeyPaste {
             MpColor = new MpColor((int)tagColor.R,(int)tagColor.G,(int)tagColor.B,(int)tagColor.A);
             ColorId = MpColor.ColorId;
 
-            WriteToDatabase();
+            //WriteToDatabase();
         }
         public MpTag(int tagId) {
             DataTable dt = MpLogFormController.Db.Execute("select * from MpTag where pk_MpTagId=" + tagId);
@@ -62,14 +62,17 @@ namespace MonkeyPaste {
                         MpColor = new MpColor(ColorId);
                     } else {
                         ColorId = MpColor.ColorId;
-                    }                    
+                    }
                 } else {
-                    MpLogFormController.Db.ExecuteNonQuery("insert into MpTag(fk_MpTagTypeId,TagName,fk_MpColorId) values(" + (int)TagType + ",'" + TagName + "',"+ColorId+")");
+                    MpLogFormController.Db.ExecuteNonQuery("insert into MpTag(fk_MpTagTypeId,TagName,fk_MpColorId) values(" + (int)TagType + ",'" + TagName + "'," + ColorId + ")");
                     TagId = MpLogFormController.Db.GetLastRowId("MpTag","pk_MpTagId");
                 }
             } else {
                 Console.WriteLine("MpTag warning, attempting to update a tag but not implemented");
             }
+        }
+        public void DeleteFromDatabase() {
+            MpLogFormController.Db.ExecuteNonQuery("delete from MpTag where pk_MpTagId=" + this.TagId);
         }
         private void MapDataToColumns() {
             tableName = "MpTag";

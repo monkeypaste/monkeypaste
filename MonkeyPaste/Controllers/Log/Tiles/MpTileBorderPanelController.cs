@@ -13,15 +13,21 @@ namespace MonkeyPaste {
             TileBorderPanel = new MpTileBorderPanel(panelId) {
                 AutoScroll = false,
                 AutoSize = false,
-                BackColor = Color.Gray,// Properties.Settings.Default.TileSelectedColor,
+                BackColor = Properties.Settings.Default.TileSelectedColor,
                 BorderColor = Properties.Settings.Default.TileSelectedColor,
-                Radius = Properties.Settings.Default.TileBorderRadius
+                Radius = Properties.Settings.Default.TileBorderRadius,
+                Visible = false
             };
             Link(new List<MpIView>() { TileBorderPanel });
         }
         public override void Update() {
-            //selecred tile panel rect
-            Rectangle stpr = ((MpTileChooserPanelController)Parent).SelectedTileController.TilePanel.Bounds;
+            if(((MpTileChooserPanelController)Parent).SelectedTilePanelController == null) {
+                TileBorderPanel.Visible = false;
+                TileBorderPanel.Invalidate();
+                return;
+            }
+            //selected tile panel rect
+            Rectangle stpr = ((MpTileChooserPanelController)Parent).SelectedTilePanelController.TilePanel.Bounds;
             //tile padding
             int tp = (int)(Properties.Settings.Default.TileChooserPadHeightRatio * stpr.Height);
             //border delta size
@@ -32,6 +38,8 @@ namespace MonkeyPaste {
             TileBorderPanel.Size = new Size(bds,bds);
 
             TileBorderPanel.SendToBack();
+
+            TileBorderPanel.Invalidate();
         }
     }
 }

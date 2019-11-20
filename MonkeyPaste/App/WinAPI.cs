@@ -92,12 +92,12 @@ namespace MonkeyPaste {
         public static extern bool SetActiveWindow(IntPtr hWnd);
 
         // Registers a hot key with Windows.
-        [DllImport("user32.dll")]
-        public static extern bool RegisterHotKey(IntPtr hWnd,int id,uint fsModifiers,uint vk);
+        //[DllImport("user32.dll")]
+        //public static extern bool RegisterHotKey(IntPtr hWnd,int id,uint fsModifiers,uint vk);
 
-        // Unregisters the hot key with Windows.
-        [DllImport("user32.dll")]
-        public static extern bool UnregisterHotKey(IntPtr hWnd,int id);
+        //// Unregisters the hot key with Windows.
+        //[DllImport("user32.dll")]
+        //public static extern bool UnregisterHotKey(IntPtr hWnd,int id);
 
         [DllImport(@"User32.dll",EntryPoint = @"SendMessage",CharSet = CharSet.Auto)]
         public static extern int SendMessageRefRect(IntPtr hWnd,uint msg,int wParam,ref RECT rect);
@@ -121,5 +121,14 @@ namespace MonkeyPaste {
         [DllImport("user32.dll",EntryPoint = "FindWindow",SetLastError = true)]
         public static extern IntPtr FindWindowByCaption(IntPtr zeroOnly,string lpWindowName);
 
+        [DllImport("user32",SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool RegisterHotKey(IntPtr hwnd,int id,uint fsModifiers,uint vk);
+        [DllImport("user32",SetLastError = true)]
+        public static extern int UnregisterHotKey(IntPtr hwnd,int id);
+        [DllImport("kernel32",SetLastError = true)]
+        public static extern short GlobalAddAtom(string lpString);
+        [DllImport("kernel32",SetLastError = true)]
+        public static extern short GlobalDeleteAtom(short nAtom);
     }
 }

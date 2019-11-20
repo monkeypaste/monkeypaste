@@ -14,7 +14,7 @@ namespace MonkeyPaste {
             TileTitleIconBox = new MpTileTitleIconBox(tileId,panelId) {
                 BackColor = Color.Transparent,
                 SizeMode = PictureBoxSizeMode.StretchImage,
-                Image = MpHelperSingleton.Instance.RotateImage(ci.App.Icon.IconImage,20.0f,true,false,Color.Transparent)//MpHelperSingleton.Instance.RotateImage(MpSingletonController.Instance.GetMpData().GetMpIcon(MpSingletonController.Instance.GetMpData().GetMpApp(ci.appId).iconId).IconImage,20.0f,true,false,Color.Transparent)
+                Image = MpHelperSingleton.Instance.RotateImage(ci.App.Icon.IconImage,20.0f,false,false,Color.Transparent)//MpHelperSingleton.Instance.RotateImage(MpSingletonController.Instance.GetMpData().GetMpIcon(MpSingletonController.Instance.GetMpData().GetMpApp(ci.appId).iconId).IconImage,20.0f,true,false,Color.Transparent)
             };
             TileTitleIconBox.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
 
@@ -32,8 +32,11 @@ namespace MonkeyPaste {
             int tix = (int)((float)ticx + ((float)tis * 1.0f));
             int tiy = (int)((float)ticy - ((float)tis / 2.0f));
 
+            TileTitleIconBox.Invalidate();
+
             TileTitleIconBox.Size = new Size(tis,tis);
             TileTitleIconBox.Location = new Point(tix,tiy);
+
         }
     }
 }

@@ -65,24 +65,28 @@ namespace MonkeyPaste {
             if(newItem.copyItemTypeId == MpCopyItemType.Text) {
                 DataTable dt = MpLogFormController.Db.Execute("select * from MpTextItem where ItemText='" + (string)newItem.DataObject+"'");
                 if(dt != null && dt.Rows.Count > 0) {
+                    int cid = Convert.ToInt32(dt.Rows[0]["fk_MpCopyItemId"].ToString());
+                    dt = MpLogFormController.Db.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + cid);
+                    int cc = Convert.ToInt32(dt.Rows[0]["CopyCount"].ToString()) + 1;
                     Console.WriteLine("MpCopyItem: ignoring duplicate");
+                    MpLogFormController.Db.ExecuteNonQuery("update MpCopyItem set CopyCount="+cc+" where pk_MpCopyItemId="+cid);
                     return null;
                 }
             }
             
 
-            if(MpSingletonController.Instance.InAppendMode && newItem.copyItemTypeId == MpCopyItemType.Text) {
-                if(MpSingletonController.Instance.AppendItem == null) {
-                    MpSingletonController.Instance.AppendItem = newItem;
-                }
-                else {
-                    string appendedStr = (string)MpSingletonController.Instance.AppendItem.GetData() + Environment.NewLine + (string)newItem.DataObject;
-                    MpSingletonController.Instance.AppendItem.SetData((object)appendedStr);
-                    //MpSingletonController.Instance.GetMpData().UpdateMpCopyItem(MpSingletonController.Instance.AppendItem);
-                    newItem.copyItemId = -2;
-                    return newItem;
-                }
-            }
+            //if(Properties.Settings.Default.IsAppendModeActive && newItem.copyItemTypeId == MpCopyItemType.Text) {
+            //    if(MpSingletonController.Instance.AppendItem == null) {
+            //        MpSingletonController.Instance.AppendItem = newItem;
+            //    }
+            //    else {
+            //        string appendedStr = (string)MpSingletonController.Instance.AppendItem.GetData() + Environment.NewLine + (string)newItem.DataObject;
+            //        MpSingletonController.Instance.AppendItem.SetData((object)appendedStr);
+            //        //MpSingletonController.Instance.GetMpData().UpdateMpCopyItem(MpSingletonController.Instance.AppendItem);
+            //        newItem.copyItemId = -2;
+            //        return newItem;
+            //    }
+            //}
             newItem.copyItemId = itemId;
             newItem.CopyDateTime = DateTime.Now;
             newItem.sourceHandle = sourceHandle;
@@ -90,7 +94,7 @@ namespace MonkeyPaste {
             newItem.CopyCount = 1;
             newItem.App = new MpApp(0,0,sourceHandle,false);
             newItem.appId = newItem.App.appId;
-            newItem.WriteToDatabase();
+            //newItem.WriteToDatabase();
             return newItem;
             //MpSingletonController.Instance.GetMpData().AddMpApp(App);
 
@@ -130,7 +134,7 @@ namespace MonkeyPaste {
                 DataObject = data;
             }
 
-            if(MpSingletonController.Instance.InAppendMode && copyItemTypeId == MpCopyItemType.Text) {
+            if(Properties.Settings.Default.IsAppendModeActive && copyItemTypeId == MpCopyItemType.Text) {
                 if(MpSingletonController.Instance.AppendItem == null) {
                     MpSingletonController.Instance.AppendItem = this;
                 } else {
@@ -213,7 +217,7 @@ namespace MonkeyPaste {
             this.Title = dr["Title"].ToString();
             this.CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
 
-            App = new MpApp(MpLogFormController.Db.Execute("select * from MpApp where pk_MpAppId=" + appId).Rows[0]);
+            this.App = new MpApp(MpLogFormController.Db.Execute("select * from MpApp where pk_MpAppId=" + appId).Rows[0]);
 
             DataTable copyItemData = null;
             switch(this.copyItemTypeId) {
@@ -269,10 +273,10 @@ namespace MonkeyPaste {
             bool isNew = false;
 
             if(this.appId == 0) {
-                App = new MpApp(0,0,sourceHandle,false);
-                this.appId = App.appId;
-                //MpSingletonController.Instance.GetMpData().AddMpApp(App);
+                App = new MpApp(0,0,sourceHandle,false);                
             }
+            App.WriteToDatabase();
+            this.appId = this.App.appId;
             //if copyitem already exists
             if(this.copyItemId > 0) {
                 DataTable dt = MpLogFormController.Db.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + this.copyItemId);
@@ -286,22 +290,6 @@ namespace MonkeyPaste {
                 isNew = false;
             }
             else {
-                //ensure not a dup
-                //foreach(MpCopyItem ci in MpSingletonController.Instance.GetMpData().GetMpCopyItemList()) {
-                //    if(ci.copyItemTypeId != copyItemTypeId) {
-                //        continue;
-                //    }
-                //    //if this new item is a duplicate update original and return
-                //    if(ci.GetData() == GetData() && ci.appId == appId) {
-                //        ci.CopyCount++;
-                //        if(MpLogFormController.Db.NoDb) {
-                //            ci.WriteToDatabase();
-                //        }
-                //        MpSingletonController.Instance.GetMpData().UpdateMpCopyItem(ci);
-                //        copyItemId = -1;
-                //        return;
-                //    }
-                //}
                 ++TotalCopyItemCount;
                 if(MpLogFormController.Db.NoDb) {                    
                     copyItemId = TotalCopyItemCount;

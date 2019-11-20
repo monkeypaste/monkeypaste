@@ -329,6 +329,7 @@
     <Compile Include="Controllers\Log\Menu\Tags\MpTagTextBoxController.cs" />
     <Compile Include="Controllers\Log\Menu\Tags\MpTagPanelController.cs" />
     <Compile Include="Controllers\Log\Tiles\MpTileBorderPanelController.cs" />
+    <Compile Include="Controllers\Log\Tiles\MpTileDetailsTextBoxController.cs" />
     <Compile Include="Controllers\MpTaskbarIconController.cs" />
     <Compile Include="Controllers\MpController.cs" />
     <Compile Include="Controllers\Log\Tiles\MpTileDetailsPanelController.cs" />
@@ -383,7 +384,7 @@
     <Compile Include="View\MpSearchBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpLogMenuTileTokenAddTokenTextBox.cs">
+    <Compile Include="View\MpAddTagTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpSearchIconBox.cs">
@@ -592,12 +593,6 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MpLogForm\MpLogFormControl.csproj">
-      <Project>{dd7e4ef0-9dff-4879-a93e-fa4d3dd13e18}</Project>
-      <Name>MpLogFormControl</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\noun_Search_1609001.png" />

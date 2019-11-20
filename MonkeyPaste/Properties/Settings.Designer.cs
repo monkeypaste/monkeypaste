@@ -418,5 +418,17 @@ namespace MonkeyPaste.Properties {
                 return ((global::System.Drawing.Color)(this["LogMenuTileTokenChooserBgColor"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsAppendModeActive {
+            get {
+                return ((bool)(this["IsAppendModeActive"]));
+            }
+            set {
+                this["IsAppendModeActive"] = value;
+            }
+        }
     }
 }

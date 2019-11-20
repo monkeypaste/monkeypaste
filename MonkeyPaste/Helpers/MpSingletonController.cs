@@ -10,17 +10,13 @@ namespace MonkeyPaste {
     public class MpSingletonController {
         private static readonly Lazy<MpSingletonController> lazy = new Lazy<MpSingletonController>(() => new MpSingletonController());
         public static MpSingletonController Instance { get { return lazy.Value; } }
-
-        //public MpInputEventType InputEvent = new MpInputEventType();
-        //private Dictionary<string,MpKeyboardHook> _hotkeyHookDictionary;
-        //private MpData _data;
-
+        
         public int ScrollWheelDelta { get; set; } = 0;
 
         public MpRegistryHelper Rh { get; set; } = new MpRegistryHelper();
 
         public MpCopyItem AppendItem { get; set; }
-        public bool InAppendMode { get; set; } = false;
+        //public bool InAppendMode { get; set; } = false;
 
         public bool InCopySelectionMode { get; set; } = false;
 
@@ -33,8 +29,6 @@ namespace MonkeyPaste {
         public Random Rand { get; set; }
 
         public float TileTitleFontSize { get; set; }
-
-       // public int CustomLogHeight { get; set; }
 
         public void ScrollWheelListener(object sender, MouseEventArgs e) {
             ScrollWheelDelta += e.Delta;

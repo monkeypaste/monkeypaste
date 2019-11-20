@@ -25,6 +25,7 @@ namespace MonkeyPaste {
                         Multiline = true,
                         Text = (string)ci.GetData(),
                         ScrollBars = RichTextBoxScrollBars.None,
+                        BackColor = Properties.Settings.Default.TileItemBgColor,
                         AutoSize = false,
                         ReadOnly = true,
                         Cursor = Cursors.Arrow,                        
@@ -63,14 +64,14 @@ namespace MonkeyPaste {
             }            
             ItemControlPanel= new Panel() {
                 BorderStyle = BorderStyle.None,
-                BackColor = ItemControl.BackColor,
+                BackColor = Properties.Settings.Default.TileItemBgColor,
                 AutoSize = false
             };
             ItemControlPanel.Controls.Add(ItemControl);
 
             ItemPanel = new Panel() {
                 BorderStyle = BorderStyle.None,
-                BackColor = ItemControl.BackColor,
+                BackColor = Properties.Settings.Default.TileItemBgColor,
                 AutoSize = false
             };
             ItemPanel.Controls.Add(ItemControlPanel);
@@ -92,11 +93,12 @@ namespace MonkeyPaste {
             ItemPanel.SetBounds(tp,tp+ttr.Height,tr.Width - (tp*2),tr.Height-tdr.Height-ttr.Height-(tp*4));
 
             if(ItemControl.GetType().IsSubclassOf(typeof(TextBoxBase))) {
+                ((MpTileControlRichTextBox)ItemControl).Text = (string)((MpTilePanelController)Parent).CopyItem.GetData();
                 float fontSize = ItemPanel.Height * Properties.Settings.Default.TileFontSizeRatio;
                 ItemFont = new Font(Properties.Settings.Default.TileFont,fontSize,GraphicsUnit.Pixel);
                 ((TextBoxBase)ItemControl).Font = ItemFont;
                 ItemControl.Location = Point.Empty;
-                Size textSize = MpHelperSingleton.Instance.GetTextSize(((TextBoxBase)ItemControl).Text,ItemFont);
+                Size textSize = TextRenderer.MeasureText(((TextBoxBase)ItemControl).Text,ItemFont);
                 if(textSize.Width < ItemPanel.Width) {
                     textSize.Width = ItemPanel.Width;
                 }
@@ -104,13 +106,17 @@ namespace MonkeyPaste {
                     textSize.Height = ItemPanel.Height;
                 }
                 ItemControl.Size = textSize;
-                ItemControlPanel.Size = textSize;
+                ItemControlPanel.Size = ItemPanel.Size;
             } else {
                 ItemFont = null;
                 ItemControl.Bounds = ItemPanel.Bounds;
                 ItemControlPanel.Bounds = ItemPanel.Bounds;
             }
             ItemPanel.SendToBack();
+
+            ItemPanel.Invalidate(); 
+            ItemControlPanel.Invalidate();
+            ItemControl.Invalidate();
         }
         public void TraverseItem(Point ml) {
             return;

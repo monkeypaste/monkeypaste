@@ -18,7 +18,7 @@ namespace MonkeyPaste {
             this.iconId = iconId;
             this.IconImage = MpHelperSingleton.Instance.GetIconImage(sourceHandle);
             this.Path = MpHelperSingleton.Instance.GetProcessPath(sourceHandle);
-            WriteToDatabase();
+            //WriteToDatabase();
         }
         public MpIcon(IntPtr sourceHandle) {
             IconImage = MpHelperSingleton.Instance.GetIconImage(sourceHandle);
@@ -52,12 +52,10 @@ namespace MonkeyPaste {
             Console.WriteLine("Loaded MpIcon");
             Console.WriteLine(ToString());
         }
-        public override void WriteToDatabase() {
-            
+        public override void WriteToDatabase() {            
             bool isNew = false;
             if(IconImage == null) {
-                Console.WriteLine("Error creating MpIcon Image cannot be null");
-                return;
+                throw new Exception("Error creating MpIcon Image cannot be null");
             }
             if(iconId == 0) {
                 if(MpLogFormController.Db.NoDb) {
@@ -80,8 +78,9 @@ namespace MonkeyPaste {
             else {
                 MpLogFormController.Db.ExecuteNonQuery("update MpIcon set IconBlob=@0 where pk_MpIconId="+this.iconId,new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertImageToByteArray(this.IconImage) });                
             }
-            MapDataToColumns();
-            //MpSingletonController.Instance.GetMpData().AddMpIcon(this);
+            if(isNew) {
+                MapDataToColumns();
+            }
             Console.WriteLine(isNew ? "Created ":"Updated "+ " MpIcon");
             Console.WriteLine(ToString());
         }

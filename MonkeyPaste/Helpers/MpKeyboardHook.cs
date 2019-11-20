@@ -28,9 +28,7 @@ namespace MonkeyPaste {
                     ModifierKeys modifier = (ModifierKeys)((int)m.LParam & 0xFFFF);
 
                     // invoke the event to notify the parent.
-                    if(KeyPressed != null) {
-                        KeyPressed(this,new KeyPressedEventArgs(modifier,key));
-                    }
+                    KeyPressed(this,new KeyPressedEventArgs(modifier,key));
                 }
                 base.WndProc(ref m);
             }
@@ -49,6 +47,7 @@ namespace MonkeyPaste {
         private int _currentId;
         private const int GrabModeAsync = 1;
         private const int KeyPress = 2;
+        private bool _isEventRaised = false;
 
         private Gdk.ModifierType modifier;
         private ModifierKeys modifierWin;
@@ -63,17 +62,16 @@ namespace MonkeyPaste {
                 InitWin();
             }            
         }
-        private void InitGdk() {
-            Gdk.Window rootWin = Gdk.Global.DefaultRootWindow;
-            IntPtr xDisplay = GetXDisplay(rootWin);
-        }
+        
         private void InitWin() {
             _window = new Window();
             // register the event of the inner native window.
-            /*_window.KeyPressed += delegate (object sender,KeyPressedEventArgs args) {
-                if(KeyPressed != null)
+            _window.KeyPressed += delegate (object sender,KeyPressedEventArgs args) {
+                if(KeyPressed != null) {
+                    //_isEventRaised = false;
                     KeyPressed(this,args);
-            };*/
+                }
+            };
         }
         /// <summary>
         /// Registers a hot key in the system.
@@ -88,6 +86,65 @@ namespace MonkeyPaste {
             } else {
                 RegisterHotKeyWin(modifier,key);
             }
+        }
+        
+        private void RegisterHotKeyWin(ModifierKeys modifier,Keys key) {
+            // increment the counter.
+            _currentId = _currentId + 1;
+            // register the hot key.
+            if(!WinApi.RegisterHotKey(_window.Handle,_currentId,(uint)modifier,(uint)key)) {
+                 throw new InvalidOperationException("Couldn’t register the hot key.");
+                _isRegistered = false;
+                return;
+            }
+            _isRegistered = true;
+        }
+        public bool IsRegistered() {
+            return _isRegistered;
+        }
+        public void UnregisterHotKey() {
+            if(MpCompatibility.IsRunningOnMono()) {
+                UnregisterHotKeyGdk();
+            }
+            else {
+                UnregisterHotKeyWin();
+            }
+            _isRegistered = false;
+        }
+        
+        private void UnregisterHotKeyWin() {
+            // unregister all the registered hot keys.
+            for(int i = _currentId;i > 0;i--) {
+                WinApi.UnregisterHotKey(_window.Handle,i);
+            }
+            _window.KeyPressed -= delegate (object sender,KeyPressedEventArgs args) {
+                if(KeyPressed != null) {
+                    KeyPressed(this,args);
+                }
+            };
+        }
+        private void InitGdk() {
+            Gdk.Window rootWin = Gdk.Global.DefaultRootWindow;
+            IntPtr xDisplay = GetXDisplay(rootWin);
+        }
+        private void UnregisterHotKeyGdk() {
+            Gdk.Window rootWin = Gdk.Global.DefaultRootWindow;
+            IntPtr xDisplay = GetXDisplay(rootWin);
+            GdkApi.XUngrabKey(
+                 xDisplay,
+                 (int)key,
+                 (uint)modifier,
+                 GetXWindow(rootWin));
+        }
+        private Gdk.FilterReturn FilterFunction(IntPtr xEvent,Gdk.Event evnt) {
+            XKeyEvent xKeyEvent = (XKeyEvent)Marshal.PtrToStructure(xEvent,typeof(XKeyEvent));
+
+            if(xKeyEvent.type == KeyPress) {
+                if(xKeyEvent.keycode == (int)key && xKeyEvent.state == (uint)modifier) {
+                    KeyPressed(this,new KeyPressedEventArgs(modifierWin,keyWin));
+                }
+            }
+            return Gdk.FilterReturn.Continue;
         }
         private void RegisterHotKeyGdk(Gdk.ModifierType modifier,Keys key) {
             Gdk.Window rootWin = Gdk.Global.DefaultRootWindow;
@@ -105,62 +162,6 @@ namespace MonkeyPaste {
              GrabModeAsync
             );
             _isRegistered = true;
-        }
-        private void RegisterHotKeyWin(ModifierKeys modifier,Keys key) {
-            // increment the counter.
-            _currentId = _currentId + 1;
-            // register the hot key.
-            if(!WinApi.RegisterHotKey(_window.Handle,_currentId,(uint)modifier,(uint)key)) {
-                // throw new InvalidOperationException("Couldn’t register the hot key.");
-                _isRegistered = false;
-                return;
-            }               
-            _window.KeyPressed += delegate (object sender,KeyPressedEventArgs args) {
-                if(KeyPressed != null)
-                    KeyPressed(this,args);
-            };
-            _isRegistered = true;
-        }
-        public bool IsRegistered() {
-            return _isRegistered;
-        }
-        public void UnregisterHotKey() {
-            if(MpCompatibility.IsRunningOnMono()) {
-                UnregisterHotKeyGdk();
-            }
-            else {
-                UnregisterHotKeyWin();
-            }
-            _isRegistered = false;
-        }
-        private void UnregisterHotKeyGdk() {
-            Gdk.Window rootWin = Gdk.Global.DefaultRootWindow;
-            IntPtr xDisplay = GetXDisplay(rootWin);
-            GdkApi.XUngrabKey(
-                 xDisplay,
-                 (int)key,
-                 (uint)modifier,
-                 GetXWindow(rootWin));
-        }
-        private void UnregisterHotKeyWin() {
-            // unregister all the registered hot keys.
-            for(int i = _currentId;i > 0;i--) {
-                WinApi.UnregisterHotKey(_window.Handle,i);
-            }
-            _window.KeyPressed -= delegate (object sender,KeyPressedEventArgs args) {
-                if(KeyPressed != null)
-                    KeyPressed(this,args);
-            };
-        }
-        private Gdk.FilterReturn FilterFunction(IntPtr xEvent,Gdk.Event evnt) {
-            XKeyEvent xKeyEvent = (XKeyEvent)Marshal.PtrToStructure(xEvent,typeof(XKeyEvent));
-
-            if(xKeyEvent.type == KeyPress) {
-                if(xKeyEvent.keycode == (int)key && xKeyEvent.state == (uint)modifier) {
-                    KeyPressed(this,new KeyPressedEventArgs(modifierWin,keyWin));
-                }
-            }
-            return Gdk.FilterReturn.Continue;
         }
         /// <summary>
         /// A hot key has been pressed.
