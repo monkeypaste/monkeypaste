@@ -11,12 +11,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
+using VisualEffects;
+using VisualEffects.Animations.Effects;
+using VisualEffects.Easing;
 
 namespace MonkeyPaste {
     public class MpLogFormController : MpController {
         public static MpDb Db { get; set; }
 
         public MpClipboardHelper ClipboardController { get; set; }
+
+        public MpLogFormPanelController LogFormPanelController { get; set; }
 
         public MpLogForm LogForm { get; set; }
 
@@ -38,9 +43,12 @@ namespace MonkeyPaste {
             LogForm = new MpLogForm() {
                 AutoSize = false,                
                 AutoScaleMode = AutoScaleMode.Dpi,
-                MinimumSize = new Size(15,200)                
+                MinimumSize = new Size(15,200),
+                TransparencyKey = Color.Fuchsia,
+                BackColor = Color.Fuchsia
             };
             LogForm.Load += LogForm_Load;
+            LogForm.Activated += LogForm_Activated;
             LogForm.FormClosing += logForm_Closing;
             LogForm.FormClosed += logForm_Closed;
             LogForm.Leave += LogForm_Leave;
@@ -72,15 +80,36 @@ namespace MonkeyPaste {
             Link(new List<MpIView> { LogForm });            
         }
 
+        private void LogForm_Activated(object sender,EventArgs e) {
+            int t = 500;
+            int d = 50;
+
+            if(TileChooserPanelController.TileControllerList.Count > 0) {
+                int fy = TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Location.Y;
+                TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Location = new Point(TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Location.X,TileChooserPanelController.TileChooserPanel.Bottom);
+                TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Invalidate();
+                int idx = TileChooserPanelController.TileControllerList.IndexOf(TileChooserPanelController.SelectedTilePanelController);
+                TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Animate(new YLocationEffect(),EasingFunctions.SineEaseOut,fy,t,idx*d);
+            }
+            foreach(MpTilePanelController tpc in TileChooserPanelController.GetVisibleTilePanelControllerList()) {
+                int fy = tpc.TilePanel.Location.Y;
+                tpc.TilePanel.Location = new Point(tpc.TilePanel.Location.X,TileChooserPanelController.TileChooserPanel.Bottom);
+                tpc.TilePanel.Invalidate();
+                int idx = TileChooserPanelController.TileControllerList.IndexOf(tpc);
+                tpc.AnimateTileY(fy,t,idx * d,EasingFunctions.SineEaseOut);
+            }
+        }
+
         public override void Update() {
             //current screen rect
             Rectangle sr = MpHelperSingleton.Instance.GetScreenBoundsWithMouse();
             
-            int h = _isFirstLoad ? (int)((float)sr.Height * Properties.Settings.Default.LogScreenHeightRatio) : LogForm.Height;
+            //int h = _isFirstLoad ? (int)((float)sr.Height * Properties.Settings.Default.LogScreenHeightRatio) : LogForm.Height;
             //MpSingletonController.Instance.CustomLogHeight = h;
 
-            LogForm.SetBounds(0,sr.Height - h,sr.Width,h);
-
+            //LogForm.SetBounds(0,sr.Height - h,sr.Width,h);
+            LogForm.Bounds = sr;
+            
             if(TileChooserPanelController != null) {
                 TileChooserPanelController.Update();
                 

@@ -39,7 +39,8 @@ namespace MonkeyPaste {
             }
         }*/
         public MpLogForm() : base() {
-            this.DoubleBuffered = true;
+            this.DoubleBuffered = true;        
+
             ViewType = this.GetType().ToString();
             ViewName = ViewType;
             ViewId = MpSingletonController.Instance.Rand.Next(1,int.MaxValue);

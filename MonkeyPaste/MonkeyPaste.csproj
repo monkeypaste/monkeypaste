@@ -320,36 +320,41 @@
     <Compile Include="App\GdkApi.cs" />
     <Compile Include="App\MpApplicationController.cs" />
     <Compile Include="App\MpCompatibility.cs" />
-    <Compile Include="Controllers\Log\Menu\MpLogMenuPanelController.cs" />
-    <Compile Include="Controllers\Log\Menu\MpSearchIconController.cs" />
-    <Compile Include="Controllers\Log\Menu\MpSearchTextBoxController.cs" />
-    <Compile Include="Controllers\Log\Menu\Tags\MpAddTagTextBoxController.cs" />
-    <Compile Include="Controllers\Log\Menu\Tags\MpTagButtonController.cs" />
-    <Compile Include="Controllers\Log\Menu\Tags\MpTagChooserPanelController.cs" />
-    <Compile Include="Controllers\Log\Menu\Tags\MpTagTextBoxController.cs" />
-    <Compile Include="Controllers\Log\Menu\Tags\MpTagPanelController.cs" />
-    <Compile Include="Controllers\Log\Tiles\MpTileBorderPanelController.cs" />
-    <Compile Include="Controllers\Log\Tiles\MpTileDetailsTextBoxController.cs" />
+    <Compile Include="Controllers\Log\Menu\SubMenu\MpLogMenuPanelController.cs" />
+    <Compile Include="Controllers\Log\Menu\SubMenu\Search\MpSearchIconController.cs" />
+    <Compile Include="Controllers\Log\Menu\SubMenu\Search\MpSearchTextBoxController.cs" />
+    <Compile Include="Controllers\Log\Menu\SubMenu\Tags\MpAddTagTextBoxController.cs" />
+    <Compile Include="Controllers\Log\Menu\SubMenu\Tags\MpTagButtonController.cs" />
+    <Compile Include="Controllers\Log\Menu\SubMenu\Tags\MpTagChooserPanelController.cs" />
+    <Compile Include="Controllers\Log\Menu\SubMenu\Tags\MpTagTextBoxController.cs" />
+    <Compile Include="Controllers\Log\Menu\SubMenu\Tags\MpTagPanelController.cs" />
+    <Compile Include="Controllers\Log\MpLogFormPanelController.cs" />
+    <Compile Include="Controllers\Log\Tile Chooser\Tile\Border\MpTileBorderPanelController.cs" />
+    <Compile Include="Controllers\Log\Tile Chooser\Tile\Detail\MpTileDetailsTextBoxController.cs" />
+    <Compile Include="Controllers\Log\Tile Chooser\Tile\Header\MpTagButtonController.cs" />
+    <Compile Include="Controllers\Log\Tile Chooser\Tile\Header\MpTileHeaderExpandButtonController.cs" />
+    <Compile Include="Controllers\Log\Tile Chooser\Tile\Header\MpTileHeaderPanelController.cs" />
+    <Compile Include="Controllers\Log\Tile Chooser\Tile\Header\MpTileHeaderCloseButtonController.cs" />
     <Compile Include="Controllers\MpTaskbarIconController.cs" />
     <Compile Include="Controllers\MpController.cs" />
-    <Compile Include="Controllers\Log\Tiles\MpTileDetailsPanelController.cs" />
-    <Compile Include="Controllers\Log\Tiles\MpTileMenuButtonController.cs" />
-    <Compile Include="Controllers\Log\Tiles\MpTileTitleIconPanelController.cs" />
-    <Compile Include="Controllers\Log\Tiles\MpTileMenuPanelController.cs" />
-    <Compile Include="Controllers\Log\Tiles\MpTileTitlePanelController.cs" />
-    <Compile Include="Controllers\Log\Tiles\MpTileTitleTextBoxController.cs" />
+    <Compile Include="Controllers\Log\Tile Chooser\Tile\Detail\MpTileDetailsPanelController.cs" />
+    <Compile Include="Controllers\Log\Tile Chooser\Tile\Menu\MpTileMenuButtonController.cs" />
+    <Compile Include="Controllers\Log\Tile Chooser\Tile\Title\MpTileTitleIconPanelController.cs" />
+    <Compile Include="Controllers\Log\Tile Chooser\Tile\Menu\MpTileMenuPanelController.cs" />
+    <Compile Include="Controllers\Log\Tile Chooser\Tile\Title\MpTileTitlePanelController.cs" />
+    <Compile Include="Controllers\Log\Tile Chooser\Tile\Title\MpTileTitleTextBoxController.cs" />
     <Compile Include="Helpers\IconHelper.cs" />
     <Compile Include="Helpers\IconListManager.cs" />
-    <Compile Include="Controllers\Log\Tiles\MpTileChooserPanelController.cs" />
-    <Compile Include="Controllers\Log\Tiles\MpTilePanelController.cs" />
+    <Compile Include="Controllers\Log\Tile Chooser\MpTileChooserPanelController.cs" />
+    <Compile Include="Controllers\Log\Tile Chooser\Tile\MpTilePanelController.cs" />
     <Compile Include="Helpers\MpColorPallete.cs" />
     <Compile Include="Helpers\MpCursorPosition.cs" />
     <Compile Include="Helpers\MpMouseHook.cs" />
     <Compile Include="Helpers\MpTypeHelper.cs" />
     <Compile Include="Model\MpPasteHistory.cs" />
     <Compile Include="Helpers\MpHelperSingleton.cs" />
-    <Compile Include="Controllers\Log\Tiles\MpFileListItemRowPanelController.cs" />
-    <Compile Include="Controllers\Log\Tiles\MpTileControlController.cs" />
+    <Compile Include="Controllers\Log\Tile Chooser\Tile\Content\MpFileListItemRowPanelController.cs" />
+    <Compile Include="Controllers\Log\Tile Chooser\Tile\Content\MpTileControlController.cs" />
     <Compile Include="Controllers\Log\MpLogFormController.cs" />
     <Compile Include="Helpers\MpClipboardHelper.cs">
       <SubType>Form</SubType>
@@ -369,6 +374,10 @@
     <Compile Include="View\MpButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="View\MpControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\MpDropShadowLabel.cs" />
     <Compile Include="View\MpFileListItemRowIcon.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -381,6 +390,9 @@
     <Compile Include="View\MpGlassyPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="View\MpLogFormPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="View\MpSearchBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -390,6 +402,9 @@
     <Compile Include="View\MpSearchIconBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="View\MpTileHeaderButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="View\MpTagButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -397,6 +412,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpTileControlRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\MpTileHeaderPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\MpTileHeaderTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpTokenChooserPanel.cs">
@@ -620,6 +641,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\add2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\doubleSidedArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\doubleSidedArrow2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Desktop\.Net Examples\VisualEffects\VisualEffects.csproj">
+      <Project>{88c2e4d2-1237-4616-9f74-2d0a4af06009}</Project>
+      <Name>VisualEffects</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controllers\Log\Menu\PrimaryMenu\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets')" />

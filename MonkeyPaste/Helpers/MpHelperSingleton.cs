@@ -402,7 +402,7 @@ namespace MonkeyPaste {
             return Screen.FromHandle(Process.GetCurrentProcess().Handle).Bounds;
         }
         public void SetPadding(TextBoxBase textBox,Padding padding) {
-            var rect = new Rectangle(padding.Left,padding.Top,textBox.ClientSize.Width - padding.Left - padding.Right,textBox.ClientSize.Height - padding.Top - padding.Bottom);
+            var rect = new Rectangle(padding.Left,padding.Top,textBox.Size.Width - padding.Left - padding.Right,textBox.Size.Height - padding.Top - padding.Bottom);
             RECT rc = new RECT(rect);
             WinApi.SendMessageRefRect(textBox.Handle,WinApi.EM_SETRECT,0,ref rc);
         }

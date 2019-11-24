@@ -9,6 +9,28 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {
     public class MpRoundedPanel : Panel {
+        public Color BackColor2 { get; set; }
+
+        private Color _backColor = Color.Pink;
+        public override Color BackColor {
+            get {
+                return _backColor;
+            }
+            set {
+                if(MpHelperSingleton.Instance.IsBright(value)) {
+                    BackColor2 = MpHelperSingleton.Instance.ChangeColorBrightness(value,-0.5f);
+                    _backColor = value;
+                    _topBrush = new SolidBrush(_backColor);
+                    _bottomBrush = new SolidBrush(BackColor2);
+                } else {
+                    BackColor2 = value;
+                    _backColor = MpHelperSingleton.Instance.ChangeColorBrightness(value,0.5f);
+                    _topBrush = new SolidBrush(BackColor2);
+                    _bottomBrush = new SolidBrush(_backColor);
+                }
+                Invalidate();
+            }
+        }
         private int _borderThickness = 0;
         public int BorderThickness {
             get {
@@ -43,7 +65,7 @@ namespace MonkeyPaste {
                 Invalidate();
             }
         }
-
+        private SolidBrush _topBrush, _bottomBrush;
         private Pen _pen;
 
         public MpRoundedPanel() : base() {
@@ -74,7 +96,47 @@ namespace MonkeyPaste {
             path.AddArc(GetLeftLower(Radius),90,90);
             path.AddLine(0,Height - Radius,0,Radius);
             path.CloseFigure();
+            //e.Graphics.FillPath(_topBrush,path);
             Region = new Region(path);
+            //half height
+           // int hh = (int)((float)Height / 2.0f);
+            //GraphicsPath topPath = new GraphicsPath();
+
+            //topPath.StartFigure();
+            ////top left
+            //topPath.AddArc(GetLeftUpper(Radius),180,90);
+            ////top
+            //topPath.AddLine(Radius,0,Width - Radius,0);
+            ////top right
+            //topPath.AddArc(GetRightUpper(Radius),270,90);
+            ////mid right
+            //topPath.AddLine(Width,Radius,Width,hh - Radius);
+            ////mid
+            //topPath.AddLine(Width,hh,0,hh);
+            ////mid left
+            //topPath.AddLine(0,hh - Radius,0,Radius);
+            //topPath.CloseFigure();
+            //Region = new Region(topPath);
+            
+            //GraphicsPath bottomPath = new GraphicsPath();
+            ////bottom right
+            //bottomPath.AddArc(GetRightLower(Radius),0,90);
+            ////bottom
+            //bottomPath.AddLine(Width - Radius,Height,Radius,Height);
+            ////bottom left
+            //bottomPath.AddArc(GetLeftLower(Radius),90,90);
+            ////mid left
+            //bottomPath.AddLine(0,Height - Radius,0,Radius);
+            ////mid
+            //bottomPath.AddLine(0,hh,Width,hh);
+            ////mid right
+            //bottomPath.AddLine(Width,hh,Width,Height - Radius);
+            //bottomPath.CloseFigure();
+
+            //e.Graphics.SetClip(topPath);
+            //e.Graphics.FillPath()
+            //e.Graphics.FillPath(_bottomBrush,bottomPath);
+            
         }
         private void DrawSingleBorder(Graphics graphics) {
             graphics.DrawArc(_pen,new Rectangle(0,0,Radius,Radius),180,90);

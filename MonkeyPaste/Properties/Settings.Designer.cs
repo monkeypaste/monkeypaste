@@ -133,7 +133,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.15")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.2")]
         public float TileTitleHeightRatio {
             get {
                 return ((float)(this["TileTitleHeightRatio"]));
@@ -340,7 +340,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.4")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.25")]
         public float TileTitleIconWidthRatio {
             get {
                 return ((float)(this["TileTitleIconWidthRatio"]));
@@ -428,6 +428,33 @@ namespace MonkeyPaste.Properties {
             }
             set {
                 this["IsAppendModeActive"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.05")]
+        public float TileHeaderHeightRatio {
+            get {
+                return ((float)(this["TileHeaderHeightRatio"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.7")]
+        public float TileHeaderFontSizeRatio {
+            get {
+                return ((float)(this["TileHeaderFontSizeRatio"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("12")]
+        public int MaxTitleLength {
+            get {
+                return ((int)(this["MaxTitleLength"]));
             }
         }
     }

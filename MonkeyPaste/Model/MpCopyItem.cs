@@ -73,20 +73,6 @@ namespace MonkeyPaste {
                     return null;
                 }
             }
-            
-
-            //if(Properties.Settings.Default.IsAppendModeActive && newItem.copyItemTypeId == MpCopyItemType.Text) {
-            //    if(MpSingletonController.Instance.AppendItem == null) {
-            //        MpSingletonController.Instance.AppendItem = newItem;
-            //    }
-            //    else {
-            //        string appendedStr = (string)MpSingletonController.Instance.AppendItem.GetData() + Environment.NewLine + (string)newItem.DataObject;
-            //        MpSingletonController.Instance.AppendItem.SetData((object)appendedStr);
-            //        //MpSingletonController.Instance.GetMpData().UpdateMpCopyItem(MpSingletonController.Instance.AppendItem);
-            //        newItem.copyItemId = -2;
-            //        return newItem;
-            //    }
-            //}
             newItem.copyItemId = itemId;
             newItem.CopyDateTime = DateTime.Now;
             newItem.sourceHandle = sourceHandle;
@@ -94,67 +80,7 @@ namespace MonkeyPaste {
             newItem.CopyCount = 1;
             newItem.App = new MpApp(0,0,sourceHandle,false);
             newItem.appId = newItem.App.appId;
-            //newItem.WriteToDatabase();
             return newItem;
-            //MpSingletonController.Instance.GetMpData().AddMpApp(App);
-
-            //WriteToDatabase();
-        }
-        public MpCopyItem(int itemId, MpCopyItemType itemType,int clientId,int appId,object data,IntPtr sourceHandle) {
-            this.copyItemTypeId = itemType;
-            if(copyItemTypeId == MpCopyItemType.RichText) {
-                RichTextBox rtb = new RichTextBox() { Rtf = (string)data };
-                DataObject = rtb.Text;
-                copyItemTypeId = MpCopyItemType.Text;
-            }
-            else if(copyItemTypeId == MpCopyItemType.HTMLText) {
-                string dataStr = (string)data;
-                int idx0 = dataStr.IndexOf("<html>") < 0 ? 0 : dataStr.IndexOf("<html>");
-                int idx1 = dataStr.IndexOf("/<html>") < 0 ? dataStr.Length - 1 : dataStr.IndexOf("/<html>");
-                dataStr = dataStr.Substring(idx0,idx1 - idx0);
-                dataStr.Insert(dataStr.IndexOf("<html>") + 4," style='border:none;'>");
-                WebBrowser wb = new WebBrowser() {
-                    AutoSize = true,
-                    DocumentText = dataStr
-                };
-                MpSingletonController.Instance.SetIgnoreNextClipboardEvent(true);
-                ((WebBrowser)wb).Document.ExecCommand("SelectAll",false,null);
-                ((WebBrowser)wb).Document.ExecCommand("Copy",false,null);
-                MpSingletonController.Instance.SetIgnoreNextClipboardEvent(false);
-                TextBox temp = new TextBox();
-                temp.Paste();
-                DataObject = (string)temp.Text;
-                ((WebBrowser)wb).Document.ExecCommand("UNSELECT",false,Type.Missing);
-                copyItemTypeId = MpCopyItemType.Text;
-            }
-            else if(copyItemTypeId == MpCopyItemType.Text) {
-                DataObject = (string)data;
-            }
-            else {
-                DataObject = data;
-            }
-
-            if(Properties.Settings.Default.IsAppendModeActive && copyItemTypeId == MpCopyItemType.Text) {
-                if(MpSingletonController.Instance.AppendItem == null) {
-                    MpSingletonController.Instance.AppendItem = this;
-                } else {
-                    string appendedStr = (string)MpSingletonController.Instance.AppendItem.GetData() + Environment.NewLine + (string)DataObject;
-                    MpSingletonController.Instance.AppendItem.SetData((object)appendedStr);
-                    //MpSingletonController.Instance.GetMpData().UpdateMpCopyItem(MpSingletonController.Instance.AppendItem);
-                    copyItemId = -2;
-                    return;
-                }
-            } 
-            this.copyItemId = itemId;   
-            this.CopyDateTime = DateTime.Now;
-            this.sourceHandle = sourceHandle;
-            this.Title = Enum.GetName(typeof(MpCopyItemType),copyItemId).ToString();
-            this.CopyCount = 1;
-            App = new MpApp(0,0,sourceHandle,false);
-            this.appId = App.appId;
-            //MpSingletonController.Instance.GetMpData().AddMpApp(App);
-
-            //WriteToDatabase();
         }
         public MpCopyItem(int copyItemId) {
             DataTable dt = MpLogFormController.Db.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + copyItemId);
@@ -163,11 +89,6 @@ namespace MonkeyPaste {
             }
         }
        
-        public MpCopyItem(object data,MpCopyItemType mpType,IntPtr sourceHandle) : this(0,mpType,MpLogFormController.Db.Client.MpClientId,0,data,sourceHandle) { }
-        public MpCopyItem(string copyText,MpCopyItemType textType,IntPtr sourceHandle) :this((object)copyText,textType,sourceHandle) {}
-        public MpCopyItem(Image img,IntPtr sourceHandle) :this((object)MpHelperSingleton.Instance.ConvertImageToByteArray(img),MpCopyItemType.Image,sourceHandle) {}
-        public MpCopyItem(string[] fileDropList,IntPtr sourceHandle) : this((object)fileDropList,MpCopyItemType.FileList,sourceHandle) {}
-
         public void SetData(object newData) {
             DataObject = newData;
             WriteToDatabase();
@@ -199,7 +120,7 @@ namespace MonkeyPaste {
                     }
                     return new string[1] { "Misreferenced" };
                 case MpCopyItemType.Image:
-                    return (byte[])DataObject;           
+                    return DataObject;           
             }
             return "Error unknown copyitem format!";
         }
@@ -268,6 +189,28 @@ namespace MonkeyPaste {
             Console.WriteLine("Loaded MpCopyItem");
             Console.WriteLine(ToString());
         }
+        public void DeleteFromDatabase() {
+            if(copyItemId <= 0) {
+                return;
+            }
+            switch(copyItemTypeId) {
+                case MpCopyItemType.Text:
+                    MpLogFormController.Db.ExecuteNonQuery("delete from MpTextItem where fk_MpCopyItemId=" + copyItemId);
+                    MpLogFormController.Db.ExecuteNonQuery("delete from MpPasteHistory where fk_MpCopyItemId=" + copyItemId);
+                    MpLogFormController.Db.ExecuteNonQuery("delete from MpCopyItem where pk_MpCopyItemId=" + copyItemId);
+                    break;
+                case MpCopyItemType.FileList:
+                    MpLogFormController.Db.ExecuteNonQuery("delete from MpFileDropListSubItem where fk_MpFileDropListItemId=" + SubItemId);
+                    MpLogFormController.Db.ExecuteNonQuery("delete from MpFileDropListItem where pk_MpFileDropListItemId=" + SubItemId);
+                    MpLogFormController.Db.ExecuteNonQuery("delete from MpCopyItem where pk_MpCopyItemId=" + copyItemId);
+                    break;
+                case MpCopyItemType.Image:
+                    MpLogFormController.Db.ExecuteNonQuery("delete from MpImageItem where fk_MpCopyItemId=" + copyItemId);
+                    MpLogFormController.Db.ExecuteNonQuery("delete from MpPasteHistory where fk_MpCopyItemId=" + copyItemId);
+                    MpLogFormController.Db.ExecuteNonQuery("delete from MpCopyItem where pk_MpCopyItemId=" + copyItemId);
+                    break;
+            }
+        }
         // still req'd if NoDb=true
         public override void WriteToDatabase() {            
             bool isNew = false;
@@ -329,7 +272,7 @@ namespace MonkeyPaste {
                     break;
                 case MpCopyItemType.Image:
                     if(isNew) {
-                        MpLogFormController.Db.ExecuteNonQuery("insert into MpImageItem(fk_MpCopyItemId,ItemImage) values (" + this.copyItemId + ",@0)",new List<string>() { "@0" },new List<object>() { this.DataObject });
+                        MpLogFormController.Db.ExecuteNonQuery("insert into MpImageItem(fk_MpCopyItemId,ItemImage) values (" + this.copyItemId + ",@0)",new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertImageToByteArray((Image)this.DataObject) });
                     } else {
                         MpLogFormController.Db.ExecuteNonQuery("update MpImageItem set ItemImage=@0 where pk_MpImageItemId="+this.SubItemId,new List<string>() { "@0" },new List<object>() { this.DataObject });
                     }
