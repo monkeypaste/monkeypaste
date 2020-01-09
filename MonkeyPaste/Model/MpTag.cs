@@ -27,8 +27,6 @@ namespace MonkeyPaste {
             TagType = tagType;
             MpColor = new MpColor((int)tagColor.R,(int)tagColor.G,(int)tagColor.B,(int)tagColor.A);
             ColorId = MpColor.ColorId;
-
-            //WriteToDatabase();
         }
         public MpTag(int tagId) {
             DataTable dt = MpLogFormController.Db.Execute("select * from MpTag where pk_MpTagId=" + tagId);
@@ -48,7 +46,7 @@ namespace MonkeyPaste {
         }
 
         public override void WriteToDatabase() {
-            if(TagName == null || TagName == string.Empty) {
+            if(TagName == null || TagName == string.Empty || MpLogFormController.Db.NoDb) {
                 Console.WriteLine("MpTag Error, cannot create nameless tag");
                 return;
             }

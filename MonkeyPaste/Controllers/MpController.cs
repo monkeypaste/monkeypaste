@@ -16,7 +16,7 @@ namespace MonkeyPaste {
     }   
 
     public abstract class MpController :  MpIController {
-        public static Dictionary<string,Dictionary<string,object>> ControllerDictionary { get; set; } = new Dictionary<string,Dictionary<string,object>>();
+        public static Dictionary<string,object> ControllerDictionary { get; set; } = new Dictionary<string,object>();
         public static int ControllerCount { get; set; } = 0;
         public static int ViewCount { get; set; } = 0;
 
@@ -32,13 +32,9 @@ namespace MonkeyPaste {
             ++ControllerCount;
             Parent = p;
             ControllerType = GetType().ToString();
-            ControllerId = cid;
-            ControllerName = ControllerType + (ControllerId == -1 ? ControllerCount : ControllerId);
-            if(viewList != null) {
-                foreach(object vlo in viewList) {
-                    ViewList.Add((MpIView)vlo);
-                }
-            }
+            ControllerId = MpSingletonController.Instance.Rand.Next(1,int.MaxValue); 
+            ControllerName = ControllerType + ControllerId;
+            Link();
         }
         public abstract void Update();
         //public abstract void UpdateBounds(Rectangle refRectangle,float refRatio,bool xRatio,bool yRatio);
@@ -69,61 +65,44 @@ namespace MonkeyPaste {
             }
         }
         public void Link(List<MpIView> viewList = null,List<object> modelList = null) {
-            //return;
-            //add controller type as sub-dicitonary
-            if(!ControllerDictionary.ContainsKey(ControllerType)) {
-                ControllerDictionary.Add(ControllerType,new Dictionary<string,object>());                
+            while(ControllerDictionary.ContainsKey(ControllerName)) {
+                ControllerId = MpSingletonController.Instance.Rand.Next(1,int.MaxValue);
+                ControllerName = ControllerType + ControllerId;
             }
-            //add this controller to its type dictionary
-            ControllerDictionary[ControllerType].Add(ControllerName,this);
-
-            //add views
-            foreach(MpIView vo in viewList) {
-                if(!ControllerDictionary[ControllerType].ContainsKey(vo.ViewName)) {
-                    ControllerDictionary[ControllerType].Add(vo.ViewName,vo.ViewData);
-                }
-                else {
-                    Console.WriteLine("Warning overriding view: " + vo.ViewName);
-                    ControllerDictionary[ControllerType][vo.ViewName] = vo;
-                }
-                if(vo.ViewData.GetType().IsSubclassOf(typeof(Control))) {
-                    ((Control)vo.ViewData).KeyPress += View_KeyPress;
-                    ((Control)vo.ViewData).Click += View_Click;
-                    ViewList.Add((MpIView)vo);
-                }
-            }
+            ControllerDictionary.Add(ControllerName,this);
         }
         
         public object Find(string name) {
-            List<object> cl = new List<object>();
+            //List<object> cl = new List<object>();
             // loop controller types
-            foreach(KeyValuePair<string,Dictionary<string,object>> ctkvp in ControllerDictionary) {
+            foreach(KeyValuePair<string,object> ctkvp in ControllerDictionary) {
                 if(ctkvp.Key.ToLower().Contains(name.ToLower())) {
-                    foreach(KeyValuePair<string,object> ckvp in ControllerDictionary[ctkvp.Key]) {
-                        if(ckvp.Key.ToLower().Contains(name.ToLower())) {
-                            cl.Add(ckvp.Value);
-                        }
-                    }
+                    return ctkvp.Value;
+                    //    foreach(KeyValuePair<string,object> ckvp in ControllerDictionary[ctkvp.Key]) {
+                    //        if(ckvp.Key.ToLower().Contains(name.ToLower())) {
+                    //            cl.Add(ckvp.Value);
+                    //        }
+                    //    }
                 }
-                //loop controller sub components
-                foreach(KeyValuePair<string,object> ckvp in ControllerDictionary[ctkvp.Key]) {
-                    if(ckvp.Key.ToLower().Contains(name.ToLower())) {
-                        cl.Add(ckvp.Value);
-                    }
-                }
+                ////loop controller sub components
+                //foreach(KeyValuePair<string,object> ckvp in ControllerDictionary[ctkvp.Key]) {
+                //    if(ckvp.Key.ToLower().Contains(name.ToLower())) {
+                //        cl.Add(ckvp.Value);
+                //    }
+                //}
             }
-            if(cl.Count > 0) {
-                //if exact match return that object
-                foreach(object c in cl) {
-                    if(c.GetType().ToString() == name) {
-                        return c;
-                    }
-                }
-                if(cl.Count == 1) {
-                    return cl[0];
-                }
-                return cl;
-            }
+            //if(cl.Count > 0) {
+            //    if exact match return that object
+            //    foreach(object c in cl) {
+            //        if(c.GetType().ToString() == name) {
+            //            return c;
+            //        }
+            //    }
+            //    if(cl.Count == 1) {
+            //        return cl[0];
+            //    }
+            //    return cl;
+            //}
             return null;
         }
 

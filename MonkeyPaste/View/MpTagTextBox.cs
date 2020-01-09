@@ -8,7 +8,7 @@ using System.Windows.Forms;
 namespace MonkeyPaste {
     public class MpTagTextBox:TextBox, MpIView {
         public MpTagTextBox(int tokenId) : base() {
-            //this.DoubleBuffered = true;
+            this.DoubleBuffered = true;
             ViewType = this.GetType().ToString();
             ViewName = ViewType + tokenId;
             ViewId = MpSingletonController.Instance.Rand.Next(1,int.MaxValue);

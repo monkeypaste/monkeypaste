@@ -47,11 +47,7 @@ namespace MonkeyPaste {
                     //Add clipboard item to copy list and create its copyItemPanel
                     try {
                         if(MpSingletonController.Instance.GetIgnoreNextClipboardEvent()) {
-                            //MpSingletonController.Instance.SetIgnoreNextClipboardEvent(false);
-                            WinApi.SendMessage(_nextClipboardViewer,m.Msg,m.WParam,m.LParam);
-                            //base.WndProc(ref m);
-                            return;
-                            //break;
+                            break;
                         }
                         IDataObject iData = new DataObject();
                         try {
@@ -64,19 +60,19 @@ namespace MonkeyPaste {
                         if(iData != null) {
                             MpCopyItem ci = null;
                             if(iData.GetDataPresent(DataFormats.Bitmap)) {
-                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.Image,MpLogFormController.Db.Client.MpClientId,0,(Image)iData.GetData(DataFormats.Bitmap,true),_lastWindowWatcher.LastHandle);// CreateCopyItem(0,MpCopyItemType.None,0,0,null,IntPtr.Zero);// ((Image)iData.GetData(DataFormats.Bitmap,true),sourceHandle);
+                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.Image,MpLogFormController.Db.Client.ClientId,0,(Image)iData.GetData(DataFormats.Bitmap,true),_lastWindowWatcher.LastHandle);// CreateCopyItem(0,MpCopyItemType.None,0,0,null,IntPtr.Zero);// ((Image)iData.GetData(DataFormats.Bitmap,true),sourceHandle);
                             }
                             else if(iData.GetDataPresent(DataFormats.FileDrop)) {
-                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.FileList,MpLogFormController.Db.Client.MpClientId,0,(string[])iData.GetData(DataFormats.FileDrop,true),_lastWindowWatcher.LastHandle);
+                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.FileList,MpLogFormController.Db.Client.ClientId,0,(string[])iData.GetData(DataFormats.FileDrop,true),_lastWindowWatcher.LastHandle);
                             }
                             else if(iData.GetDataPresent(DataFormats.Rtf)) {
-                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.Text,MpLogFormController.Db.Client.MpClientId,0,(string)iData.GetData(DataFormats.Text),_lastWindowWatcher.LastHandle);
+                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.Text,MpLogFormController.Db.Client.ClientId,0,(string)iData.GetData(DataFormats.Text),_lastWindowWatcher.LastHandle);
                             }
                             else if(iData.GetDataPresent(DataFormats.Html)) {
-                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.Text,MpLogFormController.Db.Client.MpClientId,0,(string)iData.GetData(DataFormats.Text),_lastWindowWatcher.LastHandle);
+                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.Text,MpLogFormController.Db.Client.ClientId,0,(string)iData.GetData(DataFormats.Text),_lastWindowWatcher.LastHandle);
                             }
                             else if(iData.GetDataPresent(DataFormats.Text)) {
-                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.Text,MpLogFormController.Db.Client.MpClientId,0,(string)iData.GetData(DataFormats.Text),_lastWindowWatcher.LastHandle);
+                                ci = MpCopyItem.CreateCopyItem(0,MpCopyItemType.Text,MpLogFormController.Db.Client.ClientId,0,(string)iData.GetData(DataFormats.Text),_lastWindowWatcher.LastHandle);
                             }
                             else {
                                 Console.WriteLine("MpData error clipboard data is not known format");

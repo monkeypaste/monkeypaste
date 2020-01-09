@@ -25,8 +25,9 @@ namespace MonkeyPaste {
         private IntPtr sourceHandle;
 
         public MpApp App { get; set; }
-        
-        public MpCopyItem() { }
+        public MpClient Client { get; set; }
+
+        public MpCopyItem() {}
 
         public static MpCopyItem CreateCopyItem(int itemId,MpCopyItemType itemType,int clientId,int appId,object data,IntPtr sourceHandle) {
             MpCopyItem newItem = new MpCopyItem();
@@ -63,7 +64,7 @@ namespace MonkeyPaste {
                 newItem.DataObject = data;
             }
             if(newItem.copyItemTypeId == MpCopyItemType.Text) {
-                DataTable dt = MpLogFormController.Db.Execute("select * from MpTextItem where ItemText='" + (string)newItem.DataObject+"'");
+                DataTable dt = MpLogFormController.Db.Execute("select * from MpTextItem where ItemText=@1",new List<string>(){ "@1"},new List<object>() { (string)newItem.DataObject });
                 if(dt != null && dt.Rows.Count > 0) {
                     int cid = Convert.ToInt32(dt.Rows[0]["fk_MpCopyItemId"].ToString());
                     dt = MpLogFormController.Db.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + cid);
@@ -80,6 +81,8 @@ namespace MonkeyPaste {
             newItem.CopyCount = 1;
             newItem.App = new MpApp(0,0,sourceHandle,false);
             newItem.appId = newItem.App.appId;
+            newItem.Client = new MpClient(0,0,MpHelperSingleton.Instance.GetCurrentIPAddress().MapToIPv4().ToString(),"unknown",DateTime.Now);
+            
             return newItem;
         }
         public MpCopyItem(int copyItemId) {
@@ -103,7 +106,7 @@ namespace MonkeyPaste {
                 case MpCopyItemType.RichText:
                 case MpCopyItemType.HTMLText:
                     //case MpCopyItemType.RichText:
-                    return DataObject;
+                    return ((string)DataObject).Replace("''","'");
                 //case MpCopyItemType.HTMLText:
                 //    return ((string)DataObject).Trim();
                 //case MpCopyItemType.RichText:
@@ -135,7 +138,7 @@ namespace MonkeyPaste {
             this.clientId = Convert.ToInt32(dr["fk_MpClientId"].ToString());
             this.appId = Convert.ToInt32(dr["fk_MpAppId"].ToString());
             this.CopyDateTime = DateTime.Parse(dr["CopyDateTime"].ToString());
-            this.Title = dr["Title"].ToString();
+            this.Title = dr["Title"].ToString().Replace("''","'");
             this.CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
 
             this.App = new MpApp(MpLogFormController.Db.Execute("select * from MpApp where pk_MpAppId=" + appId).Rows[0]);
@@ -224,7 +227,7 @@ namespace MonkeyPaste {
             if(this.copyItemId > 0) {
                 DataTable dt = MpLogFormController.Db.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + this.copyItemId);
                 if(dt.Rows.Count > 0) {
-                    MpLogFormController.Db.ExecuteNonQuery("update MpCopyItem set fk_MpCopyItemTypeId=" + (int)this.copyItemTypeId + ", fk_MpClientId=" + this.clientId + ", fk_MpAppId=" + this.appId + ", Title='"+this.Title+"', CopyCount="+this.CopyCount+" where pk_MpCopyItemId=" + this.copyItemId);
+                    MpLogFormController.Db.ExecuteNonQuery("update MpCopyItem set fk_MpCopyItemTypeId=" + (int)this.copyItemTypeId + ", fk_MpClientId=" + this.clientId + ", fk_MpAppId=" + this.appId + ", Title='"+this.Title.Replace("'","''")+"', CopyCount="+this.CopyCount+" where pk_MpCopyItemId=" + this.copyItemId);
                 }
                 else {
                     Console.WriteLine("MpCopyItem error cannot find pk of existing item");
@@ -239,7 +242,7 @@ namespace MonkeyPaste {
                     MapDataToColumns();
                     return;
                 }
-                MpLogFormController.Db.ExecuteNonQuery("insert into MpCopyItem(fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,Title,CopyDateTime,CopyCount) values (" + (int)this.copyItemTypeId + "," + MpLogFormController.Db.Client.MpClientId + "," + this.appId + ",'"+this.Title+"','" + this.CopyDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "',"+this.CopyCount+");");
+                MpLogFormController.Db.ExecuteNonQuery("insert into MpCopyItem(fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,Title,CopyDateTime,CopyCount) values (" + (int)this.copyItemTypeId + "," + MpLogFormController.Db.Client.ClientId + "," + this.appId + ",'"+this.Title+"','" + this.CopyDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "',"+this.CopyCount+");");
                 this.copyItemId = MpLogFormController.Db.GetLastRowId("MpCopyItem","pk_MpCopyItemId");
                 isNew = true;
             }
@@ -253,10 +256,10 @@ namespace MonkeyPaste {
                 //case MpCopyItemType.Email:
                 case MpCopyItemType.Text:
                     if(isNew) {
-                        MpLogFormController.Db.ExecuteNonQuery("insert into MpTextItem(fk_MpCopyItemId,ItemText) values (" + this.copyItemId + ",@1)",new List<string>() { "@1" },new List<object>() { this.DataObject });
+                        MpLogFormController.Db.ExecuteNonQuery("insert into MpTextItem(fk_MpCopyItemId,ItemText) values (" + this.copyItemId + ",@1)",new List<string>() { "@1" },new List<object>() { ((string)this.DataObject).Replace("'","''") });
                         this.SubItemId = MpLogFormController.Db.GetLastRowId("MpTextItem","pk_MpTextItemId");
                     } else {
-                        MpLogFormController.Db.ExecuteNonQuery("update MpTextItem set ItemText='" + (string)GetData() + "' where pk_MpTextItemId=" + this.SubItemId);
+                        MpLogFormController.Db.ExecuteNonQuery("update MpTextItem set ItemText='" + ((string)GetData()).Replace("'","''") + "' where pk_MpTextItemId=" + this.SubItemId);
                     }                    
                     break;
                 case MpCopyItemType.FileList:

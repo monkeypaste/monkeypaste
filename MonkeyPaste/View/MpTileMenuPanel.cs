@@ -13,7 +13,8 @@ namespace MonkeyPaste {
         public int ViewId { get; set; }
         public object ViewData { get; set; }
 
-        public MpTileMenuPanel(int tileId, int panelId) : base() {            
+        public MpTileMenuPanel(int tileId, int panelId) : base() {
+            this.DoubleBuffered = true;
             ViewType = this.GetType().ToString();
             ViewName = ViewType + panelId + "_" + tileId;
             ViewId = MpSingletonController.Instance.Rand.Next(1,int.MaxValue);

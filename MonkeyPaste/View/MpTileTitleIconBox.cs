@@ -20,5 +20,11 @@ namespace MonkeyPaste {
         public string ViewName { get; set; }
         public int ViewId { get; set; }
         public object ViewData { get; set; }
+        protected override void OnPaint(PaintEventArgs pe) {
+            pe.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+            base.OnPaint(pe);
+        }
     }
 }

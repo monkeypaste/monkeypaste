@@ -34,7 +34,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.3")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.35")]
         public float LogScreenHeightRatio {
             get {
                 return ((float)(this["LogScreenHeightRatio"]));
@@ -79,7 +79,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.14")]
         public float LogMenuHeightRatio {
             get {
                 return ((float)(this["LogMenuHeightRatio"]));
@@ -394,7 +394,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.9")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.8")]
         public float LogMenuTileTokenFontSizeRatio {
             get {
                 return ((float)(this["LogMenuTileTokenFontSizeRatio"]));
@@ -403,7 +403,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.9")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.85")]
         public float LogMenuTileTokenPanelHeightRatio {
             get {
                 return ((float)(this["LogMenuTileTokenPanelHeightRatio"]));
@@ -455,6 +455,144 @@ namespace MonkeyPaste.Properties {
         public int MaxTitleLength {
             get {
                 return ((int)(this["MaxTitleLength"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Control+D")]
+        public string InputToggleLogVisibility {
+            get {
+                return ((string)(this["InputToggleLogVisibility"]));
+            }
+            set {
+                this["InputToggleLogVisibility"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Escape")]
+        public string InputHideLog {
+            get {
+                return ((string)(this["InputHideLog"]));
+            }
+            set {
+                this["InputHideLog"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Right")]
+        public string InputNextTile {
+            get {
+                return ((string)(this["InputNextTile"]));
+            }
+            set {
+                this["InputNextTile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Left")]
+        public string InputPreviousTile {
+            get {
+                return ((string)(this["InputPreviousTile"]));
+            }
+            set {
+                this["InputPreviousTile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Tab")]
+        public string InputNextControl {
+            get {
+                return ((string)(this["InputNextControl"]));
+            }
+            set {
+                this["InputNextControl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Shift+Tab")]
+        public string InputPreviousControl {
+            get {
+                return ((string)(this["InputPreviousControl"]));
+            }
+            set {
+                this["InputPreviousControl"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Enter")]
+        public string InputPasteTile {
+            get {
+                return ((string)(this["InputPasteTile"]));
+            }
+            set {
+                this["InputPasteTile"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.9")]
+        public float LogMainMenuTitleHeightRatio {
+            get {
+                return ((float)(this["LogMainMenuTitleHeightRatio"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Candera")]
+        public string LogMainMenuTitleFont {
+            get {
+                return ((string)(this["LogMainMenuTitleFont"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.7")]
+        public float LogMainMenuTitleFontSizeRatio {
+            get {
+                return ((float)(this["LogMainMenuTitleFontSizeRatio"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.075")]
+        public float TreeViewCollapsedWidthRatio {
+            get {
+                return ((float)(this["TreeViewCollapsedWidthRatio"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.1")]
+        public float TreeViewWidthRatio {
+            get {
+                return ((float)(this["TreeViewWidthRatio"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.8")]
+        public float LogMainMenuIconSizeRatio {
+            get {
+                return ((float)(this["LogMainMenuIconSizeRatio"]));
             }
         }
     }

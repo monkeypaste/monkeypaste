@@ -9,15 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpTilePanel : MpRoundedPanel, MpIView {
+    public class MpTilePanel : Panel, MpIView {
         public MpTilePanel(int tileId,int panelId) : base() {
-            //this.DoubleBuffered = true;
+            this.DoubleBuffered = true;
             ViewType = this.GetType().ToString();
             ViewName = ViewType + panelId + "_" + tileId;
             ViewId = MpSingletonController.Instance.Rand.Next(1,int.MaxValue);
             ViewData = this;
         }
-
         public string ViewType { get; set; }
         public string ViewName { get; set; }
         public int ViewId { get; set; }

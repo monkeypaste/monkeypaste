@@ -14,6 +14,7 @@ namespace MonkeyPaste {
 
         public MpButton() : base() {
 
+            this.DoubleBuffered = true;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Auth0.OidcClient;
+using Gma.System.MouseKeyHook;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -12,8 +13,7 @@ namespace MonkeyPaste {
     public class MpTaskbarIconController : MpController {
         private static readonly string DefaultTooltip = "Monkey Paste";
 
-        private MpKeyboardHook _toggleSettingsHook,_toggleAppendModeHook;
-        private MpMouseHook _mouseHitScreenTopHook,_mouseUpHook;
+        //private IKeyboardMouseEvents _mouseHitScreenTopHook,_mouseUpHook, _toggleSettingsHook, _toggleAppendModeHook;
         private bool _skipAuth = true;
 
         public MpLogFormController LogFormController { get; set; }
@@ -36,8 +36,9 @@ namespace MonkeyPaste {
             _mouseHitScreenTopHook.MouseEvent += _mouseHitScreenTopHook_MouseEvent;
 
             _mouseUpHook = new MpMouseHook();
+
             _mouseUpHook.RegisterMouseEvent(MpMouseEvent.UpL);
-            _mouseUpHook.MouseEvent += _mouseUpHook_MouseEvent;*/
+            _mouseUpHook.MouseEvent += _mouseUpHook_MouseEvent;
 
             _toggleSettingsHook = new MpKeyboardHook();
             _toggleSettingsHook.RegisterHotKey(ModifierKeys.Alt,Keys.D);
@@ -45,7 +46,7 @@ namespace MonkeyPaste {
 
             _toggleAppendModeHook = new MpKeyboardHook();
             _toggleAppendModeHook.RegisterHotKey(ModifierKeys.Control | ModifierKeys.Shift,Keys.A);
-            _toggleAppendModeHook.KeyPressed += _toggleAppendModeHook_KeyPressed;
+            _toggleAppendModeHook.KeyPressed += _toggleAppendModeHook_KeyPressed;*/
 
             HelpForm = new MpHelpForm();
             SettingsForm = new MpSettingsForm();
@@ -66,17 +67,16 @@ namespace MonkeyPaste {
             //}
             Link(new List<MpIView>()/* { helpForm,settingsForm,notifyIcon }*/);
         }
-        private void _mouseUpHook_MouseEvent(object sender,Gma.System.MouseKeyHook.MouseEventExtArgs e) {
-            if(e.Button == MouseButtons.Left) {
-                Console.WriteLine("Mouse up event occured");
-            }            
+        public void MouseUpHook_MouseEvent() {
+            Console.WriteLine("Mouse up event occured");
+                      
         }
-        
-        private void _mouseHitScreenTopHook_MouseEvent(object sender,Gma.System.MouseKeyHook.MouseEventExtArgs e) {
+
+        public void MouseHitScreenTopHook_MouseEvent() {
             LogFormController.ShowLogForm();
         }
 
-        private void _toggleAppendModeHook_KeyPressed(object sender,KeyPressedEventArgs e) {
+        public void ToggleAppendModeHook_KeyPressed() {
             Properties.Settings.Default.IsAppendModeActive = !Properties.Settings.Default.IsAppendModeActive;
             //LogFormController.LogForm.Invoke((MethodInvoker)delegate {
             //    if(Properties.Settings.Default.IsAppendModeActive) {
@@ -93,8 +93,8 @@ namespace MonkeyPaste {
             if(Properties.Settings.Default.IsAppendModeActive) {
                 TrayIcon.BalloonTipText = "Append mode activated";
                 TrayIcon.ShowBalloonTip(5000);
-                if(LogFormController.TileChooserPanelController.SelectedTilePanelController != null && LogFormController.TileChooserPanelController.SelectedTilePanelController.CopyItem.copyItemTypeId == MpCopyItemType.Text) {
-                    MpSingletonController.Instance.AppendItem = LogFormController.TileChooserPanelController.SelectedTilePanelController.CopyItem;
+                if(LogFormController.LogFormPanelController.TileChooserPanelController.SelectedTilePanelController != null && LogFormController.LogFormPanelController.TileChooserPanelController.SelectedTilePanelController.CopyItem.copyItemTypeId == MpCopyItemType.Text) {
+                    MpSingletonController.Instance.AppendItem = LogFormController.LogFormPanelController.TileChooserPanelController.SelectedTilePanelController.CopyItem;
                 }
             }
             else {
@@ -195,7 +195,7 @@ namespace MonkeyPaste {
                 HelpForm.Activate();
             }
         }
-        private void _toggleSettingsHook_KeyPressed(object sender,KeyPressedEventArgs e) {
+        public void _toggleSettingsHook_KeyPressed() {
             Console.WriteLine("Pressed settings toggle");
 
             if(TrayIcon.ContextMenuStrip != null) {

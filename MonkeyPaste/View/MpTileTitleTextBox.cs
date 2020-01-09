@@ -13,6 +13,7 @@ namespace MonkeyPaste {
         public object ViewData {get;set;}
 
         public MpTileTitleTextBox(int tileId,int panelId) : base() {
+            this.DoubleBuffered = true;
             ViewType = this.GetType().ToString();
             ViewName = ViewType + panelId + "_" + tileId;
             ViewId = MpSingletonController.Instance.Rand.Next(1,int.MaxValue);

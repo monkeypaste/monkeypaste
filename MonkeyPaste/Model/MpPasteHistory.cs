@@ -46,7 +46,7 @@ namespace MonkeyPaste {
                 PasteHistoryId = ++TotalPasteHistoryCount;
                 return;
             }
-            MpLogFormController.Db.ExecuteNonQuery("insert into MpPasteHistory(fk_MpCopyItemId,fk_MpClientId,fk_MpAppId,PasteDateTime) values (" + CopyItemId + "," + MpLogFormController.Db.Client.MpClientId +","+DestAppId+ ",'" + PasteDateTime.ToString("yyyy-MM-dd HH:mm:ss") +"');");
+            MpLogFormController.Db.ExecuteNonQuery("insert into MpPasteHistory(fk_MpCopyItemId,fk_MpClientId,fk_MpAppId,PasteDateTime) values (" + CopyItemId + "," + MpLogFormController.Db.Client.ClientId +","+DestAppId+ ",'" + PasteDateTime.ToString("yyyy-MM-dd HH:mm:ss") +"');");
             PasteHistoryId = MpLogFormController.Db.GetLastRowId("MpPasteHistory","pk_MpPasteHistoryId");
         }
 

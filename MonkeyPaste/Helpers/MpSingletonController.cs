@@ -30,12 +30,14 @@ namespace MonkeyPaste {
 
         public float TileTitleFontSize { get; set; }
 
+        public MpSingletonController() {
+            Rand = new Random(Convert.ToInt32(DateTime.Now.Second));
+        }
         public void ScrollWheelListener(object sender, MouseEventArgs e) {
             ScrollWheelDelta += e.Delta;
         }
         public void Init(object context) {
             _appContext = context;
-            Rand = new Random(Convert.ToInt32(DateTime.Now.Second));
             //_data = new MpData(dbPath,dbPassword,idToken,accessToken);
             //_hotkeyHookDictionary = new Dictionary<string,MpKeyboardHook>();
             //_data.Init();

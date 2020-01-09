@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public class MpTileBorderPanel:MpRoundedPanel, MpIView {
         public MpTileBorderPanel(int panelId) {
+            this.DoubleBuffered = true;
             ViewType = this.GetType().ToString();
             ViewName = ViewType + panelId;
             ViewId = MpSingletonController.Instance.Rand.Next(1,int.MaxValue);

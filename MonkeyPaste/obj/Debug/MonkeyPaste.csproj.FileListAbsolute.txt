@@ -307,6 +307,7 @@ C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\MonkeyPaste.pdb
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\AtkSharp.dll
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\Auth0.OidcClient.Core.dll
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\Auth0.OidcClient.dll
+C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\BevelPanel.dll
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\BouncyCastle.Crypto.dll
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\CairoSharp.dll
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\EntityFramework.dll
@@ -355,6 +356,7 @@ C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\System.Net.Http
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\System.Numerics.Vectors.dll
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\System.Text.Encodings.Web.dll
+C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\VisualEffects.dll
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\WpfRichText.dll
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\Xceed.Wpf.AvalonDock.dll
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\Xceed.Wpf.AvalonDock.Themes.Aero.dll
@@ -364,6 +366,8 @@ C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\Xceed.Wpf.Toolk
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\YamlDotNet.dll
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\EnvDTE.dll
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\stdole.dll
+C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\VisualEffects.pdb
+C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\BevelPanel.pdb
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\Auth0.OidcClient.xml
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\Auth0.OidcClient.Core.xml
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\EntityFramework.xml
@@ -439,5 +443,6 @@ C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\obj\Debug\MonkeyPaste.csp
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\obj\Debug\MonkeyPaste.csproj.CopyComplete
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\obj\Debug\MonkeyPaste.exe
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\obj\Debug\MonkeyPaste.pdb
-C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\VisualEffects.dll
-C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\VisualEffects.pdb
+C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\ExtractLargeIconFromFile.exe
+C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\ExtractLargeIconFromFile.pdb
+C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\ExtractLargeIconFromFile.exe.config

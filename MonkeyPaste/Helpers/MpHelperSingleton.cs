@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExtractLargeIconFromFile;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -15,14 +16,19 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static ExtractLargeIconFromFile.ShellEx;
 
 namespace MonkeyPaste {
     public class MpHelperSingleton {
         private static readonly Lazy<MpHelperSingleton> lazy = new Lazy<MpHelperSingleton>(() => new MpHelperSingleton());
         public static MpHelperSingleton Instance { get { return lazy.Value; } }
 
+        public Bitmap GetBitmapFromFilePath(string filepath,IconSizeEnum iconsize) {
+            return ShellEx.GetBitmapFromFilePath(filepath,iconsize);
+        }
         public Image GetIconImage(IntPtr sourceHandle) {
-            return IconReader.GetFileIcon(MpHelperSingleton.Instance.GetProcessPath(sourceHandle),IconReader.IconSize.Large,false).ToBitmap();
+            return GetBitmapFromFilePath(MpHelperSingleton.Instance.GetProcessPath(sourceHandle),IconSizeEnum.ExtraLargeIcon);
+            //return IconReader.GetFileIcon(MpHelperSingleton.Instance.GetProcessPath(sourceHandle),IconReader.IconSize.Large,false).ToBitmap();
         }
         /// <summary>
         /// Method to rotate an Image object. The result can be one of three cases:

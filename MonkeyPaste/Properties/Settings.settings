@@ -6,7 +6,7 @@
       <Value Profile="(Default)">3</Value>
     </Setting>
     <Setting Name="LogScreenHeightRatio" Type="System.Single" Scope="Application">
-      <Value Profile="(Default)">0.3</Value>
+      <Value Profile="(Default)">0.35</Value>
     </Setting>
     <Setting Name="LogPanelBgColor" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">DodgerBlue</Value>
@@ -21,7 +21,7 @@
       <Value Profile="(Default)">0.001</Value>
     </Setting>
     <Setting Name="LogMenuHeightRatio" Type="System.Single" Scope="Application">
-      <Value Profile="(Default)">0.1</Value>
+      <Value Profile="(Default)">0.14</Value>
     </Setting>
     <Setting Name="LogMenuSearchFont" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Candera</Value>
@@ -126,10 +126,10 @@
       <Value Profile="(Default)">Tahoma</Value>
     </Setting>
     <Setting Name="LogMenuTileTokenFontSizeRatio" Type="System.Single" Scope="Application">
-      <Value Profile="(Default)">0.9</Value>
+      <Value Profile="(Default)">0.8</Value>
     </Setting>
     <Setting Name="LogMenuTileTokenPanelHeightRatio" Type="System.Single" Scope="Application">
-      <Value Profile="(Default)">0.9</Value>
+      <Value Profile="(Default)">0.85</Value>
     </Setting>
     <Setting Name="LogMenuTileTokenChooserBgColor" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">Red</Value>
@@ -145,6 +145,45 @@
     </Setting>
     <Setting Name="MaxTitleLength" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">12</Value>
+    </Setting>
+    <Setting Name="InputToggleLogVisibility" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Control+D</Value>
+    </Setting>
+    <Setting Name="InputHideLog" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Escape</Value>
+    </Setting>
+    <Setting Name="InputNextTile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Right</Value>
+    </Setting>
+    <Setting Name="InputPreviousTile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Left</Value>
+    </Setting>
+    <Setting Name="InputNextControl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Tab</Value>
+    </Setting>
+    <Setting Name="InputPreviousControl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Shift+Tab</Value>
+    </Setting>
+    <Setting Name="InputPasteTile" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Enter</Value>
+    </Setting>
+    <Setting Name="LogMainMenuTitleHeightRatio" Type="System.Single" Scope="Application">
+      <Value Profile="(Default)">0.9</Value>
+    </Setting>
+    <Setting Name="LogMainMenuTitleFont" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Candera</Value>
+    </Setting>
+    <Setting Name="LogMainMenuTitleFontSizeRatio" Type="System.Single" Scope="Application">
+      <Value Profile="(Default)">0.7</Value>
+    </Setting>
+    <Setting Name="TreeViewCollapsedWidthRatio" Type="System.Single" Scope="Application">
+      <Value Profile="(Default)">0.075</Value>
+    </Setting>
+    <Setting Name="TreeViewWidthRatio" Type="System.Single" Scope="Application">
+      <Value Profile="(Default)">0.1</Value>
+    </Setting>
+    <Setting Name="LogMainMenuIconSizeRatio" Type="System.Single" Scope="Application">
+      <Value Profile="(Default)">0.8</Value>
     </Setting>
   </Settings>
 </SettingsFile>

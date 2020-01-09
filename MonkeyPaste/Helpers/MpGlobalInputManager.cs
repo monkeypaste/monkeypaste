@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpGlobalInputManager {
+    public class MpGlobalInputManager : IDisposable {
         private static readonly Lazy<MpGlobalInputManager> lazy = new Lazy<MpGlobalInputManager>(() => new MpGlobalInputManager());
         public static MpGlobalInputManager Instance { get { return lazy.Value; } }
 
-        private IKeyboardMouseEvents _mouseHook;
-       /* private MpKeyboardHook _keyHook;*/
+        private IKeyboardMouseEvents _hook;
+        private IKeyboardMouseEvents _keyHook;
 
         public delegate void MouseClicked(object sender,MouseEventArgs e);
         public event MouseClicked MouseClickedEvent;
@@ -21,64 +21,84 @@ namespace MonkeyPaste {
         public delegate void MouseMove(object sender,MouseEventExtArgs e);
         public event MouseMove MouseMoveEvent;
 
-        public delegate void KeyPressed(object sender,KeyPressedEventArgs e);
+        public delegate void KeyPressed(object sender,KeyPressEventArgs e);
         public event KeyPressed KeyPressedEvent;
+
+        public delegate void MethodHandler();
 
         private Dictionary<Combination,Action> _assignmentDictionary = new Dictionary<Combination,Action>();
 
-        public Action ActionToggleLogVisibility { get; set; }
-        public Action ActionMouseTopScreenEdge { get; set; }
-        public Action ActionHideLog { get; set; }
-        public Action ActionToggleAppendMode { get; set; }
-        public Action ActionSelectLeftTile { get; set; }
-        public Action ActionSelectRightTile { get; set; }
-        public Action ActionDeleteTile { get; set; }
-        public Action ActionPasteTile { get; set; }
-        public Action ActionToggleAutoCopyMode { get; set; }
-        public Action ActionToggleAppEnabled { get; set; }
-        public Action ActionToggleSettings { get; set; }
+        public Action ActionMouseTopScreenEdge; 
+        public Action ActionMouseOverLogFormPanelTop;
+
+        public Action ActionKeyboardToggleLog;
+        public Action ActionKeyboardHideLog;
+
+        public Action ActionLogFormResizeBegin;
+        public Action ActionLogFormResizing;
+        public Action ActionLogFormResizeEnd;
+
+        public Action ActionKeyboardNextControl;
+        public Action ActionKeyboardPreviousControl;
+
+        public Action ActionKeyboardPreviousTile;
+        public Action ActionKeyboardNextTile;
         
+        public Action ActionKeyboardDeleteTile;
+
+        public Action ActionKeyboardPasteTile;
+        
+        public Action ActionKeyboardToggleAppendMode;
+        public Action ActionKeyboardToggleAutoCopyMode;
+        public Action ActionKeyboardToggleAppEnabled;
+
+        public Action ActionKeyboardToggleSettings;
+
+
         public MpGlobalInputManager() {
-            _mouseHook = Hook.GlobalEvents();
-
-            _mouseHook.MouseClick += delegate (object sender,MouseEventArgs e) {
-                MouseClickedEvent?.Invoke(sender,e);
-            };
-            _mouseHook.MouseMoveExt += delegate (object sender,MouseEventExtArgs e) {
-                MouseMoveEvent?.Invoke(sender,e);
-            };
-
-            //keyHook = new MpKeyboardHook();
-            //_keyHook.KeyPressed += _keyHook_KeyPressed;
-
-            /*var undo = Combination.FromString("Control+Z");
-            //var fullScreen = Combination.FromString("Shift+Alt+Enter");
-            
-            //2. Define actions
-            Action actionUndo = DoSomething;
-            Action actionFullScreen = () => { Console.WriteLine("You Pressed FULL SCREEN"); };
-
-            void DoSomething() {
-                Console.WriteLine("You pressed UNDO");
+            _hook = Hook.GlobalEvents();
+            //_hook.MouseClick += delegate (object sender,MouseEventArgs e) {
+            //    MouseClickedEvent?.Invoke(sender,e);
+            //};
+            //_hook.MouseMoveExt += delegate (object sender,MouseEventExtArgs e) {
+            //    MouseMoveEvent?.Invoke(sender,e);
+            //};
+            //_hook.KeyPress += delegate (object sender,KeyPressEventArgs e) {
+                
+            //    KeyPressedEvent?.Invoke(sender,e);
+            //};
+        }
+        public void AddKeyboardAction(string combination,ref Action action,Action actionHandler) {
+            if(!_assignmentDictionary.Contains<KeyValuePair<Combination,Action>>(new KeyValuePair<Combination, Action>(Combination.FromString(combination),action))) {
+                action = actionHandler;
+                _assignmentDictionary.Add(Combination.FromString(combination),action);
+                Hook.GlobalEvents().OnCombination(_assignmentDictionary);
+            }          
+            //
+        }
+        public void AddMouseMoveAction(EventHandler<MouseEventExtArgs> actionHandler) {            
+            _hook.MouseMoveExt += actionHandler;
+        }
+        public void AddMouseClickAction(MouseEventHandler actionHandler) {
+            _hook.MouseClick += actionHandler;
+        }
+        public void RemoveKeyboardAction(string combination) {
+            if(_assignmentDictionary.ContainsKey(Combination.FromString(combination))) {
+                _assignmentDictionary.Remove(Combination.FromString(combination));
+                Hook.GlobalEvents().OnCombination(_assignmentDictionary);
             }
-
-            //3. Assign actions to key combinations
-            var assignment = new Dictionary<Combination,Action> {
-                {undo, actionUndo},
-                {fullScreen, actionFullScreen}
-            };
-
-            //4. Install listener
-            Hook.GlobalEvents().OnCombination(assignment);*/
+            //
         }
-        public void AddKeyboardAction(string combination,Action a) {
-            _assignmentDictionary.Add(Combination.FromString(combination),a);
-            Hook.GlobalEvents().OnCombination(_assignmentDictionary);
+        public void RemoveMouseMoveAction(EventHandler<MouseEventExtArgs> actionHandler) {
+            _hook.MouseMoveExt -= actionHandler;
         }
-        private void _keyHook_KeyPressed(object sender,KeyPressedEventArgs e) {
-            throw new NotImplementedException();
+        public void RemoveMouseClickAction(MouseEventHandler actionHandler) {
+            _hook.MouseClick -= actionHandler;
         }
 
+        private void _keyHook_KeyPressed(object sender,KeyPressEventArgs e) {
+            KeyPressedEvent(sender,e);
+        }
         private void _mouseHook_MouseClick(object sender,MouseEventArgs e) {
             MouseClickedEvent(sender,e);
             //Console.WriteLine("Clicked");
@@ -108,7 +128,6 @@ namespace MonkeyPaste {
             //    TileChooserPanelController.Update();
             //}
         }
-
         private void _mouseHook_MouseMoveExt(object sender,MouseEventExtArgs e) {
             MouseMoveEvent(sender,e);
             //Console.WriteLine("Mo0ve");
@@ -121,6 +140,10 @@ namespace MonkeyPaste {
             //        citc.TileControlController.TraverseItem(citc.TileControlController.ItemPanel.PointToClient(e.Location));
             //    }
             //}
+        }
+
+        public void Dispose() {
+            _hook.Dispose();
         }
     }
 }

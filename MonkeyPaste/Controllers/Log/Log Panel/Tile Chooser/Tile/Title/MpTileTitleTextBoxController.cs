@@ -1,0 +1,118 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace MonkeyPaste {
+    public class MpTileTitleTextBoxController:MpController {
+        public MpTileTitleTextBox TileTitleTextBox { get; set; }
+        public MpTileTitleLabel TileTitleLabel { get; set; }
+
+        private int _copyItemId;
+
+        public MpTileTitleTextBoxController(int tileId,int panelId,MpCopyItem ci,MpController Parent) : base(Parent) {
+            _copyItemId = ci.copyItemId;
+            if(ci.Title.Trim() == string.Empty) {
+                ci.Title = "Empty";
+                ci.WriteToDatabase();
+            }
+
+            TileTitleLabel = new MpTileTitleLabel(tileId,panelId) {
+                Text = ci.Title,
+                BackColor = Color.Transparent,
+                Margin = Padding.Empty,
+                Padding = Padding.Empty,
+                BorderStyle = BorderStyle.None,
+                ForeColor = MpHelperSingleton.Instance.IsBright(((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor) ? Color.Black : Color.White
+            };
+            TileTitleLabel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
+            TileTitleLabel.Click += _titleLabel_Click;
+            
+            TileTitleTextBox = new MpTileTitleTextBox(tileId,panelId) {
+                Text = ci.Title,
+                ReadOnly = false,
+                Visible = false,
+                Margin = Padding.Empty,
+                Padding = Padding.Empty,
+                BorderStyle = BorderStyle.None,
+                MaxLength = Properties.Settings.Default.MaxTitleLength
+            };
+            TileTitleTextBox.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
+            TileTitleTextBox.KeyUp += TileTitleTextBox_KeyUp;
+            TileTitleTextBox.LostFocus += _titleTextBox_LostFocus;
+
+            Link(new List<MpIView> { TileTitleTextBox,TileTitleLabel });
+        }
+
+        public override void Update() {
+            //tile  rect
+            Rectangle tr = ((MpTilePanelController)((MpTileTitlePanelController)Parent).Parent).TilePanel.ClientRectangle;
+            //tile padding
+            int tp = Properties.Settings.Default.TileItemPadding;
+            //tile item padding
+            int tip = Properties.Settings.Default.TileItemPadding;
+            //tile title panel rect
+            Rectangle ttpr = ((MpTileTitlePanelController)Parent).TileTitlePanel.ClientRectangle;
+
+            float fontSize = (Properties.Settings.Default.TileTitleHeightFontRatio * (float)(ttpr.Height)) - (float)tp;
+            fontSize = fontSize < 1.0f ? 10.0f:fontSize;
+            MpSingletonController.Instance.TileTitleFontSize = fontSize;
+            TileTitleTextBox.Font = new Font(Properties.Settings.Default.TileTitleFont,fontSize,GraphicsUnit.Pixel);
+            TileTitleLabel.Font = TileTitleTextBox.Font;
+
+            //tile title textbox size
+            Size tttbs = TextRenderer.MeasureText(TileTitleTextBox.Text,TileTitleTextBox.Font);
+
+            TileTitleTextBox.SetBounds(tp * 2,10,tttbs.Width,tttbs.Height);
+            TileTitleLabel.Bounds = TileTitleTextBox.Bounds;
+            //TileTitleTextBox.BackColor = ((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor;
+            //TileTitleTextBox.ForeColor = MpHelperSingleton.Instance.IsBright(((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor) ? Color.Black : Color.White;
+            TileTitleTextBox.Invalidate();
+            TileTitleLabel.Invalidate();
+        }
+        private void TileTitleTextBox_KeyUp(object sender,KeyEventArgs e) {
+            ((MpTileTitlePanelController)Parent).Update();
+            TileTitleTextBox.Focus();
+        }
+        private void _titleTextBox_LostFocus(object sender,EventArgs e) {
+            MpCopyItem ci = new MpCopyItem(_copyItemId);
+            if(ci.Title != TileTitleTextBox.Text) {
+                ci.Title = TileTitleTextBox.Text;
+                ci.WriteToDatabase();
+            }
+            ReadMode();
+        }
+
+        private void _titleLabel_Click(object sender,EventArgs e) {
+            EditMode();
+        }
+        private void EditMode() {
+            TileTitleLabel.Visible = false;
+            TileTitleTextBox.Visible = true;
+
+            //TileTitleTextBox.BorderStyle = BorderStyle.Fixed3D;
+            //((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor = Color.White;
+            TileTitleTextBox.BackColor = Color.White;
+            TileTitleTextBox.ForeColor = Color.Black;
+            TileTitleTextBox.Focus();
+            ((MpTileTitlePanelController)Parent).Update();
+        }
+        private void ReadMode() {
+            TileTitleLabel.Visible = true;
+            TileTitleTextBox.Visible = false;
+
+            //TileTitleTextBox.BorderStyle = BorderStyle.None;
+            TileTitleLabel.BackColor = ((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor;
+            TileTitleLabel.ForeColor = MpHelperSingleton.Instance.IsBright(((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor) ? Color.Black : Color.White;
+            if(TileTitleTextBox.Text == string.Empty) {
+                TileTitleTextBox.Text = "     ";
+            }
+            TileTitleTextBox.Invalidate();
+            TileTitleLabel.Invalidate();
+            ((MpTileTitlePanelController)Parent).Update();
+        }
+    }
+}

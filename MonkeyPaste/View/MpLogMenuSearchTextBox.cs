@@ -13,6 +13,7 @@ namespace MonkeyPaste {
         public object ViewData {get;set;}
 
         public MpLogMenuSearchTextBox() : base() {
+            this.DoubleBuffered = true;
             ViewType = this.GetType().ToString();
             ViewName = ViewType;
             ViewId = MpSingletonController.Instance.Rand.Next(1,int.MaxValue);

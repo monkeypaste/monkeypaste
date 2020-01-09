@@ -6,9 +6,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 
 namespace MonkeyPaste {
     public class MpRoundedPanel : Panel {
+        public void DrawRoundRect(Graphics g,float X,float Y,float width,float height,float radius) {
+            GraphicsPath gp = new GraphicsPath();
+            gp.AddLine(X + radius,Y,X + width - (radius * 2),Y);
+            gp.AddArc(X + width - (radius * 2),Y,radius * 2,radius * 2,270,90);
+            gp.AddLine(X + width,Y + radius,X + width,Y + height - (radius * 2));
+            gp.AddArc(X + width - (radius * 2),Y + height - (radius * 2),radius * 2,radius * 2,0,90);
+            gp.AddLine(X + width - (radius * 2),Y + height,X + radius,Y + height);
+            gp.AddArc(X,Y + height - (radius * 2),radius * 2,radius * 2,90,90);
+            gp.AddLine(X,Y + height - (radius * 2),X,Y + radius);
+            gp.AddArc(X,Y,radius * 2,radius * 2,180,90);
+            gp.CloseFigure();
+            g.FillPath(_topBrush,gp);
+            gp.Dispose();
+        }
         public Color BackColor2 { get; set; }
 
         private Color _backColor = Color.Pink;
@@ -31,6 +46,7 @@ namespace MonkeyPaste {
                 Invalidate();
             }
         }
+
         private int _borderThickness = 0;
         public int BorderThickness {
             get {
@@ -65,6 +81,7 @@ namespace MonkeyPaste {
                 Invalidate();
             }
         }
+
         private SolidBrush _topBrush, _bottomBrush;
         private Pen _pen;
 
@@ -149,11 +166,16 @@ namespace MonkeyPaste {
             DrawSingleBorder(graphics);
         }
         protected override void OnPaint(PaintEventArgs e) {
+            //Graphics v = e.Graphics;
+            //DrawRoundRect(v,e.ClipRectangle.Left,e.ClipRectangle.Top,e.ClipRectangle.Width - 1,e.ClipRectangle.Height - 1,Radius);
+            //Without rounded corners
+            //e.Graphics.DrawRectangle(Pens.Blue,e.ClipRectangle.Left,e.ClipRectangle.Top,e.ClipRectangle.Width - 1,e.ClipRectangle.Height - 1);
+            //base.OnPaint(e);
             base.OnPaint(e);
-            ExtendedDraw(e);
-            if(BorderThickness > 0) {
-                DrawBorder(e.Graphics);
-            }
+            //ExtendedDraw(e);
+            //if(BorderThickness > 0) {
+            //    DrawBorder(e.Graphics);
+            //}
         }
     }
 }

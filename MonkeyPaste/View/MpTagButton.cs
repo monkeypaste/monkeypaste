@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public class MpTagButton : MpButton,MpIView {
         public MpTagButton(int tokenId) : base() {
-            //this.DoubleBuffered = true;
+            this.DoubleBuffered = true;
             ViewType = this.GetType().ToString();
             ViewName = ViewType + tokenId;
             ViewId = MpSingletonController.Instance.Rand.Next(1,int.MaxValue);

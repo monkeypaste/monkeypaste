@@ -14,7 +14,7 @@ namespace MonkeyPaste {
         public MpClient Client { get; set; }
         public MpUser User { get; set; }
 
-        public string DbPath { get; set; }
+        public string DbPath { get; set; } 
         public string DbPassword { get; set; }
 
         public string IdentityToken { get; set; }
@@ -103,11 +103,11 @@ namespace MonkeyPaste {
             _isLoaded = true;
         }
         public void InitUser(string idToken) {
-            User = new MpUser() { IdentityToken = idToken };
+           // User = new MpUser() { IdentityToken = idToken };
         }
         public void InitClient(string accessToken) {
-            Client = new MpClient() { AccessToken = accessToken };
-        }
+            Client = new MpClient(0,3,MpHelperSingleton.Instance.GetCurrentIPAddress().MapToIPv4().ToString(),accessToken,DateTime.Now);
+        }        
         public List<MpCopyItem> GetCopyItems() {
             if(NoDb) {
                 return new List<MpCopyItem>();
@@ -169,7 +169,7 @@ namespace MonkeyPaste {
             if(DbPassword != null && DbPassword != String.Empty) {
                 connStr += "Password=" + DbPassword + ";";
             }
-            Console.WriteLine("Connection String: " + connStr);
+            //Console.WriteLine("Connection String: " + connStr);
             SQLiteConnection conn = null;
             try {
                 conn = new SQLiteConnection(connStr);
@@ -331,6 +331,7 @@ namespace MonkeyPaste {
                     , TagTypeName text NOT NULL
                     );
                     INSERT INTO MpTagType(TagTypeName) VALUES('None'),('App'),('Device'),('Custom'),('Default');
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpTag (
                       pk_MpTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpTagTypeId integer NOT NULL
@@ -340,6 +341,7 @@ namespace MonkeyPaste {
                     , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId)
                     );
                     INSERT INTO MpTag(fk_MpTagTypeId,TagName,fk_MpColorId) VALUES (5,'History',3),(5,'Favorites',2);
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpSetting (
                       pk_MpSettingId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , SettingName text NOT NULL
@@ -347,26 +349,30 @@ namespace MonkeyPaste {
                     , SettingValue text NULL
                     , SettingDefaultValue text NULL
                     );
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPlatformType (
                       pk_MpPlatformTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , PlatformName text NOT NULL 
                     );
-                    INSERT INTO MpPlatformType(PlatformName) VALUES('ios'),('android'),('windows'),('mac');
+                    INSERT INTO MpPlatformType(PlatformName) VALUES('ios'),('android'),('windows'),('mac'),('linux');
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpIcon (
                       pk_MpIconId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , IconBlob image NOT NULL
                     );
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpHotKey (
                       pk_MpHotKeyId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , KeyList text NULL
                     , ModList text NULL
                     );
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpDeviceType (
                       pk_MpDeviceTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , DeviceTypeName text NULL 
                     );
                     INSERT INTO MpDeviceType(DeviceTypeName) VALUES('windows'),('mac'),('android'),('iphone'),('ipad'),('tablet');
-
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPlatform (
                       pk_MpPlatformId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpPlatformTypeId integer NOT NULL
@@ -375,17 +381,18 @@ namespace MonkeyPaste {
                     , CONSTRAINT FK_MpPlatform_0_0 FOREIGN KEY (fk_MpDeviceTypeId) REFERENCES MpDeviceType (pk_MpDeviceTypeId)
                     , CONSTRAINT FK_MpPlatform_1_0 FOREIGN KEY (fk_MpPlatformTypeId) REFERENCES MpPlatformType (pk_MpPlatformTypeId)
                     );
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCopyItemType (
                       pk_MpCopyItemTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , TypeName text NULL 
                     );
                     INSERT INTO MpCopyItemType(TypeName) VALUES('text'),('rich_text'),('html_text'),('image'),('file_list');
-
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCommandType (
                       pk_MpCommandTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , CommandName text NOT NULL
                     );
-
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCommand (
                       pk_MpCommandId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCommandTypeId int NOT NULL
@@ -393,6 +400,7 @@ namespace MonkeyPaste {
                     , CONSTRAINT FK_MpCommand_0_0 FOREIGN KEY (fk_MpHotKey) REFERENCES MpHotKey (pk_MpHotKeyId)
                     , CONSTRAINT FK_MpCommand_1_0 FOREIGN KEY (fk_MpCommandTypeId) REFERENCES MpCommandType (pk_MpCommandTypeId)
                     );
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpClient (
                       pk_MpClientId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpPlatformId integer NOT NULL
@@ -402,6 +410,7 @@ namespace MonkeyPaste {
                     , LogoutDateTime datetime NULL
                     , CONSTRAINT FK_MpClient_0_0 FOREIGN KEY (fk_MpPlatformId) REFERENCES MpPlatform (pk_MpPlatformId)
                     );
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpColor (
                        pk_MpColorId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     ,  R integer not null default 255
@@ -410,7 +419,7 @@ namespace MonkeyPaste {
                     ,  A integer not null default 255
                     );
                     INSERT INTO MpColor(R,G,B,A) VALUES (255,0,0,255),(0,255,0,255),(0,0,255,255);
-
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpApp (
                       pk_MpAppId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpIconId integer NOT NULL
@@ -420,6 +429,7 @@ namespace MonkeyPaste {
                     , CONSTRAINT FK_MpApp_0_0 FOREIGN KEY (fk_MpIconId) REFERENCES MpIcon (pk_MpIconId)
                     , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_ColorId) REFERENCES MpColor (pk_MpColorId)
                     );
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCopyItem (
                       pk_MpCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemTypeId integer NOT NULL
@@ -434,6 +444,7 @@ namespace MonkeyPaste {
                     , CONSTRAINT FK_MpCopyItem_2_0 FOREIGN KEY (fk_MpCopyItemTypeId) REFERENCES MpCopyItemType (pk_MpCopyItemTypeId) 
                     , CONSTRAINT FK_MpCopyItem_3_0 FOREIGN KEY (fk_ColorId) REFERENCES MpColor (pk_MpColorId) 
                     );
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpSubTextToken (
                       pk_MpSubTextTokenId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemId integer NOT NULL
@@ -444,6 +455,7 @@ namespace MonkeyPaste {
                     , CONSTRAINT FK_MpSubTextToken_0_0 FOREIGN KEY (fk_MpCopyItemTypeId) REFERENCES MpCopyItemType (pk_MpCopyItemTypeId) 
                     , CONSTRAINT FK_MpSubTextToken_1_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPasteHistory (
                       pk_MpPasteHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemId integer NOT NULL
@@ -454,29 +466,34 @@ namespace MonkeyPaste {
                     , CONSTRAINT FK_MpPasteHistory_1_0 FOREIGN KEY (fk_MpClientId) REFERENCES MpClient (pk_MpClientId)
                     , CONSTRAINT FK_MpPasteHistory_2_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpFileDropListItem (
                       pk_MpFileDropListItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemId integer NOT NULL
                     , CONSTRAINT FK_MpFileDropListItem_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpFileDropListSubItem (
                       pk_MpFileDropListSubItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpFileDropListItemId integer NOT NULL
                     , ItemPath text NOT NULL 
                     , CONSTRAINT FK_MpFileDropListSubItem_0_0 FOREIGN KEY (fk_MpFileDropListItemId) REFERENCES MpFileDropListItem (pk_MpFileDropListItemId)
                     );
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpImageItem (
                       pk_MpImageItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemId integer NOT NULL
                     , ItemImage longblob NOT NULL
                     , CONSTRAINT FK_MpImageItem_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpTextItem (
                       pk_MpTextItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemId integer NOT NULL
                     , ItemText text NOT NULL 
                     , CONSTRAINT FK_MpTextItem_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );
+                    ---------------------------------------------------------------------------------------------------------------------
             ";            
         }
         private string GetClearString() {
