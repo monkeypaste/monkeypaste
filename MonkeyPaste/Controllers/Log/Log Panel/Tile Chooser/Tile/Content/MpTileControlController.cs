@@ -48,7 +48,7 @@ namespace MonkeyPaste {
                                 maxWidth = newFlirp.GetFileListItemRowPanel().Width;
                             }
                         }
-                    }
+                    } 
                     break;
                 case MpCopyItemType.Image:
                     ItemControl = new MpTileControlPictureBox(tileId,panelId) {                        
