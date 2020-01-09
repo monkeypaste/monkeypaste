@@ -37,8 +37,7 @@ namespace MonkeyPaste {
         
         public MpTilePanelController(int tileId,int panelId,MpCopyItem ci,MpController Parent) : base(Parent) {
             TileId = tileId;
-            CopyItem = ci;
-            
+            CopyItem = ci;            
 
             TilePanel = new MpTilePanel(tileId,panelId) {
                 AutoScroll = false,

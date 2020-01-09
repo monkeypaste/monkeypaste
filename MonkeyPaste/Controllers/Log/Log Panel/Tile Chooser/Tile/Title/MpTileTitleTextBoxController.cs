@@ -48,18 +48,15 @@ namespace MonkeyPaste {
         }
 
         public override void Update() {
-            //tile  rect
-            Rectangle tr = ((MpTilePanelController)((MpTileTitlePanelController)Parent).Parent).TilePanel.ClientRectangle;
             //tile padding
             int tp = Properties.Settings.Default.TileItemPadding;
             //tile item padding
             int tip = Properties.Settings.Default.TileItemPadding;
             //tile title panel rect
-            Rectangle ttpr = ((MpTileTitlePanelController)Parent).TileTitlePanel.ClientRectangle;
+            Rectangle ttpr = ((MpTileTitlePanelController)Find("MpTileTitlePanelController")).TileTitlePanel.Bounds;
 
             float fontSize = (Properties.Settings.Default.TileTitleHeightFontRatio * (float)(ttpr.Height)) - (float)tp;
             fontSize = fontSize < 1.0f ? 10.0f:fontSize;
-            MpSingletonController.Instance.TileTitleFontSize = fontSize;
             TileTitleTextBox.Font = new Font(Properties.Settings.Default.TileTitleFont,fontSize,GraphicsUnit.Pixel);
             TileTitleLabel.Font = TileTitleTextBox.Font;
 
@@ -68,8 +65,12 @@ namespace MonkeyPaste {
 
             TileTitleTextBox.SetBounds(tp * 2,10,tttbs.Width,tttbs.Height);
             TileTitleLabel.Bounds = TileTitleTextBox.Bounds;
-            //TileTitleTextBox.BackColor = ((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor;
-            //TileTitleTextBox.ForeColor = MpHelperSingleton.Instance.IsBright(((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor) ? Color.Black : Color.White;
+
+            if(TileTitleLabel.Visible) {
+                TileTitleLabel.BringToFront();
+            } else {
+                TileTitleTextBox.BringToFront();
+            }
             TileTitleTextBox.Invalidate();
             TileTitleLabel.Invalidate();
         }

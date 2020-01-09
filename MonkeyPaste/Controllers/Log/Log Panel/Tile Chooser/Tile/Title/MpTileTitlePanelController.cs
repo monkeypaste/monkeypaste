@@ -26,11 +26,14 @@ namespace MonkeyPaste {
             TileTitleTextBoxController = new MpTileTitleTextBoxController(tileId,panelId,ci,this);
             TileTitlePanel.Controls.Add(TileTitleTextBoxController.TileTitleLabel);
             TileTitlePanel.Controls.Add(TileTitleTextBoxController.TileTitleTextBox);
-            
+
             TileTitlePanel.BackColor = MpHelperSingleton.Instance.GetRandomColor();
             TileTitleTextBoxController.TileTitleTextBox.BackColor = TileTitlePanel.BackColor;
             TileTitleTextBoxController.TileTitleTextBox.ForeColor = MpHelperSingleton.Instance.IsBright(TileTitlePanel.BackColor) ? Color.Black : Color.White;
+            TileTitleTextBoxController.TileTitleLabel.BackColor = TileTitleTextBoxController.TileTitleTextBox.BackColor;
+            TileTitleTextBoxController.TileTitleLabel.ForeColor = TileTitleTextBoxController.TileTitleTextBox.ForeColor;
 
+           // TileTitleTextBoxController.Read
             Link(new List<MpIView> { TileTitlePanel});
         }
         public override void Update() {
@@ -43,11 +46,10 @@ namespace MonkeyPaste {
             int tth = (int)((float)tr.Height * Properties.Settings.Default.TileTitleHeightRatio);
             //tile padding
             int tp = (int)(Properties.Settings.Default.TilePadWidthRatio * (float)tr.Width);            
-            TileTitlePanel.SetBounds(tp+tr.X,tp + thr.Bottom+tr.Y,tr.Width - tp,tth);
+            TileTitlePanel.SetBounds(tp,thr.Bottom,tr.Width - tp,tth);
 
             TileTitleIconPanelController.Update();
             TileTitleTextBoxController.Update();
-            TileTitleTextBoxController.TileTitleTextBox.BringToFront();
 
             TileTitlePanel.Invalidate();
         }

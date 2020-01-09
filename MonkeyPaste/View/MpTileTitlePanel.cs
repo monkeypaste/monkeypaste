@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpTileTitlePanel : MpGradientPanel, MpIView {
+    public class MpTileTitlePanel : Panel, MpIView {
 
         public MpTileTitlePanel(int tileId,int panelId) : base() {
             this.DoubleBuffered = true;
