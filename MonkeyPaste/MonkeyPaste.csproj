@@ -709,10 +709,6 @@
     <None Include="Resources\doubleSidedArrow2.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Desktop\.Net Examples\VisualEffects\VisualEffects.csproj">
-      <Project>{88c2e4d2-1237-4616-9f74-2d0a4af06009}</Project>
-      <Name>VisualEffects</Name>
-    </ProjectReference>
     <ProjectReference Include="..\BevelPanel\BevelPanel.csproj">
       <Project>{5230bbd2-9933-40cc-8dea-fc17d0040bc4}</Project>
       <Name>BevelPanel</Name>
@@ -720,6 +716,10 @@
     <ProjectReference Include="..\ExtractLargeIconFromFile\ExtractLargeIconFromFile\ExtractLargeIconFromFile.csproj">
       <Project>{4b9f7707-016b-4358-a497-c038b9e216fd}</Project>
       <Name>ExtractLargeIconFromFile</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\VisualEffects\VisualEffects.csproj">
+      <Project>{88c2e4d2-1237-4616-9f74-2d0a4af06009}</Project>
+      <Name>VisualEffects</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
