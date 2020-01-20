@@ -152,10 +152,7 @@ namespace MonkeyPaste {
                 }
             }
             if(clickedTileController != null) {
-                LogFormPanelController.TileChooserPanelController.SelectedTilePanelController = clickedTileController;
-                LogFormPanelController.TileChooserPanelController.SelectedTilePanelController.TilePanel.Focus();
-                LogFormPanelController.TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Visible = true;
-                LogFormPanelController.TileChooserPanelController.Update();
+                LogFormPanelController.TileChooserPanelController.SelectTile(clickedTileController);                
             }
         }
 

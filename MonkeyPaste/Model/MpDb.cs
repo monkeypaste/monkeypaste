@@ -445,6 +445,14 @@ namespace MonkeyPaste {
                     , CONSTRAINT FK_MpCopyItem_3_0 FOREIGN KEY (fk_ColorId) REFERENCES MpColor (pk_MpColorId) 
                     );
                     ---------------------------------------------------------------------------------------------------------------------
+                    CREATE TABLE MpCopyItemTag (
+                      pk_MpCopyItemTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , fk_MpCopyItemId integer NOT NULL
+                    , fk_MpTagId integer NOT NULL
+                    , CONSTRAINT FK_MpCopyItemTag_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
+                    , CONSTRAINT FK_MpCopyItemTag_1_0 FOREIGN KEY (fk_MpTagId) REFERENCES MpTag (pk_MpTagId)
+                    );
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpSubTextToken (
                       pk_MpSubTextTokenId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemId integer NOT NULL

@@ -12,6 +12,7 @@ namespace MonkeyPaste {
 
         public MpTagPanelController NewTagPanelController { get; set; }
 
+        private MpKeyboardHook _enterHook;
         private bool _typingTag = false;
 
         public MpAddTagTextBoxController(MpController parentController) : base(parentController) {
@@ -71,6 +72,12 @@ namespace MonkeyPaste {
                 NewTagPanelController.TagTextBoxController.TagTextBox.SelectionStart = NewTagPanelController.TagTextBoxController.TagTextBox.Text.Length;
                 NewTagPanelController.TagTextBoxController.TagTextBox.KeyUp += TagTextBox_KeyUp;
                 AddTagTextBox.Visible = false;
+
+                ((MpLogFormController)Find("MpLogFormController")).DeactivateHotKeys();
+                _enterHook = new MpKeyboardHook();
+                _enterHook.RegisterHotKey(ModifierKeys.None,Keys.Enter);
+                _enterHook.KeyPressed += _enterHook_KeyPressed;
+
                 Update();                
             }
             _typingTag = false;
@@ -84,8 +91,20 @@ namespace MonkeyPaste {
                 AddTagTextBox.Visible = true;
                 AddTagTextBox.Text = string.Empty;
                 AddTagTextBox.Focus();
-            }
+            } 
             ((MpTagChooserPanelController)Parent).Update();
+        }
+
+        private void _enterHook_KeyPressed(object sender,KeyPressedEventArgs e) {
+            NewTagPanelController.CreateTag();
+
+            ((MpTagChooserPanelController)Parent).Update();
+
+            _enterHook.UnregisterHotKey();
+            _enterHook.Dispose();
+            _enterHook = null;
+
+            ((MpLogFormController)Find("MpLogFormController")).ActivateHotKeys();
         }
     }
 }

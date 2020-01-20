@@ -69,6 +69,31 @@ namespace MonkeyPaste {
                 Console.WriteLine("MpTag warning, attempting to update a tag but not implemented");
             }
         }
+        public bool IsLinkedWithCopyItem(MpCopyItem ci) {
+            DataTable dt = MpLogFormController.Db.Execute("select * from MpCopyItemTag where fk_MpTagId=" + TagId + " and fk_MpCopyItemId=" + ci.copyItemId);
+            if(dt != null && dt.Rows.Count > 0) {
+                return true;
+            }
+            return false;
+        }
+        public void LinkWithCopyItem(MpCopyItem ci) {
+            if(IsLinkedWithCopyItem(ci)) {
+                //Console.WriteLine("MpTag Warning attempting to relink tag " + TagId + " with copyitem " + ci.copyItemId+" ignoring...");
+                return;
+            }
+            MpLogFormController.Db.ExecuteNonQuery("insert into MpCopyItemTag(fk_MpCopyItemId,fk_MpTagId) values(" + ci.copyItemId + "," + TagId + ")");
+
+            Console.WriteLine("Tag link created between tag " + TagId + " with copyitem " + ci.copyItemId + " ignoring...");
+        }
+        public void UnlinkWithCopyItem(MpCopyItem ci) {
+            if(!IsLinkedWithCopyItem(ci)) {
+                //Console.WriteLine("MpTag Warning attempting to unlink non-linked tag " + TagId + " with copyitem " + ci.copyItemId + " ignoring...");
+                return;
+            }
+            MpLogFormController.Db.ExecuteNonQuery("delete from MpCopyItemTag where fk_MpCopyItemId="+ci.copyItemId+" and fk_MpTagId="+TagId);
+
+            Console.WriteLine("Tag link removed between tag " + TagId + " with copyitem " + ci.copyItemId + " ignoring...");
+        }
         public void DeleteFromDatabase() {
             MpLogFormController.Db.ExecuteNonQuery("delete from MpTag where pk_MpTagId=" + this.TagId);
         }

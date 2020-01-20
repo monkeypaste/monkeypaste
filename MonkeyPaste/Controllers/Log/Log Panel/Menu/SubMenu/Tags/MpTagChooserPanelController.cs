@@ -29,11 +29,6 @@ namespace MonkeyPaste {
             }
             AddTagTextBoxController = new MpAddTagTextBoxController(this);
             TagChooserPanel.Controls.Add(AddTagTextBoxController.AddTagTextBox);
-
-            //TileTokenPanelControllerList.Add(new MpLogMenuTileTokenPanelController(this,0,"Hi how are you are you ok?",Color.Orange));
-            //LogMenuTileTokenChooserPanel.Controls.Add(TileTokenPanelControllerList[0].LogMenuTileTokenPanel);
-            //TileTokenPanelControllerList.Add(new MpLogMenuTileTokenPanelController(this,1,"I'm fat",Color.Orange));
-            //LogMenuTileTokenChooserPanel.Controls.Add(TileTokenPanelControllerList[1].LogMenuTileTokenPanel);
         }
         public override void Update() {
             //log menu panel rect
@@ -55,13 +50,31 @@ namespace MonkeyPaste {
 
             TagChooserPanel.Invalidate();
         }
-        public int GetTokenId(MpTagPanelController ttpc) {
+        //ci should always be a newly selected tile
+        public void UpdateTagListState(MpCopyItem ci) {
+            foreach(MpTagPanelController tpc in TagPanelControllerList) {
+                tpc.SetTagState(tpc.Tag.IsLinkedWithCopyItem(ci) ? MpTagPanelState.Selected:MpTagPanelState.Inactive);
+            }
+            Update();
+        }
+        public int GetTagId(MpTagPanelController ttpc) {
             for(int i = 0;i < TagPanelControllerList.Count;i++) {
                 if(TagPanelControllerList[i] == ttpc) {
                     return i;
                 }
             }
             return -1;
+        }
+        public List<MpTagPanelController> GetFocusedTagList() {
+            List<MpTagPanelController> focusedTagList = new List<MpTagPanelController>();
+
+            foreach(MpTagPanelController tpc in TagPanelControllerList) {
+                if(tpc.TagPanelState == MpTagPanelState.Focused) {
+                    focusedTagList.Add(tpc);
+                }
+            }
+
+            return focusedTagList;
         }
     }
 }

@@ -10,6 +10,10 @@ namespace MonkeyPaste {
     public class MpLogMainMenuPanelController : MpController {
         public MpLogMainMenuPanel LogMainMenuPanel { get; set; }
 
+        public MpLogMainMenuSettingsButtonController LogMainMenuSettingsButtonController { get; set; }
+        public MpLogMainMenuAppendModeButtonController LogMainMenuAppendModeButtonController { get; set; }
+        public MpLogMainMenuAutoCopyButtonController LogMainMenuAutoCopyButtonController { get; set; }
+
         public MpLogMainMenuTitlePanelController LogMainMenuTitlePanelController { get; set; }
 
         public MpLogMainMenuInfoButtonController LogMainMenuInfoButtonController { get; set; }
@@ -22,6 +26,18 @@ namespace MonkeyPaste {
                 Padding = Padding.Empty,
                 BackColor = Color.Yellow
             };
+            LogMainMenuSettingsButtonController = new MpLogMainMenuSettingsButtonController(this);
+            LogMainMenuPanel.Controls.Add(LogMainMenuSettingsButtonController.LogMainMenuSettingsButton);
+            LogMainMenuSettingsButtonController.ButtonClickedEvent += LogMainMenuSettingsButtonController_ButtonClickedEvent;
+
+            LogMainMenuAppendModeButtonController = new MpLogMainMenuAppendModeButtonController(this);
+            LogMainMenuPanel.Controls.Add(LogMainMenuAppendModeButtonController.LogMainMenuAppendModeButton);
+            LogMainMenuAppendModeButtonController.ButtonClickedEvent += LogMainMenuAppendModeButtonController_ButtonClickedEvent;
+
+            LogMainMenuAutoCopyButtonController = new MpLogMainMenuAutoCopyButtonController(this);
+            LogMainMenuPanel.Controls.Add(LogMainMenuAutoCopyButtonController.LogMainMenuAutoCopyButton);
+            LogMainMenuAutoCopyButtonController.ButtonClickedEvent += LogMainMenuAutoCopyButtonController_ButtonClickedEvent;
+
             LogMainMenuTitlePanelController = new MpLogMainMenuTitlePanelController(this);
             LogMainMenuPanel.Controls.Add(LogMainMenuTitlePanelController.LogMainMenuTitlePanel);
 
@@ -34,14 +50,7 @@ namespace MonkeyPaste {
             LogMainMenuUserButtonController.ButtonClickedEvent += LogMainMenuUserButtonController_ButtonClickedEvent;
 
             Link(new List<MpIView>() { LogMainMenuPanel });
-        }
-
-        private void LogMainMenuInfoButtonController_ButtonClickedEvent(object sender,EventArgs e) {
-            Console.WriteLine("Info button clicked");
-        }
-        private void LogMainMenuUserButtonController_ButtonClickedEvent(object sender,EventArgs e) {
-            Console.WriteLine("User button clicked");
-        }
+        }        
         public override void Update() {
             //logform rect
             Rectangle lfr = ((MpLogFormPanelController)((MpLogMenuPanelController)Parent).Parent).LogFormPanel.Bounds;
@@ -53,10 +62,34 @@ namespace MonkeyPaste {
             LogMainMenuPanel.SetBounds(0,0,lfr.Width,mh);
 
             LogMainMenuTitlePanelController.Update();
+
             LogMainMenuInfoButtonController.Update();
             LogMainMenuUserButtonController.Update();
 
+            LogMainMenuSettingsButtonController.Update();
+            LogMainMenuAppendModeButtonController.Update();
+            LogMainMenuAutoCopyButtonController.Update();
+
             LogMainMenuPanel.Invalidate();
+        }
+
+        private void LogMainMenuAutoCopyButtonController_ButtonClickedEvent(object sender,EventArgs e) {
+            Console.WriteLine("AutoCopy button clicked");
+        }
+
+        private void LogMainMenuAppendModeButtonController_ButtonClickedEvent(object sender,EventArgs e) {
+            Console.WriteLine("AppendMode button clicked");
+        }
+
+        private void LogMainMenuSettingsButtonController_ButtonClickedEvent(object sender,EventArgs e) {
+            Console.WriteLine("Settings button clicked");
+        }
+
+        private void LogMainMenuInfoButtonController_ButtonClickedEvent(object sender,EventArgs e) {
+            Console.WriteLine("Info button clicked");
+        }
+        private void LogMainMenuUserButtonController_ButtonClickedEvent(object sender,EventArgs e) {
+            Console.WriteLine("User button clicked");
         }
     }
 }

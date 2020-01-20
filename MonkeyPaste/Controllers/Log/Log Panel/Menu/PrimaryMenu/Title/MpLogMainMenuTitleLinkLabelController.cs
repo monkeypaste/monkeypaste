@@ -21,7 +21,7 @@ namespace MonkeyPaste {
                 AutoSize = false,
                 TextAlign = ContentAlignment.TopLeft,
                 Text = "MonkeyPaste",
-                LinkBehavior = LinkBehavior.NeverUnderline
+                LinkBehavior = LinkBehavior.HoverUnderline
             };
 
             LinkLabel.Link link = new LinkLabel.Link();

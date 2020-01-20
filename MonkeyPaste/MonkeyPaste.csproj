@@ -321,18 +321,22 @@
     <Compile Include="App\MpApplicationController.cs" />
     <Compile Include="App\MpCompatibility.cs" />
     <Compile Include="Controllers\Log\Log Panel\Menu\MpLogMenuPanelController.cs" />
-    <Compile Include="Controllers\Log\Log Panel\Menu\PrimaryMenu\MpLogMainMenuInfoButtonController.cs" />
+    <Compile Include="Controllers\Log\Log Panel\Menu\PrimaryMenu\Buttons\MpLogMainMenuAppendModeButtonController.cs" />
+    <Compile Include="Controllers\Log\Log Panel\Menu\PrimaryMenu\Buttons\MpLogMainMenuAutoCopyButtonController.cs" />
+    <Compile Include="Controllers\Log\Log Panel\Menu\PrimaryMenu\Buttons\MpLogMainMenuSettingsButtonController.cs" />
+    <Compile Include="Controllers\Log\Log Panel\Menu\PrimaryMenu\Buttons\MpLogMainMenuInfoButtonController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Menu\PrimaryMenu\MpLogMainMenuPanelController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Menu\PrimaryMenu\Title\MpLogMainMenuTitleIconBoxController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Menu\PrimaryMenu\Title\MpLogMainMenuTitleLinkLabelController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Menu\PrimaryMenu\Title\MpLogMainMenuTitlePanelController.cs" />
-    <Compile Include="Controllers\Log\Log Panel\Menu\PrimaryMenu\MpLogMainMenuUserButtonController.cs" />
+    <Compile Include="Controllers\Log\Log Panel\Menu\PrimaryMenu\Buttons\MpLogMainMenuUserButtonController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Menu\SubMenu\MpLogSubMenuPanelController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Menu\SubMenu\Search\MpSearchIconController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Menu\SubMenu\Search\MpSearchTextBoxController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Menu\SubMenu\Tags\MpAddTagTextBoxController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Menu\SubMenu\Tags\MpTagButtonController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Menu\SubMenu\Tags\MpTagChooserPanelController.cs" />
+    <Compile Include="Controllers\Log\Log Panel\Menu\SubMenu\Tags\MpTagLabelController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Menu\SubMenu\Tags\MpTagTextBoxController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Menu\SubMenu\Tags\MpTagPanelController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Tree\MpTreeNodeController.cs" />
@@ -401,6 +405,15 @@
     <Compile Include="View\MpGlassyPanel.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="View\MpLogMainMenuAppendModeButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\MpLogMainMenuAutoCopyButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\MpLogMainMenuSettingsButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="View\MpPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -453,7 +466,7 @@
     <Compile Include="View\MpTagButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpTagLabel.cs">
+    <Compile Include="View\MpTagLinkLabel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpTileControlRichTextBox.cs">
@@ -736,7 +749,18 @@
   <ItemGroup>
     <None Include="Resources\user.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\add3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\add4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\minus2.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

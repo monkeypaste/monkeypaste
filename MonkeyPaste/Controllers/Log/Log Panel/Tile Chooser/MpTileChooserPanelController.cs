@@ -16,8 +16,17 @@ namespace MonkeyPaste {
         public int PanelId { get; set; } = 0;
 
         public MpSelectedTileBorderPanelController SelectedTileBorderPanelController { get; set; }
-
-        public MpTilePanelController SelectedTilePanelController { get; set; }
+        
+        private MpTilePanelController _selectedTilePanelController;
+        public MpTilePanelController SelectedTilePanelController {
+            get {
+                return _selectedTilePanelController;
+            }
+            set {
+                _selectedTilePanelController = value;
+                ((MpTagChooserPanelController)Find("MpTagChooserPanelController")).UpdateTagListState(_selectedTilePanelController.CopyItem);
+            }
+        }
 
         private Timer _focusTimer;
 
@@ -83,7 +92,12 @@ namespace MonkeyPaste {
             _showSelectedTilePanelController();
             Update();
         }
-
+        public void SelectTile(MpTilePanelController tpc) {
+            SelectedTilePanelController = tpc;
+            SelectedTilePanelController.TilePanel.Focus();
+            SelectedTileBorderPanelController.TileBorderPanel.Visible = true;
+            Update();
+        }
         private void _showSelectedTilePanelController() {
             if(SelectedTilePanelController == null) {
                 return;
@@ -301,11 +315,13 @@ namespace MonkeyPaste {
                 TileChooserPanel.Controls.Add(newTileController.TilePanel);
                 if(!_isInitialLoad) {
                     MpTilePanelController.OffsetX = 0;
+                    SelectedTilePanelController = newTileController;
                 }
-                SelectedTilePanelController = newTileController;
             }
-            SelectedTilePanelController.Update();
-            SelectedTileBorderPanelController.TileBorderPanel.Visible = true;
+            if(SelectedTilePanelController != null) {
+                SelectedTilePanelController.Update();
+                SelectedTileBorderPanelController.TileBorderPanel.Visible = true;
+            }
             Sort("TileId",false);
             ScrollTiles(0);
             Update();
