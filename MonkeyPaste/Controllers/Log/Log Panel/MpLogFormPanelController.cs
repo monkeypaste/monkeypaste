@@ -13,7 +13,9 @@ namespace MonkeyPaste {
         public MpTreeViewPanelController TreeViewPanelController { get; set; }
 
         public MpLogFormPanel LogFormPanel { get; set; }
-        
+        public int CustomHeight { get; set; } = -1;
+        public int MinimumHeight { get; set; } = 50;
+
         public MpLogFormPanelController(MpController parentController) : base(parentController) {
             LogFormPanel = new MpLogFormPanel() {
                 AutoSize = false,
@@ -46,7 +48,7 @@ namespace MonkeyPaste {
             //log form rect
             Rectangle lfr = ((MpLogFormController)Parent).LogForm.Bounds;
 
-            int h = (int)((float)lfr.Height * Properties.Settings.Default.LogScreenHeightRatio);
+            int h = CustomHeight > MinimumHeight ? CustomHeight :  (int)((float)lfr.Height * Properties.Settings.Default.LogScreenHeightRatio);
 
             LogFormPanel.SetBounds(0,lfr.Height - h,lfr.Width,h);
 

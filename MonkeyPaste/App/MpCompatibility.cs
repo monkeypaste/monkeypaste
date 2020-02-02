@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Gdk;
+//using Gdk;
 
 namespace MonkeyPaste {
     public class MpCompatibility {
         public static bool IsRunningOnMono() {
             return Type.GetType("Mono.Runtime") != null;
         }
-        public static Gdk.ModifierType GetGdkModifierFromWin(ModifierKeys modifier) {
+        /*public static Gdk.ModifierType GetGdkModifierFromWin(ModifierKeys modifier) {
             switch(modifier) {
                 case ModifierKeys.None:
                     return ModifierType.None;
@@ -26,6 +26,6 @@ namespace MonkeyPaste {
                     break;
             }
             return (ModifierType)0;
-        }
+        }*/
     }
 }

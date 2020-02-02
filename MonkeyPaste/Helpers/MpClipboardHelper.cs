@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Windows.Media.Imaging;
 
-namespace MonkeyPaste {
+namespace MonkeyPaste
+{
     public class MpClipboardHelper : Form {
         private MpLastWindowWatcher _lastWindowWatcher;
         private IntPtr _nextClipboardViewer;

@@ -81,7 +81,7 @@ namespace MonkeyPaste {
             newItem.CopyCount = 1;
             newItem.App = new MpApp(0,0,sourceHandle,false);
             newItem.appId = newItem.App.appId;
-            newItem.Client = new MpClient(0,0,MpHelperSingleton.Instance.GetCurrentIPAddress().MapToIPv4().ToString(),"unknown",DateTime.Now);
+            newItem.Client = new MpClient(0,0,MpHelperSingleton.Instance.GetCurrentIPAddress()/*.MapToIPv4()*/.ToString(),"unknown",DateTime.Now);
             
             return newItem;
         }

@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms.Integration;
-using VisualEffects;
-using VisualEffects.Animations.Effects;
-using VisualEffects.Easing;
 
-namespace MonkeyPaste {
+namespace MonkeyPaste
+{
     public class MpTilePanelController : MpController, IComparable {
         public static int OffsetX { get; set; } = 0;
 
         public static int SelectedTileId { get; set; }
+
+        public static Size TilePanelSize { get; set; } = Size.Empty;
 
         public int TileId { get; set; } = -1;
         //public int SortOrder { get; set; } = 0;
@@ -84,7 +83,7 @@ namespace MonkeyPaste {
         
             Link(new List<MpIView> { /*TilePanel*/ });
         }
-        public void AnimateTileY(int finalY,int duration,int delay,EasingDelegate easing) {
+        /*public void AnimateTileY(int finalY,int duration,int delay,EasingDelegate easing) {
             TilePanel.Animate(
                 new YLocationEffect(),
                 easing,
@@ -92,7 +91,7 @@ namespace MonkeyPaste {
                 duration,
                 delay
             );
-        }
+        }*/
         private void TileHeaderCloseButtonController_ButtonClickedEvent(object sender,EventArgs e) {
             CloseButtonClickedEvent(this,e);
         }
@@ -127,6 +126,8 @@ namespace MonkeyPaste {
             //TileMenuPanelController.Update();
 
             TilePanel.Invalidate();
+
+            TilePanelSize = TilePanel.Size;
         }
         public void ShowMenu() {            
             //TileMenuPanelController.TileMenuPanel.Visible = true;

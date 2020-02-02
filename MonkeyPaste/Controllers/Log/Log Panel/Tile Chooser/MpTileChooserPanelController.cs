@@ -27,7 +27,8 @@ namespace MonkeyPaste {
                 ((MpTagChooserPanelController)Find("MpTagChooserPanelController")).UpdateTagListState(_selectedTilePanelController.CopyItem);
             }
         }
-
+        public MpTilePanelController DragTilePanelController { get; set; } = null;
+        public Point DragTilePanelStartLocation { get; set; }
         private Timer _focusTimer;
 
         private bool _isInitialLoad = true;
@@ -82,6 +83,17 @@ namespace MonkeyPaste {
 
             TileChooserPanel.Invalidate();
         }
+        public MpTilePanelController GetTilePanelControllerAtLocation(Point p) {
+            MpTilePanelController clickedTileController = null;
+            foreach(MpTilePanelController citc in TileControllerList) {
+                Rectangle tileRect = citc.TilePanel.RectangleToScreen(citc.TilePanel.ClientRectangle);
+                if(tileRect.Contains(p) || citc.TilePanel.ClientRectangle.Contains(p)) {
+                    clickedTileController = citc;
+                }
+            }
+            return clickedTileController;
+        }
+        
         public void SelectNextTile() {
             SelectedTilePanelController = GetNextTilePanelController(SelectedTilePanelController);
             _showSelectedTilePanelController();
@@ -173,7 +185,7 @@ namespace MonkeyPaste {
             if(forceValue) {
                 MpTilePanelController.OffsetX += deltaX;
             } else {
-                MpTilePanelController.OffsetX += (int)((float)deltaX * Properties.Settings.Default.ScrollDampner);
+                MpTilePanelController.OffsetX += deltaX > 0.0f ? MpTilePanelController.TilePanelSize.Width : -MpTilePanelController.TilePanelSize.Width;//(int)((float)deltaX * Properties.Settings.Default.ScrollDampner);
             }
             MpSingletonController.Instance.ScrollWheelDelta = 0;
             var visibleTileControllerList = GetVisibleTilePanelControllerList();

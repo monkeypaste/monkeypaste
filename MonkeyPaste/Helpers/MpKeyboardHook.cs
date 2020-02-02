@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using Gtk;
+//using Gtk;
 
 namespace MonkeyPaste {   
     public class MpKeyboardHook : IDisposable {        
@@ -49,9 +49,9 @@ namespace MonkeyPaste {
         private const int KeyPress = 2;
         private bool _isEventRaised = false;
 
-        private Gdk.ModifierType modifier;
         private ModifierKeys modifierWin;
-        private Gdk.Key key;
+        /*private Gdk.ModifierType modifier;
+        private Gdk.Key key;*/
         private Keys keyWin;
         private bool _isRegistered = false;
 
@@ -80,9 +80,9 @@ namespace MonkeyPaste {
         /// <param name="key">The key itself that is associated with the hot key.</param>
         public void RegisterHotKey(ModifierKeys modifier, Keys key) {            
             if(MpCompatibility.IsRunningOnMono()) {
-                modifierWin = modifier;
+                /*modifierWin = modifier;
                 keyWin = key;
-                RegisterHotKeyGdk(MpCompatibility.GetGdkModifierFromWin(modifier),key);
+                RegisterHotKeyGdk(MpCompatibility.GetGdkModifierFromWin(modifier),key);*/
             } else {
                 RegisterHotKeyWin(modifier,key);
             }
@@ -128,15 +128,15 @@ namespace MonkeyPaste {
             IntPtr xDisplay = GetXDisplay(rootWin);
         }
         private void UnregisterHotKeyGdk() {
-            Gdk.Window rootWin = Gdk.Global.DefaultRootWindow;
+            /*Gdk.Window rootWin = Gdk.Global.DefaultRootWindow;
             IntPtr xDisplay = GetXDisplay(rootWin);
             GdkApi.XUngrabKey(
                  xDisplay,
                  (int)key,
                  (uint)modifier,
-                 GetXWindow(rootWin));
+                 GetXWindow(rootWin));*/
         }
-        private Gdk.FilterReturn FilterFunction(IntPtr xEvent,Gdk.Event evnt) {
+        /*private Gdk.FilterReturn FilterFunction(IntPtr xEvent,Gdk.Event evnt) {
             XKeyEvent xKeyEvent = (XKeyEvent)Marshal.PtrToStructure(xEvent,typeof(XKeyEvent));
 
             if(xKeyEvent.type == KeyPress) {
@@ -162,7 +162,7 @@ namespace MonkeyPaste {
              GrabModeAsync
             );
             _isRegistered = true;
-        }
+        }*/
         /// <summary>
         /// A hot key has been pressed.
         /// </summary>

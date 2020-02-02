@@ -84,7 +84,7 @@ namespace MonkeyPaste {
 
         private void TagLinkLabel_LinkClick(object sender,EventArgs e) {
             _isLinkClick = true;
-            if(((MouseEventArgs)e).Button == MouseButtons.Left) {
+            if(e.GetType() == typeof(LinkLabelLinkClickedEventArgs) || (e.GetType() == typeof(MouseEventArgs) && ((MouseEventArgs)e).Button == MouseButtons.Left)) {
                 SetTagState(TagPanelState == MpTagPanelState.Focused ? MpTagPanelState.Inactive : MpTagPanelState.Focused,true);
             }
         }

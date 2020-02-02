@@ -166,9 +166,10 @@ namespace MonkeyPaste {
                     Domain = "monkeypaste.auth0.com",
                     ClientId = "mlb0PEtuS7QSKIU7LOKOqOLxDKvs1Fk8"
                 });
-                var loginResult = await client.LoginAsync(null);//client.LoginAsync();
+                //var loginResult = await client.LoginAsync(null);//client.LoginAsync();
 
-                if(!loginResult.IsError) {
+                //if(!loginResult.IsError)
+                {
                     //Init(loginResult.IdentityToken,loginResult.AccessToken);
                 }
             }

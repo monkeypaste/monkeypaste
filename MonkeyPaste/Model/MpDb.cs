@@ -106,7 +106,7 @@ namespace MonkeyPaste {
            // User = new MpUser() { IdentityToken = idToken };
         }
         public void InitClient(string accessToken) {
-            Client = new MpClient(0,3,MpHelperSingleton.Instance.GetCurrentIPAddress().MapToIPv4().ToString(),accessToken,DateTime.Now);
+            Client = new MpClient(0,3,MpHelperSingleton.Instance.GetCurrentIPAddress()/*.MapToIPv4()*/.ToString(),accessToken,DateTime.Now);
         }        
         public List<MpCopyItem> GetCopyItems() {
             if(NoDb) {

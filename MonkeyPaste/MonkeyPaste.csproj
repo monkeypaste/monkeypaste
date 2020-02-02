@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -15,9 +15,9 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <PackOnBuild>true</PackOnBuild>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -95,9 +95,6 @@
     </Reference>
     <Reference Include="Google.Protobuf, Version=3.9.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Protobuf.3.9.1\lib\net45\Google.Protobuf.dll</HintPath>
-    </Reference>
-    <Reference Include="GtkSharp, Version=3.22.25.49, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\GtkSharp.3.22.25.49\lib\netstandard2.0\GtkSharp.dll</HintPath>
     </Reference>
     <Reference Include="IdentityModel, Version=3.10.10.0, Culture=neutral, PublicKeyToken=e7877f4675df049f, processorArchitecture=MSIL">
       <HintPath>..\packages\IdentityModel.3.10.10\lib\net452\IdentityModel.dll</HintPath>
@@ -364,6 +361,7 @@
     <Compile Include="Helpers\MpColorPallete.cs" />
     <Compile Include="Helpers\MpCursorPosition.cs" />
     <Compile Include="Helpers\MpKeyboardHook.cs" />
+    <Compile Include="Helpers\MpPointMath.cs" />
     <Compile Include="Helpers\MpTypeHelper.cs" />
     <Compile Include="Model\MpPasteHistory.cs" />
     <Compile Include="Helpers\MpHelperSingleton.cs" />
@@ -650,7 +648,6 @@
     <None Include="Model\MpSchema.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -709,6 +706,10 @@
     <None Include="Resources\doubleSidedArrow2.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Desktop\.Net Examples\VisualEffects\VisualEffects.csproj">
+      <Project>{88c2e4d2-1237-4616-9f74-2d0a4af06009}</Project>
+      <Name>VisualEffects</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BevelPanel\BevelPanel.csproj">
       <Project>{5230bbd2-9933-40cc-8dea-fc17d0040bc4}</Project>
       <Name>BevelPanel</Name>
@@ -716,10 +717,6 @@
     <ProjectReference Include="..\ExtractLargeIconFromFile\ExtractLargeIconFromFile\ExtractLargeIconFromFile.csproj">
       <Project>{4b9f7707-016b-4358-a497-c038b9e216fd}</Project>
       <Name>ExtractLargeIconFromFile</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\VisualEffects\VisualEffects.csproj">
-      <Project>{88c2e4d2-1237-4616-9f74-2d0a4af06009}</Project>
-      <Name>VisualEffects</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
