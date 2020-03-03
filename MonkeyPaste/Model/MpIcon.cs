@@ -9,21 +9,26 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public class MpIcon : MpDBObject {
         public static int TotalIconCount = 0;
-        public int iconId { get; set; }
+        public int iconId { get; set; } 
         public Image IconImage { get; set; }
-        public string Path { get; set; }
+        //public string Path { get; set; }
 
-        private MpIcon() {}
-        public MpIcon(int iconId,IntPtr sourceHandle) : base() {
-            this.iconId = iconId;
-            this.IconImage = MpHelperSingleton.Instance.GetIconImage(sourceHandle);
-            this.Path = MpHelperSingleton.Instance.GetProcessPath(sourceHandle);
+        public MpIcon() {
+            iconId = 0;
+            IconImage = null;
+            ++TotalIconCount;
+        }
+        public MpIcon(Image iconImage) : base() {
+            this.iconId = 0;
+            this.IconImage = iconImage;
+            ++TotalIconCount;
+            //this.Path = MpHelperSingleton.Instance.GetProcessPath(sourceHandle);
             //WriteToDatabase();
         }
-        public MpIcon(IntPtr sourceHandle) {
+        /*public MpIcon(IntPtr sourceHandle) {
             IconImage = MpHelperSingleton.Instance.GetIconImage(sourceHandle);
-            Path = MpHelperSingleton.Instance.GetProcessPath(sourceHandle);
-            DataTable dt_app = MpLogFormController.Db.Execute("select * from MpApp where SourcePath='" + Path + "'");
+            string appPath = MpHelperSingleton.Instance.GetProcessPath(sourceHandle);
+            DataTable dt_app = MpLogFormController.Db.Execute("select * from MpApp where SourcePath='" + appPath + "'");
             if(dt_app != null && dt_app.Rows.Count > 0) {
                 iconId = Convert.ToInt32(dt_app.Rows[0]["fk_MpIconId"].ToString());
                 DataTable dt_icon = MpLogFormController.Db.Execute("select * from MpIcon where pk_MpIconId=" + iconId);
@@ -33,7 +38,7 @@ namespace MonkeyPaste {
                 }
             }
             WriteToDatabase();
-        }
+        }*/
         public MpIcon(int iconId) {
             DataTable dt = MpLogFormController.Db.Execute("select * from MpIcon where pk_MpIconId=" + iconId);
             if(dt != null && dt.Rows.Count > 0) {

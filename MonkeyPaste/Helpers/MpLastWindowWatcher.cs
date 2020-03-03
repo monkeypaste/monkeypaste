@@ -10,6 +10,7 @@ using System.Timers;
 namespace MonkeyPaste
 {
     public class MpLastWindowWatcher {
+        public static string ThisAppPath { get; set; }
         private IntPtr _thisAppHandle;
         private Timer _timer;
         private IntPtr _previousHandle;
@@ -18,7 +19,8 @@ namespace MonkeyPaste
             //Process.GetCurrentProcess().Refresh();
             _thisAppHandle = appHandle;
             _previousHandle = IntPtr.Zero;
-            Console.WriteLine("This app's exe: " + MpHelperSingleton.Instance.GetProcessPath(_thisAppHandle));
+            ThisAppPath = MpHelperSingleton.Instance.GetProcessPath(_thisAppHandle);
+            Console.WriteLine("This app's exe: " + ThisAppPath);
             _timer = new Timer(100);
             _timer.Elapsed += new ElapsedEventHandler(SetLastActive);
             _timer.Start();

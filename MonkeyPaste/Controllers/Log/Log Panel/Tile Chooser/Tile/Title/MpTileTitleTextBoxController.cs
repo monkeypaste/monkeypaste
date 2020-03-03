@@ -10,11 +10,12 @@ namespace MonkeyPaste {
     public class MpTileTitleTextBoxController:MpController {
         public MpTileTitleTextBox TileTitleTextBox { get; set; }
         public MpTileTitleLabel TileTitleLabel { get; set; }
+        //public MpTileTitleLabel TileTitleLabelShadow {get;set;}
 
         private int _copyItemId;
 
         public MpTileTitleTextBoxController(int tileId,int panelId,MpCopyItem ci,MpController Parent) : base(Parent) {
-            _copyItemId = ci.copyItemId;
+            _copyItemId = ci.CopyItemId;
             if(ci.Title.Trim() == string.Empty) {
                 ci.Title = "Empty";
                 ci.WriteToDatabase();
@@ -22,15 +23,28 @@ namespace MonkeyPaste {
 
             TileTitleLabel = new MpTileTitleLabel(tileId,panelId) {
                 Text = ci.Title,
-                BackColor = Color.Transparent,
-                Margin = Padding.Empty,
+                //Angle = 0,
+                //XOffset = MpTileTitlePanelController.ShadowOffset,
+                //YOffset = MpTileTitlePanelController.ShadowOffset,
+                //ShadowColor = MpHelperSingleton.Instance.IsBright(((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor) ? Color.White : Color.Black,
+                //BackColor = Color.Transparent,
+                //Margin = Padding.Empty,
                 Padding = Padding.Empty,
                 BorderStyle = BorderStyle.None,
-                ForeColor = MpHelperSingleton.Instance.IsBright(((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor) ? Color.Black : Color.White
+                //ForeColor = MpHelperSingleton.Instance.IsBright(((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor) ? Color.Black : Color.White
             };
             TileTitleLabel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
             TileTitleLabel.Click += _titleLabel_Click;
-            
+
+            //TileTitleLabelShadow = new MpTileTitleLabel(tileId,panelId) {
+            //    Text = ci.Title,
+            //    BackColor = Color.Transparent,
+            //    Margin = Padding.Empty,
+            //    Padding = Padding.Empty,
+            //    BorderStyle = BorderStyle.None,
+            //    ForeColor = MpHelperSingleton.Instance.IsBright(((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor) ? Color.White : Color.Black
+            //};
+
             TileTitleTextBox = new MpTileTitleTextBox(tileId,panelId) {
                 Text = ci.Title,
                 ReadOnly = false,
@@ -59,19 +73,26 @@ namespace MonkeyPaste {
             fontSize = fontSize < 1.0f ? 10.0f:fontSize;
             TileTitleTextBox.Font = new Font(Properties.Settings.Default.TileTitleFont,fontSize,GraphicsUnit.Pixel);
             TileTitleLabel.Font = TileTitleTextBox.Font;
+            //TileTitleLabelShadow.Font = TileTitleLabel.Font;
 
             //tile title textbox size
             Size tttbs = TextRenderer.MeasureText(TileTitleTextBox.Text,TileTitleTextBox.Font);
 
-            TileTitleTextBox.SetBounds(tp * 2,10,tttbs.Width,tttbs.Height);
+            Rectangle titleBounds = new Rectangle(tp * 2,10,tttbs.Width,tttbs.Height);
+            TileTitleTextBox.Bounds = titleBounds;
             TileTitleLabel.Bounds = TileTitleTextBox.Bounds;
+            //TileTitleLabelShadow.Bounds = titleBounds;
+            //TileTitleLabelShadow.Location = new Point(titleBounds.X + MpTileTitlePanelController.ShadowOffset,titleBounds.Y + MpTileTitlePanelController.ShadowOffset);
 
             if(TileTitleLabel.Visible) {
                 TileTitleLabel.BringToFront();
+                TileTitleTextBox.Visible = false;
+                //TileTitleLabelShadow.SendToBack();
             } else {
                 TileTitleTextBox.BringToFront();
             }
-            TileTitleTextBox.Invalidate();
+            //TileTitleLabelShadow.Invalidate();
+            //TileTitleTextBox.Invalidate();
             TileTitleLabel.Invalidate();
         }
         private void TileTitleTextBox_KeyUp(object sender,KeyEventArgs e) {

@@ -8,8 +8,9 @@ namespace MonkeyPaste {
         public MpTileTitlePanel TileTitlePanel { get; set; }
 
         public MpTileTitleIconPanelController TileTitleIconPanelController { get; set; }
-        public MpTileTitleTextBoxController TileTitleTextBoxController { get; set; }       
-        
+        public MpTileTitleTextBoxController TileTitleTextBoxController { get; set; }
+
+        public static int ShadowOffset { get; set; } = 1;
 
         public MpTileTitlePanelController(int tileId,int panelId,MpCopyItem ci,MpController Parent) : base(Parent) {            
             //parent panel
@@ -24,6 +25,7 @@ namespace MonkeyPaste {
             TileTitlePanel.Controls.Add(TileTitleIconPanelController.TileTitleIconBox);
 
             TileTitleTextBoxController = new MpTileTitleTextBoxController(tileId,panelId,ci,this);
+            //TileTitlePanel.Controls.Add(TileTitleTextBoxController.TileTitleLabelShadow);
             TileTitlePanel.Controls.Add(TileTitleTextBoxController.TileTitleLabel);
             TileTitlePanel.Controls.Add(TileTitleTextBoxController.TileTitleTextBox);
 

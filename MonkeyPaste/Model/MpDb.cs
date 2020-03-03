@@ -107,12 +107,44 @@ namespace MonkeyPaste {
         }
         public void InitClient(string accessToken) {
             Client = new MpClient(0,3,MpHelperSingleton.Instance.GetCurrentIPAddress()/*.MapToIPv4()*/.ToString(),accessToken,DateTime.Now);
-        }        
-        public List<MpCopyItem> GetCopyItems() {
+        }
+        public List<MpCopyItem> MergeCopyItemLists(List<MpCopyItem> listA,List<MpCopyItem> listB) {
+            //sorts merged list by copy datetime
+            List<MpCopyItem> mergedList = new List<MpCopyItem>();
+            if(listA != null) {
+                foreach(MpCopyItem cia in listA) {
+                    mergedList.Add(cia);
+                }
+            }
+            if(listB != null) {
+                foreach(MpCopyItem cib in listB) {
+                    //clear merged copyitems db id so it gets a new one in current list
+
+                    if(NoDb) {
+                        cib.CopyItemId = ++MpCopyItem.TotalCopyItemCount;                        
+                    }
+                    else {
+                        //cib = MpCopyItem.CreateCopyItem(0,(MpCopyItemType)cib.copyItemTypeId,cib.Client)
+                        cib.WriteToDatabase();
+                    }
+                    mergedList.Add(cib);
+                }
+            }
+            mergedList = mergedList.OrderByDescending(x => MpTypeHelper.GetPropertyValue(x,"CopyDateTime")).ToList();
+            return mergedList;
+        }
+        public List<MpCopyItem> GetCopyItems(string altPath = "",string altPassword = "") {
             if(NoDb) {
                 return new List<MpCopyItem>();
             }
-            if(_isLoaded == false) {
+            string tempPath = "", tempPassword = "";
+            if(altPath != "") {
+                tempPath = DbPath;
+                tempPassword = DbPassword;
+                DbPath = altPath;
+                DbPassword = altPassword;
+                
+            } else if(_isLoaded == false) {
                 InitDb();
             }
             List<MpCopyItem> copyItemList = new List<MpCopyItem>();
@@ -122,9 +154,14 @@ namespace MonkeyPaste {
                     copyItemList.Add(new MpCopyItem(dr));
                 }
             }
-            Console.WriteLine("Init w/ " + copyItemList.Count + " copyitems added");
+            if(altPath != "") {
+                DbPath = tempPath;
+                DbPassword = tempPassword;
+
+            }
+            Console.WriteLine(copyItemList.Count + " copyitems gathered");
             return copyItemList;
-        }
+        }        
         public List<MpTag> GetTags() {
             if(NoDb) {
                 return new List<MpTag>() { new MpTag("History",Color.Green,MpTagType.Default),new MpTag("Favorites",Color.Blue,MpTagType.Default) };
@@ -238,6 +275,7 @@ namespace MonkeyPaste {
                 _passwordAttempts = 0;
             }
             sql_con.Close();
+            
         }
         public DataTable Execute(string sql,List<string> paramList = null,List<object> paramValueList = null) {
             if(NoDb || _passwordAttempts > Properties.Settings.Default.MaxDbPasswordAttempts) {
@@ -301,6 +339,12 @@ namespace MonkeyPaste {
             }
             return DT;
         }
+        public void CloseDb() {
+            SQLiteConnection sql_con = SetConnection();
+            sql_con.Close();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
         public int GetLastRowId(string tableName,string pkName) {
             DataTable dt = Execute("select * from " + tableName + " ORDER BY " + pkName + " DESC LIMIT 1;");
             if(dt.Rows.Count > 0)
@@ -345,9 +389,7 @@ namespace MonkeyPaste {
                     CREATE TABLE MpSetting (
                       pk_MpSettingId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , SettingName text NOT NULL
-                    , SettingValueType text NOT NULL
                     , SettingValue text NULL
-                    , SettingDefaultValue text NULL
                     );
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPlatformType (

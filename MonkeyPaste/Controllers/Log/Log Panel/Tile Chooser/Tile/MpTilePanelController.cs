@@ -7,14 +7,13 @@ namespace MonkeyPaste
     public class MpTilePanelController : MpController, IComparable {
         public static int OffsetX { get; set; } = 0;
 
-        public static int SelectedTileId { get; set; }
-
         public static Size TilePanelSize { get; set; } = Size.Empty;
 
         public int TileId { get; set; } = -1;
         //public int SortOrder { get; set; } = 0;
 
         public MpTilePanel TilePanel { get; set; }
+        public MpTileBorderPanelController BorderPanelController { get; set; }
 
         public MpTileControlController TileControlController { get; set; }
         public MpTileTitlePanelController TileTitlePanelController { get; set; }
@@ -31,17 +30,26 @@ namespace MonkeyPaste
         public event CloseButtonClicked CloseButtonClickedEvent;
 
         public MpCopyItem CopyItem { get; set; }      
-        
+        //public DateTime CopyDateTime { get; set; }
+
         private bool _isSelected = false;
-        
+
+        private MpTilePanelState _tilePanelState = MpTilePanelState.None;
+        public MpTilePanelState TilePanelState {
+            get {
+                return _tilePanelState;
+            }
+        }
+
         public MpTilePanelController(int tileId,int panelId,MpCopyItem ci,MpController Parent) : base(Parent) {
             TileId = tileId;
-            CopyItem = ci;            
+            CopyItem = ci;
+            //CopyDateTime = CopyItem.CopyDateTime;
 
             TilePanel = new MpTilePanel(tileId,panelId) {
                 AutoScroll = false,
                 AutoSize = false,
-                BackColor = MpHelperSingleton.Instance.GetRandomColor()
+                BackColor = Color.FromArgb(0,0,0,0)//MpHelperSingleton.Instance.GetRandomColor()
                 //Radius = Properties.Settings.Default.TileBorderRadius
                 /*BackgroundGradientMode = BevelPanel.AdvancedPanel.PanelGradientMode.Vertical,
                 EdgeWidth = 2,
@@ -76,12 +84,13 @@ namespace MonkeyPaste
             TileControlController = new MpTileControlController(tileId,panelId,ci,this);
             TilePanel.Controls.Add(TileControlController.ItemPanel);
 
+            SetState(MpTilePanelState.Unselected);
             //TileMenuPanelController = new MpTileMenuPanelController(tileId,panelId,this);
 
             //MouseOverItemControlHook = new MpMouseHook();
             //MouseOverItemControlHook.MouseEvent += _mouseOverItemControlHook_MouseEvent;
-        
-            Link(new List<MpIView> { /*TilePanel*/ });
+            
+            Link(new List<MpIView> { TilePanel });
         }
         /*public void AnimateTileY(int finalY,int duration,int delay,EasingDelegate easing) {
             TilePanel.Animate(
@@ -105,12 +114,10 @@ namespace MonkeyPaste
 
         }
         public override void Update() {
-            //Update(((MpTileChooserPanelController)Parent).TileChooserPanel.Bounds,new List<float>() { Properties.Settings.Default.TileChooserPadHeightRatio },new List<bool>() { true },new List<bool> { true });
-            //if(TilePanel.Visible == false) {
-            //    return;
-            //}
+            //tile chooser panel controller
+            var tcpc = ((MpTileChooserPanelController)Find("MpTileChooserPanelController"));
             //tile chooser panel rect
-            Rectangle tcpr = ((MpTileChooserPanelController)Parent).TileChooserPanel.Bounds;
+            Rectangle tcpr = tcpc.TileChooserPanel.Bounds;
             int listIdx = ((MpTileChooserPanelController)Parent).GetVisibleTilePanelControllerList().IndexOf(this);
             //tile padding
             int tp = (int)(Properties.Settings.Default.TileChooserPadHeightRatio * tcpr.Height);
@@ -118,15 +125,21 @@ namespace MonkeyPaste
             int ts = tcpr.Height - (int)(tp*2);
             TilePanel.SetBounds((listIdx * tcpr.Height + tp)+OffsetX,tp,ts,ts);
 
-
             TileHeaderPanelController.Update();
             TileTitlePanelController.Update();
             TileDetailsPanelController.Update();
             TileControlController.Update();
             //TileMenuPanelController.Update();
 
+            if(BorderPanelController == null) {
+                BorderPanelController = new MpTileBorderPanelController(tcpc,this);
+                tcpc.TileChooserPanel.Controls.Add(BorderPanelController.TileBorderPanel);
+            }
+
+            BorderPanelController.Update();
             TilePanel.Invalidate();
 
+            
             TilePanelSize = TilePanel.Size;
         }
         public void ShowMenu() {            
@@ -148,23 +161,13 @@ namespace MonkeyPaste
 
             }
         }
-        public void SetFocus(bool isFocused) {
-            TilePanel.BringToFront();
-            if(isFocused) {
-                //TilePanel.BorderColor = Properties.Settings.Default.TileSelectedColor;
-               // TileControlController.ItemControl.Enabled = true;
-
-                //MouseOverItemControlHook.RegisterMouseEvent(MpMouseEvent.HitBox,TileControlController.ItemControl.RectangleToScreen(TileControlController.ItemControl.Bounds));
-
-                //ShowMenu();
+        public void SetState(MpTilePanelState newState) {
+            _tilePanelState = newState;
+            if(_tilePanelState == MpTilePanelState.Hidden) {
+                TilePanel.Visible = false;
             } else {
-                //TilePanel.BorderColor = TilePanel.BackColor;//(Color)MpSingletonController.Instance.GetSetting("TileUnfocusColor");
-                //TileControlController.ItemControl.Enabled = false;
-                //MouseOverItemControlHook.UnregisterMouseEvent();
-                //HideMenu();
-            }
-            _isSelected = isFocused;
-            //TileTitlePanelController.TileTitlePanel.BorderColor = TilePanel.BorderColor;
+                TilePanel.Visible = true;
+            }        
         }
 
         public void ActivateHotKeys() {}      
@@ -185,4 +188,13 @@ namespace MonkeyPaste
             return 0;
         }
     }   
+
+    public enum MpTilePanelState {
+        None = 0,
+        Hidden,
+        Disabled,
+        Unselected,
+        Hover,
+        Selected,
+    }
 }

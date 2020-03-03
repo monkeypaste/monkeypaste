@@ -70,7 +70,7 @@ namespace MonkeyPaste {
             }
         }
         public bool IsLinkedWithCopyItem(MpCopyItem ci) {
-            DataTable dt = MpLogFormController.Db.Execute("select * from MpCopyItemTag where fk_MpTagId=" + TagId + " and fk_MpCopyItemId=" + ci.copyItemId);
+            DataTable dt = MpLogFormController.Db.Execute("select * from MpCopyItemTag where fk_MpTagId=" + TagId + " and fk_MpCopyItemId=" + ci.CopyItemId);
             if(dt != null && dt.Rows.Count > 0) {
                 return true;
             }
@@ -81,18 +81,18 @@ namespace MonkeyPaste {
                 //Console.WriteLine("MpTag Warning attempting to relink tag " + TagId + " with copyitem " + ci.copyItemId+" ignoring...");
                 return;
             }
-            MpLogFormController.Db.ExecuteNonQuery("insert into MpCopyItemTag(fk_MpCopyItemId,fk_MpTagId) values(" + ci.copyItemId + "," + TagId + ")");
+            MpLogFormController.Db.ExecuteNonQuery("insert into MpCopyItemTag(fk_MpCopyItemId,fk_MpTagId) values(" + ci.CopyItemId + "," + TagId + ")");
 
-            Console.WriteLine("Tag link created between tag " + TagId + " with copyitem " + ci.copyItemId + " ignoring...");
+            Console.WriteLine("Tag link created between tag " + TagId + " with copyitem " + ci.CopyItemId + " ignoring...");
         }
         public void UnlinkWithCopyItem(MpCopyItem ci) {
             if(!IsLinkedWithCopyItem(ci)) {
                 //Console.WriteLine("MpTag Warning attempting to unlink non-linked tag " + TagId + " with copyitem " + ci.copyItemId + " ignoring...");
                 return;
             }
-            MpLogFormController.Db.ExecuteNonQuery("delete from MpCopyItemTag where fk_MpCopyItemId="+ci.copyItemId+" and fk_MpTagId="+TagId);
+            MpLogFormController.Db.ExecuteNonQuery("delete from MpCopyItemTag where fk_MpCopyItemId="+ci.CopyItemId+" and fk_MpTagId="+TagId);
 
-            Console.WriteLine("Tag link removed between tag " + TagId + " with copyitem " + ci.copyItemId + " ignoring...");
+            Console.WriteLine("Tag link removed between tag " + TagId + " with copyitem " + ci.CopyItemId + " ignoring...");
         }
         public void DeleteFromDatabase() {
             MpLogFormController.Db.ExecuteNonQuery("delete from MpTag where pk_MpTagId=" + this.TagId);

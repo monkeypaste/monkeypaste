@@ -14,6 +14,8 @@ namespace MonkeyPaste {
         private int _currentDetailId = 0;
         private MpCopyItem _copyItem;
 
+        protected MpTileDetailsTextBoxController(MpController parentController) : base(parentController) { }
+
         public MpTileDetailsTextBoxController(int tileId,int panelId,MpController parentController) : base(parentController) {
             DetailsTextBox = new MpTileDetailsTextBox(tileId,panelId) {
                 BackColor = Properties.Settings.Default.TileItemBgColor,
@@ -43,7 +45,7 @@ namespace MonkeyPaste {
             }
             Update();
         }
-        private string GetCurrentDetail(int detailId) {
+        protected string GetCurrentDetail(int detailId) {
             MpCopyItem ci = ((MpTilePanelController)((MpTileDetailsPanelController)Parent).Parent).CopyItem;
             string info = string.Empty;
             switch(detailId) {
@@ -53,20 +55,20 @@ namespace MonkeyPaste {
                     break;
                 //chars/lines
                 case 1:
-                    if(ci.copyItemTypeId == MpCopyItemType.Image) {
+                    if(ci.CopyItemType == MpCopyItemType.Image) {
                         Image ciimg = MpHelperSingleton.Instance.ConvertByteArrayToImage((byte[])ci.GetData());
                         info = "(" + ciimg.Width + ") x (" + ciimg.Height + ")";
                     }
-                    else if(ci.copyItemTypeId == MpCopyItemType.Text) {
+                    else if(ci.CopyItemType == MpCopyItemType.Text) {
                         info = ((string)ci.GetData()).Length + " chars | " + MpHelperSingleton.Instance.GetLineCount((string)ci.GetData()) + " lines";
                     }
-                    else if(ci.copyItemTypeId == MpCopyItemType.FileList) {
+                    else if(ci.CopyItemType == MpCopyItemType.FileList) {
                         info = ((string[])ci.GetData()).Length + " files | " + MpHelperSingleton.Instance.FileListSize((string[])ci.GetData()) + " bytes";
                     }
                     break;
                 //# copies/# pastes
                 case 2:
-                    DataTable dt = MpLogFormController.Db.Execute("select * from MpPasteHistory where fk_MpCopyItemId=" + ci.copyItemId);
+                    DataTable dt = MpLogFormController.Db.Execute("select * from MpPasteHistory where fk_MpCopyItemId=" + ci.CopyItemId);
                     info = ci.CopyCount + " copies | " + dt.Rows.Count + " pastes";
                     break;                
                 default:

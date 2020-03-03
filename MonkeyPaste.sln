@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyPaste", "MonkeyPaste\MonkeyPaste.csproj", "{3DF26AA3-E05B-4B38-87C9-8EECDE662875}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4B9F7707-016B-4358-A497-C038B9E216FD} = {4B9F7707-016B-4358-A497-C038B9E216FD}
+		{1E056853-C334-4019-8E2A-4C5C2DD6C130} = {1E056853-C334-4019-8E2A-4C5C2DD6C130}
 		{5230BBD2-9933-40CC-8DEA-FC17D0040BC4} = {5230BBD2-9933-40CC-8DEA-FC17D0040BC4}
 	EndProjectSection
 EndProject
@@ -14,6 +15,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractLargeIconFromFile", "ExtractLargeIconFromFile\ExtractLargeIconFromFile\ExtractLargeIconFromFile.csproj", "{4B9F7707-016B-4358-A497-C038B9E216FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualEffects", "VisualEffects\VisualEffects.csproj", "{88C2E4D2-1237-4616-9F74-2D0A4AF06009}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShadowLabel", "ShadowLabel\ShadowLabel.csproj", "{1E056853-C334-4019-8E2A-4C5C2DD6C130}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +58,14 @@ Global
 		{88C2E4D2-1237-4616-9F74-2D0A4AF06009}.Release|Any CPU.Build.0 = Release|Any CPU
 		{88C2E4D2-1237-4616-9F74-2D0A4AF06009}.Release|x86.ActiveCfg = Release|Any CPU
 		{88C2E4D2-1237-4616-9F74-2D0A4AF06009}.Release|x86.Build.0 = Release|Any CPU
+		{1E056853-C334-4019-8E2A-4C5C2DD6C130}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E056853-C334-4019-8E2A-4C5C2DD6C130}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E056853-C334-4019-8E2A-4C5C2DD6C130}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1E056853-C334-4019-8E2A-4C5C2DD6C130}.Debug|x86.Build.0 = Debug|Any CPU
+		{1E056853-C334-4019-8E2A-4C5C2DD6C130}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E056853-C334-4019-8E2A-4C5C2DD6C130}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E056853-C334-4019-8E2A-4C5C2DD6C130}.Release|x86.ActiveCfg = Release|Any CPU
+		{1E056853-C334-4019-8E2A-4C5C2DD6C130}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

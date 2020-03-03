@@ -13,7 +13,7 @@ namespace MonkeyPaste {
         private Point _itemControlPanelOrigin = Point.Empty;
 
         public MpTileControlController(int tileId,int panelId,MpCopyItem ci,MpController Parent) : base(Parent) {
-            switch(ci.copyItemTypeId) {
+            switch(ci.CopyItemType) {
                 case MpCopyItemType.HTMLText:
                 case MpCopyItemType.RichText:
                 case MpCopyItemType.Text:

@@ -346,6 +346,8 @@
     <Compile Include="Controllers\Log\Log Panel\Tile Chooser\Tile\Header\MpTileHeaderExpandButtonController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Tile Chooser\Tile\Header\MpTileHeaderPanelController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Tile Chooser\Tile\Header\MpTileHeaderCloseButtonController.cs" />
+    <Compile Include="Controllers\Log\Settings\MpDataDetailsLabelController.cs" />
+    <Compile Include="Controllers\Log\Settings\MpSettingsFormController.cs" />
     <Compile Include="Controllers\MpTaskbarIconController.cs" />
     <Compile Include="Controllers\MpController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Tile Chooser\Tile\Detail\MpTileDetailsPanelController.cs" />
@@ -375,8 +377,8 @@
     <Compile Include="Helpers\MpRegistryHelper.cs" />
     <Compile Include="App\WinApi.cs" />
     <Compile Include="Model\MpDb.cs" />
-    <Compile Include="Model\MpModel.cs" />
     <Compile Include="Model\MpPlatform.cs" />
+    <Compile Include="Model\MpSetting.cs" />
     <Compile Include="Model\MpTag.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -390,7 +392,6 @@
     <Compile Include="View\MpControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpDropShadowLabel.cs" />
     <Compile Include="View\MpFileListItemRowIcon.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -412,11 +413,14 @@
     <Compile Include="View\MpLogMainMenuSettingsButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpPanel.cs">
+    <Compile Include="View\MpAdvancedPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="View\MpDataDetailsLabel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpTileTitleLabel.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="View\MpTreeNode.cs" />
     <Compile Include="View\MpTreeViewPanel.cs">
@@ -606,6 +610,9 @@
     <EmbeddedResource Include="Helpers\MpClipboardHelper.resx">
       <DependentUpon>MpClipboardHelper.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="View\MpAdvancedPanel.resx">
+      <DependentUpon>MpAdvancedPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="View\MpTileMenuPanel.resx">
       <DependentUpon>MpTileMenuPanel.cs</DependentUpon>
     </EmbeddedResource>
@@ -718,6 +725,10 @@
       <Project>{4b9f7707-016b-4358-a497-c038b9e216fd}</Project>
       <Name>ExtractLargeIconFromFile</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ShadowLabel\ShadowLabel.csproj">
+      <Project>{1e056853-c334-4019-8e2a-4c5c2dd6c130}</Project>
+      <Name>ShadowLabel</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\tshadowdown.png" />
@@ -758,6 +769,10 @@
   <ItemGroup>
     <None Include="Resources\minus2.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\transparent.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -30,6 +30,10 @@ namespace MonkeyPaste {
             return GetBitmapFromFilePath(MpHelperSingleton.Instance.GetProcessPath(sourceHandle),IconSizeEnum.ExtraLargeIcon);
             //return IconReader.GetFileIcon(MpHelperSingleton.Instance.GetProcessPath(sourceHandle),IconReader.IconSize.Large,false).ToBitmap();
         }
+        public Image GetIconImage(string sourcePath) {
+            return GetBitmapFromFilePath(sourcePath,IconSizeEnum.ExtraLargeIcon);
+            //return IconReader.GetFileIcon(MpHelperSingleton.Instance.GetProcessPath(sourceHandle),IconReader.IconSize.Large,false).ToBitmap();
+        }
         /// <summary>
         /// Method to rotate an Image object. The result can be one of three cases:
         /// - upsizeOk = true: output image will be larger than the input, and no clipping occurs 
@@ -441,9 +445,9 @@ namespace MonkeyPaste {
         public Image ConvertByteArrayToImage(byte[] rawBytes) {
             return Image.FromStream(new MemoryStream(rawBytes),true);
         }
-        public Image GetIconImage(string path) {
-            return (Image)IconReader.GetFileIcon(path,IconReader.IconSize.Large,false).ToBitmap();//Icon.ExtractAssociatedIcon(path).ToBitmap();
-        }
+        //public Image GetIconImage(string path) {
+        //    return (Image)IconReader.GetFileIcon(path,IconReader.IconSize.Large,false).ToBitmap();//Icon.ExtractAssociatedIcon(path).ToBitmap();
+        //}
         public IPAddress GetCurrentIPAddress() {
             Ping ping = new Ping();
             var replay = ping.Send(Dns.GetHostName());

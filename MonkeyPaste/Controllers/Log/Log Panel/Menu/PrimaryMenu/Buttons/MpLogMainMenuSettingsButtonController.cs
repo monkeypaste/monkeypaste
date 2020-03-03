@@ -8,6 +8,8 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {
     public class MpLogMainMenuSettingsButtonController:MpController {
+        public MpSettingsFormController SettingsFormController { get;set;}
+
         public MpLogMainMenuSettingsButton LogMainMenuSettingsButton { get; set; }
 
         public delegate void ButtonClicked(object sender,EventArgs e);
@@ -29,6 +31,8 @@ namespace MonkeyPaste {
             LogMainMenuSettingsButton.MouseHover += MpLogMainMenuSettingsButton_MouseHover;
             LogMainMenuSettingsButton.MouseLeave += MpLogMainMenuSettingsButton_MouseLeave;
             LogMainMenuSettingsButton.MouseClick += MpLogMainMenuSettingsButton_MouseClick;
+
+            SettingsFormController = new MpSettingsFormController((MpTaskbarIconController)Find("MpTaskbarIcon6Controller"));
         }
         public override void Update() {
             //log main menu panel rect
@@ -43,6 +47,7 @@ namespace MonkeyPaste {
         }
         private void MpLogMainMenuSettingsButton_MouseClick(object sender,MouseEventArgs e) {
             ButtonClickedEvent(this,e);
+            SettingsFormController.SettingsForm.Show();
         }
 
         private void MpLogMainMenuSettingsButton_MouseLeave(object sender,EventArgs e) {

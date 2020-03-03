@@ -72,23 +72,23 @@ namespace MonkeyPaste
 
 
         private void LogForm_Activated(object sender,EventArgs e) {
-            int t = 500;
-            int d = 50;
+            //int t = 500;
+            //int d = 50;
 
-            if(LogFormPanelController.TileChooserPanelController.TileControllerList.Count > 0) {
-                int fy = LogFormPanelController.TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Location.Y;
-                LogFormPanelController.TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Location = new Point(LogFormPanelController.TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Location.X,LogFormPanelController.TileChooserPanelController.TileChooserPanel.Bottom);
-                LogFormPanelController.TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Invalidate();
-                int idx = LogFormPanelController.TileChooserPanelController.TileControllerList.IndexOf(LogFormPanelController.TileChooserPanelController.SelectedTilePanelController);
-                //LogFormPanelController.TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Animate(new YLocationEffect(),EasingFunctions.SineEaseOut,fy,t,idx*d);
-            }
-            foreach(MpTilePanelController tpc in LogFormPanelController.TileChooserPanelController.GetVisibleTilePanelControllerList()) {
-                int fy = tpc.TilePanel.Location.Y;
-                tpc.TilePanel.Location = new Point(tpc.TilePanel.Location.X,LogFormPanelController.TileChooserPanelController.TileChooserPanel.Bottom);
-                tpc.TilePanel.Invalidate();
-                int idx = LogFormPanelController.TileChooserPanelController.TileControllerList.IndexOf(tpc);
-                //tpc.AnimateTileY(fy,t,idx * d,EasingFunctions.SineEaseOut);
-            }
+            //if(LogFormPanelController.TileChooserPanelController.TileControllerList.Count > 0) {
+            //    int fy = LogFormPanelController.TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Location.Y;
+            //    LogFormPanelController.TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Location = new Point(LogFormPanelController.TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Location.X,LogFormPanelController.TileChooserPanelController.TileChooserPanel.Bottom);
+            //    LogFormPanelController.TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Invalidate();
+            //    int idx = LogFormPanelController.TileChooserPanelController.TileControllerList.IndexOf(LogFormPanelController.TileChooserPanelController.SelectedTilePanelController);
+            //    //LogFormPanelController.TileChooserPanelController.SelectedTileBorderPanelController.TileBorderPanel.Animate(new YLocationEffect(),EasingFunctions.SineEaseOut,fy,t,idx*d);
+            //}
+            //foreach(MpTilePanelController tpc in LogFormPanelController.TileChooserPanelController.GetVisibleTilePanelControllerList()) {
+            //    int fy = tpc.TilePanel.Location.Y;
+            //    tpc.TilePanel.Location = new Point(tpc.TilePanel.Location.X,LogFormPanelController.TileChooserPanelController.TileChooserPanel.Bottom);
+            //    tpc.TilePanel.Invalidate();
+            //    int idx = LogFormPanelController.TileChooserPanelController.TileControllerList.IndexOf(tpc);
+            //    //tpc.AnimateTileY(fy,t,idx * d,EasingFunctions.SineEaseOut);
+            //}
         }
 
         public override void Update() {
@@ -205,6 +205,7 @@ namespace MonkeyPaste
 
         private void ClipboardController_ClipboardChangedEvent(object sender,MpCopyItem copyItem) {
             LogFormPanelController.TileChooserPanelController.AddNewCopyItemPanel(copyItem);
+            LogFormPanelController.TileChooserPanelController.SelectTile(LogFormPanelController.TileChooserPanelController.TileControllerList[LogFormPanelController.TileChooserPanelController.TileControllerList.Count - 1]);
         }
 
         private void logForm_Closing(object sender,FormClosingEventArgs e) {
@@ -372,18 +373,18 @@ namespace MonkeyPaste
             MpSingletonController.Instance.SetIgnoreNextClipboardEvent(true);
             MpCopyItem copyItem = LogFormPanelController.TileChooserPanelController.SelectedTilePanelController.CopyItem;
 
-            if(copyItem.copyItemTypeId == MpCopyItemType.Text) {                
+            if(copyItem.CopyItemType == MpCopyItemType.Text) {                
                 Clipboard.SetData(DataFormats.Text,(string)copyItem.GetData());
-            } else if(copyItem.copyItemTypeId == MpCopyItemType.RichText) {
-                Clipboard.SetData(DataFormats.Text,(string)copyItem.GetData());
-            }
-            else if(copyItem.copyItemTypeId == MpCopyItemType.HTMLText) {
+            } else if(copyItem.CopyItemType == MpCopyItemType.RichText) {
                 Clipboard.SetData(DataFormats.Text,(string)copyItem.GetData());
             }
-            else if(copyItem.copyItemTypeId == MpCopyItemType.Image) {
+            else if(copyItem.CopyItemType == MpCopyItemType.HTMLText) {
+                Clipboard.SetData(DataFormats.Text,(string)copyItem.GetData());
+            }
+            else if(copyItem.CopyItemType == MpCopyItemType.Image) {
                 Clipboard.SetImage((Image/*BitmapSource*/)copyItem.GetData());
             }
-            else if(copyItem.copyItemTypeId == MpCopyItemType.FileList) {
+            else if(copyItem.CopyItemType == MpCopyItemType.FileList) {
                 Clipboard.SetFileDropList((StringCollection)copyItem.GetData());
             }
             //WinApi.SetActiveWindow(ClipboardController.GetLastWindowWatcher().LastHandle);

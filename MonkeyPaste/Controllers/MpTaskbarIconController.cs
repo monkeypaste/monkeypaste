@@ -93,7 +93,7 @@ namespace MonkeyPaste {
             if(Properties.Settings.Default.IsAppendModeActive) {
                 TrayIcon.BalloonTipText = "Append mode activated";
                 TrayIcon.ShowBalloonTip(5000);
-                if(LogFormController.LogFormPanelController.TileChooserPanelController.SelectedTilePanelController != null && LogFormController.LogFormPanelController.TileChooserPanelController.SelectedTilePanelController.CopyItem.copyItemTypeId == MpCopyItemType.Text) {
+                if(LogFormController.LogFormPanelController.TileChooserPanelController.SelectedTilePanelController != null && LogFormController.LogFormPanelController.TileChooserPanelController.SelectedTilePanelController.CopyItem.CopyItemType == MpCopyItemType.Text) {
                     MpSingletonController.Instance.AppendItem = LogFormController.LogFormPanelController.TileChooserPanelController.SelectedTilePanelController.CopyItem;
                 }
             }

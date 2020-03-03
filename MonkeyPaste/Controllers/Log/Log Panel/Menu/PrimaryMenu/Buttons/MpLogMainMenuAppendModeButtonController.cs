@@ -24,7 +24,7 @@ namespace MonkeyPaste {
                 Image = Properties.Resources.info,
                 DefaultImage = Properties.Resources.info,
                 OverImage = Properties.Resources.info2,
-                DownImage = Properties.Resources.info2
+                DownImage = Properties.Resources.info2                
             };
             LogMainMenuAppendModeButton.MouseHover += MpLogMainMenuAppendModeButton_MouseHover;
             LogMainMenuAppendModeButton.MouseLeave += MpLogMainMenuAppendModeButton_MouseLeave;

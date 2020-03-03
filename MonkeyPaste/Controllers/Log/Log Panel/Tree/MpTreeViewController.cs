@@ -28,7 +28,11 @@ namespace MonkeyPaste {
 
             if(copyItemList != null) {
                 foreach(MpCopyItem ci in copyItemList) {
-                    AddTreeNode(_rootTreeNodeController,Path.GetFileName(ci.App.SourcePath));
+                    if(ci.App != null) {
+                        AddTreeNode(_rootTreeNodeController,Path.GetFileName(ci.App.SourcePath));
+                    } else {
+                        Console.WriteLine("MpTreeViewController error: cannot load copyitem without an MpApp");
+                    }
                 }
             }
         }
@@ -50,7 +54,7 @@ namespace MonkeyPaste {
             //first make sure node doesn't already exist
             foreach(TreeNode tn in _rootTreeNodeController.TreeNode.Nodes) {
                 if(tn.Text == nodeName) {
-                    Console.WriteLine("Skipping adding duplicate app, " + nodeName);
+                    Console.WriteLine("MpTreeViewController: Skipping adding duplicate app, " + nodeName);
                     return;
                 }
             }

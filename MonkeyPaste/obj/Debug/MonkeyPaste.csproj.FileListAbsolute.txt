@@ -427,8 +427,10 @@ C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\ro\Xceed.Wpf.Av
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\ru\Xceed.Wpf.AvalonDock.resources.dll
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\sv\Xceed.Wpf.AvalonDock.resources.dll
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\zh-Hans\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\obj\Debug\MonkeyPaste.csprojAssemblyReference.cache
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\obj\Debug\MonkeyPaste.exe.config
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\obj\Debug\MonkeyPaste.MpClipboardHelper.resources
+C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\obj\Debug\MonkeyPaste.MpAdvancedPanel.resources
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\obj\Debug\MonkeyPaste.MpTileMenuPanel.resources
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\obj\Debug\MonkeyPaste.MpHelpForm.resources
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\obj\Debug\MonkeyPaste.View.MpInputActionForm.resources
@@ -444,4 +446,5 @@ C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\obj\Debug\MonkeyPaste.csp
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\obj\Debug\MonkeyPaste.csproj.CopyComplete
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\obj\Debug\MonkeyPaste.exe
 C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\obj\Debug\MonkeyPaste.pdb
-C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\obj\Debug\MonkeyPaste.csprojAssemblyReference.cache
+C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\ShadowLabel.dll
+C:\Users\tkefauver\Dropbox\Dev\MonkeyPaste\MonkeyPaste\bin\Debug\ShadowLabel.pdb

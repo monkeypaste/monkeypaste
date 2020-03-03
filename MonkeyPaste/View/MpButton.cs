@@ -13,7 +13,7 @@ namespace MonkeyPaste {
         public Image DownImage { get; set; }
 
         public MpButton() : base() {
-
+            
             this.DoubleBuffered = true;
         }
     }

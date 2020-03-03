@@ -15,16 +15,19 @@ namespace MonkeyPaste {
         
         public int PanelId { get; set; } = 0;
 
-        public MpSelectedTileBorderPanelController SelectedTileBorderPanelController { get; set; }
+        //public MpSelectedTileBorderPanelController SelectedTileBorderPanelController { get; set; }
         
-        private MpTilePanelController _selectedTilePanelController;
+        private MpTilePanelController _selectedTilePanelController = null;
         public MpTilePanelController SelectedTilePanelController {
             get {
                 return _selectedTilePanelController;
             }
             set {
                 _selectedTilePanelController = value;
-                ((MpTagChooserPanelController)Find("MpTagChooserPanelController")).UpdateTagListState(_selectedTilePanelController.CopyItem);
+                if(_selectedTilePanelController != null) {
+                    _selectedTilePanelController.SetState(MpTilePanelState.Selected);
+                    ((MpTagChooserPanelController)Find("MpTagChooserPanelController")).UpdateTagListState(_selectedTilePanelController.CopyItem);
+                }
             }
         }
         public MpTilePanelController DragTilePanelController { get; set; } = null;
@@ -42,11 +45,8 @@ namespace MonkeyPaste {
                 BackColor = Properties.Settings.Default.LogPanelBgColor,
                 AutoSize = false
             };
-            //Update(true);
-            TileChooserPanel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;            
-
-            SelectedTileBorderPanelController = new MpSelectedTileBorderPanelController(this,PanelId);
-            TileChooserPanel.Controls.Add(SelectedTileBorderPanelController.TileBorderPanel);                       
+            TileChooserPanel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;          
+                       
 
             _focusTimer = new Timer();
             _focusTimer.Interval = 10;
@@ -55,11 +55,10 @@ namespace MonkeyPaste {
             };
             _focusTimer.Start();
 
-            //Update();
-
             foreach(MpCopyItem ci in copyItemList) {
                 AddNewCopyItemPanel(ci);
             }
+
             _isInitialLoad = false;
 
             Link(new List<MpIView> { TileChooserPanel});
@@ -79,7 +78,7 @@ namespace MonkeyPaste {
             foreach(MpTilePanelController citc in TileControllerList) {
                 citc.Update();
             }
-            SelectedTileBorderPanelController.Update();
+            //SelectedTileBorderPanelController.Update();
 
             TileChooserPanel.Invalidate();
         }
@@ -107,7 +106,6 @@ namespace MonkeyPaste {
         public void SelectTile(MpTilePanelController tpc) {
             SelectedTilePanelController = tpc;
             SelectedTilePanelController.TilePanel.Focus();
-            SelectedTileBorderPanelController.TileBorderPanel.Visible = true;
             Update();
         }
         private void _showSelectedTilePanelController() {
@@ -201,7 +199,6 @@ namespace MonkeyPaste {
             foreach(MpTilePanelController tpc in visibleTileControllerList) {
                 tpc.Update();
             }
-            SelectedTileBorderPanelController.Update();
         }
         public void OnFormResize(Rectangle newBounds) {
             if(TileChooserPanel != null) {
@@ -232,15 +229,15 @@ namespace MonkeyPaste {
                     filteredTileIdxList.Add(i);
                     continue;
                 }
-                if(ci.copyItemTypeId == MpCopyItemType.Image) {
+                if(ci.CopyItemType == MpCopyItemType.Image) {
                     continue;
                 }
-                if(ci.copyItemTypeId == MpCopyItemType.Text) {
+                if(ci.CopyItemType == MpCopyItemType.Text) {
                     if(((string)ci.GetData()).ToLower().Contains(searchStr.ToLower())) {
                         filteredTileIdxList.Add(i);
                     }
                 }
-                else if(ci.copyItemTypeId == MpCopyItemType.FileList) {
+                else if(ci.CopyItemType == MpCopyItemType.FileList) {
                     foreach(string p in (string[])ci.GetData()) {
                         if(p.ToLower().Contains(searchStr.ToLower())) {
                             filteredTileIdxList.Add(i);
@@ -260,13 +257,15 @@ namespace MonkeyPaste {
                     TileControllerList[i].TilePanel.Visible = false;
                 }
             }
-            if(vcount == 0) {
-                SelectedTileBorderPanelController.TileBorderPanel.Visible = false;
-            } else {
-                Sort("TileId",false);
-                SelectedTileBorderPanelController.TileBorderPanel.Visible = true;
-                SelectedTilePanelController = GetVisibleTilePanelControllerList()[0];
-            }
+            //if(vcount == 0) {
+            //    SelectedTileBorderPanelController.TileBorderPanel.Visible = false;
+            //} else {
+            //    Sort("TileId",false);
+            //    SelectedTileBorderPanelController.TileBorderPanel.Visible = true;
+            //    SelectedTilePanelController = GetVisibleTilePanelControllerList()[0];
+            //}
+            Sort("TileId",false);
+            SelectedTilePanelController = GetVisibleTilePanelControllerList()[0];
             Update();
             _showSelectedTilePanelController();
         }
@@ -311,7 +310,7 @@ namespace MonkeyPaste {
         }
         public void AddNewCopyItemPanel(MpCopyItem ci) {
             if(Properties.Settings.Default.IsAppendModeActive) {
-                if(MpSingletonController.Instance.AppendItem == null && ci.copyItemTypeId == MpCopyItemType.Text) {
+                if(MpSingletonController.Instance.AppendItem == null && ci.CopyItemType == MpCopyItemType.Text) {
                     MpSingletonController.Instance.AppendItem = ci;
                 }
                 if(MpSingletonController.Instance.AppendItem != null) {
@@ -321,6 +320,7 @@ namespace MonkeyPaste {
             } else {
                 ci.WriteToDatabase();
                 MpTilePanelController newTileController = new MpTilePanelController(TileControllerList.Count,PanelId,ci,this);
+                //newTileController.CopyDateTime = ci.CopyDateTime;
                 newTileController.CloseButtonClickedEvent += TilePanelController_CloseButtonClickedEvent;
                 newTileController.ExpandButtonClickedEvent += TIlePanelController_ExpandButtonClickedEvent;
                 TileControllerList.Add(newTileController);
@@ -329,13 +329,15 @@ namespace MonkeyPaste {
                     MpTilePanelController.OffsetX = 0;
                     SelectedTilePanelController = newTileController;
                 }
+                MpCopyItem.TotalCopyItemCount = TileControllerList.Count;
             }
-            if(SelectedTilePanelController != null) {
-                SelectedTilePanelController.Update();
-                SelectedTileBorderPanelController.TileBorderPanel.Visible = true;
-            }
-            Sort("TileId",false);
+            //if(SelectedTilePanelController != null) {
+            //    SelectedTilePanelController.Update();
+            //    SelectedTileBorderPanelController.TileBorderPanel.Visible = true;
+            //}
+            Sort("CopyItemId",false);
             ScrollTiles(0);
+            MpTilePanelController.OffsetX = 0;
             Update();
         }
 
@@ -347,11 +349,11 @@ namespace MonkeyPaste {
             DeleteCopyItemPanel((MpTilePanelController)sender);
         }
 
-        private void Sort(string sortBy,bool ascending) {
+        public void Sort(string sortBy,bool ascending) {
             if(ascending) {
-                TileControllerList = TileControllerList.OrderBy(x => MpTypeHelper.GetPropertyValue(x,sortBy)).ToList();
+                TileControllerList = TileControllerList.OrderBy(x => MpTypeHelper.GetPropertyValue(x.CopyItem,sortBy)).ToList();
             } else {
-                TileControllerList = TileControllerList.OrderByDescending(x => MpTypeHelper.GetPropertyValue(x,sortBy)).ToList();
+                TileControllerList = TileControllerList.OrderByDescending(x => MpTypeHelper.GetPropertyValue(x.CopyItem,sortBy)).ToList();
             }
         }
     }

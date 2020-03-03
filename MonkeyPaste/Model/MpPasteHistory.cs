@@ -22,7 +22,7 @@ namespace MonkeyPaste {
         }
         public MpPasteHistory(MpCopyItem ci,IntPtr destHandle) {
             PasteHistoryId = 0;
-            CopyItemId = ci.copyItemId;
+            CopyItemId = ci.CopyItemId;
             _destHandle = destHandle;
             PasteDateTime = DateTime.Now;
 

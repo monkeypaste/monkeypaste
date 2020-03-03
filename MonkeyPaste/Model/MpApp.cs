@@ -19,15 +19,31 @@ namespace MonkeyPaste {
 
         public MpIcon Icon { get; set; }
 
-        private IntPtr _sourceHandle;
+        //private IntPtr _sourceHandle;
         //for new MpApp's set appId and iconId to 0
+        public MpApp(String sourcePath,bool isAppRejected) {
+            this.iconId = this.appId = 0;
+            this.SourcePath = sourcePath;
+            this.IsAppRejected = isAppRejected;
+            //this._sourceHandle = sourceHandle;
+
+            //copying
+            if(this.SourcePath == MpLastWindowWatcher.ThisAppPath) {
+
+            }
+            //WriteToDatabase();
+        }
         public MpApp(int appId,int iconId,IntPtr sourceHandle,bool isAppRejected) {            
             this.appId = appId;
             this.iconId = iconId;
             this.SourcePath = MpHelperSingleton.Instance.GetProcessPath(sourceHandle);
             this.IsAppRejected = isAppRejected;
-            this._sourceHandle = sourceHandle;
+            //this._sourceHandle = sourceHandle;
 
+            //copying
+            if(this.SourcePath == MpLastWindowWatcher.ThisAppPath) {
+
+            }
             //WriteToDatabase();
         }
         public MpApp(DataRow dr) {
@@ -51,9 +67,9 @@ namespace MonkeyPaste {
         public override void WriteToDatabase() {           
             bool isNew = false;
             if(this.iconId == 0) {
-                Icon = new MpIcon(0,_sourceHandle);
+                Icon = new MpIcon(MpHelperSingleton.Instance.GetIconImage(this.SourcePath));
             } else {
-                Icon = new MpIcon(iconId);
+                //Icon = new MpIcon(iconId);
             }
             Icon.WriteToDatabase();
             this.iconId = Icon.iconId;

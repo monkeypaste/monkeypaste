@@ -16,7 +16,8 @@ namespace MonkeyPaste {
         public MpTileHeaderPanelController(int tileId,int panelId,MpController Parent) : base(Parent) {
             TileHeaderPanel = new MpTileHeaderPanel(tileId,panelId) {
                 AutoSize = false,
-                BorderStyle = BorderStyle.None
+                BorderStyle = BorderStyle.None,
+                BackColor = Color.FromArgb(0,0,0,0)
             };
             //Update(true);
             TileHeaderCloseButtonController = new MpTileHeaderCloseButtonController(tileId,panelId,this);
@@ -36,7 +37,7 @@ namespace MonkeyPaste {
             int tdh = (int)(Properties.Settings.Default.TileHeaderHeightRatio * tr.Height);
             TileHeaderPanel.SetBounds(tp,tp,tr.Width-(tp*2),tdh);
 
-            TileHeaderPanel.BackColor = ((MpTilePanelController)Find("MpTilePanelController")).TileTitlePanelController.TileTitlePanel.BackColor;
+            //TileHeaderPanel.BackColor = ((MpTilePanelController)Find("MpTilePanelController")).TileTitlePanelController.TileTitlePanel.BackColor;
             TileHeaderCloseButtonController.Update();
             TileHeaderExpandButtonController.Update();
 
