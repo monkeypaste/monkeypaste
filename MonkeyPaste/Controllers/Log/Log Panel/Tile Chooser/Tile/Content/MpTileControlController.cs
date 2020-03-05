@@ -80,16 +80,19 @@ namespace MonkeyPaste {
             Link(new List<MpIView> { (MpIView)ItemControl});
         }
         public override void Update() {
+            //tile panel
+            var tp = ((MpTilePanelController)Find("MpTilePanelController")).TilePanel;
+
             //get tile rect
             Rectangle tr = ((MpTilePanelController)Parent).TilePanel.Bounds;
             //itemcontrol padding
-            int tp = (int)(Properties.Settings.Default.TilePadWidthRatio * (float)tr.Width);
+            int tpd = (int)(Properties.Settings.Default.TilePadWidthRatio * (float)tr.Width) + tp.EdgeWidth;
             //get tile details rect
-            Rectangle tdr = ((MpTilePanelController)Parent).TileDetailsPanelController.TileDetailsPanel.Bounds;
+            Rectangle tdr = ((MpTilePanelController)Parent).TileDetailsLabelController.DetailsLabel.Bounds;
             //get tile title rect
             Rectangle ttr = ((MpTilePanelController)Parent).TileTitlePanelController.TileTitlePanel.Bounds;
 
-            ItemPanel.SetBounds(tp,tp+ttr.Bottom,tr.Width - (tp*2),tr.Height-tdr.Height-ttr.Height-(tp*4));
+            ItemPanel.SetBounds(tpd*3,tpd+ttr.Bottom,tr.Width - (tpd*6) - tp.ShadowShift,tr.Height-tdr.Height-ttr.Height-(tpd*4));
 
             if(ItemControl.GetType().IsSubclassOf(typeof(TextBoxBase))) {
                 ((MpTileControlRichTextBox)ItemControl).Text = (string)((MpTilePanelController)Parent).CopyItem.GetData();

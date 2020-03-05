@@ -18,7 +18,9 @@ namespace MonkeyPaste
         public MpTileControlController TileControlController { get; set; }
         public MpTileTitlePanelController TileTitlePanelController { get; set; }
         //public MpTileMenuPanelController TileMenuPanelController { get; set; }
-        public MpTileDetailsPanelController TileDetailsPanelController { get; set; }
+        //public MpTileDetailsPanelController TileDetailsPanelController { get; set; }
+        public MpTileDetailsLabelController TileDetailsLabelController { get; set; }
+
         public MpTileHeaderPanelController TileHeaderPanelController { get; set; }
 
         // public MpMouseHook MouseOverItemControlHook { get; set; }
@@ -49,36 +51,34 @@ namespace MonkeyPaste
             TilePanel = new MpTilePanel(tileId,panelId) {
                 AutoScroll = false,
                 AutoSize = false,
-                BackColor = Color.FromArgb(0,0,0,0)//MpHelperSingleton.Instance.GetRandomColor()
-                //Radius = Properties.Settings.Default.TileBorderRadius
-                /*BackgroundGradientMode = BevelPanel.AdvancedPanel.PanelGradientMode.Vertical,
-                EdgeWidth = 2,
-                EndColor = System.Drawing.Color.LightGreen,
-                FlatBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(102)))),((int)(((byte)(102)))),((int)(((byte)(102))))),
-                Location = new System.Drawing.Point(258,43),
-                Name = "advancedPanel2",
-                RectRadius = 20,
-                ShadowColor = System.Drawing.Color.DimGray,
+                BackColor = Properties.Settings.Default.LogPanelBgColor, //MpHelperSingleton.Instance.GetRandomColor()
+                RectRadius = Properties.Settings.Default.TileBorderRadius,
+                //BackgroundGradientMode = BevelPanel.AdvancedPanel.PanelGradientMode.ForwardDiagonal,
+                FlatBorderColor = Color.Transparent,
+                Style = BevelPanel.AdvancedPanel.BevelStyle.Flat,
+                EdgeWidth = 5,                
+                StartColor = ci.ItemColor.Color,
+                EndColor = ci.ItemColor.Color,
+                ShadowColor = Color.DimGray,
                 ShadowShift = 10,
-                ShadowStyle = BevelPanel.AdvancedPanel.ShadowMode.ForwardDiagonal,
-                Size = new System.Drawing.Size(322,177),
-                StartColor = System.Drawing.Color.ForestGreen,
-                Style = BevelPanel.AdvancedPanel.BevelStyle.Raised,
-                TabIndex = 1*/
+                ShadowStyle = BevelPanel.AdvancedPanel.ShadowMode.ForwardDiagonal,           
+                TabIndex = 1
             };
             //TilePanel.BorderColor = TilePanel.BackColor;
             TilePanel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
 
             TileHeaderPanelController = new MpTileHeaderPanelController(tileId,panelId,this);
             TilePanel.Controls.Add(TileHeaderPanelController.TileHeaderPanel);
-            TileHeaderPanelController.TileHeaderExpandButtonController.ButtonClickedEvent += TileHeaderExpandButtonController_ButtonClickedEvent;
+            //TileHeaderPanelController.TileHeaderExpandButtonController.ButtonClickedEvent += TileHeaderExpandButtonController_ButtonClickedEvent;
             TileHeaderPanelController.TileHeaderCloseButtonController.ButtonClickedEvent += TileHeaderCloseButtonController_ButtonClickedEvent;
 
             TileTitlePanelController = new MpTileTitlePanelController(tileId,panelId,ci,this);
-            TilePanel.Controls.Add(TileTitlePanelController.TileTitlePanel);            
+            TilePanel.Controls.Add(TileTitlePanelController.TileTitlePanel);
 
-            TileDetailsPanelController = new MpTileDetailsPanelController(ci,tileId,panelId,this);
-            TilePanel.Controls.Add(TileDetailsPanelController.TileDetailsPanel);
+            //TileDetailsPanelController = new MpTileDetailsPanelController(ci,tileId,panelId,this);
+            //TilePanel.Controls.Add(TileDetailsPanelController.TileDetailsPanel);
+            TileDetailsLabelController = new MpTileDetailsLabelController(tileId,panelId,this);
+            TilePanel.Controls.Add(TileDetailsLabelController.DetailsLabel);
 
             //always call this last since it fills remaining space
             TileControlController = new MpTileControlController(tileId,panelId,ci,this);
@@ -127,7 +127,7 @@ namespace MonkeyPaste
 
             TileHeaderPanelController.Update();
             TileTitlePanelController.Update();
-            TileDetailsPanelController.Update();
+            TileDetailsLabelController.Update();
             TileControlController.Update();
             //TileMenuPanelController.Update();
 

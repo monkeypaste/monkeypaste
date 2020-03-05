@@ -558,7 +558,7 @@ namespace MonkeyPaste {
                 delete from MpFileDropListSubItem where pk_MpFileDropListSubItemId > 0;
                 delete from MpPasteHistory where pk_MpPasteHistoryId > 0;
                 delete from MpSubTextToken where pk_MpSubTextTokenId > 0;
-                delete from MpTagType where pk_MpTagType > 0;
+                delete from MpTagType where pk_MpTagTypeId > 0;
                 delete from MpTag where pk_MpTag > 0; 
                 delete from MpSetting where pk_MpSetting > 0; 
                 delete from MpHotKey where pk_MpHotKey > 0; 

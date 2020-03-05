@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpTileDetailsTextBox : TextBox,MpIView {
-        public MpTileDetailsTextBox(int tileId,int panelId) : base() {
+    public class MpTileDetailsLabel : Label,MpIView {
+        public MpTileDetailsLabel(int tileId,int panelId) : base() {
             this.DoubleBuffered = true;
             ViewType = this.GetType().ToString();
             ViewName = ViewType + panelId + "_" + tileId;

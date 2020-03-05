@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace MonkeyPaste {
     public class MpTileHeaderPanelController : MpController {
         public MpTileHeaderCloseButtonController TileHeaderCloseButtonController { get; set; }
-        public MpTileHeaderExpandButtonController TileHeaderExpandButtonController { get; set; }
+        //public MpTileHeaderExpandButtonController TileHeaderExpandButtonController { get; set; }
 
         public MpTileHeaderPanel TileHeaderPanel { get; set; }
 
@@ -17,29 +17,31 @@ namespace MonkeyPaste {
             TileHeaderPanel = new MpTileHeaderPanel(tileId,panelId) {
                 AutoSize = false,
                 BorderStyle = BorderStyle.None,
-                BackColor = Color.FromArgb(0,0,0,0)
+                BackColor = Color.LightGray,
+                Radius = Properties.Settings.Default.TileBorderRadius,
+                OnlyRoundedOnTop = true
             };
-            //Update(true);
             TileHeaderCloseButtonController = new MpTileHeaderCloseButtonController(tileId,panelId,this);
             TileHeaderPanel.Controls.Add(TileHeaderCloseButtonController.CloseButton);
 
-            TileHeaderExpandButtonController = new MpTileHeaderExpandButtonController(tileId,panelId,this);
-            TileHeaderPanel.Controls.Add(TileHeaderExpandButtonController.ExpandButton);
+            //TileHeaderExpandButtonController = new MpTileHeaderExpandButtonController(tileId,panelId,this);
+            //TileHeaderPanel.Controls.Add(TileHeaderExpandButtonController.ExpandButton);
 
             Link(new List<MpIView> { TileHeaderPanel });
         }
         public override void Update() {
-            //tile  rect
-            Rectangle tr = ((MpTilePanelController)Find("MpTilePanelController")).TilePanel.Bounds;
+            //tile panel
+            var tp = ((MpTilePanelController)Find("MpTilePanelController")).TilePanel;
+            //tile rect
+            Rectangle tr = tp.Bounds;
+            //tile title height
+            int tth = (int)((float)tr.Height * Properties.Settings.Default.TileHeaderHeightRatio);
             //tile padding
-            int tp = (int)(Properties.Settings.Default.TilePadWidthRatio * (float)tr.Width);
-            //tile header height
-            int tdh = (int)(Properties.Settings.Default.TileHeaderHeightRatio * tr.Height);
-            TileHeaderPanel.SetBounds(tp,tp,tr.Width-(tp*2),tdh);
+            int tpd = (int)(Properties.Settings.Default.TilePadWidthRatio * (float)tr.Width) + ((MpTilePanelController)Find("MpTilePanelController")).TilePanel.EdgeWidth;
+            TileHeaderPanel.SetBounds(tpd,tpd,tr.Width - tpd - tp.ShadowShift - tp.EdgeWidth,tth);
 
-            //TileHeaderPanel.BackColor = ((MpTilePanelController)Find("MpTilePanelController")).TileTitlePanelController.TileTitlePanel.BackColor;
             TileHeaderCloseButtonController.Update();
-            TileHeaderExpandButtonController.Update();
+            //TileHeaderExpandButtonController.Update();
 
             TileHeaderPanel.Invalidate();            
         }

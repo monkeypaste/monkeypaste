@@ -8,36 +8,40 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpTileDetailsTextBoxController : MpController {
-        public MpTileDetailsTextBox DetailsTextBox { get; set; }
+    public class MpTileDetailsLabelController : MpController {
+        public MpTileDetailsLabel DetailsLabel { get; set; }
 
         private int _currentDetailId = 0;
         private MpCopyItem _copyItem;
 
-        protected MpTileDetailsTextBoxController(MpController parentController) : base(parentController) { }
+        protected MpTileDetailsLabelController(MpController parentController) : base(parentController) { }
 
-        public MpTileDetailsTextBoxController(int tileId,int panelId,MpController parentController) : base(parentController) {
-            DetailsTextBox = new MpTileDetailsTextBox(tileId,panelId) {
-                BackColor = Properties.Settings.Default.TileItemBgColor,
-                ForeColor = MpHelperSingleton.Instance.IsBright((((MpTileDetailsPanelController)Parent).TileDetailsPanel).BackColor) ? Color.Black : Color.White,
+        public MpTileDetailsLabelController(int tileId,int panelId,MpController parentController) : base(parentController) {
+            DetailsLabel = new MpTileDetailsLabel(tileId,panelId) {
+                BackColor = Color.Transparent,
+                ForeColor = Color.Black,//MpHelperSingleton.Instance.IsBright((((MpTileDetailsPanelController)Parent).TileDetailsPanel).BackColor) ? Color.Black : Color.White,
                 BorderStyle = BorderStyle.None,
-                TextAlign = HorizontalAlignment.Center
+                TextAlign = ContentAlignment.MiddleCenter
             };
-            DetailsTextBox.MouseEnter += DetailsTextBox_MouseEnter;
-            Link(new List<MpIView> { DetailsTextBox });
+            DetailsLabel.MouseEnter += DetailsTextBox_MouseEnter;
+            Link(new List<MpIView> { DetailsLabel });
         }
         public override void Update() {
             //tile details panel  rect
-            Rectangle tdpr = ((MpTileDetailsPanelController)Parent).TileDetailsPanel.Bounds;
-            DetailsTextBox.SetBounds(0,0,tdpr.Width,tdpr.Height);
-
-            float fontSize = Properties.Settings.Default.TileDetailFontSizeRatio * (float)tdpr.Height;
+            Rectangle tpr = ((MpTilePanelController)Find("MpTilePanelController")).TilePanel.Bounds;
+            //tile padding
+            int tp = (int)(Properties.Settings.Default.TilePadWidthRatio * (float)tpr.Width);
+            //tile details height
+            int tdh = (int)(Properties.Settings.Default.TileDetailHeightRatio * tpr.Height);
+            DetailsLabel.SetBounds(tp,tpr.Height - tdh - tp - tp,tpr.Width - (tp * 2),tdh);
+            
+            float fontSize = Properties.Settings.Default.TileDetailFontSizeRatio * (float)tpr.Height;
             fontSize = fontSize < 1.0f ? 10.0f : fontSize;
-            DetailsTextBox.Font = new Font(Properties.Settings.Default.TileDetailFont,fontSize,GraphicsUnit.Pixel);
-            DetailsTextBox.Location = new Point();
-            DetailsTextBox.Text = GetCurrentDetail(_currentDetailId);
+            DetailsLabel.Font = new Font(Properties.Settings.Default.TileDetailFont,fontSize,GraphicsUnit.Pixel);
+           //DetailsTextBox.Location = new Point();
+            DetailsLabel.Text = GetCurrentDetail(_currentDetailId);
 
-            DetailsTextBox.Invalidate();
+            DetailsLabel.Invalidate();
         }
         private void DetailsTextBox_MouseEnter(object sender,EventArgs e) {
             if(++_currentDetailId > 2) {
@@ -46,8 +50,8 @@ namespace MonkeyPaste {
             Update();
         }
         protected string GetCurrentDetail(int detailId) {
-            MpCopyItem ci = ((MpTilePanelController)((MpTileDetailsPanelController)Parent).Parent).CopyItem;
-            string info = string.Empty;
+            MpCopyItem ci = ((MpTilePanelController)Find("MpTilePanelController")).CopyItem;
+            string info = "I dunno";// string.Empty;
             switch(detailId) {
                 //created
                 case 0:

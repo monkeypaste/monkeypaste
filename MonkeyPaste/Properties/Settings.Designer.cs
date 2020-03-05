@@ -142,7 +142,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.05")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.1")]
         public float TileDetailHeightRatio {
             get {
                 return ((float)(this["TileDetailHeightRatio"]));
@@ -151,7 +151,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.7")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public float TileDetailFontSizeRatio {
             get {
                 return ((float)(this["TileDetailFontSizeRatio"]));
@@ -241,7 +241,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
         public int TileBorderRadius {
             get {
                 return ((int)(this["TileBorderRadius"]));

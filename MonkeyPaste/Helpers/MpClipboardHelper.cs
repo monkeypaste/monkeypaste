@@ -56,20 +56,22 @@ namespace MonkeyPaste
                         if(iData != null) {
                             MpCopyItem ci = null;
                             string sourcePath = MpHelperSingleton.Instance.GetProcessPath(_lastWindowWatcher.LastHandle);
+                            Color itemColor = MpHelperSingleton.Instance.GetRandomColor();
+
                             if(iData.GetDataPresent(DataFormats.Bitmap)) {
-                                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Image,(Image)iData.GetData(DataFormats.Bitmap,true),sourcePath);// CreateCopyItem(MpCopyItemType.None,null,IntPtr.Zero);// ((Image)iData.GetData(DataFormats.Bitmap,true),sourceHandle);
+                                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Image,(Image)iData.GetData(DataFormats.Bitmap,true),sourcePath,itemColor);// CreateCopyItem(MpCopyItemType.None,null,IntPtr.Zero);// ((Image)iData.GetData(DataFormats.Bitmap,true),sourceHandle);
                             }
                             else if(iData.GetDataPresent(DataFormats.FileDrop)) {
-                                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.FileList,(string[])iData.GetData(DataFormats.FileDrop,true),sourcePath);
+                                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.FileList,(string[])iData.GetData(DataFormats.FileDrop,true),sourcePath,itemColor);
                             }
                             else if(iData.GetDataPresent(DataFormats.Rtf)) {
-                                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Text,(string)iData.GetData(DataFormats.Text),sourcePath);
+                                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Text,(string)iData.GetData(DataFormats.Text),sourcePath,itemColor);
                             }
                             else if(iData.GetDataPresent(DataFormats.Html)) {
-                                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Text,(string)iData.GetData(DataFormats.Text),sourcePath);
+                                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Text,(string)iData.GetData(DataFormats.Text),sourcePath,itemColor);
                             }
                             else if(iData.GetDataPresent(DataFormats.Text)) {
-                                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Text,(string)iData.GetData(DataFormats.Text),sourcePath);
+                                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Text,(string)iData.GetData(DataFormats.Text),sourcePath,itemColor);
                             }
                             else {
                                 Console.WriteLine("MpData error clipboard data is not known format");

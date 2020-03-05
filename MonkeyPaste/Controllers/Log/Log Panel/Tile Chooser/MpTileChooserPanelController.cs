@@ -260,11 +260,11 @@ namespace MonkeyPaste {
             //if(vcount == 0) {
             //    SelectedTileBorderPanelController.TileBorderPanel.Visible = false;
             //} else {
-            //    Sort("TileId",false);
+            //Sort("CopyItemId",false);
             //    SelectedTileBorderPanelController.TileBorderPanel.Visible = true;
             //    SelectedTilePanelController = GetVisibleTilePanelControllerList()[0];
             //}
-            Sort("TileId",false);
+            Sort("CopyItemId",false);
             SelectedTilePanelController = GetVisibleTilePanelControllerList()[0];
             Update();
             _showSelectedTilePanelController();
@@ -301,8 +301,9 @@ namespace MonkeyPaste {
                 }
             }
             TileControllerList.Remove(tpc);
+            MpCopyItem.TotalCopyItemCount = TileControllerList.Count;
             TileChooserPanel.Controls.Remove(tpc.TilePanel);
-            Sort("TileId",false);
+            Sort("CopyItemId",false);
             tpc.CopyItem.DeleteFromDatabase();            
             tpc.TilePanel.Dispose();
             tpc = null;
@@ -325,10 +326,10 @@ namespace MonkeyPaste {
                 newTileController.ExpandButtonClickedEvent += TIlePanelController_ExpandButtonClickedEvent;
                 TileControllerList.Add(newTileController);
                 TileChooserPanel.Controls.Add(newTileController.TilePanel);
-                if(!_isInitialLoad) {
-                    MpTilePanelController.OffsetX = 0;
-                    SelectedTilePanelController = newTileController;
-                }
+                //if(!_isInitialLoad) {
+                //    MpTilePanelController.OffsetX = 0;
+                //    SelectedTilePanelController = newTileController;
+                //}
                 MpCopyItem.TotalCopyItemCount = TileControllerList.Count;
             }
             //if(SelectedTilePanelController != null) {
@@ -336,8 +337,9 @@ namespace MonkeyPaste {
             //    SelectedTileBorderPanelController.TileBorderPanel.Visible = true;
             //}
             Sort("CopyItemId",false);
-            ScrollTiles(0);
             MpTilePanelController.OffsetX = 0;
+            //ScrollTiles(-MpTilePanelController.OffsetX,true);
+            ScrollTiles(0);
             Update();
         }
 

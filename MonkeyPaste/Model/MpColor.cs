@@ -30,14 +30,18 @@ namespace MonkeyPaste {
                 LoadDataRow(dt.Rows[0]);
             }
         }
+
+
+        public MpColor(DataRow dr) {
+            LoadDataRow(dr);
+        }
         public MpColor(int r,int g,int b,int a) {
             _r = r;
             _g = g;
             _b = b;
             _a = a;
-
-            WriteToDatabase();
         }
+        
         public override void LoadDataRow(DataRow dr) {
             ColorId = Convert.ToInt32(dr["pk_MpColorId"].ToString());
             _r = Convert.ToInt32(dr["R"].ToString());

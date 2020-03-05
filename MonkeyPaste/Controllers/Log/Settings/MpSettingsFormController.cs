@@ -49,6 +49,7 @@ namespace MonkeyPaste {
             if(confirmResetResult == DialogResult.Yes) {
                 MpLogFormController.Db.ResetDb();
             }
+             ((MpLogFormPanelController)Find("MpLogFormPanelController")).InitTileControllerList(new List<MpCopyItem>());
         }
 
         private void OpenDbFolderButton_Click(object sender,EventArgs e) {

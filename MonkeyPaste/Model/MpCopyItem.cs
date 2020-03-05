@@ -13,7 +13,8 @@ namespace MonkeyPaste {
         public List<MpSubTextToken> subTextTokenList = new List<MpSubTextToken>();
 
         private Object DataObject { get; set; }
-
+        
+        public int ColorId { get; set; }
         public int CopyItemId { get; set; }
         public int SubItemId { get; set; }
         public string Title { get; set; }
@@ -28,11 +29,13 @@ namespace MonkeyPaste {
 
         public MpApp App { get; set; }
         public MpClient Client { get; set; }
+        public MpColor ItemColor { get; set; }
 
         public MpCopyItem() {}
 
-        public static MpCopyItem CreateCopyItem(MpCopyItemType itemType,object data,string sourcePath) { 
+        public static MpCopyItem CreateCopyItem(MpCopyItemType itemType,object data,string sourcePath,Color tileColor) { 
             MpCopyItem newItem = new MpCopyItem();
+            newItem.ItemColor = new MpColor(tileColor.R,tileColor.G,tileColor.B,255);
             newItem.SourcePath = sourcePath;
             newItem.CopyItemType = itemType;
             if(newItem.CopyItemType == MpCopyItemType.RichText) {
@@ -140,14 +143,25 @@ namespace MonkeyPaste {
             this.CopyItemType = (MpCopyItemType)Convert.ToInt32(dr["fk_MpCopyItemTypeId"].ToString());
             this.ClientId = Convert.ToInt32(dr["fk_MpClientId"].ToString());
             this.AppId = Convert.ToInt32(dr["fk_MpAppId"].ToString());
+            this.ColorId = Convert.ToInt32(dr["fk_MpAppId"].ToString());
             this.CopyDateTime = DateTime.Parse(dr["CopyDateTime"].ToString());
             this.Title = dr["Title"].ToString().Replace("''","'");
             this.CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
 
+            //get app and icon obj
             DataTable dt = MpLogFormController.Db.Execute("select * from MpApp where pk_MpAppId=" + AppId);
             if(dt != null && dt.Rows.Count > 0) {
                 this.App = new MpApp(dt.Rows[0]);
             } else {
+                Console.WriteLine("MpCopyItem Error: error retrieving MpApp with id " + AppId);
+            }
+
+            //get color
+            dt = MpLogFormController.Db.Execute("select * from MpColor where pk_MpColorId=" + ColorId);
+            if(dt != null && dt.Rows.Count > 0) {
+                this.ItemColor = new MpColor(dt.Rows[0]);
+            }
+            else {
                 Console.WriteLine("MpCopyItem Error: error retrieving MpApp with id " + AppId);
             }
 
@@ -242,6 +256,12 @@ namespace MonkeyPaste {
             }
             App.WriteToDatabase();
             this.AppId = this.App.appId;
+            
+            if(ItemColor == null) {
+                throw new Exception("CopyItem exception writing without color created");
+            } else {
+                ItemColor.WriteToDatabase();
+            }
             //if copyitem already exists
             if(this.CopyItemId > 0) {
                 DataTable dt = MpLogFormController.Db.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + this.CopyItemId);

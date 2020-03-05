@@ -341,7 +341,7 @@
     <Compile Include="Controllers\Log\Log Panel\Tree\MpTreeViewPanelController.cs" />
     <Compile Include="Controllers\Log\Log Panel\MpLogFormPanelController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Tile Chooser\Tile\Border\MpTileBorderPanelController.cs" />
-    <Compile Include="Controllers\Log\Log Panel\Tile Chooser\Tile\Detail\MpTileDetailsTextBoxController.cs" />
+    <Compile Include="Controllers\Log\Log Panel\Tile Chooser\Tile\Detail\MpTileDetailsLabelController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Tile Chooser\Tile\Header\MpTagButtonController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Tile Chooser\Tile\Header\MpTileHeaderExpandButtonController.cs" />
     <Compile Include="Controllers\Log\Log Panel\Tile Chooser\Tile\Header\MpTileHeaderPanelController.cs" />
@@ -501,7 +501,7 @@
     <Compile Include="View\MpTileDetailPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpTileDetailsTextBox.cs">
+    <Compile Include="View\MpTileDetailsLabel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpTileMenuButton.cs">

@@ -34,17 +34,19 @@ namespace MonkeyPaste {
             TreeViewPanelController = new MpTreeViewPanelController(this,allCopyItemList);
             LogFormPanel.Controls.Add(TreeViewPanelController.TreeViewPanel);
 
-            TileChooserPanelController = new MpTileChooserPanelController(this,allCopyItemList);
+            InitTileControllerList(allCopyItemList);
+            
+            Link(new List<MpIView>() { LogFormPanel });
+        }
+        public void InitTileControllerList(List<MpCopyItem> cilist) {
+            TileChooserPanelController = new MpTileChooserPanelController(this,cilist);
             LogFormPanel.Controls.Add(TileChooserPanelController.TileChooserPanel);
 
             if(TileChooserPanelController.TileControllerList != null && TileChooserPanelController.TileControllerList.Count > 0) {
                 TileChooserPanelController.SelectTile(TileChooserPanelController.TileControllerList[TileChooserPanelController.TileControllerList.Count - 1]);
                 Update();
             }
-            
-            Link(new List<MpIView>() { LogFormPanel });
         }
-
         public override void Update() {
             //log form rect
             Rectangle lfr = ((MpLogFormController)Parent).LogForm.Bounds;

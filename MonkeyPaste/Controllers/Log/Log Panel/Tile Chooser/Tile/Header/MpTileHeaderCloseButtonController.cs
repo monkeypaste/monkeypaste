@@ -16,7 +16,7 @@ namespace MonkeyPaste {
 
         public MpTileHeaderCloseButtonController(int tileId,int panelId,MpController parentController) : base(parentController) {
             CloseButton = new MpTileHeaderButton(tileId,panelId) {
-                Margin = new Padding(3),
+                Margin = new Padding(10),
                 Padding = Padding.Empty,
                 TabIndex = 1,
                 BackColor = Color.Transparent,//((MpTileHeaderPanelController)Parent).TileHeaderPanel.BackColor,
