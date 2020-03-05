@@ -5,19 +5,19 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {
     public class MpTileTitlePanelController : MpController {
-        public static int ShadowOffset { get; set; } = 1;
-
         //title panel
         public MpTileTitlePanel TileTitlePanel { get; set; }
         public MpTileTitleTextBox TileTitleTextBox { get; set; }
         public MpTileTitleLabel TileTitleLabel { get; set; }
 
         public MpTileTitleIconPanelController TileTitleIconPanelController { get; set; }
-        public MpTileTitleTextBoxController TileTitleTextBoxController { get; set; }
         
         private int _copyItemId;
+        private MpKeyboardHook _enterHook,_escHook;
+        private string _orgTitle = string.Empty;
 
-        public MpTileTitlePanelController(int tileId,int panelId,MpCopyItem ci,MpController Parent) : base(Parent) {            
+        public MpTileTitlePanelController(int tileId,int panelId,MpCopyItem ci,MpController Parent) : base(Parent) {
+            _orgTitle = ci.Title;
             //parent panel
             TileTitlePanel = new MpTileTitlePanel(tileId,panelId) {
                 BorderStyle = BorderStyle.None,
@@ -25,9 +25,8 @@ namespace MonkeyPaste {
                 Margin = Padding.Empty,
                 Padding = Padding.Empty
             };
-            TileTitlePanel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;            
-            
-
+            TileTitlePanel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;       
+           
             TileTitleIconPanelController = new MpTileTitleIconPanelController(tileId,panelId,ci,this);
             TileTitlePanel.Controls.Add(TileTitleIconPanelController.TileTitleIconBox);
 
@@ -38,30 +37,17 @@ namespace MonkeyPaste {
                 ci.WriteToDatabase();
             }
 
-            TileTitleLabel = new MpTileTitleLabel(tileId,panelId) {
+            TileTitleLabel = new MpTileTitleLabel(tileId,panelId,ci.ItemColor.Color) {
                 Text = ci.Title,
-                //Angle = 0,
-                //XOffset = MpTileTitlePanelController.ShadowOffset,
-                //YOffset = MpTileTitlePanelController.ShadowOffset,
-                //ShadowColor = MpHelperSingleton.Instance.IsBright(((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor) ? Color.White : Color.Black,
                 BackColor = Color.Transparent,
-                //Margin = Padding.Empty,
+                Margin = Padding.Empty,
                 Padding = Padding.Empty,
                 BorderStyle = BorderStyle.None,
-                //ForeColor = MpHelperSingleton.Instance.IsBright(((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor) ? Color.Black : Color.White
+                ForeColor = MpHelperSingleton.Instance.IsBright(ci.ItemColor.Color) ? Color.Black : Color.White,
             };
             TileTitleLabel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
             TileTitleLabel.Click += _titleLabel_Click;
-
-            //TileTitleLabelShadow = new MpTileTitleLabel(tileId,panelId) {
-            //    Text = ci.Title,
-            //    BackColor = Color.Transparent,
-            //    Margin = Padding.Empty,
-            //    Padding = Padding.Empty,
-            //    BorderStyle = BorderStyle.None,
-            //    ForeColor = MpHelperSingleton.Instance.IsBright(((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor) ? Color.White : Color.Black
-            //};
-
+            
             TileTitleTextBox = new MpTileTitleTextBox(tileId,panelId) {
                 Text = ci.Title,
                 ReadOnly = false,
@@ -69,22 +55,21 @@ namespace MonkeyPaste {
                 Margin = Padding.Empty,
                 Padding = Padding.Empty,
                 BorderStyle = BorderStyle.None,
+                //SelectionLength = 0,
                 MaxLength = Properties.Settings.Default.MaxTitleLength
             };
             TileTitleTextBox.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
             TileTitleTextBox.KeyUp += TileTitleTextBox_KeyUp;
             TileTitleTextBox.LostFocus += _titleTextBox_LostFocus;
+            
+            TileTitlePanel.Controls.Add(TileTitleLabel);
+            TileTitlePanel.Controls.Add(TileTitleTextBox);
 
-            TileTitleTextBoxController = new MpTileTitleTextBoxController(tileId,panelId,ci,this);
-            //TileTitlePanel.Controls.Add(TileTitleTextBoxController.TileTitleLabelShadow);
-            TileTitlePanel.Controls.Add(TileTitleTextBoxController.TileTitleLabel);
-            TileTitlePanel.Controls.Add(TileTitleTextBoxController.TileTitleTextBox);
-
-            TileTitlePanel.BackColor = ci.ItemColor.Color;// MpHelperSingleton.Instance.GetRandomColor();
-            TileTitleTextBoxController.TileTitleTextBox.BackColor = TileTitlePanel.BackColor;
-            TileTitleTextBoxController.TileTitleTextBox.ForeColor = MpHelperSingleton.Instance.IsBright(TileTitlePanel.BackColor) ? Color.Black : Color.White;
-            TileTitleTextBoxController.TileTitleLabel.BackColor = TileTitleTextBoxController.TileTitleTextBox.BackColor;
-            TileTitleTextBoxController.TileTitleLabel.ForeColor = TileTitleTextBoxController.TileTitleTextBox.ForeColor;
+            TileTitlePanel.BackColor = ci.ItemColor.Color;
+            TileTitleTextBox.BackColor = Color.White;
+            TileTitleTextBox.ForeColor = Color.Black;
+            TileTitleLabel.BackColor = TileTitleTextBox.BackColor;
+            TileTitleLabel.ForeColor = TileTitleTextBox.ForeColor;
 
            // TileTitleTextBoxController.Read
             Link(new List<MpIView> { TileTitlePanel, TileTitleTextBox,TileTitleLabel});
@@ -109,7 +94,6 @@ namespace MonkeyPaste {
             TileTitlePanel.SetBounds(tpd,thr.Bottom,tr.Width - tpd - tp.ShadowShift - tp.EdgeWidth,tth);
 
             TileTitleIconPanelController.Update();
-            TileTitleTextBoxController.Update();
 
             TileTitlePanel.Invalidate();
         }
@@ -125,7 +109,6 @@ namespace MonkeyPaste {
             fontSize = fontSize < 1.0f ? 10.0f : fontSize;
             TileTitleTextBox.Font = new Font(Properties.Settings.Default.TileTitleFont,fontSize,GraphicsUnit.Pixel);
             TileTitleLabel.Font = TileTitleTextBox.Font;
-            //TileTitleLabelShadow.Font = TileTitleLabel.Font;
 
             //tile title textbox size
             Size tttbs = TextRenderer.MeasureText(TileTitleTextBox.Text,TileTitleTextBox.Font);
@@ -133,24 +116,20 @@ namespace MonkeyPaste {
             Rectangle titleBounds = new Rectangle(tp * 2,10,tttbs.Width,tttbs.Height);
             TileTitleTextBox.Bounds = titleBounds;
             TileTitleLabel.Bounds = TileTitleTextBox.Bounds;
-            //TileTitleLabelShadow.Bounds = titleBounds;
-            //TileTitleLabelShadow.Location = new Point(titleBounds.X + MpTileTitlePanelController.ShadowOffset,titleBounds.Y + MpTileTitlePanelController.ShadowOffset);
-
+            
             if(TileTitleLabel.Visible) {
                 TileTitleLabel.BringToFront();
                 TileTitleTextBox.Visible = false;
-                //TileTitleLabelShadow.SendToBack();
             }
             else {
                 TileTitleTextBox.BringToFront();
             }
-            //TileTitleLabelShadow.Invalidate();
-            //TileTitleTextBox.Invalidate();
+            TileTitleTextBox.Invalidate();
             TileTitleLabel.Invalidate();
         }
         private void TileTitleTextBox_KeyUp(object sender,KeyEventArgs e) {
-            ((MpTileTitlePanelController)Parent).Update();
             TileTitleTextBox.Focus();
+            Update();
         }
         private void _titleTextBox_LostFocus(object sender,EventArgs e) {
             MpCopyItem ci = new MpCopyItem(_copyItemId);
@@ -165,29 +144,74 @@ namespace MonkeyPaste {
             EditMode();
         }
         private void EditMode() {
+            ((MpLogFormController)Find("MpLogFormController")).DeactivateArrowKeys();
+            ((MpLogFormController)Find("MpLogFormController")).DeactivateEnterKey();
+            ((MpLogFormController)Find("MpLogFormController")).DeactivateEscKey();
+
+            ActivateEnterKey();
+            ActivateEscKey();
+
             TileTitleLabel.Visible = false;
             TileTitleTextBox.Visible = true;
-
-            //TileTitleTextBox.BorderStyle = BorderStyle.Fixed3D;
-            //((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor = Color.White;
-            TileTitleTextBox.BackColor = Color.White;
-            TileTitleTextBox.ForeColor = Color.Black;
             TileTitleTextBox.Focus();
-            ((MpTileTitlePanelController)Parent).Update();
+            TileTitleTextBox.DeselectAll();
+            TileTitleTextBox.SelectionStart = TileTitleTextBox.TextLength;
+            //TileTitleTextBox.SelectionLength = 0;
+            _orgTitle = TileTitleLabel.Text;
+            Update();
         }
-        private void ReadMode() {
+        private void ReadMode(bool revertTitle = false) {
+            DeactivateEnterKey();
+            DeactivateEscKey();
+
+            ((MpLogFormController)Find("MpLogFormController")).ActivateArrowKeys();
+            ((MpLogFormController)Find("MpLogFormController")).ActivateEnterKey();
+            ((MpLogFormController)Find("MpLogFormController")).ActivateEscKey();
+
             TileTitleLabel.Visible = true;
             TileTitleTextBox.Visible = false;
 
-            //TileTitleTextBox.BorderStyle = BorderStyle.None;
-            TileTitleLabel.BackColor = ((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor;
-            TileTitleLabel.ForeColor = MpHelperSingleton.Instance.IsBright(((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor) ? Color.Black : Color.White;
-            if(TileTitleTextBox.Text == string.Empty) {
-                TileTitleTextBox.Text = "     ";
-            }
-            TileTitleTextBox.Invalidate();
-            TileTitleLabel.Invalidate();
+            TileTitleLabel.Text = revertTitle ? _orgTitle : TileTitleTextBox.Text;
+            TileTitleTextBox.Text = TileTitleLabel.Text;
+
             Update();
+        }
+        public void ActivateEnterKey() {
+            if(_enterHook == null) {
+                _enterHook = new MpKeyboardHook();
+                _enterHook.RegisterHotKey(ModifierKeys.None,Keys.Enter);
+                _enterHook.KeyPressed += _enterHook_KeyPressed;
+            }
+        }       
+
+        public void DeactivateEnterKey() {
+            if(_enterHook != null) {
+                _enterHook.UnregisterHotKey();
+                _enterHook.Dispose();
+                _enterHook = null;
+            }
+        }
+        
+        public void ActivateEscKey() {
+            if(_escHook == null) {
+                _escHook = new MpKeyboardHook();
+                _escHook.RegisterHotKey(ModifierKeys.None,Keys.Escape);
+                _escHook.KeyPressed += _escHook_KeyPressed;
+            }
+        }     
+
+        public void DeactivateEscKey() {
+            if(_escHook != null) {
+                _escHook.UnregisterHotKey();
+                _escHook.Dispose();
+                _escHook = null;
+            }
+        }
+        private void _enterHook_KeyPressed(object sender,KeyPressedEventArgs e) {
+            ReadMode();
+        }
+        private void _escHook_KeyPressed(object sender,KeyPressedEventArgs e) {
+            ReadMode(true);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace MonkeyPaste {
                 ci.WriteToDatabase();
             }
 
-            TileTitleLabel = new MpTileTitleLabel(tileId,panelId) {
+            TileTitleLabel = new MpTileTitleLabel(tileId,panelId,ci.ItemColor.Color) {
                 Text = ci.Title,
                 //Angle = 0,
                 //XOffset = MpTileTitlePanelController.ShadowOffset,
@@ -30,7 +30,7 @@ namespace MonkeyPaste {
                 //BackColor = Color.Transparent,
                 //Margin = Padding.Empty,
                 Padding = Padding.Empty,
-                BorderStyle = BorderStyle.None,
+                //BorderStyle = BorderStyle.None,
                 //ForeColor = MpHelperSingleton.Instance.IsBright(((MpTileTitlePanelController)Parent).TileTitlePanel.BackColor) ? Color.Black : Color.White
             };
             TileTitleLabel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;

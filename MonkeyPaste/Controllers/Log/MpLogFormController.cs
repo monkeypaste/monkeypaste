@@ -244,17 +244,7 @@ namespace MonkeyPaste
             LogFormPanelController.TileChooserPanelController.DragTilePanelController.TilePanel.Invalidate();
             LogFormPanelController.TileChooserPanelController.DragTilePanelController = null;
         }
-        public void ActivateHotKeys() {
-            if(_enterHook == null) {
-                _enterHook = new MpKeyboardHook();
-                _enterHook.RegisterHotKey(ModifierKeys.None,Keys.Enter);
-                _enterHook.KeyPressed += EnterHook_KeyPressed;
-            }
-            if(_escHook == null) {
-                _escHook = new MpKeyboardHook();
-                _escHook.RegisterHotKey(ModifierKeys.None,Keys.Escape);
-                _escHook.KeyPressed += EscHook_KeyPressed;
-            }
+        public void ActivateArrowKeys() {
             if(_rightHook == null) {
                 _rightHook = new MpKeyboardHook();
                 _rightHook.RegisterHotKey(ModifierKeys.None,Keys.Right);
@@ -265,27 +255,8 @@ namespace MonkeyPaste
                 _leftHook.RegisterHotKey(ModifierKeys.None,Keys.Left);
                 _leftHook.KeyPressed += _leftHook_KeyPressed;
             }
-            if(_mouseDownHook == null) {
-                _mouseDownHook = Hook.GlobalEvents();
-                _mouseDownHook.MouseDown += _mouseDownHook_MouseDown;
-            }
-            if(_mouseUpHook == null) {
-                _mouseUpHook = Hook.GlobalEvents();
-                _mouseUpHook.MouseUp += _upHook_MouseUp;
-            }
-        }      
-
-        public void DeactivateHotKeys() {
-            if(_enterHook != null) {
-                _enterHook.UnregisterHotKey();
-                _enterHook.Dispose();
-                _enterHook = null;
-            }
-            if(_escHook != null) {
-                _escHook.UnregisterHotKey();
-                _escHook.Dispose();
-                _escHook = null;
-            }
+        }
+        public void DeactivateArrowKeys() {
             if(_rightHook != null) {
                 _rightHook.UnregisterHotKey();
                 _rightHook.Dispose();
@@ -296,6 +267,52 @@ namespace MonkeyPaste
                 _leftHook.Dispose();
                 _leftHook = null;
             }
+        }
+        public void ActivateEnterKey() {
+            if(_enterHook == null) {
+                _enterHook = new MpKeyboardHook();
+                _enterHook.RegisterHotKey(ModifierKeys.None,Keys.Enter);
+                _enterHook.KeyPressed += EnterHook_KeyPressed;
+            }
+        }
+        public void DeactivateEnterKey() {
+            if(_enterHook != null) {
+                _enterHook.UnregisterHotKey();
+                _enterHook.Dispose();
+                _enterHook = null;
+            }
+        }
+        public void ActivateEscKey() {
+            if(_escHook == null) {
+                _escHook = new MpKeyboardHook();
+                _escHook.RegisterHotKey(ModifierKeys.None,Keys.Escape);
+                _escHook.KeyPressed += EscHook_KeyPressed;
+            }
+        }
+        public void DeactivateEscKey() {
+            if(_escHook != null) {
+                _escHook.UnregisterHotKey();
+                _escHook.Dispose();
+                _escHook = null;
+            }
+        }
+        public void ActivateHotKeys() {
+            ActivateEnterKey();
+            ActivateEscKey();
+            ActivateArrowKeys();
+            if(_mouseDownHook == null) {
+                _mouseDownHook = Hook.GlobalEvents();
+                _mouseDownHook.MouseDown += _mouseDownHook_MouseDown;
+            }
+            if(_mouseUpHook == null) {
+                _mouseUpHook = Hook.GlobalEvents();
+                _mouseUpHook.MouseUp += _upHook_MouseUp;
+            }
+        }      
+        
+        public void DeactivateHotKeys() {
+            DeactivateEscKey();
+            DeactivateArrowKeys();
             if(_mouseDownHook != null) {
                 _mouseDownHook.Dispose();
                 _mouseDownHook = null;

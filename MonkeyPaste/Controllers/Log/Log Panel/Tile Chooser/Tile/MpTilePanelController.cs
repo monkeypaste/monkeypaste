@@ -59,8 +59,8 @@ namespace MonkeyPaste
                 EdgeWidth = 5,                
                 StartColor = ci.ItemColor.Color,
                 EndColor = ci.ItemColor.Color,
-                ShadowColor = Color.DimGray,
-                ShadowShift = 10,
+                ShadowColor = Color.Black,
+                ShadowShift = 3,
                 ShadowStyle = BevelPanel.AdvancedPanel.ShadowMode.ForwardDiagonal,           
                 TabIndex = 1
             };

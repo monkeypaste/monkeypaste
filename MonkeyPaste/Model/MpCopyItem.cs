@@ -25,7 +25,6 @@ namespace MonkeyPaste {
         public DateTime CopyDateTime { get; set; }
         public int CopyCount { get; set; }
         public string SourcePath { get; set; }
-        //private IntPtr sourceHandle;
 
         public MpApp App { get; set; }
         public MpClient Client { get; set; }
@@ -35,7 +34,6 @@ namespace MonkeyPaste {
 
         public static MpCopyItem CreateCopyItem(MpCopyItemType itemType,object data,string sourcePath,Color tileColor) { 
             MpCopyItem newItem = new MpCopyItem();
-            newItem.ItemColor = new MpColor(tileColor.R,tileColor.G,tileColor.B,255);
             newItem.SourcePath = sourcePath;
             newItem.CopyItemType = itemType;
             if(newItem.CopyItemType == MpCopyItemType.RichText) {
@@ -88,7 +86,7 @@ namespace MonkeyPaste {
             newItem.App = new MpApp(sourcePath,false);
             newItem.AppId = newItem.App.appId;
             newItem.Client = new MpClient(0,0,MpHelperSingleton.Instance.GetCurrentIPAddress()/*.MapToIPv4()*/.ToString(),"unknown",DateTime.Now);
-            
+            newItem.ItemColor = new MpColor((int)tileColor.R,(int)tileColor.G,(int)tileColor.B,255);
             return newItem;
         }
         public MpCopyItem(int copyItemId) {
@@ -143,7 +141,7 @@ namespace MonkeyPaste {
             this.CopyItemType = (MpCopyItemType)Convert.ToInt32(dr["fk_MpCopyItemTypeId"].ToString());
             this.ClientId = Convert.ToInt32(dr["fk_MpClientId"].ToString());
             this.AppId = Convert.ToInt32(dr["fk_MpAppId"].ToString());
-            this.ColorId = Convert.ToInt32(dr["fk_MpAppId"].ToString());
+            this.ColorId = Convert.ToInt32(dr["fk_MpColorId"].ToString());
             this.CopyDateTime = DateTime.Parse(dr["CopyDateTime"].ToString());
             this.Title = dr["Title"].ToString().Replace("''","'");
             this.CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
@@ -162,7 +160,7 @@ namespace MonkeyPaste {
                 this.ItemColor = new MpColor(dt.Rows[0]);
             }
             else {
-                Console.WriteLine("MpCopyItem Error: error retrieving MpApp with id " + AppId);
+                Console.WriteLine("MpCopyItem Error: error retrieving MpColor with id " + AppId);
             }
 
             DataTable copyItemData = null;
@@ -258,15 +256,16 @@ namespace MonkeyPaste {
             this.AppId = this.App.appId;
             
             if(ItemColor == null) {
-                throw new Exception("CopyItem exception writing without color created");
+                throw new Exception("MpCopyItem exception writing without color created");
             } else {
                 ItemColor.WriteToDatabase();
+                ColorId = ItemColor.ColorId;
             }
             //if copyitem already exists
             if(this.CopyItemId > 0) {
                 DataTable dt = MpLogFormController.Db.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + this.CopyItemId);
                 if(dt.Rows.Count > 0) {
-                    MpLogFormController.Db.ExecuteNonQuery("update MpCopyItem set fk_MpCopyItemTypeId=" + (int)this.CopyItemType + ", fk_MpClientId=" + this.ClientId + ", fk_MpAppId=" + this.AppId + ", Title='"+this.Title.Replace("'","''")+"', CopyCount="+this.CopyCount+" where pk_MpCopyItemId=" + this.CopyItemId);
+                    MpLogFormController.Db.ExecuteNonQuery("update MpCopyItem set fk_MpCopyItemTypeId=" + (int)this.CopyItemType + ", fk_MpClientId=" + this.ClientId + ", fk_MpAppId=" + this.AppId + ",fk_MpColorId=" + this.ColorId + ", Title='"+this.Title.Replace("'","''")+"', CopyCount="+this.CopyCount+" where pk_MpCopyItemId=" + this.CopyItemId);
                 }
                 else {
                     Console.WriteLine("MpCopyItem error cannot find pk of existing item");
@@ -281,7 +280,7 @@ namespace MonkeyPaste {
                     MapDataToColumns();
                     return;
                 }
-                MpLogFormController.Db.ExecuteNonQuery("insert into MpCopyItem(fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,Title,CopyDateTime,CopyCount) values (" + (int)this.CopyItemType + "," + MpLogFormController.Db.Client.ClientId + "," + this.AppId + ",'"+this.Title+"','" + this.CopyDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "',"+this.CopyCount+");");
+                MpLogFormController.Db.ExecuteNonQuery("insert into MpCopyItem(fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount) values (" + (int)this.CopyItemType + "," + MpLogFormController.Db.Client.ClientId + "," + this.AppId + ","+this.ColorId+ ",'"+this.Title+"','" + this.CopyDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "',"+this.CopyCount+");");
                 this.CopyItemId = MpLogFormController.Db.GetLastRowId("MpCopyItem","pk_MpCopyItemId");
                 isNew = true;
             }
@@ -332,6 +331,7 @@ namespace MonkeyPaste {
             columnData.Add("fk_MpCopyItemTypeId",this.CopyItemType);
             columnData.Add("fk_MpClientId",this.ClientId);
             columnData.Add("fk_MpAppId",this.AppId);
+            columnData.Add("fk_MpColorId",this.ColorId);
             columnData.Add("CopyDateTime",this.CopyDateTime);
             columnData.Add("SubItemId",this.SubItemId);
             columnData.Add("Title",this.Title);

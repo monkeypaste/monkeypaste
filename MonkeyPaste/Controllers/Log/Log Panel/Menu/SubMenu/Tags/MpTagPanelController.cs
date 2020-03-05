@@ -271,7 +271,7 @@ namespace MonkeyPaste {
             }
             else if(TagPanelState == MpTagPanelState.Selected) {
                 SetTagState(MpTagPanelState.Inactive);
-            }
+            } 
             ((MpTagChooserPanelController)Parent).Update();
         }
         public void Dispose() {
@@ -280,8 +280,6 @@ namespace MonkeyPaste {
             ((MpTagChooserPanelController)Parent).TagChooserPanel.Controls.Remove(TagPanel);
             
             TagPanel.Dispose();
-            
-            Tag.DeleteFromDatabase();
         }
     }
 }

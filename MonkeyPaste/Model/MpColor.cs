@@ -11,13 +11,13 @@ namespace MonkeyPaste {
         public int ColorId { get; set; }
         public Color Color{
             get {
-                return Color.FromArgb(_a,_r,_g,_b);
+                return Color.FromArgb((byte)_a,(byte)_r,(byte)_g,(byte)_b);
             }
             set {
-                _r = value.R;
-                _g = value.G;
-                _b = value.B;
-                _a = value.A;
+                _r = (byte)value.R;
+                _g = (byte)value.G;
+                _b = (byte)value.B;
+                _a = (byte)value.A;
                 WriteToDatabase();
             }
         }
