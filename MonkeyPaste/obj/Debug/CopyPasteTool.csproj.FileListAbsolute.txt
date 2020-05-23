@@ -1,9 +1,0 @@
-C:\Users\tkefauver\source\repos\CopyPasteTool\CopyPasteTool\bin\Debug\CopyPasteTool.exe.config
-C:\Users\tkefauver\source\repos\CopyPasteTool\CopyPasteTool\bin\Debug\CopyPasteTool.exe
-C:\Users\tkefauver\source\repos\CopyPasteTool\CopyPasteTool\bin\Debug\CopyPasteTool.pdb
-C:\Users\tkefauver\source\repos\CopyPasteTool\CopyPasteTool\obj\Debug\CopyPasteTool.csprojAssemblyReference.cache
-C:\Users\tkefauver\source\repos\CopyPasteTool\CopyPasteTool\obj\Debug\CopyPasteTool.Properties.Resources.resources
-C:\Users\tkefauver\source\repos\CopyPasteTool\CopyPasteTool\obj\Debug\CopyPasteTool.csproj.GenerateResource.cache
-C:\Users\tkefauver\source\repos\CopyPasteTool\CopyPasteTool\obj\Debug\CopyPasteTool.csproj.CoreCompileInputs.cache
-C:\Users\tkefauver\source\repos\CopyPasteTool\CopyPasteTool\obj\Debug\CopyPasteTool.exe
-C:\Users\tkefauver\source\repos\CopyPasteTool\CopyPasteTool\obj\Debug\CopyPasteTool.pdb

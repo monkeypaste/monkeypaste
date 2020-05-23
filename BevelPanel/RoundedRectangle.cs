@@ -1,24 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
 
-namespace BevelPanel
-{
-    public class RoundedRectangle
-    {
-
-        public static GraphicsPath DrawRoundedRectanglePath(Rectangle rect,
-                                          int radius)
-        {
-            return DrawRoundedRectanglePath(rect,radius,false);
+namespace BeveledPanel {
+    public class RoundedRectangle {
+        public static GraphicsPath DrawRoundedRectanglePath(Rectangle rect,int radius) {
+            return DrawRoundedRectanglePath(rect, radius, false);
         }
 
         public static GraphicsPath DrawRoundedRectanglePath(Rectangle rect,
-            int radius, bool dropStyle)
-        {
+            int radius, bool dropStyle) {
             int x = rect.X;
             int y = rect.Y;
             int width = rect.Width;
@@ -40,8 +30,7 @@ namespace BevelPanel
             p.StartFigure();
 
             //Top Left Corner
-            if (r2 > 0)
-            {
+            if(r2 > 0) {
                 p.AddArc(x, y, r2, r2, 180, 90);
             }
 
@@ -49,8 +38,7 @@ namespace BevelPanel
             p.AddLine(xr, y, xwr, y);
 
             //Top Right Corner
-            if (r2 > 0)
-            {
+            if(r2 > 0) {
                 p.AddArc(xwr2, y, r2, r2, 270, 90);
             }
 
@@ -58,29 +46,25 @@ namespace BevelPanel
             p.AddLine(xw, yr, xw, yhr);
 
             //Bottom Right Corner
-            if (r2 > 0)
-            {
+            if(r2 > 0) {
                 p.AddArc(xwr2, yhr2, r2, r2, 0, 90);
             }
 
             //Bottom Edge
-            if (dropStyle)
-            {
+            if(dropStyle) {
                 p.AddBezier(
                     new Point(xwr, yh),
                     new Point(xw2, yh10),
                     new Point(xw2, yh10),
                     new Point(xr, yh));
             }
-            else
-            {
+            else {
                 p.AddLine(xwr, yh, xr, yh);
             }
 
 
             //Bottom Left Corner
-            if (r2 > 0)
-            {
+            if(r2 > 0) {
                 p.AddArc(x, yhr2, r2, r2, 90, 90);
             }
 
@@ -97,8 +81,7 @@ namespace BevelPanel
 
 
         public static GraphicsPath DrawFilledRoundedRectangle(Graphics graphics, Brush rectBrush, Rectangle rect,
-                                  int radius)
-        {
+                                  int radius) {
             GraphicsPath path = DrawRoundedRectanglePath(rect, radius);
             SmoothingMode mode = graphics.SmoothingMode;
             graphics.SmoothingMode = SmoothingMode.AntiAlias;
@@ -109,8 +92,7 @@ namespace BevelPanel
 
 
         public static GraphicsPath DrawRoundedRectangle(Graphics graphics, Pen pen, Rectangle rect,
-                          int radius)
-        {
+                          int radius) {
             GraphicsPath path = DrawRoundedRectanglePath(rect, radius);
             SmoothingMode mode = graphics.SmoothingMode;
             graphics.SmoothingMode = SmoothingMode.AntiAlias;
