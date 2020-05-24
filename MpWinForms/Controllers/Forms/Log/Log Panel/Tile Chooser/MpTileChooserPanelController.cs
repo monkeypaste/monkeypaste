@@ -9,7 +9,7 @@ using VisualEffects.Easing;
 
 namespace MonkeyPaste {
 
-    public class MpTileChooserPanelController : MpPanelController    {
+    public class MpTileChooserPanelController : MpControlController    {
         public List<MpTilePanelController> TileControllerList { get; set; } = new List<MpTilePanelController>();
 
         public MpTileChooserPanel TileChooserPanel { get; set; } = new MpTileChooserPanel(0);
@@ -27,13 +27,21 @@ namespace MonkeyPaste {
             }
         }
         //public MpTilePanelController DragTilePanelController { get; set; } = null;
-        public Point DragTilePanelStartLocation { get; set; }
-        
+
         private MpTilePanelController _selectedTilePanelController = null;
-        
+
         private Timer _focusTimer;
 
         private bool _isInitialLoad = true;
+
+        private MpTileChooserPanelStateType _tileChooserStateType = MpTileChooserPanelStateType.None;
+        public MpTileChooserPanelStateType TileChooserStateType {
+            get {
+                return _tileChooserStateType;
+            }
+        }
+        public delegate void StateChanged(object sender, MpTileChooserPanelStateChangedEventArgs e);
+        public event StateChanged StateChangedEvent;
 
         public MpTileChooserPanelController(MpController Parent) : base(Parent) {
             // TODO Scale tile chooser for multiple chooser panels
@@ -59,14 +67,13 @@ namespace MonkeyPaste {
             foreach(MpCopyItem ci in MpAppManager.Instance.DataModel.CopyItemList) {
                 AddNewCopyItemPanel(ci);
             }
-
-
-            FilterTiles(string.Empty);
+            Update();
+            //FilterTiles(string.Empty);
             _isInitialLoad = false;
         }
         public override Rectangle GetBounds() {
             //log form panel rect
-            Rectangle lfpr = ((MpLogFormPanelController)Parent).LogFormPanel.Bounds;
+            Rectangle lfpr = ((MpLogFormPanelController)Parent).GetBounds();
             //logform pad
             int lfp = (int)(lfpr.Width * Properties.Settings.Default.LogPadRatio);
             //logformmenu height
@@ -84,7 +91,7 @@ namespace MonkeyPaste {
                 }
                 if (MpSingletonController.Instance.AppendItem != null) {
                     MpSingletonController.Instance.AppendItem.SetData((string)MpSingletonController.Instance.AppendItem.GetData() + Environment.NewLine + (string)ci.GetData());
-                    ((RichTextBox)SelectedTilePanelController.TileControlController.ItemControl).AppendText(Environment.NewLine + (string)ci.GetData());
+                    SelectedTilePanelController.TileContentController.ScrollPanelController.TileContentControlController.UpdateItem(MpSingletonController.Instance.AppendItem);
                 }
             }
             else {
@@ -102,9 +109,20 @@ namespace MonkeyPaste {
                 MpTilePanelController newTileController = new MpTilePanelController(ci, this);
                 newTileController.CloseButtonClickedEvent += TilePanelController_CloseButtonClickedEvent;
                 newTileController.ExpandButtonClickedEvent += TIlePanelController_ExpandButtonClickedEvent;
+                newTileController.TileContentController.ScrollPanelController.VScrollbarPanelController.ScrollStartEvent += (s, e) => {
+                    SetState(MpTileChooserPanelStateType.Scrolling);
+                };
+                newTileController.TileContentController.ScrollPanelController.HScrollbarPanelController.ScrollStartEvent += (s, e) => {
+                    SetState(MpTileChooserPanelStateType.Scrolling);
+                };
+                newTileController.TileContentController.ScrollPanelController.VScrollbarPanelController.ScrollEndEvent += (s, e) => {
+                    SetState(MpTileChooserPanelStateType.None);
+                };
+                newTileController.TileContentController.ScrollPanelController.HScrollbarPanelController.ScrollEndEvent += (s, e) => {
+                    SetState(MpTileChooserPanelStateType.None);
+                };
                 TileControllerList.Add(newTileController);
                 TileChooserPanel.Controls.Add(newTileController.TilePanel);
-                newTileController.TilePanel.VisibleChanged += TilePanel_VisibleChanged;        
                 if(!_isInitialLoad) {
                     Update();
                 }
@@ -114,9 +132,6 @@ namespace MonkeyPaste {
 
             //Sort("CopyItemId",false);
             //ScrollTiles(480);
-        }
-        private void TilePanel_VisibleChanged(object sender, EventArgs e) {
-            Console.WriteLine("Visibility changed"+sender.ToString());
         }
 
         public override void Update() {
@@ -152,18 +167,12 @@ namespace MonkeyPaste {
                 tpc.AnimateTileY(fy, t, idx * d, EasingFunctions.CircEaseIn);
             }
         }
-        
-        public MpTilePanelController GetTilePanelControllerAtLocation(Point p) {
-            MpTilePanelController clickedTileController = null;
-            foreach(MpTilePanelController citc in TileControllerList) {
-                Rectangle tileRect = citc.TilePanel.RectangleToScreen(citc.TilePanel.ClientRectangle);
-                if(tileRect.Contains(p) || citc.TilePanel.ClientRectangle.Contains(p)) {
-                    clickedTileController = citc;
-                }
-            }
-            return clickedTileController;
+        public void SetState(MpTileChooserPanelStateType newState) {
+            
+            _tileChooserStateType = newState;
+            StateChangedEvent(this, new MpTileChooserPanelStateChangedEventArgs(_tileChooserStateType));
+            Update();
         }
-        
         public void SelectNextTile() {
             SelectedTilePanelController = GetNextTilePanelController(SelectedTilePanelController);
             ShowSelectedTilePanelController();
@@ -189,7 +198,6 @@ namespace MonkeyPaste {
             SelectedTilePanelController.SetState(MpTilePanelStateType.Selected);
             Update();
         }
-
         private void ShowSelectedTilePanelController() {
             if(SelectedTilePanelController == null) {
                 return;
@@ -231,6 +239,16 @@ namespace MonkeyPaste {
                 previousTileIdx = visibleTileControllerList.Count-1;
             }
             return visibleTileControllerList[previousTileIdx];
+        }
+        public MpTilePanelController GetTilePanelControllerFromTitleAtLocation(Point p) {
+            MpTilePanelController clickedTileController = null;
+            foreach (MpTilePanelController citc in TileControllerList) {
+                Rectangle tileRect = citc.TileTitlePanelController.TileTitlePanel.RectangleToScreen(citc.TileTitlePanelController.TileTitlePanel.ClientRectangle);
+                if (tileRect.Contains(p) || citc.TileTitlePanelController.TileTitlePanel.ClientRectangle.Contains(p)) {
+                    clickedTileController = citc;
+                }
+            }
+            return clickedTileController;
         }
         public List<MpTilePanelController> GetVisibleTilePanelControllerList() {
             List<MpTilePanelController> visibleTilePanelControllerList = new List<MpTilePanelController>();
@@ -389,7 +407,23 @@ namespace MonkeyPaste {
             }
         }
     }
-
+    public class MpTileChooserPanelStateChangedEventArgs : EventArgs {
+        public MpTileChooserPanelStateType NewState { get; set; }
+        public MpTileChooserPanelStateChangedEventArgs(MpTileChooserPanelStateType newState) {
+            NewState = newState;
+        }
+    }
+    public enum MpTileChooserPanelStateType {
+        None = 0,
+        Hidden,
+        Disabled,
+        Unselected,
+        Scrolling,
+        Dragging,
+        HoverSelected,
+        HoverUnselected,
+        Selected
+    }
     public enum MpTileSortType {
         TileId = 0,
         CopyApp,

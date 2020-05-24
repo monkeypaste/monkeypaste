@@ -7,35 +7,37 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpTileTitleIconPanelController : MpController {        
+    public class MpTileTitleIconPanelController : MpControlController {        
         public PictureBox TileTitleIconBox { get; set; }
 
         public MpTileTitleIconPanelController(MpCopyItem ci,MpController Parent) : base(Parent) {
             TileTitleIconBox = new PictureBox() {
                 BackColor = Color.Transparent,
                 SizeMode = PictureBoxSizeMode.StretchImage,
-                Image = MpHelperSingleton.Instance.RotateImage(ci.App.Icon.IconImage,20.0f,false,false,Color.Transparent)
+                Image = MpHelperSingleton.Instance.RotateImage(ci.App.Icon.IconImage,20.0f,false,false,Color.Transparent),
+                Bounds = GetBounds()
             };
             TileTitleIconBox.DoubleBuffered(true);
             TileTitleIconBox.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
         }
-           public override void Update() {
-            //tile title panel rect
-            Rectangle ttpr = ((MpTileTitlePanelController)Parent).TileTitlePanel.Bounds;
-            //target icon size
-            int tis = (int)((float)ttpr.Width * Properties.Settings.Default.TileTitleIconWidthRatio);
-            //target icon center x,y
-            int ticx = (int)((float)(ttpr.Right - tis) / 2.0f);// + (ttpr.Right - tis);
-            int ticy = (int)((float)ttpr.Height / 2.0f);
-            //target icon x,y
-            int tix = (int)((float)ticx + ((float)tis * 1.618f));
-            int tiy = (int)((float)ticy - ((float)tis / 2.0f));
-            
-            TileTitleIconBox.Size = new Size(tis,tis);
-            TileTitleIconBox.Location = new Point(tix,tiy);
-
-
+        public override void Update() {
+            TileTitleIconBox.Bounds = GetBounds();
             TileTitleIconBox.Invalidate();
+        }
+
+        public override Rectangle GetBounds() {
+            //tile title panel rect
+            Rectangle ttpr = ((MpTileTitlePanelController)Parent).GetBounds();
+            //target icon size
+            int tis = (int)((float)ttpr.Height * Properties.Settings.Default.TileTitleIconHeightRatio);
+            //target icon center x,y
+            int ticx = (int)((float)( tis) / 6.0f);
+            int ticy = (int)((float)(ttpr.Height-tis) / 2.0f);
+            //target icon x,y
+            //int tix = (int)((float)ticx + ((float)tis * 1.618f));
+            //int tiy = (int)((float)ticy - ((float)tis / 2.0f));
+
+            return new Rectangle(-ticx, ticy, tis, tis);
         }
     }
 }

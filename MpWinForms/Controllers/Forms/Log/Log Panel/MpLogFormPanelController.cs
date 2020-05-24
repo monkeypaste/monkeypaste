@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpLogFormPanelController : MpPanelController {
+    public class MpLogFormPanelController : MpControlController {
         public MpTileChooserPanelController TileChooserPanelController { get; set; }
         public MpLogMenuPanelController LogMenuPanelController { get; set; }
         public MpTreeViewPanelController TreeViewPanelController { get; set; }
         
         public Panel LogFormPanel { get; set; }
+
         public int CustomHeight { get; set; } = -1;
         public int MinimumHeight { get; set; } = 50;
 
@@ -21,7 +22,7 @@ namespace MonkeyPaste {
             LogFormPanel = new Panel() {
                 AutoSize = false,                
                 BorderStyle = BorderStyle.None,
-                MinimumSize = new Size(MpScreenManager.Instance.GetScreenBoundsWithMouse().Width,MinimumHeight),
+                MinimumSize = new Size(MpSingleton.Instance.ScreenManager.GetScreenWorkingAreaWithMouse().Width,MinimumHeight),
                 Bounds = GetBounds(),
                 BackColor = Properties.Settings.Default.LogPanelBgColor,
                 Margin = Padding.Empty,
@@ -39,11 +40,11 @@ namespace MonkeyPaste {
             LogFormPanel.Controls.Add(TileChooserPanelController.TileChooserPanel);
         }
         public override Rectangle GetBounds() {
-            Rectangle lfr = ((MpLogFormController)Parent).LogForm.Bounds;
-
-            int h = CustomHeight > MinimumHeight ? CustomHeight : (int)((float)lfr.Height * Properties.Settings.Default.LogScreenHeightRatio);
-
-            return new Rectangle(0, lfr.Height - h, lfr.Width, h);
+            var lfc = ((MpLogFormController)Find(typeof(MpLogFormController)));
+            int h = CustomHeight > MinimumHeight ? CustomHeight : (int)((float)lfc.GetBounds().Height * Properties.Settings.Default.LogScreenHeightRatio);
+            //taskbar height (onkly needed for initial load for some reason)
+            int tbh = h == CustomHeight ? 0 : MpSingleton.Instance.ScreenManager.GetScreenBoundsWithMouse().Height - MpSingleton.Instance.ScreenManager.GetScreenWorkingAreaWithMouse().Height;
+            return new Rectangle(0, lfc.GetBounds().Height - h - tbh , lfc.GetBounds().Width, h);
         }
         public override void Update() {
             //log form rect
@@ -55,8 +56,8 @@ namespace MonkeyPaste {
 
             LogFormPanel.Invalidate();
         }
+       
         
-
         private void SearchTextBox_TextChanged(object sender,EventArgs e) {
             string searchText = LogMenuPanelController.LogSubMenuPanelController.LogMenuSearchTextBoxController.SearchTextBox.Text;
             TileChooserPanelController.FilterTiles(searchText);

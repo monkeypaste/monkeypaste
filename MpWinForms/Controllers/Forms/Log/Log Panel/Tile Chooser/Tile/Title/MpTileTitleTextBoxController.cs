@@ -7,19 +7,25 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpTileTitleTextBoxController:MpController {
+
+    public class MpTileTitleTextBoxController : MpControlController {
         public TextBox TileTitleTextBox { get; set; }
         public MpShadowLabel TileTitleLabel { get; set; }
 
+        public delegate void TitleModeChanged(object sender, TileTitleEventArgs e);
+        public event TitleModeChanged TitleModeChangedEvent;
+
         private MpKeyboardHook _enterHook, _escHook;
 
-        private string _orgTitle = string.Empty;
+        private string _orgTitle = string.Empty, _curTitle;
         private string _emptyTitle = "                  "; //18 spaces
 
         private int _copyItemId;
 
+        private Font _titleFont;
+
         public MpTileTitleTextBoxController(MpCopyItem ci,MpController Parent) : base(Parent) {
-            _orgTitle = ci.Title;
+            _orgTitle = _curTitle = ci.Title;
             _copyItemId = ci.CopyItemId;
             if(ci.Title.Trim() == string.Empty) {
                 ci.Title = _emptyTitle;
@@ -31,6 +37,8 @@ namespace MonkeyPaste {
                 Margin = Padding.Empty,
                 Padding = Padding.Empty,
                 BorderStyle = BorderStyle.None,
+                Bounds = GetBounds(),
+                Font = GetFont()
             };
             TileTitleLabel.DoubleBuffered(true);
             TileTitleLabel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
@@ -45,33 +53,38 @@ namespace MonkeyPaste {
                 BorderStyle = BorderStyle.None,
                 BackColor = Color.White,
                 ForeColor = Color.Black,
-                MaxLength = Properties.Settings.Default.MaxTitleLength
+                MaxLength = Properties.Settings.Default.MaxTitleLength,
+                Bounds = GetBounds(),
+                Font = GetFont()
             };
             TileTitleTextBox.DoubleBuffered(true);
             TileTitleTextBox.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
             TileTitleTextBox.KeyUp += TileTitleTextBox_KeyUp;
             TileTitleTextBox.LostFocus += _titleTextBox_LostFocus;
         }
-
-        public override void Update() {
-            //tile padding
-            int tp = Properties.Settings.Default.TileItemPadding;
-            //tile item padding
-            int tip = Properties.Settings.Default.TileItemPadding;
+        private Font GetFont() {
+            //tile title padding
+            int ttp = 5;
             //tile title panel rect
-            Rectangle ttpr = ((MpTileTitlePanelController)Find("MpTileTitlePanelController")).TileTitlePanel.Bounds;
+            Rectangle ttpr = ((MpTileTitlePanelController)Parent).GetBounds();
 
-            float fontSize = (Properties.Settings.Default.TileTitleHeightFontRatio * (float)(ttpr.Height)) - (float)tp;
+            float fontSize = (Properties.Settings.Default.TileTitleFontRatio * (float)(ttpr.Height)) - (float)ttp;
             fontSize = fontSize < 1.0f ? 10.0f : fontSize;
-            TileTitleTextBox.Font = new Font(Properties.Settings.Default.TileTitleFont, fontSize, GraphicsUnit.Pixel);
-            TileTitleLabel.Font = TileTitleTextBox.Font;
 
+            return new Font(Properties.Settings.Default.TileTitleFont, fontSize, GraphicsUnit.Pixel);
+        }
+        public override Rectangle GetBounds() {
+            //icon right
+            int ir = ((MpTileTitlePanelController)Parent).TileTitleIconPanelController.GetBounds().Right;
             //tile title textbox size
-            Size tttbs = TextRenderer.MeasureText(TileTitleTextBox.Text, TileTitleTextBox.Font);
-
-            Rectangle titleBounds = new Rectangle(tp * 2, 10, tttbs.Width, tttbs.Height);
-            TileTitleTextBox.Bounds = titleBounds;
-            TileTitleLabel.Bounds = TileTitleTextBox.Bounds;
+            Size tttbs = TextRenderer.MeasureText(_curTitle, GetFont());
+            return new Rectangle(ir, 10, tttbs.Width, tttbs.Height);
+        }
+        public override void Update() {
+            TileTitleLabel.Bounds = GetBounds();
+            TileTitleLabel.Font = GetFont();
+            TileTitleTextBox.Bounds = TileTitleLabel.Bounds;
+            TileTitleTextBox.Font = GetFont();
 
             if (TileTitleLabel.Visible) {
                 TileTitleLabel.BringToFront();
@@ -101,7 +114,8 @@ namespace MonkeyPaste {
             ReadMode(true);
         }
         private void EditMode() {
-            ((MpLogFormController)Find(typeof(MpLogFormController))).DeactivateHotKeys();
+            //((MpLogFormPanelController)Find(typeof(MpLogFormPanelController))).DeactivateHotKeys();
+            TitleModeChangedEvent(this, new TileTitleEventArgs(true));
             ActivateHotKeys();
 
             TileTitleLabel.Visible = false;
@@ -115,7 +129,8 @@ namespace MonkeyPaste {
         private void ReadMode(bool revertTitle = false) {
             DeactivateHotKeys();
 
-            ((MpLogFormController)Find(typeof(MpLogFormController))).ActivateHotKeys();
+            //((MpLogFormController)Find(typeof(MpLogFormController))).ActivateHotKeys();
+            TitleModeChangedEvent(this, new TileTitleEventArgs(false));
 
             TileTitleLabel.Visible = true;
             TileTitleTextBox.Visible = false;
@@ -175,6 +190,12 @@ namespace MonkeyPaste {
                 _escHook.Dispose();
                 _escHook = null;
             }
+        }
+    }
+    public class TileTitleEventArgs : EventArgs {
+        public bool IsEditing { get; set; }
+        public TileTitleEventArgs(bool isEditing) : base() {
+            IsEditing = isEditing;
         }
     }
 }

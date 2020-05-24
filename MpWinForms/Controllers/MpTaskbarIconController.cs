@@ -19,7 +19,8 @@ namespace MonkeyPaste {
         public NotifyIcon TrayIcon;                       // the icon that sits in the system tray      
 
         public MpKeyboardHook _showMainFormHook;
-        
+        public IKeyboardMouseEvents _mouseHook;
+
         private bool _skipAuth = true;
 
         public MpTaskbarIconController(MpController parent = null) : base(parent) {
@@ -38,6 +39,14 @@ namespace MonkeyPaste {
             }
 
             LogFormController = new MpLogFormController(this);
+            LogFormController.LogForm.VisibleChanged += (s, e) => {
+                if(((Form)s).Visible) {
+                    DeactivateHotKeys();
+                }
+                else {
+                    ActivateHotKeys();
+                }
+            };
             ActivateHotKeys();
             //only temporary 
             LogFormController.ShowLogForm();
@@ -48,21 +57,32 @@ namespace MonkeyPaste {
             }
             _showMainFormHook = new MpKeyboardHook();
             _showMainFormHook.RegisterHotKey(ModifierKeys.Control, Keys.D);
-            _showMainFormHook.KeyPressed += _showMainFormHook_KeyPressed;
+            _showMainFormHook.KeyPressed += (s,e) => {
+                LogFormController.ShowLogForm();
+            };
+
+            _mouseHook = Hook.GlobalEvents();
+            //_mouseHook.MouseDown += _mouseDownHook_MouseDown;
+            //_mouseHook.MouseUp += _upHook_MouseUp;
+            _mouseHook.MouseMove += (s,e) => {
+                Rectangle sb = MpSingleton.Instance.ScreenManager.GetScreenWorkingAreaWithMouse();
+                Rectangle hr = new Rectangle(0, 0, sb.Width, Properties.Settings.Default.ShowLogHotRegionSize);
+                if (e.Location.Y < 5) {
+                    LogFormController.ShowLogForm();
+                }
+            };
         }
-
-        private void _showMainFormHook_KeyPressed(object sender, KeyPressedEventArgs e) {
-            LogFormController.ShowLogForm();
-        }       
-
         public void DeactivateHotKeys() {
-            if(_showMainFormHook == null) {
+            if (_showMainFormHook == null) {
                 return;
             }
             _showMainFormHook.UnregisterHotKey();
             _showMainFormHook.Dispose();
             _showMainFormHook = null;
-        }
+
+            _mouseHook.Dispose();
+            _mouseHook = null;
+        }      
         public override void Update() {
             throw new NotImplementedException();
         }
@@ -265,11 +285,6 @@ namespace MonkeyPaste {
             TrayIcon.ContextMenuStrip = null;
         }
         private void ContextMenuStrip_Opening(object sender,System.ComponentModel.CancelEventArgs e) { }
-
         
-
-        protected override void View_KeyPress(object sender,KeyPressEventArgs e) {
-            base.View_KeyPress(sender,e);
-        }
     }
 }

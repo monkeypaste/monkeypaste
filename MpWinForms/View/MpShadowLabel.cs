@@ -36,9 +36,9 @@ namespace MonkeyPaste {
         public MpShadowLabel(Color tileColor) : base() {          
             this.DoubleBuffered = true;
             TileColor = tileColor;
-            ForeColor = MpHelperSingleton.Instance.IsBright(TileColor) ? Color.Black : Color.White;
-            BackColor = ForeColor == Color.Black ? Color.White : Color.Black;
-            BackOffset = new PointF(3.0f, 5.0f);
+            ForeColor = Color.White;// MpHelperSingleton.Instance.IsBright(TileColor) ? Color.Black : Color.White;
+            BackColor = Color.Black;// ForeColor == Color.Black ? Color.White : Color.Black;
+            BackOffset = new PointF(3.0f, 3.0f);
         }
     }
 }

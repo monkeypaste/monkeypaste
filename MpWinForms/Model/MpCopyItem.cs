@@ -325,6 +325,38 @@ namespace MonkeyPaste {
             Console.WriteLine(isNew ? "Created ":"Updated " + " MpCopyItem");
             Console.WriteLine(ToString());
         }
+        public string GetCurrentDetail(int detailId) {
+            string info = "I dunno";// string.Empty;
+            switch (detailId) {
+                //created
+                case 0:
+                    info = CopyDateTime.ToString();
+                    break;
+                //chars/lines
+                case 1:
+                    if (CopyItemType == MpCopyItemType.Image) {
+                        Image ciimg = MpHelperSingleton.Instance.ConvertByteArrayToImage((byte[])GetData());
+                        info = "(" + ciimg.Width + ") x (" + ciimg.Height + ")";
+                    }
+                    else if (CopyItemType == MpCopyItemType.Text) {
+                        info = ((string)GetData()).Length + " chars | " + MpHelperSingleton.Instance.GetLineCount((string)GetData()) + " lines";
+                    }
+                    else if (CopyItemType == MpCopyItemType.FileList) {
+                        info = ((string[])GetData()).Length + " files | " + MpHelperSingleton.Instance.FileListSize((string[])GetData()) + " bytes";
+                    }
+                    break;
+                //# copies/# pastes
+                case 2:
+                    DataTable dt = MpAppManager.Instance.DataModel.Db.Execute("select * from MpPasteHistory where fk_MpCopyItemId=" + CopyItemId);
+                    info = CopyCount + " copies | " + dt.Rows.Count + " pastes";
+                    break;
+                default:
+                    info = "Unknown detailId: " + detailId;
+                    break;
+            }
+
+            return info;
+        }
         private void MapDataToColumns() {
             TableName = "MpCopyItem";
             columnData.Clear();

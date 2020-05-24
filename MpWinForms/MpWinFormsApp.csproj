@@ -389,43 +389,44 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstract\MpPanelController.cs" />
+    <Compile Include="Controllers\Abstract\MpButtonPanelController.cs" />
+    <Compile Include="Controllers\Abstract\MpControlController.cs" />
     <Compile Include="Compatibility\GdkApi.cs" />
+    <Compile Include="Controllers\Abstract\MpScrollbarPanelController.cs" />
+    <Compile Include="Controllers\Abstract\MpScrollbarGripPanelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\MpScrollPanelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\MpTileContentControlController.cs" />
     <Compile Include="Input\MpCommandManager.cs" />
     <Compile Include="Input\MpHotKey.cs" />
     <Compile Include="Input\MpKeyboardHook.cs" />
-    <Compile Include="Input\MpScreenManager.cs" />
+    <Compile Include="Model\MpBoxModel.cs" />
+    <Compile Include="Singletons\MpScreenManager.cs" />
     <Compile Include="Controllers\Forms\Splash\MpSplashFormController.cs" />
     <Compile Include="App\MpAppManager.cs" />
     <Compile Include="Compatibility\MpCompatibility.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\MpLogMenuPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\PrimaryMenu\Buttons\MpLogMainMenuAppendModeButtonController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\PrimaryMenu\Buttons\MpLogMainMenuAutoCopyButtonController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\PrimaryMenu\Buttons\MpLogMainMenuSettingsButtonController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\PrimaryMenu\Buttons\MpLogMainMenuInfoButtonController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\PrimaryMenu\MpLogMainMenuPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\PrimaryMenu\Title\MpLogMainMenuTitleIconBoxController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\PrimaryMenu\Title\MpLogMainMenuTitleLinkLabelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\PrimaryMenu\Title\MpLogMainMenuTitlePanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\PrimaryMenu\Buttons\MpLogMainMenuUserButtonController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\SubMenu\MpLogSubMenuPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\SubMenu\Search\MpSearchIconController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\SubMenu\Search\MpSearchTextBoxController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\SubMenu\Tag Bar\MpAddTagTextBoxController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\SubMenu\Tag Bar\Tag\MpTagButtonController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\SubMenu\Tag Bar\MpTagChooserPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\SubMenu\Tag Bar\Tag\MpTagLabelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\SubMenu\Tag Bar\Tag\MpTagTextBoxController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menu\SubMenu\Tag Bar\Tag\MpTagPanelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\MpLogMenuPanelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Buttons\MpLogMainMenuAppendModeButtonController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Buttons\MpLogMainMenuAutoCopyButtonController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Buttons\MpLogMainMenuSettingsButtonController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Buttons\MpLogMainMenuInfoButtonController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\MpLogMainMenuPanelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Title\MpLogMainMenuTitleIconBoxController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Title\MpLogMainMenuTitleLinkLabelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Title\MpLogMainMenuTitlePanelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Buttons\MpLogMainMenuUserButtonController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\MpLogSubMenuPanelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Search\MpSearchIconController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Search\MpSearchTextBoxController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\MpAddTagTextBoxController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\Tag\MpTagButtonController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\MpTagChooserPanelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\Tag\MpTagLabelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\Tag\MpTagTextBoxController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\Tag\MpTagPanelController.cs" />
     <Compile Include="Controllers\Forms\Log\Log Panel\MpDragTilePanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tree\MpTreeViewController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tree\MpTreeViewPanelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\LeftMenu\Tree\MpTreeViewController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\LeftMenu\Tree\MpTreeViewPanelController.cs" />
     <Compile Include="Controllers\Forms\Log\Log Panel\MpLogFormPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Detail\MpTileDetailsLabelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Header\MpTagButtonController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Header\MpTileHeaderExpandButtonController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Header\MpTileHeaderPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Header\MpTileHeaderCloseButtonController.cs" />
     <Compile Include="Controllers\Forms\Menus\Settings\Data\MpDataSettingsPanelController.cs" />
     <Compile Include="Controllers\Forms\Menus\Settings\Excluded Apps\Excluded App Row\MpExcludedAppButtonController.cs" />
     <Compile Include="Controllers\Forms\Menus\Settings\Excluded Apps\Excluded App Row\MpExcludedAppLabelController.cs" />
@@ -434,7 +435,7 @@
     <Compile Include="Controllers\Forms\Menus\Settings\MpAppPreferencesPanelController.cs" />
     <Compile Include="Controllers\Forms\Menus\Settings\MpLoadOnLoginCheckBoxController.cs" />
     <Compile Include="Controllers\Forms\Menus\MpMenuController.cs" />
-    <Compile Include="Abstract\MpTileColorButtonPanelController.cs" />
+    <Compile Include="Controllers\Abstract\MpTileColorButtonPanelController.cs" />
     <Compile Include="Helpers\MpLinkedList.cs" />
     <Compile Include="Helpers\MpNode.cs" />
     <Compile Include="Helpers\MpObservableDictionary.cs" />
@@ -443,11 +444,10 @@
     <Compile Include="Controllers\Forms\Menus\Settings\Data\MpDataDetailsLabelController.cs" />
     <Compile Include="Controllers\Forms\Menus\Settings\MpSettingsFormController.cs" />
     <Compile Include="Controllers\MpTaskbarIconController.cs" />
-    <Compile Include="Abstract\MpController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Detail\MpTileDetailsPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Menu\MpTileMenuButtonController.cs" />
+    <Compile Include="Controllers\Abstract\MpController.cs" />
+    <Compile Include="Controllers\Abstract\MpButtonController.cs" />
     <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Title\MpTileTitleIconPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Menu\MpTileMenuPanelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\LeftMenu\MpTileMenuPanelController.cs" />
     <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Title\MpTileTitlePanelController.cs" />
     <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Title\MpTileTitleTextBoxController.cs" />
     <Compile Include="Helpers\IconHelper.cs" />
@@ -455,10 +455,11 @@
     <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\MpTilePanelController.cs" />
     <Compile Include="Helpers\MpPointMath.cs" />
     <Compile Include="Helpers\MpTypeHelper.cs" />
+    <Compile Include="Model\MpModel.cs" />
     <Compile Include="Model\MpPasteHistory.cs" />
     <Compile Include="Helpers\MpHelperSingleton.cs" />
     <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\MpFileListItemRowPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\MpTileControlController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\MpTileContentController.cs" />
     <Compile Include="Controllers\Forms\Log\MpLogFormController.cs" />
     <Compile Include="Input\MpClipboardManager.cs">
       <SubType>Form</SubType>
@@ -471,7 +472,6 @@
     <Compile Include="Model\MpSetting.cs" />
     <Compile Include="Model\MpCopyItemTag.cs" />
     <Compile Include="Model\MpTag.cs" />
-    <Compile Include="Model\MpPanelModel.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -482,6 +482,7 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Singletons\MpSingleton.cs" />
     <Compile Include="View\MpButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -536,9 +537,6 @@
     <Compile Include="View\MpShadowPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpTagButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="View\MpTagLinkLabel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -552,9 +550,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpTileBorderPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="View\MpTileMenuButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpLogSubMenuPanel.cs">

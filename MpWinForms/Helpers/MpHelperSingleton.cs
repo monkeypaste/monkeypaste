@@ -461,20 +461,7 @@ namespace MonkeyPaste {
             }
             return lc;
         }
-        //public Rectangle GetScreenBoundsWithMouse() {
-        //    foreach(Screen screen in Screen.AllScreens) {
-        //        Point mp = MpCursorPosition.GetCursorPosition();
-        //        if(screen.WorkingArea.Contains(mp)) {
-        //            return screen.Bounds;
-        //        }
-        //    }
-        //    return Screen.FromHandle(Process.GetCurrentProcess().Handle).Bounds;
-        //}
-        public void SetPadding(TextBoxBase textBox,Padding padding) {
-            var rect = new Rectangle(padding.Left,padding.Top,textBox.Size.Width - padding.Left - padding.Right,textBox.Size.Height - padding.Top - padding.Bottom);
-            RECT rc = new RECT(rect);
-            WinApi.SendMessageRefRect(textBox.Handle,WinApi.EM_SETRECT,0,ref rc);
-        }
+        
         public Icon GetIconFromBitmap(Bitmap bmp) {
            IntPtr Hicon = bmp.GetHicon();
            return Icon.FromHandle(Hicon);
