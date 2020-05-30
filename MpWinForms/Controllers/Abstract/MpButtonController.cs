@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpButtonController : MpControlController {
+    public class MpButtonController : MpController {
         private bool _isFocused = false;
         private bool _isDown = false;
         private bool _isDisabled = false;

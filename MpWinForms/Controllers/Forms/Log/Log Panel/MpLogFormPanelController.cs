@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpLogFormPanelController : MpControlController {
+    public class MpLogFormPanelController : MpController {
         public MpTileChooserPanelController TileChooserPanelController { get; set; }
         public MpLogMenuPanelController LogMenuPanelController { get; set; }
         public MpTreeViewPanelController TreeViewPanelController { get; set; }
@@ -16,7 +16,6 @@ namespace MonkeyPaste {
 
         public int CustomHeight { get; set; } = -1;
         public int MinimumHeight { get; set; } = 50;
-
 
         public MpLogFormPanelController(MpController parentController) : base(parentController) {
             LogFormPanel = new Panel() {

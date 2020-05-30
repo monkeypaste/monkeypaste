@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpTileTitleIconPanelController : MpControlController {        
+    public class MpTileTitleIconPanelController : MpController {        
         public PictureBox TileTitleIconBox { get; set; }
 
         public MpTileTitleIconPanelController(MpCopyItem ci,MpController Parent) : base(Parent) {

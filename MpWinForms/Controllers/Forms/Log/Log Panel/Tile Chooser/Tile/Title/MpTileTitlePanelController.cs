@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpTileTitlePanelController : MpControlController {
+    public class MpTileTitlePanelController : MpController {
         public MpTilePanel TileTitlePanel { get; set; }        
 
         public MpTileTitleIconPanelController TileTitleIconPanelController { get; set; }
@@ -18,13 +18,12 @@ namespace MonkeyPaste {
             _copyItemId = ci.CopyItemId;
             TileTitlePanel = new MpTilePanel() {
                 Bounds = GetBounds(),
-                BorderStyle = BorderStyle.None,
                 FlatBorderColor = Color.Transparent,
-                EdgeWidth = 3,
+                EdgeWidth = 5,
                 Style = BeveledPanel.AdvancedPanel.BevelStyle.Raised,
                 BackColor = Properties.Settings.Default.LogPanelBgColor,
-                StartColor = ci.ItemColor.Color,
-                EndColor = ci.ItemColor.Color,
+                StartColor = Color.White,//ci.ItemColor.Color,
+                EndColor = Color.White,//ci.ItemColor.Color,
                 ShadowColor = Color.Transparent,
                 ShadowShift = 0,
                 ShadowStyle = BeveledPanel.AdvancedPanel.ShadowMode.ForwardDiagonal,
@@ -34,8 +33,6 @@ namespace MonkeyPaste {
                 RectRadius = Properties.Settings.Default.TileBorderRadius
             };
             TileTitlePanel.DoubleBuffered(true);
-            TileTitlePanel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
-
             
             TileTitleIconPanelController = new MpTileTitleIconPanelController(ci,this);
             TileTitlePanel.Controls.Add(TileTitleIconPanelController.TileTitleIconBox);
@@ -43,8 +40,12 @@ namespace MonkeyPaste {
             TileTitleTextBoxController = new MpTileTitleTextBoxController(ci, this);
             TileTitlePanel.Controls.Add(TileTitleTextBoxController.TileTitleTextBox);
             TileTitlePanel.Controls.Add(TileTitleTextBoxController.TileTitleLabel);
+
+            DefineEvents();
         }
-        
+        public override void DefineEvents() {
+            TileTitlePanel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
+        }
         public override Rectangle GetBounds() {
             //tile panel controller
             var tpc = ((MpTilePanelController)Parent);

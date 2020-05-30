@@ -36,7 +36,7 @@ namespace MonkeyPaste {
             HashedPassword = hashedPassword;
         }
         public MpUser(int userId) {
-            DataTable dt = MpAppManager.Instance.DataModel.Db.Execute("select * from MpUser where pk_MpUserId=" + userId);
+            DataTable dt = MpApplication.Instance.DataModel.Db.Execute("select * from MpUser where pk_MpUserId=" + userId);
             if(dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }

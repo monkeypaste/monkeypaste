@@ -31,7 +31,7 @@ namespace MonkeyPaste {
             LogMenuSearchTextBoxController = new MpSearchTextBoxController(this);
             LogSubMenuPanel.Controls.Add(LogMenuSearchTextBoxController.SearchTextBox);
 
-            LogMenuTileTokenChooserPanelController = new MpTagChooserPanelController(this,MpAppManager.Instance.DataModel.Db.GetTags());
+            LogMenuTileTokenChooserPanelController = new MpTagChooserPanelController(this,MpApplication.Instance.DataModel.Db.GetTags());
             LogSubMenuPanel.Controls.Add(LogMenuTileTokenChooserPanelController.TagChooserPanel);
         }
         public override void Update() {

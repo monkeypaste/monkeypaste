@@ -145,7 +145,7 @@ namespace MonkeyPaste {
                     //clear merged copyitems db id so it gets a new one in current list
 
                     if(NoDb) {
-                        cib.CopyItemId = ++MpCopyItem.TotalCopyItemCount;                        
+                        cib.CopyItemId = mergedList.Count+1;                        
                     }
                     else {
                         //cib = MpCopyItem.CreateCopyItem(0,(MpCopyItemType)cib.copyItemTypeId,cib.Client)

@@ -40,7 +40,7 @@ namespace MonkeyPaste {
             WriteToDatabase();
         }*/
         public MpIcon(int iconId) {
-            DataTable dt = MpAppManager.Instance.DataModel.Db.Execute("select * from MpIcon where pk_MpIconId=" + iconId);
+            DataTable dt = MpApplication.Instance.DataModel.Db.Execute("select * from MpIcon where pk_MpIconId=" + iconId);
             if(dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             } else {
@@ -63,25 +63,25 @@ namespace MonkeyPaste {
                 throw new Exception("Error creating MpIcon Image cannot be null");
             }
             if(iconId == 0) {
-                if(MpAppManager.Instance.DataModel.Db.NoDb) {
+                if(MpApplication.Instance.DataModel.Db.NoDb) {
                     this.iconId = ++TotalIconCount;
                     MapDataToColumns();
                     return;
                 }
-                DataTable dt = MpAppManager.Instance.DataModel.Db.Execute("select * from MpIcon where IconBlob=@0",new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertImageToByteArray(this.IconImage) });
+                DataTable dt = MpApplication.Instance.DataModel.Db.Execute("select * from MpIcon where IconBlob=@0",new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertImageToByteArray(this.IconImage) });
                 if(dt.Rows.Count > 0) {
                     this.iconId = Convert.ToInt32(dt.Rows[0]["pk_MpIconId"]);
-                    MpAppManager.Instance.DataModel.Db.ExecuteNonQuery("update MpIcon set IconBlob=@0 where pk_MpIconId=" + this.iconId,new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertImageToByteArray(this.IconImage) });
+                    MpApplication.Instance.DataModel.Db.ExecuteNonQuery("update MpIcon set IconBlob=@0 where pk_MpIconId=" + this.iconId,new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertImageToByteArray(this.IconImage) });
                     isNew = false;
                 }
                 else {
-                    MpAppManager.Instance.DataModel.Db.ExecuteNonQuery("insert into MpIcon(IconBlob) values(@0)",new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertImageToByteArray(this.IconImage) });
-                    this.iconId = MpAppManager.Instance.DataModel.Db.GetLastRowId("MpIcon","pk_MpIconId");
+                    MpApplication.Instance.DataModel.Db.ExecuteNonQuery("insert into MpIcon(IconBlob) values(@0)",new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertImageToByteArray(this.IconImage) });
+                    this.iconId = MpApplication.Instance.DataModel.Db.GetLastRowId("MpIcon","pk_MpIconId");
                     isNew = true;
                 }
             }
             else {
-                MpAppManager.Instance.DataModel.Db.ExecuteNonQuery("update MpIcon set IconBlob=@0 where pk_MpIconId="+this.iconId,new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertImageToByteArray(this.IconImage) });                
+                MpApplication.Instance.DataModel.Db.ExecuteNonQuery("update MpIcon set IconBlob=@0 where pk_MpIconId="+this.iconId,new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertImageToByteArray(this.IconImage) });                
             }
             if(isNew) {
                 MapDataToColumns();

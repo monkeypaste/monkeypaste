@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpTileContentControlController : MpControlController {
+    public class MpTileContentControlController : MpController {
         public Control TileContentControl { get; set; }
         private Point _offset = Point.Empty;
         public Point Offset {
@@ -21,22 +21,24 @@ namespace MonkeyPaste {
                 }
             }
         }
-        public MpTileContentControlController(MpCopyItem ci,MpControlController parent) : base(parent) {
+        public MpTileContentControlController(MpCopyItem ci,MpController parent) : base(parent) {
             switch (ci.CopyItemType) {
                 case MpCopyItemType.HTMLText:
                 case MpCopyItemType.RichText:
                 case MpCopyItemType.Text:
-                    TileContentControl = new RichTextBox() {
-                        WordWrap = false,
-                        Multiline = true,
+                    TileContentControl = new MpShadowLabel(Color.White) {
+                        //MinimumSize = ((MpScrollPanelController)Parent).GetBounds().Size,
                         Text = ((string)ci.GetData()).Replace("''", "'"),
-                        ScrollBars = RichTextBoxScrollBars.None,
+                        //ScrollBars = RichTextBoxScrollBars.None,
                         BackColor = Properties.Settings.Default.TileItemBgColor,
                         ForeColor = Color.Black,
-                        AutoSize = false,
-                        ReadOnly = true,                   
+                        AutoSize = false,    
+                        BackOffset = PointF.Empty,
+                        //ReadOnly = true,                         
                         BorderStyle = BorderStyle.None
-                    };                    
+                    };
+                    TileContentControl.Bounds = GetBounds();
+                    //TileContentControl.ClientSize = GetBounds().Size;
                     break;
                 case MpCopyItemType.FileList:
                     TileContentControl = new ScrollableControl() {
@@ -65,27 +67,27 @@ namespace MonkeyPaste {
                         AutoSize = false,
                         SizeMode = PictureBoxSizeMode.StretchImage
                     };
+                    TileContentControl.Bounds = GetBounds();
                     break;
             }
             TileContentControl.DoubleBuffered(true);
-            TileContentControl.Bounds = GetBounds();
-            int pad = 0;// (int)(((MpScrollPanelController)Parent).GetBounds().Height * Properties.Settings.Default.TileItemScrollBarThicknessRatio);
-            SetPadding(new Padding(pad));
-            TileContentControl.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
 
+            DefineEvents();
+        }
+        public override void DefineEvents() {
+            TileContentControl.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
         }
         public override Rectangle GetBounds() {
             //scroll panel rect
             Rectangle spr = ((MpScrollPanelController)Parent).GetBounds();
             Size contentSize = Size.Empty;
 
-            if (TileContentControl.GetType().IsSubclassOf(typeof(TextBoxBase))) {
-               // ((RichTextBox)TileContentControl).Text = (string)((MpTilePanelController)Parent).CopyItem.GetData();
+            if (TileContentControl.GetType() == typeof(MpShadowLabel)) {
                 float fontSize = spr.Width * Properties.Settings.Default.TileFontSizeRatio;
                 fontSize = fontSize < 1.0f ? 10.0f : fontSize;
                 Font f = new Font(Properties.Settings.Default.TileFont, fontSize, GraphicsUnit.Pixel);
-                ((TextBoxBase)TileContentControl).Font = f;
-                contentSize = TextRenderer.MeasureText(((TextBoxBase)TileContentControl).Text, f);
+                ((MpShadowLabel)TileContentControl).Font = f;
+                contentSize = TextRenderer.MeasureText(((MpShadowLabel)TileContentControl).Text, f);
             }
             else if (TileContentControl.GetType().IsSubclassOf(typeof(PictureBox))) {
                 contentSize = ((PictureBox)TileContentControl).Image.Size;
@@ -106,22 +108,23 @@ namespace MonkeyPaste {
         }
         public override void Update() {
             TileContentControl.Bounds = GetBounds();
-            int pad = 0;// (int)(((MpScrollPanelController)Parent).GetBounds().Height * Properties.Settings.Default.TileItemScrollBarThicknessRatio);
-            SetPadding(new Padding(pad));
+            //TileContentControl.ClientSize = GetBounds().Size;
+            //int pad = 0;// (int)(((MpScrollPanelController)Parent).GetBounds().Height * Properties.Settings.Default.TileItemScrollBarThicknessRatio);
+            //SetPadding(new Padding(pad));
 
-            TileContentControl.Invalidate();
+            TileContentControl.Refresh();
         }
         private void SetPadding(Padding padding) {
-            if(TileContentControl.GetType().IsSubclassOf(typeof(TextBoxBase))) {
-                TextBoxBase textBox = (TextBoxBase)TileContentControl;
+            if(TileContentControl.GetType().IsSubclassOf(typeof(Label))) {
+                Label textBox = (Label)TileContentControl;
                 var rect = new Rectangle(padding.Left, padding.Top, textBox.Size.Width - padding.Left - padding.Right, textBox.Size.Height - padding.Top - padding.Bottom);
                 RECT rc = new RECT(rect);
                 WinApi.SendMessageRefRect(textBox.Handle, WinApi.EM_SETRECT, 0, ref rc);
             }
         }
         public void UpdateItem(MpCopyItem ci) {
-            if (TileContentControl.GetType().IsSubclassOf(typeof(TextBoxBase))) {
-                ((TextBoxBase)TileContentControl).Text = (string)ci.GetData();
+            if (TileContentControl.GetType().IsSubclassOf(typeof(Label))) {
+                ((Label)TileContentControl).Text = (string)ci.GetData();
                 Update();
             }
         }

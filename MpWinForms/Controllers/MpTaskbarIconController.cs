@@ -28,16 +28,6 @@ namespace MonkeyPaste {
             //HelpForm = new MpHelpForm();
             //SettingsForm = new MpSettingsForm();
                        
-            if(_skipAuth == false) {
-                if(MpHelperSingleton.Instance.CheckForInternetConnection()) {
-                    ShowLoginForm();
-                }
-                else {
-                    MessageBox.Show("Error, must be connected to internet to use, exiting");
-                    Exit();
-                }
-            }
-
             LogFormController = new MpLogFormController(this);
             LogFormController.LogForm.VisibleChanged += (s, e) => {
                 if(((Form)s).Visible) {
@@ -48,8 +38,9 @@ namespace MonkeyPaste {
                 }
             };
             ActivateHotKeys();
-            //only temporary 
-            LogFormController.ShowLogForm();
+        }
+        public void PrepareUI() { 
+            LogFormController.Update();
         }
         public void ActivateHotKeys() {
             if(_showMainFormHook != null) {
@@ -83,19 +74,14 @@ namespace MonkeyPaste {
             _mouseHook.Dispose();
             _mouseHook = null;
         }      
-        public override void Update() {
-            throw new NotImplementedException();
-        }
-        
+        public override void Update() {}        
         public void MouseUpHook_MouseEvent() {
             Console.WriteLine("Mouse up event occured");
                       
         }
-
         public void MouseHitScreenTopHook_MouseEvent() {
             LogFormController.ShowLogForm();
         }
-
         public void ToggleAppendModeHook_KeyPressed() {
             Properties.Settings.Default.IsAppendModeActive = !Properties.Settings.Default.IsAppendModeActive;
             //LogFormController.LogForm.Invoke((MethodInvoker)delegate {
@@ -124,7 +110,6 @@ namespace MonkeyPaste {
             }
 
         }
-
         private void Exit() {
             // before we exit, let forms clean themselves up.
             if(HelpForm != null) {
@@ -174,7 +159,7 @@ namespace MonkeyPaste {
             TrayIcon.ContextMenuStrip.Items.Add(new ToolStripSeparator());
             TrayIcon.ContextMenuStrip.Items.Add(ToolStripMenuItemWithHandler("&Exit",exitItem_Click));
         }
-        private async void ShowLoginForm() {
+        public async void ShowLoginForm() {
             if(_skipAuth) {
                 Console.WriteLine("Skipping auth0 authorization");
             }
@@ -243,7 +228,7 @@ namespace MonkeyPaste {
         private void toggleSaveHistory_Click(object sender,EventArgs e) { Console.WriteLine("Save History clicked"); }
         private void clearHistory_Click(object sender,EventArgs e) {
             Console.WriteLine("Clear History clicked");
-            MpAppManager.Instance.DataModel.Db.ResetDb();
+            MpApplication.Instance.DataModel.Db.ResetDb();
         }
         private void _toggleEncrypt_Click(object sender,EventArgs e) {
             Console.WriteLine("Encrypt clicked");

@@ -40,7 +40,7 @@ namespace MonkeyPaste {
             _rootTreeNodeController = new MpTreeItemController(this,"TestUser");
             TreeView.Nodes.Add(_rootTreeNodeController.TreeNode);
 
-            var copyItemList = MpAppManager.Instance.DataModel.CopyItemList;
+            var copyItemList = MpApplication.Instance.DataModel.CopyItemList;
             if(copyItemList != null) {
                 foreach(MpCopyItem ci in copyItemList) {
                     if(ci.App != null) {

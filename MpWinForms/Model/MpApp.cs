@@ -67,25 +67,25 @@ namespace MonkeyPaste {
             Icon.WriteToDatabase();
             this.iconId = Icon.iconId;
             if(this.appId == 0) {
-                if(MpAppManager.Instance.DataModel.Db.NoDb) {
+                if(MpApplication.Instance.DataModel.Db.NoDb) {
                     this.appId = ++TotalAppCount;
                     MapDataToColumns();
                     return;
                 }
-                DataTable dt = MpAppManager.Instance.DataModel.Db.Execute("select * from MpApp where SourcePath='" + this.AppPath + "'");
+                DataTable dt = MpApplication.Instance.DataModel.Db.Execute("select * from MpApp where SourcePath='" + this.AppPath + "'");
                 if(dt.Rows.Count > 0) {
                     this.appId = Convert.ToInt32(dt.Rows[0]["pk_MpAppId"]);
                     this.iconId = Convert.ToInt32(dt.Rows[0]["fk_MpIconId"]);
                     isNew = false;
                 }
                 else {
-                    MpAppManager.Instance.DataModel.Db.ExecuteNonQuery("insert into MpApp(fk_MpIconId,SourcePath,IsAppRejected) values (" + this.iconId + ",'" + AppPath + "'," + Convert.ToInt32(this.IsAppRejected) + ")");//+ "',"+Convert.ToInt32(this.IsAppRejected)+",@0)",new List<string>() { "@0" },new List<object>() { MpHelperFunctions.Instance.ConvertImageToByteArray(MpSingletonController.Instance.GetMpLastWindowWatcher().LastIconImage) });
-                    this.appId = MpAppManager.Instance.DataModel.Db.GetLastRowId("MpApp","pk_MpAppId");
+                    MpApplication.Instance.DataModel.Db.ExecuteNonQuery("insert into MpApp(fk_MpIconId,SourcePath,IsAppRejected) values (" + this.iconId + ",'" + AppPath + "'," + Convert.ToInt32(this.IsAppRejected) + ")");//+ "',"+Convert.ToInt32(this.IsAppRejected)+",@0)",new List<string>() { "@0" },new List<object>() { MpHelperFunctions.Instance.ConvertImageToByteArray(MpSingletonController.Instance.GetMpLastWindowWatcher().LastIconImage) });
+                    this.appId = MpApplication.Instance.DataModel.Db.GetLastRowId("MpApp","pk_MpAppId");
                     isNew = false;
                 }                
             }
             else {
-                MpAppManager.Instance.DataModel.Db.ExecuteNonQuery("update MpApp set fk_MpIconId=" + this.iconId + ",IsAppRejected="+Convert.ToInt32(this.IsAppRejected)+",SourcePath='" + this.AppPath + "' where pk_MpAppId=" + this.appId);
+                MpApplication.Instance.DataModel.Db.ExecuteNonQuery("update MpApp set fk_MpIconId=" + this.iconId + ",IsAppRejected="+Convert.ToInt32(this.IsAppRejected)+",SourcePath='" + this.AppPath + "' where pk_MpAppId=" + this.appId);
             }
             if(isNew) {
                 MapDataToColumns();
@@ -98,7 +98,7 @@ namespace MonkeyPaste {
                 return;
             }
 
-            MpAppManager.Instance.DataModel.Db.ExecuteNonQuery("delete from MpApp where pk_MpAppId=" + appId);
+            MpApplication.Instance.DataModel.Db.ExecuteNonQuery("delete from MpApp where pk_MpAppId=" + appId);
         }
 
         public string GetAppName() {

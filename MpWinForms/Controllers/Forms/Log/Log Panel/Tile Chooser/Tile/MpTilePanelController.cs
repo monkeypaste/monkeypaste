@@ -5,10 +5,11 @@ using System.Windows.Forms;
 using VisualEffects;
 using VisualEffects.Animations.Effects;
 using VisualEffects.Easing;
+using wdi.ui;
 
 namespace MonkeyPaste
 {
-    public class MpTilePanelController : MpControlController {
+    public class MpTilePanelController : MpController {
         private static int _OffsetX = 0;
         public static int OffsetX {
             get {
@@ -40,8 +41,9 @@ namespace MonkeyPaste
         public MpCopyItem CopyItem { get; set; }      
 
         private bool _isSelected = false;
+        
+        public FlipPanel FlipPanel { get; set; } 
 
-        private Panel _fillGapPanel { get; set; }
         private MpTilePanelStateType _tilePanelState = MpTilePanelStateType.None;
         public MpTilePanelStateType TilePanelState {
             get {
@@ -51,59 +53,70 @@ namespace MonkeyPaste
         
         public MpTilePanelController(MpCopyItem ci,MpController Parent) : base(Parent) {
             CopyItem = ci;
-            TilePanel = new MpTilePanel() {
+            FlipPanel = new FlipPanel() {
+                AutoSize = false,
+                AutoScroll = false,
+                Bounds = GetBounds()
+            };
+            FlipPanel.DoubleBuffered(true);
+
+            TilePanel = new MpTilePanel() {                
                 AutoScroll = false,
                 AutoSize = false,
-                Bounds = GetBounds(),
+                Size = GetBounds().Size,
                 BackColor = Properties.Settings.Default.LogPanelBgColor, //MpHelperSingleton.Instance.GetRandomColor()
                 //RectRadius = Properties.Settings.Default.TileBorderRadius,
                 //BackgroundGradientMode = BevelPanel.AdvancedPanel.PanelGradientMode.ForwardDiagonal,
                 FlatBorderColor = Color.Transparent,
                 Style = BeveledPanel.AdvancedPanel.BevelStyle.Flat,
                 EdgeWidth = 5,
-                StartColor = Color.White,//Properties.Settings.Default.LogPanelBgColor, ,//ci.ItemColor.Color,
-                EndColor = Color.White,//Properties.Settings.Default.LogPanelBgColor,,//ci.ItemColor.Color,
-                ShadowColor = Color.Black,
+                StartColor = Color.Transparent,//Properties.Settings.Default.LogPanelBgColor, ,//ci.ItemColor.Color,
+                EndColor = Color.Transparent,//Properties.Settings.Default.LogPanelBgColor,,//ci.ItemColor.Color,
+                ShadowColor = Color.DimGray,
                 ShadowShift = 3,
-                ShadowStyle = BeveledPanel.AdvancedPanel.ShadowMode.ForwardDiagonal,
-                TabIndex = 1
+                ShadowStyle = BeveledPanel.AdvancedPanel.ShadowMode.ForwardDiagonal
             };
             TilePanel.DoubleBuffered(true);
-            TilePanel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
+
+            Panel backPanel = new Panel() {
+                AutoScroll = false,
+                AutoSize = false,
+                BackColor = Color.Pink,
+                Size = GetBounds().Size
+            };
+            backPanel.DoubleBuffered(true);
+            FlipPanel.Front = TilePanel;
+            FlipPanel.Back = backPanel;
+            FlipPanel.TimerInterval = 5;
+            FlipPanel.DoShading = true;
+
             TileTitlePanelController = new MpTileTitlePanelController(ci,this);
             TilePanel.Controls.Add(TileTitlePanelController.TileTitlePanel);
 
             //always call this last since it fills remaining space
             TileContentController = new MpTileContentPanelController(ci,this);
-            TilePanel.Controls.Add(TileContentController.TileContentPanel);
+            TilePanel.Controls.Add(TileContentController.TileContentPanel);            
+            
+            SetState(MpTilePanelStateType.Unfocused);
+
+            DefineEvents();
+        }
+
+        public override void DefineEvents() {
+            TilePanel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
+
             TileContentController.ScrollPanelController.VScrollbarPanelController.ScrollContinueEvent += (s, e) => {
                 SetState(MpTilePanelStateType.Scrolling);
             };
             TileContentController.ScrollPanelController.HScrollbarPanelController.ScrollContinueEvent += (s, e) => {
                 SetState(MpTilePanelStateType.Scrolling);
-            };
-            //fill gap rect
-            Rectangle fgr = new Rectangle(TileContentController.GetBounds().X, (int)(TileTitlePanelController.GetBounds().Height / 2), TileContentController.GetBounds().Width, TileContentController.GetBounds().Height);
-            _fillGapPanel = new Panel() {
-                BackColor = Color.White,
-                AutoSize = false,
-                AutoScroll = false,
-                Bounds = fgr,
-                BorderStyle = BorderStyle.None
-            };
-            TilePanel.Controls.Add(_fillGapPanel);
+            };            
 
-            TileTitlePanelController.TileTitlePanel.BringToFront();
-            _fillGapPanel.SendToBack();
-            SetState(MpTilePanelStateType.Unselected);
         }
-        
-        
         public override Rectangle GetBounds() {
             //tile chooser panel controller
             var tcpc = (MpTileChooserPanelController)Parent;
             int listIdx = tcpc.GetVisibleTilePanelControllerIdx(this);
-            listIdx = listIdx < 0 ? 0 : listIdx;
             //tile chooser panel rect
             Rectangle tcpr = tcpc.TileChooserPanel.Bounds;
 
@@ -115,14 +128,13 @@ namespace MonkeyPaste
             return new Rectangle(x, tp, ts, ts);
         }
         public override void Update() {
-            TilePanel.Bounds = GetBounds();
+            FlipPanel.Bounds = GetBounds();
             TilePanelSize = TilePanel.Size;
-            _fillGapPanel.Bounds = new Rectangle(TileContentController.GetBounds().X, (int)(TileTitlePanelController.GetBounds().Height / 2), TileContentController.GetBounds().Width, TileContentController.GetBounds().Height);
-            
+
             TileTitlePanelController.Update();
             TileContentController.Update();
 
-            TilePanel.Invalidate();
+            FlipPanel.Refresh();
         }
         public void AnimateTileY(int finalY, int duration, int delay, EasingDelegate easing) {
             TilePanel.Animate(
@@ -139,32 +151,61 @@ namespace MonkeyPaste
         private void TileHeaderExpandButtonController_ButtonClickedEvent(object sender,EventArgs e) {
             ExpandButtonClickedEvent(this,e);
         }
-        
-        public void SetState(MpTilePanelStateType newState) {
-            if(newState == MpTilePanelStateType.Hidden) {
-                TilePanel.Visible = false;
+        public void Focus(bool isFocused) {
+            if(isFocused) {
+                TilePanel.Focus();
+                //FlipPanel.BackColor = Properties.Settings.Default.TileBorderSelectedColor;
+                TilePanel.FlatBorderColor = Properties.Settings.Default.TileBorderSelectedColor;
+                TileTitlePanelController.TileTitlePanel.Style = BeveledPanel.AdvancedPanel.BevelStyle.Flat;
+                TileTitlePanelController.TileTitlePanel.FlatBorderColor = Properties.Settings.Default.TileBorderSelectedColor;
+                //TileTitlePanelController.TileTitleTextBoxController.TileTitleLabel.ForeColor = Properties.Settings.Default.TileBorderSelectedColor;
+                TileContentController.ScrollPanelController.ShowScrollbars();
+                SetState(MpTilePanelStateType.Focused);
             } else {
-                TilePanel.Visible = true;
-            }
-            if (newState == MpTilePanelStateType.HoverSelected) {
-                TilePanel.FlatBorderColor = Properties.Settings.Default.TileBorderSelectedColor;
-                TileContentController.ScrollPanelController.ShowScrollbars();
-            }
-            else if (newState == MpTilePanelStateType.HoverUnselected) {
-                TilePanel.FlatBorderColor = Properties.Settings.Default.TileBorderHoverColor;
-                TileContentController.ScrollPanelController.ShowScrollbars();
-            }
-            else if(newState == MpTilePanelStateType.Unselected) {
                 TilePanel.FlatBorderColor = Color.Transparent;
-                TileContentController.ScrollPanelController.HideScrollbars();
-            } else if(newState == MpTilePanelStateType.Selected) {
-                TilePanel.FlatBorderColor = Properties.Settings.Default.TileBorderSelectedColor;
-                TileContentController.ScrollPanelController.HideScrollbars();
-            } else if(newState == MpTilePanelStateType.Scrolling) {
-                TileContentController.ScrollPanelController.ShowScrollbars();
+                TileTitlePanelController.TileTitlePanel.Style = BeveledPanel.AdvancedPanel.BevelStyle.Raised;
+                TileTitlePanelController.TileTitlePanel.FlatBorderColor = Color.Transparent;
+                //TileTitlePanelController.TileTitleTextBoxController.TileTitleLabel.ForeColor = Color.White;
+                //TileContentController.ScrollPanelController.HideScrollbars();
+                SetState(MpTilePanelStateType.Unfocused);
             }
-            _tilePanelState = newState;
+        }
+        public void Hover(bool isOver) {
+            if(_tilePanelState == MpTilePanelStateType.Focused) {
+                return;
+            }
+            if(isOver) {
+                TilePanel.FlatBorderColor = Properties.Settings.Default.TileBorderHoverColor;
+                //FlipPanel.BackColor = Properties.Settings.Default.TileBorderHoverColor;
+                TileTitlePanelController.TileTitlePanel.Style = BeveledPanel.AdvancedPanel.BevelStyle.Flat;
+                TileTitlePanelController.TileTitlePanel.FlatBorderColor = Properties.Settings.Default.TileBorderHoverColor;
+                //TileTitlePanelController.TileTitleTextBoxController.TileTitleLabel.ForeColor = Properties.Settings.Default.TileBorderHoverColor;
+                TileContentController.ScrollPanelController.ShowScrollbars();
+                SetState(MpTilePanelStateType.Hover);
+            } else {
+                TilePanel.FlatBorderColor = Color.Transparent;
+                TileTitlePanelController.TileTitlePanel.Style = BeveledPanel.AdvancedPanel.BevelStyle.Raised;
+                TileTitlePanelController.TileTitlePanel.FlatBorderColor = Color.Transparent;
+                //TileTitlePanelController.TileTitleTextBoxController.TileTitleLabel.ForeColor = Color.White;
+                //TileContentController.ScrollPanelController.HideScrollbars();
+                SetState(MpTilePanelStateType.Unfocused);
+            }
+        }
+        public void Hide() {
+            TilePanel.Visible = false;
 
+            SetState(MpTilePanelStateType.Hidden);
+        }
+        public void Show() {
+            TilePanel.Visible = true;
+
+            SetState(MpTilePanelStateType.Unfocused);
+        }
+        public void Drag() {
+            SetState(MpTilePanelStateType.Dragging);
+        }
+        private void SetState(MpTilePanelStateType newState) {
+            _tilePanelState = newState;
             Update();
         }
         #region Hotkeys
@@ -175,7 +216,7 @@ namespace MonkeyPaste
                 _enterHook = new MpKeyboardHook();
                 _enterHook.RegisterHotKey(ModifierKeys.None, Keys.Enter);
                 _enterHook.KeyPressed += (s,e) => {
-                    MpCommandManager.Instance.ClipboardCommander.PasteCopyItem(CopyItem);
+                    MpApplication.Instance.DataModel.ClipboardManager.PasteCopyItem(CopyItem);
                 };
             }
         }
@@ -194,11 +235,10 @@ namespace MonkeyPaste
         None = 0,
         Hidden,
         Disabled,
-        Unselected,
+        Unfocused,
         Scrolling,
         Dragging,
-        HoverSelected,
-        HoverUnselected,
-        Selected,
+        Hover,
+        Focused,
     }
 }

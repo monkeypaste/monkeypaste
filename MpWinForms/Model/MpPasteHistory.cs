@@ -42,12 +42,12 @@ namespace MonkeyPaste {
                 DestAppId = _destApp.appId;
                 //MpSingletonController.Instance.GetMpData().AddMpApp(_destApp);
             }
-            if(MpAppManager.Instance.DataModel.Db.NoDb) {
+            if(MpApplication.Instance.DataModel.Db.NoDb) {
                 PasteHistoryId = ++TotalPasteHistoryCount;
                 return;
             }
-            MpAppManager.Instance.DataModel.Db.ExecuteNonQuery("insert into MpPasteHistory(fk_MpCopyItemId,fk_MpClientId,fk_MpAppId,PasteDateTime) values (" + CopyItemId + "," + MpAppManager.Instance.DataModel.Db.Client.ClientId +","+DestAppId+ ",'" + PasteDateTime.ToString("yyyy-MM-dd HH:mm:ss") +"');");
-            PasteHistoryId = MpAppManager.Instance.DataModel.Db.GetLastRowId("MpPasteHistory","pk_MpPasteHistoryId");
+            MpApplication.Instance.DataModel.Db.ExecuteNonQuery("insert into MpPasteHistory(fk_MpCopyItemId,fk_MpClientId,fk_MpAppId,PasteDateTime) values (" + CopyItemId + "," + MpApplication.Instance.DataModel.Db.Client.ClientId +","+DestAppId+ ",'" + PasteDateTime.ToString("yyyy-MM-dd HH:mm:ss") +"');");
+            PasteHistoryId = MpApplication.Instance.DataModel.Db.GetLastRowId("MpPasteHistory","pk_MpPasteHistoryId");
         }
 
     }

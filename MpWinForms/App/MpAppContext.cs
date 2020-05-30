@@ -17,7 +17,7 @@ namespace MonkeyPaste {
         public MpAppContext() {
             InitializeContext();
             ExitApp = () => ExitAppCore();
-            MpAppManager.Instance.Init();
+            MpApplication.Instance.Init();
         }
         public void ExitAppCore() {
             Console.WriteLine("Application exiting " + DateTime.Now.ToString());

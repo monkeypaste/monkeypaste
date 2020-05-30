@@ -66,39 +66,39 @@ namespace MonkeyPaste {
             DialogResult confirmResetResult = MessageBox.Show("Are you sure you want to reset ALL your data?","Reset?",MessageBoxButtons.YesNo,MessageBoxIcon.Warning,MessageBoxDefaultButton.Button2,MessageBoxOptions.DefaultDesktopOnly);
 
             if(confirmResetResult == DialogResult.Yes) {
-                MpAppManager.Instance.DataModel.Db.ResetDb();
+                MpApplication.Instance.DataModel.Db.ResetDb();
             }
              //((MpLogFormPanelController)Find("MpLogFormPanelController")).InitTileControllerList();
         }
 
         private void OpenDbFolderButton_Click(object sender,EventArgs e) {
-            if(!System.IO.File.Exists(MpAppManager.Instance.DataModel.Db.DbPath)) {
-                throw new Exception("OpenDbFolder exception: Db file or folder does not exist " + MpAppManager.Instance.DataModel.Db.DbPath);
+            if(!System.IO.File.Exists(MpApplication.Instance.DataModel.Db.DbPath)) {
+                throw new Exception("OpenDbFolder exception: Db file or folder does not exist " + MpApplication.Instance.DataModel.Db.DbPath);
             }
-            System.Diagnostics.Process.Start("explorer.exe",string.Format("/select,\"{0}\"",MpAppManager.Instance.DataModel.Db.DbPath));
+            System.Diagnostics.Process.Start("explorer.exe",string.Format("/select,\"{0}\"",MpApplication.Instance.DataModel.Db.DbPath));
         }
 
         private void MoveDbButton_Click(object sender,EventArgs e) {
             FolderBrowserDialog setNewDirectoryDialog = new FolderBrowserDialog() {
                 Description = "Select new location for data file",
                 ShowNewFolderButton = true,
-                SelectedPath = Path.GetDirectoryName(MpAppManager.Instance.DataModel.Db.DbPath),
+                SelectedPath = Path.GetDirectoryName(MpApplication.Instance.DataModel.Db.DbPath),
                 //RootFolder = Environment.SpecialFolder.Personal
             };
             DialogResult newDataDirectoryResult = setNewDirectoryDialog.ShowDialog();
             if(newDataDirectoryResult == DialogResult.OK) {
-                string newDbPath = setNewDirectoryDialog.SelectedPath + Path.GetFileName(MpAppManager.Instance.DataModel.Db.DbPath);
+                string newDbPath = setNewDirectoryDialog.SelectedPath + Path.GetFileName(MpApplication.Instance.DataModel.Db.DbPath);
                 try {
-                    MpAppManager.Instance.DataModel.Db.CloseDb();
-                    File.Move(MpAppManager.Instance.DataModel.Db.DbPath,newDbPath);
+                    MpApplication.Instance.DataModel.Db.CloseDb();
+                    File.Move(MpApplication.Instance.DataModel.Db.DbPath,newDbPath);
                 } 
                 catch(Exception ex) {
-                    Console.WriteLine("MoveDb exception from path "+ MpAppManager.Instance.DataModel.Db.DbPath+" to new path "+ newDbPath+" : " + ex.ToString());
+                    Console.WriteLine("MoveDb exception from path "+ MpApplication.Instance.DataModel.Db.DbPath+" to new path "+ newDbPath+" : " + ex.ToString());
                 }
 
-                MpAppManager.Instance.DataModel.Db.DbPath = newDbPath;
+                MpApplication.Instance.DataModel.Db.DbPath = newDbPath;
 
-                MpRegistryHelper.Instance.SetValue("DBPath",MpAppManager.Instance.DataModel.Db.DbPath);
+                MpRegistryHelper.Instance.SetValue("DBPath",MpApplication.Instance.DataModel.Db.DbPath);
             }
         }
 
@@ -114,7 +114,7 @@ namespace MonkeyPaste {
                 List<MpCopyItem> newCopyItems = new List<MpCopyItem>();
                 try {
                     //import copyitems
-                    newCopyItems = MpAppManager.Instance.DataModel.Db.GetCopyItems(importDbPath);
+                    newCopyItems = MpApplication.Instance.DataModel.Db.GetCopyItems(importDbPath);
                     var tileChooserController = (MpTileChooserPanelController)Find("MpTileChooserPanelController");
                     foreach(MpCopyItem nci in newCopyItems) {
                         //clear all pk's since merging to a new database

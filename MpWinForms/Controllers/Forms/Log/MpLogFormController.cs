@@ -7,9 +7,8 @@ using System.Numerics;
 using System.Windows.Forms;
 using NonInvasiveKeyboardHookLibrary;
 
-namespace MonkeyPaste
-{
-    public class MpLogFormController : MpControlController {
+namespace MonkeyPaste {
+    public class MpLogFormController : MpController {
         public MpLogFormPanelController LogFormPanelController { get; set; }
         public MpDragTilePanelController DragTilePanelController { get; set; }
 
@@ -36,7 +35,21 @@ namespace MonkeyPaste
                 Bounds = GetBounds(),
                 TransparencyKey = Color.Fuchsia,
                 BackColor = Color.Fuchsia
-            };
+            };          
+
+            LogFormPanelController = new MpLogFormPanelController(this);
+            LogForm.Controls.Add(LogFormPanelController.LogFormPanel);
+
+            DefineEvents();
+        }
+        public override void Update() {
+            
+            LogForm.Bounds = GetBounds();
+
+            LogFormPanelController.Update();
+            LogForm.Refresh();
+        }
+        public override void DefineEvents() {
             LogForm.FormClosing += (sender, e) => {
                 HideLogForm();
                 e.Cancel = true;
@@ -50,39 +63,28 @@ namespace MonkeyPaste
             LogForm.Deactivate += (sender, e) => {
                 HideLogForm();
             };
-            LogForm.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;           
-
-            LogFormPanelController = new MpLogFormPanelController(this);
-            LogForm.Controls.Add(LogFormPanelController.LogFormPanel);
+            LogForm.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
             LogFormPanelController.TileChooserPanelController.StateChangedEvent += (s, e) => {
-                if(e.NewState == MpTileChooserPanelStateType.Scrolling) {
+                if (e.NewState == MpTileChooserPanelStateType.Scrolling) {
                     _isScrolling = true;
                     DeactivateHotKeys();
-                } else {
+                }
+                else {
                     _isScrolling = false;
                     _isLMouseDown = false;
                     ActivateHotKeys();
                 }
             };
-            Update();
-            ShowLogForm();
-            HideLogForm();       
         }
-        
-        public override void Update() {
-            LogForm.Bounds = GetBounds();
 
-            LogFormPanelController.Update();
-            LogForm.Invalidate();
-        }
         #region HotKeys
         public void ActivateHotKeys() {
             ActivateEscKey();
-            ActivateMouseListener();
+            //ActivateMouseListener();
         }
         public void DeactivateHotKeys() {
             DeactivateEscKey();
-            DeactivateMouseListener();
+            //DeactivateMouseListener();
         }
         public void ActivateMouseListener() {
             _mouseHook = Hook.GlobalEvents();
@@ -90,8 +92,7 @@ namespace MonkeyPaste
             _mouseHook.MouseDown += _mouseHook_MouseDown;
             _mouseHook.MouseUp += _mouseHook_MouseUp;
             _mouseHook.MouseClick += _mouseHook_MouseClick;
-        }      
-
+        }
         public void DeactivateMouseListener() {
             if(_mouseHook == null) {
                 return;
@@ -186,23 +187,23 @@ namespace MonkeyPaste
                     _canResize = false;
                 }
                 //check if mouse hover over tiles
-                foreach (MpTilePanelController citc in LogFormPanelController.TileChooserPanelController.TileControllerList) {
-                    Rectangle tileRect = citc.TilePanel.RectangleToScreen(citc.TilePanel.ClientRectangle);
-                    if (tileRect.Contains(e.Location) || citc.TilePanel.ClientRectangle.Contains(e.Location)) {
-                        if (citc == LogFormPanelController.TileChooserPanelController.SelectedTilePanelController) {
-                            citc.SetState(MpTilePanelStateType.HoverSelected);
-                        }
-                        else {
-                            citc.SetState(MpTilePanelStateType.HoverUnselected);
-                        }
-                    }
-                    else if (citc == LogFormPanelController.TileChooserPanelController.SelectedTilePanelController) {
-                        citc.SetState(MpTilePanelStateType.Selected);
-                    }
-                    else {
-                        citc.SetState(MpTilePanelStateType.Unselected);
-                    }
-                }
+                //foreach (MpTilePanelController citc in LogFormPanelController.TileChooserPanelController.TileControllerList) {
+                //    Rectangle tileRect = citc.TilePanel.RectangleToScreen(citc.TilePanel.ClientRectangle);
+                //    if (tileRect.Contains(e.Location) || citc.TilePanel.ClientRectangle.Contains(e.Location)) {
+                //        if (citc == LogFormPanelController.TileChooserPanelController.SelectedTilePanelController) {
+                //            citc.SetState(MpTilePanelStateType.HoverSelected);
+                //        }
+                //        else {
+                //            citc.SetState(MpTilePanelStateType.HoverUnselected);
+                //        }
+                //    }
+                //    else if (citc == LogFormPanelController.TileChooserPanelController.SelectedTilePanelController) {
+                //        citc.SetState(MpTilePanelStateType.Selected);
+                //    }
+                //    else {
+                //        citc.SetState(MpTilePanelStateType.Unselected);
+                //    }
+                //}
             }
         }
         #endregion
@@ -233,8 +234,7 @@ namespace MonkeyPaste
         }
         public override Rectangle GetBounds() {
            return MpSingleton.Instance.ScreenManager.GetScreenWorkingAreaWithMouse();
-        }
-        
+        }        
         private void LogForm_Resize(object sender, EventArgs e) {
             Update();
         }

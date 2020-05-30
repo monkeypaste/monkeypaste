@@ -27,6 +27,10 @@ namespace MonkeyPaste {
             var prop = control.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
             prop.SetValue(control, enabled, null);
         }
+        public static IEnumerable<T> GetAll<T>(this Control control) {
+            var controls = control.Controls.Cast<Control>();
+            return controls.SelectMany(ctrl => ctrl.GetAll<T>()).Concat(controls.OfType<T>());
+        }
     }
     public class MpHelperSingleton {
         private static readonly Lazy<MpHelperSingleton> lazy = new Lazy<MpHelperSingleton>(() => new MpHelperSingleton());

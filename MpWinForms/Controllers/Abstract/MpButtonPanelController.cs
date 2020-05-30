@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpButtonPanelController : MpControlController {
+    public class MpButtonPanelController : MpController {
         public MpButton ButtonPanel { get; set; }
 
         public delegate void ButtonClick(object sender, EventArgs e);
@@ -19,7 +19,7 @@ namespace MonkeyPaste {
         public delegate void ButtonLeave(object sender, EventArgs e);
         public event ButtonLeave ButtonLeaveEvent;
 
-        public MpButtonPanelController(MpControlController p) : base(p) {
+        public MpButtonPanelController(MpController p) : base(p) {
 
         }
 

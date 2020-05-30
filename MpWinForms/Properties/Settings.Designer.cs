@@ -259,7 +259,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.05")]
         public float TileFontSizeRatio {
             get {
                 return ((float)(this["TileFontSizeRatio"]));

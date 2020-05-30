@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpScrollPanelController : MpControlController {
+    public class MpScrollPanelController : MpController {
         public MpScrollbarPanelController VScrollbarPanelController { get; set; }
         public MpScrollbarPanelController HScrollbarPanelController { get; set; }
 
@@ -15,7 +15,7 @@ namespace MonkeyPaste {
 
         public Panel ScrollPanel { get; set; }
 
-        public MpScrollPanelController(MpCopyItem ci,MpControlController parent) : base(parent) {
+        public MpScrollPanelController(MpCopyItem ci,MpController parent) : base(parent) {
             ScrollPanel = new Panel() {
                 AutoScroll = false,
                 AutoSize = false,
@@ -29,39 +29,31 @@ namespace MonkeyPaste {
 
             VScrollbarPanelController = new MpScrollbarPanelController(this, TileContentControlController.TileContentControl,false);
             ScrollPanel.Controls.Add(VScrollbarPanelController.ScrollbarPanel);
+            
+            HScrollbarPanelController = new MpScrollbarPanelController(this, TileContentControlController.TileContentControl, true);
+            ScrollPanel.Controls.Add(HScrollbarPanelController.ScrollbarPanel);
+
+            DefineEvents();
+        }
+
+        public override void DefineEvents() {
             VScrollbarPanelController.ScrollContinueEvent += (s, e) => {
                 Point offset = TileContentControlController.Offset;
-                offset.Y += e.ScrollAmount;
+                offset.Y += -e.ScrollAmount;
                 TileContentControlController.Offset = offset;
             };
-            HScrollbarPanelController = new MpScrollbarPanelController(this, TileContentControlController.TileContentControl, true);
+
             HScrollbarPanelController.ScrollContinueEvent += (s, e) => {
                 Point offset = TileContentControlController.Offset;
                 offset.X += -e.ScrollAmount;
                 TileContentControlController.Offset = offset;
             };
-            ScrollPanel.Controls.Add(HScrollbarPanelController.ScrollbarPanel);           
         }
-
         public override Rectangle GetBounds() {
-            //    //tile panel controller
-            //    var tpc = ((MpTilePanelController)Parent);
-            //    //tile title height
-            //    int tth = tpc.TileTitlePanelController.GetBounds().Height;
-            //    //tile  rect
-            //    Rectangle tr = tpc.GetBounds();
-            //    //control width
-            //    int cw = (int)((float)tr.Width * Properties.Settings.Default.TileItemPadWidthRatio);
-            //    //adjust for scrollbar
-            //    cw = (int)(cw * Properties.Settings.Default.TileItemScrollBarThicknessRatio);
-            //    //itemcontrol padding
-            //    int icp = (int)((tr.Width-cw)/2);
-            //    //control height
-            //    int ch = tr.Height - (icp * 2) - tth;
-            //    return new Rectangle(0, 0, cw, ch);
-            //tile content panel rect
+            //tile  rect
+            int p = ((MpTilePanelController)Parent.Parent).TilePanel.EdgeWidth + ((MpTilePanelController)Parent.Parent).TilePanel.ShadowShift;
             Rectangle tcpr = ((MpTileContentPanelController)Parent).GetBounds();
-            return new Rectangle(0, 0, tcpr.Width, tcpr.Height);
+            return new Rectangle(0,0, tcpr.Width, tcpr.Height);
         }
 
         public override void Update() {
@@ -74,14 +66,14 @@ namespace MonkeyPaste {
             VScrollbarPanelController.ScrollbarPanel.BringToFront();
             HScrollbarPanelController.ScrollbarPanel.BringToFront();
 
-            ScrollPanel.Invalidate();
+            ScrollPanel.Refresh();
         }
 
         public void ShowScrollbars() {
             //scroll panel size
-            Size sps = ScrollPanel.Size;
+            Size sps = GetBounds().Size;
             //tile content control size
-            Size tccs = TileContentControlController.TileContentControl.Size;
+            Size tccs = TileContentControlController.GetBounds().Size;
 
             if(tccs.Height > sps.Height) {
                 VScrollbarPanelController.ScrollbarPanel.Visible = true;

@@ -25,7 +25,7 @@ namespace MonkeyPaste {
         private int _r, _g, _b,_a;
 
         public MpColor(int colorId) {
-            DataTable dt = MpAppManager.Instance.DataModel.Db.Execute("select * from MpColor where pk_MpColorId=" + colorId);
+            DataTable dt = MpApplication.Instance.DataModel.Db.Execute("select * from MpColor where pk_MpColorId=" + colorId);
             if(dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
@@ -51,17 +51,17 @@ namespace MonkeyPaste {
         }
         public override void WriteToDatabase() {
             if(ColorId == 0) {
-                DataTable dt = MpAppManager.Instance.DataModel.Db.Execute("select * from MpColor where R=" + _r + " and G=" + _g + " and B=" + _b + " and A=" + _a);
+                DataTable dt = MpApplication.Instance.DataModel.Db.Execute("select * from MpColor where R=" + _r + " and G=" + _g + " and B=" + _b + " and A=" + _a);
                 if(dt != null && dt.Rows.Count > 0) {
                     ColorId = Convert.ToInt32(dt.Rows[0]["pk_MpColorId"].ToString());
                 }
                 else {
-                    MpAppManager.Instance.DataModel.Db.ExecuteNonQuery("insert into MpColor(R,G,B,A) values(" + _r + "," + _g + "," + _b + "," + _a + ")");
-                    ColorId = MpAppManager.Instance.DataModel.Db.GetLastRowId("MpColor","pk_MpColorId");
+                    MpApplication.Instance.DataModel.Db.ExecuteNonQuery("insert into MpColor(R,G,B,A) values(" + _r + "," + _g + "," + _b + "," + _a + ")");
+                    ColorId = MpApplication.Instance.DataModel.Db.GetLastRowId("MpColor","pk_MpColorId");
                 }
             }
             else {
-                MpAppManager.Instance.DataModel.Db.ExecuteNonQuery("update MpColor set R=" + _r + ", G=" + _g + ", B=" + _b + ", A=" + _a + " where pk_MpColorId=" + ColorId);
+                MpApplication.Instance.DataModel.Db.ExecuteNonQuery("update MpColor set R=" + _r + ", G=" + _g + ", B=" + _b + ", A=" + _a + " where pk_MpColorId=" + ColorId);
             }
         }
         private void MapDataToColumns() {

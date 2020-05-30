@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {    
     
-    public class MpScrollbarPanelController : MpControlController {
+    public class MpScrollbarPanelController : MpController {
         public MpScrollbarGripPanelController ScrollbarGripControlController { get; set; }
 
         public Panel ScrollbarPanel { get; set; }
@@ -22,42 +22,42 @@ namespace MonkeyPaste {
         private Point _startDragPoint = Point.Empty;
         private bool _isScrolling = false;
 
-        public MpScrollbarPanelController(MpControlController parent, Control controlToScroll,bool isHorizontal) : base(parent) {
+        public MpScrollbarPanelController(MpController parent, Control controlToScroll,bool isHorizontal) : base(parent) {
            _isHorizontal = isHorizontal;
-
             ScrollbarPanel = new Panel() {
                 AutoSize = false,
                 AutoScroll = false,
                 Visible = false,
                 Bounds = GetBounds(),
-                BackColor = Properties.Settings.Default.TileItemScrollBarBgColor
+                BackColor = Properties.Settings.Default.TileItemScrollBarBgColor,
+                Margin = new Padding(0),
+                Padding = new Padding(0)
             };
             ScrollbarPanel.DoubleBuffered(true);
 
             ScrollbarGripControlController = new MpScrollbarGripPanelController(this,controlToScroll,isHorizontal);
             ScrollbarPanel.Controls.Add(ScrollbarGripControlController.GripPanel);
-
+            
+            DefineEvents();
+        }
+        public override void DefineEvents() {
             ScrollbarGripControlController.GripPanel.MouseDown += (s, e) => {
                 _startDragPoint = e.Location;
                 _isScrolling = true;
                 ScrollStartEvent(this, new ScrollEventArgs(0));
             };
             ScrollbarGripControlController.GripPanel.MouseMove += (s, e) => {
-                if(_isScrolling) {
+                if (_isScrolling) {
                     int lastOffset = ScrollbarGripControlController.Offset;
-                    if(_isHorizontal) {
-                        //float or = ScrollbarGripControlController.GetOffsetRatio();
+                    if (_isHorizontal) {
                         int dx = (int)((float)(e.Location.X - _startDragPoint.X));
                         Cursor.Current = Cursors.Hand;
                         ScrollbarGripControlController.Offset += dx;
-                        Console.WriteLine("Scroll Delta X: " + dx);
-                    } else {
-                        //float or = ScrollbarGripControlController.GetOffsetRatio();
+                    }
+                    else {
                         int dy = (int)((float)(e.Location.Y - _startDragPoint.Y));
                         Cursor.Current = Cursors.Hand;
                         ScrollbarGripControlController.Offset += dy;
-                        ScrollContinueEvent(this, new ScrollEventArgs(dy));
-                        Console.WriteLine("Scroll Delta Y: " + dy);
                     }
                     ScrollContinueEvent(this, new ScrollEventArgs(ScrollbarGripControlController.Offset - lastOffset));
                 }
@@ -68,8 +68,23 @@ namespace MonkeyPaste {
 
                 ScrollEndEvent(this, new ScrollEventArgs(0));
             };
+            ScrollbarPanel.MouseUp += (s, e) => {
+                _startDragPoint = e.Location;
+                //_isScrolling = true;
+                int lastOffset = ScrollbarGripControlController.Offset;
+                if (_isHorizontal) {
+                    int dx = (int)((float)(e.Location.X - ScrollbarGripControlController.GripPanel.Location.X));
+                    Cursor.Current = Cursors.Hand;
+                    ScrollbarGripControlController.Offset += dx;
+                }
+                else {
+                    int dy = (int)((float)(e.Location.Y - ScrollbarGripControlController.GripPanel.Location.Y));
+                    Cursor.Current = Cursors.Hand;
+                    ScrollbarGripControlController.Offset += dy;
+                }
+                ScrollContinueEvent(this, new ScrollEventArgs(ScrollbarGripControlController.Offset - lastOffset));
+            };
         }
-        
         public override Rectangle GetBounds() {
             //scrollable  rect
             Rectangle sr = ((MpScrollPanelController)Parent).GetBounds();
@@ -90,7 +105,7 @@ namespace MonkeyPaste {
 
             ScrollbarGripControlController.Update();
             ScrollbarGripControlController.GripPanel.BringToFront();
-            ScrollbarPanel.Invalidate();
+            ScrollbarPanel.Refresh();
         }
     }
     public class ScrollEventArgs : EventArgs {

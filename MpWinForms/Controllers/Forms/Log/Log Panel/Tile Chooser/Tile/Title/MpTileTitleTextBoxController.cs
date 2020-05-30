@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {
 
-    public class MpTileTitleTextBoxController : MpControlController {
+    public class MpTileTitleTextBoxController : MpController {
         public TextBox TileTitleTextBox { get; set; }
         public MpShadowLabel TileTitleLabel { get; set; }
 
@@ -115,7 +115,9 @@ namespace MonkeyPaste {
         }
         private void EditMode() {
             //((MpLogFormPanelController)Find(typeof(MpLogFormPanelController))).DeactivateHotKeys();
-            TitleModeChangedEvent(this, new TileTitleEventArgs(true));
+            if(TitleModeChangedEvent != null) {
+                TitleModeChangedEvent(this, new TileTitleEventArgs(true));
+            }
             ActivateHotKeys();
 
             TileTitleLabel.Visible = false;
@@ -130,7 +132,9 @@ namespace MonkeyPaste {
             DeactivateHotKeys();
 
             //((MpLogFormController)Find(typeof(MpLogFormController))).ActivateHotKeys();
-            TitleModeChangedEvent(this, new TileTitleEventArgs(false));
+            if(TitleModeChangedEvent != null) {
+                TitleModeChangedEvent(this, new TileTitleEventArgs(false));
+            }
 
             TileTitleLabel.Visible = true;
             TileTitleTextBox.Visible = false;

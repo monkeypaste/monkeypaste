@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpTilePanel : BeveledPanel.AdvancedPanel{
+    public class MpTilePanel : BeveledPanel.AdvancedPanel {
         private bool _visible = true;
         public new bool Visible {
             get {

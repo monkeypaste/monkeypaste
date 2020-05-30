@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace MonkeyPaste {
     public class MpColorButtonPanelController : MpButtonPanelController {
 
-        public MpColorButtonPanelController(MpControlController p) : base(p) {
+        public MpColorButtonPanelController(MpController p) : base(p) {
 
         }
         public override Rectangle GetBounds() {

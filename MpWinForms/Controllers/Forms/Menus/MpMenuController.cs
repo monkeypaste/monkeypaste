@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MonkeyPaste.App.TaskBar.Forms.Menus {
-    class MpMenuController {
+namespace MonkeyPaste {
+    public class MpMenuController {
     }
 }

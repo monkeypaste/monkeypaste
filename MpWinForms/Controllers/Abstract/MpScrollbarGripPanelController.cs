@@ -19,11 +19,6 @@ namespace MonkeyPaste {
             }
             set {
                 if(_offset != value) {
-                    //int diff = value-_offset;
-                    ////delta offset (normalized for item size)
-                    //int doffset = (_isHorizontal) ?
-                    //    (int)(((float)_itemControl.Width / (float)GetGripLength()) * (float)diff) :
-                    //    (int)(((float)_itemControl.Height / (float)GetGripLength()) * (float)diff);
                     _offset = value;
                     if (_offset < 0) {
                         _offset = 0;
@@ -59,6 +54,10 @@ namespace MonkeyPaste {
                 BackColor = Properties.Settings.Default.TileItemScrollBarGripInactiveColor
             };
             GripPanel.DoubleBuffered(true);
+
+            DefineEvents();
+        }
+        public override void DefineEvents() {
             GripPanel.MouseHover += (s, e) => {
                 GripPanel.BackColor = Properties.Settings.Default.TileItemScrollBarGripActiveColor;
                 Cursor.Current = Cursors.Hand;

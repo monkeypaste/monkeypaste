@@ -19,7 +19,7 @@ namespace MonkeyPaste {
                 AutoSize = false
             };
             bool altRowColor = false;
-            List<MpApp> excludedAppList = (List<MpApp>)MpAppManager.Instance.DataModel.Db.GetExcludedAppList();
+            List<MpApp> excludedAppList = (List<MpApp>)MpApplication.Instance.DataModel.Db.GetExcludedAppList();
             foreach(MpApp ea in excludedAppList) {
                 MpExcludedAppPanelController neac = new MpExcludedAppPanelController(this, ea,altRowColor ? Properties.Settings.Default.ExcludedAppRowColor2:Properties.Settings.Default.ExcludedAppRowColor1);
                 ExcludedAppPanelControllerList.Add(neac);

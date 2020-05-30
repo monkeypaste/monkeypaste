@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpLogMenuPanelController : MpControlController {
+    public class MpLogMenuPanelController : MpController {
         public Panel LogMenuPanel { get; set; }
 
         public MpLogMainMenuPanelController LogMainMenuPanelController { get; set; }

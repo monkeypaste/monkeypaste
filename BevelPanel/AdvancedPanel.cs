@@ -2,11 +2,11 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using wdi.ui;
 
 namespace BeveledPanel {
     public class AdvancedPanel : Panel {
         #region Variables
-
         /// <summary>Panel border style.</summary>
         public enum BevelStyle {
             /// <summary>Lowered border.</summary>
@@ -16,35 +16,24 @@ namespace BeveledPanel {
             /// <summary>Thin border.</summary>
             Flat
         }
-
         public enum ShadowMode {
             /// <summary>Specifies a shodow from upper left to lower right.</summary>
             ForwardDiagonal = 0,
-
             /// <summary>Specifies a surrounded shadow.</summary>
             Surrounded = 1,
-
             /// <summary>Specifies a dropped shadow.</summary>
             Dropped = 2
-
         }
-
         public enum PanelGradientMode {
             /// <summary>Specifies a gradient from upper right to lower left.</summary>
             BackwardDiagonal = 3,
-
             /// <summary>Specifies a gradient from upper left to lower right.</summary>
             ForwardDiagonal = 2,
-
             /// <summary>Specifies a gradient from left to right.</summary>
             Horizontal = 0,
-
             /// <summary>Specifies a gradient from top to bottom.</summary>
             Vertical = 1
         }
-
-
-
         Color _startColor = Color.FromArgb(232, 238, 249);
         Color _endColor = Color.FromArgb(168, 192, 234);
         private Color _borderColor = Color.FromArgb(102, 102, 102);
@@ -63,8 +52,6 @@ namespace BeveledPanel {
         private Color edgeColor2;
         private BevelStyle _style = BevelStyle.Flat;
         private ShadowMode _shadowStyle = ShadowMode.ForwardDiagonal;
-
-
 
         /// <summary>
         /// Gets or sets the style of the shadow.
@@ -157,7 +144,6 @@ namespace BeveledPanel {
                 Invalidate();
             }
         }
-
         /// <summary>
         /// Border color in flat mode
         /// </summary>
@@ -169,8 +155,6 @@ namespace BeveledPanel {
                 Invalidate();
             }
         }
-
-
         /// <summary>
         /// Gets or sets the background gradient mode
         /// </summary>
@@ -182,7 +166,6 @@ namespace BeveledPanel {
                 Invalidate();
             }
         }
-
         /// <summary>
         /// Gets or sets the corner round radius
         /// </summary>
@@ -194,7 +177,6 @@ namespace BeveledPanel {
                 Invalidate();
             }
         }
-
         public bool RoundedTop {
             get { return _roundedTop; }
             set {
@@ -210,7 +192,6 @@ namespace BeveledPanel {
             }
         }
         #endregion
-
         public AdvancedPanel() {
             this.Size = new Size(200, 50);
             this.Paint += this.AdvancedPanel_Paint;
@@ -221,22 +202,17 @@ namespace BeveledPanel {
             SetStyle(ControlStyles.UserPaint, true);
             this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
         }
-
         public Rectangle GetChildBounds() {
             return new Rectangle(Location.X + EdgeWidth, Location.Y + EdgeWidth, Size.Width - ShadowShift, Size.Height - ShadowShift);
         }
         #region Paint
-
         private void AdvancedPanel_Paint(object sender, PaintEventArgs e) {
             var panelRect = new Rectangle();
-
             if (_shadowShift > 0) {
                 DrawShadow(e.Graphics);
             }
-
             switch (_shadowStyle) {
                 case ShadowMode.ForwardDiagonal:
-
                     panelRect = new Rectangle(
                         0,
                         0,
@@ -272,7 +248,6 @@ namespace BeveledPanel {
                     break;
             }
         }
-
         private void DrawRectLowered(Graphics graphics, Rectangle rect) {
             var darknessEnd = _endColor.GetSaturation();
             var darknessBegin = _startColor.GetSaturation();
@@ -285,14 +260,11 @@ namespace BeveledPanel {
             rect.Inflate(-_edgeWidth, -_edgeWidth);
             DrawPanelStyled(graphics, rect);
         }
-
-
-
         private void DrawRect(Graphics graphics, Rectangle rect) {
 
             // Border rectangle
             using (Brush backgroundGradientBrush = new SolidBrush(_borderColor)) {
-                RoundedRectangle.DrawFilledRoundedRectangle(graphics, backgroundGradientBrush,rect, _rectRadius, _roundedTop, _roundedBottom);
+                RoundedRectangle.DrawFilledRoundedRectangle(graphics, backgroundGradientBrush, rect, _rectRadius);
             }
 
             rect.Inflate(-_edgeWidth, -_edgeWidth);
@@ -300,12 +272,9 @@ namespace BeveledPanel {
             // Panel main rectangle
             using (Brush backgroundGradientBrush = new LinearGradientBrush(
                 rect, _startColor, _endColor, (LinearGradientMode)this.BackgroundGradientMode)) {
-                RoundedRectangle.DrawFilledRoundedRectangle(graphics, backgroundGradientBrush,rect, _rectRadius, _roundedTop, _roundedBottom);
+                RoundedRectangle.DrawFilledRoundedRectangle(graphics, backgroundGradientBrush, rect, _rectRadius);
             }
-
         }
-
-
         private void DrawRectRaised(Graphics graphics, Rectangle rect) {
             var darknessEnd = _endColor.GetSaturation();
             var darknessBegin = _startColor.GetSaturation();
@@ -319,8 +288,6 @@ namespace BeveledPanel {
             DrawPanelStyled(graphics, rect);
 
         }
-
-
         /// <summary>
         /// Fill in the panel edges
         /// </summary>
@@ -358,10 +325,9 @@ namespace BeveledPanel {
                                                 edgeColor2,
                                                 LinearGradientMode.ForwardDiagonal)) {
                 edgeBrush.Blend = edgeBlend;
-                RoundedRectangle.DrawFilledRoundedRectangle(g, edgeBrush, edgeRect, _rectRadius,_roundedTop,_roundedBottom);
+                RoundedRectangle.DrawFilledRoundedRectangle(g, edgeBrush, edgeRect, _rectRadius);
             }
         }
-
         /// <summary>
         /// Fill in the main panel with gradient
         /// </summary>
@@ -370,11 +336,10 @@ namespace BeveledPanel {
         protected virtual void DrawPanelStyled(Graphics g, Rectangle rect) {
             using (Brush pgb = new LinearGradientBrush(rect, _startColor, _endColor,
                 (LinearGradientMode)this.BackgroundGradientMode)) {
-                RoundedRectangle.DrawFilledRoundedRectangle(g, pgb, rect, _rectRadius, _roundedTop, _roundedBottom);
+                RoundedRectangle.DrawFilledRoundedRectangle(g, pgb, rect, _rectRadius);
             }
 
         }
-
         private void DrawShadow(Graphics graphics) {
             Rectangle rect = new Rectangle();
             GraphicsPath path;
@@ -392,10 +357,10 @@ namespace BeveledPanel {
             }
 
             if (_shadowStyle != ShadowMode.Dropped) {
-                path = RoundedRectangle.DrawRoundedRectanglePath(rect, _rectRadius, _roundedTop, _roundedBottom);
+                path = RoundedRectangle.DrawRoundedRectanglePath(rect, _rectRadius);
             }
             else {
-                path = RoundedRectangle.DrawRoundedRectanglePath(rect, _rectRadius, true, _roundedTop, _roundedBottom);
+                path = RoundedRectangle.DrawRoundedRectanglePath(rect, _rectRadius, true);
             }
 
             using (PathGradientBrush shadowBrush = new PathGradientBrush(path)) {
@@ -416,9 +381,6 @@ namespace BeveledPanel {
             }
 
         }
-
-
         #endregion
-
     }
 }

@@ -3,8 +3,7 @@ using System.Collections.Specialized;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace MonkeyPaste
-{
+namespace MonkeyPaste {
     public class MpClipboardManager : Form {
         private MpLastWindowWatcher _lastWindowWatcher;
         private IntPtr _nextClipboardViewer;

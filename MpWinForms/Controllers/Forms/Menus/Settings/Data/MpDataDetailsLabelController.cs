@@ -53,16 +53,16 @@ namespace MonkeyPaste {
             switch(detailId) {
                 //# of entries | file size
                 case 0:
-                    info = MpCopyItem.TotalCopyItemCount + " total items | " + (new FileInfo(MpAppManager.Instance.DataModel.Db.DbPath).Length / 1024f) / 1024f + "MB";
+                    info = MpApplication.Instance.DataModel.CopyItemList.Count + " total items | " + (new FileInfo(MpApplication.Instance.DataModel.Db.DbPath).Length / 1024f) / 1024f + "MB";
                     break;
                 //Encryption: On/Off | Device Count:
                 case 1:
                     info = "Encryption: ";
-                    info += MpAppManager.Instance.DataModel.Db.DbPassword == string.Empty ? "Off" : "On" + " | 1 connected devices";
+                    info += MpApplication.Instance.DataModel.Db.DbPassword == string.Empty ? "Off" : "On" + " | 1 connected devices";
                     break;
                 //Created: Date/Time | Modified Date/Time
                 case 2:
-                    info = "Created " + new FileInfo(MpAppManager.Instance.DataModel.Db.DbPath).CreationTime.ToString() +" | Modified: "+ new FileInfo(MpAppManager.Instance.DataModel.Db.DbPath).LastWriteTime.ToString();
+                    info = "Created " + new FileInfo(MpApplication.Instance.DataModel.Db.DbPath).CreationTime.ToString() +" | Modified: "+ new FileInfo(MpApplication.Instance.DataModel.Db.DbPath).LastWriteTime.ToString();
                     break;
                 default:
                     info = "UNKNOWN";

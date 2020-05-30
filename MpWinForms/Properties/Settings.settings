@@ -81,7 +81,7 @@
       <Value Profile="(Default)">22</Value>
     </Setting>
     <Setting Name="TileFontSizeRatio" Type="System.Single" Scope="Application">
-      <Value Profile="(Default)">0.1</Value>
+      <Value Profile="(Default)">0.05</Value>
     </Setting>
     <Setting Name="TileItemBgColor" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">White</Value>

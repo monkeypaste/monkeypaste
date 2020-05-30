@@ -35,7 +35,7 @@ namespace MonkeyPaste {
             lfc.LogForm.Controls.Add(TilePanelController.TilePanel);
             TilePanelController.TilePanel.Location = lfc.LogForm.PointToClient(_startTilePoint);
 
-            TilePanelController.SetState(MpTilePanelStateType.Dragging);
+            TilePanelController.Drag();
 
             TilePanelController.TilePanel.BringToFront();
             TilePanelController.TilePanel.Invalidate();

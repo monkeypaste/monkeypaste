@@ -23,10 +23,10 @@ namespace MonkeyPaste {
             LogoutDateTime = null;
         }
         public MpClient(int clientId) {
-            if(MpAppManager.Instance.DataModel.Db.NoDb) {
+            if(MpApplication.Instance.DataModel.Db.NoDb) {
                 return;
             }
-            DataTable dt = MpAppManager.Instance.DataModel.Db.Execute("select * from MpClient where MpClientId=" + clientId);
+            DataTable dt = MpApplication.Instance.DataModel.Db.Execute("select * from MpClient where MpClientId=" + clientId);
             if(dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
@@ -44,17 +44,17 @@ namespace MonkeyPaste {
         }
 
         public override void WriteToDatabase() {
-            if(Ip4Address == null || Ip4Address == string.Empty || MpAppManager.Instance.DataModel.Db.NoDb) {
+            if(Ip4Address == null || Ip4Address == string.Empty || MpApplication.Instance.DataModel.Db.NoDb) {
                 Console.WriteLine("MpTag Error, cannot create nameless tag");
                 return;
             }
             if(ClientId == 0) {
-                MpAppManager.Instance.DataModel.Db.ExecuteNonQuery("insert into MpClient(fk_MpPlatformId,Ip4Address,AccessToken,LoginDateTime) values(" + PlatformId + ",'" + Ip4Address + "','" + AccessToken + "','"+ this.LoginDateTime.ToString("yyyy-MM-dd HH:mm:ss")+"')");
-                ClientId = MpAppManager.Instance.DataModel.Db.GetLastRowId("MpClient","pk_MpClientId");
+                MpApplication.Instance.DataModel.Db.ExecuteNonQuery("insert into MpClient(fk_MpPlatformId,Ip4Address,AccessToken,LoginDateTime) values(" + PlatformId + ",'" + Ip4Address + "','" + AccessToken + "','"+ this.LoginDateTime.ToString("yyyy-MM-dd HH:mm:ss")+"')");
+                ClientId = MpApplication.Instance.DataModel.Db.GetLastRowId("MpClient","pk_MpClientId");
             }
             else {
                 LogoutDateTime = DateTime.Now;
-                MpAppManager.Instance.DataModel.Db.ExecuteNonQuery("update MpClient set LogoutDateTime='" + LogoutDateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") + "'");
+                MpApplication.Instance.DataModel.Db.ExecuteNonQuery("update MpClient set LogoutDateTime='" + LogoutDateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") + "'");
             }
         }
         private void MapDataToColumns() {

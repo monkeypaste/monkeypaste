@@ -65,7 +65,7 @@ namespace MonkeyPaste.View {
             this.deleteDbButton.Click += DeleteDbButton_Click;
         }
         private void DeleteDbButton_Click(object sender,EventArgs e) {
-            MpAppManager.Instance.DataModel.Db.DeleteDb();
+            MpApplication.Instance.DataModel.Db.DeleteDb();
         }
 
         private void SettingsForm_Deactivate(object sender,EventArgs e) {
@@ -111,7 +111,7 @@ namespace MonkeyPaste.View {
 
         private void resetDbButtonClicked(object sender,EventArgs e) {
             // TODO Add confirmation here
-            MpAppManager.Instance.DataModel.Db.ResetDb();
+            MpApplication.Instance.DataModel.Db.ResetDb();
         }
     }
 }

@@ -32,12 +32,12 @@ namespace MonkeyPaste {
             bool isNew = false;
 
             if(this.SettingId == 0) {
-                if(MpAppManager.Instance.DataModel.Db.NoDb) {
+                if(MpApplication.Instance.DataModel.Db.NoDb) {
                     this.SettingId = ++TotalSettingCount;
                     MapDataToColumns();
                     return;
                 }
-                DataTable dt = MpAppManager.Instance.DataModel.Db.Execute("select * from MpSetting where SettingName='" + this.SettingName + "'");
+                DataTable dt = MpApplication.Instance.DataModel.Db.Execute("select * from MpSetting where SettingName='" + this.SettingName + "'");
                 if(dt.Rows.Count > 0) {
                     this.SettingId = Convert.ToInt32(dt.Rows[0]["pk_MpSettingId"]);
                     this.SettingName = dt.Rows[0]["SettingName"].ToString();
@@ -45,13 +45,13 @@ namespace MonkeyPaste {
                     isNew = false;
                 }
                 else {
-                    MpAppManager.Instance.DataModel.Db.ExecuteNonQuery("insert into MpSetting(SettingName,SettingValue) values ('" + this.SettingName + "','" + this.SettingValue + "')");
-                    this.SettingId = MpAppManager.Instance.DataModel.Db.GetLastRowId("MpSetting","pk_MpSettingId");
+                    MpApplication.Instance.DataModel.Db.ExecuteNonQuery("insert into MpSetting(SettingName,SettingValue) values ('" + this.SettingName + "','" + this.SettingValue + "')");
+                    this.SettingId = MpApplication.Instance.DataModel.Db.GetLastRowId("MpSetting","pk_MpSettingId");
                     isNew = false;
                 }
             }
             else {
-                MpAppManager.Instance.DataModel.Db.ExecuteNonQuery("update MpSetting set SettingName='" + this.SettingName + "',SettingValue='" + this.SettingValue + "' where pk_MpSettingId=" + this.SettingId);
+                MpApplication.Instance.DataModel.Db.ExecuteNonQuery("update MpSetting set SettingName='" + this.SettingName + "',SettingValue='" + this.SettingValue + "' where pk_MpSettingId=" + this.SettingId);
             }
             if(isNew) {
                 MapDataToColumns();

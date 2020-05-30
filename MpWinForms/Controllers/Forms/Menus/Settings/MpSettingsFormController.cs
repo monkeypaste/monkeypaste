@@ -31,8 +31,8 @@ namespace MonkeyPaste {
             AppPreferencesPanelController = new MpAppPreferencesPanelController(this);
             SettingsForm.Controls.Add(AppPreferencesPanelController.AppPreferencesPanel);
 
-            DataSettingsPanelController = new MpDataSettingsPanelController(this);
-            SettingsForm.Controls.Add(DataSettingsPanelController.DataSettingsPanel);
+            //DataSettingsPanelController = new MpDataSettingsPanelController(this);
+            //SettingsForm.Controls.Add(DataSettingsPanelController.DataSettingsPanel);
 
             //ExcludedAppListPanelController = new MpExcludedAppListPanelController(this);
             //SettingsForm.Controls.Add(ExcludedAppListPanelController.ExcludedAppListPanel);
@@ -41,7 +41,7 @@ namespace MonkeyPaste {
         }  
         public override void Update() {
             AppPreferencesPanelController.Update();
-            DataSettingsPanelController.Update();
+           // DataSettingsPanelController.Update();
             //ExcludedAppListPanelController.Update();
         }
         

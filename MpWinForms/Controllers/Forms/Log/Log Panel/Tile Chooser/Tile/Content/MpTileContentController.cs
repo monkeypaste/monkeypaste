@@ -4,28 +4,23 @@ using System.Drawing;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpTileContentPanelController : MpControlController {
+    public class MpTileContentPanelController : MpController {
         public MpScrollPanelController ScrollPanelController { get; set; }
         
         public Panel TileContentPanel { get; set; }
-        
-
-        private Point _lastMouseLoc = Point.Empty;
-        private Point _itemControlPanelOrigin = Point.Empty;
-
+       
         public MpTileContentPanelController(MpCopyItem ci,MpController Parent) : base(Parent) {            
             TileContentPanel = new Panel() {
                 AutoSize = false,
                 AutoScroll = false,
                 Bounds = GetBounds(),
-                BackColor = Color.Brown
+                BackColor = Color.Pink
             };
             TileContentPanel.DoubleBuffered(true);
 
             ScrollPanelController = new MpScrollPanelController(ci, this);
             TileContentPanel.Controls.Add(ScrollPanelController.ScrollPanel);
         }
-        //pub
         public override Rectangle GetBounds() {
             //tile panel controller
             var tpc = ((MpTilePanelController)Parent);
@@ -33,7 +28,7 @@ namespace MonkeyPaste {
             int tth = tpc.TileTitlePanelController.GetBounds().Height;
             //tile  rect
             Rectangle tr = tpc.GetBounds();
-            int p = tpc.TilePanel.EdgeWidth;
+            int p = tpc.TilePanel.EdgeWidth + tpc.TilePanel.ShadowShift;
             return new Rectangle(p,tth, tr.Width-(p*2), tr.Height-tth-p);
         }
         public override void Update() {

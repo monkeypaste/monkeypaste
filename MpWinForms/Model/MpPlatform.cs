@@ -34,7 +34,7 @@ namespace MonkeyPaste {
             Version = version;
         }
         public MpPlatform(int platformId) {
-            DataTable dt = MpAppManager.Instance.DataModel.Db.Execute("select * from MpPlatform where pk_MpPlatformId=" + platformId);
+            DataTable dt = MpApplication.Instance.DataModel.Db.Execute("select * from MpPlatform where pk_MpPlatformId=" + platformId);
             if(dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
@@ -50,19 +50,19 @@ namespace MonkeyPaste {
         }
 
         public override void WriteToDatabase() {
-            if(Version == null || Version == string.Empty || MpAppManager.Instance.DataModel.Db.NoDb) {
+            if(Version == null || Version == string.Empty || MpApplication.Instance.DataModel.Db.NoDb) {
                 Console.WriteLine("MpPlatform Error, cannot create nameless tag");
                 return;
             }
             if(PlatformId == 0) {
-                DataTable dt = MpAppManager.Instance.DataModel.Db.Execute("select * from MpPlatform where pk_MpPlatformId=" + PlatformId);
+                DataTable dt = MpApplication.Instance.DataModel.Db.Execute("select * from MpPlatform where pk_MpPlatformId=" + PlatformId);
                 //if tag already exists just populate this w/ its data
                 if(dt != null && dt.Rows.Count > 0) {
                     PlatformId = Convert.ToInt32(dt.Rows[0]["pk_MpPlatformId"].ToString());
                 }
                 else {
-                    MpAppManager.Instance.DataModel.Db.ExecuteNonQuery("insert into MpPlatform(fk_MpPlatformTypeId,fk_MpDeviceTypeId,Version) values(" + (int)PlatformType + "," + (int)DeviceType + ",'" + Version + "')");
-                    PlatformId = MpAppManager.Instance.DataModel.Db.GetLastRowId("MpPlatform","pk_MpPlatformId");
+                    MpApplication.Instance.DataModel.Db.ExecuteNonQuery("insert into MpPlatform(fk_MpPlatformTypeId,fk_MpDeviceTypeId,Version) values(" + (int)PlatformType + "," + (int)DeviceType + ",'" + Version + "')");
+                    PlatformId = MpApplication.Instance.DataModel.Db.GetLastRowId("MpPlatform","pk_MpPlatformId");
                 }
             }
             else {

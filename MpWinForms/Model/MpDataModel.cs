@@ -36,9 +36,6 @@ namespace MonkeyPaste {
             set {
                 if(_copyItemList != value) {
                     _copyItemList = value;
-                    _copyItemList.CollectionChanged += (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) => {
-
-                    };
                 }
             }
         }
@@ -51,9 +48,6 @@ namespace MonkeyPaste {
             set {
                 if (_excludedAppList != value) {
                     _excludedAppList = value;
-                    _excludedAppList.CollectionChanged += (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) => {
-
-                    };
                 }
             }
         }
@@ -66,9 +60,6 @@ namespace MonkeyPaste {
             set {
                 if (_settingList != value) {
                     _settingList = value;
-                    _settingList.CollectionChanged += (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) => {
-
-                    };
                 }
             }
         }
@@ -81,16 +72,19 @@ namespace MonkeyPaste {
             set {
                 if (_tagist != value) {
                     _tagist = value;
-                    _tagist.CollectionChanged += (object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) => {
-
-                    };
                 }
             }
         }
+        public MpClipboardManager ClipboardManager { get; set; }
 
         public MpDataModel() {
             ClearData();
             Db = new MpDb(); //inits not NoDb=true
+            ClipboardManager = new MpClipboardManager();
+            ClipboardManager.ClipboardChangedEvent += (s, ci) => {
+                CopyItemList.Add(ci);
+            };
+            ClipboardManager.Init();
         }
         private void ClearData() {
             CopyItemList = new ObservableCollection<MpCopyItem>();
@@ -98,18 +92,24 @@ namespace MonkeyPaste {
             SettingList = new ObservableCollection<MpSetting>();
             TagList = new ObservableCollection<MpTag>();
         }
-        public bool ConnectToDatabase(string dbPath, string dbPassword, string identityToken, string accessToken) {
+        public void LoadAllData(string dbPath, string dbPassword, string identityToken = null, string accessToken = null) {
             Db = new MpDb(dbPath, dbPassword, identityToken, accessToken);
             if(!Db.IsLoaded) {
                 Db.NoDb = true;
-                ClearData();
             } else {
-                CopyItemList = new ObservableCollection<MpCopyItem>(Db.GetCopyItems() as List<MpCopyItem>);
-                ExcludedAppList = new ObservableCollection<MpApp>(Db.GetExcludedAppList() as List<MpApp>);
-                SettingList = new ObservableCollection<MpSetting>(Db.GetAppSettingList() as List<MpSetting>);
-                TagList = new ObservableCollection<MpTag>(Db.GetTags() as List<MpTag>);
+                foreach(MpCopyItem ci in Db.GetCopyItems()) {
+                    CopyItemList.Add(ci);
+                }
+                foreach(MpApp a in Db.GetExcludedAppList()) {
+                    ExcludedAppList.Add(a);
+                }
+                foreach(MpSetting s in Db.GetAppSettingList()) {
+                    SettingList.Add(s);
+                }
+                foreach(MpTag t in Db.GetTags()) {
+                    TagList.Add(t);
+                }
             }
-            return Db.IsLoaded;
         }
     }
 }
