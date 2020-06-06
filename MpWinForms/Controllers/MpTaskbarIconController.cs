@@ -24,38 +24,42 @@ namespace MonkeyPaste {
         private bool _skipAuth = true;
 
         public MpTaskbarIconController(MpController parent = null) : base(parent) {
-            InitTrayMenu();                       
+            InitTrayMenu();
             //HelpForm = new MpHelpForm();
-            //SettingsForm = new MpSettingsForm();
+            //SettingsForm = new MpSettingsForm();            
                        
             LogFormController = new MpLogFormController(this);
+
+            DefineEvents();
+            ActivateHotKeys();
+        }
+        public override void DefineEvents() {
             LogFormController.LogForm.VisibleChanged += (s, e) => {
-                if(((Form)s).Visible) {
+                if (((Form)s).Visible) {
                     DeactivateHotKeys();
-                }
-                else {
+                } else {
                     ActivateHotKeys();
                 }
             };
-            ActivateHotKeys();
         }
         public void PrepareUI() { 
-            LogFormController.Update();
+            foreach(Control c in LogFormController.LogForm.GetAll<Control>()) {
+                c.DoubleBuffered(true);
+            }
+            LogFormController.LogFormPanelController.LogMenuPanelController.LogSubMenuPanelController.TileTagChooserPanelController.SelectedTagPanelController = LogFormController.LogFormPanelController.LogMenuPanelController.LogSubMenuPanelController.TileTagChooserPanelController.GetHistoryTagPanelController();
+            LogFormController.ShowLogForm();
         }
-        public void ActivateHotKeys() {
-            if(_showMainFormHook != null) {
+        public override void ActivateHotKeys() {
+            if (_showMainFormHook != null) {
                 DeactivateHotKeys();
             }
             _showMainFormHook = new MpKeyboardHook();
             _showMainFormHook.RegisterHotKey(ModifierKeys.Control, Keys.D);
-            _showMainFormHook.KeyPressed += (s,e) => {
+            _showMainFormHook.KeyPressed += (s, e) => {
                 LogFormController.ShowLogForm();
             };
-
             _mouseHook = Hook.GlobalEvents();
-            //_mouseHook.MouseDown += _mouseDownHook_MouseDown;
-            //_mouseHook.MouseUp += _upHook_MouseUp;
-            _mouseHook.MouseMove += (s,e) => {
+            _mouseHook.MouseMove += (s, e) => {
                 Rectangle sb = MpSingleton.Instance.ScreenManager.GetScreenWorkingAreaWithMouse();
                 Rectangle hr = new Rectangle(0, 0, sb.Width, Properties.Settings.Default.ShowLogHotRegionSize);
                 if (e.Location.Y < 5) {
@@ -63,7 +67,7 @@ namespace MonkeyPaste {
                 }
             };
         }
-        public void DeactivateHotKeys() {
+        public override void DeactivateHotKeys() {
             if (_showMainFormHook == null) {
                 return;
             }
@@ -75,13 +79,6 @@ namespace MonkeyPaste {
             _mouseHook = null;
         }      
         public override void Update() {}        
-        public void MouseUpHook_MouseEvent() {
-            Console.WriteLine("Mouse up event occured");
-                      
-        }
-        public void MouseHitScreenTopHook_MouseEvent() {
-            LogFormController.ShowLogForm();
-        }
         public void ToggleAppendModeHook_KeyPressed() {
             Properties.Settings.Default.IsAppendModeActive = !Properties.Settings.Default.IsAppendModeActive;
             //LogFormController.LogForm.Invoke((MethodInvoker)delegate {
@@ -269,7 +266,6 @@ namespace MonkeyPaste {
             TrayIcon.ContextMenuStrip.Hide();
             TrayIcon.ContextMenuStrip = null;
         }
-        private void ContextMenuStrip_Opening(object sender,System.ComponentModel.CancelEventArgs e) { }
-        
+        private void ContextMenuStrip_Opening(object sender,System.ComponentModel.CancelEventArgs e) { }        
     }
 }

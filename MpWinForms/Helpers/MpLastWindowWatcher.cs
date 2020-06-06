@@ -16,7 +16,7 @@ namespace MonkeyPaste
         private IntPtr _previousHandle;
 
         public MpLastWindowWatcher(IntPtr appHandle) {
-            //Process.GetCurrentProcess().Refresh();
+            //Process.GetCurrentProcess().Invalidate();
             _thisAppHandle = appHandle;
             _previousHandle = IntPtr.Zero;
             ThisAppPath = MpHelperSingleton.Instance.GetProcessPath(_thisAppHandle);

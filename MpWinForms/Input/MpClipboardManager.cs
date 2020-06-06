@@ -35,7 +35,6 @@ namespace MonkeyPaste {
 
         public void PasteCopyItem(MpCopyItem copyItem) {
             IgnoreNextClipboardEvent = true;
-            //MpCopyItem copyItem = LogFormPanelController.TileChooserPanelController.SelectedTilePanelController.CopyItem;
 
             if (copyItem.CopyItemType == MpCopyItemType.Text) {
                 Clipboard.SetData(DataFormats.Text, (string)copyItem.GetData());
@@ -44,11 +43,12 @@ namespace MonkeyPaste {
             } else if (copyItem.CopyItemType == MpCopyItemType.HTMLText) {
                 Clipboard.SetData(DataFormats.Text, (string)copyItem.GetData());
             } else if (copyItem.CopyItemType == MpCopyItemType.Image) {
-                Clipboard.SetImage((Image/*BitmapSource*/)copyItem.GetData());
+                Clipboard.SetImage((Image/*BitmapSource*/)MpHelperSingleton.Instance.ConvertByteArrayToImage((byte[])copyItem.GetData()));
             } else if (copyItem.CopyItemType == MpCopyItemType.FileList) {
                 Clipboard.SetFileDropList((StringCollection)copyItem.GetData());
             }
-            //WinApi.SetActiveWindow(ClipboardController.GetLastWindowWatcher().LastHandle);
+
+            //WinApi.SetActiveWindow(GetLastWindowWatcher().LastHandle);
             SendKeys.Send("^v");
 
             IgnoreNextClipboardEvent = false;

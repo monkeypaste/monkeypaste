@@ -27,8 +27,8 @@ namespace MonkeyPaste {
             //logform pad
             int lfp = (int)(lmpr.Width * Properties.Settings.Default.LogPadRatio); 
             SearchTextBox.Font = new Font(
-                Properties.Settings.Default.LogMenuSearchFont,
-                (int)((lmpr.Height-lfp-lfp)* Properties.Settings.Default.LogMenuSearchFontSizeRatio),
+                Properties.Settings.Default.SearchFont,
+                (int)((lmpr.Height-lfp-lfp)* Properties.Settings.Default.SearchFontSizeRatio),
                 GraphicsUnit.Pixel);
             SearchTextBox.SetBounds(lmpr.Height,lfp,(int)(lmpr.Width / 7),lmpr.Height - lfp - lfp);
             SearchTextBox.Invalidate();

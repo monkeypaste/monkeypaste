@@ -389,13 +389,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App\MpApplication.cs" />
+    <Compile Include="Application\MpApplication.cs" />
     <Compile Include="Controllers\Abstract\MpButtonPanelController.cs" />
     <Compile Include="Compatibility\GdkApi.cs" />
-    <Compile Include="Controllers\Abstract\MpScrollbarPanelController.cs" />
-    <Compile Include="Controllers\Abstract\MpScrollbarGripPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\MpScrollPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\MpTileContentControlController.cs" />
+    <Compile Include="Controllers\Abstract\MpEditableLabelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\MpResizeLogPanelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\ScrollPanel\MpScrollbarPanelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\ScrollPanel\MpScrollbarGripPanelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\ScrollPanel\MpScrollPanelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\ScrollPanel\MpTileContentControlController.cs" />
     <Compile Include="Controllers\Forms\Menus\MpToolStripMenuController.cs" />
     <Compile Include="Input\MpHotKey.cs" />
     <Compile Include="Input\MpKeyboardHook.cs" />
@@ -457,8 +459,8 @@
     <Compile Include="Model\MpModel.cs" />
     <Compile Include="Model\MpPasteHistory.cs" />
     <Compile Include="Helpers\MpHelperSingleton.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\MpFileListItemRowPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\MpTileContentController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\ScrollPanel\MpFileListItemRowPanelController.cs" />
+    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\MpTileContentPanelController.cs" />
     <Compile Include="Controllers\Forms\Log\MpLogFormController.cs" />
     <Compile Include="Input\MpClipboardManager.cs">
       <SubType>Form</SubType>
@@ -500,8 +502,14 @@
     <Compile Include="View\MpLogMainMenuSettingsButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="View\MpPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="View\MpSettingsForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\MpTextBox.cs">
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpTilePanel.cs">
       <SubType>Component</SubType>
@@ -536,19 +544,7 @@
     <Compile Include="View\MpShadowPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpTagLinkLabel.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="View\MpTileHeaderTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="View\MpTagTextBox.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="View\MpTagPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="View\MpTileBorderPanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpLogSubMenuPanel.cs">
@@ -564,18 +560,12 @@
     <Compile Include="Model\MpClient.cs" />
     <Compile Include="Model\MpColor.cs" />
     <Compile Include="Model\MpCopyItem.cs" />
-    <Compile Include="App\MpAppContext.cs" />
+    <Compile Include="Application\MpAppContext.cs" />
     <Compile Include="Model\MpDbObject.cs" />
     <Compile Include="Model\MpIcon.cs" />
     <Compile Include="Model\MpUser.cs" />
     <Compile Include="View\MpTileControl.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="View\MpTileChooserPanel.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="View\MpTileIconPanel.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="View\MpHelpForm.cs">
       <SubType>Form</SubType>
@@ -596,7 +586,7 @@
       <DependentUpon>MpIntroSlideShow.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\MpLastWindowWatcher.cs" />
-    <Compile Include="App\MpAppProgram.cs" />
+    <Compile Include="Application\MpAppProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\MpResizableBorderlessForm.cs">
       <SubType>Form</SubType>
@@ -774,7 +764,12 @@
   <ItemGroup>
     <None Include="Resources\transparent.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="monkeyIcon16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\MonkeySound1.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

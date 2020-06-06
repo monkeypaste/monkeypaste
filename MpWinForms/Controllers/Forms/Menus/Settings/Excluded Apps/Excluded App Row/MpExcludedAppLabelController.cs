@@ -28,12 +28,12 @@ namespace MonkeyPaste {
             //token panel rect
             Rectangle tpr = ((MpExcludedAppPanelController)Parent).ExcludedAppPanel.Bounds;
             //token panel height
-            float tph = (float)tpr.Height * Properties.Settings.Default.LogMenuTileTokenPanelHeightRatio;
+            float tph = (float)tpr.Height * Properties.Settings.Default.TagPanelHeightRatio;
             //token chooser pad
             int tcp = tpr.Height - (int)tph;
 
-            float fontSize = (float)tpr.Height * Properties.Settings.Default.LogMenuTileTokenFontSizeRatio;
-            ExcludedAppLabel.Font = new Font(Properties.Settings.Default.LogMenuTileTokenFont,fontSize,GraphicsUnit.Pixel);
+            float fontSize = (float)tpr.Height * Properties.Settings.Default.TagFontSizeRatio;
+            ExcludedAppLabel.Font = new Font(Properties.Settings.Default.TagFont,fontSize,GraphicsUnit.Pixel);
             ExcludedAppLabel.Size = TextRenderer.MeasureText(ExcludedAppLabel.Text+"  ",ExcludedAppLabel.Font);
             ExcludedAppLabel.Location = new Point((int)(fontSize/4.0f),-(int)(fontSize/6.0f));
 

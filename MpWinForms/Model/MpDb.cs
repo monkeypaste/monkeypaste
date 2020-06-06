@@ -66,7 +66,7 @@ namespace MonkeyPaste {
         }
         public void InitDb() {
             if(NoDb) {
-                Console.WriteLine("Skipping Db Init");
+                Console.WriteLine("Database exists, skipping Db creation");
                 return;
             }
             if(DbPath == null || DbPath == String.Empty || !Directory.Exists(Path.GetDirectoryName(DbPath)) || !File.Exists(DbPath)) {

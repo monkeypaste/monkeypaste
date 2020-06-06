@@ -8,20 +8,19 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {
     public class MpTagLabelController:MpController {
-        public MpTagLinkLabel TagLinkLabel { get; set; }
+        public LinkLabel TagLinkLabel { get; set; }
 
-        public MpTagLabelController(MpController parentController,string tokenText,Color tokenColor,bool _isEdit) : base(parentController) {
-            TagLinkLabel = new MpTagLinkLabel(((MpTagChooserPanelController)((MpTagPanelController)parentController).Parent).TagPanelControllerList.IndexOf(((MpTagPanelController)Parent))) {
-                TabIndex = 0,
+        public MpTagLabelController(MpController parentController,string tagText,Color tagColor,bool _isEdit) : base(parentController) {
+            TagLinkLabel = new LinkLabel() {
                 Visible = false,
                 Margin = Padding.Empty,
                 Padding = Padding.Empty,
                 Cursor = Cursors.Arrow,
-                BackColor = tokenColor,
+                BackColor = tagColor,
                 BorderStyle = BorderStyle.None,
                 TextAlign = ContentAlignment.MiddleLeft,
-                LinkColor = MpHelperSingleton.Instance.IsBright(tokenColor) ? Color.Black:Color.White,
-                Text = tokenText,
+                LinkColor = MpHelperSingleton.Instance.IsBright(tagColor) ? Color.Black:Color.White,
+                Text = tagText,
                 LinkBehavior = LinkBehavior.HoverUnderline                
             };
             TagLinkLabel.DoubleBuffered(true);
@@ -31,18 +30,21 @@ namespace MonkeyPaste {
             TagLinkLabel.Links.Add(link);
             
         }
-           public override void Update() {
-            //token panel rect
-            Rectangle tpr = ((MpTagPanelController)Parent).TagPanel.Bounds;
-            //token panel height
-            float tph = (float)tpr.Height * Properties.Settings.Default.LogMenuTileTokenPanelHeightRatio;
-            //token chooser pad
-            int tcp = tpr.Height - (int)tph;
+        public Font GetFont() {
+            //tag panel rect
+            Rectangle tpr = ((MpTagPanelController)Parent).GetBounds();
 
-            float fontSize = (float)tpr.Height * Properties.Settings.Default.LogMenuTileTokenFontSizeRatio;
-            TagLinkLabel.Font = new Font(Properties.Settings.Default.LogMenuTileTokenFont,fontSize,GraphicsUnit.Pixel);
-            TagLinkLabel.Size = TextRenderer.MeasureText(TagLinkLabel.Text+"  ",TagLinkLabel.Font);
-            TagLinkLabel.Location = new Point((int)(fontSize/4.0f),-(int)(fontSize/6.0f));
+            float fontSize = (float)tpr.Height * Properties.Settings.Default.TagFontSizeRatio;
+            fontSize = fontSize < 1.0f ? 10.0f : fontSize;
+            return new Font(Properties.Settings.Default.TagFont, fontSize, GraphicsUnit.Pixel);
+        }
+        public override Rectangle GetBounds() {
+            Size labelSize = TextRenderer.MeasureText(TagLinkLabel.Text , GetFont());
+            return new Rectangle(0,0, labelSize.Width, labelSize.Height);
+        }
+        public override void Update() {
+            TagLinkLabel.Bounds = GetBounds();
+            TagLinkLabel.Font = GetFont();
 
             TagLinkLabel.Invalidate();
         }

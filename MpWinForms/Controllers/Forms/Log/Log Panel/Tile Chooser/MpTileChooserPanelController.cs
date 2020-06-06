@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -9,11 +10,10 @@ using VisualEffects.Animations.Effects;
 using VisualEffects.Easing;
 
 namespace MonkeyPaste {
-
-    public class MpTileChooserPanelController : MpController    {
+    public class MpTileChooserPanelController : MpController,INotifyPropertyChanged    {
         public ObservableCollection<MpTilePanelController> TileControllerList { get; set; } = new ObservableCollection<MpTilePanelController>();
 
-        public MpTileChooserPanel TileChooserPanel { get; set; } = new MpTileChooserPanel(0);
+        public Panel TileChooserPanel { get; set; }
 
         private MpTilePanelController _selectedTilePanelController = null;
         public MpTilePanelController SelectedTilePanelController {
@@ -27,22 +27,43 @@ namespace MonkeyPaste {
             }
         }
 
-        private bool _isInitialLoad = true;
-
+        public ObservableCollection<MpTilePanelController> FocusedTilePanelControllerList = new ObservableCollection<MpTilePanelController>();
+        
         private MpTileChooserPanelStateType _tileChooserStateType = MpTileChooserPanelStateType.None;
         public MpTileChooserPanelStateType TileChooserStateType {
             get {
                 return _tileChooserStateType;
             }
         }
+
         public delegate void StateChanged(object sender, MpTileChooserPanelStateChangedEventArgs e);
         public event StateChanged StateChangedEvent;
 
+        public event PropertyChangedEventHandler PropertyChanged {
+            add {
+                ((INotifyPropertyChanged)FocusedTilePanelControllerList).PropertyChanged += value;
+            }
+
+            remove {
+                ((INotifyPropertyChanged)FocusedTilePanelControllerList).PropertyChanged -= value;
+            }
+        }
+
+        private bool _isDragging = false;
+        private Point _lastDragLoc = Point.Empty;
+        private int _offsetX = 0;
+
+        private bool _isInitialLoad = true;
+        private bool _isShiftDown = false;
+        private bool _isControlDown = false;
+
+        private IKeyboardMouseEvents _mouseHook;
+       
         public MpTileChooserPanelController(MpController Parent) : base(Parent) {
-            TileChooserPanel = new MpTileChooserPanel(0) {
+            TileChooserPanel = new Panel() {
                 Margin = Padding.Empty,
                 Padding = Padding.Empty,
-                BackColor = Properties.Settings.Default.LogPanelBgColor,
+                BackColor = Properties.Settings.Default.TileChooserBgColor,
                 Bounds = GetBounds(),
                 AutoSize = false
             };
@@ -50,13 +71,30 @@ namespace MonkeyPaste {
 
             DefineEvents();
         }
+        
         public override void DefineEvents() {
-            TileChooserPanel.MouseWheel += MpSingletonController.Instance.ScrollWheelListener;
+            TileChooserPanel.MouseWheel += (s, e) => {
+                _offsetX += (int)((float)e.Delta / 50.0f);
+                Update();
+            };
 
             MpApplication.Instance.DataModel.CopyItemList.CollectionChanged += (s, e) => {
                 foreach (MpCopyItem ci in e.NewItems) {
                     AddNewCopyItemPanel(ci);
                 }
+            };
+            ((MpLogFormPanelController)Parent).LogMenuPanelController.LogSubMenuPanelController.TileTagChooserPanelController.PropertyChanged += (s, e) => {
+                MpTag selectedTag = ((MpLogFormPanelController)Parent).LogMenuPanelController.LogSubMenuPanelController.TileTagChooserPanelController.SelectedTagPanelController.Tag;
+                foreach (MpTilePanelController tpc in TileControllerList) {
+                    if(selectedTag.IsLinkedWithCopyItem(tpc.CopyItem)) {
+                        tpc.Show();
+                    } else {
+                        tpc.Hide();
+                    }
+                }
+            };
+            TileChooserPanel.VisibleChanged += (s, e) => {
+                Console.WriteLine("Visibility chaged");
             };
         }
         public override Rectangle GetBounds() {
@@ -69,9 +107,8 @@ namespace MonkeyPaste {
             //tile chooser offset 
             int tco = ((MpTreeViewPanelController)Find(typeof(MpTreeViewPanelController))).TreeViewPanel.Right;
 
-            return new Rectangle(lfp + tco, lfp + lfmh, lfpr.Width - (lfp * 2), lfpr.Height - lfmh - (lfp * 2));
+            return new Rectangle(lfp + tco + _offsetX, lfp + lfmh, lfpr.Width - (lfp * 2), lfpr.Height - lfmh - (lfp * 2));
         }
-
         public void AddNewCopyItemPanel(MpCopyItem ci) {
             if (Properties.Settings.Default.IsAppendModeActive) {
                 if (MpSingletonController.Instance.AppendItem == null && ci.CopyItemType == MpCopyItemType.Text) {
@@ -84,19 +121,9 @@ namespace MonkeyPaste {
             }
             else {
                 ci.WriteToDatabase();
-                MpTag historyTag = null;
-                foreach (MpTag t in MpApplication.Instance.DataModel.TagList) {
-                    if (t.TagName == "History") {
-                        historyTag = t;
-                    }
-                }
-                if (historyTag != null) {
-                    historyTag.LinkWithCopyItem(ci);
-                }
-
+                ((MpLogFormPanelController)Parent).LogMenuPanelController.LogSubMenuPanelController.TileTagChooserPanelController.GetHistoryTagPanelController().Tag.LinkWithCopyItem(ci);
+                
                 MpTilePanelController newTileController = new MpTilePanelController(ci, this);
-                newTileController.CloseButtonClickedEvent += TilePanelController_CloseButtonClickedEvent;
-                newTileController.ExpandButtonClickedEvent += TIlePanelController_ExpandButtonClickedEvent;
                 newTileController.TileContentController.ScrollPanelController.VScrollbarPanelController.ScrollStartEvent += (s, e) => {
                     SelectTile(newTileController);
                     SetState(MpTileChooserPanelStateType.Scrolling);
@@ -111,37 +138,41 @@ namespace MonkeyPaste {
                 newTileController.TileContentController.ScrollPanelController.HScrollbarPanelController.ScrollEndEvent += (s, e) => {
                     SetState(MpTileChooserPanelStateType.None);
                 };
-                var childControls = newTileController.TilePanel.GetAll<Control>();
-                //horizontal scroll panel
-                var hsp = newTileController.TileContentController.ScrollPanelController.HScrollbarPanelController.ScrollbarPanel;
-                //horizontal scroll grip panel
-                var hsgp = newTileController.TileContentController.ScrollPanelController.HScrollbarPanelController.ScrollbarGripControlController.GripPanel;
-                //vertical scroll panel
-                var vsp = newTileController.TileContentController.ScrollPanelController.VScrollbarPanelController.ScrollbarPanel;
-                //vertical scroll grip panel
-                var vsgp = newTileController.TileContentController.ScrollPanelController.VScrollbarPanelController.ScrollbarGripControlController.GripPanel;
-                foreach (Control c in childControls) {
-                    if (c == hsp || c == hsgp || c == vsp || c == vsgp) {
-                        continue;
+                newTileController.TileContentController.ScrollPanelController.TileContentControlController.TileContentControl.MouseDown += (s, e) => {
+                    //tile chooser rect
+                    Rectangle tcr = TileChooserPanel.RectangleToScreen(TileChooserPanel.Bounds);
+                    if (TileChooserPanel.Bounds.Contains(e.Location)) {
+                        _isDragging = true;
+                        _lastDragLoc = e.Location;
                     }
-                    c.MouseEnter += (s, e) => newTileController.Hover(true);
-                    c.MouseLeave += (s, e) => newTileController.Hover(false);
-                    c.MouseClick += (s, e) => {
-                        SelectTile(newTileController);
-                        SelectedTilePanelController.FlipPanel.Flip();
-                    };
+                };
+                newTileController.TileContentController.ScrollPanelController.TileContentControlController.TileContentControl.MouseMove += (s, e) => {
+                    if (_isDragging) {
+                        _offsetX += (e.Location.X - _lastDragLoc.X);
+                        if (_offsetX > 0) {
+                            _offsetX = 0;
+                        }
+                        Update();
+                        _lastDragLoc = e.Location;
+                    }
+                };
+                newTileController.TileContentController.ScrollPanelController.TileContentControlController.TileContentControl.MouseUp += (s, e) => {
+                    _isDragging = false;
+                };
+                var childControls = newTileController.TilePanel.GetAll<Control>();
+                foreach (Control c in childControls) {
+                    c.MouseEnter += (s, e) => newTileController.Hover();
+                    c.MouseLeave += (s, e) => newTileController.Focus(newTileController.IsFocused);
+                    c.MouseClick += (s, e) => SelectTile(newTileController);
                 }
+                newTileController.TileContentController.ScrollPanelController.ShowScrollbars();
                 TileControllerList.Insert(0,newTileController);
-                TileChooserPanel.Controls.Add(newTileController.FlipPanel);
-
-                if(!_isInitialLoad) {
-                    Update();
-                }
+                TileChooserPanel.Controls.Add(newTileController.TilePanel);
+                
                 SelectTile(newTileController);
             }
             //Sort("CopyDateTime", false);
         }
-
         public override void Update() {
             _isInitialLoad = false;
             TileChooserPanel.Bounds = GetBounds();
@@ -150,7 +181,7 @@ namespace MonkeyPaste {
                 citc.Update();
             }
 
-            TileChooserPanel.Refresh();
+            TileChooserPanel.Invalidate();
         }
         public void BeginAnimation() {
             int t = 500;
@@ -173,20 +204,39 @@ namespace MonkeyPaste {
         }
         private void SetState(MpTileChooserPanelStateType newState) {            
             _tileChooserStateType = newState;
-            StateChangedEvent(this, new MpTileChooserPanelStateChangedEventArgs(_tileChooserStateType));
+            if(StateChangedEvent != null) {
+                StateChangedEvent(this, new MpTileChooserPanelStateChangedEventArgs(_tileChooserStateType));
+            }
             Update();
+        }
+        public bool ProcessKeyInput(Keys keyData) {
+             if (keyData == Keys.Enter || keyData == Keys.Return) {
+                Console.WriteLine("Enter key pressed");
+                if (SelectedTilePanelController != null) {
+                    ((MpLogFormController)Parent.Parent).HideLogForm();
+                    MpApplication.Instance.DataModel.ClipboardManager.PasteCopyItem(SelectedTilePanelController.CopyItem);
+                }
+                return true;
+            } else if (keyData == Keys.Tab) {
+                Console.WriteLine("Tab key pressed");
+                SelectNextTile();
+                return true;
+            } else if (keyData == (Keys.Shift | Keys.Tab)) {
+                Console.WriteLine("Tab shift pressed");
+                SelectPreviousTile();
+                return true;
+            }
+            return false;
         }
         public void SelectNextTile() {
-            SelectedTilePanelController = GetNextTilePanelController(SelectedTilePanelController);
-            ShowSelectedTilePanelController();
-            Update();
+            SelectTile(GetNextTilePanelController(SelectedTilePanelController));
+            //Update();
         }
         public void SelectPreviousTile() {
-            SelectedTilePanelController = GetPreviousTilePanelController(SelectedTilePanelController);
-            ShowSelectedTilePanelController();
-            Update();
+            SelectTile(GetPreviousTilePanelController(SelectedTilePanelController));
+           // Update();
         }
-        public void SelectTile(MpTilePanelController tpc) {
+        public void SelectTile(MpTilePanelController tpc,bool appendSelection = false) {
             //ignore if same tile
             if(tpc == SelectedTilePanelController) {
                 return;
@@ -199,7 +249,7 @@ namespace MonkeyPaste {
             SelectedTilePanelController = tpc;
             SelectedTilePanelController.Focus(true);
 
-            ((MpTagChooserPanelController)Find(typeof(MpTagChooserPanelController))).UpdateTagListState(_selectedTilePanelController.CopyItem);
+            ShowSelectedTilePanelController();
             Update();
         }
         private void ShowSelectedTilePanelController() {
@@ -218,7 +268,7 @@ namespace MonkeyPaste {
                 ox = -tl+p;
             }
             if(ox != 0) {
-                ScrollTiles(ox,true);
+                _offsetX += ox;
             }
         }
         private MpTilePanelController GetNextTilePanelController(MpTilePanelController tpc) {
@@ -271,47 +321,6 @@ namespace MonkeyPaste {
                 }
             }
             return -1;
-        }
-        public void ScrollTiles(int deltaX,bool forceValue = false) {
-            if(deltaX == 0) {
-                return;
-            }
-            //if(forceValue) {
-            //    MpTilePanelController.OffsetX += deltaX;
-            //} else {
-            //    MpTilePanelController.OffsetX += deltaX > 0.0f ? MpTilePanelController.TilePanelSize.Width : -MpTilePanelController.TilePanelSize.Width;//(int)((float)deltaX * Properties.Settings.Default.ScrollDampner);
-            //}
-            //MpSingletonController.Instance.ScrollWheelDelta = 0;
-            //var visibleTileControllerList = GetVisibleTilePanelControllerList();
-            //int tp = (int)(Properties.Settings.Default.TileChooserPadHeightRatio * TileChooserPanel.Bounds.Height);
-            //int rx = (visibleTileControllerList.Count-1) * TileChooserPanel.Height + tp;
-            //int cx = TileChooserPanel.Width - tp - TileChooserPanel.Height;
-
-            //if(MpTilePanelController.OffsetX > tp) {
-            //    MpTilePanelController.OffsetX = tp;
-            //} else if(MpTilePanelController.OffsetX < cx - rx && rx > cx) {
-            //    MpTilePanelController.OffsetX = cx - rx + tp;
-            //}
-            //foreach(MpTilePanelController tpc in visibleTileControllerList) {
-            //    tpc.Update();
-            //}
-            MpSingletonController.Instance.ScrollWheelDelta = 0;
-            int minx = -GetVisibleTileCount() * MpTilePanelController.TilePanelSize.Width;
-            MpTilePanelController.OffsetX += deltaX;
-            if(MpTilePanelController.OffsetX > 0)
-            {
-                MpTilePanelController.OffsetX = 0;
-            } else if(MpTilePanelController.OffsetX < minx)
-            {
-                MpTilePanelController.OffsetX = minx;
-            }
-            Update();
-        }
-        public void OnFormResize(Rectangle newBounds) {
-            if(TileChooserPanel != null) {
-                TileChooserPanel.Bounds = newBounds;
-                Update();
-            }
         }
         public int GetVisibleTileCount() {
             int count = 0;
@@ -372,36 +381,42 @@ namespace MonkeyPaste {
             Update();
             ShowSelectedTilePanelController();
         }
-        private void DeleteCopyItemPanel(MpTilePanelController tpc) {
+        public void DeleteFocusedTile() {
+            //tile to delete
+            var ttd = SelectedTilePanelController;
+            //new focused tile
+            MpTilePanelController nft = null;
             var vtl = GetVisibleTilePanelControllerList();
-            int dtpcIdx = vtl.IndexOf(tpc);
-            if(tpc == SelectedTilePanelController) {
+            int dtpcIdx = vtl.IndexOf(ttd);
+            if(ttd == SelectedTilePanelController) {
                 if(dtpcIdx == vtl.Count - 1) {
-                    if(vtl.Count == 1) {
-                        SelectedTilePanelController = null;
-                    } else {
-                        SelectedTilePanelController = vtl[dtpcIdx - 1];
+                    if(vtl.Count > 1) {
+                        nft = vtl[dtpcIdx - 1];
                     }
                 } else {
-                    SelectedTilePanelController = vtl[dtpcIdx + 1];
+                    nft = vtl[dtpcIdx + 1];
                 }
             }
-            TileControllerList.Remove(tpc);
-            TileChooserPanel.Controls.Remove(tpc.TilePanel);
-            Sort("CopyItemId",false);
-            tpc.CopyItem.DeleteFromDatabase();            
-            tpc.TilePanel.Dispose();
-            tpc = null;
-            Update();
+            TileControllerList.Remove(ttd);
+            TileChooserPanel.Controls.Remove(ttd.TilePanel);
+            //Sort("CopyItemId",false);
+            ttd.CopyItem.DeleteFromDatabase();            
+            ttd.TilePanel.Dispose();
+            ttd = null;
+            
+            if(nft != null) {
+                SelectTile(nft);
+            }
         }
-        private void TIlePanelController_ExpandButtonClickedEvent(object sender,EventArgs e) {
-            throw new NotImplementedException();
+        public override void ActivateHotKeys() {
+            
+            // _ctrlTabHook, _ctrlShiftTabHook
         }
+        public override void DeactivateHotKeys() {
+           
 
-        private void TilePanelController_CloseButtonClickedEvent(object sender,EventArgs e) {
-            DeleteCopyItemPanel((MpTilePanelController)sender);
+            //_ctrlTabHook, _ctrlShiftTabHook,
         }
-
         public void Sort(string sortBy,bool ascending) {
             if(ascending) {
                 TileControllerList.OrderBy(x => MpTypeHelper.GetPropertyValue(x.CopyItem, sortBy));

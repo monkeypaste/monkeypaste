@@ -20,13 +20,13 @@ namespace MonkeyPaste {
         public int TagId { get; set; }
         public int ColorId { get; set; }
         public string TagName { get; set; }
-        public MpColor MpColor { get; set; }
+        public MpColor TagColor { get; set; }
 
         public MpTag(string tagName,Color tagColor,MpTagType tagType = MpTagType.Custom) {
             TagName = tagName;
             TagType = tagType;
-            MpColor = new MpColor((int)tagColor.R,(int)tagColor.G,(int)tagColor.B,(int)tagColor.A);
-            ColorId = MpColor.ColorId;
+            TagColor = new MpColor((int)tagColor.R,(int)tagColor.G,(int)tagColor.B,(int)tagColor.A);
+            ColorId = TagColor.ColorId;
         }
         public MpTag(int tagId) {
             DataTable dt = MpApplication.Instance.DataModel.Db.Execute("select * from MpTag where pk_MpTagId=" + tagId);
@@ -42,7 +42,7 @@ namespace MonkeyPaste {
             TagType = (MpTagType)Convert.ToInt32(dr["fk_MpTagTypeId"].ToString());
             TagName = dr["TagName"].ToString();
             ColorId = Convert.ToInt32(dr["fk_MpColorId"].ToString());
-            MpColor = new MpColor(ColorId);
+            TagColor = new MpColor(ColorId);
         }
 
         public override void WriteToDatabase() {
@@ -57,9 +57,9 @@ namespace MonkeyPaste {
                     TagId = Convert.ToInt32(dt.Rows[0]["pk_MpTagId"].ToString());
                     if(dt.Rows[0]["fk_MpColorId"] != null) {
                         ColorId = Convert.ToInt32(dt.Rows[0]["fk_MpColorId"].ToString());
-                        MpColor = new MpColor(ColorId);
+                        TagColor = new MpColor(ColorId);
                     } else {
-                        ColorId = MpColor.ColorId;
+                        ColorId = TagColor.ColorId;
                     }
                 } else {
                     MpApplication.Instance.DataModel.Db.ExecuteNonQuery("insert into MpTag(fk_MpTagTypeId,TagName,fk_MpColorId) values(" + (int)TagType + ",'" + TagName + "'," + ColorId + ")");
@@ -83,7 +83,7 @@ namespace MonkeyPaste {
             }
             MpApplication.Instance.DataModel.Db.ExecuteNonQuery("insert into MpCopyItemTag(fk_MpCopyItemId,fk_MpTagId) values(" + ci.CopyItemId + "," + TagId + ")");
 
-            Console.WriteLine("Tag link created between tag " + TagId + " with copyitem " + ci.CopyItemId + " ignoring...");
+            Console.WriteLine("Tag link created between tag " + TagId + " with copyitem " + ci.CopyItemId);
         }
         public void UnlinkWithCopyItem(MpCopyItem ci) {
             if(!IsLinkedWithCopyItem(ci)) {

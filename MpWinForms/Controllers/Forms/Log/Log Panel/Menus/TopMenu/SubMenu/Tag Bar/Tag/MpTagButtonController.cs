@@ -9,56 +9,46 @@ using System.Windows.Forms;
 namespace MonkeyPaste {
     public class MpTagButtonController : MpController {
         public MpButton TagButton { get; set; }
-        public delegate void ButtonClicked(object sender,EventArgs e);
-        public event ButtonClicked ButtonClickedEvent;
 
-        public MpTagButtonController(MpController parentController,bool isNew) : base(parentController) {
+        public MpTagButtonController(MpController parentController) : base(parentController) {
             TagButton = new MpButton() {                    
                 Margin = new Padding(3),
                 Padding = Padding.Empty,
-                TabIndex = 1,
-                BackColor =((MpTagPanelController)Parent).TagPanel.BackColor,
+                BackColor = Properties.Settings.Default.TagAddTagButtonColor,
                 BorderStyle = BorderStyle.None,
                 SizeMode = PictureBoxSizeMode.StretchImage,
-                Image = isNew ? Properties.Resources.add2 : Properties.Resources.close2,
-                DefaultImage = isNew ? Properties.Resources.add2 : Properties.Resources.close2,
-                OverImage = isNew ? Properties.Resources.add : Properties.Resources.close,
-                DownImage = isNew ? Properties.Resources.add : Properties.Resources.close
+                Image = Properties.Resources.add2,
+                DefaultImage = Properties.Resources.add2,
+                OverImage = Properties.Resources.add,
+                DownImage = Properties.Resources.add
             };
             TagButton.DoubleBuffered(true);
-            TagButton.MouseHover += LogMenuTileTokenButton_MouseHover;
-            TagButton.MouseLeave += LogMenuTileTokenButton_MouseLeave;
-            TagButton.MouseClick += LogMenuTileTokenButton_MouseClick;
-        }       
 
-           public override void Update() {
-            //token panel rect
-            Rectangle tpr = ((MpTagPanelController)Parent).TagPanel.Bounds;
+            DefineEvents();
+        }
+        public override void DefineEvents() {
+            TagButton.MouseHover += (s, e) => {
+                TagButton.Image = TagButton.OverImage;
+            };
+            TagButton.MouseLeave += (s, e) => {
+                TagButton.Image = TagButton.DefaultImage;
+            };
+        }
+        public override Rectangle GetBounds() {
+            //tag chooser panel rect
+            Rectangle tcpr = ((MpTagChooserPanelController)Parent).GetBounds();
             //token panel height
-            float tph = (float)tpr.Height * Properties.Settings.Default.LogMenuTileTokenPanelHeightRatio;
+            int tph = (int)((float)tcpr.Height * Properties.Settings.Default.TagPanelHeightRatio);
             //token chooser pad
-            int tcp = tpr.Height - (int)tph;
-            //token textbox font size
-            int ttfs = (int)(tph * Properties.Settings.Default.LogMenuTileTokenPanelHeightRatio);
-            int h = tpr.Height;// (int)((float)tpr.Height * Properties.Settings.Default.LogMenuTileTokenFontSizeRatio);
-            int p = (int)(ttfs/4.0f);// (int)((float)(tpr.Height - h)/2.0f);
-            TagButton.Size = new Size(ttfs,ttfs);
-            TagButton.Location = new Point(tpr.Width - ttfs - p,(int)((float)p*0.5f));
+            int tcp = tcpr.Height - (int)tph;
+
+            return new Rectangle(tcpr.Right-tph-tcp,tcp,tph,tph);
+        }
+        public override void Update() {
+            TagButton.Bounds = GetBounds();
             TagButton.BringToFront();
 
             TagButton.Invalidate();
-        }
-
-        private void LogMenuTileTokenButton_MouseClick(object sender,MouseEventArgs e) {
-            ButtonClickedEvent(this,e);
-        }
-
-        private void LogMenuTileTokenButton_MouseLeave(object sender,EventArgs e) {
-            TagButton.Image = TagButton.DefaultImage;
-        }
-
-        private void LogMenuTileTokenButton_MouseHover(object sender,EventArgs e) {
-            TagButton.Image = TagButton.OverImage;
         }
     }
 }

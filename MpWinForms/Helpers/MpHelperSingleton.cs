@@ -35,6 +35,27 @@ namespace MonkeyPaste {
     public class MpHelperSingleton {
         private static readonly Lazy<MpHelperSingleton> lazy = new Lazy<MpHelperSingleton>(() => new MpHelperSingleton());
         public static MpHelperSingleton Instance { get { return lazy.Value; } }
+        /// <summary>
+        /// Take the screenshot of the active window using the CopyFromScreen method relative to the bounds of the form.
+        /// // Use it like : 
+
+        //WindowScreenshotWithoutClass(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "window_screen_noclass.jpg", ImageFormat.Jpeg);
+        /// </summary>
+        /// <param name="filepath"></param>
+        /// <param name="filename"></param>
+        /// <param name="format"></param>
+        private Image WindowScreenshotWithoutClass() {
+            Rectangle bounds = MpSingleton.Instance.ScreenManager.GetScreenBoundsWithMouse();
+
+            using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height)) {
+                using (Graphics g = Graphics.FromImage(bitmap)) {
+                    g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
+                }
+                return bitmap;
+            }
+        }
+
+
         
         //returns a rect from the center of r 
         //with delta width/height

@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace MonkeyPaste {
     public class MpTileTitlePanelController : MpController {
-        public MpTilePanel TileTitlePanel { get; set; }        
+        public Panel TileTitlePanel { get; set; }        
 
         public MpTileTitleIconPanelController TileTitleIconPanelController { get; set; }
         public MpTileTitleTextBoxController TileTitleTextBoxController { get; set; }
@@ -16,21 +16,12 @@ namespace MonkeyPaste {
 
         public MpTileTitlePanelController(MpCopyItem ci,MpController Parent) : base(Parent) {            
             _copyItemId = ci.CopyItemId;
-            TileTitlePanel = new MpTilePanel() {
+            TileTitlePanel = new Panel() {
                 Bounds = GetBounds(),
-                FlatBorderColor = Color.Transparent,
-                EdgeWidth = 5,
-                Style = BeveledPanel.AdvancedPanel.BevelStyle.Raised,
-                BackColor = Properties.Settings.Default.LogPanelBgColor,
-                StartColor = Color.White,//ci.ItemColor.Color,
-                EndColor = Color.White,//ci.ItemColor.Color,
-                ShadowColor = Color.Transparent,
-                ShadowShift = 0,
-                ShadowStyle = BeveledPanel.AdvancedPanel.ShadowMode.ForwardDiagonal,
-                RoundedBottom = false,
+                AutoSize = false,
+                BackColor = ci.ItemColor.Color,
                 Margin = Padding.Empty,
-                Padding = Padding.Empty,
-                RectRadius = Properties.Settings.Default.TileBorderRadius
+                Padding = Padding.Empty
             };
             TileTitlePanel.DoubleBuffered(true);
             
@@ -49,15 +40,13 @@ namespace MonkeyPaste {
         public override Rectangle GetBounds() {
             //tile panel controller
             var tpc = ((MpTilePanelController)Parent);
-            //tile content rect
-            Rectangle tcr = tpc.GetBounds();
+            //tile rect
+            Rectangle tpr = tpc.TilePanel.GetChildBounds();
 
             //tile title height
-            int tth = (int)((float)tcr.Height * Properties.Settings.Default.TileTitleHeightRatio);
-            //tile content padding
-           // int tpd = (int)(Properties.Settings.Default.TilePadWidthRatio * (float)tcr.Width) + TileTitlePanel.EdgeWidth;
-            
-            return new Rectangle(0,0, tcr.Width, tth);
+            int tth = (int)((float)tpr.Height * Properties.Settings.Default.TileTitleHeightRatio);
+            tpr.Size = new Size(tpr.Width, tth);
+            return tpr;
         }
         public override void Update() {
             TileTitlePanel.Bounds = GetBounds();

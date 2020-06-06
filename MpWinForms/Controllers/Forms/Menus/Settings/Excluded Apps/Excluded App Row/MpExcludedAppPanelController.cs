@@ -79,10 +79,10 @@ namespace MonkeyPaste {
             Rectangle ptr = thisExcludedAppIdx == 0 ? Rectangle.Empty:((MpExcludedAppListPanelController)Find("MpExcludedAppListController")).ExcludedAppPanelControllerList[thisExcludedAppIdx-1].ExcludedAppPanel.Bounds;
 
             //token panel height
-            float tph = (float)ttcpr.Height*Properties.Settings.Default.LogMenuTileTokenPanelHeightRatio;
+            float tph = (float)ttcpr.Height*Properties.Settings.Default.TagPanelHeightRatio;
             //token chooser pad
             int tcp = ttcpr.Height - (int)(tph);
-            Font f = new Font(Properties.Settings.Default.LogMenuTileTokenFont,(float)ttcpr.Height-(float)(tcp*1.0f),GraphicsUnit.Pixel);
+            Font f = new Font(Properties.Settings.Default.TagFont,(float)ttcpr.Height-(float)(tcp*1.0f),GraphicsUnit.Pixel);
 
             //text size
             Size ts = TextRenderer.MeasureText(ExcludedAppLabelController.ExcludedAppLabel.Text,f);

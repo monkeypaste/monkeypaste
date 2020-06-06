@@ -2,47 +2,16 @@
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-namespace MonkeyPaste
-{
-    public class MpRoundedPanel : Panel {
-        public bool OnlyRoundedOnTop { get; set; } = false;
-
-        public void DrawRoundRect(Graphics g,float X,float Y,float width,float height,float radius) {
-            GraphicsPath gp = new GraphicsPath();
-            gp.AddLine(X + radius,Y,X + width - (radius * 2),Y);
-            gp.AddArc(X + width - (radius * 2),Y,radius * 2,radius * 2,270,90);
-            gp.AddLine(X + width,Y + radius,X + width,Y + height - (radius * 2));
-            gp.AddArc(X + width - (radius * 2),Y + height - (radius * 2),radius * 2,radius * 2,0,90);
-            gp.AddLine(X + width - (radius * 2),Y + height,X + radius,Y + height);
-            gp.AddArc(X,Y + height - (radius * 2),radius * 2,radius * 2,90,90);
-            gp.AddLine(X,Y + height - (radius * 2),X,Y + radius);
-            gp.AddArc(X,Y,radius * 2,radius * 2,180,90);
-            gp.CloseFigure();
-            if(_topBrush == null) {
-                _topBrush = new SolidBrush(Color.Magenta);
-            }
-            g.FillPath(_topBrush,gp);
-            gp.Dispose();
-        }
-        public Color BackColor2 { get; set; }
-
-        private Color _backColor = Color.Pink;
+namespace MonkeyPaste {
+    public class MpRoundedPanel : Panel { 
+        
         public override Color BackColor {
             get {
-                return _backColor;
+                return base.BackColor;
             }
             set {
-                if(MpHelperSingleton.Instance.IsBright(value)) {
-                    BackColor2 = MpHelperSingleton.Instance.ChangeColorBrightness(value,-0.5f);
-                    _backColor = value;
-                    _topBrush = new SolidBrush(_backColor);
-                    _bottomBrush = new SolidBrush(BackColor2);
-                } else {
-                    BackColor2 = value;
-                    _backColor = MpHelperSingleton.Instance.ChangeColorBrightness(value,0.5f);
-                    _topBrush = new SolidBrush(BackColor2);
-                    _bottomBrush = new SolidBrush(_backColor);
-                }
+                base.BackColor = value;
+                _brush = new SolidBrush(base.BackColor);
                 Invalidate();
             }
         }
@@ -54,7 +23,7 @@ namespace MonkeyPaste
             }
             set {
                 _borderThickness = value;
-                _pen = new Pen(_borderColor,(float)BorderThickness);
+                _pen = new Pen(_borderColor, (float)BorderThickness);
                 Invalidate();
             }
         }
@@ -66,12 +35,12 @@ namespace MonkeyPaste
             }
             set {
                 _borderColor = value;
-                _pen = new Pen(_borderColor,BorderThickness);
+                _pen = new Pen(_borderColor, BorderThickness);
                 Invalidate();
             }
         }
 
-        private int _radius =50;
+        private int _radius = 50;
         public int Radius {
             get {
                 return _radius;
@@ -82,75 +51,102 @@ namespace MonkeyPaste
             }
         }
 
-        private SolidBrush _topBrush, _bottomBrush;
+        private SolidBrush _brush;
         private Pen _pen;
 
         public MpRoundedPanel() : base() {
-            _pen = new Pen(BorderColor,BorderThickness);
+            _pen = new Pen(BorderColor, BorderThickness);
         }
-        private Rectangle GetLeftUpper(int e) {
-            return new Rectangle(0,0,e,e);
+        public Rectangle GetChildBounds() {
+            Rectangle cb = Bounds;
+            cb.Inflate(-(_borderThickness * 2) - (_radius * 2), -(_borderThickness * 2) - (_radius * 2));
+            cb.Location = new Point(_borderThickness + _radius, _borderThickness + _radius);
+            return new Rectangle((int)((float)_borderThickness/2.0f),(int)((float)_borderThickness/2.0f), Width - (int)((float)_borderThickness / 1.0f), Height - (int)((float)_borderThickness / 1.0f));
+            //return new Rectangle(_borderThickness, _borderThickness , Width, Height);
         }
-        private Rectangle GetRightUpper(int e) {
-            return new Rectangle(Width - e,0,e,e);
+        private GraphicsPath DrawRoundedRectanglePath(Rectangle rect, int radius) {
+            return DrawRoundedRectanglePath(rect, radius, false);
         }
-        private Rectangle GetRightLower(int e) {
-            return new Rectangle(Width - e,Height - e,e,e);
-        }
-        private Rectangle GetLeftLower(int e) {
-            return new Rectangle(0,Height - e,e,e);
-        }
-        private void ExtendedDraw(PaintEventArgs e) {
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            GraphicsPath path = new GraphicsPath();
-            if(OnlyRoundedOnTop) {
-                path.StartFigure();
-                path.AddArc(GetLeftUpper(Radius),180,90);
-                path.AddLine(Radius,0,Width - Radius,0);
-                path.AddArc(GetRightUpper(Radius),270,90);
-                path.AddLine(Width,Radius,Width,Height);
-                path.AddLine(Width,Height,0,Height);
-                path.AddLine(0,Height,0,Radius);
-                path.CloseFigure();
-            } else {
-                path.StartFigure();
-                path.AddArc(GetLeftUpper(Radius),180,90);
-                path.AddLine(Radius,0,Width - Radius,0);
-                path.AddArc(GetRightUpper(Radius),270,90);
-                path.AddLine(Width,Radius,Width,Height - Radius);
-                path.AddArc(GetRightLower(Radius),0,90);
-                path.AddLine(Width - Radius,Height,Radius,Height);
-                path.AddArc(GetLeftLower(Radius),90,90);
-                path.AddLine(0,Height - Radius,0,Radius);
-                path.CloseFigure();
+        private GraphicsPath DrawRoundedRectanglePath(Rectangle rect, int radius, bool dropStyle) {
+            int x = rect.X;
+            int y = rect.Y;
+            int width = rect.Width;
+            int height = rect.Height;
+
+            int xw = x + width;
+            int yh = y + height;
+            int xwr = xw - radius;
+            int yhr = yh - radius;
+            int xr = x + radius;
+            int yr = y + radius;
+            int r2 = radius * 2;
+
+            int xwr2 = xw - r2;
+            int yhr2 = yh - r2;
+            int xw2 = x + width / 2;
+            int yh10 = yh - height / 20;
+
+            GraphicsPath p = new GraphicsPath();
+            p.StartFigure();
+
+            //Top Left Corner
+            if (r2 > 0) {
+                p.AddArc(x, y, r2, r2, 180, 90);
             }
-            //e.Graphics.FillPath(_topBrush,path);
-            Region = new Region(path);
-            
-            
+            //Top Edge
+            p.AddLine(xr, y, xwr, y);
+            //Top Right Corner
+            if (r2 > 0) {
+                p.AddArc(xwr2, y, r2, r2, 270, 90);
+            }
+            //Right Edge
+            p.AddLine(xw, yr, xw, yhr);
+
+            //Bottom Right Corner
+            if (r2 > 0) {
+                p.AddArc(xwr2, yhr2, r2, r2, 0, 90);
+            }
+
+            //Bottom Edge
+            if (dropStyle) {
+                p.AddBezier(
+                    new Point(xwr, yh),
+                    new Point(xw2, yh10),
+                    new Point(xw2, yh10),
+                    new Point(xr, yh));
+            } else {
+                p.AddLine(xwr, yh, xr, yh);
+            }
+            //Bottom Left Corner
+            if (r2 > 0) {
+                p.AddArc(x, yhr2, r2, r2, 90, 90);
+            }
+            //Left Edge
+            p.AddLine(x, yhr, x, yr);
+            p.CloseFigure();
+            return p;
         }
-        private void DrawSingleBorder(Graphics graphics) {
-            graphics.DrawArc(_pen,new Rectangle(0,0,Radius,Radius),180,90);
-            graphics.DrawArc(_pen,new Rectangle(Width - Radius - 1,-1,Radius,Radius),270,90);
-            graphics.DrawArc(_pen,new Rectangle(Width - Radius - 1,Height - Radius - 1,Radius,Radius),0,90);
-            graphics.DrawArc(_pen,new Rectangle(0,Height - Radius - 1,Radius,Radius),90,90);
-            graphics.DrawRectangle(_pen,0.0f,0.0f,(float)Width - 1.0f,(float)Height - 1.0f);
+        private GraphicsPath DrawFilledRoundedRectangle(Graphics graphics, Brush rectBrush, Rectangle rect, int radius) {
+            GraphicsPath path = DrawRoundedRectanglePath(rect, radius);
+            graphics.SmoothingMode = SmoothingMode.HighSpeed;
+            graphics.FillPath(rectBrush, path);
+            this.Region = new Region(path);
+            return path;
         }
-        private void DrawBorder(Graphics graphics) {
-            DrawSingleBorder(graphics);
+        private GraphicsPath DrawRoundedRectangle(Graphics graphics, Pen pen, Rectangle rect, int radius) {
+            GraphicsPath path = DrawRoundedRectanglePath(rect, radius);
+            graphics.SmoothingMode = SmoothingMode.HighSpeed;
+            graphics.DrawPath(pen, path);
+            //this.Region = new Region(path);
+            return path;
         }
         protected override void OnPaint(PaintEventArgs e) {
+            Rectangle borderRect =  new Rectangle(0,0,Width,Height);
+            Rectangle fillRect = borderRect;
+            //fillRect.Inflate(-(_borderThickness * 1), -(_borderThickness * 1));
+            DrawFilledRoundedRectangle(e.Graphics, _brush, fillRect, _radius);
             //base.OnPaint(e);
-            //Graphics v = e.Graphics;
-            //DrawRoundRect(v,e.ClipRectangle.Left,e.ClipRectangle.Top,e.ClipRectangle.Width - 1,e.ClipRectangle.Height - 1,Radius);
-            //Without rounded corners
-            //e.Graphics.DrawRectangle(Pens.Blue,e.ClipRectangle.Left,e.ClipRectangle.Top,e.ClipRectangle.Width - 1,e.ClipRectangle.Height - 1);
-            //
-            //base.OnPaint(e);
-            ExtendedDraw(e);
-            if(BorderThickness > 0) {
-                DrawBorder(e.Graphics);
-            }
+            DrawRoundedRectangle(e.Graphics, _pen, borderRect, _radius);
         }
     }
 }

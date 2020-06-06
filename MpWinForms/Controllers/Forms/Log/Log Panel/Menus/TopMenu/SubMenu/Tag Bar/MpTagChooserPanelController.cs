@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -7,32 +8,59 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MonkeyPaste {
-    public class MpTagChooserPanelController:MpController {
-        public MpRoundedPanel TagChooserPanel { get; set; }
-        public MpAddTagTextBoxController AddTagTextBoxController { get; set; }
-
+    public class MpTagChooserPanelController : MpController,INotifyPropertyChanged {
         public List<MpTagPanelController> TagPanelControllerList = new List<MpTagPanelController>();
+        public MpTagButtonController AddTagButtonController { get; set; }
+
+        public Panel TagChooserPanel { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private MpTagPanelController _selectedTagPanelController;
+        public MpTagPanelController SelectedTagPanelController {
+            get {
+                return _selectedTagPanelController;
+            }
+            set {
+                if(_selectedTagPanelController != value) {
+                    if(_selectedTagPanelController != null) {
+                        _selectedTagPanelController.UnselectTag();
+                    }
+                    _selectedTagPanelController = value;
+                    _selectedTagPanelController.SelectTag();
+                    PropertyChanged(this, new PropertyChangedEventArgs("SelectedTagPanelController"));
+                }
+            }
+        }
 
         public MpTagChooserPanelController(MpController parentController,List<MpTag> tagList) : base(parentController) {
-            TagChooserPanel = new MpRoundedPanel() {
+            TagChooserPanel = new Panel() {
                 AutoSize = false,
-                BackColor = Properties.Settings.Default.LogMenuTileTokenChooserBgColor,
+                BackColor = Properties.Settings.Default.TagChooserBgColor,
                 Margin = Padding.Empty,
                 Padding = Padding.Empty,
-                BorderThickness = 0,
-                Radius = 10
+                //BorderThickness = 0,
+                //Radius = 10
             };
             TagChooserPanel.DoubleBuffered(true);
 
-            foreach (MpTag tag in tagList) {
-                MpTagPanelController tpc = new MpTagPanelController(this,tag);
-                TagPanelControllerList.Add(tpc);
-                TagChooserPanel.Controls.Add(tpc.TagPanel);      
-            }
-            AddTagTextBoxController = new MpAddTagTextBoxController(this);
-            TagChooserPanel.Controls.Add(AddTagTextBoxController.AddTagTextBox);
+            AddTagButtonController = new MpTagButtonController(this);
+            TagChooserPanel.Controls.Add(AddTagButtonController.TagButton);
+
+            DefineEvents();
         }
-        public override void Update() {
+        public override void DefineEvents() {
+            MpApplication.Instance.DataModel.TagList.CollectionChanged += (s, e) => {
+                foreach(MpTag tag in e.NewItems) {
+                    AddTagPanelController(tag);
+                }
+            };
+
+            AddTagButtonController.TagButton.Click += (s,e) => {
+                AddTagPanelController(new MpTag("Untitled", Properties.Settings.Default.TagDefaultColor));
+            };
+        }
+        public override Rectangle GetBounds() {
             //log menu panel rect
             Rectangle lmpr = ((MpLogSubMenuPanelController)Parent).LogSubMenuPanel.Bounds;
             //log menu search textbox rect
@@ -41,41 +69,47 @@ namespace MonkeyPaste {
             int lfp = (int)(lmpr.Height * Properties.Settings.Default.LogPadRatio);
             //int h = (int)((float)lmpr.Height * Properties.Settings.Default.LogMenuTileTokenPanelHeightRatio);
             int h = lmpr.Height - lfp - lfp;
-            TagChooserPanel.Size = new Size(lmpr.Width - lmstr.Right - 10,(int)((float)lmstr.Height*Properties.Settings.Default.LogMenuTileTokenPanelHeightRatio));
-            TagChooserPanel.Location = new Point(lmstr.Right + 5,lmstr.Y);
+            return new Rectangle(lmstr.Right + 5, lmstr.Y, lmpr.Width - lmstr.Right - 10, (int)((float)lmstr.Height * Properties.Settings.Default.TagPanelHeightRatio));
+        }
+        public override void Update() {
+            TagChooserPanel.Bounds = GetBounds();
 
             foreach(MpTagPanelController ttpc in TagPanelControllerList) {
                 ttpc.Update();
             }
-            AddTagTextBoxController.Update();
+            AddTagButtonController.Update();
 
             TagChooserPanel.Invalidate();
         }
-        //ci should always be a newly selected tile
-        public void UpdateTagListState(MpCopyItem ci) {
-            foreach(MpTagPanelController tpc in TagPanelControllerList) {
-                tpc.SetTagState(tpc.Tag.IsLinkedWithCopyItem(ci) ? MpTagPanelState.Selected:MpTagPanelState.Inactive);
-            }
+        public void AddTagPanelController(MpTag tag) {
+            tag.WriteToDatabase();
+
+            MpTagPanelController tpc = new MpTagPanelController(this, tag);
+            tpc.EditableLabelController.Label.Click += (s, e) => {
+                if(tpc.TagPanelState == MpTagPanelState.Unselected) {
+                    SelectedTagPanelController = tpc;
+                }
+            };
+            TagPanelControllerList.Add(tpc);
+            TagChooserPanel.Controls.Add(tpc.TagPanel);
+            
             Update();
         }
-        public int GetTagId(MpTagPanelController ttpc) {
-            for(int i = 0;i < TagPanelControllerList.Count;i++) {
-                if(TagPanelControllerList[i] == ttpc) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-        public List<MpTagPanelController> GetFocusedTagList() {
-            List<MpTagPanelController> focusedTagList = new List<MpTagPanelController>();
-
+        public MpTagPanelController GetHistoryTagPanelController() {
             foreach(MpTagPanelController tpc in TagPanelControllerList) {
-                if(tpc.TagPanelState == MpTagPanelState.Focused) {
-                    focusedTagList.Add(tpc);
+                if(tpc.Tag.TagId == Properties.Settings.Default.TagHistoryId) {
+                    return tpc;
                 }
             }
-
-            return focusedTagList;
+            return null; 
+        }
+        public MpTagPanelController GetFavoritesTagPanelController() {
+            foreach (MpTagPanelController tpc in TagPanelControllerList) {
+                if (tpc.Tag.TagId == Properties.Settings.Default.TagFavoritesId) {
+                    return tpc;
+                }
+            }
+            return null;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gma.System.MouseKeyHook;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -15,21 +16,20 @@ namespace MonkeyPaste {
         public Panel LogFormPanel { get; set; }
 
         public int CustomHeight { get; set; } = -1;
-        public int MinimumHeight { get; set; } = 50;
-
+               
         public MpLogFormPanelController(MpController parentController) : base(parentController) {
             LogFormPanel = new Panel() {
                 AutoSize = false,                
                 BorderStyle = BorderStyle.None,
-                MinimumSize = new Size(MpSingleton.Instance.ScreenManager.GetScreenWorkingAreaWithMouse().Width,MinimumHeight),
+                MinimumSize = new Size(MpSingleton.Instance.ScreenManager.GetScreenWorkingAreaWithMouse().Width,Properties.Settings.Default.LogMenuMinimumHeight),
                 Bounds = GetBounds(),
-                BackColor = Properties.Settings.Default.LogPanelBgColor,
+                BackColor = Properties.Settings.Default.TileChooserBgColor,
                 Margin = Padding.Empty,
                 Padding = Padding.Empty                
             };
-            LogFormPanel.DoubleBuffered(true);
+            LogFormPanel.DoubleBuffered(true);            
+
             LogMenuPanelController = new MpLogMenuPanelController(this);
-            LogMenuPanelController.LogSubMenuPanelController.LogMenuSearchTextBoxController.SearchTextBox.TextChanged += SearchTextBox_TextChanged;
             LogFormPanel.Controls.Add(LogMenuPanelController.LogMenuPanel);
             
             TreeViewPanelController = new MpTreeViewPanelController(this);
@@ -37,10 +37,18 @@ namespace MonkeyPaste {
             
             TileChooserPanelController = new MpTileChooserPanelController(this);
             LogFormPanel.Controls.Add(TileChooserPanelController.TileChooserPanel);
+
+            DefineEvents();
+        }
+        public override void DefineEvents() {
+            LogMenuPanelController.LogSubMenuPanelController.LogMenuSearchTextBoxController.SearchTextBox.TextChanged += (s,e) => {
+                string searchText = LogMenuPanelController.LogSubMenuPanelController.LogMenuSearchTextBoxController.SearchTextBox.Text;
+                TileChooserPanelController.FilterTiles(searchText);
+            };
         }
         public override Rectangle GetBounds() {
             var lfc = ((MpLogFormController)Find(typeof(MpLogFormController)));
-            int h = CustomHeight > MinimumHeight ? CustomHeight : (int)((float)lfc.GetBounds().Height * Properties.Settings.Default.LogScreenHeightRatio);
+            int h = CustomHeight > Properties.Settings.Default.LogMenuMinimumHeight ? CustomHeight : (int)((float)lfc.GetBounds().Height * Properties.Settings.Default.LogScreenHeightRatio);
             //taskbar height (onkly needed for initial load for some reason)
             int tbh = h == CustomHeight ? 0 : MpSingleton.Instance.ScreenManager.GetScreenBoundsWithMouse().Height - MpSingleton.Instance.ScreenManager.GetScreenWorkingAreaWithMouse().Height;
             return new Rectangle(0, lfc.GetBounds().Height - h - tbh , lfc.GetBounds().Width, h);
@@ -54,12 +62,6 @@ namespace MonkeyPaste {
             TileChooserPanelController.Update();
 
             LogFormPanel.Invalidate();
-        }
-       
-        
-        private void SearchTextBox_TextChanged(object sender,EventArgs e) {
-            string searchText = LogMenuPanelController.LogSubMenuPanelController.LogMenuSearchTextBoxController.SearchTextBox.Text;
-            TileChooserPanelController.FilterTiles(searchText);
         }
     }
 }

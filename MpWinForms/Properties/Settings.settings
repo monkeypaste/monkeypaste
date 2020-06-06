@@ -8,14 +8,14 @@
     <Setting Name="LogScreenHeightRatio" Type="System.Single" Scope="Application">
       <Value Profile="(Default)">0.35</Value>
     </Setting>
-    <Setting Name="LogPanelBgColor" Type="System.Drawing.Color" Scope="Application">
+    <Setting Name="TileChooserBgColor" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">DodgerBlue</Value>
     </Setting>
     <Setting Name="LogFont" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Candera</Value>
     </Setting>
     <Setting Name="LogResizeHandleHeight" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">5</Value>
+      <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="LogPadRatio" Type="System.Single" Scope="Application">
       <Value Profile="(Default)">0.001</Value>
@@ -23,14 +23,11 @@
     <Setting Name="LogMenuHeightRatio" Type="System.Single" Scope="Application">
       <Value Profile="(Default)">0.14</Value>
     </Setting>
-    <Setting Name="LogMenuSearchFont" Type="System.String" Scope="Application">
+    <Setting Name="SearchFont" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Candera</Value>
     </Setting>
-    <Setting Name="LogMenuSearchFontSizeRatio" Type="System.Single" Scope="Application">
+    <Setting Name="SearchFontSizeRatio" Type="System.Single" Scope="Application">
       <Value Profile="(Default)">0.85</Value>
-    </Setting>
-    <Setting Name="TileChooserPadHeightRatio" Type="System.Single" Scope="Application">
-      <Value Profile="(Default)">0.02</Value>
     </Setting>
     <Setting Name="TileTitleFontRatio" Type="System.Single" Scope="Application">
       <Value Profile="(Default)">0.75</Value>
@@ -39,9 +36,9 @@
       <Value Profile="(Default)">Candera</Value>
     </Setting>
     <Setting Name="TileTitleHeightRatio" Type="System.Single" Scope="Application">
-      <Value Profile="(Default)">0.2</Value>
+      <Value Profile="(Default)">0.27</Value>
     </Setting>
-    <Setting Name="TileBorderSelectedColor" Type="System.Drawing.Color" Scope="Application">
+    <Setting Name="TileBorderFocusedColor" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">Red</Value>
     </Setting>
     <Setting Name="TileBorderThicknessRatio" Type="System.Single" Scope="Application">
@@ -54,7 +51,7 @@
       <Value Profile="(Default)">0.03</Value>
     </Setting>
     <Setting Name="TileBorderRadius" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">10</Value>
+      <Value Profile="(Default)">20</Value>
     </Setting>
     <Setting Name="TileFont" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Candera</Value>
@@ -87,7 +84,7 @@
       <Value Profile="(Default)">White</Value>
     </Setting>
     <Setting Name="TileTitleIconHeightRatio" Type="System.Single" Scope="Application">
-      <Value Profile="(Default)">1.75</Value>
+      <Value Profile="(Default)">3</Value>
     </Setting>
     <Setting Name="TileItemPaddingRatio" Type="System.Single" Scope="Application">
       <Value Profile="(Default)">0.05</Value>
@@ -101,16 +98,13 @@
     <Setting Name="DoCrossAppDuplication" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="LogMenuTileTokenFont" Type="System.String" Scope="Application">
+    <Setting Name="TagFont" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Tahoma</Value>
     </Setting>
-    <Setting Name="LogMenuTileTokenFontSizeRatio" Type="System.Single" Scope="Application">
+    <Setting Name="TagFontSizeRatio" Type="System.Single" Scope="Application">
       <Value Profile="(Default)">0.8</Value>
     </Setting>
-    <Setting Name="LogMenuTileTokenPanelHeightRatio" Type="System.Single" Scope="Application">
-      <Value Profile="(Default)">0.85</Value>
-    </Setting>
-    <Setting Name="LogMenuTileTokenChooserBgColor" Type="System.Drawing.Color" Scope="Application">
+    <Setting Name="TagChooserBgColor" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">Red</Value>
     </Setting>
     <Setting Name="IsAppendModeActive" Type="System.Boolean" Scope="User">
@@ -127,21 +121,6 @@
     </Setting>
     <Setting Name="InputToggleLogVisibility" Type="System.String" Scope="User">
       <Value Profile="(Default)">Control+D</Value>
-    </Setting>
-    <Setting Name="InputNextTile" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Right</Value>
-    </Setting>
-    <Setting Name="InputPreviousTile" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Left</Value>
-    </Setting>
-    <Setting Name="InputNextControl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Tab</Value>
-    </Setting>
-    <Setting Name="InputPreviousControl" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Shift+Tab</Value>
-    </Setting>
-    <Setting Name="InputPasteTile" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Enter</Value>
     </Setting>
     <Setting Name="LogMainMenuTitleHeightRatio" Type="System.Single" Scope="Application">
       <Value Profile="(Default)">0.9</Value>
@@ -170,12 +149,6 @@
     <Setting Name="TrayAppTitle" Type="System.String" Scope="Application">
       <Value Profile="(Default)">MonkeyPaste</Value>
     </Setting>
-    <Setting Name="InputHideLog" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Escape</Value>
-    </Setting>
-    <Setting Name="TileBorder" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="TileBorderHoverColor" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">Yellow</Value>
     </Setting>
@@ -200,7 +173,7 @@
     <Setting Name="TileItemScrollBarGripInactiveColor" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">Gray</Value>
     </Setting>
-    <Setting Name="TileItemScrollBarGripActiveColor" Type="System.Drawing.Color" Scope="Application">
+    <Setting Name="TileItemScrollBarGripOverColor" Type="System.Drawing.Color" Scope="Application">
       <Value Profile="(Default)">Black</Value>
     </Setting>
     <Setting Name="LogMenuLeftWidthRatio" Type="System.Single" Scope="Application">
@@ -214,6 +187,51 @@
     </Setting>
     <Setting Name="ShowLogHotRegionSize" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="TileItemScrollBarGripActiveColor" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">White</Value>
+    </Setting>
+    <Setting Name="TileBorderUnfocusedColor" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">White</Value>
+    </Setting>
+    <Setting Name="LogResizeHandleUnfocusedColor" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">Silver</Value>
+    </Setting>
+    <Setting Name="LogResizeHandleMouseOverColor" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">224, 224, 224</Value>
+    </Setting>
+    <Setting Name="LogResizeHandleMouseDownColor" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">White</Value>
+    </Setting>
+    <Setting Name="LogMenuMinimumHeight" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">50</Value>
+    </Setting>
+    <Setting Name="TilePaddingRatio" Type="System.Single" Scope="Application">
+      <Value Profile="(Default)">0.02</Value>
+    </Setting>
+    <Setting Name="TileBgColor" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">DarkRed</Value>
+    </Setting>
+    <Setting Name="TagDefaultColor" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">DimGray</Value>
+    </Setting>
+    <Setting Name="TagHistoryId" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="TagFavoritesId" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="TagPanelHeightRatio" Type="System.Single" Scope="Application">
+      <Value Profile="(Default)">0.85</Value>
+    </Setting>
+    <Setting Name="TagAddTagButtonColor" Type="System.Drawing.Color" Scope="Application">
+      <Value Profile="(Default)">0, 192, 0</Value>
+    </Setting>
+    <Setting Name="TagTextPadX" Type="System.Single" Scope="Application">
+      <Value Profile="(Default)">0.6</Value>
+    </Setting>
+    <Setting Name="TagTextPadY" Type="System.Single" Scope="Application">
+      <Value Profile="(Default)">0.4</Value>
     </Setting>
   </Settings>
 </SettingsFile>

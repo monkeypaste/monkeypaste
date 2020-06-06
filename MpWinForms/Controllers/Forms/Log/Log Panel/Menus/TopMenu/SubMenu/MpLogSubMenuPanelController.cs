@@ -13,7 +13,7 @@ namespace MonkeyPaste {
         
         public MpSearchTextBoxController LogMenuSearchTextBoxController { get; set; }
 
-        public MpTagChooserPanelController LogMenuTileTokenChooserPanelController { get; set; }
+        public MpTagChooserPanelController TileTagChooserPanelController { get; set; }
 
         public MpSearchIconController SearchIconController { get; set; }
 
@@ -31,10 +31,10 @@ namespace MonkeyPaste {
             LogMenuSearchTextBoxController = new MpSearchTextBoxController(this);
             LogSubMenuPanel.Controls.Add(LogMenuSearchTextBoxController.SearchTextBox);
 
-            LogMenuTileTokenChooserPanelController = new MpTagChooserPanelController(this,MpApplication.Instance.DataModel.Db.GetTags());
-            LogSubMenuPanel.Controls.Add(LogMenuTileTokenChooserPanelController.TagChooserPanel);
+            TileTagChooserPanelController = new MpTagChooserPanelController(this,MpApplication.Instance.DataModel.Db.GetTags());
+            LogSubMenuPanel.Controls.Add(TileTagChooserPanelController.TagChooserPanel);
         }
-        public override void Update() {
+        public override Rectangle GetBounds() {
             //logform rect
             Rectangle lfr = ((MpLogFormPanelController)((MpLogMenuPanelController)Parent).Parent).LogFormPanel.Bounds;
             //logform drag handle height
@@ -44,11 +44,14 @@ namespace MonkeyPaste {
             //menu height
             int mh = (int)((float)lfr.Height * Properties.Settings.Default.LogMenuHeightRatio);
 
-            LogSubMenuPanel.SetBounds(0,(int)((float)mh*0.5f),lfr.Width,mh);
+            return new Rectangle(0, (int)((float)mh * 0.5f), lfr.Width, mh);
+        }
+        public override void Update() {
+            LogSubMenuPanel.Bounds = GetBounds();
 
             SearchIconController.Update();
             LogMenuSearchTextBoxController.Update();
-            LogMenuTileTokenChooserPanelController.Update();
+            TileTagChooserPanelController.Update();
 
             LogSubMenuPanel.Invalidate();
         }

@@ -51,16 +51,19 @@ namespace MonkeyPaste {
             LogMainMenuUserButtonController.ButtonClickedEvent += LogMainMenuUserButtonController_ButtonClickedEvent;
 
             ////Link(new List<MpIView>() { LogMainMenuPanel });
-        }        
-           public override void Update() {
+        }
+        public override Rectangle GetBounds() {
             //logform rect
             Rectangle lfr = ((MpLogFormPanelController)((MpLogMenuPanelController)Parent).Parent).LogFormPanel.Bounds;
             //logform pad
             int lfp = (int)(lfr.Width * Properties.Settings.Default.LogPadRatio);
             //menu height
-            int mh = (int)(((float)lfr.Height * Properties.Settings.Default.LogMenuHeightRatio)*0.5f);
+            int mh = (int)(((float)lfr.Height * Properties.Settings.Default.LogMenuHeightRatio) * 0.5f);
 
-            LogMainMenuPanel.SetBounds(0,0,lfr.Width,mh);
+            return new Rectangle(0, 0, lfr.Width, mh);
+        }
+        public override void Update() {
+            LogMainMenuPanel.Bounds = GetBounds();
 
             LogMainMenuTitlePanelController.Update();
 

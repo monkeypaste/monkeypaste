@@ -27,16 +27,8 @@ namespace MonkeyPaste {
             LogSubMenuPanelController = new MpLogSubMenuPanelController(this);
             LogMenuPanel.Controls.Add(LogSubMenuPanelController.LogSubMenuPanel);
         }
-
         public override void Update() {
-            //logform rect
-            Rectangle lfr = ((MpLogFormPanelController)Parent).LogFormPanel.Bounds;
-            //logform pad
-            int lfp = (int)(lfr.Width * Properties.Settings.Default.LogPadRatio);
-            //menu height
-            int mh = (int)((float)lfr.Height * Properties.Settings.Default.LogMenuHeightRatio);
-
-            LogMenuPanel.SetBounds(0,0,lfr.Width,(int)((float)mh*1.5f));
+            LogMenuPanel.Bounds = GetBounds();
 
             LogMainMenuPanelController.Update();
             LogSubMenuPanelController.Update();
@@ -45,7 +37,14 @@ namespace MonkeyPaste {
         }
 
         public override Rectangle GetBounds() {
-            throw new NotImplementedException();
+            //logform rect
+            Rectangle lfr = ((MpLogFormPanelController)Parent).LogFormPanel.Bounds;
+            //logform pad
+            int lfp = (int)(lfr.Width * Properties.Settings.Default.LogPadRatio);
+            //menu height
+            int mh = (int)((float)lfr.Height * (Properties.Settings.Default.LogMenuHeightRatio*1.5f));
+
+            return new Rectangle(0, 0, lfr.Width, mh);
         }
     }
 }

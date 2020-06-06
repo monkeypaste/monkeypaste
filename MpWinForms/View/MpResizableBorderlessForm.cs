@@ -29,13 +29,12 @@ namespace MonkeyPaste {
             InitializeComponent();
             this.FormBorderStyle = FormBorderStyle.None;
             this.DoubleBuffered = true;
-            this.SetStyle(/*ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.ContainerControl | */ControlStyles.ResizeRedraw,true);            
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.ContainerControl | ControlStyles.ResizeRedraw,true);            
         }
 
         private void MpResizableBorderlessForm_Load(object sender,EventArgs e) {
             
         }
-
         protected override void WndProc(ref Message m) {
             if(m.Msg == 0x84) {  // Trap WM_NCHITTEST
                 System.Drawing.Point pos = new System.Drawing.Point(m.LParam.ToInt32());

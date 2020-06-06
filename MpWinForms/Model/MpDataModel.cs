@@ -84,22 +84,18 @@ namespace MonkeyPaste {
             ClipboardManager.ClipboardChangedEvent += (s, ci) => {
                 CopyItemList.Add(ci);
             };
-            ClipboardManager.Init();
         }
         private void ClearData() {
-            CopyItemList = new ObservableCollection<MpCopyItem>();
             ExcludedAppList = new ObservableCollection<MpApp>();
             SettingList = new ObservableCollection<MpSetting>();
             TagList = new ObservableCollection<MpTag>();
+            CopyItemList = new ObservableCollection<MpCopyItem>();
         }
         public void LoadAllData(string dbPath, string dbPassword, string identityToken = null, string accessToken = null) {
             Db = new MpDb(dbPath, dbPassword, identityToken, accessToken);
             if(!Db.IsLoaded) {
                 Db.NoDb = true;
             } else {
-                foreach(MpCopyItem ci in Db.GetCopyItems()) {
-                    CopyItemList.Add(ci);
-                }
                 foreach(MpApp a in Db.GetExcludedAppList()) {
                     ExcludedAppList.Add(a);
                 }
@@ -108,6 +104,9 @@ namespace MonkeyPaste {
                 }
                 foreach(MpTag t in Db.GetTags()) {
                     TagList.Add(t);
+                }
+                foreach (MpCopyItem ci in Db.GetCopyItems()) {
+                    CopyItemList.Add(ci);
                 }
             }
         }

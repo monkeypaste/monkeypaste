@@ -38,8 +38,7 @@ namespace BeveledPanel {
         Color _endColor = Color.FromArgb(168, 192, 234);
         private Color _borderColor = Color.FromArgb(102, 102, 102);
         private Color mainColor;
-
-        private bool _roundedTop = true, _roundedBottom = true;
+        
         private int _rectRadius = 0;
         //private int[] _rectRadius = new int[4];
         private PanelGradientMode _backgroundGradientMode = PanelGradientMode.Vertical;
@@ -177,20 +176,6 @@ namespace BeveledPanel {
                 Invalidate();
             }
         }
-        public bool RoundedTop {
-            get { return _roundedTop; }
-            set {
-                _roundedTop = value;
-                Invalidate();
-            }
-        }
-        public bool RoundedBottom {
-            get { return _roundedBottom; }
-            set {
-                _roundedBottom = value;
-                Invalidate();
-            }
-        }
         #endregion
         public AdvancedPanel() {
             this.Size = new Size(200, 50);
@@ -201,9 +186,10 @@ namespace BeveledPanel {
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.UserPaint, true);
             this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+            this.UpdateStyles();
         }
         public Rectangle GetChildBounds() {
-            return new Rectangle(Location.X + EdgeWidth, Location.Y + EdgeWidth, Size.Width - ShadowShift, Size.Height - ShadowShift);
+            return new Rectangle(EdgeWidth, EdgeWidth, Size.Width - ShadowShift - (EdgeWidth*2), Size.Height - ShadowShift-(EdgeWidth*2));
         }
         #region Paint
         private void AdvancedPanel_Paint(object sender, PaintEventArgs e) {
@@ -262,18 +248,26 @@ namespace BeveledPanel {
         }
         private void DrawRect(Graphics graphics, Rectangle rect) {
 
-            // Border rectangle
-            using (Brush backgroundGradientBrush = new SolidBrush(_borderColor)) {
-                RoundedRectangle.DrawFilledRoundedRectangle(graphics, backgroundGradientBrush, rect, _rectRadius);
-            }
+            
 
             rect.Inflate(-_edgeWidth, -_edgeWidth);
 
             // Panel main rectangle
-            using (Brush backgroundGradientBrush = new LinearGradientBrush(
-                rect, _startColor, _endColor, (LinearGradientMode)this.BackgroundGradientMode)) {
+            //using (Brush backgroundGradientBrush = new LinearGradientBrush(
+            //    rect, _startColor, _endColor, (LinearGradientMode)this.BackgroundGradientMode)) {
+            //    RoundedRectangle.DrawFilledRoundedRectangle(graphics, backgroundGradientBrush, rect, _rectRadius);
+            //}
+            using (Brush backgroundGradientBrush = new SolidBrush(BackColor)) {
                 RoundedRectangle.DrawFilledRoundedRectangle(graphics, backgroundGradientBrush, rect, _rectRadius);
             }
+            rect.Inflate(_edgeWidth, _edgeWidth);
+            // Border rectangle
+
+            using (Brush backgroundGradientBrush = new SolidBrush(_borderColor)) {
+                RoundedRectangle.DrawFilledRoundedRectangle(graphics, backgroundGradientBrush, rect, _rectRadius);
+            }
+
+
         }
         private void DrawRectRaised(Graphics graphics, Rectangle rect) {
             var darknessEnd = _endColor.GetSaturation();

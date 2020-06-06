@@ -44,9 +44,9 @@ namespace MonkeyPaste.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DodgerBlue")]
-        public global::System.Drawing.Color LogPanelBgColor {
+        public global::System.Drawing.Color TileChooserBgColor {
             get {
-                return ((global::System.Drawing.Color)(this["LogPanelBgColor"]));
+                return ((global::System.Drawing.Color)(this["TileChooserBgColor"]));
             }
         }
         
@@ -61,7 +61,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
         public int LogResizeHandleHeight {
             get {
                 return ((int)(this["LogResizeHandleHeight"]));
@@ -89,27 +89,18 @@ namespace MonkeyPaste.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Candera")]
-        public string LogMenuSearchFont {
+        public string SearchFont {
             get {
-                return ((string)(this["LogMenuSearchFont"]));
+                return ((string)(this["SearchFont"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.85")]
-        public float LogMenuSearchFontSizeRatio {
+        public float SearchFontSizeRatio {
             get {
-                return ((float)(this["LogMenuSearchFontSizeRatio"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.02")]
-        public float TileChooserPadHeightRatio {
-            get {
-                return ((float)(this["TileChooserPadHeightRatio"]));
+                return ((float)(this["SearchFontSizeRatio"]));
             }
         }
         
@@ -133,7 +124,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.2")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.27")]
         public float TileTitleHeightRatio {
             get {
                 return ((float)(this["TileTitleHeightRatio"]));
@@ -143,9 +134,9 @@ namespace MonkeyPaste.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Red")]
-        public global::System.Drawing.Color TileBorderSelectedColor {
+        public global::System.Drawing.Color TileBorderFocusedColor {
             get {
-                return ((global::System.Drawing.Color)(this["TileBorderSelectedColor"]));
+                return ((global::System.Drawing.Color)(this["TileBorderFocusedColor"]));
             }
         }
         
@@ -178,7 +169,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        [global::System.Configuration.DefaultSettingValueAttribute("20")]
         public int TileBorderRadius {
             get {
                 return ((int)(this["TileBorderRadius"]));
@@ -277,7 +268,7 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1.75")]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
         public float TileTitleIconHeightRatio {
             get {
                 return ((float)(this["TileTitleIconHeightRatio"]));
@@ -323,36 +314,27 @@ namespace MonkeyPaste.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Tahoma")]
-        public string LogMenuTileTokenFont {
+        public string TagFont {
             get {
-                return ((string)(this["LogMenuTileTokenFont"]));
+                return ((string)(this["TagFont"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.8")]
-        public float LogMenuTileTokenFontSizeRatio {
+        public float TagFontSizeRatio {
             get {
-                return ((float)(this["LogMenuTileTokenFontSizeRatio"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0.85")]
-        public float LogMenuTileTokenPanelHeightRatio {
-            get {
-                return ((float)(this["LogMenuTileTokenPanelHeightRatio"]));
+                return ((float)(this["TagFontSizeRatio"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Red")]
-        public global::System.Drawing.Color LogMenuTileTokenChooserBgColor {
+        public global::System.Drawing.Color TagChooserBgColor {
             get {
-                return ((global::System.Drawing.Color)(this["LogMenuTileTokenChooserBgColor"]));
+                return ((global::System.Drawing.Color)(this["TagChooserBgColor"]));
             }
         }
         
@@ -404,66 +386,6 @@ namespace MonkeyPaste.Properties {
             }
             set {
                 this["InputToggleLogVisibility"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Right")]
-        public string InputNextTile {
-            get {
-                return ((string)(this["InputNextTile"]));
-            }
-            set {
-                this["InputNextTile"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Left")]
-        public string InputPreviousTile {
-            get {
-                return ((string)(this["InputPreviousTile"]));
-            }
-            set {
-                this["InputPreviousTile"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Tab")]
-        public string InputNextControl {
-            get {
-                return ((string)(this["InputNextControl"]));
-            }
-            set {
-                this["InputNextControl"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Shift+Tab")]
-        public string InputPreviousControl {
-            get {
-                return ((string)(this["InputPreviousControl"]));
-            }
-            set {
-                this["InputPreviousControl"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Enter")]
-        public string InputPasteTile {
-            get {
-                return ((string)(this["InputPasteTile"]));
-            }
-            set {
-                this["InputPasteTile"] = value;
             }
         }
         
@@ -550,27 +472,6 @@ namespace MonkeyPaste.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Escape")]
-        public string InputHideLog {
-            get {
-                return ((string)(this["InputHideLog"]));
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string TileBorder {
-            get {
-                return ((string)(this["TileBorder"]));
-            }
-            set {
-                this["TileBorder"] = value;
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Yellow")]
         public global::System.Drawing.Color TileBorderHoverColor {
             get {
@@ -647,9 +548,9 @@ namespace MonkeyPaste.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Black")]
-        public global::System.Drawing.Color TileItemScrollBarGripActiveColor {
+        public global::System.Drawing.Color TileItemScrollBarGripOverColor {
             get {
-                return ((global::System.Drawing.Color)(this["TileItemScrollBarGripActiveColor"]));
+                return ((global::System.Drawing.Color)(this["TileItemScrollBarGripOverColor"]));
             }
         }
         
@@ -686,6 +587,141 @@ namespace MonkeyPaste.Properties {
         public int ShowLogHotRegionSize {
             get {
                 return ((int)(this["ShowLogHotRegionSize"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        public global::System.Drawing.Color TileItemScrollBarGripActiveColor {
+            get {
+                return ((global::System.Drawing.Color)(this["TileItemScrollBarGripActiveColor"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        public global::System.Drawing.Color TileBorderUnfocusedColor {
+            get {
+                return ((global::System.Drawing.Color)(this["TileBorderUnfocusedColor"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Silver")]
+        public global::System.Drawing.Color LogResizeHandleUnfocusedColor {
+            get {
+                return ((global::System.Drawing.Color)(this["LogResizeHandleUnfocusedColor"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("224, 224, 224")]
+        public global::System.Drawing.Color LogResizeHandleMouseOverColor {
+            get {
+                return ((global::System.Drawing.Color)(this["LogResizeHandleMouseOverColor"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        public global::System.Drawing.Color LogResizeHandleMouseDownColor {
+            get {
+                return ((global::System.Drawing.Color)(this["LogResizeHandleMouseDownColor"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public int LogMenuMinimumHeight {
+            get {
+                return ((int)(this["LogMenuMinimumHeight"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.02")]
+        public float TilePaddingRatio {
+            get {
+                return ((float)(this["TilePaddingRatio"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DarkRed")]
+        public global::System.Drawing.Color TileBgColor {
+            get {
+                return ((global::System.Drawing.Color)(this["TileBgColor"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DimGray")]
+        public global::System.Drawing.Color TagDefaultColor {
+            get {
+                return ((global::System.Drawing.Color)(this["TagDefaultColor"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int TagHistoryId {
+            get {
+                return ((int)(this["TagHistoryId"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int TagFavoritesId {
+            get {
+                return ((int)(this["TagFavoritesId"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.85")]
+        public float TagPanelHeightRatio {
+            get {
+                return ((float)(this["TagPanelHeightRatio"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 192, 0")]
+        public global::System.Drawing.Color TagAddTagButtonColor {
+            get {
+                return ((global::System.Drawing.Color)(this["TagAddTagButtonColor"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.6")]
+        public float TagTextPadX {
+            get {
+                return ((float)(this["TagTextPadX"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.4")]
+        public float TagTextPadY {
+            get {
+                return ((float)(this["TagTextPadY"]));
             }
         }
     }
