@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Data;
 using System.Runtime.InteropServices;
 
-namespace MonkeyPaste {
+namespace MpWinFormsApp {
    
     public static class MpAppProgram {
         static MpAppContext applicationContext = null;

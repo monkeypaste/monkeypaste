@@ -1,0 +1,212 @@
+﻿<Window x:Class="MpWpfApp.MpMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:MpWpfApp"
+        xmlns:med="clr-namespace:System.Windows.Media"
+        xmlns:mp="clir-namespace:MpWinFormsApp"
+        local:MpWindowClosingBehavior.Closed="{Binding ClosedCommand}"
+        local:MpWindowClosingBehavior.Closing="{Binding ClosingCommand}"
+        local:MpWindowClosingBehavior.CancelClosing="{Binding CancelClosingCommand}"
+        local:MpWindowLoadingBehavior.Loaded="{Binding LoadedCommand}"
+        Title="MpMainWindow"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        ShowInTaskbar="true"
+        ResizeMode="NoResize"
+        Background="#FFB72F2F"
+        Height="350"
+        Width="1680">
+    <Window.Resources>
+    </Window.Resources>
+    <Window.DataContext>
+        <local:MpMainWindowViewModel />        
+    </Window.DataContext>
+    
+     <!-- Main Window Grid -->
+    <Grid x:Name="ClipTrayMainWindowGrid"
+          Background="Green">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding TitleMenuHeight}"
+                           x:Name="ClipTrayTitleMenuPanel" />
+            <RowDefinition Height="{Binding FilterMenuHeight}"                           
+                           x:Name="ClipTrayFilterMenuPanel" />
+            <RowDefinition Height="{Binding TrayHeight}"
+                            x:Name="ClipTrayGrid" />
+        </Grid.RowDefinitions>
+        <!-- Main Menu -->
+        <StackPanel Grid.Row="0"
+                    Grid.Column="0"
+                    Orientation="Horizontal"
+                    Background="Pink" />
+        <!-- FilterMenu -->
+        <StackPanel Grid.Row="1" Grid.Column="0"
+                    Background="DarkBlue">
+            <StackPanel HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                <ListBox x:Name="TagTray"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         BorderBrush="Transparent"
+                         HorizontalAlignment="Center"
+                         SelectionMode="Multiple"
+                         SelectionChanged="TagListBox_SelectionChanged"
+                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                         ItemsSource="{Binding TagTiles}">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <ContentPresenter />
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel IsItemsHost="True" 
+                                                ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                                Orientation="Horizontal" /> 
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <!-- Tag Tile View -->
+                            <Border Background="Black"
+                                    BorderBrush="White"
+                                    Margin="5,0,5,0"
+                                    Padding="10,0,10,0"
+                                    BorderThickness="2"
+                                    VerticalAlignment="Center"
+                                    MouseEnter="TagBorder_MouseEnter"
+                                    MouseLeave="TagBorder_MouseLeave"
+                                    MouseUp="TagBorder_MouseUp"
+                                    Loaded="TagTileTray_Loaded"
+                                    Height="{Binding TagHeight}"
+                                    CornerRadius="10">
+                                <TextBlock x:Name="TagNameTextBlock"
+                                           Padding="0,0,0,5"
+                                           Text="{Binding TagName}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Top"
+                                           Foreground="White"
+                                           FontSize="{Binding TagFontSize}" />
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Button Content="+" />
+            </StackPanel>
+        </StackPanel>
+        <!--3rd row row for tray -->
+        <Grid Grid.Row="2"
+              Grid.Column="0"
+              Background="Green">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{Binding AppStateButtonGridWidth}"
+                                  x:Name="AppStateButtonGrid" />
+                <ColumnDefinition x:Name="ClipTrayListBox" />
+            </Grid.ColumnDefinitions>
+            <!-- Side bar -->
+            <Grid Grid.Row="0"
+                  Grid.Column="0"
+                  Background="Orange" />
+            <!-- tile tray -->
+            <ListBox x:Name="ClipTray"
+                     Grid.Row="0"
+                     Grid.Column="1"
+                     Background="DarkViolet"
+                     SelectionMode="Extended"
+                     ScrollViewer.CanContentScroll="False"
+                     SelectionChanged="TrayListBox_SelectionChanged"
+                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                     ItemsSource="{Binding ClipTiles}">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <!--<Setter Property="IsSelected"
+                                Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}" />-->
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel IsItemsHost="True"
+                                                CanVerticallyScroll="False" 
+                                                VerticalAlignment="Stretch"
+                                                Orientation="Horizontal" /> 
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <!-- Tile View -->
+                        <Viewbox Width="{Binding TileSize}"
+                                 Height="{Binding TileSize}"
+                                 Stretch="Fill">
+                            <Border MouseLeave="TileBorder_MouseLeave"
+                                    MouseEnter="TileBorder_MouseEnter"
+                                    Loaded="ClipTile_Loaded"
+                                    BorderBrush="Transparent"                                    
+                                    Margin="5"
+                                    Background="{Binding TitleColor}"
+                                    Visibility="{Binding Visibility}"
+                                    BorderThickness="2"
+                                    Width="{Binding TileSize}"
+                                    Height="{Binding TileSize}"
+                                    CornerRadius="10"
+                                    x:Name="TileBorder">
+                                <Border.Effect>
+                                    <DropShadowEffect BlurRadius="10"
+                                                      Color="DimGray" />
+                                </Border.Effect>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="{Binding TileTitleHeight}" />
+                                        <RowDefinition Height="{Binding TileContentHeight}" />
+                                    </Grid.RowDefinitions>
+                                    <!-- Tile Title StackPanel -->
+                                    <StackPanel Grid.Row="0"
+                                                Grid.Column="0"
+                                                VerticalAlignment="Center"
+                                                Orientation="Horizontal">
+                                        <Image Source="{Binding Icon}"
+                                               Stretch="Fill"
+                                               Width="{Binding TileTitleHeight}"
+                                               Height="{Binding TileTitleHeight}" />
+                                        <TextBlock Text="{Binding Title}"
+                                                   Margin="10,0,0,0"
+                                                   VerticalAlignment="Top"
+                                                   FontSize="35"
+                                                   Foreground="White">
+                                            <TextBlock.Effect>
+                                                <DropShadowEffect ShadowDepth="2"
+                                                                  Direction="330"
+                                                                  Color="Black"
+                                                                  Opacity="1.0"
+                                                                  BlurRadius="4" />
+                                            </TextBlock.Effect>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <!-- Tile Content-->
+                                    <TextBlock Text="{Binding Text}"
+                                               Grid.Row="1"
+                                               FontSize="24"
+                                               Grid.Column="0"
+                                               Foreground="Black"
+                                               Background="White" />
+
+                                </Grid>
+                            </Border>
+                        </Viewbox>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </Grid>
+</Window>

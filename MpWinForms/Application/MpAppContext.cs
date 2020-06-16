@@ -8,7 +8,7 @@ using IdentityModel.OidcClient;
 using System.Data.SQLite;
 using System.IO;
 
-namespace MonkeyPaste {
+namespace MpWinFormsApp {
 
     public class MpAppContext : ApplicationContext  {   
         public static Action ExitApp { get; set; }

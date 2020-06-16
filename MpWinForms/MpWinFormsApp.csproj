@@ -389,90 +389,91 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Application\Model\MpObject.cs" />
     <Compile Include="Application\MpApplication.cs" />
-    <Compile Include="Controllers\Abstract\MpButtonPanelController.cs" />
-    <Compile Include="Compatibility\GdkApi.cs" />
-    <Compile Include="Controllers\Abstract\MpEditableLabelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\MpResizeLogPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\ScrollPanel\MpScrollbarPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\ScrollPanel\MpScrollbarGripPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\ScrollPanel\MpScrollPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\ScrollPanel\MpTileContentControlController.cs" />
-    <Compile Include="Controllers\Forms\Menus\MpToolStripMenuController.cs" />
-    <Compile Include="Input\MpHotKey.cs" />
-    <Compile Include="Input\MpKeyboardHook.cs" />
-    <Compile Include="Model\MpBoxModel.cs" />
-    <Compile Include="Singletons\MpScreenManager.cs" />
-    <Compile Include="Controllers\Forms\Splash\MpSplashFormController.cs" />
-    <Compile Include="Compatibility\MpCompatibility.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\MpLogMenuPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Buttons\MpLogMainMenuAppendModeButtonController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Buttons\MpLogMainMenuAutoCopyButtonController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Buttons\MpLogMainMenuSettingsButtonController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Buttons\MpLogMainMenuInfoButtonController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\MpLogMainMenuPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Title\MpLogMainMenuTitleIconBoxController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Title\MpLogMainMenuTitleLinkLabelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Title\MpLogMainMenuTitlePanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Buttons\MpLogMainMenuUserButtonController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\MpLogSubMenuPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Search\MpSearchIconController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Search\MpSearchTextBoxController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\MpAddTagTextBoxController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\Tag\MpTagButtonController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\MpTagChooserPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\Tag\MpTagLabelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\Tag\MpTagTextBoxController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\Tag\MpTagPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\MpDragTilePanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\LeftMenu\Tree\MpTreeViewController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\LeftMenu\Tree\MpTreeViewPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\MpLogFormPanelController.cs" />
-    <Compile Include="Controllers\Forms\Menus\Settings\Data\MpDataSettingsPanelController.cs" />
-    <Compile Include="Controllers\Forms\Menus\Settings\Excluded Apps\Excluded App Row\MpExcludedAppButtonController.cs" />
-    <Compile Include="Controllers\Forms\Menus\Settings\Excluded Apps\Excluded App Row\MpExcludedAppLabelController.cs" />
-    <Compile Include="Controllers\Forms\Menus\Settings\Excluded Apps\Excluded App Row\MpExcludedAppPanelController.cs" />
-    <Compile Include="Controllers\Forms\Menus\Settings\Excluded Apps\MpExcludedAppListPanelController.cs" />
-    <Compile Include="Controllers\Forms\Menus\Settings\MpAppPreferencesPanelController.cs" />
-    <Compile Include="Controllers\Forms\Menus\Settings\MpLoadOnLoginCheckBoxController.cs" />
-    <Compile Include="Controllers\Forms\Menus\MpMenuController.cs" />
-    <Compile Include="Controllers\Abstract\MpTileColorButtonPanelController.cs" />
-    <Compile Include="Helpers\MpLinkedList.cs" />
-    <Compile Include="Helpers\MpNode.cs" />
-    <Compile Include="Helpers\MpObservableDictionary.cs" />
-    <Compile Include="Helpers\MpTreeNode.cs" />
-    <Compile Include="Model\MpDataModel.cs" />
-    <Compile Include="Controllers\Forms\Menus\Settings\Data\MpDataDetailsLabelController.cs" />
-    <Compile Include="Controllers\Forms\Menus\Settings\MpSettingsFormController.cs" />
-    <Compile Include="Controllers\MpTaskbarIconController.cs" />
-    <Compile Include="Controllers\Abstract\MpController.cs" />
-    <Compile Include="Controllers\Abstract\MpButtonController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Title\MpTileTitleIconPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Menus\LeftMenu\MpTileMenuPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Title\MpTileTitlePanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Title\MpTileTitleTextBoxController.cs" />
-    <Compile Include="Helpers\IconHelper.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\MpTileChooserPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\MpTilePanelController.cs" />
-    <Compile Include="Helpers\MpPointMath.cs" />
-    <Compile Include="Helpers\MpTypeHelper.cs" />
-    <Compile Include="Model\MpModel.cs" />
-    <Compile Include="Model\MpPasteHistory.cs" />
-    <Compile Include="Helpers\MpHelperSingleton.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\ScrollPanel\MpFileListItemRowPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\MpTileContentPanelController.cs" />
-    <Compile Include="Controllers\Forms\Log\MpLogFormController.cs" />
-    <Compile Include="Input\MpClipboardManager.cs">
+    <Compile Include="Application\Controllers\Abstract\MpButtonPanelController.cs" />
+    <Compile Include="Application\Compatibility\GdkApi.cs" />
+    <Compile Include="Application\Controllers\Abstract\MpEditableLabelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\MpResizeLogPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\ScrollPanel\MpScrollbarPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\ScrollPanel\MpScrollbarGripPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\ScrollPanel\MpScrollPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\ScrollPanel\MpTileContentControlController.cs" />
+    <Compile Include="Application\Controllers\Forms\Menus\MpToolStripMenuController.cs" />
+    <Compile Include="Application\Input\MpHotKey.cs" />
+    <Compile Include="Application\Input\MpKeyboardHook.cs" />
+    <Compile Include="Application\Model\MpBoxModel.cs" />
+    <Compile Include="Application\Singletons\MpScreenManager.cs" />
+    <Compile Include="Application\Controllers\Forms\Splash\MpSplashFormController.cs" />
+    <Compile Include="Application\Compatibility\MpCompatibility.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\MpLogMenuPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Buttons\MpLogMainMenuAppendModeButtonController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Buttons\MpLogMainMenuAutoCopyButtonController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Buttons\MpLogMainMenuSettingsButtonController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Buttons\MpLogMainMenuInfoButtonController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\MpLogMainMenuPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Title\MpLogMainMenuTitleIconBoxController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Title\MpLogMainMenuTitleLinkLabelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Title\MpLogMainMenuTitlePanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\PrimaryMenu\Buttons\MpLogMainMenuUserButtonController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\MpLogSubMenuPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Search\MpSearchIconController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Search\MpSearchTextBoxController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\MpAddTagTextBoxController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\Tag\MpTagButtonController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\MpTagChooserPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\Tag\MpTagLabelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\Tag\MpTagTextBoxController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\TopMenu\SubMenu\Tag Bar\Tag\MpTagPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\MpDragTilePanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\LeftMenu\Tree\MpTreeViewController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\LeftMenu\Tree\MpTreeViewPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\MpLogFormPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Menus\Settings\Data\MpDataSettingsPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Menus\Settings\Excluded Apps\Excluded App Row\MpExcludedAppButtonController.cs" />
+    <Compile Include="Application\Controllers\Forms\Menus\Settings\Excluded Apps\Excluded App Row\MpExcludedAppLabelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Menus\Settings\Excluded Apps\Excluded App Row\MpExcludedAppPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Menus\Settings\Excluded Apps\MpExcludedAppListPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Menus\Settings\MpAppPreferencesPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Menus\Settings\MpLoadOnLoginCheckBoxController.cs" />
+    <Compile Include="Application\Controllers\Forms\Menus\MpMenuController.cs" />
+    <Compile Include="Application\Controllers\Abstract\MpTileColorButtonPanelController.cs" />
+    <Compile Include="Application\Helpers\MpLinkedList.cs" />
+    <Compile Include="Application\Helpers\MpNode.cs" />
+    <Compile Include="Application\Helpers\MpObservableDictionary.cs" />
+    <Compile Include="Application\Helpers\MpTreeNode.cs" />
+    <Compile Include="Application\Model\MpDataModel.cs" />
+    <Compile Include="Application\Controllers\Forms\Menus\Settings\Data\MpDataDetailsLabelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Menus\Settings\MpSettingsFormController.cs" />
+    <Compile Include="Application\Controllers\MpTaskbarIconController.cs" />
+    <Compile Include="Application\Controllers\Abstract\MpController.cs" />
+    <Compile Include="Application\Controllers\Abstract\MpButtonController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Title\MpTileTitleIconPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Menus\LeftMenu\MpTileMenuPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Title\MpTileTitlePanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Title\MpTileTitleTextBoxController.cs" />
+    <Compile Include="Application\Helpers\IconHelper.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Tile Chooser\MpTileChooserPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\MpTilePanelController.cs" />
+    <Compile Include="Application\Helpers\MpPointMath.cs" />
+    <Compile Include="Application\Helpers\MpTypeHelper.cs" />
+    <Compile Include="Application\Model\MpModel.cs" />
+    <Compile Include="Application\Model\MpPasteHistory.cs" />
+    <Compile Include="Application\Helpers\MpHelperSingleton.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\ScrollPanel\MpFileListItemRowPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\Log Panel\Tile Chooser\Tile\Content\MpTileContentPanelController.cs" />
+    <Compile Include="Application\Controllers\Forms\Log\MpLogFormController.cs" />
+    <Compile Include="Application\Input\MpClipboardManager.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Helpers\MpSingletonController.cs" />
-    <Compile Include="Helpers\MpRegistryHelper.cs" />
-    <Compile Include="Compatibility\WinApi.cs" />
-    <Compile Include="Model\MpDb.cs" />
-    <Compile Include="Model\MpPlatform.cs" />
-    <Compile Include="Model\MpSetting.cs" />
-    <Compile Include="Model\MpCopyItemTag.cs" />
-    <Compile Include="Model\MpTag.cs" />
+    <Compile Include="Application\Helpers\MpSingletonController.cs" />
+    <Compile Include="Application\Helpers\MpRegistryHelper.cs" />
+    <Compile Include="Application\Compatibility\WinApi.cs" />
+    <Compile Include="Application\Model\MpDb.cs" />
+    <Compile Include="Application\Model\MpPlatform.cs" />
+    <Compile Include="Application\Model\MpSetting.cs" />
+    <Compile Include="Application\Model\MpCopyItemTag.cs" />
+    <Compile Include="Application\Model\MpTag.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -483,143 +484,144 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Singletons\MpSingleton.cs" />
-    <Compile Include="View\MpButton.cs">
+    <Compile Include="Application\Singletons\MpSingleton.cs" />
+    <Compile Include="Application\View\MpButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpLoginForm.cs">
+    <Compile Include="Application\View\MpLoginForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\MpLoginForm.Designer.cs">
+    <Compile Include="Application\View\MpLoginForm.Designer.cs">
       <DependentUpon>MpLoginForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\MpLogMainMenuAppendModeButton.cs">
+    <Compile Include="Application\View\MpLogMainMenuAppendModeButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpLogMainMenuAutoCopyButton.cs">
+    <Compile Include="Application\View\MpLogMainMenuAutoCopyButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpLogMainMenuSettingsButton.cs">
+    <Compile Include="Application\View\MpLogMainMenuSettingsButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpPanel.cs">
+    <Compile Include="Application\View\MpPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpSettingsForm.cs">
+    <Compile Include="Application\View\MpSettingsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\MpTextBox.cs">
+    <Compile Include="Application\View\MpTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpTilePanel.cs">
+    <Compile Include="Application\View\MpTilePanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpShadowLabel.cs">
+    <Compile Include="Application\View\MpShadowLabel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="View\MpTreeViewPanel.cs">
+    <Compile Include="Application\View\MpTreeViewPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpLogMainMenuTitleIconBox.cs">
+    <Compile Include="Application\View\MpLogMainMenuTitleIconBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpLogMainMenuTitleLabelLink.cs">
+    <Compile Include="Application\View\MpLogMainMenuTitleLabelLink.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpLogMainMenuTitlePanel.cs">
+    <Compile Include="Application\View\MpLogMainMenuTitlePanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpLogMainMenuInfoButton.cs">
+    <Compile Include="Application\View\MpLogMainMenuInfoButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpLogMainMenuUserButton.cs">
+    <Compile Include="Application\View\MpLogMainMenuUserButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpSearchBox.cs">
+    <Compile Include="Application\View\MpSearchBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpSearchIconBox.cs">
+    <Compile Include="Application\View\MpSearchIconBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpShadowPanel.cs">
+    <Compile Include="Application\View\MpShadowPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpTileHeaderTextBox.cs">
+    <Compile Include="Application\View\MpTileHeaderTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpLogSubMenuPanel.cs">
+    <Compile Include="Application\View\MpLogSubMenuPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpLogMenuSearchTextBox.cs">
+    <Compile Include="Application\View\MpLogMenuSearchTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpRoundedPanel.cs">
+    <Compile Include="Application\View\MpRoundedPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Model\MpApp.cs" />
-    <Compile Include="Model\MpClient.cs" />
-    <Compile Include="Model\MpColor.cs" />
-    <Compile Include="Model\MpCopyItem.cs" />
+    <Compile Include="Application\Model\MpApp.cs" />
+    <Compile Include="Application\Model\MpClient.cs" />
+    <Compile Include="Application\Model\MpColor.cs" />
+    <Compile Include="Application\Model\MpCopyItem.cs" />
     <Compile Include="Application\MpAppContext.cs" />
-    <Compile Include="Model\MpDbObject.cs" />
-    <Compile Include="Model\MpIcon.cs" />
-    <Compile Include="Model\MpUser.cs" />
-    <Compile Include="View\MpTileControl.cs">
+    <Compile Include="Application\Model\MpDbObject.cs" />
+    <Compile Include="Application\Model\MpIcon.cs" />
+    <Compile Include="Application\Model\MpUser.cs" />
+    <Compile Include="Application\View\MpTileControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="View\MpHelpForm.cs">
+    <Compile Include="Application\View\MpHelpForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\MpHelpForm.Designer.cs">
+    <Compile Include="Application\View\MpHelpForm.Designer.cs">
       <DependentUpon>MpHelpForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\MpInputActionForm.cs">
+    <Compile Include="Application\View\MpInputActionForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\MpInputActionForm.Designer.cs">
+    <Compile Include="Application\View\MpInputActionForm.Designer.cs">
       <DependentUpon>MpInputActionForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\MpIntroSlideShow.cs">
+    <Compile Include="Application\View\MpIntroSlideShow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\MpIntroSlideShow.Designer.cs">
+    <Compile Include="Application\View\MpIntroSlideShow.Designer.cs">
       <DependentUpon>MpIntroSlideShow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\MpLastWindowWatcher.cs" />
+    <Compile Include="Application\Helpers\MpLastWindowWatcher.cs" />
     <Compile Include="Application\MpAppProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="View\MpResizableBorderlessForm.cs">
+    <Compile Include="Application\View\MpResizableBorderlessForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\MpResizableBorderlessForm.Designer.cs">
+    <Compile Include="Application\View\MpResizableBorderlessForm.Designer.cs">
       <DependentUpon>MpResizableBorderlessForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\MpEnterDbPasswordForm.cs">
+    <Compile Include="Application\View\MpEnterDbPasswordForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\MpEnterDbPasswordForm.Designer.cs">
+    <Compile Include="Application\View\MpEnterDbPasswordForm.Designer.cs">
       <DependentUpon>MpEnterDbPasswordForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\MpSetDbPasswordForm.cs">
+    <Compile Include="Application\View\MpSetDbPasswordForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\MpSetDbPasswordForm.Designer.cs">
+    <Compile Include="Application\View\MpSetDbPasswordForm.Designer.cs">
       <DependentUpon>MpSetDbPasswordForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\MpTreeView.cs">
+    <Compile Include="Application\View\MpTreeView.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="View\MpView.cs" />
-    <EmbeddedResource Include="Input\MpClipboardManager.resx">
+    <Compile Include="Application\View\MpView.cs" />
+    <Compile Include="Settings.cs" />
+    <EmbeddedResource Include="Application\Input\MpClipboardManager.resx">
       <DependentUpon>MpClipboardManager.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\MpHelpForm.resx">
+    <EmbeddedResource Include="Application\View\MpHelpForm.resx">
       <DependentUpon>MpHelpForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\MpInputActionForm.resx">
+    <EmbeddedResource Include="Application\View\MpInputActionForm.resx">
       <DependentUpon>MpInputActionForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\MpIntroSlideShow.resx">
+    <EmbeddedResource Include="Application\View\MpIntroSlideShow.resx">
       <DependentUpon>MpIntroSlideShow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -627,16 +629,16 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\MpLoginForm.resx">
+    <EmbeddedResource Include="Application\View\MpLoginForm.resx">
       <DependentUpon>MpLoginForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\MpResizableBorderlessForm.resx">
+    <EmbeddedResource Include="Application\View\MpResizableBorderlessForm.resx">
       <DependentUpon>MpResizableBorderlessForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\MpEnterDbPasswordForm.resx">
+    <EmbeddedResource Include="Application\View\MpEnterDbPasswordForm.resx">
       <DependentUpon>MpEnterDbPasswordForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\MpSetDbPasswordForm.resx">
+    <EmbeddedResource Include="Application\View\MpSetDbPasswordForm.resx">
       <DependentUpon>MpSetDbPasswordForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config">
@@ -646,7 +648,7 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <None Include="Model\MpSchema.xsd">
+    <None Include="Application\Model\MpSchema.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\Settings.settings">
@@ -697,9 +699,9 @@
     <None Include="Resources\doubleSidedArrow2.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FlipTest\FlipTest.csproj">
-      <Project>{9d201c14-937d-4401-b357-138f44bf3c54}</Project>
-      <Name>FlipTest</Name>
+    <ProjectReference Include="..\MpWinFormsClassLibrary\MpWinFormsClassLibrary.csproj">
+      <Project>{593857B5-C1B0-425C-85F6-B4F567406518}</Project>
+      <Name>MpWinFormsClassLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\VisualEffects\VisualEffects.csproj">
       <Project>{88c2e4d2-1237-4616-9f74-2d0a4af06009}</Project>
@@ -708,18 +710,6 @@
     <ProjectReference Include="..\BevelPanel\BeveledPanel.csproj">
       <Project>{5230bbd2-9933-40cc-8dea-fc17d0040bc4}</Project>
       <Name>BeveledPanel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ExtractLargeIconFromFile\ExtractLargeIconFromFile\ExtractLargeIconFromFile.csproj">
-      <Project>{4b9f7707-016b-4358-a497-c038b9e216fd}</Project>
-      <Name>ExtractLargeIconFromFile</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MpWinForms_ControlLibrary\MpWinForms_ControlLibrary.csproj">
-      <Project>{f57ad8e4-11aa-4940-8063-a39919491880}</Project>
-      <Name>MonkeyPaste_WindowsControlLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NonInvasiveKeyboardHookLibrary\NonInvasiveKeyboardHookLibrary.csproj">
-      <Project>{0df3eaba-2c33-4e77-b2db-b6d23146edab}</Project>
-      <Name>NonInvasiveKeyboardHookLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

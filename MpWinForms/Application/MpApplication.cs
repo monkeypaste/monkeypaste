@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MonkeyPaste {
+namespace MpWinFormsApp {
 
     public class MpApplication  {
         private static readonly Lazy<MpApplication> lazy = new Lazy<MpApplication>(() => new MpApplication());
@@ -15,10 +15,10 @@ namespace MonkeyPaste {
 
         public MpSplashFormController SplashFormController { get; set; }
         public MpTaskbarIconController TaskbarController { get; set; } = null;
-        
+
         // TODO Add NetworkController to gather all db init parameters
 
-        public MpDataModel DataModel { get; set; }
+        public MpDataModel DataModel { get; set; } = new MpDataModel();
 
         private bool _authorizeUser = false;
 

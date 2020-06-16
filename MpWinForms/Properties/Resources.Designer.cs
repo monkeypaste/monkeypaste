@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MonkeyPaste.Properties {
+namespace MpWinFormsApp.Properties {
     using System;
     
     
