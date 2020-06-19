@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Text.RegularExpressions;
-using System.Drawing;
 using System.Windows;
+using System.Windows.Media;
 using MpWinFormsClassLibrary;
 
 namespace MpWpfApp {
@@ -42,7 +42,7 @@ namespace MpWpfApp {
             Color itemColor = MpHelperSingleton.Instance.GetRandomColor();
 
             if(iData.GetDataPresent(DataFormats.Bitmap)) {
-                ci = MpClip.CreateCopyItem(MpCopyItemType.Image, (Image)iData.GetData(DataFormats.Bitmap, true), sourcePath, itemColor);// CreateCopyItem(MpCopyItemType.None,null,IntPtr.Zero);// ((Image)iData.GetData(DataFormats.Bitmap,true),sourceHandle);
+                ci = MpClip.CreateCopyItem(MpCopyItemType.Image, (System.Drawing.Image)iData.GetData(DataFormats.Bitmap, true), sourcePath, itemColor);// CreateCopyItem(MpCopyItemType.None,null,IntPtr.Zero);// ((Image)iData.GetData(DataFormats.Bitmap,true),sourceHandle);
             } else if(iData.GetDataPresent(DataFormats.FileDrop)) {
                 ci = MpClip.CreateCopyItem(MpCopyItemType.FileList, (string[])iData.GetData(DataFormats.FileDrop, true), sourcePath, itemColor);
             } else if(iData.GetDataPresent(DataFormats.Rtf) || iData.GetDataPresent(DataFormats.Html) || iData.GetDataPresent(DataFormats.Text)) {
@@ -363,7 +363,7 @@ namespace MpWpfApp {
                     break;
                 case MpCopyItemType.Image:
                     if(isNew) {
-                        MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpImageItem(fk_MpCopyItemId,ItemImage) values (" + this.CopyItemId + ",@0)",new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ImageConverter.ConvertImageToByteArray((Image)this.DataObject) });
+                        MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpImageItem(fk_MpCopyItemId,ItemImage) values (" + this.CopyItemId + ",@0)",new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ImageConverter.ConvertImageToByteArray((System.Drawing.Image)this.DataObject) });
                     } else {
                         MpDataStore.Instance.Db.ExecuteNonQuery("update MpImageItem set ItemImage=@0 where pk_MpImageItemId="+this.SubItemId,new List<string>() { "@0" },new List<object>() { this.DataObject });
                     }
@@ -384,7 +384,7 @@ namespace MpWpfApp {
                 //chars/lines
                 case 1:
                     if (CopyItemType == MpCopyItemType.Image) {
-                        Image ciimg = MpHelperSingleton.Instance.ImageConverter.ConvertByteArrayToImage((byte[])GetData());
+                        System.Drawing.Image ciimg = MpHelperSingleton.Instance.ImageConverter.ConvertByteArrayToImage((byte[])GetData());
                         info = "(" + ciimg.Width + ") x (" + ciimg.Height + ")";
                     }
                     else if (CopyItemType == MpCopyItemType.Text) {

@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SQLite;
-using System.Drawing;
+using System.Windows.Media;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -215,7 +215,7 @@ namespace MpWpfApp {
         }
         public List<MpTag> GetTags() {
             if(NoDb) {
-                return new List<MpTag>() { new MpTag("History",Color.Green,MpTagType.Default),new MpTag("Favorites",Color.Blue,MpTagType.Default) };
+                return new List<MpTag>() { new MpTag("History",Colors.Green,MpTagType.Default),new MpTag("Favorites",Colors.Blue,MpTagType.Default) };
             }
             //if(_isLoaded == false) {
             //    InitDb();

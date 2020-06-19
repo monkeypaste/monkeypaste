@@ -62,7 +62,7 @@
                         <Track x:Name="PART_Track"
                                Grid.Row="0"
                                IsDirectionReversed="true"
-                               Focusable="false">
+                               Focusable="False">
                             <Track.Thumb>
                                 <Thumb x:Name="Thumb"
                                        Background="{TemplateBinding Foreground}"

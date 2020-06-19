@@ -30,17 +30,18 @@ namespace MpWpfApp {
                 LoadDataRow(dt.Rows[0]);
             }
         }
-
-
-        public MpColor(DataRow dr) {
-            LoadDataRow(dr);
-        }
-        public MpColor(int r,int g,int b,int a) {
+        public MpColor(int r, int g, int b, int a) {
             _r = r;
             _g = g;
             _b = b;
             _a = a;
         }
+        public MpColor(Color c) : this(c.R, c.G, c.B, c.A) { }
+
+        public MpColor(DataRow dr) {
+            LoadDataRow(dr);
+        }
+        
         
         public override void LoadDataRow(DataRow dr) {
             ColorId = Convert.ToInt32(dr["pk_MpColorId"].ToString());

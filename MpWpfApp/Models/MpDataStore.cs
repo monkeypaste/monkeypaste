@@ -8,6 +8,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+
 namespace MpWpfApp {
     
     public class MpDataStore   {
@@ -25,6 +27,12 @@ namespace MpWpfApp {
             ClipboardManager.Init();
             ClipboardManager.ClipboardChangedEvent += () => {
                 MpClip newClip = MpClip.CreateFromClipboard();
+                var mainWindowViewModel = ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext);
+                if(mainWindowViewModel.IsInAppendMode) {
+                    //when in append mode just append the new items text to selecteditem
+                    mainWindowViewModel.SelectedClipTiles[0].Text = mainWindowViewModel.SelectedClipTiles[0].CopyItem.Text + '\n' + newClip.Text;
+                    return;
+                }
                 if(newClip != null) {
                     newClip.WriteToDatabase();
                     MpTag historyTag = new MpTag(1);

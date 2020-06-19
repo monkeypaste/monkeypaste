@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
+using System.Windows.Media;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +15,7 @@ namespace MpWpfApp {
         Default
     }
 
-    public class MpTag:MpDbObject {
+    public class MpTag : MpDbObject {
         public MpTagType TagType { get; set; }
         public int TagId { get; set; }
         public int ColorId { get; set; }
@@ -25,8 +25,7 @@ namespace MpWpfApp {
         public MpTag(string tagName,Color tagColor,MpTagType tagType = MpTagType.Custom) {
             TagName = tagName;
             TagType = tagType;
-            TagColor = new MpColor((int)tagColor.R,(int)tagColor.G,(int)tagColor.B,(int)tagColor.A);
-            ColorId = TagColor.ColorId;
+            TagColor = new MpColor((int)tagColor.R,(int)tagColor.G,(int)tagColor.B,255);
         }
         public MpTag(int tagId) {
             DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpTag where pk_MpTagId=" + tagId);
@@ -50,23 +49,16 @@ namespace MpWpfApp {
                 Console.WriteLine("MpTag Error, cannot create nameless tag");
                 return;
             }
+            //if new tag
             if(TagId == 0) {
-                DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpTag where TagName='" + TagName + "'");
-                //if tag already exists just populate this w/ its data
-                if(dt != null && dt.Rows.Count > 0) {
-                    TagId = Convert.ToInt32(dt.Rows[0]["pk_MpTagId"].ToString());
-                    if(dt.Rows[0]["fk_MpColorId"] != null) {
-                        ColorId = Convert.ToInt32(dt.Rows[0]["fk_MpColorId"].ToString());
-                        TagColor = new MpColor(ColorId);
-                    } else {
-                        ColorId = TagColor.ColorId;
-                    }
-                } else {
-                    MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpTag(fk_MpTagTypeId,TagName,fk_MpColorId) values(" + (int)TagType + ",'" + TagName + "'," + ColorId + ")");
-                    TagId = MpDataStore.Instance.Db.GetLastRowId("MpTag","pk_MpTagId");
-                }
+                TagColor.WriteToDatabase();
+                ColorId = TagColor.ColorId;
+                MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpTag(fk_MpTagTypeId,TagName,fk_MpColorId) values(" + (int)TagType + ",'" + TagName + "'," + ColorId + ")");
+                TagId = MpDataStore.Instance.Db.GetLastRowId("MpTag", "pk_MpTagId");                 
             } else {
-                Console.WriteLine("MpTag warning, attempting to update a tag but not implemented");
+                TagColor.WriteToDatabase();
+                ColorId = TagColor.ColorId;
+                MpDataStore.Instance.Db.ExecuteNonQuery("update MpTag set fk_MpTagTypeId=" + (int)TagType + ", TagName='" + TagName + "', fk_MpColorId=" + ColorId+" where pk_MpTagId="+TagId);                
             }
         }
         public bool IsLinkedWithCopyItem(MpClip ci) {

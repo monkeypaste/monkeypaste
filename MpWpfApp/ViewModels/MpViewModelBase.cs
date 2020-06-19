@@ -164,6 +164,7 @@ namespace MpWpfApp {
             return Application.Current.MainWindow != null && Application.Current.MainWindow.IsVisible == true;
         }
 
+
         public ICommand ExitApplicationCommand {
             get {
                 return new MpRelayCommand(param => {

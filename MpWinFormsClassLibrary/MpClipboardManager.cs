@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace MpWinFormsClassLibrary {
@@ -46,6 +47,19 @@ namespace MpWinFormsClassLibrary {
             this.Hide();
         }
 
+
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+        public static void PressKey(Keys key, bool up) {
+            const int KEYEVENTF_EXTENDEDKEY = 0x1;
+            const int KEYEVENTF_KEYUP = 0x2;
+            if(up) {
+                keybd_event((byte)key, 0x45, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, (UIntPtr)0);
+            } else {
+                keybd_event((byte)key, 0x45, KEYEVENTF_EXTENDEDKEY, (UIntPtr)0);
+            }
+        }
+
         public void PasteCopyItem(object itemToPaste) {
             IgnoreNextClipboardEvent = true;
 
@@ -64,8 +78,13 @@ namespace MpWinFormsClassLibrary {
             //}
 
             //WinApi.SetActiveWindow(GetLastWindowWatcher().LastHandle);
-            SendKeys.Send("^v");
-
+            //WinApi.SetForegroundWindow(LastWindowWatcher.LastHandle);
+            SendKeys.SendWait("^v");
+            //PressKey(Keys.ControlKey, false);
+            //PressKey(Keys.V, false);
+            //PressKey(Keys.V, true);
+            //PressKey(Keys.ControlKey, true);
+            
             IgnoreNextClipboardEvent = false;
 
             //only create to write to db
@@ -127,16 +146,17 @@ namespace MpWinFormsClassLibrary {
         private void InitializeComponent() {
             this.SuspendLayout();
             // 
-            // MpClipboardController
+            // MpClipboardManager
             // 
             this.ClientSize = new System.Drawing.Size(0, 0);
             this.ControlBox = false;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "MpClipboarManager";
+            this.Name = "MpClipboardManager";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
+            this.WindowState = System.Windows.Forms.FormWindowState.Minimized;
             this.ResumeLayout(false);
 
         }

@@ -142,6 +142,7 @@
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="Utils\MpWindowLoadingBehavior.cs" />
     <Compile Include="Utils\MpWindowClosingBehavior.cs" />
+    <Compile Include="ViewModels\MpClipTileTagMenuItemViewModel.cs" />
     <Compile Include="ViewModels\MpClipTileViewModel.cs" />
     <Compile Include="ViewModels\MpClipTrayViewModel.cs" />
     <Page Include="Styles\ClipTileListBox.xaml">
@@ -215,7 +216,10 @@
     <Resource Include="Resources\add.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\add2.png" />
+    <Content Include="Resources\add2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Views\add2.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\add3.png" />

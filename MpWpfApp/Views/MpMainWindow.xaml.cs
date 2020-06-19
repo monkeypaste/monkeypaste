@@ -7,108 +7,100 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using MpWinFormsClassLibrary;
 
 namespace MpWpfApp {
     public partial class MpMainWindow : Window {
         
         public MpMainWindow() {
-            InitializeComponent();            
+            InitializeComponent();
         }
-        #region Clip Tile Events 
-        private void TrayListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            //mainwindowviewmodel
-            var mwvm = (MpMainWindowViewModel)(((ListBox)sender).DataContext);
 
-            foreach(MpClipTileViewModel clipTile in e.RemovedItems) {
-                clipTile.ToggleSelected();
-                //mwvm.SelectedClipTiles.Remove(clipTile);
-                var clipBorder = (Border)((MpMainWindow)Application.Current.MainWindow).FindName("Clip"+ mwvm.ClipTiles.IndexOf(clipTile));
-                clipBorder.BorderBrush = Brushes.Yellow;
-            }
-            foreach(MpClipTileViewModel clipTile in e.AddedItems) {
-                clipTile.ToggleSelected();
-                //mwvm.SelectedClipTiles.Add(clipTile);
-                var clipBorder = (Border)((MpMainWindow)Application.Current.MainWindow).FindName("Clip" + mwvm.ClipTiles.IndexOf(clipTile));
-                clipBorder.BorderBrush = Brushes.Red;
+        private void TagListBoxItem_MouseEnter(object sender, MouseEventArgs e) {
+            if(sender.GetType().IsSubclassOf(typeof(Control))) {
+                ((MpTagTileViewModel)((Control)sender).DataContext).IsHovering = true;
             }
         }
-        private void TileBorder_MouseEnter(object sender, MouseEventArgs e) {
-            ((Border)sender).BorderBrush = Brushes.Yellow;
+
+        private void TagListBoxItem_MouseLeave(object sender, MouseEventArgs e) {
+            if(sender.GetType().IsSubclassOf(typeof(Control))) {
+                ((MpTagTileViewModel)((Control)sender).DataContext).IsHovering = false;
+            }            
         }
-        private void TileBorder_MouseLeave(object sender, MouseEventArgs e) {
-            if(!((MpClipTileViewModel)((Border)sender).DataContext).IsSelected) {
-                ((Border)sender).BorderBrush = Brushes.Transparent;
-            } else {
-                ((Border)sender).BorderBrush = Brushes.Red;
+        private void ClipListBoxItem_MouseEnter(object sender, MouseEventArgs e) {
+            if(sender.GetType().IsSubclassOf(typeof(Control))) {
+                ((MpClipTileViewModel)((Control)sender).DataContext).IsHovering = true;
+            }            
+        }
+
+        private void ClipListBoxItem_MouseLeave(object sender, MouseEventArgs e) {
+            if(!Extensions.IsNamedObject(((Control)sender).DataContext))
+            {
+                ((MpClipTileViewModel)((Control)sender).DataContext).IsHovering = false;
+            }            
+        }
+
+        private void TagNameTextBox_KeyDown(object sender, KeyEventArgs e) {
+            if(e.Key == Key.Enter) {
+                ((MpTagTileViewModel)((TextBox)sender).DataContext).IsEditing = false;
+            } else if(e.Key == Key.Delete || e.Key == Key.Back) {
+                ((MpTagTileViewModel)((TextBox)sender).DataContext).DeleteTagCommand.Execute(null);
             }
         }
-        private void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            this.RegisterName("Clip" + ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).ClipTiles.IndexOf(((MpClipTileViewModel)((Border)sender).DataContext)), ((Border)sender));
 
+        private void TagTile_LostFocus(object sender, RoutedEventArgs e) {
+            ((MpTagTileViewModel)((TextBox)sender).DataContext).IsEditing = false;
         }
-        #endregion
 
-        #region Tag Tile Events 
-        private void TagTileTray_Loaded(object sender, RoutedEventArgs e) {
-            this.RegisterName("Tag" + ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).TagTiles.IndexOf(((MpTagTileViewModel)((Border)sender).DataContext)),((Border)sender));
-
-            if(((MpTagTileViewModel)((Border)sender).DataContext).TagName == "History") {
-                ((Border)sender).BorderBrush = Brushes.Red;
-                ((Border)sender).Background = ((MpTagTileViewModel)((Border)sender).DataContext).TagColor;
-                ((MpTagTileViewModel)((Border)sender).DataContext).ToggleSelected();
-                ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).SelectedTagTiles.Add(((MpTagTileViewModel)((Border)sender).DataContext));
+        private void TextBox_SizeChanged(object sender, SizeChangedEventArgs e) {
+            //used for bot tags and clips
+            if(sender != null && ((TextBox)sender).ActualHeight > 0 && !((TextBox)sender).IsFocused) {
+                ((TextBox)sender).Focus();
+                ((TextBox)sender).SelectAll();
             }
         }
-        private void TagListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-           //if(((MpMainWindowViewModel)((ListBox)sender).DataContext).SelectedTagTiles.Count == 0) {
-           //     var historyTagBorder = (Border)((MpMainWindow)Application.Current.MainWindow).FindName("Tag0");
-           //     historyTagBorder.BorderBrush = Brushes.Red;
-           //     historyTagBorder.Background = ((MpTagTileViewModel)historyTagBorder.DataContext).TagColor;
-           //     ((MpTagTileViewModel)historyTagBorder.DataContext).ToggleSelected();
-           //     ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).SelectedTagTiles.Add(((MpTagTileViewModel)historyTagBorder.DataContext));
-           // }             
-        }
-        private void TagBorder_MouseEnter(object sender, MouseEventArgs e) {
-            ((Border)sender).BorderBrush = Brushes.White;
-        }
-        private void TagBorder_MouseLeave(object sender, MouseEventArgs e) {
-            if(!((MpTagTileViewModel)((Border)sender).DataContext).IsSelected) {
-                ((Border)sender).BorderBrush = Brushes.Transparent;
-            } else {
-                ((Border)sender).BorderBrush = Brushes.Red;
-            }
-        }
-        private void TagBorder_MouseUp(object sender, MouseButtonEventArgs e) {
-            ((MpTagTileViewModel)((Border)sender).DataContext).ToggleSelected();
 
-            if(((MpTagTileViewModel)((Border)sender).DataContext).IsSelected) {
-                ((Border)sender).BorderBrush = Brushes.Red;
-                ((Border)sender).Background = ((MpTagTileViewModel)((Border)sender).DataContext).TagColor;
-                ((TextBlock)((Border)sender).FindName("TagNameTextBlock")).Foreground = Brushes.Black;
-                ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).SelectedTagTiles.Add(((MpTagTileViewModel)((Border)sender).DataContext));
-            } else {
-                ((Border)sender).BorderBrush = Brushes.Yellow;
-                ((Border)sender).Background = Brushes.Black;
-                ((TextBlock)((Border)sender).FindName("TagNameTextBlock")).Foreground = Brushes.White;
-                ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).SelectedTagTiles.Remove(((MpTagTileViewModel)((Border)sender).DataContext));
-            }
-
-            //if all tags are inactive turn the history tag back on
-            bool isAnyTagActive = false;
-            foreach(MpTagTileViewModel tagTile in ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).TagTiles) {
-                if(tagTile.IsSelected) {
-                    isAnyTagActive = true;
-                    break;
+        private void ClipTile_KeyDown(object sender, KeyEventArgs e) {
+            if(e.Key == Key.Delete || e.Key == Key.Back) {
+                //delete clip which shifts focus to neighbor
+                ((MpClipTileViewModel)((TextBox)sender).DataContext).DeleteClipCommand.Execute(null);
+            } else if(e.Key == Key.Enter) {
+                //In order to paste the app must hide first
+                Application.Current.MainWindow.Hide();
+                foreach(var clipTile in ((MpMainWindowViewModel)DataContext).SelectedClipTiles) {
+                    MpDataStore.Instance.ClipboardManager.PasteCopyItem(clipTile.CopyItem.Text);
                 }
             }
-            if(!isAnyTagActive) {
-                var historyTagBorder = (Border)((MpMainWindow)Application.Current.MainWindow).FindName("Tag0");
-                historyTagBorder.BorderBrush = Brushes.Red;
-                historyTagBorder.Background = ((MpTagTileViewModel)historyTagBorder.DataContext).TagColor;
-                ((MpTagTileViewModel)historyTagBorder.DataContext).ToggleSelected();
-                ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).SelectedTagTiles.Add(((MpTagTileViewModel)historyTagBorder.DataContext));
+        }
+        private void TagTile_KeyDown(object sender, KeyEventArgs e) {
+            if(e.Key == Key.Delete || e.Key == Key.Back && ((MpTagTileViewModel)((TextBox)sender).DataContext).DeleteTagCommand.CanExecute(null)) {
+                ((MpTagTileViewModel)((TextBox)sender).DataContext).DeleteTagCommand.Execute(null);
             }
         }
-        #endregion        
+
+        private void ClipTile_LostFocus(object sender, RoutedEventArgs e) {
+            ((MpClipTileViewModel)((TextBox)sender).DataContext).IsEditingTitle = false;
+        }
+
+        private void ClipTitleTextBox_KeyDown(object sender, KeyEventArgs e) {
+            if(e.Key == Key.Enter) {
+                ((MpClipTileViewModel)((TextBox)sender).DataContext).IsEditingTitle = false;
+            }
+        }
+
+        private void ClipTray_PreviewMouseWheel(object sender, MouseWheelEventArgs e) {
+            var scrollViewer = ((ListBox)sender).GetChildOfType<ScrollViewer>();
+            double lastOffset = scrollViewer.HorizontalOffset;
+            ((ListBox)sender).GetChildOfType<ScrollViewer>().ScrollToHorizontalOffset(lastOffset - (double)e.Delta);
+        }
+
+        private void ClipTile_Loaded(object sender, RoutedEventArgs e) {
+            var clipTile = ((MpClipTileViewModel)((Border)sender).DataContext);
+            ((ListBox)FindName("ClipTray")).RegisterName("Clip" + clipTile.CopyItem.CopyItemId, ((Border)sender));
+            if(((MpMainWindowViewModel)DataContext).SelectedClipTiles.Contains(clipTile)) {
+                ((Border)sender).Focus();
+            }
+        }
+
     }
 }

@@ -18,7 +18,7 @@ namespace MpWpfApp {
 
         private double _screenWidth = SystemParameters.PrimaryScreenWidth;
         private double _screenHeight = SystemParameters.PrimaryScreenHeight;
-        private double _tileMargin = 10;
+        
 
         private double _mainWindowHeight {
             get {
@@ -35,6 +35,11 @@ namespace MpWpfApp {
                     _screenWidth, 
                     _mainWindowHeight
                 );
+            }
+        }
+        public double TileMargin {
+            get {
+                return TrayHeight / 50;
             }
         }
         public double TitleMenuHeight {
@@ -59,7 +64,7 @@ namespace MpWpfApp {
         }
         public double TileSize {
             get {
-                return TrayHeight - (_tileMargin * 2);
+                return TrayHeight - (TileMargin * 2) - 10;
             }
         }
         public double TileTitleHeight {

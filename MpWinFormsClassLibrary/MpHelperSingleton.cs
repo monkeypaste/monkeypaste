@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Management;
@@ -14,10 +11,11 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 using static MpWinFormsClassLibrary.ShellEx;
-using Color = System.Drawing.Color;
+
 namespace MpWinFormsClassLibrary {
     public static class Extensions {
         public static void DoubleBuffered(this Control control, bool enabled) {
@@ -28,11 +26,28 @@ namespace MpWinFormsClassLibrary {
             var controls = control.Controls.Cast<Control>();
             return controls.SelectMany(ctrl => ctrl.GetAll<T>()).Concat(controls.OfType<T>());
         }
+        public static bool IsNamedObject(this object obj) {
+            return obj.GetType().FullName == "MS.Internal.NamedObject";
+        }
+        public static T GetChildOfType<T>(this DependencyObject depObj)  where T : DependencyObject {
+            if(depObj == null) return null;
+
+            for(int i = 0;i < VisualTreeHelper.GetChildrenCount(depObj);i++) {
+                var child = VisualTreeHelper.GetChild(depObj, i);
+
+                var result = (child as T) ?? GetChildOfType<T>(child);
+                if(result != null) return result;
+            }
+            return null;
+        }
     }
     public class MpHelperSingleton {
         private static readonly Lazy<MpHelperSingleton> lazy = new Lazy<MpHelperSingleton>(() => new MpHelperSingleton());
         public static MpHelperSingleton Instance { get { return lazy.Value; } }
-
+        public static Random Rand;
+        private MpHelperSingleton() {
+            Rand = new Random();
+        }
         public MpImageConverter ImageConverter { get; set; } = new MpImageConverter();
         /// <summary>
         /// Take the screenshot of the active window using the CopyFromScreen method relative to the bounds of the form.
@@ -44,13 +59,12 @@ namespace MpWinFormsClassLibrary {
         /// <param name="format"></param>
         public string GetRandomString(int maxCharsPerLine = 50, int maxLines = 50) {
             StringBuilder str_build = new StringBuilder();
-            Random random = new Random(DateTime.Now.Millisecond);
-            int numLines = random.Next(1, maxLines);
+            int numLines = Rand.Next(1, maxLines);
 
             for(int i = 0;i < numLines;i++) {
-                int numCharsOnLine = random.Next(1, maxCharsPerLine);
+                int numCharsOnLine = Rand.Next(1, maxCharsPerLine);
                 for(int j = 0;j < numCharsOnLine;j++) {
-                    double flt = random.NextDouble();
+                    double flt = Rand.NextDouble();
                     int shift = Convert.ToInt32(Math.Floor(25 * flt));
                     char letter = Convert.ToChar(shift + 65);
                     str_build.Append(letter);
@@ -59,87 +73,8 @@ namespace MpWinFormsClassLibrary {
             }
             return str_build.ToString();
         }
-        /// <summary>
-        /// Method to rotate an Image object. The result can be one of three cases:
-        /// - upsizeOk = true: output image will be larger than the input, and no clipping occurs 
-        /// - upsizeOk = false & clipOk = true: output same size as input, clipping occurs
-        /// - upsizeOk = false & clipOk = false: output same size as input, image reduced, no clipping
-        /// 
-        /// A background color must be specified, and this color will fill the edges that are not 
-        /// occupied by the rotated image. If color = transparent the output image will be 32-bit, 
-        /// otherwise the output image will be 24-bit.
-        /// 
-        /// Note that this method always returns a new Bitmap object, even if rotation is zero - in 
-        /// which case the returned object is a clone of the input object. 
-        /// </summary>
-        /// <param name="inputImage">input Image object, is not modified</param>
-        /// <param name="angleDegrees">angle of rotation, in degrees</param>
-        /// <param name="upsizeOk">see comments above</param>
-        /// <param name="clipOk">see comments above, not used if upsizeOk = true</param>
-        /// <param name="backgroundColor">color to fill exposed parts of the background</param>
-        /// <returns>new Bitmap object, may be larger than input image</returns>
-        public Image RotateImage(Image inputImage,float angleDegrees,bool upsizeOk,
-                                         bool clipOk,Color backgroundColor) {
-            // Test for zero rotation and return a clone of the input image
-            if(angleDegrees == 0f)
-                return (Image)inputImage.Clone();
-
-            // Set up old and new image dimensions, assuming upsizing not wanted and clipping OK
-            int oldWidth = inputImage.Width;
-            int oldHeight = inputImage.Height;
-            int newWidth = oldWidth;
-            int newHeight = oldHeight;
-            float scaleFactor = 1f;
-
-            // If upsizing wanted or clipping not OK calculate the size of the resulting bitmap
-            if(upsizeOk || !clipOk) {
-                double angleRadians = angleDegrees * Math.PI / 180d;
-
-                double cos = Math.Abs(Math.Cos(angleRadians));
-                double sin = Math.Abs(Math.Sin(angleRadians));
-                newWidth = (int)Math.Round(oldWidth * cos + oldHeight * sin);
-                newHeight = (int)Math.Round(oldWidth * sin + oldHeight * cos);
-            }
-
-            // If upsizing not wanted and clipping not OK need a scaling factor
-            if(!upsizeOk && !clipOk) {
-                scaleFactor = Math.Min((float)oldWidth / newWidth,(float)oldHeight / newHeight);
-                newWidth = oldWidth;
-                newHeight = oldHeight;
-            }
-
-            // Create the new bitmap object. If background color is transparent it must be 32-bit, 
-            //  otherwise 24-bit is good enough.
-            Bitmap newBitmap = new Bitmap(newWidth,newHeight,backgroundColor == Color.Transparent ?
-                                             System.Drawing.Imaging.PixelFormat.Format32bppArgb : System.Drawing.Imaging.PixelFormat.Format24bppRgb);
-            newBitmap.SetResolution(inputImage.HorizontalResolution,inputImage.VerticalResolution);
-
-            // Create the Graphics object that does the work
-            using(Graphics graphicsObject = Graphics.FromImage(newBitmap)) {
-                graphicsObject.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphicsObject.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                graphicsObject.SmoothingMode = SmoothingMode.HighQuality;
-
-                // Fill in the specified background color if necessary
-                if(backgroundColor != Color.Transparent)
-                    graphicsObject.Clear(backgroundColor);
-
-                // Set up the built-in transformation matrix to do the rotation and maybe scaling
-                graphicsObject.TranslateTransform(newWidth / 2f,newHeight / 2f);
-
-                if(scaleFactor != 1f)
-                    graphicsObject.ScaleTransform(scaleFactor,scaleFactor);
-
-                graphicsObject.RotateTransform(angleDegrees);
-                graphicsObject.TranslateTransform(-oldWidth / 2f,-oldHeight / 2f);
-
-                // Draw the result 
-                graphicsObject.DrawImage(inputImage,0,0);
-            }
-
-            return (Image)newBitmap;
-        }
-        public Color GetDominantColor(Bitmap bmp) {            
+        
+        public System.Drawing.Color GetDominantColor(System.Drawing.Bitmap bmp) {            
             //Used for tally
             int r = 0;
             int g = 0;
@@ -149,7 +84,7 @@ namespace MpWinFormsClassLibrary {
 
             for(int x = 0;x < bmp.Width;x++) {
                 for(int y = 0;y < bmp.Height;y++) {
-                    Color clr = bmp.GetPixel(x,y);
+                    System.Drawing.Color clr = bmp.GetPixel(x,y);
 
                     r += clr.R;
                     g += clr.G;
@@ -164,33 +99,9 @@ namespace MpWinFormsClassLibrary {
             g /= total;
             b /= total;
 
-            return Color.FromArgb(r,g,b);
+            return System.Drawing.Color.FromArgb((byte)r, (byte)g, (byte)b);
         }
 
-        /// <summary>Determines the current screen resolution in DPI.</summary>
-        /// <returns>Point.X is the X DPI, Point.Y is the Y DPI.</returns>
-        public Point GetSystemDpi() {
-            Point result = new Point();
-
-            IntPtr hDC = WinApi.GetDC(IntPtr.Zero);
-
-            result.X = WinApi.GetDeviceCaps(hDC,88); //LOGPIXELSX
-            result.Y = WinApi.GetDeviceCaps(hDC,90); //LOGPIXELSY
-
-            WinApi.ReleaseDC(IntPtr.Zero,hDC);
-
-            return result;
-        }
-
-        /// <summary>
-        /// Checks if font is not default.
-        /// </summary>
-        /// <returns>True if font DPI is not 96.</returns>
-        public bool IsDifferentFont() {
-            Point result = GetSystemDpi();
-
-            return result.X != 96 || result.Y != 96;
-        }
 
         public ImageSource GetIconImage(string sourcePath) {
             return ImageConverter.ConvertImageToImageSource(GetBitmapFromFilePath(sourcePath, IconSizeEnum.ExtraLargeIcon));
@@ -215,7 +126,7 @@ namespace MpWinFormsClassLibrary {
             }
             return null;
         }
-        public void ColorToHSV(Color color,out double hue,out double saturation,out double value) {
+        public void ColorToHSV(System.Drawing.Color color,out double hue,out double saturation,out double value) {
             int max = Math.Max(color.R,Math.Max(color.G,color.B));
             int min = Math.Min(color.R,Math.Min(color.G,color.B));
 
@@ -223,7 +134,7 @@ namespace MpWinFormsClassLibrary {
             saturation = (max == 0) ? 0 : 1d - (1d * min / max);
             value = max / 255d;
         }
-        public Color ColorFromHSV(double hue,double saturation,double value) {
+        public System.Drawing.Color ColorFromHSV(double hue,double saturation,double value) {
             int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
             double f = hue / 60 - Math.Floor(hue / 60);
 
@@ -234,30 +145,29 @@ namespace MpWinFormsClassLibrary {
             int t = Convert.ToInt32(value * (1 - (1 - f) * saturation));
 
             if(hi == 0)
-                return Color.FromArgb(255,v,t,p);
+                return System.Drawing.Color.FromArgb(255,(byte)v,(byte)t,(byte)p);
             else if(hi == 1)
-                return Color.FromArgb(255,q,v,p);
+                return System.Drawing.Color.FromArgb(255,(byte)q,(byte)v,(byte)p);
             else if(hi == 2)
-                return Color.FromArgb(255,p,v,t);
+                return System.Drawing.Color.FromArgb(255,(byte)p,(byte)v,(byte)t);
             else if(hi == 3)
-                return Color.FromArgb(255,p,q,v);
+                return System.Drawing.Color.FromArgb(255,(byte)p,(byte)q,(byte)v);
             else if(hi == 4)
-                return Color.FromArgb(255,t,p,v);
+                return System.Drawing.Color.FromArgb(255,(byte)t,(byte)p,(byte)v);
             else
-                return Color.FromArgb(255,v,p,q);
+                return System.Drawing.Color.FromArgb(255,(byte)v,(byte)p,(byte)q);
         }
-        public Color GetInvertedColor(Color c) {
+        public System.Drawing.Color GetInvertedColor(System.Drawing.Color c) {
             double h, s, v;
             ColorToHSV(c,out h,out s,out v);
             h = (h + 180) % 360;
             return ColorFromHSV(h,s,v);
         }
-        public Color GetRandomColor(int alpha = 255) {
-            Random Rand = new Random(Convert.ToInt32(DateTime.Now.Millisecond));
+        public Color GetRandomColor(byte alpha = 255) {
             if(alpha == 255) {
-                return Color.FromArgb(Rand.Next(256),Rand.Next(256),Rand.Next(256));
+                return  Color.FromArgb(alpha,(byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
             }
-            return Color.FromArgb(alpha,Rand.Next(256),Rand.Next(256),Rand.Next(256));
+            return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256),(byte)Rand.Next(256));
         }
         public IPAddress GetCurrentIPAddress() {
             Ping ping = new Ping();
@@ -331,19 +241,13 @@ namespace MpWinFormsClassLibrary {
             rcount = rcount == 0 ? 1 : rcount;
             return new Size(ccount,rcount);
         }
-        public Size GetTextSize(string text,Font f) {
-            Image fakeImage = new Bitmap(1,1);
-            Graphics graphics = Graphics.FromImage(fakeImage);
-            SizeF s = graphics.MeasureString(text,f);
-            return new Size((int)s.Width,(int)s.Height);
-        }
-        public bool IsBright(Color c) {
+        public bool IsBright(Color c,int brightThreshold = 130) {
             return (int)Math.Sqrt(
             c.R * c.R * .299 +
             c.G * c.G * .587 +
-            c.B * c.B * .114) > 130;
+            c.B * c.B * .114) > brightThreshold;
         }
-        public Color ChangeColorBrightness(Color color,float correctionFactor) {
+        public System.Drawing.Color ChangeColorBrightness(System.Drawing.Color color,float correctionFactor) {
             float red = (float)color.R;
             float green = (float)color.G;
             float blue = (float)color.B;
@@ -360,7 +264,7 @@ namespace MpWinFormsClassLibrary {
                 blue = (255 - blue) * correctionFactor + blue;
             }
 
-            return Color.FromArgb(color.A,(int)red,(int)green,(int)blue);
+            return System.Drawing.Color.FromArgb(color.A,(byte)red,(byte)green,(byte)blue);
         }
         public long FileListSize(string[] paths) {
             long total = 0;
@@ -448,14 +352,14 @@ namespace MpWinFormsClassLibrary {
             return lc;
         }
         
-        public Icon GetIconFromBitmap(Bitmap bmp) {
+        public System.Drawing.Icon GetIconFromBitmap(System.Drawing.Bitmap bmp) {
            IntPtr Hicon = bmp.GetHicon();
-           return Icon.FromHandle(Hicon);
+           return System.Drawing.Icon.FromHandle(Hicon);
         }
         public string GetColorString(Color c) {
             return (int)c.A + "," + (int)c.R + "," + (int)c.G + "," + (int)c.B;
         }
-        public Color GetColorFromString(string colorStr) {
+        public System.Drawing.Color GetColorFromString(string colorStr) {
             if(colorStr == null || colorStr == String.Empty) {
                 colorStr = GetColorString(GetRandomColor());
             }
@@ -464,9 +368,9 @@ namespace MpWinFormsClassLibrary {
                 c[i] = Convert.ToInt32(colorStr.Split(',')[i]);
             }
             if(c.Length == 3) {
-                return Color.FromArgb(255/*c[3]*/,c[0],c[1],c[2]);
+                return System.Drawing.Color.FromArgb(255/*c[3]*/,c[0],c[1],c[2]);
             }
-            return Color.FromArgb(c[3],c[0],c[1],c[2]);
+            return System.Drawing.Color.FromArgb(c[3],c[0],c[1],c[2]);
         }
         //public Image GetIconImage(string path) {
         //    return (Image)IconReader.GetFileIcon(path,IconReader.IconSize.Large,false).ToBitmap();//Icon.ExtractAssociatedIcon(path).ToBitmap();
