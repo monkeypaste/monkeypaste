@@ -37,11 +37,7 @@ namespace MpWpfApp {
                 );
             }
         }
-        public double TileMargin {
-            get {
-                return TrayHeight / 50;
-            }
-        }
+        
         public double TitleMenuHeight {
             get {
                 return _mainWindowHeight / 10;
@@ -62,19 +58,34 @@ namespace MpWpfApp {
                 return MainWindowRect.Height - TitleMenuHeight - FilterMenuHeight;
             }
         }
-        public double TileSize {
+        public double ClipTileMargin {
             get {
-                return TrayHeight - (TileMargin * 2) - 10;
+                return TrayHeight / 50;
             }
         }
-        public double TileTitleHeight {
+        public double ClipTileDropShadowRadius {
             get {
-                return TileSize / 5;
+                return 10;
+            }
+        }
+        public double ClipTileSize {
+            get {
+                return TrayHeight - (ClipTileMargin * 2) - ClipTileDropShadowRadius;
+            }
+        }
+        public double ClipTileBorderSize {
+            get {
+                return ClipTileSize - ClipTileDropShadowRadius;
+            }
+        }
+        public double ClipTileTitleHeight {
+            get {
+                return ClipTileSize / 5;
             }
         }
         public double TileContentHeight {
             get {
-                return TileSize - TileTitleHeight;
+                return ClipTileSize - ClipTileTitleHeight;
             }
         }
     }

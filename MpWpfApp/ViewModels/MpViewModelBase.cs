@@ -16,6 +16,19 @@ namespace MpWpfApp {
         public string DisplayName { get; set; }
         public bool ThrowOnInvalidPropertyName { get; private set; }
 
+        private bool _isFocused;
+        public  bool IsFocused {
+            get {
+                return _isFocused;
+            }
+            set {
+                if(_isFocused != value) {
+                    _isFocused = value;
+                    OnPropertyChanged("IsFocused");
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName) {
@@ -122,55 +135,9 @@ namespace MpWpfApp {
             MessageBox.Show("CancelClosing");
         }
 
-        private MpRelayCommand _showWindowCommand;
-        public ICommand ShowWindowCommand {
-            get {
-                if(_showWindowCommand == null) {
-                    _showWindowCommand = new MpRelayCommand(
-                        param => this.ShowWindow(),
-                        param => this.CanShowWindow());
-                }
-                return _showWindowCommand;
-            }
-        }
-        private bool CanShowWindow() {
-            return Application.Current.MainWindow == null || Application.Current.MainWindow.Visibility != Visibility.Visible;
-        }
-        private int ShowWindow() {
-            if(Application.Current.MainWindow == null) {
-                Application.Current.MainWindow = new MpMainWindow();
-            }
-            Application.Current.MainWindow.Show();
-            Application.Current.MainWindow.Activate();
-            Application.Current.MainWindow.Visibility = Visibility.Visible;
-            return 3;
-        }
-
-        private MpRelayCommand _hideWindowCommand;
-        public ICommand HideWindowCommand {
-            get {
-                if(_hideWindowCommand == null) {
-                    _hideWindowCommand = new MpRelayCommand(
-                        param => this.HideWindow(),
-                        param => this.CanHideWindow());
-                }
-                return _hideWindowCommand;
-            }
-        }
-        private void HideWindow() {
-            Application.Current.MainWindow.Visibility = Visibility.Hidden;
-        }
-        private bool CanHideWindow() {
-            return Application.Current.MainWindow != null && Application.Current.MainWindow.IsVisible == true;
-        }
-
-
         public ICommand ExitApplicationCommand {
             get {
-                return new MpRelayCommand(param => {
-                    Application.Current.MainWindow.Close();
-                    Application.Current.Shutdown();
-                });
+                return new DelegateCommand(Application.Current.Shutdown);
             }
         }
         #endregion

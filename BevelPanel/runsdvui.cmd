@@ -1,2 +1,0 @@
-cd /d "C:\Users\tkefauver\Desktop\Dev\MonkeyPaste\BevelPanel" &msbuild "BeveledPanel.csproj" /t:sdvViewer /p:configuration="Debug" /p:platform="Any CPU" /p:SolutionDir="C:\Users\tkefauver\Desktop\Dev\MonkeyPaste" 
-exit %errorlevel% 
