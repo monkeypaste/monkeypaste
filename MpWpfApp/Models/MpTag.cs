@@ -61,14 +61,14 @@ namespace MpWpfApp {
                 MpDataStore.Instance.Db.ExecuteNonQuery("update MpTag set fk_MpTagTypeId=" + (int)TagType + ", TagName='" + TagName + "', fk_MpColorId=" + ColorId+" where pk_MpTagId="+TagId);                
             }
         }
-        public bool IsLinkedWithCopyItem(MpClip ci) {
+        public bool IsLinkedWithCopyItem(MpCopyItem ci) {
             DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpCopyItemTag where fk_MpTagId=" + TagId + " and fk_MpCopyItemId=" + ci.CopyItemId);
             if(dt != null && dt.Rows.Count > 0) {
                 return true;
             }
             return false;
         }
-        public void LinkWithCopyItem(MpClip ci) {
+        public void LinkWithCopyItem(MpCopyItem ci) {
             if(IsLinkedWithCopyItem(ci)) {
                 //Console.WriteLine("MpTag Warning attempting to relink tag " + TagId + " with copyitem " + ci.copyItemId+" ignoring...");
                 return;
@@ -77,7 +77,7 @@ namespace MpWpfApp {
 
             Console.WriteLine("Tag link created between tag " + TagId + " with copyitem " + ci.CopyItemId);
         }
-        public void UnlinkWithCopyItem(MpClip ci) {
+        public void UnlinkWithCopyItem(MpCopyItem ci) {
             if(!IsLinkedWithCopyItem(ci)) {
                 //Console.WriteLine("MpTag Warning attempting to unlink non-linked tag " + TagId + " with copyitem " + ci.copyItemId + " ignoring...");
                 return;

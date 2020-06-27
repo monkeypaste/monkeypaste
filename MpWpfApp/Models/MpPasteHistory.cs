@@ -20,7 +20,7 @@ namespace MpWpfApp {
         public MpPasteHistory(DataRow dr) {
             LoadDataRow(dr);
         }
-        public MpPasteHistory(MpClip ci,IntPtr destHandle) {
+        public MpPasteHistory(MpCopyItem ci,IntPtr destHandle) {
             PasteHistoryId = 0;
             CopyItemId = ci.CopyItemId;
             _destHandle = destHandle;

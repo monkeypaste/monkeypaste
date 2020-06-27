@@ -28,6 +28,8 @@ namespace MpWpfApp {
         }
 
         #region Appearance Properties
+        public Point DragStart;
+
         private bool _isTitleTextBoxFocused = false;
         public bool IsTitleTextBoxFocused {
             get {
@@ -40,6 +42,7 @@ namespace MpWpfApp {
                 }
             }
         }
+
         private bool _isSelected = false;
         public bool IsSelected {
             get {
@@ -69,6 +72,19 @@ namespace MpWpfApp {
                             BorderBrush = Brushes.Transparent;
                         }
                     }
+                }
+            }
+        }
+
+        private bool _isDragging = false;
+        public bool IsDragging {
+            get {
+                return _isDragging;
+            }
+            set {
+                if(_isDragging != value) {
+                    _isDragging = value;
+                    OnPropertyChanged(nameof(IsDragging));
                 }
             }
         }
@@ -171,6 +187,23 @@ namespace MpWpfApp {
             }
         }
 
+        private double _tileBorderThickness = MpMeasurements.Instance.ClipTileBorderThickness;
+        public double TileBorderThickness
+        {
+            get
+            {
+                return _tileBorderThickness;
+            }
+            set
+            {
+                if (_tileBorderThickness != value)
+                {
+                    _tileBorderThickness = value;
+                    OnPropertyChanged(nameof(TileBorderThickness));
+                }
+            }
+        }
+
         private double _tileTitleHeight = MpMeasurements.Instance.ClipTileTitleHeight;
         public double TileTitleHeight {
             get {
@@ -218,7 +251,20 @@ namespace MpWpfApp {
             set {
                 if(_tileDropShadowRadius != value) {
                     _tileDropShadowRadius = value;
-                    OnPropertyChanged("TileDropShadowRadius");
+                    OnPropertyChanged(nameof(TileDropShadowRadius));
+                }
+            }
+        }
+
+        private MpMainWindowViewModel _mainWindowViewModel;
+        public MpMainWindowViewModel MainWindowViewModel {
+            get {
+                return _mainWindowViewModel;
+            }
+            set {
+                if(_mainWindowViewModel != value) {
+                    _mainWindowViewModel = value;
+                    OnPropertyChanged(nameof(MainWindowViewModel));
                 }
             }
         }
@@ -265,8 +311,8 @@ namespace MpWpfApp {
             }
         }
 
-        private MpClip _copyItem;
-        public MpClip CopyItem {
+        private MpCopyItem _copyItem;
+        public MpCopyItem CopyItem {
             get {
                 return _copyItem;
             }
@@ -277,13 +323,12 @@ namespace MpWpfApp {
                 }
             }
         }
-        #endregion
-
-        
+        #endregion        
 
         #region Constructor
-        public MpClipTileViewModel(MpClip ci) {
+        public MpClipTileViewModel(MpCopyItem ci,MpMainWindowViewModel mwvm) {
             CopyItem = ci;
+            MainWindowViewModel = mwvm;
             PropertyChanged += (s, e) => {
                 if(e.PropertyName == "IsSelected") {
                     if(IsSelected) {
@@ -318,6 +363,51 @@ namespace MpWpfApp {
             IsHovering = false;
         }
 
+        public void ClipTile_LeftMouseButtonDown(object sender, MouseButtonEventArgs e) {
+            var draggedClipTile = ((Border)sender);
+            var draggedClipTileViewModel = (MpClipTileViewModel)draggedClipTile.DataContext;
+            draggedClipTile.CaptureMouse();
+            draggedClipTileViewModel.DragStart = Mouse.GetPosition(draggedClipTile);
+            DragDrop.DoDragDrop(draggedClipTile, draggedClipTileViewModel, DragDropEffects.Move);
+            e.Handled = false;
+        }
+        
+        public void ClipTile_MouseMove(object sender, MouseEventArgs e) {
+            var draggedClipTile = ((Border)sender);
+            var draggedClipTileViewModel = (MpClipTileViewModel)draggedClipTile.DataContext;
+            if (draggedClipTile.IsMouseCaptured) {
+                // get the parent container
+                var container = VisualTreeHelper.GetParent(draggedClipTile) as UIElement;
+
+                // get the position within the container
+                var mousePosition = e.GetPosition(container);
+
+                // move the usercontrol.
+                draggedClipTile.RenderTransform = new TranslateTransform(mousePosition.X - draggedClipTileViewModel.DragStart.X, mousePosition.Y - draggedClipTileViewModel.DragStart.Y);
+            }
+        }
+
+        public void ClipTile_LeftMouseButtonUp(object sender, MouseButtonEventArgs e) {
+            var draggedClipTile = ((Border)sender);
+            var draggedClipTileViewModel = (MpClipTileViewModel)draggedClipTile.DataContext;
+            draggedClipTileViewModel.IsDragging = false;
+            draggedClipTile.ReleaseMouseCapture();
+
+        }
+        //protected override void OnMouseMove(MouseEventArgs e) {
+        //    base.OnMouseMove(e);
+        //    if (e.LeftButton == MouseButtonState.Pressed) {
+        //        // Package the data.
+        //        DataObject data = new DataObject();
+        //        data.SetData(DataFormats.StringFormat, circleUI.Fill.ToString());
+        //        data.SetData("Double", circleUI.Height);
+        //        data.SetData("Object", this);
+
+        //        // Inititate the drag-and-drop operation.
+        //        DragDrop.DoDragDrop(this, data, DragDropEffects.Copy | DragDropEffects.Move);
+        //    }
+        //}
+
         public void LostFocus() {
             //occurs when editing tag text
             IsEditingTitle = false;
@@ -325,7 +415,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-
+        
         private DelegateCommand<KeyEventArgs> _keyDownCommand;
         public ICommand KeyDownCommand {
             get {
@@ -342,7 +432,7 @@ namespace MpWpfApp {
             Key key = e.Key;
             if(key == Key.Delete || key == Key.Back && !IsEditingTitle) {
                 //delete clip which shifts focus to neighbor
-                DeleteClipCommand.Execute(null);
+                MainWindowViewModel.DeleteClipCommand.Execute(null);
             } else if(key == Key.Enter) {
                 if(IsEditingTitle) {
                     IsEditingTitle = false;
@@ -359,24 +449,6 @@ namespace MpWpfApp {
             }
         }
 
-        private DelegateCommand _deleteClipCommand;
-        public ICommand DeleteClipCommand {
-            get {
-                if(_deleteClipCommand == null) {
-                    _deleteClipCommand = new DelegateCommand(DeleteClip);
-                }
-                return _deleteClipCommand;
-            }
-        }
-        private void DeleteClip() {
-            //this removal triggers mainwindowviewmodel to delete ALL SELECTED the cliptiles
-            var selectedClipTiles = ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).ClipTiles.Where(ct => ct.IsSelected).ToList();
-            foreach(var ct in selectedClipTiles) {
-                ct.CopyItem.DeleteFromDatabase();
-                MpDataStore.Instance.ClipList.Remove(ct.CopyItem);
-            }
-        }
-
         private DelegateCommand _renameClipCommand;
         public ICommand RenameClipCommand {
             get {
@@ -388,6 +460,7 @@ namespace MpWpfApp {
         }
         private void RenameClip() {
             IsEditingTitle = true;
+            IsTitleTextBoxFocused = true;
         }
         #endregion
 

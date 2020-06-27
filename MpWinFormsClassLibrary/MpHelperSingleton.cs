@@ -49,6 +49,19 @@ namespace MpWinFormsClassLibrary {
             Rand = new Random();
         }
         public MpImageConverter ImageConverter { get; set; } = new MpImageConverter();
+
+        public bool ApplicationIsActivated() {
+            var activatedHandle = WinApi.GetForegroundWindow();
+            if (activatedHandle == IntPtr.Zero) {
+                return false;       // No window is currently activated
+            }
+
+            var procId = Process.GetCurrentProcess().Id;
+            uint activeProcId;
+            WinApi.GetWindowThreadProcessId(activatedHandle, out activeProcId);
+
+            return (int)activeProcId == procId;
+        }
         /// <summary>
         /// Take the screenshot of the active window using the CopyFromScreen method relative to the bounds of the form.
         /// // Use it like : 

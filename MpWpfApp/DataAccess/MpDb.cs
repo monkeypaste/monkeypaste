@@ -19,15 +19,13 @@ namespace MpWpfApp {
         public MpClient Client { get; set; }
         public MpUser User { get; set; }
 
-        public string DbPath { get; set; } 
-        public string DbPassword { get; set; }
-
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
 
         private bool _noDb = false;
         public bool NoDb {
             get {
+                
                 return _noDb;
             }
             set {
@@ -47,18 +45,15 @@ namespace MpWpfApp {
                 return _isLoaded;
             }
         }
-        public MpDb(string dbPath,string dbPassword,string identityToken,string accessToken) {
-            NoDb = false; //MpCompatibility.IsRunningOnMono();
-            Console.WriteLine("Running mono: " + NoDb);
+        public MpDb(string identityToken,string accessToken) {
+            NoDb = false; 
 
-            DbPath = dbPath;
-            DbPassword = dbPassword;
             IdentityToken = identityToken;
             AccessToken = accessToken;
             Init();
         }
         public MpDb() {
-            DbPath = DbPassword = IdentityToken = AccessToken = string.Empty;
+            Properties.Settings.Default.DbPath = Properties.Settings.Default.DbPassword = IdentityToken = AccessToken = string.Empty;
             NoDb = true;
             Init();
         }
@@ -73,8 +68,8 @@ namespace MpWpfApp {
                 Console.WriteLine("Database exists, skipping Db creation");
                 return;
             }
-            if(DbPath == null || DbPath == String.Empty || !Directory.Exists(Path.GetDirectoryName(DbPath)) || !File.Exists(DbPath)) {
-                Console.WriteLine(DbPath + " does not exist...");
+            if(Properties.Settings.Default.DbPath == null || Properties.Settings.Default.DbPath == String.Empty || !Directory.Exists(Path.GetDirectoryName(Properties.Settings.Default.DbPath)) || !File.Exists(Properties.Settings.Default.DbPath)) {
+                Console.WriteLine(Properties.Settings.Default.DbPath + " does not exist...");
                 MessageBoxResult result = MessageBox.Show("No Database found would you like to load a file?","No DB Found",MessageBoxButton.YesNo,MessageBoxImage.Question,MessageBoxResult.Yes,MessageBoxOptions.DefaultDesktopOnly);
                 if(result == MessageBoxResult.Yes) {
                     OpenFileDialog openFileDialog = new OpenFileDialog() {
@@ -84,10 +79,10 @@ namespace MpWpfApp {
                     };
                     bool? openResult = openFileDialog.ShowDialog();
                     if(openResult != null && openResult.Value) {
-                        DbPath = openFileDialog.FileName;
+                        Properties.Settings.Default.DbPath = openFileDialog.FileName;
                         MessageBoxResult autoLoadResult = MessageBox.Show("Would you like to remember this next time?","Remember Database?",MessageBoxButton.YesNo,MessageBoxImage.Question,MessageBoxResult.Yes,MessageBoxOptions.DefaultDesktopOnly);
                         if(autoLoadResult == MessageBoxResult.Yes) {
-                            MpRegistryHelper.Instance.SetValue("DBPath",DbPath);
+                            MpRegistryHelper.Instance.SetValue("DBPath",Properties.Settings.Default.DbPath);
                         }
                     }
                 }
@@ -104,12 +99,12 @@ namespace MpWpfApp {
 
                         bool? saveResult = saveFileDialog.ShowDialog();
                         if(saveResult != null && saveResult.Value) {
-                            DbPath = saveFileDialog.FileName;
+                            Properties.Settings.Default.DbPath = saveFileDialog.FileName;
                             MessageBoxResult autoLoadResult = MessageBox.Show("Would you like to remember this next time?","Remember Database?",MessageBoxButton.YesNo,MessageBoxImage.Question,MessageBoxResult.Yes,MessageBoxOptions.DefaultDesktopOnly);
                             if(autoLoadResult == MessageBoxResult.Yes) {
-                                MpRegistryHelper.Instance.SetValue("DBPath",DbPath);
+                                MpRegistryHelper.Instance.SetValue("DBPath",Properties.Settings.Default.DbPath);
                             }
-                            SQLiteConnection.CreateFile(DbPath);
+                            SQLiteConnection.CreateFile(Properties.Settings.Default.DbPath);
                             MessageBoxResult newDbPasswordResult = MessageBox.Show("Would you like to encrypt database with a password?","Encrypt?",MessageBoxButton.YesNo,MessageBoxImage.Question,MessageBoxResult.Yes,MessageBoxOptions.DefaultDesktopOnly);
                             if(newDbPasswordResult == MessageBoxResult.Yes) {
                                 throw new Exception("Create WPF password form and show here");
@@ -128,7 +123,7 @@ namespace MpWpfApp {
                     }
                 }
             }
-            Console.WriteLine("Database successfully initialized at " + DbPath);
+            Console.WriteLine("Database successfully initialized at " + Properties.Settings.Default.DbPath);
             _isLoaded = true;
         }
         public void InitUser(string idToken) {
@@ -137,16 +132,16 @@ namespace MpWpfApp {
         public void InitClient(string accessToken) {
             Client = new MpClient(0,3,MpHelperSingleton.Instance.GetCurrentIPAddress()/*.MapToIPv4()*/.ToString(),accessToken,DateTime.Now);
         }
-        public List<MpClip> MergeCopyItemLists(List<MpClip> listA,List<MpClip> listB) {
+        public List<MpCopyItem> MergeCopyItemLists(List<MpCopyItem> listA,List<MpCopyItem> listB) {
             //sorts merged list by copy datetime
-            List<MpClip> mergedList = new List<MpClip>();
+            List<MpCopyItem> mergedList = new List<MpCopyItem>();
             if(listA != null) {
-                foreach(MpClip cia in listA) {
+                foreach(MpCopyItem cia in listA) {
                     mergedList.Add(cia);
                 }
             }
             if(listB != null) {
-                foreach(MpClip cib in listB) {
+                foreach(MpCopyItem cib in listB) {
                     //clear merged copyitems db id so it gets a new one in current list
 
                     if(NoDb) {
@@ -162,30 +157,30 @@ namespace MpWpfApp {
             mergedList = mergedList.OrderByDescending(x => MpTypeHelper.GetPropertyValue(x,"CopyDateTime")).ToList();
             return mergedList;
         }
-        public List<MpClip> GetCopyItems(string altPath = "", string altPassword = "") {
+        public List<MpCopyItem> GetCopyItems(string altPath = "", string altPassword = "") {
             if (NoDb) {
-                return new List<MpClip>();
+                return new List<MpCopyItem>();
             }
             string tempPath = "", tempPassword = "";
             if (altPath != "") {
-                tempPath = DbPath;
-                tempPassword = DbPassword;
-                DbPath = altPath;
-                DbPassword = altPassword;
+                tempPath = Properties.Settings.Default.DbPath;
+                tempPassword = Properties.Settings.Default.DbPassword;
+                Properties.Settings.Default.DbPath = altPath;
+                Properties.Settings.Default.DbPassword = altPassword;
 
             } else if (_isLoaded == false) {
                 InitDb();
             }
-            List<MpClip> copyItemList = new List<MpClip>();
+            List<MpCopyItem> copyItemList = new List<MpCopyItem>();
             DataTable dt = Execute("select * from MpCopyItem");
             if (dt != null) {
                 foreach (DataRow dr in dt.Rows) {
-                    copyItemList.Add(new MpClip(dr));
+                    copyItemList.Add(new MpCopyItem(dr));
                 }
             }
             if (altPath != "") {
-                DbPath = tempPath;
-                DbPassword = tempPassword;
+                Properties.Settings.Default.DbPath = tempPath;
+                Properties.Settings.Default.DbPassword = tempPassword;
 
             }
             Console.WriteLine(copyItemList.Count + " copyitems gathered");
@@ -199,7 +194,7 @@ namespace MpWpfApp {
                     appSettingList.Add(new MpSetting(dr));
                 }
             }
-            Console.WriteLine(appSettingList.Count + " settings gathered from db: " + DbPath);
+            Console.WriteLine(appSettingList.Count + " settings gathered from db: " + Properties.Settings.Default.DbPath);
             return appSettingList;
         }
         public List<MpApp> GetExcludedAppList() {
@@ -210,7 +205,7 @@ namespace MpWpfApp {
                     excludedAppList.Add(new MpApp(dr));
                 }
             }
-            Console.WriteLine(excludedAppList.Count + " exxcluded gathered from db: "+DbPath);
+            Console.WriteLine(excludedAppList.Count + " exxcluded gathered from db: "+Properties.Settings.Default.DbPath);
             return excludedAppList;
         }
         public List<MpTag> GetTags() {
@@ -231,15 +226,15 @@ namespace MpWpfApp {
             return tagList;
         }
         public void SetDbPassword(string newPassword) {
-            if(DbPassword != newPassword) {
+            if(Properties.Settings.Default.DbPassword != newPassword) {
                 // if db is unpassword protected
-                if(DbPassword == null || DbPassword == String.Empty) {
+                if(Properties.Settings.Default.DbPassword == null || Properties.Settings.Default.DbPassword == String.Empty) {
                     ExecuteNonQuery("PRAGMA key='" + newPassword + "';");
                 }
                 else {
                     ExecuteNonQuery("PRAGMA rekey='" + newPassword + "';");
                 }
-                DbPassword = newPassword;
+                Properties.Settings.Default.DbPassword = newPassword;
             }
         }
         private SQLiteConnection SetConnection() {
@@ -249,10 +244,10 @@ namespace MpWpfApp {
             // see https://stackoverflow.com/questions/1381264/password-protect-a-sqlite-db-is-it-possible
             // about passwords
             SQLiteConnectionStringBuilder connStr = new SQLiteConnectionStringBuilder();
-            connStr.DataSource = DbPath;
+            connStr.DataSource = Properties.Settings.Default.DbPath;
             connStr.Version = 3;
-            if(DbPassword != null && DbPassword != String.Empty) {
-                connStr.Password = DbPassword;
+            if(Properties.Settings.Default.DbPassword != null && Properties.Settings.Default.DbPassword != String.Empty) {
+                connStr.Password = Properties.Settings.Default.DbPassword;
             }
             //Console.WriteLine("Connection String: " + connStr);
             SQLiteConnection conn = null;
@@ -262,7 +257,7 @@ namespace MpWpfApp {
             catch(Exception e) {
                 Console.WriteLine("Error during SQL connection: " + connStr + "\n" + "With error: " + e.ToString());
                 conn = null;
-                DbPath = null;
+                Properties.Settings.Default.DbPath = null;
                 InitDb();
                 SetConnection();
             }
@@ -305,13 +300,12 @@ namespace MpWpfApp {
                 wasError = true;
                 Console.WriteLine("Error in executenonquery: " + ex.ToString());
                 if(_isLoaded) {
-                    MessageBoxResult warnDbErrorResult = MessageBox.Show("Error writing data to " + DbPath + " and program terminating","IO Error",MessageBoxButton.OK,MessageBoxImage.Error,MessageBoxResult.Yes,MessageBoxOptions.DefaultDesktopOnly);
+                    MessageBoxResult warnDbErrorResult = MessageBox.Show("Error writing data to " + Properties.Settings.Default.DbPath + " and program terminating","IO Error",MessageBoxButton.OK,MessageBoxImage.Error,MessageBoxResult.Yes,MessageBoxOptions.DefaultDesktopOnly);
                    // MpSingletonController.Instance.ExitApplication();
                 } else {
                     //MpEnterDbPasswordForm enterPasswordForm = new MpEnterDbPasswordForm();
                     //MessageBoxResult enterPasswordResult = enterPasswordForm.ShowDialog();
 
-                    throw new Exception("Create WPF password form and show here");
                     _passwordAttempts++;
                     if(_passwordAttempts < Properties.Settings.Default.MaxDbPasswordAttempts) {
                         Init();
@@ -319,6 +313,8 @@ namespace MpWpfApp {
                     else {
                         return;
                     }
+
+                    throw new Exception("Create WPF password form and show here");
                 }              
             }
             if(!wasError) {
@@ -369,7 +365,7 @@ namespace MpWpfApp {
                 wasError = true;
                 Console.WriteLine("Error in sql execute  " + ex.ToString());
                 if(_isLoaded) {
-                    MessageBoxResult warnDbErrorResult = MessageBox.Show("Error writing data to " + DbPath + " and program terminating","IO Error",MessageBoxButton.OK,MessageBoxImage.Error,MessageBoxResult.Yes,MessageBoxOptions.DefaultDesktopOnly);
+                    MessageBoxResult warnDbErrorResult = MessageBox.Show("Error writing data to " + Properties.Settings.Default.DbPath + " and program terminating","IO Error",MessageBoxButton.OK,MessageBoxImage.Error,MessageBoxResult.Yes,MessageBoxOptions.DefaultDesktopOnly);
 
                     throw new Exception("Add exit app call here");
                 }
@@ -377,7 +373,6 @@ namespace MpWpfApp {
                     //MpEnterDbPasswordForm enterPasswordForm = new MpEnterDbPasswordForm();
                     //MessageBoxResult enterPasswordResult = enterPasswordForm.ShowDialog();
 
-                    throw new Exception("Create WPF password form and show here");
                     _passwordAttempts++;
                     if(_passwordAttempts < Properties.Settings.Default.MaxDbPasswordAttempts) {
                         Init();
@@ -385,6 +380,8 @@ namespace MpWpfApp {
                     else {
                         return null;
                     }
+
+                    throw new Exception("Create WPF password form and show here");
                 }
             }
             if(!wasError) {
@@ -425,12 +422,12 @@ namespace MpWpfApp {
         }
         
         public void ResetDb() {
-            // File.Delete(DbPath);
+            // File.Delete(Properties.Settings.Default.DbPath);
             //InitDb();
             ExecuteNonQuery(GetClearString());
         }
         public void DeleteDb() {
-            File.Delete(DbPath);
+            File.Delete(Properties.Settings.Default.DbPath);
         }
         private string GetCreateString() {
             return @"

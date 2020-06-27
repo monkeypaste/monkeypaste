@@ -13,12 +13,12 @@ namespace MpWpfApp {
         public static MpMeasurements Instance { get { return lazy.Value; } }
 
         private double _mainWindowToScreenHeightRatio = 0.35;
-        
-        private MpMeasurements() {}
+
+        private MpMeasurements() { }
 
         private double _screenWidth = SystemParameters.PrimaryScreenWidth;
         private double _screenHeight = SystemParameters.PrimaryScreenHeight;
-        
+
 
         private double _mainWindowHeight {
             get {
@@ -32,12 +32,12 @@ namespace MpWpfApp {
                 return new Rect(
                     0,
                     SystemParameters.WorkArea.Height - _mainWindowHeight,
-                    _screenWidth, 
+                    _screenWidth,
                     _mainWindowHeight
                 );
             }
         }
-        
+
         public double TitleMenuHeight {
             get {
                 return _mainWindowHeight / 10;
@@ -50,7 +50,7 @@ namespace MpWpfApp {
         }
         public double AppStateButtonPanelWidth {
             get {
-                return _mainWindowHeight / 8;
+                return _mainWindowHeight / 7;
             }
         }
         public double TrayHeight {
@@ -78,6 +78,11 @@ namespace MpWpfApp {
                 return ClipTileSize - ClipTileDropShadowRadius;
             }
         }
+        public double ClipTileBorderThickness {
+            get {
+                return 5;
+            }
+        }
         public double ClipTileTitleHeight {
             get {
                 return ClipTileSize / 5;
@@ -85,7 +90,7 @@ namespace MpWpfApp {
         }
         public double TileContentHeight {
             get {
-                return ClipTileSize - ClipTileTitleHeight;
+                return ClipTileSize - ClipTileTitleHeight - (ClipTileMargin*2);
             }
         }
     }

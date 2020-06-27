@@ -22,11 +22,11 @@ namespace MpWpfApp {
 
         //First call is in MpClipTray (for now)
         public MpDataStore() {      
-            Db = new MpDb((string)MpRegistryHelper.Instance.GetValue("DBPath"), (string)MpRegistryHelper.Instance.GetValue("DBPassword"),string.Empty,string.Empty); //inits not NoDb=true 
+            Db = new MpDb(string.Empty,string.Empty); //inits not NoDb=true 
             ClipboardManager = new MpClipboardManager();
             ClipboardManager.Init();
             ClipboardManager.ClipboardChangedEvent += () => {
-                MpClip newClip = MpClip.CreateFromClipboard();
+                MpCopyItem newClip = MpCopyItem.CreateFromClipboard();
                 var mainWindowViewModel = ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext);
                 if(mainWindowViewModel.IsInAppendMode) {
                     //when in append mode just append the new items text to selecteditem
@@ -49,10 +49,10 @@ namespace MpWpfApp {
             ExcludedAppList = new ObservableCollection<MpApp>();
             SettingList = new ObservableCollection<MpSetting>();
             TagList = new ObservableCollection<MpTag>();
-            ClipList = new ObservableCollection<MpClip>();
+            ClipList = new ObservableCollection<MpCopyItem>();
         }
-        private ObservableCollection<MpClip> _copyItemList = new ObservableCollection<MpClip>();
-        public ObservableCollection<MpClip> ClipList {
+        private ObservableCollection<MpCopyItem> _copyItemList = new ObservableCollection<MpCopyItem>();
+        public ObservableCollection<MpCopyItem> ClipList {
             get {
                 return _copyItemList;
             }
@@ -113,7 +113,7 @@ namespace MpWpfApp {
                 foreach(MpTag t in Db.GetTags()) {
                     TagList.Add(t);
                 }
-                foreach (MpClip ci in Db.GetCopyItems()) {
+                foreach (MpCopyItem ci in Db.GetCopyItems()) {
                     ClipList.Add(ci);
                 }
             }

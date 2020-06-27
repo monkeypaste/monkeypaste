@@ -8,7 +8,7 @@ using System.Windows.Media;
 using MpWinFormsClassLibrary;
 
 namespace MpWpfApp {
-    public class MpClip:MpDbObject {
+    public class MpCopyItem:MpDbObject {
         public List<MpSubTextToken> subTextTokenList = new List<MpSubTextToken>();
 
         private Object DataObject { get; set; }
@@ -29,12 +29,12 @@ namespace MpWpfApp {
         public MpClient Client { get; set; }
         public MpColor ItemColor { get; set; }
 
-        public MpClip() {
+        public MpCopyItem() {
         }
 
-        public static MpClip CreateFromClipboard() {
+        public static MpCopyItem CreateFromClipboard() {
             IDataObject iData = Clipboard.GetDataObject();
-            MpClip ci = null;
+            MpCopyItem ci = null;
             if(iData == null) {
                 return ci;
             }
@@ -42,11 +42,11 @@ namespace MpWpfApp {
             Color itemColor = MpHelperSingleton.Instance.GetRandomColor();
 
             if(iData.GetDataPresent(DataFormats.Bitmap)) {
-                ci = MpClip.CreateCopyItem(MpCopyItemType.Image, (System.Drawing.Image)iData.GetData(DataFormats.Bitmap, true), sourcePath, itemColor);// CreateCopyItem(MpCopyItemType.None,null,IntPtr.Zero);// ((Image)iData.GetData(DataFormats.Bitmap,true),sourceHandle);
+                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Image, (System.Drawing.Image)iData.GetData(DataFormats.Bitmap, true), sourcePath, itemColor);// CreateCopyItem(MpCopyItemType.None,null,IntPtr.Zero);// ((Image)iData.GetData(DataFormats.Bitmap,true),sourceHandle);
             } else if(iData.GetDataPresent(DataFormats.FileDrop)) {
-                ci = MpClip.CreateCopyItem(MpCopyItemType.FileList, (string[])iData.GetData(DataFormats.FileDrop, true), sourcePath, itemColor);
+                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.FileList, (string[])iData.GetData(DataFormats.FileDrop, true), sourcePath, itemColor);
             } else if(iData.GetDataPresent(DataFormats.Rtf) || iData.GetDataPresent(DataFormats.Html) || iData.GetDataPresent(DataFormats.Text)) {
-                ci = MpClip.CreateCopyItem(MpCopyItemType.Text, (string)iData.GetData(DataFormats.Text), sourcePath, itemColor);
+                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Text, (string)iData.GetData(DataFormats.Text), sourcePath, itemColor);
             }
               //else if() {
               //    ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Text,(string)iData.GetData(DataFormats.Text),sourcePath,itemColor);
@@ -63,8 +63,8 @@ namespace MpWpfApp {
             }
             return ci;
         }
-        public static MpClip CreateCopyItem(MpCopyItemType itemType,object data,string sourcePath,Color tileColor) { 
-            MpClip newItem = new MpClip();
+        public static MpCopyItem CreateCopyItem(MpCopyItemType itemType,object data,string sourcePath,Color tileColor) { 
+            MpCopyItem newItem = new MpCopyItem();
             newItem.SourcePath = sourcePath;
             newItem.CopyItemType = itemType;
             //if(newItem.CopyItemType == MpCopyItemType.RichText) {
@@ -97,6 +97,7 @@ namespace MpWpfApp {
             //else 
             if(newItem.CopyItemType == MpCopyItemType.Text) {
                 newItem.DataObject = (string)data;
+                newItem.subTextTokenList = MpSubTextToken.GatherTokens((string)newItem.DataObject);
             }
             else {
                 newItem.DataObject = data;
@@ -123,18 +124,18 @@ namespace MpWpfApp {
             newItem.ItemColor = new MpColor((int)tileColor.R,(int)tileColor.G,(int)tileColor.B,255);
             return newItem;
         }
-        public MpClip(int copyItemId) {
+        public MpCopyItem(int copyItemId) {
             DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + copyItemId);
             if(dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
         }
-        public static List<MpClip> GetAllClips() {
-            List<MpClip> clips = new List<MpClip>();
+        public static List<MpCopyItem> GetAllClips() {
+            List<MpCopyItem> clips = new List<MpCopyItem>();
             DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpCopyItem");
             if(dt != null && dt.Rows.Count > 0) {
                 foreach(DataRow r in dt.Rows) {
-                    clips.Add(new MpClip(r));
+                    clips.Add(new MpCopyItem(r));
                 }
             }
             return clips;
@@ -183,7 +184,7 @@ namespace MpWpfApp {
             return "Error unknown copyitem format!";
         }
 
-        public MpClip(DataRow dr) {
+        public MpCopyItem(DataRow dr) {
             LoadDataRow(dr);
         }
         
@@ -203,6 +204,15 @@ namespace MpWpfApp {
                 this.App = new MpApp(dt.Rows[0]);
             } else {
                 Console.WriteLine("MpCopyItem Error: error retrieving MpApp with id " + AppId);
+            }
+            //get subtokens
+            dt = MpDataStore.Instance.Db.Execute("select * from MpSubTextToken where fk_MpCopyItemId=" + CopyItemId);
+            if (dt != null && dt.Rows.Count > 0) {
+                foreach(DataRow row in dt.Rows) {
+                    subTextTokenList.Add(new MpSubTextToken(row));
+                }
+            } else {
+                //copyitem not req'd to have subtokens
             }
 
             //get color
@@ -272,16 +282,19 @@ namespace MpWpfApp {
                     MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpTextItem where fk_MpCopyItemId=" + CopyItemId);
                     MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpPasteHistory where fk_MpCopyItemId=" + CopyItemId);
                     MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpCopyItem where pk_MpCopyItemId=" + CopyItemId);
+                    MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpSubTextToken where fk_MpCopyItemId=" + CopyItemId);
                     break;
                 case MpCopyItemType.FileList:
                     MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpFileDropListSubItem where fk_MpFileDropListItemId=" + SubItemId);
                     MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpFileDropListItem where pk_MpFileDropListItemId=" + SubItemId);
                     MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpCopyItem where pk_MpCopyItemId=" + CopyItemId);
+                    MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpSubTextToken where fk_MpCopyItemId=" + CopyItemId);
                     break;
                 case MpCopyItemType.Image:
                     MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpImageItem where fk_MpCopyItemId=" + CopyItemId);
                     MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpPasteHistory where fk_MpCopyItemId=" + CopyItemId);
                     MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpCopyItem where pk_MpCopyItemId=" + CopyItemId);
+                    MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpSubTextToken where fk_MpCopyItemId=" + CopyItemId);
                     break;
             }
         }
@@ -305,6 +318,7 @@ namespace MpWpfApp {
             }
             App.WriteToDatabase();
             this.AppId = this.App.appId;
+            
             
             if(ItemColor == null) {
                 throw new Exception("MpCopyItem exception writing without color created");
@@ -369,6 +383,10 @@ namespace MpWpfApp {
                     }
                     
                     break;
+            }
+            foreach (MpSubTextToken subToken in subTextTokenList) {
+                subToken.CopyItemId = CopyItemId;
+                subToken.WriteToDatabase();
             }
             MapDataToColumns();
             Console.WriteLine(isNew ? "Created ":"Updated " + " MpCopyItem");

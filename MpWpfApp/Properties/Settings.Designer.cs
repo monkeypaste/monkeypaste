@@ -40,5 +40,47 @@ namespace MpWpfApp.Properties {
                 return ((int)(this["MaxDbPasswordAttempts"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\tkefauver\\Desktop\\mp.db")]
+        public string DbPath {
+            get {
+                return ((string)(this["DbPath"]));
+            }
+            set {
+                this["DbPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DbPassword {
+            get {
+                return ((string)(this["DbPassword"]));
+            }
+            set {
+                this["DbPassword"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public int ShowMainWindowAnimationMilliseconds {
+            get {
+                return ((int)(this["ShowMainWindowAnimationMilliseconds"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int ShowMainWindowMouseHitZoneHeight {
+            get {
+                return ((int)(this["ShowMainWindowMouseHitZoneHeight"]));
+            }
+        }
     }
 }

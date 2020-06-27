@@ -22,7 +22,7 @@ namespace MpWpfApp {
             set {
                 if(_isSelected != value) {
                     _isSelected = value;
-                    OnPropertyChanged("IsSelected");                    
+                    OnPropertyChanged(nameof(IsSelected));                    
                 }
             }
         }
@@ -33,10 +33,8 @@ namespace MpWpfApp {
                 return _isTextBoxFocused;
             }
             set {
-                if(_isTextBoxFocused != value) {
-                    _isTextBoxFocused = value;
-                    OnPropertyChanged("IsTextBoxFocused");
-                }
+                _isTextBoxFocused = value;
+                OnPropertyChanged(nameof(IsTextBoxFocused));
             }
         }
 
@@ -48,7 +46,7 @@ namespace MpWpfApp {
             set {
                 if(_isEditing != value) {                    
                     _isEditing = value;
-                    OnPropertyChanged("IsEditing");
+                    OnPropertyChanged(nameof(IsEditing));
                 }
             }
         }
@@ -61,7 +59,7 @@ namespace MpWpfApp {
             set {
                 if(_isHovering != value) {
                     _isHovering = value;
-                    OnPropertyChanged("IsHovering");
+                    OnPropertyChanged(nameof(IsHovering));
                 }
             }
         }
@@ -74,7 +72,7 @@ namespace MpWpfApp {
             set {
                 if(_tagBorderBrush != value) {
                     _tagBorderBrush = value;
-                    OnPropertyChanged("TagBorderBrush");
+                    OnPropertyChanged(nameof(TagBorderBrush));
                 }
             }
         }
@@ -87,7 +85,7 @@ namespace MpWpfApp {
             set {
                 if(_tagTextColor != value) {
                     _tagTextColor = value;
-                    OnPropertyChanged("TagTextColor");
+                    OnPropertyChanged(nameof(TagTextColor));
                 }
             }
         }
@@ -134,6 +132,7 @@ namespace MpWpfApp {
             }
         }
         #endregion
+
         #region Exposed Model Properties
         private MpTag _tag;
         public MpTag Tag {
@@ -170,27 +169,39 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        private MpMainWindowViewModel _mainWindowViewModel;
+        public MpMainWindowViewModel MainWindowViewModel {
+            get {
+                return _mainWindowViewModel;
+            }
+            set {
+                if (_mainWindowViewModel != value) {
+                    _mainWindowViewModel = value;
+                    OnPropertyChanged(nameof(MainWindowViewModel));
+                }
+            }
+        }
         #endregion
 
         #region Constructor
-        public MpTagTileViewModel(MpTag tag) {
+        public MpTagTileViewModel(MpTag tag,MpMainWindowViewModel mainWindowViewModel) {
             DisplayName = "MpTagTileViewModel";
             Tag = tag;
+            MainWindowViewModel = mainWindowViewModel;
             PropertyChanged += (s, e) => {
-                if(e.PropertyName == "IsEditing") {
+                if(e.PropertyName == nameof(IsEditing)) {
                     if(IsEditing) {
                         //show textbox and select all text
                         TextBoxVisibility = Visibility.Visible;
                         TextBlockVisibility = Visibility.Collapsed;
-                        IsTextBoxFocused = false;
                         IsTextBoxFocused = true;
                     } else {
                         //tag names cannot be blank so don't allow the textblock to reappear and change name back to 'untitled'
                         if(TagName.Trim() == string.Empty) {
                             TagName = "Untitled";
                             //to trigger selectall unfocus and refocus tag textbox
-                            IsTextBoxFocused = false;
-                            IsTextBoxFocused = true;
+                            //IsTextBoxFocused = true;
                             IsEditing = true;
                             return;
                         }
@@ -199,7 +210,7 @@ namespace MpWpfApp {
                         Tag.WriteToDatabase();
                         IsTextBoxFocused = false;
                     }
-                } else if(e.PropertyName == "IsSelected") {
+                } else if(e.PropertyName == nameof(IsSelected)) {
                     if(IsSelected) {
                         TagBorderBrush = Brushes.Red;
                         TagColor = new SolidColorBrush(Tag.TagColor.Color);
@@ -210,7 +221,7 @@ namespace MpWpfApp {
                         TagColor = Brushes.Black;
                         TagTextColor = Brushes.White;
                     }
-                } else if(e.PropertyName == "IsHovering") {
+                } else if(e.PropertyName == nameof(IsHovering)) {
                     if(!IsSelected) {
                         if(IsHovering) {
                             TagBorderBrush = Brushes.Yellow;
@@ -250,40 +261,10 @@ namespace MpWpfApp {
         }
         private void KeyDown(KeyEventArgs e) {
             Key key = e.Key;
-            if(key == Key.Delete || key == Key.Back && DeleteTagCommand.CanExecute(null)) {
-                DeleteTagCommand.Execute(null);
+            if(key == Key.Delete || key == Key.Back && MainWindowViewModel.DeleteTagCommand.CanExecute(null)) {
+                MainWindowViewModel.DeleteTagCommand.Execute(null);
             } else if(key == Key.Enter && IsEditing) {
                 IsEditing = false;
-            }
-        }
-
-        private DelegateCommand _deleteTagCommand;
-        public ICommand DeleteTagCommand {
-            get {
-                if(_deleteTagCommand == null) {
-                    _deleteTagCommand = new DelegateCommand(DeleteTag, CanDeleteTag);
-                }
-                return _deleteTagCommand;
-            }
-        }
-        private bool CanDeleteTag() {
-            //allow delete if any tag besides history tag is selected, delete method will ignore history
-            var selectedTagTiles = ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).TagTiles.Where(ct => ct.IsSelected).ToList();
-            if(selectedTagTiles.Count == 1 && selectedTagTiles[0].TagName == "History") {
-                return false;
-            }
-            return selectedTagTiles.Count > 0;
-        }
-        private void DeleteTag() {
-            //this removal triggers mainwindowviewmodel to delete the tagtile            
-            var selectedTagTiles = ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).TagTiles.Where(ct => ct.IsSelected).ToList();
-            foreach(var ct in selectedTagTiles) {
-                //do not delete history tag
-                if(ct.Tag.TagName == "History") {
-                    continue;
-                }
-                MpDataStore.Instance.TagList.Remove(ct.Tag);
-                ct.Tag.DeleteFromDatabase();
             }
         }
 
