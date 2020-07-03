@@ -15,5 +15,8 @@ namespace MpWpfApp {
     /// Simple application. Check the XAML for comments.
     /// </summary>
     public partial class App : Application {
+        protected override void OnStartup(StartupEventArgs e) {
+            base.OnStartup(e);
+        }
     }
 }

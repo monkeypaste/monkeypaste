@@ -4,6 +4,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
         xmlns:local="clr-namespace:MpWpfApp"
         local:MpWindowClosingBehavior.Closed="{Binding ClosedCommand}"
         local:MpWindowClosingBehavior.Closing="{Binding ClosingCommand}"
@@ -12,56 +15,66 @@
         Title="MpMainWindow"
         WindowStyle="None"
         AllowsTransparency="True"
+        Top="10000"
         ShowInTaskbar="false"
         ResizeMode="NoResize"
         Background="Transparent"
         Height="350"
         Width="1680">
     <Window.DataContext>
-        <local:MpMainWindowViewModel/>
+        <local:MpMainWindowViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <Style x:Key="DropShadowBorderStyle"
+               TargetType="{x:Type Border}">
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="0"
+                                      BlurRadius="0"></DropShadowEffect>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <!-- Main Window Grid -->
     <Grid x:Name="MainWindowGrid"
-            Background="Green">
+          Background="Green">
         <Grid.RowDefinitions>
             <RowDefinition Height="{Binding TitleMenuHeight}"
-                    x:Name="ClipTrayTitleMenuPanel" />
+                           x:Name="ClipTrayTitleMenuPanel" />
             <RowDefinition Height="{Binding FilterMenuHeight}"
-                    x:Name="ClipTrayFilterMenuPanel" />
-            <RowDefinition Height="216"
-                    x:Name="ClipTrayGrid" />
-            <RowDefinition Height="53"/>
+                           x:Name="ClipTrayFilterMenuPanel" />
+            <RowDefinition x:Name="ClipTrayGrid" />
         </Grid.RowDefinitions>
         <!-- Main Menu -->
         <StackPanel Grid.Row="0"
-                Grid.Column="0"
-                Orientation="Horizontal"
-                Background="DarkGreen" />
+                    Grid.Column="0"
+                    Orientation="Horizontal"
+                    Background="DarkGreen" />
         <!-- FilterMenu -->
         <Grid Grid.Row="1"
-                Grid.Column="0"
-                Focusable="True"
-                Background="DarkBlue">
+              Grid.Column="0"
+              Focusable="True"
+              Background="DarkBlue">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="8*" />
-                <ColumnDefinition Width="2*" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="7*" />
+                <ColumnDefinition Width="1.5*" />
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Row="0"
-                    Grid.Column="1"
-                    Focusable="True"
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal">
-                <ListBox x:Name="TagTray"
+                        Grid.Column="1"
                         Focusable="True"
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        dd:DragDrop.IsDragSource="True"
-                        dd:DragDrop.IsDropTarget="True"
                         HorizontalAlignment="Center"
-                        SelectionMode="Single"
-                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                        ItemsSource="{Binding TagTiles}">
+                        Orientation="Horizontal">
+                <ListBox x:Name="TagTray"
+                         Focusable="True"
+                         Background="Transparent"
+                         BorderBrush="Transparent"
+                         dd:DragDrop.IsDragSource="True"
+                         dd:DragDrop.IsDropTarget="True"
+                         HorizontalAlignment="Center"
+                         SelectionMode="Single"
+                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                         ItemsSource="{Binding TagTiles}">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="{x:Type ListBoxItem}">
                             <Setter Property="IsSelected"
@@ -78,14 +91,14 @@
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel IsItemsHost="True"
-                                    ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                    Orientation="Horizontal"/>
+                                                    ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                                    Orientation="Horizontal" />
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <!-- Tag Tile View -->
-                            <Border CornerRadius="10"
+                            <Border CornerRadius="20"
                                     Margin="5,0,5,0"
                                     Padding="10,0,10,0"
                                     Focusable="True"
@@ -98,61 +111,62 @@
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseEnter">
                                         <i:CallMethodAction TargetObject="{Binding}"
-                                                MethodName="MouseEnter" />
+                                                            MethodName="MouseEnter" />
                                     </i:EventTrigger>
                                     <i:EventTrigger EventName="MouseLeave">
                                         <i:CallMethodAction TargetObject="{Binding}"
-                                                MethodName="MouseLeave" />
+                                                            MethodName="MouseLeave" />
                                     </i:EventTrigger>
                                     <i:EventTrigger EventName="KeyDown">
                                         <i:InvokeCommandAction Command="{Binding KeyDownCommand}"
-                                                PassEventArgsToCommand="True" />
+                                                               PassEventArgsToCommand="True" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                                 <Border.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="Rename"
-                                                Command="{Binding RenameTagCommand}" />
+                                                  Command="{Binding RenameTagCommand}" />
                                         <MenuItem Header="Delete"
-                                                Command="{Binding MainWindowViewModel.DeleteTagCommand}" />
+                                                  Command="{Binding MainWindowViewModel.DeleteTagCommand}" />
                                     </ContextMenu>
                                 </Border.ContextMenu>
                                 <StackPanel>
                                     <TextBlock Padding="0,0,0,10"
-                                            Background="Transparent"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Top"
-                                            Foreground="White"
-                                            Visibility="{Binding TextBlockVisibility}"
-                                            Text="{Binding TagName}"
-                                            FontSize="{Binding TagFontSize}">
+                                               Background="Transparent"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Top"
+                                               Foreground="White"
+                                               Visibility="{Binding TextBlockVisibility}"
+                                               Text="{Binding TagName}"
+                                               FontSize="{Binding TagFontSize}">
                                         <TextBlock.Effect>
                                             <DropShadowEffect ShadowDepth="2"
-                                                    Direction="330"
-                                                    Color="Black"
-                                                    Opacity="1.0"
-                                                    BlurRadius="4" />
+                                                              Direction="330"
+                                                              Color="Black"
+                                                              Opacity="1.0"
+                                                              BlurRadius="4" />
                                         </TextBlock.Effect>
                                     </TextBlock>
                                     <TextBox Padding="0,0,0,10"
-                                            Background="White"
-                                            Foreground="Black"
-                                            IsReadOnly="False"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Top"
-                                            local:MpTextBoxBehavior.SelectAllTextOnFocus="True"
-                                            local:MpFocusExtension.IsFocused="{Binding IsTextBoxFocused}"
-                                            Visibility="{Binding TextBoxVisibility}"
-                                            Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                            FontSize="{Binding TagFontSize}">
+                                             Background="White"
+                                             Foreground="Black"
+                                             IsReadOnly="False"
+                                             
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Top"
+                                             local:MpTextBoxBehavior.SelectAllTextOnFocus="True"
+                                             local:MpFocusExtension.IsFocused="{Binding IsTextBoxFocused}"
+                                             Visibility="{Binding TextBoxVisibility}"
+                                             Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             FontSize="{Binding TagFontSize}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="KeyDown">
                                                 <i:InvokeCommandAction Command="{Binding KeyDownCommand}"
-                                                        PassEventArgsToCommand="True" />
+                                                                       PassEventArgsToCommand="True" />
                                             </i:EventTrigger>
                                             <i:EventTrigger EventName="LostFocus">
                                                 <i:CallMethodAction MethodName="LostFocus"
-                                                        TargetObject="{Binding}" />
+                                                                    TargetObject="{Binding}" />
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                     </TextBox>
@@ -166,30 +180,30 @@
                         Width="30"
                         Command="{Binding CreateTagCommand}">
                     <Image Stretch="Fill"
-                            Source="add2.png" />
+                           Source="add2.png" />
                 </Button>
             </StackPanel>
             <!-- Search TextBox -->
             <TextBox Grid.Row="0"
-                    Grid.Column="2"
-                    Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    Margin="0,7,7,7"
-                    FontSize="24" />
+                     Grid.Column="2"
+                     Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="0,7,7,7"
+                     FontSize="24" />
         </Grid>
         <!--3rd row row for tray -->
         <Grid Grid.Row="2"
-                Grid.Column="0"
-                Focusable="True"
-                Background="DarkViolet" Grid.RowSpan="2">
+              Grid.Column="0"
+              Focusable="True"
+              Background="DarkViolet">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding AppStateButtonGridWidth}"
-                        x:Name="AppStateButtonGrid" />
+                                  x:Name="AppStateButtonGrid" />
                 <ColumnDefinition x:Name="ClipTrayListBox" />
             </Grid.ColumnDefinitions>
             <!-- Side bar AppState Buttons -->
             <Grid Grid.Row="0"
-                    Grid.Column="0"
-                    Background="Orange">
+                  Grid.Column="0"
+                  Background="Orange">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
@@ -198,58 +212,59 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <ToggleButton Grid.Row="0"
-                        Grid.Column="0"
-                        Padding="0,5,0,5">
+                              Grid.Column="0"
+                              Padding="0,5,0,5">
                     <TextBlock Text="Pause System"
-                            HorizontalAlignment="Center"
-                            TextWrapping="Wrap" />
+                               HorizontalAlignment="Center"
+                               TextWrapping="Wrap" />
                 </ToggleButton>
                 <ToggleButton Grid.Row="1"
-                        Grid.Column="0" 
-                        IsChecked="{Binding IsAutoCopyMode}"
-                        Padding="0,5,0,5">
+                              Grid.Column="0"
+                              IsChecked="{Binding IsAutoCopyMode}"
+                              Padding="0,5,0,5">
                     <TextBlock Text="Auto Copy"
-                            HorizontalAlignment="Center"
-                            TextWrapping="Wrap" />
+                               HorizontalAlignment="Center"
+                               TextWrapping="Wrap" />
                 </ToggleButton>
                 <ToggleButton Grid.Row="2"
-                        Grid.Column="0"
-                        Padding="0,5,0,5">
+                              Grid.Column="0"
+                              Padding="0,5,0,5">
                     <TextBlock Text="Auto Paste"
-                            HorizontalAlignment="Center"
-                            TextWrapping="Wrap" />
+                               HorizontalAlignment="Center"
+                               TextWrapping="Wrap" />
                 </ToggleButton>
                 <ToggleButton Grid.Row="3"
-                        Grid.Column="0"
-                        Padding="0,5,0,5"
-                        IsChecked="{Binding IsInAppendMode}">
-                    <TextBlock Text="Auto Append" FontSize="11"
-                            HorizontalAlignment="Center"
-                            TextWrapping="Wrap" />
+                              Grid.Column="0"
+                              Padding="0,5,0,5"
+                              IsChecked="{Binding IsInAppendMode}">
+                    <TextBlock Text="Auto Append"
+                               FontSize="11"
+                               HorizontalAlignment="Center"
+                               TextWrapping="Wrap" />
                 </ToggleButton>
                 <ToggleButton Grid.Row="4"
-                        Grid.Column="0"
-                        Padding="0,10,10,10">
+                              Grid.Column="0"
+                              Padding="0,10,10,10">
                     <TextBlock Text="Smart Copy"
-                            HorizontalAlignment="Center"
-                            TextWrapping="Wrap" />
+                               HorizontalAlignment="Center"
+                               TextWrapping="Wrap" />
                 </ToggleButton>
             </Grid>
             <!-- tile tray -->
             <ListBox x:Name="ClipTray"
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    Focusable="True"
-                    dd:DragDrop.IsDragSource="True"
-                    dd:DragDrop.IsDropTarget="True"
-                    dd:DragDrop.DragHandler="{Binding}"
-                    Background="Transparent" 
-                    SelectionMode="Extended"
-                    ScrollViewer.CanContentScroll="False"                    
-                    ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                    ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                    Visibility="{Binding ClipListVisibility}"
-                    ItemsSource="{Binding ClipTiles}" >
+                     Grid.Row="0"
+                     Grid.Column="1"
+                     Focusable="True"
+                     dd:DragDrop.IsDragSource="True"
+                     dd:DragDrop.IsDropTarget="True"
+                     dd:DragDrop.DragHandler="{Binding}"
+                     Background="Transparent"
+                     SelectionMode="Extended"
+                     ScrollViewer.CanContentScroll="False"
+                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                     Visibility="{Binding ClipListVisibility}"
+                     ItemsSource="{Binding ClipTiles, Mode=TwoWay, BindsDirectlyToSource=True, NotifyOnSourceUpdated=True}">
                 <i:Interaction.Triggers>
                     <!--<i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                         <i:CallMethodAction TargetObject="{Binding}" 
@@ -268,11 +283,12 @@
                                                         MethodName="ClipTile_DragEnter"/>
                     </i:EventTrigger>-->
                     <i:EventTrigger EventName="PreviewMouseWheel">
-                        <i:InvokeCommandAction Command="{Binding ScrollClipTrayCommand}" 
-                                PassEventArgsToCommand="True" />
+                        <i:InvokeCommandAction Command="{Binding ScrollClipTrayCommand}"
+                                               PassEventArgsToCommand="True" />
                     </i:EventTrigger>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:CallMethodAction TargetObject="{Binding}" MethodName="ClipTray_SelectionChanged"/>
+                        <i:CallMethodAction TargetObject="{Binding}"
+                                            MethodName="ClipTray_SelectionChanged" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <ListBox.ItemContainerStyle>
@@ -285,7 +301,7 @@
                                     <ContentPresenter />
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected"
-                                                Value="True">
+                                                 Value="True">
                                             <Setter Property="BorderBrush"
                                                     Value="Transparent" />
                                             <Setter Property="Background"
@@ -300,9 +316,10 @@
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel IsItemsHost="True"
-                                CanVerticallyScroll="False" 
-                                VerticalAlignment="Stretch"                                                
-                                Orientation="Horizontal">
+                                                CanVerticallyScroll="False"
+                                                CanHorizontallyScroll="False"
+                                                VerticalAlignment="Stretch"
+                                                Orientation="Horizontal">
                         </VirtualizingStackPanel>
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
@@ -310,40 +327,45 @@
                     <DataTemplate>
                         <!-- Clip Tile -->
                         <local:MpClipBorder BorderBrush="{Binding BorderBrush}"
-                                Focusable="True" 
-                                local:MpFocusExtension.IsFocused="{Binding IsFocused}"
-                                Margin="{Binding TileMargin}"                                    
-                                Background="{Binding TitleColor}"
-                                BorderThickness="{Binding TileBorderThickness}"
-                                Width="{Binding TileSize}"
-                                Height="{Binding TileSize}"
-                                CornerRadius="10"
-                                Visibility="{Binding Visibility}">
+                                            Style="{StaticResource DropShadowBorderStyle}"
+                                            Focusable="True"
+                                            local:MpFocusExtension.IsFocused="{Binding IsFocused}"
+                                            Margin="{Binding TileMargin}"
+                                            Background="{Binding TitleColor}"
+                                            BorderThickness="{Binding TileBorderThickness}"
+                                            Width="{Binding TileSize}"
+                                            Height="{Binding TileSize}"
+                                            CornerRadius="10"
+                                            Visibility="{Binding Visibility}">
                             <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Loaded">
+                                    <i:CallMethodAction TargetObject="{Binding}"
+                                                        MethodName="ClipTile_Loaded" />
+                                </i:EventTrigger>
                                 <i:EventTrigger EventName="MouseEnter">
                                     <i:CallMethodAction TargetObject="{Binding}"
-                                            MethodName="MouseEnter" />
+                                                        MethodName="MouseEnter" />
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="MouseLeave">
                                     <i:CallMethodAction TargetObject="{Binding}"
-                                            MethodName="MouseLeave" />
+                                                        MethodName="MouseLeave" />
                                 </i:EventTrigger>
                                 <i:EventTrigger EventName="KeyDown">
                                     <i:InvokeCommandAction Command="{Binding KeyDownCommand}"
-                                            PassEventArgsToCommand="True" />
+                                                           PassEventArgsToCommand="True" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <local:MpClipBorder.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Rename"
-                                            Command="{Binding RenameClipCommand}" />
+                                              Command="{Binding MainWindowViewModel.RenameClipCommand}" />
                                     <MenuItem Header="Delete"
-                                            Command="{Binding MainWindowViewModel.DeleteClipCommand}" />
-                                    <MenuItem Header="Merge" 
-                                            Command="{Binding MainWindowViewModel.MergeClipsCommand}" 
-                                            Visibility="{Binding MainWindowViewModel.MergeClipsCommandVisibility}" />
+                                              Command="{Binding MainWindowViewModel.DeleteClipCommand}" />
+                                    <MenuItem Header="Merge"
+                                              Command="{Binding MainWindowViewModel.MergeClipsCommand}"
+                                              Visibility="{Binding MainWindowViewModel.MergeClipsCommandVisibility}" />
                                     <MenuItem Header="Pin To"
-                                            ItemsSource="{Binding TagMenuItems}">
+                                              ItemsSource="{Binding TagMenuItems}">
                                         <MenuItem.ItemContainerStyle>
                                             <Style TargetType="{x:Type MenuItem}">
                                                 <Setter Property="Header"
@@ -360,72 +382,82 @@
                                 </ContextMenu>
                             </local:MpClipBorder.ContextMenu>
                             <local:MpClipBorder.Effect>
-                                <DropShadowEffect BlurRadius="{Binding TileDropShadowRadius}"
-                                        Color="Black" />
+                                <DropShadowEffect Color="Black"  
+                                                  BlurRadius="10" />
                             </local:MpClipBorder.Effect>
-                            <Grid>
+                            <Grid >
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="{Binding TileTitleHeight}" />
-                                    <RowDefinition Height="{Binding TileContentHeight}" />
+                                    <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <!-- Tile Title StackPanel -->
                                 <StackPanel Grid.Row="0"
-                                        Grid.Column="0"
-                                        VerticalAlignment="Center"
-                                        Orientation="Horizontal">
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
                                     <Image Source="{Binding Icon}"
-                                            Stretch="Fill"
-                                            Width="{Binding TileTitleHeight}"
-                                            Height="{Binding TileTitleHeight}" />
+                                           Stretch="Fill"
+                                           Width="{Binding TileTitleHeight}"
+                                           Height="{Binding TileTitleHeight}">
+                                    </Image>
                                     <TextBlock Text="{Binding Title}"
-                                            Margin="10,0,0,0"
-                                            VerticalAlignment="Top"
-                                            FontSize="35"
-                                            Foreground="White"
-                                            Background="Transparent"
-                                            Visibility="{Binding TextBlockVisibility}">
+                                               Margin="10,0,0,0"
+                                               VerticalAlignment="Top"
+                                               FontSize="35"
+                                               Foreground="White"
+                                               Background="Transparent"
+                                               Visibility="{Binding TextBlockVisibility}">
                                         <TextBlock.Effect>
                                             <DropShadowEffect ShadowDepth="2"
-                                                    Direction="330"
-                                                    Color="Black"
-                                                    Opacity="1.0"
-                                                    BlurRadius="7" />
+                                                              Direction="330"
+                                                              Color="Black"
+                                                              Opacity="1.0"
+                                                              BlurRadius="7" />
                                         </TextBlock.Effect>
                                     </TextBlock>
                                     <!-- Clip Title TextBox -->
                                     <TextBox Margin="10,0,0,0"
-                                            Background="White"
-                                            Foreground="Black"
-                                            FontSize="35"
-                                            VerticalAlignment="Top"
-                                            Visibility="{Binding TextBoxVisibility}"
-                                            local:MpFocusExtension.IsFocused="{Binding IsTitleTextBoxFocused}"
-                                            local:MpTextBoxBehavior.SelectAllTextOnFocus="True"
-                                            Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                             Background="White"
+                                             Foreground="Black"
+                                             FontSize="35"
+                                             VerticalAlignment="Top"
+                                             Visibility="{Binding TextBoxVisibility}"
+                                             local:MpFocusExtension.IsFocused="{Binding IsTitleTextBoxFocused}"
+                                             local:MpTextBoxBehavior.SelectAllTextOnFocus="True"
+                                             Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="KeyDown">
                                                 <i:InvokeCommandAction Command="{Binding KeyDownCommand}"
-                                                        PassEventArgsToCommand="True" />
+                                                                       PassEventArgsToCommand="True" />
                                             </i:EventTrigger>
                                             <i:EventTrigger EventName="LostFocus">
                                                 <i:CallMethodAction MethodName="LostFocus"
-                                                        TargetObject="{Binding}" />
+                                                                    TargetObject="{Binding}" />
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                     </TextBox>
 
                                 </StackPanel>
                                 <!-- Tile Content-->
-                                <Canvas Grid.Row="1" Grid.Column="0" Background="White">
-                                    <local:MpSearchHightlightTextBlock Text="{Binding Text}"
+                                <ScrollViewer Grid.Row="1" 
+                                              Grid.Column="0" 
+                                              Width="{Binding TileBorderSize}"
+                                              Height="{Binding TileContentHeight}"
+                                              VerticalScrollBarVisibility="Auto"
+                                              HorizontalScrollBarVisibility="Auto" 
+                                              Background="White">
+                                    <local:MpSearchHightlightTextBlock x:Name="ClipTileRichTextBox"
                                                                        SearchText="{Binding MainWindowViewModel.SearchText}"
-                                                                       TextWrapping="Wrap"
-                                                                       Width="{Binding TileSize}"
-                                                                       Padding="10"
-                                                                       FontSize="12"
-                                                                       Foreground="Black"
-                                                                       Background="White" />
-                                </Canvas>
+                                                                       IsReadOnly="True" Focusable="True"
+                                                                       VerticalAlignment="Top"
+                                                                       HorizontalAlignment="Left"
+                                                                       MinWidth="{Binding TileBorderSize}"
+                                                                       MinHeight="{Binding TileContentHeight}"
+                                                                       IsDocumentEnabled="True"
+                                                                       Cursor="Arrow"
+                                                                       BorderThickness="0"
+                                                                       Padding="10"/>
+                                </ScrollViewer>
                             </Grid>
                         </local:MpClipBorder>
 
@@ -433,16 +465,16 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <TextBlock x:Name="EmptyListTextBlock"
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    Text="This list has no items"
-                    Visibility="{Binding EmptyListMessageVisibility}"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Foreground="LightGray"
-                    Margin="0,0,0,40"
-                    FontStyle="Oblique"
-                    FontSize="34"/>
+                       Grid.Row="0"
+                       Grid.Column="1"
+                       Text="This list has no items"
+                       Visibility="{Binding EmptyListMessageVisibility}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="LightGray"
+                       Margin="0,0,0,40"
+                       FontStyle="Oblique"
+                       FontSize="34" />
         </Grid>
     </Grid>
 </Window>

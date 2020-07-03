@@ -9,7 +9,7 @@ using MpWinFormsClassLibrary;
 
 namespace MpWpfApp {
     public class MpCopyItem:MpDbObject {
-        public List<MpSubTextToken> subTextTokenList = new List<MpSubTextToken>();
+        public List<MpSubTextToken> SubTextTokenList = new List<MpSubTextToken>();
 
         private Object DataObject { get; set; }
         
@@ -32,29 +32,31 @@ namespace MpWpfApp {
         public MpCopyItem() {
         }
 
-        public static MpCopyItem CreateFromClipboard() {
+        public static MpCopyItem CreateFromClipboard(IntPtr processHandle) {
             IDataObject iData = Clipboard.GetDataObject();
             MpCopyItem ci = null;
             if(iData == null) {
                 return ci;
             }
-            string sourcePath = MpHelperSingleton.Instance.GetProcessPath(MpDataStore.Instance.ClipboardManager.LastWindowWatcher.LastHandle);
+            string sourcePath = MpHelperSingleton.Instance.GetProcessPath(processHandle);
             Color itemColor = MpHelperSingleton.Instance.GetRandomColor();
 
             if(iData.GetDataPresent(DataFormats.Bitmap)) {
                 ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Image, (System.Drawing.Image)iData.GetData(DataFormats.Bitmap, true), sourcePath, itemColor);// CreateCopyItem(MpCopyItemType.None,null,IntPtr.Zero);// ((Image)iData.GetData(DataFormats.Bitmap,true),sourceHandle);
             } else if(iData.GetDataPresent(DataFormats.FileDrop)) {
                 ci = MpCopyItem.CreateCopyItem(MpCopyItemType.FileList, (string[])iData.GetData(DataFormats.FileDrop, true), sourcePath, itemColor);
-            } else if(iData.GetDataPresent(DataFormats.Rtf) || iData.GetDataPresent(DataFormats.Html) || iData.GetDataPresent(DataFormats.Text)) {
+            } else if(iData.GetDataPresent(DataFormats.Rtf)) {
+                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, (string)iData.GetData(DataFormats.Rtf), sourcePath, itemColor);
+            } else if (iData.GetDataPresent(DataFormats.Html) || iData.GetDataPresent(DataFormats.Text)) {
                 ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Text, (string)iData.GetData(DataFormats.Text), sourcePath, itemColor);
             }
-              //else if() {
-              //    ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Text,(string)iData.GetData(DataFormats.Text),sourcePath,itemColor);
-              //}
-              //else if() {
-              //    ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Text,(string)iData.GetData(DataFormats.Text),sourcePath,itemColor);
-              //}
-              else {
+               //else if() {
+               //    ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Text,(string)iData.GetData(DataFormats.Text),sourcePath,itemColor);
+               //}
+               //else if() {
+               //    ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Text,(string)iData.GetData(DataFormats.Text),sourcePath,itemColor);
+               //}
+               else {
                 Console.WriteLine("MpData error clipboard data is not known format");
                 return null;
             }
@@ -95,28 +97,31 @@ namespace MpWpfApp {
             //    newItem.CopyItemType = MpCopyItemType.Text;
             //}
             //else 
-            if(newItem.CopyItemType == MpCopyItemType.Text) {
-                newItem.DataObject = (string)data;
-                newItem.subTextTokenList = MpSubTextToken.GatherTokens((string)newItem.DataObject);
+            if(newItem.CopyItemType == MpCopyItemType.Text || newItem.CopyItemType == MpCopyItemType.RichText) {
+                if(newItem.CopyItemType == MpCopyItemType.Text) {
+                    data = (object)PlainTextToRtf((string)data);
+                }
+                newItem.DataObject = Regex.Replace(((string)data).Trim(), @"^\s+(?!\B)|\s*(?>[\r\n]+)$", string.Empty, RegexOptions.Multiline).TrimEnd();
+                newItem.SubTextTokenList = MpSubTextToken.GatherTokens((string)newItem.DataObject);
             }
             else {
                 newItem.DataObject = data;
             }
             if(newItem.CopyItemType == MpCopyItemType.Text) {
-                DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpTextItem where ItemText=@1",new List<string>(){ "@1"},new List<object>() { (string)newItem.DataObject });
+                DataTable dt = MpDb.Instance.Execute("select * from MpTextItem where ItemText=@1",new List<string>(){ "@1"},new List<object>() { (string)newItem.DataObject });
                 if(dt != null && dt.Rows.Count > 0) {
                     int cid = Convert.ToInt32(dt.Rows[0]["fk_MpCopyItemId"].ToString());
-                    dt = MpDataStore.Instance.Db.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + cid);
+                    dt = MpDb.Instance.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + cid);
                     int cc = Convert.ToInt32(dt.Rows[0]["CopyCount"].ToString()) + 1;
                     Console.WriteLine("MpCopyItem: ignoring duplicate");
-                    MpDataStore.Instance.Db.ExecuteNonQuery("update MpCopyItem set CopyCount="+cc+" where pk_MpCopyItemId="+cid);
+                    MpDb.Instance.ExecuteNonQuery("update MpCopyItem set CopyCount="+cc+" where pk_MpCopyItemId="+cid);
                     return null;
                 }
             }
             //newItem.CopyItemId = itemId;
             newItem.CopyDateTime = DateTime.Now;
             //newItem.sourceHandle = sourceHandle;
-            newItem.Title = Enum.GetName(typeof(MpCopyItemType),newItem.CopyItemType).ToString();
+            newItem.Title = Enum.GetName(typeof(MpCopyItemType),newItem.CopyItemType);
             newItem.CopyCount = 1;
             newItem.App = new MpApp(sourcePath,false);
             newItem.AppId = newItem.App.appId;
@@ -125,14 +130,14 @@ namespace MpWpfApp {
             return newItem;
         }
         public MpCopyItem(int copyItemId) {
-            DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + copyItemId);
+            DataTable dt = MpDb.Instance.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + copyItemId);
             if(dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
         }
-        public static List<MpCopyItem> GetAllClips() {
+        public static List<MpCopyItem> GetAllCopyItems() {
             List<MpCopyItem> clips = new List<MpCopyItem>();
-            DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpCopyItem");
+            DataTable dt = MpDb.Instance.Execute("select * from MpCopyItem");
             if(dt != null && dt.Rows.Count > 0) {
                 foreach(DataRow r in dt.Rows) {
                     clips.Add(new MpCopyItem(r));
@@ -161,7 +166,6 @@ namespace MpWpfApp {
                 case MpCopyItemType.Text:
                 case MpCopyItemType.RichText:
                 case MpCopyItemType.HTMLText:
-                    //case MpCopyItemType.RichText:
                     return ((string)DataObject).Replace("''","'");
                 //case MpCopyItemType.HTMLText:
                 //    return ((string)DataObject).Trim();
@@ -187,7 +191,13 @@ namespace MpWpfApp {
         public MpCopyItem(DataRow dr) {
             LoadDataRow(dr);
         }
-        
+        private static string PlainTextToRtf(string plainText) {
+            string escapedPlainText = plainText.Replace(@"\", @"\\").Replace("{", @"\{").Replace("}", @"\}");
+            string rtf = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard ";
+            rtf += escapedPlainText.Replace(Environment.NewLine, @" \par ");
+            rtf += " }";
+            return rtf;
+        }
         public override void LoadDataRow(DataRow dr) {
             this.CopyItemId = Convert.ToInt32(dr["pk_MpCopyItemId"].ToString());
             this.CopyItemType = (MpCopyItemType)Convert.ToInt32(dr["fk_MpCopyItemTypeId"].ToString());
@@ -199,24 +209,24 @@ namespace MpWpfApp {
             this.CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
 
             //get app and icon obj
-            DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpApp where pk_MpAppId=" + AppId);
+            DataTable dt = MpDb.Instance.Execute("select * from MpApp where pk_MpAppId=" + AppId);
             if(dt != null && dt.Rows.Count > 0) {
                 this.App = new MpApp(dt.Rows[0]);
             } else {
                 Console.WriteLine("MpCopyItem Error: error retrieving MpApp with id " + AppId);
             }
             //get subtokens
-            dt = MpDataStore.Instance.Db.Execute("select * from MpSubTextToken where fk_MpCopyItemId=" + CopyItemId);
+            dt = MpDb.Instance.Execute("select * from MpSubTextToken where fk_MpCopyItemId=" + CopyItemId);
             if (dt != null && dt.Rows.Count > 0) {
                 foreach(DataRow row in dt.Rows) {
-                    subTextTokenList.Add(new MpSubTextToken(row));
+                    SubTextTokenList.Add(new MpSubTextToken(row));
                 }
             } else {
                 //copyitem not req'd to have subtokens
             }
 
             //get color
-            dt = MpDataStore.Instance.Db.Execute("select * from MpColor where pk_MpColorId=" + ColorId);
+            dt = MpDb.Instance.Execute("select * from MpColor where pk_MpColorId=" + ColorId);
             if(dt != null && dt.Rows.Count > 0) {
                 this.ItemColor = new MpColor(dt.Rows[0]);
             }
@@ -233,7 +243,7 @@ namespace MpWpfApp {
                 case MpCopyItemType.Text:
                 case MpCopyItemType.HTMLText:
                 case MpCopyItemType.RichText:
-                    copyItemData = MpDataStore.Instance.Db.Execute("select * from MpTextItem where fk_MpCopyItemId=" + this.CopyItemId);
+                    copyItemData = MpDb.Instance.Execute("select * from MpTextItem where fk_MpCopyItemId=" + this.CopyItemId);
                     if(copyItemData == null || copyItemData.Rows.Count == 0) {
                         Console.WriteLine("Error reading MpTextItem " + this.CopyItemId);
                         break;
@@ -242,13 +252,13 @@ namespace MpWpfApp {
                     this.DataObject = copyItemData.Rows[0]["ItemText"].ToString();
                     break;
                 case MpCopyItemType.FileList:
-                    copyItemData = MpDataStore.Instance.Db.Execute("select * from MpFileDropListItem where fk_MpCopyItemId=" + this.CopyItemId);
+                    copyItemData = MpDb.Instance.Execute("select * from MpFileDropListItem where fk_MpCopyItemId=" + this.CopyItemId);
                     if(copyItemData == null || copyItemData.Rows.Count == 0) {
                         Console.WriteLine("Error reading MpFileDropListItem " + this.CopyItemId);
                         break;
                     }
                     this.SubItemId = Convert.ToInt32(copyItemData.Rows[0]["pk_MpFileDropListItemId"].ToString());
-                    copyItemData = MpDataStore.Instance.Db.Execute("select * from MpFileDropListSubItem where fk_MpFileDropListItemId=" + this.SubItemId);
+                    copyItemData = MpDb.Instance.Execute("select * from MpFileDropListSubItem where fk_MpFileDropListItemId=" + this.SubItemId);
                     if(copyItemData == null || copyItemData.Rows.Count == 0) {
                         Console.WriteLine("Error reading MpFileDropListSubItem for  MpFileDropListItemId=" + this.CopyItemId);
                         break;
@@ -260,7 +270,7 @@ namespace MpWpfApp {
                     }
                     break;
                 case MpCopyItemType.Image:
-                    copyItemData = MpDataStore.Instance.Db.Execute("select * from MpImageItem where fk_MpCopyItemId=" + this.CopyItemId);
+                    copyItemData = MpDb.Instance.Execute("select * from MpImageItem where fk_MpCopyItemId=" + this.CopyItemId);
                     if(copyItemData == null || copyItemData.Rows.Count == 0) {
                         Console.WriteLine("Error reading MpImageItem for Id=" + this.CopyItemId);
                         break;
@@ -279,22 +289,22 @@ namespace MpWpfApp {
             }
             switch(CopyItemType) {
                 case MpCopyItemType.Text:
-                    MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpTextItem where fk_MpCopyItemId=" + CopyItemId);
-                    MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpPasteHistory where fk_MpCopyItemId=" + CopyItemId);
-                    MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpCopyItem where pk_MpCopyItemId=" + CopyItemId);
-                    MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpSubTextToken where fk_MpCopyItemId=" + CopyItemId);
+                    MpDb.Instance.ExecuteNonQuery("delete from MpTextItem where fk_MpCopyItemId=" + CopyItemId);
+                    MpDb.Instance.ExecuteNonQuery("delete from MpPasteHistory where fk_MpCopyItemId=" + CopyItemId);
+                    MpDb.Instance.ExecuteNonQuery("delete from MpCopyItem where pk_MpCopyItemId=" + CopyItemId);
+                    MpDb.Instance.ExecuteNonQuery("delete from MpSubTextToken where fk_MpCopyItemId=" + CopyItemId);
                     break;
                 case MpCopyItemType.FileList:
-                    MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpFileDropListSubItem where fk_MpFileDropListItemId=" + SubItemId);
-                    MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpFileDropListItem where pk_MpFileDropListItemId=" + SubItemId);
-                    MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpCopyItem where pk_MpCopyItemId=" + CopyItemId);
-                    MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpSubTextToken where fk_MpCopyItemId=" + CopyItemId);
+                    MpDb.Instance.ExecuteNonQuery("delete from MpFileDropListSubItem where fk_MpFileDropListItemId=" + SubItemId);
+                    MpDb.Instance.ExecuteNonQuery("delete from MpFileDropListItem where pk_MpFileDropListItemId=" + SubItemId);
+                    MpDb.Instance.ExecuteNonQuery("delete from MpCopyItem where pk_MpCopyItemId=" + CopyItemId);
+                    MpDb.Instance.ExecuteNonQuery("delete from MpSubTextToken where fk_MpCopyItemId=" + CopyItemId);
                     break;
                 case MpCopyItemType.Image:
-                    MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpImageItem where fk_MpCopyItemId=" + CopyItemId);
-                    MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpPasteHistory where fk_MpCopyItemId=" + CopyItemId);
-                    MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpCopyItem where pk_MpCopyItemId=" + CopyItemId);
-                    MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpSubTextToken where fk_MpCopyItemId=" + CopyItemId);
+                    MpDb.Instance.ExecuteNonQuery("delete from MpImageItem where fk_MpCopyItemId=" + CopyItemId);
+                    MpDb.Instance.ExecuteNonQuery("delete from MpPasteHistory where fk_MpCopyItemId=" + CopyItemId);
+                    MpDb.Instance.ExecuteNonQuery("delete from MpCopyItem where pk_MpCopyItemId=" + CopyItemId);
+                    MpDb.Instance.ExecuteNonQuery("delete from MpSubTextToken where fk_MpCopyItemId=" + CopyItemId);
                     break;
             }
         }
@@ -306,7 +316,7 @@ namespace MpWpfApp {
                 this.AppId = App.appId;
             }
             if(this.AppId == 0) {
-                DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpApp where pk_MpAppId=" + AppId);
+                DataTable dt = MpDb.Instance.Execute("select * from MpApp where pk_MpAppId=" + AppId);
                 if(dt != null && dt.Rows.Count > 0) {
                     this.App = new MpApp(dt.Rows[0]);
                     this.App.appId = 0;
@@ -328,9 +338,9 @@ namespace MpWpfApp {
             }
             //if copyitem already exists
             if(this.CopyItemId > 0) {
-                DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + this.CopyItemId);
+                DataTable dt = MpDb.Instance.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + this.CopyItemId);
                 if(dt.Rows.Count > 0) {
-                    MpDataStore.Instance.Db.ExecuteNonQuery("update MpCopyItem set fk_MpCopyItemTypeId=" + (int)this.CopyItemType + ", fk_MpClientId=" + this.ClientId + ", fk_MpAppId=" + this.AppId + ",fk_MpColorId=" + this.ColorId + ", Title='"+this.Title.Replace("'","''")+"', CopyCount="+this.CopyCount+" where pk_MpCopyItemId=" + this.CopyItemId);
+                    MpDb.Instance.ExecuteNonQuery("update MpCopyItem set fk_MpCopyItemTypeId=" + (int)this.CopyItemType + ", fk_MpClientId=" + this.ClientId + ", fk_MpAppId=" + this.AppId + ",fk_MpColorId=" + this.ColorId + ", Title='"+this.Title.Replace("'","''")+"', CopyCount="+this.CopyCount+" where pk_MpCopyItemId=" + this.CopyItemId);
                 }
                 else {
                     Console.WriteLine("MpCopyItem error cannot find pk of existing item");
@@ -339,13 +349,13 @@ namespace MpWpfApp {
                 isNew = false;
             }
             else {
-                if(MpDataStore.Instance.Db.NoDb) {                    
+                if(MpDb.Instance.NoDb) {                    
                     CopyItemId = MpDataStore.Instance.ClipList.Count;
                     MapDataToColumns();
                     return;
                 }
-                MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpCopyItem(fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount) values (" + (int)this.CopyItemType + "," + MpDataStore.Instance.Db.Client.ClientId + "," + this.AppId + ","+this.ColorId+ ",'"+this.Title+"','" + this.CopyDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "',"+this.CopyCount+");");
-                this.CopyItemId = MpDataStore.Instance.Db.GetLastRowId("MpCopyItem","pk_MpCopyItemId");
+                MpDb.Instance.ExecuteNonQuery("insert into MpCopyItem(fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount) values (" + (int)this.CopyItemType + "," + MpDb.Instance.Client.ClientId + "," + this.AppId + ","+this.ColorId+ ",'"+this.Title+"','" + this.CopyDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "',"+this.CopyCount+");");
+                this.CopyItemId = MpDb.Instance.GetLastRowId("MpCopyItem","pk_MpCopyItemId");
                 isNew = true;
             }
 
@@ -358,18 +368,18 @@ namespace MpWpfApp {
                 //case MpCopyItemType.Email:
                 case MpCopyItemType.Text:
                     if(isNew) {
-                        MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpTextItem(fk_MpCopyItemId,ItemText) values (" + this.CopyItemId + ",@1)",new List<string>() { "@1" },new List<object>() { ((string)this.DataObject).Replace("'","''") });
-                        this.SubItemId = MpDataStore.Instance.Db.GetLastRowId("MpTextItem","pk_MpTextItemId");
+                        MpDb.Instance.ExecuteNonQuery("insert into MpTextItem(fk_MpCopyItemId,ItemText) values (" + this.CopyItemId + ",@1)",new List<string>() { "@1" },new List<object>() { ((string)this.DataObject).Replace("'","''") });
+                        this.SubItemId = MpDb.Instance.GetLastRowId("MpTextItem","pk_MpTextItemId");
                     } else {
-                        MpDataStore.Instance.Db.ExecuteNonQuery("update MpTextItem set ItemText='" + ((string)GetData()).Replace("'","''") + "' where pk_MpTextItemId=" + this.SubItemId);
+                        MpDb.Instance.ExecuteNonQuery("update MpTextItem set ItemText='" + ((string)GetData()).Replace("'","''") + "' where pk_MpTextItemId=" + this.SubItemId);
                     }                    
                     break;
                 case MpCopyItemType.FileList:
                     if(isNew) {
-                        MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpFileDropListItem(fk_MpCopyItemId) values(" + this.CopyItemId + ")");
-                        this.SubItemId = MpDataStore.Instance.Db.GetLastRowId("MpFileDropListItem","pk_MpFileDropListItemId");
+                        MpDb.Instance.ExecuteNonQuery("insert into MpFileDropListItem(fk_MpCopyItemId) values(" + this.CopyItemId + ")");
+                        this.SubItemId = MpDb.Instance.GetLastRowId("MpFileDropListItem","pk_MpFileDropListItemId");
                         foreach(string fileOrPath in (string[])this.DataObject) {
-                            MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpFileDropListSubItem(fk_MpFileDropListItemId,ItemPath) values (" + this.SubItemId + ",'" + fileOrPath + "')");
+                            MpDb.Instance.ExecuteNonQuery("insert into MpFileDropListSubItem(fk_MpFileDropListItemId,ItemPath) values (" + this.SubItemId + ",'" + fileOrPath + "')");
                         }
                     } else {
                         //file lists are not editable
@@ -377,14 +387,14 @@ namespace MpWpfApp {
                     break;
                 case MpCopyItemType.Image:
                     if(isNew) {
-                        MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpImageItem(fk_MpCopyItemId,ItemImage) values (" + this.CopyItemId + ",@0)",new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ImageConverter.ConvertImageToByteArray((System.Drawing.Image)this.DataObject) });
+                        MpDb.Instance.ExecuteNonQuery("insert into MpImageItem(fk_MpCopyItemId,ItemImage) values (" + this.CopyItemId + ",@0)",new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ImageConverter.ConvertImageToByteArray((System.Drawing.Image)this.DataObject) });
                     } else {
-                        MpDataStore.Instance.Db.ExecuteNonQuery("update MpImageItem set ItemImage=@0 where pk_MpImageItemId="+this.SubItemId,new List<string>() { "@0" },new List<object>() { this.DataObject });
+                        MpDb.Instance.ExecuteNonQuery("update MpImageItem set ItemImage=@0 where pk_MpImageItemId="+this.SubItemId,new List<string>() { "@0" },new List<object>() { this.DataObject });
                     }
                     
                     break;
             }
-            foreach (MpSubTextToken subToken in subTextTokenList) {
+            foreach (MpSubTextToken subToken in SubTextTokenList) {
                 subToken.CopyItemId = CopyItemId;
                 subToken.WriteToDatabase();
             }
@@ -414,7 +424,7 @@ namespace MpWpfApp {
                     break;
                 //# copies/# pastes
                 case 2:
-                    DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpPasteHistory where fk_MpCopyItemId=" + CopyItemId);
+                    DataTable dt = MpDb.Instance.Execute("select * from MpPasteHistory where fk_MpCopyItemId=" + CopyItemId);
                     info = CopyCount + " copies | " + dt.Rows.Count + " pastes";
                     break;
                 default:

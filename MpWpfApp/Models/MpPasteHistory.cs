@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,9 +30,9 @@ namespace MpWpfApp {
             WriteToDatabase();
         }
         public override void LoadDataRow(DataRow dr) {
-            PasteHistoryId = Convert.ToInt32(dr["pk_MpPasteHistoryId"]);
-            CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemId"]);
-            DestAppId = Convert.ToInt32(dr["fk_MpAppId"]);
+            PasteHistoryId = Convert.ToInt32(dr["pk_MpPasteHistoryId"],CultureInfo.InvariantCulture);
+            CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemId"], CultureInfo.InvariantCulture);
+            DestAppId = Convert.ToInt32(dr["fk_MpAppId"], CultureInfo.InvariantCulture);
             PasteDateTime = DateTime.Parse(dr["PasteDateTime"].ToString());
         }
 
@@ -42,12 +43,12 @@ namespace MpWpfApp {
                 DestAppId = _destApp.appId;
                 //MpSingletonController.Instance.GetMpData().AddMpApp(_destApp);
             }
-            if(MpDataStore.Instance.Db.NoDb) {
+            if(MpDb.Instance.NoDb) {
                 PasteHistoryId = ++TotalPasteHistoryCount;
                 return;
             }
-            MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpPasteHistory(fk_MpCopyItemId,fk_MpClientId,fk_MpAppId,PasteDateTime) values (" + CopyItemId + "," + MpDataStore.Instance.Db.Client.ClientId +","+DestAppId+ ",'" + PasteDateTime.ToString("yyyy-MM-dd HH:mm:ss") +"');");
-            PasteHistoryId = MpDataStore.Instance.Db.GetLastRowId("MpPasteHistory","pk_MpPasteHistoryId");
+            MpDb.Instance.ExecuteNonQuery("insert into MpPasteHistory(fk_MpCopyItemId,fk_MpClientId,fk_MpAppId,PasteDateTime) values (" + CopyItemId + "," + MpDb.Instance.Client.ClientId +","+DestAppId+ ",'" + PasteDateTime.ToString("yyyy-MM-dd HH:mm:ss") +"');");
+            PasteHistoryId = MpDb.Instance.GetLastRowId("MpPasteHistory","pk_MpPasteHistoryId");
         }
 
     }

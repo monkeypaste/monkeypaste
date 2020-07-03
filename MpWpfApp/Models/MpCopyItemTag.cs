@@ -17,7 +17,7 @@ namespace MpWpfApp {
             TagId = tagId;
         }
         public MpCopyItemTag(int copyItemTagId) {
-            DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpCopyItemTag where pk_MpCopyItemTagId=" + copyItemTagId);
+            DataTable dt = MpDb.Instance.Execute("select * from MpCopyItemTag where pk_MpCopyItemTagId=" + copyItemTagId);
             if(dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
@@ -38,20 +38,20 @@ namespace MpWpfApp {
             }
             //new 
             if(CopyItemTagId == 0) {
-                DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpCopyItemTag where fk_MpCopyItemId=" + CopyItemId + " and fk_MpTagId="+TagId);
+                DataTable dt = MpDb.Instance.Execute("select * from MpCopyItemTag where fk_MpCopyItemId=" + CopyItemId + " and fk_MpTagId="+TagId);
                 //if copy/tag already exists ignore duplicate
                 if(dt != null && dt.Rows.Count > 0) {
                     Console.WriteLine("Ignoring duplicate tag relationship for copyItemId:" + CopyItemId + " tagId:" + TagId);
                 } else {
-                    MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpCopyItemTag(fk_MpCopyItemId,fk_MpTagId) values(" + CopyItemId + "," + TagId + ")");
-                    CopyItemTagId = MpDataStore.Instance.Db.GetLastRowId("MpCopyItemTag","pk_MpCopyItemTagId");
+                    MpDb.Instance.ExecuteNonQuery("insert into MpCopyItemTag(fk_MpCopyItemId,fk_MpTagId) values(" + CopyItemId + "," + TagId + ")");
+                    CopyItemTagId = MpDb.Instance.GetLastRowId("MpCopyItemTag","pk_MpCopyItemTagId");
                 }
             } else {
                 Console.WriteLine("MpCopyItemTag warning, attempting to update a tag but not implemented");
             }
         }
         public bool IsLinkedWithCopyItem(MpCopyItem ci) {
-            DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpCopyItemTag where fk_MpCopyItemTagId=" + CopyItemTagId + " and fk_MpCopyItemId=" + ci.CopyItemId);
+            DataTable dt = MpDb.Instance.Execute("select * from MpCopyItemTag where fk_MpCopyItemTagId=" + CopyItemTagId + " and fk_MpCopyItemId=" + ci.CopyItemId);
             if(dt != null && dt.Rows.Count > 0) {
                 return true;
             }
@@ -62,7 +62,7 @@ namespace MpWpfApp {
                 //Console.WriteLine("MpCopyItemTag Warning attempting to relink tag " + CopyItemTagId + " with copyitem " + ci.copyItemId+" ignoring...");
                 return;
             }
-            MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpCopyItemTag(fk_MpCopyItemId,fk_MpCopyItemCopyItemTagId) values(" + ci.CopyItemId + "," + CopyItemTagId + ")");
+            MpDb.Instance.ExecuteNonQuery("insert into MpCopyItemTag(fk_MpCopyItemId,fk_MpCopyItemCopyItemTagId) values(" + ci.CopyItemId + "," + CopyItemTagId + ")");
 
             Console.WriteLine("Tag link created between tag " + CopyItemTagId + " with copyitem " + ci.CopyItemId + " ignoring...");
         }
@@ -71,12 +71,12 @@ namespace MpWpfApp {
                 //Console.WriteLine("MpCopyItemTag Warning attempting to unlink non-linked tag " + CopyItemTagId + " with copyitem " + ci.copyItemId + " ignoring...");
                 return;
             }
-            MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpCopyItemTag where fk_MpCopyItemId="+ci.CopyItemId+" and fk_MpCopyItemCopyItemTagId="+CopyItemTagId);
+            MpDb.Instance.ExecuteNonQuery("delete from MpCopyItemTag where fk_MpCopyItemId="+ci.CopyItemId+" and fk_MpCopyItemCopyItemTagId="+CopyItemTagId);
 
             Console.WriteLine("Tag link removed between tag " + CopyItemTagId + " with copyitem " + ci.CopyItemId + " ignoring...");
         }
         public void DeleteFromDatabase() {
-            MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpCopyItemTag where pk_MpCopyItemTagId=" + this.CopyItemTagId);
+            MpDb.Instance.ExecuteNonQuery("delete from MpCopyItemTag where pk_MpCopyItemTagId=" + this.CopyItemTagId);
         }
         private void MapDataToColumns() {
             TableName = "MpCopyItemTag";

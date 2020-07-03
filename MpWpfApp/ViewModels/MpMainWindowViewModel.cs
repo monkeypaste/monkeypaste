@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,7 @@ namespace MpWpfApp {
         private double _startMainWindowTop, _endMainWindowTop;
         private MpHotKeyHost _hotkeyHost = null;
         private IKeyboardMouseEvents _globalHook = null;
+        public MpClipboardManager ClipboardManager { get; private set; }
         #endregion
 
         #region View/Model Collection Properties
@@ -36,6 +38,7 @@ namespace MpWpfApp {
             set {
                 if(_clipTiles != value) {
                     _clipTiles = value;
+                    OnPropertyChanged(nameof(ClipTiles));
                 }
             }
         }
@@ -58,8 +61,9 @@ namespace MpWpfApp {
                 return _tagTiles;
             }
             set {
-                if(_tagTiles != value) {
+                if (_tagTiles != value) {
                     _tagTiles = value;
+                    OnPropertyChanged(nameof(TagTiles));
                 }
             }
         }
@@ -233,27 +237,11 @@ namespace MpWpfApp {
         #region Constructor
         public MpMainWindowViewModel() {
             base.DisplayName = "MpMainWindowViewModel";
-
-            //clears model data and loads everything from db and setups clipboard listener
-            MpDataStore.Instance.Init();
-
-            //init ClipTiles
-
-            //when clipboard changes add a cliptile
-            MpDataStore.Instance.ClipList.CollectionChanged += (s1, e1) => {
-                if(e1.NewItems != null) {
-                    foreach(MpCopyItem c in e1.NewItems) {
-                        AddClipTile(c);
-                    }
-                }
-                if(e1.OldItems != null) {
-                    foreach(MpCopyItem c in e1.OldItems) {
-                        RemoveClipTile(ClipTiles.Where(ct => ct.CopyItem == c).ToList()[0]);
-                    }
-                }
-            };
+            if(DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
+                return;
+            }
             //create tiles for all clips in the database
-            foreach(MpCopyItem c in MpCopyItem.GetAllClips()) {
+            foreach (MpCopyItem c in MpCopyItem.GetAllCopyItems()) {
                 AddClipTile(c);
             }
             //select first tile by default
@@ -262,23 +250,8 @@ namespace MpWpfApp {
                 ClipTiles[0].IsFocused = true;
             }
 
-            //init TagTiles
-
-            //when a tag is added or deleted reflect it in the tiles
-            MpDataStore.Instance.TagList.CollectionChanged += (s2, e2) => {
-                if(e2.NewItems != null) {
-                    foreach(MpTag t in e2.NewItems) {
-                        AddTagTile(t,true);
-                    }
-                }
-                if(e2.OldItems != null) {
-                    foreach(MpTag t in e2.OldItems) {
-                        RemoveTagTile(TagTiles.Where(tt => tt.Tag == t).ToList()[0]);
-                    }
-                }
-            };
             //create tiles for all the tags
-            foreach(MpTag t in MpDataStore.Instance.TagList) {
+            foreach(MpTag t in MpTag.GetAllTags()) {
                 AddTagTile(t);
             }
             //select history tag by default
@@ -307,7 +280,11 @@ namespace MpWpfApp {
                     }
                 }
             };
+            ((MpMainWindow)Application.Current.MainWindow).Deactivated += (s, e) => {
+                HideWindowCommand.Execute(null);
+            };
 
+            SetupMainWindowRect();
         }
         #endregion
 
@@ -316,11 +293,10 @@ namespace MpWpfApp {
             base.Loaded();
             //SetupMainWindowRect();
 
-            ((MpMainWindow)Application.Current.MainWindow).Deactivated += (s, e) => {
-                HideWindowCommand.Execute(null);
-            };
+            
 
             InitHotKeys();
+            InitClipboard();
 
 #if DEBUG
             ShowWindowCommand.Execute(null);
@@ -447,12 +423,14 @@ namespace MpWpfApp {
             //var newClipTile = ;
             
             ClipTiles.Insert(0, new MpClipTileViewModel(ci, this));
+            ClipListVisibility = Visibility.Visible;
+            EmptyListMessageVisibility = Visibility.Collapsed;
+            VisibileClipTiles[0].IsSelected = true;
 
             //SelectedClipTiles.Clear();
             //newClipTile.IsSelected = true;
             //SelectedClipTiles.Add(newClipTile);
         }
-
         public void MoveClipTile(MpClipTileViewModel clipTile,int newIdx) {
             if (newIdx > ClipTiles.Count) {
                 throw new Exception("Cannot insert tile clip tile at index: " + newIdx + " with list of length: " + ClipTiles.Count);
@@ -482,7 +460,7 @@ namespace MpWpfApp {
             //search ci's from newest to oldest for filterstr, adding idx to list
             for(int i = ClipTiles.Count - 1;i >= 0;i--) {
                 //when search string is empty add each item to list so all shown
-                if(searchStr == string.Empty) {
+                if(string.IsNullOrEmpty(searchStr)) {
                     filteredTileIdxList.Add(i);
                     continue;
                 }
@@ -568,6 +546,25 @@ namespace MpWpfApp {
                 }
             };
         }
+
+        private void InitClipboard() {
+            ClipboardManager = new MpClipboardManager();
+            ClipboardManager.Init();
+            ClipboardManager.ClipboardChangedEvent += () => {
+                MpCopyItem newClip = MpCopyItem.CreateFromClipboard(ClipboardManager.LastWindowWatcher.LastHandle);
+                if (IsInAppendMode) {
+                    //when in append mode just append the new items text to selecteditem
+                    SelectedClipTiles[0].Text += Environment.NewLine + newClip.Text;
+                    return;
+                }
+                if (newClip != null) {
+                    newClip.WriteToDatabase();
+                    MpTag historyTag = new MpTag(1);
+                    historyTag.LinkWithCopyItem(newClip);
+                    AddClipTile(newClip);
+                }
+            };
+        }
         #endregion
 
         #region Commands
@@ -631,12 +628,12 @@ namespace MpWpfApp {
             if(Application.Current.MainWindow == null) {
                 Application.Current.MainWindow = new MpMainWindow();
             }
+            SetupMainWindowRect();
             var mw = ((MpMainWindow)Application.Current.MainWindow);
             mw.Show();
             mw.Activate();
             mw.Visibility = Visibility.Visible;
             mw.Topmost = true;
-            SetupMainWindowRect();
 
             foreach (MpClipTileViewModel selectedClipTile in SelectedClipTiles) {
                 selectedClipTile.IsSelected = false;
@@ -649,7 +646,7 @@ namespace MpWpfApp {
             ta.From = _startMainWindowTop;
             ta.To = _endMainWindowTop;
             ta.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
-            CubicEase easing = new CubicEase();  // or whatever easing class you want
+            CubicEase easing = new CubicEase();
             easing.EasingMode = EasingMode.EaseIn;
             ta.EasingFunction = easing;
             mw.BeginAnimation(Window.TopProperty, ta);
@@ -702,6 +699,23 @@ namespace MpWpfApp {
             foreach (var ct in SelectedClipTiles) {
                 RemoveClipTile(ct);
             }
+        }
+
+        private DelegateCommand _renameClipCommand;
+        public ICommand RenameClipCommand {
+            get {
+                if (_renameClipCommand == null) {
+                    _renameClipCommand = new DelegateCommand(RenameClip,CanRenameClip);
+                }
+                return _renameClipCommand;
+            }
+        }
+        private bool CanRenameClip() {
+            return SelectedClipTiles.Count == 1;
+        }
+        private void RenameClip() {
+            SelectedClipTiles[0].IsEditingTitle = true;
+            SelectedClipTiles[0].IsTitleTextBoxFocused = true;
         }
 
         private DelegateCommand _deleteTagCommand;
@@ -769,7 +783,9 @@ namespace MpWpfApp {
         }
         private void ToggleAutoCopyMode() {
             IsAutoCopyMode = !IsAutoCopyMode;
-        }        
+        }
+
+
         #endregion
 
         #region Drag and Drop Support

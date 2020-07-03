@@ -34,6 +34,8 @@ namespace System.Windows.Media {
             memoryStream.Seek(0, System.IO.SeekOrigin.Begin);
             bitmap.StreamSource = memoryStream;
             bitmap.EndInit();
+            //memoryStream.Close();
+            //memoryStream.Dispose();
             return bitmap;
         }
         
@@ -71,6 +73,7 @@ namespace System.Windows.Media {
         public byte[] ConvertImageToByteArray(Image img) {
             MemoryStream ms = new MemoryStream();
             img.Save(ms, ImageFormat.Png);
+            //ms.Close();
             return ms.ToArray();
         }
         public Image ConvertByteArrayToImage(byte[] rawBytes) {
@@ -87,6 +90,8 @@ namespace System.Windows.Media {
                 using(var stream = new MemoryStream()) {
                     encoder.Save(stream);
                     bytes = stream.ToArray();
+                    //stream.Close();
+                    //stream.Dispose();
                 }
             }
 
@@ -97,6 +102,8 @@ namespace System.Windows.Media {
             bi.BeginInit();
             bi.StreamSource = new MemoryStream(rawBytes);
             bi.EndInit();
+            //bi.StreamSource.Close();
+            //bi.StreamSource.Dispose();
             return bi;
         }
         public Rectangle GetScreenWorkingAreaWithMouse() {

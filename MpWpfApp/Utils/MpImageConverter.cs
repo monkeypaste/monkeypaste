@@ -74,9 +74,10 @@ namespace System.Windows.Media {
             return ConvertByteArrayToImageSource(ConvertImageToByteArray(image));
         }
         public byte[] ConvertImageToByteArray(Image img) {
-            MemoryStream ms = new MemoryStream();
-            img.Save(ms, ImageFormat.Png);
-            return ms.ToArray();
+            using (MemoryStream ms = new MemoryStream()) {
+                img.Save(ms, ImageFormat.Png);
+                return ms.ToArray();
+            }                
         }
         public Image ConvertByteArrayToImage(byte[] rawBytes) {
             return Image.FromStream(new MemoryStream(rawBytes), true);

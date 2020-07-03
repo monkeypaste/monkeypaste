@@ -28,13 +28,23 @@ namespace MpWpfApp {
             TagColor = new MpColor((int)tagColor.R,(int)tagColor.G,(int)tagColor.B,255);
         }
         public MpTag(int tagId) {
-            DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpTag where pk_MpTagId=" + tagId);
+            DataTable dt = MpDb.Instance.Execute("select * from MpTag where pk_MpTagId=" + tagId);
             if(dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
         }
         public MpTag(DataRow dr) {
             LoadDataRow(dr);
+        }
+        public static List<MpTag> GetAllTags() {
+            List<MpTag> tags = new List<MpTag>();
+            DataTable dt = MpDb.Instance.Execute("select * from MpTag");
+            if (dt != null && dt.Rows.Count > 0) {
+                foreach (DataRow r in dt.Rows) {
+                    tags.Add(new MpTag(r));
+                }
+            }
+            return tags;
         }
         public override void LoadDataRow(DataRow dr) {
             TagId = Convert.ToInt32(dr["pk_MpTagId"].ToString());
@@ -45,7 +55,7 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase() {
-            if(TagName == null || TagName == string.Empty || MpDataStore.Instance.Db.NoDb) {
+            if(TagName == null || TagName == string.Empty || MpDb.Instance.NoDb) {
                 Console.WriteLine("MpTag Error, cannot create nameless tag");
                 return;
             }
@@ -53,16 +63,16 @@ namespace MpWpfApp {
             if(TagId == 0) {
                 TagColor.WriteToDatabase();
                 ColorId = TagColor.ColorId;
-                MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpTag(fk_MpTagTypeId,TagName,fk_MpColorId) values(" + (int)TagType + ",'" + TagName + "'," + ColorId + ")");
-                TagId = MpDataStore.Instance.Db.GetLastRowId("MpTag", "pk_MpTagId");                 
+                MpDb.Instance.ExecuteNonQuery("insert into MpTag(fk_MpTagTypeId,TagName,fk_MpColorId) values(" + (int)TagType + ",'" + TagName + "'," + ColorId + ")");
+                TagId = MpDb.Instance.GetLastRowId("MpTag", "pk_MpTagId");                 
             } else {
                 TagColor.WriteToDatabase();
                 ColorId = TagColor.ColorId;
-                MpDataStore.Instance.Db.ExecuteNonQuery("update MpTag set fk_MpTagTypeId=" + (int)TagType + ", TagName='" + TagName + "', fk_MpColorId=" + ColorId+" where pk_MpTagId="+TagId);                
+                MpDb.Instance.ExecuteNonQuery("update MpTag set fk_MpTagTypeId=" + (int)TagType + ", TagName='" + TagName + "', fk_MpColorId=" + ColorId+" where pk_MpTagId="+TagId);                
             }
         }
         public bool IsLinkedWithCopyItem(MpCopyItem ci) {
-            DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpCopyItemTag where fk_MpTagId=" + TagId + " and fk_MpCopyItemId=" + ci.CopyItemId);
+            DataTable dt = MpDb.Instance.Execute("select * from MpCopyItemTag where fk_MpTagId=" + TagId + " and fk_MpCopyItemId=" + ci.CopyItemId);
             if(dt != null && dt.Rows.Count > 0) {
                 return true;
             }
@@ -73,7 +83,7 @@ namespace MpWpfApp {
                 //Console.WriteLine("MpTag Warning attempting to relink tag " + TagId + " with copyitem " + ci.copyItemId+" ignoring...");
                 return;
             }
-            MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpCopyItemTag(fk_MpCopyItemId,fk_MpTagId) values(" + ci.CopyItemId + "," + TagId + ")");
+            MpDb.Instance.ExecuteNonQuery("insert into MpCopyItemTag(fk_MpCopyItemId,fk_MpTagId) values(" + ci.CopyItemId + "," + TagId + ")");
 
             Console.WriteLine("Tag link created between tag " + TagId + " with copyitem " + ci.CopyItemId);
         }
@@ -82,12 +92,12 @@ namespace MpWpfApp {
                 //Console.WriteLine("MpTag Warning attempting to unlink non-linked tag " + TagId + " with copyitem " + ci.copyItemId + " ignoring...");
                 return;
             }
-            MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpCopyItemTag where fk_MpCopyItemId="+ci.CopyItemId+" and fk_MpTagId="+TagId);
+            MpDb.Instance.ExecuteNonQuery("delete from MpCopyItemTag where fk_MpCopyItemId="+ci.CopyItemId+" and fk_MpTagId="+TagId);
 
             Console.WriteLine("Tag link removed between tag " + TagId + " with copyitem " + ci.CopyItemId + " ignoring...");
         }
         public void DeleteFromDatabase() {
-            MpDataStore.Instance.Db.ExecuteNonQuery("delete from MpTag where pk_MpTagId=" + this.TagId);
+            MpDb.Instance.ExecuteNonQuery("delete from MpTag where pk_MpTagId=" + this.TagId);
         }
         private void MapDataToColumns() {
             TableName = "MpTag";

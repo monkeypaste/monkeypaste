@@ -25,7 +25,7 @@ namespace MpWpfApp {
         private int _r, _g, _b,_a;
 
         public MpColor(int colorId) {
-            DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpColor where pk_MpColorId=" + colorId);
+            DataTable dt = MpDb.Instance.Execute("select * from MpColor where pk_MpColorId=" + colorId);
             if(dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
@@ -52,17 +52,17 @@ namespace MpWpfApp {
         }
         public override void WriteToDatabase() {
             if(ColorId == 0) {
-                DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpColor where R=" + _r + " and G=" + _g + " and B=" + _b + " and A=" + _a);
+                DataTable dt = MpDb.Instance.Execute("select * from MpColor where R=" + _r + " and G=" + _g + " and B=" + _b + " and A=" + _a);
                 if(dt != null && dt.Rows.Count > 0) {
                     ColorId = Convert.ToInt32(dt.Rows[0]["pk_MpColorId"].ToString());
                 }
                 else {
-                    MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpColor(R,G,B,A) values(" + _r + "," + _g + "," + _b + "," + _a + ")");
-                    ColorId = MpDataStore.Instance.Db.GetLastRowId("MpColor","pk_MpColorId");
+                    MpDb.Instance.ExecuteNonQuery("insert into MpColor(R,G,B,A) values(" + _r + "," + _g + "," + _b + "," + _a + ")");
+                    ColorId = MpDb.Instance.GetLastRowId("MpColor","pk_MpColorId");
                 }
             }
             else {
-                MpDataStore.Instance.Db.ExecuteNonQuery("update MpColor set R=" + _r + ", G=" + _g + ", B=" + _b + ", A=" + _a + " where pk_MpColorId=" + ColorId);
+                MpDb.Instance.ExecuteNonQuery("update MpColor set R=" + _r + ", G=" + _g + ", B=" + _b + ", A=" + _a + " where pk_MpColorId=" + ColorId);
             }
         }
         private void MapDataToColumns() {

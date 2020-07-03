@@ -36,7 +36,7 @@ namespace MpWpfApp {
             HashedPassword = hashedPassword;
         }
         public MpUser(int userId) {
-            DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpUser where pk_MpUserId=" + userId);
+            DataTable dt = MpDb.Instance.Execute("select * from MpUser where pk_MpUserId=" + userId);
             if(dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }

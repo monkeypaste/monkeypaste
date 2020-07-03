@@ -3,13 +3,19 @@ using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.TextFormatting;
+using System.Windows.Navigation;
 
 namespace MpWpfApp {
    public class  MpClipTileViewModel : MpViewModelBase {
@@ -279,7 +285,7 @@ namespace MpWpfApp {
                 CopyItem.ItemColor = new MpColor(((SolidColorBrush)value).Color);
                 CopyItem.ItemColor.WriteToDatabase();
                 CopyItem.ColorId = CopyItem.ItemColor.ColorId;
-                OnPropertyChanged("TitleColor");
+                OnPropertyChanged(nameof(TitleColor));
             }
         }
 
@@ -359,54 +365,91 @@ namespace MpWpfApp {
             IsHovering = true;
         }
 
+        public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
+            if(CopyItem.CopyItemType == MpCopyItemType.Image || CopyItem.CopyItemType == MpCopyItemType.FileList) {
+                return;
+            }
+            //First load the richtextbox with copytext
+            var rtb = (RichTextBox)((Border)sender)?.FindName("ClipTileRichTextBox");
+            rtb.SetRtf(Text);
+            //TextRange rtbRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+            //FormattedText ft = new FormattedText(rtbRange.Text, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface(rtb.Document.FontFamily.ToString()), rtb.Document.FontSize, rtb.Document.Foreground,VisualTreeHelper.GetDpi(rtb).PixelsPerDip);
+            //rtb.Width = ft.MaxTextWidth + rtb.Padding.Left + rtb.Padding.Right;
+            //rtb.Height = ft.MaxTextHeight + rtb.Padding.Top + rtb.Padding.Bottom;           
+            //rtb.Document.PageWidth = 10000;
+            //rtb.Document.PageHeight = 10000;
+            var sortedTokenList = CopyItem.SubTextTokenList.OrderBy(stt => stt.BlockIdx).ThenBy(stt=>stt.StartIdx).ToList();
+            if (sortedTokenList.Count > 0) {
+                var doc = rtb.Document;
+                TextRange lastTokenRange = null;
+                //iterate over each token
+                for(int i = 0;i < sortedTokenList.Count;i++) {
+                    MpSubTextToken token = sortedTokenList[i];
+                    Paragraph para = (Paragraph)doc.Blocks.ToArray()[token.BlockIdx]; 
+                    //find and remove the inline with the token
+                    Span inline = (Span)para.Inlines.ToArray()[token.InlineIdx];
+                    //para.Inlines.Remove(inline);
+                    TextRange runRange = new TextRange(inline.ContentStart, inline.ContentEnd);            
+                    string tokenText = runRange.Text.Substring(token.StartIdx,token.EndIdx-token.StartIdx);
+                    TextPointer searchStartPointer = inline.ContentStart;
+                    if(i > 0) {
+                        var lastToken = sortedTokenList[i - 1];
+                        if(token.BlockIdx == lastToken.BlockIdx && token.InlineIdx == lastToken.InlineIdx) {
+                            searchStartPointer = lastTokenRange.End;
+                        }
+                    }
+                    TextRange tokenRange = FindStringRangeFromPosition(searchStartPointer, tokenText);
+                    lastTokenRange = tokenRange;
+                    Hyperlink tokenLink = new Hyperlink(tokenRange.Start,tokenRange.End);
+                    tokenLink.IsEnabled = true;
+                    tokenLink.RequestNavigate += Hyperlink_RequestNavigate;
+                    switch (token.TokenType) {
+                        case MpCopyItemType.WebLink:
+                            if (!tokenText.Contains("https://")) {
+                                tokenLink.NavigateUri = new Uri("https://" + tokenText);
+                            } else {
+                                tokenLink.NavigateUri = new Uri(tokenText);
+                            }
+                            break;
+
+                        case MpCopyItemType.Email:
+                            tokenLink.NavigateUri = new Uri("mailto:" + tokenText);
+                            break;
+
+                        case MpCopyItemType.PhoneNumber:
+                            tokenLink.NavigateUri = new Uri("tel:" + tokenText);
+                            break;
+                        default:
+
+                            break;
+                    }
+                }
+            }
+        }
+        private TextRange FindStringRangeFromPosition(TextPointer position,string str) {
+            while (position != null) {
+                if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.Text) {
+                    string textRun = position.GetTextInRun(LogicalDirection.Forward);
+
+                    // Find the starting index of any substring that matches "word".
+                    int indexInRun = textRun.IndexOf(str);
+                    if (indexInRun >= 0) {
+                        return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + str.Length));
+                    }
+                }
+                position = position.GetNextContextPosition(LogicalDirection.Forward);
+            }
+
+            // position will be null if "word" is not found.
+            return null;
+        }
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e) {
+            System.Diagnostics.Process.Start(e.Uri.ToString());
+        }
+
         public void MouseLeave() {
             IsHovering = false;
         }
-
-        public void ClipTile_LeftMouseButtonDown(object sender, MouseButtonEventArgs e) {
-            var draggedClipTile = ((Border)sender);
-            var draggedClipTileViewModel = (MpClipTileViewModel)draggedClipTile.DataContext;
-            draggedClipTile.CaptureMouse();
-            draggedClipTileViewModel.DragStart = Mouse.GetPosition(draggedClipTile);
-            DragDrop.DoDragDrop(draggedClipTile, draggedClipTileViewModel, DragDropEffects.Move);
-            e.Handled = false;
-        }
-        
-        public void ClipTile_MouseMove(object sender, MouseEventArgs e) {
-            var draggedClipTile = ((Border)sender);
-            var draggedClipTileViewModel = (MpClipTileViewModel)draggedClipTile.DataContext;
-            if (draggedClipTile.IsMouseCaptured) {
-                // get the parent container
-                var container = VisualTreeHelper.GetParent(draggedClipTile) as UIElement;
-
-                // get the position within the container
-                var mousePosition = e.GetPosition(container);
-
-                // move the usercontrol.
-                draggedClipTile.RenderTransform = new TranslateTransform(mousePosition.X - draggedClipTileViewModel.DragStart.X, mousePosition.Y - draggedClipTileViewModel.DragStart.Y);
-            }
-        }
-
-        public void ClipTile_LeftMouseButtonUp(object sender, MouseButtonEventArgs e) {
-            var draggedClipTile = ((Border)sender);
-            var draggedClipTileViewModel = (MpClipTileViewModel)draggedClipTile.DataContext;
-            draggedClipTileViewModel.IsDragging = false;
-            draggedClipTile.ReleaseMouseCapture();
-
-        }
-        //protected override void OnMouseMove(MouseEventArgs e) {
-        //    base.OnMouseMove(e);
-        //    if (e.LeftButton == MouseButtonState.Pressed) {
-        //        // Package the data.
-        //        DataObject data = new DataObject();
-        //        data.SetData(DataFormats.StringFormat, circleUI.Fill.ToString());
-        //        data.SetData("Double", circleUI.Height);
-        //        data.SetData("Object", this);
-
-        //        // Inititate the drag-and-drop operation.
-        //        DragDrop.DoDragDrop(this, data, DragDropEffects.Copy | DragDropEffects.Move);
-        //    }
-        //}
 
         public void LostFocus() {
             //occurs when editing tag text
@@ -414,8 +457,11 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Private Methods
+        #endregion
+
         #region Commands
-        
+
         private DelegateCommand<KeyEventArgs> _keyDownCommand;
         public ICommand KeyDownCommand {
             get {
@@ -443,29 +489,11 @@ namespace MpWpfApp {
                     var mw = ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext);
                     mw.HideWindowCommand.Execute(null);
                     foreach(var clipTile in mw.SelectedClipTiles) {
-                        MpDataStore.Instance.ClipboardManager.PasteCopyItem(clipTile.CopyItem.Text);
+                        mw.ClipboardManager.PasteCopyItem(clipTile.CopyItem.Text);
                     }
                 }
             }
         }
-
-        private DelegateCommand _renameClipCommand;
-        public ICommand RenameClipCommand {
-            get {
-                if(_renameClipCommand == null) {
-                    _renameClipCommand = new DelegateCommand(RenameClip);
-                }
-                return _renameClipCommand;
-            }
-        }
-        private void RenameClip() {
-            IsEditingTitle = true;
-            IsTitleTextBoxFocused = true;
-        }
         #endregion
-
-        public override string ToString() {
-            return CopyItem.ToString();
-        }
     }
 }

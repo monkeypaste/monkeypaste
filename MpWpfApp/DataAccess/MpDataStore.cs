@@ -14,32 +14,14 @@ namespace MpWpfApp {
     
     public class MpDataStore   {
         private static readonly Lazy<MpDataStore> lazy = new Lazy<MpDataStore>(() => new MpDataStore());
-        private static Lazy<MpDataStore> _cfgSrc = new Lazy<MpDataStore>(System.Threading.LazyThreadSafetyMode.PublicationOnly);
         public static MpDataStore Instance { get { return lazy.Value; } }       
 
         public MpDb Db { get; set; } = null;
-        public MpClipboardManager ClipboardManager { get; set; }
 
         //First call is in MpClipTray (for now)
         public MpDataStore() {      
-            Db = new MpDb(string.Empty,string.Empty); //inits not NoDb=true 
-            ClipboardManager = new MpClipboardManager();
-            ClipboardManager.Init();
-            ClipboardManager.ClipboardChangedEvent += () => {
-                MpCopyItem newClip = MpCopyItem.CreateFromClipboard();
-                var mainWindowViewModel = ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext);
-                if(mainWindowViewModel.IsInAppendMode) {
-                    //when in append mode just append the new items text to selecteditem
-                    mainWindowViewModel.SelectedClipTiles[0].Text = mainWindowViewModel.SelectedClipTiles[0].CopyItem.Text + '\n' + newClip.Text;
-                    return;
-                }
-                if(newClip != null) {
-                    newClip.WriteToDatabase();
-                    MpTag historyTag = new MpTag(1);
-                    historyTag.LinkWithCopyItem(newClip);
-                    ClipList.Insert(0, newClip);
-                }
-            };
+            //Db = new MpDb(string.Empty,string.Empty); //inits not NoDb=true 
+            
         }
         public void Init() {
             ClearData();

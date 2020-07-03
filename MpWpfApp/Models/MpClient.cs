@@ -23,10 +23,10 @@ namespace MpWpfApp {
             LogoutDateTime = null;
         }
         public MpClient(int clientId) {
-            if(MpDataStore.Instance.Db.NoDb) {
+            if(MpDb.Instance.NoDb) {
                 return;
             }
-            DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpClient where MpClientId=" + clientId);
+            DataTable dt = MpDb.Instance.Execute("select * from MpClient where MpClientId=" + clientId);
             if(dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
@@ -44,17 +44,17 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase() {
-            if(Ip4Address == null || Ip4Address == string.Empty || MpDataStore.Instance.Db.NoDb) {
+            if(Ip4Address == null || Ip4Address == string.Empty || MpDb.Instance.NoDb) {
                 Console.WriteLine("MpTag Error, cannot create nameless tag");
                 return;
             }
             if(ClientId == 0) {
-                MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpClient(fk_MpPlatformId,Ip4Address,AccessToken,LoginDateTime) values(" + PlatformId + ",'" + Ip4Address + "','" + AccessToken + "','"+ this.LoginDateTime.ToString("yyyy-MM-dd HH:mm:ss")+"')");
-                ClientId = MpDataStore.Instance.Db.GetLastRowId("MpClient","pk_MpClientId");
+                MpDb.Instance.ExecuteNonQuery("insert into MpClient(fk_MpPlatformId,Ip4Address,AccessToken,LoginDateTime) values(" + PlatformId + ",'" + Ip4Address + "','" + AccessToken + "','"+ this.LoginDateTime.ToString("yyyy-MM-dd HH:mm:ss")+"')");
+                ClientId = MpDb.Instance.GetLastRowId("MpClient","pk_MpClientId");
             }
             else {
                 LogoutDateTime = DateTime.Now;
-                MpDataStore.Instance.Db.ExecuteNonQuery("update MpClient set LogoutDateTime='" + LogoutDateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") + "'");
+                MpDb.Instance.ExecuteNonQuery("update MpClient set LogoutDateTime='" + LogoutDateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") + "'");
             }
         }
         private void MapDataToColumns() {

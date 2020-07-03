@@ -34,7 +34,7 @@ namespace MpWpfApp {
             Version = version;
         }
         public MpPlatform(int platformId) {
-            DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpPlatform where pk_MpPlatformId=" + platformId);
+            DataTable dt = MpDb.Instance.Execute("select * from MpPlatform where pk_MpPlatformId=" + platformId);
             if(dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
@@ -50,19 +50,19 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase() {
-            if(Version == null || Version == string.Empty || MpDataStore.Instance.Db.NoDb) {
+            if(Version == null || Version == string.Empty || MpDb.Instance.NoDb) {
                 Console.WriteLine("MpPlatform Error, cannot create nameless tag");
                 return;
             }
             if(PlatformId == 0) {
-                DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpPlatform where pk_MpPlatformId=" + PlatformId);
+                DataTable dt = MpDb.Instance.Execute("select * from MpPlatform where pk_MpPlatformId=" + PlatformId);
                 //if tag already exists just populate this w/ its data
                 if(dt != null && dt.Rows.Count > 0) {
                     PlatformId = Convert.ToInt32(dt.Rows[0]["pk_MpPlatformId"].ToString());
                 }
                 else {
-                    MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpPlatform(fk_MpPlatformTypeId,fk_MpDeviceTypeId,Version) values(" + (int)PlatformType + "," + (int)DeviceType + ",'" + Version + "')");
-                    PlatformId = MpDataStore.Instance.Db.GetLastRowId("MpPlatform","pk_MpPlatformId");
+                    MpDb.Instance.ExecuteNonQuery("insert into MpPlatform(fk_MpPlatformTypeId,fk_MpDeviceTypeId,Version) values(" + (int)PlatformType + "," + (int)DeviceType + ",'" + Version + "')");
+                    PlatformId = MpDb.Instance.GetLastRowId("MpPlatform","pk_MpPlatformId");
                 }
             }
             else {

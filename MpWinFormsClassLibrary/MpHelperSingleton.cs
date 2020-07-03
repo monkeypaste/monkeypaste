@@ -40,6 +40,14 @@ namespace MpWinFormsClassLibrary {
             }
             return null;
         }
+        public static void SetRtf(this System.Windows.Controls.RichTextBox rtb, string document) {
+            var documentBytes = Encoding.UTF8.GetBytes(document);
+            using (var reader = new MemoryStream(documentBytes)) {
+                reader.Position = 0;
+                rtb.SelectAll();
+                rtb.Selection.Load(reader,System.Windows.DataFormats.Rtf);
+            }
+        }
     }
     public class MpHelperSingleton {
         private static readonly Lazy<MpHelperSingleton> lazy = new Lazy<MpHelperSingleton>(() => new MpHelperSingleton());

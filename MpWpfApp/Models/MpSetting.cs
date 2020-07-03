@@ -32,12 +32,12 @@ namespace MpWpfApp {
             bool isNew = false;
 
             if(this.SettingId == 0) {
-                if(MpDataStore.Instance.Db.NoDb) {
+                if(MpDb.Instance.NoDb) {
                     this.SettingId = ++TotalSettingCount;
                     MapDataToColumns();
                     return;
                 }
-                DataTable dt = MpDataStore.Instance.Db.Execute("select * from MpSetting where SettingName='" + this.SettingName + "'");
+                DataTable dt = MpDb.Instance.Execute("select * from MpSetting where SettingName='" + this.SettingName + "'");
                 if(dt.Rows.Count > 0) {
                     this.SettingId = Convert.ToInt32(dt.Rows[0]["pk_MpSettingId"]);
                     this.SettingName = dt.Rows[0]["SettingName"].ToString();
@@ -45,13 +45,13 @@ namespace MpWpfApp {
                     isNew = false;
                 }
                 else {
-                    MpDataStore.Instance.Db.ExecuteNonQuery("insert into MpSetting(SettingName,SettingValue) values ('" + this.SettingName + "','" + this.SettingValue + "')");
-                    this.SettingId = MpDataStore.Instance.Db.GetLastRowId("MpSetting","pk_MpSettingId");
+                    MpDb.Instance.ExecuteNonQuery("insert into MpSetting(SettingName,SettingValue) values ('" + this.SettingName + "','" + this.SettingValue + "')");
+                    this.SettingId = MpDb.Instance.GetLastRowId("MpSetting","pk_MpSettingId");
                     isNew = false;
                 }
             }
             else {
-                MpDataStore.Instance.Db.ExecuteNonQuery("update MpSetting set SettingName='" + this.SettingName + "',SettingValue='" + this.SettingValue + "' where pk_MpSettingId=" + this.SettingId);
+                MpDb.Instance.ExecuteNonQuery("update MpSetting set SettingName='" + this.SettingName + "',SettingValue='" + this.SettingValue + "' where pk_MpSettingId=" + this.SettingId);
             }
             if(isNew) {
                 MapDataToColumns();
