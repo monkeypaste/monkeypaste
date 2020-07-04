@@ -25,14 +25,33 @@
         <local:MpMainWindowViewModel />
     </Window.DataContext>
     <Window.Resources>
-        <Style x:Key="DropShadowBorderStyle"
-               TargetType="{x:Type Border}">
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect ShadowDepth="0"
-                                      BlurRadius="0"></DropShadowEffect>
-                </Setter.Value>
-            </Setter>
+        <Style x:Key="DropShaodowGridStyle"
+                TargetType="{x:Type Grid}">
+            <Style.Triggers>
+                <Trigger Property="Visibility"
+                            Value="Visible">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="(Effect).BlurRadius"
+                                                    From="0"
+                                                    To="80"
+                                                    Duration="0:0:0.2" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetProperty="(Effect).BlurRadius"
+                                                    From="80"
+                                                    To="0"
+                                                    Duration="0:0:0.2" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </Window.Resources>
     <!-- Main Window Grid -->
@@ -327,7 +346,6 @@
                     <DataTemplate>
                         <!-- Clip Tile -->
                         <local:MpClipBorder BorderBrush="{Binding BorderBrush}"
-                                            Style="{StaticResource DropShadowBorderStyle}"
                                             Focusable="True"
                                             local:MpFocusExtension.IsFocused="{Binding IsFocused}"
                                             Margin="{Binding TileMargin}"
@@ -361,7 +379,9 @@
                                               Command="{Binding MainWindowViewModel.RenameClipCommand}" />
                                     <MenuItem Header="Delete"
                                               Command="{Binding MainWindowViewModel.DeleteClipCommand}" />
-                                    <MenuItem Header="Merge"
+                                            <MenuItem Header="Say"
+                                                      Command="{Binding SperakClipCommand}" />
+                                            <MenuItem Header="Merge"
                                               Command="{Binding MainWindowViewModel.MergeClipsCommand}"
                                               Visibility="{Binding MainWindowViewModel.MergeClipsCommandVisibility}" />
                                     <MenuItem Header="Pin To"
@@ -439,8 +459,10 @@
 
                                 </StackPanel>
                                 <!-- Tile Content-->
+                                <!-- RichText Content -->
                                 <ScrollViewer Grid.Row="1" 
-                                              Grid.Column="0" 
+                                              Grid.Column="0"
+                                              x:Name="ClipTileRichTextBoxScrollViewer"
                                               Width="{Binding TileBorderSize}"
                                               Height="{Binding TileContentHeight}"
                                               VerticalScrollBarVisibility="Auto"
@@ -448,7 +470,7 @@
                                               Background="White">
                                     <local:MpSearchHightlightTextBlock x:Name="ClipTileRichTextBox"
                                                                        SearchText="{Binding MainWindowViewModel.SearchText}"
-                                                                       IsReadOnly="True" Focusable="True"
+                                                                       IsReadOnly="True"
                                                                        VerticalAlignment="Top"
                                                                        HorizontalAlignment="Left"
                                                                        MinWidth="{Binding TileBorderSize}"
@@ -456,8 +478,43 @@
                                                                        IsDocumentEnabled="True"
                                                                        Cursor="Arrow"
                                                                        BorderThickness="0"
-                                                                       Padding="10"/>
+                                                                       Padding="10" />
                                 </ScrollViewer>
+                                <!-- Image Content-->
+                                <Image Grid.Row="1"
+                                       Grid.Column="0"
+                                       x:Name="ClipTileImage"
+                                       Width="{Binding TileBorderSize}"
+                                       Height="{Binding TileContentHeight}"
+                                       Stretch="Fill"/>
+                                <!--File List Content -->
+                                <ListBox Grid.Row="1"
+                                         Grid.Column="0"
+                                         x:Name="ClipTileFileListBox"
+                                         Width="{Binding TileBorderSize}"
+                                         Height="{Binding TileContentHeight}"
+                                         ItemsSource="{Binding FileListItems}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border BorderThickness="0">
+                                                <StackPanel VerticalAlignment="Center"
+                                                            HorizontalAlignment="Left"
+                                                            Orientation="Horizontal">
+                                                    <Image Source="{Binding Icon}"
+                                                           Stretch="Fill">
+                                                    </Image>
+                                                    <TextBlock Text="{Binding ItemPath}"
+                                                               Margin="50,0,0,0"
+                                                               VerticalAlignment="Center"
+                                                               FontSize="16"
+                                                               Foreground="Black"
+                                                               Background="Transparent">
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </Border>                                                    
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
                             </Grid>
                         </local:MpClipBorder>
 

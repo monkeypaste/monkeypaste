@@ -2,18 +2,15 @@
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace MpWinFormsClassLibrary
-{
-    public class ShellEx
-    {
+namespace MpWinFormsClassLibrary {
+    public class ShellEx {
         private const int SHGFI_SMALLICON = 0x1;
         private const int SHGFI_LARGEICON = 0x0;
         private const int SHIL_JUMBO = 0x4;
         private const int SHIL_EXTRALARGE = 0x2;
         private const int WM_CLOSE = 0x0010;
 
-        public enum IconSizeEnum
-        {
+        public enum IconSizeEnum {
             SmallIcon16 = SHGFI_SMALLICON,
             MediumIcon32 = SHGFI_LARGEICON,
             LargeIcon48 = SHIL_EXTRALARGE,
@@ -37,10 +34,10 @@ namespace MpWinFormsClassLibrary
 
         [DllImport("Shell32.dll")]
         public static extern int SHGetFileInfo(
-            string pszPath, 
-            int dwFileAttributes, 
-            ref SHFILEINFO psfi, 
-            int cbFileInfo, 
+            string pszPath,
+            int dwFileAttributes,
+            ref SHFILEINFO psfi,
+            int cbFileInfo,
             uint uFlags);
 
         [DllImport("user32")]
@@ -48,39 +45,30 @@ namespace MpWinFormsClassLibrary
             IntPtr hIcon);
 
         public static System.Drawing.Bitmap GetBitmapFromFolderPath(
-            string filepath, IconSizeEnum iconsize)
-        {
+            string filepath, IconSizeEnum iconsize) {
             IntPtr hIcon = GetIconHandleFromFolderPath(filepath, iconsize);
             return getBitmapFromIconHandle(hIcon);
         }
 
-        public static System.Drawing.Bitmap GetBitmapFromFilePath(
-            string filepath, IconSizeEnum iconsize)
-        {
+        public static System.Drawing.Bitmap GetBitmapFromFilePath(string filepath, IconSizeEnum iconsize) {
             IntPtr hIcon = GetIconHandleFromFilePath(filepath, iconsize);
             return getBitmapFromIconHandle(hIcon);
         }
 
         public static System.Drawing.Bitmap GetBitmapFromPath(
-            string filepath, IconSizeEnum iconsize)
-        {
+            string filepath, IconSizeEnum iconsize) {
             IntPtr hIcon = IntPtr.Zero;
-            if (Directory.Exists(filepath))
-            {
+            if (Directory.Exists(filepath)) {
                 hIcon = GetIconHandleFromFolderPath(filepath, iconsize);
-            }
-            else
-            {
-                if (File.Exists(filepath))
-                {
+            } else {
+                if (File.Exists(filepath)) {
                     hIcon = GetIconHandleFromFilePath(filepath, iconsize);
                 }
             }
             return getBitmapFromIconHandle(hIcon);
         }
 
-        private static System.Drawing.Bitmap getBitmapFromIconHandle(IntPtr hIcon)
-        {
+        private static System.Drawing.Bitmap getBitmapFromIconHandle(IntPtr hIcon) {
             if (hIcon == IntPtr.Zero) throw new System.IO.FileNotFoundException();
             var myIcon = System.Drawing.Icon.FromHandle(hIcon);
             var bitmap = myIcon.ToBitmap();
@@ -90,8 +78,7 @@ namespace MpWinFormsClassLibrary
             return bitmap;
         }
 
-        private static IntPtr GetIconHandleFromFilePath(string filepath, IconSizeEnum iconsize)
-        {
+        private static IntPtr GetIconHandleFromFilePath(string filepath, IconSizeEnum iconsize) {
             var shinfo = new SHFILEINFO();
             const uint SHGFI_SYSICONINDEX = 0x4000;
             const int FILE_ATTRIBUTE_NORMAL = 0x80;
@@ -99,8 +86,7 @@ namespace MpWinFormsClassLibrary
             return getIconHandleFromFilePathWithFlags(filepath, iconsize, ref shinfo, FILE_ATTRIBUTE_NORMAL, flags);
         }
 
-        private static IntPtr GetIconHandleFromFolderPath(string folderpath, IconSizeEnum iconsize)
-        {
+        private static IntPtr GetIconHandleFromFolderPath(string folderpath, IconSizeEnum iconsize) {
             var shinfo = new SHFILEINFO();
 
             const uint SHGFI_ICON = 0x000000100;
@@ -112,8 +98,7 @@ namespace MpWinFormsClassLibrary
 
         private static IntPtr getIconHandleFromFilePathWithFlags(
             string filepath, IconSizeEnum iconsize,
-            ref SHFILEINFO shinfo, int fileAttributeFlag, uint flags)
-        {
+            ref SHFILEINFO shinfo, int fileAttributeFlag, uint flags) {
             const int ILD_TRANSPARENT = 1;
             var retval = SHGetFileInfo(filepath, fileAttributeFlag, ref shinfo, Marshal.SizeOf(shinfo), flags);
             if (retval == 0) throw (new System.IO.FileNotFoundException());

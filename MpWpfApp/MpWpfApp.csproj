@@ -93,6 +93,9 @@
     <Reference Include="Prism, Version=7.2.0.1422, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.7.2.0.1422\lib\net45\Prism.dll</HintPath>
     </Reference>
+    <Reference Include="QRCoder, Version=1.3.9.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\QRCoder.1.3.9\lib\net40\QRCoder.dll</HintPath>
+    </Reference>
     <Reference Include="SQLitePCLRaw.batteries_v2, Version=2.0.2.669, Culture=neutral, PublicKeyToken=8226ea5df37bcae9, processorArchitecture=MSIL">
       <HintPath>..\packages\SQLitePCLRaw.bundle_e_sqlite3.2.0.2\lib\net461\SQLitePCLRaw.batteries_v2.dll</HintPath>
     </Reference>
@@ -143,6 +146,7 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Speech" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
@@ -172,8 +176,6 @@
     <Compile Include="Attached Properties\MpTextBoxBehavior.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpSearchHighlightTextBlock.cs" />
-    <Compile Include="Converters\MpObservableCollectionToObjectConverter.cs" />
-    <Compile Include="Converters\MpStringToXamlConverter.cs" />
     <Compile Include="Models\MpApp.cs" />
     <Compile Include="Models\MpClient.cs" />
     <Compile Include="Models\MpColor.cs" />
@@ -191,7 +193,6 @@
     <Compile Include="Models\MpTag.cs" />
     <Compile Include="Models\MpUser.cs" />
     <Compile Include="Utils\MpHotKey.cs" />
-    <Compile Include="Utils\MpImageConverter.cs" />
     <Compile Include="Utils\MpMeasurements.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="Utils\MpWindowLoadingBehavior.cs" />
@@ -211,6 +212,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModels\MpCommandViewModel.cs" />
+    <Compile Include="ViewModels\MpFileListItemViewModel.cs" />
     <Compile Include="ViewModels\MpMainWindowViewModel.cs" />
     <Compile Include="ViewModels\MpTagTileViewModel.cs" />
     <Compile Include="ViewModels\MpViewModelBase.cs" />

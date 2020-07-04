@@ -5,6 +5,7 @@ using System.Data;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using MpWinFormsClassLibrary;
 
 namespace MpWpfApp {
@@ -42,7 +43,7 @@ namespace MpWpfApp {
             Color itemColor = MpHelperSingleton.Instance.GetRandomColor();
 
             if(iData.GetDataPresent(DataFormats.Bitmap)) {
-                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Image, (System.Drawing.Image)iData.GetData(DataFormats.Bitmap, true), sourcePath, itemColor);// CreateCopyItem(MpCopyItemType.None,null,IntPtr.Zero);// ((Image)iData.GetData(DataFormats.Bitmap,true),sourceHandle);
+                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Image, Clipboard.GetImage(), sourcePath, itemColor);
             } else if(iData.GetDataPresent(DataFormats.FileDrop)) {
                 ci = MpCopyItem.CreateCopyItem(MpCopyItemType.FileList, (string[])iData.GetData(DataFormats.FileDrop, true), sourcePath, itemColor);
             } else if(iData.GetDataPresent(DataFormats.Rtf)) {
@@ -86,7 +87,7 @@ namespace MpWpfApp {
             //        DocumentText = dataStr
             //    };
             //    MpDataStore.Instance.ClipboardManager.IgnoreNextClipboardEvent = true;
-                
+
             //    ((WebBrowser)_wb).Document.ExecCommand("SelectAll",false,null);
             //    ((WebBrowser)_wb).Document.ExecCommand("Copy",false,null);
             //    MpDataStore.Instance.ClipboardManager.IgnoreNextClipboardEvent = false;
@@ -97,13 +98,14 @@ namespace MpWpfApp {
             //    newItem.CopyItemType = MpCopyItemType.Text;
             //}
             //else 
-            if(newItem.CopyItemType == MpCopyItemType.Text || newItem.CopyItemType == MpCopyItemType.RichText) {
-                if(newItem.CopyItemType == MpCopyItemType.Text) {
-                    data = (object)PlainTextToRtf((string)data);
-                }
+            if (newItem.CopyItemType == MpCopyItemType.Text) {
+                data = (object)PlainTextToRtf((string)data);
+                newItem.CopyItemType = MpCopyItemType.RichText;
+            }
+            if (newItem.CopyItemType == MpCopyItemType.RichText) {                
                 newItem.DataObject = Regex.Replace(((string)data).Trim(), @"^\s+(?!\B)|\s*(?>[\r\n]+)$", string.Empty, RegexOptions.Multiline).TrimEnd();
                 newItem.SubTextTokenList = MpSubTextToken.GatherTokens((string)newItem.DataObject);
-            }
+            } 
             else {
                 newItem.DataObject = data;
             }
@@ -149,14 +151,7 @@ namespace MpWpfApp {
             DataObject = newData;
             WriteToDatabase();
         }
-        public string Text {
-            get {
-                if(CopyItemType == MpCopyItemType.Image) {
-                    return "Image";
-                }
-                return (string)GetData();
-            }
-        }
+        
         public object GetData() {
             switch(this.CopyItemType) {
                 //case MpCopyItemType.PhoneNumber:
@@ -174,14 +169,7 @@ namespace MpWpfApp {
                    // DataObject = (object)rtb.Text;
                  //   return rtb.Text.Trim();
                 case MpCopyItemType.FileList:
-                    if(DataObject.GetType() == typeof(string[])) {
-                        string fileListStr = "";
-                        foreach(string fileOrPathStr in (string[])DataObject) {
-                            fileListStr += fileOrPathStr + Environment.NewLine;
-                        }
-                        return fileListStr;
-                    }
-                    return new string[1] { "Misreferenced" };
+                    return DataObject;
                 case MpCopyItemType.Image:
                     return DataObject;           
             }
@@ -276,7 +264,7 @@ namespace MpWpfApp {
                         break;
                     }
                     this.SubItemId = Convert.ToInt32(copyItemData.Rows[0]["pk_MpImageItemId"].ToString());
-                    this.DataObject = (byte[])copyItemData.Rows[0]["ItemImage"];
+                    this.DataObject = MpHelperSingleton.Instance.ConvertByteArrayToBitmapSource((byte[])copyItemData.Rows[0]["ItemImage"]);
                     break;
             }
             MapDataToColumns();
@@ -387,7 +375,7 @@ namespace MpWpfApp {
                     break;
                 case MpCopyItemType.Image:
                     if(isNew) {
-                        MpDb.Instance.ExecuteNonQuery("insert into MpImageItem(fk_MpCopyItemId,ItemImage) values (" + this.CopyItemId + ",@0)",new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ImageConverter.ConvertImageToByteArray((System.Drawing.Image)this.DataObject) });
+                        MpDb.Instance.ExecuteNonQuery("insert into MpImageItem(fk_MpCopyItemId,ItemImage) values (" + this.CopyItemId + ",@0)",new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertBitmapSourceToByteArray((BitmapSource)this.DataObject) });
                     } else {
                         MpDb.Instance.ExecuteNonQuery("update MpImageItem set ItemImage=@0 where pk_MpImageItemId="+this.SubItemId,new List<string>() { "@0" },new List<object>() { this.DataObject });
                     }
@@ -412,8 +400,9 @@ namespace MpWpfApp {
                 //chars/lines
                 case 1:
                     if (CopyItemType == MpCopyItemType.Image) {
-                        System.Drawing.Image ciimg = MpHelperSingleton.Instance.ImageConverter.ConvertByteArrayToImage((byte[])GetData());
-                        info = "(" + ciimg.Width + ") x (" + ciimg.Height + ")";
+                        //System.Drawing.Image ciimg = MpHelperSingleton.Instance.ImageConverter.ConvertByteArrayToImage((byte[])GetData());
+                        
+                        info = "(" + ((BitmapSource)DataObject).Width + ") x (" + ((BitmapSource)DataObject).Height + ")";
                     }
                     else if (CopyItemType == MpCopyItemType.Text) {
                         info = ((string)GetData()).Length + " chars | " + MpHelperSingleton.Instance.GetLineCount((string)GetData()) + " lines";
@@ -460,6 +449,8 @@ namespace MpWpfApp {
         FileList,
         StreetAddress,
         Email,
-        PhoneNumber
+        PhoneNumber,
+        Currency,
+        HexColor
     }    
 }

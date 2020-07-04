@@ -565,6 +565,7 @@ namespace MpWpfApp {
                     , EndIdx integer NOT NULL
                     , BlockIdx int NOT NULL
                     , InlineIdx int NOT NULL
+                    , TokenText text NOT NULL
                     , CONSTRAINT FK_MpSubTextToken_0_0 FOREIGN KEY (fk_MpCopyItemTypeId) REFERENCES MpCopyItemType (pk_MpCopyItemTypeId) 
                     , CONSTRAINT FK_MpSubTextToken_1_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );

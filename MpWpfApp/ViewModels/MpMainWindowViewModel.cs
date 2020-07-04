@@ -413,23 +413,12 @@ namespace MpWpfApp {
             tagTileToRemove.Tag.DeleteFromDatabase();
         }
 
-        private void AddClipTile(MpCopyItem ci) {
-            //always make new cliptile the only one selected
-            //first clear all selections
-            //foreach(var ct in ClipTiles) {
-            //    ct.IsSelected = false;
-            //}
-            //then create/add new tile with selected = true
-            //var newClipTile = ;
-            
+        public void AddClipTile(MpCopyItem ci) {
             ClipTiles.Insert(0, new MpClipTileViewModel(ci, this));
+            //update cliptray visibility if this is the first cliptile added
             ClipListVisibility = Visibility.Visible;
             EmptyListMessageVisibility = Visibility.Collapsed;
             VisibileClipTiles[0].IsSelected = true;
-
-            //SelectedClipTiles.Clear();
-            //newClipTile.IsSelected = true;
-            //SelectedClipTiles.Add(newClipTile);
         }
         public void MoveClipTile(MpClipTileViewModel clipTile,int newIdx) {
             if (newIdx > ClipTiles.Count) {
@@ -440,19 +429,14 @@ namespace MpWpfApp {
         }
 
         private void RemoveClipTile(MpClipTileViewModel clipTileToRemove) {
-            //when the clip is selected change selection to previous tile or next if it is first tile
-            //if(clipTileToRemove.IsSelected) {
-            //    clipTileToRemove.IsSelected = false;
-            //    if(ClipTiles.Count > 1) {
-            //        if(ClipTiles.IndexOf(clipTileToRemove) == 0) {
-            //            ClipTiles[1].IsSelected = true;
-            //        } else {
-            //            ClipTiles[ClipTiles.IndexOf(clipTileToRemove) - 1].IsSelected = true;
-            //        }
-            //    }
-            //}
             ClipTiles.Remove(clipTileToRemove);
             clipTileToRemove.CopyItem.DeleteFromDatabase();
+
+            //if this was the last visible clip update the cliptray visibility
+            if (VisibileClipTiles.Count == 0) {
+                ClipListVisibility = Visibility.Collapsed;
+                EmptyListMessageVisibility = Visibility.Visible;
+            }
         }
 
         private void FilterTiles(string searchStr) {
@@ -552,9 +536,9 @@ namespace MpWpfApp {
             ClipboardManager.Init();
             ClipboardManager.ClipboardChangedEvent += () => {
                 MpCopyItem newClip = MpCopyItem.CreateFromClipboard(ClipboardManager.LastWindowWatcher.LastHandle);
-                if (IsInAppendMode) {
+                if (IsInAppendMode && newClip.CopyItemType == MpCopyItemType.RichText) {
                     //when in append mode just append the new items text to selecteditem
-                    SelectedClipTiles[0].Text += Environment.NewLine + newClip.Text;
+                    SelectedClipTiles[0].RichText += Environment.NewLine + (string)newClip.GetData();
                     return;
                 }
                 if (newClip != null) {
@@ -587,7 +571,7 @@ namespace MpWpfApp {
                 if(selectedClipTile == focusedClip) {
                     continue;
                 }
-                focusedClip.Text += "\r\n" + selectedClipTile.Text;
+                focusedClip.RichText += "\r\n" + selectedClipTile.RichText;
                 clipTilesToRemove.Add(selectedClipTile);
             }
             foreach(MpClipTileViewModel tileToRemove in clipTilesToRemove) {
@@ -793,7 +777,7 @@ namespace MpWpfApp {
             GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.StartDrag(dragInfo);
             string selectedText = "";
             foreach (MpClipTileViewModel ctvm in SelectedClipTiles) {
-                selectedText += ctvm.Text + "\r\n";
+                selectedText += ctvm.RichText + "\r\n";
             }
 
             string tempFilePath = System.AppDomain.CurrentDomain.BaseDirectory + @"\temp.txt";

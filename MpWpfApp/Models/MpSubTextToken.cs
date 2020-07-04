@@ -15,7 +15,7 @@ namespace MpWpfApp {
     public class MpSubTextToken : MpDbObject {
         public int SubTextTokenId { get; set; }
         public int CopyItemId { get; set; }
-        public string Token { get; set; }
+        public string TokenText { get; set; }
         public MpCopyItemType TokenType { get; set; }
         public int StartIdx { get; set; }
         public int EndIdx { get; set; }
@@ -23,7 +23,7 @@ namespace MpWpfApp {
         public int InlineIdx { get; set; }
 
         public MpSubTextToken(string token, MpCopyItemType mpType, int s, int e, int b,int i) {
-            this.Token = token;
+            this.TokenText = token;
             this.TokenType = mpType;
             this.StartIdx = s;
             this.EndIdx = e;
@@ -39,22 +39,13 @@ namespace MpWpfApp {
         public MpSubTextToken(DataRow dr) {
             LoadDataRow(dr);
         }
-        public static List<MpSubTextToken> GatherTokens(string searchText,bool isRichText = false) {
+        public static List<MpSubTextToken> GatherTokens(string searchText) {
             List<MpSubTextToken> tokenList = new List<MpSubTextToken>();
-            if(/*isRichText*/true) {
-                RichTextBox rtb = new RichTextBox();
-                rtb.SetRtf(searchText);
-                tokenList?.AddRange(ContainsEmail(rtb.Document));
-                tokenList?.AddRange(ContainsWebLink(rtb.Document));
-                tokenList?.AddRange(ContainsPhoneNumber(rtb.Document));
-                //tokenList?.AddRange(ContainsStreetAddress(searchText));
-            } 
-            //else {
-            //    tokenList?.AddRange(ContainsEmail(rtb.Document));
-            //    tokenList?.AddRange(ContainsWebLink(rtb.Document));
-            //    tokenList?.AddRange(ContainsPhoneNumber(rtb.Document));
-            //    //tokenList?.AddRange(ContainsStreetAddress(searchText));
-            //}
+            RichTextBox rtb = new RichTextBox();
+            rtb.SetRtf(searchText);
+            tokenList?.AddRange(ContainsEmail(rtb.Document));
+            tokenList?.AddRange(ContainsWebLink(rtb.Document));
+            tokenList?.AddRange(ContainsPhoneNumber(rtb.Document));
 
             //ensure no weblinks are part of emails
             List<MpSubTextToken> tokensToRemove = new List<MpSubTextToken>();
@@ -74,44 +65,7 @@ namespace MpWpfApp {
             }
 
             return tokenList;
-        }
-
-        public override void LoadDataRow(DataRow dr) {
-            this.SubTextTokenId = Convert.ToInt32(dr["pk_MpSubTextTokenId"].ToString());
-            this.CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemId"].ToString());
-            this.TokenType = (MpCopyItemType)Convert.ToInt32(dr["fk_MpCopyItemTypeId"].ToString());
-            this.StartIdx = Convert.ToInt32(dr["StartIdx"].ToString());
-            this.EndIdx = Convert.ToInt32(dr["EndIdx"].ToString());
-            this.BlockIdx = Convert.ToInt32(dr["BlockIdx"].ToString());
-            this.InlineIdx = Convert.ToInt32(dr["InlineIdx"].ToString());
-        }
-
-        public override void WriteToDatabase() {
-            //if new
-            if(SubTextTokenId == 0) {
-                MpDb.Instance.ExecuteNonQuery("insert into MpSubTextToken(fk_MpCopyItemId,fk_MpCopyItemTypeId,StartIdx,EndIdx,BlockIdx,InlineIdx) values(" + CopyItemId + "," + (int)TokenType + "," + StartIdx + "," + EndIdx + ","+BlockIdx+","+InlineIdx+")");
-                SubTextTokenId = MpDb.Instance.GetLastRowId("MpSubTextToken", "pk_MpSubTextTokenId");
-            } else {
-                MpDb.Instance.ExecuteNonQuery("update MpSubTextToken set fk_MpCopyItemId=" + CopyItemId + ", fk_MpCopyItemTypeId=" + (int)TokenType + ", StartIdx=" + StartIdx + ", EndIdx=" + EndIdx + ",BlockIdx="+BlockIdx+",InlineIdx="+InlineIdx+" where pk_MpSubTextTokenId=" + SubTextTokenId);
-            }
-        }
-        public void DeleteFromDatabase() {
-            if(SubTextTokenId <= 0) {
-                return;
-            }
-            MpDb.Instance.ExecuteNonQuery("delete from MpSubTextToken where pk_MpSubTextTokenId=" + SubTextTokenId);
-        }
-        private void MapDataToColumns() {
-            TableName = "MpSubTextToken";
-            columnData.Clear();
-            columnData.Add("pk_MpSubTextTokenId", this.SubTextTokenId);
-            columnData.Add("fk_MpCopyItemId", this.CopyItemId);
-            columnData.Add("fk_MpCopyItemTypeId", (int)this.TokenType);
-            columnData.Add("StartIdx", this.StartIdx);
-            columnData.Add("EndIdx", this.EndIdx);
-            columnData.Add("BlockIdx", this.BlockIdx);
-        }
-
+        }       
         private static List<MpSubTextToken> ContainsEmail(FlowDocument doc) {
             return ContainsRegEx(doc, @"([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})", MpCopyItemType.Email);
         }
@@ -136,7 +90,12 @@ namespace MpWpfApp {
         private static List<MpSubTextToken> ContainsWebLink(FlowDocument doc) {
             return ContainsRegEx(doc, @"\b(?:https?://|www\.)\S+\b", MpCopyItemType.WebLink);
         }
-
+        private static List<MpSubTextToken> ContainsCurrency(FlowDocument doc) {
+            return ContainsRegEx(doc, @"(-?\d{1,3}(,?\d{3})*(\.\d{2}?))(\D|$)", MpCopyItemType.Currency);
+        }
+        private static List<MpSubTextToken> ContainsHexColor(FlowDocument doc) {
+            return ContainsRegEx(doc, @"#(([\da-fA-F]{3}){1,2}|([\da-fA-F]{4}){1,2})$", MpCopyItemType.Currency);
+        }
         //        tkefauver@gmail.com www.google.com
         //804-459-9980
         private static List<MpSubTextToken> ContainsRegEx(FlowDocument doc, string regExStr, MpCopyItemType tokenType) {
@@ -157,10 +116,45 @@ namespace MpWpfApp {
                         }
                     }
                 }                
-            }
-                       
+            }                       
             return tokenList;
         }
+        public override void LoadDataRow(DataRow dr) {
+            this.SubTextTokenId = Convert.ToInt32(dr["pk_MpSubTextTokenId"].ToString());
+            this.CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemId"].ToString());
+            this.TokenType = (MpCopyItemType)Convert.ToInt32(dr["fk_MpCopyItemTypeId"].ToString());
+            this.StartIdx = Convert.ToInt32(dr["StartIdx"].ToString());
+            this.EndIdx = Convert.ToInt32(dr["EndIdx"].ToString());
+            this.BlockIdx = Convert.ToInt32(dr["BlockIdx"].ToString());
+            this.InlineIdx = Convert.ToInt32(dr["InlineIdx"].ToString());
+            this.TokenText = dr["TokenText"].ToString();
+        }
 
+        public override void WriteToDatabase() {
+            //if new
+            if (SubTextTokenId == 0) {
+                MpDb.Instance.ExecuteNonQuery("insert into MpSubTextToken(fk_MpCopyItemId,fk_MpCopyItemTypeId,StartIdx,EndIdx,BlockIdx,InlineIdx,TokenText) values(" + CopyItemId + "," + (int)TokenType + "," + StartIdx + "," + EndIdx + "," + BlockIdx + "," + InlineIdx + ",'"+TokenText+"')");
+                SubTextTokenId = MpDb.Instance.GetLastRowId("MpSubTextToken", "pk_MpSubTextTokenId");
+            } else {
+                MpDb.Instance.ExecuteNonQuery("update MpSubTextToken set fk_MpCopyItemId=" + CopyItemId + ", fk_MpCopyItemTypeId=" + (int)TokenType + ", StartIdx=" + StartIdx + ", EndIdx=" + EndIdx + ",BlockIdx=" + BlockIdx + ",InlineIdx=" + InlineIdx + ",TokenText='"+TokenText+"' where pk_MpSubTextTokenId=" + SubTextTokenId);
+            }
+        }
+        public void DeleteFromDatabase() {
+            if (SubTextTokenId <= 0) {
+                return;
+            }
+            MpDb.Instance.ExecuteNonQuery("delete from MpSubTextToken where pk_MpSubTextTokenId=" + SubTextTokenId);
+        }
+        private void MapDataToColumns() {
+            TableName = "MpSubTextToken";
+            columnData.Clear();
+            columnData.Add("pk_MpSubTextTokenId", this.SubTextTokenId);
+            columnData.Add("fk_MpCopyItemId", this.CopyItemId);
+            columnData.Add("fk_MpCopyItemTypeId", (int)this.TokenType);
+            columnData.Add("StartIdx", this.StartIdx);
+            columnData.Add("EndIdx", this.EndIdx);
+            columnData.Add("BlockIdx", this.BlockIdx);
+            columnData.Add("TokenText", this.TokenText);
+        }
     }
 }

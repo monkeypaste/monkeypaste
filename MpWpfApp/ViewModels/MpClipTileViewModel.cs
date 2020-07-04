@@ -1,5 +1,6 @@
 ﻿using MpWinFormsClassLibrary;
 using Prism.Commands;
+using QRCoder;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Policy;
+using System.Speech.Synthesis;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,11 +16,13 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Media.TextFormatting;
 using System.Windows.Navigation;
 
 namespace MpWpfApp {
    public class  MpClipTileViewModel : MpViewModelBase {
+        private static MpClipTileViewModel _sourceSelectedClipTile = null;
         public ObservableCollection<MpClipTileTagMenuItemViewModel> TagMenuItems {
             get {
                 ObservableCollection<MpClipTileTagMenuItemViewModel> tagMenuItems = new ObservableCollection<MpClipTileTagMenuItemViewModel>();
@@ -30,6 +34,25 @@ namespace MpWpfApp {
                     tagMenuItems.Add(new MpClipTileTagMenuItemViewModel(tagTile.TagName, tagTile.LinkTagToCopyItemCommand, tagTile.Tag.IsLinkedWithCopyItem(CopyItem)));
                 }
                 return tagMenuItems;
+            }
+        }
+
+        private ObservableCollection<MpFileListItemViewModel> _fileListItems = null;
+        public ObservableCollection<MpFileListItemViewModel> FileListItems {
+            get {
+                if(_fileListItems == null && CopyItem.CopyItemType == MpCopyItemType.FileList) {
+                    _fileListItems = new ObservableCollection<MpFileListItemViewModel>();
+                    foreach(string fileItem in (string[])CopyItem.GetData()) {
+                        _fileListItems.Add(new MpFileListItemViewModel(fileItem));
+                    }
+                }
+                return _fileListItems;
+            }
+            set {
+                if(_fileListItems != value) {
+                    _fileListItems = value;
+                    OnPropertyChanged(nameof(FileListItems));
+                }
             }
         }
 
@@ -301,13 +324,27 @@ namespace MpWpfApp {
             }
         }
 
+        private string _text = string.Empty;
         public string Text {
             get {
-                return CopyItem.Text;
+                return _text;
+            }
+            set {
+                if(_text != value) {
+                    _text = value;
+                    OnPropertyChanged(nameof(Text));
+                }
+            }
+        }
+
+        public string RichText {
+            get {
+                return (string)CopyItem.GetData();
             }
             set {
                 CopyItem.SetData(value);
-                OnPropertyChanged("Text");
+                CopyItem.WriteToDatabase();
+                OnPropertyChanged(nameof(RichText));
             }
         }
 
@@ -325,7 +362,7 @@ namespace MpWpfApp {
             set {
                 if(_copyItem != value) {
                     _copyItem = value;
-                    OnPropertyChanged("CopyItem");
+                    OnPropertyChanged(nameof(CopyItem));
                 }
             }
         }
@@ -366,12 +403,27 @@ namespace MpWpfApp {
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            if(CopyItem.CopyItemType == MpCopyItemType.Image || CopyItem.CopyItemType == MpCopyItemType.FileList) {
+            var flb = (ListBox)((Border)sender)?.FindName("ClipTileFileListBox"); 
+            var image = (Image)((Border)sender)?.FindName("ClipTileImage");
+            var rtb = (RichTextBox)((Border)sender)?.FindName("ClipTileRichTextBox");
+
+            if (CopyItem.CopyItemType == MpCopyItemType.FileList) {
+                rtb.Visibility = Visibility.Collapsed;
+                image.Visibility = Visibility.Collapsed;
                 return;
             }
+            if (CopyItem.CopyItemType == MpCopyItemType.Image) {
+                image.Source = (BitmapSource)CopyItem.GetData();
+                rtb.Visibility = Visibility.Collapsed;
+                flb.Visibility = Visibility.Collapsed;
+                return;
+            }
+            image.Visibility = Visibility.Collapsed;
+            flb.Visibility = Visibility.Collapsed;
             //First load the richtextbox with copytext
-            var rtb = (RichTextBox)((Border)sender)?.FindName("ClipTileRichTextBox");
-            rtb.SetRtf(Text);
+            rtb.SetRtf(RichText);
+            rtb.PreviewMouseLeftButtonDown += ClipTileRichTextBox_PreviewLeftMouseButtonDown;
+            Text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
             //TextRange rtbRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
             //FormattedText ft = new FormattedText(rtbRange.Text, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface(rtb.Document.FontFamily.ToString()), rtb.Document.FontSize, rtb.Document.Foreground,VisualTreeHelper.GetDpi(rtb).PixelsPerDip);
             //rtb.Width = ft.MaxTextWidth + rtb.Padding.Left + rtb.Padding.Right;
@@ -403,6 +455,12 @@ namespace MpWpfApp {
                     Hyperlink tokenLink = new Hyperlink(tokenRange.Start,tokenRange.End);
                     tokenLink.IsEnabled = true;
                     tokenLink.RequestNavigate += Hyperlink_RequestNavigate;
+                    MenuItem convertToQrCodeMenuItem = new MenuItem();
+                    convertToQrCodeMenuItem.Header = "Convert to QR Code";
+                    convertToQrCodeMenuItem.Click += ConvertToQrCodeMenuItem_Click;
+                    convertToQrCodeMenuItem.Tag = tokenLink;
+                    tokenLink.ContextMenu = new ContextMenu();
+                    tokenLink.ContextMenu.Items.Add(convertToQrCodeMenuItem);
                     switch (token.TokenType) {
                         case MpCopyItemType.WebLink:
                             if (!tokenText.Contains("https://")) {
@@ -426,7 +484,77 @@ namespace MpWpfApp {
                 }
             }
         }
-        private TextRange FindStringRangeFromPosition(TextPointer position,string str) {
+
+        private void ConvertToQrCodeMenuItem_Click(object sender, RoutedEventArgs e) {
+            var hyperLink = (Hyperlink)(((MenuItem)sender).Tag);
+
+            Url generator = new Url(hyperLink.NavigateUri.ToString());
+            string payload = generator.ToString();
+
+            using (QRCodeGenerator qrGenerator = new QRCodeGenerator()) {
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q);
+                using(QRCode qrCode = new QRCode(qrCodeData)) {
+                    var qrCodeAsBitmap = qrCode.GetGraphic(20);
+                    MpCopyItem qrCopyItem = MpCopyItem.CreateCopyItem(MpCopyItemType.Image, MpHelperSingleton.Instance.ConvertBitmapToBitmapSource(qrCodeAsBitmap), MainWindowViewModel.ClipboardManager.LastWindowWatcher.ThisAppPath, MpHelperSingleton.Instance.GetRandomColor());
+                    qrCopyItem.WriteToDatabase();
+                    MpTag historyTag = new MpTag(1);
+                    historyTag.LinkWithCopyItem(qrCopyItem);
+                    MainWindowViewModel.AddClipTile(qrCopyItem);
+                }
+            }                
+        }
+
+        private void ClipTileRichTextBox_PreviewLeftMouseButtonDown(object sender, MouseButtonEventArgs e) {
+            if (System.Windows.Forms.Control.ModifierKeys == System.Windows.Forms.Keys.Control) {
+                IsSelected = !IsSelected;
+                _sourceSelectedClipTile = this;
+            } else if (System.Windows.Forms.Control.ModifierKeys == System.Windows.Forms.Keys.Shift) {
+                if (_sourceSelectedClipTile == null) {
+                    IsSelected = true;
+                    _sourceSelectedClipTile = this;
+                } else {
+                    int curIdx = MainWindowViewModel.ClipTiles.IndexOf(this);
+                    int targetIdx = MainWindowViewModel.ClipTiles.IndexOf(_sourceSelectedClipTile);
+                    foreach (var selectedClipTile in MainWindowViewModel.SelectedClipTiles) {
+                        selectedClipTile.IsSelected = false;
+                    }
+                    if (curIdx > targetIdx) {
+                        for (int i = targetIdx; i <= curIdx; i++) {
+                            MainWindowViewModel.ClipTiles[i].IsSelected = true;
+                        }
+                    } else {
+                        for (int i = curIdx; i <= targetIdx; i++) {
+                            MainWindowViewModel.ClipTiles[i].IsSelected = true;
+                        }
+                    }
+                }
+            } else {
+                foreach (var selectedClipTile in MainWindowViewModel.SelectedClipTiles) {
+                    selectedClipTile.IsSelected = false;
+                }
+                IsSelected = true;
+                _sourceSelectedClipTile = this;
+            }
+
+            ((RichTextBox)sender).Selection.Select(((RichTextBox)sender).Document.ContentEnd, ((RichTextBox)sender).Document.ContentEnd);
+        }
+
+        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e) {
+            System.Diagnostics.Process.Start(e.Uri.ToString());
+        }
+
+        public void MouseLeave() {
+            IsHovering = false;
+        }
+
+        public void LostFocus() {
+            //occurs when editing tag text
+            IsEditingTitle = false;
+        }
+        #endregion
+
+        #region Private Methods
+        private TextRange FindStringRangeFromPosition(TextPointer position, string str) {
             while (position != null) {
                 if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.Text) {
                     string textRun = position.GetTextInRun(LogicalDirection.Forward);
@@ -443,25 +571,9 @@ namespace MpWpfApp {
             // position will be null if "word" is not found.
             return null;
         }
-        private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e) {
-            System.Diagnostics.Process.Start(e.Uri.ToString());
-        }
-
-        public void MouseLeave() {
-            IsHovering = false;
-        }
-
-        public void LostFocus() {
-            //occurs when editing tag text
-            IsEditingTitle = false;
-        }
-        #endregion
-
-        #region Private Methods
         #endregion
 
         #region Commands
-
         private DelegateCommand<KeyEventArgs> _keyDownCommand;
         public ICommand KeyDownCommand {
             get {
@@ -486,12 +598,47 @@ namespace MpWpfApp {
                     return;
                 } else {
                     //In order to paste the app must hide first
-                    var mw = ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext);
-                    mw.HideWindowCommand.Execute(null);
-                    foreach(var clipTile in mw.SelectedClipTiles) {
-                        mw.ClipboardManager.PasteCopyItem(clipTile.CopyItem.Text);
+                    MainWindowViewModel.HideWindowCommand.Execute(null);
+                    foreach(var clipTile in MainWindowViewModel.SelectedClipTiles) {
+                        MainWindowViewModel.ClipboardManager.PasteCopyItem(clipTile.RichText);
                     }
                 }
+            }
+        }
+
+        private DelegateCommand _speakClipCommand;
+        public ICommand SperakClipCommand {
+            get {
+                if(_speakClipCommand == null) {
+                    _speakClipCommand = new DelegateCommand(SpeakClip, CanSpeakClip);
+                }
+                return _speakClipCommand;
+            }
+        }
+        private bool CanSpeakClip() {
+            return CopyItem.CopyItemType != MpCopyItemType.Image && CopyItem.CopyItemType != MpCopyItemType.FileList;
+        }
+        private void SpeakClip() {
+            using (SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer()) {
+                speechSynthesizer.Speak(Text);
+            }                
+        }
+
+        private DelegateCommand _convertTokenToQrCodeCommand;
+        public ICommand ConvertTokenToQrCodeCommand {
+            get {
+                if (_convertTokenToQrCodeCommand == null) {
+                    _convertTokenToQrCodeCommand = new DelegateCommand(ConvertTokenToQrCode);
+                }
+                return _convertTokenToQrCodeCommand;
+            }
+        }
+        private bool CanConvertTokenToQrCode() {
+            return CopyItem.CopyItemType != MpCopyItemType.Image && CopyItem.CopyItemType != MpCopyItemType.FileList;
+        }
+        private void ConvertTokenToQrCode() {
+            using (SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer()) {
+                speechSynthesizer.Speak(Text);
             }
         }
         #endregion

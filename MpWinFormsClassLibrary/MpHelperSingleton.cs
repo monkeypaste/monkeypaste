@@ -14,6 +14,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using static MpWinFormsClassLibrary.ShellEx;
 
 namespace MpWinFormsClassLibrary {
@@ -56,7 +57,6 @@ namespace MpWinFormsClassLibrary {
         private MpHelperSingleton() {
             Rand = new Random();
         }
-        public MpImageConverter ImageConverter { get; set; } = new MpImageConverter();
 
         public bool ApplicationIsActivated() {
             var activatedHandle = WinApi.GetForegroundWindow();
@@ -125,7 +125,7 @@ namespace MpWinFormsClassLibrary {
 
 
         public ImageSource GetIconImage(string sourcePath) {
-            return ImageConverter.ConvertImageToImageSource(GetBitmapFromFilePath(sourcePath, IconSizeEnum.ExtraLargeIcon));
+            return ConvertBitmapToBitmapSource(GetBitmapFromFilePath(sourcePath, IconSizeEnum.LargeIcon48));
             //return IconReader.GetFileIcon(MpHelperSingleton.Instance.GetProcessPath(sourceHandle),IconReader.IconSize.Large,false).ToBitmap();
         }
         public string GetProcessPath(IntPtr hwnd) {
@@ -418,5 +418,41 @@ namespace MpWinFormsClassLibrary {
             return cpuInfo;
         }
         
+        public byte[] ConvertBitmapSourceToByteArray(BitmapSource bs) {
+            PngBitmapEncoder encoder = new PngBitmapEncoder(); 
+            //encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
+            // byte[] bit = new byte[0];
+            using (MemoryStream stream = new MemoryStream()) {
+                encoder.Frames.Add(BitmapFrame.Create(bs));
+                encoder.Save(stream);
+                byte[] bit = stream.ToArray();
+                stream.Close();
+                return bit;
+            }
+        }
+
+        public BitmapSource ConvertByteArrayToBitmapSource(byte[] bytes) {
+            return (BitmapSource)new ImageSourceConverter().ConvertFrom(bytes);
+        }
+
+        public BitmapSource ConvertBitmapToBitmapSource(System.Drawing.Bitmap bitmap) {
+            var bitmapData = bitmap.LockBits(
+                new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                System.Drawing.Imaging.ImageLockMode.ReadOnly, bitmap.PixelFormat);
+
+            var bitmapSource = BitmapSource.Create(
+                bitmapData.Width, bitmapData.Height,
+                bitmap.HorizontalResolution, bitmap.VerticalResolution,
+                PixelFormats.Bgra32, null,
+                bitmapData.Scan0, bitmapData.Stride * bitmapData.Height, bitmapData.Stride);
+
+            bitmap.UnlockBits(bitmapData);
+            return bitmapSource;
+        }
+
+        public bool IsPathDirectory(string str) {
+            // get the file attributes for file or directory
+            return File.GetAttributes(str).HasFlag(FileAttributes.Directory);
+        }
     }
 }

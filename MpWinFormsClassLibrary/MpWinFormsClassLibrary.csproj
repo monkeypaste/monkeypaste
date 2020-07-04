@@ -51,9 +51,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MpHelperSingleton.cs" />
-    <Compile Include="MpImageConverter.cs" />
     <Compile Include="MpLastWindowWatcher.cs" />
-    <Compile Include="MpRegistryHelper.cs" />
     <Compile Include="MpScreenManager.cs" />
     <Compile Include="MpSingleton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
