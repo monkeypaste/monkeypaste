@@ -86,11 +86,11 @@ namespace MpWpfApp {
             //        AutoSize = true,
             //        DocumentText = dataStr
             //    };
-            //    MpDataStore.Instance.ClipboardManager.IgnoreNextClipboardEvent = true;
+            //    MpDataStore.Instance.ClipboardMonitor.IgnoreNextClipboardEvent = true;
 
             //    ((WebBrowser)_wb).Document.ExecCommand("SelectAll",false,null);
             //    ((WebBrowser)_wb).Document.ExecCommand("Copy",false,null);
-            //    MpDataStore.Instance.ClipboardManager.IgnoreNextClipboardEvent = false;
+            //    MpDataStore.Instance.ClipboardMonitor.IgnoreNextClipboardEvent = false;
             //    TextBox temp = new TextBox();
             //    temp.Paste();
             //    newItem.DataObject = (string)temp.Text;

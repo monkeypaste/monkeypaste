@@ -47,9 +47,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MpClipboardManager.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="MpHelperSingleton.cs" />
     <Compile Include="MpLastWindowWatcher.cs" />
     <Compile Include="MpScreenManager.cs" />
@@ -63,11 +60,6 @@
     <Compile Include="Shell\RECT.cs" />
     <Compile Include="Shell\SHFILEINFO.cs" />
     <Compile Include="WinApi.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MpClipboardManager.resx">
-      <DependentUpon>MpClipboardManager.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

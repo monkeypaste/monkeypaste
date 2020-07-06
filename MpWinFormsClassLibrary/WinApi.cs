@@ -52,15 +52,16 @@ namespace MpWinFormsClassLibrary {
             ShowWindow(window, SW_SHOWNORMAL);
             SetForegroundWindow(window);
         }
-        [DllImport("User32.dll")]
-        public static extern int SetClipboardViewer(int hWndNewViewer);
 
-        [DllImport("User32.dll",CharSet = CharSet.Auto)]
-        public static extern bool ChangeClipboardChain(IntPtr hWndRemove,IntPtr hWndNewNext);
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetClipboardViewer(IntPtr hWndNewViewer);
 
-        [DllImport("user32.dll",CharSet = CharSet.Auto)]
-        public static extern int SendMessage(IntPtr hwnd,int wMsg,IntPtr wParam,IntPtr lParam);
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool ChangeClipboardChain(IntPtr hWndRemove, IntPtr hWndNewNext);
 
+        [DllImport("user32.dll")]
+        public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
         /// <summary>
         /// Places the given window in the system-maintained clipboard format listener list.
         /// </summary>

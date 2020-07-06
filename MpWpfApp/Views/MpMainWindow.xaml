@@ -273,7 +273,7 @@
             <ListBox x:Name="ClipTray"
                      Grid.Row="0"
                      Grid.Column="1"
-                     Focusable="True"
+                     Focusable="True"                     
                      dd:DragDrop.IsDragSource="True"
                      dd:DragDrop.IsDropTarget="True"
                      dd:DragDrop.DragHandler="{Binding}"
@@ -345,16 +345,16 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <!-- Clip Tile -->
-                        <local:MpClipBorder BorderBrush="{Binding BorderBrush}"
+                        <local:MpClipBorder BorderBrush="{Binding TileBorderBrush}"
                                             Focusable="True"
                                             local:MpFocusExtension.IsFocused="{Binding IsFocused}"
                                             Margin="{Binding TileMargin}"
-                                            Background="{Binding TitleColor}"
+                                            Background="White"
                                             BorderThickness="{Binding TileBorderThickness}"
                                             Width="{Binding TileSize}"
                                             Height="{Binding TileSize}"
                                             CornerRadius="10"
-                                            Visibility="{Binding Visibility}">
+                                            Visibility="{Binding TileVisibility}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Loaded">
                                     <i:CallMethodAction TargetObject="{Binding}"
@@ -405,28 +405,35 @@
                                 <DropShadowEffect Color="Black"  
                                                   BlurRadius="10" />
                             </local:MpClipBorder.Effect>
-                            <Grid >
+                            <Grid ClipToBounds="False">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="{Binding TileTitleHeight}" />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
-                                <!-- Tile Title StackPanel -->
-                                <StackPanel Grid.Row="0"
-                                            Grid.Column="0"
-                                            VerticalAlignment="Center"
-                                            Orientation="Horizontal">
-                                    <Image Source="{Binding Icon}"
-                                           Stretch="Fill"
-                                           Width="{Binding TileTitleHeight}"
-                                           Height="{Binding TileTitleHeight}">
-                                    </Image>
-                                    <TextBlock Text="{Binding Title}"
-                                               Margin="10,0,0,0"
-                                               VerticalAlignment="Top"
-                                               FontSize="35"
+                                <!-- Tile Title StackPanel -->                                
+                                <Path x:Name="ClipTileTitlePath2"
+                                      Grid.Row="0"
+                                      Grid.Column="0"
+                                      ClipToBounds="False"
+                                      StrokeThickness="0">
+                                </Path>
+                                <Path x:Name="ClipTileTitlePath3"
+                                      Grid.Row="0"
+                                      Grid.Column="0"
+                                      ClipToBounds="False"
+                                      StrokeThickness="0"
+                                      Fill="{Binding TitleColor}">
+                                </Path>
+                                <Canvas VerticalAlignment="Top"
+                                        HorizontalAlignment="Left">
+                                    <TextBlock x:Name="ClipTileTitleTextBlock"
+                                               Text="{Binding Title}"
+                                               Canvas.Top="-2"
+                                               Canvas.Left="5"
+                                               FontSize="24"
                                                Foreground="White"
                                                Background="Transparent"
-                                               Visibility="{Binding TextBlockVisibility}">
+                                               Visibility="{Binding TileTitleTextBlockVisibility}">
                                         <TextBlock.Effect>
                                             <DropShadowEffect ShadowDepth="2"
                                                               Direction="330"
@@ -436,12 +443,12 @@
                                         </TextBlock.Effect>
                                     </TextBlock>
                                     <!-- Clip Title TextBox -->
-                                    <TextBox Margin="10,0,0,0"
+                                    <TextBox x:Name="ClipTileTitleTextBox"
                                              Background="White"
                                              Foreground="Black"
-                                             FontSize="35"
-                                             VerticalAlignment="Top"
-                                             Visibility="{Binding TextBoxVisibility}"
+                                             Padding="10,0,0,0"
+                                             FontSize="24"
+                                             Visibility="{Binding TileTitleTextBoxVisibility}"
                                              local:MpFocusExtension.IsFocused="{Binding IsTitleTextBoxFocused}"
                                              local:MpTextBoxBehavior.SelectAllTextOnFocus="True"
                                              Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
@@ -456,9 +463,26 @@
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                     </TextBox>
+                                    <!-- Clip Title Icon Image -->
+                                    <Image x:Name="ClipTileAppIconImage"
+                                           Source="{Binding Icon}"
+                                           Stretch="Fill"
+                                           Width="{Binding TileTitleIconSize}"
+                                           Height="{Binding TileTitleIconSize}">
+                                        <Image.Effect>
+                                            <DropShadowEffect Color="DimGray" />
+                                        </Image.Effect>
+                                    </Image>
 
-                                </StackPanel>
-                                <!-- Tile Content-->
+                                    <!--<Ellipse x:Name="ClipTileAppIconImageBorder"
+                                             Width="{Binding TileTitleIconBorderSize}"
+                                             Height="{Binding TileTitleIconBorderSize}"
+                                             Margin="10"
+                                             Stroke="DimGray"
+                                             Fill="Gray"
+                                             Canvas.Left="10"
+                                             Canvas.Top="25" />-->
+                                </Canvas>
                                 <!-- RichText Content -->
                                 <ScrollViewer Grid.Row="1" 
                                               Grid.Column="0"
@@ -468,7 +492,7 @@
                                               VerticalScrollBarVisibility="Auto"
                                               HorizontalScrollBarVisibility="Auto" 
                                               Background="White">
-                                    <local:MpSearchHightlightTextBlock x:Name="ClipTileRichTextBox"
+                                    <local:MpClipTileRichTextBox x:Name="ClipTileRichTextBox"
                                                                        SearchText="{Binding MainWindowViewModel.SearchText}"
                                                                        IsReadOnly="True"
                                                                        VerticalAlignment="Top"

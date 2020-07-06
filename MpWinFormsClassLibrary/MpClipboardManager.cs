@@ -98,7 +98,7 @@ namespace MpWinFormsClassLibrary {
             IgnoreNextClipboardEvent = true;
             //AddClipboardFormatListener(this.Handle);    // Add our window to the clipboard's format listener list.
             
-            _nextClipboardViewer = (IntPtr)WinApi.SetClipboardViewer((int)this.Handle);
+            //_nextClipboardViewer = (IntPtr)WinApi.SetClipboardViewer((int)this.Handle);
             IgnoreNextClipboardEvent = false;
         }
         

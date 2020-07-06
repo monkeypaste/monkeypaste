@@ -57,7 +57,18 @@ namespace MpWpfApp {
         }
 
         #region Appearance Properties
-        public Point DragStart;
+        private bool _hasScrollBars = false;
+        public bool HasScrollBars {
+            get {
+                return _hasScrollBars;
+            }
+            set {
+                if(_hasScrollBars != value) {
+                    _hasScrollBars = value;
+                    OnPropertyChanged(nameof(HasScrollBars));
+                }
+            }
+        }
 
         private bool _isTitleTextBoxFocused = false;
         public bool IsTitleTextBoxFocused {
@@ -67,7 +78,7 @@ namespace MpWpfApp {
             set {
                 if(_isTitleTextBoxFocused != value) {
                     _isTitleTextBoxFocused = value;
-                    OnPropertyChanged("IsTitleTextBoxFocused");
+                    OnPropertyChanged(nameof(IsTitleTextBoxFocused));
                 }
             }
         }
@@ -80,7 +91,7 @@ namespace MpWpfApp {
             set {
                 if(_isSelected != value) {
                     _isSelected = value;
-                    OnPropertyChanged("IsSelected");                    
+                    OnPropertyChanged(nameof(IsSelected));                    
                 }
             }
         }
@@ -93,14 +104,7 @@ namespace MpWpfApp {
             set {
                 if(_isHovering != value) {
                     _isHovering = value;
-                    OnPropertyChanged("IsHovering");
-                    if(!IsSelected) {
-                        if(_isHovering) {
-                            BorderBrush = Brushes.Yellow;
-                        } else {
-                            BorderBrush = Brushes.Transparent;
-                        }
-                    }
+                    OnPropertyChanged(nameof(IsHovering));
                 }
             }
         }
@@ -125,67 +129,62 @@ namespace MpWpfApp {
             }
             set {
                 if(_isEditingTitle != value) {
-                    //tag names cannot be blank so don't allow the textblock to reappear and change name back to 'untitled'
-                    //if(CopyItem.Title.Trim() == string.Empty) {
-                    //    Title = "Untitled";
-                    //    return;
-                    //}
                     _isEditingTitle = value;
-                    OnPropertyChanged("IsEditingTitle");
+                    OnPropertyChanged(nameof(IsEditingTitle));
                 }
             }
         }
         
-        private Brush _borderBrush = Brushes.Transparent;
-        public Brush BorderBrush {
+        private Brush _tileBorderBrush = Brushes.Transparent;
+        public Brush TileBorderBrush {
             get {
-                return _borderBrush;
+                return _tileBorderBrush;
             }
             set {
-                if(_borderBrush != value) {
-                    _borderBrush = value;
-                    OnPropertyChanged("BorderBrush");
+                if(_tileBorderBrush != value) {
+                    _tileBorderBrush = value;
+                    OnPropertyChanged(nameof(TileBorderBrush));
                 }
             }
         }
         #endregion
 
         #region Layout 
-        private Visibility _visibility = Visibility.Visible;
-        public Visibility Visibility {
+        private Visibility _tileVisibility = Visibility.Visible;
+        public Visibility TileVisibility {
             get {
-                return _visibility;
+                return _tileVisibility;
             }
             set {
-                if(_visibility != value) {
-                    _visibility = value;
-                    OnPropertyChanged("Visibility");
+                if(_tileVisibility != value) {
+                    _tileVisibility = value;
+                    OnPropertyChanged(nameof(TileVisibility));
                 }
             }
         }
 
-        private Visibility _textBoxVisibility = Visibility.Collapsed;
-        public Visibility TextBoxVisibility {
+        private Visibility _tileTitleTextBlockVisibility = Visibility.Visible;
+        public Visibility TileTitleTextBlockVisibility {
             get {
-                return _textBoxVisibility;
+                return _tileTitleTextBlockVisibility;
             }
             set {
-                if(_textBoxVisibility != value) {
-                    _textBoxVisibility = value;
-                    OnPropertyChanged("TextBoxVisibility");
+                if (_tileTitleTextBlockVisibility != value) {
+                    _tileTitleTextBlockVisibility = value;
+                    OnPropertyChanged(nameof(TileTitleTextBlockVisibility));
                 }
             }
         }
 
-        private Visibility _textBlockVisibility = Visibility.Visible;
-        public Visibility TextBlockVisibility {
+        private Visibility _tileTitleTextBoxVisibility = Visibility.Collapsed;
+        public Visibility TileTitleTextBoxVisibility {
             get {
-                return _textBlockVisibility;
+                return _tileTitleTextBoxVisibility;
             }
             set {
-                if(_textBlockVisibility != value) {
-                    _textBlockVisibility = value;
-                    OnPropertyChanged("TextBlockVisibility");
+                if (_tileTitleTextBoxVisibility != value) {
+                    _tileTitleTextBoxVisibility = value;
+                    OnPropertyChanged(nameof(TileTitleTextBoxVisibility));
                 }
             }
         }
@@ -198,7 +197,7 @@ namespace MpWpfApp {
             set {
                 if(_tileSize != value) {
                     _tileSize = value;
-                    OnPropertyChanged("TileSize");
+                    OnPropertyChanged(nameof(TileSize));
                 }
             }
         }
@@ -211,7 +210,7 @@ namespace MpWpfApp {
             set {
                 if(_tileBorderSize != value) {
                     _tileBorderSize = value;
-                    OnPropertyChanged("TileBorderSize");
+                    OnPropertyChanged(nameof(TileBorderSize));
                 }
             }
         }
@@ -241,7 +240,7 @@ namespace MpWpfApp {
             set {
                 if(_tileTitleHeight != value) {
                     _tileTitleHeight = value;
-                    OnPropertyChanged("TileTitleHeight");
+                    OnPropertyChanged(nameof(TileTitleHeight));
                 }
             }
         }
@@ -254,7 +253,7 @@ namespace MpWpfApp {
             set {
                 if(_tileTitleHeight != value) {
                     _tileTitleHeight = value;
-                    OnPropertyChanged("TileTitleHeight");
+                    OnPropertyChanged(nameof(TileTitleHeight));
                 }
             }
         }
@@ -267,7 +266,7 @@ namespace MpWpfApp {
             set {
                 if(_tileMargin != value) {
                     _tileMargin = value;
-                    OnPropertyChanged("TileMargin");
+                    OnPropertyChanged(nameof(TileMargin));
                 }
             }
         }
@@ -319,7 +318,7 @@ namespace MpWpfApp {
             set {
                 if(CopyItem.Title != value) {
                     CopyItem.Title = value;
-                    OnPropertyChanged("Title");
+                    OnPropertyChanged(nameof(Title));
                 }
             }
         }
@@ -343,7 +342,6 @@ namespace MpWpfApp {
             }
             set {
                 CopyItem.SetData(value);
-                CopyItem.WriteToDatabase();
                 OnPropertyChanged(nameof(RichText));
             }
         }
@@ -373,25 +371,44 @@ namespace MpWpfApp {
             CopyItem = ci;
             MainWindowViewModel = mwvm;
             PropertyChanged += (s, e) => {
-                if(e.PropertyName == "IsSelected") {
-                    if(IsSelected) {
-                        BorderBrush = Brushes.Red;
-                    } else {
-                        BorderBrush = Brushes.Transparent;
-                    }
-                } else if(e.PropertyName == "IsEditingTitle") {
-                    if(IsEditingTitle) {
-                        //show textbox and select all text
-                        TextBoxVisibility = Visibility.Visible;
-                        TextBlockVisibility = Visibility.Collapsed;
-                        IsTitleTextBoxFocused = false;
-                        IsTitleTextBoxFocused = true;
-                    } else {
-                        TextBoxVisibility = Visibility.Collapsed;
-                        TextBlockVisibility = Visibility.Visible;
-                        IsTitleTextBoxFocused = false;
+                switch(e.PropertyName) {
+                    case nameof(IsSelected):
+                        if (IsSelected) {
+                            TileBorderBrush = Brushes.Red;
+                        } else {
+                            TileBorderBrush = Brushes.Transparent;
+                        }
+                        break;
+                    case nameof(IsEditingTitle):
+                        if (IsEditingTitle) {
+                            //show textbox and select all text
+
+                            TileTitleTextBoxVisibility = Visibility.Visible;
+                            TileTitleTextBlockVisibility = Visibility.Collapsed;
+                            IsTitleTextBoxFocused = false;
+                            IsTitleTextBoxFocused = true;
+                        } else {
+                            TileTitleTextBoxVisibility = Visibility.Collapsed;
+                            TileTitleTextBlockVisibility = Visibility.Visible;
+                            IsTitleTextBoxFocused = false;
+                            CopyItem.WriteToDatabase();
+                        }
+                        break;
+                    case nameof(RichText):
                         CopyItem.WriteToDatabase();
-                    }
+                        break;
+                    case nameof(Title):
+                        CopyItem.WriteToDatabase();
+                        break;
+                    case nameof(IsHovering):
+                        if (!IsSelected) {
+                            if (IsHovering) {
+                                TileBorderBrush = Brushes.Yellow;
+                            } else {
+                                TileBorderBrush = Brushes.Transparent;
+                            }
+                        }
+                        break;
                 }
             };
         }
@@ -402,7 +419,49 @@ namespace MpWpfApp {
             IsHovering = true;
         }
 
+        private PolyBezierSegment CreateCurveRect(double x,double y,double w,double h, double m1,double m2,double m3,double m4) {
+            PolyBezierSegment plineSeg = new PolyBezierSegment();
+            plineSeg.Points.Add(new Point(x,y));
+            plineSeg.Points.Add(new Point(x,y));
+            plineSeg.Points.Add(new Point(x,y));
+
+            plineSeg.Points.Add(new Point(w, y));
+            plineSeg.Points.Add(new Point(w, y));
+            plineSeg.Points.Add(new Point(w, y));
+
+            plineSeg.Points.Add(new Point(w, h));
+            plineSeg.Points.Add(new Point(w, h));
+            plineSeg.Points.Add(new Point(w, h));
+
+            //test m1=0.75 m2=2.0 m3=0.5 m4=0.5
+            plineSeg.Points.Add(new Point(w * m1, h * m2));
+            plineSeg.Points.Add(new Point(w * m3, h * m4));
+            plineSeg.Points.Add(new Point(x, h));
+
+            return plineSeg;
+        }
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
+            PathFigure pthFigure = new PathFigure();
+            pthFigure.IsClosed = true;
+            pthFigure.StartPoint = new Point(0, 0);
+            
+            PathSegmentCollection myPathSegmentCollection = new PathSegmentCollection();
+            myPathSegmentCollection.Add(CreateCurveRect(0,0,TileBorderSize,TileTitleHeight,0.375,1.0,0.25,0.25));
+            pthFigure.Segments = myPathSegmentCollection;
+
+            PathFigureCollection pthFigureCollection = new PathFigureCollection();
+            pthFigureCollection.Add(pthFigure);
+            PathGeometry pthGeometry = new PathGeometry();
+            pthGeometry.Figures = pthFigureCollection;
+
+            var titlePath = (System.Windows.Shapes.Path)((Border)sender)?.FindName("ClipTileTitlePath3");
+            titlePath.Data = pthGeometry;
+            TileTitleHeight = titlePath.RenderSize.Height;
+
+            var titleIconImage = (Image)((Border)sender)?.FindName("ClipTileAppIconImage");
+            Canvas.SetLeft(titleIconImage, TileBorderSize - TileTitleHeight);
+            Canvas.SetTop(titleIconImage, 10);// TileBorderSize * 0.5);
+
             var flb = (ListBox)((Border)sender)?.FindName("ClipTileFileListBox"); 
             var image = (Image)((Border)sender)?.FindName("ClipTileImage");
             var rtb = (RichTextBox)((Border)sender)?.FindName("ClipTileRichTextBox");
@@ -421,15 +480,31 @@ namespace MpWpfApp {
             image.Visibility = Visibility.Collapsed;
             flb.Visibility = Visibility.Collapsed;
             //First load the richtextbox with copytext
-            rtb.SetRtf(RichText);
+            rtb.SetRtf(RichText); 
             rtb.PreviewMouseLeftButtonDown += ClipTileRichTextBox_PreviewLeftMouseButtonDown;
             Text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
-            //TextRange rtbRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
-            //FormattedText ft = new FormattedText(rtbRange.Text, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface(rtb.Document.FontFamily.ToString()), rtb.Document.FontSize, rtb.Document.Foreground,VisualTreeHelper.GetDpi(rtb).PixelsPerDip);
-            //rtb.Width = ft.MaxTextWidth + rtb.Padding.Left + rtb.Padding.Right;
-            //rtb.Height = ft.MaxTextHeight + rtb.Padding.Top + rtb.Padding.Bottom;           
-            //rtb.Document.PageWidth = 10000;
-            //rtb.Document.PageHeight = 10000;
+
+            //TextRange rtbRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);\
+            double dpi1 = (double)DpiUtilities.GetDpiForDesktop();
+            double dpi2 = (double)DpiUtilities.GetDpiForMonitor(DpiUtilities.GetDesktopMonitor());
+            double dpi3 = (double)DpiUtilities.GetDpiForWindow(MainWindowViewModel.ClipboardMonitor.LastWindowWatcher.ThisAppHandle);
+            var dpi4 = VisualTreeHelper.GetDpi(rtb);
+            FormattedText ft = new FormattedText(Text, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface(rtb.Document.FontFamily.ToString()), rtb.Document.FontSize, rtb.Document.Foreground, dpi4.PixelsPerDip);//VisualTreeHelper.GetDpi(rtb).PixelsPerDip);
+            using (var font = new System.Drawing.Font(rtb.Document.FontFamily.ToString(), (float)rtb.Document.FontSize)) {
+                System.Drawing.Size textSize = System.Windows.Forms.TextRenderer.MeasureText(Text, font);
+                //rtb.Width = ((double)textSize.Width/dpi4.DpiScaleX) + rtb.Padding.Left + rtb.Padding.Right;
+                //rtb.Height = ((double)textSize.Height/dpi4.DpiScaleY) + rtb.Padding.Top + rtb.Padding.Bottom;
+                //rtb.Document.PageWidth = ((double)textSize.Width / dpi4.DpiScaleX);
+                //rtb.Document.PageHeight = ((double)textSize.Height / dpi4.DpiScaleY);
+
+                rtb.Width = ft.Width + rtb.Padding.Left + rtb.Padding.Right;
+                rtb.Height = ft.Height + rtb.Padding.Top + rtb.Padding.Bottom;
+                rtb.Document.PageWidth = ft.Width;
+                rtb.Document.PageHeight = ft.Height;
+            }
+            var scrollViewer = (ScrollViewer)((Border)sender)?.FindName("ClipTileRichTextBoxScrollViewer"); 
+            HasScrollBars = scrollViewer.Height < rtb.Height || scrollViewer.Width < rtb.Width;//scrollViewer.ComputedHorizontalScrollBarVisibility == Visibility.Visible || scrollViewer.ComputedVerticalScrollBarVisibility == Visibility.Visible;
+            
             var sortedTokenList = CopyItem.SubTextTokenList.OrderBy(stt => stt.BlockIdx).ThenBy(stt=>stt.StartIdx).ToList();
             if (sortedTokenList.Count > 0) {
                 var doc = rtb.Document;
@@ -495,7 +570,7 @@ namespace MpWpfApp {
                 QRCodeData qrCodeData = qrGenerator.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q);
                 using(QRCode qrCode = new QRCode(qrCodeData)) {
                     var qrCodeAsBitmap = qrCode.GetGraphic(20);
-                    MpCopyItem qrCopyItem = MpCopyItem.CreateCopyItem(MpCopyItemType.Image, MpHelperSingleton.Instance.ConvertBitmapToBitmapSource(qrCodeAsBitmap), MainWindowViewModel.ClipboardManager.LastWindowWatcher.ThisAppPath, MpHelperSingleton.Instance.GetRandomColor());
+                    MpCopyItem qrCopyItem = MpCopyItem.CreateCopyItem(MpCopyItemType.Image, MpHelperSingleton.Instance.ConvertBitmapToBitmapSource(qrCodeAsBitmap), MainWindowViewModel.ClipboardMonitor.LastWindowWatcher.ThisAppPath, MpHelperSingleton.Instance.GetRandomColor());
                     qrCopyItem.WriteToDatabase();
                     MpTag historyTag = new MpTag(1);
                     historyTag.LinkWithCopyItem(qrCopyItem);
@@ -584,7 +659,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanKeyDown(KeyEventArgs e) {
-            return Visibility == Visibility.Visible;
+            return TileVisibility == Visibility.Visible;
         }
         private void KeyDown(KeyEventArgs e) {
             Key key = e.Key;
@@ -600,7 +675,7 @@ namespace MpWpfApp {
                     //In order to paste the app must hide first
                     MainWindowViewModel.HideWindowCommand.Execute(null);
                     foreach(var clipTile in MainWindowViewModel.SelectedClipTiles) {
-                        MainWindowViewModel.ClipboardManager.PasteCopyItem(clipTile.RichText);
+                        MainWindowViewModel.ClipboardMonitor.PasteCopyItem(clipTile.RichText);
                     }
                 }
             }

@@ -24,9 +24,11 @@ namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase, IDragSource {
         #region Private Variables
         private double _startMainWindowTop, _endMainWindowTop;
+
         private MpHotKeyHost _hotkeyHost = null;
         private IKeyboardMouseEvents _globalHook = null;
-        public MpClipboardManager ClipboardManager { get; private set; }
+
+        public MpClipboardMonitor ClipboardMonitor { get; private set; }
         #endregion
 
         #region View/Model Collection Properties
@@ -51,7 +53,7 @@ namespace MpWpfApp {
 
         public List<MpClipTileViewModel> VisibileClipTiles {
             get {
-                return ClipTiles.Where(ct => ct.Visibility == Visibility.Visible).ToList();
+                return ClipTiles.Where(ct => ct.TileVisibility == Visibility.Visible).ToList();
             }
         }
 
@@ -260,24 +262,27 @@ namespace MpWpfApp {
             //init SearchBox
 
             PropertyChanged += (s, e) => {
-                //perform filter method anytime search text changes
-                if (e.PropertyName == nameof(SearchText)) {
-                    FilterTiles(SearchText);
-                    Sort("CopyItemId", false);
+                switch (e.PropertyName) {
+                    case nameof(SearchText):
+                        //perform filter method anytime search text changes
+                        FilterTiles(SearchText);
+                        Sort("CopyItemId", false);
 
-                    var visibleClipTiles = ClipTiles.Where(ct => ct.Visibility == Visibility.Visible).ToList();
-                    if(visibleClipTiles != null && visibleClipTiles.Count > 0) {
-                        foreach(var visibleClipTile in visibleClipTiles) {
-                            visibleClipTile.IsSelected = false;
+                        var visibleClipTiles = ClipTiles.Where(ct => ct.TileVisibility == Visibility.Visible).ToList();
+                        if (visibleClipTiles != null && visibleClipTiles.Count > 0) {
+                            foreach (var visibleClipTile in visibleClipTiles) {
+                                visibleClipTile.IsSelected = false;
+                            }
+                            visibleClipTiles[0].IsSelected = true;
                         }
-                        visibleClipTiles[0].IsSelected = true;
-                    }
-                } else if(e.PropertyName == nameof(IsAutoCopyMode)) {
-                    if(IsAutoCopyMode) {
-                        _globalHook.MouseUp += GlobalMouseUpEvent;
-                    } else {
-                        _globalHook.MouseUp -= GlobalMouseUpEvent;
-                    }
+                        break;
+                    case nameof(IsAutoCopyMode):
+                        if (IsAutoCopyMode) {
+                            _globalHook.MouseUp += GlobalMouseUpEvent;
+                        } else {
+                            _globalHook.MouseUp -= GlobalMouseUpEvent;
+                        }
+                        break;
                 }
             };
             ((MpMainWindow)Application.Current.MainWindow).Deactivated += (s, e) => {
@@ -312,17 +317,6 @@ namespace MpWpfApp {
             if (be != null) {
                 be.UpdateTarget();
             }
-            //if (e.AddedItems != null) {
-            //    foreach (MpClipTileViewModel ct in e.AddedItems) {
-            //        SelectedClipTiles.Add(ct);
-            //    }
-            //}
-            //if (e.RemovedItems != null) {
-            //    foreach (MpClipTileViewModel ct in e.RemovedItems) {
-            //        SelectedClipTiles.Remove(ct);
-            //    }
-            //}
-            //Console.WriteLine("Selected Clip Count: " + SelectedClipTiles.Count);
             MergeClipsCommandVisibility = SelectedClipTiles.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
         }
         #endregion
@@ -381,9 +375,9 @@ namespace MpWpfApp {
                             //this ensures when switching between tags the last selected tag in a list reset
                             clipTile.IsSelected = false;
                             if(tagChanged.Tag.IsLinkedWithCopyItem(clipTile.CopyItem)) {
-                                clipTile.Visibility = Visibility.Visible;
+                                clipTile.TileVisibility = Visibility.Visible;
                             } else {
-                                clipTile.Visibility = Visibility.Collapsed;
+                                clipTile.TileVisibility = Visibility.Collapsed;
                             }
                         }
                         if(VisibileClipTiles.Count == 0) {
@@ -477,10 +471,10 @@ namespace MpWpfApp {
             int vcount = 0;
             for(int i = ClipTiles.Count - 1;i >= 0;i--) {
                 if(filteredTileIdxList.Contains(i)) {
-                    ClipTiles[i].Visibility = Visibility.Visible;
+                    ClipTiles[i].TileVisibility = Visibility.Visible;
                     vcount++;
                 } else {
-                    ClipTiles[i].Visibility = Visibility.Collapsed;
+                    ClipTiles[i].TileVisibility = Visibility.Collapsed;
                 }
             }            
         }
@@ -532,10 +526,11 @@ namespace MpWpfApp {
         }
 
         private void InitClipboard() {
-            ClipboardManager = new MpClipboardManager();
-            ClipboardManager.Init();
-            ClipboardManager.ClipboardChangedEvent += () => {
-                MpCopyItem newClip = MpCopyItem.CreateFromClipboard(ClipboardManager.LastWindowWatcher.LastHandle);
+            ClipboardMonitor = new MpClipboardMonitor((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow));
+
+            // Attach the handler to the event raising on WM_DRAWCLIPBOARD message is received
+            ClipboardMonitor.ClipboardChanged += (s, e) => {
+                MpCopyItem newClip = MpCopyItem.CreateFromClipboard(ClipboardMonitor.LastWindowWatcher.LastHandle);
                 if (IsInAppendMode && newClip.CopyItemType == MpCopyItemType.RichText) {
                     //when in append mode just append the new items text to selecteditem
                     SelectedClipTiles[0].RichText += Environment.NewLine + (string)newClip.GetData();
@@ -590,6 +585,12 @@ namespace MpWpfApp {
             }
         }
         private void ScrollClipTray(MouseWheelEventArgs e) {
+            //if mouse is over a selected clip that has scrollbars ignore scrolling the tray
+            foreach(var clipTile in VisibileClipTiles) {
+                if(clipTile.IsSelected && clipTile.IsHovering && clipTile.HasScrollBars) {
+                    return;
+                }
+            }
             var clipTrayListBox = ((ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray"));
             var scrollViewer = clipTrayListBox.GetChildOfType<ScrollViewer>();
             double lastOffset = scrollViewer.HorizontalOffset;

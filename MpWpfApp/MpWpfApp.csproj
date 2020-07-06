@@ -175,7 +175,8 @@
     <Compile Include="Attached Properties\MpFocusExtension.cs" />
     <Compile Include="Attached Properties\MpTextBoxBehavior.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
-    <Compile Include="Controls\MpSearchHighlightTextBlock.cs" />
+    <Compile Include="Controls\MpClipTileRichTextBox.cs" />
+    <Compile Include="Controls\MpTitlePolygonShape.cs" />
     <Compile Include="Models\MpApp.cs" />
     <Compile Include="Models\MpClient.cs" />
     <Compile Include="Models\MpColor.cs" />
@@ -192,13 +193,18 @@
     <Compile Include="Models\MpSubTextToken.cs" />
     <Compile Include="Models\MpTag.cs" />
     <Compile Include="Models\MpUser.cs" />
+    <Compile Include="Utils\MpClipboardMonitor.cs" />
     <Compile Include="Utils\MpHotKey.cs" />
     <Compile Include="Utils\MpMeasurements.cs" />
+    <Compile Include="Utils\MpScreenInformation.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="Utils\MpWindowLoadingBehavior.cs" />
     <Compile Include="Utils\MpWindowClosingBehavior.cs" />
-    <Compile Include="ViewModels\MpClipTileTagMenuItemViewModel.cs" />
-    <Compile Include="ViewModels\MpClipTileViewModel.cs" />
+    <Compile Include="ViewModels\ClipTiles\MpClipTileTagMenuItemViewModel.cs" />
+    <Compile Include="ViewModels\ClipTiles\MpClipTileViewModel.cs" />
+    <Compile Include="Views\Window1.xaml.cs">
+      <DependentUpon>Window1.xaml</DependentUpon>
+    </Compile>
     <Page Include="Styles\ResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -211,6 +217,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ViewModels\ClipTiles\MpFileListClipTileViewModel.cs" />
+    <Compile Include="ViewModels\ClipTiles\MpImageClipTileViewModel.cs" />
+    <Compile Include="ViewModels\ClipTiles\MpRichTextClipTileViewModel.cs" />
     <Compile Include="ViewModels\MpCommandViewModel.cs" />
     <Compile Include="ViewModels\MpFileListItemViewModel.cs" />
     <Compile Include="ViewModels\MpMainWindowViewModel.cs" />
@@ -219,6 +228,10 @@
     <Page Include="Views\MpNotifyIconResources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Window1.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

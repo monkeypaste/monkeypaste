@@ -124,10 +124,6 @@ namespace MpWinFormsClassLibrary {
         }
 
 
-        public ImageSource GetIconImage(string sourcePath) {
-            return ConvertBitmapToBitmapSource(GetBitmapFromFilePath(sourcePath, IconSizeEnum.LargeIcon48));
-            //return IconReader.GetFileIcon(MpHelperSingleton.Instance.GetProcessPath(sourceHandle),IconReader.IconSize.Large,false).ToBitmap();
-        }
         public string GetProcessPath(IntPtr hwnd) {
             uint pid = 0;
             WinApi.GetWindowThreadProcessId(hwnd,out pid);
@@ -184,12 +180,57 @@ namespace MpWinFormsClassLibrary {
             h = (h + 180) % 360;
             return ColorFromHSV(h,s,v);
         }
+        public bool IsBright(Color c, int brightThreshold = 130) {
+            return (int)Math.Sqrt(
+            c.R * c.R * .299 +
+            c.G * c.G * .587 +
+            c.B * c.B * .114) > brightThreshold;
+        }
+        public Brush ChangeBrushBrightness(SolidColorBrush brush, float correctionFactor) {
+            float red = (float)brush.Color.R;
+            float green = (float)brush.Color.G;
+            float blue = (float)brush.Color.B;
+
+            if (correctionFactor < 0) {
+                correctionFactor = 1 + correctionFactor;
+                red *= correctionFactor;
+                green *= correctionFactor;
+                blue *= correctionFactor;
+            } else {
+                red = (255 - red) * correctionFactor + red;
+                green = (255 - green) * correctionFactor + green;
+                blue = (255 - blue) * correctionFactor + blue;
+            }
+
+            return new SolidColorBrush(Color.FromArgb(brush.Color.A, (byte)red, (byte)green, (byte)blue));
+        }
         public Color GetRandomColor(byte alpha = 255) {
             if(alpha == 255) {
                 return  Color.FromArgb(alpha,(byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
             }
             return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256),(byte)Rand.Next(256));
         }
+        public System.Drawing.Icon GetIconFromBitmap(System.Drawing.Bitmap bmp) {
+            IntPtr Hicon = bmp.GetHicon();
+            return System.Drawing.Icon.FromHandle(Hicon);
+        }
+        public string GetColorString(Color c) {
+            return (int)c.A + "," + (int)c.R + "," + (int)c.G + "," + (int)c.B;
+        }
+        public System.Drawing.Color GetColorFromString(string colorStr) {
+            if (colorStr == null || colorStr == String.Empty) {
+                colorStr = GetColorString(GetRandomColor());
+            }
+            int[] c = new int[colorStr.Split(',').Length];
+            for (int i = 0; i < c.Length; i++) {
+                c[i] = Convert.ToInt32(colorStr.Split(',')[i]);
+            }
+            if (c.Length == 3) {
+                return System.Drawing.Color.FromArgb(255/*c[3]*/, c[0], c[1], c[2]);
+            }
+            return System.Drawing.Color.FromArgb(c[3], c[0], c[1], c[2]);
+        }
+
         public IPAddress GetCurrentIPAddress() {
             Ping ping = new Ping();
             var replay = ping.Send(Dns.GetHostName());
@@ -262,31 +303,7 @@ namespace MpWinFormsClassLibrary {
             rcount = rcount == 0 ? 1 : rcount;
             return new Size(ccount,rcount);
         }
-        public bool IsBright(Color c,int brightThreshold = 130) {
-            return (int)Math.Sqrt(
-            c.R * c.R * .299 +
-            c.G * c.G * .587 +
-            c.B * c.B * .114) > brightThreshold;
-        }
-        public System.Drawing.Color ChangeColorBrightness(System.Drawing.Color color,float correctionFactor) {
-            float red = (float)color.R;
-            float green = (float)color.G;
-            float blue = (float)color.B;
 
-            if(correctionFactor < 0) {
-                correctionFactor = 1 + correctionFactor;
-                red *= correctionFactor;
-                green *= correctionFactor;
-                blue *= correctionFactor;
-            }
-            else {
-                red = (255 - red) * correctionFactor + red;
-                green = (255 - green) * correctionFactor + green;
-                blue = (255 - blue) * correctionFactor + blue;
-            }
-
-            return System.Drawing.Color.FromArgb(color.A,(byte)red,(byte)green,(byte)blue);
-        }
         public long FileListSize(string[] paths) {
             long total = 0;
             foreach(string path in paths) {
@@ -373,26 +390,7 @@ namespace MpWinFormsClassLibrary {
             return lc;
         }
         
-        public System.Drawing.Icon GetIconFromBitmap(System.Drawing.Bitmap bmp) {
-           IntPtr Hicon = bmp.GetHicon();
-           return System.Drawing.Icon.FromHandle(Hicon);
-        }
-        public string GetColorString(Color c) {
-            return (int)c.A + "," + (int)c.R + "," + (int)c.G + "," + (int)c.B;
-        }
-        public System.Drawing.Color GetColorFromString(string colorStr) {
-            if(colorStr == null || colorStr == String.Empty) {
-                colorStr = GetColorString(GetRandomColor());
-            }
-            int[] c = new int[colorStr.Split(',').Length];
-            for(int i = 0;i < c.Length;i++) {
-                c[i] = Convert.ToInt32(colorStr.Split(',')[i]);
-            }
-            if(c.Length == 3) {
-                return System.Drawing.Color.FromArgb(255/*c[3]*/,c[0],c[1],c[2]);
-            }
-            return System.Drawing.Color.FromArgb(c[3],c[0],c[1],c[2]);
-        }
+        
         //public Image GetIconImage(string path) {
         //    return (Image)IconReader.GetFileIcon(path,IconReader.IconSize.Large,false).ToBitmap();//Icon.ExtractAssociatedIcon(path).ToBitmap();
         
@@ -417,7 +415,12 @@ namespace MpWinFormsClassLibrary {
             }
             return cpuInfo;
         }
-        
+
+        public ImageSource GetIconImage(string sourcePath) {
+            return ConvertBitmapToBitmapSource(GetBitmapFromFilePath(sourcePath, IconSizeEnum.LargeIcon48));
+            //return IconReader.GetFileIcon(MpHelperSingleton.Instance.GetProcessPath(sourceHandle),IconReader.IconSize.Large,false).ToBitmap();
+        }
+
         public byte[] ConvertBitmapSourceToByteArray(BitmapSource bs) {
             PngBitmapEncoder encoder = new PngBitmapEncoder(); 
             //encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
