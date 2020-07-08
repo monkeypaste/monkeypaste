@@ -19,58 +19,40 @@ namespace MpWpfApp {
             set { SetValue(SearchTextProperty, value); }
         }
 
-        private static void OnSearchTextChanged(DependencyObject source, DependencyPropertyChangedEventArgs e) {
+        private static void OnDataChanged(DependencyObject source, DependencyPropertyChangedEventArgs e) {
             Application.Current.Dispatcher.BeginInvoke(
-                DispatcherPriority.Background, 
-                new Action(() => { })//OnDataChangedHelper((RichTextBox)source,(string)e.NewValue))
+                DispatcherPriority.Background,
+                new Action(() => {
+                    if (e.OldValue != null) {
+                        OnDataChangedHelper((RichTextBox)source, (string)e.OldValue, Brushes.Transparent);
+                    }
+                    OnDataChangedHelper((RichTextBox)source, (string)e.NewValue,Brushes.Yellow);
+                })
             );
         }
-        private static void OnDataChangedHelper(RichTextBox rtb, string updatedSearchText) {
-            //if(rtb.Visibility == Visibility.Collapsed) {
-            //    return;
-            //}
+        private static void OnDataChangedHelper(RichTextBox rtb, string updatedSearchText,SolidColorBrush highlightColor) {
+            if(highlightColor == Brushes.Transparent) {
+                Console.WriteLine("Erase");
+            } else {
+                Console.WriteLine("Highlight");
+            }
             string rtbt = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
 
-            if (rtbt.Length == 0 || updatedSearchText.Length == 0) {
-                return;
-            }
-            string regExStr = @"\b" + Regex.Escape(updatedSearchText) + @"\b";
-            MatchCollection mc = Regex.Matches(rtbt, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+            string regExStr = $@"\b" + updatedSearchText + @"\b";
+            MatchCollection mc = Regex.Matches(rtbt, $@"\b{Regex.Escape(updatedSearchText)}\b", RegexOptions.IgnoreCase);
 
             TextRange lastTokenRange = null;
+
             foreach (Match m in mc) {
                 foreach (Group mg in m.Groups) {
                     foreach (Capture c in mg.Captures) {
                         TextPointer startPoint = lastTokenRange == null ? rtb.Document.ContentStart : lastTokenRange.End;
                         var range = FindStringRangeFromPosition(startPoint, c.Value);
-                        range.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush(Colors.Aquamarine));
+                        range.ApplyPropertyValue(TextElement.BackgroundProperty, highlightColor);
                         lastTokenRange = range;
                     }
                 }
             }
-            //string textUpper = rtbt.ToUpper();
-            //string toFind = updatedSearchText.ToUpper();
-            //int firstIndex = textUpper.IndexOf(toFind);
-            //if (firstIndex < 0) {
-            //    return;
-            //}
-            //string firstStr = rtbt.Substring(0, firstIndex);
-            //string foundStr = rtbt.Substring(firstIndex, toFind.Length);
-            //string endStr = rtbt.Substring(firstIndex + toFind.Length, rtbt.Length - (firstIndex + toFind.Length));
-
-            //rtb.Inlines.Clear();
-            //var run = new Run();
-            //run.Text = firstStr;
-            //rtb.Inlines.Add(run);
-            //run = new Run();
-            //run.Background = Brushes.Yellow;
-            //run.Text = foundStr;
-            //rtb.Inlines.Add(run);
-            //run = new Run();
-            //run.Text = endStr;
-
-            //rtb.Inlines.Add(run);
-
         }
 
         public static TextRange FindStringRangeFromPosition(TextPointer position, string str) {
@@ -94,6 +76,6 @@ namespace MpWpfApp {
             DependencyProperty.Register("SearchText",
                                         typeof(string),
                                         typeof(MpClipTileRichTextBox),
-                                        new FrameworkPropertyMetadata(null,OnSearchTextChanged));
+                                        new FrameworkPropertyMetadata(null,OnDataChanged));
     }
 }

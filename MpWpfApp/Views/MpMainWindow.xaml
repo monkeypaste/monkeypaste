@@ -380,10 +380,44 @@
                                     <MenuItem Header="Delete"
                                               Command="{Binding MainWindowViewModel.DeleteClipCommand}" />
                                             <MenuItem Header="Say"
-                                                      Command="{Binding SperakClipCommand}" />
+                                                      Command="{Binding SpeakClipCommand}" />
                                             <MenuItem Header="Merge"
                                               Command="{Binding MainWindowViewModel.MergeClipsCommand}"
                                               Visibility="{Binding MainWindowViewModel.MergeClipsCommandVisibility}" />
+                                    <MenuItem Header="Search Web">
+                                        <MenuItem Header="Google">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                                    <i:CallMethodAction MethodName="ContextMenuMouseLeftButtonUpOnSearchGoogle"
+                                                                        TargetObject="{Binding}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </MenuItem>
+                                        <MenuItem Header="Bing">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                                    <i:CallMethodAction MethodName="ContextMenuMouseLeftButtonUpOnSearchBing"
+                                                                        TargetObject="{Binding}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </MenuItem>
+                                        <MenuItem Header="DuckDuckGo">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                                    <i:CallMethodAction MethodName="ContextMenuMouseLeftButtonUpOnSearchDuckDuckGo"
+                                                                        TargetObject="{Binding}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </MenuItem>
+                                        <MenuItem Header="Yandex">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                                    <i:CallMethodAction MethodName="ContextMenuMouseLeftButtonUpOnSearchYandex"
+                                                                        TargetObject="{Binding}" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </MenuItem>
+                                    </MenuItem>
                                     <MenuItem Header="Pin To"
                                               ItemsSource="{Binding TagMenuItems}">
                                         <MenuItem.ItemContainerStyle>

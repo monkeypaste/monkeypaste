@@ -1,4 +1,6 @@
 ﻿using MpWinFormsClassLibrary;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Prism.Commands;
 using QRCoder;
 using System;
@@ -7,10 +9,14 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Policy;
 using System.Speech.Synthesis;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -23,6 +29,7 @@ using System.Windows.Navigation;
 namespace MpWpfApp {
    public class  MpClipTileViewModel : MpViewModelBase {
         private static MpClipTileViewModel _sourceSelectedClipTile = null;
+
         public ObservableCollection<MpClipTileTagMenuItemViewModel> TagMenuItems {
             get {
                 ObservableCollection<MpClipTileTagMenuItemViewModel> tagMenuItems = new ObservableCollection<MpClipTileTagMenuItemViewModel>();
@@ -198,6 +205,19 @@ namespace MpWpfApp {
                 if(_tileSize != value) {
                     _tileSize = value;
                     OnPropertyChanged(nameof(TileSize));
+                }
+            }
+        }
+
+        private double _tileTitleIconSize = MpMeasurements.Instance.ClipTileTitleIconSize;
+        public double TileTitleIconSize {
+            get {
+                return _tileTitleIconSize;
+            }
+            set {
+                if(_tileTitleIconSize != value) {
+                    _tileTitleIconSize = value;
+                    OnPropertyChanged(nameof(TileTitleIconSize));
                 }
             }
         }
@@ -440,6 +460,7 @@ namespace MpWpfApp {
 
             return plineSeg;
         }
+        
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             PathFigure pthFigure = new PathFigure();
             pthFigure.IsClosed = true;
@@ -460,7 +481,7 @@ namespace MpWpfApp {
 
             var titleIconImage = (Image)((Border)sender)?.FindName("ClipTileAppIconImage");
             Canvas.SetLeft(titleIconImage, TileBorderSize - TileTitleHeight);
-            Canvas.SetTop(titleIconImage, 10);// TileBorderSize * 0.5);
+            Canvas.SetTop(titleIconImage, 0);// TileBorderSize * 0.5);
 
             var flb = (ListBox)((Border)sender)?.FindName("ClipTileFileListBox"); 
             var image = (Image)((Border)sender)?.FindName("ClipTileImage");
@@ -482,6 +503,7 @@ namespace MpWpfApp {
             //First load the richtextbox with copytext
             rtb.SetRtf(RichText); 
             rtb.PreviewMouseLeftButtonDown += ClipTileRichTextBox_PreviewLeftMouseButtonDown;
+            rtb.MouseRightButtonUp += ClipTileRichTextBox_MouseRightButtonUp;
             Text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
 
             //TextRange rtbRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);\
@@ -503,7 +525,7 @@ namespace MpWpfApp {
                 rtb.Document.PageHeight = ft.Height;
             }
             var scrollViewer = (ScrollViewer)((Border)sender)?.FindName("ClipTileRichTextBoxScrollViewer"); 
-            HasScrollBars = scrollViewer.Height < rtb.Height || scrollViewer.Width < rtb.Width;//scrollViewer.ComputedHorizontalScrollBarVisibility == Visibility.Visible || scrollViewer.ComputedVerticalScrollBarVisibility == Visibility.Visible;
+            HasScrollBars = scrollViewer.Height < rtb.Height || scrollViewer.Width < rtb.Width;
             
             var sortedTokenList = CopyItem.SubTextTokenList.OrderBy(stt => stt.BlockIdx).ThenBy(stt=>stt.StartIdx).ToList();
             if (sortedTokenList.Count > 0) {
@@ -543,6 +565,11 @@ namespace MpWpfApp {
                             } else {
                                 tokenLink.NavigateUri = new Uri(tokenText);
                             }
+                            MenuItem minifyUrl = new MenuItem();
+                            minifyUrl.Header = "Minify with bit.ly";
+                            minifyUrl.Click += MinifyUrl_Click;
+                            minifyUrl.Tag = tokenLink;
+                            tokenLink.ContextMenu.Items.Add(minifyUrl);
                             break;
 
                         case MpCopyItemType.Email:
@@ -560,6 +587,30 @@ namespace MpWpfApp {
             }
         }
 
+        private void MinifyUrl_Click(object sender, RoutedEventArgs e) {
+            Hyperlink link = ((Hyperlink)((MenuItem)sender).Tag);
+            string minifiedLink = ShortenUrl(link.NavigateUri.ToString()).Result;
+            MpCopyItem newCopyItem = MpCopyItem.CreateCopyItem(MpCopyItemType.Text, minifiedLink, MainWindowViewModel.ClipboardMonitor.LastWindowWatcher.ThisAppPath, MpHelperSingleton.Instance.GetRandomColor());
+            newCopyItem.WriteToDatabase();
+            MpTag historyTag = new MpTag(1);
+            historyTag.LinkWithCopyItem(newCopyItem);
+            MainWindowViewModel.ClearSelection();
+            MainWindowViewModel.AddClipTile(newCopyItem);
+        }
+        
+        private void ClipTileRichTextBox_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
+            MenuItem searchMenuItem = new MenuItem();
+            searchMenuItem.Click += (s, e1) => {
+                RichTextBox rtb = (RichTextBox)sender;
+                string searchStr = new TextRange(rtb.Selection.Start, rtb.Selection.End).Text;
+                System.Diagnostics.Process.Start("http://www.google.com.au/search?q=" + Uri.EscapeDataString(searchStr));
+            };
+            searchMenuItem.Header = "Search Web";
+
+            ContextMenu cmnu = new ContextMenu();
+            cmnu.Items.Add(searchMenuItem);
+        }
+
         private void ConvertToQrCodeMenuItem_Click(object sender, RoutedEventArgs e) {
             var hyperLink = (Hyperlink)(((MenuItem)sender).Tag);
 
@@ -574,6 +625,7 @@ namespace MpWpfApp {
                     qrCopyItem.WriteToDatabase();
                     MpTag historyTag = new MpTag(1);
                     historyTag.LinkWithCopyItem(qrCopyItem);
+                    MainWindowViewModel.ClearSelection();
                     MainWindowViewModel.AddClipTile(qrCopyItem);
                 }
             }                
@@ -626,6 +678,20 @@ namespace MpWpfApp {
             //occurs when editing tag text
             IsEditingTitle = false;
         }
+
+        public void ContextMenuMouseLeftButtonUpOnSearchGoogle() {
+            System.Diagnostics.Process.Start(@"https://www.google.com/search?q=" + System.Uri.EscapeDataString(Text));
+        }
+        public void ContextMenuMouseLeftButtonUpOnSearchBing() {
+            System.Diagnostics.Process.Start(@"https://www.bing.com/search?q=" + System.Uri.EscapeDataString(Text));
+        }
+        public void ContextMenuMouseLeftButtonUpOnSearchDuckDuckGo() {
+            System.Diagnostics.Process.Start(@"https://duckduckgo.com/?q=" + System.Uri.EscapeDataString(Text));
+        }
+        public void ContextMenuMouseLeftButtonUpOnSearchYandex() {
+            System.Diagnostics.Process.Start(@"https://yandex.com/search/?text=" + System.Uri.EscapeDataString(Text));
+        }
+
         #endregion
 
         #region Private Methods
@@ -645,6 +711,39 @@ namespace MpWpfApp {
 
             // position will be null if "word" is not found.
             return null;
+        }
+
+        private async Task<string> ShortenUrl(string url) {
+            string _bitlyToken = @"f6035b9ed05ac82b42d4853c984e34a4f1ba05d8";
+            HttpClient client = new HttpClient();
+
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post,
+                "https://api-ssl.bitly.com/v4/shorten") {
+                Content = new StringContent($"{{\"long_url\":\"{url}\"}}",
+                                                Encoding.UTF8,
+                                                "application/json")
+            };
+
+            try {
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", _bitlyToken);
+
+                var response = await client.SendAsync(request).ConfigureAwait(false);
+
+                if (!response.IsSuccessStatusCode) {
+
+                    Console.WriteLine("Minify error: " + response.Content.ToString());
+                    return string.Empty;
+                }
+
+                var responsestr = await response.Content.ReadAsStringAsync();
+
+                dynamic jsonResponse = JsonConvert.DeserializeObject<dynamic>(responsestr);
+                return jsonResponse["link"];
+            }
+            catch (Exception ex) {
+                Console.WriteLine("Minify exception: " + ex.ToString());
+                return string.Empty;
+            }
         }
         #endregion
 
@@ -682,7 +781,7 @@ namespace MpWpfApp {
         }
 
         private DelegateCommand _speakClipCommand;
-        public ICommand SperakClipCommand {
+        public ICommand SpeakClipCommand {
             get {
                 if(_speakClipCommand == null) {
                     _speakClipCommand = new DelegateCommand(SpeakClip, CanSpeakClip);

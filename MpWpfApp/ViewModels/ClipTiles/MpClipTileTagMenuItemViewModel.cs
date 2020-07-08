@@ -15,7 +15,7 @@ namespace MpWpfApp {
             set {
                 if(_isTagLinkedToClip != value) {
                     _isTagLinkedToClip = value;
-                    OnPropertyChanged("IsTagLinkedToClip");
+                    OnPropertyChanged(nameof(IsTagLinkedToClip));
                 }
             }
         }
@@ -28,7 +28,7 @@ namespace MpWpfApp {
             set {
                 if(_header != value) {
                     _header = value;
-                    OnPropertyChanged("Header");
+                    OnPropertyChanged(nameof(Header));
                 }
             }
         }
@@ -41,7 +41,7 @@ namespace MpWpfApp {
             set {
                 if(_command != value) {
                     _command = value;
-                    OnPropertyChanged("Command");
+                    OnPropertyChanged(nameof(Command));
                 }
             }
         }

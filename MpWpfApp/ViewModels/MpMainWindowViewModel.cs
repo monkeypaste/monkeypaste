@@ -443,6 +443,7 @@ namespace MpWpfApp {
                     continue;
                 }
                 MpCopyItem ci = ClipTiles[i].CopyItem;
+                var ct = ClipTiles[i];
                 //add clips where searchStr is in clip title or part of the app path ( TODO also check application name since usually different than exe)
                 if(ci.Title.ToLower().Contains(searchStr.ToLower()) || ci.App.AppPath.ToLower().Contains(searchStr.ToLower())) {
                     filteredTileIdxList.Add(i);
@@ -453,8 +454,8 @@ namespace MpWpfApp {
                     continue;
                 }
                 //add clips where search is part of clip's content
-                if(ci.CopyItemType == MpCopyItemType.Text) {
-                    if(((string)ci.GetData()).ToLower().Contains(searchStr.ToLower())) {
+                if(ci.CopyItemType == MpCopyItemType.RichText) {
+                    if((ct.Text).ToLower().Contains(searchStr.ToLower())) {
                         filteredTileIdxList.Add(i);
                     }
                 }
@@ -473,12 +474,21 @@ namespace MpWpfApp {
                 if(filteredTileIdxList.Contains(i)) {
                     ClipTiles[i].TileVisibility = Visibility.Visible;
                     vcount++;
+                    Button b = new Button();
+                    b.MouseLeftButtonUp += (s, e) => {
+
+                    };
                 } else {
                     ClipTiles[i].TileVisibility = Visibility.Collapsed;
                 }
             }            
         }
 
+        public void ClearSelection() {
+            foreach (var clip in ClipTiles) {
+                clip.IsSelected = false;
+            }
+        }
         private void Sort(string sortBy, bool ascending) {
             if(ascending) {
                 ClipTiles.OrderBy(x => MpTypeHelper.GetPropertyValue(x.CopyItem, sortBy));
