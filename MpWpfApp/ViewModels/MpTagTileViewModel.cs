@@ -91,7 +91,6 @@ namespace MpWpfApp {
         }
         #endregion
 
-
         #region Layout Properties
         private Visibility _textBoxVisibility = Visibility.Collapsed;
         public Visibility TextBoxVisibility {
@@ -131,6 +130,9 @@ namespace MpWpfApp {
                 return TagHeight / 1.5;
             }
         }
+        #endregion
+
+        #region Business Logic Properties
         #endregion
 
         #region Exposed Model Properties

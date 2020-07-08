@@ -246,11 +246,8 @@ namespace MpWpfApp {
             foreach (MpCopyItem c in MpCopyItem.GetAllCopyItems()) {
                 AddClipTile(c);
             }
-            //select first tile by default
-            if(ClipTiles.Count > 0) {
-                ClipTiles[0].IsSelected = true;
-                ClipTiles[0].IsFocused = true;
-            }
+
+            ResetSelection();
 
             //create tiles for all the tags
             foreach(MpTag t in MpTag.GetAllTags()) {
@@ -268,13 +265,7 @@ namespace MpWpfApp {
                         FilterTiles(SearchText);
                         Sort("CopyItemId", false);
 
-                        var visibleClipTiles = ClipTiles.Where(ct => ct.TileVisibility == Visibility.Visible).ToList();
-                        if (visibleClipTiles != null && visibleClipTiles.Count > 0) {
-                            foreach (var visibleClipTile in visibleClipTiles) {
-                                visibleClipTile.IsSelected = false;
-                            }
-                            visibleClipTiles[0].IsSelected = true;
-                        }
+                        ResetSelection();
                         break;
                     case nameof(IsAutoCopyMode):
                         if (IsAutoCopyMode) {
@@ -329,6 +320,83 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Public Methods
+
+        public void AddTagTile(MpTag t, bool isNew = false) {
+            var newTagTile = new MpTagTileViewModel(t, this);
+            TagTiles.Add(newTagTile);
+            //watches Tag IsSelected so History is selected if none are
+            newTagTile.PropertyChanged += (s, e) => {
+                if (e.PropertyName == "IsSelected") {
+                    var tagChanged = ((MpTagTileViewModel)s);
+                    //ensure at least history is selected
+                    if (tagChanged.IsSelected == false) {
+                        //find all selected tag tiles
+                        var selectedTagTiles = TagTiles.Where(tt => tt.IsSelected == true).ToList();
+                        //if none selected select history tag
+                        if (selectedTagTiles == null || selectedTagTiles.Count == 0) {
+                            TagTiles.Where(tt => tt.Tag.TagName == "History").ToList()[0].IsSelected = true;
+                        }
+                    } else {
+                        foreach (MpClipTileViewModel clipTile in ClipTiles) {
+                            //this ensures when switching between tags the last selected tag in a list reset
+                            clipTile.IsSelected = false;
+                            if (tagChanged.Tag.IsLinkedWithCopyItem(clipTile.CopyItem)) {
+                                clipTile.TileVisibility = Visibility.Visible;
+                            } else {
+                                clipTile.TileVisibility = Visibility.Collapsed;
+                            }
+                        }
+                        if (VisibileClipTiles.Count == 0) {
+                            ClipListVisibility = Visibility.Collapsed;
+                            EmptyListMessageVisibility = Visibility.Visible;
+                        } else {
+                            ClipListVisibility = Visibility.Visible;
+                            EmptyListMessageVisibility = Visibility.Collapsed;
+
+                            ResetSelection();
+                        }
+                    }
+                }
+            };
+            if (isNew) {
+                //newTagTile.RenameTagCommand.Execute(null);
+                //newTagTile.IsSelected = true;
+                newTagTile.IsEditing = true;
+            }
+        }
+
+        public void ClearSelection() {
+            foreach (var clip in ClipTiles) {
+                clip.IsSelected = false;
+            }
+        }
+
+        public void ResetSelection() {
+            ClearSelection();
+            if(VisibileClipTiles.Count > 0) {
+                VisibileClipTiles[0].IsSelected = true;
+                VisibileClipTiles[0].IsFocused = true;
+            }
+        }
+
+        public void AddClipTile(MpCopyItem ci) {
+            ClipTiles.Insert(0, new MpClipTileViewModel(ci, this));
+            //update cliptray visibility if this is the first cliptile added
+            ClipListVisibility = Visibility.Visible;
+            EmptyListMessageVisibility = Visibility.Collapsed;
+            ResetSelection();
+        }
+
+        public void MoveClipTile(MpClipTileViewModel clipTile, int newIdx) {
+            if (newIdx > ClipTiles.Count) {
+                throw new Exception("Cannot insert tile clip tile at index: " + newIdx + " with list of length: " + ClipTiles.Count);
+            }
+            ClipTiles.Remove(clipTile);
+            ClipTiles.Insert(newIdx, clipTile);
+        }
+
+        #endregion
         #region Private Methods
         private void SetupMainWindowRect() {
             var mw = ((MpMainWindow)Application.Current.MainWindow);
@@ -355,71 +423,14 @@ namespace MpWpfApp {
             }            
         }
 
-        public void AddTagTile(MpTag t, bool isNew = false) {
-            var newTagTile = new MpTagTileViewModel(t,this);
-            TagTiles.Add(newTagTile);
-            //watches Tag IsSelected so History is selected if none are
-            newTagTile.PropertyChanged += (s, e) => {
-                if(e.PropertyName == "IsSelected") {
-                    var tagChanged = ((MpTagTileViewModel)s);
-                    //ensure at least history is selected
-                    if(tagChanged.IsSelected == false) {
-                        //find all selected tag tiles
-                        var selectedTagTiles = TagTiles.Where(tt => tt.IsSelected == true).ToList();
-                        //if none selected select history tag
-                        if(selectedTagTiles == null || selectedTagTiles.Count == 0) {
-                            TagTiles.Where(tt => tt.Tag.TagName == "History").ToList()[0].IsSelected = true;
-                        }
-                    } else {
-                        foreach(MpClipTileViewModel clipTile in ClipTiles) {
-                            //this ensures when switching between tags the last selected tag in a list reset
-                            clipTile.IsSelected = false;
-                            if(tagChanged.Tag.IsLinkedWithCopyItem(clipTile.CopyItem)) {
-                                clipTile.TileVisibility = Visibility.Visible;
-                            } else {
-                                clipTile.TileVisibility = Visibility.Collapsed;
-                            }
-                        }
-                        if(VisibileClipTiles.Count == 0) {
-                            ClipListVisibility = Visibility.Collapsed;
-                            EmptyListMessageVisibility = Visibility.Visible;
-                        } else {
-                            ClipListVisibility = Visibility.Visible;
-                            EmptyListMessageVisibility = Visibility.Collapsed;
-                            VisibileClipTiles[0].IsSelected = true;
-                        }
-                    }
-                }
-            };
-            if(isNew) {
-                //newTagTile.RenameTagCommand.Execute(null);
-                //newTagTile.IsSelected = true;
-                newTagTile.IsEditing = true;
-            }
-        }
-
         private void RemoveTagTile(MpTagTileViewModel tagTileToRemove) {
+            //when removing a tag auto-select the history tag
             if(tagTileToRemove.IsSelected) {
                 tagTileToRemove.IsSelected = false;
                 TagTiles.Where(tt => tt.Tag.TagName == "History").ToList()[0].IsSelected = true;
             }
             TagTiles.Remove(tagTileToRemove);
             tagTileToRemove.Tag.DeleteFromDatabase();
-        }
-
-        public void AddClipTile(MpCopyItem ci) {
-            ClipTiles.Insert(0, new MpClipTileViewModel(ci, this));
-            //update cliptray visibility if this is the first cliptile added
-            ClipListVisibility = Visibility.Visible;
-            EmptyListMessageVisibility = Visibility.Collapsed;
-            VisibileClipTiles[0].IsSelected = true;
-        }
-        public void MoveClipTile(MpClipTileViewModel clipTile,int newIdx) {
-            if (newIdx > ClipTiles.Count) {
-                throw new Exception("Cannot insert tile clip tile at index: " + newIdx + " with list of length: " + ClipTiles.Count);
-            }
-            ClipTiles.Remove(clipTile);
-            ClipTiles.Insert(newIdx, clipTile);
         }
 
         private void RemoveClipTile(MpClipTileViewModel clipTileToRemove) {
@@ -484,11 +495,7 @@ namespace MpWpfApp {
             }            
         }
 
-        public void ClearSelection() {
-            foreach (var clip in ClipTiles) {
-                clip.IsSelected = false;
-            }
-        }
+
         private void Sort(string sortBy, bool ascending) {
             if(ascending) {
                 ClipTiles.OrderBy(x => MpTypeHelper.GetPropertyValue(x.CopyItem, sortBy));
@@ -567,7 +574,13 @@ namespace MpWpfApp {
             }
         }
         private bool CanMergeClips() {
-            return SelectedClipTiles.Count > 1;
+            bool canMerge = true;
+            foreach(var sc in SelectedClipTiles) {
+                if(sc.CopyItem.CopyItemType != MpCopyItemType.RichText) {
+                    canMerge = false;
+                }
+            }
+            return SelectedClipTiles.Count > 1 && canMerge;
         }
         private void MergeClips() {
             var focusedClip = SelectedClipTiles[0];
@@ -630,12 +643,7 @@ namespace MpWpfApp {
             mw.Visibility = Visibility.Visible;
             mw.Topmost = true;
 
-            foreach (MpClipTileViewModel selectedClipTile in SelectedClipTiles) {
-                selectedClipTile.IsSelected = false;
-            }
-            if (VisibileClipTiles.Count > 0) {
-                VisibileClipTiles[0].IsSelected = true;
-            }
+            ResetSelection();
 
             DoubleAnimation ta = new DoubleAnimation();
             ta.From = _startMainWindowTop;

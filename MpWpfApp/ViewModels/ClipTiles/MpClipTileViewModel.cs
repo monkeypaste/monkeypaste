@@ -481,7 +481,7 @@ namespace MpWpfApp {
 
             var titleIconImage = (Image)((Border)sender)?.FindName("ClipTileAppIconImage");
             Canvas.SetLeft(titleIconImage, TileBorderSize - TileTitleHeight);
-            Canvas.SetTop(titleIconImage, 0);// TileBorderSize * 0.5);
+            Canvas.SetTop(titleIconImage, 2);// TileBorderSize * 0.5);
 
             var flb = (ListBox)((Border)sender)?.FindName("ClipTileFileListBox"); 
             var image = (Image)((Border)sender)?.FindName("ClipTileImage");
