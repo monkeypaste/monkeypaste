@@ -35,23 +35,7 @@ namespace MpWpfApp {
             this.iconId = 0;
             this.IconImage = iconImage;
             ++TotalIconCount;
-            //this.Path = MpHelperSingleton.Instance.GetProcessPath(sourceHandle);
-            //WriteToDatabase();
         }
-        /*public MpIcon(IntPtr sourceHandle) {
-            IconImage = MpHelperSingleton.Instance.GetIconImage(sourceHandle);
-            string appPath = MpHelperSingleton.Instance.GetProcessPath(sourceHandle);
-            DataTable dt_app = MpAppController.DataModel.Db.Execute("select * from MpApp where SourcePath='" + appPath + "'");
-            if(dt_app != null && dt_app.Rows.Count > 0) {
-                iconId = Convert.ToInt32(dt_app.Rows[0]["fk_MpIconId"].ToString());
-                DataTable dt_icon = MpAppController.DataModel.Db.Execute("select * from MpIcon where pk_MpIconId=" + iconId);
-                if(dt_icon != null && dt_icon.Rows.Count > 0) {
-                    LoadDataRow(dt_icon.Rows[0]);
-                    return;
-                }
-            }
-            WriteToDatabase();
-        }*/
         public MpIcon(int iconId) {
             DataTable dt = MpDb.Instance.Execute("select * from MpIcon where pk_MpIconId=" + iconId);
             if(dt != null && dt.Rows.Count > 0) {

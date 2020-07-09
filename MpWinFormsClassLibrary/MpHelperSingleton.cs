@@ -418,7 +418,6 @@ namespace MpWinFormsClassLibrary {
 
         public ImageSource GetIconImage(string sourcePath) {
             return ConvertBitmapToBitmapSource(GetBitmapFromFilePath(sourcePath, IconSizeEnum.LargeIcon48));
-            //return IconReader.GetFileIcon(MpHelperSingleton.Instance.GetProcessPath(sourceHandle),IconReader.IconSize.Large,false).ToBitmap();
         }
 
         public byte[] ConvertBitmapSourceToByteArray(BitmapSource bs) {

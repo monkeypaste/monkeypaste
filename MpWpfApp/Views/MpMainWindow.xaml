@@ -196,7 +196,7 @@
                 </ListBox>
                 <!-- Add Tag Button -->
                 <Button Height="30"
-                        Width="30"
+                        Width="30" 
                         Command="{Binding CreateTagCommand}">
                     <Image Stretch="Fill"
                            Source="add2.png" />

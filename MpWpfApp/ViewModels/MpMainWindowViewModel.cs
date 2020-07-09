@@ -32,6 +32,7 @@ namespace MpWpfApp {
         #endregion
 
         #region View/Model Collection Properties
+        
         private ObservableCollection<MpClipTileViewModel> _clipTiles = new ObservableCollection<MpClipTileViewModel>();
         public ObservableCollection<MpClipTileViewModel> ClipTiles {
             get {

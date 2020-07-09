@@ -10,6 +10,8 @@ using MpWinFormsClassLibrary;
 
 namespace MpWpfApp {
     public class MpCopyItem:MpDbObject {
+        private static int _CopyItemCount = 0;
+
         public List<MpSubTextToken> SubTextTokenList = new List<MpSubTextToken>();
 
         private Object DataObject { get; set; }
@@ -338,7 +340,7 @@ namespace MpWpfApp {
             }
             else {
                 if(MpDb.Instance.NoDb) {                    
-                    CopyItemId = MpDataStore.Instance.ClipList.Count;
+                    CopyItemId = ++_CopyItemCount;
                     MapDataToColumns();
                     return;
                 }
