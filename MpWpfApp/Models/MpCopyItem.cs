@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using MpWinFormsClassLibrary;
+
 
 namespace MpWpfApp {
     public class MpCopyItem:MpDbObject {

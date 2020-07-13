@@ -40,7 +40,7 @@ namespace MpWpfApp {
 
         public double TitleMenuHeight {
             get {
-                return _mainWindowHeight / 10;
+                return _mainWindowHeight / 20;
             }
         }
         public double FilterMenuHeight {

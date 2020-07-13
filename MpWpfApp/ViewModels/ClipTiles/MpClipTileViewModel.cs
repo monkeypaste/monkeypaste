@@ -1,4 +1,4 @@
-﻿using MpWinFormsClassLibrary;
+﻿
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Prism.Commands;
@@ -462,6 +462,7 @@ namespace MpWpfApp {
         }
         
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
+            var tileBorder = (Border)sender;
             PathFigure pthFigure = new PathFigure();
             pthFigure.IsClosed = true;
             pthFigure.StartPoint = new Point(0, 0);
@@ -505,25 +506,13 @@ namespace MpWpfApp {
             rtb.PreviewMouseLeftButtonDown += ClipTileRichTextBox_PreviewLeftMouseButtonDown;
             rtb.MouseRightButtonUp += ClipTileRichTextBox_MouseRightButtonUp;
             Text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
-
-            //TextRange rtbRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);\
-            double dpi1 = (double)DpiUtilities.GetDpiForDesktop();
-            double dpi2 = (double)DpiUtilities.GetDpiForMonitor(DpiUtilities.GetDesktopMonitor());
-            double dpi3 = (double)DpiUtilities.GetDpiForWindow(MainWindowViewModel.ClipboardMonitor.LastWindowWatcher.ThisAppHandle);
             var dpi4 = VisualTreeHelper.GetDpi(rtb);
             FormattedText ft = new FormattedText(Text, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface(rtb.Document.FontFamily.ToString()), rtb.Document.FontSize, rtb.Document.Foreground, dpi4.PixelsPerDip);//VisualTreeHelper.GetDpi(rtb).PixelsPerDip);
-            using (var font = new System.Drawing.Font(rtb.Document.FontFamily.ToString(), (float)rtb.Document.FontSize)) {
-                System.Drawing.Size textSize = System.Windows.Forms.TextRenderer.MeasureText(Text, font);
-                //rtb.Width = ((double)textSize.Width/dpi4.DpiScaleX) + rtb.Padding.Left + rtb.Padding.Right;
-                //rtb.Height = ((double)textSize.Height/dpi4.DpiScaleY) + rtb.Padding.Top + rtb.Padding.Bottom;
-                //rtb.Document.PageWidth = ((double)textSize.Width / dpi4.DpiScaleX);
-                //rtb.Document.PageHeight = ((double)textSize.Height / dpi4.DpiScaleY);
+            rtb.Width = ft.Width + rtb.Padding.Left + rtb.Padding.Right;
+            rtb.Height = ft.Height + rtb.Padding.Top + rtb.Padding.Bottom;
+            rtb.Document.PageWidth = ft.Width;
+            rtb.Document.PageHeight = ft.Height;
 
-                rtb.Width = ft.Width + rtb.Padding.Left + rtb.Padding.Right;
-                rtb.Height = ft.Height + rtb.Padding.Top + rtb.Padding.Bottom;
-                rtb.Document.PageWidth = ft.Width;
-                rtb.Document.PageHeight = ft.Height;
-            }
             var scrollViewer = (ScrollViewer)((Border)sender)?.FindName("ClipTileRichTextBoxScrollViewer"); 
             HasScrollBars = scrollViewer.Height < rtb.Height || scrollViewer.Width < rtb.Width;
             

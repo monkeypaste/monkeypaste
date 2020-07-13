@@ -70,14 +70,6 @@ namespace MpWinFormsClassLibrary {
 
             return (int)activeProcId == procId;
         }
-        /// <summary>
-        /// Take the screenshot of the active window using the CopyFromScreen method relative to the bounds of the form.
-        /// // Use it like : 
-        //WindowScreenshotWithoutClass(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "window_screen_noclass.jpg", ImageFormat.Jpeg);
-        /// </summary>
-        /// <param name="filepath"></param>
-        /// <param name="filename"></param>
-        /// <param name="format"></param>
         public string GetRandomString(int maxCharsPerLine = 50, int maxLines = 50) {
             StringBuilder str_build = new StringBuilder();
             int numLines = Rand.Next(1, maxLines);
@@ -390,10 +382,6 @@ namespace MpWinFormsClassLibrary {
             return lc;
         }
         
-        
-        //public Image GetIconImage(string path) {
-        //    return (Image)IconReader.GetFileIcon(path,IconReader.IconSize.Large,false).ToBitmap();//Icon.ExtractAssociatedIcon(path).ToBitmap();
-        
         /*public string GeneratePassword() {
             var generator = new MpPasswordGenerator(minimumLengthPassword: 8,
                                       maximumLengthPassword: 12,
@@ -455,6 +443,32 @@ namespace MpWinFormsClassLibrary {
         public bool IsPathDirectory(string str) {
             // get the file attributes for file or directory
             return File.GetAttributes(str).HasFlag(FileAttributes.Directory);
+        }
+
+        public System.Drawing.Rectangle GetScreenWorkingAreaWithMouse() {
+            foreach (Screen screen in Screen.AllScreens) {
+                //get cursor pos
+                WinApi.PointInter lpPoint;
+                WinApi.GetCursorPos(out lpPoint);
+                System.Drawing.Point mp = (System.Drawing.Point)lpPoint;
+                if (screen.WorkingArea.Contains(mp)) {
+                    return screen.WorkingArea;
+                }
+            }
+            return Screen.FromHandle(Process.GetCurrentProcess().Handle).WorkingArea;
+        }
+
+        public System.Drawing.Rectangle GetScreenBoundsWithMouse() {
+            foreach (Screen screen in Screen.AllScreens) {
+                //get cursor pos
+                WinApi.PointInter lpPoint;
+                WinApi.GetCursorPos(out lpPoint);
+                System.Drawing.Point mp = (System.Drawing.Point)lpPoint;
+                if (screen.WorkingArea.Contains(mp)) {
+                    return screen.Bounds;
+                }
+            }
+            return Screen.FromHandle(Process.GetCurrentProcess().Handle).Bounds;
         }
     }
 }

@@ -52,13 +52,6 @@
     <Compile Include="MpScreenManager.cs" />
     <Compile Include="MpSingleton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShellEx.cs" />
-    <Compile Include="Shell\IImageList.cs" />
-    <Compile Include="Shell\IMAGEINFO.cs" />
-    <Compile Include="Shell\IMAGELISTDRAWPARAMS.cs" />
-    <Compile Include="Shell\POINT.cs" />
-    <Compile Include="Shell\RECT.cs" />
-    <Compile Include="Shell\SHFILEINFO.cs" />
     <Compile Include="WinApi.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

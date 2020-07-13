@@ -1,17 +1,14 @@
 ﻿
 using Gma.System.MouseKeyHook;
 using GongSolutions.Wpf.DragDrop;
-using MpWinFormsClassLibrary;
 using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -24,6 +21,8 @@ namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase, IDragSource {
         #region Private Variables
         private double _startMainWindowTop, _endMainWindowTop;
+
+        private string _placeholderText = "Search...";
 
         private MpHotKeyHost _hotkeyHost = null;
         private IKeyboardMouseEvents _globalHook = null;
@@ -235,12 +234,54 @@ namespace MpWpfApp {
                 return MpMeasurements.Instance.FilterMenuHeight;
             }
         }
+
+        private SolidColorBrush _searchTextBoxTextBrush = Brushes.DimGray;
+        public SolidColorBrush SearchTextBoxTextBrush {
+            get {
+                return _searchTextBoxTextBrush;
+            }
+            set {
+                if(_searchTextBoxTextBrush != value) {
+                    _searchTextBoxTextBrush = value;
+                    OnPropertyChanged(nameof(SearchTextBoxTextBrush));
+                }
+            }
+        }
+
+        private string _searchTextBoxFontStyle = "Italics";
+        public string SearchTextBoxFontStyle {
+            get { 
+                return _searchTextBoxFontStyle; 
+            }
+            set { 
+                if(_searchTextBoxFontStyle != value) {
+                    _searchTextBoxFontStyle = value;
+                    OnPropertyChanged(nameof(SearchTextBoxFontStyle));
+                }
+            }
+        }
         #endregion
 
         #region Constructor
         public MpMainWindowViewModel() {
             base.DisplayName = "MpMainWindowViewModel";
-            if(DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
+            
+        }
+        #endregion
+
+        #region Overrides
+        protected override void Loaded() {
+            base.Loaded();
+
+            SearchText = _placeholderText;
+            if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
+                AddTagTile(new MpTag("Home", MpHelperSingleton.Instance.GetRandomColor()));
+                AddTagTile(new MpTag("Favorites", MpHelperSingleton.Instance.GetRandomColor()));
+                AddTagTile(new MpTag("C#", MpHelperSingleton.Instance.GetRandomColor()));
+                for (int i = 0; i < 15; i++) {
+                    AddClipTile(MpCopyItem.CreateCopyItem(MpCopyItemType.Text, MpHelperSingleton.Instance.GetRandomString(100, 100), MpHelperSingleton.Instance.GetProcessPath(Process.GetCurrentProcess().Handle), MpHelperSingleton.Instance.GetRandomColor()));
+                }
+
                 return;
             }
             //create tiles for all clips in the database
@@ -251,7 +292,7 @@ namespace MpWpfApp {
             ResetSelection();
 
             //create tiles for all the tags
-            foreach(MpTag t in MpTag.GetAllTags()) {
+            foreach (MpTag t in MpTag.GetAllTags()) {
                 AddTagTile(t);
             }
             //select history tag by default
@@ -262,7 +303,9 @@ namespace MpWpfApp {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(SearchText):
-                        //perform filter method anytime search text changes
+                        if(SearchText == _placeholderText) {
+                            return;
+                        }
                         FilterTiles(SearchText);
                         Sort("CopyItemId", false);
 
@@ -282,15 +325,6 @@ namespace MpWpfApp {
             };
 
             SetupMainWindowRect();
-        }
-        #endregion
-
-        #region Overrides
-        protected override void Loaded() {
-            base.Loaded();
-            //SetupMainWindowRect();
-
-            
 
             InitHotKeys();
             InitClipboard();
@@ -310,6 +344,22 @@ namespace MpWpfApp {
                 be.UpdateTarget();
             }
             MergeClipsCommandVisibility = SelectedClipTiles.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
+        }
+        public void SearchTextboxGotFocus(object sender,RoutedEventArgs e) {
+            //var searchTextBox = (TextBox)e.Source;
+            
+            if(SearchText == _placeholderText) {
+                SearchText = "";
+            }
+        }
+        public void SearchTextboxLostFocus(object sender, RoutedEventArgs e) {
+            //var searchTextBox = (TextBox)e.Source;
+            if (string.IsNullOrEmpty(SearchText)) {
+                SearchText = _placeholderText;
+            }
+        }
+        public void SearchTextboxBorderPassFocus() {
+            ((TextBox)((MpMainWindow)Application.Current.MainWindow).FindName("SearchTextBox")).Focus();
         }
         #endregion
 
@@ -378,6 +428,8 @@ namespace MpWpfApp {
             if(VisibileClipTiles.Count > 0) {
                 VisibileClipTiles[0].IsSelected = true;
                 VisibileClipTiles[0].IsFocused = true;
+                //var clipTrayListBox = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
+                //clipTrayListBox.ScrollIntoView(clipTrayListBox.Items[0]);
             }
         }
 
@@ -603,19 +655,19 @@ namespace MpWpfApp {
         public ICommand ScrollClipTrayCommand {
             get {
                 if(_scrollClipTrayCommand == null) {
-                    _scrollClipTrayCommand = new DelegateCommand<MouseWheelEventArgs>(ScrollClipTray);
+                    //_scrollClipTrayCommand = new DelegateCommand<MouseWheelEventArgs>(ScrollClipTray);
                 }
                 return _scrollClipTrayCommand;
             }
         }
-        private void ScrollClipTray(MouseWheelEventArgs e) {
+        public void ScrollClipTray(object sender,MouseWheelEventArgs e) {
             //if mouse is over a selected clip that has scrollbars ignore scrolling the tray
             foreach(var clipTile in VisibileClipTiles) {
                 if(clipTile.IsSelected && clipTile.IsHovering && clipTile.HasScrollBars) {
                     return;
                 }
             }
-            var clipTrayListBox = ((ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray"));
+            var clipTrayListBox = (ListBox)sender;
             var scrollViewer = clipTrayListBox.GetChildOfType<ScrollViewer>();
             double lastOffset = scrollViewer.HorizontalOffset;
             scrollViewer.ScrollToHorizontalOffset(lastOffset - (double)(e.Delta * 0.3));

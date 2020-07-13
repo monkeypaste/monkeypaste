@@ -9,12 +9,11 @@ using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public partial class MpMainWindow : Window {
+    public partial class MpMainWindow0712 : Window {
         
-        public MpMainWindow() {
+        public MpMainWindow0712() {
            
             InitializeComponent();
         }
-
     }
 }

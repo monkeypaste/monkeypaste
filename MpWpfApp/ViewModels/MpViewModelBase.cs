@@ -24,7 +24,7 @@ namespace MpWpfApp {
             set {
                 if(_isFocused != value) {
                     _isFocused = value;
-                    OnPropertyChanged("IsFocused");
+                    OnPropertyChanged(nameof(IsFocused));
                 }
             }
         }

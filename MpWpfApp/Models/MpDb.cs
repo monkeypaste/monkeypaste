@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
 using Microsoft.Win32;
-using MpWinFormsClassLibrary;
+
 
 namespace MpWpfApp {
     public class MpDb {
@@ -205,7 +205,7 @@ namespace MpWpfApp {
         }
         public List<MpTag> GetTags() {
             if(NoDb) {
-                return new List<MpTag>() { new MpTag("History",Colors.Green,MpTagType.Default),new MpTag("Favorites",Colors.Blue,MpTagType.Default) };
+                return new List<MpTag>() { new MpTag("History",Colors.Green),new MpTag("Favorites",Colors.Blue) };
             }
             //if(_isLoaded == false) {
             //    InitDb();
@@ -432,21 +432,16 @@ namespace MpWpfApp {
         }
         private string GetCreateString() {
             return @"
-                    CREATE TABLE MpTagType (
-                      pk_MpTagTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , TagTypeName text NOT NULL
-                    );
-                    INSERT INTO MpTagType(TagTypeName) VALUES('None'),('App'),('Device'),('Custom'),('Default');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpTag (
                       pk_MpTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , fk_MpTagTypeId integer NOT NULL
-                    , TagName text NOT NULL
+                    , fk_ParentTagId integer
+                    , TagName text
                     , fk_MpColorId integer 
-                    , CONSTRAINT FK_MpTag_0_0 FOREIGN KEY (fk_MpTagTypeId) REFERENCES MpTagType (pk_MpTagTypeId)
+                    , CONSTRAINT FK_MpTag_0_0 FOREIGN KEY (fk_ParentTagId) REFERENCES MpTagType (pk_MpTagId)
                     , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId)
                     );
-                    INSERT INTO MpTag(fk_MpTagTypeId,TagName,fk_MpColorId) VALUES (5,'History',3),(5,'Favorites',2);
+                    INSERT INTO MpTag(TagName,fk_MpColorId) VALUES ('History',3),('Favorites',2);
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpSetting (
                       pk_MpSettingId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -458,7 +453,7 @@ namespace MpWpfApp {
                       pk_MpPlatformTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , PlatformName text NOT NULL 
                     );
-                    INSERT INTO MpPlatformType(PlatformName) VALUES('ios'),('android'),('windows'),('mac'),('linux');
+                    INSERT INTO MpPlatformType(PlatformName) VALUES('ios'),('android'),('windows'),('mac'),('linux'),('web');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpIcon (
                       pk_MpIconId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -475,7 +470,7 @@ namespace MpWpfApp {
                       pk_MpDeviceTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , DeviceTypeName text NULL 
                     );
-                    INSERT INTO MpDeviceType(DeviceTypeName) VALUES('windows'),('mac'),('android'),('iphone'),('ipad'),('tablet');
+                    INSERT INTO MpDeviceType(DeviceTypeName) VALUES('pc'),('mac'),('android'),('iphone'),('ipad'),('tablet'),('web');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPlatform (
                       pk_MpPlatformId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

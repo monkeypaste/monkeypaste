@@ -129,6 +129,7 @@
       <HintPath>..\packages\System.Data.SQLite.Linq.1.0.113.0\lib\net46\System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll</HintPath>
     </Reference>
@@ -195,13 +196,17 @@
     <Compile Include="Models\MpSubTextToken.cs" />
     <Compile Include="Models\MpTag.cs" />
     <Compile Include="Models\MpUser.cs" />
+    <Compile Include="Utils\MpExtraLargeIconLoader.cs" />
     <Compile Include="Utils\MpClipboardMonitor.cs" />
+    <Compile Include="Utils\MpHelperSingleton.cs" />
     <Compile Include="Utils\MpHotKey.cs" />
+    <Compile Include="Utils\MpLastWindowWatcher.cs" />
     <Compile Include="Utils\MpMeasurements.cs" />
     <Compile Include="Utils\MpScreenInformation.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="Utils\MpWindowLoadingBehavior.cs" />
     <Compile Include="Utils\MpWindowClosingBehavior.cs" />
+    <Compile Include="Utils\WinApi.cs" />
     <Compile Include="ViewModels\ClipTiles\MpClipTileTagMenuItemViewModel.cs" />
     <Compile Include="ViewModels\ClipTiles\MpClipTileViewModel.cs" />
     <Compile Include="Views\Window1.xaml.cs">
@@ -271,9 +276,9 @@
     <Resource Include="Resources\add.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\add2.png">
+    <Resource Include="Resources\add2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </Resource>
     <Content Include="Utils\asciiCam.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -325,10 +330,10 @@
     <Resource Include="Resources\MonkeyIcon1.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\MonkeySound1.wav" />
+    <Resource Include="Resources\MonkeySound1.wav" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\noun_Search_1609001.png" />
+    <Resource Include="Resources\search.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\star_filled.png" />
@@ -365,12 +370,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\user2.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MpWinFormsClassLibrary\MpWinFormsClassLibrary.csproj">
-      <Project>{593857B5-C1B0-425C-85F6-B4F567406518}</Project>
-      <Name>MpWinFormsClassLibrary</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.VersionCheckAnalyzer.2.9.6\analyzers\dotnet\cs\Microsoft.CodeAnalysis.VersionCheckAnalyzer.resources.dll" />

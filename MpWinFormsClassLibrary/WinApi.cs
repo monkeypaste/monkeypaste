@@ -3,17 +3,6 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace MpWinFormsClassLibrary {
-    /// <summary>
-    /// A wrapper for various WinAPI functions.
-    /// </summary>
-    /// <remarks>
-    /// This class is just a wrapper for your various WinApi functions.
-    /// In this sample only the bare essentials are included.
-    /// In my own WinApi class, I have all the WinApi functions that any
-    /// of my applications would ever need.
-    /// 
-    /// From http://www.codeproject.com/KB/cs/SingleInstanceAppMutex.aspx
-    /// </remarks>
     public static class WinApi {
         [StructLayout(LayoutKind.Sequential)]
         public struct PointInter {

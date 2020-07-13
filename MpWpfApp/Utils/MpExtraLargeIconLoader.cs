@@ -1,9 +1,125 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace MpWinFormsClassLibrary {
-    public class ShellEx {
+namespace MpWpfApp {
+    public struct SHFILEINFO
+    {
+        public IntPtr hIcon;
+        public int iIcon;
+        public uint dwAttributes;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 254)]
+        public string szDisplayName;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+        public string szTypeName;
+    };
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RECT {
+        public int Left;
+        public int Top;
+        public int Right;
+        public int Bottom;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct POINT {
+        public int X;
+        public int Y;
+
+        public POINT(int x, int y) {
+            this.X = x;
+            this.Y = y;
+        }
+
+        public POINT(System.Drawing.Point pt) : this(pt.X, pt.Y) { }
+
+        public static implicit operator System.Drawing.Point(POINT p) {
+            return new System.Drawing.Point(p.X, p.Y);
+        }
+
+        public static implicit operator POINT(System.Drawing.Point p) {
+            return new POINT(p.X, p.Y);
+        }
+    }
+
+    public struct IMAGELISTDRAWPARAMS {
+        public int cbSize;
+        public IntPtr himl;
+        public int i;
+        public IntPtr hdcDst;
+        public int x;
+        public int y;
+        public int cx;
+        public int cy;
+        public int xBitmap;
+        public int yBitmap;
+        public int rgbBk;
+        public int rgbFg;
+        public int fStyle;
+        public int dwRop;
+        public int fState;
+        public int Frame;
+        public int crEffect;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct IMAGEINFO {
+        public IntPtr hbmImage;
+        public IntPtr hbmMask;
+        public int Unused1;
+        public int Unused2;
+        public RECT rcImage;
+    }
+
+    [ComImportAttribute()]
+    [GuidAttribute("46EB5926-582E-4017-9FDF-E8998DAA0950")]
+    [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
+    public interface IImageList {
+        [PreserveSig]
+        int Add(
+            IntPtr hbmImage,
+            IntPtr hbmMask,
+            ref int pi);
+
+        [PreserveSig]
+        int ReplaceIcon(
+            int i,
+            IntPtr hicon,
+            ref int pi);
+
+        [PreserveSig]
+        int SetOverlayImage(
+            int iImage,
+            int iOverlay);
+
+        [PreserveSig]
+        int Replace(
+            int i,
+            IntPtr hbmImage,
+            IntPtr hbmMask);
+
+        [PreserveSig]
+        int AddMasked(
+            IntPtr hbmImage,
+            int crMask,
+            ref int pi);
+
+        [PreserveSig]
+        int Draw(
+            ref IMAGELISTDRAWPARAMS pimldp);
+
+        [PreserveSig]
+        int Remove(
+            int i);
+
+        [PreserveSig]
+        int GetIcon(
+            int i,
+            int flags,
+            ref IntPtr picon);
+    };
+    public class MpShellEx {
         private const int SHGFI_SMALLICON = 0x1;
         private const int SHGFI_LARGEICON = 0x0;
         private const int SHIL_JUMBO = 0x4;

@@ -7,24 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public enum MpTagType {
-        None=1,
-        App,
-        Device,
-        Custom,
-        Default
-    }
-
     public class MpTag : MpDbObject {
-        public MpTagType TagType { get; set; }
         public int TagId { get; set; }
         public int ColorId { get; set; }
         public string TagName { get; set; }
         public MpColor TagColor { get; set; }
+        //unused
+        public int ParentTagId { get; set; }
 
-        public MpTag(string tagName,Color tagColor,MpTagType tagType = MpTagType.Custom) {
+        public MpTag(string tagName,Color tagColor) {
             TagName = tagName;
-            TagType = tagType;
             TagColor = new MpColor((int)tagColor.R,(int)tagColor.G,(int)tagColor.B,255);
         }
         public MpTag(int tagId) {
@@ -48,14 +40,13 @@ namespace MpWpfApp {
         }
         public override void LoadDataRow(DataRow dr) {
             TagId = Convert.ToInt32(dr["pk_MpTagId"].ToString());
-            TagType = (MpTagType)Convert.ToInt32(dr["fk_MpTagTypeId"].ToString());
             TagName = dr["TagName"].ToString();
             ColorId = Convert.ToInt32(dr["fk_MpColorId"].ToString());
             TagColor = new MpColor(ColorId);
         }
 
         public override void WriteToDatabase() {
-            if(TagName == null || TagName == string.Empty || MpDb.Instance.NoDb) {
+            if(string.IsNullOrEmpty(TagName) || MpDb.Instance.NoDb) {
                 Console.WriteLine("MpTag Error, cannot create nameless tag");
                 return;
             }
@@ -63,12 +54,12 @@ namespace MpWpfApp {
             if(TagId == 0) {
                 TagColor.WriteToDatabase();
                 ColorId = TagColor.ColorId;
-                MpDb.Instance.ExecuteNonQuery("insert into MpTag(fk_MpTagTypeId,TagName,fk_MpColorId) values(" + (int)TagType + ",'" + TagName + "'," + ColorId + ")");
+                MpDb.Instance.ExecuteNonQuery("insert into MpTag(TagName,fk_MpColorId) values('" + TagName + "'," + ColorId + ")");
                 TagId = MpDb.Instance.GetLastRowId("MpTag", "pk_MpTagId");                 
             } else {
                 TagColor.WriteToDatabase();
                 ColorId = TagColor.ColorId;
-                MpDb.Instance.ExecuteNonQuery("update MpTag set fk_MpTagTypeId=" + (int)TagType + ", TagName='" + TagName + "', fk_MpColorId=" + ColorId+" where pk_MpTagId="+TagId);                
+                MpDb.Instance.ExecuteNonQuery("update MpTag set TagName='" + TagName + "', fk_MpColorId=" + ColorId+" where pk_MpTagId="+TagId);                
             }
         }
         public bool IsLinkedWithCopyItem(MpCopyItem ci) {
@@ -103,7 +94,6 @@ namespace MpWpfApp {
             TableName = "MpTag";
             columnData.Clear();
             columnData.Add("pk_MpTagId",this.TagId);
-            columnData.Add("fk_MpTagTypeId",this.TagType);
             columnData.Add("fk_MpColorId",this.ColorId);
             columnData.Add("TagName",this.TagName);
         }

@@ -1,4 +1,4 @@
-﻿using MpWinFormsClassLibrary;
+﻿
 using Prism.Commands;
 using System;
 using System.Collections.Generic;
@@ -133,6 +133,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Business Logic Properties
+        public bool IsHistory() {
+            return Tag.TagId == 1;
+        }
         #endregion
 
         #region Exposed Model Properties

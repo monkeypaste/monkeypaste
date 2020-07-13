@@ -1,36 +1,8 @@
 ﻿using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows;
 
 namespace MpWpfApp {
-    //[StructLayout(LayoutKind.Sequential)]
-    //public struct RECT {
-    //    public readonly int Left;
-    //    public readonly int Top;
-    //    public readonly int Right;
-    //    public readonly int Bottom;
-
-    //    private RECT(int left,int top,int right,int bottom) {
-    //        Left = left;
-    //        Top = top;
-    //        Right = right;
-    //        Bottom = bottom;
-    //    }
-
-    //    public RECT(Rectangle r) : this(r.Left,r.Top,r.Right,r.Bottom) {
-    //    }
-    //}
-    /// <summary>
-    /// A wrapper for various WinAPI functions.
-    /// </summary>
-    /// <remarks>
-    /// This class is just a wrapper for your various WinApi functions.
-    /// In this sample only the bare essentials are included.
-    /// In my own WinApi class, I have all the WinApi functions that any
-    /// of my applications would ever need.
-    /// 
-    /// From http://www.codeproject.com/KB/cs/SingleInstanceAppMutex.aspx
-    /// </remarks>
     public static class WinApi {
         [StructLayout(LayoutKind.Sequential)]
         public struct PointInter {
@@ -69,15 +41,16 @@ namespace MpWpfApp {
             ShowWindow(window, SW_SHOWNORMAL);
             SetForegroundWindow(window);
         }
-        [DllImport("User32.dll")]
-        public static extern int SetClipboardViewer(int hWndNewViewer);
 
-        [DllImport("User32.dll",CharSet = CharSet.Auto)]
-        public static extern bool ChangeClipboardChain(IntPtr hWndRemove,IntPtr hWndNewNext);
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetClipboardViewer(IntPtr hWndNewViewer);
 
-        [DllImport("user32.dll",CharSet = CharSet.Auto)]
-        public static extern int SendMessage(IntPtr hwnd,int wMsg,IntPtr wParam,IntPtr lParam);
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool ChangeClipboardChain(IntPtr hWndRemove, IntPtr hWndNewNext);
 
+        [DllImport("user32.dll")]
+        public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
         /// <summary>
         /// Places the given window in the system-maintained clipboard format listener list.
         /// </summary>
@@ -106,8 +79,8 @@ namespace MpWpfApp {
         //[DllImport("user32.dll")]
         //public static extern bool UnregisterHotKey(IntPtr hWnd,int id);
 
-        //[DllImport(@"User32.dll",EntryPoint = @"SendMessage",CharSet = CharSet.Auto)]
-        //public static extern int SendMessageRefRect(IntPtr hWnd,uint msg,int wParam,ref RECT rect);
+        [DllImport(@"User32.dll",EntryPoint = @"SendMessage",CharSet = CharSet.Auto)]
+        public static extern int SendMessageRefRect(IntPtr hWnd,uint msg,int wParam,ref RECT rect);
 
         [DllImport("User32.dll")]
         public static extern bool SetProcessDPIAware();
@@ -151,10 +124,5 @@ namespace MpWpfApp {
         [DllImport("user32.dll")]
         public static extern bool GetCursorPos(out PointInter lpPoint);
 
-        public static readonly int WM_SHOWME = RegisterWindowMessage("WM_SHOWME");
-        //If you get 'dllimport unknown'-, then add 'using System.Runtime.InteropServices;'
-        [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool DeleteObject([In] IntPtr hObject);
     }
 }
