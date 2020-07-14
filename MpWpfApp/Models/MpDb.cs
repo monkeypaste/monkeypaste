@@ -527,7 +527,7 @@ namespace MpWpfApp {
                     , fk_ColorId integer 
                     , CONSTRAINT FK_MpApp_0_0 FOREIGN KEY (fk_MpIconId) REFERENCES MpIcon (pk_MpIconId)
                     , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_ColorId) REFERENCES MpColor (pk_MpColorId)
-                    );
+                    );                
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCopyItem (
                       pk_MpCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -551,17 +551,23 @@ namespace MpWpfApp {
                     , CONSTRAINT FK_MpCopyItemTag_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     , CONSTRAINT FK_MpCopyItemTag_1_0 FOREIGN KEY (fk_MpTagId) REFERENCES MpTag (pk_MpTagId)
                     );
+                     ---------------------------------------------------------------------------------------------------------------------
+                    CREATE TABLE MpSubTextTokenType (
+                      pk_MpSubTextTokenTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , TokenTypeName text NOT NULL 
+                    );
+                    INSERT INTO MpSubTextTokenType(TokenTypeName) VALUES('URI'),('Email'),('Phone Number'),('Currency'),('Hex Color'),('Street Address');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpSubTextToken (
                       pk_MpSubTextTokenId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemId integer NOT NULL
-                    , fk_MpCopyItemTypeId integer NOT NULL
+                    , fk_MpSubTextTokenTypeId integer NOT NULL
                     , StartIdx integer NOT NULL
                     , EndIdx integer NOT NULL
                     , BlockIdx int NOT NULL
                     , InlineIdx int NOT NULL
                     , TokenText text NOT NULL
-                    , CONSTRAINT FK_MpSubTextToken_0_0 FOREIGN KEY (fk_MpCopyItemTypeId) REFERENCES MpCopyItemType (pk_MpCopyItemTypeId) 
+                    , CONSTRAINT FK_MpSubTextToken_0_0 FOREIGN KEY (fk_MpSubTextTokenTypeId) REFERENCES MpSubTextTokenType (pk_MpSubTextTokenTypeId) 
                     , CONSTRAINT FK_MpSubTextToken_1_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );
                     ---------------------------------------------------------------------------------------------------------------------

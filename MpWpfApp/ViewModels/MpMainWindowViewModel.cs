@@ -1,7 +1,7 @@
 ﻿
+using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
 using GongSolutions.Wpf.DragDrop;
-using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,6 +27,11 @@ namespace MpWpfApp {
         private MpHotKeyHost _hotkeyHost = null;
         private IKeyboardMouseEvents _globalHook = null;
 
+        //private MpPhysicsBody _clipTrayPhysicsBody;
+
+        #endregion
+
+        #region Public Variables
         public MpClipboardMonitor ClipboardMonitor { get; private set; }
         #endregion
 
@@ -269,11 +274,12 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Overrides
-        protected override void Loaded() {
-            base.Loaded();
-
+        #region View Event Handlers
+        public void MainWindowLoaded(object sender,RoutedEventArgs e) {
             SearchText = _placeholderText;
+
+            SetupMainWindowRect();
+
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
                 AddTagTile(new MpTag("Home", MpHelperSingleton.Instance.GetRandomColor()));
                 AddTagTile(new MpTag("Favorites", MpHelperSingleton.Instance.GetRandomColor()));
@@ -300,44 +306,48 @@ namespace MpWpfApp {
 
             //init SearchBox
 
-            PropertyChanged += (s, e) => {
-                switch (e.PropertyName) {
-                    case nameof(SearchText):
-                        if(SearchText == _placeholderText) {
-                            return;
-                        }
-                        FilterTiles(SearchText);
-                        Sort("CopyItemId", false);
+            PropertyChanged += MpMainWindowViewModel_PropertyChanged;
 
-                        ResetSelection();
-                        break;
-                    case nameof(IsAutoCopyMode):
-                        if (IsAutoCopyMode) {
-                            _globalHook.MouseUp += GlobalMouseUpEvent;
-                        } else {
-                            _globalHook.MouseUp -= GlobalMouseUpEvent;
-                        }
-                        break;
-                }
-            };
-            ((MpMainWindow)Application.Current.MainWindow).Deactivated += (s, e) => {
+            ((MpMainWindow)Application.Current.MainWindow).Deactivated += (s, e1) => {
                 HideWindowCommand.Execute(null);
             };
 
-            SetupMainWindowRect();
 
-            InitHotKeys();
             InitClipboard();
+            //InitHotKeys();
+            InitHotMouseActions();
+
+            //var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
+            //_clipTrayPhysicsBody = new MpPhysicsBody(clipTray);
 
 #if DEBUG
-            ShowWindowCommand.Execute(null);
+            ShowWindow();
 #else
             HideWindowCommand.Execute(null);
 #endif
         }
-        #endregion
 
-        #region View Event Handlers
+        private void MpMainWindowViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+            switch (e.PropertyName) {
+                case nameof(SearchText):
+                    if (SearchText == _placeholderText) {
+                        return;
+                    }
+                    FilterTiles(SearchText);
+                    Sort("CopyItemId", false);
+
+                    ResetSelection();
+                    break;
+                case nameof(IsAutoCopyMode):
+                    if (IsAutoCopyMode) {
+                        _globalHook.MouseUp += GlobalMouseUpEvent;
+                    } else {
+                        _globalHook.MouseUp -= GlobalMouseUpEvent;
+                    }
+                    break;
+            }
+        }
+
         public void ClipTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             BindingExpression be = (BindingExpression)((ListBox)sender).GetBindingExpression(ListBox.SelectedItemsProperty);
             if (be != null) {
@@ -360,6 +370,20 @@ namespace MpWpfApp {
         }
         public void SearchTextboxBorderPassFocus() {
             ((TextBox)((MpMainWindow)Application.Current.MainWindow).FindName("SearchTextBox")).Focus();
+        }
+        public void ScrollClipTray(object sender, MouseWheelEventArgs e) {
+            //if mouse is over a selected clip that has scrollbars ignore scrolling the tray
+            foreach (var clipTile in VisibileClipTiles) {
+                if (clipTile.IsSelected && clipTile.IsHovering && clipTile.HasScrollBars) {
+                    return;
+                }
+            }
+            var clipTrayListBox = (ListBox)sender;
+            var scrollViewer = clipTrayListBox.GetChildOfType<ScrollViewer>();
+            double lastOffset = scrollViewer.HorizontalOffset;
+
+            //_clipTrayPhysicsBody.AddForce(e.Delta);
+            scrollViewer.ScrollToHorizontalOffset(lastOffset - (double)(e.Delta * 0.3));
         }
         #endregion
 
@@ -450,6 +474,7 @@ namespace MpWpfApp {
         }
 
         #endregion
+
         #region Private Methods
         private void SetupMainWindowRect() {
             var mw = ((MpMainWindow)Application.Current.MainWindow);
@@ -558,15 +583,15 @@ namespace MpWpfApp {
         }
 
         private void InitHotKeys() {
-            _hotkeyHost = new MpHotKeyHost(HwndSource.FromHwnd(new WindowInteropHelper(Application.Current.MainWindow).Handle));
+            _hotkeyHost = new MpHotKeyHost((HwndSource)HwndSource.FromVisual((MpMainWindow)Application.Current.MainWindow));
 
-            ShowMainWindowHotKey = new MpHotKey(Key.D, ModifierKeys.Control | ModifierKeys.Shift);
+            ShowMainWindowHotKey = new MpHotKey(Key.D,ModifierKeys.None/*, ModifierKeys.Control | ModifierKeys.Shift*/);
             ShowMainWindowHotKey.HotKeyPressed += (s, e1) => {
                 if(ShowWindowCommand.CanExecute(null)) {
                     ShowWindowCommand.Execute(null);
                 }
             };
-
+            
             HideMainWindowHotKey = new MpHotKey(Key.Escape, ModifierKeys.None);
             HideMainWindowHotKey.HotKeyPressed += (s, e) => {
                 if(HideWindowCommand.CanExecute(null)) {
@@ -583,18 +608,18 @@ namespace MpWpfApp {
 
             _hotkeyHost.AddHotKey(ShowMainWindowHotKey);
             _hotkeyHost.AddHotKey(HideMainWindowHotKey);
-            _hotkeyHost.AddHotKey(ToggleAppendModeHotKey);
-
+            _hotkeyHost.AddHotKey(ToggleAppendModeHotKey);            
+        }
+        private void InitHotMouseActions() {
             _globalHook = Hook.GlobalEvents();
             _globalHook.MouseMove += (s, e) => {
-                if(e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
+                if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
                     if (ShowWindowCommand.CanExecute(null)) {
                         ShowWindowCommand.Execute(null);
                     }
                 }
             };
         }
-
         private void InitClipboard() {
             ClipboardMonitor = new MpClipboardMonitor((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow));
 
@@ -617,11 +642,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        private DelegateCommand _mergeClipsCommand;
+        private RelayCommand _mergeClipsCommand;
         public ICommand MergeClipsCommand {
             get {
                 if(_mergeClipsCommand == null) {
-                    _mergeClipsCommand = new DelegateCommand(MergeClips,CanMergeClips);
+                    _mergeClipsCommand = new RelayCommand(MergeClips,CanMergeClips);
                 }
                 return _mergeClipsCommand;
             }
@@ -651,33 +676,12 @@ namespace MpWpfApp {
             focusedClip.IsFocused = true;
         }
 
-        private DelegateCommand<MouseWheelEventArgs> _scrollClipTrayCommand;
-        public ICommand ScrollClipTrayCommand {
-            get {
-                if(_scrollClipTrayCommand == null) {
-                    //_scrollClipTrayCommand = new DelegateCommand<MouseWheelEventArgs>(ScrollClipTray);
-                }
-                return _scrollClipTrayCommand;
-            }
-        }
-        public void ScrollClipTray(object sender,MouseWheelEventArgs e) {
-            //if mouse is over a selected clip that has scrollbars ignore scrolling the tray
-            foreach(var clipTile in VisibileClipTiles) {
-                if(clipTile.IsSelected && clipTile.IsHovering && clipTile.HasScrollBars) {
-                    return;
-                }
-            }
-            var clipTrayListBox = (ListBox)sender;
-            var scrollViewer = clipTrayListBox.GetChildOfType<ScrollViewer>();
-            double lastOffset = scrollViewer.HorizontalOffset;
-            scrollViewer.ScrollToHorizontalOffset(lastOffset - (double)(e.Delta * 0.3));
-        }
 
-        private DelegateCommand _showWindowCommand;
+        private RelayCommand _showWindowCommand;
         public ICommand ShowWindowCommand {
             get {
-                if(_showWindowCommand == null) {
-                    _showWindowCommand = new DelegateCommand(ShowWindow, CanShowWindow);
+                if (_showWindowCommand == null) {
+                    _showWindowCommand = new RelayCommand(ShowWindow, CanShowWindow);
                 }
                 return _showWindowCommand;
             }
@@ -705,17 +709,19 @@ namespace MpWpfApp {
             CubicEase easing = new CubicEase();
             easing.EasingMode = EasingMode.EaseIn;
             ta.EasingFunction = easing;
-            mw.BeginAnimation(Window.TopProperty, ta);
-
-            ShowMainWindowHotKey.Enabled = false;
-            HideMainWindowHotKey.Enabled = true;
+            ta.Completed += (s, e1) => {
+                //_clipTrayPhysicsBody.Start();
+                //ShowMainWindowHotKey.Enabled = false;
+                //HideMainWindowHotKey.Enabled = true;
+            };
+            mw.BeginAnimation(Window.TopProperty, ta);            
         }
 
-        private DelegateCommand _hideWindowCommand;
+        private RelayCommand _hideWindowCommand;
         public ICommand HideWindowCommand {
             get {
-                if(_hideWindowCommand == null) {
-                    _hideWindowCommand = new DelegateCommand(HideWindow, CanHideWindow);
+                if (_hideWindowCommand == null) {
+                    _hideWindowCommand = new RelayCommand(HideWindow, CanHideWindow);
                 }
                 return _hideWindowCommand;
             }
@@ -724,6 +730,9 @@ namespace MpWpfApp {
             return Application.Current.MainWindow != null && Application.Current.MainWindow.Visibility == Visibility.Visible;
         }
         private void HideWindow() {
+            if(!CanHideWindow()) {
+                return;
+            }
             var mw = ((MpMainWindow)Application.Current.MainWindow);
 
             DoubleAnimation ta = new DoubleAnimation();
@@ -732,21 +741,21 @@ namespace MpWpfApp {
             ta.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
             ta.Completed += (s, e) => {
                 mw.Visibility = Visibility.Collapsed;
+                //ShowMainWindowHotKey.Enabled = true;
+                //HideMainWindowHotKey.Enabled = false;
+                //_clipTrayPhysicsBody.Stop();
             };
             CubicEase easing = new CubicEase();  // or whatever easing class you want
             easing.EasingMode = EasingMode.EaseIn;
             ta.EasingFunction = easing;
-            mw.BeginAnimation(Window.TopProperty, ta);
-
-            ShowMainWindowHotKey.Enabled = true;
-            HideMainWindowHotKey.Enabled = false;
+            mw.BeginAnimation(Window.TopProperty, ta);            
         }
 
-        private DelegateCommand _deleteClipCommand;
+        private RelayCommand _deleteClipCommand;
         public ICommand DeleteClipCommand {
             get {
                 if (_deleteClipCommand == null) {
-                    _deleteClipCommand = new DelegateCommand(DeleteClip);
+                    _deleteClipCommand = new RelayCommand(DeleteClip);
                 }
                 return _deleteClipCommand;
             }
@@ -757,11 +766,11 @@ namespace MpWpfApp {
             }
         }
 
-        private DelegateCommand _renameClipCommand;
+        private RelayCommand _renameClipCommand;
         public ICommand RenameClipCommand {
             get {
                 if (_renameClipCommand == null) {
-                    _renameClipCommand = new DelegateCommand(RenameClip,CanRenameClip);
+                    _renameClipCommand = new RelayCommand(RenameClip,CanRenameClip);
                 }
                 return _renameClipCommand;
             }
@@ -774,11 +783,11 @@ namespace MpWpfApp {
             SelectedClipTiles[0].IsTitleTextBoxFocused = true;
         }
 
-        private DelegateCommand _deleteTagCommand;
+        private RelayCommand _deleteTagCommand;
         public ICommand DeleteTagCommand {
             get {
                 if (_deleteTagCommand == null) {
-                    _deleteTagCommand = new DelegateCommand(DeleteTag, CanDeleteTag);
+                    _deleteTagCommand = new RelayCommand(DeleteTag, CanDeleteTag);
                 }
                 return _deleteTagCommand;
             }
@@ -791,11 +800,11 @@ namespace MpWpfApp {
             RemoveTagTile(SelectedTagTile);
         }
 
-        private DelegateCommand _createTagCommand;
+        private RelayCommand _createTagCommand;
         public ICommand CreateTagCommand {
             get {
                 if(_createTagCommand == null) {
-                    _createTagCommand = new DelegateCommand(CreateTag);
+                    _createTagCommand = new RelayCommand(CreateTag);
                 }
                 return _createTagCommand;
             }
@@ -807,11 +816,11 @@ namespace MpWpfApp {
             AddTagTile(newTag, true);
         }
 
-        private DelegateCommand _toggleAppendModeCommand;
+        private RelayCommand _toggleAppendModeCommand;
         public ICommand ToggleAppendModeCommand {
             get {
                 if(_toggleAppendModeCommand == null) {
-                    _toggleAppendModeCommand = new DelegateCommand(ToggleAppendMode, CanToggleAppendMode);
+                    _toggleAppendModeCommand = new RelayCommand(ToggleAppendMode, CanToggleAppendMode);
                 }
                 return _toggleAppendModeCommand;
             }
@@ -824,11 +833,11 @@ namespace MpWpfApp {
             IsInAppendMode = !IsInAppendMode;
         }
 
-        private DelegateCommand _toggleAutoCopyModeCommand;
+        private RelayCommand _toggleAutoCopyModeCommand;
         public ICommand ToggleAutoCopyModeCommand {
             get {
                 if (_toggleAutoCopyModeCommand == null) {
-                    _toggleAutoCopyModeCommand = new DelegateCommand(ToggleAutoCopyMode, CanToggleAutoCopyMode);
+                    _toggleAutoCopyModeCommand = new RelayCommand(ToggleAutoCopyMode, CanToggleAutoCopyMode);
                 }
                 return _toggleAutoCopyModeCommand;
             }

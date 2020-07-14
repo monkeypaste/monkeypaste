@@ -62,7 +62,7 @@ namespace MpWpfApp {
         public Key Key {
             get { return key; }
             set {
-                if(key != value) {
+                if (key != value) {
                     key = value;
                     OnPropertyChanged("Key");
                 }
@@ -76,7 +76,7 @@ namespace MpWpfApp {
         public ModifierKeys Modifiers {
             get { return modifiers; }
             set {
-                if(modifiers != value) {
+                if (modifiers != value) {
                     modifiers = value;
                     OnPropertyChanged("Modifiers");
                 }
@@ -87,7 +87,7 @@ namespace MpWpfApp {
         public bool Enabled {
             get { return enabled; }
             set {
-                if(value != enabled) {
+                if (value != enabled) {
                     enabled = value;
                     OnPropertyChanged("Enabled");
                 }
@@ -97,14 +97,14 @@ namespace MpWpfApp {
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName) {
-            if(PropertyChanged != null)
+            if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
 
         public override bool Equals(object obj) {
             MpHotKey hotKey = obj as MpHotKey;
-            if(hotKey != null)
+            if (hotKey != null)
                 return Equals(hotKey);
             else
                 return false;
@@ -128,7 +128,7 @@ namespace MpWpfApp {
         public event EventHandler<HotKeyEventArgs> HotKeyPressed;
 
         protected virtual void OnHotKeyPress() {
-            if(HotKeyPressed != null)
+            if (HotKeyPressed != null)
                 HotKeyPressed(this, new HotKeyEventArgs(this));
         }
 
@@ -159,7 +159,7 @@ namespace MpWpfApp {
         /// </summary>
         /// <param name="hwndSource">The handle of the window. Must not be null.</param>
         public MpHotKeyHost(HwndSource hwndSource) {
-            if(hwndSource == null)
+            if (hwndSource == null)
                 throw new ArgumentNullException("hwndSource");
 
             this.hook = new HwndSourceHook(WndProc);
@@ -185,13 +185,13 @@ namespace MpWpfApp {
         private HwndSource hwndSource;
 
         private void RegisterHotKey(int id, MpHotKey hotKey) {
-            if((int)hwndSource.Handle != 0) {
+            if ((int)hwndSource.Handle != 0) {
                 RegisterHotKey(hwndSource.Handle, id, (int)hotKey.Modifiers, KeyInterop.VirtualKeyFromKey(hotKey.Key));
                 int error = Marshal.GetLastWin32Error();
-                if(error != 0) {
+                if (error != 0) {
                     Exception e = new Win32Exception(error);
 
-                    if(error == 1409)
+                    if (error == 1409)
                         throw new HotKeyAlreadyRegisteredException(e.Message, hotKey, e);
                     else
                         throw e;
@@ -201,10 +201,10 @@ namespace MpWpfApp {
         }
 
         private void UnregisterHotKey(int id) {
-            if((int)hwndSource.Handle != 0) {
+            if ((int)hwndSource.Handle != 0) {
                 UnregisterHotKey(hwndSource.Handle, id);
                 int error = Marshal.GetLastWin32Error();
-                if(error != 0)
+                if (error != 0)
                     throw new Win32Exception(error);
             }
         }
@@ -217,11 +217,11 @@ namespace MpWpfApp {
         public event EventHandler<HotKeyEventArgs> HotKeyPressed;
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
-            if(msg == WM_HotKey) {
-                if(hotKeys.ContainsKey((int)wParam)) {
+            if (msg == WM_HotKey) {
+                if (hotKeys.ContainsKey((int)wParam)) {
                     MpHotKey h = hotKeys[(int)wParam];
                     h.RaiseOnHotKeyPressed();
-                    if(HotKeyPressed != null)
+                    if (HotKeyPressed != null)
                         HotKeyPressed(this, new HotKeyEventArgs(h));
                 }
             }
@@ -232,14 +232,14 @@ namespace MpWpfApp {
 
         void hotKey_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             var kvPair = hotKeys.FirstOrDefault(h => h.Value == sender);
-            if(kvPair.Value != null) {
-                if(e.PropertyName == "Enabled") {
-                    if(kvPair.Value.Enabled)
+            if (kvPair.Value != null) {
+                if (e.PropertyName == "Enabled") {
+                    if (kvPair.Value.Enabled)
                         RegisterHotKey(kvPair.Key, kvPair.Value);
                     else
                         UnregisterHotKey(kvPair.Key);
-                } else if(e.PropertyName == "Key" || e.PropertyName == "Modifiers") {
-                    if(kvPair.Value.Enabled) {
+                } else if (e.PropertyName == "Key" || e.PropertyName == "Modifiers") {
+                    if (kvPair.Value.Enabled) {
                         UnregisterHotKey(kvPair.Key);
                         RegisterHotKey(kvPair.Key, kvPair.Value);
                     }
@@ -276,15 +276,15 @@ namespace MpWpfApp {
         /// </summary>
         /// <param name="hotKey">The hotKey which will be added. Must not be null and can be registed only once.</param>
         public void AddHotKey(MpHotKey hotKey) {
-            if(hotKey == null)
+            if (hotKey == null)
                 throw new ArgumentNullException("value");
-            if(hotKey.Key == 0)
+            if (hotKey.Key == 0)
                 throw new ArgumentNullException("value.Key");
-            if(hotKeys.ContainsValue(hotKey)) { 
+            if (hotKeys.ContainsValue(hotKey)) {
                 throw new HotKeyAlreadyRegisteredException("HotKey already registered!", hotKey);
-         }
+            }
             int id = idGen.Next();
-            if(hotKey.Enabled)
+            if (hotKey.Enabled)
                 RegisterHotKey(id, hotKey);
             hotKey.PropertyChanged += hotKey_PropertyChanged;
             hotKeys[id] = hotKey;
@@ -297,9 +297,9 @@ namespace MpWpfApp {
         /// <returns>True if success, otherwise false</returns>
         public bool RemoveHotKey(MpHotKey hotKey) {
             var kvPair = hotKeys.FirstOrDefault(h => h.Value == hotKey);
-            if(kvPair.Value != null) {
+            if (kvPair.Value != null) {
                 kvPair.Value.PropertyChanged -= hotKey_PropertyChanged;
-                if(kvPair.Value.Enabled)
+                if (kvPair.Value.Enabled)
                     UnregisterHotKey(kvPair.Key);
                 return hotKeys.Remove(kvPair.Key);
             }
@@ -312,14 +312,14 @@ namespace MpWpfApp {
         private bool disposed;
 
         private void Dispose(bool disposing) {
-            if(disposed)
+            if (disposed)
                 return;
 
-            if(disposing) {
+            if (disposing) {
                 hwndSource.RemoveHook(hook);
             }
 
-            for(int i = hotKeys.Count - 1;i >= 0;i--) {
+            for (int i = hotKeys.Count - 1; i >= 0; i--) {
                 RemoveHotKey(hotKeys.Values.ElementAt(i));
             }
 

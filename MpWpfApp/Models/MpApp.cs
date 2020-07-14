@@ -49,8 +49,8 @@ namespace MpWpfApp {
                 this.IsAppRejected = true;
             }
             MapDataToColumns();
-            Console.WriteLine("Loaded MpApp");
-            Console.WriteLine(ToString());
+            //Console.WriteLine("Loaded MpApp");
+            //Console.WriteLine(ToString());
         }
         public override void WriteToDatabase() {           
             bool isNew = false;

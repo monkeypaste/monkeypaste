@@ -31,6 +31,7 @@ namespace MpWpfApp {
             );
         }
         private static void OnDataChangedHelper(RichTextBox rtb, string updatedSearchText,SolidColorBrush highlightColor) {
+            
             if(highlightColor == Brushes.Transparent) {
                 Console.WriteLine("Erase");
             } else {

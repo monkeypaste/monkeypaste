@@ -12,19 +12,27 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 
 namespace MpWpfApp {
+    public enum MpSubTextTokenType {
+        Uri = 1,
+        Email,
+        PhoneNumber,
+        Currency,
+        HexColor,
+        StreetAddress
+    }
     public class MpSubTextToken : MpDbObject {
         public int SubTextTokenId { get; set; }
         public int CopyItemId { get; set; }
         public string TokenText { get; set; }
-        public MpCopyItemType TokenType { get; set; }
+        public MpSubTextTokenType TokenType { get; set; }
         public int StartIdx { get; set; }
         public int EndIdx { get; set; }
         public int BlockIdx { get; set; }
         public int InlineIdx { get; set; }
 
-        public MpSubTextToken(string token, MpCopyItemType mpType, int s, int e, int b,int i) {
+        public MpSubTextToken(string token, MpSubTextTokenType tokenType, int s, int e, int b,int i) {
             this.TokenText = token;
-            this.TokenType = mpType;
+            this.TokenType = tokenType;
             this.StartIdx = s;
             this.EndIdx = e;
             this.BlockIdx = b;
@@ -50,8 +58,8 @@ namespace MpWpfApp {
             //ensure no weblinks are part of emails
             List<MpSubTextToken> tokensToRemove = new List<MpSubTextToken>();
             foreach(MpSubTextToken token in tokenList) {
-                if (token.TokenType == MpCopyItemType.WebLink) {
-                    var emailTokenList = tokenList.Where(stt => stt.TokenType == MpCopyItemType.Email).ToList();
+                if (token.TokenType == MpSubTextTokenType.Uri) {
+                    var emailTokenList = tokenList.Where(stt => stt.TokenType == MpSubTextTokenType.Email).ToList();
                     //check if this weblink is within email token's range
                     foreach(var emailToken in emailTokenList) {
                         if(token.StartIdx >= emailToken.StartIdx && token.StartIdx <= emailToken.EndIdx) {
@@ -67,10 +75,10 @@ namespace MpWpfApp {
             return tokenList;
         }       
         private static List<MpSubTextToken> ContainsEmail(FlowDocument doc) {
-            return ContainsRegEx(doc, @"([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})", MpCopyItemType.Email);
+            return ContainsRegEx(doc, @"([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})", MpSubTextTokenType.Email);
         }
         private static List<MpSubTextToken> ContainsPhoneNumber(FlowDocument doc) {
-            return ContainsRegEx(doc, @"(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:\-?|\ ?))[2-9]\d{2}[- ]?\d{4}", MpCopyItemType.PhoneNumber);
+            return ContainsRegEx(doc, @"(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:\-?|\ ?))[2-9]\d{2}[- ]?\d{4}", MpSubTextTokenType.PhoneNumber);
         }
         private static List<MpSubTextToken> ContainsStreetAddress(FlowDocument doc) {
             string zip = @"\b\d{5}(?:-\d{4})?\b";
@@ -85,20 +93,20 @@ namespace MpWpfApp {
             string cityStateZip = @"{" + city + "},[ ](?:{" + state + "}|{" + stateAbbr + "})[ ]{" + zip + "}";
             string street = @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Court|Loop|Pike|Turnpike|Square|Station|Trail|Terrace|Lane|Parkway|Road|Way|Circle|Boulevard|Drive|Street|Ave|Trnpk|Dr|Trl|Wy|Ter|Sq||Pkwy|Rd|Cir|Blvd|Ln|Ct|St)\.?";
             string fullAddress = street + @"\s"+ cityStateZip;
-            return ContainsRegEx(doc, fullAddress, MpCopyItemType.StreetAddress);
+            return ContainsRegEx(doc, fullAddress, MpSubTextTokenType.StreetAddress);
         }
         private static List<MpSubTextToken> ContainsWebLink(FlowDocument doc) {
-            return ContainsRegEx(doc, @"\b(?:https?://|www\.)\S+\b", MpCopyItemType.WebLink);
+            return ContainsRegEx(doc, @"\b(?:https?://|www\.)\S+\b", MpSubTextTokenType.Uri);
         }
         private static List<MpSubTextToken> ContainsCurrency(FlowDocument doc) {
-            return ContainsRegEx(doc, @"(-?\d{1,3}(,?\d{3})*(\.\d{2}?))(\D|$)", MpCopyItemType.Currency);
+            return ContainsRegEx(doc, @"(-?\d{1,3}(,?\d{3})*(\.\d{2}?))(\D|$)", MpSubTextTokenType.Currency);
         }
         private static List<MpSubTextToken> ContainsHexColor(FlowDocument doc) {
-            return ContainsRegEx(doc, @"#(([\da-fA-F]{3}){1,2}|([\da-fA-F]{4}){1,2})$", MpCopyItemType.Currency);
+            return ContainsRegEx(doc, @"#(([\da-fA-F]{3}){1,2}|([\da-fA-F]{4}){1,2})$", MpSubTextTokenType.Currency);
         }
         //        tkefauver@gmail.com www.google.com
         //804-459-9980
-        private static List<MpSubTextToken> ContainsRegEx(FlowDocument doc, string regExStr, MpCopyItemType tokenType) {
+        private static List<MpSubTextToken> ContainsRegEx(FlowDocument doc, string regExStr, MpSubTextTokenType tokenType) {
             List<MpSubTextToken> tokenList = new List<MpSubTextToken>();
             //break document into blocks and then blocks into lines and regex lines
             for (int i = 0;i < doc.Blocks.Count;i++) {
@@ -122,7 +130,7 @@ namespace MpWpfApp {
         public override void LoadDataRow(DataRow dr) {
             this.SubTextTokenId = Convert.ToInt32(dr["pk_MpSubTextTokenId"].ToString());
             this.CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemId"].ToString());
-            this.TokenType = (MpCopyItemType)Convert.ToInt32(dr["fk_MpCopyItemTypeId"].ToString());
+            this.TokenType = (MpSubTextTokenType)Convert.ToInt32(dr["fk_MpSubTextTokenTypeId"].ToString());
             this.StartIdx = Convert.ToInt32(dr["StartIdx"].ToString());
             this.EndIdx = Convert.ToInt32(dr["EndIdx"].ToString());
             this.BlockIdx = Convert.ToInt32(dr["BlockIdx"].ToString());
@@ -133,10 +141,10 @@ namespace MpWpfApp {
         public override void WriteToDatabase() {
             //if new
             if (SubTextTokenId == 0) {
-                MpDb.Instance.ExecuteNonQuery("insert into MpSubTextToken(fk_MpCopyItemId,fk_MpCopyItemTypeId,StartIdx,EndIdx,BlockIdx,InlineIdx,TokenText) values(" + CopyItemId + "," + (int)TokenType + "," + StartIdx + "," + EndIdx + "," + BlockIdx + "," + InlineIdx + ",'"+TokenText+"')");
+                MpDb.Instance.ExecuteNonQuery("insert into MpSubTextToken(fk_MpCopyItemId,fk_MpSubTextTokenTypeId,StartIdx,EndIdx,BlockIdx,InlineIdx,TokenText) values(" + CopyItemId + "," + (int)TokenType + "," + StartIdx + "," + EndIdx + "," + BlockIdx + "," + InlineIdx + ",'"+TokenText+"')");
                 SubTextTokenId = MpDb.Instance.GetLastRowId("MpSubTextToken", "pk_MpSubTextTokenId");
             } else {
-                MpDb.Instance.ExecuteNonQuery("update MpSubTextToken set fk_MpCopyItemId=" + CopyItemId + ", fk_MpCopyItemTypeId=" + (int)TokenType + ", StartIdx=" + StartIdx + ", EndIdx=" + EndIdx + ",BlockIdx=" + BlockIdx + ",InlineIdx=" + InlineIdx + ",TokenText='"+TokenText+"' where pk_MpSubTextTokenId=" + SubTextTokenId);
+                MpDb.Instance.ExecuteNonQuery("update MpSubTextToken set fk_MpCopyItemId=" + CopyItemId + ", fk_MpSubTextTokenTypeId=" + (int)TokenType + ", StartIdx=" + StartIdx + ", EndIdx=" + EndIdx + ",BlockIdx=" + BlockIdx + ",InlineIdx=" + InlineIdx + ",TokenText='"+TokenText+"' where pk_MpSubTextTokenId=" + SubTextTokenId);
             }
         }
         public void DeleteFromDatabase() {
@@ -150,7 +158,7 @@ namespace MpWpfApp {
             columnData.Clear();
             columnData.Add("pk_MpSubTextTokenId", this.SubTextTokenId);
             columnData.Add("fk_MpCopyItemId", this.CopyItemId);
-            columnData.Add("fk_MpCopyItemTypeId", (int)this.TokenType);
+            columnData.Add("fk_MpSubTextTokenTypeId", (int)this.TokenType);
             columnData.Add("StartIdx", this.StartIdx);
             columnData.Add("EndIdx", this.EndIdx);
             columnData.Add("BlockIdx", this.BlockIdx);

@@ -209,6 +209,9 @@
     <Compile Include="Utils\WinApi.cs" />
     <Compile Include="ViewModels\ClipTiles\MpClipTileTagMenuItemViewModel.cs" />
     <Compile Include="ViewModels\ClipTiles\MpClipTileViewModel.cs" />
+    <Compile Include="Views\MpMainWindow0712.xaml.cs">
+      <DependentUpon>MpMainWindow0712.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
@@ -232,6 +235,10 @@
     <Compile Include="ViewModels\MpMainWindowViewModel.cs" />
     <Compile Include="ViewModels\MpTagTileViewModel.cs" />
     <Compile Include="ViewModels\MpViewModelBase.cs" />
+    <Page Include="Views\MpMainWindow0712.xaml">
+      <SubType>Designer</SubType>
+      <Generator>XamlIntelliSenseFileGenerator</Generator>
+    </Page>
     <Page Include="Views\MpNotifyIconResources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -1,4 +1,4 @@
-﻿using Prism.Commands;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -58,11 +58,11 @@ namespace MpWpfApp {
             }
         }
         #region Commands
-        private DelegateCommand _loadedCommand;
+        private RelayCommand _loadedCommand;
         public ICommand LoadedCommand {
             get {
                 if(_loadedCommand == null) {
-                    _loadedCommand = new DelegateCommand(Loaded, IsLoaded);
+                    _loadedCommand = new RelayCommand(Loaded, IsLoaded);
                 }
                 return _loadedCommand;
             }
@@ -73,11 +73,11 @@ namespace MpWpfApp {
             return App.Current.MainWindow != null && App.Current.MainWindow.IsLoaded;
         }
 
-        private DelegateCommand exitCommand;
+        private RelayCommand exitCommand;
         public ICommand ExitCommand {
             get {
                 if(exitCommand == null) {
-                    exitCommand = new DelegateCommand(Exit);
+                    exitCommand = new RelayCommand(Exit);
                 }
                 return exitCommand;
             }
@@ -86,11 +86,11 @@ namespace MpWpfApp {
             Application.Current.Shutdown();
         }
 
-        private DelegateCommand closedCommand;
+        private RelayCommand closedCommand;
         public ICommand ClosedCommand {
             get {
                 if(closedCommand == null) {
-                    closedCommand = new DelegateCommand(Closed);
+                    closedCommand = new RelayCommand(Closed);
                 }
                 return closedCommand;
             }
@@ -100,11 +100,11 @@ namespace MpWpfApp {
             //MessageBox.Show("Closed");
         }
 
-        private DelegateCommand closingCommand;
+        private RelayCommand closingCommand;
         public ICommand ClosingCommand {
             get {
                 if(closingCommand == null) {
-                    closingCommand = new DelegateCommand(
+                    closingCommand = new RelayCommand(
                         ExecuteClosing, CanExecuteClosing);
                 }
                 return closingCommand;
@@ -121,11 +121,11 @@ namespace MpWpfApp {
                 MessageBoxButton.YesNo) == MessageBoxResult.Yes;
         }
 
-        private DelegateCommand cancelClosingCommand;
+        private RelayCommand cancelClosingCommand;
         public ICommand CancelClosingCommand {
             get {
                 if(cancelClosingCommand == null) {
-                    cancelClosingCommand = new DelegateCommand(CancelClosing);
+                    cancelClosingCommand = new RelayCommand(CancelClosing);
                 }
                 return cancelClosingCommand;
             }
@@ -137,7 +137,7 @@ namespace MpWpfApp {
 
         public ICommand ExitApplicationCommand {
             get {
-                return new DelegateCommand(Application.Current.Shutdown);
+                return new RelayCommand(Application.Current.Shutdown);
             }
         }
         #endregion

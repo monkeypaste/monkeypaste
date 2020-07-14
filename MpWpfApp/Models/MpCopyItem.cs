@@ -270,8 +270,8 @@ namespace MpWpfApp {
                     break;
             }
             MapDataToColumns();
-            Console.WriteLine("Loaded MpCopyItem");
-            Console.WriteLine(ToString());
+            //Console.WriteLine("Loaded MpCopyItem");
+            //Console.WriteLine(ToString());
         }
         public void DeleteFromDatabase() {
             if(CopyItemId <= 0) {

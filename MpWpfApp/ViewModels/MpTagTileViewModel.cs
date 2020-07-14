@@ -1,15 +1,8 @@
-﻿
-using Prism.Commands;
-using System;
-using System.Collections.Generic;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using TextBox = System.Windows.Controls.TextBox;
 
 namespace MpWpfApp {
     public class MpTagTileViewModel : MpViewModelBase {
@@ -255,11 +248,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        private DelegateCommand<KeyEventArgs> _keyDownCommand;
+        private RelayCommand<KeyEventArgs> _keyDownCommand;
         public ICommand KeyDownCommand {
             get {
                 if(_keyDownCommand == null) {
-                    _keyDownCommand = new DelegateCommand<KeyEventArgs>(KeyDown);
+                    _keyDownCommand = new RelayCommand<KeyEventArgs>(KeyDown);
                 }
                 return _keyDownCommand;
             }
@@ -273,11 +266,11 @@ namespace MpWpfApp {
             }
         }
 
-        private DelegateCommand _renameTagCommand;
+        private RelayCommand _renameTagCommand;
         public ICommand RenameTagCommand {
             get {
                 if(_renameTagCommand == null) {
-                    _renameTagCommand = new DelegateCommand(RenameTag,CanRenameTag);
+                    _renameTagCommand = new RelayCommand(RenameTag,CanRenameTag);
                 }
                 return _renameTagCommand;
             }
@@ -289,11 +282,11 @@ namespace MpWpfApp {
             IsEditing = true;
         }
 
-        private DelegateCommand _linkTagToCopyItemCommand;
-        public DelegateCommand LinkTagToCopyItemCommand {
+        private RelayCommand _linkTagToCopyItemCommand;
+        public RelayCommand LinkTagToCopyItemCommand {
             get {
                 if(_linkTagToCopyItemCommand == null) {
-                    _linkTagToCopyItemCommand = new DelegateCommand(LinkTagToCopyItem);
+                    _linkTagToCopyItemCommand = new RelayCommand(LinkTagToCopyItem);
                 }
                 return _linkTagToCopyItemCommand;
             }

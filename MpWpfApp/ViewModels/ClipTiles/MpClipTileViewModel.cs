@@ -1,33 +1,27 @@
 ﻿
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Prism.Commands;
+using GalaSoft.MvvmLight.CommandWpf;
 using QRCoder;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Policy;
 using System.Speech.Synthesis;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Media.TextFormatting;
 using System.Windows.Navigation;
 
 namespace MpWpfApp {
-   public class  MpClipTileViewModel : MpViewModelBase {
+    public class  MpClipTileViewModel : MpViewModelBase {
         private static MpClipTileViewModel _sourceSelectedClipTile = null;
 
         public ObservableCollection<MpClipTileTagMenuItemViewModel> TagMenuItems {
@@ -548,7 +542,7 @@ namespace MpWpfApp {
                     tokenLink.ContextMenu = new ContextMenu();
                     tokenLink.ContextMenu.Items.Add(convertToQrCodeMenuItem);
                     switch (token.TokenType) {
-                        case MpCopyItemType.WebLink:
+                        case MpSubTextTokenType.Uri:
                             if (!tokenText.Contains("https://")) {
                                 tokenLink.NavigateUri = new Uri("https://" + tokenText);
                             } else {
@@ -561,11 +555,11 @@ namespace MpWpfApp {
                             tokenLink.ContextMenu.Items.Add(minifyUrl);
                             break;
 
-                        case MpCopyItemType.Email:
+                        case MpSubTextTokenType.Email:
                             tokenLink.NavigateUri = new Uri("mailto:" + tokenText);
                             break;
 
-                        case MpCopyItemType.PhoneNumber:
+                        case MpSubTextTokenType.PhoneNumber:
                             tokenLink.NavigateUri = new Uri("tel:" + tokenText);
                             break;
                         default:
@@ -737,11 +731,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        private DelegateCommand<KeyEventArgs> _keyDownCommand;
+        private RelayCommand<KeyEventArgs> _keyDownCommand;
         public ICommand KeyDownCommand {
             get {
                 if(_keyDownCommand == null) {
-                    _keyDownCommand = new DelegateCommand<KeyEventArgs>(KeyDown,CanKeyDown);
+                    _keyDownCommand = new RelayCommand<KeyEventArgs>(KeyDown,CanKeyDown);
                 }
                 return _keyDownCommand;
             }
@@ -769,11 +763,11 @@ namespace MpWpfApp {
             }
         }
 
-        private DelegateCommand _speakClipCommand;
+        private RelayCommand _speakClipCommand;
         public ICommand SpeakClipCommand {
             get {
                 if(_speakClipCommand == null) {
-                    _speakClipCommand = new DelegateCommand(SpeakClip, CanSpeakClip);
+                    _speakClipCommand = new RelayCommand(SpeakClip, CanSpeakClip);
                 }
                 return _speakClipCommand;
             }
@@ -787,11 +781,11 @@ namespace MpWpfApp {
             }                
         }
 
-        private DelegateCommand _convertTokenToQrCodeCommand;
+        private RelayCommand _convertTokenToQrCodeCommand;
         public ICommand ConvertTokenToQrCodeCommand {
             get {
                 if (_convertTokenToQrCodeCommand == null) {
-                    _convertTokenToQrCodeCommand = new DelegateCommand(ConvertTokenToQrCode);
+                    _convertTokenToQrCodeCommand = new RelayCommand(ConvertTokenToQrCode);
                 }
                 return _convertTokenToQrCodeCommand;
             }
