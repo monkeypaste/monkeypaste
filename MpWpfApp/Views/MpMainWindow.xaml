@@ -64,11 +64,9 @@
     <Grid x:Name="MainWindowGrid"
           Background="Green">
         <Grid.RowDefinitions>
-            <RowDefinition Height="{Binding TitleMenuHeight}"
-                           x:Name="ClipTrayTitleMenuPanel" />
-            <RowDefinition Height="{Binding FilterMenuHeight}"
-                           x:Name="ClipTrayFilterMenuPanel" />
-            <RowDefinition x:Name="ClipTrayGrid" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
         <!-- Main Menu -->
         <StackPanel Grid.Row="0"
@@ -79,12 +77,39 @@
         <Grid Grid.Row="1"
               Grid.Column="0"
               Focusable="True"
-              Background="DarkBlue">
+              Background="DarkViolet">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition />
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="7*" />
                 <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
+            <!-- Sort Combobox -->
+            <Grid Grid.Row="0"
+                  Grid.Column="0" 
+                  Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="3*" />
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" 
+                       FontSize="16" 
+                       Foreground="White"
+                       HorizontalAlignment="Right"
+                       FontWeight="DemiBold"
+                       VerticalContentAlignment="Center" 
+                       Padding="0,0,15,0">Sort By</Label>
+                <ComboBox Grid.Column="1" 
+                          FontSize="16"
+                          Background="Transparent" 
+                          HorizontalAlignment="Stretch"
+                          VerticalContentAlignment="Center">
+                    <ComboBoxItem Content="Date" />
+                    <ComboBoxItem Content="Application" />
+                    <ComboBoxItem Content="Title" />
+                    <ComboBoxItem Content="Content" />
+                    <ComboBoxItem Content="Usage" />
+                </ComboBox>
+            </Grid>
             <StackPanel Grid.Row="0"
                         Grid.Column="1"
                         Focusable="True"
@@ -122,18 +147,22 @@
                     </ListBox.ItemsPanel>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <!-- Tag Tile View -->
+                            <!-- Tag Tile Border -->
                             <Border CornerRadius="20"
                                     Margin="5,0,5,0"
                                     Padding="10,0,10,0"
                                     Focusable="True"
                                     BorderThickness="2"
                                     VerticalAlignment="Center"
-                                    local:MpFocusExtension.IsFocused="{Binding IsFocused}"
+                                    local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"
                                     Background="{Binding TagColor}"
                                     BorderBrush="{Binding TagBorderBrush}"
                                     Height="{Binding TagHeight}">
                                 <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Loaded">
+                                        <i:CallMethodAction TargetObject="{Binding}"
+                                                            MethodName="TagLoaded" />
+                                    </i:EventTrigger>
                                     <i:EventTrigger EventName="MouseEnter">
                                         <i:CallMethodAction TargetObject="{Binding}"
                                                             MethodName="MouseEnter" />
@@ -147,6 +176,7 @@
                                                                PassEventArgsToCommand="True" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
+                                
                                 <Border.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="Rename"
@@ -156,7 +186,8 @@
                                     </ContextMenu>
                                 </Border.ContextMenu>
                                 <StackPanel>
-                                    <TextBlock Padding="0,0,0,10"
+                                    <TextBlock x:Name="TagTextBlock"
+                                               Padding="0,0,0,10"
                                                Background="Transparent"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Top"
@@ -172,14 +203,13 @@
                                                               BlurRadius="4" />
                                         </TextBlock.Effect>
                                     </TextBlock>
-                                    <TextBox Padding="0,0,0,10"
+                                    <TextBox x:Name="TagTextBox"
+                                             Padding="0,0,0,10"
                                              Background="White"
                                              Foreground="Black"
-                                             IsReadOnly="False"
-                                             
+                                             IsReadOnly="False"                                             
                                              HorizontalAlignment="Center"
                                              VerticalAlignment="Top"
-                                             local:MpTextBoxBehavior.SelectAllTextOnFocus="True"
                                              local:MpFocusExtension.IsFocused="{Binding IsTextBoxFocused}"
                                              Visibility="{Binding TextBoxVisibility}"
                                              Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -205,12 +235,13 @@
                         Width="30" 
                         Command="{Binding CreateTagCommand}">
                     <Image Stretch="Fill"
-                           Source="add2.png" />
+                           Source="pack://application:,,,/Resources/add2.png" />
                 </Button>
             </StackPanel>
             <!-- Search TextBox -->
             <Border Grid.Row="0" 
                     Grid.Column="2"
+                    Margin="10"
                     BorderBrush="Black"
                     BorderThickness="0"
                     VerticalAlignment="Center"
@@ -248,7 +279,7 @@
         <Grid Grid.Row="2"
               Grid.Column="0"
               Focusable="True"
-              Background="DarkViolet">
+              Background="MediumPurple">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="{Binding AppStateButtonGridWidth}"
                                   x:Name="AppStateButtonGrid" />
@@ -308,7 +339,7 @@
             <ListBox x:Name="ClipTray"
                      Grid.Row="0"
                      Grid.Column="1"
-                     Focusable="True"                     
+                     Focusable="True"    
                      dd:DragDrop.IsDragSource="True"
                      dd:DragDrop.IsDropTarget="True"
                      dd:DragDrop.DragHandler="{Binding}"
@@ -618,6 +649,7 @@
                        Grid.Row="0"
                        Grid.Column="1"
                        Text="This list has no items"
+                       Focusable="True"
                        Visibility="{Binding EmptyListMessageVisibility}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"

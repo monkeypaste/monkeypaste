@@ -64,7 +64,7 @@ namespace MpWpfApp {
             set {
                 if (key != value) {
                     key = value;
-                    OnPropertyChanged("Key");
+                    OnPropertyChanged(nameof(Key));
                 }
             }
         }
@@ -78,7 +78,7 @@ namespace MpWpfApp {
             set {
                 if (modifiers != value) {
                     modifiers = value;
-                    OnPropertyChanged("Modifiers");
+                    OnPropertyChanged(nameof(Modifiers));
                 }
             }
         }
@@ -89,7 +89,7 @@ namespace MpWpfApp {
             set {
                 if (value != enabled) {
                     enabled = value;
-                    OnPropertyChanged("Enabled");
+                    OnPropertyChanged(nameof(Enabled));
                 }
             }
         }

@@ -56,6 +56,7 @@ namespace MpWpfApp {
 
         private const int WM_DRAWCLIPBOARD = 0x0308;
         private const int WM_CHANGECBCHAIN = 0x030D;
+        private const int WM_PASTE = 0x0302;
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
             switch (msg) {
@@ -72,6 +73,9 @@ namespace MpWpfApp {
                         _nextClipboardViewer = lParam;
                     else
                         WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
+                    break;
+                case WM_PASTE:
+                    Console.WriteLine("Pasted");
                     break;
             }
             return IntPtr.Zero;

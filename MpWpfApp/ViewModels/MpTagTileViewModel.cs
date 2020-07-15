@@ -1,6 +1,8 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -93,7 +95,7 @@ namespace MpWpfApp {
             set {
                 if(_textBoxVisibility != value) {
                     _textBoxVisibility = value;
-                    OnPropertyChanged("TextBoxVisibility");
+                    OnPropertyChanged(nameof(TextBoxVisibility));
                 }
             }
         }
@@ -106,7 +108,7 @@ namespace MpWpfApp {
             set {
                 if(_textBlockVisibility != value) {
                     _textBlockVisibility = value;
-                    OnPropertyChanged("TextBlockVisibility");
+                    OnPropertyChanged(nameof(TextBlockVisibility));
                 }
             }
         }
@@ -183,10 +185,12 @@ namespace MpWpfApp {
         #endregion
 
         #region Constructor
-        public MpTagTileViewModel(MpTag tag,MpMainWindowViewModel mainWindowViewModel) {
+        private bool _isNew;
+        public MpTagTileViewModel(MpTag tag,MpMainWindowViewModel mainWindowViewModel,bool isNew) {
             DisplayName = "MpTagTileViewModel";
             Tag = tag;
             MainWindowViewModel = mainWindowViewModel;
+            _isNew = isNew;
             PropertyChanged += (s, e) => {
                 if(e.PropertyName == nameof(IsEditing)) {
                     if(IsEditing) {
@@ -194,6 +198,7 @@ namespace MpWpfApp {
                         TextBoxVisibility = Visibility.Visible;
                         TextBlockVisibility = Visibility.Collapsed;
                         IsTextBoxFocused = true;
+                        TagTextBox?.SelectAll();
                     } else {
                         //tag names cannot be blank so don't allow the textblock to reappear and change name back to 'untitled'
                         if(TagName.Trim() == string.Empty) {
@@ -233,6 +238,22 @@ namespace MpWpfApp {
         #endregion
 
         #region View Event Handlers
+        public TextBox TagTextBox;
+        public void TagLoaded(object sender, RoutedEventArgs e) {
+            Console.WriteLine("Loaded");
+            TagTextBox = (TextBox)((Border)sender).FindName("TagTextBox");
+            //this is called 
+            TagTextBox.GotFocus += (s, e1) => {
+                //TagTextBox.SelectAll();
+            };
+
+            if (_isNew) {
+                IsEditing = true;
+            }
+        }
+        public void Test(object sender) {
+            IsHovering = true;
+        }
         public void MouseEnter() {
             IsHovering = true;
         }

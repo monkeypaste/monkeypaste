@@ -22,7 +22,7 @@ namespace MpWpfApp {
         #region Private Variables
         private double _startMainWindowTop, _endMainWindowTop;
 
-        private string _placeholderText = "Search...";
+        private string _placeholderText = "Search";
 
         private MpHotKeyHost _hotkeyHost = null;
         private IKeyboardMouseEvents _globalHook = null;
@@ -83,6 +83,32 @@ namespace MpWpfApp {
         #endregion
 
         #region Business Logic Properties
+        private Combination _showMainWindowCombination;
+        public Combination ShowMainWindowCombination {
+            get {
+                return _showMainWindowCombination;
+            }
+            set {
+                if(_showMainWindowCombination != value) {
+                    _showMainWindowCombination = value;
+                    OnPropertyChanged(nameof(ShowMainWindowCombination));
+                }
+            }
+        }
+
+        private Combination _hideMainWindowCombination;
+        public Combination HideMainWindowCombination {
+            get {
+                return _hideMainWindowCombination;
+            }
+            set {
+                if (_hideMainWindowCombination != value) {
+                    _hideMainWindowCombination = value;
+                    OnPropertyChanged(nameof(HideMainWindowCombination));
+                }
+            }
+        }
+
         private bool _isInAppendMode = false;
         public bool IsInAppendMode {
             get {
@@ -314,11 +340,7 @@ namespace MpWpfApp {
 
 
             InitClipboard();
-            //InitHotKeys();
-            InitHotMouseActions();
-
-            //var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
-            //_clipTrayPhysicsBody = new MpPhysicsBody(clipTray);
+            InitHotKeys();
 
 #if DEBUG
             ShowWindow();
@@ -398,46 +420,48 @@ namespace MpWpfApp {
         #region Public Methods
 
         public void AddTagTile(MpTag t, bool isNew = false) {
-            var newTagTile = new MpTagTileViewModel(t, this);
+            var newTagTile = new MpTagTileViewModel(t, this,isNew);
             TagTiles.Add(newTagTile);
             //watches Tag IsSelected so History is selected if none are
             newTagTile.PropertyChanged += (s, e) => {
-                if (e.PropertyName == "IsSelected") {
-                    var tagChanged = ((MpTagTileViewModel)s);
-                    //ensure at least history is selected
-                    if (tagChanged.IsSelected == false) {
-                        //find all selected tag tiles
-                        var selectedTagTiles = TagTiles.Where(tt => tt.IsSelected == true).ToList();
-                        //if none selected select history tag
-                        if (selectedTagTiles == null || selectedTagTiles.Count == 0) {
-                            TagTiles.Where(tt => tt.Tag.TagName == "History").ToList()[0].IsSelected = true;
-                        }
-                    } else {
-                        foreach (MpClipTileViewModel clipTile in ClipTiles) {
-                            //this ensures when switching between tags the last selected tag in a list reset
-                            clipTile.IsSelected = false;
-                            if (tagChanged.Tag.IsLinkedWithCopyItem(clipTile.CopyItem)) {
-                                clipTile.TileVisibility = Visibility.Visible;
+                switch(e.PropertyName) {
+                    case "IsSelected":
+                        var tagChanged = ((MpTagTileViewModel)s);
+                        //ensure at least history is selected
+                        if (tagChanged.IsSelected == false) {
+                            //find all selected tag tiles
+                            var selectedTagTiles = TagTiles.Where(tt => tt.IsSelected == true).ToList();
+                            //if none selected select history tag
+                            if (selectedTagTiles == null || selectedTagTiles.Count == 0) {
+                                TagTiles.Where(tt => tt.Tag.TagName == "History").ToList()[0].IsSelected = true;
+                            }
+                        } else {
+                            foreach (MpClipTileViewModel clipTile in ClipTiles) {
+                                //this ensures when switching between tags the last selected tag in a list reset
+                                clipTile.IsSelected = false;
+                                if (tagChanged.Tag.IsLinkedWithCopyItem(clipTile.CopyItem)) {
+                                    clipTile.TileVisibility = Visibility.Visible;
+                                } else {
+                                    clipTile.TileVisibility = Visibility.Collapsed;
+                                }
+                            }
+                            if (VisibileClipTiles.Count == 0) {
+                                ClipListVisibility = Visibility.Collapsed;
+                                EmptyListMessageVisibility = Visibility.Visible;
                             } else {
-                                clipTile.TileVisibility = Visibility.Collapsed;
+                                ClipListVisibility = Visibility.Visible;
+                                EmptyListMessageVisibility = Visibility.Collapsed;
+
+                                ResetSelection();
                             }
                         }
-                        if (VisibileClipTiles.Count == 0) {
-                            ClipListVisibility = Visibility.Collapsed;
-                            EmptyListMessageVisibility = Visibility.Visible;
-                        } else {
-                            ClipListVisibility = Visibility.Visible;
-                            EmptyListMessageVisibility = Visibility.Collapsed;
-
-                            ResetSelection();
-                        }
-                    }
+                        break;
                 }
             };
             if (isNew) {
                 //newTagTile.RenameTagCommand.Execute(null);
                 //newTagTile.IsSelected = true;
-                newTagTile.IsEditing = true;
+                //newTagTile.IsEditing = true;
             }
         }
 
@@ -583,34 +607,6 @@ namespace MpWpfApp {
         }
 
         private void InitHotKeys() {
-            _hotkeyHost = new MpHotKeyHost((HwndSource)HwndSource.FromVisual((MpMainWindow)Application.Current.MainWindow));
-
-            ShowMainWindowHotKey = new MpHotKey(Key.D,ModifierKeys.None/*, ModifierKeys.Control | ModifierKeys.Shift*/);
-            ShowMainWindowHotKey.HotKeyPressed += (s, e1) => {
-                if(ShowWindowCommand.CanExecute(null)) {
-                    ShowWindowCommand.Execute(null);
-                }
-            };
-            
-            HideMainWindowHotKey = new MpHotKey(Key.Escape, ModifierKeys.None);
-            HideMainWindowHotKey.HotKeyPressed += (s, e) => {
-                if(HideWindowCommand.CanExecute(null)) {
-                    HideWindowCommand.Execute(null);
-                }
-            };
-
-            ToggleAppendModeHotKey = new MpHotKey(Key.A, ModifierKeys.Control | ModifierKeys.Shift);
-            ToggleAppendModeHotKey.HotKeyPressed += (s, e2) => {
-                if(ToggleAppendModeCommand.CanExecute(null)) {
-                    ToggleAppendModeCommand.Execute(null);
-                }
-            };
-
-            _hotkeyHost.AddHotKey(ShowMainWindowHotKey);
-            _hotkeyHost.AddHotKey(HideMainWindowHotKey);
-            _hotkeyHost.AddHotKey(ToggleAppendModeHotKey);            
-        }
-        private void InitHotMouseActions() {
             _globalHook = Hook.GlobalEvents();
             _globalHook.MouseMove += (s, e) => {
                 if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
@@ -619,6 +615,16 @@ namespace MpWpfApp {
                     }
                 }
             };
+
+            ShowMainWindowCombination = Combination.FromString("Control+Shift+D");
+            HideMainWindowCombination = Combination.FromString("Escape");
+            var PasteCombination = Combination.FromString("Control+V");
+            var assignment = new Dictionary<Combination, Action>{
+                {ShowMainWindowCombination, ()=>ShowWindowCommand.Execute(null)},
+                {HideMainWindowCombination, ()=>HideWindowCommand.Execute(null)},
+                {PasteCombination,()=>Console.WriteLine("Pasted")}
+            };
+            Hook.GlobalEvents().OnCombination(assignment);
         }
         private void InitClipboard() {
             ClipboardMonitor = new MpClipboardMonitor((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow));
@@ -814,6 +820,7 @@ namespace MpWpfApp {
             MpTag newTag = new MpTag("Untitled", MpHelperSingleton.Instance.GetRandomColor());
             newTag.WriteToDatabase();
             AddTagTile(newTag, true);
+
         }
 
         private RelayCommand _toggleAppendModeCommand;

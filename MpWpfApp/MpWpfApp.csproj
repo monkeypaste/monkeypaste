@@ -199,7 +199,7 @@
     <Compile Include="Utils\MpExtraLargeIconLoader.cs" />
     <Compile Include="Utils\MpClipboardMonitor.cs" />
     <Compile Include="Utils\MpHelperSingleton.cs" />
-    <Compile Include="Utils\MpHotKey.cs" />
+    <Compile Include="Utils\MpHotKey2.cs" />
     <Compile Include="Utils\MpLastWindowWatcher.cs" />
     <Compile Include="Utils\MpMeasurements.cs" />
     <Compile Include="Utils\MpScreenInformation.cs" />
@@ -209,9 +209,6 @@
     <Compile Include="Utils\WinApi.cs" />
     <Compile Include="ViewModels\ClipTiles\MpClipTileTagMenuItemViewModel.cs" />
     <Compile Include="ViewModels\ClipTiles\MpClipTileViewModel.cs" />
-    <Compile Include="Views\MpMainWindow0712.xaml.cs">
-      <DependentUpon>MpMainWindow0712.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>
@@ -235,10 +232,6 @@
     <Compile Include="ViewModels\MpMainWindowViewModel.cs" />
     <Compile Include="ViewModels\MpTagTileViewModel.cs" />
     <Compile Include="ViewModels\MpViewModelBase.cs" />
-    <Page Include="Views\MpMainWindow0712.xaml">
-      <SubType>Designer</SubType>
-      <Generator>XamlIntelliSenseFileGenerator</Generator>
-    </Page>
     <Page Include="Views\MpNotifyIconResources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -286,10 +279,6 @@
     <Resource Include="Resources\add2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Content Include="Utils\asciiCam.min.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Resource Include="Views\add2.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\add3.png" />
