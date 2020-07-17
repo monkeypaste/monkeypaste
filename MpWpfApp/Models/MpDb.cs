@@ -125,7 +125,7 @@ namespace MpWpfApp {
            // User = new MpUser() { IdentityToken = idToken };
         }
         public void InitClient(string accessToken) {
-            Client = new MpClient(0,3,MpHelperSingleton.Instance.GetCurrentIPAddress()/*.MapToIPv4()*/.ToString(),accessToken,DateTime.Now);
+            Client = new MpClient(0,3,MpHelpers.GetCurrentIPAddress()/*.MapToIPv4()*/.ToString(),accessToken,DateTime.Now);
         }
         public List<MpCopyItem> MergeCopyItemLists(List<MpCopyItem> listA,List<MpCopyItem> listB) {
             //sorts merged list by copy datetime
@@ -485,7 +485,7 @@ namespace MpWpfApp {
                       pk_MpCopyItemTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , TypeName text NULL 
                     );
-                    INSERT INTO MpCopyItemType(TypeName) VALUES('text'),('rich_text'),('html_text'),('image'),('file_list');
+                    INSERT INTO MpCopyItemType(TypeName) VALUES ('rich_text'),('image'),('file_list');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCommandType (
                       pk_MpCommandTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

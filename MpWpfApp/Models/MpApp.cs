@@ -26,12 +26,12 @@ namespace MpWpfApp {
             this.iconId = this.appId = 0;
             this.AppPath = sourcePath;
             this.IsAppRejected = isAppRejected;
-            this.Icon = new MpIcon(MpHelperSingleton.Instance.GetIconImage(this.AppPath));
+            this.Icon = new MpIcon(MpHelpers.GetIconImage(this.AppPath));
         }
         public MpApp(int appId,int iconId,IntPtr sourceHandle,bool isAppRejected) {            
             this.appId = appId;
             this.iconId = iconId;
-            this.AppPath = MpHelperSingleton.Instance.GetProcessPath(sourceHandle);
+            this.AppPath = MpHelpers.GetProcessPath(sourceHandle);
             this.IsAppRejected = isAppRejected;
         }
         public MpApp(DataRow dr) {
@@ -55,7 +55,7 @@ namespace MpWpfApp {
         public override void WriteToDatabase() {           
             bool isNew = false;
             if(this.iconId == 0) {
-                Icon = new MpIcon(MpHelperSingleton.Instance.GetIconImage(this.AppPath));
+                Icon = new MpIcon(MpHelpers.GetIconImage(this.AppPath));
             } 
             Icon.WriteToDatabase();
             this.iconId = Icon.iconId;

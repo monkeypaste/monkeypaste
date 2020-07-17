@@ -4,6 +4,8 @@ using System.Collections.Specialized;
 using System.Data;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -14,9 +16,9 @@ namespace MpWpfApp {
 
         public List<MpSubTextToken> SubTextTokenList = new List<MpSubTextToken>();
 
-        private Object DataObject { get; set; }
+        public Object DataObject { get; private set; }
         
-        public int ColorId { get; set; }
+        public int ColorId { get;  set; }
         public int CopyItemId { get; set; }
         public int SubItemId { get; set; }
         public string Title { get; set; }
@@ -37,90 +39,54 @@ namespace MpWpfApp {
 
         public static MpCopyItem CreateFromClipboard(IntPtr processHandle) {
             IDataObject iData = Clipboard.GetDataObject();
+            var iDataFormats = Clipboard.GetDataObject().GetFormats();
             MpCopyItem ci = null;
             if(iData == null) {
                 return ci;
             }
-            string sourcePath = MpHelperSingleton.Instance.GetProcessPath(processHandle);
-            Color itemColor = MpHelperSingleton.Instance.GetRandomColor();
+            string sourcePath = MpHelpers.GetProcessPath(processHandle);
+            Color itemColor = MpHelpers.GetRandomColor();
 
-            if(iData.GetDataPresent(DataFormats.Bitmap)) {
-                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Image, Clipboard.GetImage(), sourcePath, itemColor);
-            } else if(iData.GetDataPresent(DataFormats.FileDrop)) {
+            if(iData.GetDataPresent(DataFormats.FileDrop)) {
                 ci = MpCopyItem.CreateCopyItem(MpCopyItemType.FileList, (string[])iData.GetData(DataFormats.FileDrop, true), sourcePath, itemColor);
             } else if(iData.GetDataPresent(DataFormats.Rtf)) {
                 ci = MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, (string)iData.GetData(DataFormats.Rtf), sourcePath, itemColor);
+            } else if (iData.GetDataPresent(DataFormats.Bitmap)) {
+                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Image, Clipboard.GetImage(), sourcePath, itemColor);
             } else if (iData.GetDataPresent(DataFormats.Html) || iData.GetDataPresent(DataFormats.Text)) {
-                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Text, (string)iData.GetData(DataFormats.Text), sourcePath, itemColor);
-            }
-               //else if() {
-               //    ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Text,(string)iData.GetData(DataFormats.Text),sourcePath,itemColor);
-               //}
-               //else if() {
-               //    ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Text,(string)iData.GetData(DataFormats.Text),sourcePath,itemColor);
-               //}
-               else {
+                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, PlainTextToRtf((string)iData.GetData(DataFormats.Text)), sourcePath, itemColor);
+            } else {
                 Console.WriteLine("MpData error clipboard data is not known format");
                 return null;
             }
-            if(ci != null && ci.CopyItemType == MpCopyItemType.Text && (ci.GetData() == null || (string)ci.GetData() == string.Empty)) {
-                ci = null;
-            }
+            //if(ci != null && ci.CopyItemType == MpCopyItemType.Text && (ci.GetData() == null || (string)ci.GetData() == string.Empty)) {
+            //    ci = null;
+            //}
             return ci;
         }
         public static MpCopyItem CreateCopyItem(MpCopyItemType itemType,object data,string sourcePath,Color tileColor) { 
             MpCopyItem newItem = new MpCopyItem();
             newItem.SourcePath = sourcePath;
             newItem.CopyItemType = itemType;
-            //if(newItem.CopyItemType == MpCopyItemType.RichText) {
-            //    RichTextBox rtb = new RichTextBox();
-            //    rtb.AppendText((string)data);
-            //    newItem.DataObject = rtb.Document.SetV;
-            //    newItem.CopyItemType = MpCopyItemType.Text;
-            //}
-            //else if(newItem.CopyItemType == MpCopyItemType.HTMLText) {
-            //    string dataStr = (string)data;
-            //    int idx0 = dataStr.IndexOf("<html>") < 0 ? 0 : dataStr.IndexOf("<html>");
-            //    int idx1 = dataStr.IndexOf("/<html>") < 0 ? dataStr.Length - 1 : dataStr.IndexOf("/<html>");
-            //    dataStr = dataStr.Substring(idx0,idx1 - idx0);
-            //    dataStr.Insert(dataStr.IndexOf("<html>") + 4," style='border:none;'>");
-            //    WebBrowser _wb = new WebBrowser() {
-            //        AutoSize = true,
-            //        DocumentText = dataStr
-            //    };
-            //    MpDataStore.Instance.ClipboardMonitor.IgnoreNextClipboardEvent = true;
+            if (newItem.CopyItemType == MpCopyItemType.RichText) {
+                newItem.DataObject = ((string)data);//.Trim();// Regex.Replace(((string)data).Trim(), @"^\s+(?!\B)|\s*(?>[\r\n]+)$", string.Empty, RegexOptions.Multiline).TrimEnd();
 
-            //    ((WebBrowser)_wb).Document.ExecCommand("SelectAll",false,null);
-            //    ((WebBrowser)_wb).Document.ExecCommand("Copy",false,null);
-            //    MpDataStore.Instance.ClipboardMonitor.IgnoreNextClipboardEvent = false;
-            //    TextBox temp = new TextBox();
-            //    temp.Paste();
-            //    newItem.DataObject = (string)temp.Text;
-            //    ((WebBrowser)_wb).Document.ExecCommand("UNSELECT",false,Type.Missing);
-            //    newItem.CopyItemType = MpCopyItemType.Text;
-            //}
-            //else 
-            if (newItem.CopyItemType == MpCopyItemType.Text) {
-                data = (object)PlainTextToRtf((string)data);
-                newItem.CopyItemType = MpCopyItemType.RichText;
-            }
-            if (newItem.CopyItemType == MpCopyItemType.RichText) {                
-                newItem.DataObject = Regex.Replace(((string)data).Trim(), @"^\s+(?!\B)|\s*(?>[\r\n]+)$", string.Empty, RegexOptions.Multiline).TrimEnd();
-                newItem.SubTextTokenList = MpSubTextToken.GatherTokens((string)newItem.DataObject);
-            } 
-            else {
-                newItem.DataObject = data;
-            }
-            if(newItem.CopyItemType == MpCopyItemType.Text) {
-                DataTable dt = MpDb.Instance.Execute("select * from MpTextItem where ItemText=@1",new List<string>(){ "@1"},new List<object>() { (string)newItem.DataObject });
-                if(dt != null && dt.Rows.Count > 0) {
+                //if item is a duplicate return null
+                DataTable dt = MpDb.Instance.Execute("select * from MpTextItem where ItemText=@1", new List<string>() { "@1" }, new List<object>() { (string)newItem.DataObject });
+                if (dt != null && dt.Rows.Count > 0) {
                     int cid = Convert.ToInt32(dt.Rows[0]["fk_MpCopyItemId"].ToString());
                     dt = MpDb.Instance.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + cid);
                     int cc = Convert.ToInt32(dt.Rows[0]["CopyCount"].ToString()) + 1;
                     Console.WriteLine("MpCopyItem: ignoring duplicate");
-                    MpDb.Instance.ExecuteNonQuery("update MpCopyItem set CopyCount="+cc+" where pk_MpCopyItemId="+cid);
+                    MpDb.Instance.ExecuteNonQuery("update MpCopyItem set CopyCount=" + cc + " where pk_MpCopyItemId=" + cid);
                     return null;
                 }
+
+                //parse text for tokens
+                newItem.SubTextTokenList = MpSubTextToken.GatherTokens((string)newItem.DataObject);
+            } 
+            else {
+                newItem.DataObject = data;
             }
             //newItem.CopyItemId = itemId;
             newItem.CopyDateTime = DateTime.Now;
@@ -129,7 +95,7 @@ namespace MpWpfApp {
             newItem.CopyCount = 1;
             newItem.App = new MpApp(sourcePath,false);
             newItem.AppId = newItem.App.appId;
-            newItem.Client = new MpClient(0,0,MpHelperSingleton.Instance.GetCurrentIPAddress().MapToIPv4().ToString(),"unknown",DateTime.Now);
+            newItem.Client = new MpClient(0,0,MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(),"unknown",DateTime.Now);
             newItem.ItemColor = new MpColor((int)tileColor.R,(int)tileColor.G,(int)tileColor.B,255);
             return newItem;
         }
@@ -153,40 +119,35 @@ namespace MpWpfApp {
             DataObject = newData;
             WriteToDatabase();
         }
-        
-        public object GetData() {
-            switch(this.CopyItemType) {
-                //case MpCopyItemType.PhoneNumber:
-                //case MpCopyItemType.StreetAddress:
-                //case MpCopyItemType.WebLink:
-                //case MpCopyItemType.Email:
-                case MpCopyItemType.Text:
-                case MpCopyItemType.RichText:
-                case MpCopyItemType.HTMLText:
-                    return ((string)DataObject).Replace("''","'");
-                //case MpCopyItemType.HTMLText:
-                //    return ((string)DataObject).Trim();
-                //case MpCopyItemType.RichText:
-                //    TextBox rtb = new TextBox() { Rtf = (string)this.DataObject };
-                   // DataObject = (object)rtb.Text;
-                 //   return rtb.Text.Trim();
-                case MpCopyItemType.FileList:
-                    return DataObject;
-                case MpCopyItemType.Image:
-                    return DataObject;           
-            }
-            return "Error unknown copyitem format!";
-        }
 
         public MpCopyItem(DataRow dr) {
             LoadDataRow(dr);
         }
-        private static string PlainTextToRtf(string plainText) {
+        public static string PlainTextToRtf(string plainText) {
             string escapedPlainText = plainText.Replace(@"\", @"\\").Replace("{", @"\{").Replace("}", @"\}");
             string rtf = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard ";
             rtf += escapedPlainText.Replace(Environment.NewLine, @" \par ");
             rtf += " }";
             return rtf;
+        }
+        public string GetPlainText() {
+            switch(CopyItemType) {
+                case MpCopyItemType.Image:
+                    return Enum.GetName(typeof(MpCopyItemType), CopyItemType);
+                case MpCopyItemType.RichText:
+                    RichTextBox rtb = new RichTextBox();
+                    rtb.SetRtf((string)DataObject);
+                    return new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
+                case MpCopyItemType.FileList:
+                    string outStr = string.Empty;
+                    foreach(string str in (string[])DataObject) {
+                        outStr += str + Environment.NewLine;
+                    }
+                    return outStr;
+                default:
+                    Console.WriteLine("CopyItme GetPlainText error unknow type");
+                    return string.Empty;
+            }
         }
         public override void LoadDataRow(DataRow dr) {
             this.CopyItemId = Convert.ToInt32(dr["pk_MpCopyItemId"].ToString());
@@ -226,12 +187,6 @@ namespace MpWpfApp {
 
             DataTable copyItemData = null;
             switch(this.CopyItemType) {
-                //case MpCopyItemType.PhoneNumber:
-                //case MpCopyItemType.StreetAddress:
-                //case MpCopyItemType.WebLink:
-                //case MpCopyItemType.Email:
-                case MpCopyItemType.Text:
-                case MpCopyItemType.HTMLText:
                 case MpCopyItemType.RichText:
                     copyItemData = MpDb.Instance.Execute("select * from MpTextItem where fk_MpCopyItemId=" + this.CopyItemId);
                     if(copyItemData == null || copyItemData.Rows.Count == 0) {
@@ -266,7 +221,7 @@ namespace MpWpfApp {
                         break;
                     }
                     this.SubItemId = Convert.ToInt32(copyItemData.Rows[0]["pk_MpImageItemId"].ToString());
-                    this.DataObject = MpHelperSingleton.Instance.ConvertByteArrayToBitmapSource((byte[])copyItemData.Rows[0]["ItemImage"]);
+                    this.DataObject = MpHelpers.ConvertByteArrayToBitmapSource((byte[])copyItemData.Rows[0]["ItemImage"]);
                     break;
             }
             MapDataToColumns();
@@ -278,7 +233,7 @@ namespace MpWpfApp {
                 return;
             }
             switch(CopyItemType) {
-                case MpCopyItemType.Text:
+                case MpCopyItemType.RichText:
                     MpDb.Instance.ExecuteNonQuery("delete from MpTextItem where fk_MpCopyItemId=" + CopyItemId);
                     MpDb.Instance.ExecuteNonQuery("delete from MpPasteHistory where fk_MpCopyItemId=" + CopyItemId);
                     MpDb.Instance.ExecuteNonQuery("delete from MpCopyItem where pk_MpCopyItemId=" + CopyItemId);
@@ -351,17 +306,11 @@ namespace MpWpfApp {
 
             switch(this.CopyItemType) {
                 case MpCopyItemType.RichText:
-                case MpCopyItemType.HTMLText:
-                //case MpCopyItemType.PhoneNumber:
-                //case MpCopyItemType.StreetAddress:
-                //case MpCopyItemType.WebLink:
-                //case MpCopyItemType.Email:
-                case MpCopyItemType.Text:
                     if(isNew) {
                         MpDb.Instance.ExecuteNonQuery("insert into MpTextItem(fk_MpCopyItemId,ItemText) values (" + this.CopyItemId + ",@1)",new List<string>() { "@1" },new List<object>() { ((string)this.DataObject).Replace("'","''") });
                         this.SubItemId = MpDb.Instance.GetLastRowId("MpTextItem","pk_MpTextItemId");
                     } else {
-                        MpDb.Instance.ExecuteNonQuery("update MpTextItem set ItemText='" + ((string)GetData()).Replace("'","''") + "' where pk_MpTextItemId=" + this.SubItemId);
+                        MpDb.Instance.ExecuteNonQuery("update MpTextItem set ItemText='" + ((string)DataObject).Replace("'","''") + "' where pk_MpTextItemId=" + this.SubItemId);
                     }                    
                     break;
                 case MpCopyItemType.FileList:
@@ -377,7 +326,7 @@ namespace MpWpfApp {
                     break;
                 case MpCopyItemType.Image:
                     if(isNew) {
-                        MpDb.Instance.ExecuteNonQuery("insert into MpImageItem(fk_MpCopyItemId,ItemImage) values (" + this.CopyItemId + ",@0)",new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertBitmapSourceToByteArray((BitmapSource)this.DataObject) });
+                        MpDb.Instance.ExecuteNonQuery("insert into MpImageItem(fk_MpCopyItemId,ItemImage) values (" + this.CopyItemId + ",@0)",new List<string>() { "@0" },new List<object>() { MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)this.DataObject) });
                     } else {
                         MpDb.Instance.ExecuteNonQuery("update MpImageItem set ItemImage=@0 where pk_MpImageItemId="+this.SubItemId,new List<string>() { "@0" },new List<object>() { this.DataObject });
                     }
@@ -402,15 +351,15 @@ namespace MpWpfApp {
                 //chars/lines
                 case 1:
                     if (CopyItemType == MpCopyItemType.Image) {
-                        //System.Drawing.Image ciimg = MpHelperSingleton.Instance.ImageConverter.ConvertByteArrayToImage((byte[])GetData());
+                        //System.Drawing.Image ciimg = MpHelpers.ImageConverter.ConvertByteArrayToImage((byte[])GetData());
                         
                         info = "(" + ((BitmapSource)DataObject).Width + ") x (" + ((BitmapSource)DataObject).Height + ")";
                     }
-                    else if (CopyItemType == MpCopyItemType.Text) {
-                        info = ((string)GetData()).Length + " chars | " + MpHelperSingleton.Instance.GetLineCount((string)GetData()) + " lines";
+                    else if (CopyItemType == MpCopyItemType.RichText) {
+                        info = GetPlainText().Length + " chars | " + MpHelpers.GetLineCount(GetPlainText()) + " lines";
                     }
                     else if (CopyItemType == MpCopyItemType.FileList) {
-                        info = ((string[])GetData()).Length + " files | " + MpHelperSingleton.Instance.FileListSize((string[])GetData()) + " bytes";
+                        info = ((string[])DataObject).Length + " files | " + MpHelpers.FileListSize((string[])DataObject) + " bytes";
                     }
                     break;
                 //# copies/# pastes
@@ -443,16 +392,8 @@ namespace MpWpfApp {
 
     public enum MpCopyItemType {
         None=0,
-        Text,
         RichText,
-        HTMLText,
-        WebLink,
         Image,
-        FileList,
-        StreetAddress,
-        Email,
-        PhoneNumber,
-        Currency,
-        HexColor
+        FileList
     }    
 }

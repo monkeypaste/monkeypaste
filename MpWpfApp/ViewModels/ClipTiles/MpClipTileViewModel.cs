@@ -43,7 +43,7 @@ namespace MpWpfApp {
             get {
                 if(_fileListItems == null && CopyItem.CopyItemType == MpCopyItemType.FileList) {
                     _fileListItems = new ObservableCollection<MpFileListItemViewModel>();
-                    foreach(string fileItem in (string[])CopyItem.GetData()) {
+                    foreach(string fileItem in (string[])CopyItem.DataObject) {
                         _fileListItems.Add(new MpFileListItemViewModel(fileItem));
                     }
                 }
@@ -57,20 +57,7 @@ namespace MpWpfApp {
             }
         }
 
-        #region Appearance Properties
-        private bool _hasScrollBars = false;
-        public bool HasScrollBars {
-            get {
-                return _hasScrollBars;
-            }
-            set {
-                if(_hasScrollBars != value) {
-                    _hasScrollBars = value;
-                    OnPropertyChanged(nameof(HasScrollBars));
-                }
-            }
-        }
-
+        #region View Properties
         private bool _isTitleTextBoxFocused = false;
         public bool IsTitleTextBoxFocused {
             get {
@@ -312,16 +299,46 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Model Properties
+        #region View AND Model Properties
         public Brush TitleColor {
             get {
-                return new SolidColorBrush(CopyItem.ItemColor.Color);
+                return (Brush)new SolidColorBrush(CopyItem.ItemColor.Color);
             }
             set {
                 CopyItem.ItemColor = new MpColor(((SolidColorBrush)value).Color);
                 CopyItem.ItemColor.WriteToDatabase();
                 CopyItem.ColorId = CopyItem.ItemColor.ColorId;
                 OnPropertyChanged(nameof(TitleColor));
+            }
+        }
+
+        public Brush TitleColorLighter {
+            get {
+                return MpHelpers.ChangeBrushAlpha(
+                    MpHelpers.ChangeBrushBrightness(
+                        new SolidColorBrush(CopyItem.ItemColor.Color),
+                        -0.5f),
+                    100);
+            }
+        }
+
+        public Brush TitleColorDarker {
+            get {
+                return MpHelpers.ChangeBrushAlpha(
+                    MpHelpers.ChangeBrushBrightness(
+                        new SolidColorBrush(CopyItem.ItemColor.Color), 
+                        -0.4f),
+                    50);
+            }
+        }
+
+        public Brush TitleColorAccent {
+            get {
+                return MpHelpers.ChangeBrushAlpha(
+                    MpHelpers.ChangeBrushBrightness(
+                        new SolidColorBrush(CopyItem.ItemColor.Color),
+                        -0.0f),
+                    100);
             }
         }
 
@@ -337,22 +354,16 @@ namespace MpWpfApp {
             }
         }
 
-        private string _text = string.Empty;
-        public string Text {
-            get {
-                return _text;
-            }
-            set {
-                if(_text != value) {
-                    _text = value;
-                    OnPropertyChanged(nameof(Text));
-                }
-            }
-        }
-
         public string RichText {
             get {
-                return (string)CopyItem.GetData();
+                if (CopyItem.CopyItemType == MpCopyItemType.RichText) {
+                    return (string)CopyItem.DataObject;
+                } else if (CopyItem.CopyItemType == MpCopyItemType.FileList) {
+                    return MpCopyItem.PlainTextToRtf(Enum.GetName(typeof(MpCopyItemType), CopyItem.CopyItemType));
+                } else {
+                    return MpCopyItem.PlainTextToRtf(Enum.GetName(typeof(MpCopyItemType),CopyItem.CopyItemType));
+                }
+                return string.Empty;
             }
             set {
                 CopyItem.SetData(value);
@@ -363,6 +374,21 @@ namespace MpWpfApp {
         public ImageSource Icon {
             get {
                 return CopyItem.App.Icon.IconImage;
+            }
+        }
+        #endregion
+
+        #region Model Properties
+        private string _text = string.Empty;
+        public string Text {
+            get {
+                return _text;
+            }
+            set {
+                if(_text != value) {
+                    _text = value;
+                    OnPropertyChanged(nameof(Text));
+                }
             }
         }
 
@@ -456,59 +482,46 @@ namespace MpWpfApp {
         }
         
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            var tileBorder = (Border)sender;
-            PathFigure pthFigure = new PathFigure();
-            pthFigure.IsClosed = true;
-            pthFigure.StartPoint = new Point(0, 0);
-            
-            PathSegmentCollection myPathSegmentCollection = new PathSegmentCollection();
-            myPathSegmentCollection.Add(CreateCurveRect(0,0,TileBorderSize,TileTitleHeight,0.375,1.0,0.25,0.25));
-            pthFigure.Segments = myPathSegmentCollection;
-
-            PathFigureCollection pthFigureCollection = new PathFigureCollection();
-            pthFigureCollection.Add(pthFigure);
-            PathGeometry pthGeometry = new PathGeometry();
-            pthGeometry.Figures = pthFigureCollection;
-
-            var titlePath = (System.Windows.Shapes.Path)((Border)sender)?.FindName("ClipTileTitlePath3");
-            titlePath.Data = pthGeometry;
-            TileTitleHeight = titlePath.RenderSize.Height;
-
             var titleIconImage = (Image)((Border)sender)?.FindName("ClipTileAppIconImage");
             Canvas.SetLeft(titleIconImage, TileBorderSize - TileTitleHeight);
             Canvas.SetTop(titleIconImage, 2);// TileBorderSize * 0.5);
 
             var flb = (ListBox)((Border)sender)?.FindName("ClipTileFileListBox"); 
-            var image = (Image)((Border)sender)?.FindName("ClipTileImage");
+            var img = (Image)((Border)sender)?.FindName("ClipTileImage");
             var rtb = (RichTextBox)((Border)sender)?.FindName("ClipTileRichTextBox");
 
             if (CopyItem.CopyItemType == MpCopyItemType.FileList) {
                 rtb.Visibility = Visibility.Collapsed;
-                image.Visibility = Visibility.Collapsed;
+                img.Visibility = Visibility.Collapsed;
+
+                flb.PreviewMouseLeftButtonDown += ClipTileContent_PreviewLeftMouseButtonDown;
+                flb.MouseRightButtonUp += ClipTileContent_MouseRightButtonUp;
                 return;
             }
             if (CopyItem.CopyItemType == MpCopyItemType.Image) {
-                image.Source = (BitmapSource)CopyItem.GetData();
+                img.Source = (BitmapSource)CopyItem.DataObject;
                 rtb.Visibility = Visibility.Collapsed;
                 flb.Visibility = Visibility.Collapsed;
+
+                img.PreviewMouseLeftButtonDown += ClipTileContent_PreviewLeftMouseButtonDown;
+                img.MouseRightButtonUp += ClipTileContent_MouseRightButtonUp;
                 return;
+            } else if(CopyItem.CopyItemType == MpCopyItemType.RichText) {
+
             }
-            image.Visibility = Visibility.Collapsed;
+            img.Visibility = Visibility.Collapsed;
             flb.Visibility = Visibility.Collapsed;
             //First load the richtextbox with copytext
             rtb.SetRtf(RichText); 
-            rtb.PreviewMouseLeftButtonDown += ClipTileRichTextBox_PreviewLeftMouseButtonDown;
-            rtb.MouseRightButtonUp += ClipTileRichTextBox_MouseRightButtonUp;
-            Text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
-            var dpi4 = VisualTreeHelper.GetDpi(rtb);
-            FormattedText ft = new FormattedText(Text, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface(rtb.Document.FontFamily.ToString()), rtb.Document.FontSize, rtb.Document.Foreground, dpi4.PixelsPerDip);//VisualTreeHelper.GetDpi(rtb).PixelsPerDip);
-            rtb.Width = ft.Width + rtb.Padding.Left + rtb.Padding.Right;
-            rtb.Height = ft.Height + rtb.Padding.Top + rtb.Padding.Bottom;
-            rtb.Document.PageWidth = ft.Width;
-            rtb.Document.PageHeight = ft.Height;
-
-            var scrollViewer = (ScrollViewer)((Border)sender)?.FindName("ClipTileRichTextBoxScrollViewer"); 
-            HasScrollBars = scrollViewer.Height < rtb.Height || scrollViewer.Width < rtb.Width;
+            rtb.PreviewMouseLeftButtonDown += ClipTileContent_PreviewLeftMouseButtonDown;
+            rtb.MouseRightButtonUp += ClipTileContent_MouseRightButtonUp;
+            //Text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
+            //var dpi4 = VisualTreeHelper.GetDpi(rtb);
+            //FormattedText ft = new FormattedText(Text, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface(rtb.Document.FontFamily.ToString()), rtb.Document.FontSize, rtb.Document.Foreground, dpi4.PixelsPerDip);//VisualTreeHelper.GetDpi(rtb).PixelsPerDip);
+            //rtb.Width = ft.Width + rtb.Padding.Left + rtb.Padding.Right;
+            //rtb.Height = ft.Height + rtb.Padding.Top + rtb.Padding.Bottom;
+            rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
+            rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
             
             var sortedTokenList = CopyItem.SubTextTokenList.OrderBy(stt => stt.BlockIdx).ThenBy(stt=>stt.StartIdx).ToList();
             if (sortedTokenList.Count > 0) {
@@ -517,19 +530,34 @@ namespace MpWpfApp {
                 //iterate over each token
                 for(int i = 0;i < sortedTokenList.Count;i++) {
                     MpSubTextToken token = sortedTokenList[i];
-                    Paragraph para = (Paragraph)doc.Blocks.ToArray()[token.BlockIdx]; 
+                    Block block = doc.Blocks.ToArray()[token.BlockIdx];
                     //find and remove the inline with the token
-                    Span inline = (Span)para.Inlines.ToArray()[token.InlineIdx];
+
+                    //Span inline = (Span)block.Inlines.ToArray()[token.InlineIdx];
                     //para.Inlines.Remove(inline);
-                    TextRange runRange = new TextRange(inline.ContentStart, inline.ContentEnd);            
-                    string tokenText = runRange.Text.Substring(token.StartIdx,token.EndIdx-token.StartIdx);
-                    TextPointer searchStartPointer = inline.ContentStart;
-                    if(i > 0) {
+                    TextRange runRange = new TextRange(block.ContentStart, block.ContentEnd);
+                    string tokenText = runRange.Text.Substring(token.StartIdx, token.EndIdx - token.StartIdx);
+                    TextPointer searchStartPointer = block.ContentStart;
+                    if (i > 0) {
                         var lastToken = sortedTokenList[i - 1];
-                        if(token.BlockIdx == lastToken.BlockIdx && token.InlineIdx == lastToken.InlineIdx) {
+                        if (token.BlockIdx == lastToken.BlockIdx) {
                             searchStartPointer = lastTokenRange.End;
                         }
                     }
+
+                    //Paragraph para = (Paragraph)doc.Blocks.ToArray()[token.BlockIdx];
+                    //Span inline = (Span)para.Inlines.ToArray()[token.InlineIdx];
+                    ////para.Inlines.Remove(inline);
+                    //TextRange runRange = new TextRange(inline.ContentStart, inline.ContentEnd);            
+                    //string tokenText = runRange.Text.Substring(token.StartIdx,token.EndIdx-token.StartIdx);
+                    //TextPointer searchStartPointer = inline.ContentStart;
+                    //if(i > 0) {
+                    //    var lastToken = sortedTokenList[i - 1];
+                    //    if(token.BlockIdx == lastToken.BlockIdx && token.InlineIdx == lastToken.InlineIdx) {
+                    //        searchStartPointer = lastTokenRange.End;
+                    //    }
+                    //}
+
                     TextRange tokenRange = FindStringRangeFromPosition(searchStartPointer, tokenText);
                     lastTokenRange = tokenRange;
                     Hyperlink tokenLink = new Hyperlink(tokenRange.Start,tokenRange.End);
@@ -573,7 +601,7 @@ namespace MpWpfApp {
         private void MinifyUrl_Click(object sender, RoutedEventArgs e) {
             Hyperlink link = ((Hyperlink)((MenuItem)sender).Tag);
             string minifiedLink = ShortenUrl(link.NavigateUri.ToString()).Result;
-            MpCopyItem newCopyItem = MpCopyItem.CreateCopyItem(MpCopyItemType.Text, minifiedLink, MainWindowViewModel.ClipboardMonitor.LastWindowWatcher.ThisAppPath, MpHelperSingleton.Instance.GetRandomColor());
+            MpCopyItem newCopyItem = MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, MpCopyItem.PlainTextToRtf(minifiedLink), MainWindowViewModel.ClipboardMonitor.LastWindowWatcher.ThisAppPath, MpHelpers.GetRandomColor());
             newCopyItem.WriteToDatabase();
             MpTag historyTag = new MpTag(1);
             historyTag.LinkWithCopyItem(newCopyItem);
@@ -581,9 +609,10 @@ namespace MpWpfApp {
             MainWindowViewModel.AddClipTile(newCopyItem);
         }
         
-        private void ClipTileRichTextBox_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
+        private void ClipTileContent_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
             MenuItem searchMenuItem = new MenuItem();
             searchMenuItem.Click += (s, e1) => {
+                // TODO check and use type of s and compensate for img and fl
                 RichTextBox rtb = (RichTextBox)sender;
                 string searchStr = new TextRange(rtb.Selection.Start, rtb.Selection.End).Text;
                 System.Diagnostics.Process.Start("http://www.google.com.au/search?q=" + Uri.EscapeDataString(searchStr));
@@ -604,7 +633,7 @@ namespace MpWpfApp {
                 QRCodeData qrCodeData = qrGenerator.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q);
                 using(QRCode qrCode = new QRCode(qrCodeData)) {
                     var qrCodeAsBitmap = qrCode.GetGraphic(20);
-                    MpCopyItem qrCopyItem = MpCopyItem.CreateCopyItem(MpCopyItemType.Image, MpHelperSingleton.Instance.ConvertBitmapToBitmapSource(qrCodeAsBitmap), MainWindowViewModel.ClipboardMonitor.LastWindowWatcher.ThisAppPath, MpHelperSingleton.Instance.GetRandomColor());
+                    MpCopyItem qrCopyItem = MpCopyItem.CreateCopyItem(MpCopyItemType.Image, MpHelpers.ConvertBitmapToBitmapSource(qrCodeAsBitmap), MainWindowViewModel.ClipboardMonitor.LastWindowWatcher.ThisAppPath, MpHelpers.GetRandomColor());
                     qrCopyItem.WriteToDatabase();
                     MpTag historyTag = new MpTag(1);
                     historyTag.LinkWithCopyItem(qrCopyItem);
@@ -614,7 +643,7 @@ namespace MpWpfApp {
             }                
         }
 
-        private void ClipTileRichTextBox_PreviewLeftMouseButtonDown(object sender, MouseButtonEventArgs e) {
+        private void ClipTileContent_PreviewLeftMouseButtonDown(object sender, MouseButtonEventArgs e) {
             if (System.Windows.Forms.Control.ModifierKeys == System.Windows.Forms.Keys.Control) {
                 IsSelected = !IsSelected;
                 _sourceSelectedClipTile = this;

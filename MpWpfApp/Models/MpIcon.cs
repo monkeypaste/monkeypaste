@@ -19,7 +19,7 @@ namespace MpWpfApp {
         //    get {
         //        BitmapImage bi = new BitmapImage();
         //        bi.BeginInit();
-        //        bi.StreamSource = new MemoryStream(MpHelperSingleton.Instance.ImageConverter.ConvertImageSourceToByteArray(IconImage));
+        //        bi.StreamSource = new MemoryStream(MpHelpers.ImageConverter.ConvertImageSourceToByteArray(IconImage));
         //        bi.EndInit();
         //        return bi;
         //    }
@@ -49,7 +49,7 @@ namespace MpWpfApp {
         }
         public override void LoadDataRow(DataRow dr) {
             this.iconId = Convert.ToInt32(dr["pk_MpIconId"].ToString());
-            this.IconImage = MpHelperSingleton.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
+            this.IconImage = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
             MapDataToColumns();
             Console.WriteLine("Loaded MpIcon");
             Console.WriteLine(ToString());
@@ -65,20 +65,20 @@ namespace MpWpfApp {
                     MapDataToColumns();
                     return;
                 }
-                DataTable dt = MpDb.Instance.Execute("select * from MpIcon where IconBlob=@0",new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertBitmapSourceToByteArray((BitmapSource)this.IconImage) });
+                DataTable dt = MpDb.Instance.Execute("select * from MpIcon where IconBlob=@0",new List<string>() { "@0" },new List<object>() { MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)this.IconImage) });
                 if(dt.Rows.Count > 0) {
                     this.iconId = Convert.ToInt32(dt.Rows[0]["pk_MpIconId"]);
-                    MpDb.Instance.ExecuteNonQuery("update MpIcon set IconBlob=@0 where pk_MpIconId=" + this.iconId,new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertBitmapSourceToByteArray((BitmapSource)this.IconImage) });
+                    MpDb.Instance.ExecuteNonQuery("update MpIcon set IconBlob=@0 where pk_MpIconId=" + this.iconId,new List<string>() { "@0" },new List<object>() { MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)this.IconImage) });
                     isNew = false;
                 }
                 else {
-                    MpDb.Instance.ExecuteNonQuery("insert into MpIcon(IconBlob) values(@0)",new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertBitmapSourceToByteArray((BitmapSource)this.IconImage) });
+                    MpDb.Instance.ExecuteNonQuery("insert into MpIcon(IconBlob) values(@0)",new List<string>() { "@0" },new List<object>() { MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)this.IconImage) });
                     this.iconId = MpDb.Instance.GetLastRowId("MpIcon","pk_MpIconId");
                     isNew = true;
                 }
             }
             else {
-                MpDb.Instance.ExecuteNonQuery("update MpIcon set IconBlob=@0 where pk_MpIconId="+this.iconId,new List<string>() { "@0" },new List<object>() { MpHelperSingleton.Instance.ConvertBitmapSourceToByteArray((BitmapSource)this.IconImage) });                
+                MpDb.Instance.ExecuteNonQuery("update MpIcon set IconBlob=@0 where pk_MpIconId="+this.iconId,new List<string>() { "@0" },new List<object>() { MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)this.IconImage) });                
             }
             if(isNew) {
                 MapDataToColumns();

@@ -24,18 +24,59 @@
         <local:MpMainWindowViewModel />
     </Window.DataContext>
     <Window.Resources>
+        <local:MpSolidColorBrushToBrushConverter x:Key="SolidColorBrushToBrushConverter" />
+        <Style x:Key="SortOrderButtonStyle"
+               TargetType="Button">
+            <Setter Property="OverridesDefaultStyle"
+                    Value="True" />
+            <Setter Property="Margin"
+                    Value="10,0,0,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border"
+                                BorderThickness="0"
+                                CornerRadius="15"
+                                Width="30"
+                                Height="30"
+                                Background="Transparent">
+                            <ContentPresenter HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Stretch" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <ImageBrush ImageSource="/MpWpfApp;component/Resources/asc_black.png" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver"
+                                     Value="False">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <ImageBrush ImageSource="/MpWpfApp;component/Resources/asc_white.png" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="DropShaodowGridStyle"
-                TargetType="{x:Type Grid}">
+               TargetType="{x:Type Grid}">
             <Style.Triggers>
                 <Trigger Property="Visibility"
-                            Value="Visible">
+                         Value="Visible">
                     <Trigger.EnterActions>
                         <BeginStoryboard>
                             <Storyboard>
                                 <DoubleAnimation Storyboard.TargetProperty="(Effect).BlurRadius"
-                                                    From="0"
-                                                    To="80"
-                                                    Duration="0:0:0.2" />
+                                                 From="0"
+                                                 To="80"
+                                                 Duration="0:0:0.2" />
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.EnterActions>
@@ -43,16 +84,151 @@
                         <BeginStoryboard>
                             <Storyboard>
                                 <DoubleAnimation Storyboard.TargetProperty="(Effect).BlurRadius"
-                                                    From="80"
-                                                    To="0"
-                                                    Duration="0:0:0.2" />
+                                                 From="80"
+                                                 To="0"
+                                                 Duration="0:0:0.2" />
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.ExitActions>
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <!--<local:MpMainWindowViewModel x:Key="MpMainWindowViewModel"/>-->
+        <!--Scrollbar Thumbs-->
+        <Style x:Key="ScrollThumbs"
+               TargetType="{x:Type Thumb}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Grid x:Name="Grid">
+                            <Rectangle HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch"
+                                       Width="Auto"
+                                       Height="Auto"
+                                       Fill="Transparent" />
+                            <Border x:Name="Rectangle1"
+                                    CornerRadius="10"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Width="Auto"
+                                    Height="Auto"
+                                    Background="{TemplateBinding Background}" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Tag"
+                                     Value="Horizontal">
+                                <Setter TargetName="Rectangle1"
+                                        Property="Width"
+                                        Value="Auto" />
+                                <Setter TargetName="Rectangle1"
+                                        Property="Height"
+                                        Value="7" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!--ScrollBars-->
+        <Style x:Key="{x:Type ScrollBar}"
+               TargetType="{x:Type ScrollBar}">
+            <Setter Property="Stylus.IsFlicksEnabled"
+                    Value="false" />
+            <Setter Property="Foreground"
+                    Value="LightGray" />
+            <Setter Property="Background"
+                    Value="DarkGray" />
+            <Setter Property="Width"
+                    Value="10" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                        <Grid x:Name="GridRoot"
+                              Width="19"
+                              Background="{TemplateBinding Background}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.00001*" />
+                            </Grid.RowDefinitions>
+
+                            <Track x:Name="PART_Track"
+                                   Grid.Row="0"
+                                   IsDirectionReversed="true"
+                                   Focusable="false">
+                                <Track.Thumb>
+                                    <Thumb x:Name="Thumb"
+                                           Background="{TemplateBinding Foreground}"
+                                           Style="{DynamicResource ScrollThumbs}" />
+                                </Track.Thumb>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton x:Name="PageUp"
+                                                  Command="ScrollBar.PageDownCommand"
+                                                  Opacity="0"
+                                                  Focusable="false" />
+                                </Track.IncreaseRepeatButton>
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton x:Name="PageDown"
+                                                  Command="ScrollBar.PageUpCommand"
+                                                  Opacity="0"
+                                                  Focusable="false" />
+                                </Track.DecreaseRepeatButton>
+                            </Track>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger SourceName="Thumb"
+                                     Property="IsMouseOver"
+                                     Value="true">
+                                <Setter Value="{DynamicResource ButtonSelectBrush}"
+                                        TargetName="Thumb"
+                                        Property="Background" />
+                            </Trigger>
+                            <Trigger SourceName="Thumb"
+                                     Property="IsDragging"
+                                     Value="true">
+                                <Setter Value="{DynamicResource DarkBrush}"
+                                        TargetName="Thumb"
+                                        Property="Background" />
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled"
+                                     Value="false">
+                                <Setter TargetName="Thumb"
+                                        Property="Visibility"
+                                        Value="Collapsed" />
+                            </Trigger>
+                            <Trigger Property="Orientation"
+                                     Value="Horizontal">
+                                <Setter TargetName="GridRoot"
+                                        Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="PART_Track"
+                                        Property="LayoutTransform">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Width"
+                                        Value="Auto" />
+                                <Setter Property="Height"
+                                        Value="12" />
+                                <Setter TargetName="Thumb"
+                                        Property="Tag"
+                                        Value="Horizontal" />
+                                <Setter TargetName="PageDown"
+                                        Property="Command"
+                                        Value="ScrollBar.PageLeftCommand" />
+                                <Setter TargetName="PageUp"
+                                        Property="Command"
+                                        Value="ScrollBar.PageRightCommand" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -65,8 +241,8 @@
           Background="Green">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="2*"/>
-            <RowDefinition Height="10*"/>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="10*" />
         </Grid.RowDefinitions>
         <!-- Main Menu -->
         <StackPanel Grid.Row="0"
@@ -79,36 +255,44 @@
               Focusable="True"
               Background="DarkViolet">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="7*" />
                 <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
             <!-- Sort Combobox -->
             <Grid Grid.Row="0"
-                  Grid.Column="0" 
+                  Grid.Column="0"
                   Margin="10">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="4*" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="3*" />
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0" 
-                       FontSize="16" 
+                <Label Grid.Column="0"
+                       FontSize="19"
                        Foreground="White"
                        HorizontalAlignment="Right"
                        FontWeight="DemiBold"
-                       VerticalContentAlignment="Center" 
+                       VerticalContentAlignment="Center"
                        Padding="0,0,15,0">Sort By</Label>
-                <ComboBox Grid.Column="1" 
-                          FontSize="16"
-                          Background="Transparent" 
-                          HorizontalAlignment="Stretch"
-                          VerticalContentAlignment="Center">
-                    <ComboBoxItem Content="Date" />
-                    <ComboBoxItem Content="Application" />
-                    <ComboBoxItem Content="Title" />
-                    <ComboBoxItem Content="Content" />
-                    <ComboBoxItem Content="Usage" />
-                </ComboBox>
+                <local:MpClipBorder CornerRadius="15"
+                                    Grid.Column="1">
+                    <ComboBox FontSize="16"
+                              Background="Transparent"
+                              HorizontalAlignment="Stretch"
+                              VerticalContentAlignment="Center"
+                              ItemsSource="{Binding SortTypeList}" />
+                </local:MpClipBorder>
+                <Button Grid.Column="2"
+                        Margin="0,0,0,0" 
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Height="30"
+                        Width="30"
+                        Command="{Binding CreateTagCommand}">
+                    <Image Source="/MpWpfApp;component/Resources/asc_white.png"
+                           Stretch="Fill" />
+                </Button>
             </Grid>
             <StackPanel Grid.Row="0"
                         Grid.Column="1"
@@ -148,16 +332,16 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <!-- Tag Tile Border -->
-                            <Border CornerRadius="20"
-                                    Margin="5,0,5,0"
-                                    Padding="10,0,10,0"
-                                    Focusable="True"
-                                    BorderThickness="2"
-                                    VerticalAlignment="Center"
-                                    local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"
-                                    Background="{Binding TagColor}"
-                                    BorderBrush="{Binding TagBorderBrush}"
-                                    Height="{Binding TagHeight}">
+                            <local:MpClipBorder CornerRadius="15"
+                                                Margin="5,0,5,0"
+                                                Padding="10,0,10,0"
+                                                Focusable="True"
+                                                BorderThickness="0.25"
+                                                VerticalAlignment="Center"
+                                                local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"
+                                                Background="{Binding TagColor}"
+                                                BorderBrush="{Binding TagBorderBrush}"
+                                                Height="{Binding TagHeight}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Loaded">
                                         <i:CallMethodAction TargetObject="{Binding}"
@@ -176,7 +360,7 @@
                                                                PassEventArgsToCommand="True" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                                
+
                                 <Border.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="Rename"
@@ -207,7 +391,7 @@
                                              Padding="0,0,0,10"
                                              Background="White"
                                              Foreground="Black"
-                                             IsReadOnly="False"                                             
+                                             IsReadOnly="False"
                                              HorizontalAlignment="Center"
                                              VerticalAlignment="Top"
                                              local:MpFocusExtension.IsFocused="{Binding IsTextBoxFocused}"
@@ -226,27 +410,29 @@
                                         </i:Interaction.Triggers>
                                     </TextBox>
                                 </StackPanel>
-                            </Border>
+                            </local:MpClipBorder>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
                 <!-- Add Tag Button -->
                 <Button Height="30"
                         Width="30" 
+                        Background="Transparent"
                         Command="{Binding CreateTagCommand}">
                     <Image Stretch="Fill"
-                           Source="pack://application:,,,/Resources/add2.png" />
+                           Source="/MpWpfApp;component/Resources/add4.png" />
                 </Button>
             </StackPanel>
-            <!-- Search TextBox -->
-            <Border Grid.Row="0" 
-                    Grid.Column="2"
-                    Margin="10"
-                    BorderBrush="Black"
-                    BorderThickness="0"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Stretch"
-                    Background="White">
+            <!-- Search Border -->
+            <local:MpClipBorder Grid.Row="0"
+                                Grid.Column="2"
+                                Margin="10"
+                                BorderBrush="Black"
+                                BorderThickness="0"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Stretch"
+                                Background="White"
+                                CornerRadius="15">
                 <StackPanel Margin="5"
                             Orientation="Horizontal">
                     <Button Background="Transparent"
@@ -254,13 +440,17 @@
                         <Image Source="pack://application:,,,/Resources/search.png"
                                Stretch="Fill" />
                     </Button>
+                    <!-- Search TextBox-->
                     <TextBox x:Name="SearchTextBox"
-                             Text="{Binding SearchText}"
+                             Text="{Binding SearchText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True,NotifyOnSourceUpdated=True}"
+                             FontStyle="{Binding SearchTextBoxFontStyle}"
+                             Foreground="{Binding SearchTextBoxTextBrush}"
                              BorderThickness="0"
-                             FontSize="20"
-                             VerticalAlignment="Center"
-                             HorizontalAlignment="Stretch"
-                             VerticalContentAlignment="Center">
+                             FontSize="18"
+                             MinWidth="1000"
+                             VerticalAlignment="Top"
+                             HorizontalAlignment="Left"
+                             VerticalContentAlignment="Top">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="GotFocus">
                                 <i:CallMethodAction TargetObject="{Binding}"
@@ -273,17 +463,17 @@
                         </i:Interaction.Triggers>
                     </TextBox>
                 </StackPanel>
-            </Border>
+            </local:MpClipBorder>
         </Grid>
         <!--3rd row row for tray -->
         <Grid Grid.Row="2"
               Grid.Column="0"
+              Height="{Binding ClipTrayHeight}"
               Focusable="True"
               Background="MediumPurple">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="{Binding AppStateButtonGridWidth}"
-                                  x:Name="AppStateButtonGrid" />
-                <ColumnDefinition x:Name="ClipTrayListBox" />
+                <ColumnDefinition Width="{Binding AppStateButtonGridWidth}" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <!-- Side bar AppState Buttons -->
             <Grid Grid.Row="0"
@@ -339,17 +529,18 @@
             <ListBox x:Name="ClipTray"
                      Grid.Row="0"
                      Grid.Column="1"
-                     Focusable="True"    
+                     Focusable="True"
                      dd:DragDrop.IsDragSource="True"
                      dd:DragDrop.IsDropTarget="True"
                      dd:DragDrop.DragHandler="{Binding}"
                      Background="Transparent"
                      SelectionMode="Extended"
                      ScrollViewer.CanContentScroll="False"
-                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      Visibility="{Binding ClipListVisibility}"
-                     ItemsSource="{Binding ClipTiles, Mode=TwoWay, BindsDirectlyToSource=True, NotifyOnSourceUpdated=True}">
+                     ItemsSource="{Binding ClipTiles, Mode=TwoWay, BindsDirectlyToSource=True, NotifyOnSourceUpdated=True}"
+                     Grid.ColumnSpan="3">
                 <i:Interaction.Triggers>
                     <!--<i:EventTrigger EventName="PreviewMouseLeftButtonDown">
                         <i:CallMethodAction TargetObject="{Binding}" 
@@ -369,7 +560,7 @@
                     </i:EventTrigger>-->
                     <i:EventTrigger EventName="PreviewMouseWheel">
                         <i:CallMethodAction MethodName="ScrollClipTray"
-                                               TargetObject="{Binding}" />
+                                            TargetObject="{Binding}" />
                     </i:EventTrigger>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:CallMethodAction TargetObject="{Binding}"
@@ -420,7 +611,7 @@
                                             Width="{Binding TileSize}"
                                             Height="{Binding TileSize}"
                                             CornerRadius="10"
-                                            Visibility="{Binding TileVisibility}">
+                                            Visibility="{Binding TileVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Loaded">
                                     <i:CallMethodAction TargetObject="{Binding}"
@@ -445,9 +636,9 @@
                                               Command="{Binding MainWindowViewModel.RenameClipCommand}" />
                                     <MenuItem Header="Delete"
                                               Command="{Binding MainWindowViewModel.DeleteClipCommand}" />
-                                            <MenuItem Header="Say"
-                                                      Command="{Binding SpeakClipCommand}" />
-                                            <MenuItem Header="Merge"
+                                    <MenuItem Header="Say"
+                                              Command="{Binding SpeakClipCommand}" />
+                                    <MenuItem Header="Merge"
                                               Command="{Binding MainWindowViewModel.MergeClipsCommand}"
                                               Visibility="{Binding MainWindowViewModel.MergeClipsCommandVisibility}" />
                                     <MenuItem Header="Search Web">
@@ -502,7 +693,7 @@
                                 </ContextMenu>
                             </local:MpClipBorder.ContextMenu>
                             <local:MpClipBorder.Effect>
-                                <DropShadowEffect Color="Black"  
+                                <DropShadowEffect Color="Black"
                                                   BlurRadius="10" />
                             </local:MpClipBorder.Effect>
                             <Grid ClipToBounds="False">
@@ -510,22 +701,43 @@
                                     <RowDefinition Height="{Binding TileTitleHeight}" />
                                     <RowDefinition />
                                 </Grid.RowDefinitions>
-                                <!-- Tile Title StackPanel -->                                
-                                <Path x:Name="ClipTileTitlePath2"
-                                      Grid.Row="0"
-                                      Grid.Column="0"
-                                      ClipToBounds="False"
-                                      StrokeThickness="0">
-                                </Path>
-                                <Path x:Name="ClipTileTitlePath3"
-                                      Grid.Row="0"
-                                      Grid.Column="0"
-                                      ClipToBounds="False"
-                                      StrokeThickness="0"
-                                      Fill="{Binding TitleColor}">
-                                </Path>
-                                <Canvas VerticalAlignment="Top"
+                                <!-- Tile Title StackPanel -->
+                                <Canvas Grid.Row="0"
+                                        Grid.Column="0"
+                                        VerticalAlignment="Top"
                                         HorizontalAlignment="Left">
+                                    <local:MpTintedImage x:Name="TitleSwirl0"
+                                                         TintBrush="{Binding TitleColor,Converter={StaticResource SolidColorBrushToBrushConverter}}"
+                                                         Canvas.Top="-1"
+                                                         Canvas.Left="-1"
+                                                         Stretch="Fill"
+                                                         Width="{Binding TileSize}"
+                                                         Height="{Binding TileTitleHeight}"
+                                                         Source="/MpWpfApp;component/Resources/title_swirl0001.png" />
+                                    <local:MpTintedImage x:Name="TitleSwirl1"
+                                                         TintBrush="{Binding TitleColorLighter,Converter={StaticResource SolidColorBrushToBrushConverter}}"
+                                                         Canvas.Top="-1"
+                                                         Canvas.Left="-1"
+                                                         Stretch="Fill"
+                                                         Width="{Binding TileSize}"
+                                                         Height="{Binding TileTitleHeight}"
+                                                         Source="/MpWpfApp;component/Resources/title_swirl0002.png" />
+                                    <local:MpTintedImage x:Name="TitleSwirl2"
+                                                         TintBrush="{Binding TitleColorDarker, Converter={StaticResource SolidColorBrushToBrushConverter}}"
+                                                         Canvas.Top="-1"
+                                                         Canvas.Left="-1"
+                                                         Stretch="Fill"
+                                                         Width="{Binding TileSize}"
+                                                         Height="{Binding TileTitleHeight}"
+                                                         Source="/MpWpfApp;component/Resources/title_swirl0003.png" />
+                                    <local:MpTintedImage x:Name="TitleSwirl3"
+                                                         TintBrush="{Binding TitleColorAccent, Converter={StaticResource SolidColorBrushToBrushConverter}}"
+                                                         Canvas.Top="-1"
+                                                         Canvas.Left="-1"
+                                                         Stretch="Fill" 
+                                                         Width="{Binding TileSize}"
+                                                         Height="{Binding TileTitleHeight}"
+                                                         Source="/MpWpfApp;component/Resources/title_swirl0004.png" />
                                     <TextBlock x:Name="ClipTileTitleTextBlock"
                                                Text="{Binding Title}"
                                                Canvas.Top="-2"
@@ -584,33 +796,30 @@
                                              Canvas.Top="25" />-->
                                 </Canvas>
                                 <!-- RichText Content -->
-                                <ScrollViewer Grid.Row="1" 
-                                              Grid.Column="0"
-                                              x:Name="ClipTileRichTextBoxScrollViewer"
-                                              Width="{Binding TileBorderSize}"
-                                              Height="{Binding TileContentHeight}"
-                                              VerticalScrollBarVisibility="Auto"
-                                              HorizontalScrollBarVisibility="Auto" 
-                                              Background="White">
-                                    <local:MpClipTileRichTextBox x:Name="ClipTileRichTextBox"
-                                                                       SearchText="{Binding MainWindowViewModel.SearchText}"
-                                                                       IsReadOnly="True"
-                                                                       VerticalAlignment="Top"
-                                                                       HorizontalAlignment="Left"
-                                                                       MinWidth="{Binding TileBorderSize}"
-                                                                       MinHeight="{Binding TileContentHeight}"
-                                                                       IsDocumentEnabled="True"
-                                                                       Cursor="Arrow"
-                                                                       BorderThickness="0"
-                                                                       Padding="10" />
-                                </ScrollViewer>
+                                    <!-- RichText Content-->
+                                <local:MpClipTileRichTextBox x:Name="ClipTileRichTextBox"
+                                                             SearchText="{Binding MainWindowViewModel.SearchText}"
+                                                             IsReadOnly="True"
+                                                             Grid.Row="1"
+                                                             Grid.Column="0"
+                                                             Background="White"
+                                                             VerticalAlignment="Top"
+                                                             HorizontalAlignment="Left"
+                                                             MinWidth="{Binding TileBorderSize}"
+                                                             MinHeight="{Binding TileContentHeight}"
+                                                             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                                             ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                                             IsDocumentEnabled="True"
+                                                             Cursor="Arrow"
+                                                             BorderThickness="0"
+                                                             Padding="10" />
                                 <!-- Image Content-->
                                 <Image Grid.Row="1"
                                        Grid.Column="0"
                                        x:Name="ClipTileImage"
                                        Width="{Binding TileBorderSize}"
                                        Height="{Binding TileContentHeight}"
-                                       Stretch="Fill"/>
+                                       Stretch="Fill" />
                                 <!--File List Content -->
                                 <ListBox Grid.Row="1"
                                          Grid.Column="0"
@@ -635,7 +844,7 @@
                                                                Background="Transparent">
                                                     </TextBlock>
                                                 </StackPanel>
-                                            </Border>                                                    
+                                            </Border>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
@@ -654,7 +863,7 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Foreground="LightGray"
-                       Margin="0,0,0,40"
+                       Margin="545,91,683,132"
                        FontStyle="Oblique"
                        FontSize="34" />
         </Grid>

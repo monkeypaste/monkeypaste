@@ -18,7 +18,7 @@ namespace MpWpfApp {
             //Process.GetCurrentProcess().Invalidate();
             ThisAppHandle = appHandle;
             _previousHandle = IntPtr.Zero;
-            ThisAppPath = MpHelperSingleton.Instance.GetProcessPath(ThisAppHandle);
+            ThisAppPath = MpHelpers.GetProcessPath(ThisAppHandle);
             Console.WriteLine("This app's exe: " + ThisAppPath);
             _timer = new Timer(100);
             _timer.Elapsed += new ElapsedEventHandler(SetLastActive);

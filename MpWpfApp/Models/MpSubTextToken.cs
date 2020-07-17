@@ -110,20 +110,41 @@ namespace MpWpfApp {
             List<MpSubTextToken> tokenList = new List<MpSubTextToken>();
             //break document into blocks and then blocks into lines and regex lines
             for (int i = 0;i < doc.Blocks.Count;i++) {
-                Paragraph block = (Paragraph)doc.Blocks.ToArray()[i];
-                for(int j = 0;j < block.Inlines.Count;j++) {
-                    Inline inline = block.Inlines.ToArray()[j];
-                    TextRange textRange = new TextRange(inline.ContentStart, inline.ContentEnd);
-                    MatchCollection mc = Regex.Matches(textRange.Text, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
-                    foreach (Match m in mc) {
-                        foreach (Group mg in m.Groups) {
-                            foreach(Capture c in mg.Captures) {
-                                int sIdx = textRange.Text.IndexOf(mg.Value);
-                                tokenList.Add(new MpSubTextToken(mg.Value, tokenType, sIdx, sIdx+c.Value.Length, i, j));
-                            }
+                // TODO Maybe account for Paragraph and Table (more?) here...
+                Block block = doc.Blocks.ToArray()[i];
+                TextRange textRange = new TextRange(block.ContentStart, block.ContentEnd);
+                MatchCollection mc = Regex.Matches(textRange.Text, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+                foreach (Match m in mc) {
+                    foreach (Group mg in m.Groups) {
+                        foreach (Capture c in mg.Captures) {
+                            int sIdx = textRange.Text.IndexOf(mg.Value);
+                            tokenList.Add(new MpSubTextToken(mg.Value, tokenType, sIdx, sIdx + c.Value.Length, i, 0));
                         }
                     }
-                }                
+                }
+                //if(block.GetType() == typeof(Table)) {
+                //    Table table = (Table)block;
+                //    foreach(var r in table.RowGroups) {
+                //        foreach(var c in table.Columns) {
+                //            table.
+                //        }
+                //    }
+                //}
+
+
+                //for(int j = 0;j < block.Inlines.Count;j++) {
+                //    Inline inline = block.Inlines.ToArray()[j];
+                //    TextRange textRange = new TextRange(inline.ContentStart, inline.ContentEnd);
+                //    MatchCollection mc = Regex.Matches(textRange.Text, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+                //    foreach (Match m in mc) {
+                //        foreach (Group mg in m.Groups) {
+                //            foreach(Capture c in mg.Captures) {
+                //                int sIdx = textRange.Text.IndexOf(mg.Value);
+                //                tokenList.Add(new MpSubTextToken(mg.Value, tokenType, sIdx, sIdx+c.Value.Length, i, j));
+                //            }
+                //        }
+                //    }
+                //}                
             }                       
             return tokenList;
         }

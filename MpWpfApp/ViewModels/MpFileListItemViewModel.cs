@@ -36,19 +36,19 @@ namespace MpWpfApp {
 
         public double ItemBitSize {
             get {
-                return (double)MpHelperSingleton.Instance.FileListSize(new string[]{ ItemPath});
+                return (double)MpHelpers.FileListSize(new string[]{ ItemPath});
             }
         }
 
         public bool IsItemDirectory {
             get {
-                return MpHelperSingleton.Instance.IsPathDirectory(ItemPath);
+                return MpHelpers.IsPathDirectory(ItemPath);
             }
         }
 
         public MpFileListItemViewModel(string path) {
             ItemPath = path;
-            Icon = (BitmapSource)MpHelperSingleton.Instance.GetIconImage(ItemPath);
+            Icon = (BitmapSource)MpHelpers.GetIconImage(ItemPath);
         }
     }
 }

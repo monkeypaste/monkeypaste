@@ -89,13 +89,13 @@ namespace MpWpfApp {
             }
             // TODO Add other objecy type pasters here
             //} else if(itemToPaste.GetType() == typeof(string)) {
-            //    Clipboard.SetData(DataFormats.Text, (string)copyItem.GetData());
+            //    Clipboard.SetData(DataFormats.Text, (string)CopyItem.DataObject);
             //} else if (copyItem.CopyItemType == MpCopyItemType.HTMLText) {
-            //    Clipboard.SetData(DataFormats.Text, (string)copyItem.GetData());
+            //    Clipboard.SetData(DataFormats.Text, (string)CopyItem.DataObject);
             //} else if (copyItem.CopyItemType == MpCopyItemType.Image) {
-            //    Clipboard.SetImage((Image/*BitmapSource*/)MpHelperSingleton.Instance.ConvertByteArrayToImage((byte[])copyItem.GetData()));
+            //    Clipboard.SetImage((Image/*BitmapSource*/)MpHelpers.ConvertByteArrayToImage((byte[])CopyItem.DataObject));
             //} else if (copyItem.CopyItemType == MpCopyItemType.FileList) {
-            //    Clipboard.SetFileDropList((StringCollection)copyItem.GetData());
+            //    Clipboard.SetFileDropList((StringCollection)CopyItem.DataObject);
             //}
 
             //WinApi.SetActiveWindow(GetLastWindowWatcher().LastHandle);

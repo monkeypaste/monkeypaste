@@ -217,7 +217,7 @@ namespace MpWpfApp {
                     if(IsSelected) {
                         TagBorderBrush = Brushes.Red;
                         TagColor = new SolidColorBrush(Tag.TagColor.Color);
-                        TagTextColor = MpHelperSingleton.Instance.IsBright(Tag.TagColor.Color) ? Brushes.Black : Brushes.White;
+                        TagTextColor = MpHelpers.IsBright(Tag.TagColor.Color) ? Brushes.Black : Brushes.White;
 
                     } else {
                         TagBorderBrush = Brushes.White;

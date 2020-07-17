@@ -15,8 +15,12 @@ namespace MpWpfApp {
         public MpClipTileRichTextBox() : base() { }
 
         public String SearchText {
-            get { return (String)GetValue(SearchTextProperty); }
-            set { SetValue(SearchTextProperty, value); }
+            get { 
+                return (String)GetValue(SearchTextProperty); 
+            }
+            set { 
+                SetValue(SearchTextProperty, value); 
+            }
         }
 
         private static void OnDataChanged(DependencyObject source, DependencyPropertyChangedEventArgs e) {
@@ -24,23 +28,25 @@ namespace MpWpfApp {
                 DispatcherPriority.Background,
                 new Action(() => {
                     if (e.OldValue != null) {
-                        OnDataChangedHelper((RichTextBox)source, (string)e.OldValue, Brushes.Transparent);
+                        //OnDataChangedHelper((RichTextBox)source, (string)e.OldValue, Brushes.Transparent);
                     }
                     OnDataChangedHelper((RichTextBox)source, (string)e.NewValue,Brushes.Yellow);
                 })
             );
         }
         private static void OnDataChangedHelper(RichTextBox rtb, string updatedSearchText,SolidColorBrush highlightColor) {
+            //clear highlights
+            var fullDocRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+            fullDocRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
+
             
-            if(highlightColor == Brushes.Transparent) {
-                Console.WriteLine("Erase");
-            } else {
-                Console.WriteLine("Highlight");
+            if(updatedSearchText == Properties.Settings.Default.SearchPlaceHolderText) {
+                return;
             }
             string rtbt = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
 
             string regExStr = $@"\b" + updatedSearchText + @"\b";
-            MatchCollection mc = Regex.Matches(rtbt, $@"\b{Regex.Escape(updatedSearchText)}\b", RegexOptions.IgnoreCase);
+            MatchCollection mc = Regex.Matches(rtbt, $@"\b"+updatedSearchText+"\b", RegexOptions.IgnoreCase);
 
             TextRange lastTokenRange = null;
 

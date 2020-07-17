@@ -22,8 +22,7 @@ namespace MpWpfApp {
         #region Private Variables
         private double _startMainWindowTop, _endMainWindowTop;
 
-        private string _placeholderText = "Search";
-
+        
         private MpHotKeyHost _hotkeyHost = null;
         private IKeyboardMouseEvents _globalHook = null;
 
@@ -80,9 +79,34 @@ namespace MpWpfApp {
                 return TagTiles.Where(tt => tt.IsSelected).ToList()[0];
             }
         }
+
+        public List<string> SortTypeList {
+            get {
+                var sortTypes = new List<string>();
+                sortTypes.Add("Date");
+                sortTypes.Add("Application");
+                sortTypes.Add("Title");
+                sortTypes.Add("Content");
+                sortTypes.Add("Usage");
+                return sortTypes;
+            }
+        }
         #endregion
 
         #region Business Logic Properties
+        private string _selectedSortType;
+        public string SelectedSortType {
+            get {
+                return _selectedSortType;
+            }
+             set {
+                if(_selectedSortType != value) {
+                    _selectedSortType = value;
+                    OnPropertyChanged(nameof(SelectedSortType));
+                }
+            }
+        }
+
         private Combination _showMainWindowCombination;
         public Combination ShowMainWindowCombination {
             get {
@@ -203,6 +227,19 @@ namespace MpWpfApp {
         #endregion
 
         #region View Properties
+        private bool _isClipTrayScrollbarVisible = false;
+        public bool IsClipTrayScrollbarVisible {
+            get {
+                return _isClipTrayScrollbarVisible;
+            }
+            set {
+                if(_isClipTrayScrollbarVisible != value) {
+                    _isClipTrayScrollbarVisible = value;
+                    OnPropertyChanged(nameof(IsClipTrayScrollbarVisible));
+                }
+            }
+        }
+
         private Visibility _emptyListMessageVisibility = Visibility.Collapsed;
         public Visibility EmptyListMessageVisibility {
             get {
@@ -248,9 +285,16 @@ namespace MpWpfApp {
             }
         }
 
-        public double TrayHeight {
+        private double _clipTrayHeight = MpMeasurements.Instance.TrayHeight;
+        public double ClipTrayHeight {
             get {
-                return MpMeasurements.Instance.TrayHeight;
+                return _clipTrayHeight;
+            }
+            set {
+                if(_clipTrayHeight != value) {
+                    _clipTrayHeight = value;
+                    OnPropertyChanged(nameof(ClipTrayHeight));
+                }
             }
         }
 
@@ -279,8 +323,8 @@ namespace MpWpfApp {
             }
         }
 
-        private string _searchTextBoxFontStyle = "Italics";
-        public string SearchTextBoxFontStyle {
+        private FontStyle _searchTextBoxFontStyle = FontStyles.Italic;
+        public FontStyle SearchTextBoxFontStyle {
             get { 
                 return _searchTextBoxFontStyle; 
             }
@@ -302,16 +346,16 @@ namespace MpWpfApp {
 
         #region View Event Handlers
         public void MainWindowLoaded(object sender,RoutedEventArgs e) {
-            SearchText = _placeholderText;
-
+            SearchText = Properties.Settings.Default.SearchPlaceHolderText;
+            
             SetupMainWindowRect();
 
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
-                AddTagTile(new MpTag("Home", MpHelperSingleton.Instance.GetRandomColor()));
-                AddTagTile(new MpTag("Favorites", MpHelperSingleton.Instance.GetRandomColor()));
-                AddTagTile(new MpTag("C#", MpHelperSingleton.Instance.GetRandomColor()));
+                AddTagTile(new MpTag("Home", MpHelpers.GetRandomColor()));
+                AddTagTile(new MpTag("Favorites", MpHelpers.GetRandomColor()));
+                AddTagTile(new MpTag("C#", MpHelpers.GetRandomColor()));
                 for (int i = 0; i < 15; i++) {
-                    AddClipTile(MpCopyItem.CreateCopyItem(MpCopyItemType.Text, MpHelperSingleton.Instance.GetRandomString(100, 100), MpHelperSingleton.Instance.GetProcessPath(Process.GetCurrentProcess().Handle), MpHelperSingleton.Instance.GetRandomColor()));
+                    AddClipTile(MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, MpCopyItem.PlainTextToRtf(MpHelpers.GetRandomString(100, 100)), MpHelpers.GetProcessPath(Process.GetCurrentProcess().Handle), MpHelpers.GetRandomColor()));
                 }
 
                 return;
@@ -332,7 +376,7 @@ namespace MpWpfApp {
 
             //init SearchBox
 
-            PropertyChanged += MpMainWindowViewModel_PropertyChanged;
+            PropertyChanged += MainWindowViewModel_PropertyChanged;
 
             ((MpMainWindow)Application.Current.MainWindow).Deactivated += (s, e1) => {
                 HideWindowCommand.Execute(null);
@@ -349,10 +393,10 @@ namespace MpWpfApp {
 #endif
         }
 
-        private void MpMainWindowViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+        private void MainWindowViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             switch (e.PropertyName) {
                 case nameof(SearchText):
-                    if (SearchText == _placeholderText) {
+                    if (SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
                         return;
                     }
                     FilterTiles(SearchText);
@@ -367,6 +411,13 @@ namespace MpWpfApp {
                         _globalHook.MouseUp -= GlobalMouseUpEvent;
                     }
                     break;
+                case nameof(IsClipTrayScrollbarVisible):
+                    if(IsClipTrayScrollbarVisible) {
+                        ClipTrayHeight = MpMeasurements.Instance.TrayHeight + 30;
+                    } else {
+                        ClipTrayHeight = MpMeasurements.Instance.TrayHeight;
+                    }
+                    break;
             }
         }
 
@@ -378,40 +429,39 @@ namespace MpWpfApp {
             MergeClipsCommandVisibility = SelectedClipTiles.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
         }
         public void SearchTextboxGotFocus(object sender,RoutedEventArgs e) {
-            //var searchTextBox = (TextBox)e.Source;
-            
-            if(SearchText == _placeholderText) {
+            //make text
+            if(SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
                 SearchText = "";
             }
+            SearchTextBoxFontStyle = FontStyles.Normal;
+            SearchTextBoxTextBrush = Brushes.Black;
         }
         public void SearchTextboxLostFocus(object sender, RoutedEventArgs e) {
             //var searchTextBox = (TextBox)e.Source;
             if (string.IsNullOrEmpty(SearchText)) {
-                SearchText = _placeholderText;
+                SearchText = Properties.Settings.Default.SearchPlaceHolderText;
+                SearchTextBoxFontStyle = FontStyles.Italic;
+                SearchTextBoxTextBrush = Brushes.DimGray;
             }
         }
         public void SearchTextboxBorderPassFocus() {
             ((TextBox)((MpMainWindow)Application.Current.MainWindow).FindName("SearchTextBox")).Focus();
         }
         public void ScrollClipTray(object sender, MouseWheelEventArgs e) {
-            //if mouse is over a selected clip that has scrollbars ignore scrolling the tray
-            foreach (var clipTile in VisibileClipTiles) {
-                if (clipTile.IsSelected && clipTile.IsHovering && clipTile.HasScrollBars) {
-                    return;
-                }
-            }
             var clipTrayListBox = (ListBox)sender;
             var scrollViewer = clipTrayListBox.GetChildOfType<ScrollViewer>();
             double lastOffset = scrollViewer.HorizontalOffset;
 
             //_clipTrayPhysicsBody.AddForce(e.Delta);
             scrollViewer.ScrollToHorizontalOffset(lastOffset - (double)(e.Delta * 0.3));
+
+            e.Handled = true;
         }
         #endregion
 
         #region App Mode Event Handlers
         private void GlobalMouseUpEvent(object sender, System.Windows.Forms.MouseEventArgs e) {
-            if(e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelperSingleton.Instance.ApplicationIsActivated()) {
+            if(e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.ApplicationIsActivated()) {
                 System.Windows.Forms.SendKeys.SendWait("^c");
             }
         }
@@ -476,8 +526,10 @@ namespace MpWpfApp {
             if(VisibileClipTiles.Count > 0) {
                 VisibileClipTiles[0].IsSelected = true;
                 VisibileClipTiles[0].IsFocused = true;
-                //var clipTrayListBox = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
-                //clipTrayListBox.ScrollIntoView(clipTrayListBox.Items[0]);
+                var clipTrayListBox = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
+                if(clipTrayListBox != null && clipTrayListBox.Items != null && clipTrayListBox.Items.Count > 0) {
+                    clipTrayListBox.ScrollIntoView(clipTrayListBox.Items[0]);
+                }
             }
         }
 
@@ -486,6 +538,9 @@ namespace MpWpfApp {
             //update cliptray visibility if this is the first cliptile added
             ClipListVisibility = Visibility.Visible;
             EmptyListMessageVisibility = Visibility.Collapsed;
+            double clipsWidth = VisibileClipTiles[0].TileSize * VisibileClipTiles.Count;
+            double trayWidth = ((MpMainWindow)Application.Current.MainWindow).Width - AppStateButtonGridWidth;
+            IsClipTrayScrollbarVisible = clipsWidth > trayWidth;
             ResetSelection();
         }
 
@@ -568,13 +623,13 @@ namespace MpWpfApp {
                 }
                 //add clips where search is part of clip's content
                 if(ci.CopyItemType == MpCopyItemType.RichText) {
-                    if((ct.Text).ToLower().Contains(searchStr.ToLower())) {
+                    if(ci.GetPlainText().ToLower().Contains(searchStr.ToLower())) {
                         filteredTileIdxList.Add(i);
                     }
                 }
                 //lastly add filelist clips if search string found in it's path(s)
                 else if(ci.CopyItemType == MpCopyItemType.FileList) {
-                    foreach(string p in (string[])ci.GetData()) {
+                    foreach(string p in (string[])ci.DataObject) {
                         if(p.ToLower().Contains(searchStr.ToLower())) {
                             filteredTileIdxList.Add(i);
                         }
@@ -634,7 +689,7 @@ namespace MpWpfApp {
                 MpCopyItem newClip = MpCopyItem.CreateFromClipboard(ClipboardMonitor.LastWindowWatcher.LastHandle);
                 if (IsInAppendMode && newClip.CopyItemType == MpCopyItemType.RichText) {
                     //when in append mode just append the new items text to selecteditem
-                    SelectedClipTiles[0].RichText += Environment.NewLine + (string)newClip.GetData();
+                    SelectedClipTiles[0].RichText += Environment.NewLine + (string)newClip.DataObject;
                     return;
                 }
                 if (newClip != null) {
@@ -817,7 +872,7 @@ namespace MpWpfApp {
         }
         private void CreateTag() {
             //add tag to datastore so TagTile collection will automatically add the tile
-            MpTag newTag = new MpTag("Untitled", MpHelperSingleton.Instance.GetRandomColor());
+            MpTag newTag = new MpTag("Untitled", MpHelpers.GetRandomColor());
             newTag.WriteToDatabase();
             AddTagTile(newTag, true);
 

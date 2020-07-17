@@ -82,5 +82,14 @@ namespace MpWpfApp.Properties {
                 return ((int)(this["ShowMainWindowMouseHitZoneHeight"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Search")]
+        public string SearchPlaceHolderText {
+            get {
+                return ((string)(this["SearchPlaceHolderText"]));
+            }
+        }
     }
 }
