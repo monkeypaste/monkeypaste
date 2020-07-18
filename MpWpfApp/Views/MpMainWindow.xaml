@@ -240,9 +240,9 @@
     <Grid x:Name="MainWindowGrid"
           Background="Green">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="2*" />
-            <RowDefinition Height="10*" />
+            <RowDefinition Height="{Binding TitleMenuHeight}" />
+            <RowDefinition Height="{Binding FilterMenuHeight}"/>
+            <RowDefinition Height="{Binding ClipTrayHeight}"/>
         </Grid.RowDefinitions>
         <!-- Main Menu -->
         <StackPanel Grid.Row="0"
@@ -467,8 +467,7 @@
         </Grid>
         <!--3rd row row for tray -->
         <Grid Grid.Row="2"
-              Grid.Column="0"
-              Height="{Binding ClipTrayHeight}"
+              Grid.Column="0"              
               Focusable="True"
               Background="MediumPurple">
             <Grid.ColumnDefinitions>
@@ -533,6 +532,7 @@
                      dd:DragDrop.IsDragSource="True"
                      dd:DragDrop.IsDropTarget="True"
                      dd:DragDrop.DragHandler="{Binding}"
+                     VerticalAlignment="Top"
                      Background="Transparent"
                      SelectionMode="Extended"
                      ScrollViewer.CanContentScroll="False"
@@ -593,8 +593,8 @@
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel IsItemsHost="True"
                                                 CanVerticallyScroll="False"
-                                                CanHorizontallyScroll="False"
-                                                VerticalAlignment="Stretch"
+                                                CanHorizontallyScroll="False"                                                
+                                                VerticalAlignment="Top"
                                                 Orientation="Horizontal">
                         </VirtualizingStackPanel>
                     </ItemsPanelTemplate>

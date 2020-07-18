@@ -19,7 +19,6 @@ namespace MpWpfApp {
         private double _screenWidth = SystemParameters.PrimaryScreenWidth;
         private double _screenHeight = SystemParameters.PrimaryScreenHeight;
 
-
         private double _mainWindowHeight {
             get {
                 return SystemParameters.PrimaryScreenHeight * _mainWindowToScreenHeightRatio;
@@ -70,7 +69,7 @@ namespace MpWpfApp {
         }
         public double ClipTileSize {
             get {
-                return TrayHeight - (ClipTileMargin * 2) - ClipTileDropShadowRadius;
+                return TrayHeight - (ClipTileMargin * 2) - ClipTileDropShadowRadius - 30;
             }
         }
         public double ClipTileTitleIconSize {

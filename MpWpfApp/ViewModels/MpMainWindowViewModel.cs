@@ -34,7 +34,7 @@ namespace MpWpfApp {
         public MpClipboardMonitor ClipboardMonitor { get; private set; }
         #endregion
 
-        #region View/Model Collection Properties
+        #region Properties
         
         private ObservableCollection<MpClipTileViewModel> _clipTiles = new ObservableCollection<MpClipTileViewModel>();
         public ObservableCollection<MpClipTileViewModel> ClipTiles {
@@ -227,19 +227,6 @@ namespace MpWpfApp {
         #endregion
 
         #region View Properties
-        private bool _isClipTrayScrollbarVisible = false;
-        public bool IsClipTrayScrollbarVisible {
-            get {
-                return _isClipTrayScrollbarVisible;
-            }
-            set {
-                if(_isClipTrayScrollbarVisible != value) {
-                    _isClipTrayScrollbarVisible = value;
-                    OnPropertyChanged(nameof(IsClipTrayScrollbarVisible));
-                }
-            }
-        }
-
         private Visibility _emptyListMessageVisibility = Visibility.Collapsed;
         public Visibility EmptyListMessageVisibility {
             get {
@@ -411,13 +398,6 @@ namespace MpWpfApp {
                         _globalHook.MouseUp -= GlobalMouseUpEvent;
                     }
                     break;
-                case nameof(IsClipTrayScrollbarVisible):
-                    if(IsClipTrayScrollbarVisible) {
-                        ClipTrayHeight = MpMeasurements.Instance.TrayHeight + 30;
-                    } else {
-                        ClipTrayHeight = MpMeasurements.Instance.TrayHeight;
-                    }
-                    break;
             }
         }
 
@@ -538,9 +518,7 @@ namespace MpWpfApp {
             //update cliptray visibility if this is the first cliptile added
             ClipListVisibility = Visibility.Visible;
             EmptyListMessageVisibility = Visibility.Collapsed;
-            double clipsWidth = VisibileClipTiles[0].TileSize * VisibileClipTiles.Count;
-            double trayWidth = ((MpMainWindow)Application.Current.MainWindow).Width - AppStateButtonGridWidth;
-            IsClipTrayScrollbarVisible = clipsWidth > trayWidth;
+            
             ResetSelection();
         }
 
