@@ -36,6 +36,10 @@ namespace MpWpfApp {
         }
         private static void OnDataChangedHelper(RichTextBox rtb, string updatedSearchText,SolidColorBrush highlightColor) {
             //clear highlights
+            //foreach(Block b in rtb.Document.Blocks) {
+            //    Paragraph p = (Paragraph)b;
+            //    p.Inlines.Clear();
+            //}
             var fullDocRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
             fullDocRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
 
@@ -43,39 +47,39 @@ namespace MpWpfApp {
             if(updatedSearchText == Properties.Settings.Default.SearchPlaceHolderText) {
                 return;
             }
-            string rtbt = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
-
-            string regExStr = $@"\b" + updatedSearchText + @"\b";
-            MatchCollection mc = Regex.Matches(rtbt, $@"\b"+updatedSearchText+"\b", RegexOptions.IgnoreCase);
-
+            string rtbt = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.ToLower();
+            updatedSearchText = updatedSearchText.ToLower();
+            //string regExStr = $@"\b" + updatedSearchText + @"\b";
+            //MatchCollection mc = Regex.Matches(rtbt, $@"\b"+updatedSearchText+"\b", RegexOptions.IgnoreCase);
+            var tokenIdxList = rtbt.AllIndexesOf(updatedSearchText);
             TextRange lastTokenRange = null;
-
-            foreach (Match m in mc) {
-                foreach (Group mg in m.Groups) {
-                    foreach (Capture c in mg.Captures) {
-                        TextPointer startPoint = lastTokenRange == null ? rtb.Document.ContentStart : lastTokenRange.End;
-                        var range = FindStringRangeFromPosition(startPoint, c.Value);
-                        range.ApplyPropertyValue(TextElement.BackgroundProperty, highlightColor);
-                        lastTokenRange = range;
-                    }
+            rtb.CaretPosition = rtb.Document.ContentStart;
+            foreach (int idx in tokenIdxList) {
+                TextPointer startPoint = lastTokenRange == null ? rtb.Document.ContentStart : lastTokenRange.End;
+                var range = FindStringRangeFromPosition(startPoint, updatedSearchText);
+                if(range == null) {
+                    //i don't know why range is coming back null but to avoid the exception just returtn
+                    Console.WriteLine("Can't find range for highlight: " + rtbt);
+                    return;
                 }
+                range.ApplyPropertyValue(TextElement.BackgroundProperty, highlightColor);
+                lastTokenRange = range;
             }
         }
 
-        public static TextRange FindStringRangeFromPosition(TextPointer position, string str) {
+        public static TextRange FindStringRangeFromPosition(TextPointer position, string lowerCaseStr) {
             while (position != null) {
                 if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.Text) {
-                    string textRun = position.GetTextInRun(LogicalDirection.Forward);
+                    string textRun = position.GetTextInRun(LogicalDirection.Forward).ToLower();
 
                     // Find the starting index of any substring that matches "word".
-                    int indexInRun = textRun.IndexOf(str);
+                    int indexInRun = textRun.IndexOf(lowerCaseStr);
                     if (indexInRun >= 0) {
-                        return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + str.Length));
+                        return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + lowerCaseStr.Length));
                     }
-                }
+                } 
                 position = position.GetNextContextPosition(LogicalDirection.Forward);
             }
-
             // position will be null if "word" is not found.
             return null;
         }

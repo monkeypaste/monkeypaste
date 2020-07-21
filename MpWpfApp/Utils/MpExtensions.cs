@@ -12,6 +12,17 @@ using System.Windows.Media.Imaging;
 namespace MpWpfApp {
 
     public static class MpExtensions {
+        public static List<int> AllIndexesOf(this string str, string value) {
+            if (String.IsNullOrEmpty(value))
+                return new List<int>();
+            List<int> indexes = new List<int>();
+            for (int index = 0; ; index += value.Length) {
+                index = str.IndexOf(value, index);
+                if (index == -1)
+                    return indexes;
+                indexes.Add(index);
+            }
+        }
         //faster version but needs unsafe thing
         //public unsafe static void CopyPixels(this BitmapSource source, PixelColor[,] pixels, int stride, int offset) {
         //    fixed (PixelColor* buffer = &pixels[0, 0])

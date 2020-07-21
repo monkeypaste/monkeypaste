@@ -252,6 +252,8 @@ namespace MpWpfApp {
                     MpDb.Instance.ExecuteNonQuery("delete from MpSubTextToken where fk_MpCopyItemId=" + CopyItemId);
                     break;
             }
+            MpDb.Instance.ExecuteNonQuery("delete from MpCopyItemTag where fk_MpCopyItemId=" + this.CopyItemId);
+            MpDb.Instance.ExecuteNonQuery("delete from MpTagCopyItemSortOrder where fk_MpCopyItemId=" + this.CopyItemId);
         }
         // still req'd if NoDb=true
         public override void WriteToDatabase() {            
@@ -340,6 +342,17 @@ namespace MpWpfApp {
             MapDataToColumns();
             Console.WriteLine(isNew ? "Created ":"Updated " + " MpCopyItem");
             Console.WriteLine(ToString());
+        }
+        //returns -1 when not tagged
+        public int GetTagSortOrder(MpTag tag) {
+            if(!tag.IsLinkedWithCopyItem(this)) {
+                return -1;
+            }
+            DataTable dt = MpDb.Instance.Execute("select * from MpCopyItemTag where fk_MpCopyItemId=" + this.CopyItemId+" and fk_MpTagId="+tag.TagId);
+            if(dt == null || dt.Rows.Count == 0) {
+                return -1;
+            }
+            return Convert.ToInt32(dt.Rows[0]["OrderIex"].ToString());
         }
         public string GetCurrentDetail(int detailId) {
             string info = "I dunno";// string.Empty;

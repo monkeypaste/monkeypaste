@@ -74,8 +74,11 @@ namespace MpWpfApp {
                 //Console.WriteLine("MpTag Warning attempting to relink tag " + TagId + " with copyitem " + ci.copyItemId+" ignoring...");
                 return;
             }
+            DataTable dt = MpDb.Instance.Execute("select * from MpCopyItemTag where fk_MpTagId=" + this.TagId);
+            int SortOrderIdx = dt.Rows.Count + 1;
             MpDb.Instance.ExecuteNonQuery("insert into MpCopyItemTag(fk_MpCopyItemId,fk_MpTagId) values(" + ci.CopyItemId + "," + TagId + ")");
-
+            MpDb.Instance.ExecuteNonQuery("insert into MpTagCopyItemSortOrder(fk_MpCopyItemId,fk_MpTagId,OrderIdx) values(" + ci.CopyItemId + "," + this.TagId+","+ SortOrderIdx+")");
+            
             Console.WriteLine("Tag link created between tag " + TagId + " with copyitem " + ci.CopyItemId);
         }
         public void UnlinkWithCopyItem(MpCopyItem ci) {
@@ -84,11 +87,13 @@ namespace MpWpfApp {
                 return;
             }
             MpDb.Instance.ExecuteNonQuery("delete from MpCopyItemTag where fk_MpCopyItemId="+ci.CopyItemId+" and fk_MpTagId="+TagId);
-
+            MpDb.Instance.ExecuteNonQuery("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
             Console.WriteLine("Tag link removed between tag " + TagId + " with copyitem " + ci.CopyItemId + " ignoring...");
         }
         public void DeleteFromDatabase() {
             MpDb.Instance.ExecuteNonQuery("delete from MpTag where pk_MpTagId=" + this.TagId);
+            MpDb.Instance.ExecuteNonQuery("delete from MpCopyItemTag where fk_MpTagId=" + this.TagId);
+            MpDb.Instance.ExecuteNonQuery("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
         }
         private void MapDataToColumns() {
             TableName = "MpTag";
