@@ -529,9 +529,7 @@
                      Grid.Row="0"
                      Grid.Column="1"
                      Focusable="True"
-                     dd:DragDrop.IsDragSource="True"
-                     dd:DragDrop.IsDropTarget="True"
-                     dd:DragDrop.DragHandler="{Binding}"
+                     AllowDrop="True"
                      VerticalAlignment="Top"
                      Background="Transparent"
                      SelectionMode="Extended"
@@ -539,25 +537,16 @@
                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      Visibility="{Binding ClipListVisibility}"
-                     ItemsSource="{Binding ClipTiles, Mode=TwoWay, BindsDirectlyToSource=True, NotifyOnSourceUpdated=True}"
-                     Grid.ColumnSpan="3">
+                     ItemsSource="{Binding ClipTiles, Mode=TwoWay, BindsDirectlyToSource=True, NotifyOnSourceUpdated=True}">
                 <i:Interaction.Triggers>
-                    <!--<i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                        <i:CallMethodAction TargetObject="{Binding}" 
-                                            MethodName="ClipTile_LeftMouseButtonDown"/>
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="MouseMove">
-                        <i:CallMethodAction TargetObject="{Binding}" 
-                                            MethodName="ClipTile_MouseMove"/>
-                    </i:EventTrigger>
                     <i:EventTrigger EventName="Drop">
                         <i:CallMethodAction TargetObject="{Binding}" 
                                                         MethodName="ClipTile_Drop"/>
                     </i:EventTrigger>
                     <i:EventTrigger EventName="DragEnter">
-                        <i:CallMethodAction TargetObject="{Binding}" 
-                                                        MethodName="ClipTile_DragEnter"/>
-                    </i:EventTrigger>-->
+                        <i:CallMethodAction TargetObject="{Binding}"
+                                            MethodName="ClipTile_DragEnter" />
+                    </i:EventTrigger>
                     <i:EventTrigger EventName="PreviewMouseWheel">
                         <i:CallMethodAction MethodName="ScrollClipTray"
                                             TargetObject="{Binding}" />
@@ -628,6 +617,18 @@
                                 <i:EventTrigger EventName="KeyDown">
                                     <i:InvokeCommandAction Command="{Binding KeyDownCommand}"
                                                            PassEventArgsToCommand="True" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                    <i:CallMethodAction TargetObject="{Binding}"
+                                                        MethodName="ClipTile_LeftMouseButtonDown" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                    <i:CallMethodAction TargetObject="{Binding}"
+                                                        MethodName="ClipTile_LeftMouseButtonUp" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseMove">
+                                    <i:CallMethodAction TargetObject="{Binding}"
+                                                        MethodName="ClipTile_MouseMove" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <local:MpClipBorder.ContextMenu>

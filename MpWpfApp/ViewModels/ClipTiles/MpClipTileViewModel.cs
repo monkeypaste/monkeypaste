@@ -22,8 +22,13 @@ using System.Windows.Navigation;
 
 namespace MpWpfApp {
     public class  MpClipTileViewModel : MpViewModelBase {
+        #region Private Variables
         private static MpClipTileViewModel _sourceSelectedClipTile = null;
+        private bool _isMouseDown = false;
+        private Point _startDragPoint;
 
+        #endregion
+        #region Collections
         public ObservableCollection<MpClipTileTagMenuItemViewModel> TagMenuItems {
             get {
                 ObservableCollection<MpClipTileTagMenuItemViewModel> tagMenuItems = new ObservableCollection<MpClipTileTagMenuItemViewModel>();
@@ -56,7 +61,7 @@ namespace MpWpfApp {
                 }
             }
         }
-
+        #endregion
         #region View Properties
         private bool _isTitleTextBoxFocused = false;
         public bool IsTitleTextBoxFocused {
@@ -455,6 +460,42 @@ namespace MpWpfApp {
         #endregion
 
         #region View Events Handlers
+        public void ClipTile_LeftMouseButtonDown(object sender,MouseEventArgs e) {
+            _startDragPoint = e.GetPosition(null);
+            _isMouseDown = true;
+        }
+        public void ClipTile_MouseMove(object sender, MouseEventArgs e) {
+            // Get the current mouse position
+            Point mousePos = e.GetPosition(null);
+            Vector diff = _startDragPoint - mousePos;
+
+            if (_isMouseDown) {
+                // Get the dragged ListViewItem
+                ListView listView = sender as ListView;
+                ListViewItem listViewItem = FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
+
+                // Find the data behind the ListViewItem
+                var clipTileViewModel = (MpClipTileViewModel)listViewItem.DataContext;
+                // Initialize the drag & drop operation
+                DataObject dragData = new DataObject("myFormat", clipTileViewModel);
+                DragDrop.DoDragDrop(listViewItem, dragData, DragDropEffects.Move);
+            }
+        }
+        // Helper to search up the VisualTree
+        private T FindAnchestor<T>(DependencyObject current)
+            where T : DependencyObject {
+            do {
+                if (current is T) {
+                    return (T)current;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            }
+            while (current != null);
+            return null;
+        }
+        public void ClipTile_LeftMouseButtonUp(object sender, MouseEventArgs e) {
+            _isMouseDown = false;
+        }
         public void MouseEnter() {
             IsHovering = true;
         }

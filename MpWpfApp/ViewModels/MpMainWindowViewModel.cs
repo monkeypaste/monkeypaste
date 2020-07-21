@@ -401,6 +401,20 @@ namespace MpWpfApp {
             }
         }
 
+        public void ClipTile_DragEnter(object sender, DragEventArgs e) {
+            if (!e.Data.GetDataPresent("myFormat") || sender == e.Source) {
+                e.Effects = DragDropEffects.None;
+            }
+        }
+
+        public void ClipTile_Drop(object sender, DragEventArgs e) {
+            if (e.Data.GetDataPresent("myFormat")) {
+                var clipTileViewModel = (MpClipTileViewModel)e.Data.GetData("myFormat");
+                ListView listView = sender as ListView;
+                listView.Items.Add(clipTileViewModel);
+            }
+        }
+
         public void ClipTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             BindingExpression be = (BindingExpression)((ListBox)sender).GetBindingExpression(ListBox.SelectedItemsProperty);
             if (be != null) {
@@ -408,6 +422,7 @@ namespace MpWpfApp {
             }
             MergeClipsCommandVisibility = SelectedClipTiles.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
         }
+        
         public void SearchTextboxGotFocus(object sender,RoutedEventArgs e) {
             //make text
             if(SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
