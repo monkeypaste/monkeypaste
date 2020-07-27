@@ -3,6 +3,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -24,6 +25,13 @@
         <local:MpMainWindowViewModel />
     </Window.DataContext>
     <Window.Resources>
+        <DataTemplate x:Key="ClipTileDragAdorner">
+            <StackPanel>
+                <Image Source="/MpWpfApp;component/Resources/asc_black.png"
+                       Width="64"
+                       HorizontalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
         <local:MpSolidColorBrushToBrushConverter x:Key="SolidColorBrushToBrushConverter" />
         <Style x:Key="SortOrderButtonStyle"
                TargetType="Button">
@@ -93,8 +101,9 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <!--Scrollbar Thumbs-->
-        <Style x:Key="ScrollThumbs"
+        <!--ScrollBars-->
+        
+        <Style x:Key="ScrollBarTrackThumb"
                TargetType="{x:Type Thumb}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -105,51 +114,50 @@
                                        Width="Auto"
                                        Height="Auto"
                                        Fill="Transparent" />
-                            <Border x:Name="Rectangle1"
-                                    CornerRadius="10"
+                            <Border x:Name="CornerScrollBarRectangle"
+                                    CornerRadius="5"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
                                     Width="Auto"
                                     Height="Auto"
+                                    Margin="0,1,0,1"
                                     Background="{TemplateBinding Background}" />
                         </Grid>
                         <ControlTemplate.Triggers>
                             <Trigger Property="Tag"
                                      Value="Horizontal">
-                                <Setter TargetName="Rectangle1"
+                                <Setter TargetName="CornerScrollBarRectangle"
                                         Property="Width"
                                         Value="Auto" />
-                                <Setter TargetName="Rectangle1"
+                                <Setter TargetName="CornerScrollBarRectangle"
                                         Property="Height"
-                                        Value="7" />
+                                        Value="6" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-
-        <!--ScrollBars-->
-        <Style x:Key="{x:Type ScrollBar}"
-               TargetType="{x:Type ScrollBar}">
+        <Style TargetType="{x:Type ScrollBar}">
             <Setter Property="Stylus.IsFlicksEnabled"
                     Value="false" />
             <Setter Property="Foreground"
-                    Value="LightGray" />
+                    Value="#ADABAB" />
             <Setter Property="Background"
-                    Value="DarkGray" />
+                    Value="Transparent" />
             <Setter Property="Width"
-                    Value="10" />
+                    Value="7" />
+            <Setter Property="VerticalAlignment"
+                    Value="Bottom" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ScrollBar}">
                         <Grid x:Name="GridRoot"
-                              Width="19"
+                              Width="7"
                               Background="{TemplateBinding Background}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="0.00001*" />
                             </Grid.RowDefinitions>
-
                             <Track x:Name="PART_Track"
                                    Grid.Row="0"
                                    IsDirectionReversed="true"
@@ -157,7 +165,7 @@
                                 <Track.Thumb>
                                     <Thumb x:Name="Thumb"
                                            Background="{TemplateBinding Foreground}"
-                                           Style="{DynamicResource ScrollThumbs}" />
+                                           Style="{DynamicResource ScrollBarTrackThumb}" />
                                 </Track.Thumb>
                                 <Track.IncreaseRepeatButton>
                                     <RepeatButton x:Name="PageUp"
@@ -173,7 +181,6 @@
                                 </Track.DecreaseRepeatButton>
                             </Track>
                         </Grid>
-
                         <ControlTemplate.Triggers>
                             <Trigger SourceName="Thumb"
                                      Property="IsMouseOver"
@@ -213,7 +220,7 @@
                                 <Setter Property="Width"
                                         Value="Auto" />
                                 <Setter Property="Height"
-                                        Value="12" />
+                                        Value="8" />
                                 <Setter TargetName="Thumb"
                                         Property="Tag"
                                         Value="Horizontal" />
@@ -229,6 +236,12 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <CollectionViewSource x:Key="SortedClipTiles"
+                              Source="{Binding ClipTiles}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="CopyItemCreatedDateTime"></scm:SortDescription>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -262,7 +275,7 @@
             <!-- Sort Combobox -->
             <Grid Grid.Row="0"
                   Grid.Column="0"
-                  Margin="10">
+                  Margin="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="4*" />
@@ -275,13 +288,21 @@
                        FontWeight="DemiBold"
                        VerticalContentAlignment="Center"
                        Padding="0,0,15,0">Sort By</Label>
-                <local:MpClipBorder CornerRadius="15"
+                <local:MpClipBorder CornerRadius="15" 
+                                    Margin="5"
                                     Grid.Column="1">
                     <ComboBox FontSize="16"
                               Background="Transparent"
-                              HorizontalAlignment="Stretch"
+                              HorizontalContentAlignment="Left"
                               VerticalContentAlignment="Center"
-                              ItemsSource="{Binding SortTypeList}" />
+                              SelectedItem="{Binding SelectedSortType}"
+                              ItemsSource="{Binding SortTypes}">
+                        <ComboBox.ItemTemplate>
+                            <ItemContainerTemplate>
+                                <TextBlock Text="{Binding Header}" />
+                            </ItemContainerTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </local:MpClipBorder>
                 <Button Grid.Column="2"
                         Margin="0,0,0,0" 
@@ -289,9 +310,16 @@
                         BorderThickness="0"
                         Height="30"
                         Width="30"
-                        Command="{Binding CreateTagCommand}">
-                    <Image Source="/MpWpfApp;component/Resources/asc_white.png"
-                           Stretch="Fill" />
+                        Command="{Binding ToggleSortOrderCommand}">
+                    <Grid>
+                        <Image Source="/MpWpfApp;component/Resources/asc_white.png"
+                               Visibility="{Binding AscSortOrderButtonImageVisibility}"
+                               Stretch="Fill" />
+                        <Image Source="/MpWpfApp;component/Resources/desc_white.png"
+                               Visibility="{Binding DescSortOrderButtonImageVisibility}"
+                               Stretch="Fill" />
+                    </Grid>
+                    
                 </Button>
             </Grid>
             <StackPanel Grid.Row="0"
@@ -426,9 +454,9 @@
             <!-- Search Border -->
             <local:MpClipBorder Grid.Row="0"
                                 Grid.Column="2"
-                                Margin="10"
-                                BorderBrush="Black"
-                                BorderThickness="0"
+                                Margin="0"
+                                BorderBrush="{Binding SearchTextBoxBorderBrush}"
+                                BorderThickness="5"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Stretch"
                                 Background="White"
@@ -529,24 +557,23 @@
                      Grid.Row="0"
                      Grid.Column="1"
                      Focusable="True"
-                     AllowDrop="True"
-                     VerticalAlignment="Top"
+                     dd:DragDrop.IsDragSource="True"
+                     dd:DragDrop.IsDropTarget="True"
+                     dd:DragDrop.DragHandler="{Binding}"
+                     dd:DragDrop.DragAdornerTemplate="{StaticResource ClipTileDragAdorner}"
+                     VerticalAlignment="Stretch"
                      Background="Transparent"
                      SelectionMode="Extended"
                      ScrollViewer.CanContentScroll="False"
                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      Visibility="{Binding ClipListVisibility}"
-                     ItemsSource="{Binding ClipTiles, Mode=TwoWay, BindsDirectlyToSource=True, NotifyOnSourceUpdated=True}">
+                     ItemsSource="{Binding ClipTiles}">
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Drop">
+                    <!--<i:EventTrigger EventName="Drop">
                         <i:CallMethodAction TargetObject="{Binding}" 
-                                                        MethodName="ClipTile_Drop"/>
-                    </i:EventTrigger>
-                    <i:EventTrigger EventName="DragEnter">
-                        <i:CallMethodAction TargetObject="{Binding}"
-                                            MethodName="ClipTile_DragEnter" />
-                    </i:EventTrigger>
+                                                        MethodName="ClipTray_Drop"/>
+                    </i:EventTrigger>-->
                     <i:EventTrigger EventName="PreviewMouseWheel">
                         <i:CallMethodAction MethodName="ScrollClipTray"
                                             TargetObject="{Binding}" />
@@ -597,11 +624,31 @@
                                             Margin="{Binding TileMargin}"
                                             Background="White"
                                             BorderThickness="{Binding TileBorderThickness}"
-                                            Width="{Binding TileSize}"
-                                            Height="{Binding TileSize}"
+                                            Width="{Binding TileBorderSize}"
+                                            Height="{Binding TileBorderSize}"
                                             CornerRadius="10"
                                             Visibility="{Binding TileVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True}">
                             <i:Interaction.Triggers>
+                                <!--<i:EventTrigger EventName="Drop">
+                                    <i:CallMethodAction TargetObject="{Binding MainWindowViewModel}"
+                                                        MethodName="ClipTray_Drop" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="DragEnter">
+                                    <i:CallMethodAction TargetObject="{Binding}"
+                                                        MethodName="ClipTile_DragEnter" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
+                                    <i:CallMethodAction TargetObject="{Binding}"
+                                                        MethodName="ClipTile_LeftMouseButtonDown" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                    <i:CallMethodAction TargetObject="{Binding}"
+                                                        MethodName="ClipTile_LeftMouseButtonUp" />
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="PreviewMouseMove">
+                                    <i:CallMethodAction TargetObject="{Binding}"
+                                                        MethodName="ClipTile_MouseMove" />
+                                </i:EventTrigger>-->
                                 <i:EventTrigger EventName="Loaded">
                                     <i:CallMethodAction TargetObject="{Binding}"
                                                         MethodName="ClipTile_Loaded" />
@@ -617,19 +664,7 @@
                                 <i:EventTrigger EventName="KeyDown">
                                     <i:InvokeCommandAction Command="{Binding KeyDownCommand}"
                                                            PassEventArgsToCommand="True" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                                    <i:CallMethodAction TargetObject="{Binding}"
-                                                        MethodName="ClipTile_LeftMouseButtonDown" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                                    <i:CallMethodAction TargetObject="{Binding}"
-                                                        MethodName="ClipTile_LeftMouseButtonUp" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="MouseMove">
-                                    <i:CallMethodAction TargetObject="{Binding}"
-                                                        MethodName="ClipTile_MouseMove" />
-                                </i:EventTrigger>
+                                </i:EventTrigger>                                
                             </i:Interaction.Triggers>
                             <local:MpClipBorder.ContextMenu>
                                 <ContextMenu>
@@ -797,7 +832,6 @@
                                              Canvas.Top="25" />-->
                                 </Canvas>
                                 <!-- RichText Content -->
-                                    <!-- RichText Content-->
                                 <local:MpClipTileRichTextBox x:Name="ClipTileRichTextBox"
                                                              SearchText="{Binding MainWindowViewModel.SearchText}"
                                                              IsReadOnly="True"
@@ -851,7 +885,6 @@
                                 </ListBox>
                             </Grid>
                         </local:MpClipBorder>
-
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

@@ -69,7 +69,7 @@ namespace MpWpfApp {
         }
         public double ClipTileSize {
             get {
-                return TrayHeight - (ClipTileMargin * 2) - ClipTileDropShadowRadius - 30;
+                return TrayHeight - (ClipTileMargin * 2) - ClipTileDropShadowRadius;
             }
         }
         public double ClipTileTitleIconSize {

@@ -14,17 +14,7 @@ namespace MpWpfApp {
     public class MpIcon : MpDbObject {
         public static int TotalIconCount = 0;
         public int iconId { get; set; } 
-       // public Image IconImage { get; set; }
         public ImageSource IconImage { get; set; }
-        //    get {
-        //        BitmapImage bi = new BitmapImage();
-        //        bi.BeginInit();
-        //        bi.StreamSource = new MemoryStream(MpHelpers.ImageConverter.ConvertImageSourceToByteArray(IconImage));
-        //        bi.EndInit();
-        //        return bi;
-        //    }
-        //}
-        //public string Path { get; set; }
 
         public MpIcon() {
             iconId = 0;
@@ -50,9 +40,9 @@ namespace MpWpfApp {
         public override void LoadDataRow(DataRow dr) {
             this.iconId = Convert.ToInt32(dr["pk_MpIconId"].ToString());
             this.IconImage = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
-            MapDataToColumns();
-            Console.WriteLine("Loaded MpIcon");
-            Console.WriteLine(ToString());
+            //MapDataToColumns();
+            //Console.WriteLine("Loaded MpIcon");
+            //Console.WriteLine(ToString());
         }
         public override void WriteToDatabase() {            
             bool isNew = false;

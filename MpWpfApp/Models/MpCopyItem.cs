@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 
 
 namespace MpWpfApp {
-    public class MpCopyItem:MpDbObject {
+    public class MpCopyItem:MpDbObject,IComparable {
         private static int _CopyItemCount = 0;
 
         public List<MpSubTextToken> SubTextTokenList = new List<MpSubTextToken>();
@@ -28,6 +28,16 @@ namespace MpWpfApp {
         public int IconId { get; set; }
         public DateTime CopyDateTime { get; set; }
         public int CopyCount { get; set; }
+        public int PasteCount {
+            get {
+                return GetPasteCount();
+            }
+        }
+        public int RelevanceScore {
+            get {
+                return CopyCount + PasteCount;
+            }
+        }
         public string SourcePath { get; set; }
 
         public MpApp App { get; set; }
@@ -71,15 +81,15 @@ namespace MpWpfApp {
             if (newItem.CopyItemType == MpCopyItemType.RichText) {
                 newItem.DataObject = ((string)data);//.Trim();// Regex.Replace(((string)data).Trim(), @"^\s+(?!\B)|\s*(?>[\r\n]+)$", string.Empty, RegexOptions.Multiline).TrimEnd();
 
-                //if item is a duplicate return null
+                //if item is a duplicate update copycount and return a reference to it
                 DataTable dt = MpDb.Instance.Execute("select * from MpTextItem where ItemText=@1", new List<string>() { "@1" }, new List<object>() { (string)newItem.DataObject });
                 if (dt != null && dt.Rows.Count > 0) {
                     int cid = Convert.ToInt32(dt.Rows[0]["fk_MpCopyItemId"].ToString());
-                    dt = MpDb.Instance.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + cid);
-                    int cc = Convert.ToInt32(dt.Rows[0]["CopyCount"].ToString()) + 1;
-                    Console.WriteLine("MpCopyItem: ignoring duplicate");
-                    MpDb.Instance.ExecuteNonQuery("update MpCopyItem set CopyCount=" + cc + " where pk_MpCopyItemId=" + cid);
-                    return null;
+                    MpCopyItem orgCopyItem = new MpCopyItem(cid);
+                    //orgCopyItem.CopyCount++;
+                    //orgCopyItem.CopyDateTime = DateTime.Now;
+                    Console.WriteLine("MpCopyItem: ignoring duplicate and returning original item");
+                    return orgCopyItem;
                 }
 
                 //parse text for tokens
@@ -129,6 +139,16 @@ namespace MpWpfApp {
             rtf += escapedPlainText.Replace(Environment.NewLine, @" \par ");
             rtf += " }";
             return rtf;
+        }
+        public int GetPasteCount() {
+            if(CopyItemId <= 0) {
+                return 0;
+            }
+            DataTable dt = MpDb.Instance.Execute("select * from MpPasteHistory where fk_MpCopyItemId=" + CopyItemId);
+            if(dt == null) {
+                return 0;
+            }
+            return dt.Rows.Count;
         }
         public string GetPlainText() {
             switch(CopyItemType) {
@@ -253,7 +273,7 @@ namespace MpWpfApp {
                     break;
             }
             MpDb.Instance.ExecuteNonQuery("delete from MpCopyItemTag where fk_MpCopyItemId=" + this.CopyItemId);
-            MpDb.Instance.ExecuteNonQuery("delete from MpTagCopyItemSortOrder where fk_MpCopyItemId=" + this.CopyItemId);
+            MpDb.Instance.ExecuteNonQuery("delete from MpCopyItemSortTypeOrder where fk_MpCopyItemId=" + this.CopyItemId);
         }
         // still req'd if NoDb=true
         public override void WriteToDatabase() {            
@@ -400,6 +420,16 @@ namespace MpWpfApp {
             columnData.Add("Title",this.Title);
             columnData.Add("DataObject",this.DataObject);
             columnData.Add("CopyCount",this.CopyCount);
+        }
+
+        public int CompareTo(object obj) {
+            if(((MpCopyItem)obj).DataObject == DataObject && ((MpCopyItem)obj).AppId == AppId) {
+                return 0;
+            }
+            if (((MpCopyItem)obj).CopyDateTime > CopyDateTime && ((MpCopyItem)obj).AppId == AppId) {
+                return -1;
+            }
+            return 1;
         }
     }
 

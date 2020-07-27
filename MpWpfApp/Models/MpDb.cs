@@ -487,15 +487,21 @@ namespace MpWpfApp {
                     );
                     INSERT INTO MpCopyItemType(TypeName) VALUES ('rich_text'),('image'),('file_list');
                     ---------------------------------------------------------------------------------------------------------------------
-                     CREATE TABLE MpTagCopyItemSortOrder (
-                      pk_MpTagCopyItemSortOrderId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , fk_MpCopyItemId integer NOT NULL
-                    , fk_MpTagId integer NOT NULL
-                    , OrderIdx integer NOT NULL
-                    , CONSTRAINT FK_MpCopyItemTag_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
-                    , CONSTRAINT FK_MpCopyItemTag_1_0 FOREIGN KEY (fk_MpTagId) REFERENCES MpTag (pk_MpTagId)
+                    CREATE TABLE MpSortType (
+                      pk_MpSortTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , SortTypeName text NULL 
                     );
-                     ---------------------------------------------------------------------------------------------------------------------
+                    INSERT INTO MpSortType(SortTypeName) VALUES('Date'),('Application'),('Title'),('Content'),('Type'),('Usage');
+                    ---------------------------------------------------------------------------------------------------------------------
+                    CREATE TABLE MpCopyItemSortTypeOrder (
+                      pk_MpCopyItemSortTypeOrderId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , fk_MpCopyItemId integer NOT NULL
+                    , fk_MpSortTypeId integer NOT NULL
+                    , SortOrder integer NOT NULL 
+                    , CONSTRAINT FK_MpCopyItemSortTypeOrder_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
+                    , CONSTRAINT FK_MpCopyItemSortTypeOrder_1_0 FOREIGN KEY (fk_MpSortTypeId) REFERENCES MpSortType (pk_MpSortTypeId)
+                    );
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCommandType (
                       pk_MpCommandTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , CommandName text NOT NULL
@@ -546,6 +552,7 @@ namespace MpWpfApp {
                     , fk_MpColorId integer 
                     , Title text NULL 
                     , CopyCount integer not null default 1
+                    , PasteCount integer not null default 0
                     , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL
                     , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
                     , CONSTRAINT FK_MpCopyItem_1_0 FOREIGN KEY (fk_MpClientId) REFERENCES MpClient (pk_MpClientId)

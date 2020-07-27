@@ -19,9 +19,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Management;
 
 namespace MpWpfApp {
-    public class  MpClipTileViewModel : MpViewModelBase {
+    public class MpClipTileViewModel : MpViewModelBase {
         #region Private Variables
         private static MpClipTileViewModel _sourceSelectedClipTile = null;
         private bool _isMouseDown = false;
@@ -33,8 +34,8 @@ namespace MpWpfApp {
             get {
                 ObservableCollection<MpClipTileTagMenuItemViewModel> tagMenuItems = new ObservableCollection<MpClipTileTagMenuItemViewModel>();
                 var tagTiles = ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).TagTiles;
-                foreach(var tagTile in tagTiles) {
-                    if(tagTile.TagName == "History") {
+                foreach (var tagTile in tagTiles) {
+                    if (tagTile.TagName == "History") {
                         continue;
                     }
                     tagMenuItems.Add(new MpClipTileTagMenuItemViewModel(tagTile.TagName, tagTile.LinkTagToCopyItemCommand, tagTile.Tag.IsLinkedWithCopyItem(CopyItem)));
@@ -46,16 +47,16 @@ namespace MpWpfApp {
         private ObservableCollection<MpFileListItemViewModel> _fileListItems = null;
         public ObservableCollection<MpFileListItemViewModel> FileListItems {
             get {
-                if(_fileListItems == null && CopyItem.CopyItemType == MpCopyItemType.FileList) {
+                if (_fileListItems == null && CopyItem.CopyItemType == MpCopyItemType.FileList) {
                     _fileListItems = new ObservableCollection<MpFileListItemViewModel>();
-                    foreach(string fileItem in (string[])CopyItem.DataObject) {
+                    foreach (string fileItem in (string[])CopyItem.DataObject) {
                         _fileListItems.Add(new MpFileListItemViewModel(fileItem));
                     }
                 }
                 return _fileListItems;
             }
             set {
-                if(_fileListItems != value) {
+                if (_fileListItems != value) {
                     _fileListItems = value;
                     OnPropertyChanged(nameof(FileListItems));
                 }
@@ -69,7 +70,7 @@ namespace MpWpfApp {
                 return _isTitleTextBoxFocused;
             }
             set {
-                if(_isTitleTextBoxFocused != value) {
+                if (_isTitleTextBoxFocused != value) {
                     _isTitleTextBoxFocused = value;
                     OnPropertyChanged(nameof(IsTitleTextBoxFocused));
                 }
@@ -82,9 +83,9 @@ namespace MpWpfApp {
                 return _isSelected;
             }
             set {
-                if(_isSelected != value) {
+                if (_isSelected != value) {
                     _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));                    
+                    OnPropertyChanged(nameof(IsSelected));
                 }
             }
         }
@@ -95,7 +96,7 @@ namespace MpWpfApp {
                 return _isHovering;
             }
             set {
-                if(_isHovering != value) {
+                if (_isHovering != value) {
                     _isHovering = value;
                     OnPropertyChanged(nameof(IsHovering));
                 }
@@ -108,7 +109,7 @@ namespace MpWpfApp {
                 return _isDragging;
             }
             set {
-                if(_isDragging != value) {
+                if (_isDragging != value) {
                     _isDragging = value;
                     OnPropertyChanged(nameof(IsDragging));
                 }
@@ -121,20 +122,20 @@ namespace MpWpfApp {
                 return _isEditingTitle;
             }
             set {
-                if(_isEditingTitle != value) {
+                if (_isEditingTitle != value) {
                     _isEditingTitle = value;
                     OnPropertyChanged(nameof(IsEditingTitle));
                 }
             }
         }
-        
+
         private Brush _tileBorderBrush = Brushes.Transparent;
         public Brush TileBorderBrush {
             get {
                 return _tileBorderBrush;
             }
             set {
-                if(_tileBorderBrush != value) {
+                if (_tileBorderBrush != value) {
                     _tileBorderBrush = value;
                     OnPropertyChanged(nameof(TileBorderBrush));
                 }
@@ -143,13 +144,26 @@ namespace MpWpfApp {
         #endregion
 
         #region Layout 
+        private int _sortOrderIdx = -1;
+        public int SortOrderIdx {
+            get {
+                return _sortOrderIdx;
+            }
+            set {
+                if (_sortOrderIdx != value) {
+                    _sortOrderIdx = value;
+                    OnPropertyChanged(nameof(SortOrderIdx));
+                }
+            }
+        }
+
         private Visibility _tileVisibility = Visibility.Visible;
         public Visibility TileVisibility {
             get {
                 return _tileVisibility;
             }
             set {
-                if(_tileVisibility != value) {
+                if (_tileVisibility != value) {
                     _tileVisibility = value;
                     OnPropertyChanged(nameof(TileVisibility));
                 }
@@ -188,7 +202,7 @@ namespace MpWpfApp {
                 return _tileSize;
             }
             set {
-                if(_tileSize != value) {
+                if (_tileSize != value) {
                     _tileSize = value;
                     OnPropertyChanged(nameof(TileSize));
                 }
@@ -201,7 +215,7 @@ namespace MpWpfApp {
                 return _tileTitleIconSize;
             }
             set {
-                if(_tileTitleIconSize != value) {
+                if (_tileTitleIconSize != value) {
                     _tileTitleIconSize = value;
                     OnPropertyChanged(nameof(TileTitleIconSize));
                 }
@@ -214,7 +228,7 @@ namespace MpWpfApp {
                 return _tileBorderSize;
             }
             set {
-                if(_tileBorderSize != value) {
+                if (_tileBorderSize != value) {
                     _tileBorderSize = value;
                     OnPropertyChanged(nameof(TileBorderSize));
                 }
@@ -222,16 +236,12 @@ namespace MpWpfApp {
         }
 
         private double _tileBorderThickness = MpMeasurements.Instance.ClipTileBorderThickness;
-        public double TileBorderThickness
-        {
-            get
-            {
+        public double TileBorderThickness {
+            get {
                 return _tileBorderThickness;
             }
-            set
-            {
-                if (_tileBorderThickness != value)
-                {
+            set {
+                if (_tileBorderThickness != value) {
                     _tileBorderThickness = value;
                     OnPropertyChanged(nameof(TileBorderThickness));
                 }
@@ -244,7 +254,7 @@ namespace MpWpfApp {
                 return _tileTitleHeight;
             }
             set {
-                if(_tileTitleHeight != value) {
+                if (_tileTitleHeight != value) {
                     _tileTitleHeight = value;
                     OnPropertyChanged(nameof(TileTitleHeight));
                 }
@@ -257,7 +267,7 @@ namespace MpWpfApp {
                 return _tileContentHeight;
             }
             set {
-                if(_tileTitleHeight != value) {
+                if (_tileTitleHeight != value) {
                     _tileTitleHeight = value;
                     OnPropertyChanged(nameof(TileTitleHeight));
                 }
@@ -270,7 +280,7 @@ namespace MpWpfApp {
                 return _tileMargin;
             }
             set {
-                if(_tileMargin != value) {
+                if (_tileMargin != value) {
                     _tileMargin = value;
                     OnPropertyChanged(nameof(TileMargin));
                 }
@@ -283,7 +293,7 @@ namespace MpWpfApp {
                 return _tileDropShadowRadius;
             }
             set {
-                if(_tileDropShadowRadius != value) {
+                if (_tileDropShadowRadius != value) {
                     _tileDropShadowRadius = value;
                     OnPropertyChanged(nameof(TileDropShadowRadius));
                 }
@@ -296,7 +306,7 @@ namespace MpWpfApp {
                 return _mainWindowViewModel;
             }
             set {
-                if(_mainWindowViewModel != value) {
+                if (_mainWindowViewModel != value) {
                     _mainWindowViewModel = value;
                     OnPropertyChanged(nameof(MainWindowViewModel));
                 }
@@ -331,7 +341,7 @@ namespace MpWpfApp {
             get {
                 return MpHelpers.ChangeBrushAlpha(
                     MpHelpers.ChangeBrushBrightness(
-                        new SolidColorBrush(CopyItem.ItemColor.Color), 
+                        new SolidColorBrush(CopyItem.ItemColor.Color),
                         -0.4f),
                     50);
             }
@@ -347,12 +357,40 @@ namespace MpWpfApp {
             }
         }
 
+
+        #endregion
+
+        #region Model Properties
+
+        public int CopyItemUsageScore {
+            get {
+                return CopyItem.RelevanceScore;
+            }
+        }
+        public int CopyItemAppId {
+            get {
+                return CopyItem.AppId;
+            }
+        }
+
+        public MpCopyItemType CopyItemType {
+            get {
+                return CopyItem.CopyItemType;
+            }
+        }
+
+        public DateTime CopyItemCreatedDateTime {
+            get {
+                return CopyItem.CopyDateTime;
+            }
+        }
+
         public string Title {
             get {
                 return CopyItem.Title;
             }
             set {
-                if(CopyItem.Title != value) {
+                if (CopyItem.Title != value) {
                     CopyItem.Title = value;
                     OnPropertyChanged(nameof(Title));
                 }
@@ -364,9 +402,10 @@ namespace MpWpfApp {
                 if (CopyItem.CopyItemType == MpCopyItemType.RichText) {
                     return (string)CopyItem.DataObject;
                 } else if (CopyItem.CopyItemType == MpCopyItemType.FileList) {
+                    return MpCopyItem.PlainTextToRtf(CopyItem.GetPlainText());
+                } else if (CopyItem.CopyItemType == MpCopyItemType.Image) {
+                    // TODO add image to text conversion here
                     return MpCopyItem.PlainTextToRtf(Enum.GetName(typeof(MpCopyItemType), CopyItem.CopyItemType));
-                } else {
-                    return MpCopyItem.PlainTextToRtf(Enum.GetName(typeof(MpCopyItemType),CopyItem.CopyItemType));
                 }
                 return string.Empty;
             }
@@ -381,19 +420,9 @@ namespace MpWpfApp {
                 return CopyItem.App.Icon.IconImage;
             }
         }
-        #endregion
-
-        #region Model Properties
-        private string _text = string.Empty;
         public string Text {
             get {
-                return _text;
-            }
-            set {
-                if(_text != value) {
-                    _text = value;
-                    OnPropertyChanged(nameof(Text));
-                }
+                return CopyItem.GetPlainText();
             }
         }
 
@@ -460,71 +489,15 @@ namespace MpWpfApp {
         #endregion
 
         #region View Events Handlers
-        public void ClipTile_LeftMouseButtonDown(object sender,MouseEventArgs e) {
-            _startDragPoint = e.GetPosition(null);
-            _isMouseDown = true;
-        }
-        public void ClipTile_MouseMove(object sender, MouseEventArgs e) {
-            // Get the current mouse position
-            Point mousePos = e.GetPosition(null);
-            Vector diff = _startDragPoint - mousePos;
 
-            if (_isMouseDown) {
-                // Get the dragged ListViewItem
-                ListView listView = sender as ListView;
-                ListViewItem listViewItem = FindAnchestor<ListViewItem>((DependencyObject)e.OriginalSource);
-
-                // Find the data behind the ListViewItem
-                var clipTileViewModel = (MpClipTileViewModel)listViewItem.DataContext;
-                // Initialize the drag & drop operation
-                DataObject dragData = new DataObject("myFormat", clipTileViewModel);
-                DragDrop.DoDragDrop(listViewItem, dragData, DragDropEffects.Move);
-            }
-        }
-        // Helper to search up the VisualTree
-        private T FindAnchestor<T>(DependencyObject current)
-            where T : DependencyObject {
-            do {
-                if (current is T) {
-                    return (T)current;
-                }
-                current = VisualTreeHelper.GetParent(current);
-            }
-            while (current != null);
-            return null;
-        }
-        public void ClipTile_LeftMouseButtonUp(object sender, MouseEventArgs e) {
-            _isMouseDown = false;
-        }
+        
         public void MouseEnter() {
             IsHovering = true;
         }
 
-        private PolyBezierSegment CreateCurveRect(double x,double y,double w,double h, double m1,double m2,double m3,double m4) {
-            PolyBezierSegment plineSeg = new PolyBezierSegment();
-            plineSeg.Points.Add(new Point(x,y));
-            plineSeg.Points.Add(new Point(x,y));
-            plineSeg.Points.Add(new Point(x,y));
-
-            plineSeg.Points.Add(new Point(w, y));
-            plineSeg.Points.Add(new Point(w, y));
-            plineSeg.Points.Add(new Point(w, y));
-
-            plineSeg.Points.Add(new Point(w, h));
-            plineSeg.Points.Add(new Point(w, h));
-            plineSeg.Points.Add(new Point(w, h));
-
-            //test m1=0.75 m2=2.0 m3=0.5 m4=0.5
-            plineSeg.Points.Add(new Point(w * m1, h * m2));
-            plineSeg.Points.Add(new Point(w * m3, h * m4));
-            plineSeg.Points.Add(new Point(x, h));
-
-            return plineSeg;
-        }
-        
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             var titleIconImage = (Image)((Border)sender)?.FindName("ClipTileAppIconImage");
-            Canvas.SetLeft(titleIconImage, TileBorderSize - TileTitleHeight);
+            Canvas.SetLeft(titleIconImage, TileBorderSize - TileTitleHeight - 10);
             Canvas.SetTop(titleIconImage, 2);// TileBorderSize * 0.5);
 
             var flb = (ListBox)((Border)sender)?.FindName("ClipTileFileListBox"); 
@@ -548,92 +521,91 @@ namespace MpWpfApp {
                 img.MouseRightButtonUp += ClipTileContent_MouseRightButtonUp;
                 return;
             } else if(CopyItem.CopyItemType == MpCopyItemType.RichText) {
+                img.Visibility = Visibility.Collapsed;
+                flb.Visibility = Visibility.Collapsed;
+                //First load the richtextbox with copytext
+                rtb.SetRtf(RichText);
+                rtb.PreviewMouseLeftButtonDown += ClipTileContent_PreviewLeftMouseButtonDown;
+                rtb.MouseRightButtonUp += ClipTileContent_MouseRightButtonUp;
+                //Text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
+                //var dpi4 = VisualTreeHelper.GetDpi(rtb);
+                //FormattedText ft = new FormattedText(Text, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface(rtb.Document.FontFamily.ToString()), rtb.Document.FontSize, rtb.Document.Foreground, dpi4.PixelsPerDip);//VisualTreeHelper.GetDpi(rtb).PixelsPerDip);
+                //rtb.Width = ft.Width + rtb.Padding.Left + rtb.Padding.Right;
+                //rtb.Height = ft.Height + rtb.Padding.Top + rtb.Padding.Bottom;
+                rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
+                rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
 
-            }
-            img.Visibility = Visibility.Collapsed;
-            flb.Visibility = Visibility.Collapsed;
-            //First load the richtextbox with copytext
-            rtb.SetRtf(RichText); 
-            rtb.PreviewMouseLeftButtonDown += ClipTileContent_PreviewLeftMouseButtonDown;
-            rtb.MouseRightButtonUp += ClipTileContent_MouseRightButtonUp;
-            //Text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
-            //var dpi4 = VisualTreeHelper.GetDpi(rtb);
-            //FormattedText ft = new FormattedText(Text, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface(rtb.Document.FontFamily.ToString()), rtb.Document.FontSize, rtb.Document.Foreground, dpi4.PixelsPerDip);//VisualTreeHelper.GetDpi(rtb).PixelsPerDip);
-            //rtb.Width = ft.Width + rtb.Padding.Left + rtb.Padding.Right;
-            //rtb.Height = ft.Height + rtb.Padding.Top + rtb.Padding.Bottom;
-            rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
-            rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
-            
-            var sortedTokenList = CopyItem.SubTextTokenList.OrderBy(stt => stt.BlockIdx).ThenBy(stt=>stt.StartIdx).ToList();
-            if (sortedTokenList.Count > 0) {
-                var doc = rtb.Document;
-                TextRange lastTokenRange = null;
-                //iterate over each token
-                for(int i = 0;i < sortedTokenList.Count;i++) {
-                    MpSubTextToken token = sortedTokenList[i];
-                    Block block = doc.Blocks.ToArray()[token.BlockIdx];
-                    //find and remove the inline with the token
+                var sortedTokenList = CopyItem.SubTextTokenList.OrderBy(stt => stt.BlockIdx).ThenBy(stt => stt.StartIdx).ToList();
+                if (sortedTokenList.Count > 0) {
+                    var doc = rtb.Document;
+                    TextRange lastTokenRange = null;
+                    //iterate over each token
+                    for (int i = 0; i < sortedTokenList.Count; i++) {
+                        MpSubTextToken token = sortedTokenList[i];
+                        Block block = doc.Blocks.ToArray()[token.BlockIdx];
+                        //find and remove the inline with the token
 
-                    //Span inline = (Span)block.Inlines.ToArray()[token.InlineIdx];
-                    //para.Inlines.Remove(inline);
-                    TextRange runRange = new TextRange(block.ContentStart, block.ContentEnd);
-                    string tokenText = runRange.Text.Substring(token.StartIdx, token.EndIdx - token.StartIdx);
-                    TextPointer searchStartPointer = block.ContentStart;
-                    if (i > 0) {
-                        var lastToken = sortedTokenList[i - 1];
-                        if (token.BlockIdx == lastToken.BlockIdx) {
-                            searchStartPointer = lastTokenRange.End;
-                        }
-                    }
-
-                    //Paragraph para = (Paragraph)doc.Blocks.ToArray()[token.BlockIdx];
-                    //Span inline = (Span)para.Inlines.ToArray()[token.InlineIdx];
-                    ////para.Inlines.Remove(inline);
-                    //TextRange runRange = new TextRange(inline.ContentStart, inline.ContentEnd);            
-                    //string tokenText = runRange.Text.Substring(token.StartIdx,token.EndIdx-token.StartIdx);
-                    //TextPointer searchStartPointer = inline.ContentStart;
-                    //if(i > 0) {
-                    //    var lastToken = sortedTokenList[i - 1];
-                    //    if(token.BlockIdx == lastToken.BlockIdx && token.InlineIdx == lastToken.InlineIdx) {
-                    //        searchStartPointer = lastTokenRange.End;
-                    //    }
-                    //}
-
-                    TextRange tokenRange = FindStringRangeFromPosition(searchStartPointer, tokenText);
-                    lastTokenRange = tokenRange;
-                    Hyperlink tokenLink = new Hyperlink(tokenRange.Start,tokenRange.End);
-                    tokenLink.IsEnabled = true;
-                    tokenLink.RequestNavigate += Hyperlink_RequestNavigate;
-                    MenuItem convertToQrCodeMenuItem = new MenuItem();
-                    convertToQrCodeMenuItem.Header = "Convert to QR Code";
-                    convertToQrCodeMenuItem.Click += ConvertToQrCodeMenuItem_Click;
-                    convertToQrCodeMenuItem.Tag = tokenLink;
-                    tokenLink.ContextMenu = new ContextMenu();
-                    tokenLink.ContextMenu.Items.Add(convertToQrCodeMenuItem);
-                    switch (token.TokenType) {
-                        case MpSubTextTokenType.Uri:
-                            if (!tokenText.Contains("https://")) {
-                                tokenLink.NavigateUri = new Uri("https://" + tokenText);
-                            } else {
-                                tokenLink.NavigateUri = new Uri(tokenText);
+                        //Span inline = (Span)block.Inlines.ToArray()[token.InlineIdx];
+                        //para.Inlines.Remove(inline);
+                        TextRange runRange = new TextRange(block.ContentStart, block.ContentEnd);
+                        string tokenText = runRange.Text.Substring(token.StartIdx, token.EndIdx - token.StartIdx);
+                        TextPointer searchStartPointer = block.ContentStart;
+                        if (i > 0) {
+                            var lastToken = sortedTokenList[i - 1];
+                            if (token.BlockIdx == lastToken.BlockIdx) {
+                                searchStartPointer = lastTokenRange.End;
                             }
-                            MenuItem minifyUrl = new MenuItem();
-                            minifyUrl.Header = "Minify with bit.ly";
-                            minifyUrl.Click += MinifyUrl_Click;
-                            minifyUrl.Tag = tokenLink;
-                            tokenLink.ContextMenu.Items.Add(minifyUrl);
-                            break;
+                        }
 
-                        case MpSubTextTokenType.Email:
-                            tokenLink.NavigateUri = new Uri("mailto:" + tokenText);
-                            break;
+                        //Paragraph para = (Paragraph)doc.Blocks.ToArray()[token.BlockIdx];
+                        //Span inline = (Span)para.Inlines.ToArray()[token.InlineIdx];
+                        ////para.Inlines.Remove(inline);
+                        //TextRange runRange = new TextRange(inline.ContentStart, inline.ContentEnd);            
+                        //string tokenText = runRange.Text.Substring(token.StartIdx,token.EndIdx-token.StartIdx);
+                        //TextPointer searchStartPointer = inline.ContentStart;
+                        //if(i > 0) {
+                        //    var lastToken = sortedTokenList[i - 1];
+                        //    if(token.BlockIdx == lastToken.BlockIdx && token.InlineIdx == lastToken.InlineIdx) {
+                        //        searchStartPointer = lastTokenRange.End;
+                        //    }
+                        //}
 
-                        case MpSubTextTokenType.PhoneNumber:
-                            tokenLink.NavigateUri = new Uri("tel:" + tokenText);
-                            break;
-                        default:
+                        TextRange tokenRange = FindStringRangeFromPosition(searchStartPointer, tokenText);
+                        lastTokenRange = tokenRange;
+                        Hyperlink tokenLink = new Hyperlink(tokenRange.Start, tokenRange.End);
+                        tokenLink.IsEnabled = true;
+                        tokenLink.RequestNavigate += Hyperlink_RequestNavigate;
+                        MenuItem convertToQrCodeMenuItem = new MenuItem();
+                        convertToQrCodeMenuItem.Header = "Convert to QR Code";
+                        convertToQrCodeMenuItem.Click += ConvertToQrCodeMenuItem_Click;
+                        convertToQrCodeMenuItem.Tag = tokenLink;
+                        tokenLink.ContextMenu = new ContextMenu();
+                        tokenLink.ContextMenu.Items.Add(convertToQrCodeMenuItem);
+                        switch (token.TokenType) {
+                            case MpSubTextTokenType.Uri:
+                                if (!tokenText.Contains("https://")) {
+                                    tokenLink.NavigateUri = new Uri("https://" + tokenText);
+                                } else {
+                                    tokenLink.NavigateUri = new Uri(tokenText);
+                                }
+                                MenuItem minifyUrl = new MenuItem();
+                                minifyUrl.Header = "Minify with bit.ly";
+                                minifyUrl.Click += MinifyUrl_Click;
+                                minifyUrl.Tag = tokenLink;
+                                tokenLink.ContextMenu.Items.Add(minifyUrl);
+                                break;
 
-                            break;
+                            case MpSubTextTokenType.Email:
+                                tokenLink.NavigateUri = new Uri("mailto:" + tokenText);
+                                break;
+
+                            case MpSubTextTokenType.PhoneNumber:
+                                tokenLink.NavigateUri = new Uri("tel:" + tokenText);
+                                break;
+                            default:
+
+                                break;
+                        }
                     }
                 }
             }
@@ -647,7 +619,7 @@ namespace MpWpfApp {
             MpTag historyTag = new MpTag(1);
             historyTag.LinkWithCopyItem(newCopyItem);
             MainWindowViewModel.ClearSelection();
-            MainWindowViewModel.AddClipTile(newCopyItem);
+            MainWindowViewModel.CreateClipTile(newCopyItem);
         }
         
         private void ClipTileContent_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
@@ -679,7 +651,7 @@ namespace MpWpfApp {
                     MpTag historyTag = new MpTag(1);
                     historyTag.LinkWithCopyItem(qrCopyItem);
                     MainWindowViewModel.ClearSelection();
-                    MainWindowViewModel.AddClipTile(qrCopyItem);
+                    MainWindowViewModel.CreateClipTile(qrCopyItem);
                 }
             }                
         }
@@ -716,7 +688,9 @@ namespace MpWpfApp {
                 _sourceSelectedClipTile = this;
             }
 
-            ((RichTextBox)sender).Selection.Select(((RichTextBox)sender).Document.ContentEnd, ((RichTextBox)sender).Document.ContentEnd);
+            if(sender.GetType() == typeof(RichTextBox)) {
+                ((RichTextBox)sender).Selection.Select(((RichTextBox)sender).Document.ContentEnd, ((RichTextBox)sender).Document.ContentEnd);
+            }
         }
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e) {
@@ -744,6 +718,54 @@ namespace MpWpfApp {
         public void ContextMenuMouseLeftButtonUpOnSearchYandex() {
             System.Diagnostics.Process.Start(@"https://yandex.com/search/?text=" + System.Uri.EscapeDataString(Text));
         }
+
+        #endregion
+
+        #region Drag Drop Event Handlers
+
+        //public void ClipTile_DragEnter(object sender, DragEventArgs e) {
+        //    if (!e.Data.GetDataPresent("MonkeyPasteFormat") || sender == e.Source) {
+        //        e.Effects = DragDropEffects.None;
+        //    }
+        //}
+
+        //public void ClipTile_LeftMouseButtonDown(object sender, MouseEventArgs e) {
+        //    _startDragPoint = e.GetPosition(null);
+        //    _isMouseDown = true;
+        //}
+        //public void ClipTile_MouseMove(object sender, MouseEventArgs e) {
+        //    // Get the current mouse position
+        //    Point mousePos = e.GetPosition(null);
+        //    Vector diff = _startDragPoint - mousePos;
+
+        //    if (_isMouseDown) {
+        //        var clipBorder = (MpClipBorder)sender;
+
+        //        var clipTileViewModel = (MpClipTileViewModel)clipBorder.DataContext;
+        //        // Initialize the drag & drop operation
+        //        DataObject dragData = new DataObject("MonkeyPasteFormat", clipTileViewModel);
+
+        //        dragData.SetData(DataFormats.Rtf, RichText);
+        //        dragData.SetData(DataFormats.Text, clipTileViewModel.CopyItem.GetPlainText());
+        //        //dragData.SetData(dragData);
+        //        DragDrop.DoDragDrop(clipBorder, dragData, DragDropEffects.None);
+        //    }
+        //}
+        //// Helper to search up the VisualTree
+        //private T FindAnchestor<T>(DependencyObject current)
+        //    where T : DependencyObject {
+        //    do {
+        //        if (current is T) {
+        //            return (T)current;
+        //        }
+        //        current = VisualTreeHelper.GetParent(current);
+        //    }
+        //    while (current != null);
+        //    return null;
+        //}
+        //public void ClipTile_LeftMouseButtonUp(object sender, MouseEventArgs e) {
+        //    _isMouseDown = false;
+        //}
 
         #endregion
 
@@ -827,7 +849,7 @@ namespace MpWpfApp {
                     //In order to paste the app must hide first
                     MainWindowViewModel.HideWindowCommand.Execute(null);
                     foreach(var clipTile in MainWindowViewModel.SelectedClipTiles) {
-                        MainWindowViewModel.ClipboardMonitor.PasteCopyItem(clipTile.RichText);
+                        MainWindowViewModel.ClipboardMonitor.PasteCopyItem(clipTile.CopyItem);
                     }
                 }
             }
@@ -867,6 +889,12 @@ namespace MpWpfApp {
             using (SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer()) {
                 speechSynthesizer.Speak(Text);
             }
+        }
+        #endregion
+
+        #region Overrides
+        public override string ToString() {
+            return CopyItem.GetPlainText();
         }
         #endregion
     }

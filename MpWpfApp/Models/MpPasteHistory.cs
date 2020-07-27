@@ -29,6 +29,16 @@ namespace MpWpfApp {
 
             WriteToDatabase();
         }
+        public static List<MpPasteHistory> GetAllPasteHistory() {
+            var pasteHistoryList = new List<MpPasteHistory>();
+            DataTable dt = MpDb.Instance.Execute("select * from MpPasteHistory");
+            if (dt != null && dt.Rows.Count > 0) {
+                foreach (DataRow r in dt.Rows) {
+                    pasteHistoryList.Add(new MpPasteHistory(r));
+                }
+            }
+            return pasteHistoryList;
+        }
         public override void LoadDataRow(DataRow dr) {
             PasteHistoryId = Convert.ToInt32(dr["pk_MpPasteHistoryId"],CultureInfo.InvariantCulture);
             CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemId"], CultureInfo.InvariantCulture);

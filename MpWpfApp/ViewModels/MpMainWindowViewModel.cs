@@ -5,6 +5,7 @@ using GongSolutions.Wpf.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -16,6 +17,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase, IDragSource {
@@ -34,7 +36,7 @@ namespace MpWpfApp {
         public MpClipboardMonitor ClipboardMonitor { get; private set; }
         #endregion
 
-        #region Properties
+        #region Collection Properties
         
         private ObservableCollection<MpClipTileViewModel> _clipTiles = new ObservableCollection<MpClipTileViewModel>();
         public ObservableCollection<MpClipTileViewModel> ClipTiles {
@@ -80,32 +82,43 @@ namespace MpWpfApp {
             }
         }
 
-        public List<string> SortTypeList {
+        private ObservableCollection<MpSortTypeComboBoxItemViewModel> _sortTypes = new ObservableCollection<MpSortTypeComboBoxItemViewModel>();
+        public ObservableCollection<MpSortTypeComboBoxItemViewModel> SortTypes {
             get {
-                var sortTypes = new List<string>();
-                sortTypes.Add("Date");
-                sortTypes.Add("Application");
-                sortTypes.Add("Title");
-                sortTypes.Add("Content");
-                sortTypes.Add("Usage");
-                return sortTypes;
+                if(_sortTypes.Count == 0) {
+                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel("Date",null));
+                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel("Application", null));
+                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel("Title", null));
+                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel("Content", null));
+                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel("Type", null));
+                    _sortTypes.Add(new MpSortTypeComboBoxItemViewModel("Usage", null));
+                }
+                return _sortTypes;
+            }
+            set {
+                if(_sortTypes != value) {
+                    _sortTypes = value;
+                    OnPropertyChanged(nameof(SortTypes));
+                }
             }
         }
-        #endregion
 
-        #region Business Logic Properties
-        private string _selectedSortType;
-        public string SelectedSortType {
+        private MpSortTypeComboBoxItemViewModel _selectedSortType;
+        public MpSortTypeComboBoxItemViewModel SelectedSortType {
             get {
                 return _selectedSortType;
             }
-             set {
-                if(_selectedSortType != value) {
+            set {
+                if (_selectedSortType != value) {
                     _selectedSortType = value;
                     OnPropertyChanged(nameof(SelectedSortType));
                 }
             }
         }
+
+        #endregion
+
+        #region Business Logic Properties
 
         private Combination _showMainWindowCombination;
         public Combination ShowMainWindowCombination {
@@ -227,6 +240,19 @@ namespace MpWpfApp {
         #endregion
 
         #region View Properties
+        private Brush _searchTextBoxBorderBrush = Brushes.Transparent;
+        public Brush SearchTextBoxBorderBrush {
+            get {
+                return _searchTextBoxBorderBrush;
+            }
+            set {
+                if(_searchTextBoxBorderBrush != value) {
+                    _searchTextBoxBorderBrush = value;
+                    OnPropertyChanged(nameof(SearchTextBoxBorderBrush));
+                }
+            }
+        }
+
         private Visibility _emptyListMessageVisibility = Visibility.Collapsed;
         public Visibility EmptyListMessageVisibility {
             get {
@@ -262,6 +288,32 @@ namespace MpWpfApp {
                 if (_mergeClipsCommandVisibility != value) {
                     _mergeClipsCommandVisibility = value;
                     OnPropertyChanged(nameof(MergeClipsCommandVisibility));
+                }
+            }
+        }
+
+        private Visibility _ascSortOrderButtonImageVisibility = Visibility.Collapsed;
+        public Visibility AscSortOrderButtonImageVisibility {
+            get {
+                return _ascSortOrderButtonImageVisibility;
+            }
+            set {
+                if (_ascSortOrderButtonImageVisibility != value) {
+                    _ascSortOrderButtonImageVisibility = value;
+                    OnPropertyChanged(nameof(AscSortOrderButtonImageVisibility));
+                }
+            }
+        }
+
+        private Visibility _descSortOrderButtonImageVisibility = Visibility.Visible;
+        public Visibility DescSortOrderButtonImageVisibility {
+            get {
+                return _descSortOrderButtonImageVisibility;
+            }
+            set {
+                if (_descSortOrderButtonImageVisibility != value) {
+                    _descSortOrderButtonImageVisibility = value;
+                    OnPropertyChanged(nameof(DescSortOrderButtonImageVisibility));
                 }
             }
         }
@@ -334,7 +386,7 @@ namespace MpWpfApp {
         #region View Event Handlers
         public void MainWindowLoaded(object sender,RoutedEventArgs e) {
             SearchText = Properties.Settings.Default.SearchPlaceHolderText;
-            
+            SelectedSortType = SortTypes[0];
             SetupMainWindowRect();
 
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
@@ -342,14 +394,14 @@ namespace MpWpfApp {
                 AddTagTile(new MpTag("Favorites", MpHelpers.GetRandomColor()));
                 AddTagTile(new MpTag("C#", MpHelpers.GetRandomColor()));
                 for (int i = 0; i < 15; i++) {
-                    AddClipTile(MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, MpCopyItem.PlainTextToRtf(MpHelpers.GetRandomString(100, 100)), MpHelpers.GetProcessPath(Process.GetCurrentProcess().Handle), MpHelpers.GetRandomColor()));
+                    CreateClipTile(MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, MpCopyItem.PlainTextToRtf(MpHelpers.GetRandomString(100, 100)), MpHelpers.GetProcessPath(Process.GetCurrentProcess().Handle), MpHelpers.GetRandomColor()));
                 }
 
                 return;
             }
             //create tiles for all clips in the database
             foreach (MpCopyItem c in MpCopyItem.GetAllCopyItems()) {
-                AddClipTile(c);
+                CreateClipTile(c);
             }
 
             ResetSelection();
@@ -387,8 +439,14 @@ namespace MpWpfApp {
                         return;
                     }
                     FilterTiles(SearchText);
-                    Sort("CopyItemId", false);
-
+                    SortClipTiles();
+                    if(!string.IsNullOrEmpty(SearchText.Trim())) {
+                        if(VisibileClipTiles.Count > 0) {
+                            SearchTextBoxBorderBrush = Brushes.Transparent;
+                        } else {
+                            SearchTextBoxBorderBrush = Brushes.Red;
+                        }
+                    }
                     ResetSelection();
                     break;
                 case nameof(IsAutoCopyMode):
@@ -398,20 +456,11 @@ namespace MpWpfApp {
                         _globalHook.MouseUp -= GlobalMouseUpEvent;
                     }
                     break;
-            }
-        }
-
-        public void ClipTile_DragEnter(object sender, DragEventArgs e) {
-            if (!e.Data.GetDataPresent("myFormat") || sender == e.Source) {
-                e.Effects = DragDropEffects.None;
-            }
-        }
-
-        public void ClipTile_Drop(object sender, DragEventArgs e) {
-            if (e.Data.GetDataPresent("myFormat")) {
-                var clipTileViewModel = (MpClipTileViewModel)e.Data.GetData("myFormat");
-                ListView listView = sender as ListView;
-                listView.Items.Add(clipTileViewModel);
+                case nameof(AscSortOrderButtonImageVisibility):
+                case nameof(DescSortOrderButtonImageVisibility):
+                case nameof(SelectedSortType):
+                    SortClipTiles();
+                    break;
             }
         }
 
@@ -442,6 +491,7 @@ namespace MpWpfApp {
         public void SearchTextboxBorderPassFocus() {
             ((TextBox)((MpMainWindow)Application.Current.MainWindow).FindName("SearchTextBox")).Focus();
         }
+
         public void ScrollClipTray(object sender, MouseWheelEventArgs e) {
             var clipTrayListBox = (ListBox)sender;
             var scrollViewer = clipTrayListBox.GetChildOfType<ScrollViewer>();
@@ -528,20 +578,28 @@ namespace MpWpfApp {
             }
         }
 
-        public void AddClipTile(MpCopyItem ci) {
-            ClipTiles.Insert(0, new MpClipTileViewModel(ci, this));
+        public void CreateClipTile(MpCopyItem ci) {
+            MpClipTileViewModel newClipTile = new MpClipTileViewModel(ci, this);
+
+            ClipTiles.Insert(0, newClipTile);
+
             //update cliptray visibility if this is the first cliptile added
             ClipListVisibility = Visibility.Visible;
             EmptyListMessageVisibility = Visibility.Collapsed;
-            
-            ResetSelection();
         }
-
         public void MoveClipTile(MpClipTileViewModel clipTile, int newIdx) {
-            if (newIdx > ClipTiles.Count) {
+            if(ClipTiles == null) {
+                throw new Exception("MoveClipTile exception ClipTiles is null");
+            }
+            if (newIdx > ClipTiles.Count || newIdx < 0) {
                 throw new Exception("Cannot insert tile clip tile at index: " + newIdx + " with list of length: " + ClipTiles.Count);
             }
+            int removeIdx = VisibileClipTiles.IndexOf(clipTile);
+            if(removeIdx < 0) {
+                throw new Exception("MoveClipTile error can only move visible clip tiles");
+            }
             ClipTiles.Remove(clipTile);
+            //SortClipTiles();
             ClipTiles.Insert(newIdx, clipTile);
         }
 
@@ -645,13 +703,53 @@ namespace MpWpfApp {
             }            
         }
 
-
-        private void Sort(string sortBy, bool ascending) {
-            if(ascending) {
-                ClipTiles.OrderBy(x => MpTypeHelper.GetPropertyValue(x.CopyItem, sortBy));
-            } else {
-                ClipTiles.OrderByDescending(x => MpTypeHelper.GetPropertyValue(x.CopyItem, sortBy));
+        private void SortClipTiles() {
+            if (ClipTiles == null) {
+                return;
             }
+            string sortBy = string.Empty;
+            bool ascending = AscSortOrderButtonImageVisibility == Visibility.Visible;
+            var tempClipTiles = new ObservableCollection<MpClipTileViewModel>();
+            foreach(var ctvm in ClipTiles) {
+                tempClipTiles.Add(ctvm);
+            }
+            //ClipTiles.Clear();
+
+            if (SelectedSortType.Header == "Date") {
+                sortBy = "CopyItemCreatedDateTime";                
+            } else if (SelectedSortType.Header == "Application") {
+                sortBy = "CopyItemAppId";
+            } else if (SelectedSortType.Header == "Title") {
+                sortBy = "Title";
+            } else if (SelectedSortType.Header == "Content") {
+                sortBy = "Text";
+            } else if (SelectedSortType.Header == "Type") {
+                sortBy = "CopyItemType";
+            } else if (SelectedSortType.Header == "Usage") {
+                sortBy = "CopyItemUsageScore";
+            }
+            //var colView = (CollectionViewSource)((MpMainWindow)Application.Current.MainWindow).Resources["SortedClipTiles"];
+            //colView.SortDescriptions.Clear();
+            if (ascending) {
+                //colView.SortDescriptions.Add(new SortDescription(sortBy, ListSortDirection.Ascending));
+                //ClipTiles.OrderBy(x => x.Title);
+                //ClipTiles = ClipTiles.OrderBy(x => x.Title) as ObservableCollection<MpClipTileViewModel>;
+                //tempClipTiles.OrderBy(o => o.GetType()
+                //    .GetProperty(sortBy)
+                //    .GetValue(o, null));
+            } else {
+                //colView.SortDescriptions.Add(new SortDescription(sortBy, ListSortDirection.Ascending));
+                //ClipTiles.OrderByDescending(x => x.Title);
+                //ClipTiles = ClipTiles.OrderByDescending(x => x.Title) as ObservableCollection<MpClipTileViewModel>;
+                //tempClipTiles.OrderByDescending(o => o.GetType()
+                //    .GetProperty(sortBy)
+                //    .GetValue(o, null));
+            }
+            //foreach(var ctvm in tempClipTiles) {
+            //    AddClipTile(ctvm);
+            //}
+
+            ResetSelection();
         }
 
         private void InitHotKeys() {
@@ -679,23 +777,75 @@ namespace MpWpfApp {
 
             // Attach the handler to the event raising on WM_DRAWCLIPBOARD message is received
             ClipboardMonitor.ClipboardChanged += (s, e) => {
-                MpCopyItem newClip = MpCopyItem.CreateFromClipboard(ClipboardMonitor.LastWindowWatcher.LastHandle);
-                if (IsInAppendMode && newClip.CopyItemType == MpCopyItemType.RichText) {
+                MpCopyItem newCopyItem = MpCopyItem.CreateFromClipboard(ClipboardMonitor.LastWindowWatcher.LastHandle);
+                if (IsInAppendMode && newCopyItem.CopyItemType == MpCopyItemType.RichText) {
                     //when in append mode just append the new items text to selecteditem
-                    SelectedClipTiles[0].RichText += Environment.NewLine + (string)newClip.DataObject;
+                    SelectedClipTiles[0].RichText += Environment.NewLine + (string)newCopyItem.DataObject;
                     return;
                 }
-                if (newClip != null) {
-                    newClip.WriteToDatabase();
-                    MpTag historyTag = new MpTag(1);
-                    historyTag.LinkWithCopyItem(newClip);
-                    AddClipTile(newClip);
+                
+                if (newCopyItem != null) {
+                    var existingClipTile = FindClipTileByModel(newCopyItem);
+                    if(existingClipTile == null) {
+                        newCopyItem.WriteToDatabase();
+                        MpTag historyTag = new MpTag(1);
+                        historyTag.LinkWithCopyItem(newCopyItem);
+                        CreateClipTile(newCopyItem);
+                    } else {
+                        existingClipTile.CopyItem.CopyCount++;
+                        existingClipTile.CopyItem.CopyDateTime = DateTime.Now;
+                        MoveClipTile(existingClipTile, 0);
+                    }
+
+                    ResetSelection();
                 }
             };
+        }
+
+        private MpClipTileViewModel FindClipTileByModel(MpCopyItem ci) {
+            foreach(var ctvm in ClipTiles) {
+                if(ctvm.CopyItemType != ci.CopyItemType || ctvm.CopyItemAppId != ci.AppId) {
+                    continue;
+                }
+                switch(ci.CopyItemType) {
+                    case MpCopyItemType.Image:
+                    case MpCopyItemType.FileList:
+                        if (ctvm.CopyItem.DataObject == ci.DataObject) {
+                            return ctvm;
+                        }
+                        break;
+                    case MpCopyItemType.RichText:
+                        if (ctvm.CopyItem.GetPlainText() == ci.GetPlainText()) {
+                            return ctvm;
+                        }
+                        break;
+                }
+                
+            }
+            return null;
         }
         #endregion
 
         #region Commands
+        private RelayCommand _toggleSortOrderCommand;
+        public ICommand ToggleSortOrderCommand {
+            get {
+                if (_toggleSortOrderCommand == null) {
+                    _toggleSortOrderCommand = new RelayCommand(ToggleSortOrder);
+                }
+                return _toggleSortOrderCommand;
+            }
+        }
+        private void ToggleSortOrder() {
+            if(AscSortOrderButtonImageVisibility == Visibility.Visible) {
+                AscSortOrderButtonImageVisibility = Visibility.Collapsed;
+                DescSortOrderButtonImageVisibility = Visibility.Visible;
+            } else {
+                AscSortOrderButtonImageVisibility = Visibility.Visible;
+                DescSortOrderButtonImageVisibility = Visibility.Collapsed;
+            }
+        }
+
         private RelayCommand _mergeClipsCommand;
         public ICommand MergeClipsCommand {
             get {
@@ -729,7 +879,6 @@ namespace MpWpfApp {
             }
             focusedClip.IsFocused = true;
         }
-
 
         private RelayCommand _showWindowCommand;
         public ICommand ShowWindowCommand {
@@ -905,31 +1054,73 @@ namespace MpWpfApp {
             IsAutoCopyMode = !IsAutoCopyMode;
         }
 
-
         #endregion
 
         #region Drag and Drop Support
-        public void StartDrag(IDragInfo dragInfo) {            
+        //public void ClipTray_Drop(object sender, DragEventArgs e) {
+        //    if (e.Data.GetDataPresent("MonkeyPasteFormat")) {
+        //        var dropClipTileViewModel = (MpClipTileViewModel)e.Data.GetData("MonkeyPasteFormat");
+        //        MpClipTileViewModel hoverClipTileViewModel = null;
+        //        foreach (var vctvm in VisibileClipTiles) {
+        //            if (vctvm.IsHovering) {
+        //                hoverClipTileViewModel = vctvm;
+        //            }
+        //        }
+        //        if (hoverClipTileViewModel != null) {
+        //            int dragIdx = VisibileClipTiles.IndexOf(dropClipTileViewModel);
+        //            int dropIdx = VisibileClipTiles.IndexOf(hoverClipTileViewModel);
+        //            MoveClipTile(dropClipTileViewModel, dropIdx);
+        //        }
+        //    }
+        //}
+
+        public void StartDrag(IDragInfo dragInfo) {
+            dragInfo.Effects = DragDropEffects.Move | DragDropEffects.Copy;
             GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.StartDrag(dragInfo);
-            string selectedText = "";
+            return;
+
+            string selectedRichText = string.Empty;
+            string selectedRawText = string.Empty;
             foreach (MpClipTileViewModel ctvm in SelectedClipTiles) {
-                selectedText += ctvm.RichText + "\r\n";
+                selectedRichText += ctvm.RichText + Environment.NewLine;
+                selectedRawText += ctvm.CopyItem.GetPlainText() + Environment.NewLine;
             }
 
             string tempFilePath = System.AppDomain.CurrentDomain.BaseDirectory + @"\temp.txt";
+            if (File.Exists(tempFilePath)) {
+                File.Delete(tempFilePath);
+            }
             System.IO.StreamWriter tempFile = new System.IO.StreamWriter(tempFilePath);
-            tempFile.Write(selectedText);
+            tempFile.Write(selectedRawText);
             tempFile.Close();
             List<String> tempFileList = new List<string>();
             tempFileList.Add(tempFilePath);
 
-            DataObject d = new DataObject();            
-            d.SetData(DataFormats.FileDrop, tempFileList.ToArray<string>());
-            d.SetData(DataFormats.Text, selectedText);
-            System.Windows.DragDrop.DoDragDrop(dragInfo.VisualSource, d, DragDropEffects.Copy);
+            IDataObject d = new DataObject();// Properties.Settings.Default.ClipTileDragDropFormatName, dragInfo.SourceItems);
+            d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, (MpClipTileViewModel) dragInfo.SourceItem);
+            switch (SelectedClipTiles[0].CopyItem.CopyItemType) {
+                case MpCopyItemType.RichText:
+                    d.SetData(DataFormats.Text, selectedRawText);
+                    d.SetData(DataFormats.Rtf, selectedRichText);
+                    d.SetData(DataFormats.FileDrop, tempFileList.ToArray<string>());
+                    break;
+                case MpCopyItemType.Image:
+                    d.SetData(DataFormats.Bitmap, (BitmapSource)SelectedClipTiles[0].CopyItem.DataObject);
+                    break;
+                case MpCopyItemType.FileList:
+                    d.SetData(DataFormats.FileDrop,(StringCollection)SelectedClipTiles[0].CopyItem.DataObject);
+                    break;
+            }
+            dragInfo.DataObject = d;
+            //dragInfo.DataObject = SelectedClipTiles;
+            GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.StartDrag(dragInfo);
+            //System.Windows.DragDrop.DoDragDrop(dragInfo.VisualSource, d, DragDropEffects.Copy);
         }
 
         public bool CanStartDrag(IDragInfo dragInfo) {
+
+            //need to update canstartdrag to ensure all selected tiles are richtext or 
+            //selection is single filelist or image
             return GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.CanStartDrag(dragInfo);
         }
 
@@ -939,20 +1130,25 @@ namespace MpWpfApp {
 
         public void DragDropOperationFinished(DragDropEffects operationResult, IDragInfo dragInfo) {
             GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.DragDropOperationFinished(operationResult, dragInfo);
-            string tempFilePath = System.AppDomain.CurrentDomain.BaseDirectory + @"\temp.txt";
-            if(File.Exists(tempFilePath)) {
-                File.Delete(tempFilePath);
-            }
+            //string tempFilePath = System.AppDomain.CurrentDomain.BaseDirectory + @"\temp.txt";
+            //if (File.Exists(tempFilePath)) {
+            //    File.Delete(tempFilePath);
+            //}
         }
 
         public void DragCancelled() {
-
             GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.DragCancelled();
+            //string tempFilePath = System.AppDomain.CurrentDomain.BaseDirectory + @"\temp.txt";
+            //if (File.Exists(tempFilePath)) {
+            //    File.Delete(tempFilePath);
+            //}
         }
 
         public bool TryCatchOccurredException(Exception exception) {
             return GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.TryCatchOccurredException(exception);
         }
+
+
         #endregion
     }
 }

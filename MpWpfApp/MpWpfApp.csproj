@@ -201,6 +201,7 @@
     <Compile Include="Utils\MpHotKey2.cs" />
     <Compile Include="Utils\MpLastWindowWatcher.cs" />
     <Compile Include="Utils\MpMeasurements.cs" />
+    <Compile Include="Utils\MpRichTextToImageConverter.cs" />
     <Compile Include="Utils\MpScreenInformation.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="Utils\MpWindowLoadingBehavior.cs" />
@@ -208,6 +209,7 @@
     <Compile Include="Utils\WinApi.cs" />
     <Compile Include="ViewModels\ClipTiles\MpClipTileTagMenuItemViewModel.cs" />
     <Compile Include="ViewModels\ClipTiles\MpClipTileViewModel.cs" />
+    <Compile Include="ViewModels\MpSortTypeComboBoxItemViewModel.cs" />
     <Compile Include="Views\Window1.xaml.cs">
       <DependentUpon>Window1.xaml</DependentUpon>
     </Compile>

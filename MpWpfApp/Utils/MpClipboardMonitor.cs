@@ -1,12 +1,14 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     public class MpClipboardMonitor : IDisposable {
@@ -81,11 +83,22 @@ namespace MpWpfApp {
             return IntPtr.Zero;
         }
 
-        public void PasteCopyItem(object itemToPaste) {
+        public void PasteCopyItem(MpCopyItem ci) {
             IgnoreClipboardChangeEvent = true;
 
-            if (itemToPaste.GetType() == typeof(string)) {
-                Clipboard.SetData(DataFormats.Text, (string)itemToPaste);
+            switch(ci.CopyItemType) {
+                case MpCopyItemType.RichText:
+                    Clipboard.SetData(DataFormats.Rtf, (string)ci.DataObject);
+                    Clipboard.SetData(DataFormats.Text, ci.GetPlainText());
+                    break;
+                case MpCopyItemType.Image:
+                    Clipboard.SetData(DataFormats.Bitmap, ci.DataObject);
+                    Clipboard.SetData(DataFormats.Text, ci.GetPlainText());
+                    break;
+                case MpCopyItemType.FileList:
+                    Clipboard.SetData(DataFormats.FileDrop,(StringCollection)ci.DataObject);
+                    Clipboard.SetData(DataFormats.Text, ci.GetPlainText());
+                    break;
             }
             // TODO Add other objecy type pasters here
             //} else if(itemToPaste.GetType() == typeof(string)) {
@@ -108,9 +121,8 @@ namespace MpWpfApp {
 
             IgnoreClipboardChangeEvent = false;
 
-            //only create to write to db
-
-            //MpPasteHistory pasteHistory = new MpPasteHistory(copyItem, GetLastWindowWatcher().LastHandle);
+            //creating history item automatically saves it to the db
+            MpPasteHistory pasteHistory = new MpPasteHistory(ci, ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).ClipboardMonitor.LastWindowWatcher.LastHandle);
 
             //MpSingletonController.Instance.AppendItem = null;
         }
