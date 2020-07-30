@@ -66,7 +66,7 @@ namespace MpWpfApp {
                     if(IgnoreClipboardChangeEvent) {
                         //do nothing
                     } else {
-                        OnClipboardChanged();
+                        OnClipboardChanged();                        
                     }
                     WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
                     break;
@@ -76,9 +76,9 @@ namespace MpWpfApp {
                     else
                         WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
                     break;
-                case WM_PASTE:
-                    Console.WriteLine("Pasted");
-                    break;
+                //case WM_PASTE:
+                //    Console.WriteLine("Pasted");
+                //    break;
             }
             return IntPtr.Zero;
         }
@@ -112,7 +112,8 @@ namespace MpWpfApp {
             //}
 
             //WinApi.SetActiveWindow(GetLastWindowWatcher().LastHandle);
-            //WinApi.SetForegroundWindow(LastWindowWatcher.LastHandle);
+            WinApi.SetForegroundWindow(LastWindowWatcher.LastHandle);
+            //System.Windows.Forms.SendKeys.Send("^v");
             System.Windows.Forms.SendKeys.SendWait("^v");
             //PressKey(Keys.ControlKey, false);
             //PressKey(Keys.V, false);
@@ -122,7 +123,7 @@ namespace MpWpfApp {
             IgnoreClipboardChangeEvent = false;
 
             //creating history item automatically saves it to the db
-            MpPasteHistory pasteHistory = new MpPasteHistory(ci, ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).ClipboardMonitor.LastWindowWatcher.LastHandle);
+            //MpPasteHistory pasteHistory = new MpPasteHistory(ci, ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).ClipboardMonitor.LastWindowWatcher.LastHandle);
 
             //MpSingletonController.Instance.AppendItem = null;
         }

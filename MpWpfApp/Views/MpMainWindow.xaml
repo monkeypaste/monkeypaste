@@ -236,12 +236,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <CollectionViewSource x:Key="SortedClipTiles"
-                              Source="{Binding ClipTiles}">
-            <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription PropertyName="CopyItemCreatedDateTime"></scm:SortDescription>
-            </CollectionViewSource.SortDescriptions>
-        </CollectionViewSource>
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -457,6 +451,7 @@
                                 Margin="0"
                                 BorderBrush="{Binding SearchTextBoxBorderBrush}"
                                 BorderThickness="5"
+                                Focusable="False"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Stretch"
                                 Background="White"
@@ -473,6 +468,7 @@
                              Text="{Binding SearchText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True,NotifyOnSourceUpdated=True}"
                              FontStyle="{Binding SearchTextBoxFontStyle}"
                              Foreground="{Binding SearchTextBoxTextBrush}"
+                             local:MpFocusExtension.IsFocused="{Binding IsSearchTextBoxFocused, NotifyOnSourceUpdated=True,NotifyOnTargetUpdated=True,UpdateSourceTrigger=PropertyChanged}"
                              BorderThickness="0"
                              FontSize="18"
                              MinWidth="1000"
@@ -556,7 +552,6 @@
             <ListBox x:Name="ClipTray"
                      Grid.Row="0"
                      Grid.Column="1"
-                     Focusable="True"
                      dd:DragDrop.IsDragSource="True"
                      dd:DragDrop.IsDropTarget="True"
                      dd:DragDrop.DragHandler="{Binding}"
@@ -619,7 +614,7 @@
                     <DataTemplate>
                         <!-- Clip Tile -->
                         <local:MpClipBorder BorderBrush="{Binding TileBorderBrush}"
-                                            Focusable="True"
+                                            Focusable="True"                                            
                                             local:MpFocusExtension.IsFocused="{Binding IsFocused}"
                                             Margin="{Binding TileMargin}"
                                             Background="White"
@@ -629,49 +624,19 @@
                                             CornerRadius="10"
                                             Visibility="{Binding TileVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True}">
                             <i:Interaction.Triggers>
-                                <!--<i:EventTrigger EventName="Drop">
-                                    <i:CallMethodAction TargetObject="{Binding MainWindowViewModel}"
-                                                        MethodName="ClipTray_Drop" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="DragEnter">
-                                    <i:CallMethodAction TargetObject="{Binding}"
-                                                        MethodName="ClipTile_DragEnter" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="PreviewMouseLeftButtonDown">
-                                    <i:CallMethodAction TargetObject="{Binding}"
-                                                        MethodName="ClipTile_LeftMouseButtonDown" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                                    <i:CallMethodAction TargetObject="{Binding}"
-                                                        MethodName="ClipTile_LeftMouseButtonUp" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="PreviewMouseMove">
-                                    <i:CallMethodAction TargetObject="{Binding}"
-                                                        MethodName="ClipTile_MouseMove" />
-                                </i:EventTrigger>-->
                                 <i:EventTrigger EventName="Loaded">
                                     <i:CallMethodAction TargetObject="{Binding}"
                                                         MethodName="ClipTile_Loaded" />
                                 </i:EventTrigger>
-                                <i:EventTrigger EventName="MouseEnter">
-                                    <i:CallMethodAction TargetObject="{Binding}"
-                                                        MethodName="MouseEnter" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="MouseLeave">
-                                    <i:CallMethodAction TargetObject="{Binding}"
-                                                        MethodName="MouseLeave" />
-                                </i:EventTrigger>
-                                <i:EventTrigger EventName="KeyDown">
-                                    <i:InvokeCommandAction Command="{Binding KeyDownCommand}"
-                                                           PassEventArgsToCommand="True" />
-                                </i:EventTrigger>                                
                             </i:Interaction.Triggers>
                             <local:MpClipBorder.ContextMenu>
                                 <ContextMenu>
+                                    <MenuItem Header="Bring To Front"
+                                              Command="{Binding MainWindowViewModel.BringSelectedClipTilesToFrontCommand}" />
                                     <MenuItem Header="Rename"
                                               Command="{Binding MainWindowViewModel.RenameClipCommand}" />
                                     <MenuItem Header="Delete"
-                                              Command="{Binding MainWindowViewModel.DeleteClipCommand}" />
+                                              Command="{Binding MainWindowViewModel.DeleteSelectedClipsCommand}" />
                                     <MenuItem Header="Say"
                                               Command="{Binding SpeakClipCommand}" />
                                     <MenuItem Header="Merge"
@@ -770,7 +735,7 @@
                                                          TintBrush="{Binding TitleColorAccent, Converter={StaticResource SolidColorBrushToBrushConverter}}"
                                                          Canvas.Top="-1"
                                                          Canvas.Left="-1"
-                                                         Stretch="Fill" 
+                                                         Stretch="Fill"
                                                          Width="{Binding TileSize}"
                                                          Height="{Binding TileTitleHeight}"
                                                          Source="/MpWpfApp;component/Resources/title_swirl0004.png" />
@@ -799,18 +764,7 @@
                                              Visibility="{Binding TileTitleTextBoxVisibility}"
                                              local:MpFocusExtension.IsFocused="{Binding IsTitleTextBoxFocused}"
                                              local:MpTextBoxBehavior.SelectAllTextOnFocus="True"
-                                             Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="KeyDown">
-                                                <i:InvokeCommandAction Command="{Binding KeyDownCommand}"
-                                                                       PassEventArgsToCommand="True" />
-                                            </i:EventTrigger>
-                                            <i:EventTrigger EventName="LostFocus">
-                                                <i:CallMethodAction MethodName="LostFocus"
-                                                                    TargetObject="{Binding}" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                    </TextBox>
+                                             Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                     <!-- Clip Title Icon Image -->
                                     <Image x:Name="ClipTileAppIconImage"
                                            Source="{Binding Icon}"
@@ -821,15 +775,6 @@
                                             <DropShadowEffect Color="DimGray" />
                                         </Image.Effect>
                                     </Image>
-
-                                    <!--<Ellipse x:Name="ClipTileAppIconImageBorder"
-                                             Width="{Binding TileTitleIconBorderSize}"
-                                             Height="{Binding TileTitleIconBorderSize}"
-                                             Margin="10"
-                                             Stroke="DimGray"
-                                             Fill="Gray"
-                                             Canvas.Left="10"
-                                             Canvas.Top="25" />-->
                                 </Canvas>
                                 <!-- RichText Content -->
                                 <local:MpClipTileRichTextBox x:Name="ClipTileRichTextBox"
@@ -845,6 +790,7 @@
                                                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                                              IsDocumentEnabled="True"
+                                                             Focusable="False"
                                                              Cursor="Arrow"
                                                              BorderThickness="0"
                                                              Padding="10" />
@@ -852,6 +798,7 @@
                                 <Image Grid.Row="1"
                                        Grid.Column="0"
                                        x:Name="ClipTileImage"
+                                       Focusable="False"
                                        Width="{Binding TileBorderSize}"
                                        Height="{Binding TileContentHeight}"
                                        Stretch="Fill" />
