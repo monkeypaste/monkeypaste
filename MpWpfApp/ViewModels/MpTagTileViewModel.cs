@@ -8,6 +8,11 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpTagTileViewModel : MpViewModelBase {
+        #region Private Variables
+
+        private bool _isNew;
+
+        #endregion
         #region Apperance Properties
         private bool _isSelected = false;
         public bool IsSelected {
@@ -59,15 +64,15 @@ namespace MpWpfApp {
             }
         }
 
-        private Brush _tagBorderBrush = Brushes.White;
-        public Brush TagBorderBrush {
+        private Brush _tagBorderBackgroundBrush = Brushes.Transparent;
+        public Brush TagBorderBackgroundBrush {
             get {
-                return _tagBorderBrush;
+                return _tagBorderBackgroundBrush;
             }
             set {
-                if(_tagBorderBrush != value) {
-                    _tagBorderBrush = value;
-                    OnPropertyChanged(nameof(TagBorderBrush));
+                if(_tagBorderBackgroundBrush != value) {
+                    _tagBorderBackgroundBrush = value;
+                    OnPropertyChanged(nameof(TagBorderBackgroundBrush));
                 }
             }
         }
@@ -113,16 +118,28 @@ namespace MpWpfApp {
             }
         }
 
+        private int _tagClipCount = 0;
+        public int TagClipCount {
+            get {
+                return _tagClipCount;
+            }
+            set {
+                if(_tagClipCount != value) {
+                    _tagClipCount = value;
+                    OnPropertyChanged(nameof(TagClipCount));
+                }
+            }
+        }
         public double TagHeight {
             get {
-                return MpMeasurements.Instance.FilterMenuHeight * 0.85;
+                return MpMeasurements.Instance.FilterMenuHeight;
 
             }
         }
 
         public double TagFontSize {
             get {
-                return TagHeight / 1.5;
+                return TagHeight * 0.75;
             }
         }
         #endregion
@@ -142,7 +159,7 @@ namespace MpWpfApp {
             set {
                 if(_tag != value) {
                     _tag = value;
-                    OnPropertyChanged("Tag");
+                    OnPropertyChanged(nameof(Tag));
                 }
             }
         }
@@ -153,11 +170,11 @@ namespace MpWpfApp {
             }
             set {
                 Tag.TagName = value;
-                OnPropertyChanged("TagName");
+                OnPropertyChanged(nameof(TagName));
             }
         }
 
-        private Brush _tagColor = Brushes.Black;
+        private Brush _tagColor;
         public Brush TagColor {
             get {
                 return _tagColor;
@@ -165,7 +182,7 @@ namespace MpWpfApp {
             set {
                 if(_tagColor != value) {
                     _tagColor = value;
-                    OnPropertyChanged("TagColor");
+                    OnPropertyChanged(nameof(TagColor));
                 }
             }
         }
@@ -185,107 +202,113 @@ namespace MpWpfApp {
         #endregion
 
         #region Constructor
-        private bool _isNew;
         public MpTagTileViewModel(MpTag tag,MpMainWindowViewModel mainWindowViewModel,bool isNew) {
             DisplayName = "MpTagTileViewModel";
             Tag = tag;
             MainWindowViewModel = mainWindowViewModel;
             _isNew = isNew;
-            PropertyChanged += (s, e) => {
-                if(e.PropertyName == nameof(IsEditing)) {
-                    if(IsEditing) {
-                        //show textbox and select all text
-                        TextBoxVisibility = Visibility.Visible;
-                        TextBlockVisibility = Visibility.Collapsed;
-                        IsTextBoxFocused = true;
-                        TagTextBox?.SelectAll();
-                    } else {
-                        //tag names cannot be blank so don't allow the textblock to reappear and change name back to 'untitled'
-                        if(TagName.Trim() == string.Empty) {
-                            TagName = "Untitled";
-                            //to trigger selectall unfocus and refocus tag textbox
-                            //IsTextBoxFocused = true;
-                            IsEditing = true;
-                            return;
-                        }
-                        TextBoxVisibility = Visibility.Collapsed;
-                        TextBlockVisibility = Visibility.Visible;
-                        Tag.WriteToDatabase();
-                        IsTextBoxFocused = false;
-                    }
-                } else if(e.PropertyName == nameof(IsSelected)) {
-                    if(IsSelected) {
-                        TagBorderBrush = Brushes.Red;
-                        TagColor = new SolidColorBrush(Tag.TagColor.Color);
-                        TagTextColor = MpHelpers.IsBright(Tag.TagColor.Color) ? Brushes.Black : Brushes.White;
+        }
+        #endregion
 
-                    } else {
-                        TagBorderBrush = Brushes.White;
-                        TagColor = Brushes.Black;
-                        TagTextColor = Brushes.White;
-                    }
-                } else if(e.PropertyName == nameof(IsHovering)) {
-                    if(!IsSelected) {
-                        if(IsHovering) {
-                            TagBorderBrush = Brushes.Yellow;
-                        } else {
-                            TagBorderBrush = Brushes.White;
-                        }
-                    }
-                }
-            };
+        #region Private Methods
+
+        public void LinkToClipTile(MpClipTileViewModel clipTileToLink) {
+            if(!Tag.IsLinkedWithCopyItem(clipTileToLink.CopyItem)) {
+                Tag.LinkWithCopyItem(clipTileToLink.CopyItem);
+                TagClipCount++;
+            }
+        }
+
+        public void UnlinkWithClipTile(MpClipTileViewModel clipTileToLink) {
+            if (Tag.IsLinkedWithCopyItem(clipTileToLink.CopyItem)) {
+                Tag.UnlinkWithCopyItem(clipTileToLink.CopyItem);
+                TagClipCount--;
+            }
         }
         #endregion
 
         #region View Event Handlers
         public TextBox TagTextBox;
-        public void TagLoaded(object sender, RoutedEventArgs e) {
-            Console.WriteLine("Loaded");
-            TagTextBox = (TextBox)((Border)sender).FindName("TagTextBox");
+        public void TagTile_Loaded(object sender, RoutedEventArgs e) {
+            PropertyChanged += (s, e1) => {
+                switch(e1.PropertyName) {
+                    case nameof(IsEditing):
+                        if (IsEditing) {
+                            //show textbox and select all text
+                            TextBoxVisibility = Visibility.Visible;
+                            TextBlockVisibility = Visibility.Collapsed;
+                            IsTextBoxFocused = true;
+                            TagTextBox?.SelectAll();
+                        } else {
+                            //tag names cannot be blank so don't allow the textblock to reappear and change name back to 'untitled'
+                            if (TagName.Trim() == string.Empty) {
+                                TagName = "Untitled";
+                                //to trigger selectall unfocus and refocus tag textbox
+                                //IsTextBoxFocused = true;
+                                IsEditing = true;
+                                return;
+                            }
+                            TextBoxVisibility = Visibility.Collapsed;
+                            TextBlockVisibility = Visibility.Visible;
+                            Tag.WriteToDatabase();
+                            IsTextBoxFocused = false;
+                        }
+                        break;
+                    case nameof(IsSelected):
+                        if (IsSelected) {
+                            //TagBorderBackgroundBrush = Brushes.Red;
+                            //TagColor = new SolidColorBrush(Tag.TagColor.Color);
+                            TagTextColor = Brushes.White;  
+
+                        } else {
+                            //TagBorderBackgroundBrush = Brushes.White;
+                            //TagColor = Brushes.Black;
+                            TagTextColor = Brushes.LightGray;
+                        }
+                        break;
+                    case nameof(IsHovering):
+                        if (!IsSelected) {
+                            if (IsHovering) {
+                                TagBorderBackgroundBrush = Brushes.DimGray;
+
+                            } else {
+                                TagBorderBackgroundBrush = Brushes.Transparent;
+                            }
+                        }
+                        break;
+                }
+            };
+
+            TagColor = new SolidColorBrush(Tag.TagColor.Color);
+
+            var tagBorder = ((Border)sender);
+            tagBorder.MouseEnter += (s, e1) => {
+                IsHovering = true;
+            };
+            tagBorder.MouseLeave += (s, e1) => {
+                IsHovering = false;
+            };
+
+            TagTextBox = (TextBox)tagBorder.FindName("TagTextBox");
             //this is called 
             TagTextBox.GotFocus += (s, e1) => {
                 //TagTextBox.SelectAll();
             };
-
+            TagTextBox.LostFocus += (s, e2) => {
+                IsEditing = false;
+            };
+            TagTextBox.PreviewKeyDown += (s, e3) => {
+                if (e3.Key == Key.Enter && IsEditing) {
+                    IsEditing = false;
+                }
+            };
             if (_isNew) {
                 IsEditing = true;
             }
         }
-        public void Test(object sender) {
-            IsHovering = true;
-        }
-        public void MouseEnter() {
-            IsHovering = true;
-        }
-
-        public void MouseLeave() {
-            IsHovering = false;
-        }
-
-        public void LostFocus() {
-            //occurs when editing title or content text
-            IsEditing = false;
-        }
         #endregion
 
         #region Commands
-        private RelayCommand<KeyEventArgs> _keyDownCommand;
-        public ICommand KeyDownCommand {
-            get {
-                if(_keyDownCommand == null) {
-                    _keyDownCommand = new RelayCommand<KeyEventArgs>(KeyDown);
-                }
-                return _keyDownCommand;
-            }
-        }
-        private void KeyDown(KeyEventArgs e) {
-            Key key = e.Key;
-            if(key == Key.Delete || key == Key.Back && MainWindowViewModel.DeleteTagCommand.CanExecute(null)) {
-                MainWindowViewModel.DeleteTagCommand.Execute(null);
-            } else if(key == Key.Enter && IsEditing) {
-                IsEditing = false;
-            }
-        }
 
         private RelayCommand _renameTagCommand;
         public ICommand RenameTagCommand {
@@ -297,38 +320,12 @@ namespace MpWpfApp {
             }
         }
         private bool CanRenameTag() {
-            return TagName != "History";
+            return TagName != Properties.Settings.Default.HistoryTagTitle;
         }
         private void RenameTag() {
             IsEditing = true;
         }
 
-        private RelayCommand _linkTagToCopyItemCommand;
-        public RelayCommand LinkTagToCopyItemCommand {
-            get {
-                if(_linkTagToCopyItemCommand == null) {
-                    _linkTagToCopyItemCommand = new RelayCommand(LinkTagToCopyItem);
-                }
-                return _linkTagToCopyItemCommand;
-            }
-        }
-        private void LinkTagToCopyItem() {
-            //tags and clips have 1-to-1 relationship so remove all other links if it exists before creating new one
-            //so loop through all selected clips and sub-loop through all tags and remove links if found
-            var clipsToLink = ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).ClipTiles.Where(ct => ct.IsSelected).ToList();
-            foreach(var clipToRemoveOldLink in clipsToLink) {
-                foreach(var tagTile in ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).TagTiles) {
-                    if(tagTile.Tag.IsLinkedWithCopyItem(clipToRemoveOldLink.CopyItem) && tagTile.TagName != "History") {
-                        tagTile.Tag.UnlinkWithCopyItem(clipToRemoveOldLink.CopyItem);
-                    }
-                }
-            }
-            //now loop over all selected clips and link to this tag
-            foreach (var clipToLink in clipsToLink) {
-                Tag.LinkWithCopyItem(clipToLink.CopyItem);
-                clipToLink.TitleColor = new SolidColorBrush(Tag.TagColor.Color);
-            }
-        }
         #endregion
     }
 }

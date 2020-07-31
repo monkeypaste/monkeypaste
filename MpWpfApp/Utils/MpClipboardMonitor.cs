@@ -123,7 +123,7 @@ namespace MpWpfApp {
             IgnoreClipboardChangeEvent = false;
 
             //creating history item automatically saves it to the db
-            //MpPasteHistory pasteHistory = new MpPasteHistory(ci, ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).ClipboardMonitor.LastWindowWatcher.LastHandle);
+            MpPasteHistory pasteHistory = new MpPasteHistory(ci, ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).ClipboardMonitor.LastWindowWatcher.LastHandle);
 
             //MpSingletonController.Instance.AppendItem = null;
         }

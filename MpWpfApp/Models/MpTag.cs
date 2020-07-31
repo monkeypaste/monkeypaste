@@ -87,13 +87,13 @@ namespace MpWpfApp {
                 return;
             }
             MpDb.Instance.ExecuteNonQuery("delete from MpCopyItemTag where fk_MpCopyItemId="+ci.CopyItemId+" and fk_MpTagId="+TagId);
-            MpDb.Instance.ExecuteNonQuery("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
+            //MpDb.Instance.ExecuteNonQuery("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
             Console.WriteLine("Tag link removed between tag " + TagId + " with copyitem " + ci.CopyItemId + " ignoring...");
         }
         public void DeleteFromDatabase() {
             MpDb.Instance.ExecuteNonQuery("delete from MpTag where pk_MpTagId=" + this.TagId);
             MpDb.Instance.ExecuteNonQuery("delete from MpCopyItemTag where fk_MpTagId=" + this.TagId);
-            MpDb.Instance.ExecuteNonQuery("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
+            //MpDb.Instance.ExecuteNonQuery("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
         }
         private void MapDataToColumns() {
             TableName = "MpTag";

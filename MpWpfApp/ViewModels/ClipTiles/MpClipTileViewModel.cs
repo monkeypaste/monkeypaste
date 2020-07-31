@@ -36,10 +36,10 @@ namespace MpWpfApp {
                 ObservableCollection<MpClipTileTagMenuItemViewModel> tagMenuItems = new ObservableCollection<MpClipTileTagMenuItemViewModel>();
                 var tagTiles = ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).TagTiles;
                 foreach (var tagTile in tagTiles) {
-                    if (tagTile.TagName == "History") {
+                    if (tagTile.TagName == Properties.Settings.Default.HistoryTagTitle) {
                         continue;
                     }
-                    tagMenuItems.Add(new MpClipTileTagMenuItemViewModel(tagTile.TagName, tagTile.LinkTagToCopyItemCommand, tagTile.Tag.IsLinkedWithCopyItem(CopyItem)));
+                    tagMenuItems.Add(new MpClipTileTagMenuItemViewModel(tagTile.TagName, MainWindowViewModel.LinkTagToCopyItemCommand, tagTile.Tag.IsLinkedWithCopyItem(CopyItem)));
                 }
                 return tagMenuItems;
             }
@@ -262,7 +262,7 @@ namespace MpWpfApp {
             }
         }
 
-        private double _tileContentHeight = MpMeasurements.Instance.TileContentHeight;
+        private double _tileContentHeight = MpMeasurements.Instance.ClipTileContentHeight;
         public double TileContentHeight {
             get {
                 return _tileContentHeight;
@@ -445,14 +445,25 @@ namespace MpWpfApp {
         public MpClipTileViewModel(MpCopyItem ci,MpMainWindowViewModel mwvm) {
             CopyItem = ci;
             MainWindowViewModel = mwvm;
-            PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
+        }
+        #endregion
+
+        #region View Events Handlers        
+
+        public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
+            PropertyChanged += (s, e1) => {
+                switch (e1.PropertyName) {
                     case nameof(IsSelected):
                         if (IsSelected) {
                             TileBorderBrush = Brushes.Red;
-                            IsFocused = true;
+                            //this check ensures that as user types in search that 
+                            //resetselection doesn't take the focus from the search box
+                            if (!((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).IsSearchTextBoxFocused) {
+                                IsFocused = true;
+                            }
                         } else {
                             TileBorderBrush = Brushes.Transparent;
+                            //below must be called to clear focus when deselected (it may not have focus)
                             IsFocused = false;
                         }
                         break;
@@ -488,14 +499,7 @@ namespace MpWpfApp {
                         break;
                 }
             };
-        }
-        #endregion
 
-        #region View Events Handlers
-
-        
-
-        public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             var clipTileBorder = (Border)sender;
             
             clipTileBorder.MouseEnter += (s, e1) => {
@@ -504,13 +508,17 @@ namespace MpWpfApp {
             clipTileBorder.MouseLeave += (s,e2) => {
                 IsHovering = false;
             };
-            //clipTileBorder.PreviewKeyDown += MainWindowViewModel.ClipTile_KeyUp;
             clipTileBorder.LostFocus += (s, e4) => {
                 IsEditingTitle = false;
             };
+            clipTileBorder.MouseLeftButtonDown += (s, e5) => {
+                if(e5.ClickCount == 2) {
+                    ((MpClipTileViewModel)((Border)s).DataContext).MainWindowViewModel.PasteSelectedClipsCommand.Execute(null);
+                }
+            };
 
             var clipTileTitleTextBox = (TextBox)clipTileBorder.FindName("ClipTileTitleTextBox");
-            clipTileTitleTextBox.KeyUp += MainWindowViewModel.ClipTile_KeyDown;
+            clipTileTitleTextBox.KeyUp += MainWindowViewModel.MainWindow_KeyDown;
             clipTileTitleTextBox.LostFocus += (s, e4) => {
                 IsEditingTitle = false;
             };
@@ -554,31 +562,12 @@ namespace MpWpfApp {
                 rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
                 rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
 
+                //sort item's tokens by block and then by start idx
                 var sortedTokenList = CopyItem.SubTextTokenList.OrderBy(stt => stt.BlockIdx).ThenBy(stt => stt.StartIdx).ToList();
                 foreach(var sortedToken in sortedTokenList) {
                     rtb.AddSubTextToken(sortedToken);
                 }   
             }
-        }
-        private void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
-            ((RichTextBox)sender).Selection.Select(((RichTextBox)sender).Document.ContentStart, ((RichTextBox)sender).Document.ContentStart);
-        }
-        private void Rtb_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            ((RichTextBox)sender).Selection.Select(((RichTextBox)sender).Document.ContentStart, ((RichTextBox)sender).Document.ContentStart);
-        }
-
-        private void ClipTileContent_MouseRightButtonUp(object sender, MouseButtonEventArgs e) {
-            MenuItem searchMenuItem = new MenuItem();
-            searchMenuItem.Click += (s, e1) => {
-                // TODO check and use type of s and compensate for img and fl
-                RichTextBox rtb = (RichTextBox)sender;
-                string searchStr = new TextRange(rtb.Selection.Start, rtb.Selection.End).Text;
-                System.Diagnostics.Process.Start("http://www.google.com.au/search?q=" + Uri.EscapeDataString(searchStr));
-            };
-            searchMenuItem.Header = "Search Web";
-
-            ContextMenu cmnu = new ContextMenu();
-            cmnu.Items.Add(searchMenuItem);
         }
         
         public void ContextMenuMouseLeftButtonUpOnSearchGoogle() {

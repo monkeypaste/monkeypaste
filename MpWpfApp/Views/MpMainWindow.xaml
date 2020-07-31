@@ -239,7 +239,7 @@
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
-            <i:CallMethodAction MethodName="MainWindowLoaded"
+            <i:CallMethodAction MethodName="MainWindow_Loaded"
                                 TargetObject="{Binding}" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
@@ -354,83 +354,67 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <!-- Tag Tile Border -->
-                            <local:MpClipBorder CornerRadius="15"
+                            <local:MpClipBorder CornerRadius="5"
                                                 Margin="5,0,5,0"
-                                                Padding="10,0,10,0"
                                                 Focusable="True"
-                                                BorderThickness="0.25"
                                                 VerticalAlignment="Center"
                                                 local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"
-                                                Background="{Binding TagColor}"
-                                                BorderBrush="{Binding TagBorderBrush}"
+                                                Background="Transparent"
+                                                BorderBrush="Transparent"
+                                                BorderThickness="0"
                                                 Height="{Binding TagHeight}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Loaded">
                                         <i:CallMethodAction TargetObject="{Binding}"
-                                                            MethodName="TagLoaded" />
-                                    </i:EventTrigger>
-                                    <i:EventTrigger EventName="MouseEnter">
-                                        <i:CallMethodAction TargetObject="{Binding}"
-                                                            MethodName="MouseEnter" />
-                                    </i:EventTrigger>
-                                    <i:EventTrigger EventName="MouseLeave">
-                                        <i:CallMethodAction TargetObject="{Binding}"
-                                                            MethodName="MouseLeave" />
-                                    </i:EventTrigger>
-                                    <i:EventTrigger EventName="KeyDown">
-                                        <i:InvokeCommandAction Command="{Binding KeyDownCommand}"
-                                                               PassEventArgsToCommand="True" />
+                                                            MethodName="TagTile_Loaded" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-
-                                <Border.ContextMenu>
+                                <local:MpClipBorder.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="Rename"
                                                   Command="{Binding RenameTagCommand}" />
                                         <MenuItem Header="Delete"
                                                   Command="{Binding MainWindowViewModel.DeleteTagCommand}" />
                                     </ContextMenu>
-                                </Border.ContextMenu>
-                                <StackPanel>
+                                </local:MpClipBorder.ContextMenu>
+                                <StackPanel Orientation="Horizontal">
+                                    <local:MpClipBorder CornerRadius="5"
+                                                        Margin="0,10,0,10"
+                                                        BorderThickness="0"
+                                                        Background="{Binding TagColor}">
+                                        <TextBlock Background="Transparent"
+                                                   VerticalAlignment="Center"
+                                                   Padding="5,0,5,0"
+                                                   Text="{Binding TagClipCount}"
+                                                   Foreground="White" />
+                                    </local:MpClipBorder>
                                     <TextBlock x:Name="TagTextBlock"
-                                               Padding="0,0,0,10"
+                                               Margin="3,0,0,0"
                                                Background="Transparent"
                                                HorizontalAlignment="Center"
-                                               VerticalAlignment="Top"
-                                               Foreground="White"
+                                               VerticalAlignment="Center"
                                                Visibility="{Binding TextBlockVisibility}"
-                                               Text="{Binding TagName}"
-                                               FontSize="{Binding TagFontSize}">
-                                        <TextBlock.Effect>
-                                            <DropShadowEffect ShadowDepth="2"
-                                                              Direction="330"
-                                                              Color="Black"
-                                                              Opacity="1.0"
-                                                              BlurRadius="4" />
-                                        </TextBlock.Effect>
+                                               FontSize="{Binding TagFontSize}"
+                                               Foreground="{Binding TagTextColor}"
+                                               Text="{Binding TagName}">
+                                            <!--<TextBlock.Effect>
+                                                <DropShadowEffect ShadowDepth="2"
+                                                                  Direction="330"
+                                                                  Color="Black"
+                                                                  Opacity="1.0"
+                                                                  BlurRadius="4" />
+                                            </TextBlock.Effect>-->
                                     </TextBlock>
                                     <TextBox x:Name="TagTextBox"
-                                             Padding="0,0,0,10"
                                              Background="White"
                                              Foreground="Black"
                                              IsReadOnly="False"
                                              HorizontalAlignment="Center"
-                                             VerticalAlignment="Top"
+                                             VerticalAlignment="Center"
                                              local:MpFocusExtension.IsFocused="{Binding IsTextBoxFocused}"
                                              Visibility="{Binding TextBoxVisibility}"
-                                             Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                             FontSize="{Binding TagFontSize}">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="KeyDown">
-                                                <i:InvokeCommandAction Command="{Binding KeyDownCommand}"
-                                                                       PassEventArgsToCommand="True" />
-                                            </i:EventTrigger>
-                                            <i:EventTrigger EventName="LostFocus">
-                                                <i:CallMethodAction MethodName="LostFocus"
-                                                                    TargetObject="{Binding}" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                    </TextBox>
+                                             FontSize="{Binding TagFontSize}"
+                                             Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>
                             </local:MpClipBorder>
                         </DataTemplate>
@@ -602,7 +586,7 @@
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <VirtualizingStackPanel IsItemsHost="True"
+                        <VirtualizingStackPanel IsItemsHost="True"                                                
                                                 CanVerticallyScroll="False"
                                                 CanHorizontallyScroll="False"                                                
                                                 VerticalAlignment="Top"
@@ -805,21 +789,24 @@
                                 <!--File List Content -->
                                 <ListBox Grid.Row="1"
                                          Grid.Column="0"
+                                         BorderThickness="0"
                                          x:Name="ClipTileFileListBox"
                                          Width="{Binding TileBorderSize}"
                                          Height="{Binding TileContentHeight}"
                                          ItemsSource="{Binding FileListItems}">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <Border BorderThickness="0">
+                                            <Border Height="22"
+                                                    BorderThickness="0">
                                                 <StackPanel VerticalAlignment="Center"
                                                             HorizontalAlignment="Left"
                                                             Orientation="Horizontal">
                                                     <Image Source="{Binding Icon}"
+                                                           Height="22"
                                                            Stretch="Fill">
                                                     </Image>
                                                     <TextBlock Text="{Binding ItemPath}"
-                                                               Margin="50,0,0,0"
+                                                               Margin="0,0,0,0"
                                                                VerticalAlignment="Center"
                                                                FontSize="16"
                                                                Foreground="Black"

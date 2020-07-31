@@ -100,5 +100,14 @@ namespace MpWpfApp.Properties {
                 return ((string)(this["ClipTileDragDropFormatName"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("History")]
+        public string HistoryTagTitle {
+            get {
+                return ((string)(this["HistoryTagTitle"]));
+            }
+        }
     }
 }

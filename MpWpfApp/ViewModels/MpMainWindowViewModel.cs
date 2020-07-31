@@ -24,8 +24,7 @@ namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase, IDragSource {
         #region Private Variables
         private double _startMainWindowTop, _endMainWindowTop;
-
-        
+        private bool _doPaste = false;
         private MpHotKeyHost _hotkeyHost = null;
         private IKeyboardMouseEvents _globalHook = null;
 
@@ -338,7 +337,7 @@ namespace MpWpfApp {
             }
         }
 
-        private double _clipTrayHeight = MpMeasurements.Instance.TrayHeight;
+        private double _clipTrayHeight = MpMeasurements.Instance.ClipTrayHeight;
         public double ClipTrayHeight {
             get {
                 return _clipTrayHeight;
@@ -388,6 +387,7 @@ namespace MpWpfApp {
                 }
             }
         }
+
         #endregion
 
         #region Constructor
@@ -398,7 +398,7 @@ namespace MpWpfApp {
         #endregion
 
         #region View Event Handlers
-        public void MainWindowLoaded(object sender,RoutedEventArgs e) {
+        public void MainWindow_Loaded(object sender,RoutedEventArgs e) {
             SearchText = Properties.Settings.Default.SearchPlaceHolderText;
             SelectedSortType = SortTypes[0];
             SetupMainWindowRect();
@@ -415,27 +415,55 @@ namespace MpWpfApp {
             }
             //create tiles for all clips in the database
             foreach (MpCopyItem c in MpCopyItem.GetAllCopyItems()) {
-                AddClipTile(c);
+                AddClipTile(c,false);
             }
-
-            ResetSelection();
 
             //create tiles for all the tags
             foreach (MpTag t in MpTag.GetAllTags()) {
-                AddTagTile(t);
+                AddTagTile(t,false);
             }
             //select history tag by default
-            TagTiles.Where(tt => tt.Tag.TagName == "History").ToList()[0].IsSelected = true;
+            GetHistoryTagTileViewModel().IsSelected = true;
 
-            //init SearchBox
+            SortClipTiles();
 
-            PropertyChanged += MainWindowViewModel_PropertyChanged;
+            PropertyChanged += (s,e1) => {
+                switch (e1.PropertyName) {
+                    case nameof(SearchText):
+                        if (SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
+                            return;
+                        }
+                        FilterTiles(SearchText);
+                        //SortClipTiles();
+                        if (!string.IsNullOrEmpty(SearchText.Trim())) {
+                            if (VisibileClipTiles.Count > 0) {
+                                SearchTextBoxBorderBrush = Brushes.Transparent;
+                            } else {
+                                SearchTextBoxBorderBrush = Brushes.Red;
+                            }
+                        }
+                        ResetSelection();
+                        break;
+                    case nameof(IsAutoCopyMode):
+                        if (IsAutoCopyMode) {
+                            _globalHook.MouseUp += GlobalMouseUpEvent;
+                        } else {
+                            _globalHook.MouseUp -= GlobalMouseUpEvent;
+                        }
+                        break;
+                    case nameof(AscSortOrderButtonImageVisibility):
+                    case nameof(DescSortOrderButtonImageVisibility):
+                    case nameof(SelectedSortType):
+                        SortClipTiles();
+                        break;
+                }
+            };
 
-            ((MpMainWindow)Application.Current.MainWindow).Deactivated += (s, e1) => {
+            ((MpMainWindow)Application.Current.MainWindow).Deactivated += (s, e2) => {
                 HideWindowCommand.Execute(null);
             };
-            ((MpMainWindow)Application.Current.MainWindow).PreviewKeyDown += ClipTile_KeyDown;
-
+            ((MpMainWindow)Application.Current.MainWindow).PreviewKeyDown += MainWindow_KeyDown;
+            
             InitClipboard();
             InitHotKeys();
 
@@ -444,37 +472,6 @@ namespace MpWpfApp {
 #else
             HideWindowCommand.Execute(null);
 #endif
-        }
-
-        private void MainWindowViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e) {
-            switch (e.PropertyName) {
-                case nameof(SearchText):
-                    if (SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
-                        return;
-                    }
-                    FilterTiles(SearchText);
-                    //SortClipTiles();
-                    if(!string.IsNullOrEmpty(SearchText.Trim())) {
-                        if(VisibileClipTiles.Count > 0) {
-                            SearchTextBoxBorderBrush = Brushes.Transparent;
-                        } else {
-                            SearchTextBoxBorderBrush = Brushes.Red;
-                        }
-                    }
-                    break;
-                case nameof(IsAutoCopyMode):
-                    if (IsAutoCopyMode) {
-                        _globalHook.MouseUp += GlobalMouseUpEvent;
-                    } else {
-                        _globalHook.MouseUp -= GlobalMouseUpEvent;
-                    }
-                    break;
-                case nameof(AscSortOrderButtonImageVisibility):
-                case nameof(DescSortOrderButtonImageVisibility):
-                case nameof(SelectedSortType):
-                    SortClipTiles();
-                    break;
-            }
         }
 
         public void ClipTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -493,6 +490,8 @@ namespace MpWpfApp {
             SearchTextBoxFontStyle = FontStyles.Normal;
             SearchTextBoxTextBrush = Brushes.Black;
             IsSearchTextBoxFocused = true;
+
+            TestAnimatedScroll();
         }
         public void SearchTextboxLostFocus(object sender, RoutedEventArgs e) {
             //var searchTextBox = (TextBox)e.Source;
@@ -505,18 +504,43 @@ namespace MpWpfApp {
         }
 
         public void ScrollClipTray(object sender, MouseWheelEventArgs e) {
+            e.Handled = true;
+
             var clipTrayListBox = (ListBox)sender;
             var scrollViewer = clipTrayListBox.GetChildOfType<ScrollViewer>();
-            double lastOffset = scrollViewer.HorizontalOffset;
 
-            //_clipTrayPhysicsBody.AddForce(e.Delta);
-            scrollViewer.ScrollToHorizontalOffset(lastOffset - (double)(e.Delta * 0.3));
-
-            e.Handled = true;
+            scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + (e.Delta * -1) / 5);
         }
+        public void TestAnimatedScroll() {
+            var mw = ((MpMainWindow)Application.Current.MainWindow);
+            var clipTrayListBox = (ListBox)mw.FindName("ClipTray");
 
+            var scrollViewer = clipTrayListBox.GetChildOfType<ScrollViewer>();
+
+            DoubleAnimation ta = new DoubleAnimation();
+            ta.From = scrollViewer.HorizontalOffset;
+            ta.To = scrollViewer.HorizontalOffset + 10000;
+            ta.Duration = new Duration(TimeSpan.FromSeconds(7));
+            CubicEase easing = new CubicEase();
+            easing.EasingMode = EasingMode.EaseIn;
+            ta.EasingFunction = easing;
+            ta.Completed += (s, e1) => {
+                //_clipTrayPhysicsBody.Start();
+                //ShowMainWindowHotKey.Enabled = false;
+                //HideMainWindowHotKey.Enabled = true;
+            };
+
+            //Storyboard storyboard = new Storyboard();
+
+            //storyboard.Children.Add(ta);
+            //Storyboard.SetTarget(ta, scrollViewer);
+            //Storyboard.SetTargetProperty(ta, new PropertyPath(MpScrollViewFixer.VerticalOffsetProperty));
+            //storyboard.Begin();
+            //scrollViewer.BeginAnimation(MpScrollViewFixer.CurrentHorizontalOffsetProperty, ta);
+            //mw.BeginAnimation(Window.TopProperty, ta);
+        }
         // NOTE KeyUp cannot handle Enter key so KeyDown MUST be used
-        public void ClipTile_KeyDown(object sender, KeyEventArgs e) {
+        public void MainWindow_KeyDown(object sender, KeyEventArgs e) {
             if(IsSearchTextBoxFocused) {
                 return;
             }
@@ -564,7 +588,7 @@ namespace MpWpfApp {
                             var selectedTagTiles = TagTiles.Where(tt => tt.IsSelected == true).ToList();
                             //if none selected select history tag
                             if (selectedTagTiles == null || selectedTagTiles.Count == 0) {
-                                TagTiles.Where(tt => tt.Tag.TagName == "History").ToList()[0].IsSelected = true;
+                                GetHistoryTagTileViewModel().IsSelected = true;
                             }
                         } else {
                             foreach (MpClipTileViewModel clipTile in ClipTiles) {
@@ -593,6 +617,12 @@ namespace MpWpfApp {
                 //newTagTile.RenameTagCommand.Execute(null);
                 //newTagTile.IsSelected = true;
                 //newTagTile.IsEditing = true;
+            } else {
+                foreach(var ctvm in ClipTiles) {
+                    if(newTagTile.Tag.IsLinkedWithCopyItem(ctvm.CopyItem)) {
+                        newTagTile.TagClipCount++;
+                    }
+                }
             }
         }
 
@@ -605,23 +635,29 @@ namespace MpWpfApp {
         public void ResetSelection() {
             ClearSelection();
             if(VisibileClipTiles.Count > 0) {
-                var clipTrayListBox = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
-                if(clipTrayListBox != null && clipTrayListBox.Items != null && clipTrayListBox.Items.Count > 0) {
-                    clipTrayListBox.ScrollIntoView(clipTrayListBox.Items[0]);
-                }
-                VisibileClipTiles[0].IsSelected = true;
+                var clipTray = (ListBox)Application.Current.MainWindow.FindName("ClipTray");
+                CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(clipTray.ItemsSource);
+                ((MpClipTileViewModel)view.GetItemAt(0)).IsSelected = true;
             }
         }
 
-        public void AddClipTile(MpCopyItem ci) {
+        public void AddClipTile(MpCopyItem ci,bool isNew = false) {
+            if (isNew) {
+                ci.WriteToDatabase();
+                MpTag historyTag = new MpTag(1);
+                historyTag.LinkWithCopyItem(ci);
+                GetHistoryTagTileViewModel().TagClipCount++;
+            }
+
             MpClipTileViewModel newClipTile = new MpClipTileViewModel(ci, this);
 
             ClipTiles.Insert(0, newClipTile);
 
             //update cliptray visibility if this is the first cliptile added
             ClipListVisibility = Visibility.Visible;
-            EmptyListMessageVisibility = Visibility.Collapsed;
+            EmptyListMessageVisibility = Visibility.Collapsed;            
         }
+
         public void MoveClipTile(MpClipTileViewModel clipTile, int newIdx) {
             if(ClipTiles == null) {
                 throw new Exception("MoveClipTile exception ClipTiles is null");
@@ -638,9 +674,14 @@ namespace MpWpfApp {
             ClipTiles.Insert(newIdx, clipTile);
         }
 
+        public MpTagTileViewModel GetHistoryTagTileViewModel() {
+            return TagTiles.Where(tt => tt.Tag.TagName == Properties.Settings.Default.HistoryTagTitle).ToList()[0];
+        }
+
         #endregion
 
         #region Private Methods
+
         private void SetupMainWindowRect() {
             var mw = ((MpMainWindow)Application.Current.MainWindow);
 
@@ -670,13 +711,18 @@ namespace MpWpfApp {
             //when removing a tag auto-select the history tag
             if(tagTileToRemove.IsSelected) {
                 tagTileToRemove.IsSelected = false;
-                TagTiles.Where(tt => tt.Tag.TagName == "History").ToList()[0].IsSelected = true;
+                TagTiles.Where(tt => tt.Tag.TagName == Properties.Settings.Default.HistoryTagTitle).ToList()[0].IsSelected = true;
             }
             TagTiles.Remove(tagTileToRemove);
             tagTileToRemove.Tag.DeleteFromDatabase();
         }
 
         private void RemoveClipTile(MpClipTileViewModel clipTileToRemove) {
+            foreach(var ttvm in TagTiles) {
+                if(ttvm.Tag.IsLinkedWithCopyItem(clipTileToRemove.CopyItem)) {
+                    ttvm.TagClipCount--;
+                }
+            }
             ClipTiles.Remove(clipTileToRemove);
             clipTileToRemove.CopyItem.DeleteFromDatabase();
 
@@ -697,7 +743,6 @@ namespace MpWpfApp {
                     continue;
                 }
                 MpCopyItem ci = ClipTiles[i].CopyItem;
-                var ct = ClipTiles[i];
                 //add clips where searchStr is in clip title or part of the app path ( TODO also check application name since usually different than exe)
                 if(ci.Title.ToLower().Contains(searchStr.ToLower()) || ci.App.AppPath.ToLower().Contains(searchStr.ToLower())) {
                     filteredTileIdxList.Add(i);
@@ -728,10 +773,6 @@ namespace MpWpfApp {
                 if(filteredTileIdxList.Contains(i)) {
                     ClipTiles[i].TileVisibility = Visibility.Visible;
                     vcount++;
-                    Button b = new Button();
-                    b.MouseLeftButtonUp += (s, e) => {
-
-                    };
                 } else {
                     ClipTiles[i].TileVisibility = Visibility.Collapsed;
                 }
@@ -744,11 +785,6 @@ namespace MpWpfApp {
             }
             string sortBy = string.Empty;
             bool ascending = AscSortOrderButtonImageVisibility == Visibility.Visible;
-            var tempClipTiles = new ObservableCollection<MpClipTileViewModel>();
-            foreach(var ctvm in ClipTiles) {
-                tempClipTiles.Add(ctvm);
-            }
-            //ClipTiles.Clear();
 
             if (SelectedSortType.Header == "Date") {
                 sortBy = "CopyItemCreatedDateTime";                
@@ -763,26 +799,17 @@ namespace MpWpfApp {
             } else if (SelectedSortType.Header == "Usage") {
                 sortBy = "CopyItemUsageScore";
             }
-            //var colView = (CollectionViewSource)((MpMainWindow)Application.Current.MainWindow).Resources["SortedClipTiles"];
-            //colView.SortDescriptions.Clear();
+
+            ClearSelection();
+
+            var clipTray = (ListBox)Application.Current.MainWindow.FindName("ClipTray");
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(clipTray.ItemsSource);
+            view.SortDescriptions.Clear();
             if (ascending) {
-                //colView.SortDescriptions.Add(new SortDescription(sortBy, ListSortDirection.Ascending));
-                //ClipTiles.OrderBy(x => x.Title);
-                //ClipTiles = ClipTiles.OrderBy(x => x.Title) as ObservableCollection<MpClipTileViewModel>;
-                //tempClipTiles.OrderBy(o => o.GetType()
-                //    .GetProperty(sortBy)
-                //    .GetValue(o, null));
+                view.SortDescriptions.Add(new SortDescription(sortBy, ListSortDirection.Ascending));
             } else {
-                //colView.SortDescriptions.Add(new SortDescription(sortBy, ListSortDirection.Ascending));
-                //ClipTiles.OrderByDescending(x => x.Title);
-                //ClipTiles = ClipTiles.OrderByDescending(x => x.Title) as ObservableCollection<MpClipTileViewModel>;
-                //tempClipTiles.OrderByDescending(o => o.GetType()
-                //    .GetProperty(sortBy)
-                //    .GetValue(o, null));
+                view.SortDescriptions.Add(new SortDescription(sortBy, ListSortDirection.Descending));
             }
-            //foreach(var ctvm in tempClipTiles) {
-            //    AddClipTile(ctvm);
-            //}
 
             ResetSelection();
         }
@@ -807,6 +834,7 @@ namespace MpWpfApp {
             };
             Hook.GlobalEvents().OnCombination(assignment);
         }
+
         private void InitClipboard() {
             ClipboardMonitor = new MpClipboardMonitor((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow));
 
@@ -820,12 +848,10 @@ namespace MpWpfApp {
                 }
                 
                 if (newCopyItem != null) {
+                    //check if copyitem is duplicate
                     var existingClipTile = FindClipTileByModel(newCopyItem);
                     if(existingClipTile == null) {
-                        newCopyItem.WriteToDatabase();
-                        MpTag historyTag = new MpTag(1);
-                        historyTag.LinkWithCopyItem(newCopyItem);
-                        AddClipTile(newCopyItem);
+                        AddClipTile(newCopyItem,true);
                     } else {
                         existingClipTile.CopyItem.CopyCount++;
                         existingClipTile.CopyItem.CopyDateTime = DateTime.Now;
@@ -895,12 +921,11 @@ namespace MpWpfApp {
         }
         private void PasteSelectedClips() {
             //In order to paste the app must hide first
-            HideWindowCommand.Execute(null);
             //((MpMainWindow)Application.Current.MainWindow).Visibility = Visibility.Collapsed;
 
-            foreach (var clipTile in SelectedClipTiles) {
-                ClipboardMonitor.PasteCopyItem(clipTile.CopyItem);
-            }
+            //this triggers hidewindow to paste selected items
+            _doPaste = true;
+            HideWindowCommand.Execute(null);
         }
 
         private RelayCommand _bringSelectedClipTilesToFrontCommand;
@@ -932,6 +957,7 @@ namespace MpWpfApp {
                 MoveClipTile(SelectedClipTiles[i], 0);
             }
         }
+
         private RelayCommand _toggleSortOrderCommand;
         public ICommand ToggleSortOrderCommand {
             get {
@@ -1049,6 +1075,13 @@ namespace MpWpfApp {
             ta.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
             ta.Completed += (s, e) => {
                 mw.Visibility = Visibility.Collapsed;
+                if(_doPaste) {
+                    _doPaste = false;
+                    foreach (var clipTile in SelectedClipTiles) {
+                        ClipboardMonitor.PasteCopyItem(clipTile.CopyItem);
+                        MoveClipTile(clipTile, 0);
+                    }
+                }
                 //ShowMainWindowHotKey.Enabled = true;
                 //HideMainWindowHotKey.Enabled = false;
                 //_clipTrayPhysicsBody.Stop();
@@ -1111,7 +1144,7 @@ namespace MpWpfApp {
         }
         private bool CanDeleteTag() {
             //allow delete if any tag besides history tag is selected, delete method will ignore history\
-            return SelectedTagTile.TagName != "History";
+            return SelectedTagTile.TagName != Properties.Settings.Default.HistoryTagTitle;
         }
         private void DeleteTag() {
             RemoveTagTile(SelectedTagTile);
@@ -1132,6 +1165,33 @@ namespace MpWpfApp {
             newTag.WriteToDatabase();
             AddTagTile(newTag, true);
 
+        }
+
+        private RelayCommand<MpTagTileViewModel> _linkTagToCopyItemCommand;
+        public ICommand LinkTagToCopyItemCommand {
+            get {
+                if (_linkTagToCopyItemCommand == null) {
+                    _linkTagToCopyItemCommand = new RelayCommand<MpTagTileViewModel>(LinkTagToCopyItem);
+                }
+                return _linkTagToCopyItemCommand;
+            }
+        }
+        private void LinkTagToCopyItem(MpTagTileViewModel tagToLink) {
+            //tags and clips have 1-to-1 relationship so remove all other links if it exists before creating new one
+            //so loop through all selected clips and sub-loop through all tags and remove links if found            
+            foreach (var clipToRemoveOldLink in SelectedClipTiles) {
+                foreach (var tagTile in TagTiles) {
+                    if (tagTile.Tag.IsLinkedWithCopyItem(clipToRemoveOldLink.CopyItem) && tagTile.TagName != Properties.Settings.Default.HistoryTagTitle) {
+                        tagTile.UnlinkWithClipTile(clipToRemoveOldLink);
+                        //tagTile.Tag.UnlinkWithCopyItem(clipToRemoveOldLink.CopyItem);
+                    }
+                }
+            }
+            //now loop over all selected clips and link to this tag
+            foreach (var clipToLink in SelectedClipTiles) {
+                SelectedTagTile.LinkToClipTile(clipToLink);
+                clipToLink.TitleColor = new SolidColorBrush(SelectedTagTile.Tag.TagColor.Color);
+            }
         }
 
         private RelayCommand _toggleAppendModeCommand;

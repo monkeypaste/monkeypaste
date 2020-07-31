@@ -26,5 +26,8 @@
     <Setting Name="ClipTileDragDropFormatName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">MonkeyPasteDragDropFormat</Value>
     </Setting>
+    <Setting Name="HistoryTagTitle" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">History</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

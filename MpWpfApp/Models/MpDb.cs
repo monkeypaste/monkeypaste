@@ -205,7 +205,7 @@ namespace MpWpfApp {
         }
         public List<MpTag> GetTags() {
             if(NoDb) {
-                return new List<MpTag>() { new MpTag("History",Colors.Green),new MpTag("Favorites",Colors.Blue) };
+                return new List<MpTag>() { new MpTag(Properties.Settings.Default.HistoryTagTitle,Colors.Green),new MpTag("Favorites",Colors.Blue) };
             }
             //if(_isLoaded == false) {
             //    InitDb();
@@ -441,7 +441,7 @@ namespace MpWpfApp {
                     , CONSTRAINT FK_MpTag_0_0 FOREIGN KEY (fk_ParentTagId) REFERENCES MpTagType (pk_MpTagId)
                     , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId)
                     );
-                    INSERT INTO MpTag(TagName,fk_MpColorId) VALUES ('History',3),('Favorites',2);
+                    INSERT INTO MpTag(TagName,fk_MpColorId) VALUES ('All',3),('Favorites',2);
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpSetting (
                       pk_MpSettingId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
