@@ -21,6 +21,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Management;
 using GongSolutions.Wpf.DragDrop.Utilities;
+using System.Reflection;
 
 namespace MpWpfApp {
     public class MpClipTileViewModel : MpViewModelBase {
@@ -30,6 +31,7 @@ namespace MpWpfApp {
         private Point _startDragPoint;
 
         #endregion
+
         #region Collections
         public ObservableCollection<MpClipTileTagMenuItemViewModel> TagMenuItems {
             get {
@@ -64,6 +66,27 @@ namespace MpWpfApp {
             }
         }
         #endregion
+
+        #region Property Reflection Referencer
+        public object this[string propertyName] {
+            get {
+                // probably faster without reflection:
+                // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
+                // instead of the following
+                Type myType = typeof(MpClipTileViewModel);
+                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+                return myPropInfo.GetValue(this, null);
+            }
+            set {
+                Type myType = typeof(MpClipTileViewModel);
+                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+                myPropInfo.SetValue(this, value, null);
+
+            }
+
+        }
+        #endregion
+
         #region View Properties
         private bool _isTitleTextBoxFocused = false;
         public bool IsTitleTextBoxFocused {
@@ -699,5 +722,6 @@ namespace MpWpfApp {
             return CopyItem.GetPlainText();
         }
         #endregion
+
     }
 }

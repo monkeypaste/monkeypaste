@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,6 +16,8 @@ namespace MpWpfApp {
     public class MpViewModelBase : INotifyPropertyChanged  {
         public string DisplayName { get; set; }
         public bool ThrowOnInvalidPropertyName { get; private set; }
+
+        
 
         private bool _isFocused;
         public  bool IsFocused {

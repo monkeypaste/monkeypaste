@@ -13,6 +13,7 @@ namespace MpWpfApp {
         private bool _isNew;
 
         #endregion
+
         #region Apperance Properties
         private bool _isSelected = false;
         public bool IsSelected {
@@ -89,6 +90,19 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        private Brush _tagCountTextColor = Brushes.White;
+        public Brush TagCountTextColor {
+            get {
+                return _tagCountTextColor;
+            }
+            set {
+                if (_tagCountTextColor != value) {
+                    _tagCountTextColor = value;
+                    OnPropertyChanged(nameof(TagCountTextColor));
+                }
+            }
+        }
         #endregion
 
         #region Layout Properties
@@ -132,14 +146,15 @@ namespace MpWpfApp {
         }
         public double TagHeight {
             get {
-                return MpMeasurements.Instance.FilterMenuHeight;
+                //assumes Tag Margin is 5
+                return MpMeasurements.Instance.FilterMenuHeight - (5*2);
 
             }
         }
 
         public double TagFontSize {
             get {
-                return TagHeight * 0.75;
+                return TagHeight * 0.5;
             }
         }
         #endregion
@@ -255,9 +270,7 @@ namespace MpWpfApp {
                         }
                         break;
                     case nameof(IsSelected):
-                        if (IsSelected) {
-                            //TagBorderBackgroundBrush = Brushes.Red;
-                            //TagColor = new SolidColorBrush(Tag.TagColor.Color);
+                        if (IsSelected) {                            
                             TagTextColor = Brushes.White;  
 
                         } else {
@@ -270,6 +283,7 @@ namespace MpWpfApp {
                         if (!IsSelected) {
                             if (IsHovering) {
                                 TagBorderBackgroundBrush = Brushes.DimGray;
+                                TagTextColor = Brushes.White;
 
                             } else {
                                 TagBorderBackgroundBrush = Brushes.Transparent;
@@ -280,6 +294,7 @@ namespace MpWpfApp {
             };
 
             TagColor = new SolidColorBrush(Tag.TagColor.Color);
+            TagCountTextColor = MpHelpers.IsBright(Tag.TagColor.Color) ? Brushes.Black : Brushes.White;
 
             var tagBorder = ((Border)sender);
             tagBorder.MouseEnter += (s, e1) => {

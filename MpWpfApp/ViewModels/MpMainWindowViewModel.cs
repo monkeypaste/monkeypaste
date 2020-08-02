@@ -800,18 +800,70 @@ namespace MpWpfApp {
                 sortBy = "CopyItemUsageScore";
             }
 
-            ClearSelection();
+            //ClearSelection();
 
             var clipTray = (ListBox)Application.Current.MainWindow.FindName("ClipTray");
-            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(clipTray.ItemsSource);
-            view.SortDescriptions.Clear();
-            if (ascending) {
-                view.SortDescriptions.Add(new SortDescription(sortBy, ListSortDirection.Ascending));
-            } else {
-                view.SortDescriptions.Add(new SortDescription(sortBy, ListSortDirection.Descending));
+            //int itemCount = clipTray.Items.Count;
+            //ensures current item is head of collection
+            //ResetSelection();
+            ICollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(clipTray.ItemsSource);
+            using (view.DeferRefresh()) {
+                view.SortDescriptions.Clear();
+                if (ascending) {
+                    //for (int i = 0; i < itemCount; i++) {
+                    //    int minIdx = FindMinIdxByProperty(ClipTiles, sortBy, i);
+                    //    MoveClipTile(ClipTiles[minIdx], i);
+                    //}
+                    view.SortDescriptions.Add(new SortDescription(sortBy, ListSortDirection.Ascending));
+                } else {
+                    view.SortDescriptions.Add(new SortDescription(sortBy, ListSortDirection.Descending));
+                    //for (int i = 0; i < itemCount; i++) {
+                    //    int maxIdx = FindMaxIdxByProperty(ClipTiles, sortBy, i);
+                    //    MoveClipTile(ClipTiles[maxIdx], i);
+                    //}
+                }
             }
-
             ResetSelection();
+        }
+
+        private int FindMaxIdxByProperty(ObservableCollection<MpClipTileViewModel> list,string propertyName,int startIdx = 0) {
+            if(list == null || list.Count <= startIdx) {
+                return -1;
+            }
+            var maxItem = (MpClipTileViewModel)list[startIdx];
+            for (int i = startIdx+1; i < list.Count; i++) {
+                var curItem = (MpClipTileViewModel)list[i];
+                if (curItem[propertyName].GetType() == typeof(int)) {
+                    if ((int)curItem[propertyName] > (int)maxItem[propertyName]) {
+                        maxItem = curItem;
+                    }
+                } else if (curItem[propertyName].GetType() == typeof(string)) {
+                    if (string.Compare((string)curItem[propertyName], (string)maxItem[propertyName]) == -1) {
+                        maxItem = curItem;
+                    }
+                }
+            }
+            return list.IndexOf(maxItem);
+        }
+
+        private int FindMinIdxByProperty(ObservableCollection<MpClipTileViewModel> list, string propertyName, int startIdx = 0) {
+            if (list == null || list.Count <= startIdx) {
+                return -1;
+            }
+            var maxItem = (MpClipTileViewModel)list[startIdx];
+            for (int i = startIdx + 1; i < list.Count; i++) {
+                var curItem = (MpClipTileViewModel)list[i];
+                if (curItem[propertyName].GetType() == typeof(int)) {
+                    if ((int)curItem[propertyName] < (int)maxItem[propertyName]) {
+                        maxItem = curItem;
+                    }
+                } else if (curItem[propertyName].GetType() == typeof(string)) {
+                    if (string.Compare((string)curItem[propertyName], (string)maxItem[propertyName]) == 1) {
+                        maxItem = curItem;
+                    }
+                }
+            }
+            return list.IndexOf(maxItem);
         }
 
         private void InitHotKeys() {

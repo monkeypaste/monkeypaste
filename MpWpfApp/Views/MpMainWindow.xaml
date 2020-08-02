@@ -354,12 +354,13 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <!-- Tag Tile Border -->
-                            <local:MpClipBorder CornerRadius="5"
-                                                Margin="5,0,5,0"
+                            <local:MpClipBorder CornerRadius="10"
+                                                Margin="5"
+                                                Padding="5"
                                                 Focusable="True"
                                                 VerticalAlignment="Center"
                                                 local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"
-                                                Background="Transparent"
+                                                Background="{Binding TagBorderBackgroundBrush}"
                                                 BorderBrush="Transparent"
                                                 BorderThickness="0"
                                                 Height="{Binding TagHeight}">
@@ -378,15 +379,15 @@
                                     </ContextMenu>
                                 </local:MpClipBorder.ContextMenu>
                                 <StackPanel Orientation="Horizontal">
-                                    <local:MpClipBorder CornerRadius="5"
-                                                        Margin="0,10,0,10"
+                                    <!-- Tag Count Box-->
+                                    <local:MpClipBorder CornerRadius="15"
+                                                        Padding="5"
                                                         BorderThickness="0"
                                                         Background="{Binding TagColor}">
                                         <TextBlock Background="Transparent"
                                                    VerticalAlignment="Center"
-                                                   Padding="5,0,5,0"
                                                    Text="{Binding TagClipCount}"
-                                                   Foreground="White" />
+                                                   Foreground="{Binding TagCountTextColor}" />
                                     </local:MpClipBorder>
                                     <TextBlock x:Name="TagTextBlock"
                                                Margin="3,0,0,0"
@@ -406,6 +407,7 @@
                                             </TextBlock.Effect>-->
                                     </TextBlock>
                                     <TextBox x:Name="TagTextBox"
+                                             Margin="3,0,0,0"
                                              Background="White"
                                              Foreground="Black"
                                              IsReadOnly="False"
@@ -543,7 +545,9 @@
                      VerticalAlignment="Stretch"
                      Background="Transparent"
                      SelectionMode="Extended"
-                     ScrollViewer.CanContentScroll="False"
+                     VirtualizingPanel.IsVirtualizing="True"
+                     VirtualizingPanel.ScrollUnit="Pixel"
+                     VirtualizingPanel.VirtualizationMode="Standard"
                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      Visibility="{Binding ClipListVisibility}"
