@@ -45,8 +45,23 @@ namespace MpWpfApp {
                 }
             }
         }
-        public MpClipTileTagMenuItemViewModel(string header,ICommand command,bool isTagLinkedWithClip) {
-            Header = header;
+
+        private MpTagTileViewModel _tagViewModel;
+        public MpTagTileViewModel TagViewModel {
+            get {
+                return _tagViewModel;
+            }
+            set {
+                if(_tagViewModel != value) {
+                    _tagViewModel = value;
+                    OnPropertyChanged(nameof(TagViewModel));
+                }
+            }
+        }
+
+        public MpClipTileTagMenuItemViewModel(MpTagTileViewModel tagViewModel,ICommand command,bool isTagLinkedWithClip) {
+            TagViewModel = tagViewModel;
+            Header = TagViewModel.TagName;
             Command = command;
             IsTagLinkedToClip = isTagLinkedWithClip;
         }

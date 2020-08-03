@@ -78,7 +78,7 @@ namespace MpWpfApp {
             int SortOrderIdx = dt.Rows.Count + 1;
             MpDb.Instance.ExecuteNonQuery("insert into MpCopyItemTag(fk_MpCopyItemId,fk_MpTagId) values(" + ci.CopyItemId + "," + TagId + ")");
             MpDb.Instance.ExecuteNonQuery("insert into MpCopyItemSortTypeOrder(fk_MpCopyItemId,fk_MpSortTypeId,SortOrder) values(" + ci.CopyItemId + "," + this.TagId+","+ SortOrderIdx+")");
-            
+            WriteToDatabase();
             Console.WriteLine("Tag link created between tag " + TagId + " with copyitem " + ci.CopyItemId);
         }
         public void UnlinkWithCopyItem(MpCopyItem ci) {

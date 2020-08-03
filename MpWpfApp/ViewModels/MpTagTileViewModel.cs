@@ -222,31 +222,9 @@ namespace MpWpfApp {
             Tag = tag;
             MainWindowViewModel = mainWindowViewModel;
             _isNew = isNew;
-        }
-        #endregion
 
-        #region Private Methods
-
-        public void LinkToClipTile(MpClipTileViewModel clipTileToLink) {
-            if(!Tag.IsLinkedWithCopyItem(clipTileToLink.CopyItem)) {
-                Tag.LinkWithCopyItem(clipTileToLink.CopyItem);
-                TagClipCount++;
-            }
-        }
-
-        public void UnlinkWithClipTile(MpClipTileViewModel clipTileToLink) {
-            if (Tag.IsLinkedWithCopyItem(clipTileToLink.CopyItem)) {
-                Tag.UnlinkWithCopyItem(clipTileToLink.CopyItem);
-                TagClipCount--;
-            }
-        }
-        #endregion
-
-        #region View Event Handlers
-        public TextBox TagTextBox;
-        public void TagTile_Loaded(object sender, RoutedEventArgs e) {
             PropertyChanged += (s, e1) => {
-                switch(e1.PropertyName) {
+                switch (e1.PropertyName) {
                     case nameof(IsEditing):
                         if (IsEditing) {
                             //show textbox and select all text
@@ -270,12 +248,12 @@ namespace MpWpfApp {
                         }
                         break;
                     case nameof(IsSelected):
-                        if (IsSelected) {                            
-                            TagTextColor = Brushes.White;  
+                        if (IsSelected) {
+                            TagTextColor = Brushes.White;
+                            TagBorderBackgroundBrush = Brushes.DimGray;
 
                         } else {
-                            //TagBorderBackgroundBrush = Brushes.White;
-                            //TagColor = Brushes.Black;
+                            TagBorderBackgroundBrush = Brushes.Transparent;
                             TagTextColor = Brushes.LightGray;
                         }
                         break;
@@ -292,7 +270,29 @@ namespace MpWpfApp {
                         break;
                 }
             };
+        }
+        #endregion
 
+        #region Private Methods
+
+        //public void LinkToClipTile(MpClipTileViewModel clipTileToLink) {
+        //    if(!Tag.IsLinkedWithCopyItem(clipTileToLink.CopyItem)) {
+        //        Tag.LinkWithCopyItem(clipTileToLink.CopyItem);
+        //        TagClipCount++;
+        //    }
+        //}
+
+        //public void UnlinkWithClipTile(MpClipTileViewModel clipTileToLink) {
+        //    if (Tag.IsLinkedWithCopyItem(clipTileToLink.CopyItem)) {
+        //        Tag.UnlinkWithCopyItem(clipTileToLink.CopyItem);
+        //        TagClipCount--;
+        //    }
+        //}
+        #endregion
+
+        #region View Event Handlers
+        public TextBox TagTextBox;
+        public void TagTile_Loaded(object sender, RoutedEventArgs e) {
             TagColor = new SolidColorBrush(Tag.TagColor.Color);
             TagCountTextColor = MpHelpers.IsBright(Tag.TagColor.Color) ? Brushes.Black : Brushes.White;
 

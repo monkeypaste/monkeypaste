@@ -41,7 +41,7 @@ namespace MpWpfApp {
                     if (tagTile.TagName == Properties.Settings.Default.HistoryTagTitle) {
                         continue;
                     }
-                    tagMenuItems.Add(new MpClipTileTagMenuItemViewModel(tagTile.TagName, MainWindowViewModel.LinkTagToCopyItemCommand, tagTile.Tag.IsLinkedWithCopyItem(CopyItem)));
+                    tagMenuItems.Add(new MpClipTileTagMenuItemViewModel(tagTile, MainWindowViewModel.LinkTagToCopyItemCommand, tagTile.Tag.IsLinkedWithCopyItem(CopyItem)));
                 }
                 return tagMenuItems;
             }
@@ -85,6 +85,7 @@ namespace MpWpfApp {
             }
 
         }
+
         #endregion
 
         #region View Properties
@@ -468,12 +469,6 @@ namespace MpWpfApp {
         public MpClipTileViewModel(MpCopyItem ci,MpMainWindowViewModel mwvm) {
             CopyItem = ci;
             MainWindowViewModel = mwvm;
-        }
-        #endregion
-
-        #region View Events Handlers        
-
-        public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
                     case nameof(IsSelected):
@@ -522,6 +517,13 @@ namespace MpWpfApp {
                         break;
                 }
             };
+        }
+        #endregion
+
+        #region View Events Handlers        
+
+        public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
+            
 
             var clipTileBorder = (Border)sender;
             

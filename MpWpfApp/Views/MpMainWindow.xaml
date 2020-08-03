@@ -318,11 +318,11 @@
             </Grid>
             <StackPanel Grid.Row="0"
                         Grid.Column="1"
-                        Focusable="True"
+                        Focusable="False"
                         HorizontalAlignment="Center"
                         Orientation="Horizontal">
                 <ListBox x:Name="TagTray"
-                         Focusable="True"
+                         Focusable="False"
                          Background="Transparent"
                          BorderBrush="Transparent"
                          dd:DragDrop.IsDragSource="True"
@@ -354,7 +354,7 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <!-- Tag Tile Border -->
-                            <local:MpClipBorder CornerRadius="10"
+                            <Border CornerRadius="10"
                                                 Margin="5"
                                                 Padding="5"
                                                 Focusable="True"
@@ -370,23 +370,23 @@
                                                             MethodName="TagTile_Loaded" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                                <local:MpClipBorder.ContextMenu>
+                                <Border.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="Rename"
                                                   Command="{Binding RenameTagCommand}" />
                                         <MenuItem Header="Delete"
                                                   Command="{Binding MainWindowViewModel.DeleteTagCommand}" />
                                     </ContextMenu>
-                                </local:MpClipBorder.ContextMenu>
+                                </Border.ContextMenu>
                                 <StackPanel Orientation="Horizontal">
                                     <!-- Tag Count Box-->
-                                    <local:MpClipBorder CornerRadius="15"
+                                    <local:MpClipBorder CornerRadius="3"
                                                         Padding="5"
                                                         BorderThickness="0"
                                                         Background="{Binding TagColor}">
                                         <TextBlock Background="Transparent"
                                                    VerticalAlignment="Center"
-                                                   Text="{Binding TagClipCount}"
+                                                   Text="{Binding TagClipCount, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"
                                                    Foreground="{Binding TagCountTextColor}" />
                                     </local:MpClipBorder>
                                     <TextBlock x:Name="TagTextBlock"
@@ -418,7 +418,7 @@
                                              FontSize="{Binding TagFontSize}"
                                              Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>
-                            </local:MpClipBorder>
+                            </Border>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
@@ -537,7 +537,7 @@
             <!-- tile tray -->
             <ListBox x:Name="ClipTray"
                      Grid.Row="0"
-                     Grid.Column="1"
+                     Grid.Column="1"                     
                      dd:DragDrop.IsDragSource="True"
                      dd:DragDrop.IsDropTarget="True"
                      dd:DragDrop.DragHandler="{Binding}"
@@ -548,6 +548,7 @@
                      VirtualizingPanel.IsVirtualizing="True"
                      VirtualizingPanel.ScrollUnit="Pixel"
                      VirtualizingPanel.VirtualizationMode="Standard"
+                     ScrollViewer.CanContentScroll="False"
                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                      Visibility="{Binding ClipListVisibility}"
@@ -591,8 +592,7 @@
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel IsItemsHost="True"                                                
-                                                CanVerticallyScroll="False"
-                                                CanHorizontallyScroll="False"                                                
+                                                CanVerticallyScroll="False"                                                
                                                 VerticalAlignment="Top"
                                                 Orientation="Horizontal">
                         </VirtualizingStackPanel>
@@ -672,6 +672,8 @@
                                                         Value="{Binding Header}" />
                                                 <Setter Property="Command"
                                                         Value="{Binding Command}" />
+                                                <Setter Property="CommandParameter"
+                                                        Value="{Binding TagViewModel}" />
                                                 <Setter Property="IsCheckable"
                                                         Value="True" />
                                                 <Setter Property="IsChecked"
