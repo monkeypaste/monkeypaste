@@ -2,15 +2,20 @@
 using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
 using GongSolutions.Wpf.DragDrop;
+using Microsoft.Win32;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -28,7 +33,9 @@ namespace MpWpfApp {
         private MpHotKeyHost _hotkeyHost = null;
         private IKeyboardMouseEvents _globalHook = null;
         private bool _isLoading = true;
-        //private MpPhysicsBody _clipTrayPhysicsBody;
+
+        private ObservableCollection<MpClipTileViewModel> _clipTilesSortedByTitle = new ObservableCollection<MpClipTileViewModel>();
+        private ObservableCollection<MpClipTileViewModel> _clipTilesSortedByDate = new ObservableCollection<MpClipTileViewModel>();
 
         #endregion
 
@@ -436,8 +443,11 @@ namespace MpWpfApp {
 
         #region View Event Handlers
         public void MainWindow_Loaded(object sender,RoutedEventArgs e) {
+            var mw = ((MpMainWindow)Application.Current.MainWindow);
+
             SearchText = Properties.Settings.Default.SearchPlaceHolderText;
             SelectedSortType = SortTypes[0];
+
             SetupMainWindowRect();
 
             //if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
@@ -461,14 +471,14 @@ namespace MpWpfApp {
             }
             //select history tag by default
             GetHistoryTagTileViewModel().IsSelected = true;
-            
-            SortClipTiles();            
 
-            ((MpMainWindow)Application.Current.MainWindow).Deactivated += (s, e2) => {
+            SortClipTiles();
+
+            mw.Deactivated += (s, e2) => {
                 HideWindowCommand.Execute(null);
             };
-            ((MpMainWindow)Application.Current.MainWindow).PreviewKeyDown += MainWindow_KeyDown;
-            
+            mw.PreviewKeyDown += MainWindow_KeyDown;
+
             InitClipboard();
             InitHotKeys();
 
@@ -636,6 +646,7 @@ namespace MpWpfApp {
         public void ClearSelection() {
             foreach (var clip in ClipTiles) {
                 clip.IsSelected = false;
+                clip.IsFocused = false;
             }
         }
 
@@ -660,6 +671,12 @@ namespace MpWpfApp {
             MpClipTileViewModel newClipTile = new MpClipTileViewModel(ci, this);
 
             ClipTiles.Insert(0, newClipTile);
+
+            _clipTilesSortedByDate.Insert(0, newClipTile);
+            _clipTilesSortedByDate.Sort(x => x.CopyItemCreatedDateTime,true);
+
+            _clipTilesSortedByTitle.Insert(0, newClipTile);
+            _clipTilesSortedByTitle.Sort(x => x.Title, false);
 
             //update cliptray visibility if this is the first cliptile added
             ClipListVisibility = Visibility.Visible;
@@ -788,53 +805,32 @@ namespace MpWpfApp {
         }
 
         private void SortClipTiles() {
-            if (ClipTiles == null) {
-                return;
-            }
-            string sortBy = string.Empty;
-            bool ascending = AscSortOrderButtonImageVisibility == Visibility.Visible;
+            using (MpOverrideCursor cursor = new MpOverrideCursor(Cursors.Wait)) {
+                string sortBy = string.Empty;
+                bool ascending = AscSortOrderButtonImageVisibility == Visibility.Visible;
 
-            if (SelectedSortType.Header == "Date") {
-                sortBy = "CopyItemCreatedDateTime";                
-            } else if (SelectedSortType.Header == "Application") {
-                sortBy = "CopyItemAppId";
-            } else if (SelectedSortType.Header == "Title") {
-                sortBy = "Title";
-            } else if (SelectedSortType.Header == "Content") {
-                sortBy = "Text";
-            } else if (SelectedSortType.Header == "Type") {
-                sortBy = "CopyItemType";
-            } else if (SelectedSortType.Header == "Usage") {
-                sortBy = "CopyItemUsageScore";
-            }
-
-            ClearSelection();
-
-            var clipTray = (ListBox)Application.Current.MainWindow.FindName("ClipTray");
-            //int itemCount = clipTray.Items.Count;
-            //ensures current item is head of collection
-            //ResetSelection();
-            ICollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(clipTray.ItemsSource);
-            using (view.DeferRefresh()) {
-                view.SortDescriptions.Clear();
-                if (ascending) {
-                    //for (int i = 0; i < itemCount; i++) {
-                    //    int minIdx = FindMinIdxByProperty(ClipTiles, sortBy, i);
-                    //    MoveClipTile(ClipTiles[minIdx], i);
-                    //}
-                    view.SortDescriptions.Add(new SortDescription(sortBy, ListSortDirection.Ascending));
-                } else {
-                    view.SortDescriptions.Add(new SortDescription(sortBy, ListSortDirection.Descending));
-                    //for (int i = 0; i < itemCount; i++) {
-                    //    int maxIdx = FindMaxIdxByProperty(ClipTiles, sortBy, i);
-                    //    MoveClipTile(ClipTiles[maxIdx], i);
-                    //}
+                if (SelectedSortType.Header == "Date") {
+                    sortBy = "CopyItemCreatedDateTime";
+                } else if (SelectedSortType.Header == "Application") {
+                    sortBy = "CopyItemAppId";
+                } else if (SelectedSortType.Header == "Title") {
+                    sortBy = "Title";
+                } else if (SelectedSortType.Header == "Content") {
+                    sortBy = "Text";
+                } else if (SelectedSortType.Header == "Type") {
+                    sortBy = "CopyItemType";
+                } else if (SelectedSortType.Header == "Usage") {
+                    sortBy = "CopyItemUsageScore";
                 }
+                ClearSelection();
+                ClipTiles.Sort(x => x[sortBy], !ascending);
+                ResetSelection();
             }
-            ResetSelection();
-            //((UIElement)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray")).Focus();
+            
         }
+        private void SortHelper() {
 
+        }
         private int FindMaxIdxByProperty(ObservableCollection<MpClipTileViewModel> list,string propertyName,int startIdx = 0) {
             if(list == null || list.Count <= startIdx) {
                 return -1;
@@ -968,6 +964,78 @@ namespace MpWpfApp {
             }
             return lastIdx > int.MinValue ? lastIdx : -1;
         }
+
+        private void WriteClipsToFile(List<MpClipTileViewModel> clipList, string rootPath) {
+            foreach (MpClipTileViewModel ctvm in clipList) {
+                //file path
+                string fp = rootPath + @"\"+ctvm.Title;
+                //file extension
+                string fe = string.Empty;
+                switch(ctvm.CopyItemType) {
+                    case MpCopyItemType.RichText:
+                        fe = ".txt";
+                        break;
+                    case MpCopyItemType.Image:
+                        fe = ".png";
+                        break;
+                    //ignore file list since file type is part of item
+                }
+                if(ctvm.CopyItemType == MpCopyItemType.RichText || ctvm.CopyItemType == MpCopyItemType.Image) {
+                    //file name count
+                    int fnc = 0;
+                    string fp2 = fp;
+                    while (File.Exists(fp2 + fe)) {
+                        int result = fnc;
+                        try {
+                            result = Convert.ToInt32(Regex.Match(fp2, @"\d+$").Value);
+                        }
+                        catch(Exception e) {
+                            result = fnc;
+                        }
+
+                        fnc = ++result;
+                        fp2 = fp + fnc;
+                    }
+                    fp = fp2;
+                }
+                //output file
+                switch (ctvm.CopyItemType) {
+                    case MpCopyItemType.RichText:
+                        StreamWriter of = new StreamWriter(fp + fe);
+                        of.Write(ctvm.CopyItem.GetPlainText());
+                        of.Close();
+                        break;
+                    case MpCopyItemType.Image:
+                        System.Drawing.Bitmap bmp = MpHelpers.ConvertBitmapSourceToBitmap((BitmapSource)ctvm.CopyItem.DataObject);
+                        bmp.Save(fp + fe, ImageFormat.Png);
+                        break;
+                    case MpCopyItemType.FileList:
+                        foreach(string f in (string[])ctvm.CopyItem.DataObject) {
+                            try {
+                                string fn = Path.GetFileName(f);
+                                //file name count
+                                int fnc = 1;
+                                if (MpHelpers.IsPathDirectory(f)) {
+                                    while (Directory.Exists(rootPath + @"\" + fn)) {
+                                        fn = fn + (fnc++);
+                                    }
+                                    MpHelpers.DirectoryCopy(f, rootPath + @"\" + fn, true);
+                                } else {
+                                    while (File.Exists(rootPath + @"\" + fn)) {
+                                        fn = fn + (fnc++);
+                                    }
+                                    File.Copy(f, rootPath + @"\" + fn);
+                                }
+                            }
+                            catch(Exception e) {
+                                MessageBox.Show("Source file '" + f + "' no longer exists!");
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+
         #endregion
 
         #region Commands
@@ -1038,6 +1106,35 @@ namespace MpWpfApp {
             }
         }
 
+        private RelayCommand _exportSelectedClipTilesCommand;
+        public ICommand ExportSelectedClipTilesCommand {
+            get {
+                if(_exportSelectedClipTilesCommand == null) {
+                    _exportSelectedClipTilesCommand = new RelayCommand(ExportSelectedClipTiles);
+                }
+                return _exportSelectedClipTilesCommand;
+            }
+        }
+        private void ExportSelectedClipTiles() {
+            var dlg = new CommonOpenFileDialog();
+            dlg.Title = "Export Items to Directory...";
+            dlg.IsFolderPicker = true;
+            dlg.InitialDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
+
+            dlg.AddToMostRecentlyUsedList = false;
+            dlg.AllowNonFileSystemItems = false;
+            dlg.DefaultDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
+            dlg.EnsureFileExists = true;
+            dlg.EnsurePathExists = true;
+            dlg.EnsureReadOnly = false;
+            dlg.EnsureValidNames = true;
+            dlg.Multiselect = false;
+            dlg.ShowPlacesList = true;
+
+            if (dlg.ShowDialog() == CommonFileDialogResult.Ok) {
+                WriteClipsToFile(SelectedClipTiles.ToList(), dlg.FileName);
+            }
+        }
         private RelayCommand _mergeClipsCommand;
         public ICommand MergeClipsCommand {
             get {
@@ -1422,5 +1519,26 @@ namespace MpWpfApp {
 
 
         #endregion
+    }
+
+    public class MpSortClipTilesByTitle : IComparer {
+        public int Compare(object x, object y) {
+            if (x as MpClipTileViewModel == null || y as MpClipTileViewModel == null) {
+                throw new ArgumentException("SortCreatures can only sort CreatureModel objects." );
+            }
+            return string.Compare(((MpClipTileViewModel)x).Title, ((MpClipTileViewModel)y).Title);
+        }
+    }
+
+    public class MpSortClipTilesByDate : IComparer {
+        public int Compare(object x, object y) {
+            if (x as MpClipTileViewModel == null || y as MpClipTileViewModel == null) {
+                throw new ArgumentException("SortCreatures can only sort CreatureModel objects.");
+            }
+            if(((MpClipTileViewModel)x).CopyItemCreatedDateTime > ((MpClipTileViewModel)y).CopyItemCreatedDateTime) {
+                return 1;
+            }
+            return -1;
+        }
     }
 }

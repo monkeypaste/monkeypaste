@@ -54,6 +54,8 @@ namespace MpWpfApp {
             tokenList?.AddRange(ContainsEmail(rtb.Document));
             tokenList?.AddRange(ContainsWebLink(rtb.Document));
             tokenList?.AddRange(ContainsPhoneNumber(rtb.Document));
+            tokenList?.AddRange(ContainsCurrency(rtb.Document));
+            tokenList?.AddRange(ContainsHexColor(rtb.Document));
 
             //ensure no weblinks are part of emails
             List<MpSubTextToken> tokensToRemove = new List<MpSubTextToken>();
@@ -99,7 +101,7 @@ namespace MpWpfApp {
             return ContainsRegEx(doc, @"\b(?:https?://|www\.)\S+\b", MpSubTextTokenType.Uri);
         }
         private static List<MpSubTextToken> ContainsCurrency(FlowDocument doc) {
-            return ContainsRegEx(doc, @"(-?\d{1,3}(,?\d{3})*(\.\d{2}?))(\D|$)", MpSubTextTokenType.Currency);
+            return ContainsRegEx(doc, @"\$?([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)(\.[0-9][0-9])?$", MpSubTextTokenType.Currency);
         }
         private static List<MpSubTextToken> ContainsHexColor(FlowDocument doc) {
             return ContainsRegEx(doc, @"#(([\da-fA-F]{3}){1,2}|([\da-fA-F]{4}){1,2})$", MpSubTextTokenType.Currency);

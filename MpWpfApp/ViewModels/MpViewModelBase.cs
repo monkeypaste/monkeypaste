@@ -16,9 +16,7 @@ namespace MpWpfApp {
     public class MpViewModelBase : INotifyPropertyChanged  {
         public string DisplayName { get; set; }
         public bool ThrowOnInvalidPropertyName { get; private set; }
-
         
-
         private bool _isFocused;
         public  bool IsFocused {
             get {

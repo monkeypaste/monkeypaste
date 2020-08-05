@@ -621,6 +621,8 @@
                                 <ContextMenu>
                                     <MenuItem Header="Bring To Front"
                                               Command="{Binding MainWindowViewModel.BringSelectedClipTilesToFrontCommand}" />
+                                    <MenuItem Header="Export Item(s)..."
+                                              Command="{Binding MainWindowViewModel.ExportSelectedClipTilesCommand}" />
                                     <MenuItem Header="Rename"
                                               Command="{Binding MainWindowViewModel.RenameClipCommand}" />
                                     <MenuItem Header="Delete"

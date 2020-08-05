@@ -62,6 +62,9 @@ namespace MpWpfApp {
             //}
 
             TextRange tokenRange = FindStringRangeFromPosition(searchStartPointer, tokenText);
+            if(tokenRange == null) {
+                return;
+            }
             Hyperlink tokenLink = new Hyperlink(tokenRange.Start, tokenRange.End);
             tokenLink.IsEnabled = true;
             tokenLink.RequestNavigate += (s,e) => {
@@ -164,19 +167,11 @@ namespace MpWpfApp {
             Application.Current.Dispatcher.BeginInvoke(
                 DispatcherPriority.Background,
                 new Action(() => {
-                    if (e.OldValue != null) {
-                        //OnDataChangedHelper((RichTextBox)source, (string)e.OldValue, Brushes.Transparent);
-                    }
                     OnDataChangedHelper((RichTextBox)source, (string)e.NewValue,Brushes.Yellow);
                 })
             );
         }
         private static void OnDataChangedHelper(RichTextBox rtb, string updatedSearchText,SolidColorBrush highlightColor) {
-            //clear highlights
-            //foreach(Block b in rtb.Document.Blocks) {
-            //    Paragraph p = (Paragraph)b;
-            //    p.Inlines.Clear();
-            //}
             var fullDocRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
             fullDocRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
 
@@ -186,8 +181,6 @@ namespace MpWpfApp {
             }
             string rtbt = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.ToLower();
             updatedSearchText = updatedSearchText.ToLower();
-            //string regExStr = $@"\b" + updatedSearchText + @"\b";
-            //MatchCollection mc = Regex.Matches(rtbt, $@"\b"+updatedSearchText+"\b", RegexOptions.IgnoreCase);
             var tokenIdxList = rtbt.AllIndexesOf(updatedSearchText);
             TextRange lastTokenRange = null;
             rtb.CaretPosition = rtb.Document.ContentStart;

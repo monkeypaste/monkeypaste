@@ -260,7 +260,7 @@ namespace MpWpfApp {
                     case nameof(IsHovering):
                         if (!IsSelected) {
                             if (IsHovering) {
-                                TagBorderBackgroundBrush = Brushes.DimGray;
+                                TagBorderBackgroundBrush = Brushes.LightGray;
                                 TagTextColor = Brushes.White;
 
                             } else {

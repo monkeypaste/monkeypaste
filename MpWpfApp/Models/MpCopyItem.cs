@@ -157,7 +157,7 @@ namespace MpWpfApp {
                 case MpCopyItemType.RichText:
                     RichTextBox rtb = new RichTextBox();
                     rtb.SetRtf((string)DataObject);
-                    return new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
+                    return new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.Replace("''","'");
                 case MpCopyItemType.FileList:
                     string outStr = string.Empty;
                     foreach(string str in (string[])DataObject) {
