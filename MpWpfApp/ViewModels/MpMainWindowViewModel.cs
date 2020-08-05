@@ -1036,6 +1036,16 @@ namespace MpWpfApp {
             }
         }
 
+        private void WriteClipsToCsvFile(List<MpClipTileViewModel> clipList, string filePath) {
+            string csvText = string.Empty;
+            foreach (MpClipTileViewModel ctvm in clipList) {
+                csvText += ctvm.CopyItem.GetPlainText() + ",";
+            }
+            StreamWriter of = new StreamWriter(filePath);
+            of.Write(csvText);
+            of.Close();
+        }
+
         #endregion
 
         #region Commands
@@ -1106,35 +1116,56 @@ namespace MpWpfApp {
             }
         }
 
-        private RelayCommand _exportSelectedClipTilesCommand;
+        private RelayCommand<bool> _exportSelectedClipTilesCommand;
         public ICommand ExportSelectedClipTilesCommand {
             get {
                 if(_exportSelectedClipTilesCommand == null) {
-                    _exportSelectedClipTilesCommand = new RelayCommand(ExportSelectedClipTiles);
+                    _exportSelectedClipTilesCommand = new RelayCommand<bool> (ExportSelectedClipTiles,CanExportSelectedClipTiles);
                 }
                 return _exportSelectedClipTilesCommand;
             }
         }
-        private void ExportSelectedClipTiles() {
-            var dlg = new CommonOpenFileDialog();
-            dlg.Title = "Export Items to Directory...";
-            dlg.IsFolderPicker = true;
+        private bool CanExportSelectedClipTiles(bool toCsv) {
+            if(!toCsv) {
+                return true;
+            }
+            foreach(var sctvm in SelectedClipTiles) {
+                if(sctvm.CopyItemType != MpCopyItemType.RichText) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        private void ExportSelectedClipTiles(bool toCsv) {
+            CommonFileDialog dlg = toCsv ? new CommonSaveFileDialog() as CommonFileDialog : new CommonOpenFileDialog();
+            dlg.Title = toCsv ? "Export CSV" : "Export Items to Directory...";
+            if(toCsv) {
+                dlg.DefaultFileName = "Mp_Exported_Data_" + DateTime.Now.ToString().Replace(@"/","-");
+                dlg.DefaultExtension = "csv";
+            } else {
+                ((CommonOpenFileDialog)dlg).IsFolderPicker = !toCsv;
+            }
             dlg.InitialDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
 
             dlg.AddToMostRecentlyUsedList = false;
-            dlg.AllowNonFileSystemItems = false;
+            //dlg.AllowNonFileSystemItems = false;
             dlg.DefaultDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
             dlg.EnsureFileExists = true;
             dlg.EnsurePathExists = true;
             dlg.EnsureReadOnly = false;
             dlg.EnsureValidNames = true;
-            dlg.Multiselect = false;
+            //dlg.Multiselect = false;
             dlg.ShowPlacesList = true;
 
             if (dlg.ShowDialog() == CommonFileDialogResult.Ok) {
-                WriteClipsToFile(SelectedClipTiles.ToList(), dlg.FileName);
+                if(toCsv) {
+                    WriteClipsToCsvFile(SelectedClipTiles.ToList(), dlg.FileName);
+                } else {
+                    WriteClipsToFile(SelectedClipTiles.ToList(), dlg.FileName);
+                }
             }
         }
+
         private RelayCommand _mergeClipsCommand;
         public ICommand MergeClipsCommand {
             get {

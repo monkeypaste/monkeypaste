@@ -3,6 +3,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:s="clr-namespace:System;assembly=mscorlib"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -25,6 +26,8 @@
         <local:MpMainWindowViewModel />
     </Window.DataContext>
     <Window.Resources>
+        <s:Boolean x:Key="True">True</s:Boolean>
+        <s:Boolean x:Key="False">False</s:Boolean>
         <DataTemplate x:Key="ClipTileDragAdorner">
             <StackPanel>
                 <Image Source="/MpWpfApp;component/Resources/asc_black.png"
@@ -621,8 +624,14 @@
                                 <ContextMenu>
                                     <MenuItem Header="Bring To Front"
                                               Command="{Binding MainWindowViewModel.BringSelectedClipTilesToFrontCommand}" />
-                                    <MenuItem Header="Export Item(s)..."
-                                              Command="{Binding MainWindowViewModel.ExportSelectedClipTilesCommand}" />
+                                    <MenuItem Header="Export To">
+                                        <MenuItem Header="File(s)..."
+                                                  Command="{Binding MainWindowViewModel.ExportSelectedClipTilesCommand}"
+                                                  CommandParameter="{StaticResource False}"/>
+                                        <MenuItem Header="CSV"
+                                                  Command="{Binding MainWindowViewModel.ExportSelectedClipTilesCommand}"
+                                                  CommandParameter="{StaticResource True}"/>
+                                    </MenuItem>
                                     <MenuItem Header="Rename"
                                               Command="{Binding MainWindowViewModel.RenameClipCommand}" />
                                     <MenuItem Header="Delete"
