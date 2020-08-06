@@ -621,7 +621,7 @@
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                             <local:MpClipBorder.ContextMenu>
-                                <ContextMenu>
+                                <ContextMenu x:Name="ClipTile_ContextMenu">
                                     <MenuItem Header="Bring To Front"
                                               Command="{Binding MainWindowViewModel.BringSelectedClipTilesToFrontCommand}" />
                                     <MenuItem Header="Export To">

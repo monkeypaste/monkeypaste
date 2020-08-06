@@ -1198,6 +1198,7 @@ namespace MpWpfApp {
                 RemoveClipTile(tileToRemove);
             }
             focusedClip.IsSelected = true;
+            focusedClip.IsFocused = true;
         }
 
         private RelayCommand _showWindowCommand;

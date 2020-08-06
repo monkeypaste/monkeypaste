@@ -488,7 +488,6 @@ namespace MpWpfApp {
                     case nameof(IsEditingTitle):
                         if (IsEditingTitle) {
                             //show textbox and select all text
-
                             TileTitleTextBoxVisibility = Visibility.Visible;
                             TileTitleTextBlockVisibility = Visibility.Collapsed;
                             IsTitleTextBoxFocused = false;
@@ -523,8 +522,6 @@ namespace MpWpfApp {
         #region View Events Handlers        
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            
-
             var clipTileBorder = (Border)sender;
             
             clipTileBorder.MouseEnter += (s, e1) => {
@@ -571,6 +568,11 @@ namespace MpWpfApp {
             } else if(CopyItem.CopyItemType == MpCopyItemType.RichText) {
                 img.Visibility = Visibility.Collapsed;
                 flb.Visibility = Visibility.Collapsed;
+
+
+                // since document is enabled this overrides the rtb's context menu with the tile's defined in the xaml
+                rtb.ContextMenu = (ContextMenu)clipTileBorder.FindName("ClipTile_ContextMenu");
+
                 //First load the richtextbox with copytext
                 rtb.SetRtf(RichText);
                 //rtb.PreviewKeyDown += MainWindowViewModel.ClipTile_KeyUp;
