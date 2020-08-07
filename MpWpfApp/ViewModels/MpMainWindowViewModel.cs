@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
 using GongSolutions.Wpf.DragDrop;
+using Hardcodet.Wpf.TaskbarNotification;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
@@ -33,10 +34,6 @@ namespace MpWpfApp {
         private MpHotKeyHost _hotkeyHost = null;
         private IKeyboardMouseEvents _globalHook = null;
         private bool _isLoading = true;
-
-        private ObservableCollection<MpClipTileViewModel> _clipTilesSortedByTitle = new ObservableCollection<MpClipTileViewModel>();
-        private ObservableCollection<MpClipTileViewModel> _clipTilesSortedByDate = new ObservableCollection<MpClipTileViewModel>();
-
         #endregion
 
         #region Public Variables
@@ -53,7 +50,7 @@ namespace MpWpfApp {
             set {
                 if(_clipTiles != value) {
                     _clipTiles = value;
-                    OnPropertyChanged(nameof(ClipTiles));
+                    //OnPropertyChanged(nameof(ClipTiles));
                 }
             }
         }
@@ -119,6 +116,19 @@ namespace MpWpfApp {
                 if (_selectedSortType != value) {
                     _selectedSortType = value;
                     OnPropertyChanged(nameof(SelectedSortType));
+                }
+            }
+        }
+
+        private string _taskbarIconToolTipText = Properties.Settings.Default.ApplicationName;
+        public string TaskbarIconToolTipText {
+            get {
+                return _taskbarIconToolTipText;
+            }
+            set {
+                if(_taskbarIconToolTipText != value) {
+                    _taskbarIconToolTipText = value;
+                    OnPropertyChanged(nameof(TaskbarIconToolTipText));
                 }
             }
         }
@@ -247,7 +257,6 @@ namespace MpWpfApp {
         #endregion
 
         #region View Properties
-        private bool _isTagTextBoxFocused = false;
         public bool IsTagTextBoxFocused {
             get {
                 return SelectedTagTile.IsTextBoxFocused;
@@ -443,7 +452,7 @@ namespace MpWpfApp {
 
         #region View Event Handlers
         public void MainWindow_Loaded(object sender,RoutedEventArgs e) {
-            var mw = ((MpMainWindow)Application.Current.MainWindow);
+            var mw = ((MpMainWindow)Application.Current.MainWindow); 
 
             SearchText = Properties.Settings.Default.SearchPlaceHolderText;
             SelectedSortType = SortTypes[0];
@@ -488,6 +497,8 @@ namespace MpWpfApp {
 #else
             HideWindowCommand.Execute(null);
 #endif
+            var taskbarIcon = (TaskbarIcon)mw.FindName("TaskbarIcon");
+
             _isLoading = false;
         }
 
@@ -671,12 +682,6 @@ namespace MpWpfApp {
             MpClipTileViewModel newClipTile = new MpClipTileViewModel(ci, this);
 
             ClipTiles.Insert(0, newClipTile);
-
-            _clipTilesSortedByDate.Insert(0, newClipTile);
-            _clipTilesSortedByDate.Sort(x => x.CopyItemCreatedDateTime,true);
-
-            _clipTilesSortedByTitle.Insert(0, newClipTile);
-            _clipTilesSortedByTitle.Sort(x => x.Title, false);
 
             //update cliptray visibility if this is the first cliptile added
             ClipListVisibility = Visibility.Visible;
@@ -1006,7 +1011,7 @@ namespace MpWpfApp {
                         of.Close();
                         break;
                     case MpCopyItemType.Image:
-                        System.Drawing.Bitmap bmp = MpHelpers.ConvertBitmapSourceToBitmap((BitmapSource)ctvm.CopyItem.DataObject);
+                        System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(MpHelpers.ConvertBitmapSourceToBitmap((BitmapSource)ctvm.CopyItem.DataObject));
                         bmp.Save(fp + fe, ImageFormat.Png);
                         break;
                     case MpCopyItemType.FileList:

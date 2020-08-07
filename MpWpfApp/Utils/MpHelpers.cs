@@ -90,11 +90,15 @@ namespace MpWpfApp {
 
 
         public static string GetProcessPath(IntPtr hwnd) {
-            uint pid = 0;
-            WinApi.GetWindowThreadProcessId(hwnd,out pid);
-            //return MpHelpers.GetMainModuleFilepath((int)pid);
-            Process proc = Process.GetProcessById((int)pid);
-            return proc.MainModule.FileName.ToString();
+            try {
+                uint pid = 0;
+                WinApi.GetWindowThreadProcessId(hwnd, out pid);
+                Process proc = Process.GetProcessById((int)pid);
+                return proc.MainModule.FileName.ToString();
+            }
+            catch(Exception e) {
+                return GetProcessPath(((MpMainWindowViewModel)((MpMainWindow)App.Current.MainWindow).DataContext).ClipboardMonitor.LastWindowWatcher.ThisAppHandle);
+            }
         }
         public static string GetMainModuleFilepath(int processId) {
             string wmiQueryString = "SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId = " + processId;

@@ -350,7 +350,7 @@ namespace MpWpfApp {
                     if(isNew) {
                         MpDb.Instance.ExecuteNonQuery("insert into MpImageItem(fk_MpCopyItemId,ItemImage) values (" + this.CopyItemId + ",@0)",new List<string>() { "@0" },new List<object>() { MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)this.DataObject) });
                     } else {
-                        MpDb.Instance.ExecuteNonQuery("update MpImageItem set ItemImage=@0 where pk_MpImageItemId="+this.SubItemId,new List<string>() { "@0" },new List<object>() { this.DataObject });
+                        MpDb.Instance.ExecuteNonQuery("update MpImageItem set ItemImage=@0 where pk_MpImageItemId="+this.SubItemId,new List<string>() { "@0" },new List<object>() { MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)this.DataObject) });
                     }
                     
                     break;

@@ -29,5 +29,8 @@
     <Setting Name="HistoryTagTitle" Type="System.String" Scope="Application">
       <Value Profile="(Default)">History</Value>
     </Setting>
+    <Setting Name="ApplicationName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Monkey Paste</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

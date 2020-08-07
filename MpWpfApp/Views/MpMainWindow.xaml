@@ -4,6 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:s="clr-namespace:System;assembly=mscorlib"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -28,15 +29,15 @@
     <Window.Resources>
         <s:Boolean x:Key="True">True</s:Boolean>
         <s:Boolean x:Key="False">False</s:Boolean>
-        <DataTemplate x:Key="ClipTileDragAdorner">
+        <!--<DataTemplate x:Key="ClipTileDragAdorner">
             <StackPanel>
                 <Image Source="/MpWpfApp;component/Resources/asc_black.png"
                        Width="64"
                        HorizontalAlignment="Center" />
             </StackPanel>
-        </DataTemplate>
+        </DataTemplate>-->
         <local:MpSolidColorBrushToBrushConverter x:Key="SolidColorBrushToBrushConverter" />
-        <Style x:Key="SortOrderButtonStyle"
+        <!--<Style x:Key="SortOrderButtonStyle"
                TargetType="Button">
             <Setter Property="OverridesDefaultStyle"
                     Value="True" />
@@ -75,8 +76,8 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
-        <Style x:Key="DropShaodowGridStyle"
+        </Style>-->
+        <!--<Style x:Key="DropShaodowGridStyle"
                TargetType="{x:Type Grid}">
             <Style.Triggers>
                 <Trigger Property="Visibility"
@@ -103,9 +104,8 @@
                     </Trigger.ExitActions>
                 </Trigger>
             </Style.Triggers>
-        </Style>
+        </Style>-->
         <!--ScrollBars-->
-        
         <Style x:Key="ScrollBarTrackThumb"
                TargetType="{x:Type Thumb}">
             <Setter Property="Template">
@@ -239,6 +239,8 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <SolidColorBrush x:Key="AppColorDark">DarkViolet</SolidColorBrush>
+        <SolidColorBrush x:Key="AppColorLight">MediumPurple</SolidColorBrush>
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -254,6 +256,51 @@
             <RowDefinition Height="{Binding FilterMenuHeight}"/>
             <RowDefinition Height="{Binding ClipTrayHeight}"/>
         </Grid.RowDefinitions>
+        <tb:TaskbarIcon x:Name="TaskbarIcon"
+                        IconSource="/MpWpfApp;component/Resources/monkey (2).ico"
+                        ToolTipText="{Binding TaskbarIconToolTipText}">
+            <tb:TaskbarIcon.TrayPopup>
+                <Border Background="{StaticResource AppColorDark}"
+                        BorderBrush="{StaticResource AppColorLight}"
+                        BorderThickness="2"
+                        CornerRadius="4"
+                        Width="160"
+                        Height="40">
+                    <Button Content="Click Me!"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center" />
+                </Border>
+            </tb:TaskbarIcon.TrayPopup>
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu Background="LightCoral">
+                    <MenuItem Header="First Menu Item" />
+                    <MenuItem Header="Second Menu Item" />
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+            <tb:TaskbarIcon.TrayToolTip>
+                <Border Background="{StaticResource AppColorDark}"
+                        BorderBrush="{StaticResource AppColorLight}"
+                        BorderThickness="2"
+                        Padding="10"
+                        CornerRadius="4"
+                        Opacity="0.8">
+                    <StackPanel>
+                        <TextBlock Text="Monkey Paste Info 1"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Text="Monkey Paste Info 2"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                        <TextBlock Text="Monkey Paste Info 3"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+            </tb:TaskbarIcon.TrayToolTip>
+        </tb:TaskbarIcon>
         <!-- Main Menu -->
         <StackPanel Grid.Row="0"
                     Grid.Column="0"
@@ -358,15 +405,15 @@
                         <DataTemplate>
                             <!-- Tag Tile Border -->
                             <Border CornerRadius="10"
-                                                Margin="5"
-                                                Padding="5"
-                                                Focusable="True"
-                                                VerticalAlignment="Center"
-                                                local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"
-                                                Background="{Binding TagBorderBackgroundBrush}"
-                                                BorderBrush="Transparent"
-                                                BorderThickness="0"
-                                                Height="{Binding TagHeight}">
+                                    Margin="5"
+                                    Padding="5"
+                                    Focusable="True"
+                                    VerticalAlignment="Center"
+                                    local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"
+                                    Background="{Binding TagBorderBackgroundBrush}"
+                                    BorderBrush="Transparent"
+                                    BorderThickness="0"
+                                    Height="{Binding TagHeight}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Loaded">
                                         <i:CallMethodAction TargetObject="{Binding}"
@@ -401,13 +448,6 @@
                                                FontSize="{Binding TagFontSize}"
                                                Foreground="{Binding TagTextColor}"
                                                Text="{Binding TagName}">
-                                            <!--<TextBlock.Effect>
-                                                <DropShadowEffect ShadowDepth="2"
-                                                                  Direction="330"
-                                                                  Color="Black"
-                                                                  Opacity="1.0"
-                                                                  BlurRadius="4" />
-                                            </TextBlock.Effect>-->
                                     </TextBlock>
                                     <TextBox x:Name="TagTextBox"
                                              Margin="3,0,0,0"
@@ -428,6 +468,7 @@
                 <!-- Add Tag Button -->
                 <Button Height="30"
                         Width="30" 
+                        BorderThickness="0"
                         Background="Transparent"
                         Command="{Binding CreateTagCommand}">
                     <Image Stretch="Fill"
@@ -542,15 +583,14 @@
                      Grid.Row="0"
                      Grid.Column="1"                     
                      dd:DragDrop.IsDragSource="True"
-                     dd:DragDrop.IsDropTarget="True"
+                     dd:DragDrop.IsDropTarget="False"
                      dd:DragDrop.DragHandler="{Binding}"
-                     dd:DragDrop.DragAdornerTemplate="{StaticResource ClipTileDragAdorner}"
                      VerticalAlignment="Stretch"
                      Background="Transparent"
                      SelectionMode="Extended"
                      VirtualizingPanel.IsVirtualizing="True"
                      VirtualizingPanel.ScrollUnit="Pixel"
-                     VirtualizingPanel.VirtualizationMode="Standard"
+                     VirtualizingPanel.VirtualizationMode="Recycling"
                      ScrollViewer.CanContentScroll="False"
                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
@@ -790,6 +830,7 @@
                                                              MinHeight="{Binding TileContentHeight}"
                                                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                                             ScrollViewer.IsDeferredScrollingEnabled="True"
                                                              IsDocumentEnabled="True"
                                                              Focusable="False"
                                                              Cursor="Arrow"
