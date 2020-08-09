@@ -22,21 +22,63 @@ namespace MpWpfApp {
         private TextRange _lastTokenRange = null;
         private MpSubTextToken _lastToken = null;
 
-        public MpClipTileRichTextBox() : base() { 
-            
+        public MpClipTileRichTextBox() : base() {}
+
+        public void HighlightSearchText(string searchText,SolidColorBrush highlightColor) {
+            //((MpClipTileViewModel)((MpClipBorder)rtb.GetVisualAncestor<MpClipBorder>()).DataContext).TileVisibility = Visibility.Visible;
+
+            BeginChange();
+            {
+                var fullDocRange = new TextRange(Document.ContentStart, Document.ContentEnd);
+                fullDocRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
+                ScrollToHome();
+                if (searchText != Properties.Settings.Default.SearchPlaceHolderText && !string.IsNullOrEmpty(searchText)) {
+                    string rtbt = fullDocRange.Text.ToLower();
+                    searchText = searchText.ToLower();
+                    var tokenIdxList = rtbt.AllIndexesOf(searchText);
+                    TextRange lastTokenRange = null;
+                    CaretPosition = Document.ContentStart;
+                    foreach (int idx in tokenIdxList) {
+                        TextPointer startPoint = lastTokenRange == null ? Document.ContentStart : lastTokenRange.End;
+                        var range = FindStringRangeFromPosition(startPoint, searchText);
+                        if (range == null) {
+                            Console.WriteLine("Cannot find '" + searchText + "' in tile");
+                        }
+                        range?.ApplyPropertyValue(TextElement.BackgroundProperty, highlightColor);
+                        lastTokenRange = range;
+                    }
+                    if(lastTokenRange != null) {
+                        Rect r = lastTokenRange.End.GetCharacterRect(LogicalDirection.Backward);
+                        ScrollToVerticalOffset(r.Y - (FontSize*0.5));
+                    }
+                }          
+            }
+            EndChange();
         }
 
-        public String SearchText {
-            get { 
-                return (String)GetValue(SearchTextProperty); 
+        private TextRange FindStringRangeFromPosition(TextPointer position, string lowerCaseStr) {
+            while (position != null) {
+                var dir = LogicalDirection.Forward;
+                if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
+                    dir = LogicalDirection.Backward;
+                }
+                string textRun = position.GetTextInRun(dir).ToLower();
+
+                // Find the starting index of any substring that matches "word".
+                int indexInRun = textRun.IndexOf(lowerCaseStr);
+                if (indexInRun >= 0) {
+                    if(dir == LogicalDirection.Forward) {
+                        return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + lowerCaseStr.Length));
+                    } else {
+                        return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun - lowerCaseStr.Length));
+                    }
+                }
+                position = position.GetNextContextPosition(LogicalDirection.Forward);
             }
-            set { 
-                SetValue(SearchTextProperty, value); 
-            }
+            // position will be null if "word" is not found.
+            return null;
         }
-
-        public List<DispatcherOperation> DataChangeHandlerResults = new List<DispatcherOperation>();
-
+        
         public void AddSubTextToken(MpSubTextToken token) {
             Block block = Document.Blocks.ToArray()[token.BlockIdx];
             //find and remove the inline with the token
@@ -66,17 +108,17 @@ namespace MpWpfApp {
             //}
 
             TextRange tokenRange = FindStringRangeFromPosition(searchStartPointer, tokenText);
-            if(tokenRange == null) {
+            if (tokenRange == null) {
                 return;
             }
             Hyperlink tokenLink = new Hyperlink(tokenRange.Start, tokenRange.End);
             tokenLink.IsEnabled = true;
-            tokenLink.RequestNavigate += (s,e) => {
+            tokenLink.RequestNavigate += (s, e) => {
                 System.Diagnostics.Process.Start(e.Uri.ToString());
             };
             MenuItem convertToQrCodeMenuItem = new MenuItem();
             convertToQrCodeMenuItem.Header = "Convert to QR Code";
-            convertToQrCodeMenuItem.Click += (s,e1) => {
+            convertToQrCodeMenuItem.Click += (s, e1) => {
                 var hyperLink = (Hyperlink)(((MenuItem)s).Tag);
 
                 Url generator = new Url(hyperLink.NavigateUri.ToString());
@@ -137,6 +179,7 @@ namespace MpWpfApp {
             _lastTokenRange = tokenRange;
             _lastToken = token;
         }
+
         private async Task<string> ShortenUrl(string url) {
             string _bitlyToken = @"f6035b9ed05ac82b42d4853c984e34a4f1ba05d8";
             HttpClient client = new HttpClient();
@@ -168,81 +211,9 @@ namespace MpWpfApp {
             }
         }
 
-        public void HighlightSearchText(SolidColorBrush highlightColor) {
-            OnDataChangedHelper(this, SearchText,highlightColor);
-        }
-        private static void OnDataChanged(DependencyObject source, DependencyPropertyChangedEventArgs e) {
-            return;
-            var dchr = ((MpClipTileRichTextBox)source).DataChangeHandlerResults;
-
-            foreach(var d in dchr) {
-                d.Abort();
-            }
-            //dchr.Clear();
-
-            var ndchr = Application.Current.Dispatcher.BeginInvoke(
-                DispatcherPriority.Background,
-                new Action(() => {
-                    OnDataChangedHelper((RichTextBox)source, (string)e.NewValue, Brushes.Yellow);
-                })                
-            );
-
-            dchr.Add(ndchr);
-        }
-        private static void OnDataChangedHelper(RichTextBox rtb, string updatedSearchText, SolidColorBrush highlightColor) {
-            //((MpClipTileViewModel)((MpClipBorder)rtb.GetVisualAncestor<MpClipBorder>()).DataContext).TileVisibility = Visibility.Visible;
-            if (updatedSearchText == Properties.Settings.Default.SearchPlaceHolderText || string.IsNullOrEmpty(updatedSearchText)) {                
-                return;
-            }
-            rtb.BeginChange();
-            {
-                var fullDocRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
-                fullDocRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
-
-                string rtbt = fullDocRange.Text.ToLower();
-                updatedSearchText = updatedSearchText.ToLower();
-                var tokenIdxList = rtbt.AllIndexesOf(updatedSearchText);
-                TextRange lastTokenRange = null;
-                rtb.CaretPosition = rtb.Document.ContentStart;
-                foreach (int idx in tokenIdxList) {
-                    TextPointer startPoint = lastTokenRange == null ? rtb.Document.ContentStart : lastTokenRange.End;
-                    var range = FindStringRangeFromPosition(startPoint, updatedSearchText);
-                    if(range == null) {
-                        Console.WriteLine("Cannot find '" + updatedSearchText + "' in tile");
-                    }
-                    range?.ApplyPropertyValue(TextElement.BackgroundProperty, highlightColor);
-                    lastTokenRange = range;
-                }
-            }
-            rtb.EndChange();
-        }
-
-        public static TextRange FindStringRangeFromPosition(TextPointer position, string lowerCaseStr) {
-            while (position != null) {
-                var dir = LogicalDirection.Forward;
-                if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
-                    dir = LogicalDirection.Backward;
-                }
-                string textRun = position.GetTextInRun(dir).ToLower();
-
-                // Find the starting index of any substring that matches "word".
-                int indexInRun = textRun.IndexOf(lowerCaseStr);
-                if (indexInRun >= 0) {
-                    if(dir == LogicalDirection.Forward) {
-                        return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + lowerCaseStr.Length));
-                    } else {
-                        return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun - lowerCaseStr.Length));
-                    }
-                }
-                position = position.GetNextContextPosition(LogicalDirection.Forward);
-            }
-            // position will be null if "word" is not found.
-            return null;
-        }
         public static readonly DependencyProperty SearchTextProperty = 
             DependencyProperty.Register("SearchText",
                                         typeof(string),
-                                        typeof(MpClipTileRichTextBox),
-                                        new FrameworkPropertyMetadata(null,OnDataChanged));
+                                        typeof(MpClipTileRichTextBox));
     }
 }

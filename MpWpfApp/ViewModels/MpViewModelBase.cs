@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 
 namespace MpWpfApp {
-    public class MpViewModelBase : INotifyPropertyChanged, IEditableObject  {
+    public class MpViewModelBase : INotifyPropertyChanged  {
         public string DisplayName { get; set; }
         public bool ThrowOnInvalidPropertyName { get; private set; }
         
@@ -118,8 +118,7 @@ namespace MpWpfApp {
         private bool CanExecuteClosing() {
             //log.Add("Closing command execution check");
 
-            return MessageBox.Show("OK to close?", "Confirm",
-                MessageBoxButton.YesNo) == MessageBoxResult.Yes;
+            return MessageBox.Show("OK to close?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
         }
 
         private RelayCommand cancelClosingCommand;
@@ -132,20 +131,7 @@ namespace MpWpfApp {
             }
         }
         private void CancelClosing() {
-            //log.Add("CancelClosing command executed");
             MessageBox.Show("CancelClosing");
-        }
-
-        public void BeginEdit() {
-            throw new NotImplementedException();
-        }
-
-        public void EndEdit() {
-            throw new NotImplementedException();
-        }
-
-        public void CancelEdit() {
-            throw new NotImplementedException();
         }
 
         public ICommand ExitApplicationCommand {

@@ -182,7 +182,6 @@
     <Compile Include="Attached Properties\MpTextBoxBehavior.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpClipTileRichTextBox.cs" />
-    <Compile Include="Controls\MpTintedImage.cs" />
     <Compile Include="Converters\MpSolidColorBrushToBrushConverter.cs" />
     <Compile Include="Models\MpApp.cs" />
     <Compile Include="Models\MpClient.cs" />
@@ -199,7 +198,6 @@
     <Compile Include="Models\MpSubTextToken.cs" />
     <Compile Include="Models\MpTag.cs" />
     <Compile Include="Models\MpUser.cs" />
-    <Compile Include="Utils\MpBitmapSourceHelper.cs" />
     <Compile Include="Utils\MpExtensions.cs" />
     <Compile Include="Utils\MpExtraLargeIconLoader.cs" />
     <Compile Include="Utils\MpClipboardMonitor.cs" />
@@ -207,7 +205,6 @@
     <Compile Include="Utils\MpHotKey2.cs" />
     <Compile Include="Utils\MpLastWindowWatcher.cs" />
     <Compile Include="Utils\MpMeasurements.cs" />
-    <Compile Include="Utils\MpOverrideCursor.cs" />
     <Compile Include="Utils\MpRichTextToImageConverter.cs" />
     <Compile Include="Utils\MpScreenInformation.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />

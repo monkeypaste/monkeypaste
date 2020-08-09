@@ -45,7 +45,7 @@ namespace MpWpfApp {
         public MpClipboardMonitor ClipboardMonitor { get; private set; }
         #endregion
 
-        #region Collection Properties
+        #region Properties
         
         private ObservableCollection<MpClipTileViewModel> _clipTiles = new ObservableCollection<MpClipTileViewModel>();
         public ObservableCollection<MpClipTileViewModel> ClipTiles {
@@ -137,10 +137,6 @@ namespace MpWpfApp {
                 }
             }
         }
-
-        #endregion
-
-        #region Business Logic Properties
 
         private Combination _showMainWindowCombination;
         public Combination ShowMainWindowCombination {
@@ -259,12 +255,10 @@ namespace MpWpfApp {
                 }
             }
         }
-        #endregion
 
-        #region View Properties
         public bool IsTagTextBoxFocused {
             get {
-                return SelectedTagTile.IsTextBoxFocused;
+                return SelectedTagTile.IsTextBoxFocused || SelectedTagTile.IsEditing;
             }
         }
 
@@ -424,15 +418,6 @@ namespace MpWpfApp {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
                     case nameof(SearchText):
-                        //foreach (var d in _performSearchHandlerResults) {
-                        //    d.Abort();
-                        //}
-                        //var npshr = Application.Current.Dispatcher.BeginInvoke(
-                        //    DispatcherPriority.Background,
-                        //    new Action(() => PerformSearch())
-                        //);
-                        //_performSearchHandlerResults.Add(npshr);
-                        //PerformSearch();
                         break;
                     case nameof(IsAutoCopyMode):
                         if (IsAutoCopyMode) {
@@ -460,7 +445,26 @@ namespace MpWpfApp {
                     PerformSearch();
                 }
             };
+            searchBox.GotFocus += (s, e4) => {
+                //make text
+                if (SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
+                    SearchText = "";
+                }
+                SearchTextBoxFontStyle = FontStyles.Normal;
+                SearchTextBoxTextBrush = Brushes.Black;
+                IsSearchTextBoxFocused = true;
+            };
+            searchBox.LostFocus += (s, e5) => {
+                //var searchTextBox = (TextBox)e.Source;
+                if (string.IsNullOrEmpty(SearchText)) {
+                    SearchText = Properties.Settings.Default.SearchPlaceHolderText;
+                    SearchTextBoxFontStyle = FontStyles.Italic;
+                    SearchTextBoxTextBrush = Brushes.DimGray;
+                }
+                IsSearchTextBoxFocused = false;
+            };
             SearchText = Properties.Settings.Default.SearchPlaceHolderText;
+
             SelectedSortType = SortTypes[0];
 
             SetupMainWindowRect();
@@ -496,35 +500,6 @@ namespace MpWpfApp {
             var taskbarIcon = (TaskbarIcon)mw.FindName("TaskbarIcon");
 
             _isLoading = false;
-        }
-
-        public void ClipTray_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-            BindingExpression be = (BindingExpression)((ListBox)sender).GetBindingExpression(ListBox.SelectedItemsProperty);
-            if (be != null) {
-                be.UpdateTarget();
-            }
-            MergeClipsCommandVisibility = SelectedClipTiles.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
-        }
-        
-        public void SearchTextboxGotFocus(object sender,RoutedEventArgs e) {
-            //make text
-            if(SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
-                SearchText = "";
-            }
-            SearchTextBoxFontStyle = FontStyles.Normal;
-            SearchTextBoxTextBrush = Brushes.Black;
-            IsSearchTextBoxFocused = true;
-
-            //TestAnimatedScroll();
-        }
-        public void SearchTextboxLostFocus(object sender, RoutedEventArgs e) {
-            //var searchTextBox = (TextBox)e.Source;
-            if (string.IsNullOrEmpty(SearchText)) {
-                SearchText = Properties.Settings.Default.SearchPlaceHolderText;
-                SearchTextBoxFontStyle = FontStyles.Italic;
-                SearchTextBoxTextBrush = Brushes.DimGray;
-            }
-            IsSearchTextBoxFocused = false;
         }
 
         public void ScrollClipTray(object sender, MouseWheelEventArgs e) {
@@ -631,17 +606,13 @@ namespace MpWpfApp {
                                 ClipListVisibility = Visibility.Visible;
                                 EmptyListMessageVisibility = Visibility.Collapsed;
 
-                                ResetSelection();
+                                ResetClipSelection();
                             }
                         }
                         break;
                 }
             };
-            if (isNew) {
-                //newTagTile.RenameTagCommand.Execute(null);
-                //newTagTile.IsSelected = true;
-                //newTagTile.IsEditing = true;
-            } else {
+            if (!isNew) {
                 foreach(var ctvm in ClipTiles) {
                     if(newTagTile.Tag.IsLinkedWithCopyItem(ctvm.CopyItem)) {
                         newTagTile.TagClipCount++;
@@ -650,21 +621,31 @@ namespace MpWpfApp {
             }
         }
 
-        public void ClearSelection() {
+        public void ClearClipSelection() {
             foreach (var clip in ClipTiles) {
                 clip.IsSelected = false;
                 clip.IsFocused = false;
             }
         }
 
-        public void ResetSelection() {
-            ClearSelection();
+        public void ResetClipSelection() {
+            ClearClipSelection();
             if(VisibileClipTiles.Count > 0) {
-                //var clipTray = (ListBox)Application.Current.MainWindow.FindName("ClipTray");
-                //CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(clipTray.ItemsSource);
-                //((MpClipTileViewModel)view.GetItemAt(0)).IsSelected = true;
                 VisibileClipTiles[0].IsSelected = true;
             }
+        }
+
+        public void ClearTagSelection() {
+            foreach (var tagTile in TagTiles) {
+                tagTile.IsSelected = false;
+                tagTile.IsFocused = false;
+            }
+        }
+
+        public void ResetTagSelection() {
+            ClearTagSelection();
+            GetHistoryTagTileViewModel().IsSelected = true;
+            GetHistoryTagTileViewModel().IsFocused = true;
         }
 
         public void AddClipTile(MpCopyItem ci,bool isNew = false) {
@@ -761,21 +742,22 @@ namespace MpWpfApp {
 
         private void PerformSearch() {
             if (SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
-                return;
+                FilterTiles(string.Empty);
+            } else {
+                FilterTiles(SearchText);
             }
-            FilterTiles(SearchText);
+            
             foreach (var vctvm in VisibileClipTiles) {
-                vctvm.Highlight();
+                vctvm.Highlight(SearchText);
             }
-            //SortClipTiles();
             if (VisibileClipTiles.Count > 0) {
                 SearchTextBoxBorderBrush = Brushes.Transparent;
                 EmptyListMessageVisibility = Visibility.Collapsed;
+                SortClipTiles();
             } else {
                 SearchTextBoxBorderBrush = Brushes.Red;
                 EmptyListMessageVisibility = Visibility.Visible;
             }
-            ResetSelection();
         }
         private void FilterTiles(string searchStr) {
             List<int> filteredTileIdxList = new List<int>();
@@ -840,12 +822,12 @@ namespace MpWpfApp {
             } else if (SelectedSortType.Header == "Usage") {
                 sortBy = "CopyItemUsageScore";
             }
-            ClearSelection();
+            ClearClipSelection();
             var sortStart = DateTime.Now;
             ClipTiles.Sort(x => x[sortBy], !ascending);
             var sortDur = DateTime.Now - sortStart;
             Console.WriteLine("Sort for " + VisibileClipTiles.Count + " items: " + sortDur.TotalMilliseconds + " ms");
-            ResetSelection();            
+            ResetClipSelection();            
         }
 
         private int FindMaxIdxByProperty(ObservableCollection<MpClipTileViewModel> list,string propertyName,int startIdx = 0) {
@@ -932,7 +914,7 @@ namespace MpWpfApp {
                         MoveClipTile(existingClipTile, 0);
                     }
 
-                    ResetSelection();
+                    ResetClipSelection();
                 }
             };
         }
@@ -1242,7 +1224,7 @@ namespace MpWpfApp {
             mw.Visibility = Visibility.Visible;
             mw.Topmost = true;
 
-            ResetSelection();
+            ResetClipSelection();
 
             DoubleAnimation ta = new DoubleAnimation();
             ta.From = _startMainWindowTop;

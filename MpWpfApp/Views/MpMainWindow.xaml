@@ -405,8 +405,8 @@
                         <DataTemplate>
                             <!-- Tag Tile Border -->
                             <Border CornerRadius="10"
-                                    Margin="5"
-                                    Padding="5"
+                                    Margin="5,0,5,0"
+                                    Padding="10,5,10,5"
                                     Focusable="True"
                                     VerticalAlignment="Center"
                                     local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"
@@ -432,6 +432,7 @@
                                     <!-- Tag Count Box-->
                                     <local:MpClipBorder CornerRadius="3"
                                                         Padding="5"
+                                                        VerticalAlignment="Center"
                                                         BorderThickness="0"
                                                         Background="{Binding TagColor}">
                                         <TextBlock Background="Transparent"
@@ -440,23 +441,25 @@
                                                    Foreground="{Binding TagCountTextColor}" />
                                     </local:MpClipBorder>
                                     <TextBlock x:Name="TagTextBlock"
-                                               Margin="3,0,0,0"
+                                               Margin="5,0,0,0"
                                                Background="Transparent"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
                                                Visibility="{Binding TextBlockVisibility}"
                                                FontSize="{Binding TagFontSize}"
+                                               FontWeight="SemiBold"
                                                Foreground="{Binding TagTextColor}"
                                                Text="{Binding TagName}">
                                     </TextBlock>
                                     <TextBox x:Name="TagTextBox"
-                                             Margin="3,0,0,0"
+                                             Margin="5,0,0,0"
                                              Background="White"
                                              Foreground="Black"
                                              IsReadOnly="False"
                                              HorizontalAlignment="Center"
                                              VerticalAlignment="Center"
                                              local:MpFocusExtension.IsFocused="{Binding IsTextBoxFocused}"
+                                             local:MpTextBoxBehavior.SelectAllTextOnFocus="True"
                                              Visibility="{Binding TextBoxVisibility}"
                                              FontSize="{Binding TagFontSize}"
                                              Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -466,7 +469,8 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
                 <!-- Add Tag Button -->
-                <Button Height="30"
+                <Button x:Name="AddTagButton" 
+                        Height="30"
                         Width="30" 
                         BorderThickness="0"
                         Background="Transparent"
@@ -505,16 +509,6 @@
                              VerticalAlignment="Top"
                              HorizontalAlignment="Left"
                              VerticalContentAlignment="Top">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="GotFocus">
-                                <i:CallMethodAction TargetObject="{Binding}"
-                                                    MethodName="SearchTextboxGotFocus" />
-                            </i:EventTrigger>
-                            <i:EventTrigger EventName="LostFocus">
-                                <i:CallMethodAction TargetObject="{Binding}"
-                                                    MethodName="SearchTextboxLostFocus" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
                     </TextBox>
                 </StackPanel>
             </local:MpClipBorder>
@@ -578,7 +572,7 @@
                                TextWrapping="Wrap" />
                 </ToggleButton>
             </Grid>
-            <!-- tile tray -->
+            <!-- clip tile tray -->
             <ListBox x:Name="ClipTray"
                      Grid.Row="0"
                      Grid.Column="1"
@@ -590,7 +584,7 @@
                      SelectionMode="Extended"
                      VirtualizingPanel.IsVirtualizing="True"
                      VirtualizingPanel.ScrollUnit="Pixel"
-                     VirtualizingPanel.VirtualizationMode="Recycling"
+                     VirtualizingPanel.VirtualizationMode="Standard"
                      ScrollViewer.CanContentScroll="False"
                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
@@ -605,10 +599,11 @@
                         <i:CallMethodAction MethodName="ScrollClipTray"
                                             TargetObject="{Binding}" />
                     </i:EventTrigger>
-                    <i:EventTrigger EventName="SelectionChanged">
-                        <i:CallMethodAction TargetObject="{Binding}"
-                                            MethodName="ClipTray_SelectionChanged" />
-                    </i:EventTrigger>
+                    <!--<i:EventTrigger EventName="Drop">
+                        <i:CallMethodAction TargetObject="{Binding}" 
+                                                        MethodName="ClipTray_Drop"/>
+                    </i:EventTrigger>-->
+
                 </i:Interaction.Triggers>
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}">
@@ -802,7 +797,6 @@
                                 </Canvas>
                                 <!-- RichText Content -->
                                 <local:MpClipTileRichTextBox x:Name="ClipTileRichTextBox"
-                                                             SearchText="{Binding MainWindowViewModel.SearchText}"
                                                              IsReadOnly="True"
                                                              IsUndoEnabled="False"
                                                              Grid.Row="1"

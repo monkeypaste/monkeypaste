@@ -10,6 +10,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Resources;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -539,9 +540,18 @@ namespace MpWpfApp {
             int height = pixels.GetLength(1);
             bitmap.WritePixels(new Int32Rect(0, 0, width, height), pixels, width * 4, x, y);
         }
+
+
         public static bool IsPathDirectory(string str) {
             // get the file attributes for file or directory
             return File.GetAttributes(str).HasFlag(FileAttributes.Directory);
         }
+    }
+    [StructLayout(LayoutKind.Sequential)]
+    public struct PixelColor {
+        public byte Blue;
+        public byte Green;
+        public byte Red;
+        public byte Alpha;
     }
 }

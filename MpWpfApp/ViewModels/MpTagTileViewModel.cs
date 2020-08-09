@@ -261,10 +261,11 @@ namespace MpWpfApp {
                         if (!IsSelected) {
                             if (IsHovering) {
                                 TagBorderBackgroundBrush = Brushes.LightGray;
-                                TagTextColor = Brushes.White;
+                                TagTextColor = Brushes.Black;
 
                             } else {
                                 TagBorderBackgroundBrush = Brushes.Transparent;
+                                TagTextColor = Brushes.White;
                             }
                         }
                         break;
@@ -318,7 +319,7 @@ namespace MpWpfApp {
                 }
             };
             if (_isNew) {
-                IsEditing = true;
+                RenameTagCommand.Execute(null);
             }
         }
         #endregion
@@ -338,6 +339,9 @@ namespace MpWpfApp {
             return TagName != Properties.Settings.Default.HistoryTagTitle;
         }
         private void RenameTag() {
+            MainWindowViewModel.ClearTagSelection();
+            IsSelected = true;
+            IsFocused = true;
             IsEditing = true;
         }
 

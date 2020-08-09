@@ -515,8 +515,10 @@ namespace MpWpfApp {
         #endregion        
 
         #region Constructor
+        private int _copyItemId;
         public MpClipTileViewModel(MpCopyItem ci,MpMainWindowViewModel mwvm) {
             CopyItem = ci;
+            _copyItemId = CopyItem.CopyItemId;
             MainWindowViewModel = mwvm;
             if(TitleSwirl == null) {
                 var swirl1 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0001.png"));
@@ -530,7 +532,7 @@ namespace MpWpfApp {
                 
                 TitleSwirl = MpHelpers.MergeImages(new List<BitmapSource>() { swirl1,swirl2,swirl3,swirl4});
             }
-            //Text = CopyItem.GetPlainText();
+            Text = CopyItem.GetPlainText();
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
                     case nameof(IsSelected):
@@ -586,11 +588,8 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public void Highlight() {
-            if(_myRtb == null) {
-                return;
-            }
-            _myRtb.HighlightSearchText(Brushes.Yellow);
+        public void Highlight(string searchText) {
+            _myRtb?.HighlightSearchText(searchText,Brushes.Yellow);
         }
         #endregion
         #region View Events Handlers        
@@ -632,24 +631,18 @@ namespace MpWpfApp {
             var img = (Image)((Border)sender)?.FindName("ClipTileImage");
             var rtb = (MpClipTileRichTextBox)((Border)sender)?.FindName("ClipTileRichTextBox");
             
-
             if (CopyItem.CopyItemType == MpCopyItemType.FileList) {
                 rtb.Visibility = Visibility.Collapsed;
                 img.Visibility = Visibility.Collapsed;
-
-                //flb.PreviewKeyUp += MainWindowViewModel.ClipTile_KeyUp;
             }
             if (CopyItem.CopyItemType == MpCopyItemType.Image) {
                 img.Source = (BitmapSource)CopyItem.DataObject;
                 rtb.Visibility = Visibility.Collapsed;
                 flb.Visibility = Visibility.Collapsed;
-
-                //img.PreviewKeyUp += MainWindowViewModel.ClipTile_KeyUp;
             } else if(CopyItem.CopyItemType == MpCopyItemType.RichText) {
                 _myRtb = rtb;
                 img.Visibility = Visibility.Collapsed;
                 flb.Visibility = Visibility.Collapsed;
-
 
                 // since document is enabled this overrides the rtb's context menu with the tile's defined in the xaml
                 rtb.ContextMenu = (ContextMenu)clipTileBorder.FindName("ClipTile_ContextMenu");
@@ -675,7 +668,7 @@ namespace MpWpfApp {
                 foreach(var sortedToken in sortedTokenList) {
                     rtb.AddSubTextToken(sortedToken);
                 }
-                Highlight();
+                Highlight(string.Empty);
             }
         }
         
@@ -691,54 +684,6 @@ namespace MpWpfApp {
         public void ContextMenuMouseLeftButtonUpOnSearchYandex() {
             System.Diagnostics.Process.Start(@"https://yandex.com/search/?text=" + System.Uri.EscapeDataString(Text));
         }
-
-        #endregion
-
-        #region Drag Drop Event Handlers
-
-        //public void ClipTile_DragEnter(object sender, DragEventArgs e) {
-        //    if (!e.Data.GetDataPresent("MonkeyPasteFormat") || sender == e.Source) {
-        //        e.Effects = DragDropEffects.None;
-        //    }
-        //}
-
-        //public void ClipTile_LeftMouseButtonDown(object sender, MouseEventArgs e) {
-        //    _startDragPoint = e.GetPosition(null);
-        //    _isMouseDown = true;
-        //}
-        //public void ClipTile_MouseMove(object sender, MouseEventArgs e) {
-        //    // Get the current mouse position
-        //    Point mousePos = e.GetPosition(null);
-        //    Vector diff = _startDragPoint - mousePos;
-
-        //    if (_isMouseDown) {
-        //        var clipBorder = (MpClipBorder)sender;
-
-        //        var clipTileViewModel = (MpClipTileViewModel)clipBorder.DataContext;
-        //        // Initialize the drag & drop operation
-        //        DataObject dragData = new DataObject("MonkeyPasteFormat", clipTileViewModel);
-
-        //        dragData.SetData(DataFormats.Rtf, RichText);
-        //        dragData.SetData(DataFormats.Text, clipTileViewModel.CopyItem.GetPlainText());
-        //        //dragData.SetData(dragData);
-        //        DragDrop.DoDragDrop(clipBorder, dragData, DragDropEffects.None);
-        //    }
-        //}
-        //// Helper to search up the VisualTree
-        //private T FindAnchestor<T>(DependencyObject current)
-        //    where T : DependencyObject {
-        //    do {
-        //        if (current is T) {
-        //            return (T)current;
-        //        }
-        //        current = VisualTreeHelper.GetParent(current);
-        //    }
-        //    while (current != null);
-        //    return null;
-        //}
-        //public void ClipTile_LeftMouseButtonUp(object sender, MouseEventArgs e) {
-        //    _isMouseDown = false;
-        //}
 
         #endregion
 
