@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using GongSolutions.Wpf.DragDrop.Utilities;
+using Newtonsoft.Json;
 using QRCoder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -32,6 +34,8 @@ namespace MpWpfApp {
                 SetValue(SearchTextProperty, value); 
             }
         }
+
+        public List<DispatcherOperation> DataChangeHandlerResults = new List<DispatcherOperation>();
 
         public void AddSubTextToken(MpSubTextToken token) {
             Block block = Document.Blocks.ToArray()[token.BlockIdx];
@@ -163,51 +167,73 @@ namespace MpWpfApp {
                 return string.Empty;
             }
         }
+
+        public void HighlightSearchText(SolidColorBrush highlightColor) {
+            OnDataChangedHelper(this, SearchText,highlightColor);
+        }
         private static void OnDataChanged(DependencyObject source, DependencyPropertyChangedEventArgs e) {
-            Application.Current.Dispatcher.BeginInvoke(
+            return;
+            var dchr = ((MpClipTileRichTextBox)source).DataChangeHandlerResults;
+
+            foreach(var d in dchr) {
+                d.Abort();
+            }
+            //dchr.Clear();
+
+            var ndchr = Application.Current.Dispatcher.BeginInvoke(
                 DispatcherPriority.Background,
                 new Action(() => {
-                    OnDataChangedHelper((RichTextBox)source, (string)e.NewValue,Brushes.Yellow);
-                })
+                    OnDataChangedHelper((RichTextBox)source, (string)e.NewValue, Brushes.Yellow);
+                })                
             );
-        }
-        private static void OnDataChangedHelper(RichTextBox rtb, string updatedSearchText,SolidColorBrush highlightColor) {
-            var fullDocRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
-            fullDocRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
 
-            
-            if(updatedSearchText == Properties.Settings.Default.SearchPlaceHolderText) {
+            dchr.Add(ndchr);
+        }
+        private static void OnDataChangedHelper(RichTextBox rtb, string updatedSearchText, SolidColorBrush highlightColor) {
+            //((MpClipTileViewModel)((MpClipBorder)rtb.GetVisualAncestor<MpClipBorder>()).DataContext).TileVisibility = Visibility.Visible;
+            if (updatedSearchText == Properties.Settings.Default.SearchPlaceHolderText || string.IsNullOrEmpty(updatedSearchText)) {                
                 return;
             }
-            string rtbt = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.ToLower();
-            updatedSearchText = updatedSearchText.ToLower();
-            var tokenIdxList = rtbt.AllIndexesOf(updatedSearchText);
-            TextRange lastTokenRange = null;
-            rtb.CaretPosition = rtb.Document.ContentStart;
-            foreach (int idx in tokenIdxList) {
-                TextPointer startPoint = lastTokenRange == null ? rtb.Document.ContentStart : lastTokenRange.End;
-                var range = FindStringRangeFromPosition(startPoint, updatedSearchText);
-                if(range == null) {
-                    //i don't know why range is coming back null but to avoid the exception just returtn
-                    Console.WriteLine("Can't find range for highlight: " + rtbt);
-                    return;
+            rtb.BeginChange();
+            {
+                var fullDocRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+                fullDocRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
+
+                string rtbt = fullDocRange.Text.ToLower();
+                updatedSearchText = updatedSearchText.ToLower();
+                var tokenIdxList = rtbt.AllIndexesOf(updatedSearchText);
+                TextRange lastTokenRange = null;
+                rtb.CaretPosition = rtb.Document.ContentStart;
+                foreach (int idx in tokenIdxList) {
+                    TextPointer startPoint = lastTokenRange == null ? rtb.Document.ContentStart : lastTokenRange.End;
+                    var range = FindStringRangeFromPosition(startPoint, updatedSearchText);
+                    if(range == null) {
+                        Console.WriteLine("Cannot find '" + updatedSearchText + "' in tile");
+                    }
+                    range?.ApplyPropertyValue(TextElement.BackgroundProperty, highlightColor);
+                    lastTokenRange = range;
                 }
-                range.ApplyPropertyValue(TextElement.BackgroundProperty, highlightColor);
-                lastTokenRange = range;
             }
+            rtb.EndChange();
         }
 
         public static TextRange FindStringRangeFromPosition(TextPointer position, string lowerCaseStr) {
             while (position != null) {
-                if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.Text) {
-                    string textRun = position.GetTextInRun(LogicalDirection.Forward).ToLower();
+                var dir = LogicalDirection.Forward;
+                if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
+                    dir = LogicalDirection.Backward;
+                }
+                string textRun = position.GetTextInRun(dir).ToLower();
 
-                    // Find the starting index of any substring that matches "word".
-                    int indexInRun = textRun.IndexOf(lowerCaseStr);
-                    if (indexInRun >= 0) {
+                // Find the starting index of any substring that matches "word".
+                int indexInRun = textRun.IndexOf(lowerCaseStr);
+                if (indexInRun >= 0) {
+                    if(dir == LogicalDirection.Forward) {
                         return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + lowerCaseStr.Length));
+                    } else {
+                        return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun - lowerCaseStr.Length));
                     }
-                } 
+                }
                 position = position.GetNextContextPosition(LogicalDirection.Forward);
             }
             // position will be null if "word" is not found.

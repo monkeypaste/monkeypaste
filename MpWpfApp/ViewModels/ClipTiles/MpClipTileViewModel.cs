@@ -22,6 +22,7 @@ using System.Windows.Navigation;
 using System.Management;
 using GongSolutions.Wpf.DragDrop.Utilities;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace MpWpfApp {
     public class MpClipTileViewModel : MpViewModelBase {
@@ -29,6 +30,7 @@ namespace MpWpfApp {
         private static MpClipTileViewModel _sourceSelectedClipTile = null;
         private bool _isMouseDown = false;
         private Point _startDragPoint;
+        private int _detailIdx = 0;
 
         #endregion
 
@@ -89,6 +91,19 @@ namespace MpWpfApp {
         #endregion
 
         #region View Properties
+        private BitmapSource _titleSwirl = null;
+        public BitmapSource TitleSwirl {
+            get {
+                return _titleSwirl;
+            }
+            set {
+                if(_titleSwirl != value) {
+                    _titleSwirl = value;
+                    OnPropertyChanged(nameof(TitleSwirl));
+                }
+            }
+        }
+
         private bool _isTitleTextBoxFocused = false;
         public bool IsTitleTextBoxFocused {
             get {
@@ -410,6 +425,32 @@ namespace MpWpfApp {
             }
         }
 
+        private string _detailText = "This is empty detail text";
+        public string DetailText {
+            get {
+                return _detailText;
+            }
+            set {
+                if(_detailText != value) {
+                    _detailText = value;
+                    OnPropertyChanged(nameof(DetailText));
+                }
+            }
+        }
+
+        private Brush _detailTextColor = Brushes.Black;
+        public Brush DetailTextColor {
+            get {
+                return _detailTextColor;
+            }
+            set {
+                if (_detailTextColor != value) {
+                    _detailTextColor = value;
+                    OnPropertyChanged(nameof(DetailTextColor));
+                }
+            }
+        }
+
         public string Title {
             get {
                 return CopyItem.Title;
@@ -445,9 +486,17 @@ namespace MpWpfApp {
                 return CopyItem.App.Icon.IconImage;
             }
         }
+
+        private string _text = string.Empty;
         public string Text {
             get {
-                return CopyItem.GetPlainText();
+                return _text;
+            }
+            set {
+                if(_text != value) {
+                    _text = value;
+                    OnPropertyChanged(nameof(Text));
+                }
             }
         }
 
@@ -469,11 +518,25 @@ namespace MpWpfApp {
         public MpClipTileViewModel(MpCopyItem ci,MpMainWindowViewModel mwvm) {
             CopyItem = ci;
             MainWindowViewModel = mwvm;
+            if(TitleSwirl == null) {
+                var swirl1 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0001.png"));
+                swirl1 = MpHelpers.TintBitmapSource(swirl1, ((SolidColorBrush)TitleColor).Color);
+                var swirl2 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0002.png"));
+                swirl2 = MpHelpers.TintBitmapSource(swirl2, ((SolidColorBrush)TitleColorLighter).Color);
+                var swirl3 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0003.png"));
+                swirl3 = MpHelpers.TintBitmapSource(swirl3, ((SolidColorBrush)TitleColorDarker).Color);
+                var swirl4 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0004.png"));
+                swirl4 = MpHelpers.TintBitmapSource(swirl4, ((SolidColorBrush)TitleColorAccent).Color);
+                
+                TitleSwirl = MpHelpers.MergeImages(new List<BitmapSource>() { swirl1,swirl2,swirl3,swirl4});
+            }
+            //Text = CopyItem.GetPlainText();
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
                     case nameof(IsSelected):
                         if (IsSelected) {
                             TileBorderBrush = Brushes.Red;
+                            DetailTextColor = Brushes.Red;
                             //this check ensures that as user types in search that 
                             //resetselection doesn't take the focus from the search box
                             if (!((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).IsSearchTextBoxFocused) {
@@ -481,8 +544,20 @@ namespace MpWpfApp {
                             }
                         } else {
                             TileBorderBrush = Brushes.Transparent;
+                            DetailTextColor = Brushes.Transparent;
                             //below must be called to clear focus when deselected (it may not have focus)
                             IsFocused = false;
+                        }
+                        break;
+                    case nameof(IsHovering):
+                        if (!IsSelected) {
+                            if (IsHovering) {
+                                TileBorderBrush = Brushes.Yellow;
+                                DetailTextColor = Brushes.DarkKhaki;
+                            } else {
+                                TileBorderBrush = Brushes.Transparent;
+                                DetailTextColor = Brushes.Transparent;
+                            }
                         }
                         break;
                     case nameof(IsEditingTitle):
@@ -505,21 +580,21 @@ namespace MpWpfApp {
                     case nameof(Title):
                         CopyItem.WriteToDatabase();
                         break;
-                    case nameof(IsHovering):
-                        if (!IsSelected) {
-                            if (IsHovering) {
-                                TileBorderBrush = Brushes.Yellow;
-                            } else {
-                                TileBorderBrush = Brushes.Transparent;
-                            }
-                        }
-                        break;
                 }
             };
         }
         #endregion
 
+        #region Public Methods
+        public void Highlight() {
+            if(_myRtb == null) {
+                return;
+            }
+            _myRtb.HighlightSearchText(Brushes.Yellow);
+        }
+        #endregion
         #region View Events Handlers        
+        private MpClipTileRichTextBox _myRtb = null;
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             var clipTileBorder = (Border)sender;
@@ -547,11 +622,16 @@ namespace MpWpfApp {
 
             var titleIconImage = (Image)clipTileBorder.FindName("ClipTileAppIconImage");
             Canvas.SetLeft(titleIconImage, TileBorderSize - TileTitleHeight - 10);
-            Canvas.SetTop(titleIconImage, 2);// TileBorderSize * 0.5);
+            Canvas.SetTop(titleIconImage, 2);
+            
+            var titleDetailTextBlock = (TextBlock)clipTileBorder.FindName("ClipTileTitleDetailTextBlock");
+            Canvas.SetLeft(titleDetailTextBlock, 5);
+            Canvas.SetTop(titleDetailTextBlock, TileTitleHeight - 14);
 
             var flb = (ListBox)((Border)sender)?.FindName("ClipTileFileListBox"); 
             var img = (Image)((Border)sender)?.FindName("ClipTileImage");
             var rtb = (MpClipTileRichTextBox)((Border)sender)?.FindName("ClipTileRichTextBox");
+            
 
             if (CopyItem.CopyItemType == MpCopyItemType.FileList) {
                 rtb.Visibility = Visibility.Collapsed;
@@ -566,6 +646,7 @@ namespace MpWpfApp {
 
                 //img.PreviewKeyUp += MainWindowViewModel.ClipTile_KeyUp;
             } else if(CopyItem.CopyItemType == MpCopyItemType.RichText) {
+                _myRtb = rtb;
                 img.Visibility = Visibility.Collapsed;
                 flb.Visibility = Visibility.Collapsed;
 
@@ -593,7 +674,8 @@ namespace MpWpfApp {
                 var sortedTokenList = CopyItem.SubTextTokenList.OrderBy(stt => stt.BlockIdx).ThenBy(stt => stt.StartIdx).ToList();
                 foreach(var sortedToken in sortedTokenList) {
                     rtb.AddSubTextToken(sortedToken);
-                }   
+                }
+                Highlight();
             }
         }
         

@@ -11,7 +11,17 @@ using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     public class MpTintedImage : Image {
-        public MpTintedImage() : base() { }
+        private bool _isImageTinted = false;
+
+        public MpTintedImage() : base() {
+            Loaded += (s, e1) => {
+                if (_isImageTinted == false) {
+                    WriteableBitmap writeableBitmap = new WriteableBitmap((BitmapSource)Source);
+                    Source = (ImageSource)TintBitmapSource(writeableBitmap, ((SolidColorBrush)TintBrush).Color);
+                    _isImageTinted = true;
+                }
+            };
+        }
 
         public Brush TintBrush {
             get {
@@ -23,13 +33,8 @@ namespace MpWpfApp {
         }
 
         private static void OnDataChanged(DependencyObject source, DependencyPropertyChangedEventArgs e) {
-            var image = (MpTintedImage)source;
-            image.Loaded += (s, e1) => {
-                if(image.Source != null) {
-                    WriteableBitmap writeableBitmap = new WriteableBitmap((BitmapSource)image.Source);
-                    image.Source = (ImageSource)TintBitmapSource(writeableBitmap, ((SolidColorBrush)image.TintBrush).Color);
-                }
-            };
+            //var image = (MpTintedImage)source;
+            //image.
             
         }
 

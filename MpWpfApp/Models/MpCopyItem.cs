@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -19,9 +20,13 @@ namespace MpWpfApp {
         public Object DataObject { get; private set; }
         
         public int ColorId { get;  set; }
+
+        
         public int CopyItemId { get; set; }
+
         public int SubItemId { get; set; }
         public string Title { get; set; }
+
         public MpCopyItemType CopyItemType { get; set; }
         public int ClientId { get; set; }
         public int AppId { get; set; }
@@ -80,7 +85,7 @@ namespace MpWpfApp {
             newItem.CopyItemType = itemType;
             if (newItem.CopyItemType == MpCopyItemType.RichText) {
                 newItem.DataObject = ((string)data);//.Trim();// Regex.Replace(((string)data).Trim(), @"^\s+(?!\B)|\s*(?>[\r\n]+)$", string.Empty, RegexOptions.Multiline).TrimEnd();
-
+                
                 //if item is a duplicate update copycount and return a reference to it
                 DataTable dt = MpDb.Instance.Execute("select * from MpTextItem where ItemText=@1", new List<string>() { "@1" }, new List<object>() { (string)newItem.DataObject });
                 if (dt != null && dt.Rows.Count > 0) {
@@ -133,12 +138,29 @@ namespace MpWpfApp {
         public MpCopyItem(DataRow dr) {
             LoadDataRow(dr);
         }
-        public static string PlainTextToRtf(string plainText) {
+        public static string PlainTextToRtf2(string plainText) {
             string escapedPlainText = plainText.Replace(@"\", @"\\").Replace("{", @"\{").Replace("}", @"\}");
             string rtf = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard ";
             rtf += escapedPlainText.Replace(Environment.NewLine, @" \par ");
             rtf += " }";
             return rtf;
+        }
+        public static string PlainTextToRtf(string input) {
+            //first take care of special RTF chars
+            StringBuilder backslashed = new StringBuilder(input);
+            backslashed.Replace(@"\", @"\\");
+            backslashed.Replace(@"{", @"\{");
+            backslashed.Replace(@"}", @"\}");
+
+            //then convert the string char by char
+            StringBuilder sb = new StringBuilder();
+            foreach (char character in backslashed.ToString()) {
+                if (character <= 0x7f)
+                    sb.Append(character);
+                else
+                    sb.Append("\\u" + Convert.ToUInt32(character) + "?");
+            }
+            return sb.ToString();
         }
         public int GetPasteCount() {
             if(CopyItemId <= 0) {
@@ -210,7 +232,8 @@ namespace MpWpfApp {
                 case MpCopyItemType.RichText:
                     copyItemData = MpDb.Instance.Execute("select * from MpTextItem where fk_MpCopyItemId=" + this.CopyItemId);
                     if(copyItemData == null || copyItemData.Rows.Count == 0) {
-                        Console.WriteLine("Error reading MpTextItem " + this.CopyItemId);
+                        Console.WriteLine("Error reading MpTextItem " + this.CopyItemId +" text is null giving it placeholder value");
+                        this.DataObject = "null text placeholder";
                         break;
                     }
                     this.SubItemId = Convert.ToInt32(copyItemData.Rows[0]["pk_MpTextItemId"].ToString());
@@ -362,17 +385,6 @@ namespace MpWpfApp {
             MapDataToColumns();
             Console.WriteLine(isNew ? "Created ":"Updated " + " MpCopyItem");
             Console.WriteLine(ToString());
-        }
-        //returns -1 when not tagged
-        public int GetTagSortOrder(MpTag tag) {
-            if(!tag.IsLinkedWithCopyItem(this)) {
-                return -1;
-            }
-            DataTable dt = MpDb.Instance.Execute("select * from MpCopyItemTag where fk_MpCopyItemId=" + this.CopyItemId+" and fk_MpTagId="+tag.TagId);
-            if(dt == null || dt.Rows.Count == 0) {
-                return -1;
-            }
-            return Convert.ToInt32(dt.Rows[0]["OrderIex"].ToString());
         }
         public string GetCurrentDetail(int detailId) {
             string info = "I dunno";// string.Empty;

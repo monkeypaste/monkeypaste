@@ -20,11 +20,13 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase, IDragSource {
@@ -34,6 +36,9 @@ namespace MpWpfApp {
         private MpHotKeyHost _hotkeyHost = null;
         private IKeyboardMouseEvents _globalHook = null;
         private bool _isLoading = true;
+
+        private List<DispatcherOperation> _performSearchHandlerResults = new List<DispatcherOperation>();
+
         #endregion
 
         #region Public Variables
@@ -50,7 +55,7 @@ namespace MpWpfApp {
             set {
                 if(_clipTiles != value) {
                     _clipTiles = value;
-                    //OnPropertyChanged(nameof(ClipTiles));
+                    OnPropertyChanged(nameof(ClipTiles));
                 }
             }
         }
@@ -419,19 +424,15 @@ namespace MpWpfApp {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
                     case nameof(SearchText):
-                        if (SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
-                            return;
-                        }
-                        FilterTiles(SearchText);
-                        //SortClipTiles();
-                        if (!string.IsNullOrEmpty(SearchText.Trim())) {
-                            if (VisibileClipTiles.Count > 0) {
-                                SearchTextBoxBorderBrush = Brushes.Transparent;
-                            } else {
-                                SearchTextBoxBorderBrush = Brushes.Red;
-                            }
-                        }
-                        ResetSelection();
+                        //foreach (var d in _performSearchHandlerResults) {
+                        //    d.Abort();
+                        //}
+                        //var npshr = Application.Current.Dispatcher.BeginInvoke(
+                        //    DispatcherPriority.Background,
+                        //    new Action(() => PerformSearch())
+                        //);
+                        //_performSearchHandlerResults.Add(npshr);
+                        //PerformSearch();
                         break;
                     case nameof(IsAutoCopyMode):
                         if (IsAutoCopyMode) {
@@ -452,23 +453,18 @@ namespace MpWpfApp {
 
         #region View Event Handlers
         public void MainWindow_Loaded(object sender,RoutedEventArgs e) {
-            var mw = ((MpMainWindow)Application.Current.MainWindow); 
-
+            var mw = ((MpMainWindow)Application.Current.MainWindow);
+            var searchBox = (TextBox)mw.FindName("SearchTextBox");
+            searchBox.KeyDown += (s, e3) => {
+                if (e3.Key == Key.Return) {
+                    PerformSearch();
+                }
+            };
             SearchText = Properties.Settings.Default.SearchPlaceHolderText;
             SelectedSortType = SortTypes[0];
 
             SetupMainWindowRect();
 
-            //if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) {
-            //    AddTagTile(new MpTag("Home", MpHelpers.GetRandomColor()));
-            //    AddTagTile(new MpTag("Favorites", MpHelpers.GetRandomColor()));
-            //    AddTagTile(new MpTag("C#", MpHelpers.GetRandomColor()));
-            //    for (int i = 0; i < 15; i++) {
-            //        AddClipTile(MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, MpCopyItem.PlainTextToRtf(MpHelpers.GetRandomString(100, 100)), MpHelpers.GetProcessPath(Process.GetCurrentProcess().Handle), MpHelpers.GetRandomColor()));
-            //    }
-
-            //    return;
-            //}
             //create tiles for all clips in the database
             foreach (MpCopyItem c in MpCopyItem.GetAllCopyItems()) {
                 AddClipTile(c,false);
@@ -763,6 +759,24 @@ namespace MpWpfApp {
             }
         }
 
+        private void PerformSearch() {
+            if (SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
+                return;
+            }
+            FilterTiles(SearchText);
+            foreach (var vctvm in VisibileClipTiles) {
+                vctvm.Highlight();
+            }
+            //SortClipTiles();
+            if (VisibileClipTiles.Count > 0) {
+                SearchTextBoxBorderBrush = Brushes.Transparent;
+                EmptyListMessageVisibility = Visibility.Collapsed;
+            } else {
+                SearchTextBoxBorderBrush = Brushes.Red;
+                EmptyListMessageVisibility = Visibility.Visible;
+            }
+            ResetSelection();
+        }
         private void FilterTiles(string searchStr) {
             List<int> filteredTileIdxList = new List<int>();
             //search ci's from newest to oldest for filterstr, adding idx to list
@@ -810,32 +824,30 @@ namespace MpWpfApp {
         }
 
         private void SortClipTiles() {
-            using (MpOverrideCursor cursor = new MpOverrideCursor(Cursors.Wait)) {
-                string sortBy = string.Empty;
-                bool ascending = AscSortOrderButtonImageVisibility == Visibility.Visible;
+            string sortBy = string.Empty;
+            bool ascending = AscSortOrderButtonImageVisibility == Visibility.Visible;
 
-                if (SelectedSortType.Header == "Date") {
-                    sortBy = "CopyItemCreatedDateTime";
-                } else if (SelectedSortType.Header == "Application") {
-                    sortBy = "CopyItemAppId";
-                } else if (SelectedSortType.Header == "Title") {
-                    sortBy = "Title";
-                } else if (SelectedSortType.Header == "Content") {
-                    sortBy = "Text";
-                } else if (SelectedSortType.Header == "Type") {
-                    sortBy = "CopyItemType";
-                } else if (SelectedSortType.Header == "Usage") {
-                    sortBy = "CopyItemUsageScore";
-                }
-                ClearSelection();
-                ClipTiles.Sort(x => x[sortBy], !ascending);
-                ResetSelection();
+            if (SelectedSortType.Header == "Date") {
+                sortBy = "CopyItemCreatedDateTime";
+            } else if (SelectedSortType.Header == "Application") {
+                sortBy = "CopyItemAppId";
+            } else if (SelectedSortType.Header == "Title") {
+                sortBy = "Title";
+            } else if (SelectedSortType.Header == "Content") {
+                sortBy = "Text";
+            } else if (SelectedSortType.Header == "Type") {
+                sortBy = "CopyItemType";
+            } else if (SelectedSortType.Header == "Usage") {
+                sortBy = "CopyItemUsageScore";
             }
-            
+            ClearSelection();
+            var sortStart = DateTime.Now;
+            ClipTiles.Sort(x => x[sortBy], !ascending);
+            var sortDur = DateTime.Now - sortStart;
+            Console.WriteLine("Sort for " + VisibileClipTiles.Count + " items: " + sortDur.TotalMilliseconds + " ms");
+            ResetSelection();            
         }
-        private void SortHelper() {
 
-        }
         private int FindMaxIdxByProperty(ObservableCollection<MpClipTileViewModel> list,string propertyName,int startIdx = 0) {
             if(list == null || list.Count <= startIdx) {
                 return -1;
@@ -1481,9 +1493,9 @@ namespace MpWpfApp {
         //}
 
         public void StartDrag(IDragInfo dragInfo) {
-            dragInfo.Effects = DragDropEffects.Move | DragDropEffects.Copy;
-            GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.StartDrag(dragInfo);
-            return;
+            //dragInfo.Effects = DragDropEffects.Move | DragDropEffects.Copy;
+            //GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.StartDrag(dragInfo);
+            //return;
 
             string selectedRichText = string.Empty;
             string selectedRawText = string.Empty;
@@ -1496,7 +1508,7 @@ namespace MpWpfApp {
             if (File.Exists(tempFilePath)) {
                 File.Delete(tempFilePath);
             }
-            System.IO.StreamWriter tempFile = new System.IO.StreamWriter(tempFilePath);
+            StreamWriter tempFile = new StreamWriter(tempFilePath);
             tempFile.Write(selectedRawText);
             tempFile.Close();
             List<String> tempFileList = new List<string>();
@@ -1519,8 +1531,8 @@ namespace MpWpfApp {
             }
             dragInfo.DataObject = d;
             //dragInfo.DataObject = SelectedClipTiles;
-            GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.StartDrag(dragInfo);
-            //System.Windows.DragDrop.DoDragDrop(dragInfo.VisualSource, d, DragDropEffects.Copy);
+            //GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.StartDrag(dragInfo);
+            System.Windows.DragDrop.DoDragDrop(dragInfo.VisualSource, d, DragDropEffects.Copy);
         }
 
         public bool CanStartDrag(IDragInfo dragInfo) {
@@ -1536,10 +1548,10 @@ namespace MpWpfApp {
 
         public void DragDropOperationFinished(DragDropEffects operationResult, IDragInfo dragInfo) {
             GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.DragDropOperationFinished(operationResult, dragInfo);
-            //string tempFilePath = System.AppDomain.CurrentDomain.BaseDirectory + @"\temp.txt";
-            //if (File.Exists(tempFilePath)) {
-            //    File.Delete(tempFilePath);
-            //}
+            string tempFilePath = System.AppDomain.CurrentDomain.BaseDirectory + @"\temp.txt";
+            if (File.Exists(tempFilePath)) {
+                File.Delete(tempFilePath);
+            }
         }
 
         public void DragCancelled() {

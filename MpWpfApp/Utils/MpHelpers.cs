@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -8,6 +9,7 @@ using System.Management;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Reflection;
+using System.Resources;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -479,6 +481,64 @@ namespace MpWpfApp {
             return bitmap;
         }
 
+        public static BitmapSource MergeImages(IList<BitmapSource> bmpSrcList) {
+            int width = 0;
+            int height = 0;
+            int dpiX = 0;
+            int dpiY = 0;
+            // Get max width and height of the image
+            foreach (var image in bmpSrcList) {
+                width = Math.Max(image.PixelWidth,width);
+                height = Math.Max(image.PixelHeight, height);
+                dpiX = Math.Max((int)image.DpiX, dpiX);
+                dpiY = Math.Max((int)image.DpiY, dpiY);
+            }
+            var renderTargetBitmap = new RenderTargetBitmap(width, height, dpiX, dpiY, PixelFormats.Pbgra32);
+            var drawingVisual = new DrawingVisual();
+            using (var drawingContext = drawingVisual.RenderOpen()) {
+                foreach (var image in bmpSrcList) {
+                    drawingContext.DrawImage(image, new Rect(0, 0, width, height));
+                }
+            }
+            renderTargetBitmap.Render(drawingVisual);
+
+            return renderTargetBitmap;
+        }
+
+        public static BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint) {
+            var bmp = new WriteableBitmap(bmpSrc);
+            var pixels = GetPixels(bmp);
+            var pixelColor = new PixelColor[1, 1];
+            pixelColor[0, 0] = new PixelColor { Alpha = tint.A, Red = tint.R, Green = tint.G, Blue = tint.B };
+
+            for (int x = 0; x < bmp.Width; x++) {
+                for (int y = 0; y < bmp.Height; y++) {
+                    PixelColor c = pixels[x, y];
+                    //Color gotColor = Color.FromArgb(c.Alpha, c.Red, c.Green, c.Blue);
+                    if (c.Alpha > 0) {
+                        PutPixels(bmp, pixelColor, x, y);
+                    }
+                }
+            }
+            return bmp;
+        }
+        private static PixelColor[,] GetPixels(BitmapSource source) {
+            if (source.Format != PixelFormats.Bgra32) {
+                source = new FormatConvertedBitmap(source, PixelFormats.Bgra32, null, 0);
+            }
+            int width = source.PixelWidth;
+            int height = source.PixelHeight;
+            PixelColor[,] result = new PixelColor[width, height];
+
+            source.CopyPixels(result, width * 4, 0, false);
+            return result;
+        }
+
+        private static void PutPixels(WriteableBitmap bitmap, PixelColor[,] pixels, int x, int y) {
+            int width = pixels.GetLength(0);
+            int height = pixels.GetLength(1);
+            bitmap.WritePixels(new Int32Rect(0, 0, width, height), pixels, width * 4, x, y);
+        }
         public static bool IsPathDirectory(string str) {
             // get the file attributes for file or directory
             return File.GetAttributes(str).HasFlag(FileAttributes.Directory);

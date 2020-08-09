@@ -581,7 +581,7 @@
             <!-- tile tray -->
             <ListBox x:Name="ClipTray"
                      Grid.Row="0"
-                     Grid.Column="1"                     
+                     Grid.Column="1"
                      dd:DragDrop.IsDragSource="True"
                      dd:DragDrop.IsDropTarget="False"
                      dd:DragDrop.DragHandler="{Binding}"
@@ -645,7 +645,7 @@
                     <DataTemplate>
                         <!-- Clip Tile -->
                         <local:MpClipBorder BorderBrush="{Binding TileBorderBrush}"
-                                            Focusable="True"                                            
+                                            Focusable="True"
                                             local:MpFocusExtension.IsFocused="{Binding IsFocused}"
                                             Margin="{Binding TileMargin}"
                                             Background="White"
@@ -653,7 +653,7 @@
                                             Width="{Binding TileBorderSize}"
                                             Height="{Binding TileBorderSize}"
                                             CornerRadius="10"
-                                            Visibility="{Binding TileVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,NotifyOnSourceUpdated=True}">
+                                            Visibility="{Binding TileVisibility}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Loaded">
                                     <i:CallMethodAction TargetObject="{Binding}"
@@ -667,10 +667,10 @@
                                     <MenuItem Header="Export To">
                                         <MenuItem Header="File(s)..."
                                                   Command="{Binding MainWindowViewModel.ExportSelectedClipTilesCommand}"
-                                                  CommandParameter="{StaticResource False}"/>
+                                                  CommandParameter="{StaticResource False}" />
                                         <MenuItem Header="CSV"
                                                   Command="{Binding MainWindowViewModel.ExportSelectedClipTilesCommand}"
-                                                  CommandParameter="{StaticResource True}"/>
+                                                  CommandParameter="{StaticResource True}" />
                                     </MenuItem>
                                     <MenuItem Header="Rename"
                                               Command="{Binding MainWindowViewModel.RenameClipCommand}" />
@@ -738,7 +738,7 @@
                                 <DropShadowEffect Color="Black"
                                                   BlurRadius="10" />
                             </local:MpClipBorder.Effect>
-                            <Grid ClipToBounds="False">
+                            <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="{Binding TileTitleHeight}" />
                                     <RowDefinition />
@@ -748,38 +748,14 @@
                                         Grid.Column="0"
                                         VerticalAlignment="Top"
                                         HorizontalAlignment="Left">
-                                    <local:MpTintedImage x:Name="TitleSwirl0"
-                                                         TintBrush="{Binding TitleColor,Converter={StaticResource SolidColorBrushToBrushConverter}}"
-                                                         Canvas.Top="-1"
-                                                         Canvas.Left="-1"
-                                                         Stretch="Fill"
-                                                         Width="{Binding TileSize}"
-                                                         Height="{Binding TileTitleHeight}"
-                                                         Source="/MpWpfApp;component/Resources/title_swirl0001.png" />
-                                    <local:MpTintedImage x:Name="TitleSwirl1"
-                                                         TintBrush="{Binding TitleColorLighter,Converter={StaticResource SolidColorBrushToBrushConverter}}"
-                                                         Canvas.Top="-1"
-                                                         Canvas.Left="-1"
-                                                         Stretch="Fill"
-                                                         Width="{Binding TileSize}"
-                                                         Height="{Binding TileTitleHeight}"
-                                                         Source="/MpWpfApp;component/Resources/title_swirl0002.png" />
-                                    <local:MpTintedImage x:Name="TitleSwirl2"
-                                                         TintBrush="{Binding TitleColorDarker, Converter={StaticResource SolidColorBrushToBrushConverter}}"
-                                                         Canvas.Top="-1"
-                                                         Canvas.Left="-1"
-                                                         Stretch="Fill"
-                                                         Width="{Binding TileSize}"
-                                                         Height="{Binding TileTitleHeight}"
-                                                         Source="/MpWpfApp;component/Resources/title_swirl0003.png" />
-                                    <local:MpTintedImage x:Name="TitleSwirl3"
-                                                         TintBrush="{Binding TitleColorAccent, Converter={StaticResource SolidColorBrushToBrushConverter}}"
-                                                         Canvas.Top="-1"
-                                                         Canvas.Left="-1"
-                                                         Stretch="Fill"
-                                                         Width="{Binding TileSize}"
-                                                         Height="{Binding TileTitleHeight}"
-                                                         Source="/MpWpfApp;component/Resources/title_swirl0004.png" />
+                                    <Image x:Name="TitleSwirl"
+                                           Canvas.Top="-1"
+                                           Canvas.Left="-1"
+                                           Stretch="Fill"
+                                           Width="{Binding TileSize}"
+                                           Height="{Binding TileTitleHeight}"
+                                           Source="{Binding TitleSwirl}" />                                    
+                                    <!-- Clip Title TextBlock -->
                                     <TextBlock x:Name="ClipTileTitleTextBlock"
                                                Text="{Binding Title}"
                                                Canvas.Top="-2"
@@ -800,12 +776,19 @@
                                     <TextBox x:Name="ClipTileTitleTextBox"
                                              Background="White"
                                              Foreground="Black"
-                                             Padding="10,0,0,0"
+                                             Canvas.Top="-2"
+                                             Canvas.Left="5"
                                              FontSize="24"
                                              Visibility="{Binding TileTitleTextBoxVisibility}"
                                              local:MpFocusExtension.IsFocused="{Binding IsTitleTextBoxFocused}"
                                              local:MpTextBoxBehavior.SelectAllTextOnFocus="True"
-                                             Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                             Text="{Binding Title}" />
+                                    <!-- Clip Title Detail TextBlock -->
+                                    <TextBlock x:Name="ClipTileTitleDetailTextBlock"
+                                               Background="Transparent"
+                                               Foreground="{Binding DetailTextColor}"
+                                               FontSize="9"
+                                               Text="{Binding DetailText}" />
                                     <!-- Clip Title Icon Image -->
                                     <Image x:Name="ClipTileAppIconImage"
                                            Source="{Binding Icon}"
@@ -821,6 +804,7 @@
                                 <local:MpClipTileRichTextBox x:Name="ClipTileRichTextBox"
                                                              SearchText="{Binding MainWindowViewModel.SearchText}"
                                                              IsReadOnly="True"
+                                                             IsUndoEnabled="False"
                                                              Grid.Row="1"
                                                              Grid.Column="0"
                                                              Background="White"
@@ -867,9 +851,9 @@
                                                                Margin="0,0,0,0"
                                                                VerticalAlignment="Center"
                                                                FontSize="16"
-                                                               Foreground="Black"
+                                                               Foreground="Black"                                                               
                                                                Background="Transparent">
-                                                    </TextBlock>
+                                                    </TextBlock>                                                    
                                                 </StackPanel>
                                             </Border>
                                         </DataTemplate>
