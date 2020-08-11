@@ -69,7 +69,7 @@ namespace MpWpfApp {
             } else if (iData.GetDataPresent(DataFormats.Bitmap)) {
                 ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Image, Clipboard.GetImage(), sourcePath, itemColor);
             } else if (iData.GetDataPresent(DataFormats.Html) || iData.GetDataPresent(DataFormats.Text)) {
-                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, PlainTextToRtf((string)iData.GetData(DataFormats.Text)), sourcePath, itemColor);
+                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, MpHelpers.PlainTextToRtf((string)iData.GetData(DataFormats.Text)), sourcePath, itemColor);
             } else {
                 Console.WriteLine("MpData error clipboard data is not known format");
                 return null;
@@ -138,30 +138,7 @@ namespace MpWpfApp {
         public MpCopyItem(DataRow dr) {
             LoadDataRow(dr);
         }
-        public static string PlainTextToRtf2(string plainText) {
-            string escapedPlainText = plainText.Replace(@"\", @"\\").Replace("{", @"\{").Replace("}", @"\}");
-            string rtf = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard ";
-            rtf += escapedPlainText.Replace(Environment.NewLine, @" \par ");
-            rtf += " }";
-            return rtf;
-        }
-        public static string PlainTextToRtf(string input) {
-            //first take care of special RTF chars
-            StringBuilder backslashed = new StringBuilder(input);
-            backslashed.Replace(@"\", @"\\");
-            backslashed.Replace(@"{", @"\{");
-            backslashed.Replace(@"}", @"\}");
-
-            //then convert the string char by char
-            StringBuilder sb = new StringBuilder();
-            foreach (char character in backslashed.ToString()) {
-                if (character <= 0x7f)
-                    sb.Append(character);
-                else
-                    sb.Append("\\u" + Convert.ToUInt32(character) + "?");
-            }
-            return sb.ToString();
-        }
+       
         public int GetPasteCount() {
             if(CopyItemId <= 0) {
                 return 0;
@@ -175,7 +152,7 @@ namespace MpWpfApp {
         public string GetPlainText() {
             switch(CopyItemType) {
                 case MpCopyItemType.Image:
-                    return Enum.GetName(typeof(MpCopyItemType), CopyItemType);
+                    return @"[IMAGE]";
                 case MpCopyItemType.RichText:
                     RichTextBox rtb = new RichTextBox();
                     rtb.SetRtf((string)DataObject);

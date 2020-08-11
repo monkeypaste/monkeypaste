@@ -23,15 +23,23 @@ using System.Management;
 using GongSolutions.Wpf.DragDrop.Utilities;
 using System.Reflection;
 using System.Collections.Generic;
+using System.IO;
+using System.Drawing.Imaging;
+using System.Text.RegularExpressions;
+using System.Collections.Specialized;
+using System.Web.Security;
 
 namespace MpWpfApp {
     public class MpClipTileViewModel : MpViewModelBase {
         #region Private Variables
         private static MpClipTileViewModel _sourceSelectedClipTile = null;
         private bool _isMouseDown = false;
-        private Point _startDragPoint;
         private int _detailIdx = 0;
+        private List<string> _tempFileList = new List<string>();
+        #endregion
 
+        #region Public Variables
+        public Point StartDragPoint { get; set; }
         #endregion
 
         #region Collections
@@ -87,10 +95,35 @@ namespace MpWpfApp {
             }
 
         }
-
         #endregion
 
         #region View Properties
+        private double _contentWidth = 0;
+        public double ContentWidth {
+            get {
+                return _contentWidth;
+            }
+            set {
+                if(_contentWidth != value) {
+                    _contentWidth = value;
+                    OnPropertyChanged(nameof(ContentWidth));
+                }
+            }
+        }
+
+        private double _contentHeight = 0;
+        public double ContentHeight {
+            get {
+                return _contentHeight;
+            }
+            set {
+                if (_contentHeight != value) {
+                    _contentHeight = value;
+                    OnPropertyChanged(nameof(ContentHeight));
+                }
+            }
+        }
+
         private BitmapSource _titleSwirl = null;
         public BitmapSource TitleSwirl {
             get {
@@ -181,9 +214,7 @@ namespace MpWpfApp {
                 }
             }
         }
-        #endregion
 
-        #region Layout 
         private int _sortOrderIdx = -1;
         public int SortOrderIdx {
             get {
@@ -397,10 +428,22 @@ namespace MpWpfApp {
             }
         }
 
-
         #endregion
 
         #region Model Properties
+
+        private object _clipContentData = null;
+        public object ClipContentData {
+            get {
+                return _clipContentData;
+            }
+            set {
+                if(_clipContentData != value) {
+                    _clipContentData = value;
+                    OnPropertyChanged(nameof(ClipContentData));
+                }
+            }
+        }
 
         public int CopyItemUsageScore {
             get {
@@ -463,21 +506,16 @@ namespace MpWpfApp {
             }
         }
 
+        private string _richText = string.Empty;
         public string RichText {
             get {
-                if (CopyItem.CopyItemType == MpCopyItemType.RichText) {
-                    return (string)CopyItem.DataObject;
-                } else if (CopyItem.CopyItemType == MpCopyItemType.FileList) {
-                    return MpCopyItem.PlainTextToRtf(CopyItem.GetPlainText());
-                } else if (CopyItem.CopyItemType == MpCopyItemType.Image) {
-                    // TODO add image to text conversion here
-                    return MpCopyItem.PlainTextToRtf(Enum.GetName(typeof(MpCopyItemType), CopyItem.CopyItemType));
-                }
-                return string.Empty;
+                return _richText;
             }
             set {
-                CopyItem.SetData(value);
-                OnPropertyChanged(nameof(RichText));
+                if(_richText != value) {
+                    _richText = value;
+                    OnPropertyChanged(nameof(RichText));
+                }
             }
         }
 
@@ -488,14 +526,14 @@ namespace MpWpfApp {
         }
 
         private string _text = string.Empty;
-        public string Text {
+        public string RawText {
             get {
                 return _text;
             }
             set {
                 if(_text != value) {
                     _text = value;
-                    OnPropertyChanged(nameof(Text));
+                    OnPropertyChanged(nameof(RawText));
                 }
             }
         }
@@ -515,12 +553,13 @@ namespace MpWpfApp {
         #endregion        
 
         #region Constructor
-        private int _copyItemId;
         public MpClipTileViewModel(MpCopyItem ci,MpMainWindowViewModel mwvm) {
             CopyItem = ci;
-            _copyItemId = CopyItem.CopyItemId;
             MainWindowViewModel = mwvm;
-            if(TitleSwirl == null) {
+            RawText = CopyItem.GetPlainText();
+            RichText = MpHelpers.PlainTextToRtf(RawText);
+            ClipContentData = CopyItem.DataObject;
+            if (TitleSwirl == null) {
                 var swirl1 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0001.png"));
                 swirl1 = MpHelpers.TintBitmapSource(swirl1, ((SolidColorBrush)TitleColor).Color);
                 var swirl2 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0002.png"));
@@ -532,7 +571,6 @@ namespace MpWpfApp {
                 
                 TitleSwirl = MpHelpers.MergeImages(new List<BitmapSource>() { swirl1,swirl2,swirl3,swirl4});
             }
-            Text = CopyItem.GetPlainText();
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
                     case nameof(IsSelected):
@@ -556,6 +594,8 @@ namespace MpWpfApp {
                             if (IsHovering) {
                                 TileBorderBrush = Brushes.Yellow;
                                 DetailTextColor = Brushes.DarkKhaki;
+                                //this is necessary for dragdrop re-sorting
+                                MainWindowViewModel.LastHoveringClipTileViewModel = this;
                             } else {
                                 TileBorderBrush = Brushes.Transparent;
                                 DetailTextColor = Brushes.Transparent;
@@ -577,7 +617,10 @@ namespace MpWpfApp {
                         }
                         break;
                     case nameof(RichText):
-                        CopyItem.WriteToDatabase();
+                        if(CopyItemType == MpCopyItemType.RichText) {
+                            CopyItem.SetData(RichText);
+                            CopyItem.WriteToDatabase();
+                        }
                         break;
                     case nameof(Title):
                         CopyItem.WriteToDatabase();
@@ -591,13 +634,58 @@ namespace MpWpfApp {
         public void Highlight(string searchText) {
             _myRtb?.HighlightSearchText(searchText,Brushes.Yellow);
         }
+
+        
         #endregion
         #region View Events Handlers        
         private MpClipTileRichTextBox _myRtb = null;
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            var clipTileBorder = (Border)sender;
-            
+            var clipTileBorder = (MpClipBorder)sender;
+
+            clipTileBorder.PreviewMouseDown += (s, e6) => {
+                _isMouseDown = true;
+                StartDragPoint = e6.GetPosition((ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray"));
+            };
+            clipTileBorder.PreviewMouseMove += (s, e7) => {
+                var curDragPoint = e7.GetPosition((ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray"));
+                if (_isMouseDown /*&& Math.Abs(curDragPoint.X-StartDragPoint.X) > 50*/) {
+                    var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
+                    string selectedRawText = string.Empty;
+                    foreach (MpClipTileViewModel ctvm in MainWindowViewModel.SelectedClipTiles) {
+                        List<String> tempFileList = new List<string>();
+                        string tempText = ctvm.RawText;
+                        IDataObject d = new DataObject();
+                        switch (ctvm.CopyItem.CopyItemType) {
+                            case MpCopyItemType.RichText:
+                                d.SetData(DataFormats.Text, ctvm.RawText);
+                                d.SetData(DataFormats.Rtf, ctvm.RichText);
+                                d.SetData(DataFormats.Bitmap, MpHelpers.ConvertRichTextToImage(ctvm.RichText, (int)ctvm.ContentWidth, (int)ctvm.ContentHeight));
+                                d.SetData(DataFormats.FileDrop, new List<string>() { ctvm.WriteCopyItemToFile(Path.GetTempPath(), true) }.ToArray());
+                                break;
+                            case MpCopyItemType.Image:
+                                d.SetData(DataFormats.Text, ctvm.RawText);
+                                d.SetData(DataFormats.Rtf, ctvm.RichText);
+                                d.SetData(DataFormats.Bitmap, (BitmapSource)ctvm.ClipContentData);
+                                d.SetData(DataFormats.FileDrop, new List<string>() { ctvm.WriteCopyItemToFile(Path.GetTempPath(), true) }.ToArray());
+                                break;
+                            case MpCopyItemType.FileList:
+                                d.SetData(DataFormats.Text, ctvm.RawText);
+                                d.SetData(DataFormats.Rtf, ctvm.RichText);
+                                d.SetData(DataFormats.Bitmap, MpHelpers.ConvertRichTextToImage(ctvm.RichText, (int)ctvm.ContentWidth, (int)ctvm.ContentHeight));
+                                d.SetData(DataFormats.FileDrop, (string[])ctvm.ClipContentData);
+                                break;
+                        }
+                        //d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, ctvm);
+                        
+                        DragDrop.DoDragDrop(clipTray, d, DragDropEffects.Copy/* | DragDropEffects.Move*/); 
+                    }                    
+                }
+            };
+            clipTileBorder.PreviewMouseUp += (s, e8) => {
+                _isMouseDown = false;
+                StartDragPoint = new Point();
+            };
             clipTileBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
             };
@@ -632,15 +720,29 @@ namespace MpWpfApp {
             var rtb = (MpClipTileRichTextBox)((Border)sender)?.FindName("ClipTileRichTextBox");
             
             if (CopyItem.CopyItemType == MpCopyItemType.FileList) {
+                //assume dimensions are plaintext path list length
+                rtb.SetRtf(RichText);
+                ContentWidth = rtb.Width;
+                ContentHeight = rtb.Height;
+                
                 rtb.Visibility = Visibility.Collapsed;
-                img.Visibility = Visibility.Collapsed;
+                img.Visibility = Visibility.Collapsed;                
             }
             if (CopyItem.CopyItemType == MpCopyItemType.Image) {
                 img.Source = (BitmapSource)CopyItem.DataObject;
+                ContentWidth = img.Width;
+                ContentHeight = img.Height;
+
                 rtb.Visibility = Visibility.Collapsed;
                 flb.Visibility = Visibility.Collapsed;
+                
             } else if(CopyItem.CopyItemType == MpCopyItemType.RichText) {
                 _myRtb = rtb;
+                //overwriting richtext in constructor to rawtext
+                RichText = (string)ClipContentData;
+                if(!MpHelpers.IsStringRichText(RichText)) {
+                    RichText = MpHelpers.PlainTextToRtf(RichText);
+                }
                 img.Visibility = Visibility.Collapsed;
                 flb.Visibility = Visibility.Collapsed;
 
@@ -660,6 +762,8 @@ namespace MpWpfApp {
                 //FormattedText ft = new FormattedText(Text, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface(rtb.Document.FontFamily.ToString()), rtb.Document.FontSize, rtb.Document.Foreground, dpi4.PixelsPerDip);//VisualTreeHelper.GetDpi(rtb).PixelsPerDip);
                 //rtb.Width = ft.Width + rtb.Padding.Left + rtb.Padding.Right;
                 //rtb.Height = ft.Height + rtb.Padding.Top + rtb.Padding.Bottom;
+                ContentWidth = rtb.RenderSize.Width;
+                ContentHeight = rtb.RenderSize.Height;
                 rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
                 rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
 
@@ -671,18 +775,106 @@ namespace MpWpfApp {
                 Highlight(string.Empty);
             }
         }
+
+        //writes <Title>.txt | .png | *.* to rootPath, if <Title> exists Title is postfiex incrementally
+        //isTemporary infers this is for a drag drop and should be deleted when application closes
+        // TODO Work out best time to delete drag drop files so the target doesn't loose the source file
+        public string WriteCopyItemToFile(string rootPath,bool isTemporary = false) {
+            //file path
+            // TODO Title needs to be cleaned of anyspecial characters that invalidate file name
+            string tempTitle = string.IsNullOrEmpty(Title.Trim()) ? "temp" : Title.Trim();
+            string fp = rootPath + @"\" + tempTitle;
+            //file extension
+            string fe = string.Empty;
+            switch (CopyItemType) {
+                case MpCopyItemType.RichText:
+                    fe = ".txt";
+                    break;
+                case MpCopyItemType.Image:
+                    fe = ".png";
+                    break;
+                    //ignore file list since file type is part of item
+            }
+            if (CopyItemType == MpCopyItemType.RichText || CopyItemType == MpCopyItemType.Image) {
+                //file name count
+                int fnc = 0;
+                string fp2 = fp;
+                while (File.Exists(fp2 + fe)) {
+                    int result = fnc;
+                    try {
+                        result = Convert.ToInt32(Regex.Match(fp2, @"\d+$").Value);
+                    }
+                    catch (Exception e) {
+                        result = fnc;
+                    }
+
+                    fnc = ++result;
+                    fp2 = fp + fnc;
+                }
+                fp = fp2;
+            } else {
+                fp = fe = string.Empty;
+            }
+            //output file
+            switch (CopyItemType) {
+                case MpCopyItemType.RichText:
+                    StreamWriter of = new StreamWriter(fp + fe);
+                    of.Write(CopyItem.GetPlainText());
+                    of.Close();
+                    break;
+                case MpCopyItemType.Image:
+                    System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(MpHelpers.ConvertBitmapSourceToBitmap((BitmapSource)CopyItem.DataObject));
+                    bmp.Save(fp + fe, ImageFormat.Png);
+                    break;
+                case MpCopyItemType.FileList:
+                    foreach (string f in (string[])CopyItem.DataObject) {
+                        try {
+                            string fn = Path.GetFileName(f);
+                            //file name count
+                            int fnc = 1;
+                            if (MpHelpers.IsPathDirectory(f)) {
+                                while (Directory.Exists(rootPath + @"\" + fn)) {
+                                    fn = fn + (fnc++);
+                                }
+                                MpHelpers.DirectoryCopy(f, rootPath + @"\" + fn, true);
+                            } else {
+                                while (File.Exists(rootPath + @"\" + fn)) {
+                                    fn = fn + (fnc++);
+                                }
+                                File.Copy(f, rootPath + @"\" + fn);
+                            }
+                        }
+                        catch (Exception e) {
+                            MessageBox.Show("Source file '" + f + "' no longer exists!");
+                        }
+                    }
+                    break;
+            }
+            if(!string.IsNullOrEmpty(fp+fe) && isTemporary) {
+                _tempFileList.Add(fp + fe);
+            }
+            return fp + fe;
+        }
+
+        public void DeleteTempFiles() {
+            foreach(var f in _tempFileList) {
+                if(File.Exists(f)) {
+                    File.Delete(f);
+                }
+            }
+        }
         
         public void ContextMenuMouseLeftButtonUpOnSearchGoogle() {
-            System.Diagnostics.Process.Start(@"https://www.google.com/search?q=" + System.Uri.EscapeDataString(Text));
+            System.Diagnostics.Process.Start(@"https://www.google.com/search?q=" + System.Uri.EscapeDataString(RawText));
         }
         public void ContextMenuMouseLeftButtonUpOnSearchBing() {
-            System.Diagnostics.Process.Start(@"https://www.bing.com/search?q=" + System.Uri.EscapeDataString(Text));
+            System.Diagnostics.Process.Start(@"https://www.bing.com/search?q=" + System.Uri.EscapeDataString(RawText));
         }
         public void ContextMenuMouseLeftButtonUpOnSearchDuckDuckGo() {
-            System.Diagnostics.Process.Start(@"https://duckduckgo.com/?q=" + System.Uri.EscapeDataString(Text));
+            System.Diagnostics.Process.Start(@"https://duckduckgo.com/?q=" + System.Uri.EscapeDataString(RawText));
         }
         public void ContextMenuMouseLeftButtonUpOnSearchYandex() {
-            System.Diagnostics.Process.Start(@"https://yandex.com/search/?text=" + System.Uri.EscapeDataString(Text));
+            System.Diagnostics.Process.Start(@"https://yandex.com/search/?text=" + System.Uri.EscapeDataString(RawText));
         }
 
         #endregion
@@ -725,7 +917,7 @@ namespace MpWpfApp {
         }
         private void SpeakClip() {
             using (SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer()) {
-                speechSynthesizer.Speak(Text);
+                speechSynthesizer.Speak(RawText);
             }                
         }
 
@@ -743,7 +935,7 @@ namespace MpWpfApp {
         }
         private void ConvertTokenToQrCode() {
             using (SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer()) {
-                speechSynthesizer.Speak(Text);
+                speechSynthesizer.Speak(RawText);
             }
         }
         #endregion

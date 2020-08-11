@@ -575,10 +575,7 @@
             <!-- clip tile tray -->
             <ListBox x:Name="ClipTray"
                      Grid.Row="0"
-                     Grid.Column="1"
-                     dd:DragDrop.IsDragSource="True"
-                     dd:DragDrop.IsDropTarget="False"
-                     dd:DragDrop.DragHandler="{Binding}"
+                     Grid.Column="1" 
                      VerticalAlignment="Stretch"
                      Background="Transparent"
                      SelectionMode="Extended"

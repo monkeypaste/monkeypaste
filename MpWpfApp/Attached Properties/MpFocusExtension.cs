@@ -17,7 +17,9 @@ namespace MpWpfApp {
 
         public static readonly DependencyProperty IsFocusedProperty =
             DependencyProperty.RegisterAttached(
-                "IsFocused", typeof(bool), typeof(MpFocusExtension),
+                "IsFocused", 
+                typeof(bool), 
+                typeof(MpFocusExtension),
                 new UIPropertyMetadata(false, OnIsFocusedPropertyChanged));
 
         private static void OnIsFocusedPropertyChanged(

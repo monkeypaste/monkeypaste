@@ -482,6 +482,50 @@ namespace MpWpfApp {
             return bitmap;
         }
 
+        public static System.Drawing.Color ConvertSolidColorBrushToWinFormsColor(SolidColorBrush scb) {
+            return System.Drawing.Color.FromArgb(scb.Color.A, scb.Color.R, scb.Color.G, scb.Color.B);
+        }
+
+        public static BitmapSource ConvertRichTextToImage(string rt,  int width, int Height) {
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(width, Height);
+            using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(bmp)) {
+                graphics.DrawRtfText(rt, new System.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height), 2f);
+                graphics.Flush();
+                graphics.Dispose();
+            }
+            return ConvertBitmapToBitmapSource(bmp);
+        }
+
+        public static string PlainTextToRtf(string plainText) {
+            string escapedPlainText = plainText.Replace(@"\", @"\\").Replace("{", @"\{").Replace("}", @"\}");
+            string rtf = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard ";
+            rtf += escapedPlainText.Replace(Environment.NewLine, @" \par ");
+            rtf += " }";
+            return rtf;
+        }
+
+        public static string PlainTextToRtf2(string input) {
+            //first take care of special RTF chars
+            StringBuilder backslashed = new StringBuilder(input);
+            backslashed.Replace(@"\", @"\\");
+            backslashed.Replace(@"{", @"\{");
+            backslashed.Replace(@"}", @"\}");
+
+            //then convert the string char by char
+            StringBuilder sb = new StringBuilder();
+            foreach (char character in backslashed.ToString()) {
+                if (character <= 0x7f)
+                    sb.Append(character);
+                else
+                    sb.Append("\\u" + Convert.ToUInt32(character) + "?");
+            }
+            return sb.ToString();
+        }
+
+        public static bool IsStringRichText(string text) {
+            return text.TrimStart().StartsWith(@"{\rtf", StringComparison.Ordinal);
+        }
+
         public static BitmapSource MergeImages(IList<BitmapSource> bmpSrcList) {
             int width = 0;
             int height = 0;

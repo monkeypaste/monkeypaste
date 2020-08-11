@@ -2,6 +2,7 @@
 using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
 using GongSolutions.Wpf.DragDrop;
+using GongSolutions.Wpf.DragDrop.Utilities;
 using Hardcodet.Wpf.TaskbarNotification;
 using Microsoft.Win32;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -29,7 +30,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace MpWpfApp {
-    public class MpMainWindowViewModel : MpViewModelBase, IDragSource {
+    public class MpMainWindowViewModel : MpViewModelBase {
         #region Private Variables
         private double _startMainWindowTop, _endMainWindowTop;
         private bool _doPaste = false;
@@ -43,10 +44,12 @@ namespace MpWpfApp {
 
         #region Public Variables
         public MpClipboardMonitor ClipboardMonitor { get; private set; }
+
+        public MpClipTileViewModel LastHoveringClipTileViewModel { get; set; } = null;
         #endregion
 
         #region Properties
-        
+
         private ObservableCollection<MpClipTileViewModel> _clipTiles = new ObservableCollection<MpClipTileViewModel>();
         public ObservableCollection<MpClipTileViewModel> ClipTiles {
             get {
@@ -466,6 +469,10 @@ namespace MpWpfApp {
             SearchText = Properties.Settings.Default.SearchPlaceHolderText;
 
             SelectedSortType = SortTypes[0];
+
+            var clipTray = (ListBox)mw.FindName("ClipTray");
+            clipTray.DragEnter += ClipTray_DragEnter;
+            clipTray.Drop += ClipTray_Drop;
 
             SetupMainWindowRect();
 
@@ -966,72 +973,7 @@ namespace MpWpfApp {
 
         private void WriteClipsToFile(List<MpClipTileViewModel> clipList, string rootPath) {
             foreach (MpClipTileViewModel ctvm in clipList) {
-                //file path
-                string fp = rootPath + @"\"+ctvm.Title;
-                //file extension
-                string fe = string.Empty;
-                switch(ctvm.CopyItemType) {
-                    case MpCopyItemType.RichText:
-                        fe = ".txt";
-                        break;
-                    case MpCopyItemType.Image:
-                        fe = ".png";
-                        break;
-                    //ignore file list since file type is part of item
-                }
-                if(ctvm.CopyItemType == MpCopyItemType.RichText || ctvm.CopyItemType == MpCopyItemType.Image) {
-                    //file name count
-                    int fnc = 0;
-                    string fp2 = fp;
-                    while (File.Exists(fp2 + fe)) {
-                        int result = fnc;
-                        try {
-                            result = Convert.ToInt32(Regex.Match(fp2, @"\d+$").Value);
-                        }
-                        catch(Exception e) {
-                            result = fnc;
-                        }
-
-                        fnc = ++result;
-                        fp2 = fp + fnc;
-                    }
-                    fp = fp2;
-                }
-                //output file
-                switch (ctvm.CopyItemType) {
-                    case MpCopyItemType.RichText:
-                        StreamWriter of = new StreamWriter(fp + fe);
-                        of.Write(ctvm.CopyItem.GetPlainText());
-                        of.Close();
-                        break;
-                    case MpCopyItemType.Image:
-                        System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(MpHelpers.ConvertBitmapSourceToBitmap((BitmapSource)ctvm.CopyItem.DataObject));
-                        bmp.Save(fp + fe, ImageFormat.Png);
-                        break;
-                    case MpCopyItemType.FileList:
-                        foreach(string f in (string[])ctvm.CopyItem.DataObject) {
-                            try {
-                                string fn = Path.GetFileName(f);
-                                //file name count
-                                int fnc = 1;
-                                if (MpHelpers.IsPathDirectory(f)) {
-                                    while (Directory.Exists(rootPath + @"\" + fn)) {
-                                        fn = fn + (fnc++);
-                                    }
-                                    MpHelpers.DirectoryCopy(f, rootPath + @"\" + fn, true);
-                                } else {
-                                    while (File.Exists(rootPath + @"\" + fn)) {
-                                        fn = fn + (fnc++);
-                                    }
-                                    File.Copy(f, rootPath + @"\" + fn);
-                                }
-                            }
-                            catch(Exception e) {
-                                MessageBox.Show("Source file '" + f + "' no longer exists!");
-                            }
-                        }
-                        break;
-                }
+                ctvm.WriteCopyItemToFile(rootPath);
             }
         }
 
@@ -1457,119 +1399,39 @@ namespace MpWpfApp {
         #endregion
 
         #region Drag and Drop Support
-        //public void ClipTray_Drop(object sender, DragEventArgs e) {
-        //    if (e.Data.GetDataPresent("MonkeyPasteFormat")) {
-        //        var dropClipTileViewModel = (MpClipTileViewModel)e.Data.GetData("MonkeyPasteFormat");
-        //        MpClipTileViewModel hoverClipTileViewModel = null;
-        //        foreach (var vctvm in VisibileClipTiles) {
-        //            if (vctvm.IsHovering) {
-        //                hoverClipTileViewModel = vctvm;
-        //            }
-        //        }
-        //        if (hoverClipTileViewModel != null) {
-        //            int dragIdx = VisibileClipTiles.IndexOf(dropClipTileViewModel);
-        //            int dropIdx = VisibileClipTiles.IndexOf(hoverClipTileViewModel);
-        //            MoveClipTile(dropClipTileViewModel, dropIdx);
-        //        }
-        //    }
-        //}
+        private void ClipTray_DragEnter(object sender, DragEventArgs e) {
+            //var dragClipBorder = (MpClipBorder)e.Data.GetData(typeof(MpClipBorder));
+            e.Effects = e.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName) ? DragDropEffects.Move : DragDropEffects.None;
+        }
+        private void ClipTray_Drop(object sender, DragEventArgs e) {
+            var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
 
-        public void StartDrag(IDragInfo dragInfo) {
-            //dragInfo.Effects = DragDropEffects.Move | DragDropEffects.Copy;
-            //GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.StartDrag(dragInfo);
-            //return;
+            var dragClipViewModel = (MpClipTileViewModel)e.Data.GetData(Properties.Settings.Default.ClipTileDragDropFormatName);
 
-            string selectedRichText = string.Empty;
-            string selectedRawText = string.Empty;
-            foreach (MpClipTileViewModel ctvm in SelectedClipTiles) {
-                selectedRichText += ctvm.RichText + Environment.NewLine;
-                selectedRawText += ctvm.CopyItem.GetPlainText() + Environment.NewLine;
+            
+            var mpo = e.GetPosition(clipTray);
+            if(mpo.X - dragClipViewModel.StartDragPoint.X > 0) {
+                mpo.X -= MpMeasurements.Instance.ClipTileMargin * 5;
+            } else {
+                mpo.X += MpMeasurements.Instance.ClipTileMargin * 5;
             }
 
-            string tempFilePath = System.AppDomain.CurrentDomain.BaseDirectory + @"\temp.txt";
-            if (File.Exists(tempFilePath)) {
-                File.Delete(tempFilePath);
+            MpClipTileViewModel dropVm = null;
+            var item = VisualTreeHelper.HitTest(clipTray, mpo).VisualHit;
+            if(item.GetType() == typeof(ScrollViewer)) {
+                dropVm = (MpClipTileViewModel)((ItemsPresenter)((ScrollViewer)item).Content).DataContext;
+            } else if(item.GetType() == typeof(MpClipBorder)) {
+                dropVm = (MpClipTileViewModel)((MpClipBorder)item).DataContext;
             }
-            StreamWriter tempFile = new StreamWriter(tempFilePath);
-            tempFile.Write(selectedRawText);
-            tempFile.Close();
-            List<String> tempFileList = new List<string>();
-            tempFileList.Add(tempFilePath);
+            int dropIdx = item == null || item == clipTray ? 0:ClipTiles.IndexOf(dropVm);
 
-            IDataObject d = new DataObject();// Properties.Settings.Default.ClipTileDragDropFormatName, dragInfo.SourceItems);
-            d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, (MpClipTileViewModel) dragInfo.SourceItem);
-            switch (SelectedClipTiles[0].CopyItem.CopyItemType) {
-                case MpCopyItemType.RichText:
-                    d.SetData(DataFormats.Text, selectedRawText);
-                    d.SetData(DataFormats.Rtf, selectedRichText);
-                    d.SetData(DataFormats.FileDrop, tempFileList.ToArray<string>());
-                    break;
-                case MpCopyItemType.Image:
-                    d.SetData(DataFormats.Bitmap, (BitmapSource)SelectedClipTiles[0].CopyItem.DataObject);
-                    break;
-                case MpCopyItemType.FileList:
-                    d.SetData(DataFormats.FileDrop,(StringCollection)SelectedClipTiles[0].CopyItem.DataObject);
-                    break;
-            }
-            dragInfo.DataObject = d;
-            //dragInfo.DataObject = SelectedClipTiles;
-            //GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.StartDrag(dragInfo);
-            System.Windows.DragDrop.DoDragDrop(dragInfo.VisualSource, d, DragDropEffects.Copy);
+            ClipTiles.Remove(dragClipViewModel);
+            ClipTiles.Insert(dropIdx, dragClipViewModel);
+
+            ClearClipSelection();
+            dragClipViewModel.IsSelected = true;
+            dragClipViewModel.IsFocused = true;
         }
-
-        public bool CanStartDrag(IDragInfo dragInfo) {
-
-            //need to update canstartdrag to ensure all selected tiles are richtext or 
-            //selection is single filelist or image
-            return GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.CanStartDrag(dragInfo);
-        }
-
-        public void Dropped(IDropInfo dropInfo) {
-            GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.Dropped(dropInfo);
-        }
-
-        public void DragDropOperationFinished(DragDropEffects operationResult, IDragInfo dragInfo) {
-            GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.DragDropOperationFinished(operationResult, dragInfo);
-            string tempFilePath = System.AppDomain.CurrentDomain.BaseDirectory + @"\temp.txt";
-            if (File.Exists(tempFilePath)) {
-                File.Delete(tempFilePath);
-            }
-        }
-
-        public void DragCancelled() {
-            GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.DragCancelled();
-            //string tempFilePath = System.AppDomain.CurrentDomain.BaseDirectory + @"\temp.txt";
-            //if (File.Exists(tempFilePath)) {
-            //    File.Delete(tempFilePath);
-            //}
-        }
-
-        public bool TryCatchOccurredException(Exception exception) {
-            return GongSolutions.Wpf.DragDrop.DragDrop.DefaultDragHandler.TryCatchOccurredException(exception);
-        }
-
-
         #endregion
-    }
-
-    public class MpSortClipTilesByTitle : IComparer {
-        public int Compare(object x, object y) {
-            if (x as MpClipTileViewModel == null || y as MpClipTileViewModel == null) {
-                throw new ArgumentException("SortCreatures can only sort CreatureModel objects." );
-            }
-            return string.Compare(((MpClipTileViewModel)x).Title, ((MpClipTileViewModel)y).Title);
-        }
-    }
-
-    public class MpSortClipTilesByDate : IComparer {
-        public int Compare(object x, object y) {
-            if (x as MpClipTileViewModel == null || y as MpClipTileViewModel == null) {
-                throw new ArgumentException("SortCreatures can only sort CreatureModel objects.");
-            }
-            if(((MpClipTileViewModel)x).CopyItemCreatedDateTime > ((MpClipTileViewModel)y).CopyItemCreatedDateTime) {
-                return 1;
-            }
-            return -1;
-        }
     }
 }
