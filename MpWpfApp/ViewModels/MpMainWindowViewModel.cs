@@ -36,7 +36,6 @@ namespace MpWpfApp {
         private bool _doPaste = false;
         private MpHotKeyHost _hotkeyHost = null;
         private IKeyboardMouseEvents _globalHook = null;
-        private bool _isLoading = true;
 
         private List<DispatcherOperation> _performSearchHandlerResults = new List<DispatcherOperation>();
 
@@ -205,7 +204,20 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(SearchText));
                 }
             }
-        }        
+        }
+
+        private bool _isLoading = true;
+        public bool IsLoading {
+            get {
+                return _isLoading;
+            }
+            set {
+                if(_isLoading != value) {
+                    _isLoading = value;
+                    OnPropertyChanged(nameof(IsLoading));
+                }
+            }
+        }
 
         private MpHotKey _showMainWindowHotKey = null;
         public MpHotKey ShowMainWindowHotKey {
@@ -418,6 +430,7 @@ namespace MpWpfApp {
         #region Constructor
         public MpMainWindowViewModel() {
             base.DisplayName = "MpMainWindowViewModel";
+            IsLoading = true;
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
                     case nameof(SearchText):
@@ -505,8 +518,6 @@ namespace MpWpfApp {
             HideWindowCommand.Execute(null);
 #endif
             var taskbarIcon = (TaskbarIcon)mw.FindName("TaskbarIcon");
-
-            _isLoading = false;
         }
 
         public void ScrollClipTray(object sender, MouseWheelEventArgs e) {
@@ -1152,7 +1163,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanShowWindow() {
-            return Application.Current.MainWindow == null || Application.Current.MainWindow.Visibility != Visibility.Visible || _isLoading;
+            return Application.Current.MainWindow == null || Application.Current.MainWindow.Visibility != Visibility.Visible || IsLoading;
         }
         private void ShowWindow() {
             if(Application.Current.MainWindow == null) {
@@ -1184,6 +1195,7 @@ namespace MpWpfApp {
                 //var ct = (ListBox)mw.FindName("ClipTray");
                 //ct.Focus();
                 //Keyboard.Focus(ct);
+                IsLoading = false;
             };
             mw.BeginAnimation(Window.TopProperty, ta);            
         }
@@ -1406,11 +1418,11 @@ namespace MpWpfApp {
         private void ClipTray_Drop(object sender, DragEventArgs e) {
             var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
 
-            var dragClipViewModel = (MpClipTileViewModel)e.Data.GetData(Properties.Settings.Default.ClipTileDragDropFormatName);
+            var dragClipViewModel = (List<MpClipTileViewModel>)e.Data.GetData(Properties.Settings.Default.ClipTileDragDropFormatName);
 
             
             var mpo = e.GetPosition(clipTray);
-            if(mpo.X - dragClipViewModel.StartDragPoint.X > 0) {
+            if(mpo.X - dragClipViewModel[0].StartDragPoint.X > 0) {
                 mpo.X -= MpMeasurements.Instance.ClipTileMargin * 5;
             } else {
                 mpo.X += MpMeasurements.Instance.ClipTileMargin * 5;
@@ -1418,20 +1430,63 @@ namespace MpWpfApp {
 
             MpClipTileViewModel dropVm = null;
             var item = VisualTreeHelper.HitTest(clipTray, mpo).VisualHit;
-            if(item.GetType() == typeof(ScrollViewer)) {
-                dropVm = (MpClipTileViewModel)((ItemsPresenter)((ScrollViewer)item).Content).DataContext;
-            } else if(item.GetType() == typeof(MpClipBorder)) {
-                dropVm = (MpClipTileViewModel)((MpClipBorder)item).DataContext;
+            dropVm = (MpClipTileViewModel)item.GetVisualAncestor<MpClipBorder>().DataContext;
+            int dropIdx = item == null || item == clipTray ? 0 : ClipTiles.IndexOf(dropVm);
+            //if(item.GetType() == typeof(ScrollViewer)) {
+            //    dropVm = (MpClipTileViewModel)((ItemsPresenter)((ScrollViewer)item).Content).DataContext;
+            //} else if(item.GetType() == typeof(MpClipBorder)) {
+            //    dropVm = (MpClipTileViewModel)((MpClipBorder)item).DataContext;
+            //}
+            if (dropIdx >= 0) {
+                ClearClipSelection();
+                for (int i = 0; i < dragClipViewModel.Count; i++) {
+                    ClipTiles.Remove(dragClipViewModel[i]);
+                    ClipTiles.Insert(dropIdx, dragClipViewModel[i]);
+                    dragClipViewModel[i].IsSelected = true;
+                    if (i == 0) {
+                        dragClipViewModel[i].IsFocused = true;
+                    }
+                }
+            } else {
+                Console.WriteLine("MainWindow drop error cannot find lasrt moused over tile");
             }
-            int dropIdx = item == null || item == clipTray ? 0:ClipTiles.IndexOf(dropVm);
-
-            ClipTiles.Remove(dragClipViewModel);
-            ClipTiles.Insert(dropIdx, dragClipViewModel);
-
-            ClearClipSelection();
-            dragClipViewModel.IsSelected = true;
-            dragClipViewModel.IsFocused = true;
         }
         #endregion
+    }
+    public class ListBoxEx : ListBox {
+        protected override DependencyObject GetContainerForItemOverride() {
+            return new ListBoxItemEx();
+        }
+
+        class ListBoxItemEx : ListBoxItem {
+            private bool _deferSelection = false;
+
+            protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e) {
+                if (e.ClickCount == 1 && IsSelected) {
+                    // the user may start a drag by clicking into selected items
+                    // delay destroying the selection to the Up event
+                    _deferSelection = true;
+                } else {
+                    base.OnMouseLeftButtonDown(e);
+                }
+            }
+
+            protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e) {
+                if (_deferSelection) {
+                    try {
+                        base.OnMouseLeftButtonDown(e);
+                    } finally {
+                        _deferSelection = false;
+                    }
+                }
+                base.OnMouseLeftButtonUp(e);
+            }
+
+            protected override void OnMouseLeave(MouseEventArgs e) {
+                // abort deferred Down
+                _deferSelection = false;
+                base.OnMouseLeave(e);
+            }
+        }
     }
 }

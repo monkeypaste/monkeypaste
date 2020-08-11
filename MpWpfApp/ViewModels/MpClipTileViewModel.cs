@@ -1,39 +1,24 @@
-﻿
-using Newtonsoft.Json;
-using GalaSoft.MvvmLight.CommandWpf;
-using QRCoder;
+﻿using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Security.Policy;
 using System.Speech.Synthesis;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Management;
-using GongSolutions.Wpf.DragDrop.Utilities;
 using System.Reflection;
 using System.Collections.Generic;
 using System.IO;
 using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
-using System.Collections.Specialized;
-using System.Web.Security;
 
 namespace MpWpfApp {
     public class MpClipTileViewModel : MpViewModelBase {
         #region Private Variables
         private static MpClipTileViewModel _sourceSelectedClipTile = null;
-        private bool _isMouseDown = false;
         private int _detailIdx = 0;
         private List<string> _tempFileList = new List<string>();
         #endregion
@@ -98,6 +83,32 @@ namespace MpWpfApp {
         #endregion
 
         #region View Properties
+        private bool _isDragging = false;
+        public bool IsDragging {
+            get {
+                return _isDragging;
+            }
+            set {
+                if (_isDragging != value) {
+                    _isDragging = value;
+                    OnPropertyChanged(nameof(IsDragging));
+                }
+            }
+        }
+
+        private bool _isMouseDown = false;
+        public bool IsMouseDown {
+            get {
+                return _isMouseDown;
+            }
+            set {
+                if(_isMouseDown != value) {
+                    _isMouseDown = value;
+                    OnPropertyChanged(nameof(IsMouseDown));
+                }
+            }
+        }
+
         private double _contentWidth = 0;
         public double ContentWidth {
             get {
@@ -172,19 +183,6 @@ namespace MpWpfApp {
                 if (_isHovering != value) {
                     _isHovering = value;
                     OnPropertyChanged(nameof(IsHovering));
-                }
-            }
-        }
-
-        private bool _isDragging = false;
-        public bool IsDragging {
-            get {
-                return _isDragging;
-            }
-            set {
-                if (_isDragging != value) {
-                    _isDragging = value;
-                    OnPropertyChanged(nameof(IsDragging));
                 }
             }
         }
@@ -553,7 +551,7 @@ namespace MpWpfApp {
         #endregion        
 
         #region Constructor
-        public MpClipTileViewModel(MpCopyItem ci,MpMainWindowViewModel mwvm) {
+        public MpClipTileViewModel(MpCopyItem ci,MpMainWindowViewModel mwvm) {            
             CopyItem = ci;
             MainWindowViewModel = mwvm;
             RawText = CopyItem.GetPlainText();
@@ -617,7 +615,7 @@ namespace MpWpfApp {
                         }
                         break;
                     case nameof(RichText):
-                        if(CopyItemType == MpCopyItemType.RichText) {
+                        if(CopyItemType == MpCopyItemType.RichText && !MainWindowViewModel.IsLoading) {
                             CopyItem.SetData(RichText);
                             CopyItem.WriteToDatabase();
                         }
@@ -643,47 +641,64 @@ namespace MpWpfApp {
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             var clipTileBorder = (MpClipBorder)sender;
 
-            clipTileBorder.PreviewMouseDown += (s, e6) => {
-                _isMouseDown = true;
+            clipTileBorder.PreviewMouseLeftButtonDown += (s, e6) => {
+                if (e6.ClickCount == 2) {
+                    ((MpClipTileViewModel)((Border)s).DataContext).MainWindowViewModel.PasteSelectedClipsCommand.Execute(null);
+                }
+                IsMouseDown = true;
                 StartDragPoint = e6.GetPosition((ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray"));
             };
             clipTileBorder.PreviewMouseMove += (s, e7) => {
-                var curDragPoint = e7.GetPosition((ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray"));
-                if (_isMouseDown /*&& Math.Abs(curDragPoint.X-StartDragPoint.X) > 50*/) {
-                    var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
-                    string selectedRawText = string.Empty;
+                var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
+                var curDragPoint = e7.GetPosition(clipTray);
+                
+                if (IsMouseDown && e7.MouseDevice.LeftButton == MouseButtonState.Pressed 
+                /*&& Math.Abs(curDragPoint.X-StartDragPoint.X) > 50*/) {
+                    string text = string.Empty;
+                    string rtf = string.Empty;
+                    var bmp = MpHelpers.ConvertRichTextToImage(RichText, (int)ContentWidth, (int)ContentHeight);
+                    List<string> fileDrop = new List<string>();
+                    MpCopyItemType lastType = CopyItemType;
                     foreach (MpClipTileViewModel ctvm in MainWindowViewModel.SelectedClipTiles) {
-                        List<String> tempFileList = new List<string>();
-                        string tempText = ctvm.RawText;
-                        IDataObject d = new DataObject();
-                        switch (ctvm.CopyItem.CopyItemType) {
-                            case MpCopyItemType.RichText:
-                                d.SetData(DataFormats.Text, ctvm.RawText);
-                                d.SetData(DataFormats.Rtf, ctvm.RichText);
-                                d.SetData(DataFormats.Bitmap, MpHelpers.ConvertRichTextToImage(ctvm.RichText, (int)ctvm.ContentWidth, (int)ctvm.ContentHeight));
-                                d.SetData(DataFormats.FileDrop, new List<string>() { ctvm.WriteCopyItemToFile(Path.GetTempPath(), true) }.ToArray());
-                                break;
-                            case MpCopyItemType.Image:
-                                d.SetData(DataFormats.Text, ctvm.RawText);
-                                d.SetData(DataFormats.Rtf, ctvm.RichText);
-                                d.SetData(DataFormats.Bitmap, (BitmapSource)ctvm.ClipContentData);
-                                d.SetData(DataFormats.FileDrop, new List<string>() { ctvm.WriteCopyItemToFile(Path.GetTempPath(), true) }.ToArray());
-                                break;
-                            case MpCopyItemType.FileList:
-                                d.SetData(DataFormats.Text, ctvm.RawText);
-                                d.SetData(DataFormats.Rtf, ctvm.RichText);
-                                d.SetData(DataFormats.Bitmap, MpHelpers.ConvertRichTextToImage(ctvm.RichText, (int)ctvm.ContentWidth, (int)ctvm.ContentHeight));
-                                d.SetData(DataFormats.FileDrop, (string[])ctvm.ClipContentData);
-                                break;
+                        if(ctvm.CopyItemType != lastType) {
+                            continue;
+                        } else {
+                            lastType = ctvm.CopyItemType;
                         }
-                        //d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, ctvm);
-                        
-                        DragDrop.DoDragDrop(clipTray, d, DragDropEffects.Copy/* | DragDropEffects.Move*/); 
-                    }                    
+                        text += ctvm.RawText + Environment.NewLine;
+                        rtf += ctvm.RichText + Environment.NewLine;
+                        bmp = MpHelpers.MergeImages(new List<BitmapSource>() { bmp, MpHelpers.ConvertRichTextToImage(ctvm.RichText, (int)ContentWidth, (int)ContentHeight) });
+                        if(ctvm.CopyItemType == MpCopyItemType.FileList) {
+                            foreach(string f in (string[])ctvm.ClipContentData) {
+                                fileDrop.Add(f);
+                            }
+                        } else {
+                            fileDrop.Add(ctvm.WriteCopyItemToFile(Path.GetTempPath(), true));
+                        }    
+                    }
+                    //this case is when non file drop item's being dragged
+                    if(fileDrop.Count == 0) {
+                        if(CopyItemType == MpCopyItemType.RichText) {
+                            fileDrop.Add(WriteTextToFile(Path.GetTempFileName(), text, true));
+                        } else {
+                            fileDrop.Add(WriteBitmapSourceToFile(Path.GetTempFileName(), bmp, true));
+                        }
+                    }
+                    IDataObject d = new DataObject();
+                    d.SetData(DataFormats.Text, text);
+                    d.SetData(DataFormats.Rtf, rtf);
+                    d.SetData(DataFormats.Bitmap, bmp);
+                    d.SetData(DataFormats.FileDrop, fileDrop.ToArray());
+                    d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, MainWindowViewModel.SelectedClipTiles.ToList());
+                    DragDrop.DoDragDrop(clipTray, d, DragDropEffects.Copy | DragDropEffects.Move);
+                } else {
+                    //this occurs when mouse up is outside the application (like during a dragdrop)
+                    IsMouseDown = false;
+                    StartDragPoint = new Point();
                 }
             };
             clipTileBorder.PreviewMouseUp += (s, e8) => {
-                _isMouseDown = false;
+                IsMouseDown = false;
                 StartDragPoint = new Point();
             };
             clipTileBorder.MouseEnter += (s, e1) => {
@@ -694,11 +709,6 @@ namespace MpWpfApp {
             };
             clipTileBorder.LostFocus += (s, e4) => {
                 IsEditingTitle = false;
-            };
-            clipTileBorder.MouseLeftButtonDown += (s, e5) => {
-                if(e5.ClickCount == 2) {
-                    ((MpClipTileViewModel)((Border)s).DataContext).MainWindowViewModel.PasteSelectedClipsCommand.Execute(null);
-                }
             };
 
             var clipTileTitleTextBox = (TextBox)clipTileBorder.FindName("ClipTileTitleTextBox");
@@ -722,8 +732,8 @@ namespace MpWpfApp {
             if (CopyItem.CopyItemType == MpCopyItemType.FileList) {
                 //assume dimensions are plaintext path list length
                 rtb.SetRtf(RichText);
-                ContentWidth = rtb.Width;
-                ContentHeight = rtb.Height;
+                ContentWidth = rtb.RenderSize.Width;
+                ContentHeight = rtb.RenderSize.Height;
                 
                 rtb.Visibility = Visibility.Collapsed;
                 img.Visibility = Visibility.Collapsed;                
@@ -749,19 +759,7 @@ namespace MpWpfApp {
                 // since document is enabled this overrides the rtb's context menu with the tile's defined in the xaml
                 rtb.ContextMenu = (ContextMenu)clipTileBorder.FindName("ClipTile_ContextMenu");
 
-                //First load the richtextbox with copytext
                 rtb.SetRtf(RichText);
-                //rtb.PreviewKeyDown += MainWindowViewModel.ClipTile_KeyUp;
-                //rtb.PreviewMouseLeftButtonUp += Rtb_PreviewMouseLeftButtonUp;
-                //rtb.PreviewMouseDoubleClick += Rtb_PreviewMouseLeftButtonUp;
-                //rtb.PreviewMouseRightButtonUp += ClipTileContent_MouseRightButtonUp;
-                //clipTileBorder.PreviewMouseRightButtonUp += ClipTileContent_MouseRightButtonUp;
-
-                //Text = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
-                //var dpi4 = VisualTreeHelper.GetDpi(rtb);
-                //FormattedText ft = new FormattedText(Text, CultureInfo.GetCultureInfo("en-us"), FlowDirection.LeftToRight, new Typeface(rtb.Document.FontFamily.ToString()), rtb.Document.FontSize, rtb.Document.Foreground, dpi4.PixelsPerDip);//VisualTreeHelper.GetDpi(rtb).PixelsPerDip);
-                //rtb.Width = ft.Width + rtb.Padding.Left + rtb.Padding.Right;
-                //rtb.Height = ft.Height + rtb.Padding.Top + rtb.Padding.Bottom;
                 ContentWidth = rtb.RenderSize.Width;
                 ContentHeight = rtb.RenderSize.Height;
                 rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
@@ -775,7 +773,17 @@ namespace MpWpfApp {
                 Highlight(string.Empty);
             }
         }
-
+        public string WriteTextToFile(string filePath, string text, bool isTemporary = false) {
+            StreamWriter of = new StreamWriter(filePath);
+            of.Write(text);
+            of.Close();
+            return filePath;
+        }
+        public string WriteBitmapSourceToFile(string filePath,BitmapSource bmpSrc,bool isTemporary = false) {
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(MpHelpers.ConvertBitmapSourceToBitmap(bmpSrc));
+            bmp.Save(filePath, ImageFormat.Png);
+            return filePath;
+        }
         //writes <Title>.txt | .png | *.* to rootPath, if <Title> exists Title is postfiex incrementally
         //isTemporary infers this is for a drag drop and should be deleted when application closes
         // TODO Work out best time to delete drag drop files so the target doesn't loose the source file
@@ -783,7 +791,7 @@ namespace MpWpfApp {
             //file path
             // TODO Title needs to be cleaned of anyspecial characters that invalidate file name
             string tempTitle = string.IsNullOrEmpty(Title.Trim()) ? "temp" : Title.Trim();
-            string fp = rootPath + @"\" + tempTitle;
+            string fp = rootPath + tempTitle;
             //file extension
             string fe = string.Empty;
             switch (CopyItemType) {
@@ -800,9 +808,11 @@ namespace MpWpfApp {
                 int fnc = 0;
                 string fp2 = fp;
                 while (File.Exists(fp2 + fe)) {
+                    fp2 = fp + fnc;
                     int result = fnc;
                     try {
-                        result = Convert.ToInt32(Regex.Match(fp2, @"\d+$").Value);
+                        var match = Regex.Match(fp2, @"\d+$");
+                        result = match == null ? 0: Convert.ToInt32(match.Value);
                     }
                     catch (Exception e) {
                         result = fnc;
@@ -818,13 +828,10 @@ namespace MpWpfApp {
             //output file
             switch (CopyItemType) {
                 case MpCopyItemType.RichText:
-                    StreamWriter of = new StreamWriter(fp + fe);
-                    of.Write(CopyItem.GetPlainText());
-                    of.Close();
+                    WriteTextToFile(fp + fe, CopyItem.GetPlainText(), isTemporary);
                     break;
                 case MpCopyItemType.Image:
-                    System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(MpHelpers.ConvertBitmapSourceToBitmap((BitmapSource)CopyItem.DataObject));
-                    bmp.Save(fp + fe, ImageFormat.Png);
+                    WriteBitmapSourceToFile(fp + fe, (BitmapSource)CopyItem.DataObject);
                     break;
                 case MpCopyItemType.FileList:
                     foreach (string f in (string[])CopyItem.DataObject) {

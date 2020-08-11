@@ -573,34 +573,26 @@
                 </ToggleButton>
             </Grid>
             <!-- clip tile tray -->
-            <ListBox x:Name="ClipTray"
-                     Grid.Row="0"
-                     Grid.Column="1" 
-                     VerticalAlignment="Stretch"
-                     Background="Transparent"
-                     SelectionMode="Extended"
-                     VirtualizingPanel.IsVirtualizing="True"
-                     VirtualizingPanel.ScrollUnit="Pixel"
-                     VirtualizingPanel.VirtualizationMode="Standard"
-                     ScrollViewer.CanContentScroll="False"
-                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                     Visibility="{Binding ClipListVisibility}"
-                     ItemsSource="{Binding ClipTiles}">
+            <local:ListBoxEx x:Name="ClipTray"
+                             Grid.Row="0"
+                             Grid.Column="1"
+                             AllowDrop="True"
+                             VerticalAlignment="Stretch"
+                             Background="Transparent"
+                             SelectionMode="Extended"
+                             VirtualizingPanel.IsVirtualizing="True"
+                             VirtualizingPanel.ScrollUnit="Pixel"
+                             VirtualizingPanel.VirtualizationMode="Standard"
+                             ScrollViewer.CanContentScroll="False"
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                             Visibility="{Binding ClipListVisibility}"
+                             ItemsSource="{Binding ClipTiles}">
                 <i:Interaction.Triggers>
-                    <!--<i:EventTrigger EventName="Drop">
-                        <i:CallMethodAction TargetObject="{Binding}" 
-                                                        MethodName="ClipTray_Drop"/>
-                    </i:EventTrigger>-->
                     <i:EventTrigger EventName="PreviewMouseWheel">
                         <i:CallMethodAction MethodName="ScrollClipTray"
                                             TargetObject="{Binding}" />
                     </i:EventTrigger>
-                    <!--<i:EventTrigger EventName="Drop">
-                        <i:CallMethodAction TargetObject="{Binding}" 
-                                                        MethodName="ClipTray_Drop"/>
-                    </i:EventTrigger>-->
-
                 </i:Interaction.Triggers>
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}">
@@ -610,7 +602,7 @@
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                     <ContentPresenter />
-                                    <ControlTemplate.Triggers>
+                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsSelected"
                                                  Value="True">
                                             <Setter Property="BorderBrush"
@@ -854,7 +846,7 @@
                         </local:MpClipBorder>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
-            </ListBox>
+            </local:ListBoxEx>
             <TextBlock x:Name="EmptyListTextBlock"
                        Grid.Row="0"
                        Grid.Column="1"

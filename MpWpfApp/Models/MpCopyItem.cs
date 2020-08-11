@@ -61,23 +61,26 @@ namespace MpWpfApp {
             }
             string sourcePath = MpHelpers.GetProcessPath(processHandle);
             Color itemColor = MpHelpers.GetRandomColor();
-
-            if(iData.GetDataPresent(DataFormats.FileDrop)) {
-                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.FileList, (string[])iData.GetData(DataFormats.FileDrop, true), sourcePath, itemColor);
-            } else if(iData.GetDataPresent(DataFormats.Rtf)) {
-                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, (string)iData.GetData(DataFormats.Rtf), sourcePath, itemColor);
-            } else if (iData.GetDataPresent(DataFormats.Bitmap)) {
-                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Image, Clipboard.GetImage(), sourcePath, itemColor);
-            } else if (iData.GetDataPresent(DataFormats.Html) || iData.GetDataPresent(DataFormats.Text)) {
-                ci = MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, MpHelpers.PlainTextToRtf((string)iData.GetData(DataFormats.Text)), sourcePath, itemColor);
-            } else {
-                Console.WriteLine("MpData error clipboard data is not known format");
+            
+            try {
+                if (iData.GetDataPresent(DataFormats.FileDrop)) {
+                    ci = MpCopyItem.CreateCopyItem(MpCopyItemType.FileList, (string[])iData.GetData(DataFormats.FileDrop, true), sourcePath, itemColor);
+                } else if (iData.GetDataPresent(DataFormats.Rtf)) {
+                    ci = MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, (string)iData.GetData(DataFormats.Rtf), sourcePath, itemColor);
+                } else if (iData.GetDataPresent(DataFormats.Bitmap)) {
+                    ci = MpCopyItem.CreateCopyItem(MpCopyItemType.Image, Clipboard.GetImage(), sourcePath, itemColor);
+                } else if (iData.GetDataPresent(DataFormats.Html) || iData.GetDataPresent(DataFormats.Text)) {
+                    ci = MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, MpHelpers.PlainTextToRtf((string)iData.GetData(DataFormats.Text)), sourcePath, itemColor);
+                } else {
+                    Console.WriteLine("MpData error clipboard data is not known format");
+                    return null;
+                }
+                return ci;
+            }
+            catch(Exception e) {
+                //this catches intermittent COMExceptions (happened copy/pasting in Excel)
                 return null;
             }
-            //if(ci != null && ci.CopyItemType == MpCopyItemType.Text && (ci.GetData() == null || (string)ci.GetData() == string.Empty)) {
-            //    ci = null;
-            //}
-            return ci;
         }
         public static MpCopyItem CreateCopyItem(MpCopyItemType itemType,object data,string sourcePath,Color tileColor) { 
             MpCopyItem newItem = new MpCopyItem();

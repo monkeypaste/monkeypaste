@@ -436,7 +436,10 @@ namespace MpWpfApp {
         }
 
         public static ImageSource GetIconImage(string sourcePath) {
-            return ConvertBitmapToBitmapSource(GetBitmapFromFilePath(sourcePath, IconSizeEnum.LargeIcon48));
+            if(!File.Exists(sourcePath)) {
+                return ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Warning.ToBitmap());
+            }
+            return ConvertBitmapToBitmapSource(GetBitmapFromFilePath(sourcePath, IconSizeEnum.MediumIcon32));
         }
 
         public static byte[] ConvertBitmapSourceToByteArray(BitmapSource bs) {
