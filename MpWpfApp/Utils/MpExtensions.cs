@@ -94,7 +94,7 @@ namespace MpWpfApp {
             return null;
         }
         public static void SetRtf(this System.Windows.Controls.RichTextBox rtb, string document) {
-            var documentBytes = Encoding.UTF8.GetBytes(document);
+            var documentBytes = Encoding.Default.GetBytes(document);
             using (var reader = new MemoryStream(documentBytes)) {
                 reader.Position = 0;
                 rtb.SelectAll();

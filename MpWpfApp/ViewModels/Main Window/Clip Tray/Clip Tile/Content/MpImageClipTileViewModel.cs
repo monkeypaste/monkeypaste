@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpImageClipTileViewModel : MpClipTileViewModel {
-        public MpImageClipTileViewModel(MpCopyItem ci, MpMainWindowViewModel mwvm) : base(ci, mwvm) {
+        public MpImageClipTileViewModel(MpCopyItem ci, MpClipTrayViewModel parent) : base(ci, parent) {
         }
     }
 }

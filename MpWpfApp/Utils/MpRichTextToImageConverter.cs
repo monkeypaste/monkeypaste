@@ -13,7 +13,11 @@ namespace MpWpfApp {
             if (MpRichTextToImageConverter.rtfDrawer == null) {
                 MpRichTextToImageConverter.rtfDrawer = new RichTextBoxDrawer();
             }
-            MpRichTextToImageConverter.rtfDrawer.Rtf = rtf;
+            if(MpHelpers.IsStringRichText(rtf)) {
+                MpRichTextToImageConverter.rtfDrawer.Rtf = rtf;
+            } else {
+                MpRichTextToImageConverter.rtfDrawer.Rtf = MpHelpers.PlainTextToRtf(rtf);
+            }
             MpRichTextToImageConverter.rtfDrawer.Draw(graphics, layoutArea, xFactor);
         }
 

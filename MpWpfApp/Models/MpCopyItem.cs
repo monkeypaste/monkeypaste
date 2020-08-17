@@ -17,7 +17,7 @@ namespace MpWpfApp {
 
         public List<MpSubTextToken> SubTextTokenList = new List<MpSubTextToken>();
 
-        public Object DataObject { get; private set; }
+        public Object DataObject { get; set; }
         
         public int ColorId { get;  set; }
 
@@ -132,10 +132,6 @@ namespace MpWpfApp {
                 }
             }
             return clips;
-        }
-        public void SetData(object newData) {
-            DataObject = newData;
-            WriteToDatabase();
         }
 
         public MpCopyItem(DataRow dr) {

@@ -2,7 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Management;
@@ -26,6 +28,11 @@ namespace MpWpfApp {
         //public static static MpHelperSingleton Instance { get { return lazy.Value; } }
         public static Random Rand = new Random();
 
+        public static bool IsInDesignMode {
+            get {
+                return DesignerProperties.GetIsInDesignMode(new DependencyObject());
+            }
+        }
         public static bool ApplicationIsActivated() {
             var activatedHandle = WinApi.GetForegroundWindow();
             if (activatedHandle == IntPtr.Zero) {
@@ -90,7 +97,6 @@ namespace MpWpfApp {
 
             return System.Drawing.Color.FromArgb((byte)r, (byte)g, (byte)b);
         }
-
 
         public static string GetProcessPath(IntPtr hwnd) {
             try {
@@ -322,30 +328,42 @@ namespace MpWpfApp {
             }
             return size;
         }
-       /* public static long DirSize(string sourceDir,bool recurse) {
-            long size = 0;
-            string[] fileEntries = Directory.GetFiles(sourceDir);
+        public static string WriteTextToFile(string filePath, string text, bool isTemporary = false) {
+            StreamWriter of = new StreamWriter(filePath);
+            of.Write(text);
+            of.Close();
+            return filePath;
+        }
+        public static string WriteBitmapSourceToFile(string filePath, BitmapSource bmpSrc, bool isTemporary = false) {
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(MpHelpers.ConvertBitmapSourceToBitmap(bmpSrc));
+            bmp.Save(filePath, ImageFormat.Png);
+            return filePath;
+        }
+        
+        /* public static long DirSize(string sourceDir,bool recurse) {
+             long size = 0;
+             string[] fileEntries = Directory.GetFiles(sourceDir);
 
-            foreach(string fileName in fileEntries) {
-                Interlocked.Add(ref size,(new FileInfo(fileName)).Length);
-            }
+             foreach(string fileName in fileEntries) {
+                 Interlocked.Add(ref size,(new FileInfo(fileName)).Length);
+             }
 
-            if(recurse) {
-                string[] subdirEntries = Directory.GetDirectories(sourceDir);
+             if(recurse) {
+                 string[] subdirEntries = Directory.GetDirectories(sourceDir);
 
-                Parallel.For<long>(0,subdirEntries.Length,() => 0,(i,loop,subtotal) =>
-                {
-                    if((File.GetAttributes(subdirEntries[i]) & FileAttributes.ReparsePoint) != FileAttributes.ReparsePoint) {
-                        subtotal += DirSize(subdirEntries[i],true);
-                        return subtotal;
-                    }
-                    return 0;
-                },
-                    (x) => Interlocked.Add(ref size,x)
-                );
-            }
-            return size;
-        }*/
+                 Parallel.For<long>(0,subdirEntries.Length,() => 0,(i,loop,subtotal) =>
+                 {
+                     if((File.GetAttributes(subdirEntries[i]) & FileAttributes.ReparsePoint) != FileAttributes.ReparsePoint) {
+                         subtotal += DirSize(subdirEntries[i],true);
+                         return subtotal;
+                     }
+                     return 0;
+                 },
+                     (x) => Interlocked.Add(ref size,x)
+                 );
+             }
+             return size;
+         }*/
         public static int GetLineCount(string str) {
             char CR = '\r';
             char LF = '\n';

@@ -14,7 +14,22 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Apperance Properties
+        #region View Models
+        private MpTagTrayViewModel _tagTrayViewModel;
+        public MpTagTrayViewModel TagTrayViewModel {
+            get {
+                return _tagTrayViewModel;
+            }
+            set {
+                if (_tagTrayViewModel != value) {
+                    _tagTrayViewModel = value;
+                    OnPropertyChanged(nameof(TagTrayViewModel));
+                }
+            }
+        }
+        #endregion
+
+        #region Properties
         private bool _isSelected = false;
         public bool IsSelected {
             get {
@@ -103,9 +118,48 @@ namespace MpWpfApp {
                 }
             }
         }
-        #endregion
 
-        #region Layout Properties
+        private MpTag _tag;
+        public MpTag Tag {
+            get {
+                return _tag;
+            }
+            set {
+                if (_tag != value) {
+                    _tag = value;
+                    OnPropertyChanged(nameof(Tag));
+                }
+            }
+        }
+
+        private string _tagName;
+        public string TagName {
+            get {
+                //return Tag.TagName;
+                return _tagName;
+            }
+            set {
+                //Tag.TagName = value;
+                if(_tagName != value) {
+                    _tagName = value;
+                    OnPropertyChanged(nameof(TagName));
+                }
+            }
+        }
+
+        private Brush _tagColor;
+        public Brush TagColor {
+            get {
+                return _tagColor;
+            }
+            set {
+                if (_tagColor != value) {
+                    _tagColor = value;
+                    OnPropertyChanged(nameof(TagColor));
+                }
+            }
+        }
+
         private Visibility _textBoxVisibility = Visibility.Collapsed;
         public Visibility TextBoxVisibility {
             get {
@@ -157,70 +211,36 @@ namespace MpWpfApp {
                 return TagHeight * 0.5;
             }
         }
-        #endregion
 
-        #region Business Logic Properties
         public bool IsHistory() {
             return Tag.TagId == 1;
         }
         #endregion
 
-        #region Exposed Model Properties
-        private MpTag _tag;
-        public MpTag Tag {
-            get {
-                return _tag;
-            }
-            set {
-                if(_tag != value) {
-                    _tag = value;
-                    OnPropertyChanged(nameof(Tag));
-                }
-            }
-        }
+        #region Private Methods
 
-        public string TagName {
-            get {
-                return Tag.TagName;
-            }
-            set {
-                Tag.TagName = value;
-                OnPropertyChanged(nameof(TagName));
-            }
-        }
+        //public void LinkToClipTile(MpClipTileViewModel clipTileToLink) {
+        //    if(!Tag.IsLinkedWithCopyItem(clipTileToLink.CopyItem)) {
+        //        Tag.LinkWithCopyItem(clipTileToLink.CopyItem);
+        //        TagClipCount++;
+        //    }
+        //}
 
-        private Brush _tagColor;
-        public Brush TagColor {
-            get {
-                return _tagColor;
-            }
-            set {
-                if(_tagColor != value) {
-                    _tagColor = value;
-                    OnPropertyChanged(nameof(TagColor));
-                }
-            }
-        }
-
-        private MpMainWindowViewModel _mainWindowViewModel;
-        public MpMainWindowViewModel MainWindowViewModel {
-            get {
-                return _mainWindowViewModel;
-            }
-            set {
-                if (_mainWindowViewModel != value) {
-                    _mainWindowViewModel = value;
-                    OnPropertyChanged(nameof(MainWindowViewModel));
-                }
-            }
-        }
+        //public void UnlinkWithClipTile(MpClipTileViewModel clipTileToLink) {
+        //    if (Tag.IsLinkedWithCopyItem(clipTileToLink.CopyItem)) {
+        //        Tag.UnlinkWithCopyItem(clipTileToLink.CopyItem);
+        //        TagClipCount--;
+        //    }
+        //}
         #endregion
 
-        #region Constructor
-        public MpTagTileViewModel(MpTag tag,MpMainWindowViewModel mainWindowViewModel,bool isNew) {
-            DisplayName = "MpTagTileViewModel";
+        #region Constructor/Initializers
+        public MpTagTileViewModel(MpTag tag, MpTagTrayViewModel parent, bool isNew) {
             Tag = tag;
-            MainWindowViewModel = mainWindowViewModel;
+            TagTrayViewModel = parent; 
+            TagColor = new SolidColorBrush(Tag.TagColor.Color);
+            TagCountTextColor = MpHelpers.IsBright(Tag.TagColor.Color) ? Brushes.Black : Brushes.White;
+            TagName = Tag.TagName;
             _isNew = isNew;
 
             PropertyChanged += (s, e1) => {
@@ -272,31 +292,9 @@ namespace MpWpfApp {
                 }
             };
         }
-        #endregion
 
-        #region Private Methods
-
-        //public void LinkToClipTile(MpClipTileViewModel clipTileToLink) {
-        //    if(!Tag.IsLinkedWithCopyItem(clipTileToLink.CopyItem)) {
-        //        Tag.LinkWithCopyItem(clipTileToLink.CopyItem);
-        //        TagClipCount++;
-        //    }
-        //}
-
-        //public void UnlinkWithClipTile(MpClipTileViewModel clipTileToLink) {
-        //    if (Tag.IsLinkedWithCopyItem(clipTileToLink.CopyItem)) {
-        //        Tag.UnlinkWithCopyItem(clipTileToLink.CopyItem);
-        //        TagClipCount--;
-        //    }
-        //}
-        #endregion
-
-        #region View Event Handlers
-        public TextBox TagTextBox;
         public void TagTile_Loaded(object sender, RoutedEventArgs e) {
-            TagColor = new SolidColorBrush(Tag.TagColor.Color);
-            TagCountTextColor = MpHelpers.IsBright(Tag.TagColor.Color) ? Brushes.Black : Brushes.White;
-
+            
             var tagBorder = ((Border)sender);
             tagBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
@@ -323,6 +321,10 @@ namespace MpWpfApp {
             }
         }
         #endregion
+        #region View Event Handlers
+        public TextBox TagTextBox;
+        
+        #endregion
 
         #region Commands
 
@@ -339,7 +341,7 @@ namespace MpWpfApp {
             return TagName != Properties.Settings.Default.HistoryTagTitle;
         }
         private void RenameTag() {
-            MainWindowViewModel.ClearTagSelection();
+            TagTrayViewModel.ClearTagSelection();
             IsSelected = true;
             IsFocused = true;
             IsEditing = true;

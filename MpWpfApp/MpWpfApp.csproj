@@ -179,10 +179,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Attached Properties\MpFocusExtension.cs" />
+    <Compile Include="Attached Properties\MpDocumentRtfExtension.cs" />
     <Compile Include="Attached Properties\MpTextBoxBehavior.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
-    <Compile Include="Controls\MpClipTileDropPreviewAdorner.cs" />
     <Compile Include="Controls\MpClipTileRichTextBox.cs" />
+    <Compile Include="Controls\MpMultiSelectListBox.cs" />
+    <Compile Include="Converters\MpBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\MpSolidColorBrushToBrushConverter.cs" />
     <Compile Include="Models\MpApp.cs" />
     <Compile Include="Models\MpClient.cs" />
@@ -212,9 +214,17 @@
     <Compile Include="Utils\MpWindowLoadingBehavior.cs" />
     <Compile Include="Utils\MpWindowClosingBehavior.cs" />
     <Compile Include="Utils\WinApi.cs" />
-    <Compile Include="ViewModels\MpClipTileTagMenuItemViewModel.cs" />
-    <Compile Include="ViewModels\MpClipTileViewModel.cs" />
-    <Compile Include="ViewModels\MpSortTypeComboBoxItemViewModel.cs" />
+    <Compile Include="ViewModels\Base\MpCollectionViewModelBase.cs" />
+    <Compile Include="ViewModels\Main Window\Clip Sort\MpClipTileSortViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\Clip Tray\Clip Tile\Content\Base\MpClipTileContentViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\Clip Tray\Clip Tile\Title\MpClipTileTitleViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\Clip Tray\MpClipTrayViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\Clip Tray\Clip Tile\MpClipTilePinToTagMenuItemViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\Clip Tray\Clip Tile\MpClipTileViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\Clip Tray\Clip Tile\Content\MpFileListClipTileViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\Clip Tray\Clip Tile\Content\MpImageClipTileViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\Clip Tray\Clip Tile\Content\MpRichTextClipTileViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpSortTypeComboBoxItemViewModel.cs" />
     <Page Include="Styles\ResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -227,13 +237,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewModels\MpCommandViewModel.cs" />
-    <Compile Include="ViewModels\MpFileListItemViewModel.cs" />
-    <Compile Include="ViewModels\MpMainWindowViewModel.cs" />
-    <Compile Include="ViewModels\MpTagTileViewModel.cs" />
-    <Compile Include="ViewModels\MpViewModelBase.cs" />
+    <Compile Include="ViewModels\Main Window\Clip Tray\Clip Tile\Content\MpFileListItemViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpMainWindowViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\App Modes\MpAppModeViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\Tag Tray\Tag Tile\MpTagTileViewModel.cs" />
+    <Compile Include="ViewModels\Base\MpViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ViewModels\Main Window\Search Box\MpSearchBoxViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\System Tray\MpSystemTrayViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\Tag Tray\MpTagTrayViewModel.cs" />
     <Compile Include="Views\MpMainWindow.xaml.cs">
       <DependentUpon>MpMainWindow.xaml</DependentUpon>
     </Compile>
@@ -372,6 +385,7 @@
   <ItemGroup>
     <Resource Include="Resources\title_swirl0004.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

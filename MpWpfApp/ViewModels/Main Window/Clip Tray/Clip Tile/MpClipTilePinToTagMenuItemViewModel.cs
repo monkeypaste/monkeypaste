@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpClipTileTagMenuItemViewModel : MpViewModelBase {
+    public class MpClipTilePinToTagMenuItemViewModel : MpViewModelBase {
         private bool _isTagLinkedToClip = false;
         public bool IsTagLinkedToClip {
             get {
                 return _isTagLinkedToClip;
             }
             set {
-                if(_isTagLinkedToClip != value) {
+                if (_isTagLinkedToClip != value) {
                     _isTagLinkedToClip = value;
                     OnPropertyChanged(nameof(IsTagLinkedToClip));
                 }
@@ -26,7 +26,7 @@ namespace MpWpfApp {
                 return _header;
             }
             set {
-                if(_header != value) {
+                if (_header != value) {
                     _header = value;
                     OnPropertyChanged(nameof(Header));
                 }
@@ -39,7 +39,7 @@ namespace MpWpfApp {
                 return _command;
             }
             set {
-                if(_command != value) {
+                if (_command != value) {
                     _command = value;
                     OnPropertyChanged(nameof(Command));
                 }
@@ -52,14 +52,14 @@ namespace MpWpfApp {
                 return _tagViewModel;
             }
             set {
-                if(_tagViewModel != value) {
+                if (_tagViewModel != value) {
                     _tagViewModel = value;
                     OnPropertyChanged(nameof(TagViewModel));
                 }
             }
         }
 
-        public MpClipTileTagMenuItemViewModel(MpTagTileViewModel tagViewModel,ICommand command,bool isTagLinkedWithClip) {
+        public MpClipTilePinToTagMenuItemViewModel(MpTagTileViewModel tagViewModel, ICommand command, bool isTagLinkedWithClip) {
             TagViewModel = tagViewModel;
             Header = TagViewModel.TagName;
             Command = command;

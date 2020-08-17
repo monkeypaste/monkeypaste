@@ -211,9 +211,24 @@ namespace MpWpfApp {
             }
         }
 
-        public static readonly DependencyProperty SearchTextProperty = 
-            DependencyProperty.Register("SearchText",
-                                        typeof(string),
-                                        typeof(MpClipTileRichTextBox));
+        public static FlowDocument GetDocumentRtf(DependencyObject obj) {
+            return (FlowDocument)obj.GetValue(DocumentRtfProperty);
+        }
+        public static void SetDocumentRtf(DependencyObject obj, FlowDocument value) {
+            obj.SetValue(DocumentRtfProperty, value);
+        }
+
+        public static readonly DependencyProperty DocumentRtfProperty =
+          DependencyProperty.RegisterAttached(
+            "DocumentRtf",
+            typeof(FlowDocument),
+            typeof(MpClipTileRichTextBox),
+            new FrameworkPropertyMetadata {
+                BindsTwoWayByDefault = true,
+                PropertyChangedCallback = (s, e) => {
+                    var richTextBox = (RichTextBox)s;
+                    richTextBox.Document = e.NewValue as FlowDocument;
+                }
+            });
     }
 }

@@ -1,4 +1,4 @@
-﻿<Window x:Class="MpWpfApp.MpMainWindow"
+﻿<Window x:Class="MpWpfApp.MpMainWindow_Old"
         x:Name="MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -24,7 +24,7 @@
         Height="350"
         Width="1680">
     <Window.DataContext>
-        <local:MpMainWindowViewModel />
+        <local:MpMainWindowViewModel_Old />
     </Window.DataContext>
     <Window.Resources>
         <s:Boolean x:Key="True">True</s:Boolean>
@@ -257,16 +257,9 @@
             <RowDefinition Height="{Binding FilterMenuHeight}"/>
             <RowDefinition Height="{Binding ClipTrayHeight}"/>
         </Grid.RowDefinitions>
-        <tb:TaskbarIcon x:Name="SystemTrayTaskbarIcon"
-                        DataContext="{Binding SystemTrayViewModel}"
+        <tb:TaskbarIcon x:Name="TaskbarIcon"
                         IconSource="/MpWpfApp;component/Resources/monkey (2).ico"
-                        ToolTipText="{Binding SystemTrayIconToolTipText}">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Loaded">
-                    <i:CallMethodAction MethodName="SystemTrayTaskbarIcon_Loaded"
-                                        TargetObject="{Binding}" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
+                        ToolTipText="{Binding TaskbarIconToolTipText}">
             <tb:TaskbarIcon.TrayPopup>
                 <Border Background="{StaticResource AppColorDark}"
                         BorderBrush="{StaticResource AppColorLight}"
@@ -327,14 +320,7 @@
             <!-- Sort Combobox -->
             <Grid Grid.Row="0"
                   Grid.Column="0"
-                  DataContext="{Binding ClipTileSortViewModel}"
                   Margin="0">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Loaded">
-                        <i:CallMethodAction MethodName="ClipTileSort_Loaded"
-                                            TargetObject="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="4*" />
@@ -381,19 +367,11 @@
                     
                 </Button>
             </Grid>
-            <!-- Tag Tray -->
             <StackPanel Grid.Row="0"
                         Grid.Column="1"
-                        DataContext="{Binding TagTrayViewModel}"
                         Focusable="False"
                         HorizontalAlignment="Center"
                         Orientation="Horizontal">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Loaded">
-                        <i:CallMethodAction MethodName="TagTray_Loaded"
-                                            TargetObject="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
                 <ListBox x:Name="TagTray"
                          Focusable="False"
                          Background="Transparent"
@@ -403,7 +381,7 @@
                          HorizontalAlignment="Center"
                          SelectionMode="Single"
                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                         ItemsSource="{Binding}">
+                         ItemsSource="{Binding TagTiles}">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="{x:Type ListBoxItem}">
                             <Setter Property="IsSelected"
@@ -448,7 +426,7 @@
                                         <MenuItem Header="Rename"
                                                   Command="{Binding RenameTagCommand}" />
                                         <MenuItem Header="Delete"
-                                                  Command="{Binding TagTrayViewModel.DeleteTagCommand}" />
+                                                  Command="{Binding MainWindowViewModel.DeleteTagCommand}" />
                                     </ContextMenu>
                                 </Border.ContextMenu>
                                 <StackPanel Orientation="Horizontal">
@@ -503,9 +481,7 @@
                 </Button>
             </StackPanel>
             <!-- Search Border -->
-            <local:MpClipBorder x:Name="SearchTextBoxBorder" 
-                                DataContext="{Binding SearchBoxViewModel}"
-                                Grid.Row="0"
+            <local:MpClipBorder Grid.Row="0"
                                 Grid.Column="2"
                                 Margin="0"
                                 BorderBrush="{Binding SearchTextBoxBorderBrush}"
@@ -515,11 +491,6 @@
                                 HorizontalAlignment="Stretch"
                                 Background="White"
                                 CornerRadius="15">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Loaded">
-                        <i:CallMethodAction MethodName="SearchBoxBorder_Loaded" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
                 <StackPanel Margin="5"
                             Orientation="Horizontal">
                     <Button Background="Transparent"
@@ -555,7 +526,6 @@
             <!-- Side bar AppState Buttons -->
             <Grid Grid.Row="0"
                   Grid.Column="0"
-                  DataContext="{Binding AppModeViewModel}"
                   Background="Orange">
                 <Grid.RowDefinitions>
                     <RowDefinition />
@@ -607,9 +577,6 @@
             <local:MpMultiSelectListBox x:Name="ClipTray"
                                         Grid.Row="0"
                                         Grid.Column="1"
-                                        DataContext="{Binding ClipTrayViewModel}"
-                                        ItemsSource="{Binding}"
-                                        Visibility="{Binding ClipListVisibility}"
                                         AllowDrop="True"
                                         VerticalAlignment="Stretch"
                                         Background="Transparent"
@@ -619,10 +586,12 @@
                                         VirtualizingPanel.VirtualizationMode="Standard"
                                         ScrollViewer.CanContentScroll="False"
                                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                        ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                        Visibility="{Binding ClipListVisibility}"
+                                        ItemsSource="{Binding ClipTiles}">
                 <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Loaded">
-                        <i:CallMethodAction MethodName="ClipTray_Loaded"
+                    <i:EventTrigger EventName="PreviewMouseWheel">
+                        <i:CallMethodAction MethodName="ScrollClipTray"
                                             TargetObject="{Binding}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
@@ -679,24 +648,24 @@
                             <local:MpClipBorder.ContextMenu>
                                 <ContextMenu x:Name="ClipTile_ContextMenu">
                                     <MenuItem Header="Bring To Front"
-                                              Command="{Binding CLipTrayViewModel.BringSelectedClipTilesToFrontCommand}" />
+                                              Command="{Binding MainWindowViewModel.BringSelectedClipTilesToFrontCommand}" />
                                     <MenuItem Header="Export To">
                                         <MenuItem Header="File(s)..."
-                                                  Command="{Binding ClipTrayViewModel.ExportSelectedClipTilesCommand}"
+                                                  Command="{Binding MainWindowViewModel.ExportSelectedClipTilesCommand}"
                                                   CommandParameter="{StaticResource False}" />
                                         <MenuItem Header="CSV"
-                                                  Command="{Binding ClipTrayViewModel.ExportSelectedClipTilesCommand}"
+                                                  Command="{Binding MainWindowViewModel.ExportSelectedClipTilesCommand}"
                                                   CommandParameter="{StaticResource True}" />
                                     </MenuItem>
                                     <MenuItem Header="Rename"
-                                              Command="{Binding ClipTrayViewModel.RenameClipCommand}" />
+                                              Command="{Binding MainWindowViewModel.RenameClipCommand}" />
                                     <MenuItem Header="Delete"
-                                              Command="{Binding ClipTrayViewModel.DeleteSelectedClipsCommand}" />
+                                              Command="{Binding MainWindowViewModel.DeleteSelectedClipsCommand}" />
                                     <MenuItem Header="Say"
                                               Command="{Binding SpeakClipCommand}" />
                                     <MenuItem Header="Merge"
-                                              Command="{Binding ClipTrayViewModel.MergeClipsCommand}"
-                                              Visibility="{Binding ClipTrayViewModel.MergeClipsCommandVisibility}" />
+                                              Command="{Binding MainWindowViewModel.MergeClipsCommand}"
+                                              Visibility="{Binding MainWindowViewModel.MergeClipsCommandVisibility}" />
                                     <MenuItem Header="Search Web">
                                         <MenuItem Header="Google">
                                             <i:Interaction.Triggers>
