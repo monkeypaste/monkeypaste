@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Drawing.Imaging;
-using System.Text;
 
 namespace MpWpfApp {
 
@@ -13,10 +12,10 @@ namespace MpWpfApp {
             if (MpRichTextToImageConverter.rtfDrawer == null) {
                 MpRichTextToImageConverter.rtfDrawer = new RichTextBoxDrawer();
             }
-            if(MpHelpers.IsStringRichText(rtf)) {
+            if (MpHelpers.IsStringRichText(rtf)) {
                 MpRichTextToImageConverter.rtfDrawer.Rtf = rtf;
             } else {
-                MpRichTextToImageConverter.rtfDrawer.Rtf = MpHelpers.PlainTextToRtf(rtf);
+                MpRichTextToImageConverter.rtfDrawer.Rtf = MpHelpers.ConvertPlainTextToRichText(rtf);
             }
             MpRichTextToImageConverter.rtfDrawer.Draw(graphics, layoutArea, xFactor);
         }
@@ -24,9 +23,8 @@ namespace MpWpfApp {
         private class RichTextBoxDrawer : RichTextBox {
             //Code converted from code found here: http://support.microsoft.com/kb/812425/en-us
 
-            //Convert the unit used by the .NET framework (1/100 inch) 
+            //Convert the unit used by the .NET framework (1/100 inch)
             //and the unit used by Win32 API calls (twips 1/1440 inch)
-            private const double anInch = 14.4;
 
             public void LineSpace() {
                 SafeNativeMethods.PARAFORMAT2 fmt = new SafeNativeMethods.PARAFORMAT2();
@@ -67,12 +65,12 @@ namespace MpWpfApp {
             }
 
             public void Draw(Graphics graphics, RectangleF layoutArea, float xFactor) {
-                System.Diagnostics.Debug.WriteLine("LayoutArea " + layoutArea);
+                //System.Diagnostics.Debug.WriteLine("LayoutArea " + layoutArea);
 
                 SizeF metaSize = layoutArea.Size;
                 DPToHIMETRIC(graphics, ref metaSize);
 
-                System.Diagnostics.Debug.WriteLine("MetaSize " + metaSize);
+                //System.Diagnostics.Debug.WriteLine("MetaSize " + metaSize);
 
                 IntPtr hdc = graphics.GetHdc();
 
@@ -91,10 +89,10 @@ namespace MpWpfApp {
                 rectLayoutArea.Right = (int)((1440 * metaSize.Width + 2540 / 2) / 2540);
                 rectLayoutArea.Bottom = (int)((1440 * metaSize.Height + 2540 / 2) / 2540);
 
-                System.Diagnostics.Debug.WriteLine(String.Format("RectLayoutArea ({0},{1})", rectLayoutArea.Right, rectLayoutArea.Bottom));
+                //System.Diagnostics.Debug.WriteLine(String.Format("RectLayoutArea ({0},{1})", rectLayoutArea.Right, rectLayoutArea.Bottom));
 
                 SafeNativeMethods.FORMATRANGE fmtRange;
-                fmtRange.chrg.cpMax = -1;            //Indicate character from to character to 
+                fmtRange.chrg.cpMax = -1;            //Indicate character from to character to
                 fmtRange.chrg.cpMin = 0;
                 fmtRange.hdc = hDCEMF;                  //Use the same DC for measuring and rendering
                 fmtRange.hdcTarget = hDCEMF;         //Point at printer hDC
@@ -133,24 +131,22 @@ namespace MpWpfApp {
                 float fHorzFudgeFactor = (nHorzRes / fHorzSizeInches) / nLogPixelsX;
                 float fVertFudgeFactor = (nVertRes / fVertSizeInches) / nLogPixelsY;
 
-                System.Diagnostics.Debug.WriteLine("Fudge Factor " + fHorzFudgeFactor.ToString() + " " + fVertFudgeFactor.ToString() + " XFactor " + xFactor.ToString());
+                //System.Diagnostics.Debug.WriteLine("Fudge Factor " + fHorzFudgeFactor.ToString() + " " + fVertFudgeFactor.ToString() + " XFactor " + xFactor.ToString());
 
-                Pen RedPen = new Pen(Color.Red);
-                graphics.DrawRectangle(RedPen, layoutArea.X * xFactor, layoutArea.Y * xFactor, layoutArea.Width * xFactor, layoutArea.Height * xFactor);
+                Pen redPen = new Pen(Color.Red);
+                graphics.DrawRectangle(redPen, layoutArea.X * xFactor, layoutArea.Y * xFactor, layoutArea.Width * xFactor, layoutArea.Height * xFactor);
 
-                float Left = layoutArea.Left;
-                float Top = layoutArea.Top;
+                float left = layoutArea.Left;
+                float top = layoutArea.Top;
                 //layoutArea.X = layoutArea.Y = 0;
-                layoutArea.Offset(-Left, -Top);
-                layoutArea.Offset(Left / fHorzFudgeFactor, Top / fVertFudgeFactor);
+                layoutArea.Offset(-left, -top);
+                layoutArea.Offset(left / fHorzFudgeFactor, top / fVertFudgeFactor);
 
                 System.Drawing.Drawing2D.GraphicsState state = graphics.Save();
                 graphics.ScaleTransform(fHorzFudgeFactor * xFactor, fVertFudgeFactor * xFactor);
                 graphics.DrawImage(metafile, layoutArea);
                 graphics.Restore(state);
-
-
-                System.Diagnostics.Debug.WriteLine("Layout Aread : " + layoutArea);
+                //System.Diagnostics.Debug.WriteLine("Layout Aread : " + layoutArea);
             }
 
             #region SafeNativeMethods
@@ -351,7 +347,7 @@ namespace MpWpfApp {
                     /// &lt;summary&gt;
                     /// Preferred blt alignment
                     /// &lt;/summary&gt;
-                    BLTALIGNMENT = 119
+                    BLTALIGNMENT = 119,
                 }
 
                 public struct PARAFORMAT2 {
@@ -407,7 +403,6 @@ namespace MpWpfApp {
                     public short wBorderWidth;
 
                     public short wBorders;
-
                 }
 
                 public const int EM_FORMATRANGE = WM_USER + 57;
@@ -421,7 +416,6 @@ namespace MpWpfApp {
                 public const int WM_USER = 0x0400;
 
                 public const int WS_EX_TRANSPARENT = 0x20;
-
             }
             #endregion
         }

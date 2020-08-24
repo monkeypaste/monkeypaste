@@ -1,10 +1,5 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -78,21 +73,22 @@ namespace MpWpfApp {
 
         #region Constructor/Initializers
         public MpClipTileSortViewModel(MpMainWindowViewModel parent) {
-
             PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
+                switch (e.PropertyName) {
                     case nameof(AscSortOrderButtonImageVisibility):
                     case nameof(DescSortOrderButtonImageVisibility):
                     case nameof(SelectedSortType):
-                        //SortClipTiles();
+                        MainWindowViewModel.ClipTrayViewModel.SortAndFilterClipTiles();
                         break;
                 }
             };
+            MainWindowViewModel = parent;
         }
         public void ClipTileSort_Loaded(object sender, RoutedEventArgs e) {
             SelectedSortType = SortTypes[0];
         }
         #endregion
+
         #region Commands
         private RelayCommand _toggleSortOrderCommand;
         public ICommand ToggleSortOrderCommand {

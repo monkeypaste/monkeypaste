@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace MpWpfApp {
@@ -25,11 +20,15 @@ namespace MpWpfApp {
 
         private static void OnSelectAllTextOnFocusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             var textBox = d as TextBox;
-            if(textBox == null) return;
+            if (textBox == null) {
+                return;
+            }
 
-            if(e.NewValue is bool == false) return;
+            if (e.NewValue is bool == false) {
+                return;
+            }
 
-            if((bool)e.NewValue) {
+            if ((bool)e.NewValue) {
                 textBox.GotFocus += SelectAll;
                 textBox.PreviewMouseDown += IgnoreMouseButton;
             } else {
@@ -40,13 +39,17 @@ namespace MpWpfApp {
 
         private static void SelectAll(object sender, RoutedEventArgs e) {
             var textBox = e.OriginalSource as TextBox;
-            if(textBox == null) return;
+            if (textBox == null) {
+                return;
+            }
             textBox.SelectAll();
         }
 
         private static void IgnoreMouseButton(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             var textBox = sender as TextBox;
-            if(textBox == null || (!textBox.IsReadOnly && textBox.IsKeyboardFocusWithin)) return;
+            if (textBox == null || (!textBox.IsReadOnly && textBox.IsKeyboardFocusWithin)) {
+                return;
+            }
 
             e.Handled = true;
             textBox.Focus();

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -13,8 +8,9 @@ namespace MpWpfApp {
         #region View Models
         public MpMainWindowViewModel MainWindowViewModel { get; set; }
         #endregion
+
         #region Properties
-        private string _searchText;
+        private string _searchText = string.Empty;
         public string SearchText {
             get {
                 return _searchText;
@@ -23,19 +19,6 @@ namespace MpWpfApp {
                 if (_searchText != value) {
                     _searchText = value;
                     OnPropertyChanged(nameof(SearchText));
-                }
-            }
-        }
-
-        private bool _isSearchTextBoxFocused = false;
-        public bool IsSearchTextBoxFocused {
-            get {
-                return _isSearchTextBoxFocused;
-            }
-            set {
-                if (_isSearchTextBoxFocused != value) {
-                    _isSearchTextBoxFocused = value;
-                    OnPropertyChanged(nameof(IsSearchTextBoxFocused));
                 }
             }
         }
@@ -81,24 +64,20 @@ namespace MpWpfApp {
         #endregion
 
         #region Constructor/Initializers
+
         public MpSearchBoxViewModel(MpMainWindowViewModel parent) {
             MainWindowViewModel = parent;
         }
-        public void SearchBoxBorder_Loaded(object sender,RoutedEventArgs e) {
+        public void SearchBoxBorder_Loaded(object sender, RoutedEventArgs e) {
             var searchBox = (TextBox)((MpClipBorder)sender).FindName("SearchTextBox");
-            searchBox.KeyDown += (s, e3) => {
-                if (e3.Key == Key.Return) {
-                    MainWindowViewModel.ClipTrayViewModel.PerformSearch();
-                }
-            };
             searchBox.GotFocus += (s, e4) => {
                 //make text
                 if (SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
-                    SearchText = "";
+                    SearchText = string.Empty;
                 }
                 SearchTextBoxFontStyle = FontStyles.Normal;
                 SearchTextBoxTextBrush = Brushes.Black;
-                IsSearchTextBoxFocused = true;
+                IsFocused = true;
             };
             searchBox.LostFocus += (s, e5) => {
                 //var searchTextBox = (TextBox)e.Source;
@@ -107,8 +86,9 @@ namespace MpWpfApp {
                     SearchTextBoxFontStyle = FontStyles.Italic;
                     SearchTextBoxTextBrush = Brushes.DimGray;
                 }
-                IsSearchTextBoxFocused = false;
+                IsFocused = false;
             };
+            searchBox.PreviewKeyUp += MainWindowViewModel.MainWindow_PreviewKeyDown;
             SearchText = Properties.Settings.Default.SearchPlaceHolderText;
 
         }

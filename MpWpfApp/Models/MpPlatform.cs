@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public enum MpPlatformType {
@@ -27,7 +23,7 @@ namespace MpWpfApp {
         public MpDeviceType DeviceType { get; set; }
         public string Version { get; set; }
 
-        public MpPlatform(int platformId,MpPlatformType platformType,MpDeviceType deviceType,string version) {
+        public MpPlatform(int platformId, MpPlatformType platformType, MpDeviceType deviceType, string version) {
             PlatformId = platformId;
             PlatformType = platformType;
             DeviceType = deviceType;
@@ -35,7 +31,7 @@ namespace MpWpfApp {
         }
         public MpPlatform(int platformId) {
             DataTable dt = MpDb.Instance.Execute("select * from MpPlatform where pk_MpPlatformId=" + platformId);
-            if(dt != null && dt.Rows.Count > 0) {
+            if (dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
         }
@@ -50,22 +46,20 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase() {
-            if(Version == null || Version == string.Empty || MpDb.Instance.NoDb) {
+            if (Version == null || Version == string.Empty || MpDb.Instance.NoDb) {
                 Console.WriteLine("MpPlatform Error, cannot create nameless tag");
                 return;
             }
-            if(PlatformId == 0) {
+            if (PlatformId == 0) {
                 DataTable dt = MpDb.Instance.Execute("select * from MpPlatform where pk_MpPlatformId=" + PlatformId);
                 //if tag already exists just populate this w/ its data
-                if(dt != null && dt.Rows.Count > 0) {
+                if (dt != null && dt.Rows.Count > 0) {
                     PlatformId = Convert.ToInt32(dt.Rows[0]["pk_MpPlatformId"].ToString());
-                }
-                else {
+                } else {
                     MpDb.Instance.ExecuteNonQuery("insert into MpPlatform(fk_MpPlatformTypeId,fk_MpDeviceTypeId,Version) values(" + (int)PlatformType + "," + (int)DeviceType + ",'" + Version + "')");
-                    PlatformId = MpDb.Instance.GetLastRowId("MpPlatform","pk_MpPlatformId");
+                    PlatformId = MpDb.Instance.GetLastRowId("MpPlatform", "pk_MpPlatformId");
                 }
-            }
-            else {
+            } else {
                 Console.WriteLine("MpPlatform warning, attempting to update a platform but not implemented");
             }
         }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace MpWpfApp {
     public class MpSystemTrayViewModel : MpViewModelBase {
@@ -26,10 +21,11 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Constructors/Initializers
+        #region Public Methods
         public MpSystemTrayViewModel(MpMainWindowViewModel parent) {
             MainWindowViewModel = parent;
         }
+
         public void SystemTrayTaskbarIcon_Loaded(object sender, RoutedEventArgs e) {
         }
         #endregion

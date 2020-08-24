@@ -1,10 +1,6 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -12,7 +8,7 @@ namespace MpWpfApp {
     public class MpTagTrayViewModel : ObservableCollection<MpTagTileViewModel> {
         #region View Models
         public MpMainWindowViewModel MainWindowViewModel { get; set; }
-        
+
         public MpTagTileViewModel SelectedTagTile {
             get {
                 return this.Where(tt => tt.IsSelected).ToList()[0];
@@ -21,14 +17,28 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
-        public bool IsTagTextBoxFocused {
+        public bool IsEditingTagName {
             get {
-                return SelectedTagTile.IsTextBoxFocused || SelectedTagTile.IsEditing;
+                return SelectedTagTile.IsFocused || SelectedTagTile.IsEditing;
             }
         }
-        #endregion
+        #endregion--
 
         #region Public Methods
+
+        public MpTagTrayViewModel(MpMainWindowViewModel parent) {
+            MainWindowViewModel = parent;
+            //create tiles for all the tags
+            foreach (MpTag t in MpTag.GetAllTags()) {
+                AddTagTile(t, false);
+            }
+        }
+
+        public void TagTray_Loaded(object sender, RoutedEventArgs e) {
+            //select history tag by default
+            GetHistoryTagTileViewModel().IsSelected = true;
+        }
+
         public void AddTagTile(MpTag t, bool isNew = false) {
             var newTagTile = new MpTagTileViewModel(t, this, isNew);
             this.Add(newTagTile);
@@ -36,7 +46,7 @@ namespace MpWpfApp {
             newTagTile.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case "IsSelected":
-                        var tagChanged = ((MpTagTileViewModel)s);
+                        var tagChanged = (MpTagTileViewModel)s;
                         //ensure at least history is selected
                         if (tagChanged.IsSelected == false) {
                             //find all selected tag tiles
@@ -68,13 +78,13 @@ namespace MpWpfApp {
                         break;
                 }
             };
-            if (!isNew) {
-                foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel) {
-                    if (newTagTile.Tag.IsLinkedWithCopyItem(ctvm.CopyItem)) {
-                        newTagTile.TagClipCount++;
-                    }
-                }
-            }
+            //if (!isNew) {
+            //    foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel) {
+            //        if (newTagTile.Tag.IsLinkedWithCopyItem(ctvm.CopyItem)) {
+            //            newTagTile.TagClipCount++;
+            //        }
+            //    }
+            //}
         }
 
         private void RemoveTagTile(MpTagTileViewModel tagTileToRemove) {
@@ -86,6 +96,7 @@ namespace MpWpfApp {
             this.Remove(tagTileToRemove);
             tagTileToRemove.Tag.DeleteFromDatabase();
         }
+
         public void ClearTagSelection() {
             foreach (var tagTile in this) {
                 tagTile.IsSelected = false;
@@ -99,25 +110,10 @@ namespace MpWpfApp {
             GetHistoryTagTileViewModel().IsFocused = true;
         }
 
-
         public MpTagTileViewModel GetHistoryTagTileViewModel() {
             return this.Where(tt => tt.Tag.TagName == Properties.Settings.Default.HistoryTagTitle).ToList()[0];
         }
-        #endregion
 
-        #region Constructor/Intializers
-
-        public MpTagTrayViewModel(MpMainWindowViewModel parent) {
-            MainWindowViewModel = parent;
-        }
-        public void TagTray_Loaded(object sender, RoutedEventArgs e) {
-            //create tiles for all the tags
-            foreach (MpTag t in MpTag.GetAllTags()) {
-                AddTagTile(t, false);
-            }
-            //select history tag by default
-            GetHistoryTagTileViewModel().IsSelected = true;
-        }
         #endregion
 
         #region Commands
@@ -152,7 +148,6 @@ namespace MpWpfApp {
             MpTag newTag = new MpTag("Untitled", MpHelpers.GetRandomColor());
             newTag.WriteToDatabase();
             AddTagTile(newTag, true);
-
         }
         #endregion
     }

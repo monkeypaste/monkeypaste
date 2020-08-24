@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace MpWpfApp {
     public static class MpFocusExtension {
@@ -17,19 +14,23 @@ namespace MpWpfApp {
 
         public static readonly DependencyProperty IsFocusedProperty =
             DependencyProperty.RegisterAttached(
-                "IsFocused", 
-                typeof(bool), 
+                "IsFocused",
+                typeof(bool),
                 typeof(MpFocusExtension),
                 new UIPropertyMetadata(false, OnIsFocusedPropertyChanged));
 
         private static void OnIsFocusedPropertyChanged(
-            DependencyObject d, 
+            DependencyObject d,
             DependencyPropertyChangedEventArgs e) {
             var uie = (UIElement)d;
-            if((bool)e.NewValue) {
-                uie.Focus(); // Don't care about false values.
-                System.Windows.Input.Keyboard.Focus(uie);
-            }
+            if ((bool)e.NewValue && uie.Dispatcher != null) {
+                uie.Dispatcher.BeginInvoke(
+                    DispatcherPriority.Normal, 
+                    (Action)(() => {
+                        uie.Focus();
+                        System.Windows.Input.Keyboard.Focus(uie);
+                    })); // invoke behaves nicer, if e.g. you have some additional handler attached to 'GotFocus' of UIE.   uie.SetValue(IsFocusedProperty, false); // reset bound value if possible, to allow setting again ...
+             }
         }
     }
 }

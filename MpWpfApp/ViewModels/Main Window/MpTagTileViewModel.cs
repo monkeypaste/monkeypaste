@@ -1,6 +1,4 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
-using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,7 +8,7 @@ namespace MpWpfApp {
     public class MpTagTileViewModel : MpViewModelBase {
         #region Private Variables
 
-        private bool _isNew;
+        private bool _isNew = false;
 
         #endregion
 
@@ -36,21 +34,10 @@ namespace MpWpfApp {
                 return _isSelected;
             }
             set {
-                if(_isSelected != value) {
+                if (_isSelected != value) {
                     _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));                    
+                    OnPropertyChanged(nameof(IsSelected));
                 }
-            }
-        }
-
-        private bool _isTextBoxFocused = false;
-        public bool IsTextBoxFocused {
-            get {
-                return _isTextBoxFocused;
-            }
-            set {
-                _isTextBoxFocused = value;
-                OnPropertyChanged(nameof(IsTextBoxFocused));
             }
         }
 
@@ -60,7 +47,7 @@ namespace MpWpfApp {
                 return _isEditing;
             }
             set {
-                if(_isEditing != value) {                    
+                if (_isEditing != value) {
                     _isEditing = value;
                     OnPropertyChanged(nameof(IsEditing));
                 }
@@ -73,7 +60,7 @@ namespace MpWpfApp {
                 return _isHovering;
             }
             set {
-                if(_isHovering != value) {
+                if (_isHovering != value) {
                     _isHovering = value;
                     OnPropertyChanged(nameof(IsHovering));
                 }
@@ -86,7 +73,7 @@ namespace MpWpfApp {
                 return _tagBorderBackgroundBrush;
             }
             set {
-                if(_tagBorderBackgroundBrush != value) {
+                if (_tagBorderBackgroundBrush != value) {
                     _tagBorderBackgroundBrush = value;
                     OnPropertyChanged(nameof(TagBorderBackgroundBrush));
                 }
@@ -99,7 +86,7 @@ namespace MpWpfApp {
                 return _tagTextColor;
             }
             set {
-                if(_tagTextColor != value) {
+                if (_tagTextColor != value) {
                     _tagTextColor = value;
                     OnPropertyChanged(nameof(TagTextColor));
                 }
@@ -135,12 +122,10 @@ namespace MpWpfApp {
         private string _tagName;
         public string TagName {
             get {
-                //return Tag.TagName;
                 return _tagName;
             }
             set {
-                //Tag.TagName = value;
-                if(_tagName != value) {
+                if (_tagName != value) {
                     _tagName = value;
                     OnPropertyChanged(nameof(TagName));
                 }
@@ -166,7 +151,7 @@ namespace MpWpfApp {
                 return _textBoxVisibility;
             }
             set {
-                if(_textBoxVisibility != value) {
+                if (_textBoxVisibility != value) {
                     _textBoxVisibility = value;
                     OnPropertyChanged(nameof(TextBoxVisibility));
                 }
@@ -179,7 +164,7 @@ namespace MpWpfApp {
                 return _textBlockVisibility;
             }
             set {
-                if(_textBlockVisibility != value) {
+                if (_textBlockVisibility != value) {
                     _textBlockVisibility = value;
                     OnPropertyChanged(nameof(TextBlockVisibility));
                 }
@@ -192,7 +177,7 @@ namespace MpWpfApp {
                 return _tagClipCount;
             }
             set {
-                if(_tagClipCount != value) {
+                if (_tagClipCount != value) {
                     _tagClipCount = value;
                     OnPropertyChanged(nameof(TagClipCount));
                 }
@@ -201,8 +186,7 @@ namespace MpWpfApp {
         public double TagHeight {
             get {
                 //assumes Tag Margin is 5
-                return MpMeasurements.Instance.FilterMenuHeight - (5*2);
-
+                return MpMeasurements.Instance.FilterMenuHeight - (5 * 2);
             }
         }
 
@@ -214,6 +198,13 @@ namespace MpWpfApp {
 
         public bool IsHistory() {
             return Tag.TagId == 1;
+        }
+        #endregion
+
+        #region Public Methods
+        public void AddClip(MpClipTileViewModel ctvm) {
+            Tag.LinkWithCopyItem(ctvm.CopyItem);
+            TagClipCount++;
         }
         #endregion
 
@@ -237,7 +228,7 @@ namespace MpWpfApp {
         #region Constructor/Initializers
         public MpTagTileViewModel(MpTag tag, MpTagTrayViewModel parent, bool isNew) {
             Tag = tag;
-            TagTrayViewModel = parent; 
+            TagTrayViewModel = parent;
             TagColor = new SolidColorBrush(Tag.TagColor.Color);
             TagCountTextColor = MpHelpers.IsBright(Tag.TagColor.Color) ? Brushes.Black : Brushes.White;
             TagName = Tag.TagName;
@@ -250,8 +241,8 @@ namespace MpWpfApp {
                             //show textbox and select all text
                             TextBoxVisibility = Visibility.Visible;
                             TextBlockVisibility = Visibility.Collapsed;
-                            IsTextBoxFocused = true;
-                            TagTextBox?.SelectAll();
+                            IsFocused = true;
+                            //TagTextBox?.SelectAll();
                         } else {
                             //tag names cannot be blank so don't allow the textblock to reappear and change name back to 'untitled'
                             if (TagName.Trim() == string.Empty) {
@@ -263,15 +254,15 @@ namespace MpWpfApp {
                             }
                             TextBoxVisibility = Visibility.Collapsed;
                             TextBlockVisibility = Visibility.Visible;
+                            Tag.TagName = TagName;
                             Tag.WriteToDatabase();
-                            IsTextBoxFocused = false;
+                            IsFocused = false;
                         }
                         break;
                     case nameof(IsSelected):
                         if (IsSelected) {
                             TagTextColor = Brushes.White;
                             TagBorderBackgroundBrush = Brushes.DimGray;
-
                         } else {
                             TagBorderBackgroundBrush = Brushes.Transparent;
                             TagTextColor = Brushes.LightGray;
@@ -282,7 +273,6 @@ namespace MpWpfApp {
                             if (IsHovering) {
                                 TagBorderBackgroundBrush = Brushes.LightGray;
                                 TagTextColor = Brushes.Black;
-
                             } else {
                                 TagBorderBackgroundBrush = Brushes.Transparent;
                                 TagTextColor = Brushes.White;
@@ -294,8 +284,7 @@ namespace MpWpfApp {
         }
 
         public void TagTile_Loaded(object sender, RoutedEventArgs e) {
-            
-            var tagBorder = ((Border)sender);
+            var tagBorder = (Border)sender;
             tagBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
             };
@@ -303,27 +292,26 @@ namespace MpWpfApp {
                 IsHovering = false;
             };
 
-            TagTextBox = (TextBox)tagBorder.FindName("TagTextBox");
+            var tagTextBox = (TextBox)tagBorder.FindName("TagTextBox");
             //this is called 
-            TagTextBox.GotFocus += (s, e1) => {
+            tagTextBox.GotFocus += (s, e1) => {
                 //TagTextBox.SelectAll();
             };
-            TagTextBox.LostFocus += (s, e2) => {
+            tagTextBox.LostFocus += (s, e2) => {
                 IsEditing = false;
             };
-            TagTextBox.PreviewKeyDown += (s, e3) => {
-                if (e3.Key == Key.Enter && IsEditing) {
-                    IsEditing = false;
-                }
-            };
+            tagTextBox.PreviewKeyDown += TagTrayViewModel.MainWindowViewModel.MainWindow_PreviewKeyDown;
+
             if (_isNew) {
                 RenameTagCommand.Execute(null);
+            } else {
+                foreach(var ctvm in TagTrayViewModel.MainWindowViewModel.ClipTrayViewModel) {
+                    if(Tag.IsLinkedWithCopyItem(ctvm.CopyItem)) {
+                        TagClipCount++;
+                    }
+                }
             }
         }
-        #endregion
-        #region View Event Handlers
-        public TextBox TagTextBox;
-        
         #endregion
 
         #region Commands
@@ -331,8 +319,8 @@ namespace MpWpfApp {
         private RelayCommand _renameTagCommand;
         public ICommand RenameTagCommand {
             get {
-                if(_renameTagCommand == null) {
-                    _renameTagCommand = new RelayCommand(RenameTag,CanRenameTag);
+                if (_renameTagCommand == null) {
+                    _renameTagCommand = new RelayCommand(RenameTag, CanRenameTag);
                 }
                 return _renameTagCommand;
             }

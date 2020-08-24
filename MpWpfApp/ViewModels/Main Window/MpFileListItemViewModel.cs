@@ -1,10 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     public class MpFileListItemViewModel : MpViewModelBase {
@@ -14,7 +8,7 @@ namespace MpWpfApp {
                 return _itemPath;
             }
             set {
-                if(_itemPath != value) {
+                if (_itemPath != value) {
                     _itemPath = value;
                     OnPropertyChanged(nameof(ItemPath));
                 }
@@ -27,7 +21,7 @@ namespace MpWpfApp {
                 return _icon;
             }
             set {
-                if(_icon != value) {
+                if (_icon != value) {
                     _icon = value;
                     OnPropertyChanged(nameof(Icon));
                 }
@@ -36,7 +30,7 @@ namespace MpWpfApp {
 
         public double ItemBitSize {
             get {
-                return (double)MpHelpers.FileListSize(new string[]{ ItemPath});
+                return (double)MpHelpers.FileListSize(new string[] { ItemPath });
             }
         }
 

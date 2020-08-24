@@ -18,6 +18,21 @@
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -182,10 +197,12 @@
     <Compile Include="Attached Properties\MpDocumentRtfExtension.cs" />
     <Compile Include="Attached Properties\MpTextBoxBehavior.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
-    <Compile Include="Controls\MpClipTileRichTextBox.cs" />
+    <Compile Include="Controls\MpTokenizedRichTextBox.cs" />
     <Compile Include="Controls\MpMultiSelectListBox.cs" />
+    <Compile Include="Converters\MpIntToStringConverter.cs" />
     <Compile Include="Converters\MpBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\MpSolidColorBrushToBrushConverter.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Models\MpApp.cs" />
     <Compile Include="Models\MpClient.cs" />
     <Compile Include="Models\MpColor.cs" />
@@ -201,11 +218,11 @@
     <Compile Include="Models\MpSubTextToken.cs" />
     <Compile Include="Models\MpTag.cs" />
     <Compile Include="Models\MpUser.cs" />
+    <Compile Include="Utils\MpBindingProxy.cs" />
     <Compile Include="Utils\MpExtensions.cs" />
     <Compile Include="Utils\MpExtraLargeIconLoader.cs" />
     <Compile Include="Utils\MpClipboardMonitor.cs" />
     <Compile Include="Utils\MpHelpers.cs" />
-    <Compile Include="Utils\MpHotKey2.cs" />
     <Compile Include="Utils\MpLastWindowWatcher.cs" />
     <Compile Include="Utils\MpMeasurements.cs" />
     <Compile Include="Utils\MpRichTextToImageConverter.cs" />
@@ -215,15 +232,14 @@
     <Compile Include="Utils\MpWindowClosingBehavior.cs" />
     <Compile Include="Utils\WinApi.cs" />
     <Compile Include="ViewModels\Base\MpCollectionViewModelBase.cs" />
-    <Compile Include="ViewModels\Main Window\Clip Sort\MpClipTileSortViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\Clip Tray\Clip Tile\Content\Base\MpClipTileContentViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\Clip Tray\Clip Tile\Title\MpClipTileTitleViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\Clip Tray\MpClipTrayViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\Clip Tray\Clip Tile\MpClipTilePinToTagMenuItemViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\Clip Tray\Clip Tile\MpClipTileViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\Clip Tray\Clip Tile\Content\MpFileListClipTileViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\Clip Tray\Clip Tile\Content\MpImageClipTileViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\Clip Tray\Clip Tile\Content\MpRichTextClipTileViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpClipTileContextMenuViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpClipTileSortViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpClipTileContentViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpFileListItemViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpClipTileTitleViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpClipTrayViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpClipTileContextMenuItemViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpClipTileViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSortTypeComboBoxItemViewModel.cs" />
     <Page Include="Styles\ResourceDictionary.xaml">
       <SubType>Designer</SubType>
@@ -237,16 +253,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewModels\Main Window\Clip Tray\Clip Tile\Content\MpFileListItemViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpMainWindowViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\App Modes\MpAppModeViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\Tag Tray\Tag Tile\MpTagTileViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpAppModeViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpTagTileViewModel.cs" />
     <Compile Include="ViewModels\Base\MpViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ViewModels\Main Window\Search Box\MpSearchBoxViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\System Tray\MpSystemTrayViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\Tag Tray\MpTagTrayViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpSearchBoxViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpSystemTrayViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpTagTrayViewModel.cs" />
     <Compile Include="Views\MpMainWindow.xaml.cs">
       <DependentUpon>MpMainWindow.xaml</DependentUpon>
     </Compile>
@@ -267,6 +282,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -385,7 +403,22 @@
   <ItemGroup>
     <Resource Include="Resources\title_swirl0004.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

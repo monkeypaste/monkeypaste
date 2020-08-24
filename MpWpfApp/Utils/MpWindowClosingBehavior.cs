@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -26,8 +22,8 @@ namespace MpWpfApp {
           DependencyObject target, DependencyPropertyChangedEventArgs e) {
             Window window = target as Window;
 
-            if(window != null) {
-                if(e.NewValue != null) {
+            if (window != null) {
+                if (e.NewValue != null) {
                     window.Closed += Window_Closed;
                 } else {
                     window.Closed -= Window_Closed;
@@ -45,15 +41,17 @@ namespace MpWpfApp {
 
         public static readonly DependencyProperty ClosingProperty
             = DependencyProperty.RegisterAttached(
-            "Closing", typeof(ICommand), typeof(MpWindowClosingBehavior),
+            "Closing", 
+            typeof(ICommand), 
+            typeof(MpWindowClosingBehavior),
             new UIPropertyMetadata(new PropertyChangedCallback(ClosingChanged)));
 
         private static void ClosingChanged(
           DependencyObject target, DependencyPropertyChangedEventArgs e) {
             Window window = target as Window;
 
-            if(window != null) {
-                if(e.NewValue != null) {
+            if (window != null) {
+                if (e.NewValue != null) {
                     window.Closing += Window_Closing;
                 } else {
                     window.Closing -= Window_Closing;
@@ -73,21 +71,21 @@ namespace MpWpfApp {
             = DependencyProperty.RegisterAttached(
             "CancelClosing", typeof(ICommand), typeof(MpWindowClosingBehavior));
 
-        static void Window_Closed(object sender, EventArgs e) {
+        public static void Window_Closed(object sender, EventArgs e) {
             ICommand closed = GetClosed(sender as Window);
-            if(closed != null) {
+            if (closed != null) {
                 closed.Execute(null);
             }
         }
 
-        static void Window_Closing(object sender, CancelEventArgs e) {
+        public static void Window_Closing(object sender, CancelEventArgs e) {
             ICommand closing = GetClosing(sender as Window);
-            if(closing != null) {
-                if(closing.CanExecute(null)) {
+            if (closing != null) {
+                if (closing.CanExecute(null)) {
                     closing.Execute(null);
                 } else {
                     ICommand cancelClosing = GetCancelClosing(sender as Window);
-                    if(cancelClosing != null) {
+                    if (cancelClosing != null) {
                         cancelClosing.Execute(null);
                     }
 

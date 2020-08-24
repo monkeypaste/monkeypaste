@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpSetting:MpDbObject {
+    public class MpSetting : MpDbObject {
         public static int TotalSettingCount { get; set; } = 0;
 
         public int SettingId { get; set; }
         public string SettingName { get; set; }
         public string SettingValue { get; set; }
 
-        public MpSetting(string settingName,string settingValue) {
+        public MpSetting(string settingName, string settingValue) {
             SettingName = settingName;
             SettingValue = settingValue;
         }
@@ -31,29 +27,27 @@ namespace MpWpfApp {
         public override void WriteToDatabase() {
             bool isNew = false;
 
-            if(this.SettingId == 0) {
-                if(MpDb.Instance.NoDb) {
+            if (this.SettingId == 0) {
+                if (MpDb.Instance.NoDb) {
                     this.SettingId = ++TotalSettingCount;
                     MapDataToColumns();
                     return;
                 }
                 DataTable dt = MpDb.Instance.Execute("select * from MpSetting where SettingName='" + this.SettingName + "'");
-                if(dt.Rows.Count > 0) {
+                if (dt.Rows.Count > 0) {
                     this.SettingId = Convert.ToInt32(dt.Rows[0]["pk_MpSettingId"]);
                     this.SettingName = dt.Rows[0]["SettingName"].ToString();
                     this.SettingValue = dt.Rows[0]["SettingValue"].ToString();
                     isNew = false;
-                }
-                else {
+                } else {
                     MpDb.Instance.ExecuteNonQuery("insert into MpSetting(SettingName,SettingValue) values ('" + this.SettingName + "','" + this.SettingValue + "')");
-                    this.SettingId = MpDb.Instance.GetLastRowId("MpSetting","pk_MpSettingId");
+                    this.SettingId = MpDb.Instance.GetLastRowId("MpSetting", "pk_MpSettingId");
                     isNew = false;
                 }
-            }
-            else {
+            } else {
                 MpDb.Instance.ExecuteNonQuery("update MpSetting set SettingName='" + this.SettingName + "',SettingValue='" + this.SettingValue + "' where pk_MpSettingId=" + this.SettingId);
             }
-            if(isNew) {
+            if (isNew) {
                 MapDataToColumns();
             }
             Console.WriteLine(isNew ? "Created " : "Updated " + " MpSetting");
@@ -61,9 +55,9 @@ namespace MpWpfApp {
         }
         private void MapDataToColumns() {
             TableName = "MpSetting";
-            columnData.Add("pk_MpSettingId",this.SettingId);
-            columnData.Add("SettingName",this.SettingName);
-            columnData.Add("SettingValue",this.SettingValue);
+            columnData.Add("pk_MpSettingId", this.SettingId);
+            columnData.Add("SettingName", this.SettingName);
+            columnData.Add("SettingValue", this.SettingValue);
         }
     }
 }

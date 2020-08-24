@@ -32,5 +32,8 @@
     <Setting Name="ApplicationName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Monkey Paste</Value>
     </Setting>
+    <Setting Name="IsSearchCaseSensitive" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

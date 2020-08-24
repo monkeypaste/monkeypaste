@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpSortTypeComboBoxItemViewModel : MpViewModelBase {
@@ -13,7 +8,7 @@ namespace MpWpfApp {
                 return _header;
             }
             set {
-                if(_header != value) {
+                if (_header != value) {
                     _header = value;
                     OnPropertyChanged(nameof(Header));
                 }
@@ -26,13 +21,13 @@ namespace MpWpfApp {
                 return _command;
             }
             set {
-                if(_command != value) {
+                if (_command != value) {
                     _command = value;
                     OnPropertyChanged(nameof(Command));
                 }
             }
         }
-        public MpSortTypeComboBoxItemViewModel(string header,ICommand command) {
+        public MpSortTypeComboBoxItemViewModel(string header, ICommand command) {
             Header = header;
             Command = command;
         }

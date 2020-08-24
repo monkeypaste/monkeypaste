@@ -1,20 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
+using System.Collections.Specialized;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     public static class MpExtensions {
+        public static StringCollection ToStringCollection(this IEnumerable<string> strings) {
+            var stringCollection = new StringCollection();
+            foreach (string s in strings) {
+                stringCollection.Add(s);
+            }
+            return stringCollection;
+        }
         public static void Sort<TSource, TKey>(this ObservableCollection<TSource> source, Func<TSource, TKey> keySelector, bool desc = false) {
-            if (source == null) return;
+            if (source == null) {
+                return;
+            }
 
             Comparer<TKey> comparer = Comparer<TKey>.Default;
 
@@ -30,9 +36,7 @@ namespace MpWpfApp {
                         //source.RemoveAt(j);
                         //source.Insert(j - 1, temp);
                         source.Move(j, j - 1);
-
-                    }
-                    else if (!desc && comparison > 0) {
+                    } else if (!desc && comparison > 0) {
                         //var temp = source[j-1];
                         //source.RemoveAt(j-1);
                         //source.Insert(j, temp);
@@ -44,13 +48,15 @@ namespace MpWpfApp {
             }
         }
         public static List<int> AllIndexesOf(this string str, string value) {
-            if (String.IsNullOrEmpty(value))
+            if (string.IsNullOrEmpty(value)) {
                 return new List<int>();
+            }
             List<int> indexes = new List<int>();
             for (int index = 0; ; index += value.Length) {
                 index = str.IndexOf(value, index);
-                if (index == -1)
+                if (index == -1) {
                     return indexes;
+                }
                 indexes.Add(index);
             }
         }
@@ -63,33 +69,39 @@ namespace MpWpfApp {
         //          pixels.GetLength(0) * pixels.GetLength(1) * sizeof(PixelColor),
         //          stride);
         //}
-        public static void CopyPixels(this BitmapSource source, PixelColor[,] pixels, int stride, int offset,bool dummy) {
+        public static void CopyPixels(this BitmapSource source, PixelColor[,] pixels, int stride, int offset, bool dummy) {
             var height = source.PixelHeight;
             var width = source.PixelWidth;
             var pixelBytes = new byte[height * width * 4];
             source.CopyPixels(pixelBytes, stride, 0);
             int y0 = offset / width;
             int x0 = offset - width * y0;
-            for (int y = 0; y < height; y++)
-                for (int x = 0; x < width; x++)
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
                     pixels[x + x0, y + y0] = new PixelColor {
                         Blue = pixelBytes[(y * width + x) * 4 + 0],
                         Green = pixelBytes[(y * width + x) * 4 + 1],
                         Red = pixelBytes[(y * width + x) * 4 + 2],
                         Alpha = pixelBytes[(y * width + x) * 4 + 3],
                     };
+                }
+            }
         }
         public static bool IsNamedObject(this object obj) {
             return obj.GetType().FullName == "MS.Internal.NamedObject";
         }
         public static T GetChildOfType<T>(this DependencyObject depObj) where T : DependencyObject {
-            if (depObj == null) return null;
+            if (depObj == null) {
+                return null;
+            }
 
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++) {
                 var child = VisualTreeHelper.GetChild(depObj, i);
 
                 var result = (child as T) ?? GetChildOfType<T>(child);
-                if (result != null) return result;
+                if (result != null) {
+                    return result;
+                }
             }
             return null;
         }

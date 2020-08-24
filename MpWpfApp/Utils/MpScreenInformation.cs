@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MpWpfApp {
     // note this class considers dpix = dpiy
@@ -109,7 +105,7 @@ namespace MpWpfApp {
             uint dpiX;
             uint dpiY;
             GetDpi(DpiType.RAW, out dpiX, out dpiY);
-            RawDpi = Math.Max(dpiX,dpiY);
+            RawDpi = Math.Max(dpiX, dpiY);
         }
 
         /// <summary>

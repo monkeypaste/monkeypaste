@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 //using Auth0.Windows;
 
 namespace MpWpfApp {
     public enum MpUserState {
-        none=0,
+        none = 0,
         prepending,
         pending,
         active,
@@ -16,7 +12,7 @@ namespace MpWpfApp {
         inactive,
         deactivated
     }
-    public class MpUser : MpDbObject   {
+    public class MpUser : MpDbObject {
         public int UserId { get; set; }
         public int ClientId { get; set; }
         public DateTime LoginDateTime { get; set; }
@@ -26,7 +22,7 @@ namespace MpWpfApp {
         public string HashedPassword { get; set; }
         //public Auth0User LoggedInUser { get; set; }
 
-        public MpUser(int userId,int clientId,DateTime loginDateTime,MpUserState userState,string identityToken,string email,string hashedPassword) {
+        public MpUser(int userId, int clientId, DateTime loginDateTime, MpUserState userState, string identityToken, string email, string hashedPassword) {
             UserId = userId;
             ClientId = clientId;
             LoginDateTime = loginDateTime;
@@ -37,7 +33,7 @@ namespace MpWpfApp {
         }
         public MpUser(int userId) {
             DataTable dt = MpDb.Instance.Execute("select * from MpUser where pk_MpUserId=" + userId);
-            if(dt != null && dt.Rows.Count > 0) {
+            if (dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
         }

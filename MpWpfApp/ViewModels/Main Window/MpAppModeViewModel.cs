@@ -1,9 +1,5 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -11,7 +7,7 @@ namespace MpWpfApp {
     public class MpAppModeViewModel : MpViewModelBase {
         #region View Models
         public MpMainWindowViewModel MainWindowViewModel { get; set; }
-        
+
         #endregion
 
         #region Properties
@@ -42,19 +38,6 @@ namespace MpWpfApp {
             }
         }
 
-        private MpHotKey _toggleAppendModeHotKey;
-        public MpHotKey ToggleAppendModeHotKey {
-            get {
-                return _toggleAppendModeHotKey;
-            }
-            set {
-                if (_toggleAppendModeHotKey != value) {
-                    _toggleAppendModeHotKey = value;
-                    OnPropertyChanged(nameof(ToggleAppendModeHotKey));
-                }
-            }
-        }
-
         private bool _isAppPaused = false;
         public bool IsAppPaused {
             get {
@@ -79,7 +62,7 @@ namespace MpWpfApp {
         public MpAppModeViewModel(MpMainWindowViewModel parent) {
             MainWindowViewModel = parent;
             PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
+                switch (e.PropertyName) {
                     case nameof(IsAutoCopyMode):
                         if (IsAutoCopyMode) {
                             MainWindowViewModel.GlobalHook.MouseUp += GlobalMouseUpEvent;
@@ -90,7 +73,7 @@ namespace MpWpfApp {
                 }
             };
         }
-        public void AppMode_Loaded(object sender,RoutedEventArgs e) {
+        public void AppMode_Loaded(object sender, RoutedEventArgs e) {
 
         }
         #endregion

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Interop;
+﻿using System.Windows;
 
 namespace MpWpfApp {
     public partial class MpMainWindow : Window {
-        
-        public MpMainWindow() {           
+
+        public MpMainWindow() {
             InitializeComponent();
-        }        
+        }
     }
 }

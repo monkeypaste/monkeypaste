@@ -1,11 +1,6 @@
 ﻿
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -29,8 +24,8 @@ namespace MpWpfApp {
           DependencyObject target, DependencyPropertyChangedEventArgs e) {
             Window window = target as Window;
 
-            if(window != null) {
-                if(e.NewValue != null) {
+            if (window != null) {
+                if (e.NewValue != null) {
                     window.Loaded += Window_Loaded;
                 } else {
                     window.Loaded -= Window_Loaded;
@@ -40,7 +35,7 @@ namespace MpWpfApp {
 
         static void Window_Loaded(object sender, EventArgs e) {
             ICommand loaded = GetLoaded(sender as Window);
-            if(loaded != null) {
+            if (loaded != null) {
                 loaded.Execute(null);
             }
         }

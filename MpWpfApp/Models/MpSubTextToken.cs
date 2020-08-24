@@ -1,13 +1,8 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 
@@ -30,7 +25,7 @@ namespace MpWpfApp {
         public int BlockIdx { get; set; }
         public int InlineIdx { get; set; }
 
-        public MpSubTextToken(string token, MpSubTextTokenType tokenType, int s, int e, int b,int i) {
+        public MpSubTextToken(string token, MpSubTextTokenType tokenType, int s, int e, int b, int i) {
             this.TokenText = token;
             this.TokenType = tokenType;
             this.StartIdx = s;
@@ -59,23 +54,23 @@ namespace MpWpfApp {
 
             //ensure no weblinks are part of emails
             List<MpSubTextToken> tokensToRemove = new List<MpSubTextToken>();
-            foreach(MpSubTextToken token in tokenList) {
+            foreach (MpSubTextToken token in tokenList) {
                 if (token.TokenType == MpSubTextTokenType.Uri) {
                     var emailTokenList = tokenList.Where(stt => stt.TokenType == MpSubTextTokenType.Email).ToList();
                     //check if this weblink is within email token's range
-                    foreach(var emailToken in emailTokenList) {
-                        if(token.StartIdx >= emailToken.StartIdx && token.StartIdx <= emailToken.EndIdx) {
+                    foreach (var emailToken in emailTokenList) {
+                        if (token.StartIdx >= emailToken.StartIdx && token.StartIdx <= emailToken.EndIdx) {
                             tokensToRemove.Add(token);
                         }
                     }
                 }
             }
-            foreach(MpSubTextToken tokenToRemove in tokensToRemove) {
+            foreach (MpSubTextToken tokenToRemove in tokensToRemove) {
                 tokenList.Remove(tokenToRemove);
             }
 
             return tokenList;
-        }       
+        }
         private static List<MpSubTextToken> ContainsEmail(FlowDocument doc) {
             return ContainsRegEx(doc, @"([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})", MpSubTextTokenType.Email);
         }
@@ -94,7 +89,7 @@ namespace MpWpfApp {
             string stateAbbr = @"AL|AK|AS|AZ|AR|CA|CO|CT|DE|DC|FM|FL|GA|GU|HI|ID|IL|IN|IA|KS|KY|LA|ME|MH|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|MP|OH|OK|OR|PW|PA|PR|RI|SC|SD|TN|TX|UT|VT|VI|VA|WA|WV|WI|WY";
             string cityStateZip = @"{" + city + "},[ ](?:{" + state + "}|{" + stateAbbr + "})[ ]{" + zip + "}";
             string street = @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Court|Loop|Pike|Turnpike|Square|Station|Trail|Terrace|Lane|Parkway|Road|Way|Circle|Boulevard|Drive|Street|Ave|Trnpk|Dr|Trl|Wy|Ter|Sq||Pkwy|Rd|Cir|Blvd|Ln|Ct|St)\.?";
-            string fullAddress = street + @"\s"+ cityStateZip;
+            string fullAddress = street + @"\s" + cityStateZip;
             return ContainsRegEx(doc, fullAddress, MpSubTextTokenType.StreetAddress);
         }
         private static List<MpSubTextToken> ContainsWebLink(FlowDocument doc) {
@@ -111,7 +106,7 @@ namespace MpWpfApp {
         private static List<MpSubTextToken> ContainsRegEx(FlowDocument doc, string regExStr, MpSubTextTokenType tokenType) {
             List<MpSubTextToken> tokenList = new List<MpSubTextToken>();
             //break document into blocks and then blocks into lines and regex lines
-            for (int i = 0;i < doc.Blocks.Count;i++) {
+            for (int i = 0; i < doc.Blocks.Count; i++) {
                 // TODO Maybe account for Paragraph and Table (more?) here...
                 Block block = doc.Blocks.ToArray()[i];
                 TextRange textRange = new TextRange(block.ContentStart, block.ContentEnd);
@@ -133,7 +128,6 @@ namespace MpWpfApp {
                 //    }
                 //}
 
-
                 //for(int j = 0;j < block.Inlines.Count;j++) {
                 //    Inline inline = block.Inlines.ToArray()[j];
                 //    TextRange textRange = new TextRange(inline.ContentStart, inline.ContentEnd);
@@ -146,8 +140,8 @@ namespace MpWpfApp {
                 //            }
                 //        }
                 //    }
-                //}                
-            }                       
+                //}
+            }
             return tokenList;
         }
         public override void LoadDataRow(DataRow dr) {
@@ -164,10 +158,10 @@ namespace MpWpfApp {
         public override void WriteToDatabase() {
             //if new
             if (SubTextTokenId == 0) {
-                MpDb.Instance.ExecuteNonQuery("insert into MpSubTextToken(fk_MpCopyItemId,fk_MpSubTextTokenTypeId,StartIdx,EndIdx,BlockIdx,InlineIdx,TokenText) values(" + CopyItemId + "," + (int)TokenType + "," + StartIdx + "," + EndIdx + "," + BlockIdx + "," + InlineIdx + ",'"+TokenText+"')");
+                MpDb.Instance.ExecuteNonQuery("insert into MpSubTextToken(fk_MpCopyItemId,fk_MpSubTextTokenTypeId,StartIdx,EndIdx,BlockIdx,InlineIdx,TokenText) values(" + CopyItemId + "," + (int)TokenType + "," + StartIdx + "," + EndIdx + "," + BlockIdx + "," + InlineIdx + ",'" + TokenText + "')");
                 SubTextTokenId = MpDb.Instance.GetLastRowId("MpSubTextToken", "pk_MpSubTextTokenId");
             } else {
-                MpDb.Instance.ExecuteNonQuery("update MpSubTextToken set fk_MpCopyItemId=" + CopyItemId + ", fk_MpSubTextTokenTypeId=" + (int)TokenType + ", StartIdx=" + StartIdx + ", EndIdx=" + EndIdx + ",BlockIdx=" + BlockIdx + ",InlineIdx=" + InlineIdx + ",TokenText='"+TokenText+"' where pk_MpSubTextTokenId=" + SubTextTokenId);
+                MpDb.Instance.ExecuteNonQuery("update MpSubTextToken set fk_MpCopyItemId=" + CopyItemId + ", fk_MpSubTextTokenTypeId=" + (int)TokenType + ", StartIdx=" + StartIdx + ", EndIdx=" + EndIdx + ",BlockIdx=" + BlockIdx + ",InlineIdx=" + InlineIdx + ",TokenText='" + TokenText + "' where pk_MpSubTextTokenId=" + SubTextTokenId);
             }
         }
         public void DeleteFromDatabase() {

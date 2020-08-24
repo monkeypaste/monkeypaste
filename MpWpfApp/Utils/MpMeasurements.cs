@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace MpWpfApp {
     public class MpMeasurements : MpViewModelBase {
-        private static readonly Lazy<MpMeasurements> lazy = new Lazy<MpMeasurements>(() => new MpMeasurements());
-        public static MpMeasurements Instance { get { return lazy.Value; } }
+        private static readonly Lazy<MpMeasurements> _Lazy = new Lazy<MpMeasurements>(() => new MpMeasurements());
+        public static MpMeasurements Instance { get { return _Lazy.Value; } }
 
         private double _mainWindowToScreenHeightRatio = 0.35;
 
@@ -32,8 +26,7 @@ namespace MpWpfApp {
                     0,
                     SystemParameters.WorkArea.Height - _mainWindowHeight,
                     _screenWidth,
-                    _mainWindowHeight
-                );
+                    _mainWindowHeight);
             }
         }
 
@@ -95,7 +88,7 @@ namespace MpWpfApp {
         }
         public double ClipTileContentHeight {
             get {
-                return ClipTileSize - ClipTileTitleHeight - (ClipTileMargin*2);
+                return ClipTileSize - ClipTileTitleHeight - (ClipTileMargin * 2);
             }
         }
         public double ClipTileFileListRowHeight {

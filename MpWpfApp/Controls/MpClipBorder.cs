@@ -54,15 +54,18 @@ namespace MpWpfApp {
     public static class GeometryHelper {
         public static Geometry GetRoundRectangle(Rect baseRect, Thickness thickness, CornerRadius cornerRadius) {
             // Normalizing the corner radius
-            if (cornerRadius.TopLeft < Double.Epsilon)
+            if (cornerRadius.TopLeft < Double.Epsilon) {
                 cornerRadius.TopLeft = 0.0;
-            if (cornerRadius.TopRight < Double.Epsilon)
+            }
+            if (cornerRadius.TopRight < Double.Epsilon) {
                 cornerRadius.TopRight = 0.0;
-            if (cornerRadius.BottomLeft < Double.Epsilon)
+            }
+            if (cornerRadius.BottomLeft < Double.Epsilon) {
                 cornerRadius.BottomLeft = 0.0;
-            if (cornerRadius.BottomRight < Double.Epsilon)
+            }
+            if (cornerRadius.BottomRight < Double.Epsilon) {
                 cornerRadius.BottomRight = 0.0;
-
+            }
             // Taking the border thickness into account
             double leftHalf = thickness.Left * 0.5;
             if (leftHalf < Double.Epsilon)

@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Windows.Media;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpColor:MpDbObject {
+    public class MpColor : MpDbObject {
         public int ColorId { get; set; }
-        public Color Color{
+        public Color Color {
             get {
-                return Color.FromArgb((byte)_a,(byte)_r,(byte)_g,(byte)_b);
+                return Color.FromArgb((byte)_a, (byte)_r, (byte)_g, (byte)_b);
             }
             set {
                 _r = (byte)value.R;
@@ -22,11 +18,11 @@ namespace MpWpfApp {
             }
         }
 
-        private int _r, _g, _b,_a;
+        private int _r, _g, _b, _a;
 
         public MpColor(int colorId) {
             DataTable dt = MpDb.Instance.Execute("select * from MpColor where pk_MpColorId=" + colorId);
-            if(dt != null && dt.Rows.Count > 0) {
+            if (dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
         }
@@ -41,8 +37,8 @@ namespace MpWpfApp {
         public MpColor(DataRow dr) {
             LoadDataRow(dr);
         }
-        
-        
+
+
         public override void LoadDataRow(DataRow dr) {
             ColorId = Convert.ToInt32(dr["pk_MpColorId"].ToString());
             _r = Convert.ToInt32(dr["R"].ToString());
@@ -51,28 +47,26 @@ namespace MpWpfApp {
             _a = Convert.ToInt32(dr["A"].ToString());
         }
         public override void WriteToDatabase() {
-            if(ColorId == 0) {
+            if (ColorId == 0) {
                 DataTable dt = MpDb.Instance.Execute("select * from MpColor where R=" + _r + " and G=" + _g + " and B=" + _b + " and A=" + _a);
-                if(dt != null && dt.Rows.Count > 0) {
+                if (dt != null && dt.Rows.Count > 0) {
                     ColorId = Convert.ToInt32(dt.Rows[0]["pk_MpColorId"].ToString());
-                }
-                else {
+                } else {
                     MpDb.Instance.ExecuteNonQuery("insert into MpColor(R,G,B,A) values(" + _r + "," + _g + "," + _b + "," + _a + ")");
-                    ColorId = MpDb.Instance.GetLastRowId("MpColor","pk_MpColorId");
+                    ColorId = MpDb.Instance.GetLastRowId("MpColor", "pk_MpColorId");
                 }
-            }
-            else {
+            } else {
                 MpDb.Instance.ExecuteNonQuery("update MpColor set R=" + _r + ", G=" + _g + ", B=" + _b + ", A=" + _a + " where pk_MpColorId=" + ColorId);
             }
         }
         private void MapDataToColumns() {
             TableName = "MpColor";
             columnData.Clear();
-            columnData.Add("pk_MpColorId",this.ColorId);
-            columnData.Add("R",this._r);
-            columnData.Add("G",this._g);
-            columnData.Add("B",this._b);
-            columnData.Add("A",this._a);
+            columnData.Add("pk_MpColorId", this.ColorId);
+            columnData.Add("R", this._r);
+            columnData.Add("G", this._g);
+            columnData.Add("B", this._b);
+            columnData.Add("A", this._a);
         }
     }
 }

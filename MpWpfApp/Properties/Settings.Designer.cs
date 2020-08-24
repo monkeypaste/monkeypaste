@@ -118,5 +118,17 @@ namespace MpWpfApp.Properties {
                 return ((string)(this["ApplicationName"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsSearchCaseSensitive {
+            get {
+                return ((bool)(this["IsSearchCaseSensitive"]));
+            }
+            set {
+                this["IsSearchCaseSensitive"] = value;
+            }
+        }
     }
 }

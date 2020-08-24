@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -15,13 +12,39 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+
+        private string _detailText = "This is empty detail text";
+        public string DetailText {
+            get {
+                return _detailText;
+            }
+            set {
+                if (_detailText != value) {
+                    _detailText = value;
+                    OnPropertyChanged(nameof(DetailText));
+                }
+            }
+        }
+
+        private Brush _detailTextColor = Brushes.Black;
+        public Brush DetailTextColor {
+            get {
+                return _detailTextColor;
+            }
+            set {
+                if (_detailTextColor != value) {
+                    _detailTextColor = value;
+                    OnPropertyChanged(nameof(DetailTextColor));
+                }
+            }
+        }
         private ImageSource _icon = null;
         public ImageSource Icon {
             get {
                 return _icon;
             }
             set {
-                if(_icon != value) {
+                if (_icon != value) {
                     _icon = value;
                     OnPropertyChanged(nameof(Icon));
                 }
@@ -45,13 +68,9 @@ namespace MpWpfApp {
         public Brush TitleColor {
             get {
                 return _titleColor;
-                //return (Brush)new SolidColorBrush(CopyItem.ItemColor.Color);
             }
             set {
-                //CopyItem.ItemColor = new MpColor(((SolidColorBrush)value).Color);
-                //CopyItem.ItemColor.WriteToDatabase();
-                //CopyItem.ColorId = CopyItem.ItemColor.ColorId;
-                if(_titleColor != value) {
+                if (_titleColor != value) {
                     _titleColor = value;
                     OnPropertyChanged(nameof(TitleColor));
                 }
@@ -166,14 +185,11 @@ namespace MpWpfApp {
             }
         }
         #endregion
+
         #region Constructor/Inits
-        public MpClipTileTitleViewModel(MpCopyItem ci,MpClipTileViewModel parent) {
-            ClipTileViewModel = parent;
-            Title = ci.Title;
-            TitleColor = new SolidColorBrush(ci.ItemColor.Color);
-            Icon = ci.App.Icon.IconImage;
+        public MpClipTileTitleViewModel(MpCopyItem ci, MpClipTileViewModel parent) {
             PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
+                switch (e.PropertyName) {
                     case nameof(IsEditingTitle):
                         if (IsEditingTitle) {
                             //show textbox and select all text
@@ -185,17 +201,19 @@ namespace MpWpfApp {
                             TileTitleTextBoxVisibility = Visibility.Collapsed;
                             TileTitleTextBlockVisibility = Visibility.Visible;
                             IsTitleTextBoxFocused = false;
+                            ClipTileViewModel.CopyItem.Title = Title;
                             ClipTileViewModel.CopyItem.WriteToDatabase();
                         }
                         break;
-                    case nameof(Title):
-                        ClipTileViewModel.CopyItem.WriteToDatabase();
-                        break;
                 }
             };
+            ClipTileViewModel = parent;
+            Title = ci.Title;
+            TitleColor = new SolidColorBrush(ci.ItemColor.Color);
+            Icon = ci.App.Icon.IconImage;
         }
 
-        public void ClipTileTitle_Loaded(object sender,RoutedEventArgs e) {
+        public void ClipTileTitle_Loaded(object sender, RoutedEventArgs e) {
             if (TitleSwirl == null) {
                 var swirl1 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0001.png"));
                 swirl1 = MpHelpers.TintBitmapSource(swirl1, ((SolidColorBrush)TitleColor).Color);
@@ -211,7 +229,7 @@ namespace MpWpfApp {
 
             var titleCanvas = (Canvas)sender;
             var clipTileTitleTextBox = (TextBox)titleCanvas.FindName("ClipTileTitleTextBox");
-            clipTileTitleTextBox.KeyUp += ClipTileViewModel.ClipTrayViewModel.MainWindowViewModel.MainWindow_KeyDown;
+            clipTileTitleTextBox.PreviewKeyDown += ClipTileViewModel.ClipTrayViewModel.MainWindowViewModel.MainWindow_PreviewKeyDown;
             clipTileTitleTextBox.LostFocus += (s, e4) => {
                 IsEditingTitle = false;
             };

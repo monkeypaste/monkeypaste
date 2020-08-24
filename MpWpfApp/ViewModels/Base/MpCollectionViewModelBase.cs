@@ -1,28 +1,18 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-
 
 namespace MpWpfApp {
     public class MpObservableCollectionViewModel<T> : ObservableCollection<T> {
         public bool ThrowOnInvalidPropertyName { get; private set; }
-        
+
         public new event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged(string propertyName) {
             this.VerifyPropertyName(propertyName);
             PropertyChangedEventHandler handler = this.PropertyChanged;
-            if(handler != null) {
+            if (handler != null) {
                 var e = new PropertyChangedEventArgs(propertyName);
                 handler(this, e);
             }
@@ -33,12 +23,13 @@ namespace MpWpfApp {
         public void VerifyPropertyName(string propertyName) {
             // Verify that the property name matches a real, 
             // public, instance property on this object. 
-            if(TypeDescriptor.GetProperties(this)[propertyName] == null) {
+            if (TypeDescriptor.GetProperties(this)[propertyName] == null) {
                 string msg = "Invalid property name: " + propertyName;
-                if(this.ThrowOnInvalidPropertyName)
+                if (this.ThrowOnInvalidPropertyName) {
                     throw new Exception(msg);
-                else
+                } else {
                     Debug.Fail(msg);
+                }
             }
         }
     }

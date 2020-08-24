@@ -3,8 +3,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 
 namespace MpWpfApp {
-    public struct SHFILEINFO
-    {
+    public struct SHFILEINFO {
         public IntPtr hIcon;
         public int iIcon;
         public uint dwAttributes;
@@ -72,7 +71,7 @@ namespace MpWpfApp {
         public RECT rcImage;
     }
 
-    [ComImportAttribute()]
+    [ComImportAttribute]
     [GuidAttribute("46EB5926-582E-4017-9FDF-E8998DAA0950")]
     [InterfaceTypeAttribute(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IImageList {
@@ -141,7 +140,6 @@ namespace MpWpfApp {
             IntPtr wParam,
             IntPtr lParam);
 
-
         [DllImport("shell32.dll")]
         private static extern int SHGetImageList(
             int iImageList,
@@ -163,12 +161,12 @@ namespace MpWpfApp {
         public static System.Drawing.Bitmap GetBitmapFromFolderPath(
             string filepath, IconSizeEnum iconsize) {
             IntPtr hIcon = GetIconHandleFromFolderPath(filepath, iconsize);
-            return getBitmapFromIconHandle(hIcon);
+            return GetBitmapFromIconHandle(hIcon);
         }
 
         public static System.Drawing.Bitmap GetBitmapFromFilePath(string filepath, IconSizeEnum iconsize) {
             IntPtr hIcon = GetIconHandleFromFilePath(filepath, iconsize);
-            return getBitmapFromIconHandle(hIcon);
+            return GetBitmapFromIconHandle(hIcon);
         }
 
         public static System.Drawing.Bitmap GetBitmapFromPath(
@@ -181,11 +179,13 @@ namespace MpWpfApp {
                     hIcon = GetIconHandleFromFilePath(filepath, iconsize);
                 }
             }
-            return getBitmapFromIconHandle(hIcon);
+            return GetBitmapFromIconHandle(hIcon);
         }
 
-        private static System.Drawing.Bitmap getBitmapFromIconHandle(IntPtr hIcon) {
-            if (hIcon == IntPtr.Zero) throw new System.IO.FileNotFoundException();
+        private static System.Drawing.Bitmap GetBitmapFromIconHandle(IntPtr hIcon) {
+            if (hIcon == IntPtr.Zero) {
+                throw new System.IO.FileNotFoundException();
+            }
             var myIcon = System.Drawing.Icon.FromHandle(hIcon);
             var bitmap = myIcon.ToBitmap();
             myIcon.Dispose();
@@ -199,7 +199,7 @@ namespace MpWpfApp {
             const uint SHGFI_SYSICONINDEX = 0x4000;
             const int FILE_ATTRIBUTE_NORMAL = 0x80;
             uint flags = SHGFI_SYSICONINDEX;
-            return getIconHandleFromFilePathWithFlags(filepath, iconsize, ref shinfo, FILE_ATTRIBUTE_NORMAL, flags);
+            return GetIconHandleFromFilePathWithFlags(filepath, iconsize, ref shinfo, FILE_ATTRIBUTE_NORMAL, flags);
         }
 
         private static IntPtr GetIconHandleFromFolderPath(string folderpath, IconSizeEnum iconsize) {
@@ -209,23 +209,26 @@ namespace MpWpfApp {
             const uint SHGFI_USEFILEATTRIBUTES = 0x000000010;
             const int FILE_ATTRIBUTE_DIRECTORY = 0x00000010;
             uint flags = SHGFI_ICON | SHGFI_USEFILEATTRIBUTES;
-            return getIconHandleFromFilePathWithFlags(folderpath, iconsize, ref shinfo, FILE_ATTRIBUTE_DIRECTORY, flags);
+            return GetIconHandleFromFilePathWithFlags(folderpath, iconsize, ref shinfo, FILE_ATTRIBUTE_DIRECTORY, flags);
         }
 
-        private static IntPtr getIconHandleFromFilePathWithFlags(
-            string filepath, IconSizeEnum iconsize,
-            ref SHFILEINFO shinfo, int fileAttributeFlag, uint flags) {
+        private static IntPtr GetIconHandleFromFilePathWithFlags(
+            string filepath,
+            IconSizeEnum iconsize,
+            ref SHFILEINFO shinfo,
+            int fileAttributeFlag,
+            uint flags) {
             const int ILD_TRANSPARENT = 1;
             var retval = SHGetFileInfo(filepath, fileAttributeFlag, ref shinfo, Marshal.SizeOf(shinfo), flags);
-            if (retval == 0) throw (new System.IO.FileNotFoundException());
+            if (retval == 0) {
+                throw new System.IO.FileNotFoundException();
+            }
             var iconIndex = shinfo.iIcon;
             var iImageListGuid = new Guid("46EB5926-582E-4017-9FDF-E8998DAA0950");
-            IImageList iml;
-            var hres = SHGetImageList((int)iconsize, ref iImageListGuid, out iml);
+            var hres = SHGetImageList((int)iconsize, ref iImageListGuid, out IImageList iml);
             var hIcon = IntPtr.Zero;
             hres = iml.GetIcon(iconIndex, ILD_TRANSPARENT, ref hIcon);
             return hIcon;
         }
-
     }
 }
