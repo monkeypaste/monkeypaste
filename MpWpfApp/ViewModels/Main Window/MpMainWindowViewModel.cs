@@ -420,9 +420,10 @@ namespace MpWpfApp {
                 mw.Visibility = Visibility.Collapsed;
                 if (ClipTrayViewModel.DoPaste) {
                     ClipTrayViewModel.DoPaste = false;
-                    foreach (var clipTile in ClipTrayViewModel.SelectedClipTiles) {
-                        ClipTrayViewModel.ClipboardMonitor.PasteCopyItem(clipTile.CopyItem);
-                        ClipTrayViewModel.Move(ClipTrayViewModel.IndexOf(clipTile), 0);
+                    ClipTrayViewModel.PerformPasteSelectedClips();
+                    for (int i = ClipTrayViewModel.SelectedClipTiles.Count - 1; i >= 0; i--) {
+                        var sctvm = ClipTrayViewModel.SelectedClipTiles[i];
+                        ClipTrayViewModel.Move(ClipTrayViewModel.IndexOf(sctvm), 0);
                     }
                 }
                 //ShowMainWindowHotKey.Enabled = true;

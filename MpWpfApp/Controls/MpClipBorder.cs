@@ -131,7 +131,7 @@ namespace MpWpfApp {
             }
 
             StreamGeometry roundedRectGeometry = new StreamGeometry();
-
+            
             using (StreamGeometryContext context = roundedRectGeometry.Open()) {
                 // Begin from the Bottom of the TopLeft Arc and proceed clockwise
                 context.BeginFigure(topLeftRect.BottomLeft, true, true);

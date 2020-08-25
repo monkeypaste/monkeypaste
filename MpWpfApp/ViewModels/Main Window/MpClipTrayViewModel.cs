@@ -62,7 +62,7 @@ namespace MpWpfApp {
 
         public bool DoPaste { get; set; } = false;
 
-        public Point StartDragPoint { get; set; }
+        public Point StartDragPoint;
 
         private bool _isMouseDown = false;
         public bool IsMouseDown {
@@ -137,6 +137,16 @@ namespace MpWpfApp {
             }
         }
 
+        public string SelectedClipTilesRichText {
+            get {
+                string outStr = MpHelpers.ConvertPlainTextToRichText(string.Empty);
+                foreach (var sctvm in SelectedClipTiles) {
+                    outStr = MpHelpers.CombineRichText(outStr, sctvm.CopyItem.GetRichText());
+                }
+                return outStr;
+            }
+        }
+
         public BitmapSource SelectedClipTilesBmp {
             get {
                 var bmpList = new List<BitmapSource>();
@@ -144,6 +154,16 @@ namespace MpWpfApp {
                     bmpList.Add(sctvm.ClipTileContentViewModel.Bmp);
                 }
                 return MpHelpers.CombineBitmap(bmpList, false);
+            }
+        }
+
+        public string SelectedClipTilesCsv {
+            get {
+                string outStr = string.Empty;
+                foreach (var sctvm in SelectedClipTiles) {
+                    outStr = sctvm.CopyItem.GetPlainText() + ",";
+                }
+                return outStr;
             }
         }
 
@@ -185,6 +205,7 @@ namespace MpWpfApp {
         public void ClipTray_Loaded(object sender, RoutedEventArgs e) {
             var clipTray = (ListBox)sender;
             clipTray.DragEnter += (s, e1) => {
+                //used for resorting
                 e1.Effects = e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName) ? DragDropEffects.Move : DragDropEffects.None;
             };
             clipTray.Drop += (s, e2) => {
@@ -199,17 +220,12 @@ namespace MpWpfApp {
 
                 MpClipTileViewModel dropVm = null;
                 var item = VisualTreeHelper.HitTest(clipTray, mpo).VisualHit;
-                if(item.GetType() != typeof(MpClipBorder)) {
-                    dropVm = (MpClipTileViewModel)item.GetVisualAncestor<MpClipBorder>().DataContext;
+                if(item.GetType() != typeof(Border)) {
+                    dropVm = (MpClipTileViewModel)item.GetVisualAncestor<Border>().DataContext;
                 } else {
-                    dropVm = (MpClipTileViewModel)((MpClipBorder)item).DataContext;
+                    dropVm = (MpClipTileViewModel)((Border)item).DataContext;
                 }
                 int dropIdx = item == null || item == clipTray ? 0 : this.IndexOf(dropVm);
-                //if(item.GetType() == typeof(ScrollViewer)) {
-                //    dropVm = (MpClipTileViewModel)((ItemsPresenter)((ScrollViewer)item).Content).DataContext;
-                //} else if(item.GetType() == typeof(MpClipBorder)) {
-                //    dropVm = (MpClipTileViewModel)((MpClipBorder)item).DataContext;
-                //}
                 if (dropIdx >= 0) {
                     ClearClipSelection();
                     for (int i = 0; i < dragClipViewModel.Count; i++) {
@@ -232,42 +248,16 @@ namespace MpWpfApp {
 
                 var clipTrayListBox = (ListBox)sender;
                 var scrollViewer = clipTrayListBox.GetChildOfType<ScrollViewer>();
-
                 scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + (e3.Delta * -1) / 5);
             };
 
-            ClipboardMonitor = new MpClipboardMonitor((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow));
-
-            // Attach the handler to the event raising on WM_DRAWCLIPBOARD message is received
-            ClipboardMonitor.ClipboardChanged += (s, e53) => {
-                MpCopyItem newCopyItem = MpCopyItem.CreateFromClipboard(ClipboardMonitor.LastWindowWatcher.LastHandle);
-                if (MainWindowViewModel.AppModeViewModel.IsInAppendMode) {
-                    //when in append mode just append the new items text to selecteditem
-                    SelectedClipTiles[0].AppendContent(new MpClipTileViewModel(newCopyItem, this));
-                    return;
-                }
-
-                if (newCopyItem != null) {
-                    //check if copyitem is duplicate
-                    var existingClipTile = FindClipTileByModel(newCopyItem);
-                    if (existingClipTile == null) {
-                        this.Add(new MpClipTileViewModel(newCopyItem, this));
-                    } else {
-                        Console.WriteLine("Ignoring duplicate copy item");
-                        existingClipTile.CopyItem.CopyCount++;
-                        existingClipTile.CopyItem.CopyDateTime = DateTime.Now;
-                        this.Move(this.IndexOf(existingClipTile), 0);
-                    }
-
-                    ResetClipSelection();
-                }
-            };            
+            InitClipboard();          
 
             SortAndFilterClipTiles();
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            var clipTileBorder = (MpClipBorder)sender;
+            var clipTileBorder = (Border)sender;
 
             clipTileBorder.PreviewMouseLeftButtonDown += (s, e6) => {
                 if (e6.ClickCount == 2) {
@@ -286,45 +276,17 @@ namespace MpWpfApp {
 
                 if (IsMouseDown && e7.MouseDevice.LeftButton == MouseButtonState.Pressed
                 /*&& Math.Abs(curDragPoint.X-StartDragPoint.X) > 50*/) {
-                    //string text = SelectedClipTilesPlainText;
-                    //BitmapSource bmp = SelectedClipTilesBmp
-                    //List<string> fileDrop = new List<string>();
-                    //MpCopyItemType lastType = MpCopyItemType.None;
-                    //foreach (var ctvm in SelectedClipTiles) {
-                    //    if (ctvm.CopyItemType != lastType && lastType != MpCopyItemType.None) {
-                    //        continue;
-                    //    } else {
-                    //        lastType = ctvm.CopyItemType;
-                    //    }
-                    //    text += ctvm.PlainText + Environment.NewLine;
-                    //    rtf += ctvm.RichText + Environment.NewLine;
-                    //    bmp = MpHelpers.MergeImages(new List<BitmapSource>() { bmp, MpHelpers.ConvertRichTextToImage(ctvm.RichText, (int)ContentWidth, (int)ContentHeight) });
-                    //    if (ctvm.CopyItemType == MpCopyItemType.FileList) {
-                    //        foreach (string f in (string[])ctvm.ClipContentData) {
-                    //            fileDrop.Add(f);
-                    //        }
-                    //    } else {
-                    //        fileDrop.Add(ctvm.WriteCopyItemToFile(Path.GetTempPath(), true));
-                    //    }
-                    //}
-                    ////this case is when non file drop item's being dragged
-                    //if (fileDrop.Count == 0) {
-                    //    if (CopyItemType == MpCopyItemType.RichText) {
-                    //        fileDrop.Add(MpHelpers.WriteTextToFile(Path.GetTempFileName(), text, true));
-                    //    } else {
-                    //        fileDrop.Add(MpHelpers.WriteBitmapSourceToFile(Path.GetTempFileName(), bmp, true));
-                    //    }
-                    //}
                     IDataObject d = new DataObject();
-                    d.SetData(DataFormats.Text, SelectedClipTilesPlainText);
-                    d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
                     d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
+                    d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
+                    d.SetData(DataFormats.CommaSeparatedValue, SelectedClipTilesCsv);
+                    d.SetData(DataFormats.Rtf, SelectedClipTilesRichText);
+                    d.SetData(DataFormats.Text, SelectedClipTilesPlainText);
                     d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
                     DragDrop.DoDragDrop(clipTray, d, DragDropEffects.Copy | DragDropEffects.Move);
                 } else {
-                    //this occurs when mouse up is outside the application (like during a dragdrop)
                     IsMouseDown = false;
-                    StartDragPoint = new Point();
+                    StartDragPoint = new Point ();
                 }
             };
             clipTileBorder.PreviewMouseUp += (s, e8) => {
@@ -483,9 +445,109 @@ namespace MpWpfApp {
             ResetClipSelection();
         }
 
+        public void PerformPasteSelectedClips() {
+            Console.WriteLine("Pasting " + SelectedClipTiles.Count + " items");
+            ClipboardMonitor.IgnoreClipboardChangeEvent = true;
+            try {
+                IDataObject d = new DataObject();
+                switch(GetTargetFileType()) {
+                    case MpCopyItemType.FileList:
+                        d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
+                        break;
+                    case MpCopyItemType.Image:
+                        d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
+                        break;
+                    case MpCopyItemType.RichText:
+                        d.SetData(DataFormats.Text, SelectedClipTilesPlainText);
+                        break;
+                    case MpCopyItemType.Csv:
+                        d.SetData(DataFormats.CommaSeparatedValue, SelectedClipTilesCsv);
+                        break;
+                }
+                //d.SetData(DataFormats.Rtf, clipTray.SelectedClipTilesRichText);
+                
+                Clipboard.Clear();
+                Clipboard.SetDataObject(d);
+                //Clipboard.SetData(DataFormats.FileDrop, clipTray.SelectedClipTilesFileList);
+                //Clipboard.SetData(DataFormats.Bitmap, clipTray.SelectedClipTilesBmp);
+                //Clipboard.SetData(DataFormats.Rtf, clipTray.SelectedClipTilesRichText);
+                //Clipboard.SetData(DataFormats.CommaSeparatedValue, clipTray.SelectedClipTilesCsv);
+                //Clipboard.SetData(DataFormats.Text, clipTray.SelectedClipTilesPlainText);
+                //WinApi.SetActiveWindow(GetLastWindowWatcher().LastHandle);
+                WinApi.SetForegroundWindow(ClipboardMonitor.LastWindowWatcher.LastHandle);
+                //System.Windows.Forms.SendKeys.Send("^v");
+                System.Windows.Forms.SendKeys.SendWait("^v");
+                //PressKey(Keys.ControlKey, false);
+                //PressKey(Keys.V, false);
+                //PressKey(Keys.V, true);
+                //PressKey(Keys.ControlKey, true);
+
+
+                //creating history item automatically saves it to the db
+                foreach (var sctvm in SelectedClipTiles) {
+                    new MpPasteHistory(sctvm.CopyItem, ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).ClipTrayViewModel.ClipboardMonitor.LastWindowWatcher.LastHandle);
+                }
+
+                //MpSingletonController.Instance.AppendItem = null;
+            }
+            catch (Exception e) {
+                Console.WriteLine("ClipboardMonitor error during paste: " + e.ToString());
+            }
+            ClipboardMonitor.IgnoreClipboardChangeEvent = false;
+        }
         #endregion
 
         #region Private Methods
+
+        private void InitClipboard() {
+            ClipboardMonitor = new MpClipboardMonitor((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow));
+
+            // Attach the handler to the event raising on WM_DRAWCLIPBOARD message is received
+            ClipboardMonitor.ClipboardChanged += (s, e53) => {
+                MpCopyItem newCopyItem = MpCopyItem.CreateFromClipboard(ClipboardMonitor.LastWindowWatcher.LastHandle);
+                if (MainWindowViewModel.AppModeViewModel.IsInAppendMode) {
+                    //when in append mode just append the new items text to selecteditem
+                    SelectedClipTiles[0].AppendContent(new MpClipTileViewModel(newCopyItem, this));
+                    return;
+                }
+
+                if (newCopyItem != null) {
+                    //check if copyitem is duplicate
+                    var existingClipTile = FindClipTileByModel(newCopyItem);
+                    if (existingClipTile == null) {
+                        this.Add(new MpClipTileViewModel(newCopyItem, this));
+                    } else {
+                        Console.WriteLine("Ignoring duplicate copy item");
+                        existingClipTile.CopyItem.CopyCount++;
+                        existingClipTile.CopyItem.CopyDateTime = DateTime.Now;
+                        this.Move(this.IndexOf(existingClipTile), 0);
+                    }
+
+                    ResetClipSelection();
+                }
+            };
+        }
+
+        private MpCopyItemType GetTargetFileType() {
+            string targetTitle = ClipboardMonitor.LastWindowWatcher.LastTitle.ToLower();
+            foreach (var imgApp in Properties.Settings.Default.PasteAsImageDefaultAppTitleCollection) {
+                if (imgApp.ToLower().Contains(targetTitle)) {
+                    return MpCopyItemType.Image;
+                }
+            }
+            foreach (var imgApp in Properties.Settings.Default.PasteAsFileDropDefaultAppTitleCollection) {
+                if (imgApp.ToLower().Contains(targetTitle)) {
+                    return MpCopyItemType.FileList;
+                }
+            }
+            foreach (var imgApp in Properties.Settings.Default.PasteAsCsvDefaultAppTitleCollection) {
+                if (imgApp.ToLower().Contains(targetTitle)) {
+                    return MpCopyItemType.Csv;
+                }
+            }
+            //paste as rtf by default
+            return MpCopyItemType.RichText;
+        }
 
         private void WriteClipsToFile(List<MpClipTileViewModel> clipList, string rootPath) {
             foreach (MpClipTileViewModel ctvm in clipList) {

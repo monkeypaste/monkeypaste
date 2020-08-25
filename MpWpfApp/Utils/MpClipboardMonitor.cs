@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Interop;
 
 namespace MpWpfApp {
@@ -75,34 +77,7 @@ namespace MpWpfApp {
             }
             return IntPtr.Zero;
         }
-
-        public void PasteCopyItem(MpCopyItem ci) {
-            IgnoreClipboardChangeEvent = true;
-            try {
-                Clipboard.SetData(DataFormats.Text, ci.GetPlainText());
-                Clipboard.SetData(DataFormats.Rtf, ci.GetRichText());
-                Clipboard.SetData(DataFormats.Bitmap, ci.GetBitmapSource());
-                Clipboard.SetData(DataFormats.FileDrop, ci.GetFileList().ToStringCollection());
-                //WinApi.SetActiveWindow(GetLastWindowWatcher().LastHandle);
-                WinApi.SetForegroundWindow(LastWindowWatcher.LastHandle);
-                //System.Windows.Forms.SendKeys.Send("^v");
-                System.Windows.Forms.SendKeys.SendWait("^v");
-                //PressKey(Keys.ControlKey, false);
-                //PressKey(Keys.V, false);
-                //PressKey(Keys.V, true);
-                //PressKey(Keys.ControlKey, true);
-
-
-                //creating history item automatically saves it to the db
-                MpPasteHistory pasteHistory = new MpPasteHistory(ci, ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).ClipTrayViewModel.ClipboardMonitor.LastWindowWatcher.LastHandle);
-
-                //MpSingletonController.Instance.AppendItem = null;
-            }
-            catch(Exception e) {
-                Console.WriteLine("ClipboardMonitor error during paste: " + e.ToString());
-            }
-            IgnoreClipboardChangeEvent = false;
-        }
+                
         #region Destructor
         private bool disposed;
         protected virtual void Dispose(bool disposing) {

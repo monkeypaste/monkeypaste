@@ -4,6 +4,11 @@ using System.Runtime.InteropServices;
 
 namespace MpWpfApp {
     public static class WinApi {
+        [StructLayout(LayoutKind.Sequential)]
+        public struct Win32Point {
+            public Int32 X;
+            public Int32 Y;
+        };
         [Flags]
         public enum ExtendedWindowStyles {
             // ...
@@ -115,6 +120,13 @@ namespace MpWpfApp {
         [DllImport("user32.dll")]
         public static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
 
+        [DllImport("user32.dll")]
+        public static extern IntPtr WindowFromPoint(System.Windows.Point Point);
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetCursorPos(ref Win32Point pt);
+
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int GetWindowThreadProcessId(IntPtr handle, out uint processId);
 
@@ -148,6 +160,9 @@ namespace MpWpfApp {
 
         [DllImport("user32.dll")]
         public static extern bool GetCursorPos(out PointInter lpPoint);
+
+        [DllImport("user32.dll")]
+        public static extern bool GetCursorPos(out System.Windows.Point lpPoint);
 
         internal static int RegisterWindowMessage(string format, params object[] args) {
             string message = string.Format(format, args);

@@ -18,6 +18,7 @@ namespace MpWpfApp {
                 MpRichTextToImageConverter.rtfDrawer.Rtf = MpHelpers.ConvertPlainTextToRichText(rtf);
             }
             MpRichTextToImageConverter.rtfDrawer.Draw(graphics, layoutArea, xFactor);
+            //graphics.Dispose();
         }
 
         private class RichTextBoxDrawer : RichTextBox {
@@ -62,6 +63,7 @@ namespace MpWpfApp {
             private void DPToHIMETRIC(Graphics graphics, ref SizeF size) {
                 size.Width = (size.Width * 2540.0f) / graphics.DpiX;
                 size.Height = (size.Height * 2540.0f) / graphics.DpiY;
+                //graphics.Dispose();
             }
 
             public void Draw(Graphics graphics, RectangleF layoutArea, float xFactor) {

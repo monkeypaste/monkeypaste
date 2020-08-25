@@ -96,6 +96,15 @@ namespace MpWpfApp {
             return Regex.Replace(str, "[^a-zA-Z0-9_.]+", string.Empty, RegexOptions.Compiled);
         }
 
+        public static string GetProcessMainWindowTitle(IntPtr hWnd) {
+            if (hWnd == null) {
+                throw new Exception("MpHelpers error hWnd is null");
+            }
+            uint processId;
+            WinApi.GetWindowThreadProcessId(hWnd, out processId);
+            Process proc = Process.GetProcessById((int)processId);
+            return proc.MainWindowTitle;
+        }
         public static string GetProcessPath(IntPtr hwnd) {
             try {
                 WinApi.GetWindowThreadProcessId(hwnd, out uint pid);
@@ -106,6 +115,12 @@ namespace MpWpfApp {
                 Console.WriteLine("MpHelpers.GetProcessPath error (likely cannot find process path: " + e.ToString());
                 return GetProcessPath(((MpClipTrayViewModel)((MpMainWindowViewModel)((MpMainWindow)App.Current.MainWindow).DataContext).ClipTrayViewModel).ClipboardMonitor.LastWindowWatcher.ThisAppHandle);
             }
+        }        
+        
+        public static Point GetMousePosition() {
+            WinApi.Win32Point w32Mouse = new WinApi.Win32Point();
+            WinApi.GetCursorPos(ref w32Mouse);
+            return new Point(w32Mouse.X, w32Mouse.Y);
         }
 
         public static string GetMainModuleFilepath(int processId) {
@@ -434,12 +449,10 @@ namespace MpWpfApp {
             return b1.Length == b2.Length && WinApi.memcmp(b1, b2, b1.Length) == 0;
         }
         public static string ConvertBitmapSourceToPlainText(BitmapSource bmpSource) {
-            return string.Empty;
             string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", "&nbsp;" };
-            System.Drawing.Bitmap image = ConvertBitmapSourceToBitmap(bmpSource);
+            System.Drawing.Bitmap image = ConvertBitmapSourceToBitmap(ResizeBitmapSource(bmpSource,new Size(MpMeasurements.Instance.ClipTileBorderSize,MpMeasurements.Instance.ClipTileContentHeight)));
 
             string outStr = string.Empty;
-
             for (int h = 0; h < image.Height; h++) {
                 for (int w = 0; w < image.Width; w++) {
                     System.Drawing.Color pixelColor = image.GetPixel(w, h);
@@ -455,6 +468,11 @@ namespace MpWpfApp {
             }
 
             return outStr;
+        }
+
+        public static string ReadCharactersFromBitmapSource(BitmapSource bmpSource) {
+            
+            return string.Empty;
         }
 
         public static byte[] ConvertBitmapSourceToByteArray(BitmapSource bs) {
@@ -513,12 +531,9 @@ namespace MpWpfApp {
             string pt = ConvertRichTextToPlainText(rt);
             int w = GetColCount(pt) * fontSize;
             int h = GetRowCount(pt) * fontSize;
-            Console.WriteLine("Plain Text: ");
-            Console.WriteLine(pt);
-            Console.WriteLine("W: " + w + " H: " + h);
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h);
+            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h);           
             using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(bmp)) {
-                graphics.DrawRtfText(rt, new System.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height), 2f);
+                graphics.DrawRtfText(rt, new System.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height), 1f);
                 graphics.Flush();
                 graphics.Dispose();
             }
@@ -720,6 +735,7 @@ namespace MpWpfApp {
                         g.DrawImage(image, new System.Drawing.Rectangle(offset, 0, image.Width, image.Height));
                         offset += image.Width;
                     }
+                    g.Dispose();
                 }
                 return ConvertBitmapToBitmapSource(finalImage);
             }

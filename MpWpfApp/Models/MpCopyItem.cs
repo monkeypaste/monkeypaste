@@ -210,19 +210,17 @@ namespace MpWpfApp {
                 if (string.IsNullOrEmpty(fn)) {
                     fn = Path.GetRandomFileName();
                 }
-                //fileList.Add(MpHelpers.WriteTextToFile(fp+fn+".txt", GetPlainText()));
-                fileList.Add(MpHelpers.WriteBitmapSourceToFile(fp+fn+".png", GetBitmapSource()));
-                //string fe =  CopyItemType == MpCopyItemType.RichText ? ".txt" : ".png";
-                //string op = MpHelpers.GetUniqueFileName(fp + fn + fe);
-                ////file extension
-                //switch (CopyItemType) {
-                //    case MpCopyItemType.RichText:
-                //        fileList.Add(MpHelpers.WriteTextToFile(op, GetPlainText()));
-                //        break;
-                //    case MpCopyItemType.Image:
-                //        fileList.Add(MpHelpers.WriteBitmapSourceToFile(op, GetBitmapSource()));
-                //        break;
-                //}
+                string fe = CopyItemType == MpCopyItemType.RichText ? ".txt" : ".png";
+                string op = MpHelpers.GetUniqueFileName(fp + fn + fe);
+                //file extension
+                switch (CopyItemType) {
+                    case MpCopyItemType.RichText:
+                        fileList.Add(MpHelpers.WriteTextToFile(op, GetPlainText()));
+                        break;
+                    case MpCopyItemType.Image:
+                        fileList.Add(MpHelpers.WriteBitmapSourceToFile(op, GetBitmapSource()));
+                        break;
+                }
             }
 
             return fileList;
@@ -387,6 +385,7 @@ namespace MpWpfApp {
         None = 0,
         RichText,
         Image,
-        FileList
+        FileList,
+        Csv //this is only used during runtime
     }
 }

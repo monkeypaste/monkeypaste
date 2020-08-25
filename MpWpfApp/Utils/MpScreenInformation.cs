@@ -100,12 +100,16 @@ namespace MpWpfApp {
     }
     public class MpScreenInformation {
         public static uint RawDpi { get; private set; }
+        public static uint DpiX { get; private set; }
+        public static uint DpiY { get; private set; }
 
         static MpScreenInformation() {
             uint dpiX;
             uint dpiY;
-            GetDpi(DpiType.RAW, out dpiX, out dpiY);
+            GetDpi(DpiType.EFFECTIVE, out dpiX, out dpiY);
             RawDpi = Math.Max(dpiX, dpiY);
+            DpiX = dpiX;
+            DpiY = dpiY;
         }
 
         /// <summary>

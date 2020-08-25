@@ -130,5 +130,61 @@ namespace MpWpfApp.Properties {
                 this["IsSearchCaseSensitive"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>Paint</string>\r\n  <string>Photoshop</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection PasteAsImageDefaultAppTitleCollection {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["PasteAsImageDefaultAppTitleCollection"]));
+            }
+            set {
+                this["PasteAsImageDefaultAppTitleCollection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>Explorer</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection PasteAsFileDropDefaultAppTitleCollection {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["PasteAsFileDropDefaultAppTitleCollection"]));
+            }
+            set {
+                this["PasteAsFileDropDefaultAppTitleCollection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>Excel</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection PasteAsCsvDefaultAppTitleCollection {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["PasteAsCsvDefaultAppTitleCollection"]));
+            }
+            set {
+                this["PasteAsCsvDefaultAppTitleCollection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>Explorer</string>\r\n  <string>Notepad</string>\r\n</ArrayOfString>")]
+        public global::System.Collections.Specialized.StringCollection DragDropAsFileDropDefaultAppTitleCollection {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["DragDropAsFileDropDefaultAppTitleCollection"]));
+            }
+            set {
+                this["DragDropAsFileDropDefaultAppTitleCollection"] = value;
+            }
+        }
     }
 }

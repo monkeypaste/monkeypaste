@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Speech.Synthesis;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -388,7 +389,7 @@ namespace MpWpfApp {
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            var clipTileBorder = (MpClipBorder)sender;
+            var clipTileBorder = (Border)sender;
             clipTileBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
             };
