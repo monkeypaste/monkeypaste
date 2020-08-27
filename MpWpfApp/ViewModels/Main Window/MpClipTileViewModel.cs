@@ -384,7 +384,7 @@ namespace MpWpfApp {
 
         public void AppendContent(MpClipTileViewModel ctvm) {
             CopyItem.Combine(ctvm.CopyItem);
-            ClipTileContentViewModel = new MpClipTileContentViewModel(CopyItem, this);
+            ClipTileContentViewModel = new MpClipTileContentViewModel(CopyItem, this);            
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
@@ -461,7 +461,7 @@ namespace MpWpfApp {
 
         #region Overrides
         public override string ToString() {
-            return CopyItem.GetPlainText();
+            return CopyItem.ItemPlainText;
         }
         #endregion
     }

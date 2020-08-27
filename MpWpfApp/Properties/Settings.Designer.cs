@@ -135,10 +135,10 @@ namespace MpWpfApp.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
             "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>Paint</string>\r\n  <string>Photoshop</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection PasteAsImageDefaultAppTitleCollection {
+            "tring>paint</string>\r\n  <string>photoshop</string>\r\n</ArrayOfString>")]
+        public string[] PasteAsImageDefaultAppTitleCollection {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["PasteAsImageDefaultAppTitleCollection"]));
+                return ((string[])(this["PasteAsImageDefaultAppTitleCollection"]));
             }
             set {
                 this["PasteAsImageDefaultAppTitleCollection"] = value;
@@ -149,10 +149,10 @@ namespace MpWpfApp.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
             "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>Explorer</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection PasteAsFileDropDefaultAppTitleCollection {
+            "tring>explorer</string>\r\n</ArrayOfString>")]
+        public string[] PasteAsFileDropDefaultAppTitleCollection {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["PasteAsFileDropDefaultAppTitleCollection"]));
+                return ((string[])(this["PasteAsFileDropDefaultAppTitleCollection"]));
             }
             set {
                 this["PasteAsFileDropDefaultAppTitleCollection"] = value;
@@ -163,24 +163,10 @@ namespace MpWpfApp.Properties {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
             "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>Excel</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection PasteAsCsvDefaultAppTitleCollection {
+            "tring>explorer</string>\r\n  <string>notepad</string>\r\n</ArrayOfString>")]
+        public string[] DragDropAsFileDropDefaultAppTitleCollection {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["PasteAsCsvDefaultAppTitleCollection"]));
-            }
-            set {
-                this["PasteAsCsvDefaultAppTitleCollection"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
-            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
-            "tring>Explorer</string>\r\n  <string>Notepad</string>\r\n</ArrayOfString>")]
-        public global::System.Collections.Specialized.StringCollection DragDropAsFileDropDefaultAppTitleCollection {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["DragDropAsFileDropDefaultAppTitleCollection"]));
+                return ((string[])(this["DragDropAsFileDropDefaultAppTitleCollection"]));
             }
             set {
                 this["DragDropAsFileDropDefaultAppTitleCollection"] = value;
@@ -195,6 +181,34 @@ namespace MpWpfApp.Properties {
             }
             set {
                 this["UserCustomColorIdxArray"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>excel</string>\r\n</ArrayOfString>")]
+        public string[] PasteAsCsvDefaultAppTitleCollection {
+            get {
+                return ((string[])(this["PasteAsCsvDefaultAppTitleCollection"]));
+            }
+            set {
+                this["PasteAsCsvDefaultAppTitleCollection"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
+            "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
+            "tring>notepad</string>\r\n</ArrayOfString>")]
+        public string[] PasteAsTextFileDefaultAppTitleCollection {
+            get {
+                return ((string[])(this["PasteAsTextFileDefaultAppTitleCollection"]));
+            }
+            set {
+                this["PasteAsTextFileDefaultAppTitleCollection"] = value;
             }
         }
     }

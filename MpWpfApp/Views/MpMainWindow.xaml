@@ -26,6 +26,9 @@
         <local:MpMainWindowViewModel />
     </Window.DataContext>
     <Window.Resources>
+        <s:Int32 x:Key="Files">1</s:Int32>
+        <s:Int32 x:Key="Csv">2</s:Int32>
+        <s:Int32 x:Key="Zip">3</s:Int32>
         <s:Boolean x:Key="True">True</s:Boolean>
         <s:Boolean x:Key="False">False</s:Boolean>
         <!--<DataTemplate x:Key="ClipTileDragAdorner">
@@ -720,10 +723,13 @@
                                         <MenuItem Header="Export To">
                                             <MenuItem Header="File(s)..."
                                                       Command="{Binding Data.ExportSelectedClipTilesCommand,Source={StaticResource ClipTrayProxy}}"
-                                                      CommandParameter="{StaticResource False}" />
+                                                      CommandParameter="{StaticResource Files}" />
                                             <MenuItem Header="CSV"
                                                       Command="{Binding Data.ExportSelectedClipTilesCommand,Source={StaticResource ClipTrayProxy}}"
-                                                      CommandParameter="{StaticResource True}" />
+                                                      CommandParameter="{StaticResource Csv}" />
+                                            <MenuItem Header="Zip"
+                                                      Command="{Binding Data.ExportSelectedClipTilesCommand,Source={StaticResource ClipTrayProxy}}"
+                                                      CommandParameter="{StaticResource Zip}" />
                                         </MenuItem>
                                         <MenuItem Header="Rename"
                                                   Command="{Binding Data.RenameClipCommand,Source={StaticResource ClipTrayProxy}}" />
@@ -878,6 +884,7 @@
                                                                       SearchText="{Binding SearchText}"
                                                                       MinWidth="{Binding ClipTileViewModel.TileBorderSize}"
                                                                       MinHeight="{Binding ClipTileViewModel.TileContentHeight}"
+                                                                      Tokens="{Binding Tokens, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                       IsReadOnly="True"
                                                                       IsUndoEnabled="False" 
                                                                       Visibility="{Binding RtbVisibility}"

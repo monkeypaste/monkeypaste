@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -40,7 +41,17 @@ namespace MpWpfApp {
                 }
             }
         }
-
+        
+        public ObservableCollection<MpSubTextToken> Tokens {
+            get {
+                return (ObservableCollection<MpSubTextToken>)GetValue(TokensProperty);
+            }
+            set {
+                if ((ObservableCollection<MpSubTextToken>)GetValue(TokensProperty) != value) {
+                    SetValue(TokensProperty, value);
+                }
+            }
+        }
         public void AddSubTextToken(MpSubTextToken token) {
             Block block = Document.Blocks.ToArray()[token.BlockIdx];
             //find and remove the inline with the token
@@ -195,6 +206,29 @@ namespace MpWpfApp {
                 BindsTwoWayByDefault = true,
                 PropertyChangedCallback = (s, e) => {
                     ((MpTokenizedRichTextBox)s).HighlightSearchText(Brushes.Yellow);
+                },
+            });
+
+        public static ObservableCollection<MpSubTextToken> GetTokens(DependencyObject obj) {
+            return (ObservableCollection<MpSubTextToken>)obj.GetValue(TokensProperty);
+        }
+        public static void SetTokens(DependencyObject obj, ObservableCollection<MpSubTextToken> value) {
+            obj.SetValue(TokensProperty, value);
+        }
+
+        public static readonly DependencyProperty TokensProperty =
+          DependencyProperty.RegisterAttached(
+            "Tokens",
+            typeof(ObservableCollection<MpSubTextToken>),
+            typeof(MpTokenizedRichTextBox),
+            new FrameworkPropertyMetadata {
+                BindsTwoWayByDefault = true,
+                PropertyChangedCallback = (s, e) => {
+                    if(e.NewValue != null) {
+                        foreach (var token in (ObservableCollection<MpSubTextToken>)e.NewValue) {
+                            ((MpTokenizedRichTextBox)s).AddSubTextToken(token);
+                        }
+                    }                    
                 },
             });
     }

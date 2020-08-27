@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,19 +23,6 @@ namespace MpWpfApp {
                 if (_clipTileViewModel != value) {
                     _clipTileViewModel = value;
                     OnPropertyChanged(nameof(ClipTileViewModel));
-                }
-            }
-        }
-
-        private object _contentData = null;
-        public object ContentData {
-            get {
-                return _contentData;
-            }
-            set {
-                if (_contentData != value) {
-                    _contentData = value;
-                    OnPropertyChanged(nameof(ContentData));
                 }
             }
         }
@@ -121,7 +109,7 @@ namespace MpWpfApp {
         public string PlainText {
             get {
                 if (_plainText == string.Empty) {
-                    _plainText = ClipTileViewModel.CopyItem.GetPlainText();
+                    _plainText = ClipTileViewModel.CopyItem.ItemPlainText;
                 }
                 return _plainText;
             }
@@ -138,7 +126,7 @@ namespace MpWpfApp {
         public string RichText {
             get {
                 if (_richText == string.Empty) {
-                    _richText = ClipTileViewModel.CopyItem.GetRichText();
+                    _richText = ClipTileViewModel.CopyItem.ItemRichText;
                 }
                 return _richText;
             }
@@ -154,7 +142,7 @@ namespace MpWpfApp {
         public BitmapSource Bmp {
             get {
                 if (_bmp == null) {
-                    _bmp = ClipTileViewModel.CopyItem.GetBitmapSource();
+                    _bmp = ClipTileViewModel.CopyItem.ItemImage;
                 }
                 return _bmp;
             }
@@ -166,9 +154,36 @@ namespace MpWpfApp {
             }
         }
 
+        private ObservableCollection<MpSubTextToken> _tokens = null;
+        public ObservableCollection<MpSubTextToken> Tokens {
+            get {
+                if(_tokens == null) {
+                    _tokens = (IList<MpSubTextToken>)ClipTileViewModel.CopyItem.SubTextTokenList as ObservableCollection<MpSubTextToken>;
+                }
+                return _tokens;
+            }
+            set {
+                if(_tokens != value) {
+                    _tokens = value;
+                    OnPropertyChanged(nameof(Tokens));
+                }
+            }
+        }
+
         public List<string> FileDropList {
             get {
-                return ClipTileViewModel.CopyItem.GetFileList();
+                //switch(ClipTileViewModel.ClipTrayViewModel.GetTargetFileType()) {
+                //    case MpCopyItemType.FileList:
+                //        return MpHelpers.WriteBitmapSourceToFile(Path.GetTempFileName(), Bmp);
+                //        break;
+                //    case MpCopyItemType.Image:
+
+                //        break;
+                //    case MpCopyItemType.RichText:
+
+                //        break;
+                //}
+                return ClipTileViewModel.CopyItem.GetFileList(string.Empty, ClipTileViewModel.ClipTrayViewModel.GetTargetFileType());
             }
         }
 
@@ -184,18 +199,7 @@ namespace MpWpfApp {
                 }
             }
         }
-        //private List<MpFileListItemViewModel> _fileViewModelList = new List<MpFileListItemViewModel>();
-        //public List<MpFileListItemViewModel> FileViewModelList {
-        //    get {
-        //        return _fileViewModelList;
-        //    }
-        //    set {
-        //        if(_fileViewModelList != value) {
-        //            _fileViewModelList = value;
-        //            OnPropertyChanged(nameof(FileViewModelList));
-        //        }
-        //    }
-        //}
+
         #endregion
 
         #region Public Methods
@@ -208,6 +212,7 @@ namespace MpWpfApp {
             };
             IsLoading = true;
             ClipTileViewModel = parent;
+            Tokens = new ObservableCollection<MpSubTextToken>(copyItem.SubTextTokenList);
             switch (copyItem.CopyItemType) {
                 case MpCopyItemType.FileList:
                     FileListVisibility = Visibility.Visible;
@@ -225,14 +230,13 @@ namespace MpWpfApp {
                     RtbVisibility = Visibility.Visible;
                     break;
             }
-            // all other properties are handled by children
         }
 
         public void ContentCanvas_Loaded(object sender, RoutedEventArgs e) {
             switch (ClipTileViewModel.CopyItemType) {
                 case MpCopyItemType.FileList:
                     var flb = (ListBox)((Canvas)sender)?.FindName("ClipTileFileListBox");
-                    //flb.ContextMenu = (ContextMenu)flb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+                    flb.ContextMenu = (ContextMenu)flb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
 
                     foreach (var path in FileDropList) {
                         FileListViewModels.Add(new MpFileListItemViewModel(path));
@@ -242,7 +246,7 @@ namespace MpWpfApp {
                     break;
                 case MpCopyItemType.Image:
                     var img = (Image)((Canvas)sender)?.FindName("ClipTileImage");
-                    //img.ContextMenu = (ContextMenu)img.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+                    img.ContextMenu = (ContextMenu)img.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
                     //aspect ratio
                     double ar = Bmp.Width / Bmp.Height;
                     if (Bmp.Width >= Bmp.Height) {
@@ -265,10 +269,10 @@ namespace MpWpfApp {
                     rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
                     rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
 
-                    var sortedTokenList = ClipTileViewModel.CopyItem.SubTextTokenList.OrderBy(stt => stt.BlockIdx).ThenBy(stt => stt.StartIdx).ToList();
-                    foreach (var sortedToken in sortedTokenList) {
-                        rtb.AddSubTextToken(sortedToken);
-                    }
+                    //Tokens = new ObservableCollection<MpSubTextToken>(ClipTileViewModel.CopyItem.SubTextTokenList.OrderBy(stt => stt.BlockIdx).ThenBy(stt => stt.StartIdx).ToList());
+                    //foreach (var sortedToken in sortedTokenList) {
+                    //    rtb.AddSubTextToken(sortedToken);
+                    //}
                     rtb.SearchText = string.Empty;
                     break;
             }

@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using CsvHelper;
+using Newtonsoft.Json;
 using QRCoder;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Management;
@@ -338,6 +340,26 @@ namespace MpWpfApp {
             return filePath;
         }
 
+        public static string WriteStringListToCsvFile(string filePath, IList<string> strList, bool isTemporary = false) {
+            var textList = new List<string>();
+            foreach (var str in strList) {
+                if(!string.IsNullOrEmpty(str.Trim())) {
+                    textList.Add(str);
+                }
+            }
+            using (var writer = new StreamWriter(filePath)) {
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) {
+                    csv.WriteRecords(textList);
+                }
+            }
+            return filePath;
+            //using (var stream = File.OpenRead(filePath)) {
+            //    using (var reader = new StreamReader(stream)) {
+            //        return reader.ReadToEnd();
+            //    }
+            //}
+        }
+
         /* public static long DirSize(string sourceDir,bool recurse) {
              long size = 0;
              string[] fileEntries = Directory.GetFiles(sourceDir);
@@ -449,7 +471,7 @@ namespace MpWpfApp {
             return b1.Length == b2.Length && WinApi.memcmp(b1, b2, b1.Length) == 0;
         }
         public static string ConvertBitmapSourceToPlainText(BitmapSource bmpSource) {
-            string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", "&nbsp;" };
+            string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
             System.Drawing.Bitmap image = ConvertBitmapSourceToBitmap(ResizeBitmapSource(bmpSource,new Size(MpMeasurements.Instance.ClipTileBorderSize,MpMeasurements.Instance.ClipTileContentHeight)));
 
             string outStr = string.Empty;
@@ -530,18 +552,32 @@ namespace MpWpfApp {
             return new SolidColorBrush(Color.FromArgb(c.A, c.R, c.G, c.B));
         }
 
-        public static BitmapSource ConvertRichTextToImage(string rt, int fontSize = 12) {
-            //return null;
+        public static System.Drawing.Size GetRichTextFontSize(string rt) {
             string pt = ConvertRichTextToPlainText(rt);
-            int w = GetColCount(pt) * fontSize;
-            int h = GetRowCount(pt) * fontSize;
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(w, h);           
-            using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(bmp)) {
-                graphics.DrawRtfText(rt, new System.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height), 1f);
-                graphics.Flush();
-                graphics.Dispose();
-            }
-            return ConvertBitmapToBitmapSource(bmp);
+            using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
+                rtb.Rtf = rt;
+                rtb.SelectAll();
+                return System.Windows.Forms.TextRenderer.MeasureText(pt, rtb.SelectionFont);
+                //int w = GetColCount(pt) * (int)fontSize;
+                //int h = GetRowCount(pt) * (int)fontSize;
+
+                //rtb.SelectAll();
+                //rtb.SelectionFont.
+            }            
+            
+        }
+
+        public static BitmapSource ConvertRichTextToImage(string rt) {
+            System.Drawing.Size ts = GetRichTextFontSize(rt);
+            using(System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(ts.Width, ts.Height)){
+                using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(bmp)) {
+                    graphics.Clear(System.Drawing.Color.White);
+                    graphics.DrawRtfText(rt, new System.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height), 1f);
+                    graphics.Flush();
+                    graphics.Dispose();
+                }
+                return ConvertBitmapToBitmapSource(bmp);
+            }    
         }
 
         public static string ConvertPlainTextToRichText(string plainText) {
