@@ -57,7 +57,9 @@ namespace MpWpfApp {
                 Console.WriteLine("Database exists, skipping Db creation");
                 return;
             }
-            if (string.IsNullOrEmpty(Properties.Settings.Default.DbPath) || !Directory.Exists(Path.GetDirectoryName(Properties.Settings.Default.DbPath)) || !File.Exists(Properties.Settings.Default.DbPath)) {
+            if (string.IsNullOrEmpty(Properties.Settings.Default.DbPath) || 
+                !Directory.Exists(Path.GetDirectoryName(Properties.Settings.Default.DbPath)) || 
+                !File.Exists(Properties.Settings.Default.DbPath)) {
                 Console.WriteLine(Properties.Settings.Default.DbPath + " does not exist...");
                 MessageBoxResult result = MessageBox.Show("No Database found would you like to load a file?", "No DB Found", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
                 if (result == MessageBoxResult.Yes) {

@@ -16,7 +16,6 @@
         local:MpWindowClosingBehavior.CancelClosing="{Binding CancelClosingCommand}"
         Title="MpMainWindow"
         WindowStyle="None"
-        AllowsTransparency="True"
         Top="10000"
         ShowInTaskbar="false"
         ResizeMode="NoResize"
@@ -431,9 +430,9 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <!-- Tag Tile Border -->
-                            <Border CornerRadius="10"
+                            <local:MpClipBorder CornerRadius="10"
                                     Margin="5,0,5,0"
-                                    Padding="10,5,10,5"
+                                    Padding="7,5,7,5"
                                     Focusable="True"
                                     VerticalAlignment="Center"
                                     local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"
@@ -447,27 +446,39 @@
                                                             MethodName="TagTile_Loaded" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                                <Border.ContextMenu>
+                                <local:MpClipBorder.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="Rename"
                                                   Command="{Binding RenameTagCommand}" />
+                                        <MenuItem Header="Change Color"
+                                                  Command="{Binding ChangeTagColorCommand}" />
                                         <MenuItem Header="Delete"
                                                   Command="{Binding TagTrayViewModel.DeleteTagCommand}" />
                                     </ContextMenu>
-                                </Border.ContextMenu>
-                                <StackPanel Orientation="Horizontal">
+                                </local:MpClipBorder.ContextMenu>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
                                     <!-- Tag Count Box-->
-                                    <local:MpClipBorder CornerRadius="3"
+                                    <local:MpClipBorder CornerRadius="5"
+                                                        Grid.Column="0"
+                                                        Grid.Row="0"
+                                                        MinWidth="20"
+                                                        Margin="3,0,0,0"
                                                         Padding="5"
-                                                        VerticalAlignment="Center"
                                                         BorderThickness="0"
-                                                        Background="{Binding TagColor}">
+                                                        Background="{Binding TagColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
                                         <TextBlock Background="Transparent"
                                                    VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center"
                                                    Text="{Binding TagClipCount, Converter={StaticResource IntToStringConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                    Foreground="{Binding TagCountTextColor}" />
                                     </local:MpClipBorder>
                                     <TextBlock x:Name="TagTextBlock"
+                                               Grid.Column="1"
+                                               Grid.Row="0"
                                                Margin="5,0,0,0"
                                                Background="Transparent"
                                                HorizontalAlignment="Center"
@@ -479,6 +490,8 @@
                                                Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
                                     </TextBlock>
                                     <TextBox x:Name="TagTextBox"
+                                             Grid.Row="0"
+                                             Grid.Column="1"
                                              Margin="5,0,0,0"
                                              Background="White"
                                              Foreground="Black"
@@ -490,8 +503,8 @@
                                              Visibility="{Binding TextBoxVisibility}"
                                              FontSize="{Binding TagFontSize}"
                                              Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
-                                </StackPanel>
-                            </Border>
+                                </Grid>
+                            </local:MpClipBorder>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
@@ -700,6 +713,10 @@
                                 </local:MpClipBorder.Resources>
                                 <local:MpClipBorder.ContextMenu>
                                     <ContextMenu x:Name="ClipTile_ContextMenu">
+                                        <MenuItem Header="Bring to Front"
+                                                  Command="{Binding Data.BringSelectedClipTilesToFrontCommand, Source={StaticResource ClipTrayProxy}}" />
+                                        <MenuItem Header="Send to Back"
+                                                  Command="{Binding Data.SendSelectedClipTilesToBackCommand, Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Export To">
                                             <MenuItem Header="File(s)..."
                                                       Command="{Binding Data.ExportSelectedClipTilesCommand,Source={StaticResource ClipTrayProxy}}"
@@ -710,6 +727,8 @@
                                         </MenuItem>
                                         <MenuItem Header="Rename"
                                                   Command="{Binding Data.RenameClipCommand,Source={StaticResource ClipTrayProxy}}" />
+                                        <MenuItem Header="Change Color"
+                                                  Command="{Binding Data.ChangeClipColorCommand, Source={StaticResource ClipTileProxy}}" />
                                         <MenuItem Header="Delete"
                                                   Command="{Binding Data.DeleteSelectedClipsCommand,Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Say"
@@ -874,13 +893,18 @@
                                                                       BorderThickness="0"
                                                                       Padding="10" />
                                         <!-- Image Content-->
-                                        <Grid Width="{Binding ContentWidth}"
-                                              Height="{Binding ContentHeight}">
+                                        <Grid Width="{Binding ClipTileViewModel.TileBorderSize}"
+                                              Height="{Binding ClipTileViewModel.TileContentHeight}"
+                                              Focusable="False"
+                                              IsEnabled="False">
                                             <Image x:Name="ClipTileImage"
-                                                   Focusable="False" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                   Focusable="False" 
+                                                   IsEnabled="False"
+                                                   HorizontalAlignment="Center" 
+                                                   VerticalAlignment="Center"
                                                    Visibility="{Binding ImgVisibility}"
                                                    Source="{Binding Bmp}"
-                                                   Stretch="UniformToFill" />
+                                                   Stretch="Uniform" />
                                         </Grid>
                                         <!--File List Content -->
                                         <ListBox Width="{Binding ClipTileViewModel.TileBorderSize}"
@@ -888,6 +912,7 @@
                                                  ItemsSource="{Binding FileListViewModels}"
                                                  Visibility="{Binding FileListVisibility}"
                                                  BorderThickness="0"
+                                                 Focusable="False"
                                                  x:Name="ClipTileFileListBox">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>

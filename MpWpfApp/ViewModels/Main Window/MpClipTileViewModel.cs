@@ -341,7 +341,6 @@ namespace MpWpfApp {
         }
         #endregion        
 
-
         #region Public Methods
         public MpClipTileViewModel(MpCopyItem ci, MpClipTrayViewModel parent) {
             PropertyChanged += (s, e1) => {
@@ -389,7 +388,7 @@ namespace MpWpfApp {
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            var clipTileBorder = (Border)sender;
+            var clipTileBorder = (MpClipBorder)sender;
             clipTileBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
             };
@@ -429,6 +428,34 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+
+        private RelayCommand _changeClipColorCommand;
+        public ICommand ChangeClipColorCommand {
+            get { 
+                if (_changeClipColorCommand == null) {
+                    _changeClipColorCommand = new RelayCommand(ChangeClipColor);
+                }
+                return _changeClipColorCommand;
+            }
+        }
+        private void ChangeClipColor() {
+            System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
+            cd.AllowFullOpen = true;
+            cd.ShowHelp = true;
+            cd.Color = MpHelpers.ConvertSolidColorBrushToWinFormsColor((SolidColorBrush)ClipTileTitleViewModel.TitleColor);
+            cd.CustomColors = Properties.Settings.Default.UserCustomColorIdxArray;
+
+            var mw = (MpMainWindow)Application.Current.MainWindow;
+            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = true;
+            // Update the text box color if the user clicks OK 
+            if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                ClipTileTitleViewModel.TitleColor = MpHelpers.ConvertWinFormsColorToSolidColorBrush(cd.Color);
+                ClipTileTitleViewModel.InitSwirl();
+                CopyItem.WriteToDatabase();
+            }
+            Properties.Settings.Default.UserCustomColorIdxArray = cd.CustomColors;
+            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = false;
+        }
 
         #endregion
 

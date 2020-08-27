@@ -232,7 +232,7 @@ namespace MpWpfApp {
             switch (ClipTileViewModel.CopyItemType) {
                 case MpCopyItemType.FileList:
                     var flb = (ListBox)((Canvas)sender)?.FindName("ClipTileFileListBox");
-                    flb.ContextMenu = (ContextMenu)flb.GetVisualAncestor<Border>().FindName("ClipTile_ContextMenu");
+                    //flb.ContextMenu = (ContextMenu)flb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
 
                     foreach (var path in FileDropList) {
                         FileListViewModels.Add(new MpFileListItemViewModel(path));
@@ -242,7 +242,7 @@ namespace MpWpfApp {
                     break;
                 case MpCopyItemType.Image:
                     var img = (Image)((Canvas)sender)?.FindName("ClipTileImage");
-                    img.ContextMenu = (ContextMenu)img.GetVisualAncestor<Border>().FindName("ClipTile_ContextMenu");
+                    //img.ContextMenu = (ContextMenu)img.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
                     //aspect ratio
                     double ar = Bmp.Width / Bmp.Height;
                     if (Bmp.Width >= Bmp.Height) {
@@ -254,12 +254,12 @@ namespace MpWpfApp {
                     }
                     MpHelpers.ResizeBitmapSource(Bmp, new Size((int)ContentWidth, (int)ContentHeight));
                     
-                    //Canvas.SetLeft(img, (ClipTileViewModel.TileBorderSize / 2) - (ContentWidth / 2));
-                    //Canvas.SetTop(img, (ClipTileViewModel.TileContentHeight / 2) - (ContentHeight / 2));
+                    Canvas.SetLeft(img, (ClipTileViewModel.TileBorderSize / 2) - (ContentWidth / 2));
+                    Canvas.SetTop(img, (ClipTileViewModel.TileContentHeight / 2) - (ContentHeight / 2));
                     break;
                 case MpCopyItemType.RichText:
                     var rtb = (MpTokenizedRichTextBox)((Canvas)sender)?.FindName("ClipTileRichTextBox");
-                    rtb.ContextMenu = (ContextMenu)rtb.GetVisualAncestor<Border>().FindName("ClipTile_ContextMenu");
+                    rtb.ContextMenu = (ContextMenu)rtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
                     ContentWidth = rtb.RenderSize.Width;
                     ContentHeight = rtb.RenderSize.Height;
                     rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;

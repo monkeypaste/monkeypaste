@@ -227,15 +227,13 @@ namespace MpWpfApp {
 
         #region Constructor/Initializers
         public MpTagTileViewModel(MpTag tag, MpTagTrayViewModel parent, bool isNew) {
-            Tag = tag;
-            TagTrayViewModel = parent;
-            TagColor = new SolidColorBrush(Tag.TagColor.Color);
-            TagCountTextColor = MpHelpers.IsBright(Tag.TagColor.Color) ? Brushes.Black : Brushes.White;
-            TagName = Tag.TagName;
-            _isNew = isNew;
-
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
+                    case nameof(TagColor):
+                        Tag.TagColor.Color = ((SolidColorBrush)TagColor).Color;
+                        Tag.WriteToDatabase();
+                        TagCountTextColor = MpHelpers.IsBright(Tag.TagColor.Color) ? Brushes.Black : Brushes.White;
+                        break;
                     case nameof(IsEditing):
                         if (IsEditing) {
                             //show textbox and select all text
@@ -281,10 +279,16 @@ namespace MpWpfApp {
                         break;
                 }
             };
+
+            Tag = tag;
+            TagTrayViewModel = parent;
+            TagColor = new SolidColorBrush(Tag.TagColor.Color);
+            TagName = Tag.TagName;
+            _isNew = isNew;
         }
 
         public void TagTile_Loaded(object sender, RoutedEventArgs e) {
-            var tagBorder = (Border)sender;
+            var tagBorder = (MpClipBorder)sender;
             tagBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
             };
@@ -315,6 +319,32 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+
+        private RelayCommand _changeTagColorCommand;
+        public ICommand ChangeTagColorCommand {
+            get {
+                if (_changeTagColorCommand == null) {
+                    _changeTagColorCommand = new RelayCommand(ChangeTagColor);
+                }
+                return _changeTagColorCommand;
+            }
+        }
+        private void ChangeTagColor() {
+            System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
+            cd.AllowFullOpen = true;
+            cd.ShowHelp = true;
+            cd.Color = MpHelpers.ConvertSolidColorBrushToWinFormsColor((SolidColorBrush)TagColor);
+            cd.CustomColors = Properties.Settings.Default.UserCustomColorIdxArray;
+
+            var mw = (MpMainWindow)Application.Current.MainWindow;
+            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = true;
+            // Update the text box color if the user clicks OK 
+            if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                TagColor = MpHelpers.ConvertWinFormsColorToSolidColorBrush(cd.Color);                   
+            }
+            Properties.Settings.Default.UserCustomColorIdxArray = cd.CustomColors;
+            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = false;
+        }
 
         private RelayCommand _renameTagCommand;
         public ICommand RenameTagCommand {

@@ -186,5 +186,16 @@ namespace MpWpfApp.Properties {
                 this["DragDropAsFileDropDefaultAppTitleCollection"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public int[] UserCustomColorIdxArray {
+            get {
+                return ((int[])(this["UserCustomColorIdxArray"]));
+            }
+            set {
+                this["UserCustomColorIdxArray"] = value;
+            }
+        }
     }
 }

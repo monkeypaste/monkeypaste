@@ -46,64 +46,54 @@ namespace MpWpfApp {
             List<MpSubTextToken> tokenList = new List<MpSubTextToken>();
             RichTextBox rtb = new RichTextBox();
             rtb.SetRtf(searchText);
-            tokenList?.AddRange(ContainsEmail(rtb.Document));
-            tokenList?.AddRange(ContainsWebLink(rtb.Document));
-            tokenList?.AddRange(ContainsPhoneNumber(rtb.Document));
-            tokenList?.AddRange(ContainsCurrency(rtb.Document));
-            tokenList?.AddRange(ContainsHexColor(rtb.Document));
+            tokenList?.AddRange(ExtractEmail(rtb.Document));
+            tokenList?.AddRange(ExtractWebLink(rtb.Document));
+            tokenList?.AddRange(ExtractStreetAddress(rtb.Document));
+            tokenList?.AddRange(ExtractPhoneNumber(rtb.Document));
+            tokenList?.AddRange(ExtractCurrency(rtb.Document));
+            tokenList?.AddRange(ExtractHexColor(rtb.Document));
 
             //ensure no weblinks are part of emails
-            List<MpSubTextToken> tokensToRemove = new List<MpSubTextToken>();
-            foreach (MpSubTextToken token in tokenList) {
-                if (token.TokenType == MpSubTextTokenType.Uri) {
-                    var emailTokenList = tokenList.Where(stt => stt.TokenType == MpSubTextTokenType.Email).ToList();
-                    //check if this weblink is within email token's range
-                    foreach (var emailToken in emailTokenList) {
-                        if (token.StartIdx >= emailToken.StartIdx && token.StartIdx <= emailToken.EndIdx) {
-                            tokensToRemove.Add(token);
-                        }
-                    }
-                }
-            }
-            foreach (MpSubTextToken tokenToRemove in tokensToRemove) {
-                tokenList.Remove(tokenToRemove);
-            }
+            //List<MpSubTextToken> tokensToRemove = new List<MpSubTextToken>();
+            //foreach (MpSubTextToken token in tokenList) {
+            //    if (token.TokenType == MpSubTextTokenType.Uri) {
+            //        var emailTokenList = tokenList.Where(stt => stt.TokenType == MpSubTextTokenType.Email).ToList();
+            //        //check if this weblink is within email token's range
+            //        foreach (var emailToken in emailTokenList) {
+            //            if (token.StartIdx >= emailToken.StartIdx && token.StartIdx <= emailToken.EndIdx && token != emailToken) {
+            //                tokensToRemove.Add(token);
+            //            }
+            //        }
+            //    }
+            //}
+            //foreach (MpSubTextToken tokenToRemove in tokensToRemove) {
+            //    tokenList.Remove(tokenToRemove);
+            //}
 
             return tokenList;
         }
-        private static List<MpSubTextToken> ContainsEmail(FlowDocument doc) {
-            return ContainsRegEx(doc, @"([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})", MpSubTextTokenType.Email);
+        // created from https://www.regexr.com
+        private static List<MpSubTextToken> ExtractEmail(FlowDocument doc) {
+            return ExtractRegEx(doc, @"([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})", MpSubTextTokenType.Email);
         }
-        private static List<MpSubTextToken> ContainsPhoneNumber(FlowDocument doc) {
-            return ContainsRegEx(doc, @"(?:\([2-9]\d{2}\)\ ?|[2-9]\d{2}(?:\-?|\ ?))[2-9]\d{2}[- ]?\d{4}", MpSubTextTokenType.PhoneNumber);
+        private static List<MpSubTextToken> ExtractPhoneNumber(FlowDocument doc) {
+            return ExtractRegEx(doc, @"(\+?\d{1,3}?[ -.]?)?\(?(\d{3})\)?[ -.]?(\d{3})[ -.]?(\d{4})", MpSubTextTokenType.PhoneNumber);
         }
-        private static List<MpSubTextToken> ContainsStreetAddress(FlowDocument doc) {
-            string zip = @"\b\d{5}(?:-\d{4})?\b";
-            string city = @"(?:[A-Z][a-z.-]+[ ]?)+";
-            string state = @"Alabama|Alaska|Arizona|Arkansas|California|Colorado|Connecticut|Delaware|Florida|Georgia|Hawaii|
-                            Idaho|Illinois|Indiana|Iowa|Kansas|Kentucky|Louisiana|Maine|Maryland|Massachusetts|Michigan|
-                            Minnesota|Mississippi|Missouri|Montana|Nebraska|Nevada|New[ ]Hampshire|New[ ]Jersey|New[ ]Mexico
-                            |New[ ]York|North[ ]Carolina|North[ ]Dakota|Ohio|Oklahoma|Oregon|Pennsylvania|Rhode[ ]Island
-                            |South[ ]Carolina|South[ ]Dakota|Tennessee|Texas|Utah|Vermont|Virginia|Washington|West[ ]Virginia
-                            |Wisconsin|Wyoming";
-            string stateAbbr = @"AL|AK|AS|AZ|AR|CA|CO|CT|DE|DC|FM|FL|GA|GU|HI|ID|IL|IN|IA|KS|KY|LA|ME|MH|MD|MA|MI|MN|MS|MO|MT|NE|NV|NH|NJ|NM|NY|NC|ND|MP|OH|OK|OR|PW|PA|PR|RI|SC|SD|TN|TX|UT|VT|VI|VA|WA|WV|WI|WY";
-            string cityStateZip = @"{" + city + "},[ ](?:{" + state + "}|{" + stateAbbr + "})[ ]{" + zip + "}";
-            string street = @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Court|Loop|Pike|Turnpike|Square|Station|Trail|Terrace|Lane|Parkway|Road|Way|Circle|Boulevard|Drive|Street|Ave|Trnpk|Dr|Trl|Wy|Ter|Sq||Pkwy|Rd|Cir|Blvd|Ln|Ct|St)\.?";
-            string fullAddress = street + @"\s" + cityStateZip;
-            return ContainsRegEx(doc, fullAddress, MpSubTextTokenType.StreetAddress);
+        private static List<MpSubTextToken> ExtractStreetAddress(FlowDocument doc) {
+            return ExtractRegEx(doc, @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Lane|Road|Boulevard|Drive|Street|Ave|Dr|Rd|Blvd|Ln|St)\.?,\s(?:[A-Z][a-z.-]+[ ]?)+ \b\d{5}(?:-\d{4})?\b", MpSubTextTokenType.StreetAddress);
         }
-        private static List<MpSubTextToken> ContainsWebLink(FlowDocument doc) {
-            return ContainsRegEx(doc, @"\b(?:https?://|www\.)\S+\b", MpSubTextTokenType.Uri);
+        private static List<MpSubTextToken> ExtractWebLink(FlowDocument doc) {
+            return ExtractRegEx(doc, @"(?:https?://|www\.)\S+", MpSubTextTokenType.Uri);
         }
-        private static List<MpSubTextToken> ContainsCurrency(FlowDocument doc) {
-            return ContainsRegEx(doc, @"\$?([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)(\.[0-9][0-9])?$", MpSubTextTokenType.Currency);
+        private static List<MpSubTextToken> ExtractCurrency(FlowDocument doc) {
+            return ExtractRegEx(doc, @"[$|£|€|¥]([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)?(\.[0-9][0-9])?", MpSubTextTokenType.Currency);
         }
-        private static List<MpSubTextToken> ContainsHexColor(FlowDocument doc) {
-            return ContainsRegEx(doc, @"#(([\da-fA-F]{3}){1,2}|([\da-fA-F]{4}){1,2})$", MpSubTextTokenType.Currency);
+
+        private static List<MpSubTextToken> ExtractHexColor(FlowDocument doc) {
+            return ExtractRegEx(doc, @"#([0-9]|[a-fA-F]){6}", MpSubTextTokenType.HexColor);
         }
-        //        tkefauver@gmail.com www.google.com
-        //804-459-9980
-        private static List<MpSubTextToken> ContainsRegEx(FlowDocument doc, string regExStr, MpSubTextTokenType tokenType) {
+
+        private static List<MpSubTextToken> ExtractRegEx(FlowDocument doc, string regExStr, MpSubTextTokenType tokenType) {
             List<MpSubTextToken> tokenList = new List<MpSubTextToken>();
             //break document into blocks and then blocks into lines and regex lines
             for (int i = 0; i < doc.Blocks.Count; i++) {

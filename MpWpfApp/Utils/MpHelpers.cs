@@ -526,6 +526,10 @@ namespace MpWpfApp {
             return System.Drawing.Color.FromArgb(scb.Color.A, scb.Color.R, scb.Color.G, scb.Color.B);
         }
 
+        public static SolidColorBrush ConvertWinFormsColorToSolidColorBrush(System.Drawing.Color c) {
+            return new SolidColorBrush(Color.FromArgb(c.A, c.R, c.G, c.B));
+        }
+
         public static BitmapSource ConvertRichTextToImage(string rt, int fontSize = 12) {
             //return null;
             string pt = ConvertRichTextToPlainText(rt);

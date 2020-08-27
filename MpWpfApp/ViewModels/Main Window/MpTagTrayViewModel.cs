@@ -149,6 +149,7 @@ namespace MpWpfApp {
             newTag.WriteToDatabase();
             AddTagTile(newTag, true);
         }
+
         #endregion
     }
 }

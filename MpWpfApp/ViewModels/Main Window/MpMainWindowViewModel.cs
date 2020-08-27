@@ -20,6 +20,8 @@ namespace MpWpfApp {
 
         public IKeyboardMouseEvents GlobalHook { get; set; } = null;
 
+        public bool IsShowingDialog = false;
+
         #endregion
 
         #region Properties
@@ -404,7 +406,9 @@ namespace MpWpfApp {
             }
         }
         private bool CanHideWindow() {
-            return Application.Current.MainWindow != null && Application.Current.MainWindow.Visibility == Visibility.Visible;
+            return Application.Current.MainWindow != null && 
+                   Application.Current.MainWindow.Visibility == Visibility.Visible &&
+                   IsShowingDialog == false;
         }
         private void HideWindow() {
             if (!CanHideWindow()) {

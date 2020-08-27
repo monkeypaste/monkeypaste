@@ -87,7 +87,11 @@ namespace MpWpfApp {
             convertToQrCodeMenuItem.Tag = tokenLink;
             tokenLink.ContextMenu = new ContextMenu();
             tokenLink.ContextMenu.Items.Add(convertToQrCodeMenuItem);
+
             switch (token.TokenType) {
+                case MpSubTextTokenType.StreetAddress:
+                    tokenLink.NavigateUri = new Uri("https://google.com/maps/place/" + tokenText.Replace(' ', '+'));
+                    break;
                 case MpSubTextTokenType.Uri:
                     if (!tokenText.Contains("https://")) {
                         tokenLink.NavigateUri = new Uri("https://" + tokenText);
@@ -110,11 +114,9 @@ namespace MpWpfApp {
                     minifyUrl.Tag = tokenLink;
                     tokenLink.ContextMenu.Items.Add(minifyUrl);
                     break;
-
                 case MpSubTextTokenType.Email:
                     tokenLink.NavigateUri = new Uri("mailto:" + tokenText);
                     break;
-
                 case MpSubTextTokenType.PhoneNumber:
                     tokenLink.NavigateUri = new Uri("tel:" + tokenText);
                     break;

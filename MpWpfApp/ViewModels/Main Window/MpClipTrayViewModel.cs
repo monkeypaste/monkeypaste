@@ -60,6 +60,7 @@ namespace MpWpfApp {
 
         public MpClipboardMonitor ClipboardMonitor { get; private set; }
 
+        public bool IsDragging { get; set; } = false;
         public bool DoPaste { get; set; } = false;
 
         public Point StartDragPoint;
@@ -210,7 +211,7 @@ namespace MpWpfApp {
             };
             clipTray.Drop += (s, e2) => {
                 var dragClipViewModel = (List<MpClipTileViewModel>)e2.Data.GetData(Properties.Settings.Default.ClipTileDragDropFormatName);
-
+                
                 var mpo = e2.GetPosition(clipTray);
                 if (mpo.X - StartDragPoint.X > 0) {
                     mpo.X -= MpMeasurements.Instance.ClipTileMargin * 5;
@@ -220,17 +221,17 @@ namespace MpWpfApp {
 
                 MpClipTileViewModel dropVm = null;
                 var item = VisualTreeHelper.HitTest(clipTray, mpo).VisualHit;
-                if(item.GetType() != typeof(Border)) {
-                    dropVm = (MpClipTileViewModel)item.GetVisualAncestor<Border>().DataContext;
+                if(item.GetType() != typeof(MpClipBorder)) {
+                    dropVm = (MpClipTileViewModel)item.GetVisualAncestor<MpClipBorder>().DataContext;
                 } else {
-                    dropVm = (MpClipTileViewModel)((Border)item).DataContext;
+                    dropVm = (MpClipTileViewModel)((MpClipBorder)item).DataContext;
                 }
                 int dropIdx = item == null || item == clipTray ? 0 : this.IndexOf(dropVm);
                 if (dropIdx >= 0) {
                     ClearClipSelection();
                     for (int i = 0; i < dragClipViewModel.Count; i++) {
-                        this.Remove(dragClipViewModel[i]);
-                        this.Insert(dropIdx, dragClipViewModel[i]);
+                        int dragIdx = this.IndexOf(dragClipViewModel[i]);
+                        this.Move(dragIdx, dropIdx);
                         dragClipViewModel[i].IsSelected = true;
                         if (i == 0) {
                             dragClipViewModel[i].IsFocused = true;
@@ -257,14 +258,16 @@ namespace MpWpfApp {
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            var clipTileBorder = (Border)sender;
+            var clipTileBorder = (MpClipBorder)sender;
 
             clipTileBorder.PreviewMouseLeftButtonDown += (s, e6) => {
                 if (e6.ClickCount == 2) {
                     PasteSelectedClipsCommand.Execute(null);
+                    return;
                 }
+                var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
                 IsMouseDown = true;
-                StartDragPoint = e6.GetPosition((ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray"));
+                StartDragPoint = e6.GetPosition(clipTray);
             };
             //Initiate Selected Clips Drag/Drop, Copy/Paste and Export (to file or csv)
             //Strategy: ALL selected items, regardless of type will have text,rtf,img, and file representations
@@ -274,8 +277,10 @@ namespace MpWpfApp {
                 var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
                 var curDragPoint = e7.GetPosition(clipTray);
 
-                if (IsMouseDown && e7.MouseDevice.LeftButton == MouseButtonState.Pressed
-                /*&& Math.Abs(curDragPoint.X-StartDragPoint.X) > 50*/) {
+                if (IsMouseDown && 
+                    !IsDragging &&
+                    e7.MouseDevice.LeftButton == MouseButtonState.Pressed && 
+                    Math.Abs(curDragPoint.X - StartDragPoint.X) > 5) {
                     IDataObject d = new DataObject();
                     d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
                     d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
@@ -284,13 +289,16 @@ namespace MpWpfApp {
                     d.SetData(DataFormats.Text, SelectedClipTilesPlainText);
                     d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
                     DragDrop.DoDragDrop(clipTray, d, DragDropEffects.Copy | DragDropEffects.Move);
-                } else {
+                    IsDragging = true;
+                } else if(IsDragging) {
                     IsMouseDown = false;
+                    IsDragging = false;
                     StartDragPoint = new Point ();
                 }
             };
             clipTileBorder.PreviewMouseUp += (s, e8) => {
                 IsMouseDown = false;
+                IsDragging = false;
                 StartDragPoint = new Point();
             };
         }
@@ -313,9 +321,9 @@ namespace MpWpfApp {
         public new void Add(MpClipTileViewModel ctvm) {
             if (ctvm.IsNew) {
                 ctvm.CopyItem.WriteToDatabase();
+                MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
             }
 
-            //MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
             this.Insert(0, ctvm);
         }
 
@@ -627,9 +635,37 @@ namespace MpWpfApp {
             return canBringForward;
         }
         private void BringSelectedClipTilesToFront() {
-            for (int i = SelectedClipTiles.Count - 1; i >= 0; i--) {
-                this.Move(this.IndexOf(SelectedClipTiles[i]), 0);
+            foreach (var sctvm in SelectedClipTiles) {
+                this.Move(this.IndexOf(sctvm), 0);
             }
+        }
+
+        private RelayCommand _sendSelectedClipTilesToBackCommand;
+        public ICommand SendSelectedClipTilesToBackCommand {
+            get {
+                if (_sendSelectedClipTilesToBackCommand == null) {
+                    _sendSelectedClipTilesToBackCommand = new RelayCommand(SendSelectedClipTilesToBack, CanSendSelectedClipTilesToBack);
+                }
+                return _sendSelectedClipTilesToBackCommand;
+            }
+        }
+        private bool CanSendSelectedClipTilesToBack() {
+            bool canSendBack = false;
+            for (int i = 0; i < SelectedClipTiles.Count; i++) {
+                if (!SelectedClipTiles.Contains(VisibileClipTiles[VisibileClipTiles.Count - 1 - i])) {
+                    canSendBack = true;
+                    break;
+                }
+            }
+            return canSendBack;
+        }
+        private void SendSelectedClipTilesToBack() {
+            foreach(var sctvm in SelectedClipTiles) {
+                this.Move(this.IndexOf(sctvm), this.Count - 1);
+            }
+            //for (int i = 0; i < SelectedClipTiles.Count; i++) {
+            //    this.Move(VisibileClipTiles.IndexOf(SelectedClipTiles[i]), VisibileClipTiles.Count - 1 - i);
+            //}
         }
 
         private RelayCommand _deleteSelectedClipsCommand;

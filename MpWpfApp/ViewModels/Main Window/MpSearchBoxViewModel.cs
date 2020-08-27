@@ -69,7 +69,7 @@ namespace MpWpfApp {
             MainWindowViewModel = parent;
         }
         public void SearchBoxBorder_Loaded(object sender, RoutedEventArgs e) {
-            var searchBox = (TextBox)((Border)sender).FindName("SearchTextBox");
+            var searchBox = (TextBox)((MpClipBorder)sender).FindName("SearchTextBox");
             searchBox.GotFocus += (s, e4) => {
                 //make text
                 if (SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
