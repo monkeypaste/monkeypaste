@@ -806,7 +806,6 @@
                                     <!-- Tile Title StackPanel -->
                                     <Canvas Grid.Row="0"
                                             Grid.Column="0"
-                                            DataContext="{Binding ClipTileTitleViewModel}"
                                             VerticalAlignment="Top"
                                             HorizontalAlignment="Left">
                                         <i:Interaction.Triggers>
@@ -819,8 +818,8 @@
                                                Canvas.Top="-1"
                                                Canvas.Left="-1"
                                                Stretch="Fill"
-                                               Width="{Binding ClipTileViewModel.TileSize}"
-                                               Height="{Binding ClipTileViewModel.TileTitleHeight}"
+                                               Width="{Binding TileSize}"
+                                               Height="{Binding TileTitleHeight}"
                                                Source="{Binding TitleSwirl}" />
                                         <!-- Clip Title TextBlock -->
                                         <TextBlock x:Name="ClipTileTitleTextBlock"
@@ -869,7 +868,6 @@
                                     </Canvas>
                                     <!-- Content Container Canvas -->
                                     <Canvas x:Name="ClipTileContentCanvas"
-                                            DataContext="{Binding ClipTileContentViewModel}"
                                             Grid.Row="1"
                                             Grid.Column="0">
                                         <i:Interaction.Triggers>
@@ -882,8 +880,8 @@
                                         <local:MpTokenizedRichTextBox x:Name="ClipTileRichTextBox"
                                                                       RichText="{Binding RichText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                       SearchText="{Binding SearchText}"
-                                                                      MinWidth="{Binding ClipTileViewModel.TileBorderSize}"
-                                                                      MinHeight="{Binding ClipTileViewModel.TileContentHeight}"
+                                                                      MinWidth="{Binding TileBorderSize}"
+                                                                      MinHeight="{Binding TileContentHeight}"
                                                                       Tokens="{Binding Tokens, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                       IsReadOnly="True"
                                                                       IsUndoEnabled="False" 
@@ -900,8 +898,8 @@
                                                                       BorderThickness="0"
                                                                       Padding="10" />
                                         <!-- Image Content-->
-                                        <Grid Width="{Binding ClipTileViewModel.TileBorderSize}"
-                                              Height="{Binding ClipTileViewModel.TileContentHeight}"
+                                        <Grid Width="{Binding TileBorderSize}"
+                                              Height="{Binding TileContentHeight}"
                                               Focusable="False"
                                               IsEnabled="False">
                                             <Image x:Name="ClipTileImage"
@@ -914,8 +912,8 @@
                                                    Stretch="Uniform" />
                                         </Grid>
                                         <!--File List Content -->
-                                        <ListBox Width="{Binding ClipTileViewModel.TileBorderSize}"
-                                                 Height="{Binding ClipTileViewModel.TileContentHeight}"
+                                        <ListBox Width="{Binding TileBorderSize}"
+                                                 Height="{Binding TileContentHeight}"
                                                  ItemsSource="{Binding FileListViewModels}"
                                                  Visibility="{Binding FileListVisibility}"
                                                  BorderThickness="0"

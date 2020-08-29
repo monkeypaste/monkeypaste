@@ -39,6 +39,7 @@ namespace MpWpfApp {
                 }
             }
         }
+        
         private double _contentHeight = 0;
         public double ContentHeight {
             get {

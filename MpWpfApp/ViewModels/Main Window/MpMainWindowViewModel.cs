@@ -216,7 +216,7 @@ namespace MpWpfApp {
                 } else if (TagTrayViewModel.IsEditingTagName) {
                     TagTrayViewModel.SelectedTagTile.IsEditing = false;
                 } else if (ClipTrayViewModel.IsEditingClipTitle) {
-                    ClipTrayViewModel.SelectedClipTiles[0].ClipTileTitleViewModel.IsEditingTitle = false;
+                    ClipTrayViewModel.SelectedClipTiles[0].IsEditingTitle = false;
                 } else {
                     ClipTrayViewModel.PasteSelectedClipsCommand.Execute(null);
                 }

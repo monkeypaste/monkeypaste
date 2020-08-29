@@ -215,7 +215,7 @@ namespace MpWpfApp {
 
         public void ClipTileTitle_Loaded(object sender, RoutedEventArgs e) {
             if (TitleSwirl == null) {
-                InitSwirl();
+              //  InitSwirl();
             }
 
             var titleCanvas = (Canvas)sender;
@@ -232,19 +232,6 @@ namespace MpWpfApp {
             var titleDetailTextBlock = (TextBlock)titleCanvas.FindName("ClipTileTitleDetailTextBlock");
             Canvas.SetLeft(titleDetailTextBlock, 5);
             Canvas.SetTop(titleDetailTextBlock, ClipTileViewModel.TileTitleHeight - 14);
-        }
-
-        public void InitSwirl() {
-            var swirl1 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0001.png"));
-            swirl1 = MpHelpers.TintBitmapSource(swirl1, ((SolidColorBrush)TitleColor).Color);
-            var swirl2 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0002.png"));
-            swirl2 = MpHelpers.TintBitmapSource(swirl2, ((SolidColorBrush)TitleColorLighter).Color);
-            var swirl3 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0003.png"));
-            swirl3 = MpHelpers.TintBitmapSource(swirl3, ((SolidColorBrush)TitleColorDarker).Color);
-            var swirl4 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0004.png"));
-            swirl4 = MpHelpers.TintBitmapSource(swirl4, ((SolidColorBrush)TitleColorAccent).Color);
-
-            TitleSwirl = MpHelpers.MergeImages(new List<BitmapSource>() { swirl1, swirl2, swirl3, swirl4 });
         }
 
         #endregion

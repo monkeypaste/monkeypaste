@@ -15,10 +15,14 @@ using static QRCoder.PayloadGenerator;
 
 namespace MpWpfApp {
     public class MpTokenizedRichTextBox : RichTextBox {
+        #region Private variables
+
         private TextRange _lastTokenRange = null;
         private MpSubTextToken _lastToken = null;
 
-        public MpTokenizedRichTextBox() : base() { }
+        #endregion
+
+        #region Properties
 
         public string SearchText {
             get {
@@ -29,6 +33,12 @@ namespace MpWpfApp {
                     SetValue(SearchTextProperty, value);
                 }
             }
+        }
+        public static string GetSearchText(DependencyObject obj) {
+            return (string)obj.GetValue(SearchTextProperty);
+        }
+        public static void SetSearchText(DependencyObject obj, string value) {
+            obj.SetValue(SearchTextProperty, value);
         }
 
         public string RichText {
@@ -41,7 +51,13 @@ namespace MpWpfApp {
                 }
             }
         }
-        
+        public static string GetRichText(DependencyObject obj) {
+            return (string)obj.GetValue(RichTextProperty);
+        }
+        public static void SetRichText(DependencyObject obj, string value) {
+            obj.SetValue(RichTextProperty, value);
+        }
+
         public ObservableCollection<MpSubTextToken> Tokens {
             get {
                 return (ObservableCollection<MpSubTextToken>)GetValue(TokensProperty);
@@ -52,6 +68,19 @@ namespace MpWpfApp {
                 }
             }
         }
+        public static ObservableCollection<MpSubTextToken> GetTokens(DependencyObject obj) {
+            return (ObservableCollection<MpSubTextToken>)obj.GetValue(TokensProperty);
+        }
+        public static void SetTokens(DependencyObject obj, ObservableCollection<MpSubTextToken> value) {
+            obj.SetValue(TokensProperty, value);
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public MpTokenizedRichTextBox() : base() { }
+
         public void AddSubTextToken(MpSubTextToken token) {
             Block block = Document.Blocks.ToArray()[token.BlockIdx];
             //find and remove the inline with the token
@@ -137,9 +166,13 @@ namespace MpWpfApp {
             }
             _lastTokenRange = tokenRange;
             _lastToken = token;
-        }        
+        }
 
-        public void HighlightSearchText(SolidColorBrush highlightColor) {
+        #endregion
+
+        #region Private Methods
+
+        private void HighlightSearchText(SolidColorBrush highlightColor) {
             BeginChange();
             {
                 var fullDocRange = new TextRange(Document.ContentStart, Document.ContentEnd);
@@ -170,51 +203,9 @@ namespace MpWpfApp {
             EndChange();
         }
 
-        public static string GetRichText(DependencyObject obj) {
-            return (string)obj.GetValue(RichTextProperty);
-        }
-        public static void SetRichText(DependencyObject obj, string value) {
-            obj.SetValue(RichTextProperty, value);
-        }
+        #endregion
 
-        public static readonly DependencyProperty RichTextProperty =
-          DependencyProperty.RegisterAttached(
-            "RichText",
-            typeof(string),
-            typeof(MpTokenizedRichTextBox),
-            new FrameworkPropertyMetadata {
-                BindsTwoWayByDefault = true,
-                PropertyChangedCallback = (s, e) => {
-                    var richTextBox = (RichTextBox)s;
-                    richTextBox.SetRtf((string)e.NewValue);
-                }
-            });
-
-        public static string GetSearchText(DependencyObject obj) {
-            return (string)obj.GetValue(SearchTextProperty);
-        }
-        public static void SetSearchText(DependencyObject obj, string value) {
-            obj.SetValue(SearchTextProperty, value);
-        }
-
-        public static readonly DependencyProperty SearchTextProperty =
-          DependencyProperty.RegisterAttached(
-            "SearchText",
-            typeof(string),
-            typeof(MpTokenizedRichTextBox),
-            new FrameworkPropertyMetadata {
-                BindsTwoWayByDefault = true,
-                PropertyChangedCallback = (s, e) => {
-                    ((MpTokenizedRichTextBox)s).HighlightSearchText(Brushes.Yellow);
-                },
-            });
-
-        public static ObservableCollection<MpSubTextToken> GetTokens(DependencyObject obj) {
-            return (ObservableCollection<MpSubTextToken>)obj.GetValue(TokensProperty);
-        }
-        public static void SetTokens(DependencyObject obj, ObservableCollection<MpSubTextToken> value) {
-            obj.SetValue(TokensProperty, value);
-        }
+        #region Dependency Property Registrations
 
         public static readonly DependencyProperty TokensProperty =
           DependencyProperty.RegisterAttached(
@@ -231,5 +222,34 @@ namespace MpWpfApp {
                     }                    
                 },
             });
+
+        public static readonly DependencyProperty RichTextProperty =
+          DependencyProperty.RegisterAttached(
+            "RichText",
+            typeof(string),
+            typeof(MpTokenizedRichTextBox),
+            new FrameworkPropertyMetadata {
+                BindsTwoWayByDefault = true,
+                PropertyChangedCallback = (s, e) => {
+                    if (!string.IsNullOrEmpty((string)e.NewValue)) {
+                        var richTextBox = (RichTextBox)s;
+                        richTextBox.SetRtf((string)e.NewValue);
+                    }
+                }
+            });
+
+        public static readonly DependencyProperty SearchTextProperty =
+          DependencyProperty.RegisterAttached(
+            "SearchText",
+            typeof(string),
+            typeof(MpTokenizedRichTextBox),
+            new FrameworkPropertyMetadata {
+                BindsTwoWayByDefault = true,
+                PropertyChangedCallback = (s, e) => {
+                    ((MpTokenizedRichTextBox)s).HighlightSearchText(Brushes.Yellow);
+                },
+            });
+
+        #endregion
     }
 }
