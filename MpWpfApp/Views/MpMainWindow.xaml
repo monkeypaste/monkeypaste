@@ -535,6 +535,10 @@
                                 HorizontalAlignment="Stretch"
                                 Background="White"
                                 CornerRadius="15">
+                <local:MpClipBorder.Resources>
+                    <local:MpBindingProxy x:Key="SearchTextProxy"
+                                          Data="{Binding}" />
+                </local:MpClipBorder.Resources>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Loaded">
                         <i:CallMethodAction MethodName="SearchBoxBorder_Loaded" 
@@ -644,7 +648,7 @@
                                             SelectionMode="Extended"
                                             VirtualizingPanel.IsVirtualizing="True"
                                             VirtualizingPanel.ScrollUnit="Pixel"
-                                            VirtualizingPanel.VirtualizationMode="Standard"
+                                            VirtualizingPanel.VirtualizationMode="Recycling"
                                             ScrollViewer.CanContentScroll="False"
                                             ScrollViewer.IsDeferredScrollingEnabled="False"
                                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -716,6 +720,12 @@
                                 </local:MpClipBorder.Resources>
                                 <local:MpClipBorder.ContextMenu>
                                     <ContextMenu x:Name="ClipTile_ContextMenu">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Opened">
+                                                <i:CallMethodAction TargetObject="{Binding}"
+                                                                    MethodName="ClipTile_ContextMenu_Opened" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
                                         <MenuItem Header="Bring to Front"
                                                   Command="{Binding Data.BringSelectedClipTilesToFrontCommand, Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Send to Back"
@@ -734,7 +744,7 @@
                                         <MenuItem Header="Rename"
                                                   Command="{Binding Data.RenameClipCommand,Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Change Color"
-                                                  Command="{Binding Data.ChangeClipColorCommand, Source={StaticResource ClipTileProxy}}" />
+                                                  Command="{Binding Data.ChangeSelectedClipsColorCommand, Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Delete"
                                                   Command="{Binding Data.DeleteSelectedClipsCommand,Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Say"
@@ -815,12 +825,13 @@
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                         <Image x:Name="TitleSwirl"
+                                               DataContext="{Binding ClipTileTitleSwirlViewModel}"
                                                Canvas.Top="-1"
                                                Canvas.Left="-1"
                                                Stretch="Fill"
-                                               Width="{Binding TileSize}"
-                                               Height="{Binding TileTitleHeight}"
-                                               Source="{Binding TitleSwirl}" />
+                                               Width="{Binding ClipTileViewModel.TileSize}"
+                                               Height="{Binding ClipTileViewModel.TileTitleHeight}"
+                                               Source="{Binding TitleSwirl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                                         <!-- Clip Title TextBlock -->
                                         <TextBlock x:Name="ClipTileTitleTextBlock"
                                                    Text="{Binding Title}"
@@ -870,55 +881,68 @@
                                     <Canvas x:Name="ClipTileContentCanvas"
                                             Grid.Row="1"
                                             Grid.Column="0">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="Loaded">
-                                                <i:CallMethodAction TargetObject="{Binding}"
-                                                                    MethodName="ContentCanvas_Loaded" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
                                         <!-- RichText Content -->
                                         <local:MpTokenizedRichTextBox x:Name="ClipTileRichTextBox"
                                                                       RichText="{Binding RichText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
-                                                                      SearchText="{Binding SearchText}"
+                                                                      SearchText="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                       MinWidth="{Binding TileBorderSize}"
                                                                       MinHeight="{Binding TileContentHeight}"
                                                                       Tokens="{Binding Tokens, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                       IsReadOnly="True"
-                                                                      IsUndoEnabled="False" 
+                                                                      IsUndoEnabled="False"
                                                                       Visibility="{Binding RtbVisibility}"
                                                                       Background="White"
                                                                       VerticalAlignment="Top"
                                                                       HorizontalAlignment="Left"
                                                                       ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                                                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                                                      ScrollViewer.IsDeferredScrollingEnabled="True"
+                                                                      ScrollViewer.VerticalScrollBarVisibility="Visible"
                                                                       IsDocumentEnabled="True"
                                                                       Focusable="False"
                                                                       Cursor="Arrow"
                                                                       BorderThickness="0"
-                                                                      Padding="10" />
+                                                                      Padding="10">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Loaded">
+                                                    <i:CallMethodAction TargetObject="{Binding}"
+                                                                        MethodName="ClipTileRichTextBox_Loaded" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </local:MpTokenizedRichTextBox>
                                         <!-- Image Content-->
                                         <Grid Width="{Binding TileBorderSize}"
                                               Height="{Binding TileContentHeight}"
                                               Focusable="False"
                                               IsEnabled="False">
                                             <Image x:Name="ClipTileImage"
-                                                   Focusable="False" 
+                                                   Focusable="False"
                                                    IsEnabled="False"
-                                                   HorizontalAlignment="Center" 
+                                                   HorizontalAlignment="Center"
                                                    VerticalAlignment="Center"
                                                    Visibility="{Binding ImgVisibility}"
                                                    Source="{Binding Bmp}"
-                                                   Stretch="Uniform" />
+                                                   Stretch="Uniform">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Loaded">
+                                                        <i:CallMethodAction TargetObject="{Binding}"
+                                                                            MethodName="ClipTileImage_Loaded" />
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </Image>
                                         </Grid>
                                         <!--File List Content -->
-                                        <ListBox Width="{Binding TileBorderSize}"
+                                        <ListBox x:Name="ClipTileFileListBox"
+                                                 Width="{Binding TileBorderSize}"
                                                  Height="{Binding TileContentHeight}"
                                                  ItemsSource="{Binding FileListViewModels}"
                                                  Visibility="{Binding FileListVisibility}"
                                                  BorderThickness="0"
-                                                 Focusable="False"
-                                                 x:Name="ClipTileFileListBox">
+                                                 Focusable="False">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Loaded">
+                                                    <i:CallMethodAction TargetObject="{Binding}"
+                                                                        MethodName="ClipTileFileListBox_Loaded" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <Border Height="22"

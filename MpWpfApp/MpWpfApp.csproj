@@ -243,14 +243,14 @@
     <Compile Include="Utils\MpWindowClosingBehavior.cs" />
     <Compile Include="Utils\WinApi.cs" />
     <Compile Include="ViewModels\Base\MpCollectionViewModelBase.cs" />
-    <Compile Include="ViewModels\Main Window\MpClipTileContextMenuViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpClipTileSortViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpClipTileContentViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpClipTileTitleSwirlViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpFileListItemViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\MpClipTileTitleViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpClipTrayViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpClipTileContextMenuItemViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpClipTileViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpRichTextTokenViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSortTypeComboBoxItemViewModel.cs" />
     <Page Include="Styles\ResourceDictionary.xaml">
       <SubType>Designer</SubType>

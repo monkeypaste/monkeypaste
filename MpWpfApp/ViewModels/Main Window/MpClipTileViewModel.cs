@@ -1,6 +1,4 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
-using GongSolutions.Wpf.DragDrop.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -11,15 +9,34 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop.Utilities;
 
 namespace MpWpfApp {
     public class MpClipTileViewModel : MpViewModelBase {
         #region Private Variables
+
         private int _detailIdx = 0;
+
         private List<string> _tempFileList = new List<string>();
+
         #endregion
 
         #region View Models
+
+        private MpClipTileTitleSwirlViewModel _clipTileTitleSwirlViewModel;
+        public MpClipTileTitleSwirlViewModel ClipTileTitleSwirlViewModel {
+            get {
+                return _clipTileTitleSwirlViewModel;
+            }
+            set {
+                if (_clipTileTitleSwirlViewModel != value) {
+                    _clipTileTitleSwirlViewModel = value;
+                    OnPropertyChanged(nameof(ClipTileTitleSwirlViewModel));
+                }
+            }
+        }
+
         private MpClipTrayViewModel _clipTrayViewModel;
         public MpClipTrayViewModel ClipTrayViewModel {
             get {
@@ -36,19 +53,31 @@ namespace MpWpfApp {
         private ObservableCollection<MpClipTileContextMenuItemViewModel> _tagMenuItems = new ObservableCollection<MpClipTileContextMenuItemViewModel>();
         public ObservableCollection<MpClipTileContextMenuItemViewModel> TagMenuItems {
             get {
-                _tagMenuItems = new ObservableCollection<MpClipTileContextMenuItemViewModel>();
-                foreach (var tagTile in ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel) {
-                    if (tagTile.TagName == Properties.Settings.Default.HistoryTagTitle) {
-                        continue;
-                    }
-                    _tagMenuItems.Add(new MpClipTileContextMenuItemViewModel(tagTile.TagName, ClipTrayViewModel.LinkTagToCopyItemCommand, tagTile, tagTile.Tag.IsLinkedWithCopyItem(CopyItem), null));
-                }
                 return _tagMenuItems;
             }
             set {
-                if (_tagMenuItems != value) {
+                if(_tagMenuItems != value) {
                     _tagMenuItems = value;
                     OnPropertyChanged(nameof(TagMenuItems));
+                }
+            }
+        }
+
+        private ObservableCollection<MpFileListItemViewModel> _fileListViewModels;
+        public ObservableCollection<MpFileListItemViewModel> FileListViewModels {
+            get {
+                if (_fileListViewModels == null) {
+                    _fileListViewModels = new ObservableCollection<MpFileListItemViewModel>();
+                    foreach (var path in FileDropList) {
+                        _fileListViewModels.Add(new MpFileListItemViewModel(path));
+                    }
+                }
+                return _fileListViewModels;
+            }
+            set {
+                if (_fileListViewModels != value) {
+                    _fileListViewModels = value;
+                    OnPropertyChanged(nameof(FileListViewModels));
                 }
             }
         }
@@ -63,14 +92,6 @@ namespace MpWpfApp {
                 // instead of the following
                 Type myType = typeof(MpClipTileViewModel);
                 PropertyInfo myPropInfo = myType.GetProperty(propertyName);
-                if(myPropInfo == null) {
-                    myType = typeof(MpClipTileTitleViewModel);
-                    myPropInfo = myType.GetProperty(propertyName);
-                }
-                if (myPropInfo == null) {
-                    myType = typeof(MpClipTileContentViewModel);
-                    myPropInfo = myType.GetProperty(propertyName);
-                }
                 if (myPropInfo == null) {
                     throw new Exception("Unable to find property: " + propertyName);
                 }
@@ -86,21 +107,15 @@ namespace MpWpfApp {
 
         #region Properties
 
-        private ObservableCollection<MpFileListItemViewModel> _fileListViewModels;
-        public ObservableCollection<MpFileListItemViewModel> FileListViewModels {
+        private double _clipTileWidth = MpMeasurements.Instance.ClipTileBorderSize;
+        public double ClipTileWidth {
             get {
-                if(_fileListViewModels == null) {
-                    _fileListViewModels = new ObservableCollection<MpFileListItemViewModel>();
-                    foreach (var path in FileDropList) {
-                        _fileListViewModels.Add(new MpFileListItemViewModel(path));
-                    }
-                }
-                return _fileListViewModels;
+                return _clipTileWidth;
             }
             set {
-                if (_fileListViewModels != value) {
-                    _fileListViewModels = value;
-                    OnPropertyChanged(nameof(FileListViewModels));
+                if(_clipTileWidth != value) {
+                    _clipTileWidth = value;
+                    OnPropertyChanged(nameof(ClipTileWidth));
                 }
             }
         }
@@ -325,49 +340,6 @@ namespace MpWpfApp {
                 if (CopyItem.ItemColor.Color != ((SolidColorBrush)value).Color) {
                     CopyItem.ItemColor = new MpColor(((SolidColorBrush)value).Color);
                     OnPropertyChanged(nameof(TitleColor));
-                }
-            }
-        }
-
-        public Brush TitleColorLighter {
-            get {
-                return MpHelpers.ChangeBrushAlpha(
-                    MpHelpers.ChangeBrushBrightness(
-                        TitleColor,
-                        -0.5f),
-                    100);
-            }
-        }
-
-        public Brush TitleColorDarker {
-            get {
-                return MpHelpers.ChangeBrushAlpha(
-                    MpHelpers.ChangeBrushBrightness(
-                        TitleColor,
-                        -0.4f),
-                    50);
-            }
-        }
-
-        public Brush TitleColorAccent {
-            get {
-                return MpHelpers.ChangeBrushAlpha(
-                    MpHelpers.ChangeBrushBrightness(
-                        TitleColor,
-                        -0.0f),
-                    100);
-            }
-        }
-
-        private BitmapSource _titleSwirl = null;
-        public BitmapSource TitleSwirl {
-            get {
-                return _titleSwirl;
-            }
-            set {
-                if (_titleSwirl != value) {
-                    _titleSwirl = value;
-                    OnPropertyChanged(nameof(TitleSwirl));
                 }
             }
         }
@@ -659,6 +631,7 @@ namespace MpWpfApp {
                         break;
                     case nameof(IsSelected):
                         if (IsSelected) {
+                            //ClipTileTitleSwirlViewModel.TitleSwirl = ClipTrayViewModel.SelectedSwirl;
                             TileBorderBrush = Brushes.Red;
                             DetailTextColor = Brushes.Red;
                             //this check ensures that as user types in search that 
@@ -667,6 +640,7 @@ namespace MpWpfApp {
                                 IsFocused = true;
                             }
                         } else {
+                            //ClipTileTitleSwirlViewModel.Reset();
                             TileBorderBrush = Brushes.Transparent;
                             DetailTextColor = Brushes.Transparent;
                             //below must be called to clear focus when deselected (it may not have focus)
@@ -677,10 +651,12 @@ namespace MpWpfApp {
                         if (!IsSelected) {
                             if (IsHovering) {
                                 TileBorderBrush = Brushes.Yellow;
+                                //ClipTileTitleSwirlViewModel.TitleSwirl = ClipTrayViewModel.HoverSwirl;
                                 DetailTextColor = Brushes.DarkKhaki;
                                 //this is necessary for dragdrop re-sorting
                             } else {
                                 TileBorderBrush = Brushes.Transparent;
+                                //ClipTileTitleSwirlViewModel.Reset();
                                 DetailTextColor = Brushes.Transparent;
                             }
                         }
@@ -694,6 +670,20 @@ namespace MpWpfApp {
             TitleColor = new SolidColorBrush(ci.ItemColor.Color);
             Icon = ci.App.Icon.IconImage;
             Tokens = new ObservableCollection<MpSubTextToken>(CopyItem.SubTextTokenList);
+
+            ClipTileTitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
+
+            FileListVisibility = CopyItemType == MpCopyItemType.FileList ? Visibility.Visible : Visibility.Collapsed;
+            ImgVisibility = CopyItemType == MpCopyItemType.Image ? Visibility.Visible : Visibility.Collapsed;
+            RtbVisibility = CopyItemType == MpCopyItemType.RichText ? Visibility.Visible : Visibility.Collapsed;
+
+            ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.PropertyChanged += (s, e2) => {
+                switch(e2.PropertyName) {
+                    case nameof(ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.SearchText):
+                        SearchText = ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.SearchText;
+                        break;
+                }
+            };
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
@@ -710,9 +700,9 @@ namespace MpWpfApp {
         }
 
         public void ClipTileTitle_Loaded(object sender, RoutedEventArgs e) {
-            if (TitleSwirl == null) {
-                InitSwirl();
-            }
+            //if (ClipTileTitleSwirlViewModel == null) {
+            //    InitSwirl();
+            //}
 
             var titleCanvas = (Canvas)sender;
             var clipTileTitleTextBox = (TextBox)titleCanvas.FindName("ClipTileTitleTextBox");
@@ -730,58 +720,50 @@ namespace MpWpfApp {
             Canvas.SetTop(titleDetailTextBlock, TileTitleHeight - 14);
         }
 
-        public void ContentCanvas_Loaded(object sender, RoutedEventArgs e) {
-            switch (CopyItemType) {
-                case MpCopyItemType.FileList:
-                    var flb = (ListBox)((Canvas)sender)?.FindName("ClipTileFileListBox");
-                    flb.ContextMenu = (ContextMenu)flb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+        public void ClipTileRichTextBox_Loaded(object sender, RoutedEventArgs e) {
+            var rtb = (MpTokenizedRichTextBox)sender;
+            rtb.ContextMenu = (ContextMenu)rtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");            
+            ContentWidth = rtb.RenderSize.Width;
+            ContentHeight = rtb.RenderSize.Height;
+            rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
+            rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
 
-                    ContentWidth = Bmp.Width;
-                    ContentHeight = Bmp.Height;
+            rtb.SearchText = string.Empty;
+        }
 
-                    FileListVisibility = Visibility.Visible;
-                    ImgVisibility = Visibility.Collapsed;
-                    RtbVisibility = Visibility.Collapsed;
-                    break;
-                case MpCopyItemType.Image:
-                    var img = (Image)((Canvas)sender)?.FindName("ClipTileImage");
-                    img.ContextMenu = (ContextMenu)img.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
-                    //aspect ratio
-                    double ar = Bmp.Width / Bmp.Height;
-                    if (Bmp.Width >= Bmp.Height) {
-                        ContentWidth = TileBorderSize;
-                        ContentHeight = ContentWidth * ar;
-                    } else {
-                        ContentHeight = TileContentHeight;
-                        ContentWidth = ContentHeight * ar;
-                    }
-                    MpHelpers.ResizeBitmapSource(Bmp, new Size((int)ContentWidth, (int)ContentHeight));
+        public void ClipTileImage_Loaded(object sender, RoutedEventArgs e) {
+            var img = (Image)sender;
+            img.ContextMenu = (ContextMenu)img.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+            //aspect ratio
+            double ar = Bmp.Width / Bmp.Height;
+            if (Bmp.Width >= Bmp.Height) {
+                ContentWidth = TileBorderSize;
+                ContentHeight = ContentWidth * ar;
+            } else {
+                ContentHeight = TileContentHeight;
+                ContentWidth = ContentHeight * ar;
+            }
+            MpHelpers.ResizeBitmapSource(Bmp, new Size((int)ContentWidth, (int)ContentHeight));
 
-                    Canvas.SetLeft(img, (TileBorderSize / 2) - (ContentWidth / 2));
-                    Canvas.SetTop(img, (TileContentHeight / 2) - (ContentHeight / 2));
+            Canvas.SetLeft(img, (TileBorderSize / 2) - (ContentWidth / 2));
+            Canvas.SetTop(img, (TileContentHeight / 2) - (ContentHeight / 2));
+        }
 
-                    FileListVisibility = Visibility.Collapsed;
-                    ImgVisibility = Visibility.Visible;
-                    RtbVisibility = Visibility.Collapsed;
-                    break;
-                case MpCopyItemType.RichText:
-                    var rtb = (MpTokenizedRichTextBox)((Canvas)sender)?.FindName("ClipTileRichTextBox");
-                    rtb.ContextMenu = (ContextMenu)rtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
-                    ContentWidth = rtb.RenderSize.Width;
-                    ContentHeight = rtb.RenderSize.Height;
-                    rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
-                    rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
+        public void ClipTileFileListBox_Loaded(object sender, RoutedEventArgs e) {
+            var flb = (ListBox)sender;
+            flb.ContextMenu = (ContextMenu)flb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
 
-                    //Tokens = new ObservableCollection<MpSubTextToken>(CopyItem.SubTextTokenList.OrderBy(stt => stt.BlockIdx).ThenBy(stt => stt.StartIdx).ToList());
-                    //foreach (var sortedToken in sortedTokenList) {
-                    //    rtb.AddSubTextToken(sortedToken);
-                    //}
-                    rtb.SearchText = string.Empty;
+            ContentWidth = Bmp.Width;
+            ContentHeight = Bmp.Height;
+        }
 
-                    FileListVisibility = Visibility.Collapsed;
-                    ImgVisibility = Visibility.Collapsed;
-                    RtbVisibility = Visibility.Visible;
-                    break;
+        public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
+            TagMenuItems.Clear();
+            foreach (var tagTile in ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel) {
+                if (tagTile.TagName == Properties.Settings.Default.HistoryTagTitle) {
+                    continue;
+                }
+                TagMenuItems.Add(new MpClipTileContextMenuItemViewModel(tagTile.TagName, ClipTrayViewModel.LinkTagToCopyItemCommand, tagTile, tagTile.Tag.IsLinkedWithCopyItem(CopyItem)));
             }
         }
 
@@ -802,6 +784,23 @@ namespace MpWpfApp {
                 FileListViewModels.Add(new MpFileListItemViewModel(path));
             }
         }
+
+        //public void InitSwirl(BitmapSource sharedSwirl = null) {
+        //    if(sharedSwirl == null) {
+        //        var swirl1 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0001.png"));
+        //        swirl1 = MpHelpers.TintBitmapSource(swirl1, ((SolidColorBrush)TitleColor).Color);
+        //        var swirl2 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0002.png"));
+        //        swirl2 = MpHelpers.TintBitmapSource(swirl2, ((SolidColorBrush)TitleColorLighter).Color);
+        //        var swirl3 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0003.png"));
+        //        swirl3 = MpHelpers.TintBitmapSource(swirl3, ((SolidColorBrush)TitleColorDarker).Color);
+        //        var swirl4 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0004.png"));
+        //        swirl4 = MpHelpers.TintBitmapSource(swirl4, ((SolidColorBrush)TitleColorAccent).Color);
+
+        //        TitleSwirl = MpHelpers.MergeImages(new List<BitmapSource>() { swirl1, swirl2, swirl3, swirl4 });
+        //    } else {
+        //        TitleSwirl = sharedSwirl;
+        //    }
+        //}
 
         public void DeleteTempFiles() {
             foreach (var f in _tempFileList) {
@@ -828,50 +827,9 @@ namespace MpWpfApp {
 
         #region Private Methods       
 
-        private void InitSwirl() {
-            var swirl1 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0001.png"));
-            swirl1 = MpHelpers.TintBitmapSource(swirl1, ((SolidColorBrush)TitleColor).Color);
-            var swirl2 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0002.png"));
-            swirl2 = MpHelpers.TintBitmapSource(swirl2, ((SolidColorBrush)TitleColorLighter).Color);
-            var swirl3 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0003.png"));
-            swirl3 = MpHelpers.TintBitmapSource(swirl3, ((SolidColorBrush)TitleColorDarker).Color);
-            var swirl4 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0004.png"));
-            swirl4 = MpHelpers.TintBitmapSource(swirl4, ((SolidColorBrush)TitleColorAccent).Color);
-
-            TitleSwirl = MpHelpers.MergeImages(new List<BitmapSource>() { swirl1, swirl2, swirl3, swirl4 });
-        }
-
         #endregion
 
         #region Commands
-
-        private RelayCommand _changeClipColorCommand;
-        public ICommand ChangeClipColorCommand {
-            get { 
-                if (_changeClipColorCommand == null) {
-                    _changeClipColorCommand = new RelayCommand(ChangeClipColor);
-                }
-                return _changeClipColorCommand;
-            }
-        }
-        private void ChangeClipColor() {
-            System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
-            cd.AllowFullOpen = true;
-            cd.ShowHelp = true;
-            cd.Color = MpHelpers.ConvertSolidColorBrushToWinFormsColor((SolidColorBrush)TitleColor);
-            cd.CustomColors = Properties.Settings.Default.UserCustomColorIdxArray;
-
-            var mw = (MpMainWindow)Application.Current.MainWindow;
-            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = true;
-            // Update the text box color if the user clicks OK 
-            if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                TitleColor = MpHelpers.ConvertWinFormsColorToSolidColorBrush(cd.Color);
-                InitSwirl();
-                CopyItem.WriteToDatabase();
-            }
-            Properties.Settings.Default.UserCustomColorIdxArray = cd.CustomColors;
-            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = false;
-        }
 
         #endregion
 

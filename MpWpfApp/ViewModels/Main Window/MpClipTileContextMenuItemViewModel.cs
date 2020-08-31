@@ -69,26 +69,11 @@ namespace MpWpfApp {
             }
         }
 
-        private ObservableCollection<MpClipTileContextMenuItemViewModel> _childMenuItemViewModels = new ObservableCollection<MpClipTileContextMenuItemViewModel>();
-        public ObservableCollection<MpClipTileContextMenuItemViewModel> ChildMenuItemViewModels {
-            get {
-                return _childMenuItemViewModels;
-            }
-            set {
-                if(_childMenuItemViewModels != value) {
-                    _childMenuItemViewModels = value;
-                    OnPropertyChanged(nameof(ChildMenuItemViewModels));
-                }
-            }
-        }
-        public MpClipTileContextMenuItemViewModel(string header, ICommand command,object commandParameter, bool isChecked,ObservableCollection<MpClipTileContextMenuItemViewModel> children) {
+        public MpClipTileContextMenuItemViewModel(string header, ICommand command,object commandParameter, bool isChecked) {
             Header = header;
             Command = command;
             CommandParameter = commandParameter;
             IsChecked = isChecked;
-            if(children != null) {
-                ChildMenuItemViewModels = children;
-            }
         }
     }
 }

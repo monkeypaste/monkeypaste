@@ -90,6 +90,32 @@ namespace MpWpfApp {
             }
         }
 
+        private BitmapSource _hoverSwirl = null;
+        public BitmapSource HoverSwirl {
+            get {
+                return _hoverSwirl;
+            }
+            set {
+                if(_hoverSwirl != value) {
+                    _hoverSwirl = value;
+                    OnPropertyChanged(nameof(HoverSwirl));
+                }
+            }
+        }
+
+        private BitmapSource _selectedSwirl = null;
+        public BitmapSource SelectedSwirl {
+            get {
+                return _selectedSwirl;
+            }
+            set {
+                if (_selectedSwirl != value) {
+                    _selectedSwirl = value;
+                    OnPropertyChanged(nameof(SelectedSwirl));
+                }
+            }
+        }
+
         private Visibility _emptyListMessageVisibility = Visibility.Collapsed;
         public Visibility EmptyListMessageVisibility {
             get {
@@ -228,6 +254,14 @@ namespace MpWpfApp {
                 }
             };
 
+            //MainWindowViewModel.SearchBoxViewModel.PropertyChanged += (s, e2) => {
+            //    switch (e2.PropertyName) {
+            //        case nameof(MainWindowViewModel.SearchBoxViewModel.SearchText):
+            //            FilterTiles(MainWindowViewModel.SearchBoxViewModel.SearchText);
+            //            break;
+            //    }
+            //};
+
             //create tiles for all clips in the database
             foreach (MpCopyItem ci in MpCopyItem.GetAllCopyItems()) {
                 this.Add(new MpClipTileViewModel(ci, this));
@@ -282,6 +316,9 @@ namespace MpWpfApp {
                 var scrollViewer = clipTrayListBox.GetChildOfType<ScrollViewer>();
                 scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + (e3.Delta * -1) / 5);
             };
+
+            HoverSwirl = MpClipTileTitleSwirlViewModel.CreateSwirlBitmapSource(Brushes.Yellow);
+            SelectedSwirl = MpClipTileTitleSwirlViewModel.CreateSwirlBitmapSource(Brushes.Red);
 
             ClipboardMonitor = new MpClipboardMonitor((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow));
 
@@ -370,7 +407,9 @@ namespace MpWpfApp {
             ClearClipSelection();
             if (VisibileClipTiles.Count > 0) {
                 VisibileClipTiles[0].IsSelected = true;
-                VisibileClipTiles[0].IsFocused = true;
+                if(!MainWindowViewModel.SearchBoxViewModel.IsFocused) {
+                    VisibileClipTiles[0].IsFocused = true;
+                }
             }
         }
 
@@ -459,50 +498,62 @@ namespace MpWpfApp {
             }
         }
 
-        public void SortAndFilterClipTiles() {
+        public void SortAndFilterClipTiles(bool doSort = true,bool doFilter = true) {
             var sw = new Stopwatch();
             sw.Start();
-            ListSortDirection sortDir = MainWindowViewModel.ClipTileSortViewModel.AscSortOrderButtonImageVisibility == Visibility.Visible ? ListSortDirection.Ascending:ListSortDirection.Descending;
-            string sortBy = string.Empty;
-            switch(MainWindowViewModel.ClipTileSortViewModel.SelectedSortType.Header) {
-                case "Date":
-                    sortBy = "CopyItemCreatedDateTime";
-                    break;
-                case "Application":
-                    sortBy = "CopyItemAppId";
-                    break;
-                case "Title":
-                    sortBy = "Title";
-                    break;
-                case "Content":
-                    sortBy = "Content";
-                    break;
-                case "Type":
-                    sortBy = "CopyItemType";
-                    break;
-                case "Usage":
-                    sortBy = "CopyItemUsageScore";
-                    break;
-            }
+            
             ClearClipSelection();
             var cvs = CollectionViewSource.GetDefaultView(this);
-            //cvs.SortDescriptions.Clear();
-            //cvs.SortDescriptions.Add(new SortDescription(sortBy, sortDir));
-            cvs.Filter += item => {
-                if (MainWindowViewModel.SearchBoxViewModel.SearchText.Trim() == string.Empty || MainWindowViewModel.SearchBoxViewModel.SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
-                    return true;
-                }
-                var ctvm = (MpClipTileViewModel)item;
+            var tempSearchText = MainWindowViewModel.SearchBoxViewModel.SearchText;
+            if (doFilter) {
+                cvs.Filter += item => {
+                    if (tempSearchText.Trim() == string.Empty || tempSearchText == Properties.Settings.Default.SearchPlaceHolderText) {
+                        return true;
+                    }
+                    var ctvm = (MpClipTileViewModel)item;
 
-                if (ctvm.CopyItemType == MpCopyItemType.Image) {
-                    return false;
+                    if (ctvm.CopyItemType == MpCopyItemType.Image) {
+                        return false;
+                    }
+                    if (Properties.Settings.Default.IsSearchCaseSensitive) {
+                        return ctvm.CopyItem.ItemPlainText.Contains(tempSearchText);
+                    }
+                    return ctvm.CopyItem.ItemPlainText.ToLower().Contains(tempSearchText.ToLower());
+                };
+            }
+
+            if(doSort) {
+                ListSortDirection sortDir = MainWindowViewModel.ClipTileSortViewModel.AscSortOrderButtonImageVisibility == Visibility.Visible ? ListSortDirection.Ascending : ListSortDirection.Descending;
+                string sortBy = string.Empty;
+                switch (MainWindowViewModel.ClipTileSortViewModel.SelectedSortType.Header) {
+                    case "Date":
+                        sortBy = "CopyItemCreatedDateTime";
+                        break;
+                    case "Application":
+                        sortBy = "CopyItemAppId";
+                        break;
+                    case "Title":
+                        sortBy = "Title";
+                        break;
+                    case "Content":
+                        sortBy = "Content";
+                        break;
+                    case "Type":
+                        sortBy = "CopyItemType";
+                        break;
+                    case "Usage":
+                        sortBy = "CopyItemUsageScore";
+                        break;
                 }
-                if (Properties.Settings.Default.IsSearchCaseSensitive) {
-                    return ctvm.CopyItem.ItemPlainText.Contains(MainWindowViewModel.SearchBoxViewModel.SearchText);
-                }
-                return ctvm.CopyItem.ItemPlainText.ToLower().Contains(MainWindowViewModel.SearchBoxViewModel.SearchText.ToLower());
-            };
-            this.Sort(x => x[sortBy], sortDir == ListSortDirection.Descending);
+                //cvs.SortDescriptions.Clear();
+                //cvs.SortDescriptions.Add(new SortDescription(sortBy, sortDir));
+                this.Sort(x => x[sortBy], sortDir == ListSortDirection.Descending);
+            }
+
+            //foreach(var vctvm in VisibileClipTiles) {
+            //    vctvm.SearchText = MainWindowViewModel.SearchBoxViewModel.SearchText;
+            //}
+
             //var sortDur = DateTime.Now - sortStart;
             sw.Stop();
             Console.WriteLine("Sort for " + VisibileClipTiles.Count + " items: " + sw.ElapsedMilliseconds + " ms");
@@ -632,6 +683,43 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+
+        private RelayCommand _changeSelectedClipsColorCommand;
+        public ICommand ChangeSelectedClipsColorCommand {
+            get {
+                if (_changeSelectedClipsColorCommand == null) {
+                    _changeSelectedClipsColorCommand = new RelayCommand(ChangeSelectedClipsColor);
+                }
+                return _changeSelectedClipsColorCommand;
+            }
+        }
+        private void ChangeSelectedClipsColor() {
+            System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
+            cd.AllowFullOpen = true;
+            cd.ShowHelp = true;
+            cd.Color = MpHelpers.ConvertSolidColorBrushToWinFormsColor((SolidColorBrush)SelectedClipTiles[0].TitleColor);
+            cd.CustomColors = Properties.Settings.Default.UserCustomColorIdxArray;
+
+            var mw = (MpMainWindow)Application.Current.MainWindow;
+            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = true;
+            // Update the text box color if the user clicks OK 
+            if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                BitmapSource sharedSwirl = null;
+                foreach(var sctvm in SelectedClipTiles) {
+                    sctvm.TitleColor = MpHelpers.ConvertWinFormsColorToSolidColorBrush(cd.Color);
+                    if(sharedSwirl == null) {
+                        sctvm.ClipTileTitleSwirlViewModel.InitSwirl();
+                        sharedSwirl = sctvm.ClipTileTitleSwirlViewModel.TitleSwirl;
+                    } else {
+                        sctvm.ClipTileTitleSwirlViewModel.InitSwirl(sharedSwirl);
+                    }
+                    sctvm.CopyItem.WriteToDatabase();
+                }
+            }
+            Properties.Settings.Default.UserCustomColorIdxArray = cd.CustomColors;
+            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = false;
+        }
+
         private RelayCommand _pasteSelectedClipsCommand;
         public ICommand PasteSelectedClipsCommand {
             get {
@@ -660,9 +748,12 @@ namespace MpWpfApp {
             }
         }
         private bool CanBringSelectedClipTilesToFront() {
+            if(VisibileClipTiles.Count == 0) {
+                return false;
+            }
             bool canBringForward = false;
             for (int i = 0; i < SelectedClipTiles.Count; i++) {
-                if (!SelectedClipTiles.Contains(VisibileClipTiles[i])) {
+              if (!SelectedClipTiles.Contains(VisibileClipTiles[i])) {
                     canBringForward = true;
                     break;
                 }
@@ -685,6 +776,9 @@ namespace MpWpfApp {
             }
         }
         private bool CanSendSelectedClipTilesToBack() {
+            if (VisibileClipTiles.Count == 0) {
+                return false;
+            }
             bool canSendBack = false;
             for (int i = 0; i < SelectedClipTiles.Count; i++) {
                 if (!SelectedClipTiles.Contains(VisibileClipTiles[VisibileClipTiles.Count - 1 - i])) {

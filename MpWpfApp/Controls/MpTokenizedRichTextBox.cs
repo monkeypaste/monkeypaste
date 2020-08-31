@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
-using Newtonsoft.Json;
-using QRCoder;
-using static QRCoder.PayloadGenerator;
+using System.Windows.Threading;
+using GongSolutions.Wpf.DragDrop.Utilities;
 
 namespace MpWpfApp {
     public class MpTokenizedRichTextBox : RichTextBox {
@@ -173,34 +168,100 @@ namespace MpWpfApp {
         #region Private Methods
 
         private void HighlightSearchText(SolidColorBrush highlightColor) {
-            BeginChange();
-            {
-                var fullDocRange = new TextRange(Document.ContentStart, Document.ContentEnd);
-                fullDocRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
-
-                ScrollToHome();
-                if (SearchText != Properties.Settings.Default.SearchPlaceHolderText && !string.IsNullOrEmpty(SearchText)) {
-                    string rtbt = fullDocRange.Text.ToLower();
-                    SearchText = SearchText.ToLower();
-                    var tokenIdxList = rtbt.AllIndexesOf(SearchText);
-                    TextRange lastTokenRange = null;
-                    CaretPosition = Document.ContentStart;
-                    foreach (int idx in tokenIdxList) {
-                        TextPointer startPoint = lastTokenRange == null ? Document.ContentStart : lastTokenRange.End;
-                        var range = MpHelpers.FindStringRangeFromPosition(startPoint, SearchText);
-                        if (range == null) {
-                            Console.WriteLine("Cannot find '" + SearchText + "' in tile");
+            Dispatcher.CurrentDispatcher.BeginInvoke(
+                DispatcherPriority.Background,
+                (Action)(() => {
+                    
+                    var cb = (MpClipBorder)this.GetVisualAncestor<MpClipBorder>();
+                    if (cb == null) {
+                        throw new Exception("TokenizedRichTextBox error, cannot find clipborder");
+                    }
+                    if (cb.DataContext.GetType() != typeof(MpClipTileViewModel)) {
+                        return;
+                    }
+                    var ctvm = (MpClipTileViewModel)cb.DataContext;
+                    if (ctvm == null) {
+                        throw new Exception("TokenizedRichTextBox error, cannot find cliptile viewmodel");
+                    }
+                    
+                    BeginChange();
+                    new TextRange(Document.ContentStart, Document.ContentEnd).ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
+                    if (SearchText == null || string.IsNullOrEmpty(SearchText.Trim()) || SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
+                        ctvm.TileVisibility = Visibility.Visible;
+                        EndChange();
+                        return;
+                    }
+                    
+                    TextRange lastTokenPointer = null;
+                    for (TextPointer position = Document.ContentStart;
+                     position != null && position.CompareTo(Document.ContentEnd) <= 0;
+                     position = position.GetNextContextPosition(LogicalDirection.Forward)) {
+                        if (position.CompareTo(Document.ContentEnd) == 0) {
+                            break;
                         }
-                        range?.ApplyPropertyValue(TextElement.BackgroundProperty, highlightColor);
-                        lastTokenRange = range;
+                        string textRun = string.Empty;
+                        int indexInRun = -1;
+                        if (Properties.Settings.Default.IsSearchCaseSensitive) {
+                            textRun = position.GetTextInRun(LogicalDirection.Forward);
+                            indexInRun = textRun.IndexOf(SearchText, StringComparison.CurrentCulture);
+                        } else {
+                            textRun = position.GetTextInRun(LogicalDirection.Forward).ToLower();
+                            indexInRun = textRun.IndexOf(SearchText.ToLower(), StringComparison.CurrentCulture);
+                        }
+                        if (indexInRun >= 0) {
+                            position = position.GetPositionAtOffset(indexInRun);
+                            if (position != null) {
+                                TextPointer nextPointer = position.GetPositionAtOffset(SearchText.Length);
+                                lastTokenPointer = new TextRange(position, nextPointer);
+                                lastTokenPointer.ApplyPropertyValue(TextElement.BackgroundProperty, highlightColor);
+                            }
+                        }
                     }
-                    if (lastTokenRange != null) {
-                        Rect r = lastTokenRange.End.GetCharacterRect(LogicalDirection.Backward);
-                        ScrollToVerticalOffset(r.Y - (FontSize * 0.5));
+
+                    if (lastTokenPointer != null) {
+                        ctvm.TileVisibility = Visibility.Visible;
+                        ScrollToHome();
+                        CaretPosition = Document.ContentStart;
+                        Rect r = lastTokenPointer.End.GetCharacterRect(LogicalDirection.Backward);
+                        ScrollToVerticalOffset(500);// VerticalOffset r.Y - (FontSize * 0.5));
+                        //var characterRect = lastTokenPointer.GetCharacterRect(LogicalDirection.Forward);
+                        //this.ScrollToHorizontalOffset(this.HorizontalOffset + characterRect.Left - this.ActualWidth / 2d);
+                        //this.ScrollToVerticalOffset(this.VerticalOffset + characterRect.Top - this.ActualHeight / 2d);
+                        //ScrollToEnd();
+                    } else {
+                        ctvm.TileVisibility = Visibility.Collapsed;
                     }
-                }
-            }
-            EndChange();
+                    EndChange();
+
+
+
+                    //var fullDocRange = new TextRange(Document.ContentStart, Document.ContentEnd);
+                    ////fullDocRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
+
+                    //ScrollToHome();
+                    //if (SearchText != Properties.Settings.Default.SearchPlaceHolderText && !string.IsNullOrEmpty(SearchText)) {
+                    //    string rtbt = fullDocRange.Text.ToLower();
+                    //    SearchText = SearchText.ToLower();
+                    //    var tokenIdxList = rtbt.AllIndexesOf(SearchText);
+                    //    TextRange lastTokenRange = null;
+                    //    CaretPosition = Document.ContentStart;
+                    //    foreach (int idx in tokenIdxList) {
+                    //        TextPointer startPoint = lastTokenRange == null ? Document.ContentStart : lastTokenRange.End;
+                    //        startPoint.Po
+                    //        var range = MpHelpers.FindStringRangeFromPosition(startPoint, SearchText);
+                    //        if (range == null) {
+                    //            Console.WriteLine("Cannot find '" + SearchText + "' in tile");
+                    //        }
+                    //        range?.ApplyPropertyValue(TextElement.BackgroundProperty, highlightColor);
+                    //        lastTokenRange = range;
+                    //    }
+                    //    if (lastTokenRange != null) {
+                    //        Rect r = lastTokenRange.End.GetCharacterRect(LogicalDirection.Backward);
+                    //        ScrollToVerticalOffset(r.Y - (FontSize * 0.5));
+                    //    }
+                    //}
+                    //EndChange();
+                }));            
         }
 
         #endregion

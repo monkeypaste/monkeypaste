@@ -185,19 +185,17 @@ namespace MpWpfApp {
             c.B * c.B * .114) > brightThreshold;
         }
 
-        public static Brush ChangeBrushAlpha(Brush brush, byte alpha) {
-            var b = (SolidColorBrush)brush;
-            var c = b.Color;
+        public static SolidColorBrush ChangeBrushAlpha(SolidColorBrush solidColorBrush, byte alpha) {
+            var c = solidColorBrush.Color;
             c.A = alpha;
-            b.Color = c;
-            return b;
+            solidColorBrush.Color = c;
+            return solidColorBrush;
         }
 
-        public static Brush ChangeBrushBrightness(Brush brush, float correctionFactor) {
+        public static SolidColorBrush ChangeBrushBrightness(SolidColorBrush b, float correctionFactor) {
             if (correctionFactor == 0.0f) {
-                return brush;
+                return b.Clone();
             }
-            SolidColorBrush b = (SolidColorBrush)brush;
             float red = (float)b.Color.R;
             float green = (float)b.Color.G;
             float blue = (float)b.Color.B;
@@ -328,16 +326,18 @@ namespace MpWpfApp {
         }
 
         public static string WriteTextToFile(string filePath, string text, bool isTemporary = false) {
-            StreamWriter of = new StreamWriter(filePath);
-            of.Write(text);
-            of.Close();
-            return filePath;
+            using (StreamWriter of = new StreamWriter(filePath)) {
+                of.Write(text);
+                of.Close();
+                return filePath;
+            }
         }
 
         public static string WriteBitmapSourceToFile(string filePath, BitmapSource bmpSrc, bool isTemporary = false) {
-            System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(MpHelpers.ConvertBitmapSourceToBitmap(bmpSrc));
-            bmp.Save(filePath, ImageFormat.Png);
-            return filePath;
+            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(MpHelpers.ConvertBitmapSourceToBitmap(bmpSrc))) {
+                bmp.Save(filePath, ImageFormat.Png);
+                return filePath;
+            }            
         }
 
         public static string WriteStringListToCsvFile(string filePath, IList<string> strList, bool isTemporary = false) {
@@ -455,14 +455,15 @@ namespace MpWpfApp {
         }
 
         public static BitmapSource ResizeBitmapSource(BitmapSource bmpSrc, Size newSize) {
-            System.Drawing.Bitmap result = new System.Drawing.Bitmap((int)newSize.Width, (int)newSize.Height);
-            using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage((System.Drawing.Image)result)) {
-                //The interpolation mode produces high quality images
-                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                g.DrawImage(ConvertBitmapSourceToBitmap(bmpSrc), 0, 0, (int)newSize.Width, (int)newSize.Height);
-                g.Dispose();
-                return ConvertBitmapToBitmapSource(result);
-            }
+            using (System.Drawing.Bitmap result = new System.Drawing.Bitmap((int)newSize.Width, (int)newSize.Height)) {
+                using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage((System.Drawing.Image)result)) {
+                    //The interpolation mode produces high quality images
+                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    g.DrawImage(ConvertBitmapSourceToBitmap(bmpSrc), 0, 0, (int)newSize.Width, (int)newSize.Height);
+                    g.Dispose();
+                    return ConvertBitmapToBitmapSource(result);
+                }
+            }            
         }
 
         public static bool ByteArrayCompare(byte[] b1, byte[] b2) {
@@ -470,26 +471,26 @@ namespace MpWpfApp {
             // This also ensures that the count does not exceed the length of either buffer.  
             return b1.Length == b2.Length && WinApi.memcmp(b1, b2, b1.Length) == 0;
         }
+
         public static string ConvertBitmapSourceToPlainText(BitmapSource bmpSource) {
             string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
-            System.Drawing.Bitmap image = ConvertBitmapSourceToBitmap(ResizeBitmapSource(bmpSource,new Size(MpMeasurements.Instance.ClipTileBorderSize,MpMeasurements.Instance.ClipTileContentHeight)));
-
-            string outStr = string.Empty;
-            for (int h = 0; h < image.Height; h++) {
-                for (int w = 0; w < image.Width; w++) {
-                    System.Drawing.Color pixelColor = image.GetPixel(w, h);
-                    //Average out the RGB components to find the Gray Color
-                    int red = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
-                    int green = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
-                    int blue = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
-                    System.Drawing.Color grayColor = System.Drawing.Color.FromArgb(red, green, blue);
-                    int index = (grayColor.R * 10) / 255;
-                    outStr += asciiChars[index];
+            using (System.Drawing.Bitmap image = ConvertBitmapSourceToBitmap(ResizeBitmapSource(bmpSource, new Size(MpMeasurements.Instance.ClipTileBorderSize, MpMeasurements.Instance.ClipTileContentHeight)))) {
+                string outStr = string.Empty;
+                for (int h = 0; h < image.Height; h++) {
+                    for (int w = 0; w < image.Width; w++) {
+                        System.Drawing.Color pixelColor = image.GetPixel(w, h);
+                        //Average out the RGB components to find the Gray Color
+                        int red = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
+                        int green = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
+                        int blue = (pixelColor.R + pixelColor.G + pixelColor.B) / 3;
+                        System.Drawing.Color grayColor = System.Drawing.Color.FromArgb(red, green, blue);
+                        int index = (grayColor.R * 10) / 255;
+                        outStr += asciiChars[index];
+                    }
+                    outStr += Environment.NewLine;
                 }
-                outStr += Environment.NewLine;
+                return outStr;
             }
-
-            return outStr;
         }
 
         public static string ReadCharactersFromBitmapSource(BitmapSource bmpSource) {
@@ -528,20 +529,17 @@ namespace MpWpfApp {
                 bitmapData.Scan0,
                 bitmapData.Stride * bitmapData.Height,
                 bitmapData.Stride);
-
             bitmap.UnlockBits(bitmapData);
             return bitmapSource;
         }
 
         public static System.Drawing.Bitmap ConvertBitmapSourceToBitmap(BitmapSource bitmapsource) {
-            System.Drawing.Bitmap bitmap;
             using (MemoryStream outStream = new MemoryStream()) {
                 BitmapEncoder enc = new BmpBitmapEncoder();
                 enc.Frames.Add(BitmapFrame.Create(bitmapsource));
                 enc.Save(outStream);
-                bitmap = new System.Drawing.Bitmap(outStream);
+                return new System.Drawing.Bitmap(outStream);
             }
-            return bitmap;
         }
 
         public static System.Drawing.Color ConvertSolidColorBrushToWinFormsColor(SolidColorBrush scb) {
@@ -552,19 +550,20 @@ namespace MpWpfApp {
             return new SolidColorBrush(Color.FromArgb(c.A, c.R, c.G, c.B));
         }
 
+        public static System.Drawing.Font GetRichTextFont(string rt) {
+            using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
+                rtb.Rtf = rt;
+                return rtb.Font;
+            }
+        }
+
         public static System.Drawing.Size GetRichTextFontSize(string rt) {
             string pt = ConvertRichTextToPlainText(rt);
             using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
                 rtb.Rtf = rt;
                 rtb.SelectAll();
                 return System.Windows.Forms.TextRenderer.MeasureText(pt, rtb.SelectionFont);
-                //int w = GetColCount(pt) * (int)fontSize;
-                //int h = GetRowCount(pt) * (int)fontSize;
-
-                //rtb.SelectAll();
-                //rtb.SelectionFont.
-            }            
-            
+            }  
         }
 
         public static BitmapSource ConvertRichTextToImage(string rt) {
@@ -618,34 +617,59 @@ namespace MpWpfApp {
 
         public static async Task<string> ShortenUrl(string url) {
             string bitlyToken = @"f6035b9ed05ac82b42d4853c984e34a4f1ba05d8";
-            HttpClient client = new HttpClient();
+            using (HttpClient client = new HttpClient()) {
+                using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://api-ssl.bitly.com/v4/shorten")) {
+                    request.Content = new StringContent($"{{\"long_url\":\"{url}\"}}", Encoding.UTF8, "application/json");
+                    try {
+                        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bitlyToken);
+                        using (var response = await client.SendAsync(request).ConfigureAwait(false)) {
+                            if (!response.IsSuccessStatusCode) {
+                                Console.WriteLine("Minify error: " + response.Content.ToString());
+                                return string.Empty;
+                            }
 
-            HttpRequestMessage request = new HttpRequestMessage(
-                HttpMethod.Post,
-                "https://api-ssl.bitly.com/v4/shorten") {
-                Content = new StringContent($"{{\"long_url\":\"{url}\"}}",
-                                                Encoding.UTF8,
-                                                "application/json")
-            };
-
-            try {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bitlyToken);
-                var response = await client.SendAsync(request).ConfigureAwait(false);
-
-                if (!response.IsSuccessStatusCode) {
-                    Console.WriteLine("Minify error: " + response.Content.ToString());
-                    return string.Empty;
+                            var responsestr = await response.Content.ReadAsStringAsync();
+                            
+                            dynamic jsonResponse = JsonConvert.DeserializeObject<dynamic>(responsestr);                            
+                            return jsonResponse["link"];
+                        }                        
+                    }
+                    catch (Exception ex) {
+                        Console.WriteLine("Minify exception: " + ex.ToString());
+                        return string.Empty;
+                    }
                 }
-
-                var responsestr = await response.Content.ReadAsStringAsync();
-
-                dynamic jsonResponse = JsonConvert.DeserializeObject<dynamic>(responsestr);
-                return jsonResponse["link"];
             }
-            catch (Exception ex) {
-                Console.WriteLine("Minify exception: " + ex.ToString());
-                return string.Empty;
+        }
+
+        public static FlowDocument HighlightFlowDocument(FlowDocument flowDocument, string highlightText, SolidColorBrush highlightBrush, bool isCaseSensitive = false) {
+            new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd).ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
+
+            for (TextPointer position = flowDocument.ContentStart;
+                 position != null && position.CompareTo(flowDocument.ContentEnd) <= 0;
+                 position = position.GetNextContextPosition(LogicalDirection.Forward)) {
+                if (position.CompareTo(flowDocument.ContentEnd) == 0) {
+                    return flowDocument;
+                }
+                string textRun = string.Empty;
+                int indexInRun = -1;
+                if (isCaseSensitive) {
+                    textRun = position.GetTextInRun(LogicalDirection.Forward);
+                    indexInRun = textRun.IndexOf(highlightText, StringComparison.CurrentCulture);
+                } else {
+                    textRun = position.GetTextInRun(LogicalDirection.Forward).ToLower();
+                    indexInRun = textRun.IndexOf(highlightText.ToLower(), StringComparison.CurrentCulture);
+                }
+                if (indexInRun >= 0) {
+                    position = position.GetPositionAtOffset(indexInRun);
+                    if (position != null) {
+                        TextPointer nextPointer = position.GetPositionAtOffset(highlightText.Length);
+                        TextRange textRange = new TextRange(position, nextPointer);
+                        textRange.ApplyPropertyValue(TextElement.BackgroundProperty, highlightBrush);
+                    }
+                } 
             }
+            return flowDocument;
         }
 
         public static TextRange FindStringRangeFromPosition(TextPointer position, string lowerCaseStr) {
@@ -734,6 +758,7 @@ namespace MpWpfApp {
                 return bitmapImage;
             }
         }
+
         public static BitmapSource CombineBitmap(IList<BitmapSource> bmpSrcList, bool tileHorizontally = true) {
             if (bmpSrcList.Count == 1) {
                 return bmpSrcList[0];
@@ -815,12 +840,25 @@ namespace MpWpfApp {
             string payload = generator.ToString();
 
             using (QRCodeGenerator qrGenerator = new QRCodeGenerator()) {
-                QRCodeData qrCodeData = qrGenerator.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q);
-                using (QRCode qrCode = new QRCode(qrCodeData)) {
-                    var qrCodeAsBitmap = qrCode.GetGraphic(20);
-                    return MpHelpers.ConvertBitmapToBitmapSource(qrCodeAsBitmap);
+                using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q)) {
+                    using (QRCode qrCode = new QRCode(qrCodeData)) {
+                        var qrCodeAsBitmap = qrCode.GetGraphic(20);
+                        return MpHelpers.ConvertBitmapToBitmapSource(qrCodeAsBitmap);
+                    }
                 }
             }
+        }
+
+        public static Color ConvertHexToColor(string hexString) {
+            if (hexString.IndexOf('#') != -1) {
+                hexString = hexString.Replace("#", "");
+            }
+
+            byte r = byte.Parse(hexString.Substring(0, 2), NumberStyles.AllowHexSpecifier);
+            byte g = byte.Parse(hexString.Substring(2, 2), NumberStyles.AllowHexSpecifier);
+            byte b = byte.Parse(hexString.Substring(4, 2), NumberStyles.AllowHexSpecifier);
+
+            return Color.FromArgb(255,r, g, b);
         }
 
         public static bool IsPathDirectory(string str) {

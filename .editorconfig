@@ -134,3 +134,9 @@ dotnet_diagnostic.CS4014.severity = silent
 
 # SA1121: Use built-in type alias
 dotnet_diagnostic.SA1121.severity = silent
+
+# IDE0004: Remove Unnecessary Cast
+dotnet_diagnostic.IDE0004.severity = silent
+
+# SA1137: Elements should have the same indentation
+dotnet_diagnostic.SA1137.severity = silent
