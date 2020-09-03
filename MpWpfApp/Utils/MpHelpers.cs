@@ -1,7 +1,4 @@
-﻿using CsvHelper;
-using Newtonsoft.Json;
-using QRCoder;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -24,6 +21,9 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using CsvHelper;
+using Newtonsoft.Json;
+using QRCoder;
 using static MpWpfApp.MpShellEx;
 using static QRCoder.PayloadGenerator;
 
@@ -447,7 +447,7 @@ namespace MpWpfApp {
             return cpuInfo;
         }
 
-        public static ImageSource GetIconImage(string sourcePath) {
+        public static BitmapSource GetIconImage(string sourcePath) {
             if (!File.Exists(sourcePath)) {
                 return ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Warning.ToBitmap());
             }
@@ -851,7 +851,7 @@ namespace MpWpfApp {
 
         public static Color ConvertHexToColor(string hexString) {
             if (hexString.IndexOf('#') != -1) {
-                hexString = hexString.Replace("#", "");
+                hexString = hexString.Replace("#", string.Empty);
             }
 
             byte r = byte.Parse(hexString.Substring(0, 2), NumberStyles.AllowHexSpecifier);

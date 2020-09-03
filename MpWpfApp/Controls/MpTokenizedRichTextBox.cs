@@ -183,9 +183,15 @@ namespace MpWpfApp {
                     if (ctvm == null) {
                         throw new Exception("TokenizedRichTextBox error, cannot find cliptile viewmodel");
                     }
-                    
+                    var sttvm = ctvm.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel.SelectedTagTile;
+
                     BeginChange();
                     new TextRange(Document.ContentStart, Document.ContentEnd).ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
+                    if (!sttvm.Tag.IsLinkedWithCopyItem(ctvm.CopyItem)) {
+                        ctvm.TileVisibility = Visibility.Collapsed;
+                        EndChange();
+                        return;
+                    }
                     if (SearchText == null || string.IsNullOrEmpty(SearchText.Trim()) || SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
                         ctvm.TileVisibility = Visibility.Visible;
                         EndChange();

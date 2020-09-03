@@ -305,37 +305,6 @@ namespace MpWpfApp {
             MpDb.Instance.ExecuteNonQuery("delete from MpCopyItemSortTypeOrder where fk_MpCopyItemId=" + this.CopyItemId);
         }
 
-        public string GetCurrentDetail(int detailId) {
-            string info = "I dunno";// string.Empty;
-            switch (detailId) {
-                //created
-                case 0:
-                    info = CopyDateTime.ToString();
-                    break;
-                //chars/lines
-                case 1:
-                    if (CopyItemType == MpCopyItemType.Image) {
-                        var bmp = MpHelpers.ConvertByteArrayToBitmapSource((byte[])DataObject);
-                        info = "(" + bmp.Width + ") x (" + bmp.Height + ")";
-                    } else if (CopyItemType == MpCopyItemType.RichText) {
-                        info = ItemPlainText.Length + " chars | " + MpHelpers.GetRowCount(ItemPlainText) + " lines";
-                    } else if (CopyItemType == MpCopyItemType.FileList) {
-                        info = GetFileList().Count + " files | " + MpHelpers.FileListSize(GetFileList().ToArray()) + " bytes";
-                    }
-                    break;
-                //# copies/# pastes
-                case 2:
-                    DataTable dt = MpDb.Instance.Execute("select * from MpPasteHistory where fk_MpCopyItemId=" + CopyItemId);
-                    info = CopyCount + " copies | " + dt.Rows.Count + " pastes";
-                    break;
-                default:
-                    info = "Unknown detailId: " + detailId;
-                    break;
-            }
-
-            return info;
-        }
-
         #endregion
 
         #region Private Methods

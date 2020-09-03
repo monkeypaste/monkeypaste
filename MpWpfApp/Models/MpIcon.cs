@@ -9,14 +9,14 @@ namespace MpWpfApp {
     public class MpIcon : MpDbObject {
         public static int TotalIconCount = 0;
         public int iconId { get; set; }
-        public ImageSource IconImage { get; set; }
+        public BitmapSource IconImage { get; set; }
 
         public MpIcon() {
             iconId = 0;
             IconImage = null;
             ++TotalIconCount;
         }
-        public MpIcon(ImageSource iconImage) : base() {
+        public MpIcon(BitmapSource iconImage) : base() {
             this.iconId = 0;
             this.IconImage = iconImage;
             ++TotalIconCount;

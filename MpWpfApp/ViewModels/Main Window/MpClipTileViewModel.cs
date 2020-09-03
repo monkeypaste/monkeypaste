@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.IO;
 using System.Reflection;
 using System.Speech.Synthesis;
@@ -24,19 +25,6 @@ namespace MpWpfApp {
 
         #region View Models
 
-        private MpClipTileTitleSwirlViewModel _clipTileTitleSwirlViewModel;
-        public MpClipTileTitleSwirlViewModel ClipTileTitleSwirlViewModel {
-            get {
-                return _clipTileTitleSwirlViewModel;
-            }
-            set {
-                if (_clipTileTitleSwirlViewModel != value) {
-                    _clipTileTitleSwirlViewModel = value;
-                    OnPropertyChanged(nameof(ClipTileTitleSwirlViewModel));
-                }
-            }
-        }
-
         private MpClipTrayViewModel _clipTrayViewModel;
         public MpClipTrayViewModel ClipTrayViewModel {
             get {
@@ -46,6 +34,19 @@ namespace MpWpfApp {
                 if (_clipTrayViewModel != value) {
                     _clipTrayViewModel = value;
                     OnPropertyChanged(nameof(ClipTrayViewModel));
+                }
+            }
+        }
+
+        private ObservableCollection<MpClipTileContextMenuItemViewModel> _convertClipTypes = new ObservableCollection<MpClipTileContextMenuItemViewModel>();
+        public ObservableCollection<MpClipTileContextMenuItemViewModel> ConvertClipTypes {
+            get {
+                return _convertClipTypes;
+            }
+            set {
+                if (_convertClipTypes != value) {
+                    _convertClipTypes = value;
+                    OnPropertyChanged(nameof(ConvertClipTypes));
                 }
             }
         }
@@ -307,8 +308,21 @@ namespace MpWpfApp {
             }
         }
 
-        private ImageSource _icon = null;
-        public ImageSource Icon {
+        private BitmapSource _titleSwirl = null;
+        public BitmapSource TitleSwirl {
+            get {
+                return _titleSwirl;
+            }
+            set {
+                if(_titleSwirl != value) {
+                    _titleSwirl = value;
+                    OnPropertyChanged(nameof(TitleSwirl));
+                }
+            }
+        }
+
+        private BitmapSource _icon = null;
+        public BitmapSource Icon {
             get {
                 return _icon;
             }
@@ -640,7 +654,6 @@ namespace MpWpfApp {
                                 IsFocused = true;
                             }
                         } else {
-                            //ClipTileTitleSwirlViewModel.Reset();
                             TileBorderBrush = Brushes.Transparent;
                             DetailTextColor = Brushes.Transparent;
                             //below must be called to clear focus when deselected (it may not have focus)
@@ -651,12 +664,10 @@ namespace MpWpfApp {
                         if (!IsSelected) {
                             if (IsHovering) {
                                 TileBorderBrush = Brushes.Yellow;
-                                //ClipTileTitleSwirlViewModel.TitleSwirl = ClipTrayViewModel.HoverSwirl;
                                 DetailTextColor = Brushes.DarkKhaki;
                                 //this is necessary for dragdrop re-sorting
                             } else {
                                 TileBorderBrush = Brushes.Transparent;
-                                //ClipTileTitleSwirlViewModel.Reset();
                                 DetailTextColor = Brushes.Transparent;
                             }
                         }
@@ -671,7 +682,7 @@ namespace MpWpfApp {
             Icon = ci.App.Icon.IconImage;
             Tokens = new ObservableCollection<MpSubTextToken>(CopyItem.SubTextTokenList);
 
-            ClipTileTitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
+            InitSwirl();
 
             FileListVisibility = CopyItemType == MpCopyItemType.FileList ? Visibility.Visible : Visibility.Collapsed;
             ImgVisibility = CopyItemType == MpCopyItemType.Image ? Visibility.Visible : Visibility.Collapsed;
@@ -700,12 +711,9 @@ namespace MpWpfApp {
         }
 
         public void ClipTileTitle_Loaded(object sender, RoutedEventArgs e) {
-            //if (ClipTileTitleSwirlViewModel == null) {
-            //    InitSwirl();
-            //}
-
             var titleCanvas = (Canvas)sender;
             var clipTileTitleTextBox = (TextBox)titleCanvas.FindName("ClipTileTitleTextBox");
+
             clipTileTitleTextBox.PreviewKeyDown += ClipTrayViewModel.MainWindowViewModel.MainWindow_PreviewKeyDown;
             clipTileTitleTextBox.LostFocus += (s, e4) => {
                 IsEditingTitle = false;
@@ -716,6 +724,13 @@ namespace MpWpfApp {
             Canvas.SetTop(titleIconImage, 2);
 
             var titleDetailTextBlock = (TextBlock)titleCanvas.FindName("ClipTileTitleDetailTextBlock");
+            titleDetailTextBlock.MouseEnter += (s, e5) => {
+                if(++_detailIdx > 2) {
+                    _detailIdx = 0;
+                }
+                titleDetailTextBlock.Text = GetCurrentDetail(_detailIdx);
+            };
+            titleDetailTextBlock.Text = GetCurrentDetail(_detailIdx);
             Canvas.SetLeft(titleDetailTextBlock, 5);
             Canvas.SetTop(titleDetailTextBlock, TileTitleHeight - 14);
         }
@@ -765,6 +780,26 @@ namespace MpWpfApp {
                 }
                 TagMenuItems.Add(new MpClipTileContextMenuItemViewModel(tagTile.TagName, ClipTrayViewModel.LinkTagToCopyItemCommand, tagTile, tagTile.Tag.IsLinkedWithCopyItem(CopyItem)));
             }
+            ConvertClipTypes.Clear();
+            switch(ClipTrayViewModel.GetSelectedClipsType()) {
+                case MpCopyItemType.None:
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Text", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.RichText, false));
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("File List", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.FileList, false));
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Image", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.Image, false));
+                    break;
+                case MpCopyItemType.FileList:
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Text", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.RichText, false));
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Image", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.Image, false));
+                    break;
+                case MpCopyItemType.Image:
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Text", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.RichText, false));
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("File List", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.FileList, false));
+                    break;
+                case MpCopyItemType.RichText:
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("File List", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.FileList, false));
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Image", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.Image, false));
+                    break;
+            }
         }
 
         public void AppendContent(MpClipTileViewModel octvm) {
@@ -772,41 +807,89 @@ namespace MpWpfApp {
 
             //reinitialize item view properties
             PlainText = CopyItem.ItemPlainText;
-
             RichText = CopyItem.ItemRichText;
-
             Bmp = CopyItem.ItemImage;
-
+            Tokens = new ObservableCollection<MpSubTextToken>(CopyItem.SubTextTokenList);
             FileDropList = CopyItem.GetFileList();
-
             FileListViewModels.Clear();
             foreach(var path in FileDropList) {
                 FileListViewModels.Add(new MpFileListItemViewModel(path));
             }
         }
 
-        //public void InitSwirl(BitmapSource sharedSwirl = null) {
-        //    if(sharedSwirl == null) {
-        //        var swirl1 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0001.png"));
-        //        swirl1 = MpHelpers.TintBitmapSource(swirl1, ((SolidColorBrush)TitleColor).Color);
-        //        var swirl2 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0002.png"));
-        //        swirl2 = MpHelpers.TintBitmapSource(swirl2, ((SolidColorBrush)TitleColorLighter).Color);
-        //        var swirl3 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0003.png"));
-        //        swirl3 = MpHelpers.TintBitmapSource(swirl3, ((SolidColorBrush)TitleColorDarker).Color);
-        //        var swirl4 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0004.png"));
-        //        swirl4 = MpHelpers.TintBitmapSource(swirl4, ((SolidColorBrush)TitleColorAccent).Color);
+        public void InitSwirl(BitmapSource sharedSwirl = null) {
+            if (sharedSwirl == null) {
+                SolidColorBrush lighterColor = MpHelpers.ChangeBrushAlpha(
+                                MpHelpers.ChangeBrushBrightness((SolidColorBrush)TitleColor, -0.5f), 100);
+                SolidColorBrush darkerColor = MpHelpers.ChangeBrushAlpha(
+                                MpHelpers.ChangeBrushBrightness((SolidColorBrush)TitleColor, -0.4f), 50);
+                SolidColorBrush accentColor = MpHelpers.ChangeBrushAlpha(
+                                MpHelpers.ChangeBrushBrightness((SolidColorBrush)TitleColor, -0.0f), 100);
 
-        //        TitleSwirl = MpHelpers.MergeImages(new List<BitmapSource>() { swirl1, swirl2, swirl3, swirl4 });
-        //    } else {
-        //        TitleSwirl = sharedSwirl;
-        //    }
-        //}
+                var swirl1 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0001.png"));
+                swirl1 = MpHelpers.TintBitmapSource(swirl1, ((SolidColorBrush)TitleColor).Color);
+
+                var swirl2 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0002.png"));
+                swirl2 = MpHelpers.TintBitmapSource(swirl2, lighterColor.Color);
+
+                var swirl3 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0003.png"));
+                swirl3 = MpHelpers.TintBitmapSource(swirl3, darkerColor.Color);
+
+                var swirl4 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0004.png"));
+                swirl4 = MpHelpers.TintBitmapSource(swirl4, accentColor.Color);
+
+                TitleSwirl = MpHelpers.MergeImages(new List<BitmapSource>() { swirl1, swirl2, swirl3, swirl4 });
+            } else {
+                TitleSwirl = sharedSwirl;
+            }
+        }
 
         public void DeleteTempFiles() {
             foreach (var f in _tempFileList) {
                 if (File.Exists(f)) {
                     File.Delete(f);
                 }
+            }
+        }
+
+        public string GetCurrentDetail(int detailId) {
+            string info = "I dunno";// string.Empty;
+            switch (detailId) {
+                //created
+                case 0:
+                    TimeSpan dur = DateTime.Now - CopyItemCreatedDateTime;
+                    info = dur.ToString();
+                    break;
+                //chars/lines
+                case 1:
+                    if (CopyItemType == MpCopyItemType.Image) {                        
+                        info = "(" + Bmp.Width + ") x (" + Bmp.Height + ")";
+                    } else if (CopyItemType == MpCopyItemType.RichText) {
+                        info = PlainText.Length + " chars | " + MpHelpers.GetRowCount(PlainText) + " lines";
+                    } else if (CopyItemType == MpCopyItemType.FileList) {
+                        info = FileListViewModels.Count + " files | " + MpHelpers.FileListSize(CopyItem.GetFileList().ToArray()) + " bytes";
+                    }
+                    break;
+                //# copies/# pastes
+                case 2:                    
+                    info = CopyItem.CopyCount + " copies | " + CopyItem.PasteCount + " pastes";
+                    break;
+                default:
+                    info = "Unknown detailId: " + detailId;
+                    break;
+            }
+
+            return info;
+        }
+
+        public void Convert(MpCopyItemType newType) {
+            if(newType == CopyItemType) {
+                return;
+            }
+            switch(newType) {
+                case MpCopyItemType.FileList:
+                    ClipTrayViewModel.ExportClipsToFile(new List<MpClipTileViewModel>() { this }, Path.GetTempPath());
+                    break;
             }
         }
 

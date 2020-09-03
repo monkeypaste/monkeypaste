@@ -90,32 +90,6 @@ namespace MpWpfApp {
             }
         }
 
-        private BitmapSource _hoverSwirl = null;
-        public BitmapSource HoverSwirl {
-            get {
-                return _hoverSwirl;
-            }
-            set {
-                if(_hoverSwirl != value) {
-                    _hoverSwirl = value;
-                    OnPropertyChanged(nameof(HoverSwirl));
-                }
-            }
-        }
-
-        private BitmapSource _selectedSwirl = null;
-        public BitmapSource SelectedSwirl {
-            get {
-                return _selectedSwirl;
-            }
-            set {
-                if (_selectedSwirl != value) {
-                    _selectedSwirl = value;
-                    OnPropertyChanged(nameof(SelectedSwirl));
-                }
-            }
-        }
-
         private Visibility _emptyListMessageVisibility = Visibility.Collapsed;
         public Visibility EmptyListMessageVisibility {
             get {
@@ -254,14 +228,6 @@ namespace MpWpfApp {
                 }
             };
 
-            //MainWindowViewModel.SearchBoxViewModel.PropertyChanged += (s, e2) => {
-            //    switch (e2.PropertyName) {
-            //        case nameof(MainWindowViewModel.SearchBoxViewModel.SearchText):
-            //            FilterTiles(MainWindowViewModel.SearchBoxViewModel.SearchText);
-            //            break;
-            //    }
-            //};
-
             //create tiles for all clips in the database
             foreach (MpCopyItem ci in MpCopyItem.GetAllCopyItems()) {
                 this.Add(new MpClipTileViewModel(ci, this));
@@ -316,9 +282,6 @@ namespace MpWpfApp {
                 var scrollViewer = clipTrayListBox.GetChildOfType<ScrollViewer>();
                 scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + (e3.Delta * -1) / 5);
             };
-
-            HoverSwirl = MpClipTileTitleSwirlViewModel.CreateSwirlBitmapSource(Brushes.Yellow);
-            SelectedSwirl = MpClipTileTitleSwirlViewModel.CreateSwirlBitmapSource(Brushes.Red);
 
             ClipboardMonitor = new MpClipboardMonitor((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow));
 
@@ -394,6 +357,20 @@ namespace MpWpfApp {
                 IsDragging = false;
                 StartDragPoint = new Point();
             };
+        }
+
+        public MpCopyItemType GetSelectedClipsType() {
+            //returns none if all clips aren't the same type
+            if(SelectedClipTiles.Count == 0) {
+                return MpCopyItemType.None;
+            }
+            MpCopyItemType firstType = SelectedClipTiles[0].CopyItemType;
+            foreach(var sctvm in SelectedClipTiles) {
+                if(sctvm.CopyItemType != firstType) {
+                    return MpCopyItemType.None;
+                }
+            }
+            return firstType;
         }
 
         public void ClearClipSelection() {
@@ -499,22 +476,28 @@ namespace MpWpfApp {
         }
 
         public void SortAndFilterClipTiles(bool doSort = true,bool doFilter = true) {
+            if(MainWindowViewModel.IsLoading) {
+                return;
+            }
+
             var sw = new Stopwatch();
             sw.Start();
             
             ClearClipSelection();
-            var cvs = CollectionViewSource.GetDefaultView(this);
+            var cvs = CollectionViewSource.GetDefaultView(VisibileClipTiles);
             var tempSearchText = MainWindowViewModel.SearchBoxViewModel.SearchText;
             if (doFilter) {
                 cvs.Filter += item => {
+                    var ctvm = (MpClipTileViewModel)item;
+
                     if (tempSearchText.Trim() == string.Empty || tempSearchText == Properties.Settings.Default.SearchPlaceHolderText) {
                         return true;
                     }
-                    var ctvm = (MpClipTileViewModel)item;
 
                     if (ctvm.CopyItemType == MpCopyItemType.Image) {
                         return false;
                     }
+
                     if (Properties.Settings.Default.IsSearchCaseSensitive) {
                         return ctvm.CopyItem.ItemPlainText.Contains(tempSearchText);
                     }
@@ -549,12 +532,6 @@ namespace MpWpfApp {
                 //cvs.SortDescriptions.Add(new SortDescription(sortBy, sortDir));
                 this.Sort(x => x[sortBy], sortDir == ListSortDirection.Descending);
             }
-
-            //foreach(var vctvm in VisibileClipTiles) {
-            //    vctvm.SearchText = MainWindowViewModel.SearchBoxViewModel.SearchText;
-            //}
-
-            //var sortDur = DateTime.Now - sortStart;
             sw.Stop();
             Console.WriteLine("Sort for " + VisibileClipTiles.Count + " items: " + sw.ElapsedMilliseconds + " ms");
             ResetClipSelection();
@@ -628,17 +605,13 @@ namespace MpWpfApp {
             return MpCopyItemType.None;
         }
 
-        #endregion
-
-        #region Private Methods
-
-        private void WriteClipsToFile(List<MpClipTileViewModel> clipList, string rootPath) {
+        public void ExportClipsToFile(List<MpClipTileViewModel> clipList, string rootPath) {
             foreach (MpClipTileViewModel ctvm in clipList) {
                 ctvm.CopyItem.GetFileList(rootPath);
             }
         }
 
-        private void WriteClipsToCsvFile(List<MpClipTileViewModel> clipList, string filePath) {
+        public void ExportClipsToCsvFile(List<MpClipTileViewModel> clipList, string filePath) {
             string csvText = string.Empty;
             foreach (MpClipTileViewModel ctvm in clipList) {
                 csvText += ctvm.CopyItem.ItemPlainText + ",";
@@ -646,18 +619,22 @@ namespace MpWpfApp {
             using (StreamWriter of = new StreamWriter(filePath)) {
                 of.Write(csvText);
                 of.Close();
-            }                
-        }
-
-        private void WriteClipsToZipFile(List<MpClipTileViewModel> clipList,string filePath) {
-            using (ZipArchive zip = ZipFile.Open(filePath, ZipArchiveMode.Create)) {
-                foreach(var ctvm in clipList) {
-                    foreach(var p in ctvm.FileDropList) {
-                        zip.CreateEntryFromFile(p, Path.GetFileName(p));
-                    }
-                }                
             }
         }
+
+        public void ExportClipsToZipFile(List<MpClipTileViewModel> clipList, string filePath) {
+            using (ZipArchive zip = ZipFile.Open(filePath, ZipArchiveMode.Create)) {
+                foreach (var ctvm in clipList) {
+                    foreach (var p in ctvm.FileDropList) {
+                        zip.CreateEntryFromFile(p, Path.GetFileName(p));
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
 
         private MpClipTileViewModel FindClipTileByModel(MpCopyItem ci) {
             foreach(var ctvm in this) {
@@ -680,9 +657,29 @@ namespace MpWpfApp {
             }
             return null;
         }
+
         #endregion
 
         #region Commands
+
+        private RelayCommand<int> _convertSelectedClipsCommand;
+        public ICommand ConvertSelectedClipsCommand {
+            get {
+                if(_convertSelectedClipsCommand == null) {
+                    _convertSelectedClipsCommand = new RelayCommand<int>(ConvertSelectedClips);
+                }
+                return _convertSelectedClipsCommand;
+            }
+        }
+        private void ConvertSelectedClips(int conversionType) {
+            MpCopyItemType ct = (MpCopyItemType)conversionType;
+            foreach(var sctvm in SelectedClipTiles) {
+                if(sctvm.CopyItemType == ct) {
+                    continue;
+                }
+                sctvm.Convert(ct);
+            }
+        }
 
         private RelayCommand _changeSelectedClipsColorCommand;
         public ICommand ChangeSelectedClipsColorCommand {
@@ -708,10 +705,10 @@ namespace MpWpfApp {
                 foreach(var sctvm in SelectedClipTiles) {
                     sctvm.TitleColor = MpHelpers.ConvertWinFormsColorToSolidColorBrush(cd.Color);
                     if(sharedSwirl == null) {
-                        sctvm.ClipTileTitleSwirlViewModel.InitSwirl();
-                        sharedSwirl = sctvm.ClipTileTitleSwirlViewModel.TitleSwirl;
+                        sctvm.InitSwirl();
+                        sharedSwirl = sctvm.TitleSwirl;
                     } else {
-                        sctvm.ClipTileTitleSwirlViewModel.InitSwirl(sharedSwirl);
+                        sctvm.InitSwirl(sharedSwirl);
                     }
                     sctvm.CopyItem.WriteToDatabase();
                 }
@@ -920,11 +917,11 @@ namespace MpWpfApp {
 
             if (dlg.ShowDialog() == CommonFileDialogResult.Ok) {
                 if ((MpExportType)exportType == MpExportType.Csv) {
-                    WriteClipsToCsvFile(SelectedClipTiles.ToList(), dlg.FileName);
+                    ExportClipsToCsvFile(SelectedClipTiles.ToList(), dlg.FileName);
                 } else if ((MpExportType)exportType == MpExportType.Zip) {
-                    WriteClipsToZipFile(SelectedClipTiles.ToList(), dlg.FileName);
+                    ExportClipsToZipFile(SelectedClipTiles.ToList(), dlg.FileName);
                 } else {
-                    WriteClipsToFile(SelectedClipTiles.ToList(), dlg.FileName + @"\");
+                    ExportClipsToFile(SelectedClipTiles.ToList(), dlg.FileName + @"\");
                 }
             }
         }
