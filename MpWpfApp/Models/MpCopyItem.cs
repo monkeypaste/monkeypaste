@@ -18,7 +18,7 @@ namespace MpWpfApp {
 
         public List<MpSubTextToken> SubTextTokenList { get; set; } = new List<MpSubTextToken>();
         public int CopyItemId { get; set; }
-        public object DataObject { get; set; }
+        //private object DataObject { get; set; }
         public int ColorId { get; private set; }
         public string Title { get; set; }
         public MpCopyItemType CopyItemType { get; private set; }
@@ -40,7 +40,7 @@ namespace MpWpfApp {
         public string SourcePath { get; set; }
         public string ItemPlainText { get; set; }
         public string ItemRichText { get; set; }
-        public BitmapSource ItemImage { get; set; }
+        public BitmapSource ItemBitmapSource { get; set; }
         public MpApp App { get; set; }
         public MpClient Client { get; set; }
         public MpColor ItemColor { get; set; }
@@ -101,31 +101,24 @@ namespace MpWpfApp {
                     foreach (string str in (string[])data) {
                         paths += str + Environment.NewLine;
                     }
-                    newItem.DataObject = paths;
-                    newItem.ItemPlainText = (string)newItem.DataObject;
+                    newItem.ItemPlainText = paths;
                     newItem.ItemRichText = MpHelpers.ConvertPlainTextToRichText(newItem.ItemPlainText);
-                    newItem.ItemImage = MpHelpers.ConvertRichTextToImage(newItem.ItemRichText);
+                    newItem.ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(newItem.ItemRichText);
+                    newItem.SubTextTokenList = MpSubTextToken.GatherTokens((string)newItem.ItemRichText);
                     break;
                 case MpCopyItemType.Image:
-                    newItem.DataObject = MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)data);
-                    newItem.ItemImage = (BitmapSource)data;
-                    newItem.ItemPlainText = MpHelpers.ConvertBitmapSourceToPlainText(newItem.ItemImage);
+                    newItem.ItemBitmapSource = (BitmapSource)data;
+                    newItem.ItemPlainText = MpHelpers.ConvertBitmapSourceToPlainText(newItem.ItemBitmapSource);
                     newItem.ItemRichText = MpHelpers.ConvertPlainTextToRichText(newItem.ItemPlainText);
                     break;
                 case MpCopyItemType.RichText:
-                    newItem.DataObject = newItem.ItemPlainText = MpHelpers.IsStringRichText((string)data) ? (string)data : MpHelpers.ConvertPlainTextToRichText((string)data);
-                    newItem.ItemRichText = (string)newItem.DataObject;
-                    newItem.ItemPlainText = MpHelpers.ConvertRichTextToPlainText(newItem.ItemRichText);
-                    newItem.ItemImage = MpHelpers.ConvertRichTextToImage(newItem.ItemRichText);
-                    newItem.SubTextTokenList = MpSubTextToken.GatherTokens((string)newItem.DataObject);
+                    newItem.ItemPlainText = MpHelpers.IsStringRichText((string)data) ? (string)data : MpHelpers.ConvertPlainTextToRichText((string)data);
+                    newItem.ItemRichText = MpHelpers.IsStringRichText((string)data) ? MpHelpers.ConvertPlainTextToRichText((string)data): (string)data;
+                    newItem.ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(newItem.ItemRichText);
+                    newItem.SubTextTokenList = MpSubTextToken.GatherTokens((string)newItem.ItemRichText);
                     break;
             }
-            var existingItem = newItem.GetExistingCopyItem();
-            if (existingItem != null) {
-                Console.WriteLine("MpCopyItem: ignoring duplicate and returning original item");
-                return existingItem;
-            }
-            
+
             return newItem;
         }
         
@@ -142,24 +135,6 @@ namespace MpWpfApp {
 
         protected MpCopyItem(DataRow dr) {
             LoadDataRow(dr);
-        }
-
-        //returns null if not found
-        public MpCopyItem GetExistingCopyItem() {
-            DataTable dt = null;
-            switch (CopyItemType) {
-                case MpCopyItemType.FileList:
-                case MpCopyItemType.RichText:
-                    dt = MpDb.Instance.Execute("select * from MpCopyItem where fk_MpCopyItemTypeId=" + (int)CopyItemType + " and ItemText='" + (string)DataObject + "'");
-                    break;
-                case MpCopyItemType.Image:
-                    dt = MpDb.Instance.Execute("select * from MpCopyItem where fk_MpCopyItemTypeId=" + (int)CopyItemType + " and ItemImage=@0", new List<string>() { "@0" }, new List<object>() { (byte[])DataObject });
-                    break;
-            }
-            if (dt != null && dt.Rows.Count > 0) {
-                return new MpCopyItem(dt.Rows[0]);
-            }
-            return null;
         }
 
         public int GetPasteCount() {
@@ -219,11 +194,11 @@ namespace MpWpfApp {
             var fileList = new List<string>();
             if (CopyItemType == MpCopyItemType.FileList) {
                 if(forceType == MpCopyItemType.Image) {
-                    fileList.Add(MpHelpers.WriteBitmapSourceToFile(Path.GetTempFileName(), ItemImage));
+                    fileList.Add(MpHelpers.WriteBitmapSourceToFile(Path.GetTempFileName(), ItemBitmapSource));
                 } else if (forceType == MpCopyItemType.RichText) {
                     fileList.Add(MpHelpers.WriteTextToFile(Path.GetTempFileName(), ItemPlainText));
                 } else {
-                    var splitArray = ((string)DataObject).Split(Environment.NewLine.ToCharArray());
+                    var splitArray = ItemPlainText.Split(Environment.NewLine.ToCharArray());
                     if (splitArray == null || splitArray.Length == 0) {
                         throw new Exception("CopyItem GetFileList error, file list should not be empty");
                     } else {
@@ -248,7 +223,7 @@ namespace MpWpfApp {
                 switch (CopyItemType) {
                     case MpCopyItemType.RichText:
                         if(forceType == MpCopyItemType.Image) {
-                            fileList.Add(MpHelpers.WriteBitmapSourceToFile(op, ItemImage));
+                            fileList.Add(MpHelpers.WriteBitmapSourceToFile(op, ItemBitmapSource));
                         } else {
                             fileList.Add(MpHelpers.WriteTextToFile(op, ItemPlainText));
                         }
@@ -257,7 +232,7 @@ namespace MpWpfApp {
                         if (forceType == MpCopyItemType.RichText) {
                             fileList.Add(MpHelpers.WriteTextToFile(op, ItemPlainText));
                         } else {
-                            fileList.Add(MpHelpers.WriteBitmapSourceToFile(op, ItemImage));
+                            fileList.Add(MpHelpers.WriteBitmapSourceToFile(op, ItemBitmapSource));
                         }
                         break;
                 }
@@ -273,25 +248,76 @@ namespace MpWpfApp {
                     foreach(string f in otherItem.GetFileList()) {
                         fileStr += f + Environment.NewLine;
                     }
-                    DataObject += Environment.NewLine + fileStr;
-                    ItemPlainText = (string)DataObject;
+                    ItemPlainText += Environment.NewLine + fileStr;
                     ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
-                    ItemImage = MpHelpers.ConvertRichTextToImage(ItemRichText);
+                    ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                     break;
                 case MpCopyItemType.Image:
-                    ItemImage = MpHelpers.CombineBitmap(new List<BitmapSource>() { ItemImage, otherItem.ItemImage });
-                    DataObject = MpHelpers.ConvertBitmapSourceToByteArray(ItemImage);
-                    ItemPlainText = MpHelpers.ConvertBitmapSourceToPlainText(ItemImage);
+                    ItemBitmapSource = MpHelpers.CombineBitmap(new List<BitmapSource>() { ItemBitmapSource, otherItem.ItemBitmapSource });
+                    //DataObject = MpHelpers.ConvertBitmapSourceToByteArray(ItemBitmapSource);
+                    ItemPlainText = MpHelpers.ConvertBitmapSourceToPlainText(ItemBitmapSource);
                     ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
                     break;
                 case MpCopyItemType.RichText:
-                    DataObject = MpHelpers.CombineRichText(ItemRichText, otherItem.ItemRichText);
-                    ItemRichText = (string)DataObject;
+                    //DataObject = MpHelpers.CombineRichText(ItemRichText, otherItem.ItemRichText);
+                    ItemRichText = MpHelpers.CombineRichText(ItemRichText, otherItem.ItemRichText);
                     ItemPlainText = MpHelpers.ConvertRichTextToPlainText(ItemRichText); 
-                    ItemImage = MpHelpers.ConvertRichTextToImage(ItemRichText);
+                    ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                     SubTextTokenList = MpSubTextToken.GatherTokens(ItemRichText);
                     break;
             }
+        }
+
+        public void ConvertType(MpCopyItemType newType) {
+            if (newType == CopyItemType) {
+                return;
+            }
+            
+            switch (newType) {
+                case MpCopyItemType.FileList:
+                    switch(CopyItemType) {
+                        case MpCopyItemType.RichText:
+                            ItemPlainText = MpHelpers.WriteTextToFile(Path.GetTempFileName(), ItemPlainText, false);
+                            ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
+                            ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
+                            break;
+                        case MpCopyItemType.Image:
+                            ItemPlainText = MpHelpers.WriteBitmapSourceToFile(Path.GetTempFileName(), ItemBitmapSource, false);
+                            ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
+                            ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
+                            break;
+                    }
+                    break;
+                case MpCopyItemType.Image:
+                    switch (CopyItemType) {
+                        case MpCopyItemType.RichText:
+                            ItemPlainText = MpHelpers.ConvertBitmapSourceToPlainText(ItemBitmapSource);
+                            ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
+                            ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
+                            break;
+                        case MpCopyItemType.FileList:
+                            ItemPlainText = MpHelpers.WriteBitmapSourceToFile(Path.GetTempFileName(), ItemBitmapSource, false);
+                            ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
+                            ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
+                            break;
+                    }
+                    break;
+                case MpCopyItemType.RichText:
+                    switch (CopyItemType) {
+                        case MpCopyItemType.Image:
+                            ItemPlainText = MpHelpers.ConvertBitmapSourceToPlainText(ItemBitmapSource);
+                            ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
+                            ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
+                            break;
+                        case MpCopyItemType.FileList:
+                            ItemPlainText = MpHelpers.WriteBitmapSourceToFile(Path.GetTempFileName(), ItemBitmapSource, false);
+                            ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
+                            ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
+                            break;
+                    }
+                    break;
+            }
+            CopyItemType = newType;
         }
 
         public void DeleteFromDatabase() {
@@ -329,7 +355,7 @@ namespace MpWpfApp {
         #region Overrides
 
         public override void LoadDataRow(DataRow dr) {
-            this.CopyItemId = Convert.ToInt32(dr["pk_MpCopyItemId"].ToString());
+            CopyItemId = Convert.ToInt32(dr["pk_MpCopyItemId"].ToString());
             this.CopyItemType = (MpCopyItemType)Convert.ToInt32(dr["fk_MpCopyItemTypeId"].ToString());
             this.ClientId = Convert.ToInt32(dr["fk_MpClientId"].ToString());
             this.AppId = Convert.ToInt32(dr["fk_MpAppId"].ToString());
@@ -339,22 +365,22 @@ namespace MpWpfApp {
             this.CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
             switch (CopyItemType) {
                 case MpCopyItemType.FileList:
-                    DataObject = (object)dr["ItemText"].ToString();
+                    //DataObject = (object)dr["ItemText"].ToString();
                     ItemPlainText = (string)dr["ItemText"].ToString();
                     ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
-                    ItemImage = MpHelpers.ConvertRichTextToImage(ItemRichText);
+                    ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                     break;
                 case MpCopyItemType.Image:
-                    DataObject = (byte[])dr["ItemImage"];
-                    ItemImage = MpHelpers.ConvertByteArrayToBitmapSource((byte[])DataObject);
+                    //DataObject = (byte[])dr["ItemImage"];
+                    ItemBitmapSource = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]);
                     ItemPlainText = (string)dr["ItemText"].ToString();
                     ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
                     break;
                 case MpCopyItemType.RichText:
-                    DataObject = dr["ItemText"].ToString();
-                    ItemRichText = (string)DataObject;
+                    //DataObject = dr["ItemText"].ToString();
+                    ItemRichText = dr["ItemText"].ToString();
                     ItemPlainText = MpHelpers.ConvertRichTextToPlainText(ItemRichText);
-                    ItemImage = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]);
+                    ItemBitmapSource = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]);
                     SubTextTokenList = MpSubTextToken.GatherTokens(ItemRichText);
                     break;
             }
@@ -413,8 +439,8 @@ namespace MpWpfApp {
                 ItemColor.WriteToDatabase();
                 ColorId = ItemColor.ColorId;
             }
-            string itemText = this.CopyItemType == MpCopyItemType.RichText ? (string)DataObject : ItemPlainText;
-            byte[] itemImage = this.CopyItemType == MpCopyItemType.Image ? (byte[])DataObject : MpHelpers.ConvertBitmapSourceToByteArray(ItemImage);
+            string itemText = this.CopyItemType == MpCopyItemType.RichText ? ItemRichText : ItemPlainText;
+            byte[] itemImage = MpHelpers.ConvertBitmapSourceToByteArray(ItemBitmapSource);
             //if copyitem already exists
             if (this.CopyItemId > 0) {
                 DataTable dt = MpDb.Instance.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + this.CopyItemId);

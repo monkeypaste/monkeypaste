@@ -224,7 +224,7 @@ namespace MpWpfApp {
         public BitmapSource Bmp {
             get {
                 if (_bmp == null) {
-                    _bmp = CopyItem.ItemImage;
+                    _bmp = CopyItem.ItemBitmapSource;
                 }
                 return _bmp;
             }
@@ -808,7 +808,7 @@ namespace MpWpfApp {
             //reinitialize item view properties
             PlainText = CopyItem.ItemPlainText;
             RichText = CopyItem.ItemRichText;
-            Bmp = CopyItem.ItemImage;
+            Bmp = CopyItem.ItemBitmapSource;
             Tokens = new ObservableCollection<MpSubTextToken>(CopyItem.SubTextTokenList);
             FileDropList = CopyItem.GetFileList();
             FileListViewModels.Clear();
@@ -852,45 +852,19 @@ namespace MpWpfApp {
             }
         }
 
-        public string GetCurrentDetail(int detailId) {
-            string info = "I dunno";// string.Empty;
-            switch (detailId) {
-                //created
-                case 0:
-                    TimeSpan dur = DateTime.Now - CopyItemCreatedDateTime;
-                    info = dur.ToString();
-                    break;
-                //chars/lines
-                case 1:
-                    if (CopyItemType == MpCopyItemType.Image) {                        
-                        info = "(" + Bmp.Width + ") x (" + Bmp.Height + ")";
-                    } else if (CopyItemType == MpCopyItemType.RichText) {
-                        info = PlainText.Length + " chars | " + MpHelpers.GetRowCount(PlainText) + " lines";
-                    } else if (CopyItemType == MpCopyItemType.FileList) {
-                        info = FileListViewModels.Count + " files | " + MpHelpers.FileListSize(CopyItem.GetFileList().ToArray()) + " bytes";
-                    }
-                    break;
-                //# copies/# pastes
-                case 2:                    
-                    info = CopyItem.CopyCount + " copies | " + CopyItem.PasteCount + " pastes";
-                    break;
-                default:
-                    info = "Unknown detailId: " + detailId;
-                    break;
-            }
-
-            return info;
-        }
-
         public void Convert(MpCopyItemType newType) {
-            if(newType == CopyItemType) {
-                return;
+            CopyItem.ConvertType(newType);
+            PlainText = CopyItem.ItemPlainText;
+            RichText = CopyItem.ItemRichText;
+            Bmp = CopyItem.ItemBitmapSource;
+            FileListViewModels.Clear();
+            foreach(var p in CopyItem.GetFileList()) {
+                FileListViewModels.Add(new MpFileListItemViewModel(p));
             }
-            switch(newType) {
-                case MpCopyItemType.FileList:
-                    ClipTrayViewModel.ExportClipsToFile(new List<MpClipTileViewModel>() { this }, Path.GetTempPath());
-                    break;
-            }
+
+            FileListVisibility = CopyItemType == MpCopyItemType.FileList ? Visibility.Visible : Visibility.Collapsed;
+            ImgVisibility = CopyItemType == MpCopyItemType.Image ? Visibility.Visible : Visibility.Collapsed;
+            RtbVisibility = CopyItemType == MpCopyItemType.RichText ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public void ContextMenuMouseLeftButtonUpOnSearchGoogle() {
@@ -910,6 +884,35 @@ namespace MpWpfApp {
 
         #region Private Methods       
 
+        private string GetCurrentDetail(int detailId) {
+            string info = "I dunno";// string.Empty;
+            switch (detailId) {
+                //created
+                case 0:
+                    TimeSpan dur = DateTime.Now - CopyItemCreatedDateTime;
+                    info = dur.ToString();
+                    break;
+                //chars/lines
+                case 1:
+                    if (CopyItemType == MpCopyItemType.Image) {
+                        info = "(" + Bmp.Width + ") x (" + Bmp.Height + ")";
+                    } else if (CopyItemType == MpCopyItemType.RichText) {
+                        info = PlainText.Length + " chars | " + MpHelpers.GetRowCount(PlainText) + " lines";
+                    } else if (CopyItemType == MpCopyItemType.FileList) {
+                        info = FileListViewModels.Count + " files | " + MpHelpers.FileListSize(CopyItem.GetFileList().ToArray()) + " bytes";
+                    }
+                    break;
+                //# copies/# pastes
+                case 2:
+                    info = CopyItem.CopyCount + " copies | " + CopyItem.PasteCount + " pastes";
+                    break;
+                default:
+                    info = "Unknown detailId: " + detailId;
+                    break;
+            }
+
+            return info;
+        }
         #endregion
 
         #region Commands
@@ -917,9 +920,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Overrides
+
         public override string ToString() {
             return CopyItem.ItemPlainText;
         }
+
         #endregion
     }
 }

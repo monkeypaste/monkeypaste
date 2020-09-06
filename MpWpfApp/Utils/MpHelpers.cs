@@ -325,6 +325,19 @@ namespace MpWpfApp {
             }
         }
 
+        public static BitmapSource ReadImageFromFile(string filePath) {
+            return new BitmapImage(new Uri(filePath));
+        }
+
+        public static string ReadTextFromFile(string filePath) {
+            using (StreamReader f = new StreamReader(filePath)) {
+                string outStr = string.Empty;
+                outStr = f.ReadToEnd();
+                f.Close();
+                return outStr;
+            }
+        }
+
         public static string WriteTextToFile(string filePath, string text, bool isTemporary = false) {
             using (StreamWriter of = new StreamWriter(filePath)) {
                 of.Write(text);
@@ -566,7 +579,7 @@ namespace MpWpfApp {
             }  
         }
 
-        public static BitmapSource ConvertRichTextToImage(string rt) {
+        public static BitmapSource ConvertRichTextToBitmapSource(string rt) {
             System.Drawing.Size ts = GetRichTextFontSize(rt);
             using(System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(ts.Width, ts.Height)){
                 using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(bmp)) {

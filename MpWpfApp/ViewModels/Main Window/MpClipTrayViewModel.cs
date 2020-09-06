@@ -605,13 +605,17 @@ namespace MpWpfApp {
             return MpCopyItemType.None;
         }
 
-        public void ExportClipsToFile(List<MpClipTileViewModel> clipList, string rootPath) {
+        public string ExportClipsToFile(List<MpClipTileViewModel> clipList, string rootPath) {
+            string outStr = string.Empty;
             foreach (MpClipTileViewModel ctvm in clipList) {
-                ctvm.CopyItem.GetFileList(rootPath);
+                foreach(string f in ctvm.CopyItem.GetFileList(rootPath)) {
+                    outStr += f + Environment.NewLine;
+                }
             }
+            return outStr;
         }
 
-        public void ExportClipsToCsvFile(List<MpClipTileViewModel> clipList, string filePath) {
+        public string ExportClipsToCsvFile(List<MpClipTileViewModel> clipList, string filePath) {
             string csvText = string.Empty;
             foreach (MpClipTileViewModel ctvm in clipList) {
                 csvText += ctvm.CopyItem.ItemPlainText + ",";
@@ -620,9 +624,10 @@ namespace MpWpfApp {
                 of.Write(csvText);
                 of.Close();
             }
+            return filePath;
         }
 
-        public void ExportClipsToZipFile(List<MpClipTileViewModel> clipList, string filePath) {
+        public string ExportClipsToZipFile(List<MpClipTileViewModel> clipList, string filePath) {
             using (ZipArchive zip = ZipFile.Open(filePath, ZipArchiveMode.Create)) {
                 foreach (var ctvm in clipList) {
                     foreach (var p in ctvm.FileDropList) {
@@ -630,6 +635,7 @@ namespace MpWpfApp {
                     }
                 }
             }
+            return filePath;
         }
 
         #endregion
@@ -643,13 +649,17 @@ namespace MpWpfApp {
                 }
                 switch(ci.CopyItemType) {
                     case MpCopyItemType.RichText:
+                        if (string.Compare((string)ctvm.CopyItem.ItemRichText, ci.ItemRichText) == 0) {
+                            return ctvm;
+                        }
+                        break;
                     case MpCopyItemType.FileList:
-                        if (string.Compare((string)ctvm.CopyItem.DataObject, (string)ci.DataObject) == 0) {
+                        if (string.Compare((string)ctvm.CopyItem.ItemPlainText, ci.ItemPlainText) == 0) {
                             return ctvm;
                         }
                         break;
                     case MpCopyItemType.Image:
-                        if(MpHelpers.ByteArrayCompare((byte[])ctvm.CopyItem.DataObject,(byte[])ci.DataObject)) {
+                        if(MpHelpers.ByteArrayCompare(MpHelpers.ConvertBitmapSourceToByteArray(ctvm.CopyItem.ItemBitmapSource), MpHelpers.ConvertBitmapSourceToByteArray(ci.ItemBitmapSource))) {
                             return ctvm;
                         }
                         break;
