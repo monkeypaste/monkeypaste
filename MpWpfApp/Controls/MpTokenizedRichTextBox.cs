@@ -35,6 +35,17 @@ namespace MpWpfApp {
         public static void SetSearchText(DependencyObject obj, string value) {
             obj.SetValue(SearchTextProperty, value);
         }
+        public static readonly DependencyProperty SearchTextProperty =
+          DependencyProperty.RegisterAttached(
+            "SearchText",
+            typeof(string),
+            typeof(MpTokenizedRichTextBox),
+            new FrameworkPropertyMetadata {
+                BindsTwoWayByDefault = true,
+                PropertyChangedCallback = (s, e) => {
+                    ((MpTokenizedRichTextBox)s).HighlightSearchText(Brushes.Yellow);
+                },
+            });
 
         public string RichText {
             get {
@@ -52,6 +63,48 @@ namespace MpWpfApp {
         public static void SetRichText(DependencyObject obj, string value) {
             obj.SetValue(RichTextProperty, value);
         }
+        public static readonly DependencyProperty RichTextProperty =
+          DependencyProperty.RegisterAttached(
+            "RichText",
+            typeof(string),
+            typeof(MpTokenizedRichTextBox),
+            new FrameworkPropertyMetadata {
+                BindsTwoWayByDefault = true,
+                PropertyChangedCallback = (s, e) => {
+                    if (!string.IsNullOrEmpty((string)e.NewValue)) {
+                        ((MpTokenizedRichTextBox)s).SetRtf((string)e.NewValue);
+                    }
+                }
+            });
+
+        public FlowDocument DocumentRtf {
+            get {
+                return (FlowDocument)GetValue(DocumentRtfProperty);
+            }
+            set {
+                if ((FlowDocument)GetValue(DocumentRtfProperty) != value) {
+                    SetValue(DocumentRtfProperty, value);
+                }
+            }
+        }
+        public static FlowDocument GetDocumentRtf(DependencyObject obj) {
+            return (FlowDocument)obj.GetValue(DocumentRtfProperty);
+        }
+        public static void SetDocumentRtf(DependencyObject obj, FlowDocument value) {
+            obj.SetValue(DocumentRtfProperty, value);
+        }
+        public static readonly DependencyProperty DocumentRtfProperty =
+          DependencyProperty.RegisterAttached(
+            "DocumentRtf",
+            typeof(FlowDocument),
+            typeof(MpTokenizedRichTextBox),
+            new FrameworkPropertyMetadata {
+                BindsTwoWayByDefault = true,
+                PropertyChangedCallback = (s, e) => {
+                    var trtb = (MpTokenizedRichTextBox)s;
+                    trtb.Document = (FlowDocument)e.NewValue;
+                }
+            });
 
         public ObservableCollection<MpSubTextToken> Tokens {
             get {
@@ -69,6 +122,21 @@ namespace MpWpfApp {
         public static void SetTokens(DependencyObject obj, ObservableCollection<MpSubTextToken> value) {
             obj.SetValue(TokensProperty, value);
         }
+        public static readonly DependencyProperty TokensProperty =
+          DependencyProperty.RegisterAttached(
+            "Tokens",
+            typeof(ObservableCollection<MpSubTextToken>),
+            typeof(MpTokenizedRichTextBox),
+            new FrameworkPropertyMetadata {
+                BindsTwoWayByDefault = true,
+                PropertyChangedCallback = (s, e) => {
+                    if (e.NewValue != null) {
+                        foreach (var token in (ObservableCollection<MpSubTextToken>)e.NewValue) {
+                            ((MpTokenizedRichTextBox)s).AddSubTextToken(token);
+                        }
+                    }
+                },
+            });
 
         #endregion
 
@@ -272,51 +340,5 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Dependency Property Registrations
-
-        public static readonly DependencyProperty TokensProperty =
-          DependencyProperty.RegisterAttached(
-            "Tokens",
-            typeof(ObservableCollection<MpSubTextToken>),
-            typeof(MpTokenizedRichTextBox),
-            new FrameworkPropertyMetadata {
-                BindsTwoWayByDefault = true,
-                PropertyChangedCallback = (s, e) => {
-                    if(e.NewValue != null) {
-                        foreach (var token in (ObservableCollection<MpSubTextToken>)e.NewValue) {
-                            ((MpTokenizedRichTextBox)s).AddSubTextToken(token);
-                        }
-                    }                    
-                },
-            });
-
-        public static readonly DependencyProperty RichTextProperty =
-          DependencyProperty.RegisterAttached(
-            "RichText",
-            typeof(string),
-            typeof(MpTokenizedRichTextBox),
-            new FrameworkPropertyMetadata {
-                BindsTwoWayByDefault = true,
-                PropertyChangedCallback = (s, e) => {
-                    if (!string.IsNullOrEmpty((string)e.NewValue)) {
-                        var richTextBox = (RichTextBox)s;
-                        richTextBox.SetRtf((string)e.NewValue);
-                    }
-                }
-            });
-
-        public static readonly DependencyProperty SearchTextProperty =
-          DependencyProperty.RegisterAttached(
-            "SearchText",
-            typeof(string),
-            typeof(MpTokenizedRichTextBox),
-            new FrameworkPropertyMetadata {
-                BindsTwoWayByDefault = true,
-                PropertyChangedCallback = (s, e) => {
-                    ((MpTokenizedRichTextBox)s).HighlightSearchText(Brushes.Yellow);
-                },
-            });
-
-        #endregion
     }
 }

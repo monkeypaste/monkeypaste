@@ -187,7 +187,7 @@ namespace MpWpfApp {
                 d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
                 d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
                 d.SetData(DataFormats.CommaSeparatedValue, SelectedClipTilesCsv);
-                //d.SetData(DataFormats.Rtf, SelectedClipTilesRichText);
+                d.SetData(DataFormats.Rtf, SelectedClipTilesRichText);
                 d.SetData(DataFormats.Text, SelectedClipTilesPlainText);
                 d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
                 return d;
@@ -203,7 +203,7 @@ namespace MpWpfApp {
                 }                
                 d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
                 d.SetData(DataFormats.CommaSeparatedValue, SelectedClipTilesCsv);
-                //d.SetData(DataFormats.Rtf, SelectedClipTilesRichText);
+                d.SetData(DataFormats.Rtf, SelectedClipTilesRichText);
                 d.SetData(DataFormats.Text, SelectedClipTilesPlainText);
                 d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
                 return d;
@@ -337,13 +337,6 @@ namespace MpWpfApp {
                     !IsDragging &&
                     e7.MouseDevice.LeftButton == MouseButtonState.Pressed && 
                     (Math.Abs(curDragPoint.Y - StartDragPoint.Y) > 5 || Math.Abs(curDragPoint.X - StartDragPoint.X) > 5)) {
-                    //IDataObject d = new DataObject();
-                    //d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
-                    //d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
-                    //d.SetData(DataFormats.CommaSeparatedValue, SelectedClipTilesCsv);
-                    //d.SetData(DataFormats.Rtf, SelectedClipTilesRichText);
-                    //d.SetData(DataFormats.Text, SelectedClipTilesPlainText);
-                    //d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
                     DragDrop.DoDragDrop(clipTray, SelectedClipTilesDropDataObject, DragDropEffects.Copy | DragDropEffects.Move);
                     IsDragging = true;
                 } else if(IsDragging) {
@@ -407,72 +400,6 @@ namespace MpWpfApp {
             }
             base.Remove(clipTileToRemove);
             clipTileToRemove.CopyItem.DeleteFromDatabase();
-        }
-
-        public void PerformSearch() {
-            if (MainWindowViewModel.SearchBoxViewModel.SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
-                FilterTiles(string.Empty);
-            } else {
-                FilterTiles(MainWindowViewModel.SearchBoxViewModel.SearchText);
-            }
-            foreach (var vctvm in this) {
-                //triggers highlight in tokenized rtb
-                vctvm.SearchText = MainWindowViewModel.SearchBoxViewModel.SearchText;
-            }
-            if (VisibileClipTiles.Count > 0) {
-                MainWindowViewModel.SearchBoxViewModel.SearchTextBoxBorderBrush = Brushes.Transparent;
-                EmptyListMessageVisibility = Visibility.Collapsed;
-                SortAndFilterClipTiles();
-            } else {
-                MainWindowViewModel.SearchBoxViewModel.SearchTextBoxBorderBrush = Brushes.Red;
-                EmptyListMessageVisibility = Visibility.Visible;
-            }
-        }
-
-        public void FilterTiles(string searchStr) {
-            List<int> filteredTileIdxList = new List<int>();
-            //search ci's from newest to oldest for filterstr, adding idx to list
-            for (int i = this.Count - 1; i >= 0; i--) {
-                //when search string is empty add each item to list so all shown
-                if (string.IsNullOrEmpty(searchStr)) {
-                    filteredTileIdxList.Add(i);
-                    continue;
-                }
-                MpCopyItem ci = this[i].CopyItem;
-                //add clips where searchStr is in clip title or part of the app path ( TODO also check application name since usually different than exe)
-                if (ci.Title.ToLower().Contains(searchStr.ToLower()) || ci.App.AppPath.ToLower().Contains(searchStr.ToLower())) {
-                    filteredTileIdxList.Add(i);
-                    continue;
-                }
-                //do not search through image tiles
-                if (ci.CopyItemType == MpCopyItemType.Image) {
-                    continue;
-                }
-                //add clips where search is part of clip's content
-                if (ci.CopyItemType == MpCopyItemType.RichText) {
-                    if (ci.ItemPlainText.ToLower().Contains(searchStr.ToLower())) {
-                        filteredTileIdxList.Add(i);
-                    }
-                }
-                //lastly add filelist clips if search string found in it's path(s)
-                else if (ci.CopyItemType == MpCopyItemType.FileList) {
-                    foreach (var path in ci.GetFileList()) {
-                        if (path.ToLower().Contains(searchStr.ToLower())) {
-                            filteredTileIdxList.Add(i);
-                        }
-                    }
-                }
-            }
-            //only show tiles w/ an idx in list
-            int vcount = 0;
-            for (int i = this.Count - 1; i >= 0; i--) {
-                if (filteredTileIdxList.Contains(i)) {
-                    this[i].TileVisibility = Visibility.Visible;
-                    vcount++;
-                } else {
-                    this[i].TileVisibility = Visibility.Collapsed;
-                }
-            }
         }
 
         public void SortAndFilterClipTiles(bool doSort = true,bool doFilter = true) {
@@ -541,17 +468,8 @@ namespace MpWpfApp {
             Console.WriteLine("Pasting " + SelectedClipTiles.Count + " items");
             ClipboardMonitor.IgnoreClipboardChangeEvent = true;
             try {
-                
-                //d.SetData(DataFormats.Rtf, clipTray.SelectedClipTilesRichText);
-                
                 Clipboard.Clear();
                 Clipboard.SetDataObject(SelectedClipTilesPasteDataObject);
-                //Clipboard.SetData(DataFormats.FileDrop, clipTray.SelectedClipTilesFileList);
-                //Clipboard.SetData(DataFormats.Bitmap, clipTray.SelectedClipTilesBmp);
-                //Clipboard.SetData(DataFormats.Rtf, clipTray.SelectedClipTilesRichText);
-                //Clipboard.SetData(DataFormats.CommaSeparatedValue, clipTray.SelectedClipTilesCsv);
-                //Clipboard.SetData(DataFormats.Text, clipTray.SelectedClipTilesPlainText);
-                //WinApi.SetActiveWindow(GetLastWindowWatcher().LastHandle);
                 WinApi.SetForegroundWindow(ClipboardMonitor.LastWindowWatcher.LastHandle);
                 //System.Windows.Forms.SendKeys.Send("^v");
                 System.Windows.Forms.SendKeys.SendWait("^v");
@@ -559,7 +477,6 @@ namespace MpWpfApp {
                 //PressKey(Keys.V, false);
                 //PressKey(Keys.V, true);
                 //PressKey(Keys.ControlKey, true);
-
 
                 //creating history item automatically saves it to the db
                 foreach (var sctvm in SelectedClipTiles) {
@@ -893,17 +810,6 @@ namespace MpWpfApp {
                 return _exportSelectedClipTilesCommand;
             }
         }
-        //private bool CanExportSelectedClipTiles(int exportType) {
-        //    if ((MpExportType)exportType == MpExportType.Files || (MpExportType)exportType == MpExportType.Zip) {
-        //        return true;
-        //    }
-        //    foreach (var sctvm in SelectedClipTiles) {
-        //        if (sctvm.CopyItemType != MpCopyItemType.RichText) {
-        //            return false;
-        //        }
-        //    }
-        //    return true;
-        //}
         private void ExportSelectedClipTiles(int exportType) {
             CommonFileDialog dlg = ((MpExportType)exportType == MpExportType.Csv || (MpExportType)exportType == MpExportType.Zip) ? new CommonSaveFileDialog() as CommonFileDialog : new CommonOpenFileDialog();
             dlg.Title = (MpExportType)exportType == MpExportType.Csv ? "Export CSV" : (MpExportType)exportType == MpExportType.Zip ? "Export Zip":"Export Items to Directory...";

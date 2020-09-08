@@ -210,6 +210,7 @@
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpTokenizedRichTextBox.cs" />
     <Compile Include="Controls\MpMultiSelectListBox.cs" />
+    <Compile Include="Converters\MpImageSourceToBitmapSourceConverter.cs" />
     <Compile Include="Converters\MpIntToStringConverter.cs" />
     <Compile Include="Converters\MpBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\MpSolidColorBrushToBrushConverter.cs" />

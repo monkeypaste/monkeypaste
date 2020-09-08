@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Speech.Synthesis;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -216,6 +217,22 @@ namespace MpWpfApp {
                 if (_richText != value) {
                     _richText = value;
                     OnPropertyChanged(nameof(RichText));
+                }
+            }
+        }
+
+        private FlowDocument _documentRtf = null;
+        public FlowDocument DocumentRtf {
+            get {
+                if (_documentRtf == null) {
+                    _documentRtf = CopyItem.ItemFlowDocument;
+                }
+                return _documentRtf;
+            }
+            set {
+                if (_documentRtf != value) {
+                    _documentRtf = value;
+                    OnPropertyChanged(nameof(DocumentRtf));
                 }
             }
         }
@@ -645,7 +662,6 @@ namespace MpWpfApp {
                         break;
                     case nameof(IsSelected):
                         if (IsSelected) {
-                            //ClipTileTitleSwirlViewModel.TitleSwirl = ClipTrayViewModel.SelectedSwirl;
                             TileBorderBrush = Brushes.Red;
                             DetailTextColor = Brushes.Red;
                             //this check ensures that as user types in search that 
@@ -706,14 +722,27 @@ namespace MpWpfApp {
                 IsHovering = false;
             };
             clipTileBorder.LostFocus += (s, e4) => {
-                IsEditingTitle = false;
+                if(!IsSelected) {
+                    IsEditingTitle = false;
+                }
             };
         }
 
         public void ClipTileTitle_Loaded(object sender, RoutedEventArgs e) {
             var titleCanvas = (Canvas)sender;
-            var clipTileTitleTextBox = (TextBox)titleCanvas.FindName("ClipTileTitleTextBox");
+            
+            var clipTileTitleTextBlock = (TextBlock)titleCanvas.FindName("ClipTileTitleTextBlock");
+            clipTileTitleTextBlock.MouseEnter += (s, e1) => {
+                Application.Current.MainWindow.Cursor = Cursors.IBeam;
+            };
+            clipTileTitleTextBlock.MouseLeave += (s, e7) => {
+                Application.Current.MainWindow.Cursor = Cursors.Arrow;
+            };
+            clipTileTitleTextBlock.PreviewMouseLeftButtonUp += (s, e7) => {
+                IsEditingTitle = true;
+            };
 
+            var clipTileTitleTextBox = (TextBox)titleCanvas.FindName("ClipTileTitleTextBox");
             clipTileTitleTextBox.PreviewKeyDown += ClipTrayViewModel.MainWindowViewModel.MainWindow_PreviewKeyDown;
             clipTileTitleTextBox.LostFocus += (s, e4) => {
                 IsEditingTitle = false;
@@ -808,6 +837,7 @@ namespace MpWpfApp {
             //reinitialize item view properties
             PlainText = CopyItem.ItemPlainText;
             RichText = CopyItem.ItemRichText;
+            DocumentRtf = CopyItem.ItemFlowDocument;
             Bmp = CopyItem.ItemBitmapSource;
             Tokens = new ObservableCollection<MpSubTextToken>(CopyItem.SubTextTokenList);
             FileDropList = CopyItem.GetFileList();
@@ -856,6 +886,7 @@ namespace MpWpfApp {
             CopyItem.ConvertType(newType);
             PlainText = CopyItem.ItemPlainText;
             RichText = CopyItem.ItemRichText;
+            DocumentRtf = CopyItem.ItemFlowDocument;
             Bmp = CopyItem.ItemBitmapSource;
             FileListViewModels.Clear();
             foreach(var p in CopyItem.GetFileList()) {

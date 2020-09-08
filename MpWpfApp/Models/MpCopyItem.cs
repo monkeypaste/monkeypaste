@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -38,9 +39,12 @@ namespace MpWpfApp {
             }
         }
         public string SourcePath { get; set; }
+
         public string ItemPlainText { get; set; }
         public string ItemRichText { get; set; }
+        public FlowDocument ItemFlowDocument { get; set; }
         public BitmapSource ItemBitmapSource { get; set; }
+
         public MpApp App { get; set; }
         public MpClient Client { get; set; }
         public MpColor ItemColor { get; set; }
@@ -103,6 +107,7 @@ namespace MpWpfApp {
                     }
                     newItem.ItemPlainText = paths;
                     newItem.ItemRichText = MpHelpers.ConvertPlainTextToRichText(newItem.ItemPlainText);
+                    newItem.ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(newItem.ItemRichText);
                     newItem.ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(newItem.ItemRichText);
                     newItem.SubTextTokenList = MpSubTextToken.GatherTokens((string)newItem.ItemRichText);
                     break;
@@ -110,10 +115,12 @@ namespace MpWpfApp {
                     newItem.ItemBitmapSource = (BitmapSource)data;
                     newItem.ItemPlainText = MpHelpers.ConvertBitmapSourceToPlainText(newItem.ItemBitmapSource);
                     newItem.ItemRichText = MpHelpers.ConvertPlainTextToRichText(newItem.ItemPlainText);
+                    newItem.ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(newItem.ItemRichText);
                     break;
                 case MpCopyItemType.RichText:
-                    newItem.ItemPlainText = MpHelpers.IsStringRichText((string)data) ? (string)data : MpHelpers.ConvertPlainTextToRichText((string)data);
-                    newItem.ItemRichText = MpHelpers.IsStringRichText((string)data) ? MpHelpers.ConvertPlainTextToRichText((string)data): (string)data;
+                    newItem.ItemPlainText = MpHelpers.IsStringRichText((string)data) ? MpHelpers.ConvertRichTextToPlainText((string)data) : (string)data;
+                    newItem.ItemRichText = MpHelpers.IsStringRichText((string)data) ? (string)data : MpHelpers.ConvertPlainTextToRichText((string)data);
+                    newItem.ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(newItem.ItemRichText);
                     newItem.ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(newItem.ItemRichText);
                     newItem.SubTextTokenList = MpSubTextToken.GatherTokens((string)newItem.ItemRichText);
                     break;
@@ -250,17 +257,21 @@ namespace MpWpfApp {
                     }
                     ItemPlainText += Environment.NewLine + fileStr;
                     ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
+                    ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
                     ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                     break;
                 case MpCopyItemType.Image:
                     ItemBitmapSource = MpHelpers.CombineBitmap(new List<BitmapSource>() { ItemBitmapSource, otherItem.ItemBitmapSource });
-                    //DataObject = MpHelpers.ConvertBitmapSourceToByteArray(ItemBitmapSource);
                     ItemPlainText = MpHelpers.ConvertBitmapSourceToPlainText(ItemBitmapSource);
                     ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
+                    ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
                     break;
                 case MpCopyItemType.RichText:
-                    //DataObject = MpHelpers.CombineRichText(ItemRichText, otherItem.ItemRichText);
-                    ItemRichText = MpHelpers.CombineRichText(ItemRichText, otherItem.ItemRichText);
+                    //FlowDocument newFlowDocument = new FlowDocument(ItemFlowDocument);
+                    //MpHelpers.CombineFlowDocuments(ItemFlowDocument,newFlowDocument);
+                    MpHelpers.CombineFlowDocuments(otherItem.ItemFlowDocument,ItemFlowDocument);
+                    //ItemFlowDocument = newFlowDocument;
+                    ItemRichText = MpHelpers.ConvertFlowDocumentToRichText(ItemFlowDocument);
                     ItemPlainText = MpHelpers.ConvertRichTextToPlainText(ItemRichText); 
                     ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                     SubTextTokenList = MpSubTextToken.GatherTokens(ItemRichText);
@@ -279,11 +290,13 @@ namespace MpWpfApp {
                         case MpCopyItemType.RichText:
                             ItemPlainText = MpHelpers.WriteTextToFile(Path.GetTempFileName(), ItemPlainText, false);
                             ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
+                            ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
                             ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                             break;
                         case MpCopyItemType.Image:
                             ItemPlainText = MpHelpers.WriteBitmapSourceToFile(Path.GetTempFileName(), ItemBitmapSource, false);
                             ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
+                            ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
                             ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                             break;
                     }
@@ -293,11 +306,13 @@ namespace MpWpfApp {
                         case MpCopyItemType.RichText:
                             ItemPlainText = MpHelpers.ConvertBitmapSourceToPlainText(ItemBitmapSource);
                             ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
+                            ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
                             ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                             break;
                         case MpCopyItemType.FileList:
                             ItemPlainText = MpHelpers.WriteBitmapSourceToFile(Path.GetTempFileName(), ItemBitmapSource, false);
                             ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
+                            ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
                             ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                             break;
                     }
@@ -307,11 +322,13 @@ namespace MpWpfApp {
                         case MpCopyItemType.Image:
                             ItemPlainText = MpHelpers.ConvertBitmapSourceToPlainText(ItemBitmapSource);
                             ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
+                            ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
                             ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                             break;
                         case MpCopyItemType.FileList:
                             ItemPlainText = MpHelpers.WriteBitmapSourceToFile(Path.GetTempFileName(), ItemBitmapSource, false);
                             ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
+                            ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
                             ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                             break;
                     }
@@ -365,20 +382,20 @@ namespace MpWpfApp {
             this.CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
             switch (CopyItemType) {
                 case MpCopyItemType.FileList:
-                    //DataObject = (object)dr["ItemText"].ToString();
                     ItemPlainText = (string)dr["ItemText"].ToString();
                     ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
+                    ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
                     ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                     break;
                 case MpCopyItemType.Image:
-                    //DataObject = (byte[])dr["ItemImage"];
                     ItemBitmapSource = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]);
                     ItemPlainText = (string)dr["ItemText"].ToString();
                     ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
+                    ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
                     break;
                 case MpCopyItemType.RichText:
-                    //DataObject = dr["ItemText"].ToString();
                     ItemRichText = dr["ItemText"].ToString();
+                    ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
                     ItemPlainText = MpHelpers.ConvertRichTextToPlainText(ItemRichText);
                     ItemBitmapSource = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]);
                     SubTextTokenList = MpSubTextToken.GatherTokens(ItemRichText);

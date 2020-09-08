@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     public struct SHFILEINFO {
@@ -158,19 +159,17 @@ namespace MpWpfApp {
         public static extern int DestroyIcon(
             IntPtr hIcon);
 
-        public static System.Drawing.Bitmap GetBitmapFromFolderPath(
-            string filepath, IconSizeEnum iconsize) {
+        public static BitmapSource GetBitmapFromFolderPath(string filepath, IconSizeEnum iconsize) {
             IntPtr hIcon = GetIconHandleFromFolderPath(filepath, iconsize);
             return GetBitmapFromIconHandle(hIcon);
         }
 
-        public static System.Drawing.Bitmap GetBitmapFromFilePath(string filepath, IconSizeEnum iconsize) {
+        public static BitmapSource GetBitmapFromFilePath(string filepath, IconSizeEnum iconsize) {
             IntPtr hIcon = GetIconHandleFromFilePath(filepath, iconsize);
             return GetBitmapFromIconHandle(hIcon);
         }
 
-        public static System.Drawing.Bitmap GetBitmapFromPath(
-            string filepath, IconSizeEnum iconsize) {
+        public static BitmapSource GetBitmapFromPath(string filepath, IconSizeEnum iconsize) {
             IntPtr hIcon = IntPtr.Zero;
             if (Directory.Exists(filepath)) {
                 hIcon = GetIconHandleFromFolderPath(filepath, iconsize);
@@ -182,16 +181,18 @@ namespace MpWpfApp {
             return GetBitmapFromIconHandle(hIcon);
         }
 
-        private static System.Drawing.Bitmap GetBitmapFromIconHandle(IntPtr hIcon) {
+        private static BitmapSource GetBitmapFromIconHandle(IntPtr hIcon) {
             if (hIcon == IntPtr.Zero) {
                 throw new System.IO.FileNotFoundException();
             }
-            var myIcon = System.Drawing.Icon.FromHandle(hIcon);
-            var bitmap = myIcon.ToBitmap();
-            myIcon.Dispose();
-            DestroyIcon(hIcon);
-            SendMessage(hIcon, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
-            return bitmap;
+            using (var myIcon = System.Drawing.Icon.FromHandle(hIcon)) {
+                using (var bitmap = myIcon.ToBitmap()) {
+                    myIcon.Dispose();
+                    DestroyIcon(hIcon);
+                    SendMessage(hIcon, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                    return MpHelpers.ConvertBitmapToBitmapSource(bitmap);
+                }                    
+            }
         }
 
         private static IntPtr GetIconHandleFromFilePath(string filepath, IconSizeEnum iconsize) {

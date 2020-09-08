@@ -114,7 +114,7 @@ namespace MpWpfApp {
                 return proc.MainModule.FileName.ToString();
             }
             catch (Exception e) {
-                Console.WriteLine("MpHelpers.GetProcessPath error (likely cannot find process path: " + e.ToString());
+                Console.WriteLine("MpHelpers.GetProcessPath error (likely) cannot find process path: " + e.ToString());
                 return GetProcessPath(((MpClipTrayViewModel)((MpMainWindowViewModel)((MpMainWindow)App.Current.MainWindow).DataContext).ClipTrayViewModel).ClipboardMonitor.LastWindowWatcher.ThisAppHandle);
             }
         }        
@@ -464,7 +464,7 @@ namespace MpWpfApp {
             if (!File.Exists(sourcePath)) {
                 return ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Warning.ToBitmap());
             }
-            return ConvertBitmapToBitmapSource(GetBitmapFromFilePath(sourcePath, IconSizeEnum.MediumIcon32));
+            return GetBitmapFromFilePath(sourcePath, IconSizeEnum.MediumIcon32);
         }
 
         public static BitmapSource ResizeBitmapSource(BitmapSource bmpSrc, Size newSize) {
@@ -606,7 +606,7 @@ namespace MpWpfApp {
             return new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.Replace("''", "'");
         }
 
-        public static FlowDocument ConvertRtfToFlowDocument(string rtf) {
+        public static FlowDocument ConvertRichTextToFlowDocument(string rtf) {
             using (MemoryStream stream = new MemoryStream(Encoding.Default.GetBytes(rtf))) {
                 FlowDocument flowDocument = new FlowDocument();
                 TextRange range = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
@@ -615,7 +615,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static string ConvertFlowDocumentToRtf(FlowDocument fd) {
+        public static string ConvertFlowDocumentToRichText(FlowDocument fd) {
             string rtf = string.Empty;
             using (MemoryStream ms = new MemoryStream()) {
                 TextRange range2 = new TextRange(fd.ContentStart, fd.ContentEnd);
@@ -830,6 +830,24 @@ namespace MpWpfApp {
             }
         }
 
+        public static void CombineFlowDocuments(FlowDocument from,FlowDocument to) {            
+            TextRange range = new TextRange(from.ContentStart, from.ContentEnd);
+            MemoryStream stream = new MemoryStream();
+            System.Windows.Markup.XamlWriter.Save(range, stream);
+            range.Save(stream, DataFormats.XamlPackage);
+
+            LineBreak lb = new LineBreak();
+            Paragraph p = (Paragraph)to.Blocks.LastBlock;
+            p.LineHeight = 1;
+            p.Inlines.Add(lb);
+            //to.Blocks.Add(p);
+            TextRange range2 = new TextRange(to.ContentEnd, to.ContentEnd);
+            range2.Load(stream, DataFormats.XamlPackage);
+
+            //to.Blocks.AddRange(from.Blocks.ToList());
+            //return to;
+        }
+        
         public static BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint) {
             var bmp = new WriteableBitmap(bmpSrc);
             var pixels = GetPixels(bmp);
