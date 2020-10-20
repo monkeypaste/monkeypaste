@@ -418,10 +418,26 @@ namespace MpWpfApp {
                     , IconBlob image NOT NULL
                     );
                     ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpHotKey (
-                      pk_MpHotKeyId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    CREATE TABLE MpHotKeyItem (
+                      pk_MpHotKeyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , fk_MpCommandId integer NOT NULL
+                    , ItemIdx integer NOT NULL DEFAULT 0
                     , KeyList text NULL
-                    , ModList text NULL
+                    , ModList text NULL                    
+                    , LButton integer NOT NULL DEFAULT 0
+                    , RButton integer NOT NULL DEFAULT 0
+                    , MButton integer NOT NULL DEFAULT 0
+                    , UScroll integer NOT NULL DEFAULT 0
+                    , DScroll integer NOT NULL DEFAULT 0
+                    , LScroll integer NOT NULL DEFAULT 0
+                    , RScroll integer NOT NULL DEFAULT 0
+                    , BButton integer NOT NULL DEFAULT 0
+                    , FButton integer NOT NULL DEFAULT 0
+                    , Move integer NOT NULL DEFAULT 0
+                    , CustomA integer NOT NULL DEFAULT 0
+                    , CustomB integer NOT NULL DEFAULT 0
+                    , CustomC integer NOT NULL DEFAULT 0
+                    , CONSTRAINT FK_MpHotKeyItem_0_0 FOREIGN KEY (fk_MpCommandId) REFERENCES MpCommand (pk_MpCommandId)
                     );
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpDeviceType (
@@ -464,13 +480,12 @@ namespace MpWpfApp {
                       pk_MpCommandTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , CommandName text NOT NULL
                     );
+                    INSERT INTO MpCommandType(CommandName) VALUES('Show Window'),('Hide Window'),('Append Mode'),('Auto-Copy Mode'),('Right-Click Paste Mode'),('Paste Selected Clip'),('Delete Selected Clip'),('Search'),('Paste Clip'),('Custom');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCommand (
                       pk_MpCommandId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCommandTypeId int NOT NULL
-                    , fk_MpHotKey int NOT NULL
-                    , CONSTRAINT FK_MpCommand_0_0 FOREIGN KEY (fk_MpHotKey) REFERENCES MpHotKey (pk_MpHotKeyId)
-                    , CONSTRAINT FK_MpCommand_1_0 FOREIGN KEY (fk_MpCommandTypeId) REFERENCES MpCommandType (pk_MpCommandTypeId)
+                    , CONSTRAINT FK_MpCommand_2_0 FOREIGN KEY (fk_MpCommandTypeId) REFERENCES MpCommandType (pk_MpCommandTypeId)
                     );
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpClient (

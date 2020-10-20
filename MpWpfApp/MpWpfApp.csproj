@@ -101,7 +101,15 @@
     <Reference Include="Microsoft.Data.Sqlite, Version=3.1.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Data.Sqlite.Core.3.1.5\lib\netstandard2.0\Microsoft.Data.Sqlite.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Expression.Interactions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.4.1.0.0\lib\NET40\Microsoft.Expression.Interactions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.4.1.0.0\lib\NET40\Microsoft.Practices.Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Prism.Interactivity, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.4.1.0.0\lib\NET40\Microsoft.Practices.Prism.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAPICodePack-Core.1.1.1\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
@@ -183,8 +191,8 @@
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.4.1.0.0\lib\NET40\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -210,6 +218,7 @@
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpTokenizedRichTextBox.cs" />
     <Compile Include="Controls\MpMultiSelectListBox.cs" />
+    <Compile Include="Controls\ReorderableListbox.cs" />
     <Compile Include="Converters\MpImageSourceToBitmapSourceConverter.cs" />
     <Compile Include="Converters\MpIntToStringConverter.cs" />
     <Compile Include="Converters\MpBoolToVisibilityConverter.cs" />
@@ -217,6 +226,8 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Models\MpApp.cs" />
     <Compile Include="Models\MpClient.cs" />
+    <Compile Include="Models\MpCommand.cs" />
+    <Compile Include="Models\MpHotKeyItem.cs" />
     <Compile Include="Models\MpColor.cs" />
     <Compile Include="Models\MpCopyItem.cs" />
     <Compile Include="Models\MpCopyItemTag.cs" />
@@ -244,6 +255,7 @@
     <Compile Include="Utils\MpWindowClosingBehavior.cs" />
     <Compile Include="Utils\WinApi.cs" />
     <Compile Include="ViewModels\Base\MpCollectionViewModelBase.cs" />
+    <Compile Include="ViewModels\Main Window\MpAssignHotkeyModalWindowViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpClipTileSortViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpFileListItemViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpClipTrayViewModel.cs" />
@@ -252,6 +264,10 @@
     <Compile Include="ViewModels\Main Window\MpRichTextTokenViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSortTypeComboBoxItemViewModel.cs" />
     <Page Include="Styles\ResourceDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MpAssignHotkeyModalWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -272,6 +288,9 @@
     <Compile Include="ViewModels\Main Window\MpSearchBoxViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSystemTrayViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpTagTrayViewModel.cs" />
+    <Compile Include="Views\MpAssignHotkeyModalWindow.xaml.cs">
+      <DependentUpon>MpAssignHotkeyModalWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MpMainWindow.xaml.cs">
       <DependentUpon>MpMainWindow.xaml</DependentUpon>
     </Compile>

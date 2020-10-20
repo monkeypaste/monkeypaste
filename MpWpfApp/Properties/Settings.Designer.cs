@@ -211,5 +211,14 @@ namespace MpWpfApp.Properties {
                 this["PasteAsTextFileDefaultAppTitleCollection"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1000")]
+        public double ClipTileMoveAnimationDurationMs {
+            get {
+                return ((double)(this["ClipTileMoveAnimationDurationMs"]));
+            }
+        }
     }
 }

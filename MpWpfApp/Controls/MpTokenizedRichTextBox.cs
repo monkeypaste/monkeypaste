@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -102,7 +104,19 @@ namespace MpWpfApp {
                 BindsTwoWayByDefault = true,
                 PropertyChangedCallback = (s, e) => {
                     var trtb = (MpTokenizedRichTextBox)s;
-                    trtb.Document = (FlowDocument)e.NewValue;
+                    var newDocument = (FlowDocument)e.NewValue;
+                    //instead of directly setting document this workaround ensures document reassignment doesn't fail
+                    TextRange newRange = new TextRange(newDocument.ContentStart, newDocument.ContentEnd);
+                    MemoryStream stream = new MemoryStream();
+                    System.Windows.Markup.XamlWriter.Save(newRange, stream);
+                    newRange.Save(stream, DataFormats.XamlPackage);
+
+                    var doc = new FlowDocument();
+                    var range = new TextRange(doc.ContentStart, doc.ContentEnd);
+                    range.Load(stream, DataFormats.XamlPackage);
+
+                    // Set the document
+                    trtb.Document = doc;
                 }
             });
 

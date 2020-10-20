@@ -7,7 +7,7 @@
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         xmlns:dd="clr-namespace:GongSolutions.Wpf.DragDrop;assembly=GongSolutions.Wpf.DragDrop"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2f008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:local="clr-namespace:MpWpfApp"
@@ -15,7 +15,7 @@
         local:MpWindowClosingBehavior.Closing="{Binding ClosingCommand}"
         local:MpWindowClosingBehavior.CancelClosing="{Binding CancelClosingCommand}"
         Title="MpMainWindow"
-        WindowStyle="None"
+        WindowStyle="None"        
         Top="10000"
         ShowInTaskbar="false"
         ResizeMode="NoResize"
@@ -169,6 +169,33 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!-- Button Styles -->
+        <Style x:Key="Transparent_Button"
+               TargetType="{x:Type Button}">
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                BorderThickness="0"
+                                BorderBrush="Black"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="Transparent" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Color Palletes -->
         <SolidColorBrush x:Key="AppColorDark">DarkViolet</SolidColorBrush>
         <SolidColorBrush x:Key="AppColorLight">MediumPurple</SolidColorBrush>
     </Window.Resources>
@@ -295,6 +322,7 @@
                 <Button Grid.Column="2"
                         Margin="0,0,0,0" 
                         Background="Transparent"
+                        Style="{StaticResource Transparent_Button}"
                         BorderThickness="0"
                         Height="30"
                         Width="30"
@@ -356,7 +384,8 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <!-- Tag Tile Border -->
-                            <local:MpClipBorder CornerRadius="10"
+                            <local:MpClipBorder x:Name="TagTileBorder"
+                                    CornerRadius="10"
                                     Margin="5,0,5,0"
                                     Padding="7,5,7,5"
                                     Focusable="True"
@@ -439,6 +468,7 @@
                         Height="30"
                         Width="30" 
                         BorderThickness="0"
+                        Style="{StaticResource Transparent_Button}"
                         Background="Transparent"
                         Command="{Binding CreateTagCommand}">
                     <Image Stretch="Fill"
@@ -471,6 +501,7 @@
                 <StackPanel Margin="5"
                             Orientation="Horizontal">
                     <Button Background="Transparent"
+                            Style="{StaticResource Transparent_Button}"
                             BorderThickness="0">
                         <Image Source="pack://application:,,,/Resources/search.png"
                                Stretch="Fill" />
@@ -659,6 +690,8 @@
                                                   Command="{Binding Data.BringSelectedClipTilesToFrontCommand, Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Send to Back"
                                                   Command="{Binding Data.SendSelectedClipTilesToBackCommand, Source={StaticResource ClipTrayProxy}}" />
+                                        <MenuItem Header="Assign Hotkey"
+                                                  Command="{Binding AssignHotkeyCommand}" />
                                         <MenuItem Header="Export To">
                                             <MenuItem Header="File(s)..."
                                                       Command="{Binding Data.ExportSelectedClipTilesCommand,Source={StaticResource ClipTrayProxy}}"
@@ -812,15 +845,20 @@
                                                    FontSize="9"
                                                    Text="{Binding DetailText}" />
                                         <!-- Clip Title Icon Image -->
-                                        <Image x:Name="ClipTileAppIconImage"
-                                               Source="{Binding Icon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
-                                               Stretch="Fill"
-                                               Width="{Binding TileTitleIconSize}"
-                                               Height="{Binding TileTitleIconSize}">
-                                            <!--<Image.Effect>
+                                        <Button x:Name="ClipTileAppIconImageButton"
+                                                Style="{StaticResource Transparent_Button}"
+                                                Background="Transparent"
+                                                BorderThickness="0">
+                                            <Image x:Name="ClipTileAppIconImage"
+                                                   Source="{Binding Icon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
+                                                   Stretch="Fill"
+                                                   Width="{Binding TileTitleIconSize}"
+                                                   Height="{Binding TileTitleIconSize}">
+                                                <!--<Image.Effect>
                                                 <DropShadowEffect Color="DimGray" />
                                             </Image.Effect>-->
-                                        </Image>
+                                            </Image>
+                                        </Button>
                                     </Canvas>
                                     <!-- Content Container Canvas -->
                                     <Canvas x:Name="ClipTileContentCanvas"
@@ -880,6 +918,7 @@
                                                  Height="{Binding TileContentHeight}"
                                                  ItemsSource="{Binding FileListViewModels}"
                                                  Visibility="{Binding FileListVisibility}"
+                                                 IsEnabled="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                  BorderThickness="0"
                                                  Focusable="False">
                                             <i:Interaction.Triggers>
@@ -893,18 +932,34 @@
                                                     <Border Height="22"
                                                             BorderThickness="0">
                                                         <StackPanel VerticalAlignment="Center"
-                                                                    HorizontalAlignment="Left"
+                                                                    HorizontalAlignment="Left" 
+                                                                    ScrollViewer.HorizontalScrollBarVisibility="Hidden" 
+                                                                    ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                                                     Orientation="Horizontal">
                                                             <Image Source="{Binding Icon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
                                                                    Height="22"
                                                                    Stretch="Fill">
                                                             </Image>
-                                                            <TextBlock Text="{Binding ItemPath}"
-                                                                       Margin="0,0,0,0"
+                                                            <TextBlock x:Name="FileListItemTextBlock"
+                                                                       Margin="3,0,0,0"
                                                                        VerticalAlignment="Center"
+                                                                       HorizontalAlignment="Left"
+                                                                       ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                                                       ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                                                        FontSize="16"
                                                                        Foreground="Black"
                                                                        Background="Transparent">
+                                                                <TextBlock.ToolTip>
+                                                                    <ToolTip>
+                                                                        <TextBlock Text="{Binding ItemPath}" />
+                                                                    </ToolTip>
+                                                                </TextBlock.ToolTip>
+                                                                <i:Interaction.Triggers>
+                                                                        <i:EventTrigger EventName="Loaded">
+                                                                            <i:CallMethodAction TargetObject="{Binding}"
+                                                                                                MethodName="FileListItemTextBlock_Loaded" />
+                                                                        </i:EventTrigger>
+                                                                    </i:Interaction.Triggers>
                                                             </TextBlock>
                                                         </StackPanel>
                                                     </Border>

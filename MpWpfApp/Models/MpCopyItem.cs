@@ -267,14 +267,19 @@ namespace MpWpfApp {
                     ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
                     break;
                 case MpCopyItemType.RichText:
-                    //FlowDocument newFlowDocument = new FlowDocument(ItemFlowDocument);
-                    //MpHelpers.CombineFlowDocuments(ItemFlowDocument,newFlowDocument);
-                    MpHelpers.CombineFlowDocuments(otherItem.ItemFlowDocument,ItemFlowDocument);
-                    //ItemFlowDocument = newFlowDocument;
-                    ItemRichText = MpHelpers.ConvertFlowDocumentToRichText(ItemFlowDocument);
-                    ItemPlainText = MpHelpers.ConvertRichTextToPlainText(ItemRichText); 
-                    ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
-                    SubTextTokenList = MpSubTextToken.GatherTokens(ItemRichText);
+                    switch(otherItem.CopyItemType) {
+                        case MpCopyItemType.Image:
+                            MpHelpers.AppendBitmapSourceToFlowDocument(ItemFlowDocument, otherItem.ItemBitmapSource);
+                            break;
+                        default:
+                            MpHelpers.CombineFlowDocuments(otherItem.ItemFlowDocument, ItemFlowDocument);
+                            ItemRichText = MpHelpers.ConvertFlowDocumentToRichText(ItemFlowDocument);
+                            ItemPlainText = MpHelpers.ConvertRichTextToPlainText(ItemRichText);
+                            ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
+                            SubTextTokenList = MpSubTextToken.GatherTokens(ItemRichText);
+                            break;
+                    }
+                    
                     break;
             }
         }

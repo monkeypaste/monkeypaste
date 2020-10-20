@@ -71,7 +71,7 @@ namespace MpWpfApp {
                 if (_fileListViewModels == null) {
                     _fileListViewModels = new ObservableCollection<MpFileListItemViewModel>();
                     foreach (var path in FileDropList) {
-                        _fileListViewModels.Add(new MpFileListItemViewModel(path));
+                        _fileListViewModels.Add(new MpFileListItemViewModel(this,path));
                     }
                 }
                 return _fileListViewModels;
@@ -108,6 +108,18 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+        private MpHotKeyItem _hotkey = null;
+        public MpHotKeyItem Hotkey {
+            get {
+                return _hotkey;
+            }
+            set {
+                if(_hotkey != value) {
+                    _hotkey = value;
+                    OnPropertyChanged(nameof(Hotkey));
+                }
+            }
+        }
 
         private double _clipTileWidth = MpMeasurements.Instance.ClipTileBorderSize;
         public double ClipTileWidth {
@@ -692,6 +704,7 @@ namespace MpWpfApp {
             };
             IsLoading = true;
             CopyItem = ci;
+            //Hotkey = 
             ClipTrayViewModel = parent;
             Title = ci.Title;
             TitleColor = new SolidColorBrush(ci.ItemColor.Color);
@@ -748,9 +761,18 @@ namespace MpWpfApp {
                 IsEditingTitle = false;
             };
 
-            var titleIconImage = (Image)titleCanvas.FindName("ClipTileAppIconImage");
-            Canvas.SetLeft(titleIconImage, TileBorderSize - TileTitleHeight - 10);
-            Canvas.SetTop(titleIconImage, 2);
+            var titleIconImageButton = (Button)titleCanvas.FindName("ClipTileAppIconImageButton");
+            Canvas.SetLeft(titleIconImageButton, TileBorderSize - TileTitleHeight - 10);
+            Canvas.SetTop(titleIconImageButton, 2);
+            titleIconImageButton.PreviewMouseUp += (s, e7) => {
+                // TODO (somehow) force mainwindow to stay active when switching or opening app process
+                // TODO check if shift is down if so perform paste into target application
+                // TODO check if App is running if it is switch to it or start its process
+
+
+                System.Diagnostics.Process.Start(CopyItem.App.AppPath);
+                
+            };
 
             var titleDetailTextBlock = (TextBlock)titleCanvas.FindName("ClipTileTitleDetailTextBlock");
             titleDetailTextBlock.MouseEnter += (s, e5) => {
@@ -833,7 +855,7 @@ namespace MpWpfApp {
 
         public void AppendContent(MpClipTileViewModel octvm) {
             CopyItem.Combine(octvm.CopyItem);
-
+            CopyItem.WriteToDatabase();
             //reinitialize item view properties
             PlainText = CopyItem.ItemPlainText;
             RichText = CopyItem.ItemRichText;
@@ -843,8 +865,9 @@ namespace MpWpfApp {
             FileDropList = CopyItem.GetFileList();
             FileListViewModels.Clear();
             foreach(var path in FileDropList) {
-                FileListViewModels.Add(new MpFileListItemViewModel(path));
+                FileListViewModels.Add(new MpFileListItemViewModel(this,path));
             }
+            
         }
 
         public void InitSwirl(BitmapSource sharedSwirl = null) {
@@ -890,7 +913,7 @@ namespace MpWpfApp {
             Bmp = CopyItem.ItemBitmapSource;
             FileListViewModels.Clear();
             foreach(var p in CopyItem.GetFileList()) {
-                FileListViewModels.Add(new MpFileListItemViewModel(p));
+                FileListViewModels.Add(new MpFileListItemViewModel(this,p));
             }
 
             FileListVisibility = CopyItemType == MpCopyItemType.FileList ? Visibility.Visible : Visibility.Collapsed;
@@ -947,7 +970,21 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-
+        private RelayCommand _assignHotkeyCommand;
+        public ICommand AssignHotkeyCommand {
+            get {
+                if(_assignHotkeyCommand == null) {
+                    _assignHotkeyCommand = new RelayCommand(AssignHotkey);
+                }
+                return _assignHotkeyCommand;
+            }
+        }
+        private void AssignHotkey() {
+            MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
+            var ahkmwvm = (MpAssignHotkeyModalWindowViewModel)ahkmw.DataContext;
+            ahkmwvm.Init(null, Title);
+            ahkmw.Show();
+        }
         #endregion
 
         #region Overrides

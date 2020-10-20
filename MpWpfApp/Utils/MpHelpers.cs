@@ -462,7 +462,12 @@ namespace MpWpfApp {
 
         public static BitmapSource GetIconImage(string sourcePath) {
             if (!File.Exists(sourcePath)) {
-                return ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Warning.ToBitmap());
+                if(!Directory.Exists(sourcePath)) {
+                    return ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Warning.ToBitmap());
+                } else {
+                    return GetBitmapFromFolderPath(sourcePath, IconSizeEnum.MediumIcon32);
+                }
+                
             }
             return GetBitmapFromFilePath(sourcePath, IconSizeEnum.MediumIcon32);
         }
@@ -848,6 +853,18 @@ namespace MpWpfApp {
             //return to;
         }
         
+        public static void AppendBitmapSourceToFlowDocument(FlowDocument flowDocument,BitmapSource bitmapSource) {
+            Image image= new Image() {
+                Source = bitmapSource,
+                Width = 300,
+                Height = 300,
+                Stretch = Stretch.Fill
+            };
+            Paragraph para = new Paragraph();
+            para.Inlines.Add(image);
+            flowDocument.Blocks.Add(para);
+        }
+
         public static BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint) {
             var bmp = new WriteableBitmap(bmpSrc);
             var pixels = GetPixels(bmp);

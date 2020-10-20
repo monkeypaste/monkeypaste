@@ -9,7 +9,7 @@ namespace MpWpfApp {
             get {
                 return Color.FromArgb((byte)_a, (byte)_r, (byte)_g, (byte)_b);
             }
-            set {
+            set {   
                 _r = (byte)value.R;
                 _g = (byte)value.G;
                 _b = (byte)value.B;

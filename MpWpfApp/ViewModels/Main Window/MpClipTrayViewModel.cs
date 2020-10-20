@@ -12,6 +12,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -235,28 +236,39 @@ namespace MpWpfApp {
         }
 
         public void ClipTray_Loaded(object sender, RoutedEventArgs e) {
-            var clipTray = (ListBox)sender;
+            var clipTray = (MpMultiSelectListBox)sender;
             clipTray.DragEnter += (s, e1) => {
                 //used for resorting
                 e1.Effects = e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName) ? DragDropEffects.Move : DragDropEffects.None;
             };
             clipTray.Drop += (s, e2) => {
+                //retrieve custom dataformat object (cliptileviewmodel)
                 var dragClipViewModel = (List<MpClipTileViewModel>)e2.Data.GetData(Properties.Settings.Default.ClipTileDragDropFormatName);
                 
+                //using current mp if drag is to the right (else part) adjust point to locate next tile, otherwise adjust to point to previous tile
                 var mpo = e2.GetPosition(clipTray);
+                bool isDragLeft = true;
                 if (mpo.X - StartDragPoint.X > 0) {
                     mpo.X -= MpMeasurements.Instance.ClipTileMargin * 5;
                 } else {
                     mpo.X += MpMeasurements.Instance.ClipTileMargin * 5;
+                    isDragLeft = false;
                 }
 
                 MpClipTileViewModel dropVm = null;
                 var item = VisualTreeHelper.HitTest(clipTray, mpo).VisualHit;
                 if(item.GetType() != typeof(MpClipBorder)) {
-                    dropVm = (MpClipTileViewModel)item.GetVisualAncestor<MpClipBorder>().DataContext;
+                    var clipBorder = item.GetVisualAncestor<MpClipBorder>();
+                    //handle case if tile is dragged to end of list
+                    if(clipBorder == null) {
+                        dropVm = VisibileClipTiles[VisibileClipTiles.Count - 1];
+                    } else {
+                        dropVm = (MpClipTileViewModel)clipBorder.DataContext;
+                    }
                 } else {
                     dropVm = (MpClipTileViewModel)((MpClipBorder)item).DataContext;
                 }
+                //var dropClipBorder = (MpClipBorder)ItemsControl.ItemsControlFromItemContainer(clipTray).ItemContainerGenerator.ContainerFromItem(dropVm);
                 int dropIdx = item == null || item == clipTray ? 0 : this.IndexOf(dropVm);
                 if (dropIdx >= 0) {
                     ClearClipSelection();
@@ -274,6 +286,19 @@ namespace MpWpfApp {
             };
             clipTray.SelectionChanged += (s, e8) => {
                 MergeClipsCommandVisibility = MergeSelectedClipsCommand.CanExecute(null) ? Visibility.Visible : Visibility.Collapsed;
+
+                foreach(var ttvm in MainWindowViewModel.TagTrayViewModel) {
+                    if(ttvm == MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel() || ttvm.IsSelected) {
+                        continue;
+                    }
+                    bool isTagLinkedToAllSelectedClips = true;
+                    foreach(var sctvm in SelectedClipTiles) {
+                        if(!ttvm.Tag.IsLinkedWithCopyItem(sctvm.CopyItem)) {
+                            isTagLinkedToAllSelectedClips = false;
+                        }
+                    }
+                    ttvm.IsHovering = isTagLinkedToAllSelectedClips;
+                }
             };
             clipTray.PreviewMouseWheel += (s, e3) => {
                 e3.Handled = true;
@@ -401,6 +426,23 @@ namespace MpWpfApp {
             base.Remove(clipTileToRemove);
             clipTileToRemove.CopyItem.DeleteFromDatabase();
         }
+
+        //public new void Move(int oldIdx,int newIdx) {
+        //    var clipTray = (ListBox)Application.Current.MainWindow.FindName("ClipTray");
+
+        //    DoubleAnimation ta = new DoubleAnimation();
+        //    Point p = clipTray.Items[newIdx].TranslatePoint(new Point(0.0, 0.0), Window.GetWindow(listboxItem));
+        //    ta.From = _startMainWindowTop;
+        //    ta.To = _endMainWindowTop;
+        //    ta.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
+        //    CubicEase easing = new CubicEase();
+        //    easing.EasingMode = EasingMode.EaseIn;
+        //    ta.EasingFunction = easing;
+        //    ta.Completed += (s, e1) => {
+        //        IsLoading = false;
+        //    };
+        //    mw.BeginAnimation(Window.TopProperty, ta);
+        //}
 
         public void SortAndFilterClipTiles(bool doSort = true,bool doFilter = true) {
             if(MainWindowViewModel.IsLoading) {
@@ -558,6 +600,10 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+
+        private int GetClipTileFromDrag(Point startLoc,Point curLoc) {
+            return 0;
+        }
 
         private MpClipTileViewModel FindClipTileByModel(MpCopyItem ci) {
             foreach(var ctvm in this) {
@@ -852,6 +898,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanMergeSelectedClips() {
+            return true;
             if (SelectedClipTiles.Count <= 1) {
                 return false;
             }

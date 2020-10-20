@@ -295,6 +295,11 @@ namespace MpWpfApp {
             tagBorder.MouseLeave += (s, e1) => {
                 IsHovering = false;
             };
+            tagBorder.LostFocus += (s, e4) => {
+                if (!IsSelected) {
+                    IsEditing = false;
+                }
+            };
 
             var tagTextBox = (TextBox)tagBorder.FindName("TagTextBox");
             //this is called 
@@ -302,6 +307,7 @@ namespace MpWpfApp {
                 //TagTextBox.SelectAll();
             };
             tagTextBox.LostFocus += (s, e2) => {
+
                 IsEditing = false;
             };
             tagTextBox.PreviewKeyDown += TagTrayViewModel.MainWindowViewModel.MainWindow_PreviewKeyDown;
