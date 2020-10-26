@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Gma.System.MouseKeyHook;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,8 @@ namespace MpWpfApp {
         private MpHotKeyItem _currentHotKeyItem = null;
 
         private bool _isSeqComplete = false;
-        private bool _isLShiftDown = false;
+
+        private Window _windowRef = null;
 
         private System.Timers.Timer seqTimer = null;
         private double seqTimerMaxMs = 1000;
@@ -64,6 +66,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+
         #endregion
 
         #region Public Methods
@@ -75,8 +78,8 @@ namespace MpWpfApp {
             KeysString = "<None>";
         }
         public void AssignHotkeyModalWindow_Loaded(object sender, RoutedEventArgs e) {
-            var ahmw = (Window)sender;
-            ahmw.PreviewKeyDown += (s, e1) => {
+            _windowRef = (Window)sender;
+            _windowRef.PreviewKeyDown += (s, e1) => {
                 seqTimer.Stop();
 
                 if (_isSeqComplete) {
@@ -114,13 +117,12 @@ namespace MpWpfApp {
                 _currentHotKeyItem.AddKey(e1.Key);
             };
 
-            ahmw.PreviewKeyUp += (s, e1) => {
+            _windowRef.PreviewKeyUp += (s, e1) => {
                 if(_currentHotKeyItem != null) {
                     Command.HotKeyItemList.Add(_currentHotKeyItem);
                     _currentHotKeyItem = null;
                     KeysString = Command.GetHotKeyString();
                     Console.WriteLine("KeyString: " + KeysString);
-                    
                 }
                 seqTimer.Start();
             };
@@ -144,7 +146,7 @@ namespace MpWpfApp {
             }
         }
         private void Cancel() {
-
+            _windowRef.Close();
         }
 
         private RelayCommand _resetCommand;
@@ -171,7 +173,10 @@ namespace MpWpfApp {
             }
         }
         private void Ok() {
+            Command.RegisterCommand();
             Command.WriteToDatabase();
+            Console.WriteLine("Successfully created: " + Command.ToString());
+            _windowRef.Close();
         }
         #endregion
     }

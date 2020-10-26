@@ -53,7 +53,7 @@ namespace MpWpfApp {
                 } else {
                     ItemIdx = 1;
                 }
-                MpDb.Instance.ExecuteNonQuery("insert into MpHotKeyItem(fk_MpCommandId,ItemIdx,KeyList,ModList) values(" + CommandId + "," + ItemIdx + ",'" + KeyStr + "')");
+                MpDb.Instance.ExecuteNonQuery("insert into MpHotKeyItem(fk_MpCommandId,ItemIdx,KeyList) values(" + CommandId + "," + ItemIdx + ",'" + KeyStr + "')");
                 HotkeyItemId = MpDb.Instance.GetLastRowId("MpHotKeyItem", "pk_MpHotKeyItemId");
             } else {
                 MpDb.Instance.ExecuteNonQuery("update MpHotKeyItem set KeyList='" + KeyStr + "' where pk_MpHotKeyItemId=" + HotkeyItemId);

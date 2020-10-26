@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Gma.System.MouseKeyHook;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Documents;
@@ -31,7 +32,28 @@ namespace MpWpfApp {
         public MpCommand(DataRow dr) {
             LoadDataRow(dr);
         }
-
+        public bool RegisterCommand() {
+            try {
+                if (HotKeyItemList.Count > 1) {
+                    var performCommandSequence = Sequence.FromString(GetHotKeyString());
+                    var assignment = new Dictionary<Sequence, Action> {
+                    { performCommandSequence, () => CommandRef.Execute(null) }
+                };
+                    Hook.GlobalEvents().OnSequence(assignment);
+                } else {
+                    var performCommandCombination = Combination.FromString(GetHotKeyString());
+                    var assignment = new Dictionary<Combination, Action> {
+                    { performCommandCombination, () => CommandRef.Execute(null) }
+                };
+                    Hook.GlobalEvents().OnCombination(assignment);
+                }
+            } 
+            catch(Exception ex) {
+                Console.WriteLine("Error creating " + this.ToString() + " with exception: " + ex.ToString());
+                return false;
+            }
+            return true;
+        }
         public override void LoadDataRow(DataRow dr) {
             CommandId = Convert.ToInt32(dr["pk_MpCommandId"].ToString());
             CommandType = (MpCommandType)Convert.ToInt32(dr["fk_MpCommandTypeId"].ToString());
@@ -84,8 +106,8 @@ namespace MpWpfApp {
             return outStr.Remove(outStr.Length - 1, 1);
         }
         public override string ToString() {
-            string outStr = "Command: " + Enum.GetName(typeof(MpCommandType),CommandType);
-            outStr += GetHotKeyString();
+            string outStr = "Command Name: " + Enum.GetName(typeof(MpCommandType),CommandType);
+            outStr += " " + GetHotKeyString();
             return outStr;
         }
     }

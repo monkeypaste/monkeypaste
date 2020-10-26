@@ -982,8 +982,23 @@ namespace MpWpfApp {
         private void AssignHotkey() {
             MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
             var ahkmwvm = (MpAssignHotkeyModalWindowViewModel)ahkmw.DataContext;
-            ahkmwvm.Init(null, Title);
+            ahkmwvm.Init(PasteClipCommand, Title);
             ahkmw.Show();
+        }
+
+        private RelayCommand _pasteClipCommand;
+        public ICommand PasteClipCommand {
+            get {
+                if (_pasteClipCommand == null) {
+                    _pasteClipCommand = new RelayCommand(PasteClip);
+                }
+                return _pasteClipCommand;
+            }
+        }
+        private void PasteClip() {
+            ClipTrayViewModel.ClearClipSelection();
+            IsSelected = true;
+            ClipTrayViewModel.PasteSelectedClipsCommand.Execute(null);
         }
         #endregion
 
