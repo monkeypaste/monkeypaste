@@ -76,9 +76,12 @@ namespace MpWpfApp {
         public string GetHotKeyString() {
             string outStr = string.Empty;
             foreach (MpHotKeyItem hki in HotKeyItemList) {
-                outStr += " " + hki.ToString();
+                outStr += hki.ToString() + ",";
             }
-            return outStr;
+            if(outStr == string.Empty) {
+                return outStr;
+            }
+            return outStr.Remove(outStr.Length - 1, 1);
         }
         public override string ToString() {
             string outStr = "Command: " + Enum.GetName(typeof(MpCommandType),CommandType);

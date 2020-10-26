@@ -13,17 +13,19 @@ namespace MpWpfApp {
         public int HotkeyItemId { get; set; }
         public int CommandId { get; set; }
         public int ItemIdx { get; set; }
-        public string KeyList { get; private set; }
-        public string ModList { get; private set; }
+        public string KeyStr { get; private set; }
+
+        private List<Key> _keyList = new List<Key>();
 
         public MpHotKeyItem() {
             HotkeyItemId = 0;
             ItemIdx = 0;
             CommandId = 0;
-            KeyList = ModList = string.Empty;
+            KeyStr = string.Empty;
+            _keyList = new List<Key>();
         }
         public MpHotKeyItem(string keyList) : this() {
-            KeyList = keyList;
+            KeyStr = keyList;
         }
 
         public MpHotKeyItem(int hkId) {
@@ -39,9 +41,9 @@ namespace MpWpfApp {
         public override void LoadDataRow(DataRow dr) {
             HotkeyItemId = Convert.ToInt32(dr["pk_MpHotKeyItemId"].ToString());
             ItemIdx = Convert.ToInt32(dr["ItemIdx"].ToString());
-            KeyList = dr["KeyList"].ToString();
-            ModList = dr["ModList"].ToString();
+            KeyStr = dr["KeyList"].ToString();
         }
+
         public override void WriteToDatabase() {
             //if new hotkey find last idx of the commands item to make this the next one
             if (HotkeyItemId == 0) {
@@ -51,10 +53,10 @@ namespace MpWpfApp {
                 } else {
                     ItemIdx = 1;
                 }
-                MpDb.Instance.ExecuteNonQuery("insert into MpHotKeyItem(fk_MpCommandId,ItemIdx,KeyList,ModList) values(" + CommandId + "," + ItemIdx + ",'" + KeyList + "','" + ModList + "')");
+                MpDb.Instance.ExecuteNonQuery("insert into MpHotKeyItem(fk_MpCommandId,ItemIdx,KeyList,ModList) values(" + CommandId + "," + ItemIdx + ",'" + KeyStr + "')");
                 HotkeyItemId = MpDb.Instance.GetLastRowId("MpHotKeyItem", "pk_MpHotKeyItemId");
             } else {
-                MpDb.Instance.ExecuteNonQuery("update MpHotKeyItem set KeyList='" + KeyList + "', ModKey='" + ModList + "' where pk_MpHotKeyItemId=" + HotkeyItemId);
+                MpDb.Instance.ExecuteNonQuery("update MpHotKeyItem set KeyList='" + KeyStr + "' where pk_MpHotKeyItemId=" + HotkeyItemId);
             }
         }
         public void DeleteFromDatabase() {
@@ -65,50 +67,45 @@ namespace MpWpfApp {
             columnData.Clear();
             columnData.Add("pk_MpHotKeyItemId", this.HotkeyItemId);
             columnData.Add("ItemIdx", this.ItemIdx);
-            columnData.Add("KeyList", this.KeyList);
-            columnData.Add("ModList", this.ModList);
+            columnData.Add("KeyList", this.KeyStr);
         }
 
         public int CompareTo(object obj) {
             var otherHotkey = (MpHotKeyItem)obj;
-            if(otherHotkey.KeyList == KeyList && otherHotkey.ModList == ModList) {
+            if(otherHotkey.KeyStr == KeyStr) {
                 return 0;
             }
             return -1;
         }
                 
         public void AddKey(Key key) {
-            KeyList += key.ToString() + Delimeter;
-        }
-
-        public void RemoveKey(Key key) {
-            var keyList = KeyList.Split(Delimeter.ToCharArray());
-            var toRemoveKeyList = new List<string>();
-            foreach (string k in keyList) {
-                if(k == key.ToString()) {
-                    toRemoveKeyList.Add(k);
+            if(!_keyList.Contains(key)) {
+                _keyList.Add(key);
+                switch (key) {
+                    case Key.LeftCtrl:
+                        KeyStr += "Control";
+                        break;
+                    case Key.LeftShift:
+                        KeyStr += "Shift";
+                        break;
+                    case Key.LeftAlt:
+                        KeyStr += "Alt"; 
+                        break;
+                    case Key.LWin:
+                        KeyStr += "LWin";
+                        break;
+                    default:
+                        KeyStr += "+" + key.ToString();
+                        break;
                 }
             }
-            KeyList = string.Empty;
-            foreach (string k in keyList) {
-                if (!toRemoveKeyList.Contains(k)) {
-                    KeyConverter kc = new KeyConverter();
-                    AddKey((Key)kc.ConvertFromString(k));
-                }
+            if(KeyStr.StartsWith("+")) {
+                KeyStr = KeyStr.Remove(0, 1);
             }
         }
 
         public override string ToString() {
-            var keyList = KeyList.Split(Delimeter.ToCharArray());
-            if(keyList.Length == 0) {
-                return string.Empty;
-            }
-            string outStr = "<";
-            foreach(string k in keyList) {
-                outStr += k + " ";
-            }
-            outStr = outStr.Trim() + ">";
-            return outStr;
+            return KeyStr;
         }
     }
 }

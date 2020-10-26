@@ -13,7 +13,10 @@ namespace MpWpfApp {
         #region Private Variables
         private ICommand _hotkeyCommand = null;
 
+        private MpHotKeyItem _currentHotKeyItem = null;
+
         private bool _isSeqComplete = false;
+        private bool _isLShiftDown = false;
 
         private System.Timers.Timer seqTimer = null;
         private double seqTimerMaxMs = 1000;
@@ -60,6 +63,9 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Private Methods
+        #endregion
+
         #region Public Methods
         public void Init(ICommand hotkeyCommand, string commandName) {
             _hotkeyCommand = hotkeyCommand;
@@ -71,18 +77,51 @@ namespace MpWpfApp {
         public void AssignHotkeyModalWindow_Loaded(object sender, RoutedEventArgs e) {
             var ahmw = (Window)sender;
             ahmw.PreviewKeyDown += (s, e1) => {
-                
-            };
+                seqTimer.Stop();
 
-            ahmw.PreviewKeyUp += (s, e1) => {
-                //Console.WriteLine("HotKey('" + CommandName + "'): " + HotKey.ToString());
                 if (_isSeqComplete) {
                     Command.ClearHotKeyList();
                     _isSeqComplete = false;
+                    _currentHotKeyItem = null;
                 }
-                Command.HotKeyItemList.Add(new MpHotKeyItem(e1.Key.ToString()));
-                KeysString = Command.GetHotKeyString();
+                if (_currentHotKeyItem == null) {
+                    _currentHotKeyItem = new MpHotKeyItem();
+                }
+                if (e1.KeyboardDevice.IsKeyDown(Key.LeftCtrl)) {
+                    _currentHotKeyItem.AddKey(Key.LeftCtrl);
+                }
+                if (e1.KeyboardDevice.IsKeyDown(Key.RightCtrl)) {
+                    _currentHotKeyItem.AddKey(Key.LeftCtrl);
+                }
+                if (e1.KeyboardDevice.IsKeyDown(Key.LeftShift)) {
+                    _currentHotKeyItem.AddKey(Key.LeftShift);
+                }
+                if (e1.KeyboardDevice.IsKeyDown(Key.RightShift)) {
+                    _currentHotKeyItem.AddKey(Key.LeftShift);
+                }
+                if (e1.KeyboardDevice.IsKeyDown(Key.LeftAlt)) {
+                    _currentHotKeyItem.AddKey(Key.LeftAlt);
+                }
+                if (e1.KeyboardDevice.IsKeyDown(Key.RightAlt)) {
+                    _currentHotKeyItem.AddKey(Key.LeftAlt);
+                }
+                if (e1.KeyboardDevice.IsKeyDown(Key.LWin)) {
+                    _currentHotKeyItem.AddKey(Key.LWin);
+                }
+                if (e1.KeyboardDevice.IsKeyDown(Key.RWin)) {
+                    _currentHotKeyItem.AddKey(Key.LWin);
+                }
+                _currentHotKeyItem.AddKey(e1.Key);
+            };
 
+            ahmw.PreviewKeyUp += (s, e1) => {
+                if(_currentHotKeyItem != null) {
+                    Command.HotKeyItemList.Add(_currentHotKeyItem);
+                    _currentHotKeyItem = null;
+                    KeysString = Command.GetHotKeyString();
+                    Console.WriteLine("KeyString: " + KeysString);
+                    
+                }
                 seqTimer.Start();
             };
 
