@@ -18,10 +18,9 @@ namespace MpWpfApp {
 
         #region Public Variables
 
-        public IKeyboardMouseEvents GlobalHook { get; set; } = null;
-
         public bool IsShowingDialog = false;
 
+        public IKeyboardMouseEvents GlobalHook { get; set; }
         #endregion
 
         #region Properties
@@ -99,32 +98,6 @@ namespace MpWpfApp {
                 if (_appModeViewModel != value) {
                     _appModeViewModel = value;
                     OnPropertyChanged(nameof(AppModeViewModel));
-                }
-            }
-        }
-
-        private Combination _showMainWindowCombination;
-        public Combination ShowMainWindowCombination {
-            get {
-                return _showMainWindowCombination;
-            }
-            set {
-                if (_showMainWindowCombination != value) {
-                    _showMainWindowCombination = value;
-                    OnPropertyChanged(nameof(ShowMainWindowCombination));
-                }
-            }
-        }
-
-        private Combination _hideMainWindowCombination;
-        public Combination HideMainWindowCombination {
-            get {
-                return _hideMainWindowCombination;
-            }
-            set {
-                if (_hideMainWindowCombination != value) {
-                    _hideMainWindowCombination = value;
-                    OnPropertyChanged(nameof(HideMainWindowCombination));
                 }
             }
         }
@@ -267,25 +240,50 @@ namespace MpWpfApp {
 
         }
 
-        private void InitHotKeys() {
-            GlobalHook = Hook.GlobalEvents();
-            GlobalHook.MouseMove += (s, e) => {
-                if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
-                    if (ShowWindowCommand.CanExecute(null)) {
-                        ShowWindowCommand.Execute(null);
+        private bool InitHotKeys() {
+            try {
+                GlobalHook = Hook.GlobalEvents();
+
+                GlobalHook.MouseMove += (s, e) => {
+                    if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
+                        if (ShowWindowCommand.CanExecute(null)) {
+                            ShowWindowCommand.Execute(null);
+                        }
+                    }
+                };
+                var combinationAssignments = new Dictionary<Combination, Action>();
+                var sequenceAssignments = new Dictionary<Sequence, Action>();
+
+                var showMainWindowCommand = MpCommand.GetCommandByName(Properties.Settings.Default.CmdNameShowWindow);
+                foreach (MpCommand cmd in showMainWindowCommand) {
+                    if (cmd.IsSequence()) {
+                        sequenceAssignments.Add(Sequence.FromString(cmd.KeyList), () => ShowWindowCommand.Execute(null));
+                    } else {
+                        combinationAssignments.Add(Combination.FromString(cmd.KeyList), () => ShowWindowCommand.Execute(null));
                     }
                 }
-            };
 
-            ShowMainWindowCombination = Combination.FromString("Control+Shift+D");
-            HideMainWindowCombination = Combination.FromString("Escape");
-            var pasteCombination = Combination.FromString("Control+V");
-            var assignment = new Dictionary<Combination, Action> {
-                { ShowMainWindowCombination, () => ShowWindowCommand.Execute(null) },
-                { HideMainWindowCombination, () => HideWindowCommand.Execute(null) },
-                { pasteCombination, () => Console.WriteLine("Pasted") },
-            };
-            Hook.GlobalEvents().OnCombination(assignment);
+                var hideMainWindowCommand = MpCommand.GetCommandByName(Properties.Settings.Default.CmdNameHideWindow);
+                foreach (MpCommand cmd in hideMainWindowCommand) {
+                    if (cmd.IsSequence()) {
+                        sequenceAssignments.Add(Sequence.FromString(cmd.KeyList), () => HideWindowCommand.Execute(null));
+                    } else {
+                        combinationAssignments.Add(Combination.FromString(cmd.KeyList), () => HideWindowCommand.Execute(null));
+                    }
+                }
+
+                if (sequenceAssignments.Count > 0) {
+                    GlobalHook.OnSequence(sequenceAssignments);
+                }
+                if (combinationAssignments.Count > 0) {
+                    GlobalHook.OnCombination(combinationAssignments);
+                }
+            }
+            catch(Exception ex) {
+                Console.WriteLine("Error creating mainwindow hotkeys: " + ex.ToString());
+                return false;
+            }
+            return true;
         }
         #endregion
 
@@ -422,14 +420,6 @@ namespace MpWpfApp {
             ta.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
             ta.Completed += (s, e) => {
                 mw.Visibility = Visibility.Collapsed;
-                if (ClipTrayViewModel.DoPaste) {
-                    ClipTrayViewModel.DoPaste = false;
-                    ClipTrayViewModel.PerformPasteSelectedClips();
-                    for (int i = ClipTrayViewModel.SelectedClipTiles.Count - 1; i >= 0; i--) {
-                        var sctvm = ClipTrayViewModel.SelectedClipTiles[i];
-                        ClipTrayViewModel.Move(ClipTrayViewModel.IndexOf(sctvm), 0);
-                    }
-                }
                 //ShowMainWindowHotKey.Enabled = true;
                 //HideMainWindowHotKey.Enabled = false;
                 //_clipTrayPhysicsBody.Stop();

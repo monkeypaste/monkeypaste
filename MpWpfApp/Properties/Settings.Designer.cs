@@ -220,5 +220,149 @@ namespace MpWpfApp.Properties {
                 return ((double)(this["ClipTileMoveAnimationDurationMs"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Show Window")]
+        public string CmdNameShowWindow {
+            get {
+                return ((string)(this["CmdNameShowWindow"]));
+            }
+            set {
+                this["CmdNameShowWindow"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Hide Window")]
+        public string CmdNameHideWindow {
+            get {
+                return ((string)(this["CmdNameHideWindow"]));
+            }
+            set {
+                this["CmdNameHideWindow"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Append Mode")]
+        public string CmdNameAppendMode {
+            get {
+                return ((string)(this["CmdNameAppendMode"]));
+            }
+            set {
+                this["CmdNameAppendMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Auto-Copy Mode")]
+        public string CmdNameAutoCopyMode {
+            get {
+                return ((string)(this["CmdNameAutoCopyMode"]));
+            }
+            set {
+                this["CmdNameAutoCopyMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Right-Click Paste Mode")]
+        public string CmdNameRightClickPasteMode {
+            get {
+                return ((string)(this["CmdNameRightClickPasteMode"]));
+            }
+            set {
+                this["CmdNameRightClickPasteMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Paste Selected Clip")]
+        public string CmdNamePasteSelectedClip {
+            get {
+                return ((string)(this["CmdNamePasteSelectedClip"]));
+            }
+            set {
+                this["CmdNamePasteSelectedClip"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Delete Selected Clip")]
+        public string CmdNameDeleteSelectedClip {
+            get {
+                return ((string)(this["CmdNameDeleteSelectedClip"]));
+            }
+            set {
+                this["CmdNameDeleteSelectedClip"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Search")]
+        public string CmdNameSearch {
+            get {
+                return ((string)(this["CmdNameSearch"]));
+            }
+            set {
+                this["CmdNameSearch"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Select Next")]
+        public string CmdNameSelectNext {
+            get {
+                return ((string)(this["CmdNameSelectNext"]));
+            }
+            set {
+                this["CmdNameSelectNext"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Select Previous")]
+        public string CmdNameSelectPrevious {
+            get {
+                return ((string)(this["CmdNameSelectPrevious"]));
+            }
+            set {
+                this["CmdNameSelectPrevious"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Select All")]
+        public string CmdNameSelectAll {
+            get {
+                return ((string)(this["CmdNameSelectAll"]));
+            }
+            set {
+                this["CmdNameSelectAll"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Invert Selection")]
+        public string CmdNameInvertSelection {
+            get {
+                return ((string)(this["CmdNameInvertSelection"]));
+            }
+            set {
+                this["CmdNameInvertSelection"] = value;
+            }
+        }
     }
 }

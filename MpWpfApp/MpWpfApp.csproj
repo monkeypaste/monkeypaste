@@ -227,7 +227,7 @@
     <Compile Include="Models\MpApp.cs" />
     <Compile Include="Models\MpClient.cs" />
     <Compile Include="Models\MpCommand.cs" />
-    <Compile Include="Models\MpHotKeyItem.cs" />
+    <Compile Include="Models\MpHotKey.cs" />
     <Compile Include="Models\MpColor.cs" />
     <Compile Include="Models\MpCopyItem.cs" />
     <Compile Include="Models\MpCopyItemTag.cs" />
@@ -246,8 +246,10 @@
     <Compile Include="Utils\MpExtraLargeIconLoader.cs" />
     <Compile Include="Utils\MpClipboardMonitor.cs" />
     <Compile Include="Utils\MpHelpers.cs" />
+    <Compile Include="Utils\MpHotKeyManager.cs" />
     <Compile Include="Utils\MpLastWindowWatcher.cs" />
     <Compile Include="Utils\MpMeasurements.cs" />
+    <Compile Include="Utils\MpMouseKeyHook.cs" />
     <Compile Include="Utils\MpRichTextToImageConverter.cs" />
     <Compile Include="Utils\MpScreenInformation.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />

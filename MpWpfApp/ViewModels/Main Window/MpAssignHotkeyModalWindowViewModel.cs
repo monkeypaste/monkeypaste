@@ -12,16 +12,15 @@ using System.Windows.Input;
 namespace MpWpfApp {
     public class MpAssignHotkeyModalWindowViewModel : MpViewModelBase {
         #region Private Variables
-        private ICommand _hotkeyCommand = null;
-
-        private MpHotKeyItem _currentHotKeyItem = null;
-
         private bool _isSeqComplete = false;
+        private bool _isNewCombination = true;
 
         private Window _windowRef = null;
 
         private System.Timers.Timer seqTimer = null;
         private double seqTimerMaxMs = 1000;
+
+        private object _parentRef = null;
         #endregion
 
         #region Properties
@@ -39,14 +38,14 @@ namespace MpWpfApp {
         }
 
         private string _commandName = string.Empty;
-        public string CommandName {
+        public string CommandTypeName {
             get {
                 return _commandName;
             }
             set {
                 if(_commandName != value) {
                     _commandName = value;
-                    OnPropertyChanged(nameof(CommandName));
+                    OnPropertyChanged(nameof(CommandTypeName));
                 }
             }
         }
@@ -66,16 +65,17 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-
+        
         #endregion
 
         #region Public Methods
-        public void Init(ICommand hotkeyCommand, string commandName) {
-            _hotkeyCommand = hotkeyCommand;
-            CommandName = "'" + commandName + "'";
+        public void Init(ICommand hotkeyCommand, string commandName,object parent,int copyItemId = 0) {
+            CommandTypeName = "'" + commandName + "'";
             Command = new MpCommand();
-            Command.CommandRef = hotkeyCommand;
+            //Command.CommandRef = hotkeyCommand;
+            Command.CopyItemId = copyItemId;
             KeysString = "<None>";
+            _parentRef = parent;
         }
         public void AssignHotkeyModalWindow_Loaded(object sender, RoutedEventArgs e) {
             _windowRef = (Window)sender;
@@ -85,45 +85,60 @@ namespace MpWpfApp {
                 if (_isSeqComplete) {
                     Command.ClearHotKeyList();
                     _isSeqComplete = false;
-                    _currentHotKeyItem = null;
+                    _isNewCombination = true;
                 }
-                if (_currentHotKeyItem == null) {
-                    _currentHotKeyItem = new MpHotKeyItem();
-                }
+                //bool isModKey = true;
+                //if ((e1.Key != Key.LeftCtrl && e1.Key != Key.RightCtrl && e1.Key != Key.LeftAlt && e1.Key != Key.RightAlt && e1.Key != Key.LeftShift && e1.Key != Key.RightShift && e1.Key != Key.LWin && e1.Key != Key.RWin)) {
+                //    isModKey = false;
+                //}
+                int precount = Command.KeyList.Length;
                 if (e1.KeyboardDevice.IsKeyDown(Key.LeftCtrl)) {
-                    _currentHotKeyItem.AddKey(Key.LeftCtrl);
+                    Command.AddKey(Key.LeftCtrl,_isNewCombination && Command.KeyList.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.RightCtrl)) {
-                    _currentHotKeyItem.AddKey(Key.LeftCtrl);
+                    Command.AddKey(Key.LeftCtrl, _isNewCombination && Command.KeyList.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.LeftShift)) {
-                    _currentHotKeyItem.AddKey(Key.LeftShift);
+                    Command.AddKey(Key.LeftShift, _isNewCombination && Command.KeyList.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.RightShift)) {
-                    _currentHotKeyItem.AddKey(Key.LeftShift);
+                    Command.AddKey(Key.LeftShift, _isNewCombination && Command.KeyList.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.LeftAlt)) {
-                    _currentHotKeyItem.AddKey(Key.LeftAlt);
+                    Command.AddKey(Key.LeftAlt, _isNewCombination && Command.KeyList.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.RightAlt)) {
-                    _currentHotKeyItem.AddKey(Key.LeftAlt);
+                    Command.AddKey(Key.LeftAlt, _isNewCombination && Command.KeyList.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.LWin)) {
-                    _currentHotKeyItem.AddKey(Key.LWin);
+                    Command.AddKey(Key.LWin, _isNewCombination && Command.KeyList.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.RWin)) {
-                    _currentHotKeyItem.AddKey(Key.LWin);
+                    Command.AddKey(Key.LWin, _isNewCombination && Command.KeyList.Length == precount);
                 }
-                _currentHotKeyItem.AddKey(e1.Key);
+                if(e1.Key != Key.LeftCtrl && 
+                   e1.Key != Key.RightCtrl && 
+                   e1.Key != Key.LeftAlt && 
+                   e1.Key != Key.RightAlt && 
+                   e1.Key != Key.LeftShift && 
+                   e1.Key != Key.RightShift && 
+                   e1.Key != Key.LWin && 
+                   e1.Key != Key.RWin) {
+                    if(Command.KeyList.Length != precount) {
+                        _isNewCombination = false;
+                    }
+                    Command.AddKey(e1.Key, _isNewCombination);           
+                } else {
+                    _isNewCombination = false;
+                }
             };
 
             _windowRef.PreviewKeyUp += (s, e1) => {
-                if(_currentHotKeyItem != null) {
-                    Command.HotKeyItemList.Add(_currentHotKeyItem);
-                    _currentHotKeyItem = null;
-                    KeysString = Command.GetHotKeyString();
-                    Console.WriteLine("KeyString: " + KeysString);
-                }
+                //Command.HotKeyList.Add(_currentHotKey);
+                _isNewCombination = true;
+                KeysString = Command.KeyList;
+                Console.WriteLine("KeyString: " + KeysString);
+
                 seqTimer.Start();
             };
 
@@ -146,7 +161,9 @@ namespace MpWpfApp {
             }
         }
         private void Cancel() {
+            Command = null;
             _windowRef.Close();
+            ((MpClipTileViewModel)_parentRef).ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }
 
         private RelayCommand _resetCommand;
@@ -173,10 +190,12 @@ namespace MpWpfApp {
             }
         }
         private void Ok() {
-            Command.RegisterCommand();
+            //Command.RegisterCommand();
             Command.WriteToDatabase();
             Console.WriteLine("Successfully created: " + Command.ToString());
             _windowRef.Close();
+            
+            ((MpClipTileViewModel)_parentRef).ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }
         #endregion
     }

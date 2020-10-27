@@ -73,5 +73,41 @@
     <Setting Name="ClipTileMoveAnimationDurationMs" Type="System.Double" Scope="Application">
       <Value Profile="(Default)">1000</Value>
     </Setting>
+    <Setting Name="CmdNameShowWindow" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Show Window</Value>
+    </Setting>
+    <Setting Name="CmdNameHideWindow" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Hide Window</Value>
+    </Setting>
+    <Setting Name="CmdNameAppendMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Append Mode</Value>
+    </Setting>
+    <Setting Name="CmdNameAutoCopyMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Auto-Copy Mode</Value>
+    </Setting>
+    <Setting Name="CmdNameRightClickPasteMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Right-Click Paste Mode</Value>
+    </Setting>
+    <Setting Name="CmdNamePasteSelectedClip" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Paste Selected Clip</Value>
+    </Setting>
+    <Setting Name="CmdNameDeleteSelectedClip" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Delete Selected Clip</Value>
+    </Setting>
+    <Setting Name="CmdNameSearch" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Search</Value>
+    </Setting>
+    <Setting Name="CmdNameSelectNext" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Select Next</Value>
+    </Setting>
+    <Setting Name="CmdNameSelectPrevious" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Select Previous</Value>
+    </Setting>
+    <Setting Name="CmdNameSelectAll" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Select All</Value>
+    </Setting>
+    <Setting Name="CmdNameInvertSelection" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Invert Selection</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -63,7 +63,6 @@ namespace MpWpfApp {
         public MpClipboardMonitor ClipboardMonitor { get; private set; }
 
         public bool IsDragging { get; set; } = false;
-        public bool DoPaste { get; set; } = false;
 
         public Point StartDragPoint;
 
@@ -524,8 +523,6 @@ namespace MpWpfApp {
                 foreach (var sctvm in SelectedClipTiles) {
                     new MpPasteHistory(sctvm.CopyItem, ((MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext).ClipTrayViewModel.ClipboardMonitor.LastWindowWatcher.LastHandle);
                 }
-
-                //MpSingletonController.Instance.AppendItem = null;
             }
             catch (Exception e) {
                 Console.WriteLine("ClipboardMonitor error during paste: " + e.ToString());
@@ -701,11 +698,17 @@ namespace MpWpfApp {
         }
         private void PasteSelectedClips() {
             //In order to paste the app must hide first
-            //((MpMainWindow)Application.Current.MainWindow).Visibility = Visibility.Collapsed;
+            ((MpMainWindow)Application.Current.MainWindow).Visibility = Visibility.Collapsed;
 
             //this triggers hidewindow to paste selected items
-            DoPaste = true;
-            MainWindowViewModel.HideWindowCommand.Execute(null);
+            //DoPaste = true;
+            //MainWindowViewModel.HideWindowCommand.Execute(null);
+
+            PerformPasteSelectedClips();
+            for (int i = SelectedClipTiles.Count - 1; i >= 0; i--) {
+                var sctvm = SelectedClipTiles[i];
+                Move(IndexOf(sctvm), 0);
+            }
         }
 
         private RelayCommand _bringSelectedClipTilesToFrontCommand;

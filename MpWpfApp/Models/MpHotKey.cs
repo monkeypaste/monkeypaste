@@ -7,71 +7,73 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpHotKeyItem : MpDbObject, IComparable {
+    public class MpHotKey : MpDbObject, IComparable {
         public static string Delimeter = "+";
 
-        public int HotkeyItemId { get; set; }
+        public int HotKeyId { get; set; }
         public int CommandId { get; set; }
         public int ItemIdx { get; set; }
         public string KeyStr { get; private set; }
 
         private List<Key> _keyList = new List<Key>();
 
-        public MpHotKeyItem() {
-            HotkeyItemId = 0;
+        public MpHotKey() {
+            HotKeyId = 0;
             ItemIdx = 0;
             CommandId = 0;
             KeyStr = string.Empty;
             _keyList = new List<Key>();
         }
-        public MpHotKeyItem(string keyList) : this() {
+        public MpHotKey(string keyList) : this() {
             KeyStr = keyList;
         }
 
-        public MpHotKeyItem(int hkId) {
-            DataTable dt = MpDb.Instance.Execute("select * from MpHotKeyItem where pk_MpHotKeyItemId=" + hkId);
+        public MpHotKey(int hkId) {
+            DataTable dt = MpDb.Instance.Execute("select * from MpHotKey where pk_MpHotKeyId=" + hkId);
             if (dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
         }
-        public MpHotKeyItem(DataRow dr) {
+        public MpHotKey(DataRow dr) {
             LoadDataRow(dr);
         }
 
+        
+
         public override void LoadDataRow(DataRow dr) {
-            HotkeyItemId = Convert.ToInt32(dr["pk_MpHotKeyItemId"].ToString());
+            HotKeyId = Convert.ToInt32(dr["pk_MpHotKeyId"].ToString());            
             ItemIdx = Convert.ToInt32(dr["ItemIdx"].ToString());
             KeyStr = dr["KeyList"].ToString();
         }
 
         public override void WriteToDatabase() {
             //if new hotkey find last idx of the commands item to make this the next one
-            if (HotkeyItemId == 0) {
-                DataTable dt = MpDb.Instance.Execute("select * from MpHotKeyItem where fk_MpCommandId=" + CommandId + " ORDER BY ItemIdx DESC");
+            if (HotKeyId == 0) {
+                DataTable dt = MpDb.Instance.Execute("select * from MpHotKey where fk_MpCommandId=" + CommandId + " ORDER BY ItemIdx DESC");
                 if (dt != null && dt.Rows.Count > 0) {
                     ItemIdx = Convert.ToInt32(dt.Rows[0]["ItemIdx"].ToString()) + 1;
                 } else {
                     ItemIdx = 1;
                 }
-                MpDb.Instance.ExecuteNonQuery("insert into MpHotKeyItem(fk_MpCommandId,ItemIdx,KeyList) values(" + CommandId + "," + ItemIdx + ",'" + KeyStr + "')");
-                HotkeyItemId = MpDb.Instance.GetLastRowId("MpHotKeyItem", "pk_MpHotKeyItemId");
+                MpDb.Instance.ExecuteNonQuery("insert into MpHotKey(fk_MpCommandId,ItemIdx,KeyList) values(" + CommandId + "," + ItemIdx + ",'" + KeyStr + "')");
+                HotKeyId = MpDb.Instance.GetLastRowId("MpHotKey", "pk_MpHotKeyId");
             } else {
-                MpDb.Instance.ExecuteNonQuery("update MpHotKeyItem set KeyList='" + KeyStr + "' where pk_MpHotKeyItemId=" + HotkeyItemId);
+                MpDb.Instance.ExecuteNonQuery("update MpHotKey set KeyList='" + KeyStr + "' where pk_MpHotKeyId=" + HotKeyId);
             }
         }
         public void DeleteFromDatabase() {
-            MpDb.Instance.ExecuteNonQuery("delete from MpHotKeyItem where pk_MpHotKeyItemId=" + this.HotkeyItemId);
+            MpDb.Instance.ExecuteNonQuery("delete from MpHotKey where pk_MpHotKeyId=" + this.HotKeyId);
         }
         private void MapDataToColumns() {
             TableName = "MpHotKey";
             columnData.Clear();
-            columnData.Add("pk_MpHotKeyItemId", this.HotkeyItemId);
+            columnData.Add("pk_MpHotKeyId", this.HotKeyId);
             columnData.Add("ItemIdx", this.ItemIdx);
             columnData.Add("KeyList", this.KeyStr);
         }
 
         public int CompareTo(object obj) {
-            var otherHotkey = (MpHotKeyItem)obj;
+            var otherHotkey = (MpHotKey)obj;
             if(otherHotkey.KeyStr == KeyStr) {
                 return 0;
             }

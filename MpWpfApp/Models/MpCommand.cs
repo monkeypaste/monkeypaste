@@ -2,26 +2,49 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpCommand : MpDbObject {
-        public int CommandId { get; set; }
+        private static List<MpCommand> _CommandList = new List<MpCommand>();
 
-        public List<MpHotKeyItem> HotKeyItemList = new List<MpHotKeyItem>();
+        public int CommandId { get; set; } = 0;
+        public string CommandName { get; set; } = "None";
+        public string KeyList { get; private set; } = string.Empty;
+        public bool IsGlobal { get; set; } = false;
+        public int CopyItemId { get; set; } = 0;
 
-        public MpCommandType CommandType { get; set; }
+        private List<List<Key>> _keyList = new List<List<Key>>();
 
-        public ICommand CommandRef { get; set; }
-
-
+        #region Static Methods
+        private static List<MpCommand> GetAllCommands() {
+            List<MpCommand> commands = new List<MpCommand>();
+            DataTable dt = MpDb.Instance.Execute("select * from MpCommand");
+            if (dt != null && dt.Rows.Count > 0) {
+                foreach (DataRow dr in dt.Rows) {
+                    commands.Add(new MpCommand(dr));
+                }
+            }
+            return commands;
+        }
+        public static List<MpCommand> GetCommandByName(string commandName) {
+            return GetAllCommands().Where(x => x.CommandName == commandName).ToList();
+        }
+        public static List<MpCommand> GetCommandByCopyItemId(int copyItemId) {
+            return GetAllCommands().Where(x => x.CopyItemId == copyItemId).ToList();
+        }
+        #endregion
+        #region Public Methods
         public MpCommand() {
             CommandId = 0;
-            CommandType = MpCommandType.None;
-            CommandRef = null;
-            ClearHotKeyList();
+            CommandName = "None";
+            KeyList = string.Empty;
+            _keyList = new List<List<Key>>();
+            IsGlobal = false;
+            CopyItemId = 0;
         }
         public MpCommand(int hkId) {
             DataTable dt = MpDb.Instance.Execute("select * from MpCommand where pk_MpCommandId=" + hkId);
@@ -32,84 +55,76 @@ namespace MpWpfApp {
         public MpCommand(DataRow dr) {
             LoadDataRow(dr);
         }
-        public bool RegisterCommand() {
-            try {
-                if (HotKeyItemList.Count > 1) {
-                    var performCommandSequence = Sequence.FromString(GetHotKeyString());
-                    var assignment = new Dictionary<Sequence, Action> {
-                    { performCommandSequence, () => CommandRef.Execute(null) }
-                };
-                    Hook.GlobalEvents().OnSequence(assignment);
-                } else {
-                    var performCommandCombination = Combination.FromString(GetHotKeyString());
-                    var assignment = new Dictionary<Combination, Action> {
-                    { performCommandCombination, () => CommandRef.Execute(null) }
-                };
-                    Hook.GlobalEvents().OnCombination(assignment);
-                }
-            } 
-            catch(Exception ex) {
-                Console.WriteLine("Error creating " + this.ToString() + " with exception: " + ex.ToString());
-                return false;
+
+        public void AddKey(Key key,bool isNewCombination) {
+            if(isNewCombination && KeyList.Length > 0) {
+                KeyList += ",";
+                _keyList.Add(new List<Key>());
             }
-            return true;
+            if(_keyList.Count == 0) {
+                _keyList.Add(new List<Key>());
+            }
+            if (!_keyList[_keyList.Count - 1].Contains(key)) {
+                _keyList[_keyList.Count - 1].Add(key);
+                switch (key) {
+                    case Key.LeftCtrl:
+                        KeyList += "+Control";
+                        break;
+                    case Key.LeftShift:
+                        KeyList += "+Shift";
+                        break;
+                    case Key.LeftAlt:
+                        KeyList += "+Alt";
+                        break;
+                    case Key.LWin:
+                        KeyList += "+LWin";
+                        break;
+                    default:
+                        KeyList += "+" + key.ToString();
+                        break;
+                }
+            }
+            if (KeyList.StartsWith("+")) {
+                KeyList = KeyList.Remove(0, 1);
+            }
+            KeyList = KeyList.Replace(",+", ",");
         }
+
         public override void LoadDataRow(DataRow dr) {
             CommandId = Convert.ToInt32(dr["pk_MpCommandId"].ToString());
-            CommandType = (MpCommandType)Convert.ToInt32(dr["fk_MpCommandTypeId"].ToString());
-            HotKeyItemList = new List<MpHotKeyItem>();
+            CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemid"].ToString());
+            CommandName = dr["CommandName"].ToString();
+            KeyList = dr["KeyList"].ToString();
+            IsGlobal = Convert.ToInt32(dr["IsGlobal"].ToString()) == 1;
 
-            DataTable dt = MpDb.Instance.Execute("select * from MpHotKeyItem where fk_MpCommandId=" + CommandId + " ORDER BY ItemIdx");
-            if (dt != null && dt.Rows.Count > 0) {
-                for (int i = 0; i < dt.Rows.Count; i++) {
-                    HotKeyItemList.Add(new MpHotKeyItem(dt.Rows[i]));
-                }
-            }
         }
         public override void WriteToDatabase() {
             if (CommandId == 0) {
-                MpDb.Instance.ExecuteNonQuery("insert into MpCommand(fk_MpCommandTypeId) values(" + (int)CommandType+")");
+                MpDb.Instance.ExecuteNonQuery("insert into MpCommand(CommandName,IsGlobal,KeyList) VALUES('" + CommandName + "'," + (IsGlobal == true ? 1:0) + ",'" + KeyList + "')"); ;
                 CommandId = MpDb.Instance.GetLastRowId("MpCommand", "pk_MpCommandId");
-                foreach (MpHotKeyItem hki in HotKeyItemList) {
-                    hki.CommandId = CommandId;
-                }
             } 
-            foreach(MpHotKeyItem hki in HotKeyItemList) {
-                hki.WriteToDatabase();
-            }
         }
         public void DeleteFromDatabase() {
             MpDb.Instance.ExecuteNonQuery("delete from MpCommand where pk_MpCommandId=" + this.CommandId);
-            foreach (MpHotKeyItem hki in HotKeyItemList) {
-                hki.DeleteFromDatabase();
-            }
         }
         private void MapDataToColumns() {
             TableName = "MpCommand";
             columnData.Clear();
             columnData.Add("pk_MpCommandId", this.CommandId);
-            columnData.Add("CommandName", Enum.GetName(typeof(MpCommandType), this.CommandType));            
         }
-
+        public bool IsSequence() {
+            return KeyList.Contains(",");
+        }
         public void ClearHotKeyList() {
-            HotKeyItemList = new List<MpHotKeyItem>();
-        }
-
-        public string GetHotKeyString() {
-            string outStr = string.Empty;
-            foreach (MpHotKeyItem hki in HotKeyItemList) {
-                outStr += hki.ToString() + ",";
-            }
-            if(outStr == string.Empty) {
-                return outStr;
-            }
-            return outStr.Remove(outStr.Length - 1, 1);
+            KeyList = string.Empty;
+            _keyList = new List<List<Key>>();
         }
         public override string ToString() {
-            string outStr = "Command Name: " + Enum.GetName(typeof(MpCommandType),CommandType);
-            outStr += " " + GetHotKeyString();
+            string outStr = "Command Name: " + CommandName;
+            outStr += " " + KeyList;
             return outStr;
         }
+        #endregion
     }
     public enum MpCommandType {
         None = 0,

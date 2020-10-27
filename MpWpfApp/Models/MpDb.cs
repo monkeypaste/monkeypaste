@@ -417,27 +417,16 @@ namespace MpWpfApp {
                       pk_MpIconId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , IconBlob image NOT NULL
                     );
-                    ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpHotKeyItem (
-                      pk_MpHotKeyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , fk_MpCommandId integer NOT NULL
-                    , KeyList text NULL             
-                    , LButton integer NOT NULL DEFAULT 0
-                    , RButton integer NOT NULL DEFAULT 0
-                    , MButton integer NOT NULL DEFAULT 0
-                    , UScroll integer NOT NULL DEFAULT 0
-                    , DScroll integer NOT NULL DEFAULT 0
-                    , LScroll integer NOT NULL DEFAULT 0
-                    , RScroll integer NOT NULL DEFAULT 0
-                    , BButton integer NOT NULL DEFAULT 0
-                    , FButton integer NOT NULL DEFAULT 0
-                    , Move integer NOT NULL DEFAULT 0
-                    , CustomA integer NOT NULL DEFAULT 0
-                    , CustomB integer NOT NULL DEFAULT 0
-                    , CustomC integer NOT NULL DEFAULT 0
-                    , CONSTRAINT FK_MpHotKeyItem_0_0 FOREIGN KEY (fk_MpCommandId) REFERENCES MpCommand (pk_MpCommandId)
+                    ---------------------------------------------------------------------------------------------------------------------                    
+                    CREATE TABLE MpCommand (
+                      pk_MpCommandId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , fk_MpCopyItemid INTEGER DEFAULT 0
+                    , CommandName text NOT NULL                    
+                    , KeyList text NULL       
+                    , IsGlobal integer NOT NULL DEFAULT 0
+                    , CONSTRAINT FK_MpCommand_2_0 FOREIGN KEY (fk_MpCopyItemid) REFERENCES MpCopyItem (pk_MpCommandItemId)
                     );
-                    INSERT INTO MpHotKeyItem(fk_MpCommandId,KeyList) VALUES(1,'Control+Shift+D'),(2,'Escape'),(3,'Control+A,Control+A'),(4,'Control+C,Control+C'),(5,'Control+P,Control+P'),(6,'Enter'),(7,'Delete'),(8,'Search'),(9,'Right'),(10,'Left'),(11,'Control+A'),(12,'Control+Shift+A');
+                    INSERT INTO MpCommand(CommandName,IsGlobal,KeyList) VALUES('Show Window',1,'Control+Shift+D'),('Hide Window',0,'Escape'),('Append Mode',1,'Control+A,Control+A'),('Auto-Copy Mode',1,'Control+C,Control+C'),('Right-Click Paste Mode',1,'Control+P,Control+P'),('Paste Selected Clip',0,'Enter'),('Delete Selected Clip',0,'Delete'),('Search',0,'Search'),('Select Next',0,'Right'),('Select Previous',0,'Left'),('Select All',0,'Control+A'),('Invert Selection',0,'Control+Shift+A');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpDeviceType (
                       pk_MpDeviceTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -474,20 +463,6 @@ namespace MpWpfApp {
                     , CONSTRAINT FK_MpCopyItemSortTypeOrder_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     , CONSTRAINT FK_MpCopyItemSortTypeOrder_1_0 FOREIGN KEY (fk_MpSortTypeId) REFERENCES MpSortType (pk_MpSortTypeId)
                     );
-                    ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpCommand (
-                      pk_MpCommandTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , CommandName text NOT NULL
-                    );
-                    INSERT INTO MpCommandType(CommandName) VALUES('Show Window'),('Hide Window'),('Append Mode'),('Auto-Copy Mode'),('Right-Click Paste Mode'),('Paste Selected Clip'),('Delete Selected Clip'),('Search'),('Select Next'),('Select Previous'),('Select All'),('Invert Selection');
-                    ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpCommand (
-                      pk_MpCommandId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , fk_MpCommandTypeId int NOT NULL                    
-                    , IsGlobal integer NOT NULL DEFAULT 0
-                    , CONSTRAINT FK_MpCommand_2_0 FOREIGN KEY (fk_MpCommandTypeId) REFERENCES MpCommandType (pk_MpCommandTypeId)
-                    );
-                    INSERT INTO MpCommand(fk_MpCommandTypeId,IsGlobal) VALUES(1,1),(2,0),(3,1),(4,1),(5,1),(6,0),(7,0),(8,0),(9,0),(10,0),(11,0),(12,0);
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpClient (
                       pk_MpClientId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

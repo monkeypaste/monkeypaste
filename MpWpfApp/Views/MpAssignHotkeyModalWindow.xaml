@@ -38,7 +38,7 @@
                FontSize="16"
                HorizontalAlignment="Center"
                HorizontalContentAlignment="Center"
-               Content="{Binding CommandName}" />
+               Content="{Binding CommandTypeName}" />
         <TextBlock Grid.Row="2"
                FontSize="14"
                FontStyle="Oblique"
