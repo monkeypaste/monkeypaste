@@ -47,7 +47,7 @@ namespace MpWpfApp {
             //if new paste item (it should always be)
             if (DestAppId == 0) {
                 _destApp = new MpApp(0, 0, _destHandle, false);
-                DestAppId = _destApp.appId;
+                DestAppId = _destApp.AppId;
                 //MpSingletonController.Instance.GetMpData().AddMpApp(_destApp);
             }
             if (MpDb.Instance.NoDb) {

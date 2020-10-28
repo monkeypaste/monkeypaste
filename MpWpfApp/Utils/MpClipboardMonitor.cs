@@ -11,29 +11,9 @@ namespace MpWpfApp {
         private const int WM_CHANGECBCHAIN = 0x030D;
         private const int WM_PASTE = 0x0302;
 
-        private MpLastWindowWatcher _lastWindowWatcher;
-        public MpLastWindowWatcher LastWindowWatcher {
-            get {
-                return _lastWindowWatcher;
-            }
-            set {
-                if (_lastWindowWatcher != value) {
-                    _lastWindowWatcher = value;
-                }
-            }
-        }
+        public MpLastWindowWatcher LastWindowWatcher { get; set; }
 
-        private bool _ignoreNextClipboardEvent;
-        public bool IgnoreClipboardChangeEvent {
-            get {
-                return _ignoreNextClipboardEvent;
-            }
-            set {
-                if (_ignoreNextClipboardEvent != value) {
-                    _ignoreNextClipboardEvent = value;
-                }
-            }
-        }
+        public bool IgnoreClipboardChangeEvent { get; set; }
 
         private readonly HwndSourceHook hook;
         private readonly HwndSource hwndSource;
@@ -60,7 +40,11 @@ namespace MpWpfApp {
                     if (IgnoreClipboardChangeEvent) {
                         //do nothing
                     } else {
-                        OnClipboardChanged();
+                        if(MpApp.IsAppRejectedByHandle(LastWindowWatcher.LastHandle)) {
+                            Console.WriteLine("Clipboard Monitor: Ignoring app '" + MpHelpers.GetProcessPath(hwnd) + "' with handle: " + hwnd);
+                        } else {
+                            OnClipboardChanged();
+                        }
                     }
                     WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
                     break;

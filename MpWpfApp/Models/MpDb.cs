@@ -426,7 +426,7 @@ namespace MpWpfApp {
                     , IsGlobal integer NOT NULL DEFAULT 0
                     , CONSTRAINT FK_MpCommand_2_0 FOREIGN KEY (fk_MpCopyItemid) REFERENCES MpCopyItem (pk_MpCommandItemId)
                     );
-                    INSERT INTO MpCommand(CommandName,IsGlobal,KeyList) VALUES('Show Window',1,'Control+Shift+D'),('Hide Window',0,'Escape'),('Append Mode',1,'Control+A,Control+A'),('Auto-Copy Mode',1,'Control+C,Control+C'),('Right-Click Paste Mode',1,'Control+P,Control+P'),('Paste Selected Clip',0,'Enter'),('Delete Selected Clip',0,'Delete'),('Search',0,'Search'),('Select Next',0,'Right'),('Select Previous',0,'Left'),('Select All',0,'Control+A'),('Invert Selection',0,'Control+Shift+A');
+                    INSERT INTO MpCommand(CommandName,IsGlobal,KeyList) VALUES('Show Window',1,'Control+Shift+D'),('Hide Window',0,'Escape'),('Append Mode',1,'Control+A,Control+A'),('Auto-Copy Mode',1,'Control+C,Control+C'),('Right-Click Paste Mode',1,'Control+P,Control+P'),('Paste Selected Clip',0,'Enter'),('Delete Selected Clip',0,'Delete'),('Search',0,'S'),('Select Next',0,'Right'),('Select Previous',0,'Left'),('Select All',0,'Control+A'),('Invert Selection',0,'Control+Shift+A');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpDeviceType (
                       pk_MpDeviceTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

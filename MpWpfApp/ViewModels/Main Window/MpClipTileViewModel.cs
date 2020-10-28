@@ -703,13 +703,12 @@ namespace MpWpfApp {
                         break;
                 }
             };
+            ClipTrayViewModel = parent;
             IsLoading = true;
             CopyItem = ci;
             foreach(MpCommand cmd in MpCommand.GetCommandByCopyItemId(CopyItem.CopyItemId)) {
                 RegisterHotKeyCommand(cmd);
             }
-            //Hotkey = 
-            ClipTrayViewModel = parent;
             Title = ci.Title;
             TitleColor = new SolidColorBrush(ci.ItemColor.Color);
             Icon = ci.App.Icon.IconImage;
@@ -1000,6 +999,39 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+        private RelayCommand _excludeApplicationCommand;
+        public ICommand ExcludeApplicationCommand {
+            get {
+                if(_excludeApplicationCommand == null) {
+                    _excludeApplicationCommand = new RelayCommand(ExcludeApplication,CanExcludeApplication);
+                }
+                return _excludeApplicationCommand;
+            }
+        }
+        private bool CanExcludeApplication() {
+            return ClipTrayViewModel.SelectedClipTiles.Count == 1;
+        }
+        private void ExcludeApplication() {
+            MessageBoxResult confirmExclusionResult = MessageBox.Show("Warning! This will delete all clips from the application. Are you sure you want to exclude '"+CopyItem.App.AppPath+"'?", "Confirm Exclusion", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
+            if (confirmExclusionResult == MessageBoxResult.Yes) {
+                MpApp appToReject = CopyItem.App;
+                var clipTilesToRemove = new List<MpClipTileViewModel>();
+                foreach(MpClipTileViewModel ctvm in ClipTrayViewModel) {
+                    if(ctvm.CopyItemAppId == appToReject.AppId) {
+                        clipTilesToRemove.Add(ctvm);
+                    }
+                }
+                appToReject.IsAppRejected = true;
+                appToReject.WriteToDatabase();
+                foreach(MpClipTileViewModel ctToRemove in clipTilesToRemove) {
+                    ClipTrayViewModel.Remove(ctToRemove);
+                    ctToRemove.CopyItem.DeleteFromDatabase();
+                }
+            } else {
+                //do nothing
+            }
+        }
+
         private RelayCommand _assignHotkeyCommand;
         public ICommand AssignHotkeyCommand {
             get {

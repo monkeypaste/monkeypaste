@@ -95,7 +95,7 @@ namespace MpWpfApp {
             newItem.Title = Enum.GetName(typeof(MpCopyItemType), newItem.CopyItemType);
             newItem.CopyCount = 1;
             newItem.App = new MpApp(sourcePath, false);
-            newItem.AppId = newItem.App.appId;
+            newItem.AppId = newItem.App.AppId;
             newItem.Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
             newItem.ItemColor = new MpColor((int)tileColor.R, (int)tileColor.G, (int)tileColor.B, 255);
 
@@ -440,20 +440,20 @@ namespace MpWpfApp {
             bool isNew = false;
             if (App == null) {
                 App = new MpApp(SourcePath, false);
-                this.AppId = App.appId;
+                this.AppId = App.AppId;
             }
             if (this.AppId == 0) {
                 DataTable dt = MpDb.Instance.Execute("select * from MpApp where pk_MpAppId=" + AppId);
                 if (dt != null && dt.Rows.Count > 0) {
                     this.App = new MpApp(dt.Rows[0]);
-                    this.App.appId = 0;
+                    this.App.AppId = 0;
                 } else {
                     //this case occur
                     //Console.WriteLine("MpCopyItem Error: error retrieving MpApp with id " + appId);
                 }
             }
             App.WriteToDatabase();
-            this.AppId = this.App.appId;
+            this.AppId = this.App.AppId;
 
             if (ItemColor == null) {
                 throw new Exception("MpCopyItem exception writing without color created");

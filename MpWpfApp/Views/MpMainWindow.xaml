@@ -692,6 +692,8 @@
                                                   Command="{Binding Data.SendSelectedClipTilesToBackCommand, Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Assign Hotkey"
                                                   Command="{Binding AssignHotkeyCommand}" />
+                                        <MenuItem Header="Exclude Application"
+                                                  Command="{Binding ExcludeApplicationCommand}" />
                                         <MenuItem Header="Export To">
                                             <MenuItem Header="File(s)..."
                                                       Command="{Binding Data.ExportSelectedClipTilesCommand,Source={StaticResource ClipTrayProxy}}"
