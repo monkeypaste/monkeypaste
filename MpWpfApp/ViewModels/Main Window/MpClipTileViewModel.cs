@@ -1,21 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data;
-using System.IO;
-using System.Reflection;
-using System.Speech.Synthesis;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using GalaSoft.MvvmLight.CommandWpf;
-using Gma.System.MouseKeyHook;
-using GongSolutions.Wpf.DragDrop.Utilities;
+﻿namespace MpWpfApp {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Data;
+    using System.IO;
+    using System.Reflection;
+    using System.Speech.Synthesis;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Documents;
+    using System.Windows.Input;
+    using System.Windows.Interop;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
+    using GalaSoft.MvvmLight.CommandWpf;
+    using Gma.System.MouseKeyHook;
+    using GongSolutions.Wpf.DragDrop.Utilities;
+    using NativeCode;
+    using Windows.ApplicationModel.DataTransfer;
+    using Windows.Storage;
 
-namespace MpWpfApp {
     public class MpClipTileViewModel : MpViewModelBase {
         #region Private Variables
 
@@ -999,6 +1003,46 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+        private RelayCommand _shareClipCommand;
+        public ICommand ShareClipCommand {
+            get {
+                if (_shareClipCommand == null) {
+                    _shareClipCommand = new RelayCommand(ShareClip, CanShareClip);
+                }
+                return _shareClipCommand;
+            }
+        }
+        private bool CanShareClip() {
+            return ClipTrayViewModel.SelectedClipTiles.Count == 1;
+        }
+        private void ShareClip() {
+            ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
+            IntPtr windowHandle = new WindowInteropHelper(Application.Current.MainWindow).Handle;
+            var dtmHelper = new DataTransferManagerHelper(windowHandle);
+            dtmHelper.DataTransferManager.DataRequested += (s, e) => {
+                DataPackage dp = e.Request.Data;
+                dp.Properties.Title = Title;
+                switch(CopyItemType) {
+                    case MpCopyItemType.RichText:
+                        dp.SetText(MpHelpers.ConvertRichTextToPlainText(this.RichText));
+                        break;
+                    case MpCopyItemType.FileList:
+                    case MpCopyItemType.Image:
+                        var filesToShare = new List<IStorageItem>();
+                        foreach(string path in CopyItem.GetFileList()) {
+                            //StorageFile sf = StorageFile.
+                            //filesToShare.Add(sf);
+                        }
+
+                        dp.SetStorageItems(filesToShare);
+                        break;
+                }
+            };
+
+            dtmHelper.ShowShareUI();
+            //ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
+        }
+
         private RelayCommand _excludeApplicationCommand;
         public ICommand ExcludeApplicationCommand {
             get {
@@ -1012,23 +1056,26 @@ namespace MpWpfApp {
             return ClipTrayViewModel.SelectedClipTiles.Count == 1;
         }
         private void ExcludeApplication() {
-            MessageBoxResult confirmExclusionResult = MessageBox.Show("Warning! This will delete all clips from the application. Are you sure you want to exclude '"+CopyItem.App.AppPath+"'?", "Confirm Exclusion", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-            if (confirmExclusionResult == MessageBoxResult.Yes) {
+            MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + CopyItem.App.AppPath + "'","Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
+            if(confirmExclusionResult == MessageBoxResult.Cancel) {
+                //do nothing
+            }
+            else {
                 MpApp appToReject = CopyItem.App;
-                var clipTilesToRemove = new List<MpClipTileViewModel>();
-                foreach(MpClipTileViewModel ctvm in ClipTrayViewModel) {
-                    if(ctvm.CopyItemAppId == appToReject.AppId) {
-                        clipTilesToRemove.Add(ctvm);
+                if (confirmExclusionResult == MessageBoxResult.Yes) {
+                    var clipTilesToRemove = new List<MpClipTileViewModel>();
+                    foreach (MpClipTileViewModel ctvm in ClipTrayViewModel) {
+                        if (ctvm.CopyItemAppId == appToReject.AppId) {
+                            clipTilesToRemove.Add(ctvm);
+                        }
+                    }
+                    foreach (MpClipTileViewModel ctToRemove in clipTilesToRemove) {
+                        ClipTrayViewModel.Remove(ctToRemove);
+                        ctToRemove.CopyItem.DeleteFromDatabase();
                     }
                 }
                 appToReject.IsAppRejected = true;
                 appToReject.WriteToDatabase();
-                foreach(MpClipTileViewModel ctToRemove in clipTilesToRemove) {
-                    ClipTrayViewModel.Remove(ctToRemove);
-                    ctToRemove.CopyItem.DeleteFromDatabase();
-                }
-            } else {
-                //do nothing
             }
         }
 
