@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using System.Windows;
+using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpSystemTrayViewModel : MpViewModelBase {
@@ -27,6 +29,39 @@ namespace MpWpfApp {
         }
 
         public void SystemTrayTaskbarIcon_Loaded(object sender, RoutedEventArgs e) {
+        }
+        #endregion
+
+        #region Commands
+        private RelayCommand _exitApplicationCommand;
+        public ICommand ExitApplicationCommand {
+            get {
+                if (_exitApplicationCommand == null) {
+                    _exitApplicationCommand = new RelayCommand(ExitApplication);
+                }
+                return _exitApplicationCommand;
+            }
+        }
+        private void ExitApplication() {
+            Application.Current.Shutdown();
+        }
+
+        private RelayCommand _showSettingsWindowCommand;
+        public ICommand ShowSettingsWindowCommand {
+            get {
+                if (_showSettingsWindowCommand == null) {
+                    _showSettingsWindowCommand = new RelayCommand(ShowSettingsWindow);
+                }
+                return _showSettingsWindowCommand;
+            }
+        }
+        private void ShowSettingsWindow() {
+            MainWindowViewModel.IsShowingDialog = true;
+            MpSettingsWindow sw = new MpSettingsWindow();
+            var swvm = (MpSettingsWindowViewModel)sw.DataContext;
+            swvm.Init(this);
+            sw.ShowDialog();
+            MainWindowViewModel.IsShowingDialog = false;
         }
         #endregion
     }

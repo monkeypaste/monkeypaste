@@ -11,19 +11,7 @@ using System.Windows.Media.Animation;
 
 namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase {
-        #region Private Variables
-        private double _startMainWindowTop;
-        private double _endMainWindowTop;
-        #endregion
-
-        #region Public Variables
-
-        public bool IsShowingDialog = false;
-
-        public IKeyboardMouseEvents GlobalHook { get; set; }
-        #endregion
-
-        #region Properties
+        #region View Models
         private MpSystemTrayViewModel _systemTrayViewModel = null;
         public MpSystemTrayViewModel SystemTrayViewModel {
             get {
@@ -101,6 +89,21 @@ namespace MpWpfApp {
                 }
             }
         }
+        #endregion
+
+        #region Private Variables
+        private double _startMainWindowTop;
+        private double _endMainWindowTop;
+        #endregion
+
+        #region Public Variables
+
+        public bool IsShowingDialog = false;
+
+        public IKeyboardMouseEvents GlobalHook { get; set; }
+        #endregion
+
+        #region Properties       
 
         private bool _isLoading = true;
         public bool IsLoading {
@@ -157,6 +160,7 @@ namespace MpWpfApp {
             ClipTileSortViewModel = new MpClipTileSortViewModel(this);
             AppModeViewModel = new MpAppModeViewModel(this);
             TagTrayViewModel = new MpTagTrayViewModel(this);
+            SystemTrayViewModel = new MpSystemTrayViewModel(this);
         }
 
         public void MainWindow_Loaded(object sender, RoutedEventArgs e) {           
@@ -288,73 +292,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-
-        private RelayCommand exitCommand;
-        public ICommand ExitCommand {
-            get {
-                if (exitCommand == null) {
-                    exitCommand = new RelayCommand(Exit);
-                }
-                return exitCommand;
-            }
-        }
-        private void Exit() {
-            Application.Current.Shutdown();
-        }
-
-        private RelayCommand closedCommand;
-        public ICommand ClosedCommand {
-            get {
-                if (closedCommand == null) {
-                    closedCommand = new RelayCommand(Closed);
-                }
-                return closedCommand;
-            }
-        }
-        private void Closed() {
-            //log.Add("You won't see this of course! Closed command executed");
-            //MessageBox.Show("Closed");
-        }
-
-        private RelayCommand closingCommand;
-        public ICommand ClosingCommand {
-            get {
-                if (closingCommand == null) {
-                    closingCommand = new RelayCommand(
-                        ExecuteClosing, CanExecuteClosing);
-                }
-                return closingCommand;
-            }
-        }
-        private void ExecuteClosing() {
-            //log.Add("Closing command executed");
-            MessageBox.Show("Closing");
-        }
-        private bool CanExecuteClosing() {
-            //log.Add("Closing command execution check");
-
-            return MessageBox.Show("OK to close?", "Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
-        }
-
-        private RelayCommand cancelClosingCommand;
-        public ICommand CancelClosingCommand {
-            get {
-                if (cancelClosingCommand == null) {
-                    cancelClosingCommand = new RelayCommand(CancelClosing);
-                }
-                return cancelClosingCommand;
-            }
-        }
-        private void CancelClosing() {
-            MessageBox.Show("CancelClosing");
-        }
-
-        public ICommand ExitApplicationCommand {
-            get {
-                return new RelayCommand(Application.Current.Shutdown);
-            }
-        }
-
         private RelayCommand _showWindowCommand;
         public ICommand ShowWindowCommand {
             get {
@@ -429,7 +366,6 @@ namespace MpWpfApp {
             ta.EasingFunction = easing;
             mw.BeginAnimation(Window.TopProperty, ta);
         }
-
         #endregion
     }
 }

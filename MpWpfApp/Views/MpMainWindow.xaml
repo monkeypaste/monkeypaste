@@ -11,9 +11,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:local="clr-namespace:MpWpfApp"
-        local:MpWindowClosingBehavior.Closed="{Binding ClosedCommand}"
-        local:MpWindowClosingBehavior.Closing="{Binding ClosingCommand}"
-        local:MpWindowClosingBehavior.CancelClosing="{Binding CancelClosingCommand}"
         Title="MpMainWindow"
         WindowStyle="None"        
         Top="10000"
@@ -237,8 +234,8 @@
             </tb:TaskbarIcon.TrayPopup>
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu Background="LightCoral">
-                    <MenuItem Header="First Menu Item" />
-                    <MenuItem Header="Second Menu Item" />
+                    <MenuItem Header="Settings" Command="{Binding ShowSettingsWindowCommand}"/>
+                    <MenuItem Header="Exit" Command="{Binding ExitApplicationCommand}"/>
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
             <tb:TaskbarIcon.TrayToolTip>

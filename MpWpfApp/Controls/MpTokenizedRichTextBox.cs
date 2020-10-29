@@ -237,6 +237,16 @@ namespace MpWpfApp {
                 case MpSubTextTokenType.PhoneNumber:
                     tokenLink.NavigateUri = new Uri("tel:" + tokenText);
                     break;
+                case MpSubTextTokenType.Currency:
+                    //"https://www.google.com/search?q=%24500.80+to+yen"
+                    MenuItem convertCurrencyMenuItem = new MenuItem();
+                    convertCurrencyMenuItem.Header = "Convert Currency";
+                    convertCurrencyMenuItem.Click += (s, e2) => {
+                        ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).HideWindowCommand.Execute(null);
+                        System.Diagnostics.Process.Start(@"https://www.google.com/search?q=%24" + System.Uri.EscapeDataString(tokenText.Replace("$",string.Empty)) + "+to+yen");                        
+                    };
+                    tokenLink.ContextMenu.Items.Add(convertCurrencyMenuItem);
+                    break;
                 default:
 
                     break;
