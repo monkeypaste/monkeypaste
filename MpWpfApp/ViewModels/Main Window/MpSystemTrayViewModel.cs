@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using Hardcodet.Wpf.TaskbarNotification;
 using System.Windows;
 using System.Windows.Input;
 
@@ -29,6 +30,10 @@ namespace MpWpfApp {
         }
 
         public void SystemTrayTaskbarIcon_Loaded(object sender, RoutedEventArgs e) {
+            var taskbarIcon = (TaskbarIcon)sender;
+            taskbarIcon.TrayLeftMouseUp += (s, e1) => {
+                MainWindowViewModel.ShowWindowCommand.Execute(null);
+            };
         }
         #endregion
 

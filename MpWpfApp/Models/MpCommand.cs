@@ -20,7 +20,7 @@ namespace MpWpfApp {
         private List<List<Key>> _keyList = new List<List<Key>>();
 
         #region Static Methods
-        private static List<MpCommand> GetAllCommands() {
+        public static List<MpCommand> GetAllCommands() {
             List<MpCommand> commands = new List<MpCommand>();
             DataTable dt = MpDb.Instance.Execute("select * from MpCommand");
             if (dt != null && dt.Rows.Count > 0) {

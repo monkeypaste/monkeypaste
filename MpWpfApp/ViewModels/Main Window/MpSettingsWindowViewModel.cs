@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +9,43 @@ using System.Windows;
 using System.Windows.Input;
 
 namespace MpWpfApp {
+    // + Account
+    //   - Email Address (tb)
+    //   - Password (pb)
+    //   - Remember (cb)
+    //   - Register (link)
+    //   - Log In/Out (b)
+    //   - Devices (eg)
+    //   - Sync (b)
+
+    // + Preferences
+    //   - load on login (cb)
+    //   - Play sound notifiations (cb)
+    //   - Show Copy Notifications (cb)
+    //   - Show Append Change Notifications (cb)
+    //   - Theme Selection (dd)
+
+    // + Data
+    //   - Excluded Apps (eg)
+    //   - Import/Export Data (b)
+    //   - Reset Data (b)
+    //   - History Capacity (sb)
+    //   - Clipboard data types (cb's)
+    //   - Text recognition (msdb)
+    //   - Always Paste as Plain Text (cb)
+    //   - Db Statistics (labels)
+
+    // + Shortcuts
+    //   - Info box w/ tips & warnings
+    //   - Hotkeys (eg)
+    //   - Hotcorners (cc)
+
+    // + Help
+    //   - Keyboard shortcuts
+    //   - Support
+    //   - Send Feedback
+    //   - About Monkey Paste
+
     public class MpSettingsWindowViewModel : MpViewModelBase {
         #region View Models
         public MpSystemTrayViewModel SystemTrayViewModel { get; set; }
@@ -82,12 +120,39 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        private ObservableCollection<MpCommand> _commandList = new ObservableCollection<MpCommand>();
+        public ObservableCollection<MpCommand> CommandList {
+            get {
+                return _commandList;
+            }
+            set {
+                if(_commandList != value) {
+                    _commandList = value;
+                    OnPropertyChanged(nameof(CommandList));
+                }
+            }
+        }
         #endregion
 
         #region Public Methods
         public void SettingsWindow_Loaded(object sender, RoutedEventArgs e) {
             _windowRef = (Window)sender;
+            CommandList = new ObservableCollection<MpCommand>(MpCommand.GetAllCommands());
+            CommandList.CollectionChanged += (s, e1) => {
+                if(e1.OldItems != null && e1.OldItems.Count > 0) {
+                    foreach(MpCommand cmdToRemove in e1.OldItems) {
+                        cmdToRemove.DeleteFromDatabase();
+                    }
+                }
+                if (e1.NewItems != null && e1.NewItems.Count > 0) {
+                    foreach (MpCommand cmdToAdd in e1.NewItems) {
+                        cmdToAdd.WriteToDatabase();
+                    }
+                }
+            };
         }
+
         public void Init(MpSystemTrayViewModel stvm) {
             SystemTrayViewModel = stvm;
             SettingsPanel1Visibility = Visibility.Visible;
@@ -95,6 +160,20 @@ namespace MpWpfApp {
             SettingsPanel3Visibility = Visibility.Collapsed;
             SettingsPanel4Visibility = Visibility.Collapsed;
             SettingsPanel5Visibility = Visibility.Collapsed;
+        }
+        #endregion
+
+        #region Private Methods
+        private void SetLoadOnLogin(bool loadOnLogin) {
+            Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            string appName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
+            string appPath = ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).ClipTrayViewModel.ClipboardMonitor.LastWindowWatcher.ThisAppPath;
+            if (loadOnLogin) {
+                rk.SetValue(appName, appPath);
+            } else {
+                rk.DeleteValue(appName, false);
+            }
+            Console.WriteLine("App " + appName + " with path " + appPath + " has load on login set to: " + loadOnLogin);
         }
         #endregion
 
@@ -122,6 +201,9 @@ namespace MpWpfApp {
             }
         }
         private void SaveSettings() {
+            foreach(MpCommand cmd in CommandList) {
+                cmd.WriteToDatabase();
+            }
             _windowRef.Close();
         }
 

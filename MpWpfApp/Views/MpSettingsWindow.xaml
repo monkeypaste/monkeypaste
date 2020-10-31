@@ -81,7 +81,7 @@
                            Source="/MpWpfApp;component/Resources/info.png" />
                     <Label HorizontalAlignment="Center"
                            FontSize="16"
-                           Content="Data" />
+                           Content="Security" />
                 </StackPanel>
             </ToggleButton>
             <ToggleButton Grid.Column="3"
@@ -113,23 +113,37 @@
                 </StackPanel>
             </ToggleButton>
         </Grid>
-        <!-- Settings Panel -->
+        <!-- Account Panel -->
         <Grid Grid.Row="1"
               Visibility="{Binding SettingsPanel1Visibility}">
             <Label Content="Settings 1" />
         </Grid>
+        <!-- Preferences -->
         <Grid Grid.Row="1"
               Visibility="{Binding SettingsPanel2Visibility}">
-            <Label Content="Settings 2" />
         </Grid>
+        <!-- Data -->
         <Grid Grid.Row="1"
               Visibility="{Binding SettingsPanel3Visibility}">
             <Label Content="Settings 3" />
         </Grid>
+        <!-- Shortcuts -->
         <Grid Grid.Row="1"
               Visibility="{Binding SettingsPanel4Visibility}">
-            <Label Content="Settings 4" />
+            <DataGrid ItemsSource="{Binding CommandList}"
+                      HorizontalAlignment="Center"
+                      Margin="0,50,0,15"
+                      AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Action"
+                                        Binding="{Binding CommandName}" />
+                    <DataGridTextColumn Header="Shortcut" 
+                                        Binding="{Binding KeyList}"/>
+                    
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
+        <!-- Help -->
         <Grid Grid.Row="1"
               Visibility="{Binding SettingsPanel5Visibility}">
             <Label Content="Settings 5" />

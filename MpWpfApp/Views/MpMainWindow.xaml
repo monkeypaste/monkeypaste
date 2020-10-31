@@ -211,7 +211,7 @@
             <RowDefinition Height="{Binding ClipTrayHeight}"/>
         </Grid.RowDefinitions>
         <tb:TaskbarIcon x:Name="SystemTrayTaskbarIcon"
-                        DataContext="{Binding SystemTrayViewModel}"
+                        DataContext="{Binding SystemTrayViewModel}" 
                         IconSource="/MpWpfApp;component/Resources/monkey (2).ico"
                         ToolTipText="{Binding SystemTrayIconToolTipText}">
             <i:Interaction.Triggers>
@@ -219,23 +219,15 @@
                     <i:CallMethodAction MethodName="SystemTrayTaskbarIcon_Loaded"
                                         TargetObject="{Binding}" />
                 </i:EventTrigger>
-            </i:Interaction.Triggers>
-            <tb:TaskbarIcon.TrayPopup>
-                <Border Background="{StaticResource AppColorDark}"
-                        BorderBrush="{StaticResource AppColorLight}"
-                        BorderThickness="2"
-                        CornerRadius="4"
-                        Width="160"
-                        Height="40">
-                    <Button Content="Click Me!"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center" />
-                </Border>
-            </tb:TaskbarIcon.TrayPopup>
+            </i:Interaction.Triggers>            
             <tb:TaskbarIcon.ContextMenu>
-                <ContextMenu Background="LightCoral">
-                    <MenuItem Header="Settings" Command="{Binding ShowSettingsWindowCommand}"/>
-                    <MenuItem Header="Exit" Command="{Binding ExitApplicationCommand}"/>
+                <ContextMenu>
+                    <MenuItem Header="Settings" 
+                              Command="{Binding ShowSettingsWindowCommand}"/>
+                    <MenuItem Header="Pause" />
+                    <MenuItem Header="Help" />
+                    <MenuItem Header="Exit" 
+                              Command="{Binding ExitApplicationCommand}"/>
                 </ContextMenu>
             </tb:TaskbarIcon.ContextMenu>
             <tb:TaskbarIcon.TrayToolTip>
