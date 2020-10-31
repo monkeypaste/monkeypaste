@@ -117,8 +117,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Models\MpApp.cs" />
     <Compile Include="Models\MpClient.cs" />
-    <Compile Include="Models\MpCommand.cs" />
-    <Compile Include="Models\MpHotKey.cs" />
+    <Compile Include="Models\MpShortcut.cs" />
     <Compile Include="Models\MpColor.cs" />
     <Compile Include="Models\MpCopyItem.cs" />
     <Compile Include="Models\MpCopyItemTag.cs" />
@@ -137,7 +136,6 @@
     <Compile Include="Utils\MpExtraLargeIconLoader.cs" />
     <Compile Include="Utils\MpClipboardMonitor.cs" />
     <Compile Include="Utils\MpHelpers.cs" />
-    <Compile Include="Utils\MpHotKeyManager.cs" />
     <Compile Include="Utils\MpLastWindowWatcher.cs" />
     <Compile Include="Utils\MpMeasurements.cs" />
     <Compile Include="Utils\MpMouseKeyHook.cs" />
@@ -148,7 +146,7 @@
     <Compile Include="Utils\MpWindowClosingBehavior.cs" />
     <Compile Include="Utils\WinApi.cs" />
     <Compile Include="ViewModels\Base\MpCollectionViewModelBase.cs" />
-    <Compile Include="ViewModels\Main Window\MpAssignHotkeyModalWindowViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpAssignShortcutModalWindowViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpClipTileSortViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpFileListItemViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpClipTrayViewModel.cs" />

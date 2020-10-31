@@ -2,6 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:ii="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:MVVVMLightCommand="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         xmlns:s="clr-namespace:System;assembly=mscorlib"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
@@ -19,7 +21,7 @@
         <local:MpSettingsWindowViewModel />
     </Window.DataContext>
     <Window.Resources>
-        <local:MpVisibilityToBoolConverter x:Key="VisibilityToBoolConverter" />
+        <local:MpVisibilityToBoolConverter x:Key="VisibilityToBoolConverter" />        
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -130,16 +132,39 @@
         <!-- Shortcuts -->
         <Grid Grid.Row="1"
               Visibility="{Binding SettingsPanel4Visibility}">
-            <DataGrid ItemsSource="{Binding CommandList}"
+            <DataGrid x:Name="ShortcutDatagrid"
+                      DataContext="{Binding}"
+                      ItemsSource="{Binding CommandList, NotifyOnSourceUpdated=True}"
                       HorizontalAlignment="Center"
-                      Margin="0,50,0,15"
+                      SelectedIndex="{Binding SelectedShortcutIndex, Mode=TwoWay}"
+                      SelectionMode="Single"
+                      GridLinesVisibility="None"
+                      IsReadOnly="True"
+                      Margin="15"
                       AutoGenerateColumns="False">
+                <ii:Interaction.Triggers>
+                    <ii:EventTrigger EventName="MouseDoubleClick">
+                        <MVVVMLightCommand:EventToCommand Command="{Binding ReassignShortcutCommand}"/>
+                    </ii:EventTrigger>
+                </ii:Interaction.Triggers>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Action"
+                                        Width="200"
                                         Binding="{Binding CommandName}" />
-                    <DataGridTextColumn Header="Shortcut" 
-                                        Binding="{Binding KeyList}"/>
-                    
+                    <DataGridTextColumn Header="Shortcut"
+                                        Width="200"
+                                        Binding="{Binding KeyList, NotifyOnSourceUpdated=True}" />
+                    <DataGridTemplateColumn Width="30">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Background="White">
+                                    <Image Width="20"
+                                           Height="20" 
+                                           Source="/MpWpfApp;component/Resources/close.png" />
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

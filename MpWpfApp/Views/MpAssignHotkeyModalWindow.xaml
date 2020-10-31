@@ -14,7 +14,7 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
     <Window.DataContext>
-        <local:MpAssignHotkeyModalWindowViewModel />
+        <local:MpAssignShortcutModalWindowViewModel />
     </Window.DataContext>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">

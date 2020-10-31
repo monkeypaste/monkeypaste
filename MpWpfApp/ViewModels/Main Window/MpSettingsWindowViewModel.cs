@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using System.Windows;
 using System.Windows.Input;
 
@@ -121,8 +122,8 @@ namespace MpWpfApp {
             }
         }
 
-        private ObservableCollection<MpCommand> _commandList = new ObservableCollection<MpCommand>();
-        public ObservableCollection<MpCommand> CommandList {
+        private ObservableCollection<MpShortcut> _commandList = new ObservableCollection<MpShortcut>();
+        public ObservableCollection<MpShortcut> CommandList {
             get {
                 return _commandList;
             }
@@ -133,26 +134,38 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        private int _selectedShortcutIndex;
+        public int SelectedShortcutIndex {
+            get {
+                return _selectedShortcutIndex;
+            }
+            set {
+                if (_selectedShortcutIndex != value) {
+                    _selectedShortcutIndex = value;
+                    OnPropertyChanged(nameof(SelectedShortcutIndex));
+                }
+            }
+        }
         #endregion
 
         #region Public Methods
         public void SettingsWindow_Loaded(object sender, RoutedEventArgs e) {
             _windowRef = (Window)sender;
-            CommandList = new ObservableCollection<MpCommand>(MpCommand.GetAllCommands());
+            CommandList = new ObservableCollection<MpShortcut>(MpShortcut.GetAllCommands());
             CommandList.CollectionChanged += (s, e1) => {
                 if(e1.OldItems != null && e1.OldItems.Count > 0) {
-                    foreach(MpCommand cmdToRemove in e1.OldItems) {
+                    foreach(MpShortcut cmdToRemove in e1.OldItems) {
                         cmdToRemove.DeleteFromDatabase();
                     }
                 }
                 if (e1.NewItems != null && e1.NewItems.Count > 0) {
-                    foreach (MpCommand cmdToAdd in e1.NewItems) {
+                    foreach (MpShortcut cmdToAdd in e1.NewItems) {
                         cmdToAdd.WriteToDatabase();
                     }
                 }
             };
         }
-
         public void Init(MpSystemTrayViewModel stvm) {
             SystemTrayViewModel = stvm;
             SettingsPanel1Visibility = Visibility.Visible;
@@ -201,7 +214,7 @@ namespace MpWpfApp {
             }
         }
         private void SaveSettings() {
-            foreach(MpCommand cmd in CommandList) {
+            foreach(MpShortcut cmd in CommandList) {
                 cmd.WriteToDatabase();
             }
             _windowRef.Close();
@@ -218,6 +231,30 @@ namespace MpWpfApp {
         }
         private void ResetSettings() {
 
+        }
+
+        private RelayCommand _reassignShortcutCommand;
+        public ICommand ReassignShortcutCommand {
+            get {
+                if (_reassignShortcutCommand == null) {
+                    _reassignShortcutCommand = new RelayCommand(ReassignShortcut);
+                }
+                return _reassignShortcutCommand;
+            }
+        }
+        private void ReassignShortcut() {
+            SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
+            MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
+            var ahkmwvm = new MpAssignShortcutModalWindowViewModel(CommandList[SelectedShortcutIndex]);
+            ahkmw.DataContext = ahkmwvm;
+            ahkmw.ShowDialog();
+            if (ahkmwvm.Shortcut == null) {
+                //dialog was canceled ignore assignment changes
+            } else {
+                ahkmwvm.Shortcut.RegisterShortcutCommand(CommandList[SelectedShortcutIndex].Command);
+                CommandList[SelectedShortcutIndex] = ahkmwvm.Shortcut;
+            }
+            SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }
 
         private RelayCommand _clickSettingsPanel1Command;

@@ -113,15 +113,15 @@
         #endregion
 
         #region Properties
-        private MpHotKey _hotkey = null;
-        public MpHotKey Hotkey {
+        private MpShortcut _shortcut = null;
+        public MpShortcut Shortcut {
             get {
-                return _hotkey;
+                return _shortcut;
             }
             set {
-                if(_hotkey != value) {
-                    _hotkey = value;
-                    OnPropertyChanged(nameof(Hotkey));
+                if(_shortcut != value) {
+                    _shortcut = value;
+                    OnPropertyChanged(nameof(Shortcut));
                 }
             }
         }
@@ -710,8 +710,9 @@
             ClipTrayViewModel = parent;
             IsLoading = true;
             CopyItem = ci;
-            foreach(MpCommand cmd in MpCommand.GetCommandByCopyItemId(CopyItem.CopyItemId)) {
-                RegisterHotKeyCommand(cmd);
+            foreach(MpShortcut cmd in MpShortcut.GetCommandByCopyItemId(CopyItem.CopyItemId)) {
+                cmd.RegisterShortcutCommand(PasteClipCommand);
+                Shortcut = cmd;
             }
             Title = ci.Title;
             TitleColor = new SolidColorBrush(ci.ItemColor.Color);
@@ -928,32 +929,6 @@
             RtbVisibility = CopyItemType == MpCopyItemType.RichText ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        public bool RegisterHotKeyCommand(MpCommand cmd) {
-            try {
-                var combinationAssignments = new Dictionary<Combination, Action>();
-                var sequenceAssignments = new Dictionary<Sequence, Action>();
-
-                if (cmd.IsSequence()) {
-                    sequenceAssignments.Add(Sequence.FromString(cmd.KeyList), () => PasteClipCommand.Execute(null));
-                } else {
-                    combinationAssignments.Add(Combination.FromString(cmd.KeyList), () => PasteClipCommand.Execute(null));
-                }
-
-                if (sequenceAssignments.Count > 0) {
-                    ClipTrayViewModel.MainWindowViewModel.GlobalHook.OnSequence(sequenceAssignments);
-                }
-                if (combinationAssignments.Count > 0) {
-                    ClipTrayViewModel.MainWindowViewModel.GlobalHook.OnCombination(combinationAssignments);
-                }
-            }
-            catch (Exception ex) {
-                Console.WriteLine("Error creating cliptile hotkey: " + ex.ToString());
-                return false;
-            }
-            Console.WriteLine("HotKey Successfully registered for ClipTile; '" + Title + "' with hotkeys: " + cmd.KeyList);
-            return true;
-        }
-
         public void ContextMenuMouseLeftButtonUpOnSearchGoogle() {
             System.Diagnostics.Process.Start(@"https://www.google.com/search?q=" + System.Uri.EscapeDataString(PlainText));
         }
@@ -1091,13 +1066,13 @@
         private void AssignHotkey() {
             ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
             MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
-            var ahkmwvm = (MpAssignHotkeyModalWindowViewModel)ahkmw.DataContext;
-            ahkmwvm.Init(PasteClipCommand, Title, this);
+            ahkmw.DataContext = new MpAssignShortcutModalWindowViewModel(Shortcut);
+            //ahkmw.DataContext = ahkmwvm;
             ahkmw.ShowDialog();
-            if(ahkmwvm.Command == null) {
+            if(((MpAssignShortcutModalWindowViewModel)ahkmw.DataContext).Shortcut == null) {
                 //dialog was canceled ignore assignment changes
             } else {
-                RegisterHotKeyCommand(ahkmwvm.Command);
+                ((MpAssignShortcutModalWindowViewModel)ahkmw.DataContext).Shortcut.RegisterShortcutCommand(PasteClipCommand);
             }
         }
 

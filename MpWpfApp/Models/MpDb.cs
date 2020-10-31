@@ -418,15 +418,15 @@ namespace MpWpfApp {
                     , IconBlob image NOT NULL
                     );
                     ---------------------------------------------------------------------------------------------------------------------                    
-                    CREATE TABLE MpCommand (
-                      pk_MpCommandId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    CREATE TABLE MpShortcut (
+                      pk_MpShortcutId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemid INTEGER DEFAULT 0
                     , CommandName text NOT NULL                    
                     , KeyList text NULL       
                     , IsGlobal integer NOT NULL DEFAULT 0
-                    , CONSTRAINT FK_MpCommand_2_0 FOREIGN KEY (fk_MpCopyItemid) REFERENCES MpCopyItem (pk_MpCommandItemId)
+                    , CONSTRAINT FK_MpShortcut_2_0 FOREIGN KEY (fk_MpCopyItemid) REFERENCES MpCopyItem (pk_MpShortcutItemId)
                     );
-                    INSERT INTO MpCommand(CommandName,IsGlobal,KeyList) VALUES('Show Window',1,'Control+Shift+D'),('Hide Window',0,'Escape'),('Append Mode',1,'Control+A,Control+A'),('Auto-Copy Mode',1,'Control+C,Control+C'),('Right-Click Paste Mode',1,'Control+P,Control+P'),('Paste Selected Clip',0,'Enter'),('Delete Selected Clip',0,'Delete'),('Search',0,'S'),('Select Next',0,'Right'),('Select Previous',0,'Left'),('Select All',0,'Control+A'),('Invert Selection',0,'Control+Shift+A');
+                    INSERT INTO MpShortcut(CommandName,IsGlobal,KeyList) VALUES('Show Window',1,'Control+Shift+D'),('Hide Window',0,'Escape'),('Append Mode',1,'Control+Shift+A'),('Auto-Copy Mode',1,'Control+Shift+C'),('Right-Click Paste Mode',1,'Control+Shift+R'),('Paste Selected Clip',0,'Enter'),('Delete Selected Clip',0,'Delete'),('Search',0,'S'),('Select Next',0,'Right'),('Select Previous',0,'Left'),('Select All',0,'Control+A'),('Invert Selection',0,'Control+Shift+Alt+A');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpDeviceType (
                       pk_MpDeviceTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -567,8 +567,7 @@ namespace MpWpfApp {
                 select * from MpTagType where pk_MpTagTypeId > 0;
                 select * from MpTag where pk_MpTag > 0; 
                 select * from MpSetting where pk_MpSetting > 0; 
-                select * from MpHotKey where pk_MpHotKey > 0; 
-                select * from MpCommand where pk_MpCommand > 0; 
+                select * from MpShortcut where pk_MpShortcut > 0; 
                 select * from MpColor where pk_MpColor > 0
             ";
         }
@@ -587,8 +586,7 @@ namespace MpWpfApp {
                 delete from MpTagType where pk_MpTagTypeId > 0;
                 delete from MpTag where pk_MpTag > 0; 
                 delete from MpSetting where pk_MpSetting > 0; 
-                delete from MpHotKey where pk_MpHotKey > 0; 
-                delete from MpCommand where pk_MpCommand > 0; 
+                delete from MpShortcut where pk_MpShortcut > 0; 
                 delete from MpColor where pk_MpColor > 0
             ";
         }
@@ -607,8 +605,7 @@ namespace MpWpfApp {
                 drop table if exists MpTagType;
                 drop table if exists MpTag; 
                 drop table if exists MpSetting; 
-                drop table if exists MpHotKey; 
-                drop table if exists MpCommand; 
+                drop table if exists MpShortcut; 
                 drop table if exists MpColor;
             ";
         }
