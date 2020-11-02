@@ -69,10 +69,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpAssignShortcutModalWindowViewModel(MpShortcut shortcut) {
+        public void Init(MpShortcut shortcut) {
             Shortcut = shortcut;
-            CommandTypeName = "'" + Shortcut.CommandName + "'";
+            CommandTypeName = "'" + Shortcut.ShortcutName + "'";
             KeysString = Shortcut.KeyList;
+            _isSeqComplete = true;
         }
         public void AssignHotkeyModalWindow_Loaded(object sender, RoutedEventArgs e) {
             _windowRef = (Window)sender;
@@ -84,10 +85,6 @@ namespace MpWpfApp {
                     _isSeqComplete = false;
                     _isNewCombination = true;
                 }
-                //bool isModKey = true;
-                //if ((e1.Key != Key.LeftCtrl && e1.Key != Key.RightCtrl && e1.Key != Key.LeftAlt && e1.Key != Key.RightAlt && e1.Key != Key.LeftShift && e1.Key != Key.RightShift && e1.Key != Key.LWin && e1.Key != Key.RWin)) {
-                //    isModKey = false;
-                //}
                 int precount = Shortcut.KeyList.Length;
                 if (e1.KeyboardDevice.IsKeyDown(Key.LeftCtrl)) {
                     Shortcut.AddKey(Key.LeftCtrl,_isNewCombination && Shortcut.KeyList.Length == precount);
@@ -131,11 +128,8 @@ namespace MpWpfApp {
             };
 
             _windowRef.PreviewKeyUp += (s, e1) => {
-                //Command.HotKeyList.Add(_currentHotKey);
                 _isNewCombination = true;
                 KeysString = Shortcut.KeyList;
-                Console.WriteLine("KeyString: " + KeysString);
-
                 seqTimer.Start();
             };
 

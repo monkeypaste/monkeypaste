@@ -4,17 +4,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpShortcut : MpDbObject {
         private static List<MpShortcut> _CommandList = new List<MpShortcut>();
 
-        public int CommandId { get; set; } = 0;
-        public string CommandName { get; set; } = "None";
-        public string KeyList { get; private set; } = string.Empty;
+        public int ShortcutId { get; set; } = 0;
+        public string ShortcutName { get; set; } = "None";
+        public string KeyList { get; set; } = string.Empty;
         public bool IsGlobal { get; set; } = false;
         public int CopyItemId { get; set; } = 0;
 
@@ -23,7 +21,7 @@ namespace MpWpfApp {
         private List<List<Key>> _keyList = new List<List<Key>>();
 
         #region Static Methods
-        public static List<MpShortcut> GetAllCommands() {
+        public static List<MpShortcut> GetAllShortcuts() {
             List<MpShortcut> commands = new List<MpShortcut>();
             DataTable dt = MpDb.Instance.Execute("select * from MpShortcut");
             if (dt != null && dt.Rows.Count > 0) {
@@ -33,22 +31,22 @@ namespace MpWpfApp {
             }
             return commands;
         }
-        public static List<MpShortcut> GetCommandByName(string commandName) {
-            return GetAllCommands().Where(x => x.CommandName == commandName).ToList();
+        public static List<MpShortcut> GetShortcutByName(string shortcutName) {
+            return GetAllShortcuts().Where(x => x.ShortcutName == shortcutName).ToList();
         }
-        public static List<MpShortcut> GetCommandByCopyItemId(int copyItemId) {
-            return GetAllCommands().Where(x => x.CopyItemId == copyItemId).ToList();
+        public static List<MpShortcut> GetShortcutByCopyItemId(int copyItemId) {
+            return GetAllShortcuts().Where(x => x.CopyItemId == copyItemId).ToList();
         }
         #endregion
         #region Public Methods
         public MpShortcut() {
-            CommandId = 0;
-            CommandName = "None";
+            ShortcutId = 0;
+            ShortcutName = "None";
             Command = null;
             KeyList = string.Empty;
             _keyList = new List<List<Key>>();
             IsGlobal = false;
-            CopyItemId = 0;
+            CopyItemId = -1;
         }
         public MpShortcut(int hkId) {
             DataTable dt = MpDb.Instance.Execute("select * from MpShortcut where pk_MpShortcutId=" + hkId);
@@ -83,9 +81,8 @@ namespace MpWpfApp {
                 Console.WriteLine("Error creating shortcut: " + ex.ToString());
                 return false;
             }
-            Console.WriteLine("Shortcut Successfully registered for '" + CommandName + "' with hotkeys: " + KeyList);
+            Console.WriteLine("Shortcut Successfully registered for '" + ShortcutName + "' with hotkeys: " + KeyList);
             Command = icommand;
-            WriteToDatabase();
             return true;
         }
         public void AddKey(Key key,bool isNewCombination) {
@@ -123,26 +120,28 @@ namespace MpWpfApp {
         }
 
         public override void LoadDataRow(DataRow dr) {
-            CommandId = Convert.ToInt32(dr["pk_MpShortcutId"].ToString());
+            ShortcutId = Convert.ToInt32(dr["pk_MpShortcutId"].ToString());
             CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemid"].ToString());
-            CommandName = dr["CommandName"].ToString();
+            ShortcutName = dr["ShortcutName"].ToString();
             KeyList = dr["KeyList"].ToString();
             IsGlobal = Convert.ToInt32(dr["IsGlobal"].ToString()) == 1;
 
         }
         public override void WriteToDatabase() {
-            if (CommandId == 0) {
-                MpDb.Instance.ExecuteNonQuery("insert into MpShortcut(CommandName,IsGlobal,KeyList) VALUES('" + CommandName + "'," + (IsGlobal == true ? 1:0) + ",'" + KeyList + "')"); ;
-                CommandId = MpDb.Instance.GetLastRowId("MpShortcut", "pk_MpShortcutId");
-            } 
+            if (ShortcutId == 0) {
+                MpDb.Instance.ExecuteNonQuery("insert into MpShortcut(ShortcutName,IsGlobal,KeyList) VALUES('" + ShortcutName + "'," + (IsGlobal == true ? 1:0) + ",'" + KeyList + "')"); ;
+                ShortcutId = MpDb.Instance.GetLastRowId("MpShortcut", "pk_MpShortcutId");
+            } else {
+                MpDb.Instance.ExecuteNonQuery("update MpShortcut set ShortcutName='" + ShortcutName + "', KeyList='" + KeyList + "' where pk_MpShortcutId=" + ShortcutId);
+            }
         }
         public void DeleteFromDatabase() {
-            MpDb.Instance.ExecuteNonQuery("delete from MpShortcut where pk_MpShortcutId=" + this.CommandId);
+            MpDb.Instance.ExecuteNonQuery("delete from MpShortcut where pk_MpShortcutId=" + this.ShortcutId);
         }
         private void MapDataToColumns() {
             TableName = "MpShortcut";
             columnData.Clear();
-            columnData.Add("pk_MpShortcutId", this.CommandId);
+            columnData.Add("pk_MpShortcutId", this.ShortcutId);
         }
         public bool IsSequence() {
             return KeyList.Contains(",");
@@ -152,7 +151,7 @@ namespace MpWpfApp {
             _keyList = new List<List<Key>>();
         }
         public override string ToString() {
-            string outStr = "Command Name: " + CommandName;
+            string outStr = "Command Name: " + ShortcutName;
             outStr += " " + KeyList;
             return outStr;
         }

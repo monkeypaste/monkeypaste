@@ -1,0 +1,82 @@
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
+
+namespace MpWpfApp {
+    public class MpShortcutViewModel : MpViewModelBase {
+        private string _keyList = string.Empty;
+        public string KeyList {
+            get {
+                return _keyList;
+            }
+            set {
+                if(_keyList != value) {
+                    _keyList = value;
+                    Shortcut.KeyList = _keyList;
+                    OnPropertyChanged(nameof(KeyList));
+                }
+            }
+        }
+        private string _shortcutName = string.Empty;
+        public string ShortcutName {
+            get {
+                return _shortcutName;
+            }
+            set {
+                if (_shortcutName != value) {
+                    _shortcutName = value;
+                    Shortcut.ShortcutName = _shortcutName;
+                    OnPropertyChanged(nameof(ShortcutName));
+                }
+            }
+        }
+
+        private Visibility _deleteButtonVisibility;
+        public Visibility DeleteButtonVisibility {
+            get {
+                return _deleteButtonVisibility;
+            }
+            set {
+                if (_deleteButtonVisibility != value) {
+                    _deleteButtonVisibility = value;
+                    OnPropertyChanged(nameof(DeleteButtonVisibility));
+                }
+            }
+        }
+
+        private Visibility _resetButtonVisibility;
+        public Visibility ResetButtonVisibility {
+            get {
+                return _resetButtonVisibility;
+            }
+            set {
+                if (_resetButtonVisibility != value) {
+                    _resetButtonVisibility = value;
+                    OnPropertyChanged(nameof(ResetButtonVisibility));
+                }
+            }
+        }
+
+        public MpShortcut Shortcut { get; set; }
+
+        public MpShortcutViewModel(MpShortcut shortcut) {
+            Shortcut = shortcut;
+            KeyList = Shortcut.KeyList;
+            ShortcutName = Shortcut.ShortcutName;
+            //13 is the number of pre-created application shortcuts
+            if(Shortcut.ShortcutId < 13) {
+                ResetButtonVisibility = Visibility.Visible;
+                DeleteButtonVisibility = Visibility.Collapsed;
+            } else {
+                ResetButtonVisibility = Visibility.Collapsed;
+                DeleteButtonVisibility = Visibility.Visible;
+            }
+        }
+    }
+}

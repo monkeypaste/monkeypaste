@@ -258,7 +258,7 @@ namespace MpWpfApp {
                 var combinationAssignments = new Dictionary<Combination, Action>();
                 var sequenceAssignments = new Dictionary<Sequence, Action>();
 
-                var showMainWindowCommand = MpShortcut.GetCommandByName(Properties.Settings.Default.CmdNameShowWindow);
+                var showMainWindowCommand = MpShortcut.GetShortcutByName(Properties.Settings.Default.CmdNameShowWindow);
                 foreach (MpShortcut cmd in showMainWindowCommand) {
                     if (cmd.IsSequence()) {
                         sequenceAssignments.Add(Sequence.FromString(cmd.KeyList), () => ShowWindowCommand.Execute(null));
@@ -267,7 +267,7 @@ namespace MpWpfApp {
                     }
                 }
 
-                var hideMainWindowCommand = MpShortcut.GetCommandByName(Properties.Settings.Default.CmdNameHideWindow);
+                var hideMainWindowCommand = MpShortcut.GetShortcutByName(Properties.Settings.Default.CmdNameHideWindow);
                 foreach (MpShortcut cmd in hideMainWindowCommand) {
                     if (cmd.IsSequence()) {
                         sequenceAssignments.Add(Sequence.FromString(cmd.KeyList), () => HideWindowCommand.Execute(null));

@@ -710,7 +710,7 @@
             ClipTrayViewModel = parent;
             IsLoading = true;
             CopyItem = ci;
-            foreach(MpShortcut cmd in MpShortcut.GetCommandByCopyItemId(CopyItem.CopyItemId)) {
+            foreach(MpShortcut cmd in MpShortcut.GetShortcutByCopyItemId(CopyItem.CopyItemId)) {
                 cmd.RegisterShortcutCommand(PasteClipCommand);
                 Shortcut = cmd;
             }
@@ -1066,14 +1066,21 @@
         private void AssignHotkey() {
             ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
             MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
-            ahkmw.DataContext = new MpAssignShortcutModalWindowViewModel(Shortcut);
-            //ahkmw.DataContext = ahkmwvm;
+            var ahkmwvm = (MpAssignShortcutModalWindowViewModel)ahkmw.DataContext;
+            if(Shortcut == null) {
+                Shortcut = new MpShortcut();
+                Shortcut.ShortcutName = Title;
+                Shortcut.CopyItemId = CopyItem.CopyItemId;
+            }
+            ahkmwvm.Init(Shortcut);
             ahkmw.ShowDialog();
-            if(((MpAssignShortcutModalWindowViewModel)ahkmw.DataContext).Shortcut == null) {
+            if(ahkmwvm.Shortcut == null) {
                 //dialog was canceled ignore assignment changes
             } else {
-                ((MpAssignShortcutModalWindowViewModel)ahkmw.DataContext).Shortcut.RegisterShortcutCommand(PasteClipCommand);
+                ahkmwvm.Shortcut.RegisterShortcutCommand(PasteClipCommand);
+                ahkmwvm.Shortcut.WriteToDatabase();
             }
+            ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }
 
         private RelayCommand _pasteClipCommand;

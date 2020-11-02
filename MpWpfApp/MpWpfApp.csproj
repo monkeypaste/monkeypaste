@@ -154,6 +154,7 @@
     <Compile Include="ViewModels\Main Window\MpClipTileViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpRichTextTokenViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSettingsWindowViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpShortcutViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSortTypeComboBoxItemViewModel.cs" />
     <Compile Include="Views\MpSettingsWindow.xaml.cs">
       <DependentUpon>MpSettingsWindow.xaml</DependentUpon>

@@ -122,15 +122,15 @@ namespace MpWpfApp {
             }
         }
 
-        private ObservableCollection<MpShortcut> _commandList = new ObservableCollection<MpShortcut>();
-        public ObservableCollection<MpShortcut> CommandList {
+        private ObservableCollection<MpShortcutViewModel> _shortcutList = new ObservableCollection<MpShortcutViewModel>();
+        public ObservableCollection<MpShortcutViewModel> ShortcutList {
             get {
-                return _commandList;
+                return _shortcutList;
             }
             set {
-                if(_commandList != value) {
-                    _commandList = value;
-                    OnPropertyChanged(nameof(CommandList));
+                if(_shortcutList != value) {
+                    _shortcutList = value;
+                    OnPropertyChanged(nameof(ShortcutList));
                 }
             }
         }
@@ -152,16 +152,18 @@ namespace MpWpfApp {
         #region Public Methods
         public void SettingsWindow_Loaded(object sender, RoutedEventArgs e) {
             _windowRef = (Window)sender;
-            CommandList = new ObservableCollection<MpShortcut>(MpShortcut.GetAllCommands());
-            CommandList.CollectionChanged += (s, e1) => {
+            foreach(MpShortcut sc in MpShortcut.GetAllShortcuts()) {
+                ShortcutList.Add(new MpShortcutViewModel(sc));
+            }
+            ShortcutList.CollectionChanged += (s, e1) => {
                 if(e1.OldItems != null && e1.OldItems.Count > 0) {
-                    foreach(MpShortcut cmdToRemove in e1.OldItems) {
-                        cmdToRemove.DeleteFromDatabase();
+                    foreach(MpShortcutViewModel cmdToRemove in e1.OldItems) {
+                        cmdToRemove.Shortcut.DeleteFromDatabase();
                     }
                 }
                 if (e1.NewItems != null && e1.NewItems.Count > 0) {
-                    foreach (MpShortcut cmdToAdd in e1.NewItems) {
-                        cmdToAdd.WriteToDatabase();
+                    foreach (MpShortcutViewModel cmdToAdd in e1.NewItems) {
+                        cmdToAdd.Shortcut.WriteToDatabase();
                     }
                 }
             };
@@ -214,8 +216,8 @@ namespace MpWpfApp {
             }
         }
         private void SaveSettings() {
-            foreach(MpShortcut cmd in CommandList) {
-                cmd.WriteToDatabase();
+            foreach(MpShortcutViewModel cmd in ShortcutList) {
+                cmd.Shortcut.WriteToDatabase();
             }
             _windowRef.Close();
         }
@@ -245,16 +247,42 @@ namespace MpWpfApp {
         private void ReassignShortcut() {
             SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
             MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
-            var ahkmwvm = new MpAssignShortcutModalWindowViewModel(CommandList[SelectedShortcutIndex]);
-            ahkmw.DataContext = ahkmwvm;
+            var ahkmwvm = (MpAssignShortcutModalWindowViewModel)ahkmw.DataContext;
+            ahkmwvm.Init(ShortcutList[SelectedShortcutIndex].Shortcut);
             ahkmw.ShowDialog();
             if (ahkmwvm.Shortcut == null) {
                 //dialog was canceled ignore assignment changes
             } else {
-                ahkmwvm.Shortcut.RegisterShortcutCommand(CommandList[SelectedShortcutIndex].Command);
-                CommandList[SelectedShortcutIndex] = ahkmwvm.Shortcut;
+                ahkmwvm.Shortcut.RegisterShortcutCommand(ShortcutList[SelectedShortcutIndex].Shortcut.Command);
+                ShortcutList[SelectedShortcutIndex].KeyList = ahkmwvm.Shortcut.KeyList;
             }
             SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
+        }
+
+        private RelayCommand _deleteShortcutCommand;
+        public ICommand DeleteShortcutCommand {
+            get {
+                if (_deleteShortcutCommand == null) {
+                    _deleteShortcutCommand = new RelayCommand(DeleteShortcut);
+                }
+                return _deleteShortcutCommand;
+            }
+        }
+        private void DeleteShortcut() {
+            Console.WriteLine("Deleting row: " + SelectedShortcutIndex);
+        }
+
+        private RelayCommand _resetShortcutCommand;
+        public ICommand ResetShortcutCommand {
+            get {
+                if (_resetShortcutCommand == null) {
+                    _resetShortcutCommand = new RelayCommand(ResetShortcut);
+                }
+                return _deleteShortcutCommand;
+            }
+        }
+        private void ResetShortcut() {
+            Console.WriteLine("Reset row: " + SelectedShortcutIndex);
         }
 
         private RelayCommand _clickSettingsPanel1Command;
