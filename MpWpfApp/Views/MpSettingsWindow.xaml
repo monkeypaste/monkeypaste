@@ -132,7 +132,20 @@
         <!-- Shortcuts -->
         <Grid Grid.Row="1"
               Visibility="{Binding SettingsPanel4Visibility}">
-            <DataGrid x:Name="ShortcutDatagrid"
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.1*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Image Width="30"
+                       Source="/MpWpfApp;component/Resources/info.png" />
+                <Label HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Content="Changes will take affect upon application restart" />
+            </StackPanel>
+            <DataGrid Grid.Row="1" x:Name="ShortcutDatagrid"
                       DataContext="{Binding}"
                       ItemsSource="{Binding ShortcutList, NotifyOnSourceUpdated=True}"
                       HorizontalAlignment="Center"

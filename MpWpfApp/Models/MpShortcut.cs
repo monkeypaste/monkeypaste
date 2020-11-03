@@ -13,6 +13,7 @@ namespace MpWpfApp {
         public int ShortcutId { get; set; } = 0;
         public string ShortcutName { get; set; } = "None";
         public string KeyList { get; set; } = string.Empty;
+        public string DefaultKeyList { get; set; } = string.Empty;
         public bool IsGlobal { get; set; } = false;
         public int CopyItemId { get; set; } = 0;
 
@@ -44,6 +45,7 @@ namespace MpWpfApp {
             ShortcutName = "None";
             Command = null;
             KeyList = string.Empty;
+            DefaultKeyList = string.Empty;
             _keyList = new List<List<Key>>();
             IsGlobal = false;
             CopyItemId = -1;
@@ -57,23 +59,19 @@ namespace MpWpfApp {
         public MpShortcut(DataRow dr) {
             LoadDataRow(dr);
         }
-
+        public void Reset() {
+            KeyList = DefaultKeyList;
+        }
         public bool RegisterShortcutCommand(ICommand icommand) {
             try {
-                var combinationAssignments = new Dictionary<Combination, Action>();
-                var sequenceAssignments = new Dictionary<Sequence, Action>();
-
-                if (IsSequence()) {
-                    sequenceAssignments.Add(Sequence.FromString(KeyList), () => icommand.Execute(null));
-                } else {
-                    combinationAssignments.Add(Combination.FromString(KeyList), () => icommand.Execute(null));
-                }
-
                 var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
-                if (sequenceAssignments.Count > 0) {
+                if (IsSequence()) {
+                    var sequenceAssignments = new Dictionary<Sequence, Action>();
+                    sequenceAssignments.Add(Sequence.FromString(KeyList), () => icommand.Execute(null));
                     mwvm.GlobalHook.OnSequence(sequenceAssignments);
-                }
-                if (combinationAssignments.Count > 0) {
+                } else {
+                    var combinationAssignments = new Dictionary<Combination, Action>();
+                    combinationAssignments.Add(Combination.FromString(KeyList), () => icommand.Execute(null));
                     mwvm.GlobalHook.OnCombination(combinationAssignments);
                 }
             }
@@ -85,7 +83,7 @@ namespace MpWpfApp {
             Command = icommand;
             return true;
         }
-        public void AddKey(Key key,bool isNewCombination) {
+        public void AddKey(Key key, bool isNewCombination) {
             if(isNewCombination && KeyList.Length > 0) {
                 KeyList += ",";
                 _keyList.Add(new List<Key>());
@@ -124,15 +122,19 @@ namespace MpWpfApp {
             CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemid"].ToString());
             ShortcutName = dr["ShortcutName"].ToString();
             KeyList = dr["KeyList"].ToString();
+            DefaultKeyList = dr["DefaultKeyList"].ToString();
+            //this is used to set default application shortcuts when db is first made
+            if((KeyList == null || KeyList == string.Empty) && DefaultKeyList.Length > 0) {
+                KeyList = DefaultKeyList;
+            }
             IsGlobal = Convert.ToInt32(dr["IsGlobal"].ToString()) == 1;
-
         }
         public override void WriteToDatabase() {
             if (ShortcutId == 0) {
-                MpDb.Instance.ExecuteNonQuery("insert into MpShortcut(ShortcutName,IsGlobal,KeyList) VALUES('" + ShortcutName + "'," + (IsGlobal == true ? 1:0) + ",'" + KeyList + "')"); ;
+                MpDb.Instance.ExecuteNonQuery("insert into MpShortcut(ShortcutName,IsGlobal,KeyList,DefaultKeyList,fk_MpCopyItemid) VALUES('" + ShortcutName + "'," + (IsGlobal == true ? 1 : 0) + ",'" + KeyList + "','" + DefaultKeyList + "'," + CopyItemId + ")");
                 ShortcutId = MpDb.Instance.GetLastRowId("MpShortcut", "pk_MpShortcutId");
             } else {
-                MpDb.Instance.ExecuteNonQuery("update MpShortcut set ShortcutName='" + ShortcutName + "', KeyList='" + KeyList + "' where pk_MpShortcutId=" + ShortcutId);
+                MpDb.Instance.ExecuteNonQuery("update MpShortcut set ShortcutName='" + ShortcutName + "', KeyList='" + KeyList + "', DefaultKeyList='" + DefaultKeyList + "', fk_MpCopyItemid=" + CopyItemId + " where pk_MpShortcutId=" + ShortcutId);
             }
         }
         public void DeleteFromDatabase() {
@@ -151,7 +153,7 @@ namespace MpWpfApp {
             _keyList = new List<List<Key>>();
         }
         public override string ToString() {
-            string outStr = "Command Name: " + ShortcutName;
+            string outStr = "Shortcut Name: " + ShortcutName;
             outStr += " " + KeyList;
             return outStr;
         }
@@ -163,7 +165,7 @@ namespace MpWpfApp {
         HideWindow,
         AppendMode,
         AutoCopyMode,
-        RightClickPasteMode,
+        RightClickPasteMode, 
         PasteSelectedClip,
         DeleteSelectedClip,
         Search,

@@ -174,7 +174,7 @@ namespace MpWpfApp {
 
             InitWindowStyle();
 
-            InitHotKeys();
+            InitHotkeys();
 
 #if DEBUG
             ShowWindowCommand.Execute(null);
@@ -244,7 +244,7 @@ namespace MpWpfApp {
 
         }
 
-        private bool InitHotKeys() {
+        public override bool InitHotkeys() {
             try {
                 GlobalHook = Hook.GlobalEvents();
 

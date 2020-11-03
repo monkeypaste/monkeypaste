@@ -68,5 +68,10 @@ namespace MpWpfApp {
             };
             _ViewModelList.Add(this);
         }
+
+        public virtual bool InitHotkeys() {
+            //do nothing this is overriden in actual viewmodels
+            return true;
+        }
     }
 }

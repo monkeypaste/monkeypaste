@@ -28,6 +28,7 @@
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Label Grid.Row="0"
                FontSize="16"
@@ -44,15 +45,22 @@
                FontStyle="Oblique"
                HorizontalAlignment="Center"
                Text="{Binding KeysString}" />
-        <Grid Grid.Row="3">
+        <TextBlock Grid.Row="3"
+                   FontSize="10"
+                   FontStyle="Oblique"
+                   TextWrapping="Wrap"
+                   HorizontalAlignment="Center"
+                   Foreground="Red"
+                   Text="{Binding WarningString}" />
+        <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Button Margin="10,15,10,15" Grid.Column="0" Content="Cancel" HorizontalAlignment="Stretch" Command="{Binding CancelCommand}"/>
-            <Button Margin="10,15,10,15" Grid.Column="1" Content="Reset" HorizontalAlignment="Stretch" Command="{Binding ResetCommand}"/>
-            <Button Margin="10,15,10,15" Grid.Column="2" Content="Ok" HorizontalAlignment="Stretch" Command="{Binding OkCommand}"/>
+            <Button Margin="10" Grid.Column="0" Content="Cancel" HorizontalAlignment="Stretch" Command="{Binding CancelCommand}"/>
+            <Button Margin="10" Grid.Column="1" Content="Reset" HorizontalAlignment="Stretch" Command="{Binding ResetCommand}"/>
+            <Button Margin="10" Grid.Column="2" Content="Save" HorizontalAlignment="Stretch" Command="{Binding OkCommand}"/>
         </Grid>
     </Grid>
 </Window>

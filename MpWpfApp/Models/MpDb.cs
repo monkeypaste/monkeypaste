@@ -424,9 +424,10 @@ namespace MpWpfApp {
                     , ShortcutName text NOT NULL                    
                     , KeyList text NULL       
                     , IsGlobal integer NOT NULL DEFAULT 0
+                    , DefaultKeyList text NULL
                     , CONSTRAINT FK_MpShortcut_2_0 FOREIGN KEY (fk_MpCopyItemid) REFERENCES MpCopyItem (pk_MpShortcutItemId)
                     );
-                    INSERT INTO MpShortcut(ShortcutName,IsGlobal,KeyList) VALUES('Show Window',1,'Control+Shift+D'),('Hide Window',0,'Escape'),('Append Mode',1,'Control+Shift+A'),('Auto-Copy Mode',1,'Control+Shift+C'),('Right-Click Paste Mode',1,'Control+Shift+R'),('Paste Selected Clip',0,'Enter'),('Delete Selected Clip',0,'Delete'),('Search',0,'S'),('Select Next',0,'Right'),('Select Previous',0,'Left'),('Select All',0,'Control+A'),('Invert Selection',0,'Control+Shift+Alt+A');
+                    INSERT INTO MpShortcut(ShortcutName,IsGlobal,DefaultKeyList) VALUES('Show Window',1,'Control+Shift+D'),('Hide Window',0,'Escape'),('Append Mode',1,'Control+Shift+A'),('Auto-Copy Mode',1,'Control+Shift+C'),('Right-Click Paste Mode',1,'Control+Shift+R'),('Paste Selected Clip',0,'Enter'),('Delete Selected Clip',0,'Delete'),('Search',0,'S'),('Select Next',0,'Right'),('Select Previous',0,'Left'),('Select All',0,'Control+A'),('Invert Selection',0,'Control+Shift+Alt+A');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpDeviceType (
                       pk_MpDeviceTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

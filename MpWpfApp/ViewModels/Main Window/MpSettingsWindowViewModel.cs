@@ -54,6 +54,8 @@ namespace MpWpfApp {
 
         #region Private Variables
         private Window _windowRef;
+        private List<MpShortcut> _shortcutsToDelete = new List<MpShortcut>();
+        private List<MpShortcut> _shortcutsToReset = new List<MpShortcut>();
         #endregion
 
         #region Properties
@@ -216,8 +218,15 @@ namespace MpWpfApp {
             }
         }
         private void SaveSettings() {
-            foreach(MpShortcutViewModel cmd in ShortcutList) {
-                cmd.Shortcut.WriteToDatabase();
+            foreach (MpShortcut sc in _shortcutsToDelete) {
+                sc.DeleteFromDatabase();
+            }
+            foreach (MpShortcutViewModel sc in ShortcutList) {
+                //wait to actually reset shortcut when save clicked
+                if(_shortcutsToReset.Contains(sc.Shortcut)) {
+                    sc.Shortcut.Reset();
+                }
+                sc.Shortcut.WriteToDatabase();
             }
             _windowRef.Close();
         }
@@ -270,6 +279,10 @@ namespace MpWpfApp {
         }
         private void DeleteShortcut() {
             Console.WriteLine("Deleting row: " + SelectedShortcutIndex);
+            var shortcutToRemove = ShortcutList[SelectedShortcutIndex];
+            ShortcutList.Remove(shortcutToRemove);
+
+            _shortcutsToDelete.Add(shortcutToRemove.Shortcut);
         }
 
         private RelayCommand _resetShortcutCommand;
@@ -278,11 +291,13 @@ namespace MpWpfApp {
                 if (_resetShortcutCommand == null) {
                     _resetShortcutCommand = new RelayCommand(ResetShortcut);
                 }
-                return _deleteShortcutCommand;
+                return _resetShortcutCommand;
             }
         }
         private void ResetShortcut() {
             Console.WriteLine("Reset row: " + SelectedShortcutIndex);
+            ShortcutList[SelectedShortcutIndex].KeyList = ShortcutList[SelectedShortcutIndex].Shortcut.DefaultKeyList;
+            _shortcutsToReset.Add(ShortcutList[SelectedShortcutIndex].Shortcut);
         }
 
         private RelayCommand _clickSettingsPanel1Command;

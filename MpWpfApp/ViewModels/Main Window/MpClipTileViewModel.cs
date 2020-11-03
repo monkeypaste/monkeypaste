@@ -710,10 +710,6 @@
             ClipTrayViewModel = parent;
             IsLoading = true;
             CopyItem = ci;
-            foreach(MpShortcut cmd in MpShortcut.GetShortcutByCopyItemId(CopyItem.CopyItemId)) {
-                cmd.RegisterShortcutCommand(PasteClipCommand);
-                Shortcut = cmd;
-            }
             Title = ci.Title;
             TitleColor = new SolidColorBrush(ci.ItemColor.Color);
             Icon = ci.App.Icon.IconImage;
@@ -735,6 +731,10 @@
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
+            foreach (MpShortcut cmd in MpShortcut.GetShortcutByCopyItemId(CopyItem.CopyItemId)) {
+                cmd.RegisterShortcutCommand(PasteClipCommand);
+                Shortcut = cmd;
+            }
             var clipTileBorder = (MpClipBorder)sender;
             clipTileBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;

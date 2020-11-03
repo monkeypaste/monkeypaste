@@ -62,14 +62,39 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        private string _warningString = string.Empty;
+        public string WarningString {
+            get {
+                return _warningString;
+            }
+            set {
+                if (_warningString != value) {
+                    _warningString = value;
+                    OnPropertyChanged(nameof(WarningString));
+                }
+            }
+        }
         #endregion
 
         #region Private Methods
-        
+
         #endregion
 
         #region Public Methods
         public void Init(MpShortcut shortcut) {
+            PropertyChanged += (s, e) => {
+                switch(e.PropertyName) {
+                    case nameof(KeysString):
+                        WarningString = string.Empty;
+                        foreach(MpShortcut sc in MpShortcut.GetAllShortcuts()) {
+                            if(KeysString == sc.KeyList && sc.ShortcutId != Shortcut.ShortcutId) {
+                                WarningString = "Warning! This combination conflicts with '" + sc.ShortcutName + "' which will be cleared if saved";
+                            }
+                        }
+                        break;
+                }
+            };
             Shortcut = shortcut;
             CommandTypeName = "'" + Shortcut.ShortcutName + "'";
             KeysString = Shortcut.KeyList;

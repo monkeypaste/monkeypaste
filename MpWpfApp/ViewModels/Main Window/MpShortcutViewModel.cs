@@ -70,7 +70,7 @@ namespace MpWpfApp {
             KeyList = Shortcut.KeyList;
             ShortcutName = Shortcut.ShortcutName;
             //13 is the number of pre-created application shortcuts
-            if(Shortcut.ShortcutId < 13) {
+            if(Shortcut.DefaultKeyList.Length > 0) {
                 ResetButtonVisibility = Visibility.Visible;
                 DeleteButtonVisibility = Visibility.Collapsed;
             } else {
