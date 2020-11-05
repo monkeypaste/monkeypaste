@@ -7,6 +7,14 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 
 namespace MpWpfApp {
+    public enum MpCurrencyType {
+        None = 0,
+        Dollars,
+        Pounds,
+        Euros,
+        Yen
+    }
+
     public enum MpSubTextTokenType {
         Uri = 1,
         Email,

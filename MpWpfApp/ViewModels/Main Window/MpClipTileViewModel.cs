@@ -126,6 +126,19 @@
             }
         }
 
+        private string _shortcutKeyList = string.Empty;
+        public string ShortcutKeyList {
+            get {
+                return _shortcutKeyList;
+            }
+            set {
+                if (_shortcutKeyList != value) {
+                    _shortcutKeyList = value;
+                    OnPropertyChanged(nameof(ShortcutKeyList));
+                }
+            }
+        }
+
         private double _clipTileWidth = MpMeasurements.Instance.ClipTileBorderSize;
         public double ClipTileWidth {
             get {
@@ -663,6 +676,9 @@
         public MpClipTileViewModel(MpCopyItem ci, MpClipTrayViewModel parent) {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
+                    case nameof(Shortcut):
+                        ShortcutKeyList = Shortcut.KeyList;
+                        break;
                     case nameof(IsEditingTitle):
                         if (IsEditingTitle) {
                             //show textbox and select all text
@@ -886,17 +902,17 @@
                                 MpHelpers.ChangeBrushBrightness((SolidColorBrush)TitleColor, -0.4f), 50);
                 SolidColorBrush accentColor = MpHelpers.ChangeBrushAlpha(
                                 MpHelpers.ChangeBrushBrightness((SolidColorBrush)TitleColor, -0.0f), 100);
-
-                var swirl1 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0001.png"));
+                var path = @"pack://application:,,,/Resources/";
+                var swirl1 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0001.png"));
                 swirl1 = MpHelpers.TintBitmapSource(swirl1, ((SolidColorBrush)TitleColor).Color);
 
-                var swirl2 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0002.png"));
+                var swirl2 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0002.png"));
                 swirl2 = MpHelpers.TintBitmapSource(swirl2, lighterColor.Color);
 
-                var swirl3 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0003.png"));
+                var swirl3 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0003.png"));
                 swirl3 = MpHelpers.TintBitmapSource(swirl3, darkerColor.Color);
 
-                var swirl4 = (BitmapSource)new BitmapImage(new Uri("pack://application:,,,/Resources/title_swirl0004.png"));
+                var swirl4 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0004.png"));
                 swirl4 = MpHelpers.TintBitmapSource(swirl4, accentColor.Color);
 
                 TitleSwirl = MpHelpers.MergeImages(new List<BitmapSource>() { swirl1, swirl2, swirl3, swirl4 });
@@ -1079,6 +1095,8 @@
             } else {
                 ahkmwvm.Shortcut.RegisterShortcutCommand(PasteClipCommand);
                 ahkmwvm.Shortcut.WriteToDatabase();
+                Shortcut = ahkmwvm.Shortcut;
+                ShortcutKeyList = Shortcut.KeyList;
             }
             ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }

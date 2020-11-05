@@ -247,6 +247,52 @@ namespace MpWpfApp {
             return System.Drawing.Color.FromArgb(c[3], c[0], c[1], c[2]);
         }
 
+        public static string GetCurrencySymbol(MpCurrencyType ct) {
+            switch (ct) {
+                case MpCurrencyType.Dollars:
+                    return "$";
+                case MpCurrencyType.Pounds:
+                    return "£";
+                case MpCurrencyType.Euros:
+                    return "€";
+                case MpCurrencyType.Yen:
+                    return "¥";
+                default:
+                    return "?";
+            }
+        }
+        public static MpCurrencyType GetCurrencyTypeFromString(string moneyStr) {
+            if(moneyStr == null || moneyStr.Length == 0) {
+                return MpCurrencyType.None;
+            }
+            char currencyLet = moneyStr[0];
+            switch(currencyLet) {
+                case '$':
+                    return MpCurrencyType.Dollars;
+                case '£':
+                    return MpCurrencyType.Pounds;
+                case '€':
+                    return MpCurrencyType.Euros;
+                case '¥':
+                    return MpCurrencyType.Yen;
+            }
+
+            return MpCurrencyType.None;
+        }
+
+        public static double GetMoneyValueFromString(string moneyStr) {            
+            if (GetCurrencyTypeFromString(moneyStr) != MpCurrencyType.None) {
+                moneyStr = moneyStr.Remove(0, 1);
+            }
+            try {
+                return Convert.ToDouble(moneyStr);
+            }
+            catch(Exception ex) {
+                Console.WriteLine("MpHelper exception cannot convert moneyStr '" + moneyStr + "' to a value, returning 0");
+                return 0;
+            }
+        }
+
         public static IPAddress GetCurrentIPAddress() {
             Ping ping = new Ping();
             var replay = ping.Send(Dns.GetHostName());

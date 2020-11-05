@@ -240,11 +240,19 @@ namespace MpWpfApp {
                 case MpSubTextTokenType.Currency:
                     //"https://www.google.com/search?q=%24500.80+to+yen"
                     MenuItem convertCurrencyMenuItem = new MenuItem();
-                    convertCurrencyMenuItem.Header = "Convert Currency";
-                    convertCurrencyMenuItem.Click += (s, e2) => {
-                        ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).HideWindowCommand.Execute(null);
-                        System.Diagnostics.Process.Start(@"https://www.google.com/search?q=%24" + System.Uri.EscapeDataString(tokenText.Replace("$",string.Empty)) + "+to+yen");                        
-                    };
+                    convertCurrencyMenuItem.Header = "Convert Currency To";
+                    foreach(MpCurrencyType ct in Enum.GetValues(typeof(MpCurrencyType))) {
+                        if(ct == MpCurrencyType.None) {
+                            continue;
+                        }
+                        MenuItem subItem = new MenuItem();
+                        subItem.Header = Enum.GetName(typeof(MpCurrencyType), ct); 
+                        subItem.Click += (s, e2) => {
+                            ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).HideWindowCommand.Execute(null);
+                            System.Diagnostics.Process.Start(@"https://www.google.com/search?q=" + tokenText + "+to+" + subItem.Header);
+                        };
+                    }
+                    
                     tokenLink.ContextMenu.Items.Add(convertCurrencyMenuItem);
                     break;
                 default:

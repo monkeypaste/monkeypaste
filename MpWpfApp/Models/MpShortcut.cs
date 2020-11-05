@@ -16,6 +16,7 @@ namespace MpWpfApp {
         public string DefaultKeyList { get; set; } = string.Empty;
         public bool IsGlobal { get; set; } = false;
         public int CopyItemId { get; set; } = 0;
+        public int TagId { get; set; } = 0;
 
         public ICommand Command { get; set; }
 
@@ -38,6 +39,9 @@ namespace MpWpfApp {
         public static List<MpShortcut> GetShortcutByCopyItemId(int copyItemId) {
             return GetAllShortcuts().Where(x => x.CopyItemId == copyItemId).ToList();
         }
+        public static List<MpShortcut> GetShortcutByTagId(int tagId) {
+            return GetAllShortcuts().Where(x => x.TagId == tagId).ToList();
+        }
         #endregion
         #region Public Methods
         public MpShortcut() {
@@ -49,6 +53,7 @@ namespace MpWpfApp {
             _keyList = new List<List<Key>>();
             IsGlobal = false;
             CopyItemId = -1;
+            TagId = -1;
         }
         public MpShortcut(int hkId) {
             DataTable dt = MpDb.Instance.Execute("select * from MpShortcut where pk_MpShortcutId=" + hkId);
@@ -119,7 +124,8 @@ namespace MpWpfApp {
 
         public override void LoadDataRow(DataRow dr) {
             ShortcutId = Convert.ToInt32(dr["pk_MpShortcutId"].ToString());
-            CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemid"].ToString());
+            CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemId"].ToString());
+            TagId = Convert.ToInt32(dr["fk_MpTagId"].ToString());
             ShortcutName = dr["ShortcutName"].ToString();
             KeyList = dr["KeyList"].ToString();
             DefaultKeyList = dr["DefaultKeyList"].ToString();
@@ -131,10 +137,10 @@ namespace MpWpfApp {
         }
         public override void WriteToDatabase() {
             if (ShortcutId == 0) {
-                MpDb.Instance.ExecuteNonQuery("insert into MpShortcut(ShortcutName,IsGlobal,KeyList,DefaultKeyList,fk_MpCopyItemid) VALUES('" + ShortcutName + "'," + (IsGlobal == true ? 1 : 0) + ",'" + KeyList + "','" + DefaultKeyList + "'," + CopyItemId + ")");
+                MpDb.Instance.ExecuteNonQuery("insert into MpShortcut(ShortcutName,IsGlobal,KeyList,DefaultKeyList,fk_MpCopyItemId,fk_MpTagId) VALUES('" + ShortcutName + "'," + (IsGlobal == true ? 1 : 0) + ",'" + KeyList + "','" + DefaultKeyList + "'," + CopyItemId + "," + TagId + ")");
                 ShortcutId = MpDb.Instance.GetLastRowId("MpShortcut", "pk_MpShortcutId");
             } else {
-                MpDb.Instance.ExecuteNonQuery("update MpShortcut set ShortcutName='" + ShortcutName + "', KeyList='" + KeyList + "', DefaultKeyList='" + DefaultKeyList + "', fk_MpCopyItemid=" + CopyItemId + " where pk_MpShortcutId=" + ShortcutId);
+                MpDb.Instance.ExecuteNonQuery("update MpShortcut set ShortcutName='" + ShortcutName + "', KeyList='" + KeyList + "', DefaultKeyList='" + DefaultKeyList + "', fk_MpCopyItemId=" + CopyItemId + ", fk_MpTagId=" + TagId + " where pk_MpShortcutId=" + ShortcutId);
             }
         }
         public void DeleteFromDatabase() {
@@ -147,6 +153,9 @@ namespace MpWpfApp {
         }
         public bool IsSequence() {
             return KeyList.Contains(",");
+        }
+        public bool IsCustom() {
+            return CopyItemId > 0 || TagId > 0;
         }
         public void ClearKeyList() {
             KeyList = string.Empty;

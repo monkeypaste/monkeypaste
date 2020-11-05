@@ -24,28 +24,54 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
-        private MpShortcut _command;
-        public MpShortcut Shortcut {
+        private MpShortcut _duplicatedShortcut;
+        public MpShortcut DuplicatedShortcut {
             get {
-                return _command;
+                return _duplicatedShortcut;
             }
             set {
-                if (_command != value) {
-                    _command = value;
+                if (_duplicatedShortcut != value) {
+                    _duplicatedShortcut = value;
+                    OnPropertyChanged(nameof(DuplicatedShortcut));
+                }
+            }
+        }
+
+        private MpShortcut _shortcut;
+        public MpShortcut Shortcut {
+            get {
+                return _shortcut;
+            }
+            set {
+                if (_shortcut != value) {
+                    _shortcut = value;
                     OnPropertyChanged(nameof(Shortcut));
                 }
             }
         }
 
-        private string _commandName = string.Empty;
-        public string CommandTypeName {
+        private string _shortcutDisplayName = string.Empty;
+        public string ShortcutDisplayName {
             get {
-                return _commandName;
+                return _shortcutDisplayName;
             }
             set {
-                if(_commandName != value) {
-                    _commandName = value;
-                    OnPropertyChanged(nameof(CommandTypeName));
+                if(_shortcutDisplayName != value) {
+                    _shortcutDisplayName = value;
+                    OnPropertyChanged(nameof(ShortcutDisplayName));
+                }
+            }
+        }
+
+        private string _resetButtonText = string.Empty;
+        public string ResetButtonText {
+            get {
+                return _resetButtonText;
+            }
+            set {
+                if (_resetButtonText != value) {
+                    _resetButtonText = value;
+                    OnPropertyChanged(nameof(ResetButtonText));
                 }
             }
         }
@@ -86,9 +112,40 @@ namespace MpWpfApp {
             PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(KeysString):
+                        //when KeysString changes check full system for duplicates, ignoring order of combinations
                         WarningString = string.Empty;
+                        //split hotkey into sequences combinations
+                        var combos = Shortcut.KeyList.Split(',').ToList<string>();
+                        //iterate over ALL shortcuts
                         foreach(MpShortcut sc in MpShortcut.GetAllShortcuts()) {
-                            if(KeysString == sc.KeyList && sc.ShortcutId != Shortcut.ShortcutId) {
+                            //ignore same shortcut comparision
+                            if(sc.ShortcutId == Shortcut.ShortcutId) {
+                                continue;
+                            }
+                            var scCombos = sc.KeyList.Split(',').ToList<string>();
+                            if(combos.Count != scCombos.Count) {
+                                continue;
+                            }
+                            int curComboIdx = 0;
+                            bool isDuplicate = false;
+                            foreach(string scCombo in scCombos) {
+                                var scKeys = scCombo.Split('+').ToList<string>();
+                                var keys = combos[curComboIdx].Split('+').ToList<string>();
+                                if(keys.Count != scKeys.Count) {
+                                    isDuplicate = false;
+                                    break;
+                                }
+                                foreach(string k in keys) {
+                                    if(scKeys.Contains(k)) {
+                                        isDuplicate = true;
+                                    } else {
+                                        isDuplicate = false;
+                                    }
+                                }
+                                curComboIdx++;
+                            }
+                            if (isDuplicate) {
+                                DuplicatedShortcut = sc;
                                 WarningString = "Warning! This combination conflicts with '" + sc.ShortcutName + "' which will be cleared if saved";
                             }
                         }
@@ -96,8 +153,9 @@ namespace MpWpfApp {
                 }
             };
             Shortcut = shortcut;
-            CommandTypeName = "'" + Shortcut.ShortcutName + "'";
+            ShortcutDisplayName = "'" + Shortcut.ShortcutName + "'";
             KeysString = Shortcut.KeyList;
+            ResetButtonText = Shortcut.IsCustom() ? "Clear" : "Reset";
             _isSeqComplete = true;
         }
         public void AssignHotkeyModalWindow_Loaded(object sender, RoutedEventArgs e) {
@@ -191,21 +249,34 @@ namespace MpWpfApp {
             }
         }
         private void Reset() {
-            Shortcut.ClearKeyList();
-            KeysString = "[None]";
+            if(!Shortcut.IsCustom()) {
+                Shortcut.Reset();
+                KeysString = Shortcut.KeyList;
+            } else {
+                Shortcut.ClearKeyList();
+                KeysString = "[None]";
+            }
         }
 
         private RelayCommand _okCommand;
         public ICommand OkCommand {
             get {
                 if (_okCommand == null) {
-                    _okCommand = new RelayCommand(Ok);
+                    _okCommand = new RelayCommand(Ok, CanOk);
                 }
                 return _okCommand;
             }
         }
+        private bool CanOk() {
+            return DuplicatedShortcut == null || DuplicatedShortcut.KeyList != DuplicatedShortcut.DefaultKeyList;
+        }
         private void Ok() {
-            Console.WriteLine("Successfully created: " + Shortcut.ToString());
+            if(KeysString == "[None]" || KeysString == string.Empty) {
+                Shortcut = null;
+            }
+            if(DuplicatedShortcut != null) {
+
+            }
             _windowRef.Close();
         }
         #endregion

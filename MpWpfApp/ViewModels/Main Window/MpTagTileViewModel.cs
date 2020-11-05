@@ -28,6 +28,32 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+        private MpShortcut _shortcut = null;
+        public MpShortcut Shortcut {
+            get {
+                return _shortcut;
+            }
+            set {
+                if (_shortcut != value) {
+                    _shortcut = value;
+                    OnPropertyChanged(nameof(Shortcut));
+                }
+            }
+        }
+
+        private string _shortcutKeyList = string.Empty;
+        public string ShortcutKeyList {
+            get {
+                return _shortcutKeyList;
+            }
+            set {
+                if(_shortcutKeyList != value) {
+                    _shortcutKeyList = value;
+                    OnPropertyChanged(nameof(ShortcutKeyList));
+                }
+            }
+        }
+
         private bool _isSelected = false;
         public bool IsSelected {
             get {
@@ -288,6 +314,11 @@ namespace MpWpfApp {
         }
 
         public void TagTile_Loaded(object sender, RoutedEventArgs e) {
+            foreach (MpShortcut cmd in MpShortcut.GetShortcutByTagId(Tag.TagId)) {
+                cmd.RegisterShortcutCommand(SelectTagCommand);
+                Shortcut = cmd;
+                ShortcutKeyList = Shortcut.KeyList;
+            }
             var tagBorder = (MpClipBorder)sender;
             tagBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
@@ -325,6 +356,36 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+        private RelayCommand _assignHotkeyCommand;
+        public ICommand AssignHotkeyCommand {
+            get {
+                if (_assignHotkeyCommand == null) {
+                    _assignHotkeyCommand = new RelayCommand(AssignHotkey);
+                }
+                return _assignHotkeyCommand;
+            }
+        }
+        private void AssignHotkey() {
+            TagTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
+            MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
+            var ahkmwvm = (MpAssignShortcutModalWindowViewModel)ahkmw.DataContext;
+            if (Shortcut == null) {
+                Shortcut = new MpShortcut();
+                Shortcut.ShortcutName = TagName;
+                Shortcut.TagId = Tag.TagId;
+            }
+            ahkmwvm.Init(Shortcut);
+            ahkmw.ShowDialog();
+            if (ahkmwvm.Shortcut == null) {
+                //dialog was canceled ignore assignment changes
+            } else {
+                ahkmwvm.Shortcut.RegisterShortcutCommand(SelectTagCommand);
+                ahkmwvm.Shortcut.WriteToDatabase();
+                Shortcut = ahkmwvm.Shortcut;
+                ShortcutKeyList = Shortcut.KeyList;
+            }
+            TagTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
+        }
 
         private RelayCommand _changeTagColorCommand;
         public ICommand ChangeTagColorCommand {
@@ -369,6 +430,21 @@ namespace MpWpfApp {
             IsSelected = true;
             IsFocused = true;
             IsEditing = true;
+        }
+
+        private RelayCommand _selectTagCommand;
+        public ICommand SelectTagCommand {
+            get {
+                if (_selectTagCommand == null) {
+                    _selectTagCommand = new RelayCommand(SelectTag);
+                }
+                return _selectTagCommand;
+            }
+        }
+        private void SelectTag() {
+            TagTrayViewModel.ClearTagSelection();
+            IsSelected = true;
+            IsFocused = true;
         }
 
         #endregion

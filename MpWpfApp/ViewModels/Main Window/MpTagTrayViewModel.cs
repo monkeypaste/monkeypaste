@@ -78,13 +78,6 @@ namespace MpWpfApp {
                         break;
                 }
             };
-            //if (!isNew) {
-            //    foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel) {
-            //        if (newTagTile.Tag.IsLinkedWithCopyItem(ctvm.CopyItem)) {
-            //            newTagTile.TagClipCount++;
-            //        }
-            //    }
-            //}
         }
 
         private void RemoveTagTile(MpTagTileViewModel tagTileToRemove) {

@@ -394,6 +394,9 @@
                                     <ContextMenu>
                                         <MenuItem Header="Rename"
                                                   Command="{Binding RenameTagCommand}" />
+                                        <MenuItem Header="Assign Hotkey"
+                                                  InputGestureText="{Binding ShortcutKeyList}"
+                                                  Command="{Binding AssignHotkeyCommand}" />
                                         <MenuItem Header="Change Color"
                                                   Command="{Binding ChangeTagColorCommand}" />
                                         <MenuItem Header="Delete"
@@ -680,6 +683,7 @@
                                         <MenuItem Header="Send to Back"
                                                   Command="{Binding Data.SendSelectedClipTilesToBackCommand, Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Assign Hotkey"
+                                                  InputGestureText="{Binding ShortcutKeyList}"
                                                   Command="{Binding AssignHotkeyCommand}" />
                                         <MenuItem Header="Exclude Application"
                                                   Command="{Binding ExcludeApplicationCommand}" />
