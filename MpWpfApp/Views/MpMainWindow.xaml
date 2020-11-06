@@ -698,7 +698,7 @@
                                                       Command="{Binding Data.ExportSelectedClipTilesCommand,Source={StaticResource ClipTrayProxy}}"
                                                       CommandParameter="{StaticResource Zip}" />
                                         </MenuItem>
-                                        <MenuItem Header="Send as Email"
+                                        <MenuItem Header="Share..."
                                                   Command="{Binding ShareClipCommand}" />
                                         <MenuItem Header="Rename"
                                                   Command="{Binding Data.RenameClipCommand,Source={StaticResource ClipTrayProxy}}" />

@@ -691,10 +691,13 @@ namespace MpWpfApp {
         public ICommand PasteSelectedClipsCommand {
             get {
                 if (_pasteSelectedClipsCommand == null) {
-                    _pasteSelectedClipsCommand = new RelayCommand(PasteSelectedClips);
+                    _pasteSelectedClipsCommand = new RelayCommand(PasteSelectedClips, CanPasteSelectedClips);
                 }
                 return _pasteSelectedClipsCommand;
             }
+        }
+        private bool CanPasteSelectedClips() {
+            return MpAssignShortcutModalWindowViewModel.IsOpen == false;
         }
         private void PasteSelectedClips() {
             //In order to paste the app must hide first

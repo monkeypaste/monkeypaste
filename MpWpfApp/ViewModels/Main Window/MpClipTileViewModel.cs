@@ -1087,6 +1087,7 @@
                 Shortcut = new MpShortcut();
                 Shortcut.ShortcutName = Title;
                 Shortcut.CopyItemId = CopyItem.CopyItemId;
+                Shortcut.IsGlobal = true;
             }
             ahkmwvm.Init(Shortcut);
             ahkmw.ShowDialog();

@@ -101,6 +101,7 @@ namespace MpWpfApp {
         public bool IsShowingDialog = false;
 
         public IKeyboardMouseEvents GlobalHook { get; set; }
+        public IKeyboardMouseEvents ApplicationHook { get; set; }
         #endregion
 
         #region Properties       
@@ -247,6 +248,7 @@ namespace MpWpfApp {
         public override bool InitHotkeys() {
             try {
                 GlobalHook = Hook.GlobalEvents();
+                ApplicationHook = Hook.AppEvents();
 
                 GlobalHook.MouseMove += (s, e) => {
                     if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {

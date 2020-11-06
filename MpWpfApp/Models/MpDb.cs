@@ -429,7 +429,26 @@ namespace MpWpfApp {
                     , CONSTRAINT FK_MpShortcut_1_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpShortcutItemId)
                     , CONSTRAINT FK_MpShortcut_2_0 FOREIGN KEY (fk_MpTagId) REFERENCES MpTag (pk_MpTagId)
                     );
-                    INSERT INTO MpShortcut(ShortcutName,IsGlobal,DefaultKeyList) VALUES('Show Window',1,'Control+Shift+D'),('Hide Window',0,'Escape'),('Append Mode',1,'Control+Shift+A'),('Auto-Copy Mode',1,'Control+Shift+C'),('Right-Click Paste Mode',1,'Control+Shift+R'),('Paste Selected Clip',0,'Enter'),('Delete Selected Clip',0,'Delete'),('Search',0,'S'),('Select Next',0,'Right'),('Select Previous',0,'Left'),('Select All',0,'Control+A'),('Invert Selection',0,'Control+Shift+Alt+A');
+                    INSERT INTO MpShortcut(ShortcutName,IsGlobal,DefaultKeyList) VALUES
+                    ('Show Window',1,'Control+Shift+D')
+                    ,('Hide Window',0,'Escape')
+                    ,('Append Mode',1,'Control+Shift+A')
+                    ,('Auto-Copy Mode',1,'Control+Shift+C')
+                    ,('Right-Click Paste Mode',1,'Control+Shift+R')
+                    ,('Paste Selected Clip',0,'Enter')
+                    ,('Delete Selected Clip',0,'Delete')
+                    ,('Search',0,'S')
+                    ,('Select Next',0,'Right')
+                    ,('Select Previous',0,'Left')
+                    ,('Select All',0,'Control+A')
+                    ,('Invert Selection',0,'Control+Shift+Alt+A')
+                    ,('Bring to front',0,'')
+                    ,('Send to back',0,'')
+                    ,('Assign Hotkey',0,'')
+                    ,('Change Color',0,'')
+                    ,('Share',0,'')
+                    ,('Say',0,'')
+                    ,('Merge',0,'');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpDeviceType (
                       pk_MpDeviceTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

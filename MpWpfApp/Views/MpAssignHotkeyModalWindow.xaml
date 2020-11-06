@@ -60,7 +60,7 @@
             </Grid.ColumnDefinitions>
             <Button Margin="10" Grid.Column="0" Content="Cancel" HorizontalAlignment="Stretch" Command="{Binding CancelCommand}"/>
             <Button Margin="10" Grid.Column="1" Content="{Binding ResetButtonText}" HorizontalAlignment="Stretch" Command="{Binding ResetCommand}"/>
-            <Button Margin="10" Grid.Column="2" Content="Save" HorizontalAlignment="Stretch" Command="{Binding OkCommand}"/>
+            <Button Margin="10" Grid.Column="2" Content="Save" HorizontalAlignment="Stretch" Command="{Binding SaveCommand}"/>
         </Grid>
     </Grid>
 </Window>

@@ -73,11 +73,19 @@ namespace MpWpfApp {
                 if (IsSequence()) {
                     var sequenceAssignments = new Dictionary<Sequence, Action>();
                     sequenceAssignments.Add(Sequence.FromString(KeyList), () => icommand.Execute(null));
-                    mwvm.GlobalHook.OnSequence(sequenceAssignments);
+                    if(IsGlobal) {
+                        mwvm.GlobalHook.OnSequence(sequenceAssignments);
+                    } else {
+                        mwvm.ApplicationHook.OnSequence(sequenceAssignments);
+                    }
                 } else {
                     var combinationAssignments = new Dictionary<Combination, Action>();
                     combinationAssignments.Add(Combination.FromString(KeyList), () => icommand.Execute(null));
-                    mwvm.GlobalHook.OnCombination(combinationAssignments);
+                    if(IsGlobal) {
+                        mwvm.GlobalHook.OnCombination(combinationAssignments);
+                    } else {
+                        mwvm.ApplicationHook.OnCombination(combinationAssignments);
+                    }
                 }
             }
             catch (Exception ex) {

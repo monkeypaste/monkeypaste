@@ -373,6 +373,7 @@ namespace MpWpfApp {
                 Shortcut = new MpShortcut();
                 Shortcut.ShortcutName = TagName;
                 Shortcut.TagId = Tag.TagId;
+                Shortcut.IsGlobal = false;
             }
             ahkmwvm.Init(Shortcut);
             ahkmw.ShowDialog();

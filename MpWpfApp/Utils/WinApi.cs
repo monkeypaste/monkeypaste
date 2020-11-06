@@ -22,8 +22,8 @@ namespace MpWpfApp {
             // ...
         }
 
-        [DllImport("user32.dll")]
-        public static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
+        //[DllImport("user32.dll")]
+        //public static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
 
         public static IntPtr SetWindowLong(IntPtr hWnd, int nIndex, IntPtr dwNewLong) {
             int error = 0;
@@ -48,6 +48,13 @@ namespace MpWpfApp {
 
             return result;
         }
+
+        public const int GWL_STYLE = -16;
+        public const int WS_SYSMENU = 0x80000;
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        [DllImport("user32.dll")]
+        public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
         [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr", SetLastError = true)]
         private static extern IntPtr IntSetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
