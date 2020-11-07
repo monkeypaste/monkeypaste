@@ -37,6 +37,32 @@ namespace MpWpfApp {
             }
         }
 
+        private bool _isGlobal = false;
+        public bool IsGlobal {
+            get {
+                return _isGlobal;
+            }
+            set {
+                if (_isGlobal != value) {
+                    _isGlobal = value;
+                    OnPropertyChanged(nameof(IsGlobal));
+                }
+            }
+        }
+
+        private string _shortcutTypeName = string.Empty;
+        public string ShortcutTypeName {
+            get {
+                return _shortcutTypeName;
+            }
+            set {
+                if (_shortcutTypeName != value) {
+                    _shortcutTypeName = value;
+                    OnPropertyChanged(nameof(ShortcutTypeName));
+                }
+            }
+        }
+
         private Visibility _deleteButtonVisibility;
         public Visibility DeleteButtonVisibility {
             get {
@@ -66,11 +92,23 @@ namespace MpWpfApp {
         public MpShortcut Shortcut { get; set; }
 
         public MpShortcutViewModel(MpShortcut shortcut) {
+            if(shortcut == null) {
+                throw new Exception("ShortcutViewModel error, shortcut cannot be null");
+            }
             Shortcut = shortcut;
             KeyList = Shortcut.KeyList;
             ShortcutName = Shortcut.ShortcutName;
-            //13 is the number of pre-created application shortcuts
-            if(Shortcut.DefaultKeyList.Length > 0) {
+            IsGlobal = Shortcut.IsGlobal;
+            if(Shortcut.IsCustom()) {
+                if(Shortcut.CopyItemId > 0) {
+                    ShortcutTypeName = "Clip";
+                } else {
+                    ShortcutTypeName = "Tag";
+                }
+            } else {
+                ShortcutTypeName = "Application";
+            }
+            if(Shortcut.TagId <= 0 && Shortcut.CopyItemId <= 0) {
                 ResetButtonVisibility = Visibility.Visible;
                 DeleteButtonVisibility = Visibility.Collapsed;
             } else {

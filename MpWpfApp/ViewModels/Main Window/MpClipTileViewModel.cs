@@ -677,7 +677,11 @@
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
                     case nameof(Shortcut):
-                        ShortcutKeyList = Shortcut.KeyList;
+                        if(Shortcut != null) {
+                            ShortcutKeyList = Shortcut.KeyList;
+                        } else {
+                            ShortcutKeyList = string.Empty;
+                        }
                         break;
                     case nameof(IsEditingTitle):
                         if (IsEditingTitle) {
@@ -1092,6 +1096,13 @@
             ahkmwvm.Init(Shortcut);
             ahkmw.ShowDialog();
             if(ahkmwvm.Shortcut == null) {
+                ShortcutKeyList = Shortcut.KeyList;
+                //when canceling on a non-existing hotkey
+                if (Shortcut != null) {
+                    if (Shortcut.ShortcutId <= 0) {
+                        Shortcut = null;
+                    }
+                }
                 //dialog was canceled ignore assignment changes
             } else {
                 ahkmwvm.Shortcut.RegisterShortcutCommand(PasteClipCommand);

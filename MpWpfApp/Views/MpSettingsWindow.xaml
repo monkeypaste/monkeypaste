@@ -161,12 +161,18 @@
                     </ii:EventTrigger>
                 </ii:Interaction.Triggers>
                 <DataGrid.Columns>
+                    <DataGridTextColumn Header="Type"
+                                        Width="200"
+                                        Binding="{Binding ShortcutTypeName}" />
                     <DataGridTextColumn Header="Action"
                                         Width="200"
                                         Binding="{Binding ShortcutName}" />
                     <DataGridTextColumn Header="Shortcut"
                                         Width="200"
-                                        Binding="{Binding KeyList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />                    
+                                        Binding="{Binding KeyList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                    <DataGridCheckBoxColumn Header="Global"
+                                            IsReadOnly="True"
+                                            Binding="{Binding IsGlobal}" />
                     <DataGridTemplateColumn Width="30">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

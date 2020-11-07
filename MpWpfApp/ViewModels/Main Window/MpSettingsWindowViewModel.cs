@@ -48,6 +48,9 @@ namespace MpWpfApp {
     //   - About Monkey Paste
 
     public class MpSettingsWindowViewModel : MpViewModelBase {
+        #region Static Variables
+        public static bool IsOpen = false;
+        #endregion
         #region View Models
         public MpSystemTrayViewModel SystemTrayViewModel { get; set; }
         #endregion
@@ -154,6 +157,10 @@ namespace MpWpfApp {
         #region Public Methods
         public void SettingsWindow_Loaded(object sender, RoutedEventArgs e) {
             _windowRef = (Window)sender;
+            IsOpen = true;
+            _windowRef.Closed += (s, e2) => {
+                IsOpen = false;
+            };
             foreach(MpShortcut sc in MpShortcut.GetAllShortcuts()) {
                 ShortcutList.Add(new MpShortcutViewModel(sc));
             }

@@ -304,7 +304,10 @@ namespace MpWpfApp {
             }
         }
         private bool CanShowWindow() {
-            return Application.Current.MainWindow == null || Application.Current.MainWindow.Visibility != Visibility.Visible || IsLoading;
+            return Application.Current.MainWindow == null || 
+                Application.Current.MainWindow.Visibility != Visibility.Visible || 
+                IsLoading ||
+                !MpSettingsWindowViewModel.IsOpen;
         }
         private void ShowWindow() {
             if (Application.Current.MainWindow == null) {

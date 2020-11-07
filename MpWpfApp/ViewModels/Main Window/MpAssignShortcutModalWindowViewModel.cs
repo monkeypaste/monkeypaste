@@ -232,6 +232,7 @@ namespace MpWpfApp {
 
             _windowRef.Closed += (s, e1) => {
                 IsOpen = false;
+                
             };
 
             seqTimer = new System.Timers.Timer(seqTimerMaxMs);
@@ -253,6 +254,7 @@ namespace MpWpfApp {
             }
         }
         private void Cancel() {
+            KeysString = "[None]";
             Shortcut = null;
             _windowRef.Close();
         }
