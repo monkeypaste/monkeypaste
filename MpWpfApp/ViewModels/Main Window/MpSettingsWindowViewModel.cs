@@ -262,7 +262,7 @@ namespace MpWpfApp {
         }
         private void ReassignShortcut() {
             SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
-            MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
+            /*MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
             var ahkmwvm = (MpAssignShortcutModalWindowViewModel)ahkmw.DataContext;
             ahkmwvm.Init(ShortcutList[SelectedShortcutIndex].Shortcut);
             ahkmw.ShowDialog();
@@ -271,7 +271,7 @@ namespace MpWpfApp {
             } else {
                 ahkmwvm.Shortcut.RegisterShortcutCommand(ShortcutList[SelectedShortcutIndex].Shortcut.Command);
                 ShortcutList[SelectedShortcutIndex].KeyList = ahkmwvm.Shortcut.KeyList;
-            }
+            }*/
             SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }
 

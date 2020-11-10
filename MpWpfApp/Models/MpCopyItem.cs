@@ -92,7 +92,7 @@ namespace MpWpfApp {
             newItem.SourcePath = sourcePath;
             newItem.CopyItemType = itemType;
             newItem.CopyDateTime = DateTime.Now;
-            newItem.Title = Enum.GetName(typeof(MpCopyItemType), newItem.CopyItemType);
+            newItem.Title = "Untitled"; //Enum.GetName(typeof(MpCopyItemType), newItem.CopyItemType);
             newItem.CopyCount = 1;
             newItem.App = new MpApp(sourcePath, false);
             newItem.AppId = newItem.App.AppId;

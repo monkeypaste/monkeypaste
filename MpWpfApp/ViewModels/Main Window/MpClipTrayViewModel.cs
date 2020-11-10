@@ -135,7 +135,7 @@ namespace MpWpfApp {
                 foreach (var sctvm in SelectedClipTiles) {
                     outStr += sctvm.PlainText + Environment.NewLine;
                 }
-                return outStr;
+                return outStr.Trim('\r','\n');
             }
         }
 

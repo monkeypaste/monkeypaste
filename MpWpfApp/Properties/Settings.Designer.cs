@@ -364,5 +364,17 @@ namespace MpWpfApp.Properties {
                 this["CmdNameInvertSelection"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int MaxShortcutTitleLength {
+            get {
+                return ((int)(this["MaxShortcutTitleLength"]));
+            }
+            set {
+                this["MaxShortcutTitleLength"] = value;
+            }
+        }
     }
 }

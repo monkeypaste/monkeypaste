@@ -327,7 +327,7 @@ namespace MpWpfApp {
         }
 
         public static int GetRowCount(string text) {
-            return text.Split(Environment.NewLine.ToCharArray()).Length;
+            return text.Trim('\r','\n').Split(Environment.NewLine.ToCharArray()).Length;
         }
 
         public static Size GetTextDimensions(string text) {
@@ -361,10 +361,10 @@ namespace MpWpfApp {
             return newFullPath;
         }
 
-        public static string CombineRichText(string rt1,string rt2) {
+        public static string CombineRichText(string rt1, string rt2) {
             using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
                 rtb.Rtf = rt1;
-                rtb.Text += Environment.NewLine;
+                //rtb.Text += Environment.NewLine;
                 rtb.Select(rtb.TextLength, 0);
                 rtb.SelectedRtf = rt2;
                 return rtb.Rtf;

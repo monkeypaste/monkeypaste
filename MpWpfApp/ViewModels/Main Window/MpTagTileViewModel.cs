@@ -367,7 +367,7 @@ namespace MpWpfApp {
         }
         private void AssignHotkey() {
             TagTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
-            MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
+            /*MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
             var ahkmwvm = (MpAssignShortcutModalWindowViewModel)ahkmw.DataContext;
             if (Shortcut == null) {
                 Shortcut = new MpShortcut();
@@ -379,12 +379,19 @@ namespace MpWpfApp {
             ahkmw.ShowDialog();
             if (ahkmwvm.Shortcut == null) {
                 //dialog was canceled ignore assignment changes
+                ShortcutKeyList = Shortcut.KeyList;
+                //when canceling on a non-existing hotkey
+                if (Shortcut != null) {
+                    if (Shortcut.ShortcutId <= 0) {
+                        Shortcut = null;
+                    }
+                }
             } else {
                 ahkmwvm.Shortcut.RegisterShortcutCommand(SelectTagCommand);
                 ahkmwvm.Shortcut.WriteToDatabase();
                 Shortcut = ahkmwvm.Shortcut;
                 ShortcutKeyList = Shortcut.KeyList;
-            }
+            }*/
             TagTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }
 

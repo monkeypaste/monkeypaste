@@ -113,6 +113,13 @@
         #endregion
 
         #region Properties
+        public string ShortcutName {
+            get {
+                var sn = Title == "Untitled" ? PlainText : Title;
+                return sn.Substring(0, Math.Min(sn.Length, Properties.Settings.Default.MaxShortcutTitleLength));
+            }
+        }
+
         private MpShortcut _shortcut = null;
         public MpShortcut Shortcut {
             get {
@@ -754,6 +761,7 @@
             foreach (MpShortcut cmd in MpShortcut.GetShortcutByCopyItemId(CopyItem.CopyItemId)) {
                 cmd.RegisterShortcutCommand(PasteClipCommand);
                 Shortcut = cmd;
+                ShortcutKeyList = Shortcut.KeyList;
             }
             var clipTileBorder = (MpClipBorder)sender;
             clipTileBorder.MouseEnter += (s, e1) => {
@@ -971,8 +979,9 @@
             switch (detailId) {
                 //created
                 case 0:
-                    TimeSpan dur = DateTime.Now - CopyItemCreatedDateTime;
-                    info = dur.ToString();
+                    // TODO convert to human readable time span like "Copied an hour ago...23 days ago etc
+                    //TimeSpan dur = DateTime.Now - CopyItemCreatedDateTime;
+                    info = "Copied " + CopyItemCreatedDateTime.ToString(); //dur.ToString();
                     break;
                 //chars/lines
                 case 1:
@@ -1085,6 +1094,8 @@
         }
         private void AssignHotkey() {
             ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
+            var str = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(ShortcutName);
+            /*
             MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
             var ahkmwvm = (MpAssignShortcutModalWindowViewModel)ahkmw.DataContext;
             if(Shortcut == null) {
@@ -1109,7 +1120,7 @@
                 ahkmwvm.Shortcut.WriteToDatabase();
                 Shortcut = ahkmwvm.Shortcut;
                 ShortcutKeyList = Shortcut.KeyList;
-            }
+            }*/
             ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }
 

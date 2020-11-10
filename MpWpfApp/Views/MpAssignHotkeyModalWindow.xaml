@@ -58,9 +58,23 @@
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Button Margin="10" Grid.Column="0" Content="Cancel" HorizontalAlignment="Stretch" Command="{Binding CancelCommand}"/>
-            <Button Margin="10" Grid.Column="1" Content="{Binding ResetButtonText}" HorizontalAlignment="Stretch" Command="{Binding ResetCommand}"/>
-            <Button Margin="10" Grid.Column="2" Content="Save" HorizontalAlignment="Stretch" Command="{Binding SaveCommand}"/>
+            <Button Margin="10" 
+                    Grid.Column="0" 
+                    Content="Cancel" 
+                    IsCancel="True"
+                    HorizontalAlignment="Stretch" 
+                    Command="{Binding CancelCommand}"/>
+            <Button Margin="10" 
+                    Grid.Column="1" 
+                    Content="Clear" 
+                    HorizontalAlignment="Stretch" 
+                    Command="{Binding ClearCommand}"/>
+            <Button Margin="10" 
+                    Grid.Column="2" 
+                    Content="Save" 
+                    HorizontalAlignment="Stretch" 
+                    Command="{Binding SaveCommand}"
+                    IsDefault="True" />
         </Grid>
     </Grid>
 </Window>

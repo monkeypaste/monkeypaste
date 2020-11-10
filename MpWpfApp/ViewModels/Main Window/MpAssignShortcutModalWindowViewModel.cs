@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using Gma.System.MouseKeyHook;
+using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +26,9 @@ namespace MpWpfApp {
         private System.Timers.Timer seqTimer = null;
         private double seqTimerMaxMs = 1000;
 
-        private object _parentRef = null;
+        private int _shortcutId = -1;
 
-        private string _emptyKeyList = "[None]";
+        private List<List<Key>> _keyList = new List<List<Key>>();
         #endregion
 
         #region Properties
@@ -44,18 +45,18 @@ namespace MpWpfApp {
             }
         }
 
-        private MpShortcut _shortcut;
-        public MpShortcut Shortcut {
-            get {
-                return _shortcut;
-            }
-            set {
-                if (_shortcut != value) {
-                    _shortcut = value;
-                    OnPropertyChanged(nameof(Shortcut));
-                }
-            }
-        }
+        //private MpShortcut _shortcut;
+        //public MpShortcut Shortcut {
+        //    get {
+        //        return _shortcut;
+        //    }
+        //    set {
+        //        if (_shortcut != value) {
+        //            _shortcut = value;
+        //            OnPropertyChanged(nameof(Shortcut));
+        //        }
+        //    }
+        //}
 
         private string _shortcutDisplayName = string.Empty;
         public string ShortcutDisplayName {
@@ -66,19 +67,6 @@ namespace MpWpfApp {
                 if(_shortcutDisplayName != value) {
                     _shortcutDisplayName = value;
                     OnPropertyChanged(nameof(ShortcutDisplayName));
-                }
-            }
-        }
-
-        private string _resetButtonText = string.Empty;
-        public string ResetButtonText {
-            get {
-                return _resetButtonText;
-            }
-            set {
-                if (_resetButtonText != value) {
-                    _resetButtonText = value;
-                    OnPropertyChanged(nameof(ResetButtonText));
                 }
             }
         }
@@ -110,41 +98,52 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Private Methods
-
+        #region Static Methods
+        public static string ShowAssignShortcutWindow(string shortcutName,int shortcutId = 0) {
+            //var ascwvm = new MpAssignShortcutModalWindowViewModel(shortcutName);
+            var ascw = new MpAssignHotkeyModalWindow();
+            ascw.DataContext = new MpAssignShortcutModalWindowViewModel(shortcutName);
+            var assignResult = ascw.ShowDialog();
+            if (assignResult == true) {
+                return ((MpAssignShortcutModalWindowViewModel)ascw.DataContext).KeysString;
+            } else {
+                return null;
+            }
+        }
         #endregion
 
-        #region Public Methods
-        public void Init(MpShortcut shortcut) {
+        #region Private Methods
+
+        private MpAssignShortcutModalWindowViewModel(string shortcutName,int shortcutId = 0) {
             PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
+                switch (e.PropertyName) {
                     case nameof(KeysString):
                         //when KeysString changes check full system for duplicates, ignoring order of combinations
                         WarningString = string.Empty;
                         DuplicatedShortcut = null;
                         //split hotkey into sequences combinations
-                        var combos = Shortcut.KeyList.Split(',').ToList<string>();
+                        var combos = KeysString.Split(',').ToList<string>();
                         //iterate over ALL shortcuts
-                        foreach(MpShortcut sc in MpShortcut.GetAllShortcuts()) {
+                        foreach (MpShortcut sc in MpShortcut.GetAllShortcuts()) {
                             //ignore same shortcut comparision
-                            if(sc.ShortcutId == Shortcut.ShortcutId) {
+                            if (sc.ShortcutId == _shortcutId) {
                                 continue;
                             }
                             var scCombos = sc.KeyList.Split(',').ToList<string>();
-                            if(combos.Count != scCombos.Count) {
+                            if (combos.Count != scCombos.Count) {
                                 continue;
                             }
                             int curComboIdx = 0;
                             bool isDuplicate = false;
-                            foreach(string scCombo in scCombos) {
+                            foreach (string scCombo in scCombos) {
                                 var scKeys = scCombo.Split('+').ToList<string>();
                                 var keys = combos[curComboIdx].Split('+').ToList<string>();
-                                if(keys.Count != scKeys.Count) {
+                                if (keys.Count != scKeys.Count) {
                                     isDuplicate = false;
                                     break;
                                 }
-                                foreach(string k in keys) {
-                                    if(scKeys.Contains(k)) {
+                                foreach (string k in keys) {
+                                    if (scKeys.Contains(k)) {
                                         isDuplicate = true;
                                     } else {
                                         isDuplicate = false;
@@ -152,24 +151,66 @@ namespace MpWpfApp {
                                 }
                                 curComboIdx++;
                             }
-                            if (isDuplicate && KeysString != _emptyKeyList) {
+                            if (isDuplicate && KeysString != string.Empty) {
                                 DuplicatedShortcut = sc;
                                 WarningString = "Warning! This combination conflicts with '" + sc.ShortcutName + "' which will be cleared if saved";
-                            } 
+                                break;
+                            }
                         }
                         break;
                 }
             };
-            Shortcut = shortcut;
-            ShortcutDisplayName = "'" + Shortcut.ShortcutName + "'";
-            KeysString = Shortcut.KeyList;
-            ResetButtonText = Shortcut.IsCustom() ? "Clear" : "Reset";
+            _shortcutId = shortcutId;
+            ShortcutDisplayName = "'" + shortcutName + "'";
+            KeysString = string.Empty;
             _isSeqComplete = true;
         }
+
+        public void AddKey(Key key, bool isNewCombination) {
+            if(isNewCombination && KeysString.Length > 0) {
+                KeysString += ",";
+                _keyList.Add(new List<Key>());
+            }
+            if(_keyList.Count == 0) {
+                _keyList.Add(new List<Key>());
+            }
+            if (!_keyList[_keyList.Count - 1].Contains(key)) {
+                _keyList[_keyList.Count - 1].Add(key);
+                switch (key) {
+                    case Key.LeftCtrl:
+                        KeysString += "+Control";
+                        break;
+                    case Key.LeftShift:
+                        KeysString += "+Shift";
+                        break;
+                    case Key.LeftAlt:
+                        KeysString += "+Alt";
+                        break;
+                    case Key.LWin:
+                        KeysString += "+LWin";
+                        break;
+                    default:
+                        KeysString += "+" + key.ToString();
+                        break;
+                }
+            }
+            if (KeysString.StartsWith("+")) {
+                KeysString = KeysString.Remove(0, 1);
+            }
+            KeysString = KeysString.Replace(",+", ",");
+        }
+        #endregion
+
+        #region Public Methods
+        public MpAssignShortcutModalWindowViewModel() : this(string.Empty) { }
+
         public void AssignHotkeyModalWindow_Loaded(object sender, RoutedEventArgs e) {
             IsOpen = true;
 
             _windowRef = (Window)sender;
+
+            _windowRef.Focus();
+
             //the following hides close button
             var hwnd = new WindowInteropHelper(_windowRef).Handle;
             WinApi.SetWindowLong(hwnd, WinApi.GWL_STYLE, WinApi.GetWindowLong(hwnd, WinApi.GWL_STYLE) & ~WinApi.WS_SYSMENU);
@@ -178,34 +219,34 @@ namespace MpWpfApp {
                 seqTimer.Stop();
 
                 if (_isSeqComplete) {
-                    Shortcut.ClearKeyList();
+                    KeysString = string.Empty;
                     _isSeqComplete = false;
                     _isNewCombination = true;
                 }
-                int precount = Shortcut.KeyList.Length;
+                int precount = KeysString.Length;
                 if (e1.KeyboardDevice.IsKeyDown(Key.LeftCtrl)) {
-                    Shortcut.AddKey(Key.LeftCtrl, _isNewCombination && Shortcut.KeyList.Length == precount);
+                    AddKey(Key.LeftCtrl, _isNewCombination && KeysString.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.RightCtrl)) {
-                    Shortcut.AddKey(Key.LeftCtrl, _isNewCombination && Shortcut.KeyList.Length == precount);
+                    AddKey(Key.LeftCtrl, _isNewCombination && KeysString.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.LeftShift)) {
-                    Shortcut.AddKey(Key.LeftShift, _isNewCombination && Shortcut.KeyList.Length == precount);
+                    AddKey(Key.LeftShift, _isNewCombination && KeysString.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.RightShift)) {
-                    Shortcut.AddKey(Key.LeftShift, _isNewCombination && Shortcut.KeyList.Length == precount);
+                    AddKey(Key.LeftShift, _isNewCombination && KeysString.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.LeftAlt)) {
-                    Shortcut.AddKey(Key.LeftAlt, _isNewCombination && Shortcut.KeyList.Length == precount);
+                    AddKey(Key.LeftAlt, _isNewCombination && KeysString.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.RightAlt)) {
-                    Shortcut.AddKey(Key.LeftAlt, _isNewCombination && Shortcut.KeyList.Length == precount);
+                    AddKey(Key.LeftAlt, _isNewCombination && KeysString.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.LWin)) {
-                    Shortcut.AddKey(Key.LWin, _isNewCombination && Shortcut.KeyList.Length == precount);
+                    AddKey(Key.LWin, _isNewCombination && KeysString.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.RWin)) {
-                    Shortcut.AddKey(Key.LWin, _isNewCombination && Shortcut.KeyList.Length == precount);
+                    AddKey(Key.LWin, _isNewCombination && KeysString.Length == precount);
                 }
                 if (e1.Key != Key.LeftCtrl &&
                    e1.Key != Key.RightCtrl &&
@@ -215,10 +256,10 @@ namespace MpWpfApp {
                    e1.Key != Key.RightShift &&
                    e1.Key != Key.LWin &&
                    e1.Key != Key.RWin) {
-                    if (Shortcut.KeyList.Length != precount) {
+                    if (KeysString.Length != precount) {
                         _isNewCombination = false;
                     }
-                    Shortcut.AddKey(e1.Key, _isNewCombination);
+                    AddKey(e1.Key, _isNewCombination);
                 } else {
                     _isNewCombination = false;
                 }
@@ -226,13 +267,12 @@ namespace MpWpfApp {
 
             _windowRef.PreviewKeyUp += (s, e1) => {
                 _isNewCombination = true;
-                KeysString = Shortcut.KeyList;
+                //KeysString = KeyList;
                 seqTimer.Start();
             };
 
             _windowRef.Closed += (s, e1) => {
                 IsOpen = false;
-                
             };
 
             seqTimer = new System.Timers.Timer(seqTimerMaxMs);
@@ -254,28 +294,23 @@ namespace MpWpfApp {
             }
         }
         private void Cancel() {
-            KeysString = "[None]";
-            Shortcut = null;
+            KeysString = string.Empty;
+            //Shortcut = null;
+            _windowRef.DialogResult = false;
             _windowRef.Close();
         }
 
-        private RelayCommand _resetCommand;
-        public ICommand ResetCommand {
+        private RelayCommand _clearCommand;
+        public ICommand ClearCommand {
             get {
-                if (_resetCommand == null) {
-                    _resetCommand = new RelayCommand(Reset);
+                if (_clearCommand == null) {
+                    _clearCommand = new RelayCommand(Clear);
                 }
-                return _resetCommand;
+                return _clearCommand;
             }
         }
-        private void Reset() {
-            if(!Shortcut.IsCustom()) {
-                Shortcut.Reset();
-                KeysString = Shortcut.KeyList;
-            } else {
-                Shortcut.ClearKeyList();
-                KeysString = "[None]";
-            }
+        private void Clear() {
+            KeysString = string.Empty;
         }
 
         private RelayCommand _saveCommand;
@@ -291,7 +326,7 @@ namespace MpWpfApp {
             return DuplicatedShortcut == null || DuplicatedShortcut.KeyList != DuplicatedShortcut.DefaultKeyList;
         }
         private void Save() {
-            if(Shortcut == null) {
+            /*if(Shortcut == null) {
                 _windowRef.Close();
                 return;
             }
@@ -304,16 +339,26 @@ namespace MpWpfApp {
                 } else {
                     Shortcut.ClearKeyList();
                 }
-            }
+            }*/
             if(DuplicatedShortcut != null) {
                 if(DuplicatedShortcut.IsCustom()) {
+                    if(DuplicatedShortcut.CopyItemId > 0) {
+                        //clear input gesture text
+                        ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).ClipTrayViewModel.Where(x => x.CopyItem.CopyItemId == DuplicatedShortcut.CopyItemId).ToList()[0].ShortcutKeyList = string.Empty;
+                        // TODO Unregister hotkey here
+                    } else {
+                        ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).TagTrayViewModel.Where(x => x.Tag.TagId == DuplicatedShortcut.TagId).ToList()[0].ShortcutKeyList = string.Empty;
+                        // TODO Unregister hotkey here
+                    }
                     DuplicatedShortcut.DeleteFromDatabase();
                 } else {
                     DuplicatedShortcut.ClearKeyList();
                     DuplicatedShortcut.WriteToDatabase();
                 }
+                DuplicatedShortcut.UnregisterShortcut();
             }
-            Shortcut.WriteToDatabase();
+            //Shortcut.WriteToDatabase();
+            _windowRef.DialogResult = true;
             _windowRef.Close();
         }
         #endregion

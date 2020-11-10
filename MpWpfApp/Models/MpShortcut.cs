@@ -1,15 +1,17 @@
-﻿using Gma.System.MouseKeyHook;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Windows;
+using System.Threading;
 using System.Windows.Input;
+using System.Reactive.Linq;
+using Gma.System.MouseKeyHook;
+using MouseKeyHook.Rx;
 
 namespace MpWpfApp {
     public class MpShortcut : MpDbObject {
-        private static List<MpShortcut> _CommandList = new List<MpShortcut>();
-
+        #region Public Properties
         public int ShortcutId { get; set; } = 0;
         public string ShortcutName { get; set; } = "None";
         public string KeyList { get; set; } = string.Empty;
@@ -19,8 +21,11 @@ namespace MpWpfApp {
         public int TagId { get; set; } = 0;
 
         public ICommand Command { get; set; }
+        #endregion
 
-        private List<List<Key>> _keyList = new List<List<Key>>();
+        #region Private Variables
+        private IDisposable _keysObservable = null;
+        #endregion
 
         #region Static Methods
         public static List<MpShortcut> GetAllShortcuts() {
@@ -43,6 +48,7 @@ namespace MpWpfApp {
             return GetAllShortcuts().Where(x => x.TagId == tagId).ToList();
         }
         #endregion
+
         #region Public Methods
         public MpShortcut() {
             ShortcutId = 0;
@@ -50,7 +56,7 @@ namespace MpWpfApp {
             Command = null;
             KeyList = string.Empty;
             DefaultKeyList = string.Empty;
-            _keyList = new List<List<Key>>();
+            _keysObservable = null;
             IsGlobal = false;
             CopyItemId = -1;
             TagId = -1;
@@ -67,26 +73,54 @@ namespace MpWpfApp {
         public void Reset() {
             KeyList = DefaultKeyList;
         }
+        public bool UnregisterShortcut() {
+            if(_keysObservable != null) {
+                _keysObservable.Dispose();
+                return true;
+            }
+            return false;
+        }
         public bool RegisterShortcutCommand(ICommand icommand) {
             try {
-                var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
+                UnregisterShortcut();
+                var mwvm = (MpMainWindowViewModel)System.Windows.Application.Current.MainWindow.DataContext;
+                
                 if (IsSequence()) {
-                    var sequenceAssignments = new Dictionary<Sequence, Action>();
-                    sequenceAssignments.Add(Sequence.FromString(KeyList), () => icommand.Execute(null));
-                    if(IsGlobal) {
-                        mwvm.GlobalHook.OnSequence(sequenceAssignments);
+                    var seq = new Trigger[] { Trigger.FromString(KeyList) };
+                    //var sequenceAssignments = new Dictionary<Sequence, Action>();
+                    //sequenceAssignments.Add(Sequence.FromString(KeyList), () => icommand.Execute(null));
+                    if (IsGlobal) {
+                        //mwvm.GlobalHook.OnSequence(sequenceAssignments);
+                        _keysObservable = mwvm.GlobalHook.KeyDownObservable().Matching(seq).Subscribe((trigger) => {
+                            //Debug.WriteLine(trigger.ToString());
+                            icommand?.Execute(null);
+                        });
                     } else {
-                        mwvm.ApplicationHook.OnSequence(sequenceAssignments);
+                        //mwvm.ApplicationHook.OnSequence(sequenceAssignments);
+                        _keysObservable = mwvm.ApplicationHook.KeyDownObservable().Matching(seq).Subscribe((trigger) => {
+                            //Debug.WriteLine(trigger.ToString());
+                            icommand?.Execute(null);
+                        });
                     }
                 } else {
-                    var combinationAssignments = new Dictionary<Combination, Action>();
-                    combinationAssignments.Add(Combination.FromString(KeyList), () => icommand.Execute(null));
+                    var comb = new Trigger[] { Trigger.FromString(KeyList) };
+                    //var combinationAssignments = new Dictionary<Combination, Action>();
+                    //combinationAssignments.Add(Combination.FromString(KeyList), () => icommand.Execute(null));
                     if(IsGlobal) {
-                        mwvm.GlobalHook.OnCombination(combinationAssignments);
+                        //mwvm.GlobalHook.OnCombination(combinationAssignments);
+                        _keysObservable = mwvm.GlobalHook.KeyDownObservable().Matching(comb).Subscribe((trigger) => {
+                            //Debug.WriteLine(trigger.ToString());
+                            icommand?.Execute(null);
+                        });
                     } else {
-                        mwvm.ApplicationHook.OnCombination(combinationAssignments);
+                        //mwvm.ApplicationHook.OnCombination(combinationAssignments);
+                        _keysObservable = mwvm.ApplicationHook.KeyDownObservable().Matching(comb).Subscribe((trigger) => {
+                            //Debug.WriteLine(trigger.ToString());
+                            icommand?.Execute(null);
+                        });
                     }
                 }
+                
             }
             catch (Exception ex) {
                 Console.WriteLine("Error creating shortcut: " + ex.ToString());
@@ -96,39 +130,7 @@ namespace MpWpfApp {
             Command = icommand;
             return true;
         }
-        public void AddKey(Key key, bool isNewCombination) {
-            if(isNewCombination && KeyList.Length > 0) {
-                KeyList += ",";
-                _keyList.Add(new List<Key>());
-            }
-            if(_keyList.Count == 0) {
-                _keyList.Add(new List<Key>());
-            }
-            if (!_keyList[_keyList.Count - 1].Contains(key)) {
-                _keyList[_keyList.Count - 1].Add(key);
-                switch (key) {
-                    case Key.LeftCtrl:
-                        KeyList += "+Control";
-                        break;
-                    case Key.LeftShift:
-                        KeyList += "+Shift";
-                        break;
-                    case Key.LeftAlt:
-                        KeyList += "+Alt";
-                        break;
-                    case Key.LWin:
-                        KeyList += "+LWin";
-                        break;
-                    default:
-                        KeyList += "+" + key.ToString();
-                        break;
-                }
-            }
-            if (KeyList.StartsWith("+")) {
-                KeyList = KeyList.Remove(0, 1);
-            }
-            KeyList = KeyList.Replace(",+", ",");
-        }
+        
 
         public override void LoadDataRow(DataRow dr) {
             ShortcutId = Convert.ToInt32(dr["pk_MpShortcutId"].ToString());
@@ -167,7 +169,6 @@ namespace MpWpfApp {
         }
         public void ClearKeyList() {
             KeyList = string.Empty;
-            _keyList = new List<List<Key>>();
         }
         public override string ToString() {
             string outStr = "Shortcut Name: " + ShortcutName;

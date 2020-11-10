@@ -109,5 +109,8 @@
     <Setting Name="CmdNameInvertSelection" Type="System.String" Scope="User">
       <Value Profile="(Default)">Invert Selection</Value>
     </Setting>
+    <Setting Name="MaxShortcutTitleLength" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

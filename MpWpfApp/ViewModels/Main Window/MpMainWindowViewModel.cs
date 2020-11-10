@@ -262,20 +262,22 @@ namespace MpWpfApp {
 
                 var showMainWindowCommand = MpShortcut.GetShortcutByName(Properties.Settings.Default.CmdNameShowWindow);
                 foreach (MpShortcut cmd in showMainWindowCommand) {
-                    if (cmd.IsSequence()) {
-                        sequenceAssignments.Add(Sequence.FromString(cmd.KeyList), () => ShowWindowCommand.Execute(null));
-                    } else {
-                        combinationAssignments.Add(Combination.FromString(cmd.KeyList), () => ShowWindowCommand.Execute(null));
-                    }
+                    cmd.RegisterShortcutCommand(ShowWindowCommand);
+                    //if (cmd.IsSequence()) {
+                    //    sequenceAssignments.Add(Sequence.FromString(cmd.KeyList), () => ShowWindowCommand.Execute(null));
+                    //} else {
+                    //    combinationAssignments.Add(Combination.FromString(cmd.KeyList), () => ShowWindowCommand.Execute(null));
+                    //}
                 }
 
                 var hideMainWindowCommand = MpShortcut.GetShortcutByName(Properties.Settings.Default.CmdNameHideWindow);
                 foreach (MpShortcut cmd in hideMainWindowCommand) {
-                    if (cmd.IsSequence()) {
-                        sequenceAssignments.Add(Sequence.FromString(cmd.KeyList), () => HideWindowCommand.Execute(null));
-                    } else {
-                        combinationAssignments.Add(Combination.FromString(cmd.KeyList), () => HideWindowCommand.Execute(null));
-                    }
+                    cmd.RegisterShortcutCommand(HideWindowCommand);
+                    //if (cmd.IsSequence()) {
+                    //    sequenceAssignments.Add(Sequence.FromString(cmd.KeyList), () => HideWindowCommand.Execute(null));
+                    //} else {
+                    //    combinationAssignments.Add(Combination.FromString(cmd.KeyList), () => HideWindowCommand.Execute(null));
+                    //}
                 }
 
                 if (sequenceAssignments.Count > 0) {
