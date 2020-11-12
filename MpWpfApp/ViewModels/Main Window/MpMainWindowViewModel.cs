@@ -262,29 +262,12 @@ namespace MpWpfApp {
 
                 var showMainWindowCommand = MpShortcut.GetShortcutByName(Properties.Settings.Default.CmdNameShowWindow);
                 foreach (MpShortcut cmd in showMainWindowCommand) {
-                    cmd.RegisterShortcutCommand(ShowWindowCommand);
-                    //if (cmd.IsSequence()) {
-                    //    sequenceAssignments.Add(Sequence.FromString(cmd.KeyList), () => ShowWindowCommand.Execute(null));
-                    //} else {
-                    //    combinationAssignments.Add(Combination.FromString(cmd.KeyList), () => ShowWindowCommand.Execute(null));
-                    //}
+                    MpShortcutViewModel.RegisterShortcutViewModel(cmd.ShortcutName, true, ShowWindowCommand, cmd.KeyList, 0, 0);
                 }
 
                 var hideMainWindowCommand = MpShortcut.GetShortcutByName(Properties.Settings.Default.CmdNameHideWindow);
                 foreach (MpShortcut cmd in hideMainWindowCommand) {
-                    cmd.RegisterShortcutCommand(HideWindowCommand);
-                    //if (cmd.IsSequence()) {
-                    //    sequenceAssignments.Add(Sequence.FromString(cmd.KeyList), () => HideWindowCommand.Execute(null));
-                    //} else {
-                    //    combinationAssignments.Add(Combination.FromString(cmd.KeyList), () => HideWindowCommand.Execute(null));
-                    //}
-                }
-
-                if (sequenceAssignments.Count > 0) {
-                    GlobalHook.OnSequence(sequenceAssignments);
-                }
-                if (combinationAssignments.Count > 0) {
-                    GlobalHook.OnCombination(combinationAssignments);
+                    MpShortcutViewModel.RegisterShortcutViewModel(cmd.ShortcutName, false, HideWindowCommand, cmd.KeyList, 0, 0);
                 }
             }
             catch(Exception ex) {

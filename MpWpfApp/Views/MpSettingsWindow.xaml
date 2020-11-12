@@ -147,7 +147,7 @@
             </StackPanel>
             <DataGrid Grid.Row="1" x:Name="ShortcutDatagrid"
                       DataContext="{Binding}"
-                      ItemsSource="{Binding ShortcutList, NotifyOnSourceUpdated=True}"
+                      ItemsSource="{Binding ShortcutViewModels, NotifyOnSourceUpdated=True}"
                       HorizontalAlignment="Center"
                       SelectedIndex="{Binding SelectedShortcutIndex, Mode=TwoWay}"
                       SelectionMode="Single"

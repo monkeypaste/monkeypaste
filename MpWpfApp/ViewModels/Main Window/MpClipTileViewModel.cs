@@ -759,9 +759,9 @@
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             foreach (MpShortcut cmd in MpShortcut.GetShortcutByCopyItemId(CopyItem.CopyItemId)) {
-                cmd.RegisterShortcutCommand(PasteClipCommand);
-                Shortcut = cmd;
-                ShortcutKeyList = Shortcut.KeyList;
+                MpShortcutViewModel.RegisterShortcutViewModel(cmd.ShortcutName, cmd.IsGlobal, PasteClipCommand, cmd.KeyList, CopyItem.CopyItemId, 0);
+                //Shortcut = cmd;
+                ShortcutKeyList = cmd.KeyList;
             }
             var clipTileBorder = (MpClipBorder)sender;
             clipTileBorder.MouseEnter += (s, e1) => {
@@ -988,7 +988,7 @@
                     if (CopyItemType == MpCopyItemType.Image) {
                         info = "(" + Bmp.Width + ") x (" + Bmp.Height + ")";
                     } else if (CopyItemType == MpCopyItemType.RichText) {
-                        info = PlainText.Length + " chars | " + MpHelpers.GetRowCount(PlainText) + " lines";
+                        info = CopyItem.ItemPlainText.Length + " chars | " + MpHelpers.GetRowCount(CopyItem.ItemPlainText) + " lines";
                     } else if (CopyItemType == MpCopyItemType.FileList) {
                         info = FileListViewModels.Count + " files | " + MpHelpers.FileListSize(CopyItem.GetFileList().ToArray()) + " bytes";
                     }
@@ -1094,7 +1094,8 @@
         }
         private void AssignHotkey() {
             ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
-            var str = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(ShortcutName);
+            ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(ShortcutName);
+            MpShortcutViewModel.RegisterShortcutViewModel(ShortcutName, true, PasteClipCommand, ShortcutKeyList, CopyItem.CopyItemId, 0);
             /*
             MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
             var ahkmwvm = (MpAssignShortcutModalWindowViewModel)ahkmw.DataContext;

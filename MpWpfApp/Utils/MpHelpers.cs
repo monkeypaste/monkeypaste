@@ -327,7 +327,7 @@ namespace MpWpfApp {
         }
 
         public static int GetRowCount(string text) {
-            return text.Trim('\r','\n').Split(Environment.NewLine.ToCharArray()).Length;
+            return text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Length;
         }
 
         public static Size GetTextDimensions(string text) {

@@ -198,6 +198,13 @@ namespace MpWpfApp {
                 KeysString = KeysString.Remove(0, 1);
             }
             KeysString = KeysString.Replace(",+", ",");
+
+            //sort keysstring by with precedence ctrl, win, alt, shift, text
+            //int sortIdx = 0;
+            //var ksl = KeysString.Split('+').ToList();
+            //while(sortIdx < ksl.Count) {
+
+            //}
         }
         #endregion
 
@@ -341,7 +348,7 @@ namespace MpWpfApp {
                 }
             }*/
             if(DuplicatedShortcut != null) {
-                if(DuplicatedShortcut.IsCustom()) {
+                if(DuplicatedShortcut.CopyItemId > 0 || DuplicatedShortcut.TagId > 0) {
                     if(DuplicatedShortcut.CopyItemId > 0) {
                         //clear input gesture text
                         ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).ClipTrayViewModel.Where(x => x.CopyItem.CopyItemId == DuplicatedShortcut.CopyItemId).ToList()[0].ShortcutKeyList = string.Empty;
@@ -352,10 +359,10 @@ namespace MpWpfApp {
                     }
                     DuplicatedShortcut.DeleteFromDatabase();
                 } else {
-                    DuplicatedShortcut.ClearKeyList();
+                    DuplicatedShortcut.KeyList = string.Empty;
                     DuplicatedShortcut.WriteToDatabase();
                 }
-                DuplicatedShortcut.UnregisterShortcut();
+                //DuplicatedShortcut.UnregisterShortcut();
             }
             //Shortcut.WriteToDatabase();
             _windowRef.DialogResult = true;

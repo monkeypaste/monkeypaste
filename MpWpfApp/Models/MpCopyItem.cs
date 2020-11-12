@@ -38,6 +38,9 @@ namespace MpWpfApp {
                 return CopyCount + PasteCount;
             }
         }
+        public int Width { get; set; } = 0;
+        public int Height { get; set; } = 0;
+
         public string SourcePath { get; set; }
 
         public string ItemPlainText { get; set; }
@@ -104,18 +107,22 @@ namespace MpWpfApp {
                     string paths = string.Empty;
                     foreach (string str in (string[])data) {
                         paths += str + Environment.NewLine;
+                        newItem.Width = Math.Max(newItem.Width, str.Length);
                     }
                     newItem.ItemPlainText = paths;
                     newItem.ItemRichText = MpHelpers.ConvertPlainTextToRichText(newItem.ItemPlainText);
                     newItem.ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(newItem.ItemRichText);
                     newItem.ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(newItem.ItemRichText);
                     newItem.SubTextTokenList = MpSubTextToken.GatherTokens((string)newItem.ItemRichText);
+                    newItem.Height = ((string[])data).Length;
                     break;
                 case MpCopyItemType.Image:
                     newItem.ItemBitmapSource = (BitmapSource)data;
                     newItem.ItemPlainText = MpHelpers.ConvertBitmapSourceToPlainText(newItem.ItemBitmapSource);
                     newItem.ItemRichText = MpHelpers.ConvertPlainTextToRichText(newItem.ItemPlainText);
                     newItem.ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(newItem.ItemRichText);
+                    newItem.Height = newItem.ItemBitmapSource.PixelHeight;
+                    newItem.Width = newItem.ItemBitmapSource.PixelWidth;
                     break;
                 case MpCopyItemType.RichText:
                     newItem.ItemPlainText = MpHelpers.IsStringRichText((string)data) ? MpHelpers.ConvertRichTextToPlainText((string)data) : (string)data;
@@ -123,6 +130,7 @@ namespace MpWpfApp {
                     newItem.ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(newItem.ItemRichText);
                     newItem.ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(newItem.ItemRichText);
                     newItem.SubTextTokenList = MpSubTextToken.GatherTokens((string)newItem.ItemRichText);
+                    newItem.Height = MpHelpers.GetRowCount((string)data);
                     break;
             }
 

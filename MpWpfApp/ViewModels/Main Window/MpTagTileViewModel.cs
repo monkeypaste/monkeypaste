@@ -315,9 +315,9 @@ namespace MpWpfApp {
 
         public void TagTile_Loaded(object sender, RoutedEventArgs e) {
             foreach (MpShortcut cmd in MpShortcut.GetShortcutByTagId(Tag.TagId)) {
-                cmd.RegisterShortcutCommand(SelectTagCommand);
-                Shortcut = cmd;
-                ShortcutKeyList = Shortcut.KeyList;
+                MpShortcutViewModel.RegisterShortcutViewModel(cmd.ShortcutName, cmd.IsGlobal, SelectTagCommand, cmd.KeyList, 0, Tag.TagId);
+                //Shortcut = cmd;
+                ShortcutKeyList = cmd.KeyList;
             }
             var tagBorder = (MpClipBorder)sender;
             tagBorder.MouseEnter += (s, e1) => {
@@ -367,6 +367,8 @@ namespace MpWpfApp {
         }
         private void AssignHotkey() {
             TagTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
+            ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(TagName);
+            MpShortcutViewModel.RegisterShortcutViewModel(TagName, false, SelectTagCommand, ShortcutKeyList, 0, Tag.TagId);
             /*MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
             var ahkmwvm = (MpAssignShortcutModalWindowViewModel)ahkmw.DataContext;
             if (Shortcut == null) {

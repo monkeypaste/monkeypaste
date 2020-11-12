@@ -51,6 +51,7 @@ namespace MpWpfApp {
         #region Static Variables
         public static bool IsOpen = false;
         #endregion
+
         #region View Models
         public MpSystemTrayViewModel SystemTrayViewModel { get; set; }
         #endregion
@@ -128,14 +129,14 @@ namespace MpWpfApp {
         }
 
         private ObservableCollection<MpShortcutViewModel> _shortcutList = new ObservableCollection<MpShortcutViewModel>();
-        public ObservableCollection<MpShortcutViewModel> ShortcutList {
+        public ObservableCollection<MpShortcutViewModel> ShortcutViewModels {
             get {
                 return _shortcutList;
             }
             set {
                 if(_shortcutList != value) {
                     _shortcutList = value;
-                    OnPropertyChanged(nameof(ShortcutList));
+                    OnPropertyChanged(nameof(ShortcutViewModels));
                 }
             }
         }
@@ -161,10 +162,10 @@ namespace MpWpfApp {
             _windowRef.Closed += (s, e2) => {
                 IsOpen = false;
             };
-            foreach(MpShortcut sc in MpShortcut.GetAllShortcuts()) {
-                ShortcutList.Add(new MpShortcutViewModel(sc));
+            foreach(MpShortcutViewModel sc in MpShortcutViewModel.ShortcutViewModels) {
+                ShortcutViewModels.Add(sc);
             }
-            ShortcutList.CollectionChanged += (s, e1) => {
+            ShortcutViewModels.CollectionChanged += (s, e1) => {
                 if(e1.OldItems != null && e1.OldItems.Count > 0) {
                     foreach(MpShortcutViewModel cmdToRemove in e1.OldItems) {
                         cmdToRemove.Shortcut.DeleteFromDatabase();
@@ -228,7 +229,7 @@ namespace MpWpfApp {
             foreach (MpShortcut sc in _shortcutsToDelete) {
                 sc.DeleteFromDatabase();
             }
-            foreach (MpShortcutViewModel sc in ShortcutList) {
+            foreach (MpShortcutViewModel sc in ShortcutViewModels) {
                 //wait to actually reset shortcut when save clicked
                 if(_shortcutsToReset.Contains(sc.Shortcut)) {
                     sc.Shortcut.Reset();
@@ -262,6 +263,9 @@ namespace MpWpfApp {
         }
         private void ReassignShortcut() {
             SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
+            ShortcutViewModels[SelectedShortcutIndex].KeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(ShortcutViewModels[SelectedShortcutIndex].ShortcutDisplayName, ShortcutViewModels[SelectedShortcutIndex].Shortcut.ShortcutId);
+            MpShortcutViewModel.RegisterShortcutViewModel(ShortcutViewModels[SelectedShortcutIndex].ShortcutDisplayName, ShortcutViewModels[SelectedShortcutIndex].IsGlobal, ShortcutViewModels[SelectedShortcutIndex].Command, ShortcutViewModels[SelectedShortcutIndex].KeyList, ShortcutViewModels[SelectedShortcutIndex].Shortcut.CopyItemId, ShortcutViewModels[SelectedShortcutIndex].Shortcut.TagId);
+
             /*MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
             var ahkmwvm = (MpAssignShortcutModalWindowViewModel)ahkmw.DataContext;
             ahkmwvm.Init(ShortcutList[SelectedShortcutIndex].Shortcut);
@@ -286,8 +290,8 @@ namespace MpWpfApp {
         }
         private void DeleteShortcut() {
             Console.WriteLine("Deleting row: " + SelectedShortcutIndex);
-            var shortcutToRemove = ShortcutList[SelectedShortcutIndex];
-            ShortcutList.Remove(shortcutToRemove);
+            var shortcutToRemove = ShortcutViewModels[SelectedShortcutIndex];
+            ShortcutViewModels.Remove(shortcutToRemove);
 
             _shortcutsToDelete.Add(shortcutToRemove.Shortcut);
         }
@@ -303,8 +307,8 @@ namespace MpWpfApp {
         }
         private void ResetShortcut() {
             Console.WriteLine("Reset row: " + SelectedShortcutIndex);
-            ShortcutList[SelectedShortcutIndex].KeyList = ShortcutList[SelectedShortcutIndex].Shortcut.DefaultKeyList;
-            _shortcutsToReset.Add(ShortcutList[SelectedShortcutIndex].Shortcut);
+            ShortcutViewModels[SelectedShortcutIndex].KeyList = ShortcutViewModels[SelectedShortcutIndex].Shortcut.DefaultKeyList;
+            _shortcutsToReset.Add(ShortcutViewModels[SelectedShortcutIndex].Shortcut);
         }
 
         private RelayCommand _clickSettingsPanel1Command;

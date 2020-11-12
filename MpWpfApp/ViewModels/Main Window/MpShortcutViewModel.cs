@@ -1,15 +1,29 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
+using MouseKeyHook.Rx;
 
 namespace MpWpfApp {
     public class MpShortcutViewModel : MpViewModelBase {
+        #region Properties
+        public IDisposable KeysObservable { get; set; }
+
+        private ICommand _command = null;
+        public ICommand Command {
+            get {
+                return _command;
+            }
+            set {
+                if (_command != value) {
+                    _command = value;
+                    OnPropertyChanged(nameof(Command));
+                }
+            }
+        }
+
         private string _keyList = string.Empty;
         public string KeyList {
             get {
@@ -18,21 +32,20 @@ namespace MpWpfApp {
             set {
                 if(_keyList != value) {
                     _keyList = value;
-                    Shortcut.KeyList = _keyList;
                     OnPropertyChanged(nameof(KeyList));
                 }
             }
         }
-        private string _shortcutName = string.Empty;
-        public string ShortcutName {
+
+        private string _shortcutDisplayName = string.Empty;
+        public string ShortcutDisplayName {
             get {
-                return _shortcutName;
+                return _shortcutDisplayName;
             }
             set {
-                if (_shortcutName != value) {
-                    _shortcutName = value;
-                    Shortcut.ShortcutName = _shortcutName;
-                    OnPropertyChanged(nameof(ShortcutName));
+                if (_shortcutDisplayName != value) {
+                    _shortcutDisplayName = value;
+                    OnPropertyChanged(nameof(ShortcutDisplayName));
                 }
             }
         }
@@ -90,31 +103,115 @@ namespace MpWpfApp {
         }
 
         public MpShortcut Shortcut { get; set; }
+        #endregion
 
-        public MpShortcutViewModel(MpShortcut shortcut) {
-            if(shortcut == null) {
-                throw new Exception("ShortcutViewModel error, shortcut cannot be null");
+        #region Statics
+        public static ObservableCollection<MpShortcutViewModel> ShortcutViewModels { get; set; } = new ObservableCollection<MpShortcutViewModel>();
+        
+        public static MpShortcutViewModel RegisterShortcutViewModel(string shortcutName, bool isGlobal, ICommand command, string keys, int copyItemId = -1, int tagId = -1) {            
+            //lookup shortcut by its command to see if it already exists
+            var temp = ShortcutViewModels.Where(x => x.Command == command).ToList();
+            int scvmIdx = -1;
+            //if shortcut already exists update the keys or create a new one
+            if(temp != null && temp.Count > 0) {
+                scvmIdx = ShortcutViewModels.IndexOf(temp[0]);
+                ShortcutViewModels[scvmIdx].KeyList = keys;
+            } else {
+                ShortcutViewModels.Add(new MpShortcutViewModel(shortcutName, isGlobal, command, keys, copyItemId, tagId));
+                scvmIdx = ShortcutViewModels.Count - 1;
             }
-            Shortcut = shortcut;
-            KeyList = Shortcut.KeyList;
-            ShortcutName = Shortcut.ShortcutName;
-            IsGlobal = Shortcut.IsGlobal;
-            if(Shortcut.IsCustom()) {
-                if(Shortcut.CopyItemId > 0) {
+
+            //unregister if already exists
+            if(ShortcutViewModels[scvmIdx].KeysObservable != null) {
+                ShortcutViewModels[scvmIdx].KeysObservable.Dispose();
+            }
+            //only register if non-empty keysstring
+            if (string.IsNullOrEmpty(ShortcutViewModels[scvmIdx].KeyList)) {
+                if(ShortcutViewModels[scvmIdx].IsCustom()) {
+                    ShortcutViewModels[scvmIdx].Shortcut.DeleteFromDatabase();
+                    return null;
+                } else {
+                    ShortcutViewModels[scvmIdx].Shortcut.WriteToDatabase();
+                    return ShortcutViewModels[scvmIdx];
+                }
+            } else { 
+                try {
+                    var mwvm = (MpMainWindowViewModel)System.Windows.Application.Current.MainWindow.DataContext;
+                    var t = new MouseKeyHook.Rx.Trigger[] { MouseKeyHook.Rx.Trigger.FromString(ShortcutViewModels[scvmIdx].KeyList) };
+                    if (ShortcutViewModels[scvmIdx].IsGlobal) {
+                        ShortcutViewModels[scvmIdx].KeysObservable = mwvm.GlobalHook.KeyDownObservable().Matching(t).Subscribe((trigger) => {
+                            ShortcutViewModels[scvmIdx].Command?.Execute(null);
+                        });
+                    } else {
+                        ShortcutViewModels[scvmIdx].KeysObservable = mwvm.ApplicationHook.KeyDownObservable().Matching(t).Subscribe((trigger) => {
+                            ShortcutViewModels[scvmIdx].Command?.Execute(null);
+                        });
+                    }
+                }
+                catch (Exception ex) {
+                    Console.WriteLine("Error creating shortcut: " + ex.ToString());
+                    return null;
+                }
+                ShortcutViewModels[scvmIdx].Shortcut.WriteToDatabase();
+                Console.WriteLine("Shortcut Successfully registered for '" + ShortcutViewModels[scvmIdx].ShortcutDisplayName + "' with hotkeys: " + ShortcutViewModels[scvmIdx].KeyList);
+                return ShortcutViewModels[scvmIdx];
+            }
+        }
+        #endregion
+
+        #region Public Methods
+        public MpShortcutViewModel(string shortcutName, bool isGlobal, ICommand command, string keys, int copyItemId = -1, int tagId = -1) {
+            PropertyChanged += (s, e) => {
+                switch(e.PropertyName) {
+                    case nameof(KeyList):
+                        Shortcut.KeyList = KeyList;
+                        break;
+                    case nameof(ShortcutDisplayName):
+                        Shortcut.ShortcutName = ShortcutDisplayName;
+                        break;
+                    case nameof(IsGlobal):
+                        Shortcut.IsGlobal = IsGlobal;
+                        break;
+                }
+            };
+            Shortcut = new MpShortcut();
+            Shortcut.CopyItemId = copyItemId;
+            Shortcut.TagId = tagId;
+            KeyList = keys;
+            ShortcutDisplayName = shortcutName;
+            IsGlobal = isGlobal;
+            Command = command;
+            if (IsCustom()) {
+                if (Shortcut.CopyItemId > 0) {
                     ShortcutTypeName = "Clip";
                 } else {
                     ShortcutTypeName = "Tag";
                 }
-            } else {
-                ShortcutTypeName = "Application";
-            }
-            if(Shortcut.TagId <= 0 && Shortcut.CopyItemId <= 0) {
-                ResetButtonVisibility = Visibility.Visible;
-                DeleteButtonVisibility = Visibility.Collapsed;
-            } else {
                 ResetButtonVisibility = Visibility.Collapsed;
                 DeleteButtonVisibility = Visibility.Visible;
+            } else {
+                ShortcutTypeName = "Application"; 
+                ResetButtonVisibility = Visibility.Visible;
+                DeleteButtonVisibility = Visibility.Collapsed;
             }
         }
+
+        public MpShortcutViewModel(MpShortcut s, ICommand command) : this(s.ShortcutName, s.IsGlobal, command, s.KeyList, s.CopyItemId, s.TagId) {
+            //Shortcut = s;
+        }
+
+        public bool IsSequence() {
+            return KeyList.Contains(",");
+        }
+        public bool IsCustom() {
+            return Shortcut.CopyItemId > 0 || Shortcut.TagId > 0;
+        }
+        public void ClearKeyList() {
+            KeyList = string.Empty;
+        }
+        #endregion
+
+        #region Private Methods
+        #endregion
     }
 }
