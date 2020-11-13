@@ -62,10 +62,8 @@ namespace MpWpfApp {
         }
         private void ShowSettingsWindow() {
             MainWindowViewModel.IsShowingDialog = true;
-            MpSettingsWindow sw = new MpSettingsWindow();
-            var swvm = (MpSettingsWindowViewModel)sw.DataContext;
-            swvm.Init(this);
-            sw.ShowDialog();
+            MainWindowViewModel.HideWindowCommand.Execute(null);
+            MpSettingsWindowViewModel.ShowSettingsWindow(this);
             MainWindowViewModel.IsShowingDialog = false;
         }
         #endregion

@@ -58,8 +58,10 @@ namespace MpWpfApp {
 
         #region Private Variables
         private Window _windowRef;
-        private List<MpShortcut> _shortcutsToDelete = new List<MpShortcut>();
-        private List<MpShortcut> _shortcutsToReset = new List<MpShortcut>();
+
+        private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsBackup = new ObservableCollection<MpShortcutViewModel>();
+        private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsToDelete = new ObservableCollection<MpShortcutViewModel>();
+        private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsToRegister = new ObservableCollection<MpShortcutViewModel>();
         #endregion
 
         #region Properties
@@ -155,7 +157,17 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Static Methods
+        public static bool ShowSettingsWindow(MpSystemTrayViewModel stvm) {
+            var sw = new MpSettingsWindow();
+            sw.DataContext = new MpSettingsWindowViewModel(stvm);
+            return sw.ShowDialog() ?? false;
+        }
+        #endregion
+
         #region Public Methods
+        public MpSettingsWindowViewModel() : this(null) { }
+
         public void SettingsWindow_Loaded(object sender, RoutedEventArgs e) {
             _windowRef = (Window)sender;
             IsOpen = true;
@@ -178,7 +190,12 @@ namespace MpWpfApp {
                 }
             };
         }
-        public void Init(MpSystemTrayViewModel stvm) {
+
+        #endregion
+
+        #region Private Methods
+        private MpSettingsWindowViewModel(MpSystemTrayViewModel stvm) {
+            _shortcutViewModelsBackup = ShortcutViewModels;
             SystemTrayViewModel = stvm;
             SettingsPanel1Visibility = Visibility.Visible;
             SettingsPanel2Visibility = Visibility.Collapsed;
@@ -186,9 +203,6 @@ namespace MpWpfApp {
             SettingsPanel4Visibility = Visibility.Collapsed;
             SettingsPanel5Visibility = Visibility.Collapsed;
         }
-        #endregion
-
-        #region Private Methods
         private void SetLoadOnLogin(bool loadOnLogin) {
             Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             string appName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
@@ -213,6 +227,7 @@ namespace MpWpfApp {
             }
         }
         private void CancelSettings() {
+            ShortcutViewModels = new ObservableCollection<MpShortcutViewModel>(_shortcutViewModelsBackup);
             _windowRef.Close();
         }
 
@@ -226,15 +241,20 @@ namespace MpWpfApp {
             }
         }
         private void SaveSettings() {
-            foreach (MpShortcut sc in _shortcutsToDelete) {
-                sc.DeleteFromDatabase();
+            foreach (var scvm in _shortcutViewModelsToDelete) {
+                scvm.Unregister();
+                scvm.Shortcut.DeleteFromDatabase();
             }
-            foreach (MpShortcutViewModel sc in ShortcutViewModels) {
-                //wait to actually reset shortcut when save clicked
-                if(_shortcutsToReset.Contains(sc.Shortcut)) {
-                    sc.Shortcut.Reset();
-                }
-                sc.Shortcut.WriteToDatabase();
+            foreach (var scvm in _shortcutViewModelsToRegister) {
+                MpShortcutViewModel.RegisterShortcutViewModel(
+                    scvm.ShortcutDisplayName, 
+                    scvm.RoutingType, 
+                    scvm.Command, 
+                    scvm.KeyList, 
+                    scvm.Shortcut.CopyItemId, 
+                    scvm.Shortcut.TagId,
+                    scvm.ShortcutId);
+                scvm.Shortcut.WriteToDatabase();
             }
             _windowRef.Close();
         }
@@ -262,20 +282,13 @@ namespace MpWpfApp {
             }
         }
         private void ReassignShortcut() {
+            Console.WriteLine("Reassigning shortcut from: " + ShortcutViewModels[SelectedShortcutIndex].Shortcut.ToString());
             SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
+            
             ShortcutViewModels[SelectedShortcutIndex].KeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(ShortcutViewModels[SelectedShortcutIndex].ShortcutDisplayName, ShortcutViewModels[SelectedShortcutIndex].Shortcut.ShortcutId);
-            MpShortcutViewModel.RegisterShortcutViewModel(ShortcutViewModels[SelectedShortcutIndex].ShortcutDisplayName, ShortcutViewModels[SelectedShortcutIndex].IsGlobal, ShortcutViewModels[SelectedShortcutIndex].Command, ShortcutViewModels[SelectedShortcutIndex].KeyList, ShortcutViewModels[SelectedShortcutIndex].Shortcut.CopyItemId, ShortcutViewModels[SelectedShortcutIndex].Shortcut.TagId);
-
-            /*MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
-            var ahkmwvm = (MpAssignShortcutModalWindowViewModel)ahkmw.DataContext;
-            ahkmwvm.Init(ShortcutList[SelectedShortcutIndex].Shortcut);
-            ahkmw.ShowDialog();
-            if (ahkmwvm.Shortcut == null) {
-                //dialog was canceled ignore assignment changes
-            } else {
-                ahkmwvm.Shortcut.RegisterShortcutCommand(ShortcutList[SelectedShortcutIndex].Shortcut.Command);
-                ShortcutList[SelectedShortcutIndex].KeyList = ahkmwvm.Shortcut.KeyList;
-            }*/
+            _shortcutViewModelsToRegister.Add(ShortcutViewModels[SelectedShortcutIndex]);
+            
+            Console.WriteLine("Reassigning shortcut to: " + ShortcutViewModels[SelectedShortcutIndex].Shortcut.ToString());
             SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }
 
@@ -292,8 +305,7 @@ namespace MpWpfApp {
             Console.WriteLine("Deleting row: " + SelectedShortcutIndex);
             var shortcutToRemove = ShortcutViewModels[SelectedShortcutIndex];
             ShortcutViewModels.Remove(shortcutToRemove);
-
-            _shortcutsToDelete.Add(shortcutToRemove.Shortcut);
+            _shortcutViewModelsToDelete.Add(shortcutToRemove);
         }
 
         private RelayCommand _resetShortcutCommand;
@@ -308,7 +320,7 @@ namespace MpWpfApp {
         private void ResetShortcut() {
             Console.WriteLine("Reset row: " + SelectedShortcutIndex);
             ShortcutViewModels[SelectedShortcutIndex].KeyList = ShortcutViewModels[SelectedShortcutIndex].Shortcut.DefaultKeyList;
-            _shortcutsToReset.Add(ShortcutViewModels[SelectedShortcutIndex].Shortcut);
+            _shortcutViewModelsToRegister.Add(ShortcutViewModels[SelectedShortcutIndex]);
         }
 
         private RelayCommand _clickSettingsPanel1Command;

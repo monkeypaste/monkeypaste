@@ -512,7 +512,6 @@ namespace MpWpfApp {
                 Clipboard.Clear();
                 Clipboard.SetDataObject(SelectedClipTilesPasteDataObject);
                 WinApi.SetForegroundWindow(ClipboardMonitor.LastWindowWatcher.LastHandle);
-                //System.Windows.Forms.SendKeys.Send("^v");
                 System.Windows.Forms.SendKeys.SendWait("^v");
                 //PressKey(Keys.ControlKey, false);
                 //PressKey(Keys.V, false);

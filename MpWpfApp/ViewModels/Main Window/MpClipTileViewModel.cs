@@ -759,7 +759,7 @@
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             foreach (MpShortcut cmd in MpShortcut.GetShortcutByCopyItemId(CopyItem.CopyItemId)) {
-                MpShortcutViewModel.RegisterShortcutViewModel(cmd.ShortcutName, cmd.IsGlobal, PasteClipCommand, cmd.KeyList, CopyItem.CopyItemId, 0);
+                MpShortcutViewModel.RegisterShortcutViewModel(cmd.ShortcutName, cmd.RoutingType, PasteClipCommand, cmd.KeyList, CopyItem.CopyItemId, 0, cmd.ShortcutId);
                 //Shortcut = cmd;
                 ShortcutKeyList = cmd.KeyList;
             }
@@ -1094,34 +1094,31 @@
         }
         private void AssignHotkey() {
             ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
-            ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(ShortcutName);
-            MpShortcutViewModel.RegisterShortcutViewModel(ShortcutName, true, PasteClipCommand, ShortcutKeyList, CopyItem.CopyItemId, 0);
-            /*
-            MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
-            var ahkmwvm = (MpAssignShortcutModalWindowViewModel)ahkmw.DataContext;
-            if(Shortcut == null) {
-                Shortcut = new MpShortcut();
-                Shortcut.ShortcutName = Title;
-                Shortcut.CopyItemId = CopyItem.CopyItemId;
-                Shortcut.IsGlobal = true;
-            }
-            ahkmwvm.Init(Shortcut);
-            ahkmw.ShowDialog();
-            if(ahkmwvm.Shortcut == null) {
-                ShortcutKeyList = Shortcut.KeyList;
-                //when canceling on a non-existing hotkey
-                if (Shortcut != null) {
-                    if (Shortcut.ShortcutId <= 0) {
-                        Shortcut = null;
-                    }
+            var scList = MpShortcut.GetShortcutByCopyItemId(CopyItem.CopyItemId);
+            if(scList.Count > 0) {
+                foreach (var sc in scList) {
+                    ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(ShortcutName, sc.ShortcutId);
+                    MpShortcutViewModel.RegisterShortcutViewModel(
+                        ShortcutName,
+                        MpRoutingType.Direct,
+                        PasteClipCommand,
+                        ShortcutKeyList,
+                        CopyItem.CopyItemId,
+                        0,
+                        sc.ShortcutId);
                 }
-                //dialog was canceled ignore assignment changes
             } else {
-                ahkmwvm.Shortcut.RegisterShortcutCommand(PasteClipCommand);
-                ahkmwvm.Shortcut.WriteToDatabase();
-                Shortcut = ahkmwvm.Shortcut;
-                ShortcutKeyList = Shortcut.KeyList;
-            }*/
+                ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(ShortcutName);
+                MpShortcutViewModel.RegisterShortcutViewModel(
+                    ShortcutName,
+                    MpRoutingType.Direct,
+                    PasteClipCommand,
+                    ShortcutKeyList,
+                    CopyItem.CopyItemId,
+                    0,
+                    0);
+            }            
+            
             ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }
 
@@ -1135,7 +1132,6 @@
             }
         }
         private void PasteClip() {
-            //ClipTrayViewModel.ClearClipSelection();
             IsSelected = true;
             ClipTrayViewModel.PasteSelectedClipsCommand.Execute(null);
         }

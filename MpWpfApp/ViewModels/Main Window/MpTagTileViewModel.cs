@@ -315,7 +315,7 @@ namespace MpWpfApp {
 
         public void TagTile_Loaded(object sender, RoutedEventArgs e) {
             foreach (MpShortcut cmd in MpShortcut.GetShortcutByTagId(Tag.TagId)) {
-                MpShortcutViewModel.RegisterShortcutViewModel(cmd.ShortcutName, cmd.IsGlobal, SelectTagCommand, cmd.KeyList, 0, Tag.TagId);
+                MpShortcutViewModel.RegisterShortcutViewModel(cmd.ShortcutName, cmd.RoutingType, SelectTagCommand, cmd.KeyList, 0, Tag.TagId, cmd.ShortcutId);
                 //Shortcut = cmd;
                 ShortcutKeyList = cmd.KeyList;
             }
@@ -368,32 +368,39 @@ namespace MpWpfApp {
         private void AssignHotkey() {
             TagTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
             ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(TagName);
-            MpShortcutViewModel.RegisterShortcutViewModel(TagName, false, SelectTagCommand, ShortcutKeyList, 0, Tag.TagId);
-            /*MpAssignHotkeyModalWindow ahkmw = new MpAssignHotkeyModalWindow();
-            var ahkmwvm = (MpAssignShortcutModalWindowViewModel)ahkmw.DataContext;
-            if (Shortcut == null) {
-                Shortcut = new MpShortcut();
-                Shortcut.ShortcutName = TagName;
-                Shortcut.TagId = Tag.TagId;
-                Shortcut.IsGlobal = false;
-            }
-            ahkmwvm.Init(Shortcut);
-            ahkmw.ShowDialog();
-            if (ahkmwvm.Shortcut == null) {
-                //dialog was canceled ignore assignment changes
-                ShortcutKeyList = Shortcut.KeyList;
-                //when canceling on a non-existing hotkey
-                if (Shortcut != null) {
-                    if (Shortcut.ShortcutId <= 0) {
-                        Shortcut = null;
-                    }
+            MpShortcutViewModel.RegisterShortcutViewModel(
+                TagName, 
+                MpRoutingType.Internal, 
+                SelectTagCommand, 
+                ShortcutKeyList, 
+                0, 
+                Tag.TagId);
+
+            var scList = MpShortcut.GetShortcutByTagId(Tag.TagId);
+            if (scList.Count > 0) {
+                foreach (var sc in scList) {
+                    ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(TagName, sc.ShortcutId);
+                    MpShortcutViewModel.RegisterShortcutViewModel(
+                        TagName,
+                        MpRoutingType.Internal,
+                        SelectTagCommand,
+                        ShortcutKeyList,
+                        0,
+                        Tag.TagId,
+                        sc.ShortcutId);
                 }
             } else {
-                ahkmwvm.Shortcut.RegisterShortcutCommand(SelectTagCommand);
-                ahkmwvm.Shortcut.WriteToDatabase();
-                Shortcut = ahkmwvm.Shortcut;
-                ShortcutKeyList = Shortcut.KeyList;
-            }*/
+                ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(TagName);
+                MpShortcutViewModel.RegisterShortcutViewModel(
+                    TagName,
+                    MpRoutingType.Internal,
+                    SelectTagCommand,
+                    ShortcutKeyList,
+                    0,
+                    Tag.TagId,
+                    0);
+            }
+
             TagTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }
 

@@ -109,6 +109,7 @@
     <Compile Include="Controls\MpTokenizedRichTextBox.cs" />
     <Compile Include="Controls\MpMultiSelectListBox.cs" />
     <Compile Include="Controls\ReorderableListbox.cs" />
+    <Compile Include="Converters\MpIntToMpRoutingTypeConverter.cs" />
     <Compile Include="Converters\MpVisibilityToBoolConverter.cs" />
     <Compile Include="Converters\MpImageSourceToBitmapSourceConverter.cs" />
     <Compile Include="Converters\MpIntToStringConverter.cs" />

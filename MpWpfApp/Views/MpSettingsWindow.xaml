@@ -21,7 +21,8 @@
         <local:MpSettingsWindowViewModel />
     </Window.DataContext>
     <Window.Resources>
-        <local:MpVisibilityToBoolConverter x:Key="VisibilityToBoolConverter" />        
+        <local:MpVisibilityToBoolConverter x:Key="VisibilityToBoolConverter" />
+        <local:MpIntToMpRoutingTypeConverter x:Key="IntToMpRoutingTypeConverter" />
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -145,7 +146,8 @@
                        VerticalAlignment="Center"
                        Content="Changes will take affect upon application restart" />
             </StackPanel>
-            <DataGrid Grid.Row="1" x:Name="ShortcutDatagrid"
+            <DataGrid Grid.Row="1" 
+                      x:Name="ShortcutDatagrid"
                       DataContext="{Binding}"
                       ItemsSource="{Binding ShortcutViewModels, NotifyOnSourceUpdated=True}"
                       HorizontalAlignment="Center"
@@ -162,18 +164,32 @@
                 </ii:Interaction.Triggers>
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Type"
-                                        Width="200"
+                                        Width="85"
                                         Binding="{Binding ShortcutTypeName}" />
                     <DataGridTextColumn Header="Action"
                                         Width="200"
-                                        Binding="{Binding ShortcutName}" />
+                                        Binding="{Binding ShortcutDisplayName}" />
                     <DataGridTextColumn Header="Shortcut"
-                                        Width="200"
+                                        Width="150"
                                         Binding="{Binding KeyList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
-                    <DataGridCheckBoxColumn Header="Global"
-                                            IsReadOnly="True"
-                                            Binding="{Binding IsGlobal}" />
-                    <DataGridTemplateColumn Width="30">
+                    <DataGridTemplateColumn Header="Routing"
+                                            Width="75">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox IsEnabled="{Binding IsRoutable}" 
+                                          SelectedIndex="{Binding RoutingType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, Converter={StaticResource IntToMpRoutingTypeConverter}}">
+                                    <ComboBox.Items>
+                                        <ComboBoxItem Content="None" Visibility="Collapsed" />
+                                        <ComboBoxItem Content="Internal" IsEnabled="{Binding IsRoutable}"/>
+                                        <ComboBoxItem Content="Direct" />
+                                        <ComboBoxItem Content="Bubble" />
+                                        <ComboBoxItem Content="Tunnel" />
+                                    </ComboBox.Items>
+                                </ComboBox>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel>

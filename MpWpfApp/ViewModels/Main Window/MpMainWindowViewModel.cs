@@ -1,13 +1,12 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
-using Gma.System.MouseKeyHook;
-using Hardcodet.Wpf.TaskbarNotification;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
+using GalaSoft.MvvmLight.CommandWpf;
+using Gma.System.MouseKeyHook;
+using Hardcodet.Wpf.TaskbarNotification;
 
 namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase {
@@ -257,17 +256,14 @@ namespace MpWpfApp {
                         }
                     }
                 };
-                var combinationAssignments = new Dictionary<Combination, Action>();
-                var sequenceAssignments = new Dictionary<Sequence, Action>();
-
                 var showMainWindowCommand = MpShortcut.GetShortcutByName(Properties.Settings.Default.CmdNameShowWindow);
                 foreach (MpShortcut cmd in showMainWindowCommand) {
-                    MpShortcutViewModel.RegisterShortcutViewModel(cmd.ShortcutName, true, ShowWindowCommand, cmd.KeyList, 0, 0);
+                    MpShortcutViewModel.RegisterShortcutViewModel(cmd.ShortcutName, MpRoutingType.Direct, ShowWindowCommand, cmd.KeyList, 0, 0,cmd.ShortcutId);
                 }
 
                 var hideMainWindowCommand = MpShortcut.GetShortcutByName(Properties.Settings.Default.CmdNameHideWindow);
                 foreach (MpShortcut cmd in hideMainWindowCommand) {
-                    MpShortcutViewModel.RegisterShortcutViewModel(cmd.ShortcutName, false, HideWindowCommand, cmd.KeyList, 0, 0);
+                    MpShortcutViewModel.RegisterShortcutViewModel(cmd.ShortcutName, MpRoutingType.Internal, HideWindowCommand, cmd.KeyList, 0, 0, cmd.ShortcutId);
                 }
             }
             catch(Exception ex) {
@@ -292,6 +288,7 @@ namespace MpWpfApp {
             return Application.Current.MainWindow == null || 
                 Application.Current.MainWindow.Visibility != Visibility.Visible || 
                 IsLoading ||
+                !IsShowingDialog ||
                 !MpSettingsWindowViewModel.IsOpen;
         }
         private void ShowWindow() {

@@ -32,15 +32,15 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
-        private MpShortcut _duplicatedShortcut;
-        public MpShortcut DuplicatedShortcut {
+        private MpShortcutViewModel _duplicatedShortcutViewModel;
+        public MpShortcutViewModel DuplicatedShortcutViewModel {
             get {
-                return _duplicatedShortcut;
+                return _duplicatedShortcutViewModel;
             }
             set {
-                if (_duplicatedShortcut != value) {
-                    _duplicatedShortcut = value;
-                    OnPropertyChanged(nameof(DuplicatedShortcut));
+                if (_duplicatedShortcutViewModel != value) {
+                    _duplicatedShortcutViewModel = value;
+                    OnPropertyChanged(nameof(DuplicatedShortcutViewModel));
                 }
             }
         }
@@ -114,17 +114,17 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private MpAssignShortcutModalWindowViewModel(string shortcutName,int shortcutId = 0) {
+        private MpAssignShortcutModalWindowViewModel(string shortcutName, int shortcutId = 0) {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(KeysString):
                         //when KeysString changes check full system for duplicates, ignoring order of combinations
                         WarningString = string.Empty;
-                        DuplicatedShortcut = null;
+                        DuplicatedShortcutViewModel = null;
                         //split hotkey into sequences combinations
                         var combos = KeysString.Split(',').ToList<string>();
                         //iterate over ALL shortcuts
-                        foreach (MpShortcut sc in MpShortcut.GetAllShortcuts()) {
+                        foreach (var sc in MpShortcutViewModel.ShortcutViewModels) {
                             //ignore same shortcut comparision
                             if (sc.ShortcutId == _shortcutId) {
                                 continue;
@@ -152,8 +152,8 @@ namespace MpWpfApp {
                                 curComboIdx++;
                             }
                             if (isDuplicate && KeysString != string.Empty) {
-                                DuplicatedShortcut = sc;
-                                WarningString = "Warning! This combination conflicts with '" + sc.ShortcutName + "' which will be cleared if saved";
+                                DuplicatedShortcutViewModel = sc;
+                                WarningString = "Warning! This combination conflicts with '" + sc.ShortcutDisplayName + "' which will be cleared if saved";
                                 break;
                             }
                         }
@@ -302,7 +302,6 @@ namespace MpWpfApp {
         }
         private void Cancel() {
             KeysString = string.Empty;
-            //Shortcut = null;
             _windowRef.DialogResult = false;
             _windowRef.Close();
         }
@@ -330,41 +329,25 @@ namespace MpWpfApp {
             }
         }
         private bool CanSave() {
-            return DuplicatedShortcut == null || DuplicatedShortcut.KeyList != DuplicatedShortcut.DefaultKeyList;
+            return DuplicatedShortcutViewModel == null || DuplicatedShortcutViewModel.KeyList != DuplicatedShortcutViewModel.DefaultKeyList;
         }
         private void Save() {
-            /*if(Shortcut == null) {
-                _windowRef.Close();
-                return;
-            }
-            if(KeysString == "[None]" || KeysString == string.Empty) {
-                if(Shortcut.IsCustom()) {
-                    Shortcut.DeleteFromDatabase();
-                    Shortcut = null;
-                    _windowRef.Close();
-                    return;
-                } else {
-                    Shortcut.ClearKeyList();
-                }
-            }*/
-            if(DuplicatedShortcut != null) {
-                if(DuplicatedShortcut.CopyItemId > 0 || DuplicatedShortcut.TagId > 0) {
-                    if(DuplicatedShortcut.CopyItemId > 0) {
+            if(DuplicatedShortcutViewModel != null) {
+                if(DuplicatedShortcutViewModel.CopyItemId > 0 || DuplicatedShortcutViewModel.TagId > 0) {
+                    if(DuplicatedShortcutViewModel.CopyItemId > 0) {
                         //clear input gesture text
-                        ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).ClipTrayViewModel.Where(x => x.CopyItem.CopyItemId == DuplicatedShortcut.CopyItemId).ToList()[0].ShortcutKeyList = string.Empty;
+                        ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).ClipTrayViewModel.Where(x => x.CopyItem.CopyItemId == DuplicatedShortcutViewModel.CopyItemId).ToList()[0].ShortcutKeyList = string.Empty;
                         // TODO Unregister hotkey here
                     } else {
-                        ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).TagTrayViewModel.Where(x => x.Tag.TagId == DuplicatedShortcut.TagId).ToList()[0].ShortcutKeyList = string.Empty;
+                        ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).TagTrayViewModel.Where(x => x.Tag.TagId == DuplicatedShortcutViewModel.TagId).ToList()[0].ShortcutKeyList = string.Empty;
                         // TODO Unregister hotkey here
                     }
-                    DuplicatedShortcut.DeleteFromDatabase();
-                } else {
-                    DuplicatedShortcut.KeyList = string.Empty;
-                    DuplicatedShortcut.WriteToDatabase();
+                    //DuplicatedShortcutViewModel.Shortcut.DeleteFromDatabase();
                 }
+                DuplicatedShortcutViewModel.KeyList = string.Empty;
+                DuplicatedShortcutViewModel.Shortcut.WriteToDatabase();
                 //DuplicatedShortcut.UnregisterShortcut();
             }
-            //Shortcut.WriteToDatabase();
             _windowRef.DialogResult = true;
             _windowRef.Close();
         }
