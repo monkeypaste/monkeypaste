@@ -509,6 +509,7 @@ namespace MpWpfApp {
                       pk_MpAppId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpIconId integer NOT NULL
                     , SourcePath text NOT NULL 
+                    , AppName text 
                     , IsAppRejected integer NOT NULL
                     , fk_ColorId integer 
                     , CONSTRAINT FK_MpApp_0_0 FOREIGN KEY (fk_MpIconId) REFERENCES MpIcon (pk_MpIconId)

@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -30,7 +31,7 @@ namespace MpWpfApp {
             MainWindowViewModel = parent;
             //create tiles for all the tags
             foreach (MpTag t in MpTag.GetAllTags()) {
-                AddTagTile(t, false);
+                this.Add(new MpTagTileViewModel(t,this));
             }
         }
 
@@ -39,9 +40,11 @@ namespace MpWpfApp {
             GetHistoryTagTileViewModel().IsSelected = true;
         }
 
-        public void AddTagTile(MpTag t, bool isNew = false) {
-            var newTagTile = new MpTagTileViewModel(t, this, isNew);
-            this.Add(newTagTile);
+        public new void Add(MpTagTileViewModel newTagTile) {
+            if(newTagTile.IsNew) {
+                newTagTile.Tag.WriteToDatabase();
+            }
+            base.Add(newTagTile);
             //watches Tag IsSelected so History is selected if none are
             newTagTile.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
@@ -80,14 +83,23 @@ namespace MpWpfApp {
             };
         }
 
-        private void RemoveTagTile(MpTagTileViewModel tagTileToRemove) {
+        public new void Remove(MpTagTileViewModel tagTileToRemove) {
             //when removing a tag auto-select the history tag
             if (tagTileToRemove.IsSelected) {
                 tagTileToRemove.IsSelected = false;
                 this.Where(tt => tt.Tag.TagName == Properties.Settings.Default.HistoryTagTitle).ToList()[0].IsSelected = true;
             }
-            this.Remove(tagTileToRemove);
+            base.Remove(tagTileToRemove);
             tagTileToRemove.Tag.DeleteFromDatabase();
+
+            //remove any shortcuts associated with clip
+            var scvmToRemoveList = new List<MpShortcutViewModel>();
+            foreach (var scvmToRemove in MainWindowViewModel.ShortcutCollectionViewModel.Where(x => x.CopyItemId == tagTileToRemove.TagId).ToList()) {
+                scvmToRemoveList.Add(scvmToRemove);
+            }
+            foreach (var scvmToRemove in scvmToRemoveList) {
+                MainWindowViewModel.ShortcutCollectionViewModel.Remove(scvmToRemove);
+            }
         }
 
         public void ClearTagSelection() {
@@ -124,7 +136,7 @@ namespace MpWpfApp {
             return SelectedTagTile.TagName != Properties.Settings.Default.HistoryTagTitle;
         }
         private void DeleteTag() {
-            RemoveTagTile(SelectedTagTile);
+            this.Remove(SelectedTagTile);
         }
 
         private RelayCommand _createTagCommand;
@@ -139,8 +151,7 @@ namespace MpWpfApp {
         private void CreateTag() {
             //add tag to datastore so TagTile collection will automatically add the tile
             MpTag newTag = new MpTag("Untitled", MpHelpers.GetRandomColor());
-            newTag.WriteToDatabase();
-            AddTagTile(newTag, true);
+            this.Add(new MpTagTileViewModel(newTag, this));
         }
 
         #endregion

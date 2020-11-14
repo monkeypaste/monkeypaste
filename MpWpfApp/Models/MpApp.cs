@@ -1,6 +1,5 @@
-﻿
-
-using System;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -11,15 +10,15 @@ namespace MpWpfApp {
         public static int TotalAppCount = 0;
 
         public int AppId { get; set; }
-        public int iconId { get; set; }
+        public int IconId { get; set; }
         public string AppPath { get; set; }
-
+        public string AppName { get; set; }
         public bool IsAppRejected { get; set; }
 
         public MpIcon Icon { get; set; }
 
         #region Static Methods
-        private static List<MpApp> GetAllApps() {
+        public static List<MpApp> GetAllApps() {
             List<MpApp> apps = new List<MpApp>();
             DataTable dt = MpDb.Instance.Execute("select * from MpApp");
             if (dt != null && dt.Rows.Count > 0) {
@@ -38,45 +37,57 @@ namespace MpWpfApp {
             }
             return false;
         }
+        public static List<MpApp> GetAllRejectedApps() {
+            return GetAllApps().Where(x => x.IsAppRejected == true).ToList();
+        }
         #endregion
-        //for new MpApp's set appId and iconId to 0
-        public MpApp(String sourcePath, bool isAppRejected) {
-            this.iconId = this.AppId = 0;
+        public MpApp(String sourcePath, bool isAppRejected, string appName) {
+            this.IconId = this.AppId = 0;
             this.AppPath = sourcePath;
+            this.AppName = appName;
+            this.IsAppRejected = isAppRejected;
+            this.Icon = new MpIcon(MpHelpers.GetIconImage(this.AppPath));
+        }
+        //for new MpApp's set appId and iconId to 0
+        public MpApp(String sourcePath, bool isAppRejected, IntPtr hwnd) {
+            this.IconId = this.AppId = 0;
+            this.AppPath = sourcePath;
+            this.AppName = MpHelpers.GetProcessMainWindowTitle(hwnd);
             this.IsAppRejected = isAppRejected;
             this.Icon = new MpIcon(MpHelpers.GetIconImage(this.AppPath));
         }
         public MpApp(int appId, int iconId, IntPtr sourceHandle, bool isAppRejected) {
             this.AppId = appId;
-            this.iconId = iconId;
+            this.IconId = iconId;
             this.AppPath = MpHelpers.GetProcessPath(sourceHandle);
+            this.AppName = MpHelpers.GetProcessApplicationName(sourceHandle);
             this.IsAppRejected = isAppRejected;
         }
+        public MpApp() : this(string.Empty, true, IntPtr.Zero) { }
         public MpApp(DataRow dr) {
             LoadDataRow(dr);
         }
         
         public override void LoadDataRow(DataRow dr) {
             this.AppId = Convert.ToInt32(dr["pk_MpAppId"].ToString());
-            this.iconId = Convert.ToInt32(dr["fk_MpIconId"].ToString());
-            Icon = new MpIcon(iconId);
+            this.IconId = Convert.ToInt32(dr["fk_MpIconId"].ToString());
+            Icon = new MpIcon(IconId);
             this.AppPath = dr["SourcePath"].ToString();
+            this.AppName = dr["AppName"].ToString();
             if (Convert.ToInt32(dr["IsAppRejected"].ToString()) == 0) {
                 this.IsAppRejected = false;
             } else {
                 this.IsAppRejected = true;
             }
             MapDataToColumns();
-            //Console.WriteLine("Loaded MpApp");
-            //Console.WriteLine(ToString());
         }
         public override void WriteToDatabase() {
             bool isNew = false;
-            if (this.iconId == 0) {
+            if (this.IconId == 0) {
                 Icon = new MpIcon(MpHelpers.GetIconImage(this.AppPath));
             }
             Icon.WriteToDatabase();
-            this.iconId = Icon.iconId;
+            this.IconId = Icon.iconId;
             if (this.AppId == 0) {
                 if (MpDb.Instance.NoDb) {
                     this.AppId = ++TotalAppCount;
@@ -86,21 +97,19 @@ namespace MpWpfApp {
                 DataTable dt = MpDb.Instance.Execute("select * from MpApp where SourcePath='" + this.AppPath + "'");
                 if (dt.Rows.Count > 0) {
                     this.AppId = Convert.ToInt32(dt.Rows[0]["pk_MpAppId"]);
-                    this.iconId = Convert.ToInt32(dt.Rows[0]["fk_MpIconId"]);
+                    this.IconId = Convert.ToInt32(dt.Rows[0]["fk_MpIconId"]);
                     isNew = false;
                 } else {
-                    MpDb.Instance.ExecuteNonQuery("insert into MpApp(fk_MpIconId,SourcePath,IsAppRejected) values (" + this.iconId + ",'" + AppPath + "'," + Convert.ToInt32(this.IsAppRejected) + ")");//+ "',"+Convert.ToInt32(this.IsAppRejected)+",@0)",new List<string>() { "@0" },new List<object>() { MpHelperFunctions.Instance.ConvertImageToByteArray(MpSingletonController.Instance.GetMpLastWindowWatcher().LastIconImage) });
+                    MpDb.Instance.ExecuteNonQuery("insert into MpApp(fk_MpIconId,SourcePath,IsAppRejected,AppName) values (" + this.IconId + ",'" + AppPath + "'," + Convert.ToInt32(this.IsAppRejected) + ",'" + this.AppName + "')");//+ "',"+Convert.ToInt32(this.IsAppRejected)+",@0)",new List<string>() { "@0" },new List<object>() { MpHelperFunctions.Instance.ConvertImageToByteArray(MpSingletonController.Instance.GetMpLastWindowWatcher().LastIconImage) });
                     this.AppId = MpDb.Instance.GetLastRowId("MpApp", "pk_MpAppId");
                     isNew = false;
                 }
             } else {
-                MpDb.Instance.ExecuteNonQuery("update MpApp set fk_MpIconId=" + this.iconId + ",IsAppRejected=" + Convert.ToInt32(this.IsAppRejected) + ",SourcePath='" + this.AppPath + "' where pk_MpAppId=" + this.AppId);
+                MpDb.Instance.ExecuteNonQuery("update MpApp set fk_MpIconId=" + this.IconId + ",IsAppRejected=" + Convert.ToInt32(this.IsAppRejected) + ",SourcePath='" + this.AppPath + "',AppName='" + this.AppName + "' where pk_MpAppId=" + this.AppId);
             }
             if (isNew) {
                 MapDataToColumns();
             }
-            Console.WriteLine(isNew ? "Created " : "Updated " + " MpApp");
-            Console.WriteLine(ToString());
         }
         public void DeleteFromDatabase() {
             if (AppId <= 0) {
@@ -116,7 +125,7 @@ namespace MpWpfApp {
         private void MapDataToColumns() {
             TableName = "MpApp";
             columnData.Add("pk_MpAppId", this.AppId);
-            columnData.Add("fk_MpIconId", this.iconId);
+            columnData.Add("fk_MpIconId", this.IconId);
             columnData.Add("SourcePath", this.AppPath);
             columnData.Add("IsAppRejected", this.IsAppRejected);
         }

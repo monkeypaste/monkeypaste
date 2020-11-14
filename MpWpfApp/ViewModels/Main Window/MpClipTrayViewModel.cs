@@ -424,6 +424,15 @@ namespace MpWpfApp {
             }
             base.Remove(clipTileToRemove);
             clipTileToRemove.CopyItem.DeleteFromDatabase();
+
+            //remove any shortcuts associated with clip
+            var scvmToRemoveList = new List<MpShortcutViewModel>();
+            foreach(var scvmToRemove in MainWindowViewModel.ShortcutCollectionViewModel.Where(x => x.CopyItemId == clipTileToRemove.CopyItemId).ToList()) {
+                scvmToRemoveList.Add(scvmToRemove);
+            }
+            foreach(var scvmToRemove in scvmToRemoveList) {
+                MainWindowViewModel.ShortcutCollectionViewModel.Remove(scvmToRemove);
+            }
         }
 
         //public new void Move(int oldIdx,int newIdx) {

@@ -9,8 +9,6 @@ namespace MpWpfApp {
     public class MpTagTileViewModel : MpViewModelBase {
         #region Private Variables
 
-        private bool _isNew = false;
-
         #endregion
 
         #region View Models
@@ -29,6 +27,12 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+        public bool IsNew {
+            get {
+                return Tag == null || Tag.TagId <= 0;
+            }
+        }
+
         private int _tagId = 0;
         public int TagId {
             get {
@@ -242,7 +246,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpTagTileViewModel(MpTag tag, MpTagTrayViewModel parent, bool isNew) {
+        public MpTagTileViewModel(MpTag tag, MpTagTrayViewModel parent) {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
                     case nameof(TagId):
@@ -304,7 +308,6 @@ namespace MpWpfApp {
             TagTrayViewModel = parent;
             TagColor = new SolidColorBrush(Tag.TagColor.Color);
             TagName = Tag.TagName;
-            _isNew = isNew;
         }
 
         public void TagTile_Loaded(object sender, RoutedEventArgs e) {
@@ -320,6 +323,11 @@ namespace MpWpfApp {
                     IsEditing = false;
                 }
             };
+            tagBorder.PreviewMouseLeftButtonDown += (s, e7) => {
+                if(e7.ClickCount == 2) {
+                    RenameTagCommand.Execute(null);
+                }
+            };
 
             var tagTextBox = (TextBox)tagBorder.FindName("TagTextBox");
             //this is called 
@@ -327,12 +335,11 @@ namespace MpWpfApp {
                 //TagTextBox.SelectAll();
             };
             tagTextBox.LostFocus += (s, e2) => {
-
                 IsEditing = false;
             };
             tagTextBox.PreviewKeyDown += TagTrayViewModel.MainWindowViewModel.MainWindow_PreviewKeyDown;
-
-            if (_isNew) {
+            //if tag is created at runtime show tbox w/ all selected
+            if (!TagTrayViewModel.MainWindowViewModel.IsLoading) {
                 RenameTagCommand.Execute(null);
             } else {
                 foreach (var ctvm in TagTrayViewModel.MainWindowViewModel.ClipTrayViewModel) {

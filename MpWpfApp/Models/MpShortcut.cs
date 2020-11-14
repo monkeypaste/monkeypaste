@@ -103,7 +103,7 @@ namespace MpWpfApp {
             columnData.Add("pk_MpShortcutId", this.ShortcutId);
         }
         public override string ToString() {
-            string outStr = "Shortcut Name: " + ShortcutName;
+            string outStr = "Shortcut Name: " + ShortcutName + " Id: " + ShortcutId;
             outStr += " " + KeyList;
             return outStr;
         }

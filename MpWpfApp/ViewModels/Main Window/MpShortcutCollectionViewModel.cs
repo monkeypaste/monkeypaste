@@ -18,27 +18,6 @@ namespace MpWpfApp {
         #region Public Methods
         public MpShortcutCollectionViewModel(MpMainWindowViewModel mwvm) {
             MainWindowViewModel = mwvm;
-            /*
-             ('Show Window',2,'Control+Shift+D') 1
-            ,('Hide Window',1,'Escape') 2
-            ,('Append Mode',2,'Control+Shift+A') 3
-            ,('Auto-Copy Mode',2,'Control+Shift+C') 4
-            ,('Right-Click Paste Mode',2,'Control+Shift+R') 5
-            ,('Paste Selected Clip',1,'Enter') 6
-            ,('Delete Selected Clip',1,'Delete') 7
-            ,('Search',1,'S') 8
-            ,('Select Next',1,'Right') 9
-            ,('Select Previous',1,'Left') 10
-            ,('Select All',1,'Control+A') 11
-            ,('Invert Selection',1,'Control+Shift+Alt+A') 12
-            ,('Bring to front',1,'') 13
-            ,('Send to back',1,'') 14
-            ,('Assign Hotkey',1,'') 15
-            ,('Change Color',1,'') 16
-            ,('Share',1,'') 17
-            ,('Say',1,'') 18
-            ,('Merge',1,''); 19
-             */
 
             //using mainwindow, map all saved shortcuts to their commands
             foreach (var sc in MpShortcut.GetAllShortcuts()) {
@@ -111,14 +90,18 @@ namespace MpWpfApp {
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.MergeSelectedClipsCommand;
                         break;
                     default:
-                        if(sc.CopyItemId > 0) {
-                            var ctvm = MainWindowViewModel.ClipTrayViewModel.Where(x => x.CopyItem.CopyItemId == sc.CopyItemId).Single();
-                            ctvm.ShortcutKeyList = sc.KeyList;
-                            shortcutCommand = ctvm.PasteClipCommand;
-                        } else {
-                            var ttvm = MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.TagId == sc.TagId).Single();
-                            ttvm.ShortcutKeyList = sc.KeyList;
-                            shortcutCommand = ttvm.SelectTagCommand;
+                        try {
+                            if (sc.CopyItemId > 0) {
+                                var ctvm = MainWindowViewModel.ClipTrayViewModel.Where(x => x.CopyItem.CopyItemId == sc.CopyItemId).Single();
+                                ctvm.ShortcutKeyList = sc.KeyList;
+                                shortcutCommand = ctvm.PasteClipCommand;
+                            } else if (sc.TagId > 0) {
+                                var ttvm = MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.TagId == sc.TagId).Single();
+                                ttvm.ShortcutKeyList = sc.KeyList;
+                                shortcutCommand = ttvm.SelectTagCommand;
+                            }
+                        } catch(Exception ex) {
+                            Console.WriteLine("ShortcutCollection init error, unknown shortcut: " + sc.ToString());
                         }
                         break;
                 }

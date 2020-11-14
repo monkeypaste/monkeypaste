@@ -169,13 +169,6 @@ namespace MpWpfApp {
                     return "Application";
                 }
             }
-            
-            //set {
-            //    if (_shortcutTypeName != value) {
-            //        _shortcutTypeName = value;
-            //        OnPropertyChanged(nameof(ShortcutTypeName));
-            //    }
-            //}
         }
 
         private Visibility _deleteButtonVisibility;
@@ -210,30 +203,30 @@ namespace MpWpfApp {
             }
         }
 
-        public MpShortcut Shortcut { get; set; }
-        #endregion
-
-        #region Statics
-        private static ObservableCollection<MpShortcutViewModel> _shortcutViewModels = null;
-        public static ObservableCollection<MpShortcutViewModel> ShortcutViewModels {
+        private MpShortcut _shortcut = null;
+        public MpShortcut Shortcut {
             get {
-                if(_shortcutViewModels == null) {
-                    _shortcutViewModels = new ObservableCollection<MpShortcutViewModel>();
-                    foreach (MpShortcut sc in MpShortcut.GetAllShortcuts()) {
-                        _shortcutViewModels.Add(new MpShortcutViewModel(sc, null));
-                    }
-                }
-                return _shortcutViewModels;
+                return _shortcut;
             }
             set {
-                _shortcutViewModels = value;
+                if(_shortcut != value) {
+                    _shortcut = value;
+                    OnPropertyChanged(nameof(Shortcut));
+                }
             }
         }
-        
         #endregion
 
         #region Public Methods
-        public MpShortcutViewModel(string shortcutName, MpRoutingType routingType, ICommand command, string keys, string defaultKeys, int copyItemId = -1, int tagId = -1, int shortcutId = -1) {
+        public MpShortcutViewModel(
+            string shortcutName, 
+            MpRoutingType routingType, 
+            ICommand command, 
+            string keys, 
+            string defaultKeys, 
+            int copyItemId = -1, 
+            int tagId = -1, 
+            int shortcutId = -1) {
             PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(CopyItemId):
@@ -306,34 +299,67 @@ namespace MpWpfApp {
                         throw new Exception("ShortcutViewModel error, routing type cannot be none");
                     }
                     if (RoutingType == MpRoutingType.Internal) {
-                        KeysObservable = mwvm.ApplicationHook.KeyDownObservable().Matching(t).Subscribe((trigger) => {
-                            if (mwvm.ClipTrayViewModel.IsEditingClipTitle ||
-                                mwvm.TagTrayViewModel.IsEditingTagName ||
-                                MpAssignShortcutModalWindowViewModel.IsOpen || 
-                                MpSettingsWindowViewModel.IsOpen) {
-                                //ignore hotkey since attempting to reassign
-                            } else {
-                                Command?.Execute(null);
-                            }
-                        });
+                        if(IsSequence()) {
+                            KeysObservable = mwvm.ApplicationHook.KeyDownObservable().Matching(t).ForEachAsync((trigger) => {
+                                if (mwvm.ClipTrayViewModel.IsEditingClipTitle ||
+                                    mwvm.TagTrayViewModel.IsEditingTagName ||
+                                    MpAssignShortcutModalWindowViewModel.IsOpen ||
+                                    MpSettingsWindowViewModel.IsOpen) {
+                                    //ignore hotkey since attempting to reassign
+                                } else {
+                                    Command?.Execute(null);
+                                }
+                            });
+                        } else {
+                            KeysObservable = mwvm.ApplicationHook.KeyDownObservable().Matching(t).Subscribe((trigger) => {
+                                if (mwvm.ClipTrayViewModel.IsEditingClipTitle ||
+                                    mwvm.TagTrayViewModel.IsEditingTagName ||
+                                    MpAssignShortcutModalWindowViewModel.IsOpen ||
+                                    MpSettingsWindowViewModel.IsOpen) {
+                                    //ignore hotkey since attempting to reassign
+                                } else {
+                                    Command?.Execute(null);
+                                }
+                            });
+                        }
                     } else {
-                        KeysObservable = mwvm.GlobalHook.KeyDownObservable().Matching(t).Subscribe((trigger) => {
-                            if (MpMainWindowViewModel.IsOpen ||
-                                MpAssignShortcutModalWindowViewModel.IsOpen || 
-                                MpSettingsWindowViewModel.IsOpen) {
-                                //ignore hotkey since attempting to reassign
-                            } else {
-                                if (RoutingType == MpRoutingType.Bubble) {
-                                    PassKeysToForegroundWindow();
-                                }
+                        if(IsSequence()) {
+                            KeysObservable = mwvm.GlobalHook.KeyDownObservable().Matching(t).ForEachAsync((trigger) => {
+                                if (MpMainWindowViewModel.IsOpen ||
+                                    MpAssignShortcutModalWindowViewModel.IsOpen ||
+                                    MpSettingsWindowViewModel.IsOpen) {
+                                    //ignore hotkey since attempting to reassign
+                                } else {
+                                    if (RoutingType == MpRoutingType.Bubble) {
+                                        PassKeysToForegroundWindow();
+                                    }
 
-                                Command?.Execute(null);
+                                    Command?.Execute(null);
 
-                                if (RoutingType == MpRoutingType.Tunnel) {
-                                    PassKeysToForegroundWindow();
+                                    if (RoutingType == MpRoutingType.Tunnel) {
+                                        PassKeysToForegroundWindow();
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        } else {
+                            KeysObservable = mwvm.GlobalHook.KeyDownObservable().Matching(t).Subscribe((trigger) => {
+                                if (MpMainWindowViewModel.IsOpen ||
+                                    MpAssignShortcutModalWindowViewModel.IsOpen ||
+                                    MpSettingsWindowViewModel.IsOpen) {
+                                    //ignore hotkey since attempting to reassign
+                                } else {
+                                    if (RoutingType == MpRoutingType.Bubble) {
+                                        PassKeysToForegroundWindow();
+                                    }
+
+                                    Command?.Execute(null);
+
+                                    if (RoutingType == MpRoutingType.Tunnel) {
+                                        PassKeysToForegroundWindow();
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
                 catch (Exception ex) {

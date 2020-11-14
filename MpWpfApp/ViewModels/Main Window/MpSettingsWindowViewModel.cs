@@ -1,12 +1,15 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace MpWpfApp {
@@ -54,6 +57,12 @@ namespace MpWpfApp {
 
         #region View Models
         public MpSystemTrayViewModel SystemTrayViewModel { get; set; }
+        public MpShortcutCollectionViewModel ShortcutCollectionViewModel {
+            get {
+                return SystemTrayViewModel?.MainWindowViewModel.ShortcutCollectionViewModel;
+            }
+        }
+        public MpAppCollectionViewModel AppCollectionViewModel { get; set; }
         #endregion
 
         #region Private Variables
@@ -65,19 +74,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
-
-        private int _selectedShortcutIndex;
-        public int SelectedShortcutIndex {
-            get {
-                return _selectedShortcutIndex;
-            }
-            set {
-                if (_selectedShortcutIndex != value) {
-                    _selectedShortcutIndex = value;
-                    OnPropertyChanged(nameof(SelectedShortcutIndex));
-                }
-            }
-        }
 
         private Visibility _settingsPanel1Visibility;
         public Visibility SettingsPanel1Visibility {
@@ -142,11 +138,45 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(SettingsPanel5Visibility));
                 }
             }
+        }                
+
+        private int _selectedShortcutIndex;
+        public int SelectedShortcutIndex {
+            get {
+                return _selectedShortcutIndex;
+            }
+            set {
+                if (_selectedShortcutIndex != value) {
+                    _selectedShortcutIndex = value;
+                    OnPropertyChanged(nameof(SelectedShortcutIndex));
+                }
+            }
         }
 
-        public MpShortcutCollectionViewModel ShortcutCollectionViewModel {
+        private int _selectedExcludedAppIndex;
+        public int SelectedExcludedAppIndex {
             get {
-                return SystemTrayViewModel?.MainWindowViewModel.ShortcutCollectionViewModel;
+                return _selectedExcludedAppIndex;
+            }
+            set {
+                if (_selectedExcludedAppIndex != value) {
+                    _selectedExcludedAppIndex = value;
+                    OnPropertyChanged(nameof(SelectedExcludedAppIndex));
+                }
+            }
+        }
+
+        public ObservableCollection<MpAppViewModel> ExcludedAppViewModels {
+            get {
+                var cvs = CollectionViewSource.GetDefaultView(AppCollectionViewModel);
+                cvs.Filter += item => {
+                    var avm = (MpAppViewModel)item;
+                    return avm.IsAppRejected;
+                };
+                var eavms = new ObservableCollection<MpAppViewModel>(cvs.Cast<MpAppViewModel>().ToList());
+                //this adds empty row
+                eavms.Add(new MpAppViewModel(null));
+                return eavms;
             }
         }
         #endregion
@@ -164,14 +194,14 @@ namespace MpWpfApp {
 
         public void SettingsWindow_Loaded(object sender, RoutedEventArgs e) {
             _windowRef = (Window)sender;
-            IsOpen = true;
             _windowRef.Closed += (s, e2) => {
                 IsOpen = false;
             };
 
-            var clonedList = ShortcutCollectionViewModel.Select(x => (MpShortcutViewModel)x.Clone()).ToList();
-            _shortcutViewModelsBackup = new ObservableCollection<MpShortcutViewModel>(clonedList);
-            
+            IsOpen = true;
+            //var clonedList = ShortcutCollectionViewModel.Select(x => (MpShortcutViewModel)x.Clone()).ToList();
+            //_shortcutViewModelsBackup = new ObservableCollection<MpShortcutViewModel>(clonedList);
+
             SettingsPanel1Visibility = Visibility.Visible;
             SettingsPanel2Visibility = Visibility.Collapsed;
             SettingsPanel3Visibility = Visibility.Collapsed;
@@ -183,7 +213,9 @@ namespace MpWpfApp {
 
         #region Private Methods
         private MpSettingsWindowViewModel(MpSystemTrayViewModel stvm) {
-            SystemTrayViewModel = stvm;            
+            SystemTrayViewModel = stvm;
+            AppCollectionViewModel = new MpAppCollectionViewModel();
+            return;
         }
 
         private void SetLoadOnLogin(bool loadOnLogin) {
@@ -280,7 +312,7 @@ namespace MpWpfApp {
             }
         }
         private void DeleteShortcut() {
-            Console.WriteLine("Deleting row: " + SelectedShortcutIndex);
+            Console.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
             var scvm = ShortcutCollectionViewModel[SelectedShortcutIndex];
             ShortcutCollectionViewModel.Remove(scvm);
         }
@@ -299,6 +331,51 @@ namespace MpWpfApp {
             ShortcutCollectionViewModel[SelectedShortcutIndex].KeyList = ShortcutCollectionViewModel[SelectedShortcutIndex].Shortcut.DefaultKeyList;
             ShortcutCollectionViewModel[SelectedShortcutIndex].Register();
             ShortcutCollectionViewModel[SelectedShortcutIndex].Shortcut.WriteToDatabase();
+        }
+
+        private RelayCommand _deleteExcludedAppCommand;
+        public ICommand DeleteExcludedAppCommand {
+            get {
+                if (_deleteExcludedAppCommand == null) {
+                    _deleteExcludedAppCommand = new RelayCommand(DeleteExcludedApp);
+                }
+                return _deleteExcludedAppCommand;
+            }
+        }
+        private void DeleteExcludedApp() {
+            Console.WriteLine("Deleting excluded app row: " + SelectedExcludedAppIndex);
+            var eavm = ExcludedAppViewModels[SelectedExcludedAppIndex];
+            AppCollectionViewModel[AppCollectionViewModel.IndexOf(eavm)].IsAppRejected = false;
+            AppCollectionViewModel[AppCollectionViewModel.IndexOf(eavm)].App.WriteToDatabase();
+            OnPropertyChanged(nameof(ExcludedAppViewModels));
+        }
+
+        private RelayCommand _addExcludedAppCommand;
+        public ICommand AddExcludedAppCommand {
+            get {
+                if (_addExcludedAppCommand == null) {
+                    _addExcludedAppCommand = new RelayCommand(AddExcludedApp);
+                }
+                return _addExcludedAppCommand;
+            }
+        }
+        private void AddExcludedApp() {
+            Console.WriteLine("Add excluded app : ");
+            OpenFileDialog openFileDialog = new OpenFileDialog() {
+                Filter = "Applications|*.lnk;*.exe",
+                Title = "Select an application to exclude"
+            };
+            bool? openResult = openFileDialog.ShowDialog();
+            if (openResult != null && openResult.Value) {
+                MpApp newExcludedApp = null;
+                if(Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
+                    newExcludedApp = new MpApp(MpHelpers.GetShortcutTargetPath(openFileDialog.FileName), true, Path.GetFileNameWithoutExtension(openFileDialog.FileName));
+                } else {
+                    newExcludedApp = new MpApp(openFileDialog.FileName, true, openFileDialog.FileName);
+                }
+                AppCollectionViewModel.Add(new MpAppViewModel(newExcludedApp));
+            }
+            OnPropertyChanged(nameof(ExcludedAppViewModels));
         }
 
         private RelayCommand _clickSettingsPanel1Command;

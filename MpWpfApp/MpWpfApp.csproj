@@ -143,12 +143,14 @@
     <Compile Include="Utils\MpMouseKeyHook.cs" />
     <Compile Include="Utils\MpRichTextToImageConverter.cs" />
     <Compile Include="Utils\MpScreenInformation.cs" />
-    <Compile Include="Utils\MpShortcutCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpAppCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpShortcutCollectionViewModel.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="Utils\MpWindowLoadingBehavior.cs" />
     <Compile Include="Utils\MpWindowClosingBehavior.cs" />
     <Compile Include="Utils\WinApi.cs" />
     <Compile Include="ViewModels\Base\MpCollectionViewModelBase.cs" />
+    <Compile Include="ViewModels\Main Window\MpAppViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpAssignShortcutModalWindowViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpClipTileSortViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpFileListItemViewModel.cs" />
@@ -503,5 +505,6 @@
       <Version>1.1.1</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

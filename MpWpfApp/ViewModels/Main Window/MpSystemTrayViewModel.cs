@@ -62,7 +62,7 @@ namespace MpWpfApp {
         }
         private void ShowSettingsWindow() {
             MainWindowViewModel.IsShowingDialog = true;
-            MainWindowViewModel.HideWindowCommand.Execute(null);
+            MainWindowViewModel.HideWindowCommand.Execute(null);            
             MpSettingsWindowViewModel.ShowSettingsWindow(this);
             MainWindowViewModel.IsShowingDialog = false;
         }

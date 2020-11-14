@@ -1061,7 +1061,7 @@
             return ClipTrayViewModel.SelectedClipTiles.Count == 1;
         }
         private void ExcludeApplication() {
-            MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + CopyItem.App.AppPath + "'","Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
+            MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + CopyItem.App.AppName + "'","Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
             if(confirmExclusionResult == MessageBoxResult.Cancel) {
                 //do nothing
             }

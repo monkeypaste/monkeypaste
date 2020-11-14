@@ -22,6 +22,7 @@
     </Window.DataContext>
     <Window.Resources>
         <local:MpVisibilityToBoolConverter x:Key="VisibilityToBoolConverter" />
+        <local:MpImageSourceToBitmapSourceConverter x:Key="ImageSourceToBitmapSourceConverter" />
         <local:MpIntToMpRoutingTypeConverter x:Key="IntToMpRoutingTypeConverter" />
     </Window.Resources>
     <i:Interaction.Triggers>
@@ -45,6 +46,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
+            <!-- Account Tab Button -->
             <ToggleButton Grid.Column="0"
                           IsChecked="{Binding SettingsPanel1Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
                           Command="{Binding ClickSettingsPanel1Command}">
@@ -59,6 +61,7 @@
                            Content="Account" />
                 </StackPanel>
             </ToggleButton>
+            <!-- Prefs Tab Button -->
             <ToggleButton Grid.Column="1"
                           IsChecked="{Binding SettingsPanel2Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
                           Command="{Binding ClickSettingsPanel2Command}">
@@ -73,6 +76,7 @@
                            Content="Preferences" />
                 </StackPanel>
             </ToggleButton>
+            <!-- Security Tab Button -->
             <ToggleButton Grid.Column="2"
                           IsChecked="{Binding SettingsPanel3Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
                           Command="{Binding ClickSettingsPanel3Command}">
@@ -87,6 +91,7 @@
                            Content="Security" />
                 </StackPanel>
             </ToggleButton>
+            <!-- Shortcuts tab button -->
             <ToggleButton Grid.Column="3"
                           IsChecked="{Binding SettingsPanel4Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
                           Command="{Binding ClickSettingsPanel4Command}">
@@ -98,9 +103,10 @@
                            Source="/MpWpfApp;component/Resources/info.png" />
                     <Label HorizontalAlignment="Center"
                            FontSize="16"
-                           Content="Hotkeys" />
+                           Content="Shortcuts" />
                 </StackPanel>
             </ToggleButton>
+            <!-- Help tab Button -->
             <ToggleButton Grid.Column="4"
                           IsChecked="{Binding SettingsPanel5Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
                           Command="{Binding ClickSettingsPanel5Command}">
@@ -125,10 +131,65 @@
         <Grid Grid.Row="1"
               Visibility="{Binding SettingsPanel2Visibility}">
         </Grid>
-        <!-- Data -->
+        <!-- Security -->
         <Grid Grid.Row="1"
               Visibility="{Binding SettingsPanel3Visibility}">
-            <Label Content="Settings 3" />
+            <DataGrid Grid.Row="1"
+                      x:Name="ExcludedAppDatagrid"
+                      DataContext="{Binding}"
+                      ItemsSource="{Binding ExcludedAppViewModels}"
+                      HorizontalAlignment="Center"
+                      SelectedIndex="{Binding SelectedExcludedAppIndex, Mode=TwoWay}"
+                      SelectionMode="Single"
+                      GridLinesVisibility="None"
+                      IsReadOnly="True"
+                      Margin="15"
+                      AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Width="30">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding IconImage, Converter={StaticResource ImageSourceToBitmapSourceConverter}}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="Excluded Application"                                             
+                                            Width="300">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock VerticalAlignment="Center" 
+                                           Margin="10,0,0,0"
+                                           Text="{Binding AppName}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="30">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel VerticalAlignment="Stretch">
+                                    <Button Background="White"
+                                            BorderThickness="0"
+                                            VerticalAlignment="Stretch" 
+                                            VerticalContentAlignment="Stretch"
+                                            Visibility="{Binding DeleteButtonVisibility}"
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.DeleteExcludedAppCommand}">
+                                        <Image VerticalAlignment="Stretch"
+                                               Source="/MpWpfApp;component/Resources/close.png" />
+                                    </Button>
+                                    <Button Background="White"
+                                            BorderThickness="0"
+                                            Visibility="{Binding AddButtonVisibility}"
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.AddExcludedAppCommand}">
+                                        <Image Width="20"
+                                               Height="20"
+                                               Source="/MpWpfApp;component/Resources/add.png" />
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
         <!-- Shortcuts -->
         <Grid Grid.Row="1"

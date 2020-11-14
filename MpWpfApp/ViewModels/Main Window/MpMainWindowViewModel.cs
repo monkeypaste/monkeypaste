@@ -11,9 +11,9 @@ using Hardcodet.Wpf.TaskbarNotification;
 namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase {
         #region Statics
-
         public static bool IsOpen = false;
         #endregion
+
         #region View Models
         private MpSystemTrayViewModel _systemTrayViewModel = null;
         public MpSystemTrayViewModel SystemTrayViewModel {
@@ -107,7 +107,7 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Private Variables
+            #region Private Variables
         private double _startMainWindowTop;
         private double _endMainWindowTop;
         #endregion

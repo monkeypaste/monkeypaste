@@ -10,7 +10,6 @@ using System.Windows.Media.Imaging;
 namespace MpWpfApp {
     public class MpCopyItem : MpDbObject {
         #region Private Variables
-
         private static int _CopyItemCount = 0;
 
         #endregion
@@ -52,6 +51,9 @@ namespace MpWpfApp {
         public MpClient Client { get; set; }
         public MpColor ItemColor { get; set; }
 
+
+        //this is only set wheen ci is created to name app
+        public IntPtr SourceHandle { get; set; } = IntPtr.Zero;
         #endregion
 
         #region Public Methods
@@ -70,13 +72,33 @@ namespace MpWpfApp {
 
             try {
                 if (iData.GetDataPresent(DataFormats.FileDrop)) {
-                    newCopyItem = MpCopyItem.CreateCopyItem(MpCopyItemType.FileList, (string[])iData.GetData(DataFormats.FileDrop, true), sourcePath, itemColor);
+                    newCopyItem = MpCopyItem.CreateCopyItem(
+                        MpCopyItemType.FileList, 
+                        (string[])iData.GetData(DataFormats.FileDrop, true), 
+                        sourcePath, 
+                        itemColor,
+                        processHandle);
                 } else if (iData.GetDataPresent(DataFormats.Rtf)) {
-                    newCopyItem = MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, (string)iData.GetData(DataFormats.Rtf), sourcePath, itemColor);
+                    newCopyItem = MpCopyItem.CreateCopyItem(
+                        MpCopyItemType.RichText, 
+                        (string)iData.GetData(DataFormats.Rtf), 
+                        sourcePath, 
+                        itemColor,
+                        processHandle);
                 } else if (iData.GetDataPresent(DataFormats.Bitmap)) {
-                    newCopyItem = MpCopyItem.CreateCopyItem(MpCopyItemType.Image, Clipboard.GetImage(), sourcePath, itemColor);
+                    newCopyItem = MpCopyItem.CreateCopyItem(
+                        MpCopyItemType.Image, 
+                        Clipboard.GetImage(), 
+                        sourcePath, 
+                        itemColor,
+                        processHandle);
                 } else if ((iData.GetDataPresent(DataFormats.Html) || iData.GetDataPresent(DataFormats.Text)) && !string.IsNullOrEmpty((string)iData.GetData(DataFormats.Text))) {
-                    newCopyItem = MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, MpHelpers.ConvertPlainTextToRichText((string)iData.GetData(DataFormats.Text)), sourcePath, itemColor);
+                    newCopyItem = MpCopyItem.CreateCopyItem(
+                        MpCopyItemType.RichText, 
+                        MpHelpers.ConvertPlainTextToRichText((string)iData.GetData(DataFormats.Text)), 
+                        sourcePath, 
+                        itemColor,
+                        processHandle);
                 } else {
                     Console.WriteLine("MpData error clipboard data is not known format");
                     return null;
@@ -90,14 +112,20 @@ namespace MpWpfApp {
             }
         }
         
-        public static MpCopyItem CreateCopyItem(MpCopyItemType itemType, object data, string sourcePath, Color tileColor) {
+        public static MpCopyItem CreateCopyItem(
+            MpCopyItemType itemType, 
+            object data, 
+            string sourcePath, 
+            Color tileColor, 
+            IntPtr hwnd) {
             MpCopyItem newItem = new MpCopyItem();
+            newItem.SourceHandle = hwnd;
             newItem.SourcePath = sourcePath;
             newItem.CopyItemType = itemType;
             newItem.CopyDateTime = DateTime.Now;
             newItem.Title = "Untitled"; //Enum.GetName(typeof(MpCopyItemType), newItem.CopyItemType);
             newItem.CopyCount = 1;
-            newItem.App = new MpApp(sourcePath, false);
+            newItem.App = new MpApp(sourcePath, false, hwnd);
             newItem.AppId = newItem.App.AppId;
             newItem.Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
             newItem.ItemColor = new MpColor((int)tileColor.R, (int)tileColor.G, (int)tileColor.B, 255);
@@ -447,7 +475,7 @@ namespace MpWpfApp {
         public override void WriteToDatabase() {
             bool isNew = false;
             if (App == null) {
-                App = new MpApp(SourcePath, false);
+                App = new MpApp(SourcePath, false, SourceHandle);
                 this.AppId = App.AppId;
             }
             if (this.AppId == 0) {
