@@ -59,7 +59,7 @@ namespace MpWpfApp {
             }
         }
 
-        #region Constructor/Initializers
+        #region Public Methods
         public MpAppModeViewModel(MpMainWindowViewModel parent) {
             MainWindowViewModel = parent;
             PropertyChanged += (s, e) => {
@@ -74,6 +74,7 @@ namespace MpWpfApp {
                 }
             };
         }
+
         public void AppMode_Loaded(object sender, RoutedEventArgs e) {
 
         }

@@ -34,7 +34,7 @@ namespace MpWpfApp {
         public static List<MpShortcut> GetShortcutByName(string shortcutName) {
             return GetAllShortcuts().Where(x => x.ShortcutName == shortcutName).ToList();
         }
-        public static List<MpShortcut> GetShortcutByCopyItemId(int copyItemId) {
+        public static List<MpShortcut> GetShortcutListByCopyItemId(int copyItemId) {
             return GetAllShortcuts().Where(x => x.CopyItemId == copyItemId).ToList();
         }
         public static List<MpShortcut> GetShortcutByTagId(int tagId) {
@@ -58,6 +58,14 @@ namespace MpWpfApp {
                 LoadDataRow(dt.Rows[0]);
             }
         }
+        public MpShortcut(int copyItemId, int tagId, string keyList, string shortcutName) : this() {
+            ShortcutName = shortcutName;
+            CopyItemId = copyItemId;
+            TagId = tagId;
+            KeyList = keyList;
+            RoutingType = TagId > 0 ? MpRoutingType.Internal : MpRoutingType.Direct;
+        }
+
         public MpShortcut(DataRow dr) {
             LoadDataRow(dr);
         }

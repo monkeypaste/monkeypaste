@@ -26,7 +26,8 @@ namespace MpWpfApp {
         private System.Timers.Timer seqTimer = null;
         private double seqTimerMaxMs = 1000;
 
-        private int _shortcutId = -1;
+        private ICommand _assigningCommand = null;
+        private string _keys = string.Empty;
 
         private List<List<Key>> _keyList = new List<List<Key>>();
         #endregion
@@ -99,10 +100,10 @@ namespace MpWpfApp {
         #endregion
 
         #region Static Methods
-        public static string ShowAssignShortcutWindow(string shortcutName,int shortcutId = 0) {
+        public static string ShowAssignShortcutWindow(string shortcutName,string keys,ICommand command) {
             //var ascwvm = new MpAssignShortcutModalWindowViewModel(shortcutName);
             var ascw = new MpAssignHotkeyModalWindow();
-            ascw.DataContext = new MpAssignShortcutModalWindowViewModel(shortcutName);
+            ascw.DataContext = new MpAssignShortcutModalWindowViewModel(shortcutName,keys,command);
             var assignResult = ascw.ShowDialog();
             if (assignResult == true) {
                 return ((MpAssignShortcutModalWindowViewModel)ascw.DataContext).KeysString;
@@ -114,22 +115,24 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private MpAssignShortcutModalWindowViewModel(string shortcutName, int shortcutId = 0) {
+        private MpAssignShortcutModalWindowViewModel(string shortcutName, string keysList, ICommand command) {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(KeysString):
+                        var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
+
                         //when KeysString changes check full system for duplicates, ignoring order of combinations
                         WarningString = string.Empty;
                         DuplicatedShortcutViewModel = null;
                         //split hotkey into sequences combinations
                         var combos = KeysString.Split(',').ToList<string>();
                         //iterate over ALL shortcuts
-                        foreach (var sc in MpShortcutViewModel.ShortcutViewModels) {
+                        foreach (var scvm in mwvm.ShortcutCollectionViewModel) {
                             //ignore same shortcut comparision
-                            if (sc.ShortcutId == _shortcutId) {
+                            if (scvm.Command == _assigningCommand) {
                                 continue;
                             }
-                            var scCombos = sc.KeyList.Split(',').ToList<string>();
+                            var scCombos = scvm.KeyList.Split(',').ToList<string>();
                             if (combos.Count != scCombos.Count) {
                                 continue;
                             }
@@ -152,17 +155,17 @@ namespace MpWpfApp {
                                 curComboIdx++;
                             }
                             if (isDuplicate && KeysString != string.Empty) {
-                                DuplicatedShortcutViewModel = sc;
-                                WarningString = "Warning! This combination conflicts with '" + sc.ShortcutDisplayName + "' which will be cleared if saved";
+                                DuplicatedShortcutViewModel = scvm;
+                                WarningString = "This combination conflicts with '" + scvm.ShortcutDisplayName + "' which will be cleared if saved";
                                 break;
                             }
                         }
                         break;
                 }
             };
-            _shortcutId = shortcutId;
-            ShortcutDisplayName = "'" + shortcutName + "'";
-            KeysString = string.Empty;
+            _assigningCommand = command;
+            ShortcutDisplayName = shortcutName;
+            KeysString = keysList;
             _isSeqComplete = true;
         }
 
@@ -209,14 +212,12 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpAssignShortcutModalWindowViewModel() : this(string.Empty) { }
+        public MpAssignShortcutModalWindowViewModel() : this(string.Empty,string.Empty,null) { }
 
         public void AssignHotkeyModalWindow_Loaded(object sender, RoutedEventArgs e) {
             IsOpen = true;
 
             _windowRef = (Window)sender;
-
-            _windowRef.Focus();
 
             //the following hides close button
             var hwnd = new WindowInteropHelper(_windowRef).Handle;
@@ -287,6 +288,8 @@ namespace MpWpfApp {
             seqTimer.Elapsed += (s, e2) => {
                 _isSeqComplete = true;
             };
+
+            _windowRef.Focus();
         }
         #endregion
 
@@ -319,19 +322,16 @@ namespace MpWpfApp {
             KeysString = string.Empty;
         }
 
-        private RelayCommand _saveCommand;
-        public ICommand SaveCommand {
+        private RelayCommand _okCommand;
+        public ICommand OkCommand {
             get {
-                if (_saveCommand == null) {
-                    _saveCommand = new RelayCommand(Save, CanSave);
+                if (_okCommand == null) {
+                    _okCommand = new RelayCommand(Ok);
                 }
-                return _saveCommand;
+                return _okCommand;
             }
         }
-        private bool CanSave() {
-            return DuplicatedShortcutViewModel == null || DuplicatedShortcutViewModel.KeyList != DuplicatedShortcutViewModel.DefaultKeyList;
-        }
-        private void Save() {
+        private void Ok() {
             if(DuplicatedShortcutViewModel != null) {
                 if(DuplicatedShortcutViewModel.CopyItemId > 0 || DuplicatedShortcutViewModel.TagId > 0) {
                     if(DuplicatedShortcutViewModel.CopyItemId > 0) {
@@ -346,7 +346,7 @@ namespace MpWpfApp {
                 }
                 DuplicatedShortcutViewModel.KeyList = string.Empty;
                 DuplicatedShortcutViewModel.Shortcut.WriteToDatabase();
-                //DuplicatedShortcut.UnregisterShortcut();
+                DuplicatedShortcutViewModel.Unregister();
             }
             _windowRef.DialogResult = true;
             _windowRef.Close();

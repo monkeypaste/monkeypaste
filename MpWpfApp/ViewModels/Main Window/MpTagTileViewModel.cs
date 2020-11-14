@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -28,6 +29,19 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+        private int _tagId = 0;
+        public int TagId {
+            get {
+                return _tagId;
+            }
+            set {
+                if (_tagId != value) {
+                    _tagId = value;
+                    OnPropertyChanged(nameof(TagId));
+                }
+            }
+        }
+
         private MpShortcut _shortcut = null;
         public MpShortcut Shortcut {
             get {
@@ -228,33 +242,12 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public void AddClip(MpClipTileViewModel ctvm) {
-            Tag.LinkWithCopyItem(ctvm.CopyItem);
-            TagClipCount++;
-        }
-        #endregion
-
-        #region Private Methods
-
-        //public void LinkToClipTile(MpClipTileViewModel clipTileToLink) {
-        //    if(!Tag.IsLinkedWithCopyItem(clipTileToLink.CopyItem)) {
-        //        Tag.LinkWithCopyItem(clipTileToLink.CopyItem);
-        //        TagClipCount++;
-        //    }
-        //}
-
-        //public void UnlinkWithClipTile(MpClipTileViewModel clipTileToLink) {
-        //    if (Tag.IsLinkedWithCopyItem(clipTileToLink.CopyItem)) {
-        //        Tag.UnlinkWithCopyItem(clipTileToLink.CopyItem);
-        //        TagClipCount--;
-        //    }
-        //}
-        #endregion
-
-        #region Constructor/Initializers
         public MpTagTileViewModel(MpTag tag, MpTagTrayViewModel parent, bool isNew) {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
+                    case nameof(TagId):
+                        Tag.TagId = TagId;
+                        break;
                     case nameof(TagColor):
                         Tag.TagColor.Color = ((SolidColorBrush)TagColor).Color;
                         Tag.WriteToDatabase();
@@ -307,6 +300,7 @@ namespace MpWpfApp {
             };
 
             Tag = tag;
+            TagId = Tag.TagId;
             TagTrayViewModel = parent;
             TagColor = new SolidColorBrush(Tag.TagColor.Color);
             TagName = Tag.TagName;
@@ -314,11 +308,6 @@ namespace MpWpfApp {
         }
 
         public void TagTile_Loaded(object sender, RoutedEventArgs e) {
-            foreach (MpShortcut cmd in MpShortcut.GetShortcutByTagId(Tag.TagId)) {
-                MpShortcutViewModel.RegisterShortcutViewModel(cmd.ShortcutName, cmd.RoutingType, SelectTagCommand, cmd.KeyList, 0, Tag.TagId, cmd.ShortcutId);
-                //Shortcut = cmd;
-                ShortcutKeyList = cmd.KeyList;
-            }
             var tagBorder = (MpClipBorder)sender;
             tagBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
@@ -346,14 +335,37 @@ namespace MpWpfApp {
             if (_isNew) {
                 RenameTagCommand.Execute(null);
             } else {
-                foreach(var ctvm in TagTrayViewModel.MainWindowViewModel.ClipTrayViewModel) {
-                    if(Tag.IsLinkedWithCopyItem(ctvm.CopyItem)) {
+                foreach (var ctvm in TagTrayViewModel.MainWindowViewModel.ClipTrayViewModel) {
+                    if (Tag.IsLinkedWithCopyItem(ctvm.CopyItem)) {
                         TagClipCount++;
                     }
                 }
             }
         }
+
+        public void AddClip(MpClipTileViewModel ctvm) {
+            Tag.LinkWithCopyItem(ctvm.CopyItem);
+            TagClipCount++;
+        }
         #endregion
+
+        #region Private Methods
+
+        //public void LinkToClipTile(MpClipTileViewModel clipTileToLink) {
+        //    if(!Tag.IsLinkedWithCopyItem(clipTileToLink.CopyItem)) {
+        //        Tag.LinkWithCopyItem(clipTileToLink.CopyItem);
+        //        TagClipCount++;
+        //    }
+        //}
+
+        //public void UnlinkWithClipTile(MpClipTileViewModel clipTileToLink) {
+        //    if (Tag.IsLinkedWithCopyItem(clipTileToLink.CopyItem)) {
+        //        Tag.UnlinkWithCopyItem(clipTileToLink.CopyItem);
+        //        TagClipCount--;
+        //    }
+        //}
+        #endregion
+
 
         #region Commands
         private RelayCommand _assignHotkeyCommand;
@@ -367,40 +379,47 @@ namespace MpWpfApp {
         }
         private void AssignHotkey() {
             TagTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
-            ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(TagName);
-            MpShortcutViewModel.RegisterShortcutViewModel(
-                TagName, 
-                MpRoutingType.Internal, 
-                SelectTagCommand, 
-                ShortcutKeyList, 
-                0, 
-                Tag.TagId);
+            ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow("Select " + TagName, ShortcutKeyList, SelectTagCommand);
 
-            var scList = MpShortcut.GetShortcutByTagId(Tag.TagId);
-            if (scList.Count > 0) {
-                foreach (var sc in scList) {
-                    ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(TagName, sc.ShortcutId);
-                    MpShortcutViewModel.RegisterShortcutViewModel(
-                        TagName,
-                        MpRoutingType.Internal,
-                        SelectTagCommand,
-                        ShortcutKeyList,
-                        0,
-                        Tag.TagId,
-                        sc.ShortcutId);
+            var sccvm = TagTrayViewModel.MainWindowViewModel.ShortcutCollectionViewModel;
+            if (ShortcutKeyList == null) {
+                //if assignment was canceled ignore but reset skl
+                ShortcutKeyList = string.Empty;
+            } else if (ShortcutKeyList == string.Empty) {
+                //if an empty assignment was ok'd check if exists 
+                var scvml = sccvm.Where(x => x.Command == SelectTagCommand).ToList();
+                //if it does clear, save and unregister
+                if (scvml != null && scvml.Count > 0) {
+                    foreach (var scvm in scvml) {
+                        scvm.ClearKeyList();
+                        scvm.Shortcut.WriteToDatabase();
+                        scvm.Unregister();
+                    }
+                } else {
+                    //nothing to do since no shortcut created
                 }
             } else {
-                ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(TagName);
-                MpShortcutViewModel.RegisterShortcutViewModel(
-                    TagName,
-                    MpRoutingType.Internal,
-                    SelectTagCommand,
-                    ShortcutKeyList,
-                    0,
-                    Tag.TagId,
-                    0);
+                //check sc if exists 
+                var scvml = sccvm.Where(x => x.Command == SelectTagCommand).ToList();
+                //if it does update the keylist
+                if (scvml != null && scvml.Count > 0) {
+                    foreach (var scvm in scvml) {
+                        scvm.KeyList = ShortcutKeyList;
+                        scvm.Shortcut.WriteToDatabase();
+                        scvm.Register();
+                    }
+                } else {
+                    //add new shortcut to collection
+                    sccvm.Add(
+                        new MpShortcutViewModel(
+                            new MpShortcut(
+                                0,
+                                TagId,
+                                ShortcutKeyList,
+                                "Select " + TagName),
+                            SelectTagCommand));
+                }
             }
-
             TagTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }
 

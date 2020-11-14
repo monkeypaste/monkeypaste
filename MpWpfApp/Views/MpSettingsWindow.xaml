@@ -149,7 +149,7 @@
             <DataGrid Grid.Row="1" 
                       x:Name="ShortcutDatagrid"
                       DataContext="{Binding}"
-                      ItemsSource="{Binding ShortcutViewModels, NotifyOnSourceUpdated=True}"
+                      ItemsSource="{Binding ShortcutCollectionViewModel}"
                       HorizontalAlignment="Center"
                       SelectedIndex="{Binding SelectedShortcutIndex, Mode=TwoWay}"
                       SelectionMode="Single"

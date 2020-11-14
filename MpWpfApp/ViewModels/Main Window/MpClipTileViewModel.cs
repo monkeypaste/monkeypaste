@@ -4,6 +4,7 @@
     using System.Collections.ObjectModel;
     using System.Data;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using System.Speech.Synthesis;
     using System.Windows;
@@ -113,25 +114,6 @@
         #endregion
 
         #region Properties
-        public string ShortcutName {
-            get {
-                var sn = Title == "Untitled" ? PlainText : Title;
-                return sn.Substring(0, Math.Min(sn.Length, Properties.Settings.Default.MaxShortcutTitleLength));
-            }
-        }
-
-        private MpShortcut _shortcut = null;
-        public MpShortcut Shortcut {
-            get {
-                return _shortcut;
-            }
-            set {
-                if(_shortcut != value) {
-                    _shortcut = value;
-                    OnPropertyChanged(nameof(Shortcut));
-                }
-            }
-        }
 
         private string _shortcutKeyList = string.Empty;
         public string ShortcutKeyList {
@@ -168,6 +150,19 @@
                 if (_contentHeight != value) {
                     _contentHeight = value;
                     OnPropertyChanged(nameof(ContentHeight));
+                }
+            }
+        }
+
+        private int _copyItemId = 0;
+        public int CopyItemId {
+            get {
+                return _copyItemId;
+            }
+            set {
+                if (_copyItemId != value) {
+                    _copyItemId = value;
+                    OnPropertyChanged(nameof(CopyItemId));
                 }
             }
         }
@@ -683,12 +678,8 @@
         public MpClipTileViewModel(MpCopyItem ci, MpClipTrayViewModel parent) {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
-                    case nameof(Shortcut):
-                        if(Shortcut != null) {
-                            ShortcutKeyList = Shortcut.KeyList;
-                        } else {
-                            ShortcutKeyList = string.Empty;
-                        }
+                    case nameof(CopyItemId):
+                        CopyItem.CopyItemId = CopyItemId;
                         break;
                     case nameof(IsEditingTitle):
                         if (IsEditingTitle) {
@@ -734,9 +725,11 @@
                         break;
                 }
             };
+
             ClipTrayViewModel = parent;
             IsLoading = true;
             CopyItem = ci;
+            CopyItemId = CopyItem.CopyItemId;
             Title = ci.Title;
             TitleColor = new SolidColorBrush(ci.ItemColor.Color);
             Icon = ci.App.Icon.IconImage;
@@ -758,11 +751,19 @@
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            foreach (MpShortcut cmd in MpShortcut.GetShortcutByCopyItemId(CopyItem.CopyItemId)) {
-                MpShortcutViewModel.RegisterShortcutViewModel(cmd.ShortcutName, cmd.RoutingType, PasteClipCommand, cmd.KeyList, CopyItem.CopyItemId, 0, cmd.ShortcutId);
+            /*foreach (MpShortcut sc in MpShortcut.GetShortcutByCopyItemId(CopyItem.CopyItemId)) {
+                MpShortcutViewModel.RegisterShortcutViewModel(
+                    sc.ShortcutName, 
+                    sc.RoutingType, 
+                    PasteClipCommand, 
+                    sc.KeyList, 
+                    sc.DefaultKeyList,
+                    CopyItem.CopyItemId, 
+                    0, 
+                    sc.ShortcutId);
                 //Shortcut = cmd;
-                ShortcutKeyList = cmd.KeyList;
-            }
+                ShortcutKeyList = sc.KeyList;
+            }*/
             var clipTileBorder = (MpClipBorder)sender;
             clipTileBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
@@ -1094,31 +1095,36 @@
         }
         private void AssignHotkey() {
             ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
-            var scList = MpShortcut.GetShortcutByCopyItemId(CopyItem.CopyItemId);
-            if(scList.Count > 0) {
-                foreach (var sc in scList) {
-                    ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(ShortcutName, sc.ShortcutId);
-                    MpShortcutViewModel.RegisterShortcutViewModel(
-                        ShortcutName,
-                        MpRoutingType.Direct,
-                        PasteClipCommand,
-                        ShortcutKeyList,
-                        CopyItem.CopyItemId,
-                        0,
-                        sc.ShortcutId);
+            ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow("Paste " + Title, ShortcutKeyList, PasteClipCommand);
+            
+            var sccvm = ClipTrayViewModel.MainWindowViewModel.ShortcutCollectionViewModel;
+            if (ShortcutKeyList == null) {
+                //if assignment was canceled ignore but reset skl
+                ShortcutKeyList = string.Empty;
+            } else if(ShortcutKeyList == string.Empty) {
+                //if an empty assignment was ok'd check if exists 
+                var scvml = sccvm.Where(x => x.Command == PasteClipCommand).ToList();
+                //if it does clear, save and unregister
+                if(scvml != null && scvml.Count > 0) {
+                    foreach(var scvm in scvml) {
+                        scvm.ClearKeyList();
+                        scvm.Shortcut.WriteToDatabase();
+                        scvm.Unregister();
+                    }
+                } else {
+                    //nothing to do since no shortcut created
                 }
             } else {
-                ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(ShortcutName);
-                MpShortcutViewModel.RegisterShortcutViewModel(
-                    ShortcutName,
-                    MpRoutingType.Direct,
-                    PasteClipCommand,
-                    ShortcutKeyList,
-                    CopyItem.CopyItemId,
-                    0,
-                    0);
-            }            
-            
+                //add new shortcut to collection
+                sccvm.Add(
+                    new MpShortcutViewModel(
+                        new MpShortcut(
+                            CopyItemId, 
+                            0, 
+                            ShortcutKeyList, 
+                            "Paste " + Title), 
+                        PasteClipCommand));
+            }
             ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }
 

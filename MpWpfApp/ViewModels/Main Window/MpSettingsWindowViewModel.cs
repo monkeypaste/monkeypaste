@@ -65,6 +65,20 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+
+        private int _selectedShortcutIndex;
+        public int SelectedShortcutIndex {
+            get {
+                return _selectedShortcutIndex;
+            }
+            set {
+                if (_selectedShortcutIndex != value) {
+                    _selectedShortcutIndex = value;
+                    OnPropertyChanged(nameof(SelectedShortcutIndex));
+                }
+            }
+        }
+
         private Visibility _settingsPanel1Visibility;
         public Visibility SettingsPanel1Visibility {
             get { 
@@ -130,29 +144,9 @@ namespace MpWpfApp {
             }
         }
 
-        private ObservableCollection<MpShortcutViewModel> _shortcutList = new ObservableCollection<MpShortcutViewModel>();
-        public ObservableCollection<MpShortcutViewModel> ShortcutViewModels {
+        public MpShortcutCollectionViewModel ShortcutCollectionViewModel {
             get {
-                return _shortcutList;
-            }
-            set {
-                if(_shortcutList != value) {
-                    _shortcutList = value;
-                    OnPropertyChanged(nameof(ShortcutViewModels));
-                }
-            }
-        }
-
-        private int _selectedShortcutIndex;
-        public int SelectedShortcutIndex {
-            get {
-                return _selectedShortcutIndex;
-            }
-            set {
-                if (_selectedShortcutIndex != value) {
-                    _selectedShortcutIndex = value;
-                    OnPropertyChanged(nameof(SelectedShortcutIndex));
-                }
+                return SystemTrayViewModel?.MainWindowViewModel.ShortcutCollectionViewModel;
             }
         }
         #endregion
@@ -174,35 +168,24 @@ namespace MpWpfApp {
             _windowRef.Closed += (s, e2) => {
                 IsOpen = false;
             };
-            foreach(MpShortcutViewModel sc in MpShortcutViewModel.ShortcutViewModels) {
-                ShortcutViewModels.Add(sc);
-            }
-            ShortcutViewModels.CollectionChanged += (s, e1) => {
-                if(e1.OldItems != null && e1.OldItems.Count > 0) {
-                    foreach(MpShortcutViewModel cmdToRemove in e1.OldItems) {
-                        cmdToRemove.Shortcut.DeleteFromDatabase();
-                    }
-                }
-                if (e1.NewItems != null && e1.NewItems.Count > 0) {
-                    foreach (MpShortcutViewModel cmdToAdd in e1.NewItems) {
-                        cmdToAdd.Shortcut.WriteToDatabase();
-                    }
-                }
-            };
-        }
 
-        #endregion
-
-        #region Private Methods
-        private MpSettingsWindowViewModel(MpSystemTrayViewModel stvm) {
-            _shortcutViewModelsBackup = ShortcutViewModels;
-            SystemTrayViewModel = stvm;
+            var clonedList = ShortcutCollectionViewModel.Select(x => (MpShortcutViewModel)x.Clone()).ToList();
+            _shortcutViewModelsBackup = new ObservableCollection<MpShortcutViewModel>(clonedList);
+            
             SettingsPanel1Visibility = Visibility.Visible;
             SettingsPanel2Visibility = Visibility.Collapsed;
             SettingsPanel3Visibility = Visibility.Collapsed;
             SettingsPanel4Visibility = Visibility.Collapsed;
             SettingsPanel5Visibility = Visibility.Collapsed;
         }
+
+        #endregion
+
+        #region Private Methods
+        private MpSettingsWindowViewModel(MpSystemTrayViewModel stvm) {
+            SystemTrayViewModel = stvm;            
+        }
+
         private void SetLoadOnLogin(bool loadOnLogin) {
             Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             string appName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
@@ -227,7 +210,7 @@ namespace MpWpfApp {
             }
         }
         private void CancelSettings() {
-            ShortcutViewModels = new ObservableCollection<MpShortcutViewModel>(_shortcutViewModelsBackup);
+            //ShortcutViewModels = _shortcutViewModelsBackup;
             _windowRef.Close();
         }
 
@@ -241,21 +224,6 @@ namespace MpWpfApp {
             }
         }
         private void SaveSettings() {
-            foreach (var scvm in _shortcutViewModelsToDelete) {
-                scvm.Unregister();
-                scvm.Shortcut.DeleteFromDatabase();
-            }
-            foreach (var scvm in _shortcutViewModelsToRegister) {
-                MpShortcutViewModel.RegisterShortcutViewModel(
-                    scvm.ShortcutDisplayName, 
-                    scvm.RoutingType, 
-                    scvm.Command, 
-                    scvm.KeyList, 
-                    scvm.Shortcut.CopyItemId, 
-                    scvm.Shortcut.TagId,
-                    scvm.ShortcutId);
-                scvm.Shortcut.WriteToDatabase();
-            }
             _windowRef.Close();
         }
 
@@ -282,13 +250,23 @@ namespace MpWpfApp {
             }
         }
         private void ReassignShortcut() {
-            Console.WriteLine("Reassigning shortcut from: " + ShortcutViewModels[SelectedShortcutIndex].Shortcut.ToString());
+            var scvm = ShortcutCollectionViewModel[SelectedShortcutIndex];
             SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
             
-            ShortcutViewModels[SelectedShortcutIndex].KeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(ShortcutViewModels[SelectedShortcutIndex].ShortcutDisplayName, ShortcutViewModels[SelectedShortcutIndex].Shortcut.ShortcutId);
-            _shortcutViewModelsToRegister.Add(ShortcutViewModels[SelectedShortcutIndex]);
+            string newKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(scvm.ShortcutDisplayName,scvm.KeyList, scvm.Command);
+            if(newKeyList == null) {
+                //assignment was canceled so do nothing
+            } else if(newKeyList == string.Empty) {
+                //shortcut was cleared
+                scvm.ClearKeyList();
+                scvm.Shortcut.WriteToDatabase();
+                scvm.Unregister();
+            } else {
+                scvm.KeyList = newKeyList;
+                scvm.Shortcut.WriteToDatabase();
+                scvm.Register();
+            }
             
-            Console.WriteLine("Reassigning shortcut to: " + ShortcutViewModels[SelectedShortcutIndex].Shortcut.ToString());
             SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }
 
@@ -303,9 +281,8 @@ namespace MpWpfApp {
         }
         private void DeleteShortcut() {
             Console.WriteLine("Deleting row: " + SelectedShortcutIndex);
-            var shortcutToRemove = ShortcutViewModels[SelectedShortcutIndex];
-            ShortcutViewModels.Remove(shortcutToRemove);
-            _shortcutViewModelsToDelete.Add(shortcutToRemove);
+            var scvm = ShortcutCollectionViewModel[SelectedShortcutIndex];
+            ShortcutCollectionViewModel.Remove(scvm);
         }
 
         private RelayCommand _resetShortcutCommand;
@@ -319,8 +296,9 @@ namespace MpWpfApp {
         }
         private void ResetShortcut() {
             Console.WriteLine("Reset row: " + SelectedShortcutIndex);
-            ShortcutViewModels[SelectedShortcutIndex].KeyList = ShortcutViewModels[SelectedShortcutIndex].Shortcut.DefaultKeyList;
-            _shortcutViewModelsToRegister.Add(ShortcutViewModels[SelectedShortcutIndex]);
+            ShortcutCollectionViewModel[SelectedShortcutIndex].KeyList = ShortcutCollectionViewModel[SelectedShortcutIndex].Shortcut.DefaultKeyList;
+            ShortcutCollectionViewModel[SelectedShortcutIndex].Register();
+            ShortcutCollectionViewModel[SelectedShortcutIndex].Shortcut.WriteToDatabase();
         }
 
         private RelayCommand _clickSettingsPanel1Command;

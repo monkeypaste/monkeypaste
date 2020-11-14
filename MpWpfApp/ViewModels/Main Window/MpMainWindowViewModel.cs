@@ -10,6 +10,10 @@ using Hardcodet.Wpf.TaskbarNotification;
 
 namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase {
+        #region Statics
+
+        public static bool IsOpen = false;
+        #endregion
         #region View Models
         private MpSystemTrayViewModel _systemTrayViewModel = null;
         public MpSystemTrayViewModel SystemTrayViewModel {
@@ -85,6 +89,19 @@ namespace MpWpfApp {
                 if (_appModeViewModel != value) {
                     _appModeViewModel = value;
                     OnPropertyChanged(nameof(AppModeViewModel));
+                }
+            }
+        }
+
+        private MpShortcutCollectionViewModel _shortcutCollectionViewModel = null;
+        public MpShortcutCollectionViewModel ShortcutCollectionViewModel {
+            get {
+                return _shortcutCollectionViewModel;
+            }
+            set {
+                if(_shortcutCollectionViewModel != value) {
+                    _shortcutCollectionViewModel = value;
+                    OnPropertyChanged(nameof(ShortcutCollectionViewModel));
                 }
             }
         }
@@ -256,15 +273,8 @@ namespace MpWpfApp {
                         }
                     }
                 };
-                var showMainWindowCommand = MpShortcut.GetShortcutByName(Properties.Settings.Default.CmdNameShowWindow);
-                foreach (MpShortcut cmd in showMainWindowCommand) {
-                    MpShortcutViewModel.RegisterShortcutViewModel(cmd.ShortcutName, MpRoutingType.Direct, ShowWindowCommand, cmd.KeyList, 0, 0,cmd.ShortcutId);
-                }
 
-                var hideMainWindowCommand = MpShortcut.GetShortcutByName(Properties.Settings.Default.CmdNameHideWindow);
-                foreach (MpShortcut cmd in hideMainWindowCommand) {
-                    MpShortcutViewModel.RegisterShortcutViewModel(cmd.ShortcutName, MpRoutingType.Internal, HideWindowCommand, cmd.KeyList, 0, 0, cmd.ShortcutId);
-                }
+                ShortcutCollectionViewModel = new MpShortcutCollectionViewModel(this);                
             }
             catch(Exception ex) {
                 Console.WriteLine("Error creating mainwindow hotkeys: " + ex.ToString());
@@ -285,17 +295,18 @@ namespace MpWpfApp {
             }
         }
         private bool CanShowWindow() {
-            return Application.Current.MainWindow == null || 
+            return (Application.Current.MainWindow == null || 
                 Application.Current.MainWindow.Visibility != Visibility.Visible || 
                 IsLoading ||
-                !IsShowingDialog ||
-                !MpSettingsWindowViewModel.IsOpen;
+                !MpSettingsWindowViewModel.IsOpen) && !IsOpen;
         }
         private void ShowWindow() {
             if (Application.Current.MainWindow == null) {
                 Application.Current.MainWindow = new MpMainWindow();
             }
             SetupMainWindowRect();
+
+            IsOpen = true;
 
             var mw = (MpMainWindow)Application.Current.MainWindow;
             mw.Show();
@@ -333,9 +344,7 @@ namespace MpWpfApp {
                    IsShowingDialog == false;
         }
         private void HideWindow() {
-            if (!CanHideWindow()) {
-                return;
-            }
+            IsOpen = false;
             var mw = (MpMainWindow)Application.Current.MainWindow;
 
             DoubleAnimation ta = new DoubleAnimation();

@@ -132,6 +132,7 @@
     <Compile Include="Models\MpSubTextToken.cs" />
     <Compile Include="Models\MpTag.cs" />
     <Compile Include="Models\MpUser.cs" />
+    <Compile Include="Utils\MpAssignShortcutModalWindowResult.cs" />
     <Compile Include="Utils\MpBindingProxy.cs" />
     <Compile Include="Utils\MpExtensions.cs" />
     <Compile Include="Utils\MpExtraLargeIconLoader.cs" />
@@ -142,6 +143,7 @@
     <Compile Include="Utils\MpMouseKeyHook.cs" />
     <Compile Include="Utils\MpRichTextToImageConverter.cs" />
     <Compile Include="Utils\MpScreenInformation.cs" />
+    <Compile Include="Utils\MpShortcutCollectionViewModel.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="Utils\MpWindowLoadingBehavior.cs" />
     <Compile Include="Utils\MpWindowClosingBehavior.cs" />
