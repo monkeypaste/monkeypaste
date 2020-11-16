@@ -6,7 +6,6 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpSearchBoxViewModel : MpViewModelBase {
         #region View Models
-        public MpMainWindowViewModel MainWindowViewModel { get; set; }
         #endregion
 
         #region Properties
@@ -65,8 +64,8 @@ namespace MpWpfApp {
 
         #region Constructor/Initializers
 
-        public MpSearchBoxViewModel(MpMainWindowViewModel parent) {
-            MainWindowViewModel = parent;
+        public MpSearchBoxViewModel() {
+
         }
         public void SearchBoxBorder_Loaded(object sender, RoutedEventArgs e) {
             var searchBox = (TextBox)((MpClipBorder)sender).FindName("SearchTextBox");

@@ -172,12 +172,12 @@ namespace MpWpfApp {
 
         public MpMainWindowViewModel() {
             IsLoading = true;
-            SearchBoxViewModel = new MpSearchBoxViewModel(this);
-            ClipTrayViewModel = new MpClipTrayViewModel(this);
-            ClipTileSortViewModel = new MpClipTileSortViewModel(this);
-            AppModeViewModel = new MpAppModeViewModel(this);
-            TagTrayViewModel = new MpTagTrayViewModel(this);
-            SystemTrayViewModel = new MpSystemTrayViewModel(this);
+            SearchBoxViewModel = new MpSearchBoxViewModel();
+            ClipTrayViewModel = new MpClipTrayViewModel();
+            ClipTileSortViewModel = new MpClipTileSortViewModel();
+            AppModeViewModel = new MpAppModeViewModel();
+            TagTrayViewModel = new MpTagTrayViewModel();
+            SystemTrayViewModel = new MpSystemTrayViewModel();
         }
 
         public void MainWindow_Loaded(object sender, RoutedEventArgs e) {           
@@ -274,7 +274,7 @@ namespace MpWpfApp {
                     }
                 };
 
-                ShortcutCollectionViewModel = new MpShortcutCollectionViewModel(this);                
+                MpShortcutCollectionViewModel.Instance.Init();
             }
             catch(Exception ex) {
                 Console.WriteLine("Error creating mainwindow hotkeys: " + ex.ToString());

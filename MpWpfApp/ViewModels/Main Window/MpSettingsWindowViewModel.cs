@@ -168,6 +168,7 @@ namespace MpWpfApp {
 
         public ObservableCollection<MpAppViewModel> ExcludedAppViewModels {
             get {
+
                 var cvs = CollectionViewSource.GetDefaultView(AppCollectionViewModel);
                 cvs.Filter += item => {
                     var avm = (MpAppViewModel)item;
@@ -221,7 +222,7 @@ namespace MpWpfApp {
         private void SetLoadOnLogin(bool loadOnLogin) {
             Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             string appName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
-            string appPath = ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).ClipTrayViewModel.ClipboardMonitor.LastWindowWatcher.ThisAppPath;
+            string appPath = MainWindowViewModel.ClipTrayViewModel.ClipboardMonitor.LastWindowWatcher.ThisAppPath;
             if (loadOnLogin) {
                 rk.SetValue(appName, appPath);
             } else {
@@ -367,13 +368,23 @@ namespace MpWpfApp {
             };
             bool? openResult = openFileDialog.ShowDialog();
             if (openResult != null && openResult.Value) {
-                MpApp newExcludedApp = null;
+                string appPath = openFileDialog.FileName;
                 if(Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
-                    newExcludedApp = new MpApp(MpHelpers.GetShortcutTargetPath(openFileDialog.FileName), true, Path.GetFileNameWithoutExtension(openFileDialog.FileName));
-                } else {
-                    newExcludedApp = new MpApp(openFileDialog.FileName, true, openFileDialog.FileName);
+                    appPath = MpHelpers.GetShortcutTargetPath(openFileDialog.FileName);
                 }
-                AppCollectionViewModel.Add(new MpAppViewModel(newExcludedApp));
+                var neavm = MpAppCollectionViewModel.Instance.GetAppViewModelByProcessPath(appPath);
+                if (neavm == null) {
+                    //if unknown app just add it with rejection flag
+                    neavm = new MpAppViewModel(new MpApp(appPath, true, appPath));
+                    MpAppCollectionViewModel.Instance.Add(neavm);
+                } else if (neavm.IsAppRejected) {
+                    //if app is already rejected set it to selected in grid
+                    MessageBox.Show(neavm.AppName + " is already being rejected");
+                    neavm.IsSelected = true;
+                } else {
+                    //otherwise update rejection and prompt about current clips
+                    MpAppCollectionViewModel.Instance.UpdateRejection(neavm, true);
+                }
             }
             OnPropertyChanged(nameof(ExcludedAppViewModels));
         }

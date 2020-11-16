@@ -241,12 +241,11 @@ namespace MpWpfApp {
                     case nameof(KeyList):
                         Shortcut.KeyList = KeyList;
                         if(IsCustom()) {
-                            var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
                             if (Shortcut.CopyItemId > 0) {
-                                var ctvm = mwvm.ClipTrayViewModel.Where(x => x.CopyItem.CopyItemId == Shortcut.CopyItemId).Single();
+                                var ctvm = MainWindowViewModel.ClipTrayViewModel.Where(x => x.CopyItem.CopyItemId == Shortcut.CopyItemId).Single();
                                 ctvm.ShortcutKeyList = Shortcut.KeyList;
                             } else {
-                                var ttvm = mwvm.TagTrayViewModel.Where(x => x.Tag.TagId == Shortcut.TagId).Single();
+                                var ttvm = MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.TagId == Shortcut.TagId).Single();
                                 ttvm.ShortcutKeyList = Shortcut.KeyList;
                             }
                         }

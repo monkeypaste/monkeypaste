@@ -1,23 +1,22 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpShortcutCollectionViewModel : MpObservableCollectionViewModel<MpShortcutViewModel> {        
+    public class MpShortcutCollectionViewModel : MpObservableCollectionViewModel<MpShortcutViewModel> {
+        private static readonly Lazy<MpShortcutCollectionViewModel> _Lazy = new Lazy<MpShortcutCollectionViewModel>(() => new MpShortcutCollectionViewModel());
+        public static MpShortcutCollectionViewModel Instance { get { return _Lazy.Value; } }
         #region View Models
-        public MpMainWindowViewModel MainWindowViewModel { get; set; }
         #endregion
 
         #region Properties
         #endregion
 
         #region Public Methods
-        public MpShortcutCollectionViewModel(MpMainWindowViewModel mwvm) {
-            MainWindowViewModel = mwvm;
+        public void Init() {
+            //empty call to init singleton
+        }
+        public MpShortcutCollectionViewModel() {
 
             //using mainwindow, map all saved shortcuts to their commands
             foreach (var sc in MpShortcut.GetAllShortcuts()) {
@@ -109,11 +108,49 @@ namespace MpWpfApp {
             }
         }
 
-        public new void Add(MpShortcutViewModel scvm) {
-            if (scvm.IsNew) {
-                scvm.Shortcut.WriteToDatabase();                
+        public string RegisterViewModelShortcut(MpViewModelBase vm, string title, string keys, ICommand command) {
+            MainWindowViewModel.IsShowingDialog = true;
+            var shortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(title, keys, command);
+
+            if (shortcutKeyList == null) {
+                //if assignment was canceled ignore but reset skl
+                shortcutKeyList = string.Empty;
+            } else if (shortcutKeyList == string.Empty) {
+                //if an empty assignment was ok'd check if exists 
+                var scvml = this.Where(x => x.Command == command).ToList();
+                //if it does clear, save and unregister
+                if (scvml != null && this.Count > 0) {
+                    foreach (var scvm in scvml) {
+                        scvm.ClearKeyList();
+                        scvm.Shortcut.WriteToDatabase();
+                        scvm.Unregister();
+                    }
+                } else {
+                    //nothing to do since no shortcut created
+                }
+            } else {
+                if(vm.GetType() == typeof(MpClipTileViewModel)) {
+                    this.Add((MpClipTileViewModel)vm, shortcutKeyList, command);
+                } else if (vm.GetType() == typeof(MpTagTileViewModel)) {
+                    this.Add((MpTagTileViewModel)vm, shortcutKeyList, command);
+                }
             }
-            this.Insert(this.Count, scvm);
+            MainWindowViewModel.IsShowingDialog = false;
+            return shortcutKeyList;
+        }
+
+        public new void Add(MpShortcutViewModel scvm) {
+            scvm.Shortcut.WriteToDatabase();
+
+            //check by command if shortcut exists if it does swap it with scvm otherwise add and always register
+            var curScvml = this.Where(x => x.Command == scvm.Command).ToList();
+            if(curScvml != null && curScvml.Count > 0) {
+                foreach(var curscvm in curScvml) {
+                    this[this.IndexOf(curscvm)] = scvm;
+                }
+            } else {
+                this.Insert(this.Count, scvm);
+            }
 
             scvm.Register();
         }
@@ -134,6 +171,31 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Private Methods
+        private void Add(MpClipTileViewModel ctvm, string keys, ICommand command) {
+            //add new shortcut to collection
+            this.Add(
+                new MpShortcutViewModel(
+                    new MpShortcut(
+                        ctvm.CopyItemId,
+                        0,
+                        keys,
+                        "Paste " + ctvm.Title),
+                    command));
+        }
+
+        private void Add(MpTagTileViewModel ttvm, string keys, ICommand command) {
+            //add new shortcut to collection
+            this.Add(
+                new MpShortcutViewModel(
+                    new MpShortcut(
+                        0,
+                        ttvm.TagId,
+                        keys,
+                        "Select " + ttvm.TagName),
+                    command));
+        }
+        #endregion
         #region Commands
         #endregion
     }

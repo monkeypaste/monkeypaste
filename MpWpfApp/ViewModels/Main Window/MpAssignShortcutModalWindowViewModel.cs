@@ -119,15 +119,13 @@ namespace MpWpfApp {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(KeysString):
-                        var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
-
                         //when KeysString changes check full system for duplicates, ignoring order of combinations
                         WarningString = string.Empty;
                         DuplicatedShortcutViewModel = null;
                         //split hotkey into sequences combinations
                         var combos = KeysString.Split(',').ToList<string>();
                         //iterate over ALL shortcuts
-                        foreach (var scvm in mwvm.ShortcutCollectionViewModel) {
+                        foreach (var scvm in MpShortcutCollectionViewModel.Instance) {
                             //ignore same shortcut comparision
                             if (scvm.Command == _assigningCommand) {
                                 continue;
@@ -336,10 +334,10 @@ namespace MpWpfApp {
                 if(DuplicatedShortcutViewModel.CopyItemId > 0 || DuplicatedShortcutViewModel.TagId > 0) {
                     if(DuplicatedShortcutViewModel.CopyItemId > 0) {
                         //clear input gesture text
-                        ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).ClipTrayViewModel.Where(x => x.CopyItem.CopyItemId == DuplicatedShortcutViewModel.CopyItemId).ToList()[0].ShortcutKeyList = string.Empty;
+                        MainWindowViewModel.ClipTrayViewModel.Where(x => x.CopyItem.CopyItemId == DuplicatedShortcutViewModel.CopyItemId).ToList()[0].ShortcutKeyList = string.Empty;
                         // TODO Unregister hotkey here
                     } else {
-                        ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).TagTrayViewModel.Where(x => x.Tag.TagId == DuplicatedShortcutViewModel.TagId).ToList()[0].ShortcutKeyList = string.Empty;
+                        MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.TagId == DuplicatedShortcutViewModel.TagId).ToList()[0].ShortcutKeyList = string.Empty;
                         // TODO Unregister hotkey here
                     }
                     //DuplicatedShortcutViewModel.Shortcut.DeleteFromDatabase();

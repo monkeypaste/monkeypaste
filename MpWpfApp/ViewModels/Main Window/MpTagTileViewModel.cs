@@ -337,12 +337,12 @@ namespace MpWpfApp {
             tagTextBox.LostFocus += (s, e2) => {
                 IsEditing = false;
             };
-            tagTextBox.PreviewKeyDown += TagTrayViewModel.MainWindowViewModel.MainWindow_PreviewKeyDown;
+            tagTextBox.PreviewKeyDown += MainWindowViewModel.MainWindow_PreviewKeyDown;
             //if tag is created at runtime show tbox w/ all selected
-            if (!TagTrayViewModel.MainWindowViewModel.IsLoading) {
+            if (!MainWindowViewModel.IsLoading) {
                 RenameTagCommand.Execute(null);
             } else {
-                foreach (var ctvm in TagTrayViewModel.MainWindowViewModel.ClipTrayViewModel) {
+                foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel) {
                     if (Tag.IsLinkedWithCopyItem(ctvm.CopyItem)) {
                         TagClipCount++;
                     }
@@ -385,10 +385,10 @@ namespace MpWpfApp {
             }
         }
         private void AssignHotkey() {
-            TagTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
+            MainWindowViewModel.IsShowingDialog = true;
             ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow("Select " + TagName, ShortcutKeyList, SelectTagCommand);
 
-            var sccvm = TagTrayViewModel.MainWindowViewModel.ShortcutCollectionViewModel;
+            var sccvm = MainWindowViewModel.ShortcutCollectionViewModel;
             if (ShortcutKeyList == null) {
                 //if assignment was canceled ignore but reset skl
                 ShortcutKeyList = string.Empty;
@@ -427,7 +427,7 @@ namespace MpWpfApp {
                             SelectTagCommand));
                 }
             }
-            TagTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
+            MainWindowViewModel.IsShowingDialog = false;
         }
 
         private RelayCommand _changeTagColorCommand;

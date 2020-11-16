@@ -6,7 +6,6 @@ using System.Windows.Input;
 namespace MpWpfApp {
     public class MpSystemTrayViewModel : MpViewModelBase {
         #region View Models
-        public MpMainWindowViewModel MainWindowViewModel { get; set; }
         #endregion
 
         #region Properties
@@ -25,8 +24,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpSystemTrayViewModel(MpMainWindowViewModel parent) {
-            MainWindowViewModel = parent;
+        public MpSystemTrayViewModel() {
         }
 
         public void SystemTrayTaskbarIcon_Loaded(object sender, RoutedEventArgs e) {

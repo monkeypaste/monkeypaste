@@ -160,6 +160,16 @@ namespace MpWpfApp {
             }
         }
 
+        //exampe RunWithString(@"C:\windows\system32\cmd.exe",
+        public static void RunInShell(string args, bool asAdministrator, bool isSilent, IntPtr forceHandle) {
+            System.Diagnostics.ProcessStartInfo processInfo = new System.Diagnostics.ProcessStartInfo(); 
+            processInfo.FileName = Environment.ExpandEnvironmentVariables("%SystemRoot%") + @"\System32\cmd.exe"; //Sets the FileName property of myProcessInfo to %SystemRoot%\System32\cmd.exe where %SystemRoot% is a system variable which is expanded using Environment.ExpandEnvironmentVariables
+            processInfo.Arguments = "/K " + args;
+            processInfo.WindowStyle = isSilent ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal; //Sets the WindowStyle of myProcessInfo which indicates the window state to use when the process is started to Hidden
+            processInfo.Verb = asAdministrator ? "runas" : string.Empty; //The process should start with elevated permissions
+            System.Diagnostics.Process.Start(processInfo); //Starts the process based on myProcessInfo
+        }
+
         public static string GetProcessApplicationName(IntPtr hWnd) {
             string mwt = GetProcessMainWindowTitle(hWnd);
             if(string.IsNullOrEmpty(mwt)) {

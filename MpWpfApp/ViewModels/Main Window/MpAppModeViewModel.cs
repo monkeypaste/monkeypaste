@@ -7,11 +7,11 @@ using System.Windows.Input;
 namespace MpWpfApp {
     public class MpAppModeViewModel : MpViewModelBase {
         #region View Models
-        public MpMainWindowViewModel MainWindowViewModel { get; set; }
-
         #endregion
 
         #region Properties
+        
+
         private bool _isInAppendMode = false;
         public bool IsInAppendMode {
             get {
@@ -60,8 +60,7 @@ namespace MpWpfApp {
         }
 
         #region Public Methods
-        public MpAppModeViewModel(MpMainWindowViewModel parent) {
-            MainWindowViewModel = parent;
+        public MpAppModeViewModel() {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(IsAutoCopyMode):

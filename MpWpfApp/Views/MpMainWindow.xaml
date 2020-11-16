@@ -706,6 +706,8 @@
                                                   Command="{Binding Data.ChangeSelectedClipsColorCommand, Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Delete"
                                                   Command="{Binding Data.DeleteSelectedClipsCommand,Source={StaticResource ClipTrayProxy}}" />
+                                        <MenuItem Header="Run in Command Prompt"
+                                                  Command="{Binding Data.RunSelectedClipsInShellCommand,Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Say"
                                                   Command="{Binding Data.SpeakSelectedClipsCommand,Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Merge"
@@ -849,6 +851,7 @@
                                             <Image x:Name="ClipTileAppIconImage"
                                                    Source="{Binding Icon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
                                                    Stretch="Fill"
+                                                   ToolTip="{Binding CopyItemAppName}"
                                                    Width="{Binding TileTitleIconSize}"
                                                    Height="{Binding TileTitleIconSize}">
                                                 <!--<Image.Effect>

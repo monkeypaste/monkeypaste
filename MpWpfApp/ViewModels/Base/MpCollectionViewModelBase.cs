@@ -2,9 +2,16 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Windows;
 
 namespace MpWpfApp {
     public class MpObservableCollectionViewModel<T> : ObservableCollection<T> {
+        public MpMainWindowViewModel MainWindowViewModel {
+            get {
+                return (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
+            }
+        }
+
         public bool ThrowOnInvalidPropertyName { get; private set; }
 
         public new event PropertyChangedEventHandler PropertyChanged;

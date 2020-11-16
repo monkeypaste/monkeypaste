@@ -22,18 +22,6 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 namespace MpWpfApp {
     public class MpClipTrayViewModel : MpObservableCollectionViewModel<MpClipTileViewModel> {
         #region View Models
-        private MpMainWindowViewModel _mainWindowViewModel = null;
-        public MpMainWindowViewModel MainWindowViewModel {
-            get {
-                return _mainWindowViewModel;
-            }
-            set {
-                if(_mainWindowViewModel != value) {
-                    _mainWindowViewModel = value;
-                    OnPropertyChanged(nameof(MainWindowViewModel));
-                }
-            }
-        }
 
         public List<MpClipTileViewModel> SelectedClipTiles {
             get {
@@ -214,8 +202,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public MpClipTrayViewModel(MpMainWindowViewModel parent) {
-            MainWindowViewModel = parent;
+        public MpClipTrayViewModel() {
 
             CollectionChanged += (s, e1) => {
                 if (VisibileClipTiles.Count > 0) {
@@ -967,6 +954,28 @@ namespace MpWpfApp {
             }));            
         }
 
+        private RelayCommand _runSelectedClipsInShellCommand;
+        public ICommand RunSelectedClipsInShellCommand {
+            get {
+                if (_runSelectedClipsInShellCommand == null) {
+                    _runSelectedClipsInShellCommand = new RelayCommand(RunSelectedClipsInShell, CanRunSelectedClipsInShell);
+                }
+                return _runSelectedClipsInShellCommand;
+            }
+        }
+        private bool CanRunSelectedClipsInShell() {
+            foreach(var sctvm in SelectedClipTiles) {
+                if(!sctvm.RunClipInShellCommand.CanExecute(null)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        private void RunSelectedClipsInShell() {
+            foreach (var sctvm in SelectedClipTiles) {
+                sctvm.RunClipInShellCommand.Execute(null);
+            }
+        }
         #endregion
     }
     public enum MpExportType {

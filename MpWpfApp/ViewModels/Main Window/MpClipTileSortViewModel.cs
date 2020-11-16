@@ -6,8 +6,6 @@ using System.Windows.Input;
 namespace MpWpfApp {
     public class MpClipTileSortViewModel : MpViewModelBase {
         #region View Models
-        public MpMainWindowViewModel MainWindowViewModel { get; set; }
-
         private ObservableCollection<MpSortTypeComboBoxItemViewModel> _sortTypes = new ObservableCollection<MpSortTypeComboBoxItemViewModel>();
         public ObservableCollection<MpSortTypeComboBoxItemViewModel> SortTypes {
             get {
@@ -72,7 +70,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Constructor/Initializers
-        public MpClipTileSortViewModel(MpMainWindowViewModel parent) {
+        public MpClipTileSortViewModel() {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(AscSortOrderButtonImageVisibility):
@@ -82,7 +80,6 @@ namespace MpWpfApp {
                         break;
                 }
             };
-            MainWindowViewModel = parent;
         }
         public void ClipTileSort_Loaded(object sender, RoutedEventArgs e) {
             SelectedSortType = SortTypes[0];

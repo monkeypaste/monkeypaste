@@ -114,7 +114,6 @@
         #endregion
 
         #region Properties
-
         private string _shortcutKeyList = string.Empty;
         public string ShortcutKeyList {
             get {
@@ -633,7 +632,11 @@
                 }
             }
         }
-
+        public string CopyItemAppName {
+            get {
+                return CopyItem.App.AppName;
+            }
+        }
         public int CopyItemUsageScore {
             get {
                 return CopyItem.RelevanceScore;
@@ -739,31 +742,18 @@
 
             FileListVisibility = CopyItemType == MpCopyItemType.FileList ? Visibility.Visible : Visibility.Collapsed;
             ImgVisibility = CopyItemType == MpCopyItemType.Image ? Visibility.Visible : Visibility.Collapsed;
-            RtbVisibility = CopyItemType == MpCopyItemType.RichText ? Visibility.Visible : Visibility.Collapsed;
-
-            ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.PropertyChanged += (s, e2) => {
-                switch(e2.PropertyName) {
-                    case nameof(ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.SearchText):
-                        SearchText = ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.SearchText;
-                        break;
-                }
-            };
+            RtbVisibility = CopyItemType == MpCopyItemType.RichText ? Visibility.Visible : Visibility.Collapsed;            
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            /*foreach (MpShortcut sc in MpShortcut.GetShortcutByCopyItemId(CopyItem.CopyItemId)) {
-                MpShortcutViewModel.RegisterShortcutViewModel(
-                    sc.ShortcutName, 
-                    sc.RoutingType, 
-                    PasteClipCommand, 
-                    sc.KeyList, 
-                    sc.DefaultKeyList,
-                    CopyItem.CopyItemId, 
-                    0, 
-                    sc.ShortcutId);
-                //Shortcut = cmd;
-                ShortcutKeyList = sc.KeyList;
-            }*/
+            MainWindowViewModel.SearchBoxViewModel.PropertyChanged += (s, e2) => {
+                switch (e2.PropertyName) {
+                    case nameof(MainWindowViewModel.SearchBoxViewModel.SearchText):
+                        SearchText = MainWindowViewModel.SearchBoxViewModel.SearchText;
+                        break;
+                }
+            };
+
             var clipTileBorder = (MpClipBorder)sender;
             clipTileBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
@@ -1061,27 +1051,7 @@
             return ClipTrayViewModel.SelectedClipTiles.Count == 1;
         }
         private void ExcludeApplication() {
-            MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + CopyItem.App.AppName + "'","Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-            if(confirmExclusionResult == MessageBoxResult.Cancel) {
-                //do nothing
-            }
-            else {
-                MpApp appToReject = CopyItem.App;
-                if (confirmExclusionResult == MessageBoxResult.Yes) {
-                    var clipTilesToRemove = new List<MpClipTileViewModel>();
-                    foreach (MpClipTileViewModel ctvm in ClipTrayViewModel) {
-                        if (ctvm.CopyItemAppId == appToReject.AppId) {
-                            clipTilesToRemove.Add(ctvm);
-                        }
-                    }
-                    foreach (MpClipTileViewModel ctToRemove in clipTilesToRemove) {
-                        ClipTrayViewModel.Remove(ctToRemove);
-                        ctToRemove.CopyItem.DeleteFromDatabase();
-                    }
-                }
-                appToReject.IsAppRejected = true;
-                appToReject.WriteToDatabase();
-            }
+            MpAppCollectionViewModel.Instance.UpdateRejection(MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(CopyItemAppId), true);
         }
 
         private RelayCommand _assignHotkeyCommand;
@@ -1094,38 +1064,7 @@
             }
         }
         private void AssignHotkey() {
-            ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
-            ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow("Paste " + Title, ShortcutKeyList, PasteClipCommand);
-            
-            var sccvm = ClipTrayViewModel.MainWindowViewModel.ShortcutCollectionViewModel;
-            if (ShortcutKeyList == null) {
-                //if assignment was canceled ignore but reset skl
-                ShortcutKeyList = string.Empty;
-            } else if(ShortcutKeyList == string.Empty) {
-                //if an empty assignment was ok'd check if exists 
-                var scvml = sccvm.Where(x => x.Command == PasteClipCommand).ToList();
-                //if it does clear, save and unregister
-                if(scvml != null && scvml.Count > 0) {
-                    foreach(var scvm in scvml) {
-                        scvm.ClearKeyList();
-                        scvm.Shortcut.WriteToDatabase();
-                        scvm.Unregister();
-                    }
-                } else {
-                    //nothing to do since no shortcut created
-                }
-            } else {
-                //add new shortcut to collection
-                sccvm.Add(
-                    new MpShortcutViewModel(
-                        new MpShortcut(
-                            CopyItemId, 
-                            0, 
-                            ShortcutKeyList, 
-                            "Paste " + Title), 
-                        PasteClipCommand));
-            }
-            ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
+            ShortcutKeyList = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(this, "Paste " + Title, ShortcutKeyList, PasteClipCommand);
         }
 
         private RelayCommand _pasteClipCommand;
@@ -1140,6 +1079,22 @@
         private void PasteClip() {
             IsSelected = true;
             ClipTrayViewModel.PasteSelectedClipsCommand.Execute(null);
+        }
+
+        private RelayCommand _runClipInShellCommand;
+        public ICommand RunClipInShellCommand {
+            get {
+                if (_runClipInShellCommand == null) {
+                    _runClipInShellCommand = new RelayCommand(RunClipInShell, CanRunClipInShell);
+                }
+                return _runClipInShellCommand;
+            }
+        }
+        private bool CanRunClipInShell() {
+            return CopyItemType == MpCopyItemType.RichText;
+        }
+        private void RunClipInShell() {
+            MpHelpers.RunInShell(PlainText, false, false, IntPtr.Zero);
         }
         #endregion
 

@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Windows;
 
 namespace MpWpfApp {
     public class MpViewModelBase : INotifyPropertyChanged {
         private static List<MpViewModelBase> _ViewModelList = new List<MpViewModelBase>();
+        public MpMainWindowViewModel MainWindowViewModel {
+            get {
+                return (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
+            }
+        }
 
         public bool ThrowOnInvalidPropertyName { get; private set; }
 

@@ -6,10 +6,8 @@ using System.Windows;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpTagTrayViewModel : ObservableCollection<MpTagTileViewModel> {
+    public class MpTagTrayViewModel : MpObservableCollectionViewModel<MpTagTileViewModel> {
         #region View Models
-        public MpMainWindowViewModel MainWindowViewModel { get; set; }
-
         public MpTagTileViewModel SelectedTagTile {
             get {
                 return this.Where(tt => tt.IsSelected).ToList()[0];
@@ -27,8 +25,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public MpTagTrayViewModel(MpMainWindowViewModel parent) {
-            MainWindowViewModel = parent;
+        public MpTagTrayViewModel() {
             //create tiles for all the tags
             foreach (MpTag t in MpTag.GetAllTags()) {
                 this.Add(new MpTagTileViewModel(t,this));
