@@ -57,12 +57,6 @@ namespace MpWpfApp {
 
         #region View Models
         public MpSystemTrayViewModel SystemTrayViewModel { get; set; }
-        public MpShortcutCollectionViewModel ShortcutCollectionViewModel {
-            get {
-                return SystemTrayViewModel?.MainWindowViewModel.ShortcutCollectionViewModel;
-            }
-        }
-        public MpAppCollectionViewModel AppCollectionViewModel { get; set; }
         #endregion
 
         #region Private Variables
@@ -138,7 +132,20 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(SettingsPanel5Visibility));
                 }
             }
-        }                
+        }
+
+        private bool _isLoadOnLoginChecked = false;
+        public bool IsLoadOnLoginChecked {
+            get {
+                return _isLoadOnLoginChecked;
+            }
+            set {
+                if (_isLoadOnLoginChecked != value) {
+                    _isLoadOnLoginChecked = value;
+                    OnPropertyChanged(nameof(IsLoadOnLoginChecked));
+                }
+            }
+        }
 
         private int _selectedShortcutIndex;
         public int SelectedShortcutIndex {
@@ -169,7 +176,7 @@ namespace MpWpfApp {
         public ObservableCollection<MpAppViewModel> ExcludedAppViewModels {
             get {
 
-                var cvs = CollectionViewSource.GetDefaultView(AppCollectionViewModel);
+                var cvs = CollectionViewSource.GetDefaultView(MpAppCollectionViewModel.Instance);
                 cvs.Filter += item => {
                     var avm = (MpAppViewModel)item;
                     return avm.IsAppRejected;
@@ -178,6 +185,18 @@ namespace MpWpfApp {
                 //this adds empty row
                 eavms.Add(new MpAppViewModel(null));
                 return eavms;
+            }
+        }
+
+        public MpShortcutCollectionViewModel ShortcutCollectionViewModel {
+            get {
+                return MpShortcutCollectionViewModel.Instance;
+            }
+        }
+        
+        public MpSoundPlayerGroupCollectionViewModel SoundPlayerGroupCollectionViewModel {
+            get {
+                return MpSoundPlayerGroupCollectionViewModel.Instance;
             }
         }
         #endregion
@@ -198,9 +217,8 @@ namespace MpWpfApp {
             _windowRef.Closed += (s, e2) => {
                 IsOpen = false;
             };
-
             IsOpen = true;
-            //var clonedList = ShortcutCollectionViewModel.Select(x => (MpShortcutViewModel)x.Clone()).ToList();
+            //var clonedList = MpShortcutCollectionViewModel.Instance.Select(x => (MpShortcutViewModel)x.Clone()).ToList();
             //_shortcutViewModelsBackup = new ObservableCollection<MpShortcutViewModel>(clonedList);
 
             SettingsPanel1Visibility = Visibility.Visible;
@@ -214,8 +232,16 @@ namespace MpWpfApp {
 
         #region Private Methods
         private MpSettingsWindowViewModel(MpSystemTrayViewModel stvm) {
+            PropertyChanged += (s, e) => {
+                switch(e.PropertyName) {
+                    case nameof(IsLoadOnLoginChecked):
+                        SetLoadOnLogin(IsLoadOnLoginChecked);
+                        break;
+                }
+            };
             SystemTrayViewModel = stvm;
-            AppCollectionViewModel = new MpAppCollectionViewModel();
+            IsLoadOnLoginChecked = Properties.Settings.Default.LoadOnLogin;
+            MpAppCollectionViewModel.Instance.Init();
             return;
         }
 
@@ -228,6 +254,7 @@ namespace MpWpfApp {
             } else {
                 rk.DeleteValue(appName, false);
             }
+            Properties.Settings.Default.LoadOnLogin = loadOnLogin;
             Console.WriteLine("App " + appName + " with path " + appPath + " has load on login set to: " + loadOnLogin);
         }
         #endregion
@@ -283,24 +310,30 @@ namespace MpWpfApp {
             }
         }
         private void ReassignShortcut() {
-            var scvm = ShortcutCollectionViewModel[SelectedShortcutIndex];
-            SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
+            var scvm = MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex];
+            MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(
+                scvm,
+                scvm.ShortcutDisplayName,
+                scvm.KeyList,
+                scvm.Command
+            );
+            //SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
             
-            string newKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(scvm.ShortcutDisplayName,scvm.KeyList, scvm.Command);
-            if(newKeyList == null) {
-                //assignment was canceled so do nothing
-            } else if(newKeyList == string.Empty) {
-                //shortcut was cleared
-                scvm.ClearKeyList();
-                scvm.Shortcut.WriteToDatabase();
-                scvm.Unregister();
-            } else {
-                scvm.KeyList = newKeyList;
-                scvm.Shortcut.WriteToDatabase();
-                scvm.Register();
-            }
+            //string newKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(scvm.ShortcutDisplayName,scvm.KeyList, scvm.Command);
+            //if(newKeyList == null) {
+            //    //assignment was canceled so do nothing
+            //} else if(newKeyList == string.Empty) {
+            //    //shortcut was cleared
+            //    scvm.ClearKeyList();
+            //    scvm.Shortcut.WriteToDatabase();
+            //    scvm.Unregister();
+            //} else {
+            //    scvm.KeyList = newKeyList;
+            //    scvm.Shortcut.WriteToDatabase();
+            //    scvm.Register();
+            //}
             
-            SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
+            //SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }
 
         private RelayCommand _deleteShortcutCommand;
@@ -314,8 +347,8 @@ namespace MpWpfApp {
         }
         private void DeleteShortcut() {
             Console.WriteLine("Deleting shortcut row: " + SelectedShortcutIndex);
-            var scvm = ShortcutCollectionViewModel[SelectedShortcutIndex];
-            ShortcutCollectionViewModel.Remove(scvm);
+            var scvm = MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex];
+            MpShortcutCollectionViewModel.Instance.Remove(scvm);
         }
 
         private RelayCommand _resetShortcutCommand;
@@ -329,9 +362,9 @@ namespace MpWpfApp {
         }
         private void ResetShortcut() {
             Console.WriteLine("Reset row: " + SelectedShortcutIndex);
-            ShortcutCollectionViewModel[SelectedShortcutIndex].KeyList = ShortcutCollectionViewModel[SelectedShortcutIndex].Shortcut.DefaultKeyList;
-            ShortcutCollectionViewModel[SelectedShortcutIndex].Register();
-            ShortcutCollectionViewModel[SelectedShortcutIndex].Shortcut.WriteToDatabase();
+            MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].KeyList = MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].Shortcut.DefaultKeyList;
+            MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].Register();
+            MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].Shortcut.WriteToDatabase();
         }
 
         private RelayCommand _deleteExcludedAppCommand;
@@ -346,8 +379,8 @@ namespace MpWpfApp {
         private void DeleteExcludedApp() {
             Console.WriteLine("Deleting excluded app row: " + SelectedExcludedAppIndex);
             var eavm = ExcludedAppViewModels[SelectedExcludedAppIndex];
-            AppCollectionViewModel[AppCollectionViewModel.IndexOf(eavm)].IsAppRejected = false;
-            AppCollectionViewModel[AppCollectionViewModel.IndexOf(eavm)].App.WriteToDatabase();
+            MpAppCollectionViewModel.Instance[MpAppCollectionViewModel.Instance.IndexOf(eavm)].IsAppRejected = false;
+            MpAppCollectionViewModel.Instance[MpAppCollectionViewModel.Instance.IndexOf(eavm)].App.WriteToDatabase();
             OnPropertyChanged(nameof(ExcludedAppViewModels));
         }
 

@@ -18,7 +18,6 @@ namespace MpWpfApp {
 
         public List<MpSubTextToken> SubTextTokenList { get; set; } = new List<MpSubTextToken>();
         public int CopyItemId { get; set; }
-        //private object DataObject { get; set; }
         public int ColorId { get; private set; }
         public string Title { get; set; }
         public MpCopyItemType CopyItemType { get; private set; }
@@ -50,7 +49,6 @@ namespace MpWpfApp {
         public MpApp App { get; set; }
         public MpClient Client { get; set; }
         public MpColor ItemColor { get; set; }
-
 
         //this is only set wheen ci is created to name app
         public IntPtr SourceHandle { get; set; } = IntPtr.Zero;
@@ -191,47 +189,6 @@ namespace MpWpfApp {
             return dt.Rows.Count;
         }
 
-        //public string GetPlainText() {
-        //    switch (CopyItemType) {
-        //        case MpCopyItemType.Image:
-        //            return MpHelpers.ConvertBitmapSourceToPlainText(MpHelpers.ConvertByteArrayToBitmapSource((byte[])DataObject));
-        //        case MpCopyItemType.RichText:
-        //            return MpHelpers.ConvertRichTextToPlainText((string)DataObject);
-        //        case MpCopyItemType.FileList:
-        //            return (string)DataObject;
-        //        default:
-        //            Console.WriteLine("CopyItme GetPlainText error unknow type");
-        //            return string.Empty;
-        //    }
-        //}
-
-        //public string GetRichText() {
-        //    switch (CopyItemType) {
-        //        case MpCopyItemType.Image:
-        //            return MpHelpers.ConvertPlainTextToRichText(MpHelpers.ConvertBitmapSourceToPlainText(MpHelpers.ConvertByteArrayToBitmapSource((byte[])DataObject)));
-        //        case MpCopyItemType.RichText:
-        //            return (string)DataObject;
-        //        case MpCopyItemType.FileList:
-        //            return MpHelpers.ConvertPlainTextToRichText((string)DataObject);
-        //        default:
-        //            Console.WriteLine("CopyItme GetRichText error unknow type");
-        //            return string.Empty;
-        //    }
-        //}
-
-        //public BitmapSource GetBitmapSource() {
-        //    switch (CopyItemType) {
-        //        case MpCopyItemType.Image:
-        //            return MpHelpers.ConvertByteArrayToBitmapSource((byte[])DataObject);
-        //        case MpCopyItemType.RichText:
-        //        case MpCopyItemType.FileList:
-        //            return MpHelpers.ConvertRichTextToImage(GetRichText());
-        //        default:
-        //            Console.WriteLine("CopyItme GetBitmapSource error unknow type");
-        //            return null;
-        //    }
-        //}
-
         public List<string> GetFileList(string baseDir = "",MpCopyItemType forceType = MpCopyItemType.None) {
             //returns path of tmp file for rt or img and actual paths of filelist
             var fileList = new List<string>();
@@ -308,7 +265,7 @@ namespace MpWpfApp {
                             MpHelpers.AppendBitmapSourceToFlowDocument(ItemFlowDocument, otherItem.ItemBitmapSource);
                             break;
                         default:
-                            MpHelpers.CombineFlowDocuments(otherItem.ItemFlowDocument, ItemFlowDocument);
+                            ItemFlowDocument = MpHelpers.CombineFlowDocuments(otherItem.ItemFlowDocument, ItemFlowDocument);
                             ItemRichText = MpHelpers.ConvertFlowDocumentToRichText(ItemFlowDocument);
                             ItemPlainText = MpHelpers.ConvertRichTextToPlainText(ItemRichText);
                             ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);

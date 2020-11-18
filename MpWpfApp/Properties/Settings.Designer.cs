@@ -376,5 +376,143 @@ namespace MpWpfApp.Properties {
                 this["MaxShortcutTitleLength"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool NotificationDoPasteSound {
+            get {
+                return ((bool)(this["NotificationDoPasteSound"]));
+            }
+            set {
+                this["NotificationDoPasteSound"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool NotificationDoCopySound {
+            get {
+                return ((bool)(this["NotificationDoCopySound"]));
+            }
+            set {
+                this["NotificationDoCopySound"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool NotificationShowCopyToast {
+            get {
+                return ((bool)(this["NotificationShowCopyToast"]));
+            }
+            set {
+                this["NotificationShowCopyToast"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool NotificationShowAppendBufferToast {
+            get {
+                return ((bool)(this["NotificationShowAppendBufferToast"]));
+            }
+            set {
+                this["NotificationShowAppendBufferToast"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool NotificationShowModeChangeToast {
+            get {
+                return ((bool)(this["NotificationShowModeChangeToast"]));
+            }
+            set {
+                this["NotificationShowModeChangeToast"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool NotificationDoModeChangeSound {
+            get {
+                return ((bool)(this["NotificationDoModeChangeSound"]));
+            }
+            set {
+                this["NotificationDoModeChangeSound"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Sounds\\Ting.wav")]
+        public string NotificationCopySound1Path {
+            get {
+                return ((string)(this["NotificationCopySound1Path"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string NotificationCopySoundCustomPath {
+            get {
+                return ((string)(this["NotificationCopySoundCustomPath"]));
+            }
+            set {
+                this["NotificationCopySoundCustomPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Sounds\\chime.wav")]
+        public string NotificationCopySound2Path {
+            get {
+                return ((string)(this["NotificationCopySound2Path"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Sounds\\blip.wav")]
+        public string NotificationAppendModeOnSoundPath {
+            get {
+                return ((string)(this["NotificationAppendModeOnSoundPath"]));
+            }
+            set {
+                this["NotificationAppendModeOnSoundPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Sounds\\blip2.wav")]
+        public string NotificationAppendModeOffSoundPath {
+            get {
+                return ((string)(this["NotificationAppendModeOffSoundPath"]));
+            }
+            set {
+                this["NotificationAppendModeOffSoundPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool LoadOnLogin {
+            get {
+                return ((bool)(this["LoadOnLogin"]));
+            }
+            set {
+                this["LoadOnLogin"] = value;
+            }
+        }
     }
 }

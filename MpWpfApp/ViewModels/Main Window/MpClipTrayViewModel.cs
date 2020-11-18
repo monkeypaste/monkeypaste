@@ -45,7 +45,7 @@ namespace MpWpfApp {
             }
         }
         #endregion
-
+        private ListBox _trayListBoxRef = null;
         #region Properties
 
         public MpClipboardMonitor ClipboardMonitor { get; private set; }
@@ -131,7 +131,7 @@ namespace MpWpfApp {
             get {
                 string outStr = MpHelpers.ConvertPlainTextToRichText(string.Empty);
                 foreach (var sctvm in SelectedClipTiles) {
-                    outStr = MpHelpers.CombineRichText(outStr, sctvm.CopyItem.ItemRichText);
+                    outStr = MpHelpers.CombineRichText2(outStr, sctvm.CopyItem.ItemRichText);
                 }
                 return outStr;
             }
@@ -223,6 +223,7 @@ namespace MpWpfApp {
 
         public void ClipTray_Loaded(object sender, RoutedEventArgs e) {
             var clipTray = (MpMultiSelectListBox)sender;
+            _trayListBoxRef = clipTray;
             clipTray.DragEnter += (s, e1) => {
                 //used for resorting
                 e1.Effects = e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName) ? DragDropEffects.Move : DragDropEffects.None;
@@ -414,11 +415,11 @@ namespace MpWpfApp {
 
             //remove any shortcuts associated with clip
             var scvmToRemoveList = new List<MpShortcutViewModel>();
-            foreach(var scvmToRemove in MainWindowViewModel.ShortcutCollectionViewModel.Where(x => x.CopyItemId == clipTileToRemove.CopyItemId).ToList()) {
+            foreach(var scvmToRemove in MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == clipTileToRemove.CopyItemId).ToList()) {
                 scvmToRemoveList.Add(scvmToRemove);
             }
             foreach(var scvmToRemove in scvmToRemoveList) {
-                MainWindowViewModel.ShortcutCollectionViewModel.Remove(scvmToRemove);
+                MpShortcutCollectionViewModel.Instance.Remove(scvmToRemove);
             }
         }
 
@@ -697,7 +698,7 @@ namespace MpWpfApp {
         private void PasteSelectedClips() {
             //In order to paste the app must hide first
             ((MpMainWindow)Application.Current.MainWindow).Visibility = Visibility.Collapsed;
-
+            MpMainWindowViewModel.IsOpen = false;
             //this triggers hidewindow to paste selected items
             //DoPaste = true;
             //MainWindowViewModel.HideWindowCommand.Execute(null);
@@ -930,7 +931,10 @@ namespace MpWpfApp {
                     ClearClipSelection();
                     focusedClip.IsSelected = true;
                     focusedClip.IsFocused = true;
-                }));            
+                    //this breaks mvvm but no way to refresh tokens w/o
+                    _trayListBoxRef.Items.Refresh();
+                })
+            );   
         }
 
         private RelayCommand _speakSelectedClipsCommand;
@@ -943,15 +947,11 @@ namespace MpWpfApp {
             }
         }
         private void SpeakSelectedClips() {
-            Dispatcher.CurrentDispatcher.BeginInvoke(
-                DispatcherPriority.Background, 
-                (Action)(() => {
-                using (SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer()) {
-                    foreach (var sctvm in SelectedClipTiles) {
-                        speechSynthesizer.Speak(sctvm.PlainText);
-                    }
+            using (SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer()) {
+                foreach (var sctvm in SelectedClipTiles) {
+                    speechSynthesizer.SpeakAsync(sctvm.PlainText);
                 }
-            }));            
+            }
         }
 
         private RelayCommand _runSelectedClipsInShellCommand;

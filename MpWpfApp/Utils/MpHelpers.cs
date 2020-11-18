@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Management;
+using System.Media;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -436,7 +437,7 @@ namespace MpWpfApp {
             return newFullPath;
         }
 
-        public static string CombineRichText(string rt1, string rt2) {
+        public static string CombineRichText2(string rt1, string rt2) {
             using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
                 rtb.Rtf = rt1;
                 //rtb.Text += Environment.NewLine;
@@ -955,23 +956,30 @@ namespace MpWpfApp {
                 }
             }
         }
-
-        public static void CombineFlowDocuments(FlowDocument from,FlowDocument to) {            
+        public static string CombineRichText(string from, string to) {
+            return ConvertFlowDocumentToRichText(
+                CombineFlowDocuments(
+                    ConvertRichTextToFlowDocument(from),
+                    ConvertRichTextToFlowDocument(to)
+                )
+            );
+        }
+        public static FlowDocument CombineFlowDocuments(FlowDocument from,FlowDocument to) {            
             TextRange range = new TextRange(from.ContentStart, from.ContentEnd);
             MemoryStream stream = new MemoryStream();
             System.Windows.Markup.XamlWriter.Save(range, stream);
             range.Save(stream, DataFormats.XamlPackage);
 
-            LineBreak lb = new LineBreak();
-            Paragraph p = (Paragraph)to.Blocks.LastBlock;
-            p.LineHeight = 1;
-            p.Inlines.Add(lb);
-            //to.Blocks.Add(p);
+            //below removed so meerging follows items charaters, no extra formatting
+            //LineBreak lb = new LineBreak();
+            //Paragraph p = (Paragraph)to.Blocks.LastBlock;
+            //p.LineHeight = 1;
+            //p.Inlines.Add(lb);
             TextRange range2 = new TextRange(to.ContentEnd, to.ContentEnd);
             range2.Load(stream, DataFormats.XamlPackage);
 
             //to.Blocks.AddRange(from.Blocks.ToList());
-            //return to;
+            return to;
         }
         
         public static void AppendBitmapSourceToFlowDocument(FlowDocument flowDocument,BitmapSource bitmapSource) {

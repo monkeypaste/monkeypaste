@@ -91,11 +91,11 @@ namespace MpWpfApp {
 
             //remove any shortcuts associated with clip
             var scvmToRemoveList = new List<MpShortcutViewModel>();
-            foreach (var scvmToRemove in MainWindowViewModel.ShortcutCollectionViewModel.Where(x => x.CopyItemId == tagTileToRemove.TagId).ToList()) {
+            foreach (var scvmToRemove in MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == tagTileToRemove.TagId).ToList()) {
                 scvmToRemoveList.Add(scvmToRemove);
             }
             foreach (var scvmToRemove in scvmToRemoveList) {
-                MainWindowViewModel.ShortcutCollectionViewModel.Remove(scvmToRemove);
+                MpShortcutCollectionViewModel.Instance.Remove(scvmToRemove);
             }
         }
 

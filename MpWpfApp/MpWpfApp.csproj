@@ -143,13 +143,17 @@
     <Compile Include="Utils\MpMouseKeyHook.cs" />
     <Compile Include="Utils\MpRichTextToImageConverter.cs" />
     <Compile Include="Utils\MpScreenInformation.cs" />
+    <Compile Include="Utils\MpSoundPlayerViewModel.cs" />
+    <Compile Include="ViewModels\Base\MpObservableDictionaryViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpAppCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpNotificationCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpNotificationViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpShortcutCollectionViewModel.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="Utils\MpWindowLoadingBehavior.cs" />
     <Compile Include="Utils\MpWindowClosingBehavior.cs" />
     <Compile Include="Utils\WinApi.cs" />
-    <Compile Include="ViewModels\Base\MpCollectionViewModelBase.cs" />
+    <Compile Include="ViewModels\Base\MpObservableCollectionViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpAppViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpAssignShortcutModalWindowViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpClipTileSortViewModel.cs" />
@@ -161,6 +165,7 @@
     <Compile Include="ViewModels\Main Window\MpSettingsWindowViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpShortcutViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSortTypeComboBoxItemViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpSoundPlayerGroupCollectionViewModel.cs" />
     <Compile Include="Views\MpSettingsWindow.xaml.cs">
       <DependentUpon>MpSettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -281,7 +286,7 @@
     <Resource Include="Resources\MonkeyIcon1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\MonkeySound1.wav" />
+    <Resource Include="Resources\Sounds\MonkeySound1.wav" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\search.png" />
@@ -505,6 +510,15 @@
       <Version>1.1.1</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Resources\Icons\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Sounds\alert.wav" />
+    <Content Include="Resources\Sounds\blip.wav" />
+    <Content Include="Resources\Sounds\blip2.wav" />
+    <Content Include="Resources\Sounds\chime.wav" />
+    <Content Include="Resources\Sounds\ting.wav" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -112,5 +112,41 @@
     <Setting Name="MaxShortcutTitleLength" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
+    <Setting Name="NotificationDoPasteSound" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="NotificationDoCopySound" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="NotificationShowCopyToast" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="NotificationShowAppendBufferToast" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="NotificationShowModeChangeToast" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="NotificationDoModeChangeSound" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="NotificationCopySound1Path" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Sounds\Ting.wav</Value>
+    </Setting>
+    <Setting Name="NotificationCopySoundCustomPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="NotificationCopySound2Path" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Sounds\chime.wav</Value>
+    </Setting>
+    <Setting Name="NotificationAppendModeOnSoundPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Sounds\blip.wav</Value>
+    </Setting>
+    <Setting Name="NotificationAppendModeOffSoundPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Sounds\blip2.wav</Value>
+    </Setting>
+    <Setting Name="LoadOnLogin" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

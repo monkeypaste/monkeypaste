@@ -864,9 +864,10 @@
                                     <Canvas x:Name="ClipTileContentCanvas"
                                             Grid.Row="1"
                                             Grid.Column="0">
-                                        <!-- RichText Content -->
+                                        <!-- RichText Content DocumentRtf="{Binding DocumentRtf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                                       -->
                                         <local:MpTokenizedRichTextBox x:Name="ClipTileRichTextBox"
-                                                                      DocumentRtf="{Binding DocumentRtf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                                      RichText="{Binding RichText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                       SearchText="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                       MinWidth="{Binding TileBorderSize}"
                                                                       MinHeight="{Binding TileContentHeight}"

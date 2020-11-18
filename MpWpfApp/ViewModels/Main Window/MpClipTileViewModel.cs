@@ -303,7 +303,7 @@
         public ObservableCollection<MpSubTextToken> Tokens {
             get {
                 if (_tokens == null) {
-                    _tokens = (IList<MpSubTextToken>)CopyItem.SubTextTokenList as ObservableCollection<MpSubTextToken>;
+                    _tokens = new ObservableCollection<MpSubTextToken>(CopyItem.SubTextTokenList);
                 }
                 return _tokens;
             }
@@ -820,7 +820,7 @@
             ContentHeight = rtb.RenderSize.Height;
             rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
             rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
-
+            
             rtb.SearchText = string.Empty;
         }
 
@@ -894,7 +894,6 @@
             foreach(var path in FileDropList) {
                 FileListViewModels.Add(new MpFileListItemViewModel(this,path));
             }
-            
         }
 
         public void InitSwirl(BitmapSource sharedSwirl = null) {
@@ -1077,6 +1076,7 @@
             }
         }
         private void PasteClip() {
+            ClipTrayViewModel.ClearClipSelection();
             IsSelected = true;
             ClipTrayViewModel.PasteSelectedClipsCommand.Execute(null);
         }

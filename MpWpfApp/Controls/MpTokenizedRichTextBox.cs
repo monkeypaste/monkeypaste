@@ -71,54 +71,54 @@ namespace MpWpfApp {
             typeof(string),
             typeof(MpTokenizedRichTextBox),
             new FrameworkPropertyMetadata {
-                BindsTwoWayByDefault = true,
+                BindsTwoWayByDefault = true, 
                 PropertyChangedCallback = (s, e) => {
                     if (!string.IsNullOrEmpty((string)e.NewValue)) {
-                        ((MpTokenizedRichTextBox)s).SetRtf((string)e.NewValue);
+                        ((MpTokenizedRichTextBox)s).SetRtf((string)e.NewValue);                        
                     }
                 }
             });
 
-        public FlowDocument DocumentRtf {
-            get {
-                return (FlowDocument)GetValue(DocumentRtfProperty);
-            }
-            set {
-                if ((FlowDocument)GetValue(DocumentRtfProperty) != value) {
-                    SetValue(DocumentRtfProperty, value);
-                }
-            }
-        }
-        public static FlowDocument GetDocumentRtf(DependencyObject obj) {
-            return (FlowDocument)obj.GetValue(DocumentRtfProperty);
-        }
-        public static void SetDocumentRtf(DependencyObject obj, FlowDocument value) {
-            obj.SetValue(DocumentRtfProperty, value);
-        }
-        public static readonly DependencyProperty DocumentRtfProperty =
-          DependencyProperty.RegisterAttached(
-            "DocumentRtf",
-            typeof(FlowDocument),
-            typeof(MpTokenizedRichTextBox),
-            new FrameworkPropertyMetadata {
-                BindsTwoWayByDefault = true,
-                PropertyChangedCallback = (s, e) => {
-                    var trtb = (MpTokenizedRichTextBox)s;
-                    var newDocument = (FlowDocument)e.NewValue;
-                    //instead of directly setting document this workaround ensures document reassignment doesn't fail
-                    TextRange newRange = new TextRange(newDocument.ContentStart, newDocument.ContentEnd);
-                    MemoryStream stream = new MemoryStream();
-                    System.Windows.Markup.XamlWriter.Save(newRange, stream);
-                    newRange.Save(stream, DataFormats.XamlPackage);
+        //public FlowDocument DocumentRtf {
+        //    get {
+        //        return (FlowDocument)GetValue(DocumentRtfProperty);
+        //    }
+        //    set {
+        //        if ((FlowDocument)GetValue(DocumentRtfProperty) != value) {
+        //            SetValue(DocumentRtfProperty, value);
+        //        }
+        //    }
+        //}
+        //public static FlowDocument GetDocumentRtf(DependencyObject obj) {
+        //    return (FlowDocument)obj.GetValue(DocumentRtfProperty);
+        //}
+        //public static void SetDocumentRtf(DependencyObject obj, FlowDocument value) {
+        //    obj.SetValue(DocumentRtfProperty, value);
+        //}
+        //public static readonly DependencyProperty DocumentRtfProperty =
+        //  DependencyProperty.RegisterAttached(
+        //    "DocumentRtf",
+        //    typeof(FlowDocument),
+        //    typeof(MpTokenizedRichTextBox),
+        //    new FrameworkPropertyMetadata {
+        //        BindsTwoWayByDefault = true,
+        //        PropertyChangedCallback = (s, e) => {
+        //            var trtb = (MpTokenizedRichTextBox)s;
+        //            var newDocument = (FlowDocument)e.NewValue;
+        //            //instead of directly setting document this workaround ensures document reassignment doesn't fail
+        //            TextRange newRange = new TextRange(newDocument.ContentStart, newDocument.ContentEnd);
+        //            MemoryStream stream = new MemoryStream();
+        //            System.Windows.Markup.XamlWriter.Save(newRange, stream);
+        //            newRange.Save(stream, DataFormats.XamlPackage);
 
-                    var doc = new FlowDocument();
-                    var range = new TextRange(doc.ContentStart, doc.ContentEnd);
-                    range.Load(stream, DataFormats.XamlPackage);
+        //            var doc = new FlowDocument();
+        //            var range = new TextRange(doc.ContentStart, doc.ContentEnd);
+        //            range.Load(stream, DataFormats.XamlPackage);
 
-                    // Set the document
-                    trtb.Document = doc;
-                }
-            });
+        //            // Set the document
+        //            trtb.Document = doc;
+        //        }
+        //    });
 
         public ObservableCollection<MpSubTextToken> Tokens {
             get {

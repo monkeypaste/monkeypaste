@@ -93,21 +93,9 @@ namespace MpWpfApp {
             }
         }
 
-        private MpShortcutCollectionViewModel _shortcutCollectionViewModel = null;
-        public MpShortcutCollectionViewModel ShortcutCollectionViewModel {
-            get {
-                return _shortcutCollectionViewModel;
-            }
-            set {
-                if(_shortcutCollectionViewModel != value) {
-                    _shortcutCollectionViewModel = value;
-                    OnPropertyChanged(nameof(ShortcutCollectionViewModel));
-                }
-            }
-        }
         #endregion
 
-            #region Private Variables
+        #region Private Variables
         private double _startMainWindowTop;
         private double _endMainWindowTop;
         #endregion
@@ -200,6 +188,7 @@ namespace MpWpfApp {
             HideWindowCommand.Execute(null);
 #endif
             var taskbarIcon = (TaskbarIcon)mw.FindName("TaskbarIcon");
+            MpSoundPlayerGroupCollectionViewModel.Instance.Init();
         }
 
         public void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e) {

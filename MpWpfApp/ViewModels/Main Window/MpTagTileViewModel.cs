@@ -388,13 +388,12 @@ namespace MpWpfApp {
             MainWindowViewModel.IsShowingDialog = true;
             ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow("Select " + TagName, ShortcutKeyList, SelectTagCommand);
 
-            var sccvm = MainWindowViewModel.ShortcutCollectionViewModel;
             if (ShortcutKeyList == null) {
                 //if assignment was canceled ignore but reset skl
                 ShortcutKeyList = string.Empty;
             } else if (ShortcutKeyList == string.Empty) {
                 //if an empty assignment was ok'd check if exists 
-                var scvml = sccvm.Where(x => x.Command == SelectTagCommand).ToList();
+                var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.Command == SelectTagCommand).ToList();
                 //if it does clear, save and unregister
                 if (scvml != null && scvml.Count > 0) {
                     foreach (var scvm in scvml) {
@@ -407,7 +406,7 @@ namespace MpWpfApp {
                 }
             } else {
                 //check sc if exists 
-                var scvml = sccvm.Where(x => x.Command == SelectTagCommand).ToList();
+                var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.Command == SelectTagCommand).ToList();
                 //if it does update the keylist
                 if (scvml != null && scvml.Count > 0) {
                     foreach (var scvm in scvml) {
@@ -417,7 +416,7 @@ namespace MpWpfApp {
                     }
                 } else {
                     //add new shortcut to collection
-                    sccvm.Add(
+                    MpShortcutCollectionViewModel.Instance.Add(
                         new MpShortcutViewModel(
                             new MpShortcut(
                                 0,

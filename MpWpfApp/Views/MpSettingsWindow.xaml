@@ -130,6 +130,19 @@
         <!-- Preferences -->
         <Grid Grid.Row="1"
               Visibility="{Binding SettingsPanel2Visibility}">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Sound Notifications" />
+                    <ComboBox DataContext="{Binding SoundPlayerGroupCollectionViewModel}"
+                              ItemsSource="{Binding SoundGroupNames}"
+                              SelectedIndex="{Binding SelectedSoundGroupNameIdx}">
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Load On Login" />
+                    <CheckBox IsChecked="{Binding IsLoadOnLoginChecked}" />
+                </StackPanel>
+            </StackPanel>
         </Grid>
         <!-- Security -->
         <Grid Grid.Row="1"
