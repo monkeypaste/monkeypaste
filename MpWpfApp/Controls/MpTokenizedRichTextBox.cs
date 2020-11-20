@@ -160,42 +160,20 @@ namespace MpWpfApp {
 
         public void AddSubTextToken(MpSubTextToken token) {
             try {
-                Block block = Document.Blocks.ToArray()[token.BlockIdx];
-                //find and remove the inline with the token
-
-                //Span inline = (Span)block.Inlines.ToArray()[token.InlineIdx];
-                //para.Inlines.Remove(inline);
-                TextRange runRange = new TextRange(block.ContentStart, block.ContentEnd);
-                string tokenText = runRange.Text.Substring(token.StartIdx, token.EndIdx - token.StartIdx);
-                TextPointer searchStartPointer = block.ContentStart;
-                if (_lastToken != null) {
-                    if (token.BlockIdx == _lastToken.BlockIdx) {
-                        searchStartPointer = _lastTokenRange.End;
-                    }
-                }
-
-                //Paragraph para = (Paragraph)doc.Blocks.ToArray()[token.BlockIdx];
-                //Span inline = (Span)para.Inlines.ToArray()[token.InlineIdx];
-                ////para.Inlines.Remove(inline);
-                //TextRange runRange = new TextRange(inline.ContentStart, inline.ContentEnd);            
-                //string tokenText = runRange.Text.Substring(token.StartIdx,token.EndIdx-token.StartIdx);
-                //TextPointer searchStartPointer = inline.ContentStart;
-                //if(i > 0) {
-                //    var lastToken = sortedTokenList[i - 1];
-                //    if(token.BlockIdx == lastToken.BlockIdx && token.InlineIdx == lastToken.InlineIdx) {
-                //        searchStartPointer = lastTokenRange.End;
-                //    }
-                //}
-
-                TextRange tokenRange = MpHelpers.FindStringRangeFromPosition(searchStartPointer, tokenText);
-                if (tokenRange == null) {
+                if(token.TokenType == MpSubTextTokenType.CopyItemSegment) {
                     return;
                 }
-                Hyperlink tokenLink = new Hyperlink(tokenRange.Start, tokenRange.End);
+
+                Hyperlink tokenLink = GetTokenLink(token);
+                if(tokenLink == null) {
+                    Console.WriteLine("TokenizedTextbox error, GetTokenLink null for token: " + token.ToString());
+                    return;
+                }
                 tokenLink.IsEnabled = true;
                 tokenLink.RequestNavigate += (s, e) => {
                     System.Diagnostics.Process.Start(e.Uri.ToString());
                 };
+
                 MenuItem convertToQrCodeMenuItem = new MenuItem();
                 convertToQrCodeMenuItem.Header = "Convert to QR Code";
                 convertToQrCodeMenuItem.Click += (s, e1) => {
@@ -208,13 +186,13 @@ namespace MpWpfApp {
 
                 switch (token.TokenType) {
                     case MpSubTextTokenType.StreetAddress:
-                        tokenLink.NavigateUri = new Uri("https://google.com/maps/place/" + tokenText.Replace(' ', '+'));
+                        tokenLink.NavigateUri = new Uri("https://google.com/maps/place/" + token.TokenText.Replace(' ', '+'));
                         break;
                     case MpSubTextTokenType.Uri:
-                        if (!tokenText.Contains("https://")) {
-                            tokenLink.NavigateUri = new Uri("https://" + tokenText);
+                        if (!token.TokenText.Contains("https://")) {
+                            tokenLink.NavigateUri = new Uri("https://" + token.TokenText);
                         } else {
-                            tokenLink.NavigateUri = new Uri(tokenText);
+                            tokenLink.NavigateUri = new Uri(token.TokenText);
                         }
                         MenuItem minifyUrl = new MenuItem();
                         minifyUrl.Header = "Minify with bit.ly";
@@ -222,36 +200,38 @@ namespace MpWpfApp {
                             Hyperlink link = (Hyperlink)((MenuItem)s).Tag;
                             string minifiedLink = MpHelpers.ShortenUrl(link.NavigateUri.ToString()).Result;
                             Clipboard.SetText(minifiedLink);
-                            //MpCopyItem newCopyItem = MpCopyItem.CreateCopyItem(MpCopyItemType.RichText, MpCopyItem.PlainTextToRtf(minifiedLink), MainWindowViewModel.ClipboardMonitor.LastWindowWatcher.ThisAppPath, MpHelpers.GetRandomColor());
-                            //newCopyItem.WriteToDatabase();
-                            //MpTag historyTag = new MpTag(1);
-                            //historyTag.LinkWithCopyItem(newCopyItem);
-                            //MainWindowViewModel.ClearSelection();
-                            //MainWindowViewModel.CreateClipTile(newCopyItem);
                         };
                         minifyUrl.Tag = tokenLink;
                         tokenLink.ContextMenu.Items.Add(minifyUrl);
                         break;
                     case MpSubTextTokenType.Email:
-                        tokenLink.NavigateUri = new Uri("mailto:" + tokenText);
+                        tokenLink.NavigateUri = new Uri("mailto:" + token.TokenText);
                         break;
                     case MpSubTextTokenType.PhoneNumber:
-                        tokenLink.NavigateUri = new Uri("tel:" + tokenText);
+                        tokenLink.NavigateUri = new Uri("tel:" + token.TokenText);
                         break;
                     case MpSubTextTokenType.Currency:
                         //"https://www.google.com/search?q=%24500.80+to+yen"
                         MenuItem convertCurrencyMenuItem = new MenuItem();
                         convertCurrencyMenuItem.Header = "Convert Currency To";
                         foreach (MpCurrencyType ct in Enum.GetValues(typeof(MpCurrencyType))) {
-                            if (ct == MpCurrencyType.None) {
+                            if (ct == MpCurrencyType.None || ct == MpHelpers.GetCurrencyTypeFromString(token.TokenText)) {
                                 continue;
                             }
                             MenuItem subItem = new MenuItem();
                             subItem.Header = Enum.GetName(typeof(MpCurrencyType), ct);
                             subItem.Click += (s, e2) => {
+                                // use https://free.currencyconverterapi.com/ instead of google
+                                //string convertedCurrency = MpHelpers.CurrencyConvert(
+                                //    (decimal)MpHelpers.GetCurrencyValueFromString(token.TokenText),
+                                //    Enum.GetName(typeof(MpCurrencyType), MpHelpers.GetCurrencyTypeFromString(token.TokenText)),
+                                //    Enum.GetName(typeof(MpCurrencyType), ct));
+                                //tokenLink.Inlines.Clear();
+                                //tokenLink.Inlines.Add(new Run(convertedCurrency));
                                 ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).HideWindowCommand.Execute(null);
-                                System.Diagnostics.Process.Start(@"https://www.google.com/search?q=" + tokenText + "+to+" + subItem.Header);
+                                System.Diagnostics.Process.Start(@"https://www.google.com/search?q=" + token.TokenText + "+to+" + subItem.Header);
                             };
+                            convertCurrencyMenuItem.Items.Add(subItem);
                         }
 
                         tokenLink.ContextMenu.Items.Add(convertCurrencyMenuItem);
@@ -260,17 +240,31 @@ namespace MpWpfApp {
 
                         break;
                 }
-                _lastTokenRange = tokenRange;
-                _lastToken = token;
             } catch(Exception ex) {
-                Console.WriteLine("TokenizedTextbox error, cannot add token text: " + token.TokenText + " of type: " + Enum.GetName(typeof(MpSubTextTokenType), token.TokenType));
+                Console.WriteLine("TokenizedTextbox error, cannot add token text: " + token.TokenText + " of type: " + Enum.GetName(typeof(MpSubTextTokenType), token.TokenType) + Environment.NewLine + "with exception: " + ex.ToString());
             }
         }
 
         #endregion
 
         #region Private Methods
-
+        private Hyperlink GetTokenLink(MpSubTextToken token) {
+            Block block = Document.Blocks.ToArray()[token.BlockIdx];
+            TextPointer searchStartPointer = block.ContentStart;
+            if (_lastToken != null) {
+                if (token.BlockIdx == _lastToken.BlockIdx) {
+                    searchStartPointer = _lastTokenRange.End;
+                }
+            }
+            TextRange tokenRange = MpHelpers.FindStringRangeFromPosition(searchStartPointer, token.TokenText);
+            if (tokenRange == null) {
+                Console.WriteLine("TokenizedRichTextBox error, cannot find textrange for token: " + token.ToString());
+                return null;
+            }
+            _lastTokenRange = tokenRange;
+            _lastToken = token;
+            return new Hyperlink(tokenRange.Start, tokenRange.End);
+        }
         private void HighlightSearchText(SolidColorBrush highlightColor) {
             Dispatcher.CurrentDispatcher.BeginInvoke(
                 DispatcherPriority.Background,
@@ -342,8 +336,6 @@ namespace MpWpfApp {
                         ctvm.TileVisibility = Visibility.Collapsed;
                     }
                     EndChange();
-
-
 
                     //var fullDocRange = new TextRange(Document.ContentStart, Document.ContentEnd);
                     ////fullDocRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);

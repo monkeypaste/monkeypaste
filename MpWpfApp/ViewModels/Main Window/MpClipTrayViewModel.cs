@@ -913,6 +913,8 @@ namespace MpWpfApp {
             return areAllSameType;
         }
         private void MergeSelectedClips() {
+            //for some reason not making this run on another thread
+            //MAY throw a com error or it was from AddToken
             Dispatcher.CurrentDispatcher.BeginInvoke(
                 DispatcherPriority.Background,
                 (Action)(() => {

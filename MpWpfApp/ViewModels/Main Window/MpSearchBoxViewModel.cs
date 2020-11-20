@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -60,12 +61,35 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        private Visibility _clearSearchTextButtonVisibility = Visibility.Collapsed;
+        public Visibility ClearSearchTextButtonVisibility {
+            get {
+                return _clearSearchTextButtonVisibility;
+            }
+            set {
+                if (_clearSearchTextButtonVisibility != value) {
+                    _clearSearchTextButtonVisibility = value;
+                    OnPropertyChanged(nameof(ClearSearchTextButtonVisibility));
+                }
+            }
+        }
         #endregion
 
-        #region Constructor/Initializers
+        #region Public Methods
 
         public MpSearchBoxViewModel() {
-
+            PropertyChanged += (s, e) => {
+                switch(e.PropertyName) {
+                    case nameof(SearchText):
+                        if(SearchText.Length > 0 && SearchText != Properties.Settings.Default.SearchPlaceHolderText) {
+                            ClearSearchTextButtonVisibility = Visibility.Visible;
+                        } else {
+                            ClearSearchTextButtonVisibility = Visibility.Collapsed;
+                        }
+                        break;
+                }
+            };
         }
         public void SearchBoxBorder_Loaded(object sender, RoutedEventArgs e) {
             var searchBox = (TextBox)((MpClipBorder)sender).FindName("SearchTextBox");
@@ -90,6 +114,24 @@ namespace MpWpfApp {
             searchBox.PreviewKeyUp += MainWindowViewModel.MainWindow_PreviewKeyDown;
             SearchText = Properties.Settings.Default.SearchPlaceHolderText;
 
+        }
+        #endregion
+
+        #region Commands
+        private RelayCommand _clearSearchTextCommand;
+        public ICommand ClearSearchTextCommand {
+            get {
+                if (_clearSearchTextCommand == null) {
+                    _clearSearchTextCommand = new RelayCommand(ClearSearchText, CanClearSearchText);
+                }
+                return _clearSearchTextCommand;
+            }
+        }
+        private bool CanClearSearchText() {
+            return SearchText.Length > 0;
+        }
+        private void ClearSearchText() {
+            SearchText = string.Empty;
         }
         #endregion
     }

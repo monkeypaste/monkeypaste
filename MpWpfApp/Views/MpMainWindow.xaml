@@ -212,7 +212,7 @@
         </Grid.RowDefinitions>
         <tb:TaskbarIcon x:Name="SystemTrayTaskbarIcon"
                         DataContext="{Binding SystemTrayViewModel}" 
-                        IconSource="/MpWpfApp;component/Resources/monkey (2).ico"
+                        IconSource="/MpWpfApp;component/Resources/Icons/monkey (2).ico"
                         ToolTipText="{Binding SystemTrayIconToolTipText}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Loaded">
@@ -317,10 +317,10 @@
                         Width="30"
                         Command="{Binding ToggleSortOrderCommand}">
                     <Grid>
-                        <Image Source="/MpWpfApp;component/Resources/asc_white.png"
+                        <Image Source="/Resources/Images/asc_white.png"
                                Visibility="{Binding AscSortOrderButtonImageVisibility}"
                                Stretch="Fill" />
-                        <Image Source="/MpWpfApp;component/Resources/desc_white.png"
+                        <Image Source="/Resources/Images/desc_white.png"
                                Visibility="{Binding DescSortOrderButtonImageVisibility}"
                                Stretch="Fill" />
                     </Grid>
@@ -464,7 +464,7 @@
                         Background="Transparent"
                         Command="{Binding CreateTagCommand}">
                     <Image Stretch="Fill"
-                           Source="/MpWpfApp;component/Resources/add4.png" />
+                           Source="/MpWpfApp;component/Resources/Images/add4.png" />
                 </Button>
             </StackPanel>
             <!-- Search Border -->
@@ -495,22 +495,33 @@
                     <Button Background="Transparent"
                             Style="{StaticResource Transparent_Button}"
                             BorderThickness="0">
-                        <Image Source="pack://application:,,,/Resources/search.png"
+                        <Image Source="pack://application:,,,/Resources/Images/search.png"
                                Stretch="Fill" />
                     </Button>
                     <!-- Search TextBox-->
-                    <TextBox x:Name="SearchTextBox"
-                             Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
-                             FontStyle="{Binding SearchTextBoxFontStyle}"
-                             Foreground="{Binding SearchTextBoxTextBrush}"
-                             local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
-                             BorderThickness="0"
-                             FontSize="18"
-                             MinWidth="1000"
-                             VerticalAlignment="Top"
-                             HorizontalAlignment="Left"
-                             VerticalContentAlignment="Top">
-                    </TextBox>
+                    <DockPanel>
+                        <TextBox x:Name="SearchTextBox"
+                                 Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                 FontStyle="{Binding SearchTextBoxFontStyle}"
+                                 Foreground="{Binding SearchTextBoxTextBrush}"
+                                 local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                 BorderThickness="0"
+                                 FontSize="18"
+                                 MinWidth="1000"
+                                 VerticalAlignment="Top"
+                                 HorizontalAlignment="Left"
+                                 VerticalContentAlignment="Top">
+                        </TextBox>
+                        <Button Background="Transparent"
+                                DockPanel.Dock="Right"
+                                Visibility="{Binding ClearSearchTextButtonVisibility}"
+                                Command="{Binding ClearSearchTextCommand}"
+                                Style="{StaticResource Transparent_Button}"
+                                BorderThickness="0">
+                            <Image Source="/Resources/Images/close1.png"
+                                   Stretch="Fill" />
+                        </Button>
+                    </DockPanel>
                 </StackPanel>
             </local:MpClipBorder>
         </Grid>
@@ -702,6 +713,8 @@
                                                   Command="{Binding ShareClipCommand}" />
                                         <MenuItem Header="Rename"
                                                   Command="{Binding Data.RenameClipCommand,Source={StaticResource ClipTrayProxy}}" />
+                                        <MenuItem Header="Edit"
+                                                  Command="{Binding EditClipTextCommand}" />
                                         <MenuItem Header="Change Color"
                                                   Command="{Binding Data.ChangeSelectedClipsColorCommand, Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Delete"
@@ -865,22 +878,33 @@
                                             Grid.Row="1"
                                             Grid.Column="0">
                                         <!-- RichText Content DocumentRtf="{Binding DocumentRtf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
-                                                                       -->
+                                                                      -->
+                                        <local:MpEditableTokenizedRichTextBox x:Name="ClipTileEditableRichTextBox"
+                                                                              Document="{Binding DocumentRtf}"
+                                                                              ToolbarBackground="#FFD2CB84"
+                                                                              ToolbarBorderBrush="#FFC6BE75"
+                                                                              ToolbarBorderThickness="1,1,1,0"
+                                                                              CodeControlsVisibility="Collapsed"
+                                                                              Visibility="{Binding ErtbVisibility}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Loaded">
+                                                    <i:CallMethodAction TargetObject="{Binding}"
+                                                                        MethodName="ClipTileEditableRichTextBox_Loaded" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </local:MpEditableTokenizedRichTextBox>
                                         <local:MpTokenizedRichTextBox x:Name="ClipTileRichTextBox"
                                                                       RichText="{Binding RichText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                       SearchText="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                       MinWidth="{Binding TileBorderSize}"
                                                                       MinHeight="{Binding TileContentHeight}"
                                                                       Tokens="{Binding Tokens, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
-                                                                      IsReadOnly="True"
-                                                                      IsUndoEnabled="False"
                                                                       Visibility="{Binding RtbVisibility}"
                                                                       Background="White"
                                                                       VerticalAlignment="Top"
                                                                       HorizontalAlignment="Left"
                                                                       ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                                                       ScrollViewer.VerticalScrollBarVisibility="Visible"
-                                                                      IsDocumentEnabled="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                       Focusable="False"
                                                                       Cursor="Arrow"
                                                                       BorderThickness="0"

@@ -521,7 +521,9 @@ namespace MpWpfApp {
                     , fk_MpCopyItemTypeId integer NOT NULL
                     , fk_MpClientId integer NOT NULL
                     , fk_MpAppId integer NOT NULL
-                    , fk_MpColorId integer 
+                    , fk_MpPreCopyItemId integer
+                    , fk_MpPostCopyItemId integer
+                    , fk_MpColorId integer
                     , Title text NULL 
                     , CopyCount integer not null default 1
                     , PasteCount integer not null default 0
@@ -533,6 +535,8 @@ namespace MpWpfApp {
                     , CONSTRAINT FK_MpCopyItem_1_0 FOREIGN KEY (fk_MpClientId) REFERENCES MpClient (pk_MpClientId)
                     , CONSTRAINT FK_MpCopyItem_2_0 FOREIGN KEY (fk_MpCopyItemTypeId) REFERENCES MpCopyItemType (pk_MpCopyItemTypeId) 
                     , CONSTRAINT FK_MpCopyItem_3_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId) 
+                    , CONSTRAINT FK_MpCopyItem_4_0 FOREIGN KEY (fk_MpPreCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
+                    , CONSTRAINT FK_MpCopyItem_5_0 FOREIGN KEY (fk_MpPostCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCopyItemTag (

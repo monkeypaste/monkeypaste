@@ -514,5 +514,17 @@ namespace MpWpfApp.Properties {
                 this["LoadOnLogin"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5000")]
+        public int NotificationBalloonVisibilityTimeMs {
+            get {
+                return ((int)(this["NotificationBalloonVisibilityTimeMs"]));
+            }
+            set {
+                this["NotificationBalloonVisibilityTimeMs"] = value;
+            }
+        }
     }
 }

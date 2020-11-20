@@ -356,7 +356,7 @@ namespace MpWpfApp {
             return MpCurrencyType.None;
         }
 
-        public static double GetMoneyValueFromString(string moneyStr) {            
+        public static double GetCurrencyValueFromString(string moneyStr) {            
             if (GetCurrencyTypeFromString(moneyStr) != MpCurrencyType.None) {
                 moneyStr = moneyStr.Remove(0, 1);
             }
@@ -970,7 +970,7 @@ namespace MpWpfApp {
             System.Windows.Markup.XamlWriter.Save(range, stream);
             range.Save(stream, DataFormats.XamlPackage);
 
-            //below removed so meerging follows items charaters, no extra formatting
+            //below removed so meerging follows items characters, no extra formatting
             //LineBreak lb = new LineBreak();
             //Paragraph p = (Paragraph)to.Blocks.LastBlock;
             //p.LineHeight = 1;
@@ -978,10 +978,30 @@ namespace MpWpfApp {
             TextRange range2 = new TextRange(to.ContentEnd, to.ContentEnd);
             range2.Load(stream, DataFormats.XamlPackage);
 
-            //to.Blocks.AddRange(from.Blocks.ToList());
             return to;
         }
-        
+        public static string CurrencyConvert(decimal amount, string fromCurrency, string toCurrency) {
+            try {
+                //Grab your values and build your Web Request to the API
+                string apiURL = String.Format("https://www.google.com/finance/converter?a={0}&from={1}&to={2}&meta={3}", amount, fromCurrency, toCurrency, Guid.NewGuid().ToString());
+
+                //Make your Web Request and grab the results
+                var request = WebRequest.Create(apiURL);
+
+                //Get the Response
+                var streamReader = new StreamReader(request.GetResponse().GetResponseStream(), System.Text.Encoding.ASCII);
+
+                //Grab your converted value (ie 2.45 USD)
+                var result = Regex.Matches(streamReader.ReadToEnd(), "<span class=\"?bld\"?>([^<]+)</span>")[0].Groups[1].Value;
+
+                //Get the Result
+                return result;
+            }
+            catch(Exception ex) {
+                Console.WriteLine("MpHelpers Currency Conversion exception: " + ex.ToString());
+                return string.Empty;
+            }
+        }
         public static void AppendBitmapSourceToFlowDocument(FlowDocument flowDocument,BitmapSource bitmapSource) {
             Image image= new Image() {
                 Source = bitmapSource,

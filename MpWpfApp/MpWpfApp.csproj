@@ -58,7 +58,7 @@
     <TargetPlatformVersion>8.0</TargetPlatformVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\monkey %282%29.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Icons\monkey %282%29.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>MpWpfApp.App</StartupObject>
@@ -109,6 +109,7 @@
     <Compile Include="Controls\MpTokenizedRichTextBox.cs" />
     <Compile Include="Controls\MpMultiSelectListBox.cs" />
     <Compile Include="Controls\ReorderableListbox.cs" />
+    <Compile Include="Converters\MpFlowDocumentToXamlConverter.cs" />
     <Compile Include="Converters\MpIntToMpRoutingTypeConverter.cs" />
     <Compile Include="Converters\MpVisibilityToBoolConverter.cs" />
     <Compile Include="Converters\MpImageSourceToBitmapSourceConverter.cs" />
@@ -132,6 +133,10 @@
     <Compile Include="Models\MpSubTextToken.cs" />
     <Compile Include="Models\MpTag.cs" />
     <Compile Include="Models\MpUser.cs" />
+    <Compile Include="Utils\DragAdorner.cs" />
+    <Compile Include="Utils\ListBoxDragDropManager.cs" />
+    <Compile Include="Utils\ListViewDragDropManager.cs" />
+    <Compile Include="Utils\MouseUtilities.cs" />
     <Compile Include="Utils\MpAssignShortcutModalWindowResult.cs" />
     <Compile Include="Utils\MpBindingProxy.cs" />
     <Compile Include="Utils\MpExtensions.cs" />
@@ -146,6 +151,7 @@
     <Compile Include="Utils\MpSoundPlayerViewModel.cs" />
     <Compile Include="ViewModels\Base\MpObservableDictionaryViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpAppCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpAppendBalloonViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpNotificationCollectionViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpNotificationViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpShortcutCollectionViewModel.cs" />
@@ -161,11 +167,19 @@
     <Compile Include="ViewModels\Main Window\MpClipTrayViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpClipTileContextMenuItemViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpClipTileViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\MpRichTextTokenViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSettingsWindowViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpShortcutViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSortTypeComboBoxItemViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSoundPlayerGroupCollectionViewModel.cs" />
+    <Compile Include="Views\MpAppendBalloonControl.xaml.cs">
+      <DependentUpon>MpAppendBalloonControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MpBalloonControl.xaml.cs">
+      <DependentUpon>MpBalloonControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MpEditableTokenizedRichTextBox.xaml.cs">
+      <DependentUpon>MpEditableTokenizedRichTextBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MpSettingsWindow.xaml.cs">
       <DependentUpon>MpSettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -174,6 +188,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MpAssignHotkeyModalWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MpAppendBalloonControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MpBalloonControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -189,6 +211,10 @@
     <Compile Include="ViewModels\Main Window\MpAppModeViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpTagTileViewModel.cs" />
     <Compile Include="ViewModels\Base\MpViewModelBase.cs" />
+    <Page Include="Views\MpEditableTokenizedRichTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MpSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -233,113 +259,113 @@
     <Resource Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\add.png" />
+    <Resource Include="Resources\Images\add.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\add2.png">
+    <Resource Include="Resources\Images\add2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\add3.png" />
+    <Resource Include="Resources\Images\add3.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\add4.png" />
+    <Resource Include="Resources\Images\add4.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\close.png" />
+    <Resource Include="Resources\Images\close.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\close2.png" />
+    <Resource Include="Resources\Images\close2.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\doubleSidedArrow.png" />
+    <Resource Include="Resources\Images\doubleSidedArrow.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\doubleSidedArrow2.png" />
+    <Resource Include="Resources\Images\doubleSidedArrow2.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\info.png" />
+    <Resource Include="Resources\Images\info.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\info2.png" />
+    <Resource Include="Resources\Images\info2.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\minus.png" />
+    <Resource Include="Resources\Images\minus.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\minus2.png" />
+    <Resource Include="Resources\Images\minus2.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\monkey %281%29.png" />
+    <Resource Include="Resources\Images\monkey %281%29.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\monkey %282%29.ico" />
+    <Resource Include="Resources\Icons\monkey %282%29.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\monkey %282%29.png" />
+    <Resource Include="Resources\Images\monkey %282%29.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\monkey.png" />
+    <Resource Include="Resources\Images\monkey.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\MonkeyIcon1.png" />
+    <Resource Include="Resources\Images\MonkeyIcon1.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Sounds\MonkeySound1.wav" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\search.png" />
+    <Resource Include="Resources\Images\search.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\star_filled.png" />
+    <Resource Include="Resources\Images\star_filled.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\star_outline.png" />
+    <Resource Include="Resources\Images\star_outline.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Texture.bmp" />
+    <Resource Include="Resources\Images\Texture.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\texture.png" />
+    <Resource Include="Resources\Images\texture.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\transparent.png" />
+    <Resource Include="Resources\Images\transparent.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\tshadowdown.png" />
+    <Resource Include="Resources\Images\tshadowdown.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\tshadowdownleft.png" />
+    <Resource Include="Resources\Images\tshadowdownleft.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\tshadowdownright.png" />
+    <Resource Include="Resources\Images\tshadowdownright.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\tshadowright.png" />
+    <Resource Include="Resources\Images\tshadowright.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\tshadowtopright.png" />
+    <Resource Include="Resources\Images\tshadowtopright.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\user.png" />
+    <Resource Include="Resources\Images\user.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\user2.png" />
+    <Resource Include="Resources\Images\user2.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\asc_black.png" />
-    <Resource Include="Resources\asc_white.png" />
-    <Resource Include="Resources\desc_black.png" />
-    <Resource Include="Resources\desc_white.png" />
+    <Resource Include="Resources\Images\asc_black.png" />
+    <Resource Include="Resources\Images\asc_white.png" />
+    <Resource Include="Resources\Images\desc_black.png" />
+    <Resource Include="Resources\Images\desc_white.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\title_swirl0001.png" />
-    <Resource Include="Resources\title_swirl0002.png" />
-    <Resource Include="Resources\title_swirl0003.png" />
+    <Resource Include="Resources\Images\title_swirl0001.png" />
+    <Resource Include="Resources\Images\title_swirl0002.png" />
+    <Resource Include="Resources\Images\title_swirl0003.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\title_swirl0004.png" />
+    <Resource Include="Resources\Images\title_swirl0004.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.8">
@@ -510,10 +536,38 @@
       <Version>1.1.1</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Resources\Icons\" />
-  </ItemGroup>
-  <ItemGroup>
+    <Resource Include="Resources\Icons\Bulb.ico" />
+    <Resource Include="Resources\Icons\Computers.ico" />
+    <Resource Include="Resources\Icons\Error.ico" />
+    <Resource Include="Resources\Icons\Inactive.ico" />
+    <Resource Include="Resources\Icons\NetDrives.ico" />
+    <Resource Include="Resources\Images\Preferences.png" />
+    <Resource Include="Resources\Images\Remove.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\aligncenter.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\alignjustify.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\alignleft.PNG" />
+    <Resource Include="Resources\Images\MpRichTextBox\alignright.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\codeblock.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\codeinline.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\editcopy.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\editcut.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\editpaste.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\editredo.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\editundo.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\filesave.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\fontbold.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\fontgrow.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\fontitalic.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\fontshrink.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\fontunderline.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\indentdecrease.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\indentincrease.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\listbullets.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\listnumbers.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\normaltext.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\separator.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />

@@ -63,6 +63,12 @@ namespace MpWpfApp {
         public MpAppModeViewModel() {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
+                    case nameof(IsInAppendMode):
+                        if(Properties.Settings.Default.NotificationShowModeChangeToast) {
+                            string status = IsInAppendMode ? "ON" : "OFF";
+                            MainWindowViewModel.SystemTrayViewModel.ShowStandardBalloon("Monkey Paste", "Append Mode is " + status, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
+                        }
+                        break;
                     case nameof(IsAutoCopyMode):
                         if (IsAutoCopyMode) {
                             MainWindowViewModel.GlobalHook.MouseUp += GlobalMouseUpEvent;

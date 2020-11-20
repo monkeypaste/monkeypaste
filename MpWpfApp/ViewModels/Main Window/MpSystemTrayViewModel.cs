@@ -1,11 +1,16 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using Hardcodet.Wpf.TaskbarNotification;
 using System.Windows;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpSystemTrayViewModel : MpViewModelBase {
         #region View Models
+        #endregion
+
+        #region Private Variables
+        private TaskbarIcon _taskbarIcon = null;
         #endregion
 
         #region Properties
@@ -25,13 +30,22 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpSystemTrayViewModel() {
+            
         }
 
         public void SystemTrayTaskbarIcon_Loaded(object sender, RoutedEventArgs e) {
-            var taskbarIcon = (TaskbarIcon)sender;
-            taskbarIcon.TrayLeftMouseUp += (s, e1) => {
+            _taskbarIcon = (TaskbarIcon)sender;
+            _taskbarIcon.TrayLeftMouseUp += (s, e1) => {
                 MainWindowViewModel.ShowWindowCommand.Execute(null);
             };
+            //ShowStandardBalloon("Test title", "Test balloon text", BalloonIcon.Info);
+        }
+
+        public void ShowStandardBalloon(string title, string text, BalloonIcon icon) {
+            MpBalloonControl balloon = new MpBalloonControl();
+            balloon.BalloonTitle = title;
+            balloon.BalloonText = text;
+            _taskbarIcon.ShowCustomBalloon(balloon, PopupAnimation.Slide, Properties.Settings.Default.NotificationBalloonVisibilityTimeMs);
         }
         #endregion
 

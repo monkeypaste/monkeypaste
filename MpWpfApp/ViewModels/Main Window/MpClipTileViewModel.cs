@@ -20,6 +20,7 @@
     using NativeCode;
     using Windows.ApplicationModel.DataTransfer;
     using Windows.Storage;
+    using WPF.JoshSmith.ServiceProviders.UI;
 
     public class MpClipTileViewModel : MpViewModelBase {
         #region Private Variables
@@ -214,6 +215,19 @@
                 if (_rtbVisibility != value) {
                     _rtbVisibility = value;
                     OnPropertyChanged(nameof(RtbVisibility));
+                }
+            }
+        }
+
+        private Visibility _ertbVisibility = Visibility.Visible;
+        public Visibility ErtbVisibility {
+            get {
+                return _ertbVisibility;
+            }
+            set {
+                if (_ertbVisibility != value) {
+                    _ertbVisibility = value;
+                    OnPropertyChanged(nameof(ErtbVisibility));
                 }
             }
         }
@@ -742,7 +756,8 @@
 
             FileListVisibility = CopyItemType == MpCopyItemType.FileList ? Visibility.Visible : Visibility.Collapsed;
             ImgVisibility = CopyItemType == MpCopyItemType.Image ? Visibility.Visible : Visibility.Collapsed;
-            RtbVisibility = CopyItemType == MpCopyItemType.RichText ? Visibility.Visible : Visibility.Collapsed;            
+            RtbVisibility = CopyItemType == MpCopyItemType.RichText ? Visibility.Visible : Visibility.Collapsed;
+            ErtbVisibility = Visibility.Collapsed;
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
@@ -811,6 +826,15 @@
             titleDetailTextBlock.Text = GetCurrentDetail(_detailIdx);
             Canvas.SetLeft(titleDetailTextBlock, 5);
             Canvas.SetTop(titleDetailTextBlock, TileTitleHeight - 14);
+        }
+        public void ClipTileEditableRichTextBox_Loaded(object sender, RoutedEventArgs e) {
+            var rtb = (MpEditableTokenizedRichTextBox)sender;
+            rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
+            rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
+            rtb.TokenizedRichTextBox.MinWidth = TileBorderSize;
+            rtb.TokenizedRichTextBox.MinHeight = TileContentHeight;
+            rtb.TokenizedRichTextBox.Document.PageWidth = rtb.Document.PageWidth;
+            rtb.TokenizedRichTextBox.Document.PageHeight = rtb.Document.PageHeight;
         }
 
         public void ClipTileRichTextBox_Loaded(object sender, RoutedEventArgs e) {
@@ -883,6 +907,7 @@
         public void AppendContent(MpClipTileViewModel octvm) {
             CopyItem.Combine(octvm.CopyItem);
             CopyItem.WriteToDatabase();
+
             //reinitialize item view properties
             PlainText = CopyItem.ItemPlainText;
             RichText = CopyItem.ItemRichText;
@@ -904,7 +929,7 @@
                                 MpHelpers.ChangeBrushBrightness((SolidColorBrush)TitleColor, -0.4f), 50);
                 SolidColorBrush accentColor = MpHelpers.ChangeBrushAlpha(
                                 MpHelpers.ChangeBrushBrightness((SolidColorBrush)TitleColor, -0.0f), 100);
-                var path = @"pack://application:,,,/Resources/";
+                var path = @"pack://application:,,,/Resources/Images/";
                 var swirl1 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0001.png"));
                 swirl1 = MpHelpers.TintBitmapSource(swirl1, ((SolidColorBrush)TitleColor).Color);
 
@@ -997,6 +1022,23 @@
         #endregion
 
         #region Commands
+        private RelayCommand _editClipTextCommand;
+        public ICommand EditClipTextCommand {
+            get {
+                if (_editClipTextCommand == null) {
+                    _editClipTextCommand = new RelayCommand(EditClipText, CanEditClipText);
+                }
+                return _editClipTextCommand;
+            }
+        }
+        private bool CanEditClipText() {
+            return ClipTrayViewModel.SelectedClipTiles.Count == 1 && CopyItemType == MpCopyItemType.RichText;
+        }
+        private void EditClipText() {
+            RtbVisibility = Visibility.Collapsed;
+            ErtbVisibility = Visibility.Visible;
+        }
+
         private RelayCommand _shareClipCommand;
         public ICommand ShareClipCommand {
             get {

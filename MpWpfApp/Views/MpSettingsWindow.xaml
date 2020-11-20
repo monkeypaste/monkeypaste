@@ -55,7 +55,7 @@
                            Height="50"
                            Width="50"
                            Margin="0,10,0,0"
-                           Source="/MpWpfApp;component/Resources/close.png" />
+                           Source="/MpWpfApp;component/Resources/Images/close.png" />
                     <Label HorizontalAlignment="Center"
                            FontSize="16"
                            Content="Account" />
@@ -70,7 +70,7 @@
                            Height="50"
                            Width="50"
                            Margin="0,10,0,0"
-                           Source="/MpWpfApp;component/Resources/info.png" />
+                           Source="/MpWpfApp;component/Resources/Images/info.png" />
                     <Label HorizontalAlignment="Center"
                            FontSize="16"
                            Content="Preferences" />
@@ -85,7 +85,7 @@
                            Height="50"
                            Width="50"
                            Margin="0,10,0,0"
-                           Source="/MpWpfApp;component/Resources/info.png" />
+                           Source="/MpWpfApp;component/Resources/Images/info.png" />
                     <Label HorizontalAlignment="Center"
                            FontSize="16"
                            Content="Security" />
@@ -100,7 +100,7 @@
                            Height="50"
                            Width="50"
                            Margin="0,10,0,0"
-                           Source="/MpWpfApp;component/Resources/info.png" />
+                           Source="/MpWpfApp;component/Resources/Images/info.png" />
                     <Label HorizontalAlignment="Center"
                            FontSize="16"
                            Content="Shortcuts" />
@@ -115,7 +115,7 @@
                            Height="50"
                            Width="50"
                            Margin="0,10,0,0"
-                           Source="/MpWpfApp;component/Resources/info.png" />
+                           Source="/MpWpfApp;component/Resources/Images/info.png" />
                     <Label HorizontalAlignment="Center"
                            FontSize="16"
                            Content="Help" />
@@ -193,7 +193,7 @@
                                             Visibility="{Binding DeleteButtonVisibility}"
                                             Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.DeleteExcludedAppCommand}">
                                         <Image VerticalAlignment="Stretch"
-                                               Source="/MpWpfApp;component/Resources/close.png" />
+                                               Source="/MpWpfApp;component/Resources/Images/close.png" />
                                     </Button>
                                     <Button Background="White"
                                             BorderThickness="0"
@@ -201,7 +201,7 @@
                                             Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.AddExcludedAppCommand}">
                                         <Image Width="20"
                                                Height="20"
-                                               Source="/MpWpfApp;component/Resources/add.png" />
+                                               Source="/MpWpfApp;component/Resources/Images/add.png" />
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>
@@ -221,7 +221,7 @@
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">
                 <Image Width="30"
-                       Source="/MpWpfApp;component/Resources/info.png" />
+                       Source="/MpWpfApp;component/Resources/Images/info.png" />
                 <Label HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        Content="Changes will take affect upon application restart" />
@@ -279,7 +279,7 @@
                                             Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.DeleteShortcutCommand}">
                                         <Image Width="20"
                                                Height="20"
-                                               Source="/MpWpfApp;component/Resources/close.png" />
+                                               Source="/MpWpfApp;component/Resources/Images/close.png" />
                                     </Button>
                                     <Button Background="White"
                                             BorderThickness="0"
@@ -287,7 +287,7 @@
                                             Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.ResetShortcutCommand}">
                                         <Image Width="20"
                                                Height="20"
-                                               Source="/MpWpfApp;component/Resources/minus.png" />
+                                               Source="/MpWpfApp;component/Resources/Images/minus.png" />
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>

@@ -21,9 +21,15 @@ namespace MpWpfApp {
         PhoneNumber,
         Currency,
         HexColor,
-        StreetAddress
+        StreetAddress,
+        CopyItemSegment
     }
     public class MpSubTextToken : MpDbObject {
+        public MpSubTextToken ParentToken { get; set; }
+        public MpSubTextToken FirstChildToken { get; set; }
+        public MpSubTextToken NextToken { get; set; }
+        public MpSubTextToken PrevToken { get; set; }
+
         public int SubTextTokenId { get; set; }
         public int CopyItemId { get; set; }
         public string TokenText { get; set; }
@@ -33,13 +39,20 @@ namespace MpWpfApp {
         public int BlockIdx { get; set; }
         public int InlineIdx { get; set; }
 
-        public MpSubTextToken(string token, MpSubTextTokenType tokenType, int s, int e, int b, int i) {
+        public MpSubTextToken(
+            string token, 
+            MpSubTextTokenType tokenType, 
+            int startIdx, 
+            int endIdx, 
+            int blockIdx, 
+            int inlineIdx) {
             this.TokenText = token;
             this.TokenType = tokenType;
-            this.StartIdx = s;
-            this.EndIdx = e;
-            this.BlockIdx = b;
-            this.InlineIdx = i;
+            this.StartIdx = startIdx;
+            this.EndIdx = endIdx;
+            this.BlockIdx = blockIdx;
+            this.InlineIdx = inlineIdx;
+            MapDataToColumns();
         }
         public MpSubTextToken(int subTextTokenId) {
             DataTable dt = MpDb.Instance.Execute("select * from MpSubTextToken where pk_MpSubTextTokenId=" + subTextTokenId);
@@ -50,16 +63,18 @@ namespace MpWpfApp {
         public MpSubTextToken(DataRow dr) {
             LoadDataRow(dr);
         }
-        public static List<MpSubTextToken> GatherTokens(string searchText) {
+        public static List<MpSubTextToken> GatherTokens(FlowDocument fd) {
             List<MpSubTextToken> tokenList = new List<MpSubTextToken>();
-            RichTextBox rtb = new RichTextBox();
-            rtb.SetRtf(searchText);
-            tokenList?.AddRange(ExtractEmail(rtb.Document));
-            tokenList?.AddRange(ExtractWebLink(rtb.Document));
-            tokenList?.AddRange(ExtractStreetAddress(rtb.Document));
-            tokenList?.AddRange(ExtractPhoneNumber(rtb.Document));
-            tokenList?.AddRange(ExtractCurrency(rtb.Document));
-            tokenList?.AddRange(ExtractHexColor(rtb.Document));
+            //RichTextBox rtb = new RichTextBox();
+            //rtb.SetRtf(richText);
+
+            tokenList?.AddRange(ExtractSegment(fd));
+            tokenList?.AddRange(ExtractEmail(fd));
+            tokenList?.AddRange(ExtractWebLink(fd));
+            tokenList?.AddRange(ExtractStreetAddress(fd));
+            tokenList?.AddRange(ExtractPhoneNumber(fd));
+            tokenList?.AddRange(ExtractCurrency(fd));
+            tokenList?.AddRange(ExtractHexColor(fd));
 
             //ensure no weblinks are part of emails
             //List<MpSubTextToken> tokensToRemove = new List<MpSubTextToken>();
@@ -84,15 +99,19 @@ namespace MpWpfApp {
         private static List<MpSubTextToken> ExtractEmail(FlowDocument doc) {
             return ExtractRegEx(doc, @"([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})", MpSubTextTokenType.Email);
         }
+
         private static List<MpSubTextToken> ExtractPhoneNumber(FlowDocument doc) {
             return ExtractRegEx(doc, @"(\+?\d{1,3}?[ -.]?)?\(?(\d{3})\)?[ -.]?(\d{3})[ -.]?(\d{4})", MpSubTextTokenType.PhoneNumber);
         }
+
         private static List<MpSubTextToken> ExtractStreetAddress(FlowDocument doc) {
             return ExtractRegEx(doc, @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Lane|Road|Boulevard|Drive|Street|Ave|Dr|Rd|Blvd|Ln|St)\.?,\s(?:[A-Z][a-z.-]+[ ]?)+ \b\d{5}(?:-\d{4})?\b", MpSubTextTokenType.StreetAddress);
         }
+
         private static List<MpSubTextToken> ExtractWebLink(FlowDocument doc) {
             return ExtractRegEx(doc, @"(?:https?://|www\.)\S+", MpSubTextTokenType.Uri);
         }
+
         private static List<MpSubTextToken> ExtractCurrency(FlowDocument doc) {
             return ExtractRegEx(doc, @"[$|£|€|¥]([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)?(\.[0-9][0-9])?", MpSubTextTokenType.Currency);
         }
@@ -100,20 +119,31 @@ namespace MpWpfApp {
         private static List<MpSubTextToken> ExtractHexColor(FlowDocument doc) {
             return ExtractRegEx(doc, @"#([0-9]|[a-fA-F]){6}", MpSubTextTokenType.HexColor);
         }
+        private static List<MpSubTextToken> ExtractSegment(FlowDocument doc) {
+            return new List<MpSubTextToken>() { new MpSubTextToken(
+                new TextRange(doc.ContentStart, doc.ContentEnd).Text,
+                MpSubTextTokenType.CopyItemSegment,
+                0,  //represents first block
+                doc.Blocks.Count,
+                -1, // flag showing startIdx/endIdx represents blocks not pointer idx
+                -1)
+            };
+            //return ExtractRegEx(doc, @"^" + new TextRange(doc.ContentStart,doc.ContentEnd).Text + "$", MpSubTextTokenType.CopyItemSegment);
+        }
 
         private static List<MpSubTextToken> ExtractRegEx(FlowDocument doc, string regExStr, MpSubTextTokenType tokenType) {
             List<MpSubTextToken> tokenList = new List<MpSubTextToken>();
             //break document into blocks and then blocks into lines and regex lines
-            for (int i = 0; i < doc.Blocks.Count; i++) {
+            for (int bIdx = 0; bIdx < doc.Blocks.Count; bIdx++) {
                 // TODO Maybe account for Paragraph and Table (more?) here...
-                Block block = doc.Blocks.ToArray()[i];
+                Block block = doc.Blocks.ToArray()[bIdx];
                 TextRange textRange = new TextRange(block.ContentStart, block.ContentEnd);
                 MatchCollection mc = Regex.Matches(textRange.Text, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
                 foreach (Match m in mc) {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
                             int sIdx = textRange.Text.IndexOf(mg.Value);
-                            tokenList.Add(new MpSubTextToken(mg.Value, tokenType, sIdx, sIdx + c.Value.Length, i, 0));
+                            tokenList.Add(new MpSubTextToken(mg.Value, tokenType, sIdx, sIdx + c.Value.Length, bIdx, 0));
                         }
                     }
                 }
@@ -151,6 +181,8 @@ namespace MpWpfApp {
             this.BlockIdx = Convert.ToInt32(dr["BlockIdx"].ToString());
             this.InlineIdx = Convert.ToInt32(dr["InlineIdx"].ToString());
             this.TokenText = dr["TokenText"].ToString();
+
+            MapDataToColumns();
         }
 
         public override void WriteToDatabase() {
