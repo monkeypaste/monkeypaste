@@ -655,7 +655,7 @@
                                                 local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"                                                
                                                 Margin="{Binding TileMargin}"
                                                 BorderThickness="{Binding TileBorderThickness}"
-                                                Width="{Binding TileBorderSize}"
+                                                Width="{Binding TileBorderWidth}"
                                                 Height="{Binding TileSize}"
                                                 Visibility="{Binding TileVisibility}"
                                                 Focusable="True"
@@ -818,8 +818,9 @@
                                         <Image x:Name="TitleSwirl"
                                                Canvas.Top="-1"
                                                Canvas.Left="-1"
+                                               RenderOptions.BitmapScalingMode="HighQuality"
                                                Stretch="Fill"
-                                               Width="{Binding TileSize}"
+                                               Width="{Binding TileBorderWidth}"
                                                Height="{Binding TileTitleHeight}"
                                                Source="{Binding TitleSwirl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, Converter={StaticResource ImageSourceToBitmapSourceConverter}}" />
                                         <!-- Clip Title TextBlock -->
@@ -880,11 +881,14 @@
                                         <!-- RichText Content DocumentRtf="{Binding DocumentRtf, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                       -->
                                         <local:MpEditableTokenizedRichTextBox x:Name="ClipTileEditableRichTextBox"
-                                                                              Document="{Binding DocumentRtf}"
                                                                               ToolbarBackground="#FFD2CB84"
                                                                               ToolbarBorderBrush="#FFC6BE75"
                                                                               ToolbarBorderThickness="1,1,1,0"
                                                                               CodeControlsVisibility="Collapsed"
+                                                                              Document="{Binding DocumentRtf}"
+                                                                              MinWidth="{Binding TileBorderWidth}"
+                                                                              MinHeight="{Binding TileContentHeight}"
+                                                                              Width="{Binding ContentWidth}"
                                                                               Visibility="{Binding ErtbVisibility}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Loaded">
@@ -896,7 +900,7 @@
                                         <local:MpTokenizedRichTextBox x:Name="ClipTileRichTextBox"
                                                                       RichText="{Binding RichText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                       SearchText="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
-                                                                      MinWidth="{Binding TileBorderSize}"
+                                                                      MinWidth="{Binding TileBorderWidth}"
                                                                       MinHeight="{Binding TileContentHeight}"
                                                                       Tokens="{Binding Tokens, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                       Visibility="{Binding RtbVisibility}"
@@ -917,7 +921,7 @@
                                             </i:Interaction.Triggers>
                                         </local:MpTokenizedRichTextBox>
                                         <!-- Image Content-->
-                                        <Grid Width="{Binding TileBorderSize}"
+                                        <Grid Width="{Binding TileBorderWidth}"
                                               Height="{Binding TileContentHeight}"
                                               Focusable="False"
                                               IsEnabled="False">
@@ -939,7 +943,7 @@
                                         </Grid>
                                         <!--File List Content -->
                                         <ListBox x:Name="ClipTileFileListBox"
-                                                 Width="{Binding TileBorderSize}"
+                                                 Width="{Binding TileBorderWidth}"
                                                  Height="{Binding TileContentHeight}"
                                                  ItemsSource="{Binding FileListViewModels}"
                                                  Visibility="{Binding FileListVisibility}"

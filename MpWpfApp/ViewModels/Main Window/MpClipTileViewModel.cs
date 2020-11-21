@@ -13,6 +13,7 @@
     using System.Windows.Input;
     using System.Windows.Interop;
     using System.Windows.Media;
+    using System.Windows.Media.Animation;
     using System.Windows.Media.Imaging;
     using GalaSoft.MvvmLight.CommandWpf;
     using Gma.System.MouseKeyHook;
@@ -141,19 +142,6 @@
             }
         }
 
-        private double _contentHeight = 0;
-        public double ContentHeight {
-            get {
-                return _contentHeight;
-            }
-            set {
-                if (_contentHeight != value) {
-                    _contentHeight = value;
-                    OnPropertyChanged(nameof(ContentHeight));
-                }
-            }
-        }
-
         private int _copyItemId = 0;
         public int CopyItemId {
             get {
@@ -176,6 +164,19 @@
                 if (_contentWidth != value) {
                     _contentWidth = value;
                     OnPropertyChanged(nameof(ContentWidth));
+                }
+            }
+        }
+
+        private double _contentHeight = 0;
+        public double ContentHeight {
+            get {
+                return _contentHeight;
+            }
+            set {
+                if (_contentHeight != value) {
+                    _contentHeight = value;
+                    OnPropertyChanged(nameof(ContentHeight));
                 }
             }
         }
@@ -446,6 +447,19 @@
             }
         }
 
+        private bool _isEditingTile = false;
+        public bool IsEditingTile {
+            get {
+                return _isEditingTile;
+            }
+            set {
+                if (_isEditingTile != value) {
+                    _isEditingTile = value;
+                    OnPropertyChanged(nameof(IsEditingTile));
+                }
+            }
+        }
+
         private Visibility _tileTitleTextBlockVisibility = Visibility.Visible;
         public Visibility TileTitleTextBlockVisibility {
             get {
@@ -569,15 +583,28 @@
             }
         }
 
-        private double _tileBorderSize = MpMeasurements.Instance.ClipTileBorderSize;
-        public double TileBorderSize {
+        private double _tileBorderWidth = MpMeasurements.Instance.ClipTileBorderSize;
+        public double TileBorderWidth {
             get {
-                return _tileBorderSize;
+                return _tileBorderWidth;
             }
             set {
-                if (_tileBorderSize != value) {
-                    _tileBorderSize = value;
-                    OnPropertyChanged(nameof(TileBorderSize));
+                if (_tileBorderWidth != value) {
+                    _tileBorderWidth = value;
+                    OnPropertyChanged(nameof(TileBorderWidth));
+                }
+            }
+        }
+
+        private double _tileBorderHeight = MpMeasurements.Instance.ClipTileBorderSize;
+        public double TileBorderHeight {
+            get {
+                return _tileBorderHeight;
+            }
+            set {
+                if (_tileBorderHeight != value) {
+                    _tileBorderHeight = value;
+                    OnPropertyChanged(nameof(TileBorderHeight));
                 }
             }
         }
@@ -698,6 +725,15 @@
                     case nameof(CopyItemId):
                         CopyItem.CopyItemId = CopyItemId;
                         break;
+                    case nameof(IsEditingTile):
+                        if(IsEditingTile) {
+                            //RtbVisibility = Visibility.Collapsed;
+                            ErtbVisibility = Visibility.Visible;
+                        } else {
+                            //RtbVisibility = Visibility.Visible;
+                            ErtbVisibility = Visibility.Collapsed;
+                        }
+                        break;
                     case nameof(IsEditingTitle):
                         if (IsEditingTitle) {
                             //show textbox and select all text
@@ -715,7 +751,8 @@
                     case nameof(IsSelected):
                         if (IsSelected) {
                             TileBorderBrush = Brushes.Red;
-                            DetailTextColor = Brushes.Red;
+                            DetailTextColor = Brushes.Red;     
+
                             //this check ensures that as user types in search that 
                             //resetselection doesn't take the focus from the search box
                             if (!ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.IsFocused) {
@@ -726,6 +763,7 @@
                             DetailTextColor = Brushes.Transparent;
                             //below must be called to clear focus when deselected (it may not have focus)
                             IsFocused = false;
+                            IsEditingTile = false;
                         }
                         break;
                     case nameof(IsHovering):
@@ -804,13 +842,12 @@
             };
 
             var titleIconImageButton = (Button)titleCanvas.FindName("ClipTileAppIconImageButton");
-            Canvas.SetLeft(titleIconImageButton, TileBorderSize - TileTitleHeight - 10);
+            Canvas.SetLeft(titleIconImageButton, TileBorderWidth - TileTitleHeight - 10);
             Canvas.SetTop(titleIconImageButton, 2);
             titleIconImageButton.PreviewMouseUp += (s, e7) => {
                 // TODO (somehow) force mainwindow to stay active when switching or opening app process
                 // TODO check if shift is down if so perform paste into target application
                 // TODO check if App is running if it is switch to it or start its process
-
 
                 System.Diagnostics.Process.Start(CopyItem.App.AppPath);
                 
@@ -827,21 +864,69 @@
             Canvas.SetLeft(titleDetailTextBlock, 5);
             Canvas.SetTop(titleDetailTextBlock, TileTitleHeight - 14);
         }
+
         public void ClipTileEditableRichTextBox_Loaded(object sender, RoutedEventArgs e) {
-            var rtb = (MpEditableTokenizedRichTextBox)sender;
-            rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
-            rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
-            rtb.TokenizedRichTextBox.MinWidth = TileBorderSize;
-            rtb.TokenizedRichTextBox.MinHeight = TileContentHeight;
-            rtb.TokenizedRichTextBox.Document.PageWidth = rtb.Document.PageWidth;
-            rtb.TokenizedRichTextBox.Document.PageHeight = rtb.Document.PageHeight;
+            var etrtb = (MpEditableTokenizedRichTextBox)sender;
+            etrtb.IsVisibleChanged += (s, e1) => {
+                var etrb = (MpEditableTokenizedRichTextBox)s;
+                var cb = (MpClipBorder)etrtb.GetVisualAncestor<MpClipBorder>();
+                var trtb = (MpTokenizedRichTextBox)cb.FindName("ClipTileRichTextBox");
+                var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
+                var titleSwirl = (Image)cb.FindName("TitleSwirl");
+
+                double fromWidth = 0;
+                double toWidth = 0;
+                double fromLeft = 0;
+                double toLeft = 0;
+
+                if (ErtbVisibility == Visibility.Visible) {
+                    RtbVisibility = Visibility.Collapsed;
+                    fromWidth = TileBorderWidth;
+                    toWidth = ((MpEditableTokenizedRichTextBox)s).Width;
+                    ((MpMultiSelectListBox)cb.GetVisualAncestor<MpMultiSelectListBox>()).ScrollIntoView(cb);
+                } else {
+                    RtbVisibility = Visibility.Visible;
+                    etrb.UpdateDocumentBindings();
+                    trtb.RichText = MpHelpers.ConvertFlowDocumentToRichText(etrb.Document);
+                    fromWidth = etrb.Width;
+                    trtb.Width = fromWidth;
+                    toWidth = TileBorderWidth;                    
+                }
+                fromLeft = Canvas.GetLeft(titleIconImageButton);
+                toLeft = toWidth - TileTitleHeight - 10;
+
+                DoubleAnimation wa = new DoubleAnimation();
+                wa.From = fromWidth;
+                wa.To = toWidth;
+                wa.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
+                CubicEase easing = new CubicEase();
+                easing.EasingMode = EasingMode.EaseIn;
+                wa.EasingFunction = easing;
+                cb.BeginAnimation(MpClipBorder.WidthProperty, wa);
+                trtb.BeginAnimation(MpTokenizedRichTextBox.WidthProperty, wa);
+                titleSwirl.BeginAnimation(Image.WidthProperty, wa);
+
+                DoubleAnimation la = new DoubleAnimation();
+                la.From = fromLeft;
+                la.To = toLeft;
+                la.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
+                la.EasingFunction = easing;
+                titleIconImageButton.BeginAnimation(Canvas.LeftProperty, la);
+            };
+            //ContentWidth = rtb.RenderSize.Width;
+            //ContentHeight = rtb.RenderSize.Height;
+
+            //rtb.Document.PageWidth = ContentWidth;//rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
+            //rtb.Document.PageHeight = ContentHeight;//rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
+            //rtb.TokenizedRichTextBox.MinWidth = ContentWidth;//TileBorderSize;
+            //rtb.TokenizedRichTextBox.MinHeight = ContentHeight;//TileContentHeight;
+            //rtb.TokenizedRichTextBox.Document.PageWidth = ContentWidth;//rtb.Document.PageWidth;
+            //rtb.TokenizedRichTextBox.Document.PageHeight = ContentHeight;//rtb.Document.PageHeight;
         }
 
         public void ClipTileRichTextBox_Loaded(object sender, RoutedEventArgs e) {
             var rtb = (MpTokenizedRichTextBox)sender;
             rtb.ContextMenu = (ContextMenu)rtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");            
-            ContentWidth = rtb.RenderSize.Width;
-            ContentHeight = rtb.RenderSize.Height;
             rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
             rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
             
@@ -854,7 +939,7 @@
             //aspect ratio
             double ar = Bmp.Width / Bmp.Height;
             if (Bmp.Width >= Bmp.Height) {
-                ContentWidth = TileBorderSize;
+                ContentWidth = TileBorderWidth;
                 ContentHeight = ContentWidth * ar;
             } else {
                 ContentHeight = TileContentHeight;
@@ -862,7 +947,7 @@
             }
             MpHelpers.ResizeBitmapSource(Bmp, new Size((int)ContentWidth, (int)ContentHeight));
 
-            Canvas.SetLeft(img, (TileBorderSize / 2) - (ContentWidth / 2));
+            Canvas.SetLeft(img, (TileBorderWidth / 2) - (ContentWidth / 2));
             Canvas.SetTop(img, (TileContentHeight / 2) - (ContentHeight / 2));
         }
 
@@ -1032,11 +1117,32 @@
             }
         }
         private bool CanEditClipText() {
-            return ClipTrayViewModel.SelectedClipTiles.Count == 1 && CopyItemType == MpCopyItemType.RichText;
+            return ClipTrayViewModel.SelectedClipTiles.Count == 1 && CopyItemType == MpCopyItemType.RichText && !IsEditingTile;
         }
         private void EditClipText() {
-            RtbVisibility = Visibility.Collapsed;
-            ErtbVisibility = Visibility.Visible;
+            //RtbVisibility = Visibility.Collapsed;
+            //ErtbVisibility = Visibility.Visible;
+            IsEditingTile = true;
+            //all other action is handled in the ertb visibility changed handler in ertb_loaded
+        }
+
+        private RelayCommand _commitEditClipTextCommand;
+        public ICommand CommitEditClipTextCommand {
+            get {
+                if (_commitEditClipTextCommand == null) {
+                    _commitEditClipTextCommand = new RelayCommand(CommitEditClipText, CanCommitEditClipText);
+                }
+                return _commitEditClipTextCommand;
+            }
+        }
+        private bool CanCommitEditClipText() {
+            return IsEditingTile;// !IsEditingTitle;
+        }
+        private void CommitEditClipText() {
+            //RtbVisibility = Visibility.Visible;
+            //ErtbVisibility = Visibility.Collapsed;
+            IsEditingTile = false;
+            //all other action is handled in the ertb visibility changed handler in ertb_loaded
         }
 
         private RelayCommand _shareClipCommand;

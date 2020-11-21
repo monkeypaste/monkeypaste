@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -17,6 +19,7 @@ namespace MpWpfApp {
             }
             return stringCollection;
         }
+
         public static void Sort<TSource, TKey>(this ObservableCollection<TSource> source, Func<TSource, TKey> keySelector, bool desc = false) {
             if (source == null) {
                 return;
@@ -47,6 +50,7 @@ namespace MpWpfApp {
                 }
             }
         }
+
         public static List<int> AllIndexesOf(this string str, string value) {
             if (string.IsNullOrEmpty(value)) {
                 return new List<int>();
@@ -60,6 +64,7 @@ namespace MpWpfApp {
                 indexes.Add(index);
             }
         }
+
         //faster version but needs unsafe thing
         //public unsafe static void CopyPixels(this BitmapSource source, PixelColor[,] pixels, int stride, int offset) {
         //    fixed (PixelColor* buffer = &pixels[0, 0])
@@ -87,9 +92,11 @@ namespace MpWpfApp {
                 }
             }
         }
+
         public static bool IsNamedObject(this object obj) {
             return obj.GetType().FullName == "MS.Internal.NamedObject";
         }
+
         public static T GetChildOfType<T>(this DependencyObject depObj) where T : DependencyObject {
             if (depObj == null) {
                 return null;
@@ -105,6 +112,7 @@ namespace MpWpfApp {
             }
             return null;
         }
+
         public static void SetRtf(this System.Windows.Controls.RichTextBox rtb, string document) {
             var documentBytes = Encoding.Default.GetBytes(document);
             using (var reader = new MemoryStream(documentBytes)) {
@@ -112,6 +120,74 @@ namespace MpWpfApp {
                 rtb.SelectAll();
                 rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);
             }
+        }
+
+        public static IEnumerable<TextElement> GetRunsAndParagraphs(FlowDocument doc) {
+            for (TextPointer position = doc.ContentStart;
+              position != null && position.CompareTo(doc.ContentEnd) <= 0;
+              position = position.GetNextContextPosition(LogicalDirection.Forward)) {
+                if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.ElementEnd) {
+                    Run run = position.Parent as Run;
+
+                    if (run != null) {
+                        yield return run;
+                    } else {
+                        Paragraph para = position.Parent as Paragraph;
+
+                        if (para != null) {
+                            yield return para;
+                        }
+                    }
+                }
+            }
+        }
+
+        public static FormattedText GetFormattedText(this FlowDocument doc) {
+            if (doc == null) {
+                throw new ArgumentNullException("doc");
+            }
+
+            FormattedText output = new FormattedText(
+              GetText(doc),
+              CultureInfo.CurrentCulture,
+              doc.FlowDirection,
+              new Typeface(doc.FontFamily, doc.FontStyle, doc.FontWeight, doc.FontStretch),
+              doc.FontSize,
+              doc.Foreground);
+
+            int offset = 0;
+
+            foreach (TextElement el in GetRunsAndParagraphs(doc)) {
+                Run run = el as Run;
+
+                if (run != null) {
+                    int count = run.Text.Length;
+
+                    output.SetFontFamily(run.FontFamily, offset, count);
+                    output.SetFontStyle(run.FontStyle, offset, count);
+                    output.SetFontWeight(run.FontWeight, offset, count);
+                    output.SetFontSize(run.FontSize, offset, count);
+                    output.SetForegroundBrush(run.Foreground, offset, count);
+                    output.SetFontStretch(run.FontStretch, offset, count);
+                    output.SetTextDecorations(run.TextDecorations, offset, count);
+
+                    offset += count;
+                } else {
+                    offset += Environment.NewLine.Length;
+                }
+            }
+
+            return output;
+        }
+
+        public static string GetText(FlowDocument doc) {
+            StringBuilder sb = new StringBuilder();
+
+            foreach (TextElement el in GetRunsAndParagraphs(doc)) {
+                Run run = el as Run;
+                sb.Append(run == null ? Environment.NewLine : run.Text);
+            }
+            return sb.ToString();
         }
     }
 }

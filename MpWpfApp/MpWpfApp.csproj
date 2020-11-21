@@ -137,6 +137,7 @@
     <Compile Include="Utils\ListBoxDragDropManager.cs" />
     <Compile Include="Utils\ListViewDragDropManager.cs" />
     <Compile Include="Utils\MouseUtilities.cs" />
+    <Compile Include="Utils\MpAppState.cs" />
     <Compile Include="Utils\MpAssignShortcutModalWindowResult.cs" />
     <Compile Include="Utils\MpBindingProxy.cs" />
     <Compile Include="Utils\MpExtensions.cs" />

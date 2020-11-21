@@ -9,9 +9,7 @@
              d:DesignHeight="600"
              d:DesignWidth="800"
              IsTabStop="True">
-
     <UserControl.Resources>
-
         <!-- Flat Button -->
         <ControlTemplate x:Key="FlatButtonControlTemplate"
                          TargetType="{x:Type Button}">
@@ -57,7 +55,6 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-
         <!-- Flat Toggle Button -->
         <ControlTemplate x:Key="FlatToggleButtonControlTemplate"
                          TargetType="{x:Type ToggleButton}">
@@ -115,9 +112,7 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-
     </UserControl.Resources>
-
     <DockPanel LastChildFill="True">
         <Border DockPanel.Dock="Top"
                 BorderThickness="{Binding ElementName=MpRichTextBoxControl, Path=ToolbarBorderThickness}"
@@ -385,13 +380,13 @@
             </StackPanel>
         </Border>
         <local:MpTokenizedRichTextBox x:Name="TokenizedRichTextBox"
-                     TextOptions.TextFormattingMode="Ideal"
-                     TextOptions.TextRenderingMode="Aliased"
-                     AcceptsTab="True"
-                     AcceptsReturn="True"
-                     IsEnabled="{Binding Path=IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                     TextChanged="OnTextChanged"
-                     VerticalScrollBarVisibility="Auto"
-                     SelectionChanged="OnTextBoxSelectionChanged" />
+                                      TextOptions.TextFormattingMode="Ideal"
+                                      TextOptions.TextRenderingMode="Aliased"
+                                      AcceptsTab="True"
+                                      AcceptsReturn="True"
+                                      IsEnabled="{Binding Path=IsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                      TextChanged="OnTextChanged"
+                                      VerticalScrollBarVisibility="Auto"
+                                      SelectionChanged="OnTextBoxSelectionChanged" />
     </DockPanel>
 </UserControl>

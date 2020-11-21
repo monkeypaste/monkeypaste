@@ -151,5 +151,8 @@
     <Setting Name="NotificationBalloonVisibilityTimeMs" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5000</Value>
     </Setting>
+    <Setting Name="Setting" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -408,6 +408,7 @@ namespace MpWpfApp {
         private void PeformCommand() {
             if (MpMainWindowViewModel.IsOpen ||
                 MpAssignShortcutModalWindowViewModel.IsOpen ||
+
                 MpSettingsWindowViewModel.IsOpen) {
                 //ignore hotkey since attempting to reassign
             } else {

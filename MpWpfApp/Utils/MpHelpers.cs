@@ -394,7 +394,7 @@ namespace MpWpfApp {
 
         public static int GetColCount(string text) {
             int maxCols = int.MinValue;
-            foreach (string row in text.Split(Environment.NewLine.ToCharArray())) {
+            foreach (string row in text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)) {
                 if (row.Length > maxCols) {
                     maxCols = row.Length;
                 }
@@ -406,9 +406,11 @@ namespace MpWpfApp {
             return text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Length;
         }
 
-        public static Size GetTextDimensions(string text) {
-            return new Size((double)GetRowCount(text), (double)GetColCount(text));
-        }
+        //public static Size GetDocumentDimensions(FlowDocument doc) {
+        //    doc.Wid
+        //    var charSize = new Size((double)GetRowCount(text), (double)GetColCount(text));
+
+        //}
 
         public static long FileListSize(string[] paths) {
             long total = 0;

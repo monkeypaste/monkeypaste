@@ -14,36 +14,6 @@ using System.Windows.Threading;
 
 namespace MpWpfApp {
     public partial class MpEditableTokenizedRichTextBox : UserControl {
-        //public string RichText {
-        //    get {
-        //        return (string)GetValue(RichTextProperty);
-        //    }
-        //    set {
-        //        if ((string)GetValue(RichTextProperty) != value) {
-        //            SetValue(RichTextProperty, value);
-        //        }
-        //    }
-        //}
-        //public static string GetRichText(DependencyObject obj) {
-        //    return (string)obj.GetValue(RichTextProperty);
-        //}
-        //public static void SetRichText(DependencyObject obj, string value) {
-        //    obj.SetValue(RichTextProperty, value);
-        //}
-        //public static readonly DependencyProperty RichTextProperty =
-        //  DependencyProperty.RegisterAttached(
-        //    "RichText",
-        //    typeof(string),
-        //    typeof(MpEditableTokenizedRichTextBox),
-        //    new FrameworkPropertyMetadata {
-        //        BindsTwoWayByDefault = true,
-        //        PropertyChangedCallback = (s, e) => {
-        //            if (!string.IsNullOrEmpty((string)e.NewValue)) {
-        //                ((MpEditableTokenizedRichTextBox)s).TokenizedRichTextBox.SetRtf((string)e.NewValue);
-        //            }
-        //        }
-        //    });
-
         #region Fields
 
         // Static member variables
@@ -86,10 +56,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Constructor
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
         public MpEditableTokenizedRichTextBox() {
             InitializeComponent();
             this.Initialize();
@@ -178,8 +144,8 @@ namespace MpWpfApp {
                 return;
             }
             // Set Document property on RichTokenizedRichTextBox
-            var fd = (e.NewValue == null) ? new FlowDocument() : (FlowDocument)e.NewValue;
-            thisControl.TokenizedRichTextBox.Document = fd;// MpHelpers.ConvertFlowDocumentToRichText(fd);
+            thisControl.TokenizedRichTextBox.Document = (e.NewValue == null) ? new FlowDocument() : (FlowDocument)e.NewValue;
+            //thisControl.Width = thisControl.TokenizedRichTextBox.Document.GetFormattedText().WidthIncludingTrailingWhitespace + 20;
             // Reset flag
             thisControl.m_TextHasChanged = false;
         }
@@ -283,6 +249,8 @@ namespace MpWpfApp {
         private void OnTextChanged(object sender, TextChangedEventArgs e) {
             // Set the TextChanged flag
             m_TextHasChanged = true;
+
+            TokenizedRichTextBox.Width = TokenizedRichTextBox.Document.GetFormattedText().WidthIncludingTrailingWhitespace + 20;
         }
 
         #endregion
