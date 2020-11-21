@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Input;
+using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
 using MouseKeyHook.Rx;
 
@@ -304,7 +305,7 @@ namespace MpWpfApp {
                             hook.OnSequence(new Dictionary<Sequence, Action> {
                                 {
                                     Sequence.FromString(KeyList),
-                                    () => PeformCommand()
+                                    () => PerformShortcutCommand.Execute(null)
                                 }
                             });
                         }
@@ -313,7 +314,7 @@ namespace MpWpfApp {
                         Unregister();
                         var t = new MouseKeyHook.Rx.Trigger[] { MouseKeyHook.Rx.Trigger.FromString(KeyList) };
                         KeysObservable = hook.KeyDownObservable().Matching(t).Subscribe(
-                            (trigger) => PeformCommand()
+                            (trigger) => PerformShortcutCommand.Execute(null)
                         );
                     }
 
@@ -405,22 +406,41 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-        private void PeformCommand() {
-            if (MpMainWindowViewModel.IsOpen ||
-                MpAssignShortcutModalWindowViewModel.IsOpen ||
-
-                MpSettingsWindowViewModel.IsOpen) {
-                //ignore hotkey since attempting to reassign
+        private RelayCommand _performShortcutCommand = null;
+        public ICommand PerformShortcutCommand {
+            get {
+                if(_performShortcutCommand == null) {
+                    _performShortcutCommand = new RelayCommand(PeformShortcut, CanPerformShortcut);
+                }
+                return _performShortcutCommand;
+            }
+        }
+        private bool CanPerformShortcut() {
+            //never perform shortcuts in the following states
+            if(MpAssignShortcutModalWindowViewModel.IsOpen ||
+               MpSettingsWindowViewModel.IsOpen ||
+               MainWindowViewModel.ClipTrayViewModel.IsEditingClipTile ||
+               MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle ||
+               MainWindowViewModel.TagTrayViewModel.IsEditingTagName ||
+               MainWindowViewModel.SearchBoxViewModel.IsFocused) {
+                return false;
+            }
+            //otherwise check basic type routing for validity
+            if(RoutingType == MpRoutingType.Internal) {
+                return MpMainWindowViewModel.IsOpen;
             } else {
-                if (RoutingType == MpRoutingType.Bubble) {
-                    PassKeysToForegroundWindow();
-                }
+                return !MpMainWindowViewModel.IsOpen;
+            }
+        }
+        private void PeformShortcut() {
+            if (RoutingType == MpRoutingType.Bubble) {
+                PassKeysToForegroundWindow();
+            }
 
-                Command?.Execute(null);
+            Command?.Execute(null);
 
-                if (RoutingType == MpRoutingType.Tunnel) {
-                    PassKeysToForegroundWindow();
-                }
+            if (RoutingType == MpRoutingType.Tunnel) {
+                PassKeysToForegroundWindow();
             }
         }
         #endregion

@@ -193,7 +193,7 @@ namespace MpWpfApp {
 
         public void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e) {
             Key key = e.Key;
-            if (key == Key.Enter) {
+            /*if (key == Key.Enter) {
                 if (SearchBoxViewModel.IsFocused) {
                     ClipTrayViewModel.SortAndFilterClipTiles();
                 } else if (TagTrayViewModel.IsEditingTagName) {
@@ -211,7 +211,7 @@ namespace MpWpfApp {
                 //delete clip which shifts focus to neighbor
                 ClipTrayViewModel.DeleteSelectedClipsCommand.Execute(null);
                 e.Handled = true;
-            }
+            }*/
         }
         #endregion
 

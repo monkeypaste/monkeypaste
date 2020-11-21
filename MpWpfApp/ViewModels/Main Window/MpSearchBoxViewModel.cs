@@ -83,7 +83,7 @@ namespace MpWpfApp {
                 switch(e.PropertyName) {
                     case nameof(SearchText):
                         if(SearchText.Length > 0 && SearchText != Properties.Settings.Default.SearchPlaceHolderText) {
-                            ClearSearchTextButtonVisibility = Visibility.Visible;
+                            ClearSearchTextButtonVisibility = Visibility.Visible;                            
                         } else {
                             ClearSearchTextButtonVisibility = Visibility.Collapsed;
                         }

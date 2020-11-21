@@ -106,9 +106,7 @@
     <Compile Include="Attached Properties\MpDocumentRtfExtension.cs" />
     <Compile Include="Attached Properties\MpTextBoxBehavior.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
-    <Compile Include="Controls\MpTokenizedRichTextBox.cs" />
     <Compile Include="Controls\MpMultiSelectListBox.cs" />
-    <Compile Include="Controls\ReorderableListbox.cs" />
     <Compile Include="Converters\MpFlowDocumentToXamlConverter.cs" />
     <Compile Include="Converters\MpIntToMpRoutingTypeConverter.cs" />
     <Compile Include="Converters\MpVisibilityToBoolConverter.cs" />
@@ -172,6 +170,8 @@
     <Compile Include="ViewModels\Main Window\MpShortcutViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSortTypeComboBoxItemViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSoundPlayerGroupCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpSubTextTokenCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpSubTextTokenViewModel.cs" />
     <Compile Include="Views\MpAppendBalloonControl.xaml.cs">
       <DependentUpon>MpAppendBalloonControl.xaml</DependentUpon>
     </Compile>

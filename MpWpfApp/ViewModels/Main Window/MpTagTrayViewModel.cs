@@ -45,7 +45,7 @@ namespace MpWpfApp {
             //watches Tag IsSelected so History is selected if none are
             newTagTile.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
-                    case "IsSelected":
+                    case nameof(newTagTile.IsSelected):
                         var tagChanged = (MpTagTileViewModel)s;
                         //ensure at least history is selected
                         if (tagChanged.IsSelected == false) {

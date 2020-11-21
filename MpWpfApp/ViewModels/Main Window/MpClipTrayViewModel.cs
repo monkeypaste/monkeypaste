@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -21,8 +22,14 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace MpWpfApp {
     public class MpClipTrayViewModel : MpObservableCollectionViewModel<MpClipTileViewModel> {
-        #region View Models
+        #region View Models        
 
+        #endregion
+
+        private ListBox _trayListBoxRef = null;
+        private object _dragClipBorderElement = null;
+
+        #region Properties
         public List<MpClipTileViewModel> SelectedClipTiles {
             get {
                 return this.Where(ct => ct.IsSelected).ToList();
@@ -34,19 +41,6 @@ namespace MpWpfApp {
                 return this.Where(ct => ct.TileVisibility == Visibility.Visible).ToList();
             }
         }
-
-        public MpClipTileViewModel FocusedClipTile {
-            get {
-                var tempList = this.Where(ct => ct.IsSelected && ct.IsFocused).ToList();
-                if (tempList == null || tempList.Count == 0) {
-                    return null;
-                }
-                return tempList[0];
-            }
-        }
-        #endregion
-        private ListBox _trayListBoxRef = null;
-        #region Properties
 
         public MpClipboardMonitor ClipboardMonitor { get; private set; }
 
@@ -71,6 +65,17 @@ namespace MpWpfApp {
             get {
                 foreach(var sctvm in SelectedClipTiles) {
                     if(sctvm.IsEditingTitle) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        public bool IsEditingClipTile {
+            get {
+                foreach (var sctvm in SelectedClipTiles) {
+                    if (sctvm.IsEditingTile) {
                         return true;
                     }
                 }
@@ -203,7 +208,6 @@ namespace MpWpfApp {
         #region Public Methods
 
         public MpClipTrayViewModel() {
-
             CollectionChanged += (s, e1) => {
                 if (VisibileClipTiles.Count > 0) {
                     ClipListVisibility = Visibility.Visible;
@@ -254,6 +258,11 @@ namespace MpWpfApp {
                     }
                 } else {
                     dropVm = (MpClipTileViewModel)((MpClipBorder)item).DataContext;
+                }
+                if(dragClipViewModel.Contains(dropVm)) {
+                    e2.Effects = DragDropEffects.None;
+                    e2.Handled = true;
+                    return;
                 }
                 //var dropClipBorder = (MpClipBorder)ItemsControl.ItemsControlFromItemContainer(clipTray).ItemContainerGenerator.ContainerFromItem(dropVm);
                 int dropIdx = item == null || item == clipTray ? 0 : this.IndexOf(dropVm);
@@ -322,7 +331,7 @@ namespace MpWpfApp {
                 }
             };
 
-            SortAndFilterClipTiles();
+            SortAndFilterClipTiles();            
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
@@ -336,6 +345,8 @@ namespace MpWpfApp {
                 var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
                 IsMouseDown = true;
                 StartDragPoint = e6.GetPosition(clipTray);
+
+                _dragClipBorderElement = (MpClipBorder)VisualTreeHelper.HitTest(clipTray, StartDragPoint).VisualHit.GetVisualAncestor<MpClipBorder>(); ;
             };
             //Initiate Selected Clips Drag/Drop, Copy/Paste and Export (to file or csv)
             //Strategy: ALL selected items, regardless of type will have text,rtf,img, and file representations
@@ -344,23 +355,31 @@ namespace MpWpfApp {
             clipTileBorder.PreviewMouseMove += (s, e7) => {
                 var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
                 var curDragPoint = e7.GetPosition(clipTray);
-
+                //these tests ensure tile is not being dragged INTO another clip tile or outside tray
+                var testBorder = (MpClipBorder)VisualTreeHelper.HitTest(clipTray, curDragPoint).VisualHit.GetVisualAncestor<MpClipBorder>();
+                var testTray = (ListBox)VisualTreeHelper.HitTest(clipTray, curDragPoint).VisualHit.GetVisualAncestor<ListBox>();
                 if (IsMouseDown && 
-                    !IsDragging &&
+                    !IsDragging && 
                     e7.MouseDevice.LeftButton == MouseButtonState.Pressed && 
-                    (Math.Abs(curDragPoint.Y - StartDragPoint.Y) > 5 || Math.Abs(curDragPoint.X - StartDragPoint.X) > 5)) {
+                    (Math.Abs(curDragPoint.Y - StartDragPoint.Y) > 5 || Math.Abs(curDragPoint.X - StartDragPoint.X) > 5) &&
+                   // s.GetType() == typeof(MpClipBorder) &&
+                    //_dragClipBorderElement != testBorder &&
+                    testBorder == null &&
+                    testTray != null) {
                     DragDrop.DoDragDrop(clipTray, SelectedClipTilesDropDataObject, DragDropEffects.Copy | DragDropEffects.Move);
                     IsDragging = true;
                 } else if(IsDragging) {
                     IsMouseDown = false;
                     IsDragging = false;
                     StartDragPoint = new Point ();
+                    _dragClipBorderElement = null;
                 }
             };
             clipTileBorder.PreviewMouseUp += (s, e8) => {
                 IsMouseDown = false;
                 IsDragging = false;
                 StartDragPoint = new Point();
+                _dragClipBorderElement = null;
             };
         }
 
@@ -400,7 +419,6 @@ namespace MpWpfApp {
                 ctvm.CopyItem.WriteToDatabase();
                 MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
             }
-
             this.Insert(0, ctvm);
         }
 
@@ -916,7 +934,7 @@ namespace MpWpfApp {
             //for some reason not making this run on another thread
             //MAY throw a com error or it was from AddToken
             Dispatcher.CurrentDispatcher.BeginInvoke(
-                DispatcherPriority.Background,
+                DispatcherPriority.Normal,
                 (Action)(() => {
                     var focusedClip = SelectedClipTiles[0];
                     List<MpClipTileViewModel> clipTilesToRemove = new List<MpClipTileViewModel>();

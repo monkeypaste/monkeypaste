@@ -16,13 +16,15 @@ namespace MpWpfApp {
     }
 
     public enum MpSubTextTokenType {
+        None = 0,
         Uri = 1,
         Email,
         PhoneNumber,
         Currency,
         HexColor,
         StreetAddress,
-        CopyItemSegment
+        CopyItemSegment,
+        TemplateSegment
     }
     public class MpSubTextToken : MpDbObject {
         public MpSubTextToken ParentToken { get; set; }

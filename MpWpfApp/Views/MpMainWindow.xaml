@@ -507,7 +507,7 @@
                                  local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                  BorderThickness="0"
                                  FontSize="18"
-                                 MinWidth="1000"
+                                 MinWidth="100"
                                  VerticalAlignment="Top"
                                  HorizontalAlignment="Left"
                                  VerticalContentAlignment="Top">
@@ -868,9 +868,23 @@
                                                    ToolTip="{Binding CopyItemAppName}"
                                                    Width="{Binding TileTitleIconSize}"
                                                    Height="{Binding TileTitleIconSize}">
-                                                <!--<Image.Effect>
-                                                <DropShadowEffect Color="DimGray" />
-                                            </Image.Effect>-->
+                                                <Image.Style>
+                                                    <Style TargetType="{x:Type Image}">
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsMouseOver"
+                                                                     Value="True">
+                                                                <Setter Property="Effect">
+                                                                    <Setter.Value>
+                                                                        <DropShadowEffect ShadowDepth="3"
+                                                                                          Color="White"
+                                                                                          Opacity="1"
+                                                                                          BlurRadius="50" />
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Image.Style>
                                             </Image>
                                         </Button>
                                     </Canvas>
@@ -885,11 +899,16 @@
                                                                               ToolbarBorderBrush="#FFC6BE75"
                                                                               ToolbarBorderThickness="1,1,1,0"
                                                                               CodeControlsVisibility="Collapsed"
+                                                                              BorderThickness="0"
+                                                                              Focusable="False"
+                                                                              Cursor="Arrow"
+                                                                              ToolbarVisibility="{Binding IsEditingTile, Converter={StaticResource BoolToVisibilityConverter}}"
                                                                               Document="{Binding DocumentRtf}"
+                                                                              SearchText="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                                              Tokens="{Binding Tokens, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                               MinWidth="{Binding TileBorderWidth}"
                                                                               MinHeight="{Binding TileContentHeight}"
-                                                                              Width="{Binding ContentWidth}"
-                                                                              Visibility="{Binding ErtbVisibility}">
+                                                                              Visibility="{Binding RtbVisibility}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Loaded">
                                                     <i:CallMethodAction TargetObject="{Binding}"
@@ -897,7 +916,7 @@
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
                                         </local:MpEditableTokenizedRichTextBox>
-                                        <local:MpTokenizedRichTextBox x:Name="ClipTileRichTextBox"
+                                        <!--<local:MpTokenizedRichTextBox x:Name="ClipTileRichTextBox"
                                                                       RichText="{Binding RichText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                       SearchText="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                       MinWidth="{Binding TileBorderWidth}"
@@ -919,7 +938,7 @@
                                                                         MethodName="ClipTileRichTextBox_Loaded" />
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
-                                        </local:MpTokenizedRichTextBox>
+                                        </local:MpTokenizedRichTextBox>-->
                                         <!-- Image Content-->
                                         <Grid Width="{Binding TileBorderWidth}"
                                               Height="{Binding TileContentHeight}"
@@ -1002,15 +1021,13 @@
                     </ListBox.ItemTemplate>
                 </local:MpMultiSelectListBox>
                 <TextBlock x:Name="EmptyListTextBlock"
-                           Grid.Row="0"
-                           Grid.Column="1"
                            Text="This list has no items"
                            Focusable="True"
                            Visibility="{Binding EmptyListMessageVisibility}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
+                           Margin="0,0,0,15"
                            Foreground="LightGray"
-                           Margin="545,91,683,132"
                            FontStyle="Oblique"
                            FontSize="34" />
             </Grid>            

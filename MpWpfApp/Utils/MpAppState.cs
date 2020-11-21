@@ -9,5 +9,7 @@ namespace MpWpfApp {
         private static readonly Lazy<MpAppState> _Lazy = new Lazy<MpAppState>(() => new MpAppState());
         public static MpAppState Instance { get { return _Lazy.Value; } }
 
+
+
     }
 }

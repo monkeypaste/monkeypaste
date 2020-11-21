@@ -185,6 +185,12 @@ namespace MpWpfApp {
 
         public static string GetProcessPath(IntPtr hwnd) {
             try {
+                if (hwnd == null) {
+                    throw new Exception("MpHelpers error hWnd is null");
+                }
+                if (hwnd == IntPtr.Zero) {
+                    return string.Empty;
+                }
                 WinApi.GetWindowThreadProcessId(hwnd, out uint pid);
                 Process proc = Process.GetProcessById((int)pid);
                 return proc.MainModule.FileName.ToString();

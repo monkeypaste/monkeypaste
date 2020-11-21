@@ -31,12 +31,6 @@ namespace MpWpfApp {
                 }
             }
         }
-        public static string GetSearchText(DependencyObject obj) {
-            return (string)obj.GetValue(SearchTextProperty);
-        }
-        public static void SetSearchText(DependencyObject obj, string value) {
-            obj.SetValue(SearchTextProperty, value);
-        }
         public static readonly DependencyProperty SearchTextProperty =
           DependencyProperty.RegisterAttached(
             "SearchText",
@@ -45,7 +39,8 @@ namespace MpWpfApp {
             new FrameworkPropertyMetadata {
                 BindsTwoWayByDefault = true,
                 PropertyChangedCallback = (s, e) => {
-                    ((MpTokenizedRichTextBox)s).HighlightSearchText(Brushes.Yellow);
+                    var trtb = (MpTokenizedRichTextBox)s;
+                    trtb.HighlightSearchText(Brushes.Yellow);
                 },
             });
 
@@ -58,12 +53,6 @@ namespace MpWpfApp {
                     SetValue(RichTextProperty, value);
                 }
             }
-        }
-        public static string GetRichText(DependencyObject obj) {
-            return (string)obj.GetValue(RichTextProperty);
-        }
-        public static void SetRichText(DependencyObject obj, string value) {
-            obj.SetValue(RichTextProperty, value);
         }
         public static readonly DependencyProperty RichTextProperty =
           DependencyProperty.RegisterAttached(
@@ -129,12 +118,6 @@ namespace MpWpfApp {
                     SetValue(TokensProperty, value);
                 }
             }
-        }
-        public static ObservableCollection<MpSubTextToken> GetTokens(DependencyObject obj) {
-            return (ObservableCollection<MpSubTextToken>)obj.GetValue(TokensProperty);
-        }
-        public static void SetTokens(DependencyObject obj, ObservableCollection<MpSubTextToken> value) {
-            obj.SetValue(TokensProperty, value);
         }
         public static readonly DependencyProperty TokensProperty =
           DependencyProperty.RegisterAttached(
@@ -265,11 +248,11 @@ namespace MpWpfApp {
             _lastToken = token;
             return new Hyperlink(tokenRange.Start, tokenRange.End);
         }
+
         private void HighlightSearchText(SolidColorBrush highlightColor) {
             Dispatcher.CurrentDispatcher.BeginInvoke(
                 DispatcherPriority.Background,
-                (Action)(() => {
-                    
+                (Action)(() => {                    
                     var cb = (MpClipBorder)this.GetVisualAncestor<MpClipBorder>();
                     if (cb == null) {
                         throw new Exception("TokenizedRichTextBox error, cannot find clipborder");
@@ -285,58 +268,71 @@ namespace MpWpfApp {
 
                     BeginChange();
                     new TextRange(Document.ContentStart, Document.ContentEnd).ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
+                    ctvm.TileVisibility = Visibility.Collapsed;
                     if (!sttvm.Tag.IsLinkedWithCopyItem(ctvm.CopyItem)) {
                         ctvm.TileVisibility = Visibility.Collapsed;
                         EndChange();
-                        return;
-                    }
-                    if (SearchText == null || string.IsNullOrEmpty(SearchText.Trim()) || SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
+                        //return;
+                    } else if (SearchText == null ||
+                        string.IsNullOrEmpty(SearchText.Trim()) ||
+                        SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
                         ctvm.TileVisibility = Visibility.Visible;
                         EndChange();
-                        return;
-                    }
-                    
-                    TextRange lastTokenPointer = null;
-                    for (TextPointer position = Document.ContentStart;
-                     position != null && position.CompareTo(Document.ContentEnd) <= 0;
-                     position = position.GetNextContextPosition(LogicalDirection.Forward)) {
-                        if (position.CompareTo(Document.ContentEnd) == 0) {
-                            break;
-                        }
-                        string textRun = string.Empty;
-                        int indexInRun = -1;
-                        if (Properties.Settings.Default.IsSearchCaseSensitive) {
-                            textRun = position.GetTextInRun(LogicalDirection.Forward);
-                            indexInRun = textRun.IndexOf(SearchText, StringComparison.CurrentCulture);
-                        } else {
-                            textRun = position.GetTextInRun(LogicalDirection.Forward).ToLower();
-                            indexInRun = textRun.IndexOf(SearchText.ToLower(), StringComparison.CurrentCulture);
-                        }
-                        if (indexInRun >= 0) {
-                            position = position.GetPositionAtOffset(indexInRun);
-                            if (position != null) {
-                                TextPointer nextPointer = position.GetPositionAtOffset(SearchText.Length);
-                                lastTokenPointer = new TextRange(position, nextPointer);
-                                lastTokenPointer.ApplyPropertyValue(TextElement.BackgroundProperty, highlightColor);
+                        //return;
+                    } else {
+                        TextRange lastSearchTextRange = null;
+                        for (TextPointer position = Document.ContentStart;
+                         position != null && position.CompareTo(Document.ContentEnd) <= 0;
+                         position = position.GetNextContextPosition(LogicalDirection.Forward)) {
+                            if (position.CompareTo(Document.ContentEnd) == 0) {
+                                break;
+                            }
+                            string textRun = string.Empty;
+                            int indexInRun = -1;
+                            if (Properties.Settings.Default.IsSearchCaseSensitive) {
+                                textRun = position.GetTextInRun(LogicalDirection.Forward);
+                                indexInRun = textRun.IndexOf(SearchText, StringComparison.CurrentCulture);
+                            } else {
+                                textRun = position.GetTextInRun(LogicalDirection.Forward).ToLower();
+                                indexInRun = textRun.IndexOf(SearchText.ToLower(), StringComparison.CurrentCulture);
+                            }
+                            if (indexInRun >= 0) {
+                                position = position.GetPositionAtOffset(indexInRun);
+                                if (position != null) {
+                                    TextPointer nextPointer = position.GetPositionAtOffset(SearchText.Length);
+                                    lastSearchTextRange = new TextRange(position, nextPointer);
+                                    lastSearchTextRange.ApplyPropertyValue(TextElement.BackgroundProperty, highlightColor);
+                                }
                             }
                         }
-                    }
 
-                    if (lastTokenPointer != null) {
-                        ctvm.TileVisibility = Visibility.Visible;
-                        ScrollToHome();
-                        CaretPosition = Document.ContentStart;
-                        Rect r = lastTokenPointer.End.GetCharacterRect(LogicalDirection.Backward);
-                        ScrollToVerticalOffset(500);// VerticalOffset r.Y - (FontSize * 0.5));
-                        //var characterRect = lastTokenPointer.GetCharacterRect(LogicalDirection.Forward);
-                        //this.ScrollToHorizontalOffset(this.HorizontalOffset + characterRect.Left - this.ActualWidth / 2d);
-                        //this.ScrollToVerticalOffset(this.VerticalOffset + characterRect.Top - this.ActualHeight / 2d);
-                        //ScrollToEnd();
+                        if (lastSearchTextRange != null) {
+                            ctvm.TileVisibility = Visibility.Visible;
+                            ScrollToHome();
+                            CaretPosition = Document.ContentStart;
+                            Rect r = lastSearchTextRange.End.GetCharacterRect(LogicalDirection.Backward);
+                            ScrollToVerticalOffset(500);// VerticalOffset r.Y - (FontSize * 0.5));
+                                                        //var characterRect = lastTokenPointer.GetCharacterRect(LogicalDirection.Forward);
+                                                        //this.ScrollToHorizontalOffset(this.HorizontalOffset + characterRect.Left - this.ActualWidth / 2d);
+                                                        //this.ScrollToVerticalOffset(this.VerticalOffset + characterRect.Top - this.ActualHeight / 2d);
+                                                        //ScrollToEnd();
+                        } else {
+                            ctvm.TileVisibility = Visibility.Collapsed;
+                        }
+                        EndChange();
+                    }
+                    var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
+                    if (mwvm.ClipTrayViewModel.VisibileClipTiles.Count == 0 &&
+                       !string.IsNullOrEmpty(SearchText) &&
+                       SearchText != Properties.Settings.Default.SearchPlaceHolderText) {
+                        mwvm.SearchBoxViewModel.SearchTextBoxBorderBrush = Brushes.Red;
+                        mwvm.ClipTrayViewModel.ClipListVisibility = Visibility.Collapsed;
+                        mwvm.ClipTrayViewModel.EmptyListMessageVisibility = Visibility.Visible;
                     } else {
-                        ctvm.TileVisibility = Visibility.Collapsed;
+                        mwvm.SearchBoxViewModel.SearchTextBoxBorderBrush = Brushes.Transparent;
+                        mwvm.ClipTrayViewModel.ClipListVisibility = Visibility.Visible;
+                        mwvm.ClipTrayViewModel.EmptyListMessageVisibility = Visibility.Collapsed;
                     }
-                    EndChange();
-
                     //var fullDocRange = new TextRange(Document.ContentStart, Document.ContentEnd);
                     ////fullDocRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
 

@@ -220,15 +220,15 @@
             }
         }
 
-        private Visibility _ertbVisibility = Visibility.Visible;
-        public Visibility ErtbVisibility {
+        private Visibility _editToolbarVisibility = Visibility.Collapsed;
+        public Visibility EditToolbarVisibility {
             get {
-                return _ertbVisibility;
+                return _editToolbarVisibility;
             }
             set {
-                if (_ertbVisibility != value) {
-                    _ertbVisibility = value;
-                    OnPropertyChanged(nameof(ErtbVisibility));
+                if (_editToolbarVisibility != value) {
+                    _editToolbarVisibility = value;
+                    OnPropertyChanged(nameof(EditToolbarVisibility));
                 }
             }
         }
@@ -314,6 +314,7 @@
                 }
             }
         }
+
         private ObservableCollection<MpSubTextToken> _tokens = null;
         public ObservableCollection<MpSubTextToken> Tokens {
             get {
@@ -728,10 +729,10 @@
                     case nameof(IsEditingTile):
                         if(IsEditingTile) {
                             //RtbVisibility = Visibility.Collapsed;
-                            ErtbVisibility = Visibility.Visible;
+                            EditToolbarVisibility = Visibility.Visible;
                         } else {
                             //RtbVisibility = Visibility.Visible;
-                            ErtbVisibility = Visibility.Collapsed;
+                            EditToolbarVisibility = Visibility.Collapsed;
                         }
                         break;
                     case nameof(IsEditingTitle):
@@ -795,7 +796,7 @@
             FileListVisibility = CopyItemType == MpCopyItemType.FileList ? Visibility.Visible : Visibility.Collapsed;
             ImgVisibility = CopyItemType == MpCopyItemType.Image ? Visibility.Visible : Visibility.Collapsed;
             RtbVisibility = CopyItemType == MpCopyItemType.RichText ? Visibility.Visible : Visibility.Collapsed;
-            ErtbVisibility = Visibility.Collapsed;
+            //ErtbVisibility = Visibility.Collapsed;
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
@@ -867,10 +868,11 @@
 
         public void ClipTileEditableRichTextBox_Loaded(object sender, RoutedEventArgs e) {
             var etrtb = (MpEditableTokenizedRichTextBox)sender;
-            etrtb.IsVisibleChanged += (s, e1) => {
-                var etrb = (MpEditableTokenizedRichTextBox)s;
+            double baseWidth = TileBorderWidth - 20;
+            etrtb.Toolbar.IsVisibleChanged += (s, e1) => {
+                //var etrtb = (MpEditableTokenizedRichTextBox)((UIElement)s).GetVisualAncestor<MpEditableTokenizedRichTextBox>();
                 var cb = (MpClipBorder)etrtb.GetVisualAncestor<MpClipBorder>();
-                var trtb = (MpTokenizedRichTextBox)cb.FindName("ClipTileRichTextBox");
+                //var trtb = (MpTokenizedRichTextBox)cb.FindName("ClipTileRichTextBox");
                 var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
                 var titleSwirl = (Image)cb.FindName("TitleSwirl");
 
@@ -878,19 +880,17 @@
                 double toWidth = 0;
                 double fromLeft = 0;
                 double toLeft = 0;
-
-                if (ErtbVisibility == Visibility.Visible) {
-                    RtbVisibility = Visibility.Collapsed;
-                    fromWidth = TileBorderWidth;
-                    toWidth = ((MpEditableTokenizedRichTextBox)s).Width;
-                    ((MpMultiSelectListBox)cb.GetVisualAncestor<MpMultiSelectListBox>()).ScrollIntoView(cb);
+                if (IsEditingTile) {
+                    fromWidth = baseWidth;
+                    toWidth = Math.Max(800, etrtb.TokenizedRichTextBox.Document.GetFormattedText().WidthIncludingTrailingWhitespace + 20);
+                    etrtb.Focusable = true;
+                    etrtb.TokenizedRichTextBox.Focusable = true;
                 } else {
-                    RtbVisibility = Visibility.Visible;
-                    etrb.UpdateDocumentBindings();
-                    trtb.RichText = MpHelpers.ConvertFlowDocumentToRichText(etrb.Document);
-                    fromWidth = etrb.Width;
-                    trtb.Width = fromWidth;
-                    toWidth = TileBorderWidth;                    
+                    etrtb.UpdateDocumentBindings();
+                    fromWidth = etrtb.TokenizedRichTextBox.Width;
+                    toWidth = baseWidth;
+                    etrtb.Focusable = false;
+                    etrtb.TokenizedRichTextBox.Focusable = false;
                 }
                 fromLeft = Canvas.GetLeft(titleIconImageButton);
                 toLeft = toWidth - TileTitleHeight - 10;
@@ -902,8 +902,12 @@
                 CubicEase easing = new CubicEase();
                 easing.EasingMode = EasingMode.EaseIn;
                 wa.EasingFunction = easing;
+                wa.Completed += (s1, e2) => {
+                    ((MpMultiSelectListBox)cb.GetVisualAncestor<MpMultiSelectListBox>()).ScrollIntoView(cb);
+                };
                 cb.BeginAnimation(MpClipBorder.WidthProperty, wa);
-                trtb.BeginAnimation(MpTokenizedRichTextBox.WidthProperty, wa);
+                etrtb.BeginAnimation(MpEditableTokenizedRichTextBox.WidthProperty, wa);
+                etrtb.TokenizedRichTextBox.BeginAnimation(RichTextBox.WidthProperty, wa);
                 titleSwirl.BeginAnimation(Image.WidthProperty, wa);
 
                 DoubleAnimation la = new DoubleAnimation();
@@ -913,24 +917,12 @@
                 la.EasingFunction = easing;
                 titleIconImageButton.BeginAnimation(Canvas.LeftProperty, la);
             };
-            //ContentWidth = rtb.RenderSize.Width;
-            //ContentHeight = rtb.RenderSize.Height;
 
-            //rtb.Document.PageWidth = ContentWidth;//rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
-            //rtb.Document.PageHeight = ContentHeight;//rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
-            //rtb.TokenizedRichTextBox.MinWidth = ContentWidth;//TileBorderSize;
-            //rtb.TokenizedRichTextBox.MinHeight = ContentHeight;//TileContentHeight;
-            //rtb.TokenizedRichTextBox.Document.PageWidth = ContentWidth;//rtb.Document.PageWidth;
-            //rtb.TokenizedRichTextBox.Document.PageHeight = ContentHeight;//rtb.Document.PageHeight;
-        }
+            etrtb.ContextMenu = (ContextMenu)etrtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+            etrtb.TokenizedRichTextBox.ContextMenu = etrtb.ContextMenu;
+            etrtb.TokenizedRichTextBox.Width = baseWidth;
 
-        public void ClipTileRichTextBox_Loaded(object sender, RoutedEventArgs e) {
-            var rtb = (MpTokenizedRichTextBox)sender;
-            rtb.ContextMenu = (ContextMenu)rtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");            
-            rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
-            rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
-            
-            rtb.SearchText = string.Empty;
+            etrtb.SearchText = string.Empty;
         }
 
         public void ClipTileImage_Loaded(object sender, RoutedEventArgs e) {
