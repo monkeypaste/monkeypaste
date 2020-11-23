@@ -255,14 +255,16 @@ namespace MpWpfApp {
                 (Action)(() => {                    
                     var cb = (MpClipBorder)this.GetVisualAncestor<MpClipBorder>();
                     if (cb == null) {
-                        throw new Exception("TokenizedRichTextBox error, cannot find clipborder");
+                        Console.WriteLine("TokenizedRichTextBox error, cannot find clipborder");
+                        return;
                     }
                     if (cb.DataContext.GetType() != typeof(MpClipTileViewModel)) {
                         return;
                     }
                     var ctvm = (MpClipTileViewModel)cb.DataContext;
                     if (ctvm == null) {
-                        throw new Exception("TokenizedRichTextBox error, cannot find cliptile viewmodel");
+                        Console.WriteLine("TokenizedRichTextBox error, cannot find cliptile viewmodel");
+                        return;
                     }
                     var sttvm = ctvm.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel.SelectedTagTile;
 

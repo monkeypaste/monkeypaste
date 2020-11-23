@@ -64,6 +64,7 @@ namespace MpWpfApp {
             this.IsAppRejected = isAppRejected;
         }
         public MpApp() : this(string.Empty, true, IntPtr.Zero) { }
+
         public MpApp(DataRow dr) {
             LoadDataRow(dr);
         }

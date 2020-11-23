@@ -527,15 +527,39 @@ namespace MpWpfApp.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Setting {
+        [global::System.Configuration.DefaultSettingValueAttribute("@0")]
+        public string DbParameterBinary {
             get {
-                return ((string)(this["Setting"]));
+                return ((string)(this["DbParameterBinary"]));
             }
-            set {
-                this["Setting"] = value;
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("@1")]
+        public string DbParameterString {
+            get {
+                return ((string)(this["DbParameterString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("@2")]
+        public string DbParameterInt {
+            get {
+                return ((string)(this["DbParameterInt"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("@3")]
+        public string DbParameterDateTime {
+            get {
+                return ((string)(this["DbParameterDateTime"]));
             }
         }
     }

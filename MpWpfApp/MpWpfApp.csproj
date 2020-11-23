@@ -107,6 +107,7 @@
     <Compile Include="Attached Properties\MpTextBoxBehavior.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpMultiSelectListBox.cs" />
+    <Compile Include="Controls\MpTokenizedRichTextBox.cs" />
     <Compile Include="Converters\MpFlowDocumentToXamlConverter.cs" />
     <Compile Include="Converters\MpIntToMpRoutingTypeConverter.cs" />
     <Compile Include="Converters\MpVisibilityToBoolConverter.cs" />
@@ -251,6 +252,7 @@
     <None Include="..\.editorconfig">
       <Link>.editorconfig</Link>
     </None>
+    <None Include="stylecop.json" />
     <Resource Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

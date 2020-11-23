@@ -237,12 +237,18 @@ namespace MpWpfApp {
                 for (int i = 0; i < paramList.Count; i++) {
                     // check p to conditionally set parameter type
                     SQLiteParameter param = null;
-                    if (paramList[i] == "@0") {
+                    if (paramList[i] == Properties.Settings.Default.DbParameterBinary) {
                         param = new SQLiteParameter(paramList[i], DbType.Binary);
                         param.Value = (byte[])paramValueList[i];
-                    } else if (paramList[i] == "@1") {
+                    } else if (paramList[i] == Properties.Settings.Default.DbParameterString) {
                         param = new SQLiteParameter(paramList[i], DbType.String);
                         param.Value = (string)paramValueList[i];
+                    } else if (paramList[i] == Properties.Settings.Default.DbParameterInt) {
+                        param = new SQLiteParameter(paramList[i], DbType.Int32);
+                        param.Value = (int)paramValueList[i];
+                    } else if (paramList[i] == Properties.Settings.Default.DbParameterDateTime) {
+                        param = new SQLiteParameter(paramList[i], DbType.DateTime);
+                        param.Value = (DateTime)paramValueList[i];
                     }
                     sql_cmd.Parameters.Add(param);
                 }
@@ -298,12 +304,18 @@ namespace MpWpfApp {
                 for (int i = 0; i < paramList.Count; i++) {
                     // check p to conditionally set parameter type
                     SQLiteParameter param = null;
-                    if (paramList[i] == "@0") {
+                    if (paramList[i] == Properties.Settings.Default.DbParameterBinary) {
                         param = new SQLiteParameter(paramList[i], DbType.Binary);
                         param.Value = (byte[])paramValueList[i];
-                    } else if (paramList[i] == "@1") {
+                    } else if (paramList[i] == Properties.Settings.Default.DbParameterString) {
                         param = new SQLiteParameter(paramList[i], DbType.String);
                         param.Value = (string)paramValueList[i];
+                    } else if (paramList[i] == Properties.Settings.Default.DbParameterInt) {
+                        param = new SQLiteParameter(paramList[i], DbType.Int32);
+                        param.Value = (int)paramValueList[i];
+                    } else if (paramList[i] == Properties.Settings.Default.DbParameterDateTime) {
+                        param = new SQLiteParameter(paramList[i], DbType.DateTime);
+                        param.Value = (DateTime)paramValueList[i];
                     }
                     sql_cmd.Parameters.Add(param);
                 }
@@ -551,7 +563,7 @@ namespace MpWpfApp {
                       pk_MpSubTextTokenTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , TokenTypeName text NOT NULL 
                     );
-                    INSERT INTO MpSubTextTokenType(TokenTypeName) VALUES('URI'),('Email'),('Phone Number'),('Currency'),('Hex Color'),('Street Address');
+                    INSERT INTO MpSubTextTokenType(TokenTypeName) VALUES('URI'),('Email'),('Phone Number'),('Currency'),('Hex Color'),('Street Address'),('Clip'),('Template');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpSubTextToken (
                       pk_MpSubTextTokenId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

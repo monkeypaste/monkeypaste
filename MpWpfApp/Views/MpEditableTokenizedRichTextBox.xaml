@@ -7,7 +7,7 @@
              xmlns:local="clr-namespace:MpWpfApp"
              mc:Ignorable="d"
              d:DesignHeight="600"
-             d:DesignWidth="800">
+             d:DesignWidth="625">
     <UserControl.Resources>
         <!-- Flat Button -->
         <ControlTemplate x:Key="FlatButtonControlTemplate"
@@ -113,9 +113,9 @@
         </ControlTemplate>
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
-        <Border x:Name="Toolbar" 
+        <Border x:Name="Toolbar"
                 DockPanel.Dock="Top"
-                Visibility="{Binding ElementName=EditableTokenizedRichTextBox, Path=ToolbarVisibility}"
+                Visibility="{Binding EditToolbarVisibility}"
                 BorderThickness="{Binding ElementName=EditableTokenizedRichTextBox, Path=ToolbarBorderThickness}"
                 BorderBrush="{Binding ElementName=EditableTokenizedRichTextBox, Path=ToolbarBorderBrush}"
                 SnapsToDevicePixels="True">
@@ -156,7 +156,7 @@
                           SelectionChanged="OnFontSizeComboSelectionChanged" />
 
                 <Button Command="ApplicationCommands.Cut"
-                        CommandTarget="{Binding ElementName=EditableTokenizedRichTextBox}"
+                        CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
                         ToolTip="Cut"
                         Template="{StaticResource FlatButtonControlTemplate}"
                         Margin="0,1,0,1">
@@ -166,7 +166,7 @@
                 </Button>
 
                 <Button Command="ApplicationCommands.Copy"
-                        CommandTarget="{Binding ElementName=EditableTokenizedRichTextBox}"
+                        CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
                         ToolTip="Copy"
                         Template="{StaticResource FlatButtonControlTemplate}"
                         Margin="0,1,0,1">
@@ -176,7 +176,7 @@
                 </Button>
 
                 <Button Command="ApplicationCommands.Paste"
-                        CommandTarget="{Binding ElementName=EditableTokenizedRichTextBox}"
+                        CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
                         ToolTip="Paste"
                         Template="{StaticResource FlatButtonControlTemplate}"
                         Margin="0,1,0,1">
@@ -186,7 +186,7 @@
                 </Button>
 
                 <Button Command="ApplicationCommands.Undo"
-                        CommandTarget="{Binding ElementName=EditableTokenizedRichTextBox}"
+                        CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
                         ToolTip="Undo"
                         Template="{StaticResource FlatButtonControlTemplate}"
                         Margin="0,1,0,1">
@@ -196,7 +196,7 @@
                 </Button>
 
                 <Button Command="ApplicationCommands.Redo"
-                        CommandTarget="{Binding ElementName=EditableTokenizedRichTextBox}"
+                        CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
                         ToolTip="Redo"
                         Template="{StaticResource FlatButtonControlTemplate}"
                         Margin="0,1,0,1">
@@ -211,7 +211,7 @@
 
                 <ToggleButton x:Name="BoldButton"
                               Command="EditingCommands.ToggleBold"
-                              CommandTarget="{Binding ElementName=EditableTokenizedRichTextBox}"
+                              CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
                               ToolTip="Bold"
                               Template="{StaticResource FlatToggleButtonControlTemplate}"
                               Margin="0,1,0,1">
@@ -222,7 +222,7 @@
 
                 <ToggleButton x:Name="ItalicButton"
                               Command="EditingCommands.ToggleItalic"
-                              CommandTarget="{Binding ElementName=EditableTokenizedRichTextBox}"
+                              CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
                               ToolTip="Italic"
                               Template="{StaticResource FlatToggleButtonControlTemplate}"
                               Margin="0,1,0,1">
@@ -233,7 +233,7 @@
 
                 <ToggleButton x:Name="UnderlineButton"
                               Command="EditingCommands.ToggleUnderline"
-                              CommandTarget="{Binding ElementName=EditableTokenizedRichTextBox}"
+                              CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
                               ToolTip="Underline"
                               Template="{StaticResource FlatToggleButtonControlTemplate}"
                               Margin="0,1,0,1">
@@ -282,7 +282,7 @@
 
                 <ToggleButton x:Name="LeftButton"
                               Command="EditingCommands.AlignLeft"
-                              CommandTarget="{Binding ElementName=EditableTokenizedRichTextBox}"
+                              CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
                               ToolTip="Align Left"
                               Template="{StaticResource FlatToggleButtonControlTemplate}"
                               Margin="0,1,0,1"
@@ -294,7 +294,7 @@
 
                 <ToggleButton x:Name="CenterButton"
                               Command="EditingCommands.AlignCenter"
-                              CommandTarget="{Binding ElementName=EditableTokenizedRichTextBox}"
+                              CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
                               ToolTip="Align Center"
                               Template="{StaticResource FlatToggleButtonControlTemplate}"
                               Margin="0,1,0,1"
@@ -306,7 +306,7 @@
 
                 <ToggleButton x:Name="RightButton"
                               Command="EditingCommands.AlignRight"
-                              CommandTarget="{Binding ElementName=EditableTokenizedRichTextBox}"
+                              CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
                               ToolTip="Align Right"
                               Template="{StaticResource FlatToggleButtonControlTemplate}"
                               Margin="0,1,0,1"
@@ -318,7 +318,7 @@
 
                 <ToggleButton x:Name="JustifyButton"
                               Command="EditingCommands.AlignJustify"
-                              CommandTarget="{Binding ElementName=EditableTokenizedRichTextBox}"
+                              CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
                               ToolTip="Align Justify"
                               Template="{StaticResource FlatToggleButtonControlTemplate}"
                               Margin="0,1,0,1"
@@ -333,7 +333,7 @@
 
                 <ToggleButton x:Name="BulletsButton"
                               Command="EditingCommands.ToggleBullets"
-                              CommandTarget="{Binding ElementName=EditableTokenizedRichTextBox}"
+                              CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
                               ToolTip="Bullets"
                               Template="{StaticResource FlatToggleButtonControlTemplate}"
                               Margin="0,1,0,1"
@@ -345,7 +345,7 @@
 
                 <ToggleButton x:Name="NumberingButton"
                               Command="EditingCommands.ToggleNumbering"
-                              CommandTarget="{Binding ElementName=EditableTokenizedRichTextBox}"
+                              CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
                               ToolTip="Numbering"
                               Template="{StaticResource FlatToggleButtonControlTemplate}"
                               Margin="0,1,0,1"
@@ -359,7 +359,7 @@
                        Stretch="None" />
 
                 <Button Command="EditingCommands.IncreaseIndentation"
-                        CommandTarget="{Binding ElementName=EditableTokenizedRichTextBox}"
+                        CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
                         ToolTip="Increase Indentation"
                         Template="{StaticResource FlatButtonControlTemplate}"
                         Margin="0,1,0,1">
@@ -369,7 +369,7 @@
                 </Button>
 
                 <Button Command="EditingCommands.DecreaseIndentation"
-                        CommandTarget="{Binding ElementName=EditableTokenizedRichTextBox}"
+                        CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
                         ToolTip="Decrease Indentation"
                         Template="{StaticResource FlatButtonControlTemplate}"
                         Margin="0,1,0,1">
@@ -380,16 +380,20 @@
 
             </StackPanel>
         </Border>
-        <RichTextBox x:Name="TokenizedRichTextBox"
-                    TextOptions.TextFormattingMode="Ideal"
-                    TextOptions.TextRenderingMode="Aliased"
-                    AcceptsTab="True" 
-                    AcceptsReturn="True"
-                     Focusable="False"
-                     Cursor="Arrow"
-                     TextChanged="OnTextChanged"
-                     BorderThickness="0"
-                    VerticalScrollBarVisibility="Auto"
-                    SelectionChanged="OnTextBoxSelectionChanged"/>
+        <local:MpTokenizedRichTextBox x:Name="TokenizedRichTextBox"
+                                      TextOptions.TextFormattingMode="Ideal"
+                                      TextOptions.TextRenderingMode="Aliased"
+                                      AcceptsTab="True"
+                                      AcceptsReturn="True"
+                                      RichText="{Binding RichText}"
+                                      SearchText="{Binding SearchText}"
+                                      Tokens="{Binding Tokens}"
+                                      Width="{Binding TileBorderWidth}"
+                                      Padding="5"
+                                      Focusable="False"
+                                      Cursor="Arrow"
+                                      TextChanged="OnTextChanged"
+                                      BorderThickness="0"
+                                      SelectionChanged="OnTextBoxSelectionChanged" />
     </DockPanel>
 </UserControl>

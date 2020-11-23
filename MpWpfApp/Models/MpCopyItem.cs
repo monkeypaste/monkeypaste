@@ -59,6 +59,8 @@ namespace MpWpfApp {
         #region Public Methods
 
         public MpCopyItem() {
+            ItemColor = new MpColor(MpHelpers.GetRandomColor());
+            App = new MpApp();
         }
 
         public static MpCopyItem CreateFromClipboard(IntPtr processHandle) {

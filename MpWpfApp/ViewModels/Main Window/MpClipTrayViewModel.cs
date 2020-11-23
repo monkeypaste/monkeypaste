@@ -297,6 +297,9 @@ namespace MpWpfApp {
                 }
             };
             clipTray.PreviewMouseWheel += (s, e3) => {
+                if(IsEditingClipTile) {
+                    return;
+                }
                 e3.Handled = true;
 
                 var clipTrayListBox = (ListBox)sender;
@@ -338,10 +341,6 @@ namespace MpWpfApp {
             var clipTileBorder = (MpClipBorder)sender;
 
             clipTileBorder.PreviewMouseLeftButtonDown += (s, e6) => {
-                if (e6.ClickCount == 2) {
-                    PasteSelectedClipsCommand.Execute(null);
-                    return;
-                }
                 var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
                 IsMouseDown = true;
                 StartDragPoint = e6.GetPosition(clipTray);
@@ -934,7 +933,7 @@ namespace MpWpfApp {
             //for some reason not making this run on another thread
             //MAY throw a com error or it was from AddToken
             Dispatcher.CurrentDispatcher.BeginInvoke(
-                DispatcherPriority.Normal,
+                DispatcherPriority.Background,
                 (Action)(() => {
                     var focusedClip = SelectedClipTiles[0];
                     List<MpClipTileViewModel> clipTilesToRemove = new List<MpClipTileViewModel>();

@@ -56,6 +56,13 @@ namespace MpWpfApp {
                 return ClipTrayHeight / 50;
             }
         }
+
+        public double ClipTileContentMargin {
+            get {
+                return ClipTileMargin / 5;
+            }
+        }
+
         public double ClipTileDropShadowRadius {
             get {
                 return 10;
@@ -89,6 +96,11 @@ namespace MpWpfApp {
         public double ClipTileContentHeight {
             get {
                 return ClipTileSize - ClipTileTitleHeight - (ClipTileMargin * 2);
+            }
+        }
+        public double ClipTileContentWidth {
+            get {
+                return ClipTileSize - (ClipTileMargin * 2);
             }
         }
         public double ClipTileFileListRowHeight {

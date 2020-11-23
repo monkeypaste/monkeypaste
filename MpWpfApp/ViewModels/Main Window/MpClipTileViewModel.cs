@@ -116,6 +116,8 @@
         #endregion
 
         #region Properties
+
+        #region Model Propertiese
         private string _shortcutKeyList = string.Empty;
         public string ShortcutKeyList {
             get {
@@ -125,19 +127,6 @@
                 if (_shortcutKeyList != value) {
                     _shortcutKeyList = value;
                     OnPropertyChanged(nameof(ShortcutKeyList));
-                }
-            }
-        }
-
-        private double _clipTileWidth = MpMeasurements.Instance.ClipTileBorderSize;
-        public double ClipTileWidth {
-            get {
-                return _clipTileWidth;
-            }
-            set {
-                if(_clipTileWidth != value) {
-                    _clipTileWidth = value;
-                    OnPropertyChanged(nameof(ClipTileWidth));
                 }
             }
         }
@@ -155,80 +144,14 @@
             }
         }
 
-        private double _contentWidth = 0;
-        public double ContentWidth {
+        public string Title {
             get {
-                return _contentWidth;
+                return CopyItem.Title;
             }
             set {
-                if (_contentWidth != value) {
-                    _contentWidth = value;
-                    OnPropertyChanged(nameof(ContentWidth));
-                }
-            }
-        }
-
-        private double _contentHeight = 0;
-        public double ContentHeight {
-            get {
-                return _contentHeight;
-            }
-            set {
-                if (_contentHeight != value) {
-                    _contentHeight = value;
-                    OnPropertyChanged(nameof(ContentHeight));
-                }
-            }
-        }
-
-        private Visibility _imgVisibility = Visibility.Visible;
-        public Visibility ImgVisibility {
-            get {
-                return _imgVisibility;
-            }
-            set {
-                if (_imgVisibility != value) {
-                    _imgVisibility = value;
-                    OnPropertyChanged(nameof(ImgVisibility));
-                }
-            }
-        }
-
-        private Visibility _fileListVisibility = Visibility.Visible;
-        public Visibility FileListVisibility {
-            get {
-                return _fileListVisibility;
-            }
-            set {
-                if (_fileListVisibility != value) {
-                    _fileListVisibility = value;
-                    OnPropertyChanged(nameof(FileListVisibility));
-                }
-            }
-        }
-
-        private Visibility _rtbVisibility = Visibility.Visible;
-        public Visibility RtbVisibility {
-            get {
-                return _rtbVisibility;
-            }
-            set {
-                if (_rtbVisibility != value) {
-                    _rtbVisibility = value;
-                    OnPropertyChanged(nameof(RtbVisibility));
-                }
-            }
-        }
-
-        private Visibility _editToolbarVisibility = Visibility.Collapsed;
-        public Visibility EditToolbarVisibility {
-            get {
-                return _editToolbarVisibility;
-            }
-            set {
-                if (_editToolbarVisibility != value) {
-                    _editToolbarVisibility = value;
-                    OnPropertyChanged(nameof(EditToolbarVisibility));
+                if (CopyItem.Title != value) {
+                    CopyItem.Title = value;
+                    OnPropertyChanged(nameof(Title));
                 }
             }
         }
@@ -302,13 +225,13 @@
         private List<string> _fileDropList = null;
         public List<string> FileDropList {
             get {
-                if(_fileDropList == null) {
+                if (_fileDropList == null) {
                     _fileDropList = CopyItem.GetFileList(string.Empty, ClipTrayViewModel.GetTargetFileType());
                 }
                 return _fileDropList;
             }
             set {
-                if(_fileDropList != value) {
+                if (_fileDropList != value) {
                     _fileDropList = value;
                     OnPropertyChanged(nameof(FileDropList));
                 }
@@ -329,8 +252,317 @@
                     OnPropertyChanged(nameof(Tokens));
                 }
             }
-        }        
+        }
 
+        private BitmapSource _titleSwirl = null;
+        public BitmapSource TitleSwirl {
+            get {
+                return _titleSwirl;
+            }
+            set {
+                if (_titleSwirl != value) {
+                    _titleSwirl = value;
+                    OnPropertyChanged(nameof(TitleSwirl));
+                }
+            }
+        }
+
+        private BitmapSource _icon = null;
+        public BitmapSource Icon {
+            get {
+                return _icon;
+            }
+            set {
+                if (_icon != value) {
+                    _icon = value;
+                    OnPropertyChanged(nameof(Icon));
+                }
+            }
+        }
+
+        public string CopyItemAppName {
+            get {
+                return CopyItem.App.AppName;
+            }
+        }
+
+        public int CopyItemUsageScore {
+            get {
+                return CopyItem.RelevanceScore;
+            }
+        }
+
+        public int CopyItemAppId {
+            get {
+                return CopyItem.AppId;
+            }
+        }
+
+        public MpCopyItemType CopyItemType {
+            get {
+                return CopyItem.CopyItemType;
+            }
+        }
+
+        public DateTime CopyItemCreatedDateTime {
+            get {
+                return CopyItem.CopyDateTime;
+            }
+        }
+
+        private MpCopyItem _copyItem;
+        public MpCopyItem CopyItem {
+            get {
+                return _copyItem;
+            }
+            set {
+                if (_copyItem != value) {
+                    _copyItem = value;
+                    OnPropertyChanged(nameof(CopyItem));
+                }
+            }
+        }
+        #endregion
+
+        #region Layout Properties
+        private double _tileTitleIconSize = MpMeasurements.Instance.ClipTileTitleIconSize;
+        public double TileTitleIconSize {
+            get {
+                return _tileTitleIconSize;
+            }
+            set {
+                if (_tileTitleIconSize != value) {
+                    _tileTitleIconSize = value;
+                    OnPropertyChanged(nameof(TileTitleIconSize));
+                }
+            }
+        }
+
+        private double _tileSize = MpMeasurements.Instance.ClipTileSize;
+        public double TileSize {
+            get {
+                return _tileSize;
+            }
+            set {
+                if (_tileSize != value) {
+                    _tileSize = value;
+                    OnPropertyChanged(nameof(TileSize));
+                }
+            }
+        }
+
+        private double _tileBorderWidth = MpMeasurements.Instance.ClipTileBorderSize;
+        public double TileBorderWidth {
+            get {
+                return _tileBorderWidth;
+            }
+            set {
+                if (_tileBorderWidth != value) {
+                    _tileBorderWidth = value;
+                    OnPropertyChanged(nameof(TileBorderWidth));
+                }
+            }
+        }
+
+        private double _tileBorderHeight = MpMeasurements.Instance.ClipTileSize;
+        public double TileBorderHeight {
+            get {
+                return _tileBorderHeight;
+            }
+            set {
+                if (_tileBorderHeight != value) {
+                    _tileBorderHeight = value;
+                    OnPropertyChanged(nameof(TileBorderHeight));
+                }
+            }
+        }
+
+        private double _tileTitleHeight = MpMeasurements.Instance.ClipTileTitleHeight;
+        public double TileTitleHeight {
+            get {
+                return _tileTitleHeight;
+            }
+            set {
+                if (_tileTitleHeight != value) {
+                    _tileTitleHeight = value;
+                    OnPropertyChanged(nameof(TileTitleHeight));
+                }
+            }
+        }
+
+        private double _tileContentHeight = MpMeasurements.Instance.ClipTileContentHeight;
+        public double TileContentHeight {
+            get {
+                return _tileContentHeight;
+            }
+            set {
+                if (_tileContentHeight != value) {
+                    _tileContentHeight = value;
+                    OnPropertyChanged(nameof(TileContentHeight));
+                }
+            }
+        }
+
+        private double _tileContentWidth = MpMeasurements.Instance.ClipTileContentWidth;
+        public double TileContentWidth {
+            get {
+                return _tileContentWidth;
+            }
+            set {
+                if (_tileContentWidth != value) {
+                    _tileContentWidth = value;
+                    OnPropertyChanged(nameof(TileContentWidth));
+                }
+            }
+        }
+
+        private double _tileBorderThickness = MpMeasurements.Instance.ClipTileBorderThickness;
+        public double TileBorderThickness {
+            get {
+                return _tileBorderThickness;
+            }
+            set {
+                if (_tileBorderThickness != value) {
+                    _tileBorderThickness = value;
+                    OnPropertyChanged(nameof(TileBorderThickness));
+                }
+            }
+        }
+
+        private double _tileMargin = MpMeasurements.Instance.ClipTileMargin;
+        public double TileMargin {
+            get {
+                return _tileMargin;
+            }
+            set {
+                if (_tileMargin != value) {
+                    _tileMargin = value;
+                    OnPropertyChanged(nameof(TileMargin));
+                }
+            }
+        }
+
+        private double _tileContentMargin = MpMeasurements.Instance.ClipTileContentMargin;
+        public double TileContentMargin {
+            get {
+                return _tileContentMargin;
+            }
+            set {
+                if (_tileContentMargin != value) {
+                    _tileContentMargin = value;
+                    OnPropertyChanged(nameof(TileContentMargin));
+                }
+            }
+        }
+
+        private double _tileDropShadowRadius = MpMeasurements.Instance.ClipTileDropShadowRadius;
+        public double TileDropShadowRadius {
+            get {
+                return _tileDropShadowRadius;
+            }
+            set {
+                if (_tileDropShadowRadius != value) {
+                    _tileDropShadowRadius = value;
+                    OnPropertyChanged(nameof(TileDropShadowRadius));
+                }
+            }
+        }
+        #endregion
+
+        #region Visibility Properties
+        private Visibility _imgVisibility = Visibility.Visible;
+        public Visibility ImgVisibility {
+            get {
+                return _imgVisibility;
+            }
+            set {
+                if (_imgVisibility != value) {
+                    _imgVisibility = value;
+                    OnPropertyChanged(nameof(ImgVisibility));
+                }
+            }
+        }
+
+        private Visibility _fileListVisibility = Visibility.Visible;
+        public Visibility FileListVisibility {
+            get {
+                return _fileListVisibility;
+            }
+            set {
+                if (_fileListVisibility != value) {
+                    _fileListVisibility = value;
+                    OnPropertyChanged(nameof(FileListVisibility));
+                }
+            }
+        }
+
+        private Visibility _rtbVisibility = Visibility.Visible;
+        public Visibility RtbVisibility {
+            get {
+                return _rtbVisibility;
+            }
+            set {
+                if (_rtbVisibility != value) {
+                    _rtbVisibility = value;
+                    OnPropertyChanged(nameof(RtbVisibility));
+                }
+            }
+        }
+
+        private Visibility _tileTitleTextBlockVisibility = Visibility.Visible;
+        public Visibility TileTitleTextBlockVisibility {
+            get {
+                return _tileTitleTextBlockVisibility;
+            }
+            set {
+                if (_tileTitleTextBlockVisibility != value) {
+                    _tileTitleTextBlockVisibility = value;
+                    OnPropertyChanged(nameof(TileTitleTextBlockVisibility));
+                }
+            }
+        }
+
+        private Visibility _tileTitleTextBoxVisibility = Visibility.Collapsed;
+        public Visibility TileTitleTextBoxVisibility {
+            get {
+                return _tileTitleTextBoxVisibility;
+            }
+            set {
+                if (_tileTitleTextBoxVisibility != value) {
+                    _tileTitleTextBoxVisibility = value;
+                    OnPropertyChanged(nameof(TileTitleTextBoxVisibility));
+                }
+            }
+        }
+
+        private Visibility _tileVisibility = Visibility.Visible;
+        public Visibility TileVisibility {
+            get {
+                return _tileVisibility;
+            }
+            set {
+                if (_tileVisibility != value) {
+                    _tileVisibility = value;
+                    OnPropertyChanged(nameof(TileVisibility));
+                }
+            }
+        }
+
+        private Visibility _editToolbarVisibility = Visibility.Collapsed;
+        public Visibility EditToolbarVisibility {
+            get {
+                return _editToolbarVisibility;
+            }
+            set {
+                if (_editToolbarVisibility != value) {
+                    _editToolbarVisibility = value;
+                    OnPropertyChanged(nameof(EditToolbarVisibility));
+                }
+            }
+        }
+        #endregion
+
+        #region Business Logic Properties
         private string _searchText = string.Empty;
         public string SearchText {
             get {
@@ -359,7 +591,23 @@
             }
         }
 
+        private int _sortOrderIdx = -1;
+        public int SortOrderIdx {
+            get {
+                return _sortOrderIdx;
+            }
+            set {
+                if (_sortOrderIdx != value) {
+                    _sortOrderIdx = value;
+                    OnPropertyChanged(nameof(SortOrderIdx));
+                }
+            }
+        }
+        #endregion
+
+        #region Brush Properties
         private Brush _detailTextColor = Brushes.Transparent;
+
         public Brush DetailTextColor {
             get {
                 return _detailTextColor;
@@ -368,44 +616,6 @@
                 if (_detailTextColor != value) {
                     _detailTextColor = value;
                     OnPropertyChanged(nameof(DetailTextColor));
-                }
-            }
-        }
-
-        private BitmapSource _titleSwirl = null;
-        public BitmapSource TitleSwirl {
-            get {
-                return _titleSwirl;
-            }
-            set {
-                if(_titleSwirl != value) {
-                    _titleSwirl = value;
-                    OnPropertyChanged(nameof(TitleSwirl));
-                }
-            }
-        }
-
-        private BitmapSource _icon = null;
-        public BitmapSource Icon {
-            get {
-                return _icon;
-            }
-            set {
-                if (_icon != value) {
-                    _icon = value;
-                    OnPropertyChanged(nameof(Icon));
-                }
-            }
-        }
-
-        public string Title {
-            get {
-                return CopyItem.Title;
-            }
-            set {
-                if (CopyItem.Title != value) {
-                    CopyItem.Title = value;
-                    OnPropertyChanged(nameof(Title));
                 }
             }
         }
@@ -422,6 +632,21 @@
             }
         }
 
+        private Brush _tileBorderBrush = Brushes.Transparent;
+        public Brush TileBorderBrush {
+            get {
+                return _tileBorderBrush;
+            }
+            set {
+                if (_tileBorderBrush != value) {
+                    _tileBorderBrush = value;
+                    OnPropertyChanged(nameof(TileBorderBrush));
+                }
+            }
+        }
+        #endregion
+
+        #region State Properties
         private bool _isTitleTextBoxFocused = false;
         public bool IsTitleTextBoxFocused {
             get {
@@ -461,45 +686,6 @@
             }
         }
 
-        private Visibility _tileTitleTextBlockVisibility = Visibility.Visible;
-        public Visibility TileTitleTextBlockVisibility {
-            get {
-                return _tileTitleTextBlockVisibility;
-            }
-            set {
-                if (_tileTitleTextBlockVisibility != value) {
-                    _tileTitleTextBlockVisibility = value;
-                    OnPropertyChanged(nameof(TileTitleTextBlockVisibility));
-                }
-            }
-        }
-
-        private Visibility _tileTitleTextBoxVisibility = Visibility.Collapsed;
-        public Visibility TileTitleTextBoxVisibility {
-            get {
-                return _tileTitleTextBoxVisibility;
-            }
-            set {
-                if (_tileTitleTextBoxVisibility != value) {
-                    _tileTitleTextBoxVisibility = value;
-                    OnPropertyChanged(nameof(TileTitleTextBoxVisibility));
-                }
-            }
-        }
-
-        private double _tileTitleIconSize = MpMeasurements.Instance.ClipTileTitleIconSize;
-        public double TileTitleIconSize {
-            get {
-                return _tileTitleIconSize;
-            }
-            set {
-                if (_tileTitleIconSize != value) {
-                    _tileTitleIconSize = value;
-                    OnPropertyChanged(nameof(TileTitleIconSize));
-                }
-            }
-        }
-
         public bool IsNew {
             get {
                 return CopyItem.CopyItemId == 0;
@@ -531,209 +717,25 @@
                 }
             }
         }
-
-        private Brush _tileBorderBrush = Brushes.Transparent;
-        public Brush TileBorderBrush {
-            get {
-                return _tileBorderBrush;
-            }
-            set {
-                if (_tileBorderBrush != value) {
-                    _tileBorderBrush = value;
-                    OnPropertyChanged(nameof(TileBorderBrush));
-                }
-            }
-        }
-
-        private int _sortOrderIdx = -1;
-        public int SortOrderIdx {
-            get {
-                return _sortOrderIdx;
-            }
-            set {
-                if (_sortOrderIdx != value) {
-                    _sortOrderIdx = value;
-                    OnPropertyChanged(nameof(SortOrderIdx));
-                }
-            }
-        }
-
-        private Visibility _tileVisibility = Visibility.Visible;
-        public Visibility TileVisibility {
-            get {
-                return _tileVisibility;
-            }
-            set {
-                if (_tileVisibility != value) {
-                    _tileVisibility = value;
-                    OnPropertyChanged(nameof(TileVisibility));
-                }
-            }
-        }
-
-        private double _tileSize = MpMeasurements.Instance.ClipTileSize;
-        public double TileSize {
-            get {
-                return _tileSize;
-            }
-            set {
-                if (_tileSize != value) {
-                    _tileSize = value;
-                    OnPropertyChanged(nameof(TileSize));
-                }
-            }
-        }
-
-        private double _tileBorderWidth = MpMeasurements.Instance.ClipTileBorderSize;
-        public double TileBorderWidth {
-            get {
-                return _tileBorderWidth;
-            }
-            set {
-                if (_tileBorderWidth != value) {
-                    _tileBorderWidth = value;
-                    OnPropertyChanged(nameof(TileBorderWidth));
-                }
-            }
-        }
-
-        private double _tileBorderHeight = MpMeasurements.Instance.ClipTileBorderSize;
-        public double TileBorderHeight {
-            get {
-                return _tileBorderHeight;
-            }
-            set {
-                if (_tileBorderHeight != value) {
-                    _tileBorderHeight = value;
-                    OnPropertyChanged(nameof(TileBorderHeight));
-                }
-            }
-        }
-
-        private double _tileTitleHeight = MpMeasurements.Instance.ClipTileTitleHeight;
-        public double TileTitleHeight {
-            get {
-                return _tileTitleHeight;
-            }
-            set {
-                if (_tileTitleHeight != value) {
-                    _tileTitleHeight = value;
-                    OnPropertyChanged(nameof(TileTitleHeight));
-                }
-            }
-        }
-
-        private double _tileContentHeight = MpMeasurements.Instance.ClipTileContentHeight;
-        public double TileContentHeight {
-            get {
-                return _tileContentHeight;
-            }
-            set {
-                if (_tileContentHeight != value) {
-                    _tileContentHeight = value;
-                    OnPropertyChanged(nameof(TileContentHeight));
-                }
-            }
-        }
-
-        private double _tileBorderThickness = MpMeasurements.Instance.ClipTileBorderThickness;
-        public double TileBorderThickness {
-            get {
-                return _tileBorderThickness;
-            }
-            set {
-                if (_tileBorderThickness != value) {
-                    _tileBorderThickness = value;
-                    OnPropertyChanged(nameof(TileBorderThickness));
-                }
-            }
-        }
-
-        private double _tileMargin = MpMeasurements.Instance.ClipTileMargin;
-        public double TileMargin {
-            get {
-                return _tileMargin;
-            }
-            set {
-                if (_tileMargin != value) {
-                    _tileMargin = value;
-                    OnPropertyChanged(nameof(TileMargin));
-                }
-            }
-        }
-
-        private double _tileDropShadowRadius = MpMeasurements.Instance.ClipTileDropShadowRadius;
-        public double TileDropShadowRadius {
-            get {
-                return _tileDropShadowRadius;
-            }
-            set {
-                if (_tileDropShadowRadius != value) {
-                    _tileDropShadowRadius = value;
-                    OnPropertyChanged(nameof(TileDropShadowRadius));
-                }
-            }
-        }
-        public string CopyItemAppName {
-            get {
-                return CopyItem.App.AppName;
-            }
-        }
-        public int CopyItemUsageScore {
-            get {
-                return CopyItem.RelevanceScore;
-            }
-        }
-
-        public int CopyItemAppId {
-            get {
-                return CopyItem.AppId;
-            }
-        }
-
-        public MpCopyItemType CopyItemType {
-            get {
-                return CopyItem.CopyItemType;
-            }
-        }
-
-        public DateTime CopyItemCreatedDateTime {
-            get {
-                return CopyItem.CopyDateTime;
-            }
-        }
-
-        private MpCopyItem _copyItem;
-        public MpCopyItem CopyItem {
-            get {
-                return _copyItem;
-            }
-            set {
-                if (_copyItem != value) {
-                    _copyItem = value;
-                    OnPropertyChanged(nameof(CopyItem));
-                }
-            }
-        }
+        #endregion
 
         #endregion        
 
         #region Public Methods
+        public MpClipTileViewModel() : this(new MpCopyItem(), null) { }
 
         public MpClipTileViewModel(MpCopyItem ci, MpClipTrayViewModel parent) {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
-                    case nameof(CopyItemId):
-                        CopyItem.CopyItemId = CopyItemId;
-                        break;
                     case nameof(IsEditingTile):
                         if(IsEditingTile) {
-                            //RtbVisibility = Visibility.Collapsed;
                             EditToolbarVisibility = Visibility.Visible;
                         } else {
-                            //RtbVisibility = Visibility.Visible;
                             EditToolbarVisibility = Visibility.Collapsed;
                         }
+                        break;
+                    case nameof(CopyItemId):
+                        CopyItem.CopyItemId = CopyItemId;
                         break;
                     case nameof(IsEditingTitle):
                         if (IsEditingTitle) {
@@ -779,6 +781,10 @@
                             }
                         }
                         break;
+                    case nameof(RichText):
+                        CopyItem.ItemRichText = RichText;
+                        CopyItem.WriteToDatabase();
+                        break;
                 }
             };
 
@@ -818,6 +824,13 @@
             clipTileBorder.LostFocus += (s, e4) => {
                 if(!IsSelected) {
                     IsEditingTitle = false;
+                }
+            };
+            clipTileBorder.PreviewMouseLeftButtonDown += (s, e5) => {
+                if (e5.ClickCount == 2) {
+                    //only for richtext type
+                    EditClipTextCommand.Execute(null);
+                    return;
                 }
             };
         }
@@ -868,47 +881,66 @@
 
         public void ClipTileEditableRichTextBox_Loaded(object sender, RoutedEventArgs e) {
             var etrtb = (MpEditableTokenizedRichTextBox)sender;
-            double baseWidth = TileBorderWidth - 20;
+            etrtb.ContextMenu = (ContextMenu)etrtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+            etrtb.TokenizedRichTextBox.ContextMenu = etrtb.ContextMenu;
+
             etrtb.Toolbar.IsVisibleChanged += (s, e1) => {
-                //var etrtb = (MpEditableTokenizedRichTextBox)((UIElement)s).GetVisualAncestor<MpEditableTokenizedRichTextBox>();
                 var cb = (MpClipBorder)etrtb.GetVisualAncestor<MpClipBorder>();
-                //var trtb = (MpTokenizedRichTextBox)cb.FindName("ClipTileRichTextBox");
+                var trtb = (MpTokenizedRichTextBox)cb.FindName("TokenizedRichTextBox");
                 var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
                 var titleSwirl = (Image)cb.FindName("TitleSwirl");
 
-                double fromWidth = 0;
-                double toWidth = 0;
-                double fromLeft = 0;
-                double toLeft = 0;
-                if (IsEditingTile) {
-                    fromWidth = baseWidth;
-                    toWidth = Math.Max(800, etrtb.TokenizedRichTextBox.Document.GetFormattedText().WidthIncludingTrailingWhitespace + 20);
+                double fromWidthTile = 0;
+                double toWidthTile = 0;
+                double fromWidthContent = 0;
+                double toWidthContent = 0;
+                double scrollbarWidth = 20;
+
+                if (etrtb.Toolbar.Visibility == Visibility.Visible) {
+                    fromWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
+                    fromWidthContent = fromWidthTile;
+                    toWidthTile = Math.Max(625, etrtb.TokenizedRichTextBox.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
+                    toWidthContent = toWidthTile - scrollbarWidth;
                     etrtb.Focusable = true;
-                    etrtb.TokenizedRichTextBox.Focusable = true;
+                    etrtb.TokenizedRichTextBox.Focusable = true;                    
+                    etrtb.TokenizedRichTextBox.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+                    etrtb.TokenizedRichTextBox.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
                 } else {
-                    etrtb.UpdateDocumentBindings();
-                    fromWidth = etrtb.TokenizedRichTextBox.Width;
-                    toWidth = baseWidth;
+                    RichText = MpHelpers.ConvertFlowDocumentToRichText(etrtb.TokenizedRichTextBox.Document);
+                    fromWidthTile = etrtb.Width;
+                    fromWidthContent = fromWidthTile - scrollbarWidth;
+                    toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
+                    toWidthContent = toWidthTile;
                     etrtb.Focusable = false;
                     etrtb.TokenizedRichTextBox.Focusable = false;
+                    etrtb.TokenizedRichTextBox.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                    etrtb.TokenizedRichTextBox.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
                 }
-                fromLeft = Canvas.GetLeft(titleIconImageButton);
-                toLeft = toWidth - TileTitleHeight - 10;
+                double fromLeft = Canvas.GetLeft(titleIconImageButton);
+                double toLeft = toWidthTile - TileTitleHeight - 10;
 
-                DoubleAnimation wa = new DoubleAnimation();
-                wa.From = fromWidth;
-                wa.To = toWidth;
-                wa.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
+                DoubleAnimation twa = new DoubleAnimation();
+                twa.From = fromWidthTile;
+                twa.To = toWidthTile;
+                twa.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
                 CubicEase easing = new CubicEase();
                 easing.EasingMode = EasingMode.EaseIn;
-                wa.EasingFunction = easing;
-                wa.Completed += (s1, e2) => {
+                twa.EasingFunction = easing;
+                twa.Completed += (s1, e2) => {
                     ((MpMultiSelectListBox)cb.GetVisualAncestor<MpMultiSelectListBox>()).ScrollIntoView(cb);
                 };
-                cb.BeginAnimation(MpClipBorder.WidthProperty, wa);
-                etrtb.BeginAnimation(MpEditableTokenizedRichTextBox.WidthProperty, wa);
-                etrtb.TokenizedRichTextBox.BeginAnimation(RichTextBox.WidthProperty, wa);
-                titleSwirl.BeginAnimation(Image.WidthProperty, wa);
+                cb.BeginAnimation(MpClipBorder.WidthProperty, twa);
+                etrtb.BeginAnimation(MpEditableTokenizedRichTextBox.WidthProperty, twa);
+                titleSwirl.BeginAnimation(Image.WidthProperty, twa);
+
+                DoubleAnimation cwa = new DoubleAnimation();
+                cwa.From = fromWidthContent;
+                cwa.To = toWidthContent;
+                cwa.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
+                easing = new CubicEase();
+                easing.EasingMode = EasingMode.EaseIn;
+                cwa.EasingFunction = easing;
+                etrtb.TokenizedRichTextBox.BeginAnimation(RichTextBox.WidthProperty, cwa);
 
                 DoubleAnimation la = new DoubleAnimation();
                 la.From = fromLeft;
@@ -917,12 +949,6 @@
                 la.EasingFunction = easing;
                 titleIconImageButton.BeginAnimation(Canvas.LeftProperty, la);
             };
-
-            etrtb.ContextMenu = (ContextMenu)etrtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
-            etrtb.TokenizedRichTextBox.ContextMenu = etrtb.ContextMenu;
-            etrtb.TokenizedRichTextBox.Width = baseWidth;
-
-            etrtb.SearchText = string.Empty;
         }
 
         public void ClipTileImage_Loaded(object sender, RoutedEventArgs e) {
@@ -930,25 +956,24 @@
             img.ContextMenu = (ContextMenu)img.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
             //aspect ratio
             double ar = Bmp.Width / Bmp.Height;
+            double contentWidth = 0;
+            double contentHeight = 0;
             if (Bmp.Width >= Bmp.Height) {
-                ContentWidth = TileBorderWidth;
-                ContentHeight = ContentWidth * ar;
+                contentWidth = TileBorderWidth;
+                contentHeight = contentWidth * ar;
             } else {
-                ContentHeight = TileContentHeight;
-                ContentWidth = ContentHeight * ar;
+                contentHeight = TileContentHeight;
+                contentWidth = contentHeight * ar;
             }
-            MpHelpers.ResizeBitmapSource(Bmp, new Size((int)ContentWidth, (int)ContentHeight));
+            MpHelpers.ResizeBitmapSource(Bmp, new Size((int)contentWidth, (int)contentHeight));
 
-            Canvas.SetLeft(img, (TileBorderWidth / 2) - (ContentWidth / 2));
-            Canvas.SetTop(img, (TileContentHeight / 2) - (ContentHeight / 2));
+            Canvas.SetLeft(img, (TileBorderWidth / 2) - (contentWidth / 2));
+            Canvas.SetTop(img, (TileContentHeight / 2) - (contentHeight / 2));
         }
 
         public void ClipTileFileListBox_Loaded(object sender, RoutedEventArgs e) {
             var flb = (ListBox)sender;
             flb.ContextMenu = (ContextMenu)flb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
-
-            ContentWidth = Bmp.Width;
-            ContentHeight = Bmp.Height;
         }
 
         public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
@@ -1052,20 +1077,22 @@
         public void ContextMenuMouseLeftButtonUpOnSearchGoogle() {
             System.Diagnostics.Process.Start(@"https://www.google.com/search?q=" + System.Uri.EscapeDataString(PlainText));
         }
+
         public void ContextMenuMouseLeftButtonUpOnSearchBing() {
             System.Diagnostics.Process.Start(@"https://www.bing.com/search?q=" + System.Uri.EscapeDataString(PlainText));
         }
+
         public void ContextMenuMouseLeftButtonUpOnSearchDuckDuckGo() {
             System.Diagnostics.Process.Start(@"https://duckduckgo.com/?q=" + System.Uri.EscapeDataString(PlainText));
         }
+
         public void ContextMenuMouseLeftButtonUpOnSearchYandex() {
             System.Diagnostics.Process.Start(@"https://yandex.com/search/?text=" + System.Uri.EscapeDataString(PlainText));
         }
 
         #endregion
 
-        #region Private Methods       
-
+        #region Private Methods 
         private string GetCurrentDetail(int detailId) {
             string info = "I dunno";// string.Empty;
             switch (detailId) {
@@ -1099,6 +1126,7 @@
         #endregion
 
         #region Commands
+
         private RelayCommand _editClipTextCommand;
         public ICommand EditClipTextCommand {
             get {
@@ -1109,11 +1137,11 @@
             }
         }
         private bool CanEditClipText() {
-            return ClipTrayViewModel.SelectedClipTiles.Count == 1 && CopyItemType == MpCopyItemType.RichText && !IsEditingTile;
+            return ClipTrayViewModel.SelectedClipTiles.Count == 1 && 
+                  CopyItemType == MpCopyItemType.RichText && 
+                  !IsEditingTile;
         }
         private void EditClipText() {
-            //RtbVisibility = Visibility.Collapsed;
-            //ErtbVisibility = Visibility.Visible;
             IsEditingTile = true;
             //all other action is handled in the ertb visibility changed handler in ertb_loaded
         }
