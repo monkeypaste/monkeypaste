@@ -209,6 +209,36 @@
                        Stretch="None"
                        SnapsToDevicePixels="True" />
 
+                <Button Click="OnAddTemplateButtonClick"
+                        ToolTip="Add Template"
+                        Template="{StaticResource FlatButtonControlTemplate}"
+                        Margin="0,1,0,1">
+                    <Image Source="/Resources/Images/MpRichTextBox/templateadd.png"
+                           Stretch="None"
+                           SnapsToDevicePixels="True" />
+                </Button>
+
+                <Button Click="OnRenameTemplateButtonClick"
+                        ToolTip="Rename Template"
+                        Template="{StaticResource FlatButtonControlTemplate}"
+                        Margin="0,1,0,1">
+                    <Image Source="/Resources/Images/MpRichTextBox/templaterename.png"
+                           Stretch="None"
+                           SnapsToDevicePixels="True" />
+                </Button>
+
+                <Button Click="OnRemoveTemplateButtonClick"
+                        ToolTip="Delete Template"
+                        Template="{StaticResource FlatButtonControlTemplate}"
+                        Margin="0,1,0,1">
+                    <Image Source="/Resources/Images/MpRichTextBox/templateremove.png"
+                           Stretch="None"
+                           SnapsToDevicePixels="True" />
+                </Button>
+
+                <Image Source="/Resources/Images/MpRichTextBox/separator.png"
+                       Stretch="None"
+                       SnapsToDevicePixels="True" />
                 <ToggleButton x:Name="BoldButton"
                               Command="EditingCommands.ToggleBold"
                               CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
@@ -248,7 +278,7 @@
                 <Button ToolTip="Format as normal (non-code) text"
                         Template="{StaticResource FlatButtonControlTemplate}"
                         Margin="0,1,0,1"
-                        Visibility="{Binding Path=CodeControlsVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                        Visibility="{Binding ElementName=EditableTokenizedRichTextBox, Path=CodeControlsVisibility}"
                         Click="OnNormalTextClick">
                     <Image Source="/Resources/Images/MpRichTextBox/normaltext.png"
                            Stretch="None"
@@ -258,7 +288,7 @@
                 <Button ToolTip="Format as code block"
                         Template="{StaticResource FlatButtonControlTemplate}"
                         Margin="0,1,0,1"
-                        Visibility="{Binding Path=CodeControlsVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                        Visibility="{Binding ElementName=EditableTokenizedRichTextBox, Path=CodeControlsVisibility}"
                         Click="OnCodeBlockClick">
                     <Image Source="/Resources/Images/MpRichTextBox/codeblock.png"
                            Stretch="None"
@@ -268,7 +298,7 @@
                 <Button ToolTip="Format as inline code"
                         Template="{StaticResource FlatButtonControlTemplate}"
                         Margin="0,1,0,1"
-                        Visibility="{Binding Path=CodeControlsVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                        Visibility="{Binding ElementName=EditableTokenizedRichTextBox, Path=CodeControlsVisibility}"
                         Click="OnInlineCodeClick">
                     <Image Source="/Resources/Images/MpRichTextBox/codeinline.png"
                            Stretch="None"

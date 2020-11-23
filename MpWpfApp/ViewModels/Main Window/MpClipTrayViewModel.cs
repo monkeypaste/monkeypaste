@@ -403,6 +403,12 @@ namespace MpWpfApp {
             }
         }
 
+        public void ClearClipEdits() {
+            foreach (var clip in this) {
+                clip.IsEditingTile = false;
+                clip.IsEditingTitle = false;
+            }
+        }
         public void ResetClipSelection() {
             ClearClipSelection();
             if (VisibileClipTiles.Count > 0) {

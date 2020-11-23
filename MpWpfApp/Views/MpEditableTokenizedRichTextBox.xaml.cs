@@ -107,7 +107,7 @@ namespace MpWpfApp {
         [Browsable(true)]
         [Category("Visibility")]
         [Description("Whether the code controls are visible in the toolbar.")]
-        [DefaultValue("Visible")]
+        [DefaultValue("Collapsed")]
         public Visibility CodeControlsVisibility {
             get { 
                 return (Visibility)GetValue(CodeControlsVisibilityProperty); 
@@ -119,6 +119,25 @@ namespace MpWpfApp {
         public static readonly DependencyProperty CodeControlsVisibilityProperty =
             DependencyProperty.RegisterAttached(
                 nameof(CodeControlsVisibility), 
+                typeof(Visibility),
+                typeof(MpEditableTokenizedRichTextBox));
+
+        //------------------------------------------------------------------------------------
+        [Browsable(true)]
+        [Category("Visibility")]
+        [Description("Whether the code controls are visible in the toolbar.")]
+        [DefaultValue("Visible")]
+        public Visibility AddTemplateButtonVisibility {
+            get {
+                return (Visibility)GetValue(AddTemplateButtonVisibilityProperty);
+            }
+            set {
+                SetValue(AddTemplateButtonVisibilityProperty, value);
+            }
+        }
+        public static readonly DependencyProperty AddTemplateButtonVisibilityProperty =
+            DependencyProperty.RegisterAttached(
+                nameof(AddTemplateButtonVisibility),
                 typeof(Visibility),
                 typeof(MpEditableTokenizedRichTextBox));
 
@@ -167,14 +186,14 @@ namespace MpWpfApp {
         //                thisControl.TokenizedRichTextBox.Document = doc;
 
         //                thisControl.RichText = MpHelpers.ConvertFlowDocumentToRichText(thisControl.TokenizedRichTextBox.Document);
-                        
+
         //                // Reset flag
         //                thisControl._textHasChanged = false;
         //            }
         //        });        
 
         //------------------------------------------------------------------------------------
-       
+
         #endregion
 
         #region Constructor
@@ -221,7 +240,9 @@ namespace MpWpfApp {
         /// Changes the font family of selected text.
         /// </summary>
         private void OnFontFamilyComboSelectionChanged(object sender, SelectionChangedEventArgs e) {
-            if (FontFamilyCombo.SelectedItem == null) return;
+            if (FontFamilyCombo.SelectedItem == null) {
+                return;
+            }
             var fontFamily = FontFamilyCombo.SelectedItem.ToString();
             var textRange = new TextRange(TokenizedRichTextBox.Selection.Start, TokenizedRichTextBox.Selection.End);
             textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
@@ -232,7 +253,9 @@ namespace MpWpfApp {
         /// </summary>
         private void OnFontSizeComboSelectionChanged(object sender, SelectionChangedEventArgs e) {
             // Exit if no selection
-            if (FontSizeCombo.SelectedItem == null) return;
+            if (FontSizeCombo.SelectedItem == null) {
+                return;
+            }
 
             // clear selection if value unset
             if (FontSizeCombo.SelectedItem.ToString() == "{DependencyProperty.UnsetValue}") {
@@ -295,6 +318,21 @@ namespace MpWpfApp {
             //TokenizedRichTextBox.Width = TokenizedRichTextBox.Document.GetFormattedText().WidthIncludingTrailingWhitespace + 20;
         }
 
+        private void OnAddTemplateButtonClick(object sender, RoutedEventArgs e) {
+            //var textRange = new TextRange(TokenizedRichTextBox.Selection.Start, TokenizedRichTextBox.Selection.End);
+            TokenizedRichTextBox.Selection.Text = string.Empty;
+            MpSubTextTemplateToken sttt = new MpSubTextTemplateToken();
+            sttt.DataContext = new MpSubTextTemplateTokenViewModel();
+            new InlineUIContainer(sttt, TokenizedRichTextBox.CaretPosition);
+        }
+
+        private void OnRenameTemplateButtonClick(object sender, RoutedEventArgs e) {
+
+        }
+
+        private void OnRemoveTemplateButtonClick(object sender, RoutedEventArgs e) {
+
+        }
         #endregion
 
         #region Public Methods
@@ -345,7 +383,9 @@ namespace MpWpfApp {
 
             // Exit if currently-selected button is clicked
             if (clickedButton == currentSelectedButton) {
-                if (ignoreClickWhenSelected) clickedButton.IsChecked = true;
+                if (ignoreClickWhenSelected) {
+                    clickedButton.IsChecked = true;
+                }
                 return;
             }
 
@@ -370,13 +410,13 @@ namespace MpWpfApp {
             // Set font size combo
             var fontSize = textRange.GetPropertyValue(TextElement.FontSizeProperty);
             FontSizeCombo.Text = fontSize.ToString();
-
             // Set Font buttons
-            if (!String.IsNullOrEmpty(textRange.Text)) {
-                BoldButton.IsChecked = textRange.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
-                ItalicButton.IsChecked = textRange.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
-                UnderlineButton.IsChecked = textRange.GetPropertyValue(Inline.TextDecorationsProperty).Equals(TextDecorations.Underline);
-            }
+            //if (!String.IsNullOrEmpty(textRange.Text)) {
+
+            //}
+            BoldButton.IsChecked = textRange.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
+            ItalicButton.IsChecked = textRange.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
+            UnderlineButton.IsChecked = textRange.GetPropertyValue(Inline.TextDecorationsProperty).Equals(TextDecorations.Underline);
 
             // Set Alignment buttons
             LeftButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
@@ -385,6 +425,6 @@ namespace MpWpfApp {
             JustifyButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Justify);
         }
 
-        #endregion
+        #endregion        
     }
 }

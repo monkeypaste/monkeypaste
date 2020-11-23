@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpSubTextTokenCollectionViewModel : MpObservableCollectionViewModel<MpSubTextTokenViewModel> {
+    public class MpSubTextTokenCollectionViewModel : MpObservableCollectionViewModel<MpSubTextTemplateTokenViewModel> {
         #region View Models
         private MpClipTileViewModel _clipTileViewModel = null;
         public MpClipTileViewModel ClipTileViewModel {

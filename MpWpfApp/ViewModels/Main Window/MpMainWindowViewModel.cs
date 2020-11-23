@@ -336,6 +336,8 @@ namespace MpWpfApp {
             IsOpen = false;
             var mw = (MpMainWindow)Application.Current.MainWindow;
 
+            ClipTrayViewModel.ClearClipEdits();
+
             DoubleAnimation ta = new DoubleAnimation();
             ta.From = _endMainWindowTop;
             ta.To = _startMainWindowTop;

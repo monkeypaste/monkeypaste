@@ -373,7 +373,6 @@ namespace MpWpfApp {
         //}
         #endregion
 
-
         #region Commands
         private RelayCommand _assignHotkeyCommand;
         public ICommand AssignHotkeyCommand {

@@ -220,6 +220,37 @@ namespace MpWpfApp {
             }
             return conn;
         }
+        public int ExecuteWrite(string query, Dictionary<string, object> args) {
+            int numberOfRowsAffected;
+            using (var con = SetConnection()) {
+                con.Open();
+                using (var cmd = new SQLiteCommand(query, con)) {
+                    foreach (var pair in args) {
+                        cmd.Parameters.AddWithValue(pair.Key, pair.Value);
+                    }
+                    numberOfRowsAffected = cmd.ExecuteNonQuery();
+                }
+                return numberOfRowsAffected;
+            }
+        }
+        private DataTable Execute(string query, Dictionary<string, object> args) {
+            if (string.IsNullOrEmpty(query.Trim())) {
+                return null;
+            }
+            using (var con = SetConnection()) {
+                con.Open();
+                using (var cmd = new SQLiteCommand(query, con)) {
+                    foreach (KeyValuePair<string, object> entry in args) {
+                        cmd.Parameters.AddWithValue(entry.Key, entry.Value);
+                    }
+                    var da = new SQLiteDataAdapter(cmd);
+                    var dt = new DataTable();
+                    da.Fill(dt);
+                    da.Dispose();
+                    return dt;
+                }
+            }
+        }
         public void ExecuteNonQuery(string sql, List<string> paramList = null, List<object> paramValueList = null) {
             if (NoDb || _passwordAttempts > Properties.Settings.Default.MaxDbPasswordAttempts) {
                 return;
@@ -576,6 +607,17 @@ namespace MpWpfApp {
                     , TokenText text NOT NULL
                     , CONSTRAINT FK_MpSubTextToken_0_0 FOREIGN KEY (fk_MpSubTextTokenTypeId) REFERENCES MpSubTextTokenType (pk_MpSubTextTokenTypeId) 
                     , CONSTRAINT FK_MpSubTextToken_1_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
+                    );
+                    ---------------------------------------------------------------------------------------------------------------------
+                    CREATE TABLE MpRichTextStyle (
+                      pk_MpRichTextStyleId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , fk_MpColorId1 integer NOT NULL
+                    , fk_MpColorId2 integer NOT NULL
+                    , FontFamily text NOT NULL
+                    , FontStyle integer NOT NULL
+                    , FontSize real NOT NULL
+                    , CONSTRAINT FK_MpRichTextStyle_0_0 FOREIGN KEY (fk_MpColorId1) REFERENCES MpColor (pk_MpColorId) 
+                    , CONSTRAINT FK_MpRichTextStyle_1_0 FOREIGN KEY (fk_MpColorId2) REFERENCES MpColor (pk_MpColorId) 
                     );
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPasteHistory (

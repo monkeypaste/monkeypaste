@@ -190,10 +190,34 @@ namespace MpWpfApp {
         public override void WriteToDatabase() {
             //if new
             if (SubTextTokenId == 0) {
-                MpDb.Instance.ExecuteNonQuery("insert into MpSubTextToken(fk_MpCopyItemId,fk_MpSubTextTokenTypeId,StartIdx,EndIdx,BlockIdx,InlineIdx,TokenText) values(" + CopyItemId + "," + (int)TokenType + "," + StartIdx + "," + EndIdx + "," + BlockIdx + "," + InlineIdx + ",'" + TokenText + "')");
+                //MpDb.Instance.ExecuteNonQuery("insert into MpSubTextToken(fk_MpCopyItemId,fk_MpSubTextTokenTypeId,StartIdx,EndIdx,BlockIdx,InlineIdx,TokenText) values(" + CopyItemId + "," + (int)TokenType + "," + StartIdx + "," + EndIdx + "," + BlockIdx + "," + InlineIdx + ",'" + TokenText + "')");
+                MpDb.Instance.ExecuteWrite(
+                    "insert into MpSubTextToken(fk_MpCopyItemId,fk_MpSubTextTokenTypeId,StartIdx,EndIdx,BlockIdx,InlineIdx,TokenText) values(@copyItemId,@tokenType,@sIdx,@eIdx,@bIdx,@iIdx,@tokenText)", 
+                    new Dictionary<string, object> {
+                        { "@copyItemId", CopyItemId },
+                        { "@tokenType", (int)TokenType },
+                        { "@sIdx", StartIdx },
+                        { "@eIdx", EndIdx },
+                        { "@bIdx", BlockIdx },
+                        { "@iIdx", InlineIdx },
+                        { "@tokenText", TokenText } 
+                    });
+
                 SubTextTokenId = MpDb.Instance.GetLastRowId("MpSubTextToken", "pk_MpSubTextTokenId");
             } else {
-                MpDb.Instance.ExecuteNonQuery("update MpSubTextToken set fk_MpCopyItemId=" + CopyItemId + ", fk_MpSubTextTokenTypeId=" + (int)TokenType + ", StartIdx=" + StartIdx + ", EndIdx=" + EndIdx + ",BlockIdx=" + BlockIdx + ",InlineIdx=" + InlineIdx + ",TokenText='" + TokenText + "' where pk_MpSubTextTokenId=" + SubTextTokenId);
+                //MpDb.Instance.ExecuteNonQuery("update MpSubTextToken set fk_MpCopyItemId=" + CopyItemId + ", fk_MpSubTextTokenTypeId=" + (int)TokenType + ", StartIdx=" + StartIdx + ", EndIdx=" + EndIdx + ",BlockIdx=" + BlockIdx + ",InlineIdx=" + InlineIdx + ",TokenText='" + TokenText + "' where pk_MpSubTextTokenId=" + SubTextTokenId);
+                MpDb.Instance.ExecuteWrite(
+                    "update MpSubTextToken set fk_MpCopyItemId=@copyItemId, fk_MpSubTextTokenTypeId=@tokenType, StartIdx=@sIdx, EndIdx=@eIdx, BlockIdx=@bIdx, InlineIdx=@iIdx, TokenText=@tokenText where pk_MpSubTextTokenId=@subTextTokenId"
+                    new Dictionary<string, object> {
+                        { "@copyItemId", CopyItemId },
+                        { "@tokenType", (int)TokenType },
+                        { "@sIdx", StartIdx },
+                        { "@eIdx", EndIdx },
+                        { "@bIdx", BlockIdx },
+                        { "@iIdx", InlineIdx },
+                        { "@tokenText", TokenText },
+                        { "@subTextTokenId", SubTextTokenId }
+                    });
             }
         }
         public void DeleteFromDatabase() {
