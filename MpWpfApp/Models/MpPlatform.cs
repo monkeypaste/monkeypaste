@@ -30,7 +30,11 @@ namespace MpWpfApp {
             Version = version;
         }
         public MpPlatform(int platformId) {
-            DataTable dt = MpDb.Instance.Execute("select * from MpPlatform where pk_MpPlatformId=" + platformId);
+            DataTable dt = MpDb.Instance.Execute(
+                "select * from MpPlatform where pk_MpPlatformId=@pid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                    { "@pid", platformId }
+                });
             if (dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
@@ -46,17 +50,27 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase() {
-            if (Version == null || Version == string.Empty || MpDb.Instance.NoDb) {
+            if (string.IsNullOrEmpty(Version)) {
                 Console.WriteLine("MpPlatform Error, cannot create nameless tag");
                 return;
             }
             if (PlatformId == 0) {
-                DataTable dt = MpDb.Instance.Execute("select * from MpPlatform where pk_MpPlatformId=" + PlatformId);
+                DataTable dt = MpDb.Instance.Execute(
+                "select * from MpPlatform where pk_MpPlatformId=@pid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                    { "@pid", PlatformId }
+                });
                 //if tag already exists just populate this w/ its data
                 if (dt != null && dt.Rows.Count > 0) {
                     PlatformId = Convert.ToInt32(dt.Rows[0]["pk_MpPlatformId"].ToString());
                 } else {
-                    MpDb.Instance.ExecuteNonQuery("insert into MpPlatform(fk_MpPlatformTypeId,fk_MpDeviceTypeId,Version) values(" + (int)PlatformType + "," + (int)DeviceType + ",'" + Version + "')");
+                    MpDb.Instance.ExecuteWrite(
+                        "insert into MpPlatform(fk_MpPlatformTypeId,fk_MpDeviceTypeId,Version) values(@ptid,@dtid,@v)",
+                        new System.Collections.Generic.Dictionary<string, object> {
+                            { "@ptid", (int)PlatformType },
+                            { "@dtid", (int)DeviceType },
+                            { "@v", Version }
+                        });
                     PlatformId = MpDb.Instance.GetLastRowId("MpPlatform", "pk_MpPlatformId");
                 }
             } else {

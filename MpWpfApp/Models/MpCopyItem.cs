@@ -130,6 +130,7 @@ namespace MpWpfApp {
             newItem.App = new MpApp(sourcePath, false, hwnd);
             newItem.AppId = newItem.App.AppId;
             newItem.Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
+            newItem.ClientId = newItem.Client.ClientId;
             newItem.ItemColor = new MpColor((int)tileColor.R, (int)tileColor.G, (int)tileColor.B, 255);
 
             switch (itemType) {
@@ -164,7 +165,7 @@ namespace MpWpfApp {
         
         public static List<MpCopyItem> GetAllCopyItems() {
             List<MpCopyItem> clips = new List<MpCopyItem>();
-            DataTable dt = MpDb.Instance.Execute("select * from MpCopyItem");
+            DataTable dt = MpDb.Instance.Execute("select * from MpCopyItem", null);
             if (dt != null && dt.Rows.Count > 0) {
                 foreach (DataRow dr in dt.Rows) {
                     clips.Add(new MpCopyItem(dr));
@@ -181,7 +182,11 @@ namespace MpWpfApp {
             if (CopyItemId <= 0) {
                 return 0;
             }
-            DataTable dt = MpDb.Instance.Execute("select * from MpPasteHistory where fk_MpCopyItemId=" + CopyItemId);
+            DataTable dt = MpDb.Instance.Execute(
+                "select * from MpPasteHistory where fk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
             if (dt == null) {
                 return 0;
             }
@@ -339,11 +344,31 @@ namespace MpWpfApp {
             if (CopyItemId <= 0) {
                 return;
             }
-            MpDb.Instance.ExecuteNonQuery("delete from MpPasteHistory where fk_MpCopyItemId=" + CopyItemId);
-            MpDb.Instance.ExecuteNonQuery("delete from MpCopyItem where pk_MpCopyItemId=" + CopyItemId);
-            MpDb.Instance.ExecuteNonQuery("delete from MpSubTextToken where fk_MpCopyItemId=" + CopyItemId);
-            MpDb.Instance.ExecuteNonQuery("delete from MpCopyItemTag where fk_MpCopyItemId=" + this.CopyItemId);
-            MpDb.Instance.ExecuteNonQuery("delete from MpCopyItemSortTypeOrder where fk_MpCopyItemId=" + this.CopyItemId);
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpPasteHistory where fk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpCopyItem where pk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpSubTextToken where fk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpCopyItemTag where fk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpCopyItemSortTypeOrder where fk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
         }
 
         #endregion
@@ -401,7 +426,11 @@ namespace MpWpfApp {
             }
              
             //get app and icon obj
-            DataTable dt = MpDb.Instance.Execute("select * from MpApp where pk_MpAppId=" + AppId);
+            DataTable dt = MpDb.Instance.Execute(
+                "select * from MpApp where pk_MpAppId=@aid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@aid", AppId }
+                    });
             if (dt != null && dt.Rows.Count > 0) {
                 this.App = new MpApp(dt.Rows[0]);
             } else {
@@ -409,7 +438,11 @@ namespace MpWpfApp {
             }
 
             //get subtokens
-            dt = MpDb.Instance.Execute("select * from MpSubTextToken where fk_MpCopyItemId=" + CopyItemId);
+            dt = MpDb.Instance.Execute(
+                "select * from MpSubTextToken where fk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
             if (dt != null && dt.Rows.Count > 0) {
                 foreach (DataRow row in dt.Rows) {
                     SubTextTokenList.Add(new MpSubTextToken(row));
@@ -419,7 +452,11 @@ namespace MpWpfApp {
             }
 
             //get color
-            dt = MpDb.Instance.Execute("select * from MpColor where pk_MpColorId=" + ColorId);
+            dt = MpDb.Instance.Execute(
+                "select * from MpColor where pk_MpColorId=@cid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@cid", ColorId }
+                    });
             if (dt != null && dt.Rows.Count > 0) {
                 this.ItemColor = new MpColor(dt.Rows[0]);
             } else {
@@ -436,7 +473,11 @@ namespace MpWpfApp {
                 this.AppId = App.AppId;
             }
             if (this.AppId == 0) {
-                DataTable dt = MpDb.Instance.Execute("select * from MpApp where pk_MpAppId=" + AppId);
+                DataTable dt = MpDb.Instance.Execute(
+                    "select * from MpApp where pk_MpAppId=@aid",
+                    new System.Collections.Generic.Dictionary<string, object> {
+                            { "@aid", AppId }
+                        });
                 if (dt != null && dt.Rows.Count > 0) {
                     this.App = new MpApp(dt.Rows[0]);
                     this.App.AppId = 0;
@@ -458,21 +499,48 @@ namespace MpWpfApp {
             byte[] itemImage = MpHelpers.ConvertBitmapSourceToByteArray(ItemBitmapSource);
             //if copyitem already exists
             if (this.CopyItemId > 0) {
-                DataTable dt = MpDb.Instance.Execute("select * from MpCopyItem where pk_MpCopyItemId=" + this.CopyItemId);
+                DataTable dt = MpDb.Instance.Execute(
+                    "select * from MpCopyItem where pk_MpCopyItemId=@ciid",
+                    new System.Collections.Generic.Dictionary<string, object> {
+                            { "@ciid", CopyItemId }
+                        });
                 if (dt.Rows.Count > 0) {
-                    MpDb.Instance.ExecuteNonQuery("update MpCopyItem set fk_MpCopyItemTypeId=" + (int)this.CopyItemType + ", fk_MpClientId=" + this.ClientId + ", fk_MpAppId=" + this.AppId + ",fk_MpColorId=" + this.ColorId + ", Title='" + this.Title.Replace("'", "''") + "', CopyCount=" + this.CopyCount + ", ItemText='" + itemText.Replace("'", "''") + "', ItemImage=@0 where pk_MpCopyItemId=" + this.CopyItemId, new List<string>() { "@0" }, new List<object>() { itemImage });
+                    MpDb.Instance.ExecuteWrite(
+                        "update MpCopyItem set fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemImage=@ii where pk_MpCopyItemId=@ciid",
+                        new Dictionary<string, object> {
+                            { "@citd", (int)CopyItemType },
+                            { "@cid", ClientId },
+                            { "@aid", AppId },
+                            { "@clrId", ColorId },
+                            { "@t", Title },
+                            { "@cc", CopyCount },
+                            { "@it", itemText },
+                            { "@ii", itemImage},
+                            { "@ciid", CopyItemId},
+                        });
+                    
                 } else {
                     Console.WriteLine("MpCopyItem error cannot find pk of existing item");
                     return;
                 }
                 isNew = false;
             } else {
-                if (MpDb.Instance.NoDb) {
-                    CopyItemId = ++_CopyItemCount;
-                    MapDataToColumns();
-                    return;
-                }
-                MpDb.Instance.ExecuteNonQuery("insert into MpCopyItem(fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) values (" + (int)this.CopyItemType + "," + MpDb.Instance.Client.ClientId + "," + this.AppId + "," + this.ColorId + ",'" + this.Title + "','" + this.CopyDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "'," + this.CopyCount + ",'" + itemText.Replace("'", "''") + "',@0);", new List<string>() { "@0" }, new List<object>() { itemImage });
+                MpDb.Instance.ExecuteWrite(
+                    "insert into MpCopyItem(fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) " + 
+                    "values (@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
+                    new Dictionary<string, object> {
+                            { "@citd", (int)CopyItemType },
+                            { "@cid", ClientId },
+                            { "@aid", AppId },
+                            { "@clrId", ColorId },
+                            { "@t", Title },
+                            { "@cdt", CopyDateTime.ToString("yyyy-MM-dd HH:mm:ss") },
+                            { "@cc", CopyCount },
+                            { "@it", itemText },
+                            { "@ii", itemImage},
+                            { "@ciid", CopyItemId},
+                        });
+                //+ (int)this.CopyItemType + "," + MpDb.Instance.Client.ClientId + "," + this.AppId + "," + this.ColorId + ",'" + this.Title + "','" + this.CopyDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "'," + this.CopyCount + ",'" + itemText.Replace("'", "''") + "',@0);", new List<string>() { "@0" }, new List<object>() { itemImage });
                 this.CopyItemId = MpDb.Instance.GetLastRowId("MpCopyItem", "pk_MpCopyItemId");
                 isNew = true;
             }

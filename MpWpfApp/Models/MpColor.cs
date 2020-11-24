@@ -21,7 +21,11 @@ namespace MpWpfApp {
         private int _r, _g, _b, _a;
 
         public MpColor(int colorId) {
-            DataTable dt = MpDb.Instance.Execute("select * from MpColor where pk_MpColorId=" + colorId);
+            DataTable dt = MpDb.Instance.Execute(
+                "select * from MpColor where pk_MpColorId=@cid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                    { "@cid", colorId }
+                });
             if (dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
@@ -48,15 +52,37 @@ namespace MpWpfApp {
         }
         public override void WriteToDatabase() {
             if (ColorId == 0) {
-                DataTable dt = MpDb.Instance.Execute("select * from MpColor where R=" + _r + " and G=" + _g + " and B=" + _b + " and A=" + _a);
+                DataTable dt = MpDb.Instance.Execute(
+                    "select * from MpColor where R=@r and G=@g and B=@b and A=@a",
+                    new System.Collections.Generic.Dictionary<string, object> {
+                        { "@r", _r },
+                        { "@g", _g },
+                        { "@b", _b },
+                        { "@a", _a }
+                    });
                 if (dt != null && dt.Rows.Count > 0) {
                     ColorId = Convert.ToInt32(dt.Rows[0]["pk_MpColorId"].ToString());
                 } else {
-                    MpDb.Instance.ExecuteNonQuery("insert into MpColor(R,G,B,A) values(" + _r + "," + _g + "," + _b + "," + _a + ")");
+                    MpDb.Instance.ExecuteWrite(
+                        "insert into MpColor(R,G,B,A) values(@r,@g,@b,@a)",
+                        new System.Collections.Generic.Dictionary<string, object> {
+                        { "@r", _r },
+                        { "@g", _g },
+                        { "@b", _b },
+                        { "@a", _a }
+                    });
                     ColorId = MpDb.Instance.GetLastRowId("MpColor", "pk_MpColorId");
                 }
             } else {
-                MpDb.Instance.ExecuteNonQuery("update MpColor set R=" + _r + ", G=" + _g + ", B=" + _b + ", A=" + _a + " where pk_MpColorId=" + ColorId);
+                MpDb.Instance.ExecuteWrite(
+                    "update MpColor set R=@r, G=@g, B=@b, A=@a where pk_MpColorId=@cid",
+                    new System.Collections.Generic.Dictionary<string, object> {
+                        { "@r", _r },
+                        { "@g", _g },
+                        { "@b", _b },
+                        { "@a", _a },
+                        { "@cid", ColorId }
+                    });
             }
         }
         private void MapDataToColumns() {

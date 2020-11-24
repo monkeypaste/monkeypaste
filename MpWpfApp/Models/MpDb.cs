@@ -20,22 +20,8 @@ namespace MpWpfApp {
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
 
-        private bool _noDb = false;
-        public bool NoDb {
-            get {
-                return _noDb;
-            }
-            set {
-                if (_noDb != value) {
-                    _noDb = value;
-                    if (_noDb == true) {
-                        _isLoaded = true;
-                    }
-                }
-            }
-        }
-
         private int _passwordAttempts = 0;
+
         private bool _isLoaded = false;
         public bool IsLoaded {
             get {
@@ -43,7 +29,6 @@ namespace MpWpfApp {
             }
         }
         public MpDb() {
-            //NoDb = true;
             Init();
         }
         private void Init() {
@@ -53,63 +38,14 @@ namespace MpWpfApp {
             _isLoaded = true;
         }
         private void InitDb() {
-            if (NoDb) {
-                Console.WriteLine("Database exists, skipping Db creation");
-                return;
-            }
-            if (string.IsNullOrEmpty(Properties.Settings.Default.DbPath) || 
-                !Directory.Exists(Path.GetDirectoryName(Properties.Settings.Default.DbPath)) || 
-                !File.Exists(Properties.Settings.Default.DbPath)) {
-                Console.WriteLine(Properties.Settings.Default.DbPath + " does not exist...");
-                MessageBoxResult result = MessageBox.Show("No Database found would you like to load a file?", "No DB Found", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-                if (result == MessageBoxResult.Yes) {
-                    OpenFileDialog openFileDialog = new OpenFileDialog() {
-                        FileName = "Select a db file",
-                        Filter = "Db files (*.db)|*.db",
-                        Title = "Open DB File"
-                    };
-                    bool? openResult = openFileDialog.ShowDialog();
-                    if (openResult != null && openResult.Value) {
-                        Properties.Settings.Default.DbPath = openFileDialog.FileName;
-                        MessageBoxResult autoLoadResult = MessageBox.Show("Would you like to remember this next time?", "Remember Database?", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-                        if (autoLoadResult == MessageBoxResult.Yes) {
-                            Properties.Settings.Default.Save();
-                        }
-                    }
-                } else {
-                    MessageBoxResult newDbResult = MessageBox.Show("Would you like to create a new database and store your history?", "New Database?", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-                    if (newDbResult == MessageBoxResult.Yes) {
-                        SaveFileDialog saveFileDialog = new SaveFileDialog() {
-                            InitialDirectory = AppDomain.CurrentDomain.BaseDirectory,
-                            FileName = "mp.db",
-                            Filter = "Db files (*.db)|*.db",
-                            Title = "Create new DB File"
-                        };
-
-                        bool? saveResult = saveFileDialog.ShowDialog();
-                        if (saveResult != null && saveResult.Value) {
-                            Properties.Settings.Default.DbPath = saveFileDialog.FileName;
-                            MessageBoxResult autoLoadResult = MessageBox.Show("Would you like to remember this next time?", "Remember Database?", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-                            if (autoLoadResult == MessageBoxResult.Yes) {
-                                Properties.Settings.Default.Save();
-                            }
-                            SQLiteConnection.CreateFile(Properties.Settings.Default.DbPath);
-                            MessageBoxResult newDbPasswordResult = MessageBox.Show("Would you like to encrypt database with a password?", "Encrypt?", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-                            if (newDbPasswordResult == MessageBoxResult.Yes) {
-                                throw new Exception("Create WPF password form and show here");
-                                //MpSetDbPasswordForm setDbPasswordForm = new MpSetDbPasswordForm();
-                                //setDbPasswordForm.ShowDialog();
-                                //SetDbPassword(setDbPasswordForm.PasswordTextBox.Text);
-                            }
-                            // TODO Add last msgbox to ask if password should be remembered next time
-                            ExecuteNonQuery(GetCreateString());
-                        } else {
-                            NoDb = true;
-                        }
-                    } else {
-                        NoDb = true;
-                    }
-                }
+            //if db does not exist create it with a random password and set its path and password properties
+            if (string.IsNullOrEmpty(Properties.Settings.Default.DbPath)) {
+                Console.WriteLine("Db does not exist in " + MpHelpers.GetApplicationDirectory());
+                Properties.Settings.Default.DbPath = MpHelpers.GetApplicationDirectory() + "\\" + Properties.Settings.Default.DbName;
+                Properties.Settings.Default.Save();
+                SQLiteConnection.CreateFile(Properties.Settings.Default.DbPath);
+                ExecuteWrite(GetCreateString(), null);
+                SetDbPassword(MpHelpers.GetRandomString());
             }
             Console.WriteLine("Database successfully initialized at " + Properties.Settings.Default.DbPath);
             _isLoaded = true;
@@ -132,72 +68,35 @@ namespace MpWpfApp {
                 foreach (MpCopyItem cib in listB) {
                     //clear merged copyitems db id so it gets a new one in current list
 
-                    if (NoDb) {
-                        cib.CopyItemId = mergedList.Count + 1;
-                    } else {
-                        //cib = MpCopyItem.CreateCopyItem(0,(MpCopyItemType)cib.copyItemTypeId,cib.Client)
-                        cib.WriteToDatabase();
-                    }
+                    cib.WriteToDatabase();
                     mergedList.Add(cib);
                 }
             }
             mergedList = mergedList.OrderByDescending(x => MpTypeHelper.GetPropertyValue(x, "CopyDateTime")).ToList();
             return mergedList;
         }
-        public List<MpSetting> GetAppSettingList() {
-            List<MpSetting> appSettingList = new List<MpSetting>();
-            DataTable dt = Execute("select * from MpSetting where pk_MpSettingId >= 0");
-            if (dt != null) {
-                foreach (DataRow dr in dt.Rows) {
-                    appSettingList.Add(new MpSetting(dr));
-                }
-            }
-            Console.WriteLine(appSettingList.Count + " settings gathered from db: " + Properties.Settings.Default.DbPath);
-            return appSettingList;
-        }
-        public List<MpApp> GetExcludedAppList() {
-            List<MpApp> excludedAppList = new List<MpApp>();
-            DataTable dt = Execute("select * from MpApp where IsAppRejected > 0");
-            if (dt != null) {
-                foreach (DataRow dr in dt.Rows) {
-                    excludedAppList.Add(new MpApp(dr));
-                }
-            }
-            Console.WriteLine(excludedAppList.Count + " exxcluded gathered from db: " + Properties.Settings.Default.DbPath);
-            return excludedAppList;
-        }
-        public List<MpTag> GetTags() {
-            if (NoDb) {
-                return new List<MpTag>() { new MpTag(Properties.Settings.Default.HistoryTagTitle, Colors.Green), new MpTag("Favorites", Colors.Blue) };
-            }
-            //if(_isLoaded == false) {
-            //    InitDb();
-            //}
-            List<MpTag> tagList = new List<MpTag>();
-            DataTable dt = Execute("select * from MpTag");
-            if (dt != null) {
-                foreach (DataRow dr in dt.Rows) {
-                    tagList.Add(new MpTag(dr));
-                }
-            }
-            Console.WriteLine("Init w/ " + tagList.Count + " tags added");
-            return tagList;
-        }
+        
         public void SetDbPassword(string newPassword) {
             if (Properties.Settings.Default.DbPassword != newPassword) {
                 // if db is unpassword protected
                 if (string.IsNullOrEmpty(Properties.Settings.Default.DbPassword)) {
-                    ExecuteNonQuery("PRAGMA key='" + newPassword + "';");
+                    ExecuteWrite(
+                        "PRAGMA key=@np;",
+                        new Dictionary<string, object> {
+                            { "@np", newPassword }
+                        });
                 } else {
-                    ExecuteNonQuery("PRAGMA rekey='" + newPassword + "';");
+                    ExecuteWrite(
+                        "PRAGMA rekey=@np;",
+                        new Dictionary<string, object> {
+                            { "@np", newPassword }
+                        });
                 }
                 Properties.Settings.Default.DbPassword = newPassword;
+                Properties.Settings.Default.Save();
             }
         }
         private SQLiteConnection SetConnection() {
-            if (NoDb) {
-                return null;
-            }
             // see https://stackoverflow.com/questions/1381264/password-protect-a-sqlite-db-is-it-possible
             // about passwords
             SQLiteConnectionStringBuilder connStr = new SQLiteConnectionStringBuilder();
@@ -225,23 +124,27 @@ namespace MpWpfApp {
             using (var con = SetConnection()) {
                 con.Open();
                 using (var cmd = new SQLiteCommand(query, con)) {
-                    foreach (var pair in args) {
-                        cmd.Parameters.AddWithValue(pair.Key, pair.Value);
+                    if(args != null) {
+                        foreach (var pair in args) {
+                            cmd.Parameters.AddWithValue(pair.Key, pair.Value);
+                        }
                     }
                     numberOfRowsAffected = cmd.ExecuteNonQuery();
                 }
                 return numberOfRowsAffected;
             }
         }
-        private DataTable Execute(string query, Dictionary<string, object> args) {
+        public DataTable Execute(string query, Dictionary<string, object> args) {
             if (string.IsNullOrEmpty(query.Trim())) {
                 return null;
             }
             using (var con = SetConnection()) {
                 con.Open();
                 using (var cmd = new SQLiteCommand(query, con)) {
-                    foreach (KeyValuePair<string, object> entry in args) {
-                        cmd.Parameters.AddWithValue(entry.Key, entry.Value);
+                    if(args != null) {
+                        foreach (KeyValuePair<string, object> entry in args) {
+                            cmd.Parameters.AddWithValue(entry.Key, entry.Value);
+                        }
                     }
                     var da = new SQLiteDataAdapter(cmd);
                     var dt = new DataTable();
@@ -251,7 +154,7 @@ namespace MpWpfApp {
                 }
             }
         }
-        public void ExecuteNonQuery(string sql, List<string> paramList = null, List<object> paramValueList = null) {
+        /*public void ExecuteWrite(string sql, List<string> paramList = null, List<object> paramValueList = null) {
             if (NoDb || _passwordAttempts > Properties.Settings.Default.MaxDbPasswordAttempts) {
                 return;
             }
@@ -287,7 +190,7 @@ namespace MpWpfApp {
 
             sql_con.Open();
             try {
-                sql_cmd.ExecuteNonQuery();
+                sql_cmd.ExecuteWrite();
             }
             catch (SQLiteException ex) {
                 wasError = true;
@@ -388,7 +291,7 @@ namespace MpWpfApp {
                 _passwordAttempts = 0;
             }
             return DT;
-        }
+        }*/
         public void CloseDb() {
             SQLiteConnection sql_con = SetConnection();
             sql_con.Close();
@@ -407,7 +310,7 @@ namespace MpWpfApp {
             ds.WriteXml(out_filename);
         }
         public int GetLastRowId(string tableName, string pkName) {
-            DataTable dt = Execute("select * from " + tableName + " ORDER BY " + pkName + " DESC LIMIT 1;");
+            DataTable dt = Execute("select * from " + tableName + " ORDER BY " + pkName + " DESC LIMIT 1;", null);
             if (dt.Rows.Count > 0) {
                 return Convert.ToInt32(dt.Rows[0][0].ToString());
             }
@@ -426,7 +329,7 @@ namespace MpWpfApp {
         public void ResetDb() {
             // File.Delete(Properties.Settings.Default.DbPath);
             //InitDb();
-            ExecuteNonQuery(GetClearString());
+            ExecuteWrite(GetClearString(), null);
         }
         public void DeleteDb() {
             File.Delete(Properties.Settings.Default.DbPath);
@@ -443,12 +346,6 @@ namespace MpWpfApp {
                     , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId)
                     );
                     INSERT INTO MpTag(TagName,fk_MpColorId) VALUES ('All',3),('Favorites',2);
-                    ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpSetting (
-                      pk_MpSettingId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , SettingName text NOT NULL
-                    , SettingValue text NULL
-                    );
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPlatformType (
                       pk_MpPlatformTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

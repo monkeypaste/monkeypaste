@@ -23,7 +23,7 @@ namespace MpWpfApp {
         #region Static Methods
         public static List<MpShortcut> GetAllShortcuts() {
             List<MpShortcut> commands = new List<MpShortcut>();
-            DataTable dt = MpDb.Instance.Execute("select * from MpShortcut");
+            DataTable dt = MpDb.Instance.Execute("select * from MpShortcut", null);
             if (dt != null && dt.Rows.Count > 0) {
                 foreach (DataRow dr in dt.Rows) {
                     commands.Add(new MpShortcut(dr));
@@ -53,7 +53,10 @@ namespace MpWpfApp {
             TagId = 0;
         }
         public MpShortcut(int hkId) {
-            DataTable dt = MpDb.Instance.Execute("select * from MpShortcut where pk_MpShortcutId=" + hkId);
+            DataTable dt = MpDb.Instance.Execute("select * from MpShortcut where pk_MpShortcutId=@hkid",
+                new Dictionary<string, object> {
+                    { "@hkid", hkId }
+                });
             if (dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
@@ -88,14 +91,37 @@ namespace MpWpfApp {
         }
         public override void WriteToDatabase() {
             if (ShortcutId == 0) {
-                MpDb.Instance.ExecuteNonQuery("insert into MpShortcut(ShortcutName,RoutingType,KeyList,DefaultKeyList,fk_MpCopyItemId,fk_MpTagId) VALUES('" + ShortcutName + "'," + (int)RoutingType + ",'" + KeyList + "','" + DefaultKeyList + "'," + CopyItemId + "," + TagId + ")");
+                MpDb.Instance.ExecuteWrite(
+                    "insert into MpShortcut(ShortcutName,RoutingType,KeyList,DefaultKeyList,fk_MpCopyItemId,fk_MpTagId) values(@sn,@rt,@kl,@dkl,@ciid,@tid)",
+                    new Dictionary<string, object> {
+                        { "@sn", ShortcutName},
+                        { "@rt", (int)RoutingType},
+                        { "@kl", KeyList},
+                        { "@dkl", DefaultKeyList},
+                        { "@ciid", CopyItemId},
+                        { "@tid", TagId}
+                    });
                 ShortcutId = MpDb.Instance.GetLastRowId("MpShortcut", "pk_MpShortcutId");
             } else {
-                MpDb.Instance.ExecuteNonQuery("update MpShortcut set ShortcutName='" + ShortcutName + "', KeyList='" + KeyList + "', DefaultKeyList='" + DefaultKeyList + "', fk_MpCopyItemId=" + CopyItemId + ", fk_MpTagId=" + TagId + ", RoutingType=" + (int)RoutingType + " where pk_MpShortcutId=" + ShortcutId);
+                MpDb.Instance.ExecuteWrite(
+                    "update MpShortcut set ShortcutName=@sn, KeyList=@kl, DefaultKeyList=@dkl, fk_MpCopyItemId=@ciid, fk_MpTagId=@tid, RoutingType=@rtid where pk_MpShortcutId=@sid",
+                    new Dictionary<string, object> {
+                        { "@sn", ShortcutName},
+                        { "@rtid", (int)RoutingType},
+                        { "@kl", KeyList},
+                        { "@dkl", DefaultKeyList},
+                        { "@ciid", CopyItemId},
+                        { "@tid", TagId},
+                        { "@sid", ShortcutId }
+                    });
             }
         }
         public void DeleteFromDatabase() {
-            MpDb.Instance.ExecuteNonQuery("delete from MpShortcut where pk_MpShortcutId=" + this.ShortcutId);
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpShortcut where pk_MpShortcutId=@sid",
+                new Dictionary<string, object> {
+                    { "@sid", ShortcutId }
+                });
         }
         private void MapDataToColumns() {
             TableName = "MpShortcut";

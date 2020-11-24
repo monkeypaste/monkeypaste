@@ -9,7 +9,7 @@
       <Value Profile="(Default)">3</Value>
     </Setting>
     <Setting Name="DbPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">C:\Users\tkefauver\Desktop\mp.db</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DbPassword" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -162,6 +162,9 @@
     </Setting>
     <Setting Name="DbParameterDateTime" Type="System.String" Scope="Application">
       <Value Profile="(Default)">@3</Value>
+    </Setting>
+    <Setting Name="DbName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">mp.db</Value>
     </Setting>
   </Settings>
 </SettingsFile>

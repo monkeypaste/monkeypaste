@@ -28,7 +28,7 @@ namespace MpWpfApp {
         }
         public static List<MpPasteHistory> GetAllPasteHistory() {
             var pasteHistoryList = new List<MpPasteHistory>();
-            DataTable dt = MpDb.Instance.Execute("select * from MpPasteHistory");
+            DataTable dt = MpDb.Instance.Execute("select * from MpPasteHistory", null);
             if (dt != null && dt.Rows.Count > 0) {
                 foreach (DataRow r in dt.Rows) {
                     pasteHistoryList.Add(new MpPasteHistory(r));
@@ -50,11 +50,14 @@ namespace MpWpfApp {
                 DestAppId = _destApp.AppId;
                 //MpSingletonController.Instance.GetMpData().AddMpApp(_destApp);
             }
-            if (MpDb.Instance.NoDb) {
-                PasteHistoryId = ++TotalPasteHistoryCount;
-                return;
-            }
-            MpDb.Instance.ExecuteNonQuery("insert into MpPasteHistory(fk_MpCopyItemId,fk_MpClientId,fk_MpAppId,PasteDateTime) values (" + CopyItemId + "," + MpDb.Instance.Client.ClientId + "," + DestAppId + ",'" + PasteDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "');");
+            MpDb.Instance.ExecuteWrite(
+                "insert into MpPasteHistory(fk_MpCopyItemId,fk_MpClientId,fk_MpAppId,PasteDateTime) values (@ciid, @cid, @aid, @pdt)",
+                new Dictionary<string, object> {
+                    { "@ciid", CopyItemId },
+                    { "@cid", MpDb.Instance.Client.ClientId },
+                    { "@aid", DestAppId },
+                    { "@pdt", PasteDateTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                });
             PasteHistoryId = MpDb.Instance.GetLastRowId("MpPasteHistory", "pk_MpPasteHistoryId");
         }
     }

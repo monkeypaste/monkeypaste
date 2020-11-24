@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 //using Auth0.Windows;
 
@@ -32,7 +33,10 @@ namespace MpWpfApp {
             HashedPassword = hashedPassword;
         }
         public MpUser(int userId) {
-            DataTable dt = MpDb.Instance.Execute("select * from MpUser where pk_MpUserId=" + userId);
+            DataTable dt = MpDb.Instance.Execute("select * from MpUser where pk_MpUserId=@uid",
+                new Dictionary<string, object> {
+                    { "@uid", UserId }
+                });
             if (dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }

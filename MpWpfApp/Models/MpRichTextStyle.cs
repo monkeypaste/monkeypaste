@@ -46,7 +46,11 @@ namespace MpWpfApp {
             FontStyleType = fontStyle;
         }
         public MpRichTextStyle(int richTextStyleId) {
-            DataTable dt = MpDb.Instance.Execute("select * from MpRichTextStyle where pk_MpRichTextStyleId=" + richTextStyleId);
+            DataTable dt = MpDb.Instance.Execute(
+                "select * from MpRichTextStyle where pk_MpRichTextStyleId=@rtsid",
+                new Dictionary<string, object> {
+                    { "@rtsid", richTextStyleId }
+                });
             if (dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
@@ -56,7 +60,7 @@ namespace MpWpfApp {
         }
         public static List<MpRichTextStyle> GetAllRichTextStyles() {
             List<MpRichTextStyle> richTextStyles = new List<MpRichTextStyle>();
-            DataTable dt = MpDb.Instance.Execute("select * from MpRichTextStyle");
+            DataTable dt = MpDb.Instance.Execute("select * from MpRichTextStyle", null);
             if (dt != null && dt.Rows.Count > 0) {
                 foreach (DataRow r in dt.Rows) {
                     richTextStyles.Add(new MpRichTextStyle(r));
@@ -72,54 +76,41 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase() {
-            if (string.IsNullOrEmpty(FontFamilyName) || MpDb.Instance.NoDb) {
-                Console.WriteLine("MpRichTextStyle Error, cannot create nameless RichTextStyle");
+            if (string.IsNullOrEmpty(FontFamilyName)) {
+                Console.WriteLine("MpRichTextStyle Error, cannot create RichTextStyle without font family name");
                 return;
             }
             //if new RichTextStyle
             if (RichTextStyleId == 0) {
                 FontColor.WriteToDatabase();
                 FontColorId = FontColor.ColorId;
-                MpDb.Instance.ExecuteNonQuery("insert into MpRichTextStyle(FontFamilyName,fk_MpFontColorId) values('" + FontFamilyName + "'," + FontColorId + ")");
+                MpDb.Instance.ExecuteWrite(
+                    "insert into MpRichTextStyle(FontFamilyName,fk_MpFontColorId) values(@ffn,@fcid)",
+                    new Dictionary<string, object> {
+                        { "@ffn", FontFamilyName },
+                        { "@fcid", FontColorId }
+                    });
+                    //"'" + FontFamilyName + "'," + FontColorId + ")");
                 RichTextStyleId = MpDb.Instance.GetLastRowId("MpRichTextStyle", "pk_MpRichTextStyleId");
             } else {
                 FontColor.WriteToDatabase();
                 FontColorId = FontColor.ColorId;
-                MpDb.Instance.ExecuteNonQuery("update MpRichTextStyle set FontFamilyName='" + FontFamilyName + "', fk_MpFontColorId=" + FontColorId + " where pk_MpRichTextStyleId=" + RichTextStyleId);
+                MpDb.Instance.ExecuteWrite(
+                    "update MpRichTextStyle set FontFamilyName=@ffn, fk_MpFontColorId=@fcid where pk_MpRichTextStyleId=@rtsid",
+                    new Dictionary<string, object> {
+                        { "@ffn", FontFamilyName },
+                        { "@fcid", FontColorId },
+                        { "@rtsid", RichTextStyleId }
+                    });
             }
         }
-        public bool IsLinkedWithCopyItem(MpCopyItem ci) {
-            DataTable dt = MpDb.Instance.Execute("select * from MpCopyItemRichTextStyle where fk_MpRichTextStyleId=" + RichTextStyleId + " and fk_MpCopyItemId=" + ci.CopyItemId);
-            if (dt != null && dt.Rows.Count > 0) {
-                return true;
-            }
-            return false;
-        }
-        public void LinkWithCopyItem(MpCopyItem ci) {
-            if (IsLinkedWithCopyItem(ci)) {
-                //Console.WriteLine("MpRichTextStyle Warning attempting to relink RichTextStyle " + RichTextStyleId + " with copyitem " + ci.copyItemId+" ignoring...");
-                return;
-            }
-            DataTable dt = MpDb.Instance.Execute("select * from MpCopyItemRichTextStyle where fk_MpRichTextStyleId=" + this.RichTextStyleId);
-            int SortOrderIdx = dt.Rows.Count + 1;
-            MpDb.Instance.ExecuteNonQuery("insert into MpCopyItemRichTextStyle(fk_MpCopyItemId,fk_MpRichTextStyleId) values(" + ci.CopyItemId + "," + RichTextStyleId + ")");
-            MpDb.Instance.ExecuteNonQuery("insert into MpCopyItemSortTypeOrder(fk_MpCopyItemId,fk_MpSortTypeId,SortOrder) values(" + ci.CopyItemId + "," + this.RichTextStyleId + "," + SortOrderIdx + ")");
-            WriteToDatabase();
-            Console.WriteLine("RichTextStyle link created between RichTextStyle " + RichTextStyleId + " with copyitem " + ci.CopyItemId);
-        }
-        public void UnlinkWithCopyItem(MpCopyItem ci) {
-            if (!IsLinkedWithCopyItem(ci)) {
-                //Console.WriteLine("MpRichTextStyle Warning attempting to unlink non-linked RichTextStyle " + RichTextStyleId + " with copyitem " + ci.copyItemId + " ignoring...");
-                return;
-            }
-            MpDb.Instance.ExecuteNonQuery("delete from MpCopyItemRichTextStyle where fk_MpCopyItemId=" + ci.CopyItemId + " and fk_MpRichTextStyleId=" + RichTextStyleId);
-            //MpDb.Instance.ExecuteNonQuery("delete from MpRichTextStyleCopyItemSortOrder where fk_MpRichTextStyleId=" + this.RichTextStyleId);
-            Console.WriteLine("RichTextStyle link removed between RichTextStyle " + RichTextStyleId + " with copyitem " + ci.CopyItemId + " ignoring...");
-        }
+       
         public void DeleteFromDatabase() {
-            MpDb.Instance.ExecuteNonQuery("delete from MpRichTextStyle where pk_MpRichTextStyleId=" + this.RichTextStyleId);
-            MpDb.Instance.ExecuteNonQuery("delete from MpCopyItemRichTextStyle where fk_MpRichTextStyleId=" + this.RichTextStyleId);
-            //MpDb.Instance.ExecuteNonQuery("delete from MpRichTextStyleCopyItemSortOrder where fk_MpRichTextStyleId=" + this.RichTextStyleId);
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpRichTextStyle where pk_MpRichTextStyleId=@rtsid",
+                new Dictionary<string, object> {
+                    { "@rtsid", RichTextStyleId }
+                });
         }
         private void MapDataToColumns() {
             TableName = "MpRichTextStyle";

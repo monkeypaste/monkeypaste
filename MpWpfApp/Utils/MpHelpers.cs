@@ -50,19 +50,19 @@ namespace MpWpfApp {
             return (int)activeProcId == procId;
         }
 
-        public static string GetRandomString(int maxCharsPerLine = 50, int maxLines = 50) {
+        public static string GetRandomString(int charsPerLine = 32, int lines = 1) {
             StringBuilder str_build = new StringBuilder();
-            int numLines = Rand.Next(1, maxLines);
 
-            for (int i = 0; i < numLines; i++) {
-                int numCharsOnLine = Rand.Next(1, maxCharsPerLine);
-                for (int j = 0; j < numCharsOnLine; j++) {
+            for (int i = 0; i < lines; i++) {
+                for (int j = 0; j < charsPerLine; j++) {
                     double flt = Rand.NextDouble();
                     int shift = Convert.ToInt32(Math.Floor(25 * flt));
                     char letter = Convert.ToChar(shift + 65);
                     str_build.Append(letter);
                 }
-                str_build.Append('\n');
+                if(i + 1 < lines) {
+                    str_build.Append('\n');
+                }
             }
             return str_build.ToString();
         }
@@ -170,7 +170,9 @@ namespace MpWpfApp {
             processInfo.Verb = asAdministrator ? "runas" : string.Empty; //The process should start with elevated permissions
             System.Diagnostics.Process.Start(processInfo); //Starts the process based on myProcessInfo
         }
-
+        public static string GetApplicationDirectory() {
+            return AppDomain.CurrentDomain.BaseDirectory;
+        }
         public static string GetProcessApplicationName(IntPtr hWnd) {
             string mwt = GetProcessMainWindowTitle(hWnd);
             if(string.IsNullOrEmpty(mwt)) {

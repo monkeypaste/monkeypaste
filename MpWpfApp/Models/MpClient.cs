@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace MpWpfApp {
@@ -19,10 +20,7 @@ namespace MpWpfApp {
             LogoutDateTime = null;
         }
         public MpClient(int clientId) {
-            if (MpDb.Instance.NoDb) {
-                return;
-            }
-            DataTable dt = MpDb.Instance.Execute("select * from MpClient where MpClientId=" + clientId);
+            DataTable dt = MpDb.Instance.Execute("select * from MpClient where MpClientId=@clientId", new Dictionary<string, object> { { "@clientId", clientId } });
             if (dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
@@ -40,16 +38,29 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase() {
-            if (Ip4Address == null || Ip4Address == string.Empty || MpDb.Instance.NoDb) {
+            if (string.IsNullOrEmpty(Ip4Address)) {
                 Console.WriteLine("MpTag Error, cannot create nameless tag");
                 return;
             }
             if (ClientId == 0) {
-                MpDb.Instance.ExecuteNonQuery("insert into MpClient(fk_MpPlatformId,Ip4Address,AccessToken,LoginDateTime) values(" + PlatformId + ",'" + Ip4Address + "','" + AccessToken + "','" + this.LoginDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "')");
+                MpDb.Instance.ExecuteWrite(
+                    "insert into MpClient(fk_MpPlatformId,Ip4Address,AccessToken,LoginDateTime) values(@pId,@ip4,@at,@ldt)",
+                    new Dictionary<string, object> {
+                        { "@pId", PlatformId },
+                        { "@ip4", Ip4Address },
+                        { "@at", AccessToken },
+                        { "@ldt", LoginDateTime.ToString("yyyy-MM-dd HH:mm:ss") }
+                    });
+
                 ClientId = MpDb.Instance.GetLastRowId("MpClient", "pk_MpClientId");
             } else {
                 LogoutDateTime = DateTime.Now;
-                MpDb.Instance.ExecuteNonQuery("update MpClient set LogoutDateTime='" + LogoutDateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") + "'");
+                MpDb.Instance.ExecuteWrite(
+                    "update MpClient set LogoutDateTime=@lodt where pk_MpClientId=@cId",
+                    new Dictionary<string, object> {
+                        { "@lodt", LogoutDateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") },
+                        { "cId", ClientId }
+                    });
             }
         }
         private void MapDataToColumns() {

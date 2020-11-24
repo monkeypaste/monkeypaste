@@ -57,7 +57,11 @@ namespace MpWpfApp {
             MapDataToColumns();
         }
         public MpSubTextToken(int subTextTokenId) {
-            DataTable dt = MpDb.Instance.Execute("select * from MpSubTextToken where pk_MpSubTextTokenId=" + subTextTokenId);
+            DataTable dt = MpDb.Instance.Execute(
+                "select * from MpSubTextToken where pk_MpSubTextTokenId=@subTextTokenId",
+                new Dictionary<string, object> {
+                    { "@subTextTokenId", SubTextTokenId }
+                });
             if (dt != null && dt.Rows.Count > 0) {
                 LoadDataRow(dt.Rows[0]);
             }
@@ -190,7 +194,7 @@ namespace MpWpfApp {
         public override void WriteToDatabase() {
             //if new
             if (SubTextTokenId == 0) {
-                //MpDb.Instance.ExecuteNonQuery("insert into MpSubTextToken(fk_MpCopyItemId,fk_MpSubTextTokenTypeId,StartIdx,EndIdx,BlockIdx,InlineIdx,TokenText) values(" + CopyItemId + "," + (int)TokenType + "," + StartIdx + "," + EndIdx + "," + BlockIdx + "," + InlineIdx + ",'" + TokenText + "')");
+                //MpDb.Instance.ExecuteWrite("insert into MpSubTextToken(fk_MpCopyItemId,fk_MpSubTextTokenTypeId,StartIdx,EndIdx,BlockIdx,InlineIdx,TokenText) values(" + CopyItemId + "," + (int)TokenType + "," + StartIdx + "," + EndIdx + "," + BlockIdx + "," + InlineIdx + ",'" + TokenText + "')");
                 MpDb.Instance.ExecuteWrite(
                     "insert into MpSubTextToken(fk_MpCopyItemId,fk_MpSubTextTokenTypeId,StartIdx,EndIdx,BlockIdx,InlineIdx,TokenText) values(@copyItemId,@tokenType,@sIdx,@eIdx,@bIdx,@iIdx,@tokenText)", 
                     new Dictionary<string, object> {
@@ -205,9 +209,9 @@ namespace MpWpfApp {
 
                 SubTextTokenId = MpDb.Instance.GetLastRowId("MpSubTextToken", "pk_MpSubTextTokenId");
             } else {
-                //MpDb.Instance.ExecuteNonQuery("update MpSubTextToken set fk_MpCopyItemId=" + CopyItemId + ", fk_MpSubTextTokenTypeId=" + (int)TokenType + ", StartIdx=" + StartIdx + ", EndIdx=" + EndIdx + ",BlockIdx=" + BlockIdx + ",InlineIdx=" + InlineIdx + ",TokenText='" + TokenText + "' where pk_MpSubTextTokenId=" + SubTextTokenId);
+                //MpDb.Instance.ExecuteWrite("update MpSubTextToken set fk_MpCopyItemId=" + CopyItemId + ", fk_MpSubTextTokenTypeId=" + (int)TokenType + ", StartIdx=" + StartIdx + ", EndIdx=" + EndIdx + ",BlockIdx=" + BlockIdx + ",InlineIdx=" + InlineIdx + ",TokenText='" + TokenText + "' where pk_MpSubTextTokenId=" + SubTextTokenId);
                 MpDb.Instance.ExecuteWrite(
-                    "update MpSubTextToken set fk_MpCopyItemId=@copyItemId, fk_MpSubTextTokenTypeId=@tokenType, StartIdx=@sIdx, EndIdx=@eIdx, BlockIdx=@bIdx, InlineIdx=@iIdx, TokenText=@tokenText where pk_MpSubTextTokenId=@subTextTokenId"
+                    "update MpSubTextToken set fk_MpCopyItemId=@copyItemId, fk_MpSubTextTokenTypeId=@tokenType, StartIdx=@sIdx, EndIdx=@eIdx, BlockIdx=@bIdx, InlineIdx=@iIdx, TokenText=@tokenText where pk_MpSubTextTokenId=@subTextTokenId",
                     new Dictionary<string, object> {
                         { "@copyItemId", CopyItemId },
                         { "@tokenType", (int)TokenType },
@@ -224,7 +228,11 @@ namespace MpWpfApp {
             if (SubTextTokenId <= 0) {
                 return;
             }
-            MpDb.Instance.ExecuteNonQuery("delete from MpSubTextToken where pk_MpSubTextTokenId=" + SubTextTokenId);
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpSubTextToken where pk_MpSubTextTokenId=@sttId",
+                new Dictionary<string, object> {
+                    { "@sttId", SubTextTokenId }
+                });
         }
         private void MapDataToColumns() {
             TableName = "MpSubTextToken";

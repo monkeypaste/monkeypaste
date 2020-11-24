@@ -43,7 +43,7 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\tkefauver\\Desktop\\mp.db")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string DbPath {
             get {
                 return ((string)(this["DbPath"]));
@@ -560,6 +560,15 @@ namespace MpWpfApp.Properties {
         public string DbParameterDateTime {
             get {
                 return ((string)(this["DbParameterDateTime"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("mp.db")]
+        public string DbName {
+            get {
+                return ((string)(this["DbName"]));
             }
         }
     }

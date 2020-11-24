@@ -129,7 +129,6 @@
     <Compile Include="Models\Base\MpObject.cs" />
     <Compile Include="Models\MpPasteHistory.cs" />
     <Compile Include="Models\MpPlatform.cs" />
-    <Compile Include="Models\MpSetting.cs" />
     <Compile Include="Models\MpSubTextToken.cs" />
     <Compile Include="Models\MpTag.cs" />
     <Compile Include="Models\MpUser.cs" />
