@@ -17,8 +17,8 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpTemplateTextTokenEditableButton.xaml
     /// </summary>
-    public partial class MpSubTextTemplateToken : UserControl {
-        public MpSubTextTemplateToken() {
+    public partial class MpSubTextTemplateTokenClipBorder : UserControl {
+        public MpSubTextTemplateTokenClipBorder() {
             InitializeComponent();
         }
     }

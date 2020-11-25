@@ -1,9 +1,5 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -28,7 +24,7 @@ namespace MpWpfApp {
                 return _templateBorderBackgroundBrush;
             }
             set {
-                if(_templateBorderBackgroundBrush != value) {
+                if (_templateBorderBackgroundBrush != value) {
                     _templateBorderBackgroundBrush = value;
                     OnPropertyChanged(nameof(TemplateBorderBackgroundBrush));
                 }
@@ -70,6 +66,19 @@ namespace MpWpfApp {
                 if (_tokenText != value) {
                     _tokenText = value;
                     OnPropertyChanged(nameof(TokenText));
+                }
+            }
+        }
+
+        private string _tokenName = string.Empty;
+        public string TokenName {
+            get {
+                return _tokenName;
+            }
+            set {
+                if (_tokenName != value) {
+                    _tokenName = value;
+                    OnPropertyChanged(nameof(TokenName));
                 }
             }
         }
@@ -139,18 +148,18 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _isSelected = false;
-        public bool IsSelected {
-            get {
-                return _isSelected;
-            }
-            set {
-                if (_isSelected != value) {
-                    _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));
-                }
-            }
-        }
+        //private bool _isSelected = false;
+        //public bool IsSelected {
+        //    get {
+        //        return _isSelected;
+        //    }
+        //    set {
+        //        if (_isSelected != value) {
+        //            _isSelected = value;
+        //            OnPropertyChanged(nameof(IsSelected));
+        //        }
+        //    }
+        //}
 
         private bool _isDefined = false;
         public bool IsDefined {
@@ -260,13 +269,13 @@ namespace MpWpfApp {
         #region Public Methods
         public MpSubTextTemplateTokenViewModel() : this(
             new MpSubTextToken(
-                "Token Name",
+                "Token Text",
                 MpSubTextTokenType.TemplateSegment,
                 0,
                 0,
                 0,
-                0))
-                { }
+                0,
+                "Test Template #1")) { }
 
         public MpSubTextTemplateTokenViewModel(MpSubTextToken stt) {
             PropertyChanged += (s, e) => {
@@ -275,6 +284,7 @@ namespace MpWpfApp {
                         SubTextTokenId = SubTextToken.SubTextTokenId;
                         CopyItemId = SubTextToken.CopyItemId;
                         TokenText = SubTextToken.TokenText;
+                        TokenName = SubTextToken.TokenName;
                         TokenType = SubTextToken.TokenType;
                         StartIdx = SubTextToken.StartIdx;
                         EndIdx = SubTextToken.EndIdx;
@@ -291,6 +301,9 @@ namespace MpWpfApp {
                     case nameof(TokenText):
                         SubTextToken.TokenText = TokenText;
                         break;
+                    case nameof(TokenName):
+                        SubTextToken.TokenName = TokenName;
+                        break;
                     case nameof(TokenType):
                         SubTextToken.TokenType = TokenType;
                         break;
@@ -306,39 +319,40 @@ namespace MpWpfApp {
                     case nameof(InlineIdx):
                         SubTextToken.InlineIdx = InlineIdx;
                         break;
+                    case nameof(IsFocused):
+                        return;
+                        break;
                     case nameof(IsEditing):
                         if (IsEditing) {
                             //show textbox and select all text
                             TextBoxVisibility = Visibility.Visible;
                             TextBlockVisibility = Visibility.Collapsed;
-                            IsFocused = true;
+                            //IsFocused = true;
                             //TagTextBox?.SelectAll();
                         } else {
                             TextBoxVisibility = Visibility.Collapsed;
                             TextBlockVisibility = Visibility.Visible;
                             SubTextToken.TokenText = TokenText;
                             SubTextToken.WriteToDatabase();
-                            IsFocused = false;
+                            //IsFocused = false;
                         }
                         break;
-                    case nameof(IsSelected):
-                        if (IsSelected) {
-                            //TagTextColor = Brushes.White;
-                            TemplateBorderBackgroundBrush = Brushes.DimGray;
-                        } else {
-                            TemplateBorderBackgroundBrush = Brushes.Transparent;
-                            //TagTextColor = Brushes.LightGray;
-                        }
-                        break;
+                    //case nameof(IsSelected):
+                    //    if (IsSelected) {
+                    //        //TagTextColor = Brushes.White;
+                    //        TemplateBorderBackgroundBrush = Brushes.DimGray;
+                    //    } else {
+                    //        TemplateBorderBackgroundBrush = Brushes.Transparent;
+                    //        //TagTextColor = Brushes.LightGray;
+                    //    }
+                    //    break;
                     case nameof(IsHovering):
-                        if (!IsSelected) {
-                            if (IsHovering) {
-                                TemplateBorderBackgroundBrush = Brushes.LightGray;
-                                //TagTextColor = Brushes.Black;
-                            } else {
-                                TemplateBorderBackgroundBrush = Brushes.Transparent;
-                                //TagTextColor = Brushes.White;
-                            }
+                        if (IsHovering) {
+                            TemplateBorderBackgroundBrush = Brushes.LightGray;//MpHelpers.GetLighterBrush(_TokenGroupColorLookupList[InlineIdx]);
+                                                                              //TagTextColor = Brushes.Black;
+                        } else {
+                            TemplateBorderBackgroundBrush = _TokenGroupColorLookupList[InlineIdx];
+                            //TagTextColor = Brushes.White;
                         }
                         break;
                 }
@@ -356,10 +370,13 @@ namespace MpWpfApp {
             templateTokenBorder.MouseLeave += (s, e1) => {
                 IsHovering = false;
             };
+            templateTokenBorder.MouseDown += (s, e7) => {
+                return;
+            };
             templateTokenBorder.LostFocus += (s, e4) => {
-                if (!IsSelected) {
-                    IsEditing = false;
-                }
+                //if (!IsSelected) {
+                //    IsEditing = false;
+                //}
             };
             templateTokenBorder.PreviewMouseLeftButtonDown += (s, e7) => {
                 if (e7.ClickCount == 2) {
@@ -367,7 +384,7 @@ namespace MpWpfApp {
                 }
             };
 
-            var templateTokenTextBox = (TextBox)templateTokenBorder.FindName("TagTextBox");
+            var templateTokenTextBox = (TextBox)templateTokenBorder.FindName("TemplateTextBox");
             //this is called 
             templateTokenTextBox.GotFocus += (s, e1) => {
                 //templateTokenTextBox.SelectAll();
@@ -375,7 +392,7 @@ namespace MpWpfApp {
             templateTokenTextBox.LostFocus += (s, e2) => {
                 IsEditing = false;
             };
-            templateTokenTextBox.PreviewKeyDown += MainWindowViewModel.MainWindow_PreviewKeyDown;
+            //templateTokenTextBox.PreviewKeyDown += MainWindowViewModel.MainWindow_PreviewKeyDown;
             //if tag is created at runtime show tbox w/ all selected
             if (!MainWindowViewModel.IsLoading) {
                 //RenameTagCommand.Execute(null);
@@ -403,7 +420,7 @@ namespace MpWpfApp {
             return true;
         }
         private void RenameTemplate() {
-            IsSelected = true;
+            //IsSelected = true;
             IsFocused = true;
             IsEditing = true;
         }
@@ -418,7 +435,7 @@ namespace MpWpfApp {
             }
         }
         private void SelectTemplate() {
-            IsSelected = true;
+            //IsSelected = true;
             IsFocused = true;
         }
         #endregion

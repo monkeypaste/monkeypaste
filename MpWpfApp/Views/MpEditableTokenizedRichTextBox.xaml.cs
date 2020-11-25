@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Threading;
 using GongSolutions.Wpf.DragDrop.Utilities;
@@ -33,24 +34,11 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Dependency Property Declarations
-        //------------------------------------------------------------------------------------
-        //[DefaultValue("Collapsed")]
-        //public Visibility ToolbarVisibility {
-        //    get { 
-        //        return (Visibility)GetValue(ToolbarVisibilityProperty); 
-        //    }
-        //    set { 
-        //        SetValue(ToolbarVisibilityProperty, value); 
-        //    }
-        //}
-        //public static readonly DependencyProperty ToolbarVisibilityProperty =
-        //    DependencyProperty.RegisterAttached(
-        //        nameof(ToolbarVisibility),
-        //        typeof(Visibility),
-        //        typeof(MpEditableTokenizedRichTextBox));
+        #region Properties
+        public bool ContainsTemplate { get; set; } = false;
+        #endregion
 
-        //------------------------------------------------------------------------------------
+        #region Dependency Properties
         [Browsable(true)]
         [Category("Brushes")]
         [Description("The background color of the formatting toolbar on the control.")]
@@ -204,15 +192,6 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Properties
-
-        #endregion
-
-        #region PropertyChanged Callback Methods
-
-
-        #endregion
-
         #region Event Handlers
 
         /// <summary>
@@ -319,11 +298,33 @@ namespace MpWpfApp {
         }
 
         private void OnAddTemplateButtonClick(object sender, RoutedEventArgs e) {
-            //var textRange = new TextRange(TokenizedRichTextBox.Selection.Start, TokenizedRichTextBox.Selection.End);
-            TokenizedRichTextBox.Selection.Text = string.Empty;
-            MpSubTextTemplateToken sttt = new MpSubTextTemplateToken();
-            sttt.DataContext = new MpSubTextTemplateTokenViewModel();
-            new InlineUIContainer(sttt, TokenizedRichTextBox.CaretPosition);
+            var textRange = new TextRange(TokenizedRichTextBox.Selection.Start, TokenizedRichTextBox.Selection.End);
+            //TokenizedRichTextBox.Selection.Text = "@?@<1_1>@?@";
+
+           
+            //BlockUIContainer container = new BlockUIContainer(stttcb);
+            //TokenizedRichTextBox.Document.Blocks.InsertBefore(TokenizedRichTextBox.Document.Blocks.FirstBlock, container);
+
+            ContainsTemplate = true;
+
+            
+            MpSubTextToken newTemplateToken = new MpSubTextToken(
+                MpHelpers.GetRandomString(5) + "1_1" + MpHelpers.GetRandomString(5),
+                MpSubTextTokenType.TemplateSegment, 
+                0, 
+                0, 
+                0, 
+                0,
+                "Template #1",
+                ((MpClipTileViewModel)((UIElement)sender).GetVisualAncestor<MpClipBorder>().DataContext).CopyItemId);
+            TokenizedRichTextBox.Selection.Text = newTemplateToken.TokenText;
+            TokenizedRichTextBox.AddSubTextToken(newTemplateToken);
+            //TokenizedRichTextBox.DocumentRtf = TokenizedRichTextBox.Document;
+            
+            //TokenizedRichTextBox.AddSubTextToken()
+            //save to string:
+            //TokenizedRichTextBox.RichText = MpHelpers.ConvertFlowDocumentToRichText(TokenizedRichTextBox.Document);//XamlWriter.Save(TokenizedRichTextBox.Document);
+            //TokenizedRichTextBox
         }
 
         private void OnRenameTemplateButtonClick(object sender, RoutedEventArgs e) {
@@ -416,7 +417,7 @@ namespace MpWpfApp {
             //}
             BoldButton.IsChecked = textRange.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
             ItalicButton.IsChecked = textRange.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
-            UnderlineButton.IsChecked = textRange.GetPropertyValue(Inline.TextDecorationsProperty).Equals(TextDecorations.Underline);
+            UnderlineButton.IsChecked = textRange?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
 
             // Set Alignment buttons
             LeftButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);

@@ -6,8 +6,10 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Xml;
 using GongSolutions.Wpf.DragDrop.Utilities;
 
 namespace MpWpfApp {
@@ -44,70 +46,79 @@ namespace MpWpfApp {
                 },
             });
 
-        public string RichText {
-            get {
-                return (string)GetValue(RichTextProperty);
-            }
-            set {
-                if ((string)GetValue(RichTextProperty) != value) {
-                    SetValue(RichTextProperty, value);
-                }
-            }
-        }
-        public static readonly DependencyProperty RichTextProperty =
-          DependencyProperty.RegisterAttached(
-            "RichText",
-            typeof(string),
-            typeof(MpTokenizedRichTextBox),
-            new FrameworkPropertyMetadata {
-                BindsTwoWayByDefault = true, 
-                PropertyChangedCallback = (s, e) => {
-                    if (!string.IsNullOrEmpty((string)e.NewValue)) {
-                        ((MpTokenizedRichTextBox)s).SetRtf((string)e.NewValue);                        
-                    }
-                }
-            });
-
-        //public FlowDocument DocumentRtf {
+        //public string RichText {
         //    get {
-        //        return (FlowDocument)GetValue(DocumentRtfProperty);
+        //        return (string)GetValue(RichTextProperty);
         //    }
         //    set {
-        //        if ((FlowDocument)GetValue(DocumentRtfProperty) != value) {
-        //            SetValue(DocumentRtfProperty, value);
+        //        if ((string)GetValue(RichTextProperty) != value) {
+        //            SetValue(RichTextProperty, value);
         //        }
         //    }
         //}
-        //public static FlowDocument GetDocumentRtf(DependencyObject obj) {
-        //    return (FlowDocument)obj.GetValue(DocumentRtfProperty);
-        //}
-        //public static void SetDocumentRtf(DependencyObject obj, FlowDocument value) {
-        //    obj.SetValue(DocumentRtfProperty, value);
-        //}
-        //public static readonly DependencyProperty DocumentRtfProperty =
+        //public static readonly DependencyProperty RichTextProperty =
         //  DependencyProperty.RegisterAttached(
-        //    "DocumentRtf",
-        //    typeof(FlowDocument),
+        //    "RichText",
+        //    typeof(string),
         //    typeof(MpTokenizedRichTextBox),
         //    new FrameworkPropertyMetadata {
         //        BindsTwoWayByDefault = true,
         //        PropertyChangedCallback = (s, e) => {
         //            var trtb = (MpTokenizedRichTextBox)s;
-        //            var newDocument = (FlowDocument)e.NewValue;
-        //            //instead of directly setting document this workaround ensures document reassignment doesn't fail
-        //            TextRange newRange = new TextRange(newDocument.ContentStart, newDocument.ContentEnd);
-        //            MemoryStream stream = new MemoryStream();
-        //            System.Windows.Markup.XamlWriter.Save(newRange, stream);
-        //            newRange.Save(stream, DataFormats.XamlPackage);
-
-        //            var doc = new FlowDocument();
-        //            var range = new TextRange(doc.ContentStart, doc.ContentEnd);
-        //            range.Load(stream, DataFormats.XamlPackage);
-
-        //            // Set the document
-        //            trtb.Document = doc;
+        //            string rt = (string)e.NewValue;
+        //            if (!string.IsNullOrEmpty(rt)) {
+        //                //when content has uielements embedded it will be stored as xaml not rt
+        //                if(MpHelpers.IsStringRichText(rt)) {
+        //                    trtb.SetRtf(rt);
+        //                } else {
+        //                    //trtb.Document = (MpEventEnabledFlowDocument)XamlReader.Parse(rt);
+        //                    trtb.Document = MpHelpers.ConvertXamlToFlowDocument(rt);
+        //                }                     
+        //            }
         //        }
         //    });
+
+        public string DocumentRtf {
+            get {
+                return (string)GetValue(DocumentRtfProperty);
+            }
+            set {
+                if ((string)GetValue(DocumentRtfProperty) != value) {
+                    SetValue(DocumentRtfProperty, value);
+                }
+            }
+        }
+        public static string GetDocumentRtf(DependencyObject obj) {
+            return (string)obj.GetValue(DocumentRtfProperty);
+        }
+        public static void SetDocumentRtf(DependencyObject obj, string value) {
+            obj.SetValue(DocumentRtfProperty, value);
+        }
+        public static readonly DependencyProperty DocumentRtfProperty =
+          DependencyProperty.RegisterAttached(
+            "DocumentRtf",
+            typeof(string),
+            typeof(MpTokenizedRichTextBox),
+            new FrameworkPropertyMetadata {
+                BindsTwoWayByDefault = true,
+                PropertyChangedCallback = (s, e) => {
+                    var trtb = (MpTokenizedRichTextBox)s;
+                    trtb.Document = (MpEventEnabledFlowDocument)MpHelpers.ConvertXamlToFlowDocument((string)e.NewValue);
+                    //var newDocument = (MpEventEnabledFlowDocument)e.NewValue;
+                    ////instead of directly setting document this workaround ensures document reassignment doesn't fail
+                    //TextRange newRange = new TextRange(newDocument.ContentStart, newDocument.ContentEnd);
+                    //MemoryStream stream = new MemoryStream();
+                    //System.Windows.Markup.XamlWriter.Save(newRange, stream);
+                    //newRange.Save(stream, DataFormats.XamlPackage);
+
+                    //var doc = new MpEventEnabledFlowDocument();
+                    //var range = new TextRange(doc.ContentStart, doc.ContentEnd);
+                    //range.Load(stream, DataFormats.XamlPackage);
+
+                    //// Set the document
+                    //trtb.Document = doc;
+                }
+            });
 
         public ObservableCollection<MpSubTextToken> Tokens {
             get {
@@ -118,7 +129,8 @@ namespace MpWpfApp {
                     SetValue(TokensProperty, value);
                 }
             }
-        }
+        } 
+
         public static readonly DependencyProperty TokensProperty =
           DependencyProperty.RegisterAttached(
             "Tokens",
@@ -128,6 +140,7 @@ namespace MpWpfApp {
                 BindsTwoWayByDefault = true,
                 PropertyChangedCallback = (s, e) => {
                     if (e.NewValue != null) {
+                        //((MpTokenizedRichTextBox)s).Tokens = (ObservableCollection<MpSubTextToken>)e.NewValue;
                         foreach (var token in (ObservableCollection<MpSubTextToken>)e.NewValue) {
                             ((MpTokenizedRichTextBox)s).AddSubTextToken(token);
                         }
@@ -139,92 +152,133 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public MpTokenizedRichTextBox() : base() { }
+        public MpTokenizedRichTextBox() : base() {
+            Document = new MpEventEnabledFlowDocument();
+            Tokens = new ObservableCollection<MpSubTextToken>();
+            //Tokens.CollectionChanged += (s, e) => {
+            //    if(e.NewItems != null) {
+            //        foreach(var newToken in e.NewItems) {
+            //            AddSubTextToken((MpSubTextToken)newToken);
+            //        }
+            //    }
+            //};
+        }
+
+        public MpEventEnabledFlowDocument GetTemplateDocument() {
+            var str = XamlWriter.Save(Document);
+            var stringReader = new StringReader(str);
+            var xmlReader = XmlReader.Create(stringReader);
+            var doc = (MpEventEnabledFlowDocument)XamlReader.Load(xmlReader);
+
+            foreach (var token in Tokens.Where(x => x.TokenType == MpSubTextTokenType.TemplateSegment)) {
+                var container = (InlineUIContainer)doc.FindName(token.TokenText);
+                var containerRange = new TextRange(container.ElementStart, container.ElementEnd);
+                Span s = new Span(container.ElementStart, container.ElementEnd);
+                s.Inlines.Add(token.TokenText);
+            }
+            return doc;
+        }
 
         public void AddSubTextToken(MpSubTextToken token) {
             try {
-                if(token.TokenType == MpSubTextTokenType.CopyItemSegment) {
-                    return;
-                }
+                if (token.TokenType == MpSubTextTokenType.CopyItemSegment) {
 
-                Hyperlink tokenLink = GetTokenLink(token);
-                if(tokenLink == null) {
-                    Console.WriteLine("TokenizedTextbox error, GetTokenLink null for token: " + token.ToString());
-                    return;
-                }
-                tokenLink.IsEnabled = true;
-                tokenLink.RequestNavigate += (s, e) => {
-                    System.Diagnostics.Process.Start(e.Uri.ToString());
-                };
+                } else if (token.TokenType == MpSubTextTokenType.TemplateSegment) {
+                    MpSubTextTemplateTokenClipBorder stttcb = new MpSubTextTemplateTokenClipBorder();
+                    stttcb.DataContext = new MpSubTextTemplateTokenViewModel(token);
+                    var tokenRange = MpHelpers.FindStringRangeFromPosition(Document.ContentStart, token.TokenText.ToLower());
+                    if(tokenRange == null) {
+                        token.DeleteFromDatabase();
+                        return;
+                    }
+                    tokenRange.Text = string.Empty;
+                    var container = new InlineUIContainer(stttcb, tokenRange.Start);//, TokenizedRichTextBox.CaretPosition.GetInsertionPosition(LogicalDirection.Forward)); ;
+                    container.Name = token.TokenText;
+                    Document.RegisterName(container.Name, container);
+                } else {
+                    Hyperlink tokenLink = GetTokenLink(token);
+                    if (tokenLink == null) {
+                        Console.WriteLine("TokenizedTextbox error, GetTokenLink null for token: " + token.ToString());
+                        return;
+                    }
+                    tokenLink.IsEnabled = true;
+                    tokenLink.RequestNavigate += (s, e) => {
+                        System.Diagnostics.Process.Start(e.Uri.ToString());
+                    };
 
-                MenuItem convertToQrCodeMenuItem = new MenuItem();
-                convertToQrCodeMenuItem.Header = "Convert to QR Code";
-                convertToQrCodeMenuItem.Click += (s, e1) => {
-                    var hyperLink = (Hyperlink)((MenuItem)s).Tag;
-                    Clipboard.SetImage(MpHelpers.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString()));
-                };
-                convertToQrCodeMenuItem.Tag = tokenLink;
-                tokenLink.ContextMenu = new ContextMenu();
-                tokenLink.ContextMenu.Items.Add(convertToQrCodeMenuItem);
+                    MenuItem convertToQrCodeMenuItem = new MenuItem();
+                    convertToQrCodeMenuItem.Header = "Convert to QR Code";
+                    convertToQrCodeMenuItem.Click += (s, e1) => {
+                        var hyperLink = (Hyperlink)((MenuItem)s).Tag;
+                        Clipboard.SetImage(MpHelpers.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString()));
+                    };
+                    convertToQrCodeMenuItem.Tag = tokenLink;
+                    tokenLink.ContextMenu = new ContextMenu();
+                    tokenLink.ContextMenu.Items.Add(convertToQrCodeMenuItem);
 
-                switch (token.TokenType) {
-                    case MpSubTextTokenType.StreetAddress:
-                        tokenLink.NavigateUri = new Uri("https://google.com/maps/place/" + token.TokenText.Replace(' ', '+'));
-                        break;
-                    case MpSubTextTokenType.Uri:
-                        if (!token.TokenText.Contains("https://")) {
-                            tokenLink.NavigateUri = new Uri("https://" + token.TokenText);
-                        } else {
-                            tokenLink.NavigateUri = new Uri(token.TokenText);
-                        }
-                        MenuItem minifyUrl = new MenuItem();
-                        minifyUrl.Header = "Minify with bit.ly";
-                        minifyUrl.Click += (s, e2) => {
-                            Hyperlink link = (Hyperlink)((MenuItem)s).Tag;
-                            string minifiedLink = MpHelpers.ShortenUrl(link.NavigateUri.ToString()).Result;
-                            Clipboard.SetText(minifiedLink);
-                        };
-                        minifyUrl.Tag = tokenLink;
-                        tokenLink.ContextMenu.Items.Add(minifyUrl);
-                        break;
-                    case MpSubTextTokenType.Email:
-                        tokenLink.NavigateUri = new Uri("mailto:" + token.TokenText);
-                        break;
-                    case MpSubTextTokenType.PhoneNumber:
-                        tokenLink.NavigateUri = new Uri("tel:" + token.TokenText);
-                        break;
-                    case MpSubTextTokenType.Currency:
-                        //"https://www.google.com/search?q=%24500.80+to+yen"
-                        MenuItem convertCurrencyMenuItem = new MenuItem();
-                        convertCurrencyMenuItem.Header = "Convert Currency To";
-                        foreach (MpCurrencyType ct in Enum.GetValues(typeof(MpCurrencyType))) {
-                            if (ct == MpCurrencyType.None || ct == MpHelpers.GetCurrencyTypeFromString(token.TokenText)) {
-                                continue;
+                    switch (token.TokenType) {
+                        case MpSubTextTokenType.StreetAddress:
+                            tokenLink.NavigateUri = new Uri("https://google.com/maps/place/" + token.TokenText.Replace(' ', '+'));
+                            break;
+                        case MpSubTextTokenType.Uri:
+                            if (!token.TokenText.Contains("https://")) {
+                                tokenLink.NavigateUri = new Uri("https://" + token.TokenText);
+                            } else {
+                                tokenLink.NavigateUri = new Uri(token.TokenText);
                             }
-                            MenuItem subItem = new MenuItem();
-                            subItem.Header = Enum.GetName(typeof(MpCurrencyType), ct);
-                            subItem.Click += (s, e2) => {
-                                // use https://free.currencyconverterapi.com/ instead of google
-                                //string convertedCurrency = MpHelpers.CurrencyConvert(
-                                //    (decimal)MpHelpers.GetCurrencyValueFromString(token.TokenText),
-                                //    Enum.GetName(typeof(MpCurrencyType), MpHelpers.GetCurrencyTypeFromString(token.TokenText)),
-                                //    Enum.GetName(typeof(MpCurrencyType), ct));
-                                //tokenLink.Inlines.Clear();
-                                //tokenLink.Inlines.Add(new Run(convertedCurrency));
-                                ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).HideWindowCommand.Execute(null);
-                                System.Diagnostics.Process.Start(@"https://www.google.com/search?q=" + token.TokenText + "+to+" + subItem.Header);
+                            MenuItem minifyUrl = new MenuItem();
+                            minifyUrl.Header = "Minify with bit.ly";
+                            minifyUrl.Click += (s, e2) => {
+                                Hyperlink link = (Hyperlink)((MenuItem)s).Tag;
+                                string minifiedLink = MpHelpers.ShortenUrl(link.NavigateUri.ToString()).Result;
+                                Clipboard.SetText(minifiedLink);
                             };
-                            convertCurrencyMenuItem.Items.Add(subItem);
-                        }
+                            minifyUrl.Tag = tokenLink;
+                            tokenLink.ContextMenu.Items.Add(minifyUrl);
+                            break;
+                        case MpSubTextTokenType.Email:
+                            tokenLink.NavigateUri = new Uri("mailto:" + token.TokenText);
+                            break;
+                        case MpSubTextTokenType.PhoneNumber:
+                            tokenLink.NavigateUri = new Uri("tel:" + token.TokenText);
+                            break;
+                        case MpSubTextTokenType.Currency:
+                            //"https://www.google.com/search?q=%24500.80+to+yen"
+                            MenuItem convertCurrencyMenuItem = new MenuItem();
+                            convertCurrencyMenuItem.Header = "Convert Currency To";
+                            foreach (MpCurrencyType ct in Enum.GetValues(typeof(MpCurrencyType))) {
+                                if (ct == MpCurrencyType.None || ct == MpHelpers.GetCurrencyTypeFromString(token.TokenText)) {
+                                    continue;
+                                }
+                                MenuItem subItem = new MenuItem();
+                                subItem.Header = Enum.GetName(typeof(MpCurrencyType), ct);
+                                subItem.Click += (s, e2) => {
+                                    // use https://free.currencyconverterapi.com/ instead of google
+                                    //string convertedCurrency = MpHelpers.CurrencyConvert(
+                                    //    (decimal)MpHelpers.GetCurrencyValueFromString(token.TokenText),
+                                    //    Enum.GetName(typeof(MpCurrencyType), MpHelpers.GetCurrencyTypeFromString(token.TokenText)),
+                                    //    Enum.GetName(typeof(MpCurrencyType), ct));
+                                    //tokenLink.Inlines.Clear();
+                                    //tokenLink.Inlines.Add(new Run(convertedCurrency));
+                                    ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).HideWindowCommand.Execute(null);
+                                    System.Diagnostics.Process.Start(@"https://www.google.com/search?q=" + token.TokenText + "+to+" + subItem.Header);
+                                };
+                                convertCurrencyMenuItem.Items.Add(subItem);
+                            }
 
-                        tokenLink.ContextMenu.Items.Add(convertCurrencyMenuItem);
-                        break;
-                    default:
+                            tokenLink.ContextMenu.Items.Add(convertCurrencyMenuItem);
+                            break;
+                        default:
 
-                        break;
-                }
-            } catch(Exception ex) {
+                            break;
+                    }
+                } 
+            }
+            catch (Exception ex) {
                 Console.WriteLine("TokenizedTextbox error, cannot add token text: " + token.TokenText + " of type: " + Enum.GetName(typeof(MpSubTextTokenType), token.TokenType) + Environment.NewLine + "with exception: " + ex.ToString());
+            }
+            if(!Tokens.Contains(token)) {
+                Tokens.Add(token);
             }
         }
 
@@ -234,7 +288,7 @@ namespace MpWpfApp {
         private Hyperlink GetTokenLink(MpSubTextToken token) {
             Block block = Document.Blocks.ToArray()[token.BlockIdx];
             TextPointer searchStartPointer = block.ContentStart;
-            if (_lastToken != null) {
+            if (_lastToken != null) {        
                 if (token.BlockIdx == _lastToken.BlockIdx) {
                     searchStartPointer = _lastTokenRange.End;
                 }

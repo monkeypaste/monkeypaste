@@ -39,13 +39,14 @@ namespace MpWpfApp {
         }
         private void InitDb() {
             //if db does not exist create it with a random password and set its path and password properties
-            if (string.IsNullOrEmpty(Properties.Settings.Default.DbPath)) {
+            if (string.IsNullOrEmpty(Properties.Settings.Default.DbPath) || !File.Exists(Properties.Settings.Default.DbPath)) {
                 Console.WriteLine("Db does not exist in " + MpHelpers.GetApplicationDirectory());
-                Properties.Settings.Default.DbPath = MpHelpers.GetApplicationDirectory() + "\\" + Properties.Settings.Default.DbName;
+                Properties.Settings.Default.DbPath = MpHelpers.GetApplicationDirectory() + Properties.Settings.Default.DbName;
+                Properties.Settings.Default.DbPassword = string.Empty;
                 Properties.Settings.Default.Save();
                 SQLiteConnection.CreateFile(Properties.Settings.Default.DbPath);
                 ExecuteWrite(GetCreateString(), null);
-                SetDbPassword(MpHelpers.GetRandomString());
+                //SetDbPassword(MpHelpers.GetRandomString());
             }
             Console.WriteLine("Database successfully initialized at " + Properties.Settings.Default.DbPath);
             _isLoaded = true;
@@ -83,20 +84,20 @@ namespace MpWpfApp {
                     ExecuteWrite(
                         "PRAGMA key=@np;",
                         new Dictionary<string, object> {
-                            { "@np", newPassword }
+                        { "@np", newPassword }
                         });
                 } else {
                     ExecuteWrite(
                         "PRAGMA rekey=@np;",
                         new Dictionary<string, object> {
-                            { "@np", newPassword }
+                        { "@np", newPassword }
                         });
                 }
                 Properties.Settings.Default.DbPassword = newPassword;
                 Properties.Settings.Default.Save();
             }
         }
-        private SQLiteConnection SetConnection() {
+        private SQLiteConnection SetConnection(bool isInit = false) {
             // see https://stackoverflow.com/questions/1381264/password-protect-a-sqlite-db-is-it-possible
             // about passwords
             SQLiteConnectionStringBuilder connStr = new SQLiteConnectionStringBuilder();
@@ -409,7 +410,7 @@ namespace MpWpfApp {
                       pk_MpCopyItemTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , TypeName text NULL 
                     );
-                    INSERT INTO MpCopyItemType(TypeName) VALUES ('rich_text'),('image'),('file_list');
+                    INSERT INTO MpCopyItemType(TypeName) VALUES ('rich_text'),('image'),('file_list'),('xaml');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpSortType (
                       pk_MpSortTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -501,7 +502,8 @@ namespace MpWpfApp {
                     , EndIdx integer NOT NULL
                     , BlockIdx int NOT NULL
                     , InlineIdx int NOT NULL
-                    , TokenText text NOT NULL
+                    , TokenText text NOT NULL                    
+                    , TokenName text
                     , CONSTRAINT FK_MpSubTextToken_0_0 FOREIGN KEY (fk_MpSubTextTokenTypeId) REFERENCES MpSubTextTokenType (pk_MpSubTextTokenTypeId) 
                     , CONSTRAINT FK_MpSubTextToken_1_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );

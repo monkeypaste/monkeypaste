@@ -12,6 +12,7 @@
     using System.Windows.Documents;
     using System.Windows.Input;
     using System.Windows.Interop;
+    using System.Windows.Markup;
     using System.Windows.Media;
     using System.Windows.Media.Animation;
     using System.Windows.Media.Imaging;
@@ -190,8 +191,24 @@
             }
         }
 
-        private FlowDocument _documentRtf = null;
-        public FlowDocument DocumentRtf {
+        private string _xamlText = string.Empty;
+        public string XamlText {
+            get {
+                if (_xamlText == string.Empty) {
+                    _xamlText = CopyItem.ItemXaml;
+                }
+                return _xamlText;
+            }
+            set {
+                if (_xamlText != value) {
+                    _xamlText = value;
+                    OnPropertyChanged(nameof(XamlText));
+                }
+            }
+        }
+
+        private MpEventEnabledFlowDocument _documentRtf = null;
+        public MpEventEnabledFlowDocument DocumentRtf {
             get {
                 if (_documentRtf == null) {
                     _documentRtf = CopyItem.ItemFlowDocument;
@@ -782,8 +799,8 @@
                         }
                         break;
                     case nameof(RichText):
-                        CopyItem.ItemRichText = RichText;
-                        CopyItem.WriteToDatabase();
+                        //CopyItem.ItemRichText = RichText;
+                        //CopyItem.WriteToDatabase();
                         break;
                 }
             };
@@ -798,6 +815,7 @@
             Tokens = new ObservableCollection<MpSubTextToken>(CopyItem.SubTextTokenList);
 
             InitSwirl();
+
 
             FileListVisibility = CopyItemType == MpCopyItemType.FileList ? Visibility.Visible : Visibility.Collapsed;
             ImgVisibility = CopyItemType == MpCopyItemType.Image ? Visibility.Visible : Visibility.Collapsed;
@@ -833,6 +851,7 @@
                     return;
                 }
             };
+
         }
 
         public void ClipTileTitle_Loaded(object sender, RoutedEventArgs e) {
@@ -883,6 +902,9 @@
             var etrtb = (MpEditableTokenizedRichTextBox)sender;
             etrtb.ContextMenu = (ContextMenu)etrtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
             etrtb.TokenizedRichTextBox.ContextMenu = etrtb.ContextMenu;
+            //etrtb.TokenizedRichTextBox.Document = (MpEventEnabledFlowDocument)MpHelpers.ConvertXamlToFlowDocument(CopyItem.ItemXaml);
+            //etrtb.TokenizedRichTextBox.IsDocumentEnabled = true;
+            //etrtb.TokenizedRichTextBox.Document.IsEnabled = true;
 
             etrtb.Toolbar.IsVisibleChanged += (s, e1) => {
                 var cb = (MpClipBorder)etrtb.GetVisualAncestor<MpClipBorder>();
@@ -897,6 +919,9 @@
                 double scrollbarWidth = 20;
 
                 if (etrtb.Toolbar.Visibility == Visibility.Visible) {
+                    //etrtb.TokenizedRichTextBox.Document = (MpEventEnabledFlowDocument)etrtb.TokenizedRichTextBox.Document;
+                    //etrtb.TokenizedRichTextBox.IsDocumentEnabled = true;
+                    //etrtb.TokenizedRichTextBox.Document.IsEnabled = true;
                     fromWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
                     fromWidthContent = fromWidthTile;
                     toWidthTile = Math.Max(625, etrtb.TokenizedRichTextBox.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
@@ -905,8 +930,16 @@
                     etrtb.TokenizedRichTextBox.Focusable = true;                    
                     etrtb.TokenizedRichTextBox.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
                     etrtb.TokenizedRichTextBox.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                    Console.WriteLine("Pre template richtext: ");
+                    Console.WriteLine(RichText);
                 } else {
-                    RichText = MpHelpers.ConvertFlowDocumentToRichText(etrtb.TokenizedRichTextBox.Document);
+                    // TODO add check to see if template token was added if not use convertflowdoctoricktext
+                    //etrtb.TokenizedRichTextBox.Document = etrtb.TokenizedRichTextBox.GetTemplateDocument();
+                    CopyItem.ItemXaml = MpHelpers.ConvertFlowDocumentToXaml(etrtb.TokenizedRichTextBox.GetTemplateDocument());
+                    CopyItem.SubTextTokenList = etrtb.TokenizedRichTextBox.Tokens.ToList();
+                    CopyItem.WriteToDatabase();
+                    Console.WriteLine("Post template richtext: ");
+                    Console.WriteLine(RichText);
                     fromWidthTile = etrtb.Width;
                     fromWidthContent = fromWidthTile - scrollbarWidth;
                     toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;

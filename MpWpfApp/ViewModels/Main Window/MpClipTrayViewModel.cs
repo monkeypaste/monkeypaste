@@ -410,6 +410,7 @@ namespace MpWpfApp {
             }
         }
         public void ResetClipSelection() {
+            ClearClipEdits();
             ClearClipSelection();
             if (VisibileClipTiles.Count > 0) {
                 VisibileClipTiles[0].IsSelected = true;
@@ -628,7 +629,8 @@ namespace MpWpfApp {
                 }
                 switch(ci.CopyItemType) {
                     case MpCopyItemType.RichText:
-                        if (string.Compare((string)ctvm.CopyItem.ItemRichText, ci.ItemRichText) == 0) {
+                        if (string.Compare((string)ctvm.CopyItem.ItemXaml, ci.ItemXaml) == 0) {
+                            
                             return ctvm;
                         }
                         break;

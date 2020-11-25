@@ -45,7 +45,8 @@ namespace MpWpfApp {
 
         public string ItemPlainText { get; set; }
         public string ItemRichText { get; set; }
-        public FlowDocument ItemFlowDocument { get; set; }
+        public string ItemXaml { get; set; }
+        public MpEventEnabledFlowDocument ItemFlowDocument { get; set; }
         public BitmapSource ItemBitmapSource { get; set; }
 
         public MpApp App { get; set; }
@@ -141,7 +142,8 @@ namespace MpWpfApp {
                     }
                     newItem.ItemPlainText = paths;
                     newItem.ItemRichText = MpHelpers.ConvertPlainTextToRichText(newItem.ItemPlainText);
-                    newItem.ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(newItem.ItemRichText);
+                    newItem.ItemXaml = MpHelpers.ConvertRichTextToXaml(newItem.ItemRichText);
+                    newItem.ItemFlowDocument = MpHelpers.ConvertXamlToFlowDocument(newItem.ItemXaml);
                     newItem.ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(newItem.ItemRichText);
                     newItem.SubTextTokenList = MpSubTextToken.GatherTokens(newItem.ItemFlowDocument);
                     break;
@@ -149,12 +151,14 @@ namespace MpWpfApp {
                     newItem.ItemBitmapSource = (BitmapSource)data;
                     newItem.ItemPlainText = MpHelpers.ConvertBitmapSourceToPlainText(newItem.ItemBitmapSource);
                     newItem.ItemRichText = MpHelpers.ConvertPlainTextToRichText(newItem.ItemPlainText);
-                    newItem.ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(newItem.ItemRichText);
+                    newItem.ItemXaml = MpHelpers.ConvertRichTextToXaml(newItem.ItemRichText);
+                    newItem.ItemFlowDocument = MpHelpers.ConvertXamlToFlowDocument(newItem.ItemXaml);
                     break;
                 case MpCopyItemType.RichText:
-                    newItem.ItemPlainText = MpHelpers.IsStringRichText((string)data) ? MpHelpers.ConvertRichTextToPlainText((string)data) : (string)data;
-                    newItem.ItemRichText = MpHelpers.IsStringRichText((string)data) ? (string)data : MpHelpers.ConvertPlainTextToRichText((string)data);
-                    newItem.ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(newItem.ItemRichText);
+                    newItem.ItemPlainText = MpHelpers.IsStringRichText((string)data) ? MpHelpers.ConvertRichTextToPlainText((string)data) : MpHelpers.IsStringXaml((string)data) ? MpHelpers.ConvertXamlToPlainText((string)data) : (string)data;
+                    newItem.ItemRichText = MpHelpers.IsStringRichText((string)data) ? (string)data : MpHelpers.IsStringXaml((string)data) ? MpHelpers.ConvertXamlToRichText((string)data) : MpHelpers.ConvertPlainTextToRichText((string)data);
+                    newItem.ItemXaml = MpHelpers.ConvertRichTextToXaml((string)data);// MpHelpers.IsStringRichText((string)data) ? MpHelpers.ConvertRichTextToXaml((string)data) : MpHelpers.IsStringXaml((string)data) ? (string)data : MpHelpers.ConvertPlainTextToXaml((string)data);
+                    newItem.ItemFlowDocument = MpHelpers.ConvertXamlToFlowDocument(newItem.ItemXaml);
                     newItem.ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(newItem.ItemRichText);
                     newItem.SubTextTokenList = MpSubTextToken.GatherTokens(newItem.ItemFlowDocument);
                     break;
@@ -254,14 +258,16 @@ namespace MpWpfApp {
                     }
                     ItemPlainText += Environment.NewLine + fileStr;
                     ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
-                    ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
+                    ItemXaml = MpHelpers.ConvertRichTextToXaml(ItemRichText);
+                    ItemFlowDocument = MpHelpers.ConvertXamlToFlowDocument(ItemXaml);
                     ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                     break;
                 case MpCopyItemType.Image:
                     ItemBitmapSource = MpHelpers.CombineBitmap(new List<BitmapSource>() { ItemBitmapSource, otherItem.ItemBitmapSource });
                     ItemPlainText = MpHelpers.ConvertBitmapSourceToPlainText(ItemBitmapSource);
                     ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
-                    ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
+                    ItemXaml = MpHelpers.ConvertRichTextToXaml(ItemRichText);
+                    ItemFlowDocument = MpHelpers.ConvertXamlToFlowDocument(ItemRichText);
                     break;
                 case MpCopyItemType.RichText:
                     switch(otherItem.CopyItemType) {
@@ -271,7 +277,8 @@ namespace MpWpfApp {
                         default:
                             //var thisRange = MpHelpers.FindStringRangeFromPosition(ItemFlowDocument.ContentStart, ItemPlainText);
                             ItemFlowDocument = MpHelpers.CombineFlowDocuments(otherItem.ItemFlowDocument, ItemFlowDocument);
-                            ItemRichText = MpHelpers.ConvertFlowDocumentToRichText(ItemFlowDocument);
+                            ItemXaml = MpHelpers.ConvertFlowDocumentToXaml(ItemFlowDocument);
+                            ItemRichText = MpHelpers.ConvertXamlToRichText(ItemXaml);
                             ItemPlainText = MpHelpers.ConvertRichTextToPlainText(ItemRichText);
                             ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                             SubTextTokenList = MpSubTextToken.GatherTokens(ItemFlowDocument);
@@ -293,13 +300,15 @@ namespace MpWpfApp {
                         case MpCopyItemType.RichText:
                             ItemPlainText = MpHelpers.WriteTextToFile(Path.GetTempFileName(), ItemPlainText, false);
                             ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
-                            ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
+                            ItemXaml = MpHelpers.ConvertRichTextToXaml(ItemRichText);
+                            ItemFlowDocument = MpHelpers.ConvertXamlToFlowDocument(ItemXaml);
                             ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                             break;
                         case MpCopyItemType.Image:
                             ItemPlainText = MpHelpers.WriteBitmapSourceToFile(Path.GetTempFileName(), ItemBitmapSource, false);
                             ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
-                            ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
+                            ItemXaml = MpHelpers.ConvertRichTextToXaml(ItemRichText);
+                            ItemFlowDocument = MpHelpers.ConvertXamlToFlowDocument(ItemXaml);
                             ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                             break;
                     }
@@ -309,13 +318,15 @@ namespace MpWpfApp {
                         case MpCopyItemType.RichText:
                             ItemPlainText = MpHelpers.ConvertBitmapSourceToPlainText(ItemBitmapSource);
                             ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
-                            ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
+                            ItemXaml = MpHelpers.ConvertRichTextToXaml(ItemRichText);
+                            ItemFlowDocument = MpHelpers.ConvertXamlToFlowDocument(ItemXaml);
                             ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                             break;
                         case MpCopyItemType.FileList:
                             ItemPlainText = MpHelpers.WriteBitmapSourceToFile(Path.GetTempFileName(), ItemBitmapSource, false);
                             ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
-                            ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
+                            ItemXaml = MpHelpers.ConvertRichTextToXaml(ItemRichText);
+                            ItemFlowDocument = MpHelpers.ConvertXamlToFlowDocument(ItemXaml);
                             ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                             break;
                     }
@@ -325,13 +336,15 @@ namespace MpWpfApp {
                         case MpCopyItemType.Image:
                             ItemPlainText = MpHelpers.ConvertBitmapSourceToPlainText(ItemBitmapSource);
                             ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
-                            ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
+                            ItemXaml = MpHelpers.ConvertRichTextToXaml(ItemRichText);
+                            ItemFlowDocument = MpHelpers.ConvertXamlToFlowDocument(ItemXaml);
                             ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                             break;
                         case MpCopyItemType.FileList:
                             ItemPlainText = MpHelpers.WriteBitmapSourceToFile(Path.GetTempFileName(), ItemBitmapSource, false);
                             ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
-                            ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
+                            ItemXaml = MpHelpers.ConvertRichTextToXaml(ItemRichText);
+                            ItemFlowDocument = MpHelpers.ConvertXamlToFlowDocument(ItemXaml);
                             ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                             break;
                     }
@@ -407,18 +420,21 @@ namespace MpWpfApp {
                 case MpCopyItemType.FileList:
                     ItemPlainText = (string)dr["ItemText"].ToString();
                     ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
-                    ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
+                    ItemXaml = MpHelpers.ConvertRichTextToXaml(ItemRichText);
+                    ItemFlowDocument = MpHelpers.ConvertXamlToFlowDocument(ItemXaml);
                     ItemBitmapSource = MpHelpers.ConvertRichTextToBitmapSource(ItemRichText);
                     break;
                 case MpCopyItemType.Image:
                     ItemBitmapSource = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]);
                     ItemPlainText = (string)dr["ItemText"].ToString();
                     ItemRichText = MpHelpers.ConvertPlainTextToRichText(ItemPlainText);
-                    ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
+                    ItemXaml = MpHelpers.ConvertRichTextToXaml(ItemRichText);
+                    ItemFlowDocument = MpHelpers.ConvertXamlToFlowDocument(ItemXaml);
                     break;
                 case MpCopyItemType.RichText:
-                    ItemRichText = dr["ItemText"].ToString();
-                    ItemFlowDocument = MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
+                    ItemXaml = dr["ItemText"].ToString();
+                    ItemRichText = MpHelpers.ConvertXamlToRichText(ItemXaml);
+                    ItemFlowDocument = MpHelpers.ConvertXamlToFlowDocument(ItemXaml);
                     ItemPlainText = MpHelpers.ConvertRichTextToPlainText(ItemRichText);
                     ItemBitmapSource = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]);
                     SubTextTokenList = MpSubTextToken.GatherTokens(ItemFlowDocument);
@@ -495,17 +511,11 @@ namespace MpWpfApp {
                 ItemColor.WriteToDatabase();
                 ColorId = ItemColor.ColorId;
             }
-            string itemText = this.CopyItemType == MpCopyItemType.RichText ? ItemRichText : ItemPlainText;
+            string itemText = this.CopyItemType == MpCopyItemType.RichText ? ItemXaml : ItemPlainText;
             byte[] itemImage = MpHelpers.ConvertBitmapSourceToByteArray(ItemBitmapSource);
             //if copyitem already exists
             if (this.CopyItemId > 0) {
-                DataTable dt = MpDb.Instance.Execute(
-                    "select * from MpCopyItem where pk_MpCopyItemId=@ciid",
-                    new System.Collections.Generic.Dictionary<string, object> {
-                            { "@ciid", CopyItemId }
-                        });
-                if (dt.Rows.Count > 0) {
-                    MpDb.Instance.ExecuteWrite(
+                MpDb.Instance.ExecuteWrite(
                         "update MpCopyItem set fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemImage=@ii where pk_MpCopyItemId=@ciid",
                         new Dictionary<string, object> {
                             { "@citd", (int)CopyItemType },
@@ -518,11 +528,6 @@ namespace MpWpfApp {
                             { "@ii", itemImage},
                             { "@ciid", CopyItemId},
                         });
-                    
-                } else {
-                    Console.WriteLine("MpCopyItem error cannot find pk of existing item");
-                    return;
-                }
                 isNew = false;
             } else {
                 MpDb.Instance.ExecuteWrite(
@@ -540,7 +545,6 @@ namespace MpWpfApp {
                             { "@ii", itemImage},
                             { "@ciid", CopyItemId},
                         });
-                //+ (int)this.CopyItemType + "," + MpDb.Instance.Client.ClientId + "," + this.AppId + "," + this.ColorId + ",'" + this.Title + "','" + this.CopyDateTime.ToString("yyyy-MM-dd HH:mm:ss") + "'," + this.CopyCount + ",'" + itemText.Replace("'", "''") + "',@0);", new List<string>() { "@0" }, new List<object>() { itemImage });
                 this.CopyItemId = MpDb.Instance.GetLastRowId("MpCopyItem", "pk_MpCopyItemId");
                 isNew = true;
             }
@@ -562,6 +566,7 @@ namespace MpWpfApp {
         RichText,
         Image,
         FileList,
+        Xaml,
         Csv //this is only used during runtime
     }
 }

@@ -35,6 +35,8 @@ namespace MpWpfApp {
         public int SubTextTokenId { get; set; }
         public int CopyItemId { get; set; }
         public string TokenText { get; set; }
+
+        public string TokenName { get; set; }
         public MpSubTextTokenType TokenType { get; set; }
         public int StartIdx { get; set; }
         public int EndIdx { get; set; }
@@ -47,13 +49,17 @@ namespace MpWpfApp {
             int startIdx, 
             int endIdx, 
             int blockIdx, 
-            int inlineIdx) {
+            int inlineIdx,
+            string tokenName = "",
+            int copyItemId = 0) {
             this.TokenText = token;
             this.TokenType = tokenType;
             this.StartIdx = startIdx;
             this.EndIdx = endIdx;
             this.BlockIdx = blockIdx;
             this.InlineIdx = inlineIdx;
+            this.TokenName = tokenName;
+            this.CopyItemId = copyItemId;
             MapDataToColumns();
         }
         public MpSubTextToken(int subTextTokenId) {
@@ -74,7 +80,7 @@ namespace MpWpfApp {
             //RichTextBox rtb = new RichTextBox();
             //rtb.SetRtf(richText);
 
-            tokenList?.AddRange(ExtractSegment(fd));
+            //tokenList?.AddRange(ExtractSegment(fd));
             tokenList?.AddRange(ExtractEmail(fd));
             tokenList?.AddRange(ExtractWebLink(fd));
             tokenList?.AddRange(ExtractStreetAddress(fd));
@@ -148,8 +154,8 @@ namespace MpWpfApp {
                 foreach (Match m in mc) {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
-                            int sIdx = textRange.Text.IndexOf(mg.Value);
-                            tokenList.Add(new MpSubTextToken(mg.Value, tokenType, sIdx, sIdx + c.Value.Length, bIdx, 0));
+                            int sIdx = textRange.Text.IndexOf(c.Value);
+                            tokenList.Add(new MpSubTextToken(c.Value, tokenType, sIdx, sIdx + c.Value.Length, bIdx, 0));
                         }
                     }
                 }
@@ -187,7 +193,7 @@ namespace MpWpfApp {
             this.BlockIdx = Convert.ToInt32(dr["BlockIdx"].ToString());
             this.InlineIdx = Convert.ToInt32(dr["InlineIdx"].ToString());
             this.TokenText = dr["TokenText"].ToString();
-
+            this.TokenName = dr["TokenName"].ToString();
             MapDataToColumns();
         }
 
@@ -196,22 +202,7 @@ namespace MpWpfApp {
             if (SubTextTokenId == 0) {
                 //MpDb.Instance.ExecuteWrite("insert into MpSubTextToken(fk_MpCopyItemId,fk_MpSubTextTokenTypeId,StartIdx,EndIdx,BlockIdx,InlineIdx,TokenText) values(" + CopyItemId + "," + (int)TokenType + "," + StartIdx + "," + EndIdx + "," + BlockIdx + "," + InlineIdx + ",'" + TokenText + "')");
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpSubTextToken(fk_MpCopyItemId,fk_MpSubTextTokenTypeId,StartIdx,EndIdx,BlockIdx,InlineIdx,TokenText) values(@copyItemId,@tokenType,@sIdx,@eIdx,@bIdx,@iIdx,@tokenText)", 
-                    new Dictionary<string, object> {
-                        { "@copyItemId", CopyItemId },
-                        { "@tokenType", (int)TokenType },
-                        { "@sIdx", StartIdx },
-                        { "@eIdx", EndIdx },
-                        { "@bIdx", BlockIdx },
-                        { "@iIdx", InlineIdx },
-                        { "@tokenText", TokenText } 
-                    });
-
-                SubTextTokenId = MpDb.Instance.GetLastRowId("MpSubTextToken", "pk_MpSubTextTokenId");
-            } else {
-                //MpDb.Instance.ExecuteWrite("update MpSubTextToken set fk_MpCopyItemId=" + CopyItemId + ", fk_MpSubTextTokenTypeId=" + (int)TokenType + ", StartIdx=" + StartIdx + ", EndIdx=" + EndIdx + ",BlockIdx=" + BlockIdx + ",InlineIdx=" + InlineIdx + ",TokenText='" + TokenText + "' where pk_MpSubTextTokenId=" + SubTextTokenId);
-                MpDb.Instance.ExecuteWrite(
-                    "update MpSubTextToken set fk_MpCopyItemId=@copyItemId, fk_MpSubTextTokenTypeId=@tokenType, StartIdx=@sIdx, EndIdx=@eIdx, BlockIdx=@bIdx, InlineIdx=@iIdx, TokenText=@tokenText where pk_MpSubTextTokenId=@subTextTokenId",
+                    "insert into MpSubTextToken(fk_MpCopyItemId,fk_MpSubTextTokenTypeId,StartIdx,EndIdx,BlockIdx,InlineIdx,TokenText,TokenName) values(@copyItemId,@tokenType,@sIdx,@eIdx,@bIdx,@iIdx,@tokenText,@tokenName)", 
                     new Dictionary<string, object> {
                         { "@copyItemId", CopyItemId },
                         { "@tokenType", (int)TokenType },
@@ -220,7 +211,24 @@ namespace MpWpfApp {
                         { "@bIdx", BlockIdx },
                         { "@iIdx", InlineIdx },
                         { "@tokenText", TokenText },
-                        { "@subTextTokenId", SubTextTokenId }
+                        { "@tokenName", TokenName }
+                    });
+
+                SubTextTokenId = MpDb.Instance.GetLastRowId("MpSubTextToken", "pk_MpSubTextTokenId");
+            } else {
+                //MpDb.Instance.ExecuteWrite("update MpSubTextToken set fk_MpCopyItemId=" + CopyItemId + ", fk_MpSubTextTokenTypeId=" + (int)TokenType + ", StartIdx=" + StartIdx + ", EndIdx=" + EndIdx + ",BlockIdx=" + BlockIdx + ",InlineIdx=" + InlineIdx + ",TokenText='" + TokenText + "' where pk_MpSubTextTokenId=" + SubTextTokenId);
+                MpDb.Instance.ExecuteWrite(
+                    "update MpSubTextToken set fk_MpCopyItemId=@copyItemId, fk_MpSubTextTokenTypeId=@tokenType, StartIdx=@sIdx, EndIdx=@eIdx, BlockIdx=@bIdx, InlineIdx=@iIdx, TokenText=@tokenText, TokenName=@tokenName where pk_MpSubTextTokenId=@subTextTokenId",
+                    new Dictionary<string, object> {
+                        { "@copyItemId", CopyItemId },
+                        { "@tokenType", (int)TokenType },
+                        { "@sIdx", StartIdx },
+                        { "@eIdx", EndIdx },
+                        { "@bIdx", BlockIdx },
+                        { "@iIdx", InlineIdx },
+                        { "@tokenText", TokenText },
+                        { "@subTextTokenId", SubTextTokenId },
+                        { "@tokenName", TokenName }
                     });
             }
         }
@@ -244,6 +252,8 @@ namespace MpWpfApp {
             columnData.Add("EndIdx", this.EndIdx);
             columnData.Add("BlockIdx", this.BlockIdx);
             columnData.Add("TokenText", this.TokenText);
+
+            columnData.Add("TOkenName", this.TokenName);
         }
     }
 }

@@ -412,18 +412,17 @@
         </Border>
         <local:MpTokenizedRichTextBox x:Name="TokenizedRichTextBox"
                                       TextOptions.TextFormattingMode="Ideal"
-                                      TextOptions.TextRenderingMode="Aliased"
-                                      AcceptsTab="True"
-                                      AcceptsReturn="True"
-                                      RichText="{Binding RichText}"
+                                      TextOptions.TextRenderingMode="Aliased"                                      
+                                      DocumentRtf="{Binding XamlText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                       SearchText="{Binding SearchText}"
-                                      Tokens="{Binding Tokens}"
+                                      Tokens="{Binding Tokens, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                       Width="{Binding TileBorderWidth}"
                                       Padding="5"
                                       Focusable="False"
                                       Cursor="Arrow"
                                       TextChanged="OnTextChanged"
                                       BorderThickness="0"
-                                      SelectionChanged="OnTextBoxSelectionChanged" />
+                                      SelectionChanged="OnTextBoxSelectionChanged">
+        </local:MpTokenizedRichTextBox>
     </DockPanel>
 </UserControl>
