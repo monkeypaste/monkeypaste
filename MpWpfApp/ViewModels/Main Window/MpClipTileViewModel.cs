@@ -132,14 +132,13 @@
             }
         }
 
-        private int _copyItemId = 0;
         public int CopyItemId {
             get {
-                return _copyItemId;
+                return CopyItem.CopyItemId;
             }
             set {
-                if (_copyItemId != value) {
-                    _copyItemId = value;
+                if (CopyItem.CopyItemId != value) {
+                    CopyItem.CopyItemId = value;
                     OnPropertyChanged(nameof(CopyItemId));
                 }
             }
@@ -751,9 +750,6 @@
                             EditToolbarVisibility = Visibility.Collapsed;
                         }
                         break;
-                    case nameof(CopyItemId):
-                        CopyItem.CopyItemId = CopyItemId;
-                        break;
                     case nameof(IsEditingTitle):
                         if (IsEditingTitle) {
                             //show textbox and select all text
@@ -808,7 +804,7 @@
             ClipTrayViewModel = parent;
             IsLoading = true;
             CopyItem = ci;
-            CopyItemId = CopyItem.CopyItemId;
+            //CopyItemId = CopyItem.CopyItemId;
             Title = ci.Title;
             TitleColor = new SolidColorBrush(ci.ItemColor.Color);
             Icon = ci.App.Icon.IconImage;
@@ -816,11 +812,9 @@
 
             InitSwirl();
 
-
             FileListVisibility = CopyItemType == MpCopyItemType.FileList ? Visibility.Visible : Visibility.Collapsed;
             ImgVisibility = CopyItemType == MpCopyItemType.Image ? Visibility.Visible : Visibility.Collapsed;
             RtbVisibility = CopyItemType == MpCopyItemType.RichText ? Visibility.Visible : Visibility.Collapsed;
-            //ErtbVisibility = Visibility.Collapsed;
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
@@ -834,10 +828,10 @@
 
             var clipTileBorder = (MpClipBorder)sender;
             clipTileBorder.MouseEnter += (s, e1) => {
-                IsHovering = true;
+                ((MpClipTileViewModel)((MpClipBorder)s).DataContext).IsHovering = true;
             };
             clipTileBorder.MouseLeave += (s, e2) => {
-                IsHovering = false;
+                ((MpClipTileViewModel)((MpClipBorder)s).DataContext).IsHovering = false;
             };
             clipTileBorder.LostFocus += (s, e4) => {
                 if(!IsSelected) {
@@ -869,7 +863,6 @@
             };
 
             var clipTileTitleTextBox = (TextBox)titleCanvas.FindName("ClipTileTitleTextBox");
-            clipTileTitleTextBox.PreviewKeyDown += ClipTrayViewModel.MainWindowViewModel.MainWindow_PreviewKeyDown;
             clipTileTitleTextBox.LostFocus += (s, e4) => {
                 IsEditingTitle = false;
             };
@@ -927,7 +920,7 @@
                     toWidthTile = Math.Max(625, etrtb.TokenizedRichTextBox.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
                     toWidthContent = toWidthTile - scrollbarWidth;
                     etrtb.Focusable = true;
-                    etrtb.TokenizedRichTextBox.Focusable = true;                    
+                    //etrtb.TokenizedRichTextBox.Focusable = true;                    
                     etrtb.TokenizedRichTextBox.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
                     etrtb.TokenizedRichTextBox.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
                     Console.WriteLine("Pre template richtext: ");
@@ -945,7 +938,7 @@
                     toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
                     toWidthContent = toWidthTile;
                     etrtb.Focusable = false;
-                    etrtb.TokenizedRichTextBox.Focusable = false;
+                    //etrtb.TokenizedRichTextBox.Focusable = false;
                     etrtb.TokenizedRichTextBox.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
                     etrtb.TokenizedRichTextBox.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
                 }

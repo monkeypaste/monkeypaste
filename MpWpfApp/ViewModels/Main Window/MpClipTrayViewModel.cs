@@ -27,7 +27,7 @@ namespace MpWpfApp {
         #endregion
 
         private ListBox _trayListBoxRef = null;
-        private object _dragClipBorderElement = null;
+        //private object _dragClipBorderElement = null;
 
         #region Properties
         public List<MpClipTileViewModel> SelectedClipTiles {
@@ -96,15 +96,15 @@ namespace MpWpfApp {
             }
         }
 
-        private Visibility _clipListVisibility = Visibility.Visible;
-        public Visibility ClipListVisibility {
+        private Visibility _clipTrayVisibility = Visibility.Visible;
+        public Visibility ClipTrayVisibility {
             get {
-                return _clipListVisibility;
+                return _clipTrayVisibility;
             }
             set {
-                if (_clipListVisibility != value) {
-                    _clipListVisibility = value;
-                    OnPropertyChanged(nameof(ClipListVisibility));
+                if (_clipTrayVisibility != value) {
+                    _clipTrayVisibility = value;
+                    OnPropertyChanged(nameof(ClipTrayVisibility));
                 }
             }
         }
@@ -208,16 +208,16 @@ namespace MpWpfApp {
         #region Public Methods
 
         public MpClipTrayViewModel() {
-            CollectionChanged += (s, e1) => {
-                if (VisibileClipTiles.Count > 0) {
-                    ClipListVisibility = Visibility.Visible;
-                    EmptyListMessageVisibility = Visibility.Collapsed;
-                } else {
-                    //update cliptray visibility if this is the first cliptile added
-                    ClipListVisibility = Visibility.Collapsed;
-                    EmptyListMessageVisibility = Visibility.Visible;
-                }
-            };
+            //CollectionChanged += (s, e1) => {
+            //    if (VisibileClipTiles.Count > 0) {
+            //        ClipTrayVisibility = Visibility.Visible;
+            //        EmptyListMessageVisibility = Visibility.Collapsed;
+            //    } else {
+            //        //update cliptray visibility if this is the first cliptile added
+            //        ClipTrayVisibility = Visibility.Collapsed;
+            //        EmptyListMessageVisibility = Visibility.Visible;
+            //    }
+            //};
 
             //create tiles for all clips in the database
             foreach (MpCopyItem ci in MpCopyItem.GetAllCopyItems()) {
@@ -228,6 +228,9 @@ namespace MpWpfApp {
         public void ClipTray_Loaded(object sender, RoutedEventArgs e) {
             var clipTray = (MpMultiSelectListBox)sender;
             _trayListBoxRef = clipTray;
+            clipTray.PreviewMouseDown += (s, e10) => {
+                ResetClipSelection();
+            };
             clipTray.DragEnter += (s, e1) => {
                 //used for resorting
                 e1.Effects = e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName) ? DragDropEffects.Move : DragDropEffects.None;
@@ -293,7 +296,14 @@ namespace MpWpfApp {
                             isTagLinkedToAllSelectedClips = false;
                         }
                     }
-                    ttvm.IsHovering = isTagLinkedToAllSelectedClips;
+                    ttvm.IsHovering = isTagLinkedToAllSelectedClips && VisibileClipTiles.Count > 0;
+                }
+                if(VisibileClipTiles.Count == 0) {
+                    ClipTrayVisibility = Visibility.Collapsed;
+                    EmptyListMessageVisibility = Visibility.Visible;
+                } else {
+                    ClipTrayVisibility = Visibility.Visible;
+                    EmptyListMessageVisibility = Visibility.Collapsed;
                 }
             };
             clipTray.PreviewMouseWheel += (s, e3) => {
@@ -345,7 +355,7 @@ namespace MpWpfApp {
                 IsMouseDown = true;
                 StartDragPoint = e6.GetPosition(clipTray);
 
-                _dragClipBorderElement = (MpClipBorder)VisualTreeHelper.HitTest(clipTray, StartDragPoint).VisualHit.GetVisualAncestor<MpClipBorder>(); ;
+                //_dragClipBorderElement = (MpClipBorder)VisualTreeHelper.HitTest(clipTray, StartDragPoint).VisualHit.GetVisualAncestor<MpClipBorder>(); ;
             };
             //Initiate Selected Clips Drag/Drop, Copy/Paste and Export (to file or csv)
             //Strategy: ALL selected items, regardless of type will have text,rtf,img, and file representations
@@ -355,30 +365,30 @@ namespace MpWpfApp {
                 var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
                 var curDragPoint = e7.GetPosition(clipTray);
                 //these tests ensure tile is not being dragged INTO another clip tile or outside tray
-                var testBorder = (MpClipBorder)VisualTreeHelper.HitTest(clipTray, curDragPoint).VisualHit.GetVisualAncestor<MpClipBorder>();
-                var testTray = (ListBox)VisualTreeHelper.HitTest(clipTray, curDragPoint).VisualHit.GetVisualAncestor<ListBox>();
+                //var testBorder = (MpClipBorder)VisualTreeHelper.HitTest(clipTray, curDragPoint).VisualHit.GetVisualAncestor<MpClipBorder>();
+                //var testTray = (ListBox)VisualTreeHelper.HitTest(clipTray, curDragPoint).VisualHit.GetVisualAncestor<ListBox>();
                 if (IsMouseDown && 
                     !IsDragging && 
                     e7.MouseDevice.LeftButton == MouseButtonState.Pressed && 
-                    (Math.Abs(curDragPoint.Y - StartDragPoint.Y) > 5 || Math.Abs(curDragPoint.X - StartDragPoint.X) > 5) &&
+                    (Math.Abs(curDragPoint.Y - StartDragPoint.Y) > 5 || Math.Abs(curDragPoint.X - StartDragPoint.X) > 5) /*&&
                    // s.GetType() == typeof(MpClipBorder) &&
                     //_dragClipBorderElement != testBorder &&
                     testBorder == null &&
-                    testTray != null) {
+                    testTray != null*/) {
                     DragDrop.DoDragDrop(clipTray, SelectedClipTilesDropDataObject, DragDropEffects.Copy | DragDropEffects.Move);
                     IsDragging = true;
                 } else if(IsDragging) {
                     IsMouseDown = false;
                     IsDragging = false;
                     StartDragPoint = new Point ();
-                    _dragClipBorderElement = null;
+                    //_dragClipBorderElement = null;
                 }
             };
             clipTileBorder.PreviewMouseUp += (s, e8) => {
                 IsMouseDown = false;
                 IsDragging = false;
                 StartDragPoint = new Point();
-                _dragClipBorderElement = null;
+                //_dragClipBorderElement = null;
             };
         }
 
@@ -445,6 +455,7 @@ namespace MpWpfApp {
             foreach(var scvmToRemove in scvmToRemoveList) {
                 MpShortcutCollectionViewModel.Instance.Remove(scvmToRemove);
             }
+            clipTileToRemove = null;
         }
 
         //public new void Move(int oldIdx,int newIdx) {

@@ -111,7 +111,6 @@ namespace MpWpfApp {
                 }
                 IsFocused = false;
             };
-            searchBox.PreviewKeyUp += MainWindowViewModel.MainWindow_PreviewKeyDown;
             SearchText = Properties.Settings.Default.SearchPlaceHolderText;
 
         }

@@ -377,18 +377,18 @@ namespace MpWpfApp {
                         }
                         EndChange();
                     }
-                    var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
-                    if (mwvm.ClipTrayViewModel.VisibileClipTiles.Count == 0 &&
-                       !string.IsNullOrEmpty(SearchText) &&
-                       SearchText != Properties.Settings.Default.SearchPlaceHolderText) {
-                        mwvm.SearchBoxViewModel.SearchTextBoxBorderBrush = Brushes.Red;
-                        mwvm.ClipTrayViewModel.ClipListVisibility = Visibility.Collapsed;
-                        mwvm.ClipTrayViewModel.EmptyListMessageVisibility = Visibility.Visible;
-                    } else {
-                        mwvm.SearchBoxViewModel.SearchTextBoxBorderBrush = Brushes.Transparent;
-                        mwvm.ClipTrayViewModel.ClipListVisibility = Visibility.Visible;
-                        mwvm.ClipTrayViewModel.EmptyListMessageVisibility = Visibility.Collapsed;
-                    }
+                    //var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
+                    //if (mwvm.ClipTrayViewModel.VisibileClipTiles.Count == 0 &&
+                    //   !string.IsNullOrEmpty(SearchText) &&
+                    //   SearchText != Properties.Settings.Default.SearchPlaceHolderText) {
+                    //    mwvm.SearchBoxViewModel.SearchTextBoxBorderBrush = Brushes.Red;
+                    //    mwvm.ClipTrayViewModel.ClipTrayVisibility = Visibility.Collapsed;
+                    //    mwvm.ClipTrayViewModel.EmptyListMessageVisibility = Visibility.Visible;
+                    //} else {
+                    //    mwvm.SearchBoxViewModel.SearchTextBoxBorderBrush = Brushes.Transparent;
+                    //    mwvm.ClipTrayViewModel.ClipTrayVisibility = Visibility.Visible;
+                    //    mwvm.ClipTrayViewModel.EmptyListMessageVisibility = Visibility.Collapsed;
+                    //}
                     //var fullDocRange = new TextRange(Document.ContentStart, Document.ContentEnd);
                     ////fullDocRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
 

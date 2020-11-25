@@ -173,7 +173,6 @@ namespace MpWpfApp {
             mw.Deactivated += (s, e2) => {
                 HideWindowCommand.Execute(null);
             };
-            mw.PreviewKeyDown += MainWindow_PreviewKeyDown;
 
             SetupMainWindowRect();
 
@@ -189,29 +188,6 @@ namespace MpWpfApp {
 #endif
             var taskbarIcon = (TaskbarIcon)mw.FindName("TaskbarIcon");
             MpSoundPlayerGroupCollectionViewModel.Instance.Init();
-        }
-
-        public void MainWindow_PreviewKeyDown(object sender, KeyEventArgs e) {
-            Key key = e.Key;
-            /*if (key == Key.Enter) {
-                if (SearchBoxViewModel.IsFocused) {
-                    ClipTrayViewModel.SortAndFilterClipTiles();
-                } else if (TagTrayViewModel.IsEditingTagName) {
-                    TagTrayViewModel.SelectedTagTile.IsEditing = false;
-                } else if (ClipTrayViewModel.IsEditingClipTitle) {
-                    ClipTrayViewModel.SelectedClipTiles[0].IsEditingTitle = false;
-                } else {
-                    ClipTrayViewModel.PasteSelectedClipsCommand.Execute(null);
-                }
-                e.Handled = true;
-            } else if ((key == Key.Delete || key == Key.Back) &&
-                       !SearchBoxViewModel.IsFocused &&
-                       !TagTrayViewModel.IsEditingTagName &&
-                       !ClipTrayViewModel.IsEditingClipTitle) {
-                //delete clip which shifts focus to neighbor
-                ClipTrayViewModel.DeleteSelectedClipsCommand.Execute(null);
-                e.Handled = true;
-            }*/
         }
         #endregion
 

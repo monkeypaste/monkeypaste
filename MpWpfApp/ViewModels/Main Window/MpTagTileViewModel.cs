@@ -337,7 +337,6 @@ namespace MpWpfApp {
             tagTextBox.LostFocus += (s, e2) => {
                 IsEditing = false;
             };
-            tagTextBox.PreviewKeyDown += MainWindowViewModel.MainWindow_PreviewKeyDown;
             //if tag is created at runtime show tbox w/ all selected
             if (!MainWindowViewModel.IsLoading) {
                 RenameTagCommand.Execute(null);

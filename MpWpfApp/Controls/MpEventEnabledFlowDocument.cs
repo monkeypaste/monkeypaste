@@ -7,10 +7,10 @@ using System.Windows.Documents;
 
 namespace MpWpfApp {
     public class MpEventEnabledFlowDocument : FlowDocument {
-        protected override bool IsEnabledCore {
-            get {
-                return true;
-            }
-        }
+        //protected override bool IsEnabledCore {
+        //    get {
+        //        return true;
+        //    }
+        //}
     }
 }

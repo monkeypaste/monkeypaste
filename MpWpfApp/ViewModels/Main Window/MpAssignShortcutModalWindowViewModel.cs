@@ -1,6 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using Gma.System.MouseKeyHook;
-using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Linq;

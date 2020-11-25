@@ -33,8 +33,13 @@ namespace MpWpfApp {
         }
 
         public void TagTray_Loaded(object sender, RoutedEventArgs e) {
+            var tagTrayGrid = (UIElement)sender;
+            tagTrayGrid.PreviewMouseDown += (s, e10) => {
+                MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();
+            };
             //select history tag by default
             GetHistoryTagTileViewModel().IsSelected = true;
+
         }
 
         public new void Add(MpTagTileViewModel newTagTile) {
@@ -66,10 +71,10 @@ namespace MpWpfApp {
                                 }
                             }
                             if (MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles.Count == 0) {
-                                MainWindowViewModel.ClipTrayViewModel.ClipListVisibility = Visibility.Collapsed;
+                                MainWindowViewModel.ClipTrayViewModel.ClipTrayVisibility = Visibility.Collapsed;
                                 MainWindowViewModel.ClipTrayViewModel.EmptyListMessageVisibility = Visibility.Visible;
                             } else {
-                                MainWindowViewModel.ClipTrayViewModel.ClipListVisibility = Visibility.Visible;
+                                MainWindowViewModel.ClipTrayViewModel.ClipTrayVisibility = Visibility.Visible;
                                 MainWindowViewModel.ClipTrayViewModel.EmptyListMessageVisibility = Visibility.Collapsed;
 
                                 MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();

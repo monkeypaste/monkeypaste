@@ -463,7 +463,7 @@
                 </Grid.Resources>
                 <local:MpMultiSelectListBox x:Name="ClipTray"
                                             ItemsSource="{Binding}"
-                                            Visibility="{Binding ClipListVisibility}"
+                                            Visibility="{Binding ClipTrayVisibility}"
                                             local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                             AllowDrop="True"
                                             Margin="5,0,0,0"
