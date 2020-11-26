@@ -7,11 +7,9 @@
              xmlns:local="clr-namespace:MpWpfApp"
              mc:Ignorable="d" >
     <UserControl.DataContext>
-        <local:MpSubTextTemplateTokenViewModel />
+        <local:MpSubTextTokenViewModel />
     </UserControl.DataContext>
-
-    <local:MpClipBorder x:Name="TokenBorder"
-                        CornerRadius="3"
+    <Border CornerRadius="3"
                         Margin="0"
                         Padding="1"
                         Focusable="True"
@@ -26,7 +24,7 @@
                                     MethodName="TemplateTextTokenEditableButton_Loaded" />
             </i:EventTrigger>
         </i:Interaction.Triggers>
-        <local:MpClipBorder.ContextMenu>
+        <Border.ContextMenu>
             <ContextMenu>
                 <!--<MenuItem Header="Rename"
                           Command="{Binding RenameTagCommand}" />
@@ -35,7 +33,7 @@
                 <MenuItem Header="Delete"
                           Command="{Binding TagTrayViewModel.DeleteTagCommand}" />-->
             </ContextMenu>
-        </local:MpClipBorder.ContextMenu>
+        </Border.ContextMenu>
         <Grid>
             <TextBlock x:Name="TemplateTextBlock"
                        Margin="0"
@@ -60,5 +58,5 @@
                      FontSize="12"
                      Text="{Binding TokenName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
         </Grid>
-    </local:MpClipBorder>
+    </Border>
 </UserControl>

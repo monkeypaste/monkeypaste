@@ -316,7 +316,7 @@ namespace MpWpfApp {
                 0, 
                 0,
                 "Template #1",
-                ((MpClipTileViewModel)((UIElement)sender).GetVisualAncestor<MpClipBorder>().DataContext).CopyItemId);
+                ((MpClipTileViewModel)((UIElement)sender).GetVisualAncestor<MpClipBorder>().DataContext).CopyItem.CopyItemId);
             TokenizedRichTextBox.Selection.Text = newTemplateToken.TokenText;
             TokenizedRichTextBox.AddSubTextToken(newTemplateToken);
             //TokenizedRichTextBox.DocumentRtf = TokenizedRichTextBox.Document;

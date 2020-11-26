@@ -26,12 +26,7 @@ namespace MpWpfApp {
         CopyItemSegment,
         TemplateSegment
     }
-    public class MpSubTextToken : MpDbObject {
-        public MpSubTextToken ParentToken { get; set; }
-        public MpSubTextToken FirstChildToken { get; set; }
-        public MpSubTextToken NextToken { get; set; }
-        public MpSubTextToken PrevToken { get; set; }
-
+    public class MpSubTextToken : MpDbObject, ICloneable {
         public int SubTextTokenId { get; set; }
         public int CopyItemId { get; set; }
         public string TokenText { get; set; }
@@ -51,7 +46,8 @@ namespace MpWpfApp {
             int blockIdx, 
             int inlineIdx,
             string tokenName = "",
-            int copyItemId = 0) {
+            int copyItemId = 0,
+            int subTextTokenId = 0) {
             this.TokenText = token;
             this.TokenType = tokenType;
             this.StartIdx = startIdx;
@@ -60,6 +56,7 @@ namespace MpWpfApp {
             this.InlineIdx = inlineIdx;
             this.TokenName = tokenName;
             this.CopyItemId = copyItemId;
+            this.SubTextTokenId = subTextTokenId;
             MapDataToColumns();
         }
         public MpSubTextToken(int subTextTokenId) {
@@ -77,8 +74,6 @@ namespace MpWpfApp {
         }
         public static List<MpSubTextToken> GatherTokens(FlowDocument fd) {
             List<MpSubTextToken> tokenList = new List<MpSubTextToken>();
-            //RichTextBox rtb = new RichTextBox();
-            //rtb.SetRtf(richText);
 
             //tokenList?.AddRange(ExtractSegment(fd));
             tokenList?.AddRange(ExtractEmail(fd));
@@ -242,6 +237,19 @@ namespace MpWpfApp {
                     { "@sttId", SubTextTokenId }
                 });
         }
+        public object Clone() {
+            return new MpSubTextToken(
+                TokenText,
+                TokenType,
+                StartIdx,
+                EndIdx,
+                BlockIdx,
+                InlineIdx,
+                TokenName,
+                CopyItemId,
+                SubTextTokenId);
+        }
+
         private void MapDataToColumns() {
             TableName = "MpSubTextToken";
             columnData.Clear();
@@ -253,7 +261,7 @@ namespace MpWpfApp {
             columnData.Add("BlockIdx", this.BlockIdx);
             columnData.Add("TokenText", this.TokenText);
 
-            columnData.Add("TOkenName", this.TokenName);
+            columnData.Add("TokenName", this.TokenName);
         }
     }
 }

@@ -4,8 +4,11 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -13,6 +16,51 @@ using System.Windows.Threading;
 
 namespace MpWpfApp {
     public static class MpExtensions {
+        public static void ClearHyperlinks(this RichTextBox rtb) {
+            // Reapply event handling to hyperlinks after loading, since these are not saved:
+            foreach (var paragraph in rtb.Document.Blocks.OfType<Paragraph>()) {
+                foreach (var hyperlink in paragraph.Inlines.OfType<Hyperlink>()) {
+                    rtb.Selection.Select(hyperlink.ContentStart, hyperlink.ContentEnd);
+                    rtb.Selection.Text = rtb.Selection.Text;
+                }
+            }
+        }
+
+        public static List<Hyperlink> AddHyperlinks(this RichTextBox rtb) {        
+            var regExGroupList = new List<string> {
+                //WebLink
+                @"(?:https?://|www\.)\S+", 
+                //Email
+                @"([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})",
+                //PhoneNumber
+                @"(\+?\d{1,3}?[ -.]?)?\(?(\d{3})\)?[ -.]?(\d{3})[ -.]?(\d{4})",
+                //Currency
+                @"[$|£|€|¥]([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)?(\.[0-9][0-9])?",
+                //HexColor
+                @"#([0-9]|[a-fA-F]){6}",
+                //StreetAddress
+                @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Lane|Road|Boulevard|Drive|Street|Ave|Dr|Rd|Blvd|Ln|St)\.?,\s(?:[A-Z][a-z.-]+[ ]?)+ \b\d{5}(?:-\d{4})?\b"
+            };
+            List<Hyperlink> linkList = new List<Hyperlink>();
+            TextRange fullDocRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+            for (int i = 0; i < regExGroupList.Count; i++) {
+                var regExStr = regExGroupList[i];
+                MatchCollection mc = Regex.Matches(fullDocRange.Text, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+                foreach (Match m in mc) {
+                    foreach (Group mg in m.Groups) {
+                        foreach (Capture c in mg.Captures) {
+                            var matchRange = MpHelpers.FindStringRangeFromPosition(rtb.Document.ContentStart, c.Value);
+                            var hyperlink = new Hyperlink(matchRange.Start, matchRange.End);
+                            hyperlink.Tag = (MpSubTextTokenType)(i + 1);
+                            linkList.Add(hyperlink);
+                        }
+                    }
+                }
+            }
+            rtb.Tag = linkList;
+            return linkList;
+        }
+
         public static StringCollection ToStringCollection(this IEnumerable<string> strings) {
             var stringCollection = new StringCollection();
             foreach (string s in strings) {
@@ -120,6 +168,15 @@ namespace MpWpfApp {
                 reader.Position = 0;
                 rtb.SelectAll();
                 rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);
+            }
+        }
+
+        public static void SetXaml(this System.Windows.Controls.RichTextBox rtb, string document) {
+            var documentBytes = Encoding.Default.GetBytes(document);
+            using (var reader = new MemoryStream(documentBytes)) {
+                reader.Position = 0;
+                rtb.SelectAll();
+                rtb.Selection.Load(reader, System.Windows.DataFormats.Xaml);
             }
         }
 

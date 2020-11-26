@@ -155,13 +155,7 @@ namespace MpWpfApp {
         public MpTokenizedRichTextBox() : base() {
             Document = new MpEventEnabledFlowDocument();
             Tokens = new ObservableCollection<MpSubTextToken>();
-            //Tokens.CollectionChanged += (s, e) => {
-            //    if(e.NewItems != null) {
-            //        foreach(var newToken in e.NewItems) {
-            //            AddSubTextToken((MpSubTextToken)newToken);
-            //        }
-            //    }
-            //};
+            
         }
 
         public MpEventEnabledFlowDocument GetTemplateDocument() {
@@ -185,7 +179,7 @@ namespace MpWpfApp {
 
                 } else if (token.TokenType == MpSubTextTokenType.TemplateSegment) {
                     MpSubTextTemplateTokenClipBorder stttcb = new MpSubTextTemplateTokenClipBorder();
-                    stttcb.DataContext = new MpSubTextTemplateTokenViewModel(token);
+                    stttcb.DataContext = new MpSubTextTokenViewModel(token);
                     var tokenRange = MpHelpers.FindStringRangeFromPosition(Document.ContentStart, token.TokenText.ToLower());
                     if(tokenRange == null) {
                         token.DeleteFromDatabase();
@@ -320,7 +314,7 @@ namespace MpWpfApp {
                         Console.WriteLine("TokenizedRichTextBox error, cannot find cliptile viewmodel");
                         return;
                     }
-                    var sttvm = ctvm.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel.SelectedTagTile;
+                    var sttvm = ctvm.MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel.SelectedTagTile;
 
                     BeginChange();
                     new TextRange(Document.ContentStart, Document.ContentEnd).ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);

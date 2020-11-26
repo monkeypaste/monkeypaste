@@ -26,7 +26,7 @@ namespace MpWpfApp {
 
         #endregion
 
-        private ListBox _trayListBoxRef = null;
+        private ListBox _clipTrayRef = null;
         //private object _dragClipBorderElement = null;
 
         #region Properties
@@ -126,7 +126,7 @@ namespace MpWpfApp {
             get {
                 string outStr = string.Empty;
                 foreach (var sctvm in SelectedClipTiles) {
-                    outStr += sctvm.PlainText + Environment.NewLine;
+                    outStr += sctvm.CopyItemPlainText + Environment.NewLine;
                 }
                 return outStr.Trim('\r','\n');
             }
@@ -146,7 +146,7 @@ namespace MpWpfApp {
             get {
                 var bmpList = new List<BitmapSource>();
                 foreach (var sctvm in SelectedClipTiles) {
-                    bmpList.Add(sctvm.Bmp);
+                    bmpList.Add(sctvm.CopyItemBmp);
                 }
                 return MpHelpers.CombineBitmap(bmpList, false);
             }
@@ -166,7 +166,7 @@ namespace MpWpfApp {
             get {
                 var fl = new List<string>();
                 foreach (var sctvm in SelectedClipTiles) {
-                    foreach (string f in sctvm.FileDropList) {
+                    foreach (string f in sctvm.CopyItemFileDropList) {
                         fl.Add(f);
                     }
                 }
@@ -221,13 +221,13 @@ namespace MpWpfApp {
 
             //create tiles for all clips in the database
             foreach (MpCopyItem ci in MpCopyItem.GetAllCopyItems()) {
-                this.Add(new MpClipTileViewModel(ci, this));
+                this.Add(new MpClipTileViewModel(ci));
             }
         }
 
         public void ClipTray_Loaded(object sender, RoutedEventArgs e) {
             var clipTray = (MpMultiSelectListBox)sender;
-            _trayListBoxRef = clipTray;
+            _clipTrayRef = clipTray;
             clipTray.PreviewMouseDown += (s, e10) => {
                 ResetClipSelection();
             };
@@ -324,7 +324,7 @@ namespace MpWpfApp {
                 MpCopyItem newCopyItem = MpCopyItem.CreateFromClipboard(ClipboardMonitor.LastWindowWatcher.LastHandle);
                 if (MainWindowViewModel.AppModeViewModel.IsInAppendMode) {
                     //when in append mode just append the new items text to selecteditem
-                    SelectedClipTiles[0].AppendContent(new MpClipTileViewModel(newCopyItem, this));
+                    SelectedClipTiles[0].AppendContent(new MpClipTileViewModel(newCopyItem));
                     return;
                 }
 
@@ -332,7 +332,10 @@ namespace MpWpfApp {
                     //check if copyitem is duplicate
                     var existingClipTile = FindClipTileByModel(newCopyItem);
                     if (existingClipTile == null) {
-                        this.Add(new MpClipTileViewModel(newCopyItem, this));
+                        newCopyItem.WriteToDatabase();
+                        var ctvm = new MpClipTileViewModel(newCopyItem);
+                        MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
+                        this.Add(ctvm);
                     } else {
                         Console.WriteLine("Ignoring duplicate copy item");
                         existingClipTile.CopyItem.CopyCount++;
@@ -431,11 +434,12 @@ namespace MpWpfApp {
         }
 
         public new void Add(MpClipTileViewModel ctvm) {
-            if (ctvm.IsNew) {
-                ctvm.CopyItem.WriteToDatabase();
-                MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
-            }
+            //if (ctvm.IsNew) {
+            //    ctvm.CopyItem.WriteToDatabase();
+            //    MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
+            //}
             this.Insert(0, ctvm);
+            _clipTrayRef?.Items.Refresh();
         }
 
         public new void Remove(MpClipTileViewModel clipTileToRemove) {
@@ -449,7 +453,7 @@ namespace MpWpfApp {
 
             //remove any shortcuts associated with clip
             var scvmToRemoveList = new List<MpShortcutViewModel>();
-            foreach(var scvmToRemove in MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == clipTileToRemove.CopyItemId).ToList()) {
+            foreach(var scvmToRemove in MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == clipTileToRemove.CopyItem.CopyItemId).ToList()) {
                 scvmToRemoveList.Add(scvmToRemove);
             }
             foreach(var scvmToRemove in scvmToRemoveList) {
@@ -617,7 +621,7 @@ namespace MpWpfApp {
         public string ExportClipsToZipFile(List<MpClipTileViewModel> clipList, string filePath) {
             using (ZipArchive zip = ZipFile.Open(filePath, ZipArchiveMode.Create)) {
                 foreach (var ctvm in clipList) {
-                    foreach (var p in ctvm.FileDropList) {
+                    foreach (var p in ctvm.CopyItemFileDropList) {
                         zip.CreateEntryFromFile(p, Path.GetFileName(p));
                     }
                 }
@@ -638,24 +642,27 @@ namespace MpWpfApp {
                 if(ctvm.CopyItemType != ci.CopyItemType) {
                     continue;
                 }
-                switch(ci.CopyItemType) {
-                    case MpCopyItemType.RichText:
-                        if (string.Compare((string)ctvm.CopyItem.ItemXaml, ci.ItemXaml) == 0) {
+                if(ctvm.CopyItem.GetData() == ci.GetData()) {
+                    return ctvm;
+                }
+                //switch(ci.CopyItemType) {
+                //    case MpCopyItemType.RichText:
+                //        if (string.Compare((string)ctvm.CopyItem.ItemXaml, ci.ItemXaml) == 0) {
                             
-                            return ctvm;
-                        }
-                        break;
-                    case MpCopyItemType.FileList:
-                        if (string.Compare((string)ctvm.CopyItem.ItemPlainText, ci.ItemPlainText) == 0) {
-                            return ctvm;
-                        }
-                        break;
-                    case MpCopyItemType.Image:
-                        if(MpHelpers.ByteArrayCompare(MpHelpers.ConvertBitmapSourceToByteArray(ctvm.CopyItem.ItemBitmapSource), MpHelpers.ConvertBitmapSourceToByteArray(ci.ItemBitmapSource))) {
-                            return ctvm;
-                        }
-                        break;
-                }                
+                //            return ctvm;
+                //        }
+                //        break;
+                //    case MpCopyItemType.FileList:
+                //        if (string.Compare((string)ctvm.CopyItem.ItemPlainText, ci.ItemPlainText) == 0) {
+                //            return ctvm;
+                //        }
+                //        break;
+                //    case MpCopyItemType.Image:
+                //        if(MpHelpers.ByteArrayCompare(MpHelpers.ConvertBitmapSourceToByteArray(ctvm.CopyItem.ItemBitmapSource), MpHelpers.ConvertBitmapSourceToByteArray(ci.ItemBitmapSource))) {
+                //            return ctvm;
+                //        }
+                //        break;
+                //}                
             }
             return null;
         }
@@ -843,7 +850,7 @@ namespace MpWpfApp {
         }
         private void RenameClip() {
             SelectedClipTiles[0].IsEditingTitle = true;
-            SelectedClipTiles[0].IsTitleTextBoxFocused = true;
+            //SelectedClipTiles[0].IsTitleTextBoxFocused = true;
         }
 
         private RelayCommand<MpTagTileViewModel> _linkTagToCopyItemCommand;
@@ -970,7 +977,7 @@ namespace MpWpfApp {
                     focusedClip.IsSelected = true;
                     focusedClip.IsFocused = true;
                     //this breaks mvvm but no way to refresh tokens w/o
-                    _trayListBoxRef.Items.Refresh();
+                    _clipTrayRef.Items.Refresh();
                 })
             );   
         }
@@ -987,7 +994,7 @@ namespace MpWpfApp {
         private void SpeakSelectedClips() {
             using (SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer()) {
                 foreach (var sctvm in SelectedClipTiles) {
-                    speechSynthesizer.SpeakAsync(sctvm.PlainText);
+                    speechSynthesizer.SpeakAsync(sctvm.CopyItemPlainText);
                 }
             }
         }

@@ -187,10 +187,10 @@ namespace MpWpfApp {
             this.Add(
                 new MpShortcutViewModel(
                     new MpShortcut(
-                        ctvm.CopyItemId,
+                        ctvm.CopyItem.CopyItemId,
                         0,
                         keys,
-                        "Paste " + ctvm.Title),
+                        "Paste " + ctvm.CopyItemTitle),
                     command));
         }
 

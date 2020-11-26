@@ -16,6 +16,7 @@
     using System.Windows.Media;
     using System.Windows.Media.Animation;
     using System.Windows.Media.Imaging;
+    using System.Xml;
     using GalaSoft.MvvmLight.CommandWpf;
     using Gma.System.MouseKeyHook;
     using GongSolutions.Wpf.DragDrop.Utilities;
@@ -34,19 +35,6 @@
         #endregion
 
         #region View Models
-
-        private MpClipTrayViewModel _clipTrayViewModel;
-        public MpClipTrayViewModel ClipTrayViewModel {
-            get {
-                return _clipTrayViewModel;
-            }
-            set {
-                if (_clipTrayViewModel != value) {
-                    _clipTrayViewModel = value;
-                    OnPropertyChanged(nameof(ClipTrayViewModel));
-                }
-            }
-        }
 
         private ObservableCollection<MpClipTileContextMenuItemViewModel> _convertClipTypes = new ObservableCollection<MpClipTileContextMenuItemViewModel>();
         public ObservableCollection<MpClipTileContextMenuItemViewModel> ConvertClipTypes {
@@ -74,22 +62,13 @@
             }
         }
 
-        private ObservableCollection<MpFileListItemViewModel> _fileListViewModels;
         public ObservableCollection<MpFileListItemViewModel> FileListViewModels {
             get {
-                if (_fileListViewModels == null) {
-                    _fileListViewModels = new ObservableCollection<MpFileListItemViewModel>();
-                    foreach (var path in FileDropList) {
-                        _fileListViewModels.Add(new MpFileListItemViewModel(this,path));
-                    }
+                var fileListViewModels = new ObservableCollection<MpFileListItemViewModel>();
+                foreach (var path in CopyItem.GetFileList()) {
+                    fileListViewModels.Add(new MpFileListItemViewModel(this, path));
                 }
-                return _fileListViewModels;
-            }
-            set {
-                if (_fileListViewModels != value) {
-                    _fileListViewModels = value;
-                    OnPropertyChanged(nameof(FileListViewModels));
-                }
+                return fileListViewModels;
             }
         }
 
@@ -117,228 +96,6 @@
         #endregion
 
         #region Properties
-
-        #region Model Propertiese
-        private string _shortcutKeyList = string.Empty;
-        public string ShortcutKeyList {
-            get {
-                return _shortcutKeyList;
-            }
-            set {
-                if (_shortcutKeyList != value) {
-                    _shortcutKeyList = value;
-                    OnPropertyChanged(nameof(ShortcutKeyList));
-                }
-            }
-        }
-
-        public int CopyItemId {
-            get {
-                return CopyItem.CopyItemId;
-            }
-            set {
-                if (CopyItem.CopyItemId != value) {
-                    CopyItem.CopyItemId = value;
-                    OnPropertyChanged(nameof(CopyItemId));
-                }
-            }
-        }
-
-        public string Title {
-            get {
-                return CopyItem.Title;
-            }
-            set {
-                if (CopyItem.Title != value) {
-                    CopyItem.Title = value;
-                    OnPropertyChanged(nameof(Title));
-                }
-            }
-        }
-
-        //for drag/drop,export and paste not view
-        private string _plainText = string.Empty;
-        public string PlainText {
-            get {
-                if (_plainText == string.Empty) {
-                    _plainText = CopyItem.ItemPlainText;
-                }
-                return _plainText;
-            }
-            set {
-                if (_plainText != value) {
-                    _plainText = value;
-                    OnPropertyChanged(nameof(PlainText));
-                }
-            }
-        }
-
-        //for drag/drop,export and paste not view
-        private string _richText = string.Empty;
-        public string RichText {
-            get {
-                if (_richText == string.Empty) {
-                    _richText = CopyItem.ItemRichText;
-                }
-                return _richText;
-            }
-            set {
-                if (_richText != value) {
-                    _richText = value;
-                    OnPropertyChanged(nameof(RichText));
-                }
-            }
-        }
-
-        private string _xamlText = string.Empty;
-        public string XamlText {
-            get {
-                if (_xamlText == string.Empty) {
-                    _xamlText = CopyItem.ItemXaml;
-                }
-                return _xamlText;
-            }
-            set {
-                if (_xamlText != value) {
-                    _xamlText = value;
-                    OnPropertyChanged(nameof(XamlText));
-                }
-            }
-        }
-
-        private MpEventEnabledFlowDocument _documentRtf = null;
-        public MpEventEnabledFlowDocument DocumentRtf {
-            get {
-                if (_documentRtf == null) {
-                    _documentRtf = CopyItem.ItemFlowDocument;
-                }
-                return _documentRtf;
-            }
-            set {
-                if (_documentRtf != value) {
-                    _documentRtf = value;
-                    OnPropertyChanged(nameof(DocumentRtf));
-                }
-            }
-        }
-
-        private BitmapSource _bmp = null;
-        public BitmapSource Bmp {
-            get {
-                if (_bmp == null) {
-                    _bmp = CopyItem.ItemBitmapSource;
-                }
-                return _bmp;
-            }
-            set {
-                if (_bmp != value) {
-                    _bmp = value;
-                    OnPropertyChanged(nameof(Bmp));
-                }
-            }
-        }
-
-        private List<string> _fileDropList = null;
-        public List<string> FileDropList {
-            get {
-                if (_fileDropList == null) {
-                    _fileDropList = CopyItem.GetFileList(string.Empty, ClipTrayViewModel.GetTargetFileType());
-                }
-                return _fileDropList;
-            }
-            set {
-                if (_fileDropList != value) {
-                    _fileDropList = value;
-                    OnPropertyChanged(nameof(FileDropList));
-                }
-            }
-        }
-
-        private ObservableCollection<MpSubTextToken> _tokens = null;
-        public ObservableCollection<MpSubTextToken> Tokens {
-            get {
-                if (_tokens == null) {
-                    _tokens = new ObservableCollection<MpSubTextToken>(CopyItem.SubTextTokenList);
-                }
-                return _tokens;
-            }
-            set {
-                if (_tokens != value) {
-                    _tokens = value;
-                    OnPropertyChanged(nameof(Tokens));
-                }
-            }
-        }
-
-        private BitmapSource _titleSwirl = null;
-        public BitmapSource TitleSwirl {
-            get {
-                return _titleSwirl;
-            }
-            set {
-                if (_titleSwirl != value) {
-                    _titleSwirl = value;
-                    OnPropertyChanged(nameof(TitleSwirl));
-                }
-            }
-        }
-
-        private BitmapSource _icon = null;
-        public BitmapSource Icon {
-            get {
-                return _icon;
-            }
-            set {
-                if (_icon != value) {
-                    _icon = value;
-                    OnPropertyChanged(nameof(Icon));
-                }
-            }
-        }
-
-        public string CopyItemAppName {
-            get {
-                return CopyItem.App.AppName;
-            }
-        }
-
-        public int CopyItemUsageScore {
-            get {
-                return CopyItem.RelevanceScore;
-            }
-        }
-
-        public int CopyItemAppId {
-            get {
-                return CopyItem.AppId;
-            }
-        }
-
-        public MpCopyItemType CopyItemType {
-            get {
-                return CopyItem.CopyItemType;
-            }
-        }
-
-        public DateTime CopyItemCreatedDateTime {
-            get {
-                return CopyItem.CopyDateTime;
-            }
-        }
-
-        private MpCopyItem _copyItem;
-        public MpCopyItem CopyItem {
-            get {
-                return _copyItem;
-            }
-            set {
-                if (_copyItem != value) {
-                    _copyItem = value;
-                    OnPropertyChanged(nameof(CopyItem));
-                }
-            }
-        }
-        #endregion
 
         #region Layout Properties
         private double _tileTitleIconSize = MpMeasurements.Instance.ClipTileTitleIconSize;
@@ -486,68 +243,48 @@
         #endregion
 
         #region Visibility Properties
-        private Visibility _imgVisibility = Visibility.Visible;
         public Visibility ImgVisibility {
             get {
-                return _imgVisibility;
-            }
-            set {
-                if (_imgVisibility != value) {
-                    _imgVisibility = value;
-                    OnPropertyChanged(nameof(ImgVisibility));
+                if (CopyItemType == MpCopyItemType.Image) {
+                    return Visibility.Visible;
                 }
+                return Visibility.Collapsed;
             }
         }
 
-        private Visibility _fileListVisibility = Visibility.Visible;
         public Visibility FileListVisibility {
             get {
-                return _fileListVisibility;
-            }
-            set {
-                if (_fileListVisibility != value) {
-                    _fileListVisibility = value;
-                    OnPropertyChanged(nameof(FileListVisibility));
+                if (CopyItemType == MpCopyItemType.FileList) {
+                    return Visibility.Visible;
                 }
+                return Visibility.Collapsed;
             }
         }
 
-        private Visibility _rtbVisibility = Visibility.Visible;
         public Visibility RtbVisibility {
             get {
-                return _rtbVisibility;
-            }
-            set {
-                if (_rtbVisibility != value) {
-                    _rtbVisibility = value;
-                    OnPropertyChanged(nameof(RtbVisibility));
+                if(CopyItemType == MpCopyItemType.RichText) {
+                    return Visibility.Visible;
                 }
+                return Visibility.Collapsed;
             }
         }
 
-        private Visibility _tileTitleTextBlockVisibility = Visibility.Visible;
         public Visibility TileTitleTextBlockVisibility {
             get {
-                return _tileTitleTextBlockVisibility;
-            }
-            set {
-                if (_tileTitleTextBlockVisibility != value) {
-                    _tileTitleTextBlockVisibility = value;
-                    OnPropertyChanged(nameof(TileTitleTextBlockVisibility));
+                if(IsEditingTitle) {
+                    return Visibility.Collapsed;
                 }
+                return Visibility.Visible;
             }
         }
 
-        private Visibility _tileTitleTextBoxVisibility = Visibility.Collapsed;
         public Visibility TileTitleTextBoxVisibility {
             get {
-                return _tileTitleTextBoxVisibility;
-            }
-            set {
-                if (_tileTitleTextBoxVisibility != value) {
-                    _tileTitleTextBoxVisibility = value;
-                    OnPropertyChanged(nameof(TileTitleTextBoxVisibility));
+                if (IsEditingTitle) {
+                    return Visibility.Visible;
                 }
+                return Visibility.Collapsed;
             }
         }
 
@@ -564,46 +301,28 @@
             }
         }
 
-        private Visibility _editToolbarVisibility = Visibility.Collapsed;
         public Visibility EditToolbarVisibility {
             get {
-                return _editToolbarVisibility;
-            }
-            set {
-                if (_editToolbarVisibility != value) {
-                    _editToolbarVisibility = value;
-                    OnPropertyChanged(nameof(EditToolbarVisibility));
+                if(IsEditingTile) {
+                    return Visibility.Visible;
                 }
+                return Visibility.Collapsed;
             }
         }
         #endregion
 
         #region Business Logic Properties
-        private string _searchText = string.Empty;
         public string SearchText {
             get {
-                return _searchText;
-            }
-            set {
-                if (_searchText != value) {
-                    _searchText = value;
-                    OnPropertyChanged(nameof(SearchText));
-                }
+                return MainWindowViewModel.SearchBoxViewModel.SearchText;
             }
         }
 
         public bool IsLoading { get; set; } = false;
 
-        private string _detailText = "This is empty detail text";
         public string DetailText {
             get {
-                return _detailText;
-            }
-            set {
-                if (_detailText != value) {
-                    _detailText = value;
-                    OnPropertyChanged(nameof(DetailText));
-                }
+                return GetCurrentDetail(_detailIdx);
             }
         }
 
@@ -622,17 +341,15 @@
         #endregion
 
         #region Brush Properties
-        private Brush _detailTextColor = Brushes.Transparent;
-
         public Brush DetailTextColor {
             get {
-                return _detailTextColor;
-            }
-            set {
-                if (_detailTextColor != value) {
-                    _detailTextColor = value;
-                    OnPropertyChanged(nameof(DetailTextColor));
+                if(IsSelected) {
+                    return Brushes.DarkGray;
                 }
+                if(IsHovering) {
+                    return Brushes.DimGray;
+                }
+                return Brushes.Transparent;
             }
         }
 
@@ -644,38 +361,25 @@
                 if (CopyItem.ItemColor.Color != ((SolidColorBrush)value).Color) {
                     CopyItem.ItemColor = new MpColor(((SolidColorBrush)value).Color);
                     OnPropertyChanged(nameof(TitleColor));
+                    OnPropertyChanged(nameof(CopyItem));
                 }
             }
         }
 
-        private Brush _tileBorderBrush = Brushes.Transparent;
         public Brush TileBorderBrush {
             get {
-                return _tileBorderBrush;
-            }
-            set {
-                if (_tileBorderBrush != value) {
-                    _tileBorderBrush = value;
-                    OnPropertyChanged(nameof(TileBorderBrush));
+                if (IsSelected) {
+                    return Brushes.Red;
                 }
+                if (IsHovering) {
+                    return Brushes.Yellow;
+                }
+                return Brushes.Transparent;
             }
         }
         #endregion
 
         #region State Properties
-        private bool _isTitleTextBoxFocused = false;
-        public bool IsTitleTextBoxFocused {
-            get {
-                return _isTitleTextBoxFocused;
-            }
-            set {
-                if (_isTitleTextBoxFocused != value) {
-                    _isTitleTextBoxFocused = value;
-                    OnPropertyChanged(nameof(IsTitleTextBoxFocused));
-                }
-            }
-        }
-
         private bool _isEditingTitle = false;
         public bool IsEditingTitle {
             get {
@@ -685,6 +389,8 @@
                 if (_isEditingTitle != value) {
                     _isEditingTitle = value;
                     OnPropertyChanged(nameof(IsEditingTitle));
+                    OnPropertyChanged(nameof(TileTitleTextBlockVisibility));
+                    OnPropertyChanged(nameof(TileTitleTextBoxVisibility));
                 }
             }
         }
@@ -698,7 +404,16 @@
                 if (_isEditingTile != value) {
                     _isEditingTile = value;
                     OnPropertyChanged(nameof(IsEditingTile));
+                    OnPropertyChanged(nameof(IsReadOnly));
+                    OnPropertyChanged(nameof(ContentCursor));
+                    OnPropertyChanged(nameof(EditToolbarVisibility));
                 }
+            }
+        }
+
+        public bool IsReadOnly {
+            get {
+                return !IsEditingTile;
             }
         }
 
@@ -717,6 +432,8 @@
                 if (_isSelected != value) {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
+                    OnPropertyChanged(nameof(TileBorderBrush));
+                    OnPropertyChanged(nameof(DetailTextColor));
                 }
             }
         }
@@ -730,108 +447,269 @@
                 if (_isHovering != value) {
                     _isHovering = value;
                     OnPropertyChanged(nameof(IsHovering));
+                    OnPropertyChanged(nameof(TileBorderBrush));
+                    OnPropertyChanged(nameof(DetailTextColor));
                 }
             }
         }
         #endregion
 
-        #endregion        
+        #region Text Editor Properties
+        public ICollection<FontFamily> SystemFonts {
+            get {
+                return Fonts.SystemFontFamilies;
+            }
+        }
+
+        private List<string> _fontSizeList = null;
+        public List<string> FontSizeList {
+            get {
+                if(_fontSizeList == null) {
+                    _fontSizeList = new List<string>() {
+                        "10",
+                        "12",
+                        "14",
+                        "18",
+                        "24",
+                        "36"
+                    };
+                }
+                return _fontSizeList;
+            }
+            set {
+                if(_fontSizeList != value) {
+                    _fontSizeList = value;
+                    OnPropertyChanged(nameof(FontSizeList));
+                }
+            }
+        }
+
+        public Cursor ContentCursor {
+            get {
+                if(IsEditingTile) {
+                    return Cursors.IBeam;
+                }
+                return Cursors.Arrow;
+            }
+        }
+        #endregion
+
+        #region Model Propertiese
+        private string _shortcutKeyList = string.Empty;
+        public string ShortcutKeyList {
+            get {
+                return _shortcutKeyList;
+            }
+            set {
+                if (_shortcutKeyList != value) {
+                    _shortcutKeyList = value;
+                    OnPropertyChanged(nameof(ShortcutKeyList));
+                }
+            }
+        }
+
+        public int CopyItemId {
+            get {
+                return CopyItem.CopyItemId;
+            }
+        }
+
+        public string CopyItemTitle {
+            get {
+                return CopyItem.Title;
+            }
+            set {
+                if (CopyItem.Title != value) {
+                    CopyItem.Title = value;
+                    OnPropertyChanged(nameof(CopyItemTitle));
+                    OnPropertyChanged(nameof(CopyItem));
+                }
+            }
+        }
+
+        //public string CopyItemXamlText {
+        //    get {
+        //        return CopyItem.ItemXaml;
+        //    }
+        //    set {
+        //        if (CopyItem.ItemXaml != value) {
+        //            CopyItem.ItemXaml = value;
+        //            OnPropertyChanged(nameof(CopyItemXamlText));
+        //            OnPropertyChanged(nameof(CopyItem));
+        //        }
+        //    }
+        //}
+
+        //for drag/drop,export and paste not view
+        public string CopyItemPlainText {
+            get {
+                return CopyItem.ItemPlainText;
+            }
+        }
+
+        public string CopyItemRichText {
+            get {
+                return CopyItem.ItemRichText;
+            }
+            set {
+                if (CopyItem.ItemRichText != value) {
+                    CopyItem.SetData(value);
+                    OnPropertyChanged(nameof(CopyItemRichText));
+                    OnPropertyChanged(nameof(CopyItem));
+                }
+            }
+        }       
+
+        public BitmapSource CopyItemBmp {
+            get {
+                return CopyItem.ItemBitmapSource;
+            }
+        }
+
+        public List<string> CopyItemFileDropList {
+            get {
+                return CopyItem.GetFileList(string.Empty, MainWindowViewModel.ClipTrayViewModel.GetTargetFileType());
+            }
+        }
+
+        private List<Hyperlink> _tokens = new List<Hyperlink>();
+        public List<Hyperlink> TokenList {
+            get {
+                return _tokens;
+            }
+            set {
+                if (_tokens != value) {
+                    _tokens = value;
+                    OnPropertyChanged(nameof(TokenList));
+                }
+            }
+        }
+
+        private BitmapSource _titleSwirl = null;
+        public BitmapSource TitleSwirl {
+            get {
+                return _titleSwirl;
+            }
+            set {
+                if (_titleSwirl != value) {
+                    _titleSwirl = value;
+                    OnPropertyChanged(nameof(TitleSwirl));
+                }
+            }
+        }
+
+        public BitmapSource CopyItemAppIcon {
+            get {
+                return CopyItem.App.Icon.IconImage;
+            }
+        }
+
+        public string CopyItemAppName {
+            get {
+                return CopyItem.App.AppName;
+            }
+        }
+
+        public int CopyItemUsageScore {
+            get {
+                return CopyItem.RelevanceScore;
+            }
+        }
+
+        public int CopyItemAppId {
+            get {
+                return CopyItem.AppId;
+            }
+        }
+
+        public MpCopyItemType CopyItemType {
+            get {
+                return CopyItem.CopyItemType;
+            }
+        }
+
+        public DateTime CopyItemCreatedDateTime {
+            get {
+                return CopyItem.CopyDateTime;
+            }
+        }
+
+        private MpCopyItem _copyItem = new MpCopyItem();
+        public MpCopyItem CopyItem {
+            get {
+                return _copyItem;
+            }
+            set {
+                if (_copyItem != value) {
+                    _copyItem = value;
+
+                    CopyItem.WriteToDatabase();
+
+                    OnPropertyChanged(nameof(CopyItem));
+                    OnPropertyChanged(nameof(CopyItemId));
+                    OnPropertyChanged(nameof(CopyItemTitle));
+                    OnPropertyChanged(nameof(CopyItemPlainText));
+                    OnPropertyChanged(nameof(CopyItemRichText));
+                    //OnPropertyChanged(nameof(CopyItemXamlText));
+                    OnPropertyChanged(nameof(CopyItemBmp));
+                    OnPropertyChanged(nameof(CopyItemFileDropList));
+                    OnPropertyChanged(nameof(CopyItemAppIcon));
+                    OnPropertyChanged(nameof(CopyItemAppName));
+                    OnPropertyChanged(nameof(CopyItemUsageScore));
+                    OnPropertyChanged(nameof(CopyItemAppId));
+                    OnPropertyChanged(nameof(CopyItemType));
+                    OnPropertyChanged(nameof(CopyItemCreatedDateTime));
+                    OnPropertyChanged(nameof(DetailText));
+                    OnPropertyChanged(nameof(FileListViewModels));
+                }
+            }
+        }
+        #endregion
+        #endregion
 
         #region Public Methods
-        public MpClipTileViewModel() : this(new MpCopyItem(), null) { }
+        public MpClipTileViewModel() : this(new MpCopyItem()) { }
 
-        public MpClipTileViewModel(MpCopyItem ci, MpClipTrayViewModel parent) {
+        public MpClipTileViewModel(MpCopyItem ci) {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
-                    case nameof(IsEditingTile):
-                        if(IsEditingTile) {
-                            EditToolbarVisibility = Visibility.Visible;
-                        } else {
-                            EditToolbarVisibility = Visibility.Collapsed;
-                        }
-                        break;
-                    case nameof(IsEditingTitle):
-                        if (IsEditingTitle) {
-                            //show textbox and select all text
-                            TileTitleTextBoxVisibility = Visibility.Visible;
-                            TileTitleTextBlockVisibility = Visibility.Collapsed;
-                            IsTitleTextBoxFocused = false;
-                            IsTitleTextBoxFocused = true;
-                        } else {
-                            TileTitleTextBoxVisibility = Visibility.Collapsed;
-                            TileTitleTextBlockVisibility = Visibility.Visible;
-                            IsTitleTextBoxFocused = false;
-                            CopyItem.WriteToDatabase();
-                        }
-                        break;
                     case nameof(IsSelected):
                         if (IsSelected) {
-                            TileBorderBrush = Brushes.Red;
-                            DetailTextColor = Brushes.Red;     
-
                             //this check ensures that as user types in search that 
                             //resetselection doesn't take the focus from the search box
-                            if (!ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.IsFocused) {
+                            if (!MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.IsFocused) {
                                 IsFocused = true;
                             }
                         } else {
-                            TileBorderBrush = Brushes.Transparent;
-                            DetailTextColor = Brushes.Transparent;
                             //below must be called to clear focus when deselected (it may not have focus)
                             IsFocused = false;
                             IsEditingTile = false;
                         }
                         break;
-                    case nameof(IsHovering):
-                        if (!IsSelected) {
-                            if (IsHovering) {
-                                TileBorderBrush = Brushes.Yellow;
-                                DetailTextColor = Brushes.DarkKhaki;
-                                //this is necessary for dragdrop re-sorting
-                            } else {
-                                TileBorderBrush = Brushes.Transparent;
-                                DetailTextColor = Brushes.Transparent;
-                            }
-                        }
-                        break;
-                    case nameof(RichText):
-                        //CopyItem.ItemRichText = RichText;
-                        //CopyItem.WriteToDatabase();
-                        break;
                 }
-            };
+            };            
 
-            ClipTrayViewModel = parent;
             IsLoading = true;
             CopyItem = ci;
-            //CopyItemId = CopyItem.CopyItemId;
-            Title = ci.Title;
-            TitleColor = new SolidColorBrush(ci.ItemColor.Color);
-            Icon = ci.App.Icon.IconImage;
-            Tokens = new ObservableCollection<MpSubTextToken>(CopyItem.SubTextTokenList);
 
             InitSwirl();
-
-            FileListVisibility = CopyItemType == MpCopyItemType.FileList ? Visibility.Visible : Visibility.Collapsed;
-            ImgVisibility = CopyItemType == MpCopyItemType.Image ? Visibility.Visible : Visibility.Collapsed;
-            RtbVisibility = CopyItemType == MpCopyItemType.RichText ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             MainWindowViewModel.SearchBoxViewModel.PropertyChanged += (s, e2) => {
                 switch (e2.PropertyName) {
                     case nameof(MainWindowViewModel.SearchBoxViewModel.SearchText):
-                        SearchText = MainWindowViewModel.SearchBoxViewModel.SearchText;
+                        OnPropertyChanged(nameof(SearchText));
                         break;
                 }
             };
 
             var clipTileBorder = (MpClipBorder)sender;
             clipTileBorder.MouseEnter += (s, e1) => {
-                ((MpClipTileViewModel)((MpClipBorder)s).DataContext).IsHovering = true;
+                IsHovering = true;
             };
             clipTileBorder.MouseLeave += (s, e2) => {
-                ((MpClipTileViewModel)((MpClipBorder)s).DataContext).IsHovering = false;
+                IsHovering = false;
             };
             clipTileBorder.LostFocus += (s, e4) => {
                 if(!IsSelected) {
@@ -863,6 +741,14 @@
             };
 
             var clipTileTitleTextBox = (TextBox)titleCanvas.FindName("ClipTileTitleTextBox");
+            clipTileTitleTextBox.IsVisibleChanged += (s, e9) => {
+                if(TileTitleTextBoxVisibility == Visibility.Collapsed) {
+                    return;
+                }
+                var tbx = (TextBox)s;
+                tbx.Focus();
+                tbx.SelectAll();
+            };
             clipTileTitleTextBox.LostFocus += (s, e4) => {
                 IsEditingTitle = false;
             };
@@ -924,15 +810,15 @@
                     etrtb.TokenizedRichTextBox.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
                     etrtb.TokenizedRichTextBox.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
                     Console.WriteLine("Pre template richtext: ");
-                    Console.WriteLine(RichText);
+                    Console.WriteLine(CopyItemRichText);
                 } else {
                     // TODO add check to see if template token was added if not use convertflowdoctoricktext
                     //etrtb.TokenizedRichTextBox.Document = etrtb.TokenizedRichTextBox.GetTemplateDocument();
-                    CopyItem.ItemXaml = MpHelpers.ConvertFlowDocumentToXaml(etrtb.TokenizedRichTextBox.GetTemplateDocument());
-                    CopyItem.SubTextTokenList = etrtb.TokenizedRichTextBox.Tokens.ToList();
+                    //CopyItem.ItemXaml = MpHelpers.ConvertFlowDocumentToXaml(etrtb.TokenizedRichTextBox.GetTemplateDocument());
+                    //CopyItem.SubTextTokenList = etrtb.TokenizedRichTextBox.Tokens.ToList();
                     CopyItem.WriteToDatabase();
                     Console.WriteLine("Post template richtext: ");
-                    Console.WriteLine(RichText);
+                    Console.WriteLine(CopyItemRichText);
                     fromWidthTile = etrtb.Width;
                     fromWidthContent = fromWidthTile - scrollbarWidth;
                     toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
@@ -977,21 +863,208 @@
             };
         }
 
+        public void ClipTileRichTextBox_Loaded(object sender, RoutedEventArgs e) {
+            var rtb = (RichTextBox)sender;
+            rtb.ContextMenu = (ContextMenu)rtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+            //ContentWidth = rtb.RenderSize.Width;
+            //ContentHeight = rtb.RenderSize.Height;
+            rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
+            rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;            
+        }
+
+        public void ClipTileEditorToolbar_Loaded(object sender, RoutedEventArgs e) {
+            var ctet = (Border)sender; 
+            var cb = (MpClipBorder)ctet.GetVisualAncestor<MpClipBorder>();
+
+            var rtb = (RichTextBox)cb.FindName("ClipTileRichTextBox");
+            //rtb.GotFocus += (s, e4) => {
+            //    IsSelected = true;
+            //};
+
+            //rtb.LostFocus += (s, e4) => {
+            //    IsSelected = false;
+            //};
+            var fontFamilyComboBox = (ComboBox)ctet.FindName("FontFamilyCombo");
+            fontFamilyComboBox.SelectionChanged += (s, e1) => {
+                if(fontFamilyComboBox.SelectedItem == null) {
+                    return;
+                }
+                var fontFamily = fontFamilyComboBox.SelectedItem.ToString();
+                var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
+                textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
+            };
+            
+            var fontSizeCombo = (ComboBox)ctet.FindName("FontSizeCombo");
+            fontSizeCombo.SelectionChanged += (s, e1) => {
+                // Exit if no selection
+                if (fontSizeCombo.SelectedItem == null) {
+                    return;
+                }
+
+                // clear selection if value unset
+                if (fontSizeCombo.SelectedItem.ToString() == "{DependencyProperty.UnsetValue}") {
+                    fontSizeCombo.SelectedItem = null;
+                    return;
+                }
+
+                // Process selection
+                var pointSize = fontSizeCombo.SelectedItem.ToString();
+                var pixelSize = System.Convert.ToDouble(pointSize) * (96 / 72);
+                var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
+                textRange.ApplyPropertyValue(TextElement.FontSizeProperty, pixelSize);
+            };
+
+            var addTemplateButton = (Button)ctet.FindName("AddTemplateButton");
+            addTemplateButton.Click += (s, e2) => {
+                //return;
+
+                //var tempTokens = new List<MpSubTextToken>();
+                //foreach (var token in TokenList) {
+                //    tempTokens.Add((MpSubTextToken)token.Clone());
+                //}
+
+                //MpSubTextToken newTemplateToken = new MpSubTextToken(
+                //    MpHelpers.GetRandomString(5) + "1_1" + MpHelpers.GetRandomString(5),
+                //    MpSubTextTokenType.TemplateSegment,
+                //    0,
+                //    0,
+                //    0,
+                //    0,
+                //    "Template #1",
+                //    CopyItem.CopyItemId);
+                //newTemplateToken.WriteToDatabase();
+                //tempTokens.Add(newTemplateToken);
+
+                //rtb.Selection.Text = newTemplateToken.TokenText;
+
+                //clone and sub uielements for tokentext
+                //var str = MpHelpers.ConvertFlowDocumentToXaml((MpEventEnabledFlowDocument)rtb.Document);//XamlWriter.Save(rtb.Document);
+                //var doc = (MpEventEnabledFlowDocument)MpHelpers.ConvertXamlToFlowDocument(str);//XamlReader.Load(xmlReader);
+
+                //var str = XamlWriter.Save(rtb.Document);
+                //var stringReader = new StringReader(str);
+                //var xmlReader = XmlReader.Create(stringReader);
+                //var doc = (MpEventEnabledFlowDocument)XamlReader.Load(xmlReader);
+
+                //foreach (var token in TokenList.Where(x => x.TokenType == MpSubTextTokenType.TemplateSegment)) {
+                //    var container = (InlineUIContainer)doc.FindName(token.TokenText);
+                //    var containerRange = new TextRange(container.ElementStart, container.ElementEnd);
+                //    Span sp = new Span(container.ElementStart, container.ElementEnd);
+                //    sp.Inlines.Add(token.TokenText);
+                //}
+
+
+                //tempTokens.Add(newTemplateToken);
+
+                //TokenList = tempTokens;
+                //rtb.Document.IsEnabled = false;
+                //rtb.IsReadOnly = true;
+                var button = new TextBox() { Text = "Test" };
+                button.IsEnabled = true;
+                button.TextChanged += (s3, e7) => {
+                    MessageBox.Show("Poo");
+                };
+                var container = new InlineUIContainer(button, rtb.CaretPosition);//, TokenizedRichTextBox.CaretPosition.GetInsertionPosition(LogicalDirection.Forward)); ;
+                //var hyperlink = new Hyperlink(rtb.Selection.Start, rtb.Selection.End);
+                
+                //hyperlink.TargetName = "Teest";
+                //hyperlink.NavigateUri = new Uri("http://search.msn.com");
+                //hyperlink.RequestNavigate += (s3, e4) => {
+                //    MessageBox.Show("BOO! " + CopyItem.CopyItemId);
+                //};
+
+                //hyperlink.IsEnabled = true;
+                //rtb.Document.IsEnabled = true;
+                //rtb.IsReadOnly = false;
+
+                //CopyItem.ItemXaml = MpHelpers.ConvertFlowDocumentToXaml((MpEventEnabledFlowDocument)rtb.Document);
+                //CopyItem.SubTextTokenList = tempTokens;
+                CopyItem.WriteToDatabase();
+                Console.WriteLine("Document type: " + rtb.Document.GetType().ToString());
+            };
+
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            MessageBox.Show("BOO! " + CopyItem.CopyItemId);
+        }
+
+        //private void AddTemplateButton_Click(object sender, RoutedEventArgs e) {
+        //    var thisClipTileViewModel = MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles[0];
+        //    MpClipBorder cb = null;
+        //    foreach(var listboxitem in ((Button)sender).GetVisualAncestor<ListBox>().Items) {
+        //        if(listboxitem == thisClipTileViewModel) {
+        //            cb = (MpClipBorder)listboxitem;
+        //        }
+        //    }
+        //    if(cb == null) {
+        //        return;
+        //    }
+        //    var rtb = (RichTextBox)cb.FindName("ClipTileRichTextBox");
+        //    var tempTokens = new List<MpSubTextToken>();
+        //    foreach (var token in TokenList) {
+        //        tempTokens.Add((MpSubTextToken)token.Clone());
+        //    }
+
+        //    MpSubTextToken newTemplateToken = new MpSubTextToken(
+        //        MpHelpers.GetRandomString(5) + "1_1" + MpHelpers.GetRandomString(5),
+        //        MpSubTextTokenType.TemplateSegment,
+        //        0,
+        //        0,
+        //        0,
+        //        0,
+        //        "Template #1",
+        //        CopyItem.CopyItemId);
+        //    newTemplateToken.WriteToDatabase();
+        //    rtb.Selection.Text = newTemplateToken.TokenText;
+            //if (rtb.Tag != null) {
+            //    rtb.Document = (MpEventEnabledFlowDocument)MpHelpers.ConvertXamlToFlowDocument((string)rtb.Tag);
+            //}
+
+
+            //clone and sub uielements for tokentext
+            //var str = MpHelpers.ConvertFlowDocumentToXaml((MpEventEnabledFlowDocument)rtb.Document);//XamlWriter.Save(rtb.Document);
+            //var doc = (MpEventEnabledFlowDocument)MpHelpers.ConvertXamlToFlowDocument(str);//XamlReader.Load(xmlReader);
+
+        //    var str = XamlWriter.Save(rtb.Document);
+        //    var stringReader = new StringReader(str);
+        //    var xmlReader = XmlReader.Create(stringReader);
+        //    var doc = (MpEventEnabledFlowDocument)XamlReader.Load(xmlReader);
+
+        //    foreach (var token in TokenList.Where(x => x.TokenType == MpSubTextTokenType.TemplateSegment)) {
+        //        var container = (InlineUIContainer)doc.FindName(token.TokenText);
+        //        var containerRange = new TextRange(container.ElementStart, container.ElementEnd);
+        //        Span sp = new Span(container.ElementStart, container.ElementEnd);
+        //        sp.Inlines.Add(token.TokenText);
+        //    }
+
+
+        //    tempTokens.Add(newTemplateToken);
+
+        //    CopyItem.ItemXaml = MpHelpers.ConvertFlowDocumentToXaml(doc);
+        //    CopyItem.SubTextTokenList = tempTokens;
+        //    CopyItem.WriteToDatabase();
+
+        //    TokenList = tempTokens;
+        //}
+        
+
         public void ClipTileImage_Loaded(object sender, RoutedEventArgs e) {
             var img = (Image)sender;
             img.ContextMenu = (ContextMenu)img.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
             //aspect ratio
-            double ar = Bmp.Width / Bmp.Height;
+            double ar = CopyItemBmp.Width / CopyItemBmp.Height;
             double contentWidth = 0;
             double contentHeight = 0;
-            if (Bmp.Width >= Bmp.Height) {
+            if (CopyItemBmp.Width >= CopyItemBmp.Height) {
                 contentWidth = TileBorderWidth;
                 contentHeight = contentWidth * ar;
             } else {
                 contentHeight = TileContentHeight;
                 contentWidth = contentHeight * ar;
             }
-            MpHelpers.ResizeBitmapSource(Bmp, new Size((int)contentWidth, (int)contentHeight));
+            MpHelpers.ResizeBitmapSource(CopyItemBmp, new Size((int)contentWidth, (int)contentHeight));
 
             Canvas.SetLeft(img, (TileBorderWidth / 2) - (contentWidth / 2));
             Canvas.SetTop(img, (TileContentHeight / 2) - (contentHeight / 2));
@@ -1004,49 +1077,50 @@
 
         public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
             TagMenuItems.Clear();
-            foreach (var tagTile in ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel) {
+            foreach (var tagTile in MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel) {
                 if (tagTile.TagName == Properties.Settings.Default.HistoryTagTitle) {
                     continue;
                 }
-                TagMenuItems.Add(new MpClipTileContextMenuItemViewModel(tagTile.TagName, ClipTrayViewModel.LinkTagToCopyItemCommand, tagTile, tagTile.Tag.IsLinkedWithCopyItem(CopyItem)));
+                TagMenuItems.Add(new MpClipTileContextMenuItemViewModel(tagTile.TagName, MainWindowViewModel.ClipTrayViewModel.LinkTagToCopyItemCommand, tagTile, tagTile.Tag.IsLinkedWithCopyItem(CopyItem)));
             }
             ConvertClipTypes.Clear();
-            switch(ClipTrayViewModel.GetSelectedClipsType()) {
+            switch(MainWindowViewModel.ClipTrayViewModel.GetSelectedClipsType()) {
                 case MpCopyItemType.None:
-                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Text", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.RichText, false));
-                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("File List", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.FileList, false));
-                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Image", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.Image, false));
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Text", MainWindowViewModel.ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.RichText, false));
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("File List", MainWindowViewModel.ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.FileList, false));
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Image", MainWindowViewModel.ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.Image, false));
                     break;
                 case MpCopyItemType.FileList:
-                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Text", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.RichText, false));
-                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Image", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.Image, false));
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Text", MainWindowViewModel.ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.RichText, false));
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Image", MainWindowViewModel.ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.Image, false));
                     break;
                 case MpCopyItemType.Image:
-                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Text", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.RichText, false));
-                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("File List", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.FileList, false));
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Text", MainWindowViewModel.ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.RichText, false));
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("File List", MainWindowViewModel.ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.FileList, false));
                     break;
                 case MpCopyItemType.RichText:
-                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("File List", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.FileList, false));
-                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Image", ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.Image, false));
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("File List", MainWindowViewModel.ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.FileList, false));
+                    ConvertClipTypes.Add(new MpClipTileContextMenuItemViewModel("Image", MainWindowViewModel.ClipTrayViewModel.ConvertSelectedClipsCommand, (int)MpCopyItemType.Image, false));
                     break;
             }
         }
 
         public void AppendContent(MpClipTileViewModel octvm) {
             CopyItem.Combine(octvm.CopyItem);
-            CopyItem.WriteToDatabase();
+            OnPropertyChanged(nameof(CopyItem));
 
             //reinitialize item view properties
-            PlainText = CopyItem.ItemPlainText;
-            RichText = CopyItem.ItemRichText;
-            DocumentRtf = CopyItem.ItemFlowDocument;
-            Bmp = CopyItem.ItemBitmapSource;
-            Tokens = new ObservableCollection<MpSubTextToken>(CopyItem.SubTextTokenList);
-            FileDropList = CopyItem.GetFileList();
+            //PlainText = CopyItem.ItemPlainText;
+            //RichText = CopyItem.ItemRichText;
+            //DocumentRtf = CopyItem.ItemFlowDocument;
+            //Bmp = CopyItem.ItemBitmapSource;
+            //TokenList = CopyItem.SubTextTokenList;
+            //FileDropList = CopyItem.GetFileList();
             FileListViewModels.Clear();
-            foreach(var path in FileDropList) {
+            foreach(var path in CopyItemFileDropList) {
                 FileListViewModels.Add(new MpFileListItemViewModel(this,path));
             }
+            OnPropertyChanged(nameof(FileListViewModels));
         }
 
         public void InitSwirl(BitmapSource sharedSwirl = null) {
@@ -1086,34 +1160,23 @@
 
         public void Convert(MpCopyItemType newType) {
             CopyItem.ConvertType(newType);
-            PlainText = CopyItem.ItemPlainText;
-            RichText = CopyItem.ItemRichText;
-            DocumentRtf = CopyItem.ItemFlowDocument;
-            Bmp = CopyItem.ItemBitmapSource;
-            FileListViewModels.Clear();
-            foreach(var p in CopyItem.GetFileList()) {
-                FileListViewModels.Add(new MpFileListItemViewModel(this,p));
-            }
-
-            FileListVisibility = CopyItemType == MpCopyItemType.FileList ? Visibility.Visible : Visibility.Collapsed;
-            ImgVisibility = CopyItemType == MpCopyItemType.Image ? Visibility.Visible : Visibility.Collapsed;
-            RtbVisibility = CopyItemType == MpCopyItemType.RichText ? Visibility.Visible : Visibility.Collapsed;
+            OnPropertyChanged(nameof(CopyItem));
         }
 
         public void ContextMenuMouseLeftButtonUpOnSearchGoogle() {
-            System.Diagnostics.Process.Start(@"https://www.google.com/search?q=" + System.Uri.EscapeDataString(PlainText));
+            System.Diagnostics.Process.Start(@"https://www.google.com/search?q=" + System.Uri.EscapeDataString(CopyItemPlainText));
         }
 
         public void ContextMenuMouseLeftButtonUpOnSearchBing() {
-            System.Diagnostics.Process.Start(@"https://www.bing.com/search?q=" + System.Uri.EscapeDataString(PlainText));
+            System.Diagnostics.Process.Start(@"https://www.bing.com/search?q=" + System.Uri.EscapeDataString(CopyItemPlainText));
         }
 
         public void ContextMenuMouseLeftButtonUpOnSearchDuckDuckGo() {
-            System.Diagnostics.Process.Start(@"https://duckduckgo.com/?q=" + System.Uri.EscapeDataString(PlainText));
+            System.Diagnostics.Process.Start(@"https://duckduckgo.com/?q=" + System.Uri.EscapeDataString(CopyItemPlainText));
         }
 
         public void ContextMenuMouseLeftButtonUpOnSearchYandex() {
-            System.Diagnostics.Process.Start(@"https://yandex.com/search/?text=" + System.Uri.EscapeDataString(PlainText));
+            System.Diagnostics.Process.Start(@"https://yandex.com/search/?text=" + System.Uri.EscapeDataString(CopyItemPlainText));
         }
 
         #endregion
@@ -1131,7 +1194,7 @@
                 //chars/lines
                 case 1:
                     if (CopyItemType == MpCopyItemType.Image) {
-                        info = "(" + Bmp.Width + ") x (" + Bmp.Height + ")";
+                        info = "(" + CopyItemBmp.Width + ") x (" + CopyItemBmp.Height + ")";
                     } else if (CopyItemType == MpCopyItemType.RichText) {
                         info = CopyItem.ItemPlainText.Length + " chars | " + MpHelpers.GetRowCount(CopyItem.ItemPlainText) + " lines";
                     } else if (CopyItemType == MpCopyItemType.FileList) {
@@ -1152,6 +1215,18 @@
         #endregion
 
         #region Commands
+        private RelayCommand _addTemplateCommand;
+        public ICommand AddTemplateCommand {
+            get {
+                if (_addTemplateCommand == null) {
+                    _addTemplateCommand = new RelayCommand(AddTemplate);
+                }
+                return _addTemplateCommand;
+            }
+        }
+        private void AddTemplate() {
+            
+        }
 
         private RelayCommand _editClipTextCommand;
         public ICommand EditClipTextCommand {
@@ -1163,7 +1238,7 @@
             }
         }
         private bool CanEditClipText() {
-            return ClipTrayViewModel.SelectedClipTiles.Count == 1 && 
+            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 && 
                   CopyItemType == MpCopyItemType.RichText && 
                   !IsEditingTile;
         }
@@ -1201,18 +1276,18 @@
             }
         }
         private bool CanShareClip() {
-            return ClipTrayViewModel.SelectedClipTiles.Count == 1;
+            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1;
         }
         private void ShareClip() {
-            ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
+            MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
             IntPtr windowHandle = new WindowInteropHelper(Application.Current.MainWindow).Handle;
             var dtmHelper = new DataTransferManagerHelper(windowHandle);
             dtmHelper.DataTransferManager.DataRequested += (s, e) => {
                 DataPackage dp = e.Request.Data;
-                dp.Properties.Title = Title;
+                dp.Properties.Title = CopyItemTitle;
                 switch(CopyItemType) {
                     case MpCopyItemType.RichText:
-                        dp.SetText(MpHelpers.ConvertRichTextToPlainText(this.RichText));
+                        dp.SetText(MpHelpers.ConvertRichTextToPlainText(this.CopyItemRichText));
                         break;
                     case MpCopyItemType.FileList:
                     case MpCopyItemType.Image:
@@ -1228,7 +1303,7 @@
             };
 
             dtmHelper.ShowShareUI();
-            //ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
+            //MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }
 
         private RelayCommand _excludeApplicationCommand;
@@ -1241,7 +1316,7 @@
             }
         }
         private bool CanExcludeApplication() {
-            return ClipTrayViewModel.SelectedClipTiles.Count == 1;
+            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1;
         }
         private void ExcludeApplication() {
             MpAppCollectionViewModel.Instance.UpdateRejection(MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(CopyItemAppId), true);
@@ -1257,7 +1332,7 @@
             }
         }
         private void AssignHotkey() {
-            ShortcutKeyList = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(this, "Paste " + Title, ShortcutKeyList, PasteClipCommand);
+            ShortcutKeyList = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(this, "Paste " + CopyItemTitle, ShortcutKeyList, PasteClipCommand);
         }
 
         private RelayCommand _pasteClipCommand;
@@ -1270,9 +1345,9 @@
             }
         }
         private void PasteClip() {
-            ClipTrayViewModel.ClearClipSelection();
+            MainWindowViewModel.ClipTrayViewModel.ClearClipSelection();
             IsSelected = true;
-            ClipTrayViewModel.PasteSelectedClipsCommand.Execute(null);
+            MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand.Execute(null);
         }
 
         private RelayCommand _runClipInShellCommand;
@@ -1288,7 +1363,7 @@
             return CopyItemType == MpCopyItemType.RichText;
         }
         private void RunClipInShell() {
-            MpHelpers.RunInShell(PlainText, false, false, IntPtr.Zero);
+            MpHelpers.RunInShell(CopyItemPlainText, false, false, IntPtr.Zero);
         }
         #endregion
 

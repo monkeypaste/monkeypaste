@@ -6,7 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpSubTextTemplateTokenViewModel : MpViewModelBase {
+    public class MpSubTextTokenViewModel : MpViewModelBase {
         #region Statics
         private static List<Brush> _TokenGroupColorLookupList = new List<Brush>() {
             Brushes.Purple,
@@ -267,17 +267,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpSubTextTemplateTokenViewModel() : this(
-            new MpSubTextToken(
-                "Token Text",
-                MpSubTextTokenType.TemplateSegment,
-                0,
-                0,
-                0,
-                0,
-                "Test Template #1")) { }
+        public MpSubTextTokenViewModel() { }
 
-        public MpSubTextTemplateTokenViewModel(MpSubTextToken stt) {
+        public MpSubTextTokenViewModel(MpSubTextToken stt) {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(SubTextToken):
@@ -333,7 +325,7 @@ namespace MpWpfApp {
                             TextBoxVisibility = Visibility.Collapsed;
                             TextBlockVisibility = Visibility.Visible;
                             SubTextToken.TokenText = TokenText;
-                            SubTextToken.WriteToDatabase();
+                            //SubTextToken.WriteToDatabase();
                             //IsFocused = false;
                         }
                         break;
@@ -363,7 +355,7 @@ namespace MpWpfApp {
         }
         
         public void TemplateTextTokenEditableButton_Loaded(object sender, RoutedEventArgs e) {
-            var templateTokenBorder = (MpClipBorder)sender;
+            var templateTokenBorder = (Border)sender;
             templateTokenBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
             };
@@ -421,8 +413,8 @@ namespace MpWpfApp {
         }
         private void RenameTemplate() {
             //IsSelected = true;
-            IsFocused = true;
-            IsEditing = true;
+            //IsFocused = true;
+            //IsEditing = true;
         }
 
         private RelayCommand _selectTemplateCommand;
@@ -436,7 +428,7 @@ namespace MpWpfApp {
         }
         private void SelectTemplate() {
             //IsSelected = true;
-            IsFocused = true;
+            //IsFocused = true;
         }
         #endregion
     }

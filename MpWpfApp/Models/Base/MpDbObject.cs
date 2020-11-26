@@ -4,7 +4,7 @@ using System.Data;
 using System.Drawing;
 
 namespace MpWpfApp {
-    public abstract class MpDbObject : MpObject, ICloneable {
+    public abstract class MpDbObject : MpObject {
         public string TableName = "Unknown";
         public Dictionary<string, object> columnData = new Dictionary<string, object>();
 
@@ -21,9 +21,6 @@ namespace MpWpfApp {
         }
 
         public abstract void WriteToDatabase();
-        public object Clone() {
-            return this.MemberwiseClone();
-        }
 
         public override string ToString() {
             string outstr = "";

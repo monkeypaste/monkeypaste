@@ -53,7 +53,7 @@ namespace MpWpfApp {
             return (int)activeProcId == procId;
         }
 
-        #region Strings
+        #region Documents
         public static FlowDocument HighlightFlowDocument(FlowDocument flowDocument, string highlightText, SolidColorBrush highlightBrush, bool isCaseSensitive = false) {
             new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd).ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
 
@@ -84,21 +84,21 @@ namespace MpWpfApp {
             return flowDocument;
         }
 
-        public static TextRange FindStringRangeFromPosition(TextPointer position, string lowerCaseStr) {
+        public static TextRange FindStringRangeFromPosition(TextPointer position, string str, bool isCaseSensitive = false) {
             while (position != null) {
                 var dir = LogicalDirection.Forward;
                 if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
                     dir = LogicalDirection.Backward;
                 }
-                string textRun = position.GetTextInRun(dir).ToLower();
+                string textRun = isCaseSensitive ? position.GetTextInRun(dir) : position.GetTextInRun(dir).ToLower();
 
                 // Find the starting index of any substring that matches "word".
-                int indexInRun = textRun.IndexOf(lowerCaseStr.ToLower());
+                int indexInRun = textRun.IndexOf(isCaseSensitive ? str : str.ToLower());
                 if (indexInRun >= 0) {
                     if (dir == LogicalDirection.Forward) {
-                        return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + lowerCaseStr.Length));
+                        return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + str.Length));
                     } else {
-                        return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun - lowerCaseStr.Length));
+                        return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun - str.Length));
                     }
                 }
                 position = position.GetNextContextPosition(LogicalDirection.Forward);
@@ -132,6 +132,14 @@ namespace MpWpfApp {
 
         public static bool IsStringXaml(string text) {
             return text.StartsWith(@"<Section xmlns=") || text.StartsWith(@"<Span xmlns=");
+        }
+
+        public static bool IsStringSpan(string text) {
+            return text.StartsWith(@"<Span xmlns=");
+        }
+
+        public static bool IsStringSection(string text) {
+            return text.StartsWith(@"<Section xmlns=");
         }
 
         public static System.Drawing.Font GetRichTextFont(string rt) {
@@ -252,20 +260,22 @@ namespace MpWpfApp {
         }
 
         public static MpEventEnabledFlowDocument CombineFlowDocuments(MpEventEnabledFlowDocument from, MpEventEnabledFlowDocument to) {
-            TextRange range = new TextRange(from.ContentStart, from.ContentEnd);
-            MemoryStream stream = new MemoryStream();
-            System.Windows.Markup.XamlWriter.Save(range, stream);
-            range.Save(stream, DataFormats.XamlPackage);
+            using (MemoryStream stream = new MemoryStream()) {
+                TextRange range = new TextRange(from.ContentStart, from.ContentEnd);
 
-            //below removed so meerging follows items characters, no extra formatting
-            //LineBreak lb = new LineBreak();
-            //Paragraph p = (Paragraph)to.Blocks.LastBlock;
-            //p.LineHeight = 1;
-            //p.Inlines.Add(lb);
-            TextRange range2 = new TextRange(to.ContentEnd, to.ContentEnd);
-            range2.Load(stream, DataFormats.XamlPackage);
+                System.Windows.Markup.XamlWriter.Save(range, stream);
+                range.Save(stream, DataFormats.XamlPackage);
 
-            return to;
+                //below removed so meerging follows items characters, no extra formatting
+                //LineBreak lb = new LineBreak();
+                //Paragraph p = (Paragraph)to.Blocks.LastBlock;
+                //p.LineHeight = 1;
+                //p.Inlines.Add(lb);
+                TextRange range2 = new TextRange(to.ContentEnd, to.ContentEnd);
+                range2.Load(stream, DataFormats.XamlPackage);
+
+                return to;
+            }            
         }
 
         public static string CurrencyConvert(decimal amount, string fromCurrency, string toCurrency) {
@@ -932,24 +942,12 @@ namespace MpWpfApp {
         public static string ConvertFlowDocumentToXaml(MpEventEnabledFlowDocument fd) {
             TextRange range = new TextRange(fd.ContentStart, fd.ContentEnd);
             using (MemoryStream stream = new MemoryStream()) {
-                range.Save(stream, DataFormats.Xaml);
-                return Encoding.UTF8.GetString(stream.ToArray());
-            }                
+                range.Save(stream, DataFormats.XamlPackage);
+                return ASCIIEncoding.Default.GetString(stream.ToArray());
+            }
         }
 
         public static MpEventEnabledFlowDocument ConvertXamlToFlowDocument(string xaml) {
-            //if(IsStringRichText(xaml)) {
-            //    return ConvertRichTextToFlowDocument(xaml);
-            //}
-            
-            //using (StringReader stringReader = new StringReader(xaml)) {
-            //    using(XmlReader xmlReader = XmlReader.Create(stringReader)) {
-            //        return XamlReader.Load(xmlReader) as FlowDocument;
-            //    }
-            //}
-
-            //return (FlowDocument)XamlReader.Parse(xaml);
-
             using (var stringReader = new StringReader(xaml)) {
                 var xmlReader = XmlReader.Create(stringReader);
                 //if (!IsStringFlowSection(xaml)) {
@@ -976,10 +974,11 @@ namespace MpWpfApp {
                 } else {
                     doc = (MpEventEnabledFlowDocument)data;
                 }
-                
+
                 return doc;
             }
         }
+
         public static string ConvertPlainTextToRichText(string plainText) {
             string escapedPlainText = plainText.Replace(@"\", @"\\").Replace("{", @"\{").Replace("}", @"\}");
             string rtf = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard ";
@@ -999,6 +998,7 @@ namespace MpWpfApp {
         }
 
         public static string ConvertXamlToRichText(string xaml) {
+            //return string.Empty;
             var richTextBox = new System.Windows.Controls.RichTextBox();
             if (string.IsNullOrEmpty(xaml)) {
                 return string.Empty;
@@ -1051,7 +1051,7 @@ namespace MpWpfApp {
             var assembly = Assembly.GetAssembly(typeof(System.Windows.FrameworkElement));
             var xamlRtfConverterType = assembly.GetType("System.Windows.Documents.XamlRtfConverter");
             var xamlRtfConverter = Activator.CreateInstance(xamlRtfConverterType, true);
-            var convertRtfToXaml = xamlRtfConverterType.GetMethod("ConvertRtfToXaml", BindingFlags.Instance | BindingFlags.NonPublic);
+            var convertRtfToXaml = xamlRtfConverterType.GetMethod("ConvertRtfToXaml");
             var xamlContent = (string)convertRtfToXaml.Invoke(xamlRtfConverter, new object[] { rt });
             return xamlContent;
         }
@@ -1068,6 +1068,7 @@ namespace MpWpfApp {
             }
             return rtf;
         }
+
         public static string ConvertBitmapSourceToPlainText(BitmapSource bmpSource) {
             string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
             using (System.Drawing.Bitmap image = ConvertBitmapSourceToBitmap(ResizeBitmapSource(bmpSource, new Size(MpMeasurements.Instance.ClipTileBorderSize, MpMeasurements.Instance.ClipTileContentHeight)))) {

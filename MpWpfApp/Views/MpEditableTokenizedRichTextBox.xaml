@@ -112,7 +112,7 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </UserControl.Resources>
-    <DockPanel LastChildFill="True">
+    <DockPanel>
         <Border x:Name="Toolbar"
                 DockPanel.Dock="Top"
                 Visibility="{Binding EditToolbarVisibility}"
@@ -239,6 +239,7 @@
                 <Image Source="/Resources/Images/MpRichTextBox/separator.png"
                        Stretch="None"
                        SnapsToDevicePixels="True" />
+                
                 <ToggleButton x:Name="BoldButton"
                               Command="EditingCommands.ToggleBold"
                               CommandTarget="{Binding ElementName=TokenizedRichTextBox}"
@@ -271,6 +272,7 @@
                            Stretch="None"
                            SnapsToDevicePixels="True" />
                 </ToggleButton>
+                
                 <Image Source="/Resources/Images/MpRichTextBox/separator.png"
                        Stretch="None"
                        SnapsToDevicePixels="True" />
