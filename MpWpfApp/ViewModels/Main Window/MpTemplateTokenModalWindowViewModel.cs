@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -19,6 +20,9 @@ namespace MpWpfApp {
 
         #region Private Variables
         private Window _windowRef = null;
+        private TextRange _hyperlinkRange = null;
+        private RichTextBox _rtb = null;
+        private string _originalText = string.Empty;
         #endregion
 
         #region Properties
@@ -35,6 +39,49 @@ namespace MpWpfApp {
             }
         }
 
+        private string _validationText = string.Empty;
+        public string ValidationText {
+            get {
+                return _validationText;
+            }
+            set {
+                if (_validationText != value) {
+                    _validationText = value;
+                    OnPropertyChanged(nameof(ValidationText));
+                    OnPropertyChanged(nameof(ValidationVisibility));
+                    OnPropertyChanged(nameof(TemplateNameTextBoxBorderBrush));
+                    OnPropertyChanged(nameof(TemplateNameTextBoxBorderBrushThickness)); ;
+                }
+            }
+        }
+
+        public Visibility ValidationVisibility {
+            get {
+                if(string.IsNullOrEmpty(ValidationText)) {
+                    return Visibility.Collapsed;
+                }
+                return Visibility.Visible;
+            }
+        }
+
+        public double TemplateNameTextBoxBorderBrushThickness {
+            get {
+                if(string.IsNullOrEmpty(ValidationText)) {
+                    return 1;
+                } 
+                return 3;
+            }
+        }
+
+        public Brush TemplateNameTextBoxBorderBrush {
+            get {
+                if(string.IsNullOrEmpty(ValidationText)) {
+                    return Brushes.Black;
+                }
+                return Brushes.Red;
+            }
+        }
+
         private Hyperlink _selectedTokenHyperlink = null;
         public Hyperlink SelectedTokenHyperlink {
             get {
@@ -44,6 +91,8 @@ namespace MpWpfApp {
                 if (_selectedTokenHyperlink != value) {
                     _selectedTokenHyperlink = value;
                     OnPropertyChanged(nameof(SelectedTokenHyperlink));
+                    OnPropertyChanged(nameof(SelectedTokenName));
+                    OnPropertyChanged(nameof(SelectedTokenBrush));
                 }
             }
         }
@@ -53,14 +102,11 @@ namespace MpWpfApp {
                 return MpHelpers.GetHyperlinkText(SelectedTokenHyperlink);
             }
             set {
-                var name = MpHelpers.GetHyperlinkText(SelectedTokenHyperlink);
-                if (name != value) {
+                if (MpHelpers.GetHyperlinkText(SelectedTokenHyperlink) != value) {
                     //assign new name
                     SelectedTokenHyperlink = MpHelpers.SetHyperlinkText(SelectedTokenHyperlink, value);
-                    if(string.IsNullOrEmpty(name)) {
-                        //if new name is empty make Template #N
-                        SelectedTokenHyperlink = MpHelpers.SetHyperlinkText(SelectedTokenHyperlink, GetUniqueTemplateName());
-                    }
+
+                    Validate();
                     
                     OnPropertyChanged(nameof(SelectedTokenName));
                     OnPropertyChanged(nameof(SelectedTokenBrush));
@@ -69,16 +115,11 @@ namespace MpWpfApp {
             }
         }
 
+
+
         public Brush SelectedTokenBrush {
             get {
                 return SelectedTokenHyperlink.Background;
-            }
-            set {
-                if (SelectedTokenHyperlink.Background != value) {
-                    SelectedTokenHyperlink.Background = value;
-                    OnPropertyChanged(nameof(SelectedTokenBrush));
-                    OnPropertyChanged(nameof(SelectedTokenHyperlink));
-                }
             }
         }
 
@@ -97,11 +138,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Static Methods
-        public static bool ShowTemplateTokenModalWindow(RichTextBox rtb) {
-            var ttmw = new MpTemplateTokenModalWindow();
-            ttmw.DataContext = new MpTemplateTokenModalWindowViewModel(rtb);
-            var ttmwvm = (MpTemplateTokenModalWindowViewModel)ttmw.DataContext;
-            
+        public static bool ShowTemplateTokenModalWindow(RichTextBox rtb, TextRange hyperlinkRange) {
+            var ttmw = new MpTemplateTokenModalWindow(rtb, hyperlinkRange);
+            var ttmwvm = (MpTemplateTokenModalWindowViewModel)ttmw.DataContext;            
             var result = ttmw.ShowDialog();
             if (result.Value == true) {
                 return true;
@@ -112,9 +151,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpTemplateTokenModalWindowViewModel() : this(new RichTextBox()) { }
+        public MpTemplateTokenModalWindowViewModel()  { }
 
-        public MpTemplateTokenModalWindowViewModel(RichTextBox rtb) {
+        public MpTemplateTokenModalWindowViewModel(RichTextBox rtb, TextRange hyperlinkRange) {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(SelectedTokenHyperlink):
@@ -122,21 +161,35 @@ namespace MpWpfApp {
                         break;
                 }
             };
+            _rtb = rtb; 
+            _hyperlinkRange = _rtb.Selection;
+            _originalText = _hyperlinkRange.Text;
+            TemplateTokenHyperlinks = new ObservableCollection<Hyperlink>(_rtb.GetTemplateHyperlinks());
 
-            TemplateTokenHyperlinks = new ObservableCollection<Hyperlink>(rtb.GetTemplateHyperlinks());
-            if (TemplateTokenHyperlinks.Count == 0) {
-                rtb.Selection.Text = GetUniqueTemplateName();
-                Hyperlink newTokenLink = new Hyperlink(rtb.Selection.Start, rtb.Selection.End);
-                newTokenLink.Background = GetUniqueTemplatColor();
-                newTokenLink.Tag = MpSubTextTokenType.TemplateSegment;
-                TemplateTokenHyperlinks.Add(newTokenLink);
-            }
-            SelectedTokenHyperlink = TemplateTokenHyperlinks[0];
+           Hyperlink hl = new Hyperlink();
+            hl = MpHelpers.SetHyperlinkText(hl, _hyperlinkRange.Text);
+            hl = MpHelpers.SetHyperlinkBackgroundBrush(hl, GetUniqueTemplateColor());
+            hl.Tag = MpSubTextTokenType.TemplateSegment;
+            TemplateTokenHyperlinks.Add(hl);
+            SelectedTokenHyperlink = hl;
+
+
+            //TextBlock tb = new TextBlock();
+            //Binding textBinding = new Binding("MyDataProperty");
+            //textBinding.Source = SelectedTokenName;
+            //BindingOperations.SetBinding(tb, TextBlock.TextProperty, textBinding);
         }
 
 
         public void TemplateTokenModalWindow_Loaded(object sender, RoutedEventArgs e) {
             _windowRef = (Window)sender;
+            var tb = (TextBox)_windowRef.FindName("TemplateNameEditorTextBox");
+            tb.PreviewKeyUp += (s, e1) => {
+                if(e1.Key == Key.Enter) {
+                    OkCommand.Execute(null);
+                    e1.Handled = true;
+                }
+            };
         }
         #endregion
 
@@ -150,12 +203,26 @@ namespace MpWpfApp {
             return namePrefix + uniqueIdx;
         }
 
-        private Brush GetUniqueTemplatColor() {
+        private Brush GetUniqueTemplateColor() {
             Brush randColor = (Brush)new SolidColorBrush(MpHelpers.GetRandomColor());
             while (TemplateTokenHyperlinks.Where(x => x.Background == randColor).ToList().Count > 0) {
                 randColor = (Brush)new SolidColorBrush(MpHelpers.GetRandomColor());
             }
             return randColor;
+        }
+        private bool Validate() {
+            if(string.IsNullOrEmpty(MpHelpers.GetHyperlinkText(SelectedTokenHyperlink))) {
+                ValidationText = "Name cannot be empty!";
+                return false;
+            }
+            //if new name is a duplicate of another just delete this one and set it to the duplicate
+            var dupTokenHyperlink = TemplateTokenHyperlinks.Where(x => MpHelpers.GetHyperlinkText(x) == MpHelpers.GetHyperlinkText(SelectedTokenHyperlink) && x != SelectedTokenHyperlink).ToList();
+            if (dupTokenHyperlink != null && dupTokenHyperlink.Count > 0) {
+                ValidationText = MpHelpers.GetHyperlinkText(SelectedTokenHyperlink) + " already exists!";
+                return false;
+            }
+            ValidationText = string.Empty;
+            return true;
         }
         #endregion
 
@@ -180,9 +247,11 @@ namespace MpWpfApp {
             ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = true;
             // Update the text box color if the user clicks OK 
             if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                SelectedTokenBrush = (Brush)MpHelpers.ConvertWinFormsColorToSolidColorBrush(cd.Color);
+                SelectedTokenHyperlink = MpHelpers.SetHyperlinkBackgroundBrush(SelectedTokenHyperlink, (Brush)MpHelpers.ConvertWinFormsColorToSolidColorBrush(cd.Color));
+                OnPropertyChanged(nameof(SelectedTokenBrush));
             }
             Properties.Settings.Default.UserCustomColorIdxArray = cd.CustomColors;
+            Properties.Settings.Default.Save();
             ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = false;
         }
 
@@ -196,6 +265,8 @@ namespace MpWpfApp {
             }
         }
         private void Cancel() {
+            //_rtb.Selection.Select(_hyperlinkRange.Start,_hyperlinkRange.End);
+            _rtb.Selection.Text = _originalText;
             _windowRef.DialogResult = false;
             _windowRef.Close();
         }
@@ -216,18 +287,18 @@ namespace MpWpfApp {
         public ICommand OkCommand {
             get {
                 if (_okCommand == null) {
-                    _okCommand = new RelayCommand(Ok);
+                    _okCommand = new RelayCommand(Ok, CanOk);
                 }
                 return _okCommand;
             }
         }
+        private bool CanOk() {
+            return Validate();
+        }
         private void Ok() {
-            //if new name is a duplicate of another just delete this one and set it to the duplicate
-            var dupTokenHyperlink = TemplateTokenHyperlinks.Where(x => MpHelpers.GetHyperlinkText(x) == MpHelpers.GetHyperlinkText(SelectedTokenHyperlink) && x != SelectedTokenHyperlink).ToList();
-            if (dupTokenHyperlink != null && dupTokenHyperlink.Count > 0) {
-                TemplateTokenHyperlinks.Remove(SelectedTokenHyperlink);
-                SelectedTokenHyperlink = dupTokenHyperlink[0];
-            }
+            //apply link to rtb
+            MpHelpers.CreateHyperlink(_hyperlinkRange.Start, _hyperlinkRange.End, SelectedTokenName, SelectedTokenBrush, MpSubTextTokenType.TemplateSegment);
+
             _windowRef.DialogResult = true;
             _windowRef.Close();
         }

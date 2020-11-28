@@ -13,9 +13,6 @@
         ShowInTaskbar="False"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
-    <Window.DataContext>
-        <local:MpTemplateTokenModalWindowViewModel />
-    </Window.DataContext>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:CallMethodAction MethodName="TemplateTokenModalWindow_Loaded"
@@ -59,42 +56,48 @@
                         BorderBrush="Black"
                         BorderThickness="1"
                         Command="{Binding ChangeTemplateColorCommand}" />
-                <TextBox x:Name="TemplateNameEditorTextBox"
-                         Foreground="Black"
-                         VerticalAlignment="Stretch"
-                         HorizontalAlignment="Left"
-                         VerticalContentAlignment="Center"
-                         BorderBrush="Black"
-                         BorderThickness="1"
-                         Text="{Binding SelectedTokenName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
-                         FontSize="18"
-                         MinWidth="275"
-                         IsReadOnly="False"
-                         Padding="5,0,0,0"
-                         Height="40" />
+                <StackPanel Orientation="Vertical">
+                    <TextBox x:Name="TemplateNameEditorTextBox"
+                             Foreground="Black"
+                             VerticalAlignment="Top"
+                             HorizontalAlignment="Left"
+                             VerticalContentAlignment="Center"
+                             BorderBrush="{Binding TemplateNameTextBoxBorderBrush}"
+                             BorderThickness="{Binding TemplateNameTextBoxBorderBrushThickness}"
+                             Text="{Binding SelectedTokenName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                             FontSize="18"
+                             MinWidth="275"
+                             IsReadOnly="False"
+                             Padding="5,0,0,0"
+                             Height="32" />
+                    <Label x:Name="TemplateNameValidationLabel"
+                           Content="{Binding ValidationText}"
+                           Visibility="{Binding ValidationVisibility}"
+                           Foreground="Red"
+                           FontStyle="Oblique"
+                           VerticalContentAlignment="Top"
+                           HorizontalContentAlignment="Stretch"
+                           Padding="0,0,0,10"
+                           Margin="15,0,0,0"
+                           FontSize="12" 
+                           Width="300"
+                           Height="24"/>
+                </StackPanel>
             </StackPanel>
         </Grid>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="37*" />
-                <ColumnDefinition Width="29*" />
-                <ColumnDefinition Width="8*" />
-                <ColumnDefinition Width="37*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button Margin="10,10,10,10.5"
+            <Button Margin="10,10,10,10"
                     Grid.Column="0"
                     FontSize="18"
                     Content="Cancel"
                     IsCancel="True"
                     HorizontalAlignment="Stretch"
                     Command="{Binding CancelCommand}" />
-            <Button Margin="10,10,10,10.5"
-                    Grid.Column="1"
-                    FontSize="18"
-                    Content="Clear"
-                    HorizontalAlignment="Stretch"
-                    Command="{Binding ClearCommand}"
-                    Grid.ColumnSpan="2" />
             <Button Margin="10,10,10,10.5"
                     Grid.Column="3"
                     FontSize="18"

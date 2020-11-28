@@ -32,6 +32,8 @@
 
         private List<string> _tempFileList = new List<string>();
 
+        private TextSelection _rtbSelection = null;
+
         #endregion
 
         #region View Models
@@ -403,10 +405,14 @@
             set {
                 if (_isEditingTile != value) {
                     _isEditingTile = value;
+                    if(!IsEditingTile) {
+                        CopyItem.WriteToDatabase();
+                    }
                     OnPropertyChanged(nameof(IsEditingTile));
                     OnPropertyChanged(nameof(IsRtbReadOnly));
                     OnPropertyChanged(nameof(ContentCursor));
                     OnPropertyChanged(nameof(EditToolbarVisibility));
+                    OnPropertyChanged(nameof(CopyItem));
                 }
             }
         }
@@ -643,14 +649,11 @@
                 if (_copyItem != value) {
                     _copyItem = value;
 
-                    CopyItem.WriteToDatabase();
-
                     OnPropertyChanged(nameof(CopyItem));
                     OnPropertyChanged(nameof(CopyItemId));
                     OnPropertyChanged(nameof(CopyItemTitle));
                     OnPropertyChanged(nameof(CopyItemPlainText));
                     OnPropertyChanged(nameof(CopyItemRichText));
-                    //OnPropertyChanged(nameof(CopyItemXamlText));
                     OnPropertyChanged(nameof(CopyItemBmp));
                     OnPropertyChanged(nameof(CopyItemFileDropList));
                     OnPropertyChanged(nameof(CopyItemAppIcon));
@@ -661,6 +664,8 @@
                     OnPropertyChanged(nameof(CopyItemCreatedDateTime));
                     OnPropertyChanged(nameof(DetailText));
                     OnPropertyChanged(nameof(FileListViewModels));
+
+                    CopyItem.WriteToDatabase();
                 }
             }
         }
@@ -876,7 +881,11 @@
             //ContentWidth = rtb.RenderSize.Width;
             //ContentHeight = rtb.RenderSize.Height;
             rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
-            rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;            
+            rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
+
+            rtb.SelectionChanged += (s, e1) => {
+                _rtbSelection = rtb.Selection;
+            };
         }
 
         public void ClipTileEditorToolbar_Loaded(object sender, RoutedEventArgs e) {
@@ -922,16 +931,17 @@
             };
 
             var addTemplateButton = (Button)ctet.FindName("AddTemplateButton");
-            addTemplateButton.Click += (s, e2) => {
+            addTemplateButton.PreviewMouseDown += (s, e2) => {
                 MainWindowViewModel.IsShowingDialog = true;
-
-                var result = MpTemplateTokenModalWindowViewModel.ShowTemplateTokenModalWindow(rtb);
+                e2.Handled = true;
+                var result = MpTemplateTokenModalWindowViewModel.ShowTemplateTokenModalWindow(rtb, rtb.Selection);
                 if(result) {
                     //do nothing token was added of ref'd at selection
                 } else {
                     //clear any link if cancle
                     rtb.Selection.Text = rtb.Selection.Text;
                 }
+
                 MainWindowViewModel.IsShowingDialog = false;
             };
 

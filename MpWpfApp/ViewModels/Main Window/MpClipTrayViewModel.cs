@@ -730,6 +730,7 @@ namespace MpWpfApp {
                 }
             }
             Properties.Settings.Default.UserCustomColorIdxArray = cd.CustomColors;
+            Properties.Settings.Default.Save();
             ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = false;
         }
 

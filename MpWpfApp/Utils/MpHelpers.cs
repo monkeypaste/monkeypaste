@@ -54,6 +54,13 @@ namespace MpWpfApp {
         }
 
         #region Documents
+        public static Hyperlink CreateHyperlink(TextPointer s, TextPointer e, string text, Brush bg, MpSubTextTokenType tokenType) {
+            Hyperlink hl = new Hyperlink(s, e);
+            hl = SetHyperlinkText(hl, text);
+            hl = SetHyperlinkBackgroundBrush(hl, bg);
+            hl.Tag = tokenType;
+            return hl;
+        }
         public static string GetHyperlinkText(Hyperlink hyperlink) {
             var run = hyperlink.Inlines.FirstOrDefault() as Run;
             return run == null ? string.Empty : run.Text;
@@ -61,7 +68,17 @@ namespace MpWpfApp {
 
         public static Hyperlink SetHyperlinkText(Hyperlink hyperlink, string text) {
             var run = hyperlink.Inlines.FirstOrDefault() as Run;
+            if(run == null) {
+                run = new Run();
+                hyperlink.Inlines.Add(run);
+            }
             run.Text = text;
+            return hyperlink;
+        }
+
+        public static Hyperlink SetHyperlinkBackgroundBrush(Hyperlink hyperlink, Brush brush) {
+            hyperlink.Background = brush;
+            (hyperlink.Inlines.FirstOrDefault() as Run).Background = brush;
             return hyperlink;
         }
 

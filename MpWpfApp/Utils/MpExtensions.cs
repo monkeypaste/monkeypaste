@@ -29,8 +29,10 @@ namespace MpWpfApp {
         public static List<Hyperlink> GetTemplateHyperlinks(this RichTextBox rtb) {
             var hyperlinkList = new List<Hyperlink>();
             foreach (var paragraph in rtb.Document.Blocks.OfType<Paragraph>()) {
-                foreach (var hyperlink in paragraph.Inlines.OfType<Hyperlink>()
-                          .Where(x => (MpSubTextTokenType)x.Tag == MpSubTextTokenType.TemplateSegment).ToList()) {
+                foreach (var hyperlink in paragraph.Inlines.OfType<Hyperlink>()) { 
+                    if ((MpSubTextTokenType)hyperlink.Tag != MpSubTextTokenType.TemplateSegment) {
+                        continue;
+                    }
                     hyperlinkList.Add(hyperlink);
                 }
             }

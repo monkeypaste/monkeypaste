@@ -20,5 +20,9 @@ namespace MpWpfApp {
         public MpTemplateTokenModalWindow() {
             InitializeComponent();
         }
+        public MpTemplateTokenModalWindow(RichTextBox rtb, TextRange hyperlinkRange) {
+            this.DataContext = new MpTemplateTokenModalWindowViewModel(rtb, hyperlinkRange);
+            InitializeComponent();
+        }
     }
 }
