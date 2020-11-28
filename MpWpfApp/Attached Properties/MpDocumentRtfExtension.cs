@@ -33,7 +33,9 @@ namespace MpWpfApp {
 
                         hyperlink.IsEnabled = true;
                         hyperlink.RequestNavigate += (s4, e4) => {
-                            System.Diagnostics.Process.Start(e4.Uri.ToString());
+                            //System.Diagnostics.Process.Start(e4.Uri.ToString());
+                             var outStr = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow("test", string.Empty, null);
+                            Console.WriteLine("Passed " + outStr);
                         };
 
                         MenuItem convertToQrCodeMenuItem = new MenuItem();

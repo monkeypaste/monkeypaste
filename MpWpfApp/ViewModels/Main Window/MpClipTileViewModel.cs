@@ -404,14 +404,14 @@
                 if (_isEditingTile != value) {
                     _isEditingTile = value;
                     OnPropertyChanged(nameof(IsEditingTile));
-                    OnPropertyChanged(nameof(IsReadOnly));
+                    OnPropertyChanged(nameof(IsRtbReadOnly));
                     OnPropertyChanged(nameof(ContentCursor));
                     OnPropertyChanged(nameof(EditToolbarVisibility));
                 }
             }
         }
 
-        public bool IsReadOnly {
+        public bool IsRtbReadOnly {
             get {
                 return !IsEditingTile;
             }
@@ -665,6 +665,7 @@
             }
         }
         #endregion
+
         #endregion
 
         #region Public Methods
@@ -684,6 +685,11 @@
                             //below must be called to clear focus when deselected (it may not have focus)
                             IsFocused = false;
                             IsEditingTile = false;
+                        }
+                        break;
+                    case nameof(IsEditingTile):
+                        if(IsEditingTile == false) {
+                            return;
                         }
                         break;
                 }
@@ -720,6 +726,7 @@
                 if (e5.ClickCount == 2) {
                     //only for richtext type
                     EditClipTextCommand.Execute(null);
+                    e5.Handled = true;
                     return;
                 }
             };
@@ -916,71 +923,16 @@
 
             var addTemplateButton = (Button)ctet.FindName("AddTemplateButton");
             addTemplateButton.Click += (s, e2) => {
-                //return;
+                MainWindowViewModel.IsShowingDialog = true;
 
-                //var tempTokens = new List<MpSubTextToken>();
-                //foreach (var token in TokenList) {
-                //    tempTokens.Add((MpSubTextToken)token.Clone());
-                //}
-
-                //MpSubTextToken newTemplateToken = new MpSubTextToken(
-                //    MpHelpers.GetRandomString(5) + "1_1" + MpHelpers.GetRandomString(5),
-                //    MpSubTextTokenType.TemplateSegment,
-                //    0,
-                //    0,
-                //    0,
-                //    0,
-                //    "Template #1",
-                //    CopyItem.CopyItemId);
-                //newTemplateToken.WriteToDatabase();
-                //tempTokens.Add(newTemplateToken);
-
-                //rtb.Selection.Text = newTemplateToken.TokenText;
-
-                //clone and sub uielements for tokentext
-                //var str = MpHelpers.ConvertFlowDocumentToXaml((MpEventEnabledFlowDocument)rtb.Document);//XamlWriter.Save(rtb.Document);
-                //var doc = (MpEventEnabledFlowDocument)MpHelpers.ConvertXamlToFlowDocument(str);//XamlReader.Load(xmlReader);
-
-                //var str = XamlWriter.Save(rtb.Document);
-                //var stringReader = new StringReader(str);
-                //var xmlReader = XmlReader.Create(stringReader);
-                //var doc = (MpEventEnabledFlowDocument)XamlReader.Load(xmlReader);
-
-                //foreach (var token in TokenList.Where(x => x.TokenType == MpSubTextTokenType.TemplateSegment)) {
-                //    var container = (InlineUIContainer)doc.FindName(token.TokenText);
-                //    var containerRange = new TextRange(container.ElementStart, container.ElementEnd);
-                //    Span sp = new Span(container.ElementStart, container.ElementEnd);
-                //    sp.Inlines.Add(token.TokenText);
-                //}
-
-
-                //tempTokens.Add(newTemplateToken);
-
-                //TokenList = tempTokens;
-                //rtb.Document.IsEnabled = false;
-                //rtb.IsReadOnly = true;
-                var button = new TextBox() { Text = "Test" };
-                button.IsEnabled = true;
-                button.TextChanged += (s3, e7) => {
-                    MessageBox.Show("Poo");
-                };
-                var container = new InlineUIContainer(button, rtb.CaretPosition);//, TokenizedRichTextBox.CaretPosition.GetInsertionPosition(LogicalDirection.Forward)); ;
-                //var hyperlink = new Hyperlink(rtb.Selection.Start, rtb.Selection.End);
-                
-                //hyperlink.TargetName = "Teest";
-                //hyperlink.NavigateUri = new Uri("http://search.msn.com");
-                //hyperlink.RequestNavigate += (s3, e4) => {
-                //    MessageBox.Show("BOO! " + CopyItem.CopyItemId);
-                //};
-
-                //hyperlink.IsEnabled = true;
-                //rtb.Document.IsEnabled = true;
-                //rtb.IsReadOnly = false;
-
-                //CopyItem.ItemXaml = MpHelpers.ConvertFlowDocumentToXaml((MpEventEnabledFlowDocument)rtb.Document);
-                //CopyItem.SubTextTokenList = tempTokens;
-                CopyItem.WriteToDatabase();
-                Console.WriteLine("Document type: " + rtb.Document.GetType().ToString());
+                var result = MpTemplateTokenModalWindowViewModel.ShowTemplateTokenModalWindow(rtb);
+                if(result) {
+                    //do nothing token was added of ref'd at selection
+                } else {
+                    //clear any link if cancle
+                    rtb.Selection.Text = rtb.Selection.Text;
+                }
+                MainWindowViewModel.IsShowingDialog = false;
             };
 
 
@@ -1244,6 +1196,7 @@
         }
         private void EditClipText() {
             IsEditingTile = true;
+            IsSelected = true;
             //all other action is handled in the ertb visibility changed handler in ertb_loaded
         }
 

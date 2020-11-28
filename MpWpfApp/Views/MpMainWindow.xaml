@@ -628,6 +628,7 @@
                                                 Width="{Binding TileBorderWidth}"
                                                 Height="{Binding TileSize}"
                                                 Visibility="{Binding TileVisibility}"
+                                                local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"
                                                 Focusable="True"
                                                 Background="White"
                                                 ToolTipService.ShowDuration="1000"
@@ -814,6 +815,7 @@
                                                  FontSize="24"
                                                  IsReadOnly="False"
                                                  Visibility="{Binding TileTitleTextBoxVisibility}"
+                                                 local:MpFocusExtension.IsFocused="{Binding IsEditingTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                  Text="{Binding CopyItemTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                                         <!-- Clip Title Detail TextBlock -->
                                         <TextBlock x:Name="ClipTileTitleDetailTextBlock"
@@ -936,10 +938,11 @@
                                             <RichTextBox x:Name="ClipTileRichTextBox"
                                                          local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                          local:MpHighlightTextExtension.HighlightText="{Binding SearchText}"
-                                                         IsReadOnly="{Binding IsReadOnly}"
+                                                         IsReadOnly="{Binding IsRtbReadOnly}"
                                                          IsDocumentEnabled="{Binding IsSelected}"
                                                          Focusable="{Binding IsEditingTile}"
                                                          Cursor="{Binding ContentCursor}"
+                                                         local:MpFocusExtension.IsFocused="{Binding IsEditingTile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                          IsUndoEnabled="True"
                                                          Background="White"
                                                          VerticalAlignment="Top"

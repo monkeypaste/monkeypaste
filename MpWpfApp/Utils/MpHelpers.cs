@@ -54,6 +54,17 @@ namespace MpWpfApp {
         }
 
         #region Documents
+        public static string GetHyperlinkText(Hyperlink hyperlink) {
+            var run = hyperlink.Inlines.FirstOrDefault() as Run;
+            return run == null ? string.Empty : run.Text;
+        }
+
+        public static Hyperlink SetHyperlinkText(Hyperlink hyperlink, string text) {
+            var run = hyperlink.Inlines.FirstOrDefault() as Run;
+            run.Text = text;
+            return hyperlink;
+        }
+
         public static FlowDocument HighlightFlowDocument(FlowDocument flowDocument, string highlightText, SolidColorBrush highlightBrush, bool isCaseSensitive = false) {
             new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd).ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
 

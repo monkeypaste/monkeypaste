@@ -177,8 +177,12 @@
     <Compile Include="ViewModels\Main Window\MpSoundPlayerGroupCollectionViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSubTextTokenCollectionViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSubTextTokenViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpTemplateTokenModalWindowViewModel.cs" />
     <Compile Include="Views\MpAppendBalloonControl.xaml.cs">
       <DependentUpon>MpAppendBalloonControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MpTemplateTokenModalWindow.xaml.cs">
+      <DependentUpon>MpTemplateTokenModalWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MpBalloonControl.xaml.cs">
       <DependentUpon>MpBalloonControl.xaml</DependentUpon>
@@ -195,6 +199,10 @@
     <Page Include="Styles\ResourceDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MpTemplateTokenModalWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MpAssignHotkeyModalWindow.xaml">
       <SubType>Designer</SubType>

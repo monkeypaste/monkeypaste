@@ -26,6 +26,17 @@ namespace MpWpfApp {
             }
         }
 
+        public static List<Hyperlink> GetTemplateHyperlinks(this RichTextBox rtb) {
+            var hyperlinkList = new List<Hyperlink>();
+            foreach (var paragraph in rtb.Document.Blocks.OfType<Paragraph>()) {
+                foreach (var hyperlink in paragraph.Inlines.OfType<Hyperlink>()
+                          .Where(x => (MpSubTextTokenType)x.Tag == MpSubTextTokenType.TemplateSegment).ToList()) {
+                    hyperlinkList.Add(hyperlink);
+                }
+            }
+            return hyperlinkList;
+        }
+
         public static List<Hyperlink> AddHyperlinks(this RichTextBox rtb) {        
             var regExGroupList = new List<string> {
                 //WebLink

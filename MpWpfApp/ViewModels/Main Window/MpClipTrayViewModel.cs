@@ -229,9 +229,16 @@ namespace MpWpfApp {
             var clipTray = (MpMultiSelectListBox)sender;
             _clipTrayRef = clipTray;
             clipTray.PreviewMouseDown += (s, e10) => {
+                if(IsEditingClipTile) {
+                    return;
+                }
                 ResetClipSelection();
             };
             clipTray.DragEnter += (s, e1) => {
+                if(s.GetType() != typeof(MpClipBorder) && s.GetType() != typeof(MpClipTileViewModel)) {
+                    e1.Effects = DragDropEffects.None;
+                    return;
+                }
                 //used for resorting
                 e1.Effects = e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName) ? DragDropEffects.Move : DragDropEffects.None;
             };
