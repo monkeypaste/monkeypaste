@@ -121,6 +121,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Models\MpApp.cs" />
     <Compile Include="Models\MpClient.cs" />
+    <Compile Include="Models\MpHyperlink.cs" />
     <Compile Include="Models\MpRichTextStyle.cs" />
     <Compile Include="Models\MpShortcut.cs" />
     <Compile Include="Models\MpColor.cs" />

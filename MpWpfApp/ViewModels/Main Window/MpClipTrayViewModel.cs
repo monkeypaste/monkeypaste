@@ -235,10 +235,6 @@ namespace MpWpfApp {
                 ResetClipSelection();
             };
             clipTray.DragEnter += (s, e1) => {
-                if(s.GetType() != typeof(MpClipBorder) && s.GetType() != typeof(MpClipTileViewModel)) {
-                    e1.Effects = DragDropEffects.None;
-                    return;
-                }
                 //used for resorting
                 e1.Effects = e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName) ? DragDropEffects.Move : DragDropEffects.None;
             };
@@ -320,7 +316,7 @@ namespace MpWpfApp {
                 e3.Handled = true;
 
                 var clipTrayListBox = (ListBox)sender;
-                var scrollViewer = clipTrayListBox.GetChildOfType<ScrollViewer>();
+                var scrollViewer = clipTrayListBox.GetDescendantOfType<ScrollViewer>();
                 scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + (e3.Delta * -1) / 5);
             };
 
@@ -379,6 +375,8 @@ namespace MpWpfApp {
                 //var testTray = (ListBox)VisualTreeHelper.HitTest(clipTray, curDragPoint).VisualHit.GetVisualAncestor<ListBox>();
                 if (IsMouseDown && 
                     !IsDragging && 
+                    !IsEditingClipTile &&
+                    !IsEditingClipTitle &&
                     e7.MouseDevice.LeftButton == MouseButtonState.Pressed && 
                     (Math.Abs(curDragPoint.Y - StartDragPoint.Y) > 5 || Math.Abs(curDragPoint.X - StartDragPoint.X) > 5) /*&&
                    // s.GetType() == typeof(MpClipBorder) &&

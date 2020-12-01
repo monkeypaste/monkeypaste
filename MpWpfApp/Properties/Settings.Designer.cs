@@ -572,15 +572,21 @@ namespace MpWpfApp.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Setting {
+        [global::System.Configuration.DefaultSettingValueAttribute("@")]
+        public string TemplateTokenMarker {
             get {
-                return ((string)(this["Setting"]));
+                return ((string)(this["TemplateTokenMarker"]));
             }
-            set {
-                this["Setting"] = value;
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://www.template.com")]
+        public string TemplateTokenUri {
+            get {
+                return ((string)(this["TemplateTokenUri"]));
             }
         }
     }

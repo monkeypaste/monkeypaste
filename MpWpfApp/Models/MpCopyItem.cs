@@ -235,6 +235,7 @@ namespace MpWpfApp {
 
         public void SetData(object data) {
             _itemData = data;
+            WriteToDatabase();
         }
         public object GetData() {
             return _itemData;
@@ -480,10 +481,6 @@ namespace MpWpfApp {
             this.CopyDateTime = DateTime.Parse(dr["CopyDateTime"].ToString());
             this.Title = dr["Title"].ToString().Replace("''", "'");
             this.CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
-            SetData(dr["ItemText"].ToString()); 
-            if(CopyItemType == MpCopyItemType.Image) {
-                SetData(MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]));
-            }
             //switch (CopyItemType) {
             //    case MpCopyItemType.FileList:
             //        ItemPlainText = (string)dr["ItemText"].ToString();
@@ -521,21 +518,21 @@ namespace MpWpfApp {
                 Console.WriteLine("MpCopyItem Error: error retrieving MpApp with id " + AppId);
             }
 
-            //get subtokens
-            dt = MpDb.Instance.Execute(
-                "select * from MpSubTextToken where fk_MpCopyItemId=@ciid",
-                new System.Collections.Generic.Dictionary<string, object> {
-                        { "@ciid", CopyItemId }
-                    });
-            //if (dt != null && dt.Rows.Count > 0) {
-            //    foreach (DataRow row in dt.Rows) {
-            //        SubTextTokenList.Add(new MpSubTextToken(row));
-            //    }
-            //} else {
-            //    //copyitem not req'd to have subtokens
-            //}
+            ////get subtokens
+            //dt = MpDb.Instance.Execute(
+            //    "select * from MpSubTextToken where fk_MpCopyItemId=@ciid",
+            //    new System.Collections.Generic.Dictionary<string, object> {
+            //            { "@ciid", CopyItemId }
+            //        });
+            ////if (dt != null && dt.Rows.Count > 0) {
+            ////    foreach (DataRow row in dt.Rows) {
+            ////        SubTextTokenList.Add(new MpSubTextToken(row));
+            ////    }
+            ////} else {
+            ////    //copyitem not req'd to have subtokens
+            ////}
 
-            //get color
+            ////get color
             dt = MpDb.Instance.Execute(
                 "select * from MpColor where pk_MpColorId=@cid",
                 new System.Collections.Generic.Dictionary<string, object> {
@@ -546,6 +543,13 @@ namespace MpWpfApp {
             } else {
                 Console.WriteLine("MpCopyItem Error: error retrieving MpColor with id " + AppId);
             }
+
+
+            SetData(dr["ItemText"].ToString());
+            if (CopyItemType == MpCopyItemType.Image) {
+                SetData(MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]));
+            }
+
             MapDataToColumns();
         }
         

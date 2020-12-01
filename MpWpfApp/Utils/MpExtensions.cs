@@ -16,30 +16,61 @@ using System.Windows.Threading;
 
 namespace MpWpfApp {
     public static class MpExtensions {
-        public static void ClearHyperlinks(this RichTextBox rtb) {
-            // Reapply event handling to hyperlinks after loading, since these are not saved:
+        //public static string GetText(this Hyperlink hyperlink) {
+        //    var run = hyperlink.Inlines.FirstInline as Run;
+        //    return run == null ? string.Empty : run.Text;
+        //}
+        public static void SetHyperlinkText(this Hyperlink hyperlink, string text) {
+            var run = hyperlink.Inlines.FirstInline as Run;
+            if (run == null) {
+                run = new Run();
+                hyperlink.Inlines.Add(run);
+            }
+            run.Text = text;
+        }
+        public static List<Hyperlink> GetAllHyperlinkList(this RichTextBox rtb) {
+            if (rtb.Tag == null) {
+                return new List<Hyperlink>();
+            }
+            return (List<Hyperlink>)rtb.Tag;
+
+            var hyperlinkList = (List<Hyperlink>)rtb.Tag;
             foreach (var paragraph in rtb.Document.Blocks.OfType<Paragraph>()) {
                 foreach (var hyperlink in paragraph.Inlines.OfType<Hyperlink>()) {
-                    rtb.Selection.Select(hyperlink.ContentStart, hyperlink.ContentEnd);
-                    rtb.Selection.Text = rtb.Selection.Text;
-                }
-            }
-        }
-
-        public static List<Hyperlink> GetTemplateHyperlinks(this RichTextBox rtb) {
-            var hyperlinkList = new List<Hyperlink>();
-            foreach (var paragraph in rtb.Document.Blocks.OfType<Paragraph>()) {
-                foreach (var hyperlink in paragraph.Inlines.OfType<Hyperlink>()) { 
-                    if ((MpSubTextTokenType)hyperlink.Tag != MpSubTextTokenType.TemplateSegment) {
-                        continue;
-                    }
                     hyperlinkList.Add(hyperlink);
                 }
             }
             return hyperlinkList;
         }
 
-        public static List<Hyperlink> AddHyperlinks(this RichTextBox rtb) {        
+        public static List<Hyperlink> GetTemplateHyperlinkList(this RichTextBox rtb) {
+            return rtb.GetAllHyperlinkList().Where(x => x.NavigateUri.OriginalString == Properties.Settings.Default.TemplateTokenUri).ToList();
+            //var hyperlinkList = (List<Hyperlink>)rtb.Tag;//new List<Hyperlink>();
+            ////string test = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+            //foreach (var paragraph in rtb.Document.Blocks.OfType<Paragraph>()) {
+            //    foreach (var hyperlink in paragraph.Inlines.OfType<Hyperlink>()) {
+            //        if (hyperlink.NavigateUri.OriginalString == Properties.Settings.Default.TemplateTokenUri) {
+            //            hyperlinkList.Add(hyperlink);
+            //        }
+            //    }
+            //}
+            //return hyperlinkList;
+        }
+
+        public static void ClearHyperlinks(this RichTextBox rtb) {
+            //replaces hyperlinks with runs of there textrange text
+            //if hl is templatee it decodes the run into #templatename#templatecolor# 
+            var hll = rtb.GetAllHyperlinkList();
+            foreach (var hl in hll) {
+                rtb.Selection.Select(hl.ContentStart, hl.ContentStart);
+                rtb.Selection.Text = rtb.Selection.Text;
+                if (hl.NavigateUri.OriginalString == Properties.Settings.Default.TemplateTokenUri) {
+                    rtb.Selection.Text = string.Format(@"{0}{1}{0}", Properties.Settings.Default.TemplateTokenMarker, rtb.Selection.Text);
+                }
+            }
+            rtb.Tag = null;
+        }
+        public static void CreateHyperlinks(this RichTextBox rtb) {        
             var regExGroupList = new List<string> {
                 //WebLink
                 @"(?:https?://|www\.)\S+", 
@@ -52,26 +83,161 @@ namespace MpWpfApp {
                 //HexColor
                 @"#([0-9]|[a-fA-F]){6}",
                 //StreetAddress
-                @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Lane|Road|Boulevard|Drive|Street|Ave|Dr|Rd|Blvd|Ln|St)\.?,\s(?:[A-Z][a-z.-]+[ ]?)+ \b\d{5}(?:-\d{4})?\b"
+                @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Lane|Road|Boulevard|Drive|Street|Ave|Dr|Rd|Blvd|Ln|St)\.?,\s(?:[A-Z][a-z.-]+[ ]?)+ \b\d{5}(?:-\d{4})?\b",                
+                //Text Template
+                string.Format(
+                    @"[{0}].*?[{0}]", 
+                    Properties.Settings.Default.TemplateTokenMarker)
             };
             List<Hyperlink> linkList = new List<Hyperlink>();
+            //rtb.ClearHyperlinks();
             TextRange fullDocRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
             for (int i = 0; i < regExGroupList.Count; i++) {
+                TextPointer lastRangeEnd = rtb.Document.ContentStart;
                 var regExStr = regExGroupList[i];
                 MatchCollection mc = Regex.Matches(fullDocRange.Text, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
                 foreach (Match m in mc) {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
-                            var matchRange = MpHelpers.FindStringRangeFromPosition(rtb.Document.ContentStart, c.Value);
-                            var hyperlink = new Hyperlink(matchRange.Start, matchRange.End);
-                            hyperlink.Tag = (MpSubTextTokenType)(i + 1);
-                            linkList.Add(hyperlink);
+                            var matchRange = MpHelpers.FindStringRangeFromPosition(lastRangeEnd, c.Value);
+                            lastRangeEnd = matchRange.End;
+                            if (matchRange == null) {
+                                continue;
+                            }
+                            Hyperlink hl = null;
+                            if ((MpSubTextTokenType)(i + 1) == MpSubTextTokenType.TemplateSegment) {
+                                rtb.Selection.Select(matchRange.Start, matchRange.End);
+                                rtb.Selection.Text = rtb.Selection.Text.Replace(Properties.Settings.Default.TemplateTokenMarker, string.Empty);
+                                hl = new Hyperlink(rtb.Selection.Start, rtb.Selection.End);
+                                hl.TargetName = rtb.Selection.Text;
+                                //hl.Inlines.Clear();
+                                //hl.Inlines.Add(new Run(c.Value.Replace(Properties.Settings.Default.TemplateTokenMarkerStart, string.Empty).Replace(Properties.Settings.Default.TemplateTokenMarkerEnd, string.Empty)));
+                                hl.Tag = MpSubTextTokenType.TemplateSegment;
+                                hl.IsEnabled = true;
+                                //hl.TargetName = ((Run)hl.Inlines.FirstInline).Text;
+                                hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
+                                hl.RequestNavigate += (s4, e4) => {
+                                    MessageBox.Show("Sup");
+                                };
+                            } else {
+                                var linkText = c.Value;
+                                hl = new Hyperlink(matchRange.Start, matchRange.End);
+                                hl.Tag = (MpSubTextTokenType)(i + 1);
+                                hl.IsEnabled = true;
+                                hl.RequestNavigate += (s4, e4) => {
+                                    System.Diagnostics.Process.Start(e4.Uri.ToString());
+                                };
+
+                                MenuItem convertToQrCodeMenuItem = new MenuItem();
+                                convertToQrCodeMenuItem.Header = "Convert to QR Code";
+                                convertToQrCodeMenuItem.Click += (s5, e1) => {
+                                    var hyperLink = (Hyperlink)((MenuItem)s5).Tag;
+                                    Clipboard.SetImage(MpHelpers.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString()));
+                                };
+                                convertToQrCodeMenuItem.Tag = hl;
+                                hl.ContextMenu = new ContextMenu();
+                                hl.ContextMenu.Items.Add(convertToQrCodeMenuItem);
+
+                                switch ((MpSubTextTokenType)hl.Tag) {
+                                    case MpSubTextTokenType.StreetAddress:
+                                        hl.NavigateUri = new Uri("https://google.com/maps/place/" + linkText.Replace(' ', '+'));
+                                        break;
+                                    case MpSubTextTokenType.Uri:
+                                        if (!linkText.Contains("https://")) {
+                                            hl.NavigateUri = new Uri("https://" + linkText);
+                                        } else {
+                                            hl.NavigateUri = new Uri(linkText);
+                                        }
+                                        MenuItem minifyUrl = new MenuItem();
+                                        minifyUrl.Header = "Minify with bit.ly";
+                                        minifyUrl.Click += (s1, e2) => {
+                                            Hyperlink link = (Hyperlink)((MenuItem)s1).Tag;
+                                            string minifiedLink = MpHelpers.ShortenUrl(link.NavigateUri.ToString()).Result;
+                                            Clipboard.SetText(minifiedLink);
+                                        };
+                                        minifyUrl.Tag = hl;
+                                        hl.ContextMenu.Items.Add(minifyUrl);
+                                        break;
+                                    case MpSubTextTokenType.Email:
+                                        hl.NavigateUri = new Uri("mailto:" + linkText);
+                                        break;
+                                    case MpSubTextTokenType.PhoneNumber:
+                                        hl.NavigateUri = new Uri("tel:" + linkText);
+                                        break;
+                                    case MpSubTextTokenType.Currency:
+                                        //"https://www.google.com/search?q=%24500.80+to+yen"
+                                        MenuItem convertCurrencyMenuItem = new MenuItem();
+                                        convertCurrencyMenuItem.Header = "Convert Currency To";
+                                        foreach (MpCurrencyType ct in Enum.GetValues(typeof(MpCurrencyType))) {
+                                            if (ct == MpCurrencyType.None || ct == MpHelpers.GetCurrencyTypeFromString(linkText)) {
+                                                continue;
+                                            }
+                                            MenuItem subItem = new MenuItem();
+                                            subItem.Header = Enum.GetName(typeof(MpCurrencyType), ct);
+                                            subItem.Click += (s2, e2) => {
+                                                // use https://free.currencyconverterapi.com/ instead of google
+                                                //string convertedCurrency = MpHelpers.CurrencyConvert(
+                                                //    (decimal)MpHelpers.GetCurrencyValueFromString(linkText),
+                                                //    Enum.GetName(typeof(MpCurrencyType), MpHelpers.GetCurrencyTypeFromString(linkText)),
+                                                //    Enum.GetName(typeof(MpCurrencyType), ct));
+                                                //hyperlink.Inlines.Clear();
+                                                //hyperlink.Inlines.Add(new Run(convertedCurrency));
+                                                ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).HideWindowCommand.Execute(null);
+                                                System.Diagnostics.Process.Start(@"https://www.google.com/search?q=" + linkText + "+to+" + subItem.Header);
+                                            };
+                                            convertCurrencyMenuItem.Items.Add(subItem);
+                                        }
+
+                                        hl.ContextMenu.Items.Add(convertCurrencyMenuItem);
+                                        break;
+                                    default:
+
+                                        break;
+                                }
+                            }
+                            linkList.Add(hl);
                         }
                     }
                 }
             }
             rtb.Tag = linkList;
-            return linkList;
+        }
+
+        public static TextRange FindStringRangeFromPosition2(this RichTextBox rtb, string findText, bool isCaseSensitive = false) {
+            var fullText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+            if (string.IsNullOrEmpty(findText) || string.IsNullOrEmpty(fullText) || findText.Length > fullText.Length)
+                return null;
+
+            var textbox = rtb;
+            var leftPos = textbox.CaretPosition;
+            var rightPos = textbox.CaretPosition;
+
+            while (true) {
+                var previous = leftPos.GetNextInsertionPosition(LogicalDirection.Backward);
+                var next = rightPos.GetNextInsertionPosition(LogicalDirection.Forward);
+                if (previous == null && next == null)
+                    return null; //can no longer move outward in either direction and text wasn't found
+
+                if (previous != null)
+                    leftPos = previous;
+                if (next != null)
+                    rightPos = next;
+
+                var range = new TextRange(leftPos, rightPos);
+                var offset = range.Text.IndexOf(findText, StringComparison.InvariantCultureIgnoreCase);
+                if (offset < 0)
+                    continue; //text not found, continue to move outward
+
+                //rtf has broken text indexes that often come up too low due to not considering hidden chars.  Increment up until we find the real position
+                var findTextLower = findText.ToLower();
+                var endOfDoc = textbox.Document.ContentEnd.GetNextInsertionPosition(LogicalDirection.Backward);
+                for (var start = range.Start.GetPositionAtOffset(offset); start != endOfDoc; start = start.GetPositionAtOffset(1)) {
+                    var result = new TextRange(start, start.GetPositionAtOffset(findText.Length));
+                    if (result.Text?.ToLower() == findTextLower) {
+                        return result;
+                    }
+                }
+            }
         }
 
         public static StringCollection ToStringCollection(this IEnumerable<string> strings) {
@@ -159,7 +325,7 @@ namespace MpWpfApp {
             return obj.GetType().FullName == "MS.Internal.NamedObject";
         }
 
-        public static T GetChildOfType<T>(this DependencyObject depObj) where T : DependencyObject {
+        public static T GetDescendantOfType<T>(this DependencyObject depObj) where T : DependencyObject {
             if (depObj == null) {
                 return null;
             }
@@ -167,12 +333,40 @@ namespace MpWpfApp {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++) {
                 var child = VisualTreeHelper.GetChild(depObj, i);
 
-                var result = (child as T) ?? GetChildOfType<T>(child);
+                var result = (child as T) ?? GetDescendantOfType<T>(child);
                 if (result != null) {
                     return result;
                 }
             }
             return null;
+        }
+
+        private static T GetDescendantOfType<T>(this DependencyObject depObj, List<T> curList) where T : DependencyObject {
+            if (depObj == null) {
+                return null;
+            }
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++) {
+                var child = VisualTreeHelper.GetChild(depObj, i);
+
+                var result = (child as T) ?? GetDescendantOfType<T>(child, curList);
+                if (result != null && curList.Contains(result)) {
+                    return result;
+                }
+            }
+            return null;
+        }
+
+        public static List<T> GetDescendantListOfType<T>(this DependencyObject depObj) where T : DependencyObject {
+            var descendentList = new List<T>();
+            T newDescendant = null;
+            do {
+                newDescendant = depObj.GetDescendantOfType<T>(descendentList);
+                if (newDescendant != null) {
+                    descendentList.Add(newDescendant);
+                }
+            } while (newDescendant != null);
+            return descendentList;
         }
 
         public static void SetRtf(this System.Windows.Controls.RichTextBox rtb, string document) {

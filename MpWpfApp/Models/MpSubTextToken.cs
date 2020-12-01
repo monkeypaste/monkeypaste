@@ -23,8 +23,8 @@ namespace MpWpfApp {
         Currency,
         HexColor,
         StreetAddress,
-        CopyItemSegment,
-        TemplateSegment
+        TemplateSegment,
+        CopyItemSegment
     }
     public class MpSubTextToken : MpDbObject, ICloneable {
         public int SubTextTokenId { get; set; }

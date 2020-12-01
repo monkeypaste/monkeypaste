@@ -9,6 +9,7 @@
     using System.Speech.Synthesis;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Controls.Primitives;
     using System.Windows.Documents;
     using System.Windows.Input;
     using System.Windows.Interop;
@@ -32,8 +33,8 @@
 
         private List<string> _tempFileList = new List<string>();
 
-        private TextSelection _rtbSelection = null;
-
+        private ToggleButton _selectedAlignmentButton = null;
+        private ToggleButton _selectedListButton = null;
         #endregion
 
         #region View Models
@@ -405,9 +406,6 @@
             set {
                 if (_isEditingTile != value) {
                     _isEditingTile = value;
-                    if(!IsEditingTile) {
-                        CopyItem.WriteToDatabase();
-                    }
                     OnPropertyChanged(nameof(IsEditingTile));
                     OnPropertyChanged(nameof(IsRtbReadOnly));
                     OnPropertyChanged(nameof(ContentCursor));
@@ -558,7 +556,8 @@
                 return CopyItem.ItemRichText;
             }
             set {
-                if (CopyItem.ItemRichText != value) {
+                //if (CopyItem.ItemRichText != value) 
+                    {
                     CopyItem.SetData(value);
                     OnPropertyChanged(nameof(CopyItemRichText));
                     OnPropertyChanged(nameof(CopyItem));
@@ -692,11 +691,6 @@
                             IsEditingTile = false;
                         }
                         break;
-                    case nameof(IsEditingTile):
-                        if(IsEditingTile == false) {
-                            return;
-                        }
-                        break;
                 }
             };            
 
@@ -789,103 +783,11 @@
             Canvas.SetTop(titleDetailTextBlock, TileTitleHeight - 14);
         }
 
-        public void ClipTileEditableRichTextBox_Loaded(object sender, RoutedEventArgs e) {
-            var etrtb = (MpEditableTokenizedRichTextBox)sender;
-            etrtb.ContextMenu = (ContextMenu)etrtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
-            etrtb.TokenizedRichTextBox.ContextMenu = etrtb.ContextMenu;
-            //etrtb.TokenizedRichTextBox.Document = (MpEventEnabledFlowDocument)MpHelpers.ConvertXamlToFlowDocument(CopyItem.ItemXaml);
-            //etrtb.TokenizedRichTextBox.IsDocumentEnabled = true;
-            //etrtb.TokenizedRichTextBox.Document.IsEnabled = true;
-
-            etrtb.Toolbar.IsVisibleChanged += (s, e1) => {
-                var cb = (MpClipBorder)etrtb.GetVisualAncestor<MpClipBorder>();
-                var trtb = (MpTokenizedRichTextBox)cb.FindName("TokenizedRichTextBox");
-                var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
-                var titleSwirl = (Image)cb.FindName("TitleSwirl");
-
-                double fromWidthTile = 0;
-                double toWidthTile = 0;
-                double fromWidthContent = 0;
-                double toWidthContent = 0;
-                double scrollbarWidth = 20;
-
-                if (etrtb.Toolbar.Visibility == Visibility.Visible) {
-                    //etrtb.TokenizedRichTextBox.Document = (MpEventEnabledFlowDocument)etrtb.TokenizedRichTextBox.Document;
-                    //etrtb.TokenizedRichTextBox.IsDocumentEnabled = true;
-                    //etrtb.TokenizedRichTextBox.Document.IsEnabled = true;
-                    fromWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
-                    fromWidthContent = fromWidthTile;
-                    toWidthTile = Math.Max(625, etrtb.TokenizedRichTextBox.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
-                    toWidthContent = toWidthTile - scrollbarWidth;
-                    etrtb.Focusable = true;
-                    //etrtb.TokenizedRichTextBox.Focusable = true;                    
-                    etrtb.TokenizedRichTextBox.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-                    etrtb.TokenizedRichTextBox.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-                    Console.WriteLine("Pre template richtext: ");
-                    Console.WriteLine(CopyItemRichText);
-                } else {
-                    // TODO add check to see if template token was added if not use convertflowdoctoricktext
-                    //etrtb.TokenizedRichTextBox.Document = etrtb.TokenizedRichTextBox.GetTemplateDocument();
-                    //CopyItem.ItemXaml = MpHelpers.ConvertFlowDocumentToXaml(etrtb.TokenizedRichTextBox.GetTemplateDocument());
-                    //CopyItem.SubTextTokenList = etrtb.TokenizedRichTextBox.Tokens.ToList();
-                    CopyItem.WriteToDatabase();
-                    Console.WriteLine("Post template richtext: ");
-                    Console.WriteLine(CopyItemRichText);
-                    fromWidthTile = etrtb.Width;
-                    fromWidthContent = fromWidthTile - scrollbarWidth;
-                    toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
-                    toWidthContent = toWidthTile;
-                    etrtb.Focusable = false;
-                    //etrtb.TokenizedRichTextBox.Focusable = false;
-                    etrtb.TokenizedRichTextBox.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                    etrtb.TokenizedRichTextBox.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                }
-                double fromLeft = Canvas.GetLeft(titleIconImageButton);
-                double toLeft = toWidthTile - TileTitleHeight - 10;
-
-                DoubleAnimation twa = new DoubleAnimation();
-                twa.From = fromWidthTile;
-                twa.To = toWidthTile;
-                twa.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
-                CubicEase easing = new CubicEase();
-                easing.EasingMode = EasingMode.EaseIn;
-                twa.EasingFunction = easing;
-                twa.Completed += (s1, e2) => {
-                    ((MpMultiSelectListBox)cb.GetVisualAncestor<MpMultiSelectListBox>()).ScrollIntoView(cb);
-                };
-                cb.BeginAnimation(MpClipBorder.WidthProperty, twa);
-                etrtb.BeginAnimation(MpEditableTokenizedRichTextBox.WidthProperty, twa);
-                titleSwirl.BeginAnimation(Image.WidthProperty, twa);
-
-                DoubleAnimation cwa = new DoubleAnimation();
-                cwa.From = fromWidthContent;
-                cwa.To = toWidthContent;
-                cwa.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
-                easing = new CubicEase();
-                easing.EasingMode = EasingMode.EaseIn;
-                cwa.EasingFunction = easing;
-                etrtb.TokenizedRichTextBox.BeginAnimation(RichTextBox.WidthProperty, cwa);
-
-                DoubleAnimation la = new DoubleAnimation();
-                la.From = fromLeft;
-                la.To = toLeft;
-                la.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
-                la.EasingFunction = easing;
-                titleIconImageButton.BeginAnimation(Canvas.LeftProperty, la);
-            };
-        }
-
         public void ClipTileRichTextBox_Loaded(object sender, RoutedEventArgs e) {
             var rtb = (RichTextBox)sender;
             rtb.ContextMenu = (ContextMenu)rtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
-            //ContentWidth = rtb.RenderSize.Width;
-            //ContentHeight = rtb.RenderSize.Height;
             rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
             rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
-
-            rtb.SelectionChanged += (s, e1) => {
-                _rtbSelection = rtb.Selection;
-            };
         }
 
         public void ClipTileEditorToolbar_Loaded(object sender, RoutedEventArgs e) {
@@ -893,13 +795,10 @@
             var cb = (MpClipBorder)ctet.GetVisualAncestor<MpClipBorder>();
 
             var rtb = (RichTextBox)cb.FindName("ClipTileRichTextBox");
-            //rtb.GotFocus += (s, e4) => {
-            //    IsSelected = true;
-            //};
-
-            //rtb.LostFocus += (s, e4) => {
-            //    IsSelected = false;
-            //};
+            rtb.LostFocus += (s, e5) => {
+                
+            };
+            
             var fontFamilyComboBox = (ComboBox)ctet.FindName("FontFamilyCombo");
             fontFamilyComboBox.SelectionChanged += (s, e1) => {
                 if(fontFamilyComboBox.SelectedItem == null) {
@@ -930,13 +829,58 @@
                 textRange.ApplyPropertyValue(TextElement.FontSizeProperty, pixelSize);
             };
 
+            var leftAlignmentButton = (ToggleButton)ctet.FindName("LeftButton");
+            var centerAlignmentButton = (ToggleButton)ctet.FindName("CenterButton");
+            var rightAlignmentButton = (ToggleButton)ctet.FindName("RightButton");
+            var justifyAlignmentButton = (ToggleButton)ctet.FindName("JustifyButton");            
+            leftAlignmentButton.Click += (s, e3) => {
+                var clickedButton = (ToggleButton)s;
+                var buttonGroup = new ToggleButton[] { leftAlignmentButton, centerAlignmentButton, rightAlignmentButton, justifyAlignmentButton };
+                SetButtonGroupSelection(clickedButton, _selectedAlignmentButton, buttonGroup, true);
+                _selectedAlignmentButton = clickedButton;
+            };
+            centerAlignmentButton.Click += (s, e3) => {
+                var clickedButton = (ToggleButton)s;
+                var buttonGroup = new ToggleButton[] { leftAlignmentButton, centerAlignmentButton, rightAlignmentButton, justifyAlignmentButton };
+                SetButtonGroupSelection(clickedButton, _selectedAlignmentButton, buttonGroup, true);
+                _selectedAlignmentButton = clickedButton;
+            };
+            rightAlignmentButton.Click += (s, e3) => {
+                var clickedButton = (ToggleButton)s;
+                var buttonGroup = new ToggleButton[] { leftAlignmentButton, centerAlignmentButton, rightAlignmentButton, justifyAlignmentButton };
+                SetButtonGroupSelection(clickedButton, _selectedAlignmentButton, buttonGroup, true);
+                _selectedAlignmentButton = clickedButton;
+            };
+            justifyAlignmentButton.Click += (s, e3) => {
+                var clickedButton = (ToggleButton)s;
+                var buttonGroup = new ToggleButton[] { leftAlignmentButton, centerAlignmentButton, rightAlignmentButton, justifyAlignmentButton };
+                SetButtonGroupSelection(clickedButton, _selectedAlignmentButton, buttonGroup, true);
+                _selectedAlignmentButton = clickedButton;
+            };
+
+            var bulletsButton = (ToggleButton)ctet.FindName("BulletsButton");
+            var numberingButton = (ToggleButton)ctet.FindName("NumberingButton");
+            bulletsButton.Click += (s, e3) => {
+                var clickedButton = (ToggleButton)s;
+                var buttonGroup = new[] { bulletsButton, numberingButton };
+                this.SetButtonGroupSelection(clickedButton, _selectedListButton, buttonGroup, false);
+                _selectedListButton = clickedButton;
+            };
+            numberingButton.Click += (s, e3) => {
+                var clickedButton = (ToggleButton)s;
+                var buttonGroup = new[] { bulletsButton, numberingButton };
+                this.SetButtonGroupSelection(clickedButton, _selectedListButton, buttonGroup, false);
+                _selectedListButton = clickedButton;
+            };
+
             var addTemplateButton = (Button)ctet.FindName("AddTemplateButton");
             addTemplateButton.PreviewMouseDown += (s, e2) => {
                 MainWindowViewModel.IsShowingDialog = true;
                 e2.Handled = true;
-                var result = MpTemplateTokenModalWindowViewModel.ShowTemplateTokenModalWindow(rtb, rtb.Selection);
+                var result = MpTemplateTokenModalWindowViewModel.ShowTemplateTokenModalWindow(rtb);
                 if(result) {
-                    //do nothing token was added of ref'd at selection
+                    CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+
                 } else {
                     //clear any link if cancle
                     rtb.Selection.Text = rtb.Selection.Text;
@@ -945,72 +889,106 @@
                 MainWindowViewModel.IsShowingDialog = false;
             };
 
+            rtb.SelectionChanged += (s, e6) => {
+                // Set font family combo
+                var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
+                var fontFamily = textRange.GetPropertyValue(TextElement.FontFamilyProperty);
+                fontFamilyComboBox.SelectedItem = fontFamily;
 
+                // Set font size combo
+                var fontSize = textRange.GetPropertyValue(TextElement.FontSizeProperty);
+                fontSizeCombo.Text = fontSize.ToString();
+                // Set Font buttons
+                //if (!String.IsNullOrEmpty(textRange.Text)) {
+
+                //}
+                ((ToggleButton)ctet.FindName("BoldButton")).IsChecked = textRange.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
+                ((ToggleButton)ctet.FindName("ItalicButton")).IsChecked = textRange.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
+                ((ToggleButton)ctet.FindName("UnderlineButton")).IsChecked = textRange?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
+
+                // Set Alignment buttons
+                leftAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
+                centerAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
+                rightAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
+                justifyAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Justify);
+            };
+
+            ctet.IsVisibleChanged += (s, e1) => {
+                //var cb = (MpClipBorder)etrtb.GetVisualAncestor<MpClipBorder>();
+                //var trtb = (MpTokenizedRichTextBox)cb.FindName("TokenizedRichTextBox");
+                var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
+                var titleSwirl = (Image)cb.FindName("TitleSwirl");
+                var dp = (DockPanel)cb.FindName("ClipTileRichTextDockPanel");
+
+                double fromWidthTile = 0;
+                double toWidthTile = 0;
+                double fromWidthContent = 0;
+                double toWidthContent = 0;
+                double scrollbarWidth = 20;
+
+                if (ctet.Visibility == Visibility.Visible) {
+                    //etrtb.TokenizedRichTextBox.Document = (MpEventEnabledFlowDocument)etrtb.TokenizedRichTextBox.Document;
+                    //etrtb.TokenizedRichTextBox.IsDocumentEnabled = true;
+                    //etrtb.TokenizedRichTextBox.Document.IsEnabled = true;
+                    fromWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
+                    fromWidthContent = fromWidthTile;
+                    toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
+                    toWidthContent = toWidthTile - scrollbarWidth;
+                    rtb.Focusable = true;
+                    //etrtb.TokenizedRichTextBox.Focusable = true;                    
+                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                } else {
+                    // TODO add check to see if template token was added if not use convertflowdoctoricktext
+                    //etrtb.TokenizedRichTextBox.Document = etrtb.TokenizedRichTextBox.GetTemplateDocument();
+                    //CopyItem.ItemXaml = MpHelpers.ConvertFlowDocumentToXaml(etrtb.TokenizedRichTextBox.GetTemplateDocument());
+                    //CopyItem.SubTextTokenList = etrtb.TokenizedRichTextBox.Tokens.ToList();
+                    CopyItem.WriteToDatabase();
+                    fromWidthTile = rtb.Width;
+                    fromWidthContent = fromWidthTile - scrollbarWidth;
+                    toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
+                    toWidthContent = toWidthTile;
+                    rtb.Focusable = false;
+                    //etrtb.TokenizedRichTextBox.Focusable = false;
+                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                }
+                double fromLeft = Canvas.GetLeft(titleIconImageButton);
+                double toLeft = toWidthTile - TileTitleHeight - 10;
+
+                DoubleAnimation twa = new DoubleAnimation();
+                twa.From = fromWidthTile;
+                twa.To = toWidthTile;
+                twa.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
+                CubicEase easing = new CubicEase();
+                easing.EasingMode = EasingMode.EaseIn;
+                twa.EasingFunction = easing;
+                twa.Completed += (s1, e2) => {
+                    ((MpMultiSelectListBox)cb.GetVisualAncestor<MpMultiSelectListBox>()).ScrollIntoView(cb);
+                };
+                cb.BeginAnimation(MpClipBorder.WidthProperty, twa);
+                titleSwirl.BeginAnimation(Image.WidthProperty, twa);
+                rtb.BeginAnimation(RichTextBox.WidthProperty, twa);
+                ctet.BeginAnimation(Border.WidthProperty, twa);
+                dp.BeginAnimation(DockPanel.WidthProperty, twa);
+
+                DoubleAnimation cwa = new DoubleAnimation();
+                cwa.From = fromWidthContent;
+                cwa.To = toWidthContent;
+                cwa.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
+                easing = new CubicEase();
+                easing.EasingMode = EasingMode.EaseIn;
+                cwa.EasingFunction = easing;
+                
+
+                DoubleAnimation la = new DoubleAnimation();
+                la.From = fromLeft;
+                la.To = toLeft;
+                la.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
+                la.EasingFunction = easing;
+                titleIconImageButton.BeginAnimation(Canvas.LeftProperty, la);
+            };
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e) {
-            MessageBox.Show("BOO! " + CopyItem.CopyItemId);
-        }
-
-        //private void AddTemplateButton_Click(object sender, RoutedEventArgs e) {
-        //    var thisClipTileViewModel = MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles[0];
-        //    MpClipBorder cb = null;
-        //    foreach(var listboxitem in ((Button)sender).GetVisualAncestor<ListBox>().Items) {
-        //        if(listboxitem == thisClipTileViewModel) {
-        //            cb = (MpClipBorder)listboxitem;
-        //        }
-        //    }
-        //    if(cb == null) {
-        //        return;
-        //    }
-        //    var rtb = (RichTextBox)cb.FindName("ClipTileRichTextBox");
-        //    var tempTokens = new List<MpSubTextToken>();
-        //    foreach (var token in TokenList) {
-        //        tempTokens.Add((MpSubTextToken)token.Clone());
-        //    }
-
-        //    MpSubTextToken newTemplateToken = new MpSubTextToken(
-        //        MpHelpers.GetRandomString(5) + "1_1" + MpHelpers.GetRandomString(5),
-        //        MpSubTextTokenType.TemplateSegment,
-        //        0,
-        //        0,
-        //        0,
-        //        0,
-        //        "Template #1",
-        //        CopyItem.CopyItemId);
-        //    newTemplateToken.WriteToDatabase();
-        //    rtb.Selection.Text = newTemplateToken.TokenText;
-            //if (rtb.Tag != null) {
-            //    rtb.Document = (MpEventEnabledFlowDocument)MpHelpers.ConvertXamlToFlowDocument((string)rtb.Tag);
-            //}
-
-
-            //clone and sub uielements for tokentext
-            //var str = MpHelpers.ConvertFlowDocumentToXaml((MpEventEnabledFlowDocument)rtb.Document);//XamlWriter.Save(rtb.Document);
-            //var doc = (MpEventEnabledFlowDocument)MpHelpers.ConvertXamlToFlowDocument(str);//XamlReader.Load(xmlReader);
-
-        //    var str = XamlWriter.Save(rtb.Document);
-        //    var stringReader = new StringReader(str);
-        //    var xmlReader = XmlReader.Create(stringReader);
-        //    var doc = (MpEventEnabledFlowDocument)XamlReader.Load(xmlReader);
-
-        //    foreach (var token in TokenList.Where(x => x.TokenType == MpSubTextTokenType.TemplateSegment)) {
-        //        var container = (InlineUIContainer)doc.FindName(token.TokenText);
-        //        var containerRange = new TextRange(container.ElementStart, container.ElementEnd);
-        //        Span sp = new Span(container.ElementStart, container.ElementEnd);
-        //        sp.Inlines.Add(token.TokenText);
-        //    }
-
-
-        //    tempTokens.Add(newTemplateToken);
-
-        //    CopyItem.ItemXaml = MpHelpers.ConvertFlowDocumentToXaml(doc);
-        //    CopyItem.SubTextTokenList = tempTokens;
-        //    CopyItem.WriteToDatabase();
-
-        //    TokenList = tempTokens;
-        //}
-        
 
         public void ClipTileImage_Loaded(object sender, RoutedEventArgs e) {
             var img = (Image)sender;
@@ -1144,6 +1122,29 @@
         #endregion
 
         #region Private Methods 
+        private void SetButtonGroupSelection(ToggleButton clickedButton, ToggleButton currentSelectedButton, IEnumerable<ToggleButton> buttonGroup, bool ignoreClickWhenSelected) {
+            /* In some cases, if the user clicks the currently-selected button, we want to ignore
+             * the click; for example, when a text alignment button is clicked. In other cases, we
+             * want to deselect the button, but do nothing else; for example, when a list butteting
+             * or numbering button is clicked. The ignoreClickWhenSelected variable controls that
+             * behavior. */
+
+            // Exit if currently-selected button is clicked
+            if (clickedButton == currentSelectedButton) {
+                if (ignoreClickWhenSelected) {
+                    clickedButton.IsChecked = true;
+                }
+                return;
+            }
+
+            // Deselect all buttons
+            foreach (var button in buttonGroup) {
+                button.IsChecked = false;
+            }
+
+            // Select the clicked button
+            clickedButton.IsChecked = true;
+        }
         private string GetCurrentDetail(int detailId) {
             string info = "I dunno";// string.Empty;
             switch (detailId) {

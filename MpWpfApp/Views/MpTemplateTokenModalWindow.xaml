@@ -41,18 +41,27 @@
             <ComboBox x:Name="TemplateSelectorComboBox"
                       Grid.Row="0"
                       MinWidth="100"
-                      Margin="0,0,0,15"
+                      Margin="40,0,0,15"
                       FontSize="16"
-                      HorizontalContentAlignment="Right"
+                      HorizontalContentAlignment="Left"
                       SelectedItem="{Binding SelectedTokenHyperlink, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
-                      ItemsSource="{Binding TemplateTokenHyperlinks}" />
+                      ItemsSource="{Binding TemplateTokenHyperlinks}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding TargetName}"
+                                   FontSize="16"
+                                   Height="20" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <StackPanel Orientation="Horizontal"
                         Grid.Row="1">
                 <Button x:Name="TemplateColorButton"
-                        Background="{Binding SelectedTokenBrush}"
-                        Width="50"
-                        Height="50"
-                        Margin="0,0,10,0"
+                        Background="Brown"
+                        Width="30"
+                        Height="30"
+                        VerticalAlignment="Top"
+                        Margin="0,0,10,0" 
                         BorderBrush="Black"
                         BorderThickness="1"
                         Command="{Binding ChangeTemplateColorCommand}" />
@@ -79,9 +88,9 @@
                            HorizontalContentAlignment="Stretch"
                            Padding="0,0,0,10"
                            Margin="15,0,0,0"
-                           FontSize="12" 
+                           FontSize="12"
                            Width="300"
-                           Height="24"/>
+                           Height="24" />
                 </StackPanel>
             </StackPanel>
         </Grid>

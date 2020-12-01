@@ -54,33 +54,37 @@ namespace MpWpfApp {
         }
 
         #region Documents
-        public static Hyperlink CreateHyperlink(TextPointer s, TextPointer e, string text, Brush bg, MpSubTextTokenType tokenType) {
-            Hyperlink hl = new Hyperlink(s, e);
-            hl = SetHyperlinkText(hl, text);
-            hl = SetHyperlinkBackgroundBrush(hl, bg);
-            hl.Tag = tokenType;
-            return hl;
-        }
-        public static string GetHyperlinkText(Hyperlink hyperlink) {
-            var run = hyperlink.Inlines.FirstOrDefault() as Run;
-            return run == null ? string.Empty : run.Text;
-        }
+        //public static Hyperlink CreateHyperlink(TextPointer s, TextPointer e, string text, Brush bg, MpSubTextTokenType tokenType) {
+        //    Hyperlink hl = new Hyperlink(s, e);
+        //    hl = SetHyperlinkText(hl, text);
+        //    hl = SetHyperlinkBackgroundBrush(hl, bg);
+        //    hl.Tag = tokenType;
+        //    return hl;
+        //}
+        //public static string GetHyperlinkText(Hyperlink hyperlink) {
+        //    var run = hyperlink.Inlines.FirstOrDefault() as Run;
+        //    return run == null ? string.Empty : run.Text;
+        //}
 
-        public static Hyperlink SetHyperlinkText(Hyperlink hyperlink, string text) {
-            var run = hyperlink.Inlines.FirstOrDefault() as Run;
-            if(run == null) {
-                run = new Run();
-                hyperlink.Inlines.Add(run);
-            }
-            run.Text = text;
-            return hyperlink;
-        }
+        //public static Hyperlink SetHyperlinkText(Hyperlink hyperlink, string text) {
+        //    var run = hyperlink.Inlines.FirstOrDefault() as Run;
+        //    if(run == null) {
+        //        run = new Run(); 
+        //        hyperlink.Inlines.Add(run);
+        //    }
+        //    run.Text = text;
+        //    return hyperlink;
+        //}
 
-        public static Hyperlink SetHyperlinkBackgroundBrush(Hyperlink hyperlink, Brush brush) {
-            hyperlink.Background = brush;
-            (hyperlink.Inlines.FirstOrDefault() as Run).Background = brush;
-            return hyperlink;
-        }
+        //public static Brush GetHyperlinkBrush(Hyperlink hyperlink) {
+        //    return hyperlink.Background;
+        //}
+
+        //public static Hyperlink SetHyperlinkBackgroundBrush(Hyperlink hyperlink, Brush brush) {
+        //    hyperlink.Background = brush;
+        //    (hyperlink.Inlines.FirstOrDefault() as Run).Background = brush;
+        //    return hyperlink;
+        //}
 
         public static FlowDocument HighlightFlowDocument(FlowDocument flowDocument, string highlightText, SolidColorBrush highlightBrush, bool isCaseSensitive = false) {
             new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd).ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
@@ -111,7 +115,7 @@ namespace MpWpfApp {
             }
             return flowDocument;
         }
-
+        
         public static TextRange FindStringRangeFromPosition(TextPointer position, string str, bool isCaseSensitive = false) {
             while (position != null) {
                 var dir = LogicalDirection.Forward;
