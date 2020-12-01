@@ -159,6 +159,9 @@ namespace MpWpfApp {
         }
 
         public static bool IsStringRichText(string text) {
+            if(string.IsNullOrEmpty(text)) {
+                return false;
+            }
             return text.StartsWith(@"{\rtf");
         }
 

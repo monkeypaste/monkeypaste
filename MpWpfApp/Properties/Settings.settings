@@ -167,7 +167,7 @@
       <Value Profile="(Default)">mp.db</Value>
     </Setting>
     <Setting Name="TemplateTokenMarker" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">@</Value>
+      <Value Profile="(Default)">Љ</Value>
     </Setting>
     <Setting Name="TemplateTokenUri" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://www.template.com</Value>

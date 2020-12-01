@@ -102,7 +102,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Attached Properties\MpSubTextTokenCollectionExtension.cs" />
     <Compile Include="Attached Properties\MpHighlightTextExtension.cs" />
     <Compile Include="Attached Properties\MpFocusExtension.cs" />
     <Compile Include="Attached Properties\MpDocumentRtfExtension.cs" />
@@ -178,12 +177,16 @@
     <Compile Include="ViewModels\Main Window\MpSoundPlayerGroupCollectionViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSubTextTokenCollectionViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSubTextTokenViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\MpTemplateTokenModalWindowViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpTemplateTokenPasteModalWindowViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpTemplateTokenAssignmentModalWindowViewModel.cs" />
     <Compile Include="Views\MpAppendBalloonControl.xaml.cs">
       <DependentUpon>MpAppendBalloonControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MpTemplateTokenModalWindow.xaml.cs">
-      <DependentUpon>MpTemplateTokenModalWindow.xaml</DependentUpon>
+    <Compile Include="Views\MpTemplateTokenPasteModalWindow.xaml.cs">
+      <DependentUpon>MpTemplateTokenPasteModalWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MpTemplateTokenAssignmentModalWindow.xaml.cs">
+      <DependentUpon>MpTemplateTokenAssignmentModalWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MpBalloonControl.xaml.cs">
       <DependentUpon>MpBalloonControl.xaml</DependentUpon>
@@ -201,7 +204,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MpTemplateTokenModalWindow.xaml">
+    <Page Include="Views\MpTemplateTokenPasteModalWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MpTemplateTokenAssignmentModalWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -510,7 +517,26 @@
       <Version>1.1.1</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Outlook">
+      <Guid>{00062FFF-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>9</VersionMajor>
+      <VersionMinor>2</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Bulb.ico" />
     <Resource Include="Resources\Icons\Computers.ico" />
@@ -554,6 +580,8 @@
     <Resource Include="Resources\Images\MpRichTextBox\templateadd.png" />
     <Resource Include="Resources\Images\MpRichTextBox\templateremove.png" />
     <Resource Include="Resources\Images\MpRichTextBox\templaterename.png" />
+    <Resource Include="Resources\Images\back_black.png" />
+    <Resource Include="Resources\Images\forward_black.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />

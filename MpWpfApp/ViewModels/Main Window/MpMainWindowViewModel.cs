@@ -306,7 +306,9 @@ namespace MpWpfApp {
         private bool CanHideWindow() {
             return Application.Current.MainWindow != null && 
                    Application.Current.MainWindow.Visibility == Visibility.Visible &&
-                   IsShowingDialog == false;
+                   IsShowingDialog == false &&
+                   !MpTemplateTokenAssignmentModalWindowViewModel.IsOpen &&
+                   !MpTemplateTokenPasteModalWindowViewModel.IsOpen;
         }
         private void HideWindow() {
             IsOpen = false;

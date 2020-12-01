@@ -14,7 +14,7 @@ using System.Windows.Media;
 using Windows.UI.Xaml.Controls;
 
 namespace MpWpfApp {
-    public class MpTemplateTokenModalWindowViewModel : MpViewModelBase {
+    public class MpTemplateTokenAssignmentModalWindowViewModel : MpViewModelBase {
         #region Static Variables
         public static bool IsOpen = false;
         #endregion
@@ -27,7 +27,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
-        private string _windowTitle = "Template Manager";
+        private string _windowTitle = "Template Editor";
         public string WindowTitle {
             get {
                 return _windowTitle;
@@ -138,9 +138,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Static Methods
-        public static bool ShowTemplateTokenModalWindow(RichTextBox rtb) {
-            var ttmw = new MpTemplateTokenModalWindow(rtb);
-            var ttmwvm = (MpTemplateTokenModalWindowViewModel)ttmw.DataContext;            
+        public static bool ShowTemplateTokenAssignmentModalWindow(RichTextBox rtb) {
+            var ttmw = new MpTemplateTokenAssignmentModalWindow(rtb);
+            var ttmwvm = (MpTemplateTokenAssignmentModalWindowViewModel)ttmw.DataContext;            
             var result = ttmw.ShowDialog();
             if (result.Value == true) {
                 return true;
@@ -151,7 +151,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpTemplateTokenModalWindowViewModel(RichTextBox rtb) {
+        public MpTemplateTokenAssignmentModalWindowViewModel(RichTextBox rtb) {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(SelectedTokenHyperlink):
@@ -161,7 +161,13 @@ namespace MpWpfApp {
             };
             _rtb = rtb; 
             _originalText = _rtb.Selection.Text;
-            TemplateTokenHyperlinks = new ObservableCollection<Hyperlink>(_rtb.GetTemplateHyperlinkList());
+            TemplateTokenHyperlinks = new ObservableCollection<Hyperlink>();
+            foreach(var tthl in _rtb.GetTemplateHyperlinkList()) {
+                var dup = TemplateTokenHyperlinks.Where(x => x.TargetName == tthl.TargetName).ToList();
+                if(dup == null || dup.Count == 0) {
+                    TemplateTokenHyperlinks.Add(tthl);
+                }
+            }
             var newLink = new Hyperlink();
             newLink.TargetName = GetUniqueTemplateName();
             newLink.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
@@ -203,6 +209,7 @@ namespace MpWpfApp {
 
         public void TemplateTokenModalWindow_Loaded(object sender, RoutedEventArgs e) {
             _windowRef = (Window)sender;
+            IsOpen = true;
             //var tb = (TextBox)_windowRef.FindName("TemplateNameEditorTextBox");
             //tb.PreviewKeyUp += (s, e1) => {
             //    if(e1.Key == Key.Enter) {
@@ -288,6 +295,7 @@ namespace MpWpfApp {
             _rtb.Selection.Text = _originalText;
             _windowRef.DialogResult = false;
             _windowRef.Close();
+            IsOpen = false;
         }
 
         private RelayCommand _clearCommand;
@@ -315,19 +323,11 @@ namespace MpWpfApp {
             return Validate();
         }
         private void Ok() {
-            //_rtb.Selection.Select(SelectedTokenHyperlink.ElementStart,SelectedTokenHyperlink.ElementEnd);
-            //_rtb.Selection.Text = String.Format(@"{0}{1}{0}",Properties.Settings.Default.TemplateTokenMarker,SelectedTokenName);
-            //Hyperlink hyperlink = new Hyperlink(_rtb.Selection.Start, _rtb.Selection.End);
-            //hyperlink.Background = SelectedTokenBrush;
-            //hyperlink.Tag = MpSubTextTokenType.TemplateSegment;
-            //hyperlink.IsEnabled = true;
-            //((List<Hyperlink>)_rtb.Tag).Add(SelectedTokenHyperlink);
-            //_rtb.ClearHyperlinks();
-            //_rtb.CreateHyperlinks();
             _rtb.Selection.Text = String.Format(@"{0}{1}{0}", Properties.Settings.Default.TemplateTokenMarker, SelectedTokenName);            
             _rtb.ClearHyperlinks();
             _windowRef.DialogResult = true;
             _windowRef.Close();
+            IsOpen = false;
         }
         #endregion
 

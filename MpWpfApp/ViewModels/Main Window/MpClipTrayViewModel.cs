@@ -10,6 +10,7 @@ using System.Speech.Synthesis;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -126,7 +127,11 @@ namespace MpWpfApp {
             get {
                 string outStr = string.Empty;
                 foreach (var sctvm in SelectedClipTiles) {
-                    outStr += sctvm.CopyItemPlainText + Environment.NewLine;
+                    if (sctvm.TokenList != null && sctvm.TokenList.Count > 0) {
+                        outStr += MpHelpers.ConvertRichTextToPlainText(sctvm.TemplateRichText) + Environment.NewLine;
+                    } else {
+                        outStr += sctvm.CopyItemPlainText + Environment.NewLine;
+                    }
                 }
                 return outStr.Trim('\r','\n');
             }
@@ -136,7 +141,35 @@ namespace MpWpfApp {
             get {
                 string outStr = MpHelpers.ConvertPlainTextToRichText(string.Empty);
                 foreach (var sctvm in SelectedClipTiles) {
-                    outStr = MpHelpers.CombineRichText2(outStr, sctvm.CopyItem.ItemRichText);
+                    if(sctvm.TokenList != null && sctvm.TokenList.Count > 0) {
+                        var tempRtb = new RichTextBox();
+                        tempRtb.Document = MpHelpers.ConvertRichTextToFlowDocument(sctvm.CopyItemRichText);
+                        tempRtb.CreateHyperlinks();
+                        //var templateLinkList = (List<Hyperlink>)tempRtb.Tag;
+                        var templateTokenLookupDictionary = MpTemplateTokenPasteModalWindowViewModel.ShowTemplateTokenPasteModalWindow(sctvm.TokenList);
+                        
+                        foreach (var templateLink in sctvm.TokenList) {
+                            Span span = new Span(templateLink.ContentStart, templateLink.ContentEnd);
+                            span.Inlines.Clear();
+                            span.Inlines.Add(new Run(templateTokenLookupDictionary[templateLink.TargetName]));
+                        }
+                        sctvm.TemplateRichText = MpHelpers.ConvertFlowDocumentToRichText(tempRtb.Document);
+                        foreach (var templateLink in sctvm.TokenList) {
+                            Hyperlink hl = new Hyperlink(templateLink.ContentStart, templateLink.ContentEnd);
+                            hl.Inlines.Clear();
+                            hl.Inlines.Add(new Run(templateLink.TargetName));
+                            hl.TargetName = templateLink.TargetName;
+                            hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
+                            hl.IsEnabled = true;
+                            hl.Tag = MpSubTextTokenType.TemplateSegment;
+                            hl.RequestNavigate += (s4, e4) => {
+                                MessageBox.Show("Sup");
+                            };
+                        }
+                        outStr = MpHelpers.CombineRichText2(outStr, sctvm.TemplateRichText);
+                    } else {
+                        outStr = MpHelpers.CombineRichText2(outStr, sctvm.CopyItemRichText);
+                    }
                 }
                 return outStr;
             }
@@ -177,11 +210,11 @@ namespace MpWpfApp {
         public IDataObject SelectedClipTilesDropDataObject {
             get {
                 IDataObject d = new DataObject();
+                d.SetData(DataFormats.Rtf, SelectedClipTilesRichText);
+                d.SetData(DataFormats.Text, SelectedClipTilesPlainText);
                 d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
                 d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
                 d.SetData(DataFormats.CommaSeparatedValue, SelectedClipTilesCsv);
-                d.SetData(DataFormats.Rtf, SelectedClipTilesRichText);
-                d.SetData(DataFormats.Text, SelectedClipTilesPlainText);
                 d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
                 return d;
             }

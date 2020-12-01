@@ -16,12 +16,12 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpAssignHotkeyModalWindow.xaml
     /// </summary>
-    public partial class MpTemplateTokenModalWindow : Window {
-        public MpTemplateTokenModalWindow() {
+    public partial class MpTemplateTokenAssignmentModalWindow : Window {
+        public MpTemplateTokenAssignmentModalWindow() {
             InitializeComponent();
         }
-        public MpTemplateTokenModalWindow(RichTextBox rtb) {
-            this.DataContext = new MpTemplateTokenModalWindowViewModel(rtb);
+        public MpTemplateTokenAssignmentModalWindow(RichTextBox rtb) {
+            this.DataContext = new MpTemplateTokenAssignmentModalWindowViewModel(rtb);
             InitializeComponent();
         }
     }

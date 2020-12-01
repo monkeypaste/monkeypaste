@@ -306,7 +306,7 @@
 
         public Visibility EditToolbarVisibility {
             get {
-                if(IsEditingTile) {
+                if(IsEditingTile || IsPastingTemplateTile) {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -415,6 +415,25 @@
             }
         }
 
+        private bool _isPastingTemplateTile = false;
+        public bool IsPastingTemplateTile {
+            get {
+                return _isPastingTemplateTile;
+            }
+            set {
+                if (_isPastingTemplateTile != value) {
+                    _isPastingTemplateTile = value;
+                    OnPropertyChanged(nameof(IsPastingTemplateTile));
+                    OnPropertyChanged(nameof(IsRtbReadOnly));
+                    OnPropertyChanged(nameof(ContentCursor));
+                    OnPropertyChanged(nameof(EditToolbarVisibility));
+                    OnPropertyChanged(nameof(CopyItem));
+                }
+            }
+        }
+
+        //public bool ContainsTemplates { get; set; }
+
         public bool IsRtbReadOnly {
             get {
                 return !IsEditingTile;
@@ -488,6 +507,19 @@
             }
         }
 
+        private Dictionary<string, string> _templateTokenLookupDictionary = new Dictionary<string, string>();
+        public Dictionary<string, string> TemplateTokenLookupDictionary {
+            get {
+                return _templateTokenLookupDictionary;
+            }
+            set {
+                if (_templateTokenLookupDictionary != value) {
+                    _templateTokenLookupDictionary = value;
+                    OnPropertyChanged(nameof(TemplateTokenLookupDictionary));
+                }
+            }
+        }
+
         public Cursor ContentCursor {
             get {
                 if(IsEditingTile) {
@@ -531,20 +563,6 @@
             }
         }
 
-        //public string CopyItemXamlText {
-        //    get {
-        //        return CopyItem.ItemXaml;
-        //    }
-        //    set {
-        //        if (CopyItem.ItemXaml != value) {
-        //            CopyItem.ItemXaml = value;
-        //            OnPropertyChanged(nameof(CopyItemXamlText));
-        //            OnPropertyChanged(nameof(CopyItem));
-        //        }
-        //    }
-        //}
-
-        //for drag/drop,export and paste not view
         public string CopyItemPlainText {
             get {
                 return CopyItem.ItemPlainText;
@@ -553,17 +571,28 @@
 
         public string CopyItemRichText {
             get {
+
+                //RichTextBox rtb = new RichTextBox();
+                //rtb.Document = MpHelpers.ConvertRichTextToFlowDocument(CopyItem.ItemRichText);
+                //rtb.CreateHyperlinks();
+                //TokenList = rtb.GetTemplateHyperlinkList();
                 return CopyItem.ItemRichText;
             }
             set {
                 //if (CopyItem.ItemRichText != value) 
                     {
                     CopyItem.SetData(value);
+                    //RichTextBox rtb = new RichTextBox();
+                    //rtb.Document = MpHelpers.ConvertRichTextToFlowDocument(value);
+                    //rtb.CreateHyperlinks();
+                    //ContainsTemplates = rtb.GetTemplateHyperlinkList().Count > 0;
                     OnPropertyChanged(nameof(CopyItemRichText));
                     OnPropertyChanged(nameof(CopyItem));
                 }
             }
-        }       
+        }  
+        
+        public string TemplateRichText { get; set; }
 
         public BitmapSource CopyItemBmp {
             get {
@@ -645,7 +674,8 @@
                 return _copyItem;
             }
             set {
-                if (_copyItem != value) {
+                //if (_copyItem != value) 
+                    {
                     _copyItem = value;
 
                     OnPropertyChanged(nameof(CopyItem));
@@ -692,8 +722,8 @@
                         }
                         break;
                 }
-            };            
-
+            };
+            
             IsLoading = true;
             CopyItem = ci;
 
@@ -877,15 +907,14 @@
             addTemplateButton.PreviewMouseDown += (s, e2) => {
                 MainWindowViewModel.IsShowingDialog = true;
                 e2.Handled = true;
-                var result = MpTemplateTokenModalWindowViewModel.ShowTemplateTokenModalWindow(rtb);
+                var result = MpTemplateTokenAssignmentModalWindowViewModel.ShowTemplateTokenAssignmentModalWindow(rtb);
                 if(result) {
                     CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
-
                 } else {
-                    //clear any link if cancle
+                    //clear any link if cancled
                     rtb.Selection.Text = rtb.Selection.Text;
                 }
-
+                TokenList = rtb.Tag == null ? new List<Hyperlink>() : (List<Hyperlink>)rtb.Tag;
                 MainWindowViewModel.IsShowingDialog = false;
             };
 
@@ -934,7 +963,7 @@
                     fromWidthContent = fromWidthTile;
                     toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
                     toWidthContent = toWidthTile - scrollbarWidth;
-                    rtb.Focusable = true;
+                    //rtb.Focusable = true;
                     //etrtb.TokenizedRichTextBox.Focusable = true;                    
                     rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
                     rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
@@ -948,8 +977,9 @@
                     fromWidthContent = fromWidthTile - scrollbarWidth;
                     toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
                     toWidthContent = toWidthTile;
-                    rtb.Focusable = false;
-                    //etrtb.TokenizedRichTextBox.Focusable = false;
+                    //rtb.Focusable = false;
+                    //ContainsTemplates = rtb.Tag != null && ((List<Hyperlink>)rtb.Tag).Count > 0;
+                    TokenList = rtb.Tag == null ? new List<Hyperlink>() : (List<Hyperlink>)rtb.Tag;
                     rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
                     rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
                 }
@@ -965,6 +995,7 @@
                 twa.EasingFunction = easing;
                 twa.Completed += (s1, e2) => {
                     ((MpMultiSelectListBox)cb.GetVisualAncestor<MpMultiSelectListBox>()).ScrollIntoView(cb);
+                    
                 };
                 cb.BeginAnimation(MpClipBorder.WidthProperty, twa);
                 titleSwirl.BeginAnimation(Image.WidthProperty, twa);
@@ -987,6 +1018,21 @@
                 la.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
                 la.EasingFunction = easing;
                 titleIconImageButton.BeginAnimation(Canvas.LeftProperty, la);
+
+                //if (IsPastingTemplateTile) {
+                //    TemplateTokenLookupDictionary = MpTemplateTokenPasteModalWindowViewModel.ShowTemplateTokenPasteModalWindow(rtb);
+                //    var tempDoc = rtb.Document.Clone();
+                //    var templateLinkList = (List<Hyperlink>)rtb.Tag;
+                //    foreach (var templateLink in templateLinkList) {
+                //        Span span = new Span(templateLink.ContentStart, templateLink.ContentEnd);
+                //        span.Inlines.Clear();
+                //        span.Inlines.Add(new Run(TemplateTokenLookupDictionary[templateLink.TargetName]));
+                //    }
+                //    TemplateRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+                //    rtb.Document = tempDoc;
+                //    rtb.ClearHyperlinks();
+                //    CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+                //}
             };
         }
 
@@ -1207,6 +1253,7 @@
         }
         private void EditClipText() {
             IsEditingTile = true;
+            //IsPastingTemplateTile = true;
             IsSelected = true;
             //all other action is handled in the ertb visibility changed handler in ertb_loaded
         }

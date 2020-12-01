@@ -574,7 +574,7 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("@")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Љ")]
         public string TemplateTokenMarker {
             get {
                 return ((string)(this["TemplateTokenMarker"]));

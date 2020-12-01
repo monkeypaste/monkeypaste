@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Timers;
+using System.Windows;
 
 namespace MpWpfApp {
     public class MpLastWindowWatcher {
@@ -37,10 +38,18 @@ namespace MpWpfApp {
             Timer timer = new Timer(100);
             timer.Elapsed += (s, e) => {
                 IntPtr currentHandle = WinApi.GetForegroundWindow();
+                //var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
                 if (ThisAppHandle == IntPtr.Zero) {
                     ThisAppHandle = Process.GetCurrentProcess().MainWindowHandle;
                 }
-                if (currentHandle != LastHandle && currentHandle != ThisAppHandle && ThisAppHandle != IntPtr.Zero && currentHandle != IntPtr.Zero) {
+                if (currentHandle != LastHandle && 
+                    currentHandle != ThisAppHandle && 
+                    ThisAppHandle != IntPtr.Zero && 
+                    currentHandle != IntPtr.Zero &&
+                    !MpSettingsWindowViewModel.IsOpen &&
+                    !MpAssignShortcutModalWindowViewModel.IsOpen &&
+                    !MpTemplateTokenAssignmentModalWindowViewModel.IsOpen && 
+                    !MpTemplateTokenPasteModalWindowViewModel.IsOpen) {
                     LastHandle = currentHandle;
                     LastTitle = MpHelpers.GetProcessMainWindowTitle(LastHandle);
                     Console.WriteLine("Last Window: " + MpHelpers.GetProcessMainWindowTitle(_lastHandle));

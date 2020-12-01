@@ -93,10 +93,10 @@ namespace MpWpfApp {
             //rtb.ClearHyperlinks();
             TextRange fullDocRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
             for (int i = 0; i < regExGroupList.Count; i++) {
-                TextPointer lastRangeEnd = rtb.Document.ContentStart;
                 var regExStr = regExGroupList[i];
                 MatchCollection mc = Regex.Matches(fullDocRange.Text, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
                 foreach (Match m in mc) {
+                    TextPointer lastRangeEnd = rtb.Document.ContentStart;
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
                             var matchRange = MpHelpers.FindStringRangeFromPosition(lastRangeEnd, c.Value);
@@ -119,6 +119,7 @@ namespace MpWpfApp {
                                 hl.RequestNavigate += (s4, e4) => {
                                     MessageBox.Show("Sup");
                                 };
+                                Console.WriteLine("Creating template link w/ taget name: " + hl.TargetName);
                             } else {
                                 var linkText = c.Value;
                                 hl = new Hyperlink(matchRange.Start, matchRange.End);
@@ -202,7 +203,17 @@ namespace MpWpfApp {
             }
             rtb.Tag = linkList;
         }
-
+        public static FlowDocument Clone(this FlowDocument doc) {
+            using (MemoryStream stream = new MemoryStream()) {
+                var clonedDoc = new FlowDocument();
+                TextRange range = new TextRange(doc.ContentStart, doc.ContentEnd);
+                System.Windows.Markup.XamlWriter.Save(range, stream);
+                range.Save(stream, DataFormats.XamlPackage);
+                TextRange range2 = new TextRange(clonedDoc.ContentEnd, clonedDoc.ContentEnd);
+                range2.Load(stream, DataFormats.XamlPackage);
+                return clonedDoc;
+            }                
+        }
         public static TextRange FindStringRangeFromPosition2(this RichTextBox rtb, string findText, bool isCaseSensitive = false) {
             var fullText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
             if (string.IsNullOrEmpty(findText) || string.IsNullOrEmpty(fullText) || findText.Length > fullText.Length)
