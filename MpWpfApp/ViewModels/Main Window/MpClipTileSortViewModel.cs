@@ -69,8 +69,8 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Constructor/Initializers
-        public MpClipTileSortViewModel() {
+        #region Public Methods
+        public MpClipTileSortViewModel() : base() {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(AscSortOrderButtonImageVisibility):

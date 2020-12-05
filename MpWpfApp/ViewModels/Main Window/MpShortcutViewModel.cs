@@ -228,7 +228,7 @@ namespace MpWpfApp {
             string defaultKeys, 
             int copyItemId = -1, 
             int tagId = -1, 
-            int shortcutId = -1) {
+            int shortcutId = -1) : base() {
             PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(CopyItemId):

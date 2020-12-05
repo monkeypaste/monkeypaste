@@ -153,7 +153,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpAppViewModel(MpApp app) {
+        public MpAppViewModel(MpApp app) : base() {
             PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(App):

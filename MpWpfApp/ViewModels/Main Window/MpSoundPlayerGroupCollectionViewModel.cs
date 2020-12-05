@@ -56,7 +56,7 @@ namespace MpWpfApp {
         #region Private Methods
         private MpSoundPlayerGroupCollectionViewModel() : this(MpSoundGroup.Minimal) { }
 
-        private MpSoundPlayerGroupCollectionViewModel(MpSoundGroup group) {
+        private MpSoundPlayerGroupCollectionViewModel(MpSoundGroup group) : base() {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(SelectedSoundGroupNameIdx):

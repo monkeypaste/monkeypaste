@@ -27,7 +27,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpClipTileTextContentViewModel() {
+        public MpClipTileTextContentViewModel() : base() {
 
         }
 

@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpSubTextTokenViewModel : MpViewModelBase {
+    public class MpTemplateTokenViewModel : MpViewModelBase {
         #region Statics
         private static List<Brush> _TokenGroupColorLookupList = new List<Brush>() {
             Brushes.Purple,
@@ -266,10 +267,21 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Public Methods
-        public MpSubTextTokenViewModel() { }
+        #region Statics
+        
+        #endregion
 
-        public MpSubTextTokenViewModel(MpSubTextToken stt) {
+        #region Public Methods
+
+        public MpTemplateTokenViewModel() : base() { }
+
+        public MpTemplateTokenViewModel(string tokenName, Brush tokenColor) {
+            TokenName = tokenName;
+            TemplateBorderBackgroundBrush = tokenColor;
+            //encodedRange.Text = string.Empty;
+        }
+
+        public MpTemplateTokenViewModel(TextPointer insertPosition, string tokenName, Brush tokenBrush) {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(SubTextToken):
@@ -350,12 +362,12 @@ namespace MpWpfApp {
                 }
             };
 
-            SubTextToken = stt;
+            //SubTextToken = stt;
             IsEditing = false;
         }
         
         public void TemplateTextTokenEditableButton_Loaded(object sender, RoutedEventArgs e) {
-            var templateTokenBorder = (Border)sender;
+            var templateTokenBorder = (MpClipBorder)sender;
             templateTokenBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
             };

@@ -114,7 +114,7 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private MpAssignShortcutModalWindowViewModel(string shortcutName, string keysList, ICommand command) {
+        private MpAssignShortcutModalWindowViewModel(string shortcutName, string keysList, ICommand command) : base() {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(KeysString):

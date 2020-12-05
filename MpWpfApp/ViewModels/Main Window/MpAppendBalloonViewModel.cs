@@ -62,7 +62,7 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private MpAppendBalloonViewModel(MpClipTileViewModel ctvm) {
+        private MpAppendBalloonViewModel(MpClipTileViewModel ctvm) : base() {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(ClipTileViewModel):

@@ -15,7 +15,7 @@ namespace MpWpfApp {
 
         public bool ThrowOnInvalidPropertyName { get; private set; }
 
-        private bool _isFocused;
+        private bool _isFocused = false;
         public bool IsFocused {
             get {
                 return _isFocused;
@@ -32,7 +32,7 @@ namespace MpWpfApp {
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void OnPropertyChanged(string propertyName) {
+        public virtual void OnPropertyChanged(string propertyName) {
             this.VerifyPropertyName(propertyName);
             PropertyChangedEventHandler handler = this.PropertyChanged;
             if (handler != null) {

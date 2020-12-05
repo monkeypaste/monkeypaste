@@ -10,19 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpAssignHotkeyModalWindow.xaml
+    /// Interaction logic for MpTemplateTokenClipBorder.xaml
     /// </summary>
-    public partial class MpTemplateTokenAssignmentModalWindow : Window {
-        public MpTemplateTokenAssignmentModalWindow() {
+    public partial class MpTemplateTokenClipBorder : UserControl {
+        public MpTemplateTokenClipBorder(string tokenName, Brush tokenColor) {
             InitializeComponent();
-        }
-        public MpTemplateTokenAssignmentModalWindow(RichTextBox rtb) {
-            this.DataContext = new MpTemplateTokenAssignmentModalWindowViewModel(rtb);
-            InitializeComponent();
+            DataContext = new MpTemplateTokenViewModel(tokenName, tokenColor);
         }
     }
 }

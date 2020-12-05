@@ -69,7 +69,11 @@ namespace MpWpfApp {
             }
         }
 
-        public MpClipTileContextMenuItemViewModel(string header, ICommand command,object commandParameter, bool isChecked) {
+        public MpClipTileContextMenuItemViewModel(
+            string header, 
+            ICommand command,
+            object commandParameter,
+            bool isChecked) : base() {
             Header = header;
             Command = command;
             CommandParameter = commandParameter;

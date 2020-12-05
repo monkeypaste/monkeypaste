@@ -24,7 +24,7 @@ namespace MpWpfApp {
         public void Init() {
             //empty to initialize singleton
         }
-        public MpAppCollectionViewModel() {
+        public MpAppCollectionViewModel() : base() {
             foreach (var app in MpApp.GetAllApps()) {
                 this.Add(new MpAppViewModel(app));
             }

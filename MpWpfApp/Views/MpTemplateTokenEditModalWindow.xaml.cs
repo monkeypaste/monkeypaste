@@ -10,15 +10,15 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MpWpfApp {
     /// <summary>
-    /// Interaction logic for MpTemplateTextTokenEditableButton.xaml
+    /// Interaction logic for MpAssignHotkeyModalWindow.xaml
     /// </summary>
-    public partial class MpSubTextTemplateTokenClipBorder : UserControl {
-        public MpSubTextTemplateTokenClipBorder() {
+    public partial class MpTemplateTokenEditModalWindow : Window {
+        public MpTemplateTokenEditModalWindow(RichTextBox rtb, Hyperlink templateLink) {
+            this.DataContext = new MpTemplateTokenEditModalWindowViewModel(rtb,templateLink);
             InitializeComponent();
         }
     }

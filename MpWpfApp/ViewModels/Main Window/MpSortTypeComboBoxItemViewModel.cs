@@ -2,6 +2,7 @@
 
 namespace MpWpfApp {
     public class MpSortTypeComboBoxItemViewModel : MpViewModelBase {
+        #region Properties
         private string _header;
         public string Header {
             get {
@@ -14,6 +15,19 @@ namespace MpWpfApp {
                 }
             }
         }
+        #endregion
+
+        #region Public Methods
+        public MpSortTypeComboBoxItemViewModel(string header, ICommand command) : base() {
+            Header = header;
+            Command = command;
+        }
+        public override string ToString() {
+            return Header;
+        }
+        #endregion
+
+        #region Commands
 
         private ICommand _command;
         public ICommand Command {
@@ -27,12 +41,7 @@ namespace MpWpfApp {
                 }
             }
         }
-        public MpSortTypeComboBoxItemViewModel(string header, ICommand command) {
-            Header = header;
-            Command = command;
-        }
-        public override string ToString() {
-            return Header;
-        }
+        #endregion
+
     }
 }

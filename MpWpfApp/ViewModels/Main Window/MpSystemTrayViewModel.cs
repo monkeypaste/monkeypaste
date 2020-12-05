@@ -29,8 +29,8 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpSystemTrayViewModel() {
-            
+        public MpSystemTrayViewModel() : base() {
+
         }
 
         public void SystemTrayTaskbarIcon_Loaded(object sender, RoutedEventArgs e) {

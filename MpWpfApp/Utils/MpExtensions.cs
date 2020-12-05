@@ -5,6 +5,8 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Mail;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -28,6 +30,7 @@ namespace MpWpfApp {
             }
             run.Text = text;
         }
+
         public static List<Hyperlink> GetAllHyperlinkList(this RichTextBox rtb) {
             if (rtb.Tag == null) {
                 return new List<Hyperlink>();
@@ -43,8 +46,25 @@ namespace MpWpfApp {
             return hyperlinkList;
         }
 
-        public static List<Hyperlink> GetTemplateHyperlinkList(this RichTextBox rtb) {
-            return rtb.GetAllHyperlinkList().Where(x => x.NavigateUri.OriginalString == Properties.Settings.Default.TemplateTokenUri).ToList();
+        public static List<Hyperlink> GetTemplateHyperlinkList(this RichTextBox rtb, bool unique = false) {
+            var templateLinks = rtb.GetAllHyperlinkList().Where(x => x.NavigateUri?.OriginalString == Properties.Settings.Default.TemplateTokenUri).ToList();
+            if(unique) {
+                var toRemove = new List<Hyperlink>();
+                foreach(var hl in templateLinks) {
+                    foreach(var hl2 in templateLinks) {
+                        if(hl == hl2 || toRemove.Contains(hl) || toRemove.Contains(hl2)) {
+                            continue;
+                        }
+                        if(hl.TargetName == hl2.TargetName) {
+                            toRemove.Add(hl2);
+                        }
+                    }
+                }
+                foreach (var hlr in toRemove) {
+                    templateLinks.Remove(hlr);
+                }
+            }
+            return templateLinks;
             //var hyperlinkList = (List<Hyperlink>)rtb.Tag;//new List<Hyperlink>();
             ////string test = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
             //foreach (var paragraph in rtb.Document.Blocks.OfType<Paragraph>()) {
@@ -62,15 +82,15 @@ namespace MpWpfApp {
             //if hl is templatee it decodes the run into #templatename#templatecolor# 
             var hll = rtb.GetAllHyperlinkList();
             foreach (var hl in hll) {
-                rtb.Selection.Select(hl.ContentStart, hl.ContentStart);
+                rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
                 rtb.Selection.Text = rtb.Selection.Text;
                 if (hl.NavigateUri.OriginalString == Properties.Settings.Default.TemplateTokenUri) {
-                    rtb.Selection.Text = string.Format(@"{0}{1}{0}", Properties.Settings.Default.TemplateTokenMarker, rtb.Selection.Text);
+                    rtb.Selection.Text = string.Format(@"{0}{1}{0}{2}{0}", Properties.Settings.Default.TemplateTokenMarker, rtb.Selection.Text, hl.Background.ToString());
                 }
             }
             rtb.Tag = null;
         }
-        public static void CreateHyperlinks(this RichTextBox rtb) {        
+        public static List<Hyperlink> CreateHyperlinks(this RichTextBox rtb) {        
             var regExGroupList = new List<string> {
                 //WebLink
                 @"(?:https?://|www\.)\S+", 
@@ -80,50 +100,67 @@ namespace MpWpfApp {
                 @"(\+?\d{1,3}?[ -.]?)?\(?(\d{3})\)?[ -.]?(\d{3})[ -.]?(\d{4})",
                 //Currency
                 @"[$|£|€|¥]([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)?(\.[0-9][0-9])?",
-                //HexColor
-                @"#([0-9]|[a-fA-F]){6}",
+                //HexColor (no alpha)
+                @"#([0-9]|[a-fA-F]){5}([^" + Properties.Settings.Default.TemplateTokenMarker + "][ ])",
                 //StreetAddress
                 @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Lane|Road|Boulevard|Drive|Street|Ave|Dr|Rd|Blvd|Ln|St)\.?,\s(?:[A-Z][a-z.-]+[ ]?)+ \b\d{5}(?:-\d{4})?\b",                
                 //Text Template
                 string.Format(
-                    @"[{0}].*?[{0}]", 
-                    Properties.Settings.Default.TemplateTokenMarker)
+                    @"[{0}].*?[{0}].*?[{0}]", 
+                    Properties.Settings.Default.TemplateTokenMarker),                
+                //HexColor (with alpha)
+                @"#([0-9]|[a-fA-F]){7}([^" + Properties.Settings.Default.TemplateTokenMarker + "][ ])",
             };
             List<Hyperlink> linkList = new List<Hyperlink>();
-            //rtb.ClearHyperlinks();
             TextRange fullDocRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
             for (int i = 0; i < regExGroupList.Count; i++) {
                 var regExStr = regExGroupList[i];
-                MatchCollection mc = Regex.Matches(fullDocRange.Text, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+                MatchCollection mc = Regex.Matches(fullDocRange.Text, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);                                
                 foreach (Match m in mc) {
                     TextPointer lastRangeEnd = rtb.Document.ContentStart;
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
-                            var matchRange = MpHelpers.FindStringRangeFromPosition(lastRangeEnd, c.Value);
-                            lastRangeEnd = matchRange.End;
+                            Hyperlink hl = null;
+                            var matchRange = MpHelpers.FindStringRangeFromPosition(lastRangeEnd, c.Value);                            
                             if (matchRange == null) {
                                 continue;
                             }
-                            Hyperlink hl = null;
+                            lastRangeEnd = matchRange.End;
                             if ((MpSubTextTokenType)(i + 1) == MpSubTextTokenType.TemplateSegment) {
-                                rtb.Selection.Select(matchRange.Start, matchRange.End);
-                                rtb.Selection.Text = rtb.Selection.Text.Replace(Properties.Settings.Default.TemplateTokenMarker, string.Empty);
-                                hl = new Hyperlink(rtb.Selection.Start, rtb.Selection.End);
-                                hl.TargetName = rtb.Selection.Text;
-                                //hl.Inlines.Clear();
-                                //hl.Inlines.Add(new Run(c.Value.Replace(Properties.Settings.Default.TemplateTokenMarkerStart, string.Empty).Replace(Properties.Settings.Default.TemplateTokenMarkerEnd, string.Empty)));
+                                var tokenProps = matchRange.Text.Split(new string[] { Properties.Settings.Default.TemplateTokenMarker }, System.StringSplitOptions.RemoveEmptyEntries);
+                                matchRange.Text = tokenProps[0];
+                                hl = new Hyperlink(matchRange.Start, matchRange.End);
+                                hl.TargetName = matchRange.Text;
+                                hl.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom(tokenProps[1]));
+                                hl.Inlines.FirstInline.Background = hl.Background;
+                                hl.Foreground = Brushes.White;
+                                hl.Inlines.FirstInline.Foreground = Brushes.White;
                                 hl.Tag = MpSubTextTokenType.TemplateSegment;
                                 hl.IsEnabled = true;
-                                //hl.TargetName = ((Run)hl.Inlines.FirstInline).Text;
                                 hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
                                 hl.RequestNavigate += (s4, e4) => {
-                                    MessageBox.Show("Sup");
+                                    MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenAssignmentModalWindow(rtb, hl);
                                 };
-                                Console.WriteLine("Creating template link w/ taget name: " + hl.TargetName);
+                                var editTemplateMenuItem = new MenuItem();
+                                editTemplateMenuItem.Header = "Edit";
+                                editTemplateMenuItem.Click += (s4, e4) => {
+                                    MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenAssignmentModalWindow(rtb, hl);
+                                };
+
+                                var deleteTemplateMenuItem = new MenuItem();
+                                deleteTemplateMenuItem.Header = "Delete";
+                                deleteTemplateMenuItem.Click += (s4, e4) => {
+                                    //add remove stuff
+                                };
+                                hl.ContextMenu = new ContextMenu();
+                                hl.ContextMenu.Items.Add(editTemplateMenuItem);
+                                hl.ContextMenu.Items.Add(deleteTemplateMenuItem);
+                                //Console.WriteLine("Creating template link w/ taget name: " + hl.TargetName);
                             } else {
-                                var linkText = c.Value;
                                 hl = new Hyperlink(matchRange.Start, matchRange.End);
-                                hl.Tag = (MpSubTextTokenType)(i + 1);
+                                var linkText = c.Value;
+                                //account for special case for hexcolor w/ alpha
+                                hl.Tag = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);
                                 hl.IsEnabled = true;
                                 hl.RequestNavigate += (s4, e4) => {
                                     System.Diagnostics.Process.Start(e4.Uri.ToString());
@@ -202,7 +239,9 @@ namespace MpWpfApp {
                 }
             }
             rtb.Tag = linkList;
+            return linkList;
         }
+
         public static FlowDocument Clone(this FlowDocument doc) {
             using (MemoryStream stream = new MemoryStream()) {
                 var clonedDoc = new FlowDocument();
@@ -214,6 +253,7 @@ namespace MpWpfApp {
                 return clonedDoc;
             }                
         }
+
         public static TextRange FindStringRangeFromPosition2(this RichTextBox rtb, string findText, bool isCaseSensitive = false) {
             var fullText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
             if (string.IsNullOrEmpty(findText) || string.IsNullOrEmpty(fullText) || findText.Length > fullText.Length)
@@ -464,6 +504,37 @@ namespace MpWpfApp {
                 sb.Append(run == null ? Environment.NewLine : run.Text);
             }
             return sb.ToString();
+        }
+
+        //Extension method for MailMessage to save to a file on disk
+        public static void Save(this MailMessage message, string filename, bool addUnsentHeader = true) {
+            using (var filestream = File.Open(filename, FileMode.Create)) {
+                if (addUnsentHeader) {
+                    var binaryWriter = new BinaryWriter(filestream);
+                    //Write the Unsent header to the file so the mail client knows this mail must be presented in "New message" mode
+                    binaryWriter.Write(System.Text.Encoding.UTF8.GetBytes("X-Unsent: 1" + Environment.NewLine));
+                }
+
+                var assembly = typeof(SmtpClient).Assembly;
+                var mailWriterType = assembly.GetType("System.Net.Mail.MailWriter");
+
+                // Get reflection info for MailWriter contructor
+                var mailWriterContructor = mailWriterType.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new[] { typeof(Stream) }, null);
+
+                // Construct MailWriter object with our FileStream
+                var mailWriter = mailWriterContructor.Invoke(new object[] { filestream });
+
+                // Get reflection info for Send() method on MailMessage
+                var sendMethod = typeof(MailMessage).GetMethod("Send", BindingFlags.Instance | BindingFlags.NonPublic);
+
+                sendMethod.Invoke(message, BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { mailWriter, true, true }, null);
+
+                // Finally get reflection info for Close() method on our MailWriter
+                var closeMethod = mailWriter.GetType().GetMethod("Close", BindingFlags.Instance | BindingFlags.NonPublic);
+
+                // Call close method
+                closeMethod.Invoke(mailWriter, BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { }, null);
+            }
         }
     }
 }

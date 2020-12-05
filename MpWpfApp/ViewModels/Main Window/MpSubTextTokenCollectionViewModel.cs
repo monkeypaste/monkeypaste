@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpSubTextTokenCollectionViewModel : MpObservableCollectionViewModel<MpSubTextTokenViewModel> {
+    public class MpSubTextTokenCollectionViewModel : MpObservableCollectionViewModel<MpTemplateTokenViewModel> {
         #region View Models
         private MpClipTileViewModel _clipTileViewModel = null;
         public MpClipTileViewModel ClipTileViewModel {
@@ -22,7 +22,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpSubTextTokenCollectionViewModel(MpClipTileViewModel ctvm) {
+        public MpSubTextTokenCollectionViewModel(MpClipTileViewModel ctvm) : base() {
         }
         #endregion
     }

@@ -84,29 +84,21 @@ namespace MpWpfApp {
             }
         }
 
-        private Visibility _emptyListMessageVisibility = Visibility.Collapsed;
         public Visibility EmptyListMessageVisibility {
             get {
-                return _emptyListMessageVisibility;
-            }
-            set {
-                if (_emptyListMessageVisibility != value) {
-                    _emptyListMessageVisibility = value;
-                    OnPropertyChanged(nameof(EmptyListMessageVisibility));
+                if(VisibileClipTiles.Count == 0) {
+                    return Visibility.Visible;
                 }
+                return Visibility.Collapsed;
             }
         }
 
-        private Visibility _clipTrayVisibility = Visibility.Visible;
         public Visibility ClipTrayVisibility {
             get {
-                return _clipTrayVisibility;
-            }
-            set {
-                if (_clipTrayVisibility != value) {
-                    _clipTrayVisibility = value;
-                    OnPropertyChanged(nameof(ClipTrayVisibility));
+                if (EmptyListMessageVisibility == Visibility.Visible) {
+                    return Visibility.Collapsed;
                 }
+                return Visibility.Visible;
             }
         }
 
@@ -146,26 +138,29 @@ namespace MpWpfApp {
                         tempRtb.Document = MpHelpers.ConvertRichTextToFlowDocument(sctvm.CopyItemRichText);
                         tempRtb.CreateHyperlinks();
                         //var templateLinkList = (List<Hyperlink>)tempRtb.Tag;
-                        var templateTokenLookupDictionary = MpTemplateTokenPasteModalWindowViewModel.ShowTemplateTokenPasteModalWindow(sctvm.TokenList);
-                        
-                        foreach (var templateLink in sctvm.TokenList) {
-                            Span span = new Span(templateLink.ContentStart, templateLink.ContentEnd);
+                        var templateTokenLookupDictionary = MpTemplateTokenPasteModalWindowViewModel.ShowTemplateTokenPasteModalWindow(tempRtb.GetTemplateHyperlinkList());
+                        var temp = new Dictionary<Span, Hyperlink>();
+                        foreach (var templateLink in tempRtb.GetTemplateHyperlinkList()) {
+                            //TextRange tr = new TextRange(templateLink.ElementStart, templateLink.ElementEnd);
+                            ///tr.Text = string.Empty;
+                            Span span = new Span(templateLink.ElementStart, templateLink.ElementEnd);
                             span.Inlines.Clear();
                             span.Inlines.Add(new Run(templateTokenLookupDictionary[templateLink.TargetName]));
+                            temp.Add(span, templateLink);
                         }
                         sctvm.TemplateRichText = MpHelpers.ConvertFlowDocumentToRichText(tempRtb.Document);
-                        foreach (var templateLink in sctvm.TokenList) {
-                            Hyperlink hl = new Hyperlink(templateLink.ContentStart, templateLink.ContentEnd);
-                            hl.Inlines.Clear();
-                            hl.Inlines.Add(new Run(templateLink.TargetName));
-                            hl.TargetName = templateLink.TargetName;
-                            hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
-                            hl.IsEnabled = true;
-                            hl.Tag = MpSubTextTokenType.TemplateSegment;
-                            hl.RequestNavigate += (s4, e4) => {
-                                MessageBox.Show("Sup");
-                            };
-                        }
+                        //foreach (var span in temp.Keys) {
+                        //    Hyperlink hl = new Hyperlink(span.ElementStart, span.ElementEnd);
+                        //    hl.Inlines.Clear();
+                        //    hl.Inlines.Add(new Run(temp[span].TargetName));
+                        //    hl.TargetName = temp[span].TargetName;
+                        //    hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
+                        //    hl.IsEnabled = true;
+                        //    hl.Tag = MpSubTextTokenType.TemplateSegment;
+                        //    hl.RequestNavigate += (s4, e4) => {
+                        //        MessageBox.Show("Sup");
+                        //    };
+                        //}
                         outStr = MpHelpers.CombineRichText2(outStr, sctvm.TemplateRichText);
                     } else {
                         outStr = MpHelpers.CombineRichText2(outStr, sctvm.CopyItemRichText);
@@ -238,20 +233,15 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Events
+        public event EventHandler ItemsVisibilityChanged;
+        public virtual void OnItemsVisibilityChanged() => ItemsVisibilityChanged?.Invoke(this, EventArgs.Empty);
+
+        #endregion
+
         #region Public Methods
 
-        public MpClipTrayViewModel() {
-            //CollectionChanged += (s, e1) => {
-            //    if (VisibileClipTiles.Count > 0) {
-            //        ClipTrayVisibility = Visibility.Visible;
-            //        EmptyListMessageVisibility = Visibility.Collapsed;
-            //    } else {
-            //        //update cliptray visibility if this is the first cliptile added
-            //        ClipTrayVisibility = Visibility.Collapsed;
-            //        EmptyListMessageVisibility = Visibility.Visible;
-            //    }
-            //};
-
+        public MpClipTrayViewModel() : base() {
             //create tiles for all clips in the database
             foreach (MpCopyItem ci in MpCopyItem.GetAllCopyItems()) {
                 this.Add(new MpClipTileViewModel(ci));
@@ -334,13 +324,6 @@ namespace MpWpfApp {
                     }
                     ttvm.IsHovering = isTagLinkedToAllSelectedClips && VisibileClipTiles.Count > 0;
                 }
-                if(VisibileClipTiles.Count == 0) {
-                    ClipTrayVisibility = Visibility.Collapsed;
-                    EmptyListMessageVisibility = Visibility.Visible;
-                } else {
-                    ClipTrayVisibility = Visibility.Visible;
-                    EmptyListMessageVisibility = Visibility.Collapsed;
-                }
             };
             clipTray.PreviewMouseWheel += (s, e3) => {
                 if(IsEditingClipTile) {
@@ -352,7 +335,6 @@ namespace MpWpfApp {
                 var scrollViewer = clipTrayListBox.GetDescendantOfType<ScrollViewer>();
                 scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + (e3.Delta * -1) / 5);
             };
-
             ClipboardMonitor = new MpClipboardMonitor((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow));
 
             // Attach the handler to the event raising on WM_DRAWCLIPBOARD message is received
@@ -382,6 +364,7 @@ namespace MpWpfApp {
                     ResetClipSelection();
                 }
             };
+
 
             SortAndFilterClipTiles();            
         }
@@ -430,6 +413,11 @@ namespace MpWpfApp {
                 IsDragging = false;
                 StartDragPoint = new Point();
                 //_dragClipBorderElement = null;
+            };
+            clipTileBorder.IsVisibleChanged += (s, e9) => {
+                OnPropertyChanged(nameof(EmptyListMessageVisibility));
+                OnPropertyChanged(nameof(ClipTrayVisibility));
+                OnItemsVisibilityChanged();
             };
         }
 

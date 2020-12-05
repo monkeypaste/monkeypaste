@@ -231,7 +231,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-        private MpSettingsWindowViewModel(MpSystemTrayViewModel stvm) {
+        private MpSettingsWindowViewModel(MpSystemTrayViewModel stvm) : base() {
             PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(IsLoadOnLoginChecked):

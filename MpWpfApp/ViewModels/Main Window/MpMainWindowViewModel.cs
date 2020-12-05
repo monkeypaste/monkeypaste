@@ -158,7 +158,7 @@ namespace MpWpfApp {
 
         #region Public Methods        
 
-        public MpMainWindowViewModel() {
+        public MpMainWindowViewModel() : base() {
             IsLoading = true;
             SearchBoxViewModel = new MpSearchBoxViewModel();
             ClipTrayViewModel = new MpClipTrayViewModel();
@@ -307,7 +307,7 @@ namespace MpWpfApp {
             return Application.Current.MainWindow != null && 
                    Application.Current.MainWindow.Visibility == Visibility.Visible &&
                    IsShowingDialog == false &&
-                   !MpTemplateTokenAssignmentModalWindowViewModel.IsOpen &&
+                   !MpTemplateTokenEditModalWindowViewModel.IsOpen &&
                    !MpTemplateTokenPasteModalWindowViewModel.IsOpen;
         }
         private void HideWindow() {

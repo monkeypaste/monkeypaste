@@ -16,7 +16,7 @@ namespace MpWpfApp {
         public void Init() {
             //empty call to init singleton
         }
-        public MpShortcutCollectionViewModel() {
+        public MpShortcutCollectionViewModel() : base() {
 
             //using mainwindow, map all saved shortcuts to their commands
             foreach (var sc in MpShortcut.GetAllShortcuts()) {

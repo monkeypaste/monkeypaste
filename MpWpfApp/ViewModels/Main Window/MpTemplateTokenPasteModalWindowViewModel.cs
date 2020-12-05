@@ -128,7 +128,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpTemplateTokenPasteModalWindowViewModel(List<Hyperlink> tokenList) {
+        public MpTemplateTokenPasteModalWindowViewModel(List<Hyperlink> tokenList) : base() {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                 }

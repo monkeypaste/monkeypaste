@@ -93,7 +93,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public MpFileListItemViewModel(MpClipTileViewModel parent, string path) {
+        public MpFileListItemViewModel(MpClipTileViewModel parent, string path) : base() {
             ClipTileViewModel = parent;
             ItemPath = path;
             ItemUri = new Uri(ItemPath,UriKind.Absolute);

@@ -19,77 +19,56 @@ namespace MpWpfApp {
                 if (_searchText != value) {
                     _searchText = value;
                     OnPropertyChanged(nameof(SearchText));
-                }
-            }
-        }
-
-        private Brush _searchTextBoxBorderBrush = Brushes.Transparent;
-        public Brush SearchTextBoxBorderBrush {
-            get {
-                return _searchTextBoxBorderBrush;
-            }
-            set {
-                if (_searchTextBoxBorderBrush != value) {
-                    _searchTextBoxBorderBrush = value;
+                    OnPropertyChanged(nameof(SearchTextBoxFontStyle));
+                    OnPropertyChanged(nameof(SearchTextBoxTextBrush));
                     OnPropertyChanged(nameof(SearchTextBoxBorderBrush));
                 }
             }
         }
 
-        private SolidColorBrush _searchTextBoxTextBrush = Brushes.DimGray;
+        public Brush SearchTextBoxBorderBrush {
+            get {
+                if(MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles.Count == 0 && 
+                    SearchText != Properties.Settings.Default.SearchPlaceHolderText &&
+                    !string.IsNullOrEmpty(SearchText)) {
+                    return Brushes.Red;
+                }
+                return Brushes.Transparent;
+            }
+        }
+
         public SolidColorBrush SearchTextBoxTextBrush {
             get {
-                return _searchTextBoxTextBrush;
-            }
-            set {
-                if (_searchTextBoxTextBrush != value) {
-                    _searchTextBoxTextBrush = value;
-                    OnPropertyChanged(nameof(SearchTextBoxTextBrush));
+                if (SearchText != Properties.Settings.Default.SearchPlaceHolderText || IsFocused) {
+                    return Brushes.Black;
                 }
+                return Brushes.DimGray;
             }
         }
 
-        private FontStyle _searchTextBoxFontStyle = FontStyles.Italic;
         public FontStyle SearchTextBoxFontStyle {
             get {
-                return _searchTextBoxFontStyle;
-            }
-            set {
-                if (_searchTextBoxFontStyle != value) {
-                    _searchTextBoxFontStyle = value;
-                    OnPropertyChanged(nameof(SearchTextBoxFontStyle));
+                if(SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
+                    return FontStyles.Italic;
                 }
+                return FontStyles.Normal;
             }
         }
 
-        private Visibility _clearSearchTextButtonVisibility = Visibility.Collapsed;
         public Visibility ClearSearchTextButtonVisibility {
             get {
-                return _clearSearchTextButtonVisibility;
-            }
-            set {
-                if (_clearSearchTextButtonVisibility != value) {
-                    _clearSearchTextButtonVisibility = value;
-                    OnPropertyChanged(nameof(ClearSearchTextButtonVisibility));
+                if (SearchText.Length > 0 && 
+                    SearchText != Properties.Settings.Default.SearchPlaceHolderText) {
+                    return Visibility.Visible;
                 }
+                return Visibility.Collapsed;
             }
         }
         #endregion
 
         #region Public Methods
 
-        public MpSearchBoxViewModel() {
-            PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
-                    case nameof(SearchText):
-                        if(SearchText.Length > 0 && SearchText != Properties.Settings.Default.SearchPlaceHolderText) {
-                            ClearSearchTextButtonVisibility = Visibility.Visible;                            
-                        } else {
-                            ClearSearchTextButtonVisibility = Visibility.Collapsed;
-                        }
-                        break;
-                }
-            };
+        public MpSearchBoxViewModel() : base() {
         }
         public void SearchBoxBorder_Loaded(object sender, RoutedEventArgs e) {
             var searchBox = (TextBox)((MpClipBorder)sender).FindName("SearchTextBox");
@@ -98,21 +77,22 @@ namespace MpWpfApp {
                 if (SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
                     SearchText = string.Empty;
                 }
-                SearchTextBoxFontStyle = FontStyles.Normal;
-                SearchTextBoxTextBrush = Brushes.Black;
+                
                 IsFocused = true;
+                MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();
+                OnPropertyChanged(nameof(SearchTextBoxFontStyle));
+                OnPropertyChanged(nameof(SearchTextBoxTextBrush));
             };
             searchBox.LostFocus += (s, e5) => {
-                //var searchTextBox = (TextBox)e.Source;
+                IsFocused = false;
                 if (string.IsNullOrEmpty(SearchText)) {
                     SearchText = Properties.Settings.Default.SearchPlaceHolderText;
-                    SearchTextBoxFontStyle = FontStyles.Italic;
-                    SearchTextBoxTextBrush = Brushes.DimGray;
                 }
-                IsFocused = false;
             };
             SearchText = Properties.Settings.Default.SearchPlaceHolderText;
-
+            MainWindowViewModel.ClipTrayViewModel.ItemsVisibilityChanged += (s1, e7) => {
+                OnPropertyChanged(nameof(SearchTextBoxBorderBrush));
+            };
         }
         #endregion
 
@@ -131,6 +111,7 @@ namespace MpWpfApp {
         }
         private void ClearSearchText() {
             SearchText = string.Empty;
+            IsFocused = true;
         }
         #endregion
     }

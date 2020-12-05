@@ -11,6 +11,7 @@ using System.Media;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Mail;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -25,6 +26,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
+using Alturos.Yolo;
 using CsvHelper;
 using Newtonsoft.Json;
 using QRCoder;
@@ -351,6 +353,31 @@ namespace MpWpfApp {
         #endregion
 
         #region System
+        public static string CreateEmail(string fromAddress, string subject, object body, string attachmentPath = "") {
+            //this returns the .eml file that will need to be deleted
+            var mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress(fromAddress);
+            mailMessage.Subject = "Your subject here";
+            if(body.GetType() == typeof(BitmapSource)) {
+                mailMessage.IsBodyHtml = true;
+                mailMessage.Body = string.Format("<img src='{0}'>", MpHelpers.WriteBitmapSourceToFile(Path.GetTempPath(),(BitmapSource)body), true);
+            } else {
+                mailMessage.Body = (string)body;
+            }            
+
+            if(!string.IsNullOrEmpty(attachmentPath)) {
+                mailMessage.Attachments.Add(new Attachment(attachmentPath));
+            }
+
+            var filename = Path.GetTempPath() + "mymessage.eml";
+
+            //save the MailMessage to the filesystem
+            mailMessage.Save(filename);
+
+            //Open the file with the default associated application registered on the local machine
+            Process.Start(filename);
+            return filename;
+        }
         public static long FileListSize(string[] paths) {
             long total = 0;
             foreach (string path in paths) {
@@ -664,6 +691,27 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual
+        public static List<string> DetectObjects(byte[] image, double confidence = 0.0) {
+            var detectedObjectList = new List<string>();
+            var configurationDetector = new ConfigurationDetector();
+            var config = configurationDetector.Detect();
+            using (var yoloWrapper = new YoloWrapper(config)) {
+                var items = yoloWrapper.Detect(image);
+                foreach(var item in items) {
+                    if(item.Confidence >= confidence) {
+                        detectedObjectList.Add(item.Type);
+                    }                    
+                }
+                //items[0].Type -> "Person , Car, ..."
+                //items[0].Confidence -> 0.0 (low) -> 1.0 (high)
+                //items[0].X -> bounding box
+                //items[0].Y -> bounding box
+                //items[0].Width -> bounding box
+                //items[0].Height -> bounding box
+
+                return detectedObjectList;
+            }
+        }
         public static BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint) {
             var bmp = new WriteableBitmap(bmpSrc);
             var pixels = GetPixels(bmp);

@@ -589,5 +589,17 @@ namespace MpWpfApp.Properties {
                 return ((string)(this["TemplateTokenUri"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("tkefauver@gmail.com")]
+        public string UserEmail {
+            get {
+                return ((string)(this["UserEmail"]));
+            }
+            set {
+                this["UserEmail"] = value;
+            }
+        }
     }
 }

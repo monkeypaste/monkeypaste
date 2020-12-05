@@ -60,7 +60,7 @@ namespace MpWpfApp {
         }
 
         #region Public Methods
-        public MpAppModeViewModel() {
+        public MpAppModeViewModel() : base() {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(IsInAppendMode):

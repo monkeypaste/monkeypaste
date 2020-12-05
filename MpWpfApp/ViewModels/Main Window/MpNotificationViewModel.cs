@@ -52,7 +52,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpNotificationViewModel(MpNotificationType type, object notificationProperty) {
+        public MpNotificationViewModel(MpNotificationType type, object notificationProperty) : base() {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     //case nameof(NotificationType):

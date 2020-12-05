@@ -172,5 +172,8 @@
     <Setting Name="TemplateTokenUri" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://www.template.com</Value>
     </Setting>
+    <Setting Name="UserEmail" Type="System.String" Scope="User">
+      <Value Profile="(Default)">tkefauver@gmail.com</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

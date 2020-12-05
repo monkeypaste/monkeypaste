@@ -246,7 +246,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpTagTileViewModel(MpTag tag, MpTagTrayViewModel parent) {
+        public MpTagTileViewModel(MpTag tag, MpTagTrayViewModel parent) : base() {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
                     case nameof(TagId):
@@ -486,7 +486,6 @@ namespace MpWpfApp {
             IsSelected = true;
             IsFocused = true;
         }
-
         #endregion
     }
 }

@@ -112,6 +112,7 @@
     <Compile Include="Controls\MpTokenizedRichTextBox.cs" />
     <Compile Include="Converters\MpFlowDocumentToXamlConverter.cs" />
     <Compile Include="Converters\MpIntToMpRoutingTypeConverter.cs" />
+    <Compile Include="Converters\MpStringToFlowDocumentConverter.cs" />
     <Compile Include="Converters\MpVisibilityToBoolConverter.cs" />
     <Compile Include="Converters\MpImageSourceToBitmapSourceConverter.cs" />
     <Compile Include="Converters\MpIntToStringConverter.cs" />
@@ -176,17 +177,17 @@
     <Compile Include="ViewModels\Main Window\MpSortTypeComboBoxItemViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSoundPlayerGroupCollectionViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSubTextTokenCollectionViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\MpSubTextTokenViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpTemplateTokenViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpTemplateTokenPasteModalWindowViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\MpTemplateTokenAssignmentModalWindowViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpTemplateTokenEditModalWindowViewModel.cs" />
     <Compile Include="Views\MpAppendBalloonControl.xaml.cs">
       <DependentUpon>MpAppendBalloonControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MpTemplateTokenPasteModalWindow.xaml.cs">
       <DependentUpon>MpTemplateTokenPasteModalWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MpTemplateTokenAssignmentModalWindow.xaml.cs">
-      <DependentUpon>MpTemplateTokenAssignmentModalWindow.xaml</DependentUpon>
+    <Compile Include="Views\MpTemplateTokenEditModalWindow.xaml.cs">
+      <DependentUpon>MpTemplateTokenEditModalWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MpBalloonControl.xaml.cs">
       <DependentUpon>MpBalloonControl.xaml</DependentUpon>
@@ -197,8 +198,8 @@
     <Compile Include="Views\MpSettingsWindow.xaml.cs">
       <DependentUpon>MpSettingsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MpSubTextTemplateTokenClipBorder.xaml.cs">
-      <DependentUpon>MpSubTextTemplateTokenClipBorder.xaml</DependentUpon>
+    <Compile Include="Views\MpTemplateTokenClipBorder.xaml.cs">
+      <DependentUpon>MpTemplateTokenClipBorder.xaml</DependentUpon>
     </Compile>
     <Page Include="Styles\ResourceDictionary.xaml">
       <SubType>Designer</SubType>
@@ -208,7 +209,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MpTemplateTokenAssignmentModalWindow.xaml">
+    <Page Include="Views\MpTemplateTokenEditModalWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -244,7 +245,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MpSubTextTemplateTokenClipBorder.xaml">
+    <Page Include="Views\MpTemplateTokenClipBorder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -417,6 +418,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Alturos.Yolo">
+      <Version>2.6.4</Version>
+    </PackageReference>
+    <PackageReference Include="Alturos.YoloV2TinyVocData">
+      <Version>1.0.0</Version>
+    </PackageReference>
     <PackageReference Include="CsvHelper">
       <Version>16.2.0</Version>
     </PackageReference>

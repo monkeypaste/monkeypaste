@@ -14,15 +14,17 @@ using System.Windows.Media;
 using Windows.UI.Xaml.Controls;
 
 namespace MpWpfApp {
-    public class MpTemplateTokenAssignmentModalWindowViewModel : MpViewModelBase {
+    public class MpTemplateTokenEditModalWindowViewModel : MpViewModelBase {
         #region Static Variables
         public static bool IsOpen = false;
         #endregion
 
         #region Private Variables
+        private bool _isNew = false;
         private Window _windowRef = null;
         private RichTextBox _rtb = null;
         private string _originalText = string.Empty;
+        private Hyperlink _originalLink = null;
         private string _templateText = string.Empty;
         #endregion
 
@@ -103,14 +105,16 @@ namespace MpWpfApp {
                 return SelectedTokenHyperlink.TargetName;
             }
             set {
+                if(string.IsNullOrEmpty(value)) {
+                    return;
+                }
                 SelectedTokenHyperlink.TargetName = value;
                 Validate();
                 OnPropertyChanged(nameof(SelectedTokenName));
+                OnPropertyChanged(nameof(SelectedTokenBrush));
                 OnPropertyChanged(nameof(SelectedTokenHyperlink));
             }
         }
-
-
 
         public Brush SelectedTokenBrush {
             get {
@@ -123,25 +127,16 @@ namespace MpWpfApp {
             }
         }
 
-        private ObservableCollection<Hyperlink> _templateTokenHyperlinks = new ObservableCollection<Hyperlink>();
-        public ObservableCollection<Hyperlink> TemplateTokenHyperlinks {
-            get {
-                return _templateTokenHyperlinks;
-            }
-            set {
-                if (_templateTokenHyperlinks != value) {
-                    _templateTokenHyperlinks = value;
-                    OnPropertyChanged(nameof(TemplateTokenHyperlinks));
-                }
-            }
-        }
         #endregion
 
         #region Static Methods
-        public static bool ShowTemplateTokenAssignmentModalWindow(RichTextBox rtb) {
-            var ttmw = new MpTemplateTokenAssignmentModalWindow(rtb);
-            var ttmwvm = (MpTemplateTokenAssignmentModalWindowViewModel)ttmw.DataContext;            
+        public static bool ShowTemplateTokenAssignmentModalWindow(RichTextBox rtb, Hyperlink templateLink) {
+            var ttmw = new MpTemplateTokenEditModalWindow(rtb, templateLink);
+            var ttmwvm = (MpTemplateTokenEditModalWindowViewModel)ttmw.DataContext;
+
+            ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).IsShowingDialog = true;
             var result = ttmw.ShowDialog();
+            ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).IsShowingDialog = true;
             if (result.Value == true) {
                 return true;
             } else {
@@ -151,7 +146,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpTemplateTokenAssignmentModalWindowViewModel(RichTextBox rtb) {
+        public MpTemplateTokenEditModalWindowViewModel(RichTextBox rtb, Hyperlink templateLink) : base() {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(SelectedTokenHyperlink):
@@ -161,23 +156,23 @@ namespace MpWpfApp {
             };
             _rtb = rtb; 
             _originalText = _rtb.Selection.Text;
-            TemplateTokenHyperlinks = new ObservableCollection<Hyperlink>();
-            foreach(var tthl in _rtb.GetTemplateHyperlinkList()) {
-                var dup = TemplateTokenHyperlinks.Where(x => x.TargetName == tthl.TargetName).ToList();
-                if(dup == null || dup.Count == 0) {
-                    TemplateTokenHyperlinks.Add(tthl);
-                }
+            _originalLink = templateLink;
+
+           if(templateLink == null) {
+                _isNew = true;
+                templateLink = new Hyperlink();
+                templateLink.TargetName = GetUniqueTemplateName();
+                templateLink.Background = GetUniqueTemplateColor();
+                //templateLink.Inlines.FirstInline.Background = templateLink.Background;
+                templateLink.Tag = MpSubTextTokenType.TemplateSegment;
+                templateLink.IsEnabled = true;
+                templateLink.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
+                templateLink.RequestNavigate += (s, e1) => {
+                    MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenAssignmentModalWindow(rtb, templateLink);
+                };
             }
-            var newLink = new Hyperlink();
-            newLink.TargetName = GetUniqueTemplateName();
-            newLink.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
-            newLink.RequestNavigate += (s, e1) => {
-                MessageBox.Show(MpHelpers.ConvertFlowDocumentToRichText(_rtb.Document));
-            };
-            newLink.Tag = MpSubTextTokenType.TemplateSegment;
-            newLink.IsEnabled = true;
-            TemplateTokenHyperlinks.Add(newLink);
-            SelectedTokenHyperlink = newLink;
+
+            SelectedTokenHyperlink = templateLink;
             //_templateText = String.Format(@"{0}{1}{0}", Properties.Settings.Default.TemplateTokenMarker, GetUniqueTemplateName());
             //Run run = new Run(GetUniqueTemplateName());
             //run.Background = GetUniqueTemplateColor();
@@ -224,7 +219,7 @@ namespace MpWpfApp {
         private string GetUniqueTemplateName() {
             int uniqueIdx = 1;
             string namePrefix = "Template #";
-            while(TemplateTokenHyperlinks.Where(x => x.TargetName == namePrefix + uniqueIdx).ToList().Count > 0) {
+            while(_rtb.GetTemplateHyperlinkList().Where(x => x.TargetName == namePrefix + uniqueIdx && x != _originalLink).ToList().Count > 0) {
                 uniqueIdx++;
             }
             return namePrefix + uniqueIdx;
@@ -232,18 +227,19 @@ namespace MpWpfApp {
 
         private Brush GetUniqueTemplateColor() {
             Brush randColor = (Brush)new SolidColorBrush(MpHelpers.GetRandomColor());
-            while (TemplateTokenHyperlinks.Where(x => x.Background == randColor).ToList().Count > 0) {
+            while (_rtb.GetTemplateHyperlinkList().Where(x => x.Background == randColor).ToList().Count > 0) {
                 randColor = (Brush)new SolidColorBrush(MpHelpers.GetRandomColor());
             }
             return randColor;
         }
+
         private bool Validate() {
             if (string.IsNullOrEmpty(SelectedTokenName)) {
                 ValidationText = "Name cannot be empty!";
                 return false;
             }
             //if new name is a duplicate of another just delete this one and set it to the duplicate
-            var dupTokenHyperlink = TemplateTokenHyperlinks.Where(x => x.TargetName == SelectedTokenName && x != SelectedTokenHyperlink).ToList();
+            var dupTokenHyperlink = _rtb.GetTemplateHyperlinkList().Where(x => x.TargetName == SelectedTokenName && x != SelectedTokenHyperlink).ToList();
             if (dupTokenHyperlink != null && dupTokenHyperlink.Count > 0) {
                 ValidationText = SelectedTokenName + " already exists!";
                 return false;
@@ -274,7 +270,8 @@ namespace MpWpfApp {
             ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = true;
             // Update the text box color if the user clicks OK 
             if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                //SelectedTokenHyperlink = MpHelpers.SetHyperlinkBackgroundBrush(SelectedTokenHyperlink, (Brush)MpHelpers.ConvertWinFormsColorToSolidColorBrush(cd.Color));
+                SelectedTokenHyperlink.Background = (Brush)MpHelpers.ConvertWinFormsColorToSolidColorBrush(cd.Color);
+                //SelectedTokenHyperlink.Inlines.FirstInline.Background = SelectedTokenHyperlink.Background;
                 OnPropertyChanged(nameof(SelectedTokenBrush));
             }
             Properties.Settings.Default.UserCustomColorIdxArray = cd.CustomColors;
@@ -323,7 +320,7 @@ namespace MpWpfApp {
             return Validate();
         }
         private void Ok() {
-            _rtb.Selection.Text = String.Format(@"{0}{1}{0}", Properties.Settings.Default.TemplateTokenMarker, SelectedTokenName);            
+            _rtb.Selection.Text = String.Format(@"{0}{1}{0}{2}{0}", Properties.Settings.Default.TemplateTokenMarker, SelectedTokenName, SelectedTokenBrush.ToString());            
             _rtb.ClearHyperlinks();
             _windowRef.DialogResult = true;
             _windowRef.Close();

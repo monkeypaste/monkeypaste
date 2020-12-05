@@ -470,29 +470,28 @@
                                Stretch="Fill" />
                     </Button>
                     <!-- Search TextBox-->
-                    <DockPanel>
-                        <TextBox x:Name="SearchTextBox"
-                                 Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
-                                 FontStyle="{Binding SearchTextBoxFontStyle}"
-                                 Foreground="{Binding SearchTextBoxTextBrush}"
-                                 local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
-                                 BorderThickness="0"
-                                 FontSize="18"
-                                 MinWidth="100"
-                                 VerticalAlignment="Top"
-                                 HorizontalAlignment="Left"
-                                 VerticalContentAlignment="Top">
-                        </TextBox>
-                        <Button Background="Transparent"
-                                DockPanel.Dock="Right"
-                                Visibility="{Binding ClearSearchTextButtonVisibility}"
-                                Command="{Binding ClearSearchTextCommand}"
-                                Style="{StaticResource Transparent_Button}"
-                                BorderThickness="0">
-                            <Image Source="/Resources/Images/close1.png"
-                                   Stretch="Fill" />
-                        </Button>
-                    </DockPanel>
+                    <TextBox x:Name="SearchTextBox"
+                                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                FontStyle="{Binding SearchTextBoxFontStyle}"
+                                Foreground="{Binding SearchTextBoxTextBrush}"
+                                local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                BorderThickness="0"
+                                FontSize="18"
+                                Width="240"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left"
+                                VerticalContentAlignment="Top">
+                    </TextBox>
+                    <Button Background="Transparent"
+                            Width="20"
+                            Height="20"
+                            Visibility="{Binding ClearSearchTextButtonVisibility}"
+                            Command="{Binding ClearSearchTextCommand}"
+                            Style="{StaticResource Transparent_Button}"
+                            BorderThickness="0">
+                        <Image Source="/Resources/Images/close2.png"
+                                Stretch="Fill" />
+                    </Button>
                 </StackPanel>
             </local:MpClipBorder>
         </Grid>
@@ -587,7 +586,7 @@
                                                 TargetObject="{Binding}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                    <ListBox.ItemContainerStyle>
+                    <local:MpMultiSelectListBox.ItemContainerStyle>
                         <Style TargetType="{x:Type ListBoxItem}">
                             <Setter Property="IsSelected"
                                     Value="{Binding IsSelected}" />
@@ -608,8 +607,8 @@
                                 </Setter.Value>
                             </Setter>
                         </Style>
-                    </ListBox.ItemContainerStyle>
-                    <ListBox.ItemsPanel>
+                    </local:MpMultiSelectListBox.ItemContainerStyle>
+                    <local:MpMultiSelectListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel IsItemsHost="True"
                                                     CanVerticallyScroll="False"
@@ -618,8 +617,8 @@
                                                     Orientation="Horizontal">
                             </VirtualizingStackPanel>
                         </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
-                    <ListBox.ItemTemplate>
+                    </local:MpMultiSelectListBox.ItemsPanel>
+                    <local:MpMultiSelectListBox.ItemTemplate>
                         <DataTemplate>
                             <!-- Clip Tile -->
                             <local:MpClipBorder BorderBrush="{Binding TileBorderBrush}"
@@ -681,6 +680,8 @@
                                                   Command="{Binding Data.RenameClipCommand,Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Edit"
                                                   Command="{Binding EditClipTextCommand}" />
+                                        <MenuItem Header="Send as Email"
+                                                  Command="{Binding SendClipToEmailCommand}" />
                                         <MenuItem Header="Change Color"
                                                   Command="{Binding Data.ChangeSelectedClipsColorCommand, Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Delete"
@@ -868,12 +869,6 @@
                                                     Visibility="{Binding EditToolbarVisibility}"
                                                     DockPanel.Dock="Top" 
                                                     SnapsToDevicePixels="True">
-                                                <i:Interaction.Triggers>
-                                                    <i:EventTrigger EventName="Loaded">
-                                                        <i:CallMethodAction TargetObject="{Binding}"
-                                                                            MethodName="ClipTileEditorToolbar_Loaded" />
-                                                    </i:EventTrigger>
-                                                </i:Interaction.Triggers>
                                                 <StackPanel Orientation="Horizontal"
                                                             Height="24">
                                                     <ComboBox x:Name="FontFamilyCombo"
@@ -902,6 +897,16 @@
                                                               Margin="5,2,5,2"
                                                               IsEditable="True"
                                                               ItemsSource="{Binding FontSizeList}"/>
+                                                    <Image Source="/Resources/Images/MpRichTextBox/separator.png"
+                                                           Stretch="None" />
+                                                    <Button x:Name="AddTemplateButton"
+                                                            ToolTip="Add Template"
+                                                            Template="{StaticResource FlatButtonControlTemplate}"
+                                                            Margin="0,1,0,1">
+                                                        <Image Source="/Resources/Images/MpRichTextBox/templateadd.png"
+                                                               Stretch="None"
+                                                               SnapsToDevicePixels="True" />
+                                                    </Button>
                                                     <Image Source="/Resources/Images/MpRichTextBox/separator.png"
                                                            Stretch="None"
                                                            SnapsToDevicePixels="True" />
@@ -1068,22 +1073,12 @@
                                                         <Image Source="/Resources/Images/MpRichTextBox/indentdecrease.png"
                                                                Stretch="None"
                                                                SnapsToDevicePixels="True" />
-                                                    </Button>
-                                                    <Image Source="/Resources/Images/MpRichTextBox/separator.png"
-                                                           Stretch="None" />
-                                                    <Button x:Name="AddTemplateButton"
-                                                            ToolTip="Add Template"
-                                                            Template="{StaticResource FlatButtonControlTemplate}"
-                                                            Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/templateadd.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </Button>
+                                                    </Button>                                                    
                                                 </StackPanel>
                                             </Border>
                                             <RichTextBox x:Name="ClipTileRichTextBox"
-                                                         local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText}"
                                                          local:MpHighlightTextExtension.HighlightText="{Binding SearchText}"
+                                                         local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText}"                                                         
                                                          IsReadOnly="{Binding IsRtbReadOnly}"
                                                          IsDocumentEnabled="{Binding IsSelected}"
                                                          Focusable="{Binding IsEditingTile}"
@@ -1185,7 +1180,7 @@
                                 </Grid>
                             </local:MpClipBorder>
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
+                    </local:MpMultiSelectListBox.ItemTemplate>
                 </local:MpMultiSelectListBox>
                 <TextBlock x:Name="EmptyListTextBlock"
                            Text="This list has no items"

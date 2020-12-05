@@ -78,7 +78,7 @@ namespace MpWpfApp {
                                             lastSearchTextRange = new TextRange(position, nextPointer);
                                             lastSearchTextRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.YellowGreen);
                                         }
-                                    }
+                                    } 
                                 }
 
                                 if (lastSearchTextRange != null) {
@@ -96,6 +96,8 @@ namespace MpWpfApp {
                                 }
                                 rtb.EndChange();
                             }
+                            rtb.ClearHyperlinks();
+                            rtb.CreateHyperlinks();
                             //var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
                             //if (mwvm.ClipTrayViewModel.VisibileClipTiles.Count == 0 &&
                             //   !string.IsNullOrEmpty(SearchText) &&

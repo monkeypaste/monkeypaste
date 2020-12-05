@@ -178,17 +178,17 @@ namespace MpWpfApp {
                 if (token.TokenType == MpSubTextTokenType.CopyItemSegment) {
 
                 } else if (token.TokenType == MpSubTextTokenType.TemplateSegment) {
-                    MpSubTextTemplateTokenClipBorder stttcb = new MpSubTextTemplateTokenClipBorder();
-                    stttcb.DataContext = new MpSubTextTokenViewModel(token);
+                    //MpTemplateTokenClipBorder stttcb = new MpSubTextTemplateTokenClipBorder();
+                    //stttcb.DataContext = new MpTemplateTokenViewModel(token);
                     var tokenRange = MpHelpers.FindStringRangeFromPosition(Document.ContentStart, token.TokenText.ToLower());
                     if(tokenRange == null) {
                         token.DeleteFromDatabase();
                         return;
                     }
                     tokenRange.Text = string.Empty;
-                    var container = new InlineUIContainer(stttcb, tokenRange.Start);//, TokenizedRichTextBox.CaretPosition.GetInsertionPosition(LogicalDirection.Forward)); ;
-                    container.Name = token.TokenText;
-                    Document.RegisterName(container.Name, container);
+                    //var container = new InlineUIContainer(stttcb, tokenRange.Start);//, TokenizedRichTextBox.CaretPosition.GetInsertionPosition(LogicalDirection.Forward)); ;
+                    //container.Name = token.TokenText;
+                    //Document.RegisterName(container.Name, container);
                 } else {
                     Hyperlink tokenLink = GetTokenLink(token);
                     if (tokenLink == null) {

@@ -25,7 +25,7 @@ namespace MpWpfApp {
 
         #region Public Methods
 
-        public MpTagTrayViewModel() {
+        public MpTagTrayViewModel() : base() {
             //create tiles for all the tags
             foreach (MpTag t in MpTag.GetAllTags()) {
                 this.Add(new MpTagTileViewModel(t,this));
@@ -70,15 +70,10 @@ namespace MpWpfApp {
                                     clipTile.TileVisibility = Visibility.Collapsed;
                                 }
                             }
-                            if (MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles.Count == 0) {
-                                MainWindowViewModel.ClipTrayViewModel.ClipTrayVisibility = Visibility.Collapsed;
-                                MainWindowViewModel.ClipTrayViewModel.EmptyListMessageVisibility = Visibility.Visible;
-                            } else {
-                                MainWindowViewModel.ClipTrayViewModel.ClipTrayVisibility = Visibility.Visible;
-                                MainWindowViewModel.ClipTrayViewModel.EmptyListMessageVisibility = Visibility.Collapsed;
-
+                            if(MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles.Count > 0) {
                                 MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();
                             }
+                            
                         }
                         break;
                 }
