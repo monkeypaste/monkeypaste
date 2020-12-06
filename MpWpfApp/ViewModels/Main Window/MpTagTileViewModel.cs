@@ -437,20 +437,10 @@ namespace MpWpfApp {
             }
         }
         private void ChangeTagColor() {
-            System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
-            cd.AllowFullOpen = true;
-            cd.ShowHelp = true;
-            cd.Color = MpHelpers.ConvertSolidColorBrushToWinFormsColor((SolidColorBrush)TagColor);
-            cd.CustomColors = Properties.Settings.Default.UserCustomColorIdxArray;
-
-            var mw = (MpMainWindow)Application.Current.MainWindow;
-            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = true;
-            // Update the text box color if the user clicks OK 
-            if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                TagColor = MpHelpers.ConvertWinFormsColorToSolidColorBrush(cd.Color);                   
+            var result = MpHelpers.ShowColorDialog(TagColor);
+            if(result != null) {
+                TagColor = result;
             }
-            Properties.Settings.Default.UserCustomColorIdxArray = cd.CustomColors;
-            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = false;
         }
 
         private RelayCommand _renameTagCommand;

@@ -764,7 +764,7 @@
                     return;
                 }
             };
-
+            IsLoading = false;
         }
 
         public void ClipTileTitle_Loaded(object sender, RoutedEventArgs e) {
@@ -802,7 +802,7 @@
                 // TODO check if shift is down if so perform paste into target application
                 // TODO check if App is running if it is switch to it or start its process
 
-                System.Diagnostics.Process.Start(CopyItem.App.AppPath);
+                MpHelpers.OpenUrl(CopyItem.App.AppPath);
                 
             };
 
@@ -1223,19 +1223,19 @@
         }
 
         public void ContextMenuMouseLeftButtonUpOnSearchGoogle() {
-            System.Diagnostics.Process.Start(@"https://www.google.com/search?q=" + System.Uri.EscapeDataString(CopyItemPlainText));
+            MpHelpers.OpenUrl(@"https://www.google.com/search?q=" + System.Uri.EscapeDataString(CopyItemPlainText));
         }
 
         public void ContextMenuMouseLeftButtonUpOnSearchBing() {
-            System.Diagnostics.Process.Start(@"https://www.bing.com/search?q=" + System.Uri.EscapeDataString(CopyItemPlainText));
+            MpHelpers.OpenUrl(@"https://www.bing.com/search?q=" + System.Uri.EscapeDataString(CopyItemPlainText));
         }
 
         public void ContextMenuMouseLeftButtonUpOnSearchDuckDuckGo() {
-            System.Diagnostics.Process.Start(@"https://duckduckgo.com/?q=" + System.Uri.EscapeDataString(CopyItemPlainText));
+            MpHelpers.OpenUrl(@"https://duckduckgo.com/?q=" + System.Uri.EscapeDataString(CopyItemPlainText));
         }
 
         public void ContextMenuMouseLeftButtonUpOnSearchYandex() {
-            System.Diagnostics.Process.Start(@"https://yandex.com/search/?text=" + System.Uri.EscapeDataString(CopyItemPlainText));
+            MpHelpers.OpenUrl(@"https://yandex.com/search/?text=" + System.Uri.EscapeDataString(CopyItemPlainText));
         }
 
         #endregion
@@ -1311,7 +1311,7 @@
             return !IsEditingTile;
         }
         private void SendClipToEmail() {
-            System.Diagnostics.Process.Start(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItemTitle,CopyItemPlainText));
+            MpHelpers.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItemTitle,CopyItemPlainText));
             //MainWindowViewModel.ClipTrayViewModel.ClearClipSelection();
             //IsSelected = true;
             //MpHelpers.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);

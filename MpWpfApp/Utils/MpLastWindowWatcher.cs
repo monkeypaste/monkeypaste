@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Timers;
 using System.Windows;
 
 namespace MpWpfApp {
     public class MpLastWindowWatcher {
+        #region Private Variables
+        private Dictionary<string, List<IntPtr>> _currentProcessWindowHandleStackDictionary = new Dictionary<string, List<IntPtr>>();
+        #endregion
+
         public string ThisAppPath { get; set; }
         
         public IntPtr ThisAppHandle { get; set; }
@@ -38,8 +43,10 @@ namespace MpWpfApp {
             Timer timer = new Timer(100);
             timer.Elapsed += (s, e) => {
                 IntPtr currentHandle = WinApi.GetForegroundWindow();
-                //var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
-                if (ThisAppHandle == IntPtr.Zero) {
+                
+                RefreshHandleStack();
+
+                if (ThisAppHandle == IntPtr.Zero) { 
                     ThisAppHandle = Process.GetCurrentProcess().MainWindowHandle;
                 }
                 if (currentHandle != LastHandle && 
@@ -52,10 +59,49 @@ namespace MpWpfApp {
                     !MpTemplateTokenPasteModalWindowViewModel.IsOpen) {
                     LastHandle = currentHandle;
                     LastTitle = MpHelpers.GetProcessMainWindowTitle(LastHandle);
+
+                    UpdateHandleStack(LastHandle);
                     Console.WriteLine("Last Window: " + MpHelpers.GetProcessMainWindowTitle(_lastHandle));
                 }
             };
             timer.Start();
-        }        
+        }
+        private void RefreshHandleStack() {
+            var toRemoveProcessNameList = new List<string>();
+            foreach(var processStack in _currentProcessWindowHandleStackDictionary) {
+                bool isProcessTerminated = true;
+                foreach (var handle in processStack.Value) { 
+                    if(WinApi.IsWindow(handle)) {
+                        isProcessTerminated = false;
+                    }
+                }
+                if(isProcessTerminated) {
+                    toRemoveProcessNameList.Add(processStack.Key);
+                }
+            }
+            foreach(var processToRemove in toRemoveProcessNameList) {
+                _currentProcessWindowHandleStackDictionary.Remove(processToRemove);
+            }
+        }
+        private void UpdateHandleStack(IntPtr fgHandle) {
+            var processName = MpHelpers.GetProcessPath(fgHandle);
+            if(_currentProcessWindowHandleStackDictionary.ContainsKey(processName)) {
+                if(_currentProcessWindowHandleStackDictionary[processName].Contains(fgHandle)) {
+                    _currentProcessWindowHandleStackDictionary[processName].Remove(fgHandle);
+                }
+                _currentProcessWindowHandleStackDictionary[processName].Insert(0, fgHandle);
+            } else {
+                _currentProcessWindowHandleStackDictionary.Add(processName, new List<IntPtr> { fgHandle });
+            }
+        }
+        private void PrintHandleStack() {
+            foreach(var handleStack in _currentProcessWindowHandleStackDictionary) {
+                var outStr = handleStack.Key;
+                foreach(var handle in handleStack.Value) {
+                    outStr += " " + handle.ToInt32();
+                }
+                Console.WriteLine(outStr);
+            }
+        }
     }
 }

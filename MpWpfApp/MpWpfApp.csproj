@@ -109,7 +109,6 @@
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpMultiSelectListBox.cs" />
-    <Compile Include="Controls\MpTokenizedRichTextBox.cs" />
     <Compile Include="Converters\MpFlowDocumentToXamlConverter.cs" />
     <Compile Include="Converters\MpIntToMpRoutingTypeConverter.cs" />
     <Compile Include="Converters\MpStringToFlowDocumentConverter.cs" />

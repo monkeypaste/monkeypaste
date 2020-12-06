@@ -180,5 +180,9 @@ namespace MpWpfApp {
             ShowWindow(window, SW_SHOWNORMAL);
             SetForegroundWindow(window);
         }
+
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool IsWindow(IntPtr hWnd);
     }
 }

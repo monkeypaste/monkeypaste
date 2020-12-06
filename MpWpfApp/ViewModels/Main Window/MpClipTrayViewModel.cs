@@ -415,6 +415,7 @@ namespace MpWpfApp {
                 //_dragClipBorderElement = null;
             };
             clipTileBorder.IsVisibleChanged += (s, e9) => {
+                //_clipTrayRef.Items.Refresh();
                 OnPropertyChanged(nameof(EmptyListMessageVisibility));
                 OnPropertyChanged(nameof(ClipTrayVisibility));
                 OnItemsVisibilityChanged();
@@ -726,20 +727,12 @@ namespace MpWpfApp {
             }
         }
         private void ChangeSelectedClipsColor() {
-            System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
-            cd.AllowFullOpen = true;
-            cd.ShowHelp = true;
-            cd.Color = MpHelpers.ConvertSolidColorBrushToWinFormsColor((SolidColorBrush)SelectedClipTiles[0].TitleColor);
-            cd.CustomColors = Properties.Settings.Default.UserCustomColorIdxArray;
-
-            var mw = (MpMainWindow)Application.Current.MainWindow;
-            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = true;
-            // Update the text box color if the user clicks OK 
-            if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+            var result = MpHelpers.ShowColorDialog(SelectedClipTiles[0].TitleColor);
+            if(result != null) {
                 BitmapSource sharedSwirl = null;
-                foreach(var sctvm in SelectedClipTiles) {
-                    sctvm.TitleColor = MpHelpers.ConvertWinFormsColorToSolidColorBrush(cd.Color);
-                    if(sharedSwirl == null) {
+                foreach (var sctvm in SelectedClipTiles) {
+                    sctvm.TitleColor = result;
+                    if (sharedSwirl == null) {
                         sctvm.InitSwirl();
                         sharedSwirl = sctvm.TitleSwirl;
                     } else {
@@ -748,9 +741,6 @@ namespace MpWpfApp {
                     sctvm.CopyItem.WriteToDatabase();
                 }
             }
-            Properties.Settings.Default.UserCustomColorIdxArray = cd.CustomColors;
-            Properties.Settings.Default.Save();
-            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = false;
         }
 
         private RelayCommand _pasteSelectedClipsCommand;

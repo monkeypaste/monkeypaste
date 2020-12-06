@@ -260,23 +260,10 @@ namespace MpWpfApp {
             }
         }
         private void ChangeTemplateColor() {
-            System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
-            cd.AllowFullOpen = true;
-            cd.ShowHelp = true;
-            cd.Color = MpHelpers.ConvertSolidColorBrushToWinFormsColor((SolidColorBrush)SelectedTokenHyperlink.Background);
-            cd.CustomColors = Properties.Settings.Default.UserCustomColorIdxArray;
-
-            var mw = (MpMainWindow)Application.Current.MainWindow;
-            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = true;
-            // Update the text box color if the user clicks OK 
-            if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                SelectedTokenHyperlink.Background = (Brush)MpHelpers.ConvertWinFormsColorToSolidColorBrush(cd.Color);
-                //SelectedTokenHyperlink.Inlines.FirstInline.Background = SelectedTokenHyperlink.Background;
-                OnPropertyChanged(nameof(SelectedTokenBrush));
+            var result = MpHelpers.ShowColorDialog(SelectedTokenBrush);
+            if(result != null) {
+                SelectedTokenBrush = result;
             }
-            Properties.Settings.Default.UserCustomColorIdxArray = cd.CustomColors;
-            Properties.Settings.Default.Save();
-            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = false;
         }
 
         private RelayCommand _cancelCommand;

@@ -353,6 +353,13 @@ namespace MpWpfApp {
         #endregion
 
         #region System
+        public static void OpenUrl(string url, bool openInNewWindow = true) {
+            if(url.StartsWith(@"http") && !openInNewWindow) {
+                //WinApi.SetActiveWindow()
+            } else {
+                Process.Start(url);
+            }
+        }
         public static string CreateEmail(string fromAddress, string subject, object body, string attachmentPath = "") {
             //this returns the .eml file that will need to be deleted
             var mailMessage = new MailMessage();
@@ -378,6 +385,7 @@ namespace MpWpfApp {
             Process.Start(filename);
             return filename;
         }
+        
         public static long FileListSize(string[] paths) {
             long total = 0;
             foreach (string path in paths) {
@@ -634,6 +642,7 @@ namespace MpWpfApp {
                 }
                 WinApi.GetWindowThreadProcessId(hwnd, out uint pid);
                 Process proc = Process.GetProcessById((int)pid);
+                //Process mainProc = Process.GetProcessById(Process.GetProcessById(proc.Handle.ToInt32()).MainWindowHandle.ToInt32());
                 return proc.MainModule.FileName.ToString();
             }
             catch (Exception e) {
@@ -691,6 +700,21 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual
+        public static Brush ShowColorDialog(Brush currentBrush) {
+            System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
+            cd.AllowFullOpen = true;
+            cd.ShowHelp = true;
+            cd.Color = MpHelpers.ConvertSolidColorBrushToWinFormsColor((SolidColorBrush)currentBrush);
+            cd.CustomColors = Properties.Settings.Default.UserCustomColorIdxArray;
+
+            var mw = (MpMainWindow)Application.Current.MainWindow;
+            ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = true;
+            // Update the text box color if the user clicks OK 
+            if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+                return MpHelpers.ConvertWinFormsColorToSolidColorBrush(cd.Color);
+            }
+            return null;
+        }
         public static List<string> DetectObjects(byte[] image, double confidence = 0.0) {
             var detectedObjectList = new List<string>();
             var configurationDetector = new ConfigurationDetector();

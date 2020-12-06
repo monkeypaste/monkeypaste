@@ -111,7 +111,7 @@ namespace MpWpfApp {
             hyperLink.Inlines.Add(ItemName);
             hyperLink.SetBinding(Hyperlink.IsEnabledProperty, "ClipTileViewModel.IsSelected");
             hyperLink.RequestNavigate += (s, e1) => {
-                System.Diagnostics.Process.Start(e1.Uri.ToString());
+                MpHelpers.OpenUrl(e1.Uri.ToString());
             };
             tb.Inlines.Add(hyperLink);
         }

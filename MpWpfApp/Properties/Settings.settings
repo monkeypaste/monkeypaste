@@ -175,5 +175,8 @@
     <Setting Name="UserEmail" Type="System.String" Scope="User">
       <Value Profile="(Default)">tkefauver@gmail.com</Value>
     </Setting>
+    <Setting Name="HighlightColorHexString" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#FFFF00</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

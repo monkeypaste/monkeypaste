@@ -27,18 +27,22 @@ namespace MpWpfApp {
                         DispatcherPriority.Background,
                         (Action)(() => {
                             var cb = (MpClipBorder)rtb.GetVisualAncestor<MpClipBorder>();
-                            if (cb == null) {
-                                Console.WriteLine("TokenizedRichTextBox error, cannot find clipborder");
-                                return;
-                            }
-                            if (cb.DataContext.GetType() != typeof(MpClipTileViewModel)) {
-                                return;
-                            }
+                            //if (cb == null) {
+                            //    Console.WriteLine("TokenizedRichTextBox error, cannot find clipborder");
+                            //    return;
+                            //}
+                            //if (cb.DataContext.GetType() != typeof(MpClipTileViewModel)) {
+                            //    return;
+                            //}
+                            
                             var ctvm = (MpClipTileViewModel)cb.DataContext;
-                            if (ctvm == null) {
-                                Console.WriteLine("TokenizedRichTextBox error, cannot find cliptile viewmodel");
-                                return;
-                            }
+                            //if (ctvm == null) {
+                            //    Console.WriteLine("TokenizedRichTextBox error, cannot find cliptile viewmodel");
+                            //    return;
+                            //}
+                            //if(ctvm.MainWindowViewModel.IsLoading) {
+                            //    return;
+                            //}
                             var sttvm = ctvm.MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel.SelectedTagTile;
 
                             rtb.BeginChange();
@@ -76,7 +80,7 @@ namespace MpWpfApp {
                                         if (position != null) {
                                             TextPointer nextPointer = position.GetPositionAtOffset(hlt.Length);
                                             lastSearchTextRange = new TextRange(position, nextPointer);
-                                            lastSearchTextRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.YellowGreen);
+                                            lastSearchTextRange.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString));
                                         }
                                     } 
                                 }
@@ -96,8 +100,8 @@ namespace MpWpfApp {
                                 }
                                 rtb.EndChange();
                             }
-                            rtb.ClearHyperlinks();
-                            rtb.CreateHyperlinks();
+                            //rtb.ClearHyperlinks();
+                            //rtb.CreateHyperlinks();
                             //var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
                             //if (mwvm.ClipTrayViewModel.VisibileClipTiles.Count == 0 &&
                             //   !string.IsNullOrEmpty(SearchText) &&

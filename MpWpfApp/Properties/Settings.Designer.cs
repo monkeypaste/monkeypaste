@@ -601,5 +601,17 @@ namespace MpWpfApp.Properties {
                 this["UserEmail"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFFF00")]
+        public string HighlightColorHexString {
+            get {
+                return ((string)(this["HighlightColorHexString"]));
+            }
+            set {
+                this["HighlightColorHexString"] = value;
+            }
+        }
     }
 }

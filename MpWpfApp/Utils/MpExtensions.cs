@@ -82,11 +82,16 @@ namespace MpWpfApp {
             //if hl is templatee it decodes the run into #templatename#templatecolor# 
             var hll = rtb.GetAllHyperlinkList();
             foreach (var hl in hll) {
-                rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
-                rtb.Selection.Text = rtb.Selection.Text;
-                if (hl.NavigateUri.OriginalString == Properties.Settings.Default.TemplateTokenUri) {
-                    rtb.Selection.Text = string.Format(@"{0}{1}{0}{2}{0}", Properties.Settings.Default.TemplateTokenMarker, rtb.Selection.Text, hl.Background.ToString());
-                }
+                //if(hl.ElementStart.IsInSameDocument(rtb.Document.ContentStart)) 
+                {
+                    rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
+                    rtb.Selection.Text = rtb.Selection.Text;
+                    if (hl.NavigateUri.OriginalString == Properties.Settings.Default.TemplateTokenUri) {
+                        rtb.Selection.Text = string.Format(@"{0}{1}{0}{2}{0}", Properties.Settings.Default.TemplateTokenMarker, rtb.Selection.Text, hl.Background.ToString());
+                    }
+                } /*else {
+                    continue;
+                }    */            
             }
             rtb.Tag = null;
         }
@@ -114,10 +119,10 @@ namespace MpWpfApp {
             List<Hyperlink> linkList = new List<Hyperlink>();
             TextRange fullDocRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
             for (int i = 0; i < regExGroupList.Count; i++) {
+                TextPointer lastRangeEnd = rtb.Document.ContentStart;
                 var regExStr = regExGroupList[i];
                 MatchCollection mc = Regex.Matches(fullDocRange.Text, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);                                
                 foreach (Match m in mc) {
-                    TextPointer lastRangeEnd = rtb.Document.ContentStart;
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
                             Hyperlink hl = null;
@@ -162,8 +167,8 @@ namespace MpWpfApp {
                                 //account for special case for hexcolor w/ alpha
                                 hl.Tag = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);
                                 hl.IsEnabled = true;
-                                hl.RequestNavigate += (s4, e4) => {
-                                    System.Diagnostics.Process.Start(e4.Uri.ToString());
+                                hl.MouseLeftButtonDown += (s4, e4) => {
+                                    MpHelpers.OpenUrl(hl.NavigateUri.ToString());
                                 };
 
                                 MenuItem convertToQrCodeMenuItem = new MenuItem();
@@ -221,15 +226,29 @@ namespace MpWpfApp {
                                                 //hyperlink.Inlines.Clear();
                                                 //hyperlink.Inlines.Add(new Run(convertedCurrency));
                                                 ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).HideWindowCommand.Execute(null);
-                                                System.Diagnostics.Process.Start(@"https://www.google.com/search?q=" + linkText + "+to+" + subItem.Header);
+                                                MpHelpers.OpenUrl(@"https://www.google.com/search?q=" + linkText + "+to+" + subItem.Header);
                                             };
                                             convertCurrencyMenuItem.Items.Add(subItem);
                                         }
 
                                         hl.ContextMenu.Items.Add(convertCurrencyMenuItem);
                                         break;
-                                    default:
+                                    case MpSubTextTokenType.HexColor:
+                                        var rgbColorStr = linkText;
+                                        if(rgbColorStr.Length > 7) {
+                                            rgbColorStr = rgbColorStr.Substring(0, 7);
+                                        }
+                                        hl.NavigateUri = new Uri(@"https://www.hexcolortool.com/" + rgbColorStr);
 
+                                        MenuItem changeColorItem = new MenuItem();
+                                        changeColorItem.Header = "Change Color";
+                                        changeColorItem.Click += (s, e) => {
+                                            var result = MpHelpers.ShowColorDialog((Brush)new BrushConverter().ConvertFrom(linkText));
+                                        };
+                                        hl.ContextMenu.Items.Add(changeColorItem);
+                                        break;
+                                    default:
+                                        Console.WriteLine("Unhandled token type: " + Enum.GetName(typeof(MpSubTextTokenType), (MpSubTextTokenType)hl.Tag) + " with value: " + linkText);
                                         break;
                                 }
                             }
