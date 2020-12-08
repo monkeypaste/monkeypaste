@@ -25,8 +25,8 @@ namespace MpWpfApp {
             }
         }
 
-        //[Conditional("DEBUG")]
-        //[DebuggerStepThrough]
+        [Conditional("DEBUG")]
+        [DebuggerStepThrough]
         public void VerifyPropertyName(string propertyName) {
             // Verify that the property name matches a real, 
             // public, instance property on this object. 

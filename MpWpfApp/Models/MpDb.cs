@@ -469,7 +469,8 @@ namespace MpWpfApp {
                     , CopyCount integer not null default 1
                     , PasteCount integer not null default 0
                     , ItemImage longblob NOT NULL
-                    , ItemText text NOT NULL 
+                    , ItemText text NOT NULL                     
+                    , TitleSwirl longblob NOT NULL
                     , Screenshot longblob
                     , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL
                     , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)

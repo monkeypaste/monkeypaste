@@ -971,13 +971,13 @@ namespace MpWpfApp {
             var bitmapImage = new BitmapImage();
             var bitmapEncoder = new PngBitmapEncoder();
             bitmapEncoder.Frames.Add(BitmapFrame.Create(rtb));
-
             using (var stream = new MemoryStream()) {
                 bitmapEncoder.Save(stream);
                 stream.Seek(0, SeekOrigin.Begin);
 
                 bitmapImage.BeginInit();
                 bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.CreateOptions = BitmapCreateOptions.IgnoreColorProfile;
                 bitmapImage.StreamSource = stream;
                 bitmapImage.EndInit();
                 return bitmapImage;

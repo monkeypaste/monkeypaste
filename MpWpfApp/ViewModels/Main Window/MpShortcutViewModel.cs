@@ -422,7 +422,7 @@ namespace MpWpfApp {
                MainWindowViewModel.ClipTrayViewModel.IsEditingClipTile ||
                MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle ||
                MainWindowViewModel.TagTrayViewModel.IsEditingTagName ||
-               MainWindowViewModel.SearchBoxViewModel.IsFocused) {
+               MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
                 return false;
             }
             //otherwise check basic type routing for validity

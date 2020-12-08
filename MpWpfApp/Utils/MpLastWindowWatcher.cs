@@ -44,7 +44,7 @@ namespace MpWpfApp {
             timer.Elapsed += (s, e) => {
                 IntPtr currentHandle = WinApi.GetForegroundWindow();
                 
-                RefreshHandleStack();
+                //RefreshHandleStack();
 
                 if (ThisAppHandle == IntPtr.Zero) { 
                     ThisAppHandle = Process.GetCurrentProcess().MainWindowHandle;
@@ -60,7 +60,7 @@ namespace MpWpfApp {
                     LastHandle = currentHandle;
                     LastTitle = MpHelpers.GetProcessMainWindowTitle(LastHandle);
 
-                    UpdateHandleStack(LastHandle);
+                    //UpdateHandleStack(LastHandle);
                     Console.WriteLine("Last Window: " + MpHelpers.GetProcessMainWindowTitle(_lastHandle));
                 }
             };

@@ -350,7 +350,6 @@
                                                 Padding="7,5,7,5"
                                                 Focusable="True"
                                                 VerticalAlignment="Center"
-                                                local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"
                                                 Background="{Binding TagBorderBackgroundBrush}"
                                                 BorderBrush="Transparent"
                                                 BorderThickness="0"
@@ -416,7 +415,7 @@
                                              IsReadOnly="False"
                                              HorizontalAlignment="Center"
                                              VerticalAlignment="Center"
-                                             local:MpFocusExtension.IsFocused="{Binding IsFocused}"
+                                             local:MpFocusExtension.IsFocused="{Binding IsTextBoxFocused}"
                                              local:MpTextBoxBehavior.SelectAllTextOnFocus="True"
                                              Visibility="{Binding TextBoxVisibility}"
                                              FontSize="{Binding TagFontSize}"
@@ -474,7 +473,7 @@
                                 Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                 FontStyle="{Binding SearchTextBoxFontStyle}"
                                 Foreground="{Binding SearchTextBoxTextBrush}"
-                                local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                local:MpFocusExtension.IsFocused="{Binding IsTextBoxFocused}"
                                 BorderThickness="0"
                                 FontSize="18"
                                 Width="240"
@@ -565,10 +564,11 @@
                 </Grid.Resources>
                 <local:MpMultiSelectListBox x:Name="ClipTray"
                                             ItemsSource="{Binding}"
-                                            Visibility="{Binding ClipTrayVisibility}"
-                                            local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                            Visibility="Visible"
                                             AllowDrop="True"
                                             Margin="5,0,0,0"
+                                            Focusable="True"
+                                            local:MpFocusExtension.IsFocused="{Binding IsClipTrayFocused}"
                                             BorderThickness="0"
                                             VerticalAlignment="Stretch"
                                             Background="Transparent"
@@ -586,6 +586,10 @@
                                                 TargetObject="{Binding}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
+                    <local:MpMultiSelectListBox.InputBindings>
+                        <KeyBinding Gesture="Ctrl+A"
+                                    Command="{Binding SelectAllCommand}" />
+                    </local:MpMultiSelectListBox.InputBindings>
                     <local:MpMultiSelectListBox.ItemContainerStyle>
                         <Style TargetType="{x:Type ListBoxItem}">
                             <Setter Property="IsSelected"
@@ -627,7 +631,7 @@
                                                 Width="{Binding TileBorderWidth}"
                                                 Height="{Binding TileSize}"
                                                 Visibility="{Binding TileVisibility}"
-                                                local:MpFocusExtension.IsFocused="{Binding IsFocused, Mode=TwoWay, NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}"
+                                                local:MpFocusExtension.IsFocused="{Binding IsClipItemFocused}"
                                                 Focusable="True"
                                                 Background="White"
                                                 ToolTipService.ShowDuration="1000"
@@ -678,6 +682,8 @@
                                                   Command="{Binding ShareClipCommand}" />
                                         <MenuItem Header="Rename"
                                                   Command="{Binding Data.RenameClipCommand,Source={StaticResource ClipTrayProxy}}" />
+                                        <MenuItem Header="Duplicate"
+                                                  Command="{Binding Data.DuplicateSelectedClipsCommand,Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Edit"
                                                   Command="{Binding EditClipTextCommand}" />
                                         <MenuItem Header="Send as Email"
@@ -789,7 +795,7 @@
                                                Stretch="Fill"
                                                Width="{Binding TileBorderWidth}"
                                                Height="{Binding TileTitleHeight}"
-                                               Source="{Binding TitleSwirl, Converter={StaticResource ImageSourceToBitmapSourceConverter}}" />
+                                               Source="{Binding TitleSwirl}" />
                                         <!-- Clip Title TextBlock -->
                                         <TextBlock x:Name="ClipTileTitleTextBlock"
                                                    Text="{Binding CopyItemTitle}"
@@ -816,7 +822,7 @@
                                                  FontSize="24"
                                                  IsReadOnly="False"
                                                  Visibility="{Binding TileTitleTextBoxVisibility}"
-                                                 local:MpFocusExtension.IsFocused="{Binding IsEditingTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                 local:MpFocusExtension.IsFocused="{Binding IsClipTitleTextBoxFocused}"
                                                  Text="{Binding CopyItemTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                                         <!-- Clip Title Detail TextBlock -->
                                         <TextBlock x:Name="ClipTileTitleDetailTextBlock"
@@ -914,7 +920,7 @@
                                                                      Text="{Binding CurrentTemplateText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                      FontStyle="{Binding CurrentTemplateTextBoxFontStyle}"
                                                                      Foreground="{Binding CurrentTemplateTextBrush}"
-                                                                     local:MpFocusExtension.IsFocused="{Binding IsCurrentTemplateTextBoxFocused, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                                     local:MpFocusExtension.IsFocused="{Binding IsCurrentTemplateTextBoxFocused}"
                                                                      FontSize="14"
                                                                      Width="240"
                                                                      Padding="0,0,0,0"
@@ -974,12 +980,6 @@
                                                     Visibility="{Binding EditToolbarVisibility}"
                                                     DockPanel.Dock="Top"
                                                     SnapsToDevicePixels="True">
-                                                <i:Interaction.Triggers>
-                                                    <i:EventTrigger EventName="Loaded">
-                                                        <i:CallMethodAction TargetObject="{Binding}"
-                                                                            MethodName="ClipTileEditorToolbar_Loaded" />
-                                                    </i:EventTrigger>
-                                                </i:Interaction.Triggers>
                                                 <StackPanel Orientation="Horizontal"
                                                             Height="24">
                                                     <ComboBox x:Name="FontFamilyCombo"
@@ -1189,14 +1189,14 @@
                                                 </StackPanel>
                                             </Border>
                                             <RichTextBox x:Name="ClipTileRichTextBox"
-                                                         local:MpHighlightTextExtension.HighlightText="{Binding SearchText}"
+                                                         local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.SearchText}"
                                                          local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText}"                                                         
                                                          IsReadOnly="{Binding IsRtbReadOnly}"
                                                          IsDocumentEnabled="{Binding IsSelected}"
                                                          Focusable="{Binding IsEditingTile}"
                                                          Cursor="{Binding ContentCursor}"
                                                          MinHeight="{Binding TileContentHeight}"
-                                                         local:MpFocusExtension.IsFocused="{Binding IsEditingTile, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                         local:MpFocusExtension.IsFocused="{Binding IsClipRichTextBoxFocused}"
                                                          IsUndoEnabled="True" 
                                                          Background="White"
                                                          VerticalAlignment="Top"
@@ -1321,7 +1321,7 @@
                 <TextBlock x:Name="EmptyListTextBlock"
                            Text="This list has no items"
                            Focusable="True"
-                           Visibility="{Binding EmptyListMessageVisibility}"
+                           Visibility="Collapsed"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Margin="0,0,0,15"

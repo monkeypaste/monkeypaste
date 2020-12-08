@@ -10,6 +10,21 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+        private bool _isTextBoxFocused = false;
+        public bool IsTextBoxFocused {
+            get {
+                return _isTextBoxFocused;
+            }
+            set {
+                //omitting duplicate check to enforce change in ui
+                //if (_isTextBoxFocused != value) 
+                {
+                    _isTextBoxFocused = value;
+                    OnPropertyChanged(nameof(IsTextBoxFocused));
+                }
+            }
+        }
+
         private string _searchText = string.Empty;
         public string SearchText {
             get {
@@ -39,7 +54,7 @@ namespace MpWpfApp {
 
         public SolidColorBrush SearchTextBoxTextBrush {
             get {
-                if (SearchText != Properties.Settings.Default.SearchPlaceHolderText || IsFocused) {
+                if (SearchText != Properties.Settings.Default.SearchPlaceHolderText || IsTextBoxFocused) {
                     return Brushes.Black;
                 }
                 return Brushes.DimGray;
@@ -78,13 +93,13 @@ namespace MpWpfApp {
                     SearchText = string.Empty;
                 }
                 
-                IsFocused = true;
+                IsTextBoxFocused = true;
                 MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();
                 OnPropertyChanged(nameof(SearchTextBoxFontStyle));
                 OnPropertyChanged(nameof(SearchTextBoxTextBrush));
             };
             searchBox.LostFocus += (s, e5) => {
-                IsFocused = false;
+                IsTextBoxFocused = false;
                 if (string.IsNullOrEmpty(SearchText)) {
                     SearchText = Properties.Settings.Default.SearchPlaceHolderText;
                 }
@@ -111,7 +126,7 @@ namespace MpWpfApp {
         }
         private void ClearSearchText() {
             SearchText = string.Empty;
-            IsFocused = true;
+            IsTextBoxFocused = true;
         }
         #endregion
     }

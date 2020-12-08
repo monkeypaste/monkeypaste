@@ -18,7 +18,7 @@ namespace MpWpfApp {
         #region Properties
         public bool IsEditingTagName {
             get {
-                return SelectedTagTile.IsFocused || SelectedTagTile.IsEditing;
+                return SelectedTagTile.IsTextBoxFocused || SelectedTagTile.IsEditing;
             }
         }
         #endregion--
@@ -28,7 +28,7 @@ namespace MpWpfApp {
         public MpTagTrayViewModel() : base() {
             //create tiles for all the tags
             foreach (MpTag t in MpTag.GetAllTags()) {
-                this.Add(new MpTagTileViewModel(t,this));
+                this.Add(new MpTagTileViewModel(t));
             }
         }
 
@@ -102,14 +102,14 @@ namespace MpWpfApp {
         public void ClearTagSelection() {
             foreach (var tagTile in this) {
                 tagTile.IsSelected = false;
-                tagTile.IsFocused = false;
+                tagTile.IsTextBoxFocused = false;
             }
         }
 
         public void ResetTagSelection() {
             ClearTagSelection();
             GetHistoryTagTileViewModel().IsSelected = true;
-            GetHistoryTagTileViewModel().IsFocused = true;
+            GetHistoryTagTileViewModel().IsTextBoxFocused = true;
         }
 
         public MpTagTileViewModel GetHistoryTagTileViewModel() {
@@ -148,7 +148,7 @@ namespace MpWpfApp {
         private void CreateTag() {
             //add tag to datastore so TagTile collection will automatically add the tile
             MpTag newTag = new MpTag("Untitled", MpHelpers.GetRandomColor());
-            this.Add(new MpTagTileViewModel(newTag, this));
+            this.Add(new MpTagTileViewModel(newTag));
         }
 
         #endregion

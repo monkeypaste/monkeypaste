@@ -8,7 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpCopyItem : MpDbObject {
+    public class MpCopyItem : MpDbObject, ICloneable {
         #region Private Variables
         private static int _CopyItemCount = 0;
         private object _itemData = null;        
@@ -98,6 +98,8 @@ namespace MpWpfApp {
             }
         }
 
+
+        public BitmapSource ItemTitleSwirl { get; set; }
         public MpApp App { get; set; }
         public MpClient Client { get; set; }
         public MpColor ItemColor { get; set; }
@@ -110,7 +112,10 @@ namespace MpWpfApp {
 
         public MpCopyItem() {
             ItemColor = new MpColor(MpHelpers.GetRandomColor());
+            ItemTitleSwirl = InitSwirl();
             App = new MpApp();
+            _itemData = "Default";
+            CopyItemType = MpCopyItemType.RichText;
         }
 
         public static MpCopyItem CreateFromClipboard(IntPtr processHandle) {
@@ -169,19 +174,21 @@ namespace MpWpfApp {
             object data, 
             string sourcePath, 
             Color tileColor, 
-            IntPtr hwnd) {
+            IntPtr hwnd,
+            string appName = "") {
             MpCopyItem newItem = new MpCopyItem();
             newItem.SourceHandle = hwnd;
             newItem.SourcePath = sourcePath;
             newItem.CopyItemType = itemType;
             newItem.CopyDateTime = DateTime.Now;
-            newItem.Title = "Untitled"; //Enum.GetName(typeof(MpCopyItemType), newItem.CopyItemType);
+            newItem.Title = "Untitled"; 
             newItem.CopyCount = 1;
-            newItem.App = new MpApp(sourcePath, false, hwnd);
+            newItem.App = hwnd == IntPtr.Zero ? new MpApp(sourcePath,false,appName) : new MpApp(sourcePath, false, hwnd);
             newItem.AppId = newItem.App.AppId;
             newItem.Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
             newItem.ClientId = newItem.Client.ClientId;
             newItem.ItemColor = new MpColor((int)tileColor.R, (int)tileColor.G, (int)tileColor.B, 255);
+            newItem.ItemTitleSwirl = newItem.InitSwirl();
 
             switch (itemType) {
                 case MpCopyItemType.FileList:
@@ -444,6 +451,33 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+        public BitmapSource InitSwirl(BitmapSource sharedSwirl = null) {
+            if (sharedSwirl == null) {
+                var itemBrush = new SolidColorBrush() { Color = ItemColor.Color };
+                SolidColorBrush lighterColor = MpHelpers.ChangeBrushAlpha(
+                                MpHelpers.ChangeBrushBrightness(itemBrush, -0.5f), 100);
+                SolidColorBrush darkerColor = MpHelpers.ChangeBrushAlpha(
+                                MpHelpers.ChangeBrushBrightness(itemBrush, -0.4f), 50);
+                SolidColorBrush accentColor = MpHelpers.ChangeBrushAlpha(
+                                MpHelpers.ChangeBrushBrightness(itemBrush, -0.0f), 100);
+                var path = @"pack://application:,,,/Resources/Images/";
+                var swirl1 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0001.png"));
+                swirl1 = MpHelpers.TintBitmapSource(swirl1, (itemBrush).Color);
+
+                var swirl2 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0002.png"));
+                swirl2 = MpHelpers.TintBitmapSource(swirl2, lighterColor.Color);
+
+                var swirl3 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0003.png"));
+                swirl3 = MpHelpers.TintBitmapSource(swirl3, darkerColor.Color);
+
+                var swirl4 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0004.png"));
+                swirl4 = MpHelpers.TintBitmapSource(swirl4, accentColor.Color);
+
+                return MpHelpers.MergeImages(new List<BitmapSource>() { swirl1, swirl2, swirl3, swirl4 });
+            } else {
+                return sharedSwirl;
+            }
+        }
 
         private void MapDataToColumns() {
             TableName = "MpCopyItem";
@@ -473,6 +507,8 @@ namespace MpWpfApp {
             this.CopyDateTime = DateTime.Parse(dr["CopyDateTime"].ToString());
             this.Title = dr["Title"].ToString().Replace("''", "'");
             this.CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
+            this.ItemTitleSwirl = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["TitleSwirl"]);
+
             //get app and icon obj
             DataTable dt = MpDb.Instance.Execute(
                 "select * from MpApp where pk_MpAppId=@aid",
@@ -543,8 +579,9 @@ namespace MpWpfApp {
             //if copyitem already exists
             if (this.CopyItemId > 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "update MpCopyItem set fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemImage=@ii where pk_MpCopyItemId=@ciid",
+                        "update MpCopyItem set TitleSwirl=@ts, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemImage=@ii where pk_MpCopyItemId=@ciid",
                         new Dictionary<string, object> {
+                            { "@ts", MpHelpers.ConvertBitmapSourceToByteArray(ItemTitleSwirl) },
                             { "@citd", (int)CopyItemType },
                             { "@cid", ClientId },
                             { "@aid", AppId },
@@ -558,9 +595,10 @@ namespace MpWpfApp {
                 isNew = false;
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpCopyItem(fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) " + 
-                    "values (@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
+                    "insert into MpCopyItem(TitleSwirl,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) " + 
+                    "values (@ts,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
                     new Dictionary<string, object> {
+                            { "@ts", MpHelpers.ConvertBitmapSourceToByteArray(ItemTitleSwirl) },
                             { "@citd", (int)CopyItemType },
                             { "@cid", ClientId },
                             { "@aid", AppId },
@@ -583,6 +621,16 @@ namespace MpWpfApp {
             MapDataToColumns();
             Console.WriteLine(isNew ? "Created " : "Updated " + " MpCopyItem");
             Console.WriteLine(ToString());
+        }
+
+        public object Clone() {
+            return MpCopyItem.CreateCopyItem(
+                CopyItemType,
+                _itemData,
+                App.AppPath,
+                ItemColor.Color,
+                IntPtr.Zero,
+                App.AppName);
         }
 
         #endregion

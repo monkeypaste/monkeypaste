@@ -175,8 +175,6 @@
     <Compile Include="ViewModels\Main Window\MpShortcutViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSortTypeComboBoxItemViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSoundPlayerGroupCollectionViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\MpSubTextTokenCollectionViewModel.cs" />
-    <Compile Include="ViewModels\Main Window\MpTemplateTokenViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpTemplateTokenPasteModalWindowViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpTemplateTokenEditModalWindowViewModel.cs" />
     <Compile Include="Views\MpAppendBalloonControl.xaml.cs">
@@ -195,8 +193,8 @@
       <DependentUpon>MpSettingsWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Styles\ResourceDictionary.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MpTemplateTokenPasteModalWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -580,5 +578,6 @@
     <Content Include="Resources\Sounds\chime.wav" />
     <Content Include="Resources\Sounds\ting.wav" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

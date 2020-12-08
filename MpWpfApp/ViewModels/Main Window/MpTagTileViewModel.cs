@@ -8,25 +8,25 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpTagTileViewModel : MpViewModelBase {
         #region Private Variables
-
-        #endregion
-
-        #region View Models
-        private MpTagTrayViewModel _tagTrayViewModel;
-        public MpTagTrayViewModel TagTrayViewModel {
-            get {
-                return _tagTrayViewModel;
-            }
-            set {
-                if (_tagTrayViewModel != value) {
-                    _tagTrayViewModel = value;
-                    OnPropertyChanged(nameof(TagTrayViewModel));
-                }
-            }
-        }
+        private int _tagClipCount = 0;
         #endregion
 
         #region Properties
+        private bool _isTextBoxFocused = false;
+        public bool IsTextBoxFocused {
+            get {
+                return _isTextBoxFocused;
+            }
+            set {
+                //omitting duplicate check to enforce change in ui
+                //if (_isTextBoxFocused != value) 
+                {
+                    _isTextBoxFocused = value;
+                    OnPropertyChanged(nameof(IsTextBoxFocused));
+                }
+            }
+        }
+
         public bool IsNew {
             get {
                 return Tag == null || Tag.TagId <= 0;
@@ -42,19 +42,6 @@ namespace MpWpfApp {
                 if (_tagId != value) {
                     _tagId = value;
                     OnPropertyChanged(nameof(TagId));
-                }
-            }
-        }
-
-        private MpShortcut _shortcut = null;
-        public MpShortcut Shortcut {
-            get {
-                return _shortcut;
-            }
-            set {
-                if (_shortcut != value) {
-                    _shortcut = value;
-                    OnPropertyChanged(nameof(Shortcut));
                 }
             }
         }
@@ -215,7 +202,6 @@ namespace MpWpfApp {
             }
         }
 
-        private int _tagClipCount = 0;
         public int TagClipCount {
             get {
                 return _tagClipCount;
@@ -227,6 +213,7 @@ namespace MpWpfApp {
                 }
             }
         }
+
         public double TagHeight {
             get {
                 //assumes Tag Margin is 5
@@ -246,7 +233,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpTagTileViewModel(MpTag tag, MpTagTrayViewModel parent) : base() {
+        public MpTagTileViewModel(MpTag tag) : base() {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
                     case nameof(TagId):
@@ -262,7 +249,7 @@ namespace MpWpfApp {
                             //show textbox and select all text
                             TextBoxVisibility = Visibility.Visible;
                             TextBlockVisibility = Visibility.Collapsed;
-                            IsFocused = true;
+                            IsTextBoxFocused = true;
                             //TagTextBox?.SelectAll();
                         } else {
                             //tag names cannot be blank so don't allow the textblock to reappear and change name back to 'untitled'
@@ -277,7 +264,7 @@ namespace MpWpfApp {
                             TextBlockVisibility = Visibility.Visible;
                             Tag.TagName = TagName;
                             Tag.WriteToDatabase();
-                            IsFocused = false;
+                            IsTextBoxFocused = false;
                         }
                         break;
                     case nameof(IsSelected):
@@ -305,7 +292,6 @@ namespace MpWpfApp {
 
             Tag = tag;
             TagId = Tag.TagId;
-            TagTrayViewModel = parent;
             TagColor = new SolidColorBrush(Tag.TagColor.Color);
             TagName = Tag.TagName;
         }
@@ -356,20 +342,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-
-        //public void LinkToClipTile(MpClipTileViewModel clipTileToLink) {
-        //    if(!Tag.IsLinkedWithCopyItem(clipTileToLink.CopyItem)) {
-        //        Tag.LinkWithCopyItem(clipTileToLink.CopyItem);
-        //        TagClipCount++;
-        //    }
-        //}
-
-        //public void UnlinkWithClipTile(MpClipTileViewModel clipTileToLink) {
-        //    if (Tag.IsLinkedWithCopyItem(clipTileToLink.CopyItem)) {
-        //        Tag.UnlinkWithCopyItem(clipTileToLink.CopyItem);
-        //        TagClipCount--;
-        //    }
-        //}
         #endregion
 
         #region Commands
@@ -383,48 +355,7 @@ namespace MpWpfApp {
             }
         }
         private void AssignHotkey() {
-            MainWindowViewModel.IsShowingDialog = true;
-            ShortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow("Select " + TagName, ShortcutKeyList, SelectTagCommand);
-
-            if (ShortcutKeyList == null) {
-                //if assignment was canceled ignore but reset skl
-                ShortcutKeyList = string.Empty;
-            } else if (ShortcutKeyList == string.Empty) {
-                //if an empty assignment was ok'd check if exists 
-                var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.Command == SelectTagCommand).ToList();
-                //if it does clear, save and unregister
-                if (scvml != null && scvml.Count > 0) {
-                    foreach (var scvm in scvml) {
-                        scvm.ClearKeyList();
-                        scvm.Shortcut.WriteToDatabase();
-                        scvm.Unregister();
-                    }
-                } else {
-                    //nothing to do since no shortcut created
-                }
-            } else {
-                //check sc if exists 
-                var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.Command == SelectTagCommand).ToList();
-                //if it does update the keylist
-                if (scvml != null && scvml.Count > 0) {
-                    foreach (var scvm in scvml) {
-                        scvm.KeyList = ShortcutKeyList;
-                        scvm.Shortcut.WriteToDatabase();
-                        scvm.Register();
-                    }
-                } else {
-                    //add new shortcut to collection
-                    MpShortcutCollectionViewModel.Instance.Add(
-                        new MpShortcutViewModel(
-                            new MpShortcut(
-                                0,
-                                TagId,
-                                ShortcutKeyList,
-                                "Select " + TagName),
-                            SelectTagCommand));
-                }
-            }
-            MainWindowViewModel.IsShowingDialog = false;
+            ShortcutKeyList = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(this, "Select " + TagName, ShortcutKeyList, SelectTagCommand);
         }
 
         private RelayCommand _changeTagColorCommand;
@@ -456,9 +387,9 @@ namespace MpWpfApp {
             return TagName != Properties.Settings.Default.HistoryTagTitle;
         }
         private void RenameTag() {
-            TagTrayViewModel.ClearTagSelection();
+            MainWindowViewModel.TagTrayViewModel.ClearTagSelection();
             IsSelected = true;
-            IsFocused = true;
+            IsTextBoxFocused = true;
             IsEditing = true;
         }
 
@@ -472,9 +403,9 @@ namespace MpWpfApp {
             }
         }
         private void SelectTag() {
-            TagTrayViewModel.ClearTagSelection();
+            MainWindowViewModel.TagTrayViewModel.ClearTagSelection();
             IsSelected = true;
-            IsFocused = true;
+            //IsTextBoxFocused = true;
         }
         #endregion
     }

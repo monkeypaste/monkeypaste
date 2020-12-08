@@ -34,6 +34,8 @@
 
         private List<string> _tempFileList = new List<string>();
 
+        private RichTextBox _rtb = null;
+
         private ToggleButton _selectedAlignmentButton = null;
         private ToggleButton _selectedListButton = null;
 
@@ -302,7 +304,8 @@
                 return _tileVisibility;
             }
             set {
-                if (_tileVisibility != value) {
+                //if (_tileVisibility != value) 
+                {
                     _tileVisibility = value;
                     OnPropertyChanged(nameof(TileVisibility));
                 }
@@ -311,11 +314,6 @@
         #endregion
 
         #region Business Logic Properties
-        public string SearchText {
-            get {
-                return MainWindowViewModel.SearchBoxViewModel.SearchText;
-            }
-        }
 
         public bool IsLoading { get; set; } = false;
 
@@ -350,20 +348,7 @@
                 }
                 return Brushes.Transparent;
             }
-        }
-
-        public Brush TitleColor {
-            get {
-                return new SolidColorBrush(CopyItem.ItemColor.Color);
-            }
-            set {
-                if (CopyItem.ItemColor.Color != ((SolidColorBrush)value).Color) {
-                    CopyItem.ItemColor = new MpColor(((SolidColorBrush)value).Color);
-                    OnPropertyChanged(nameof(TitleColor));
-                    OnPropertyChanged(nameof(CopyItem));
-                }
-            }
-        }
+        }       
 
         public Brush TileBorderBrush {
             get {
@@ -442,7 +427,7 @@
             get {
                 return CopyItem.CopyItemId == 0;
             }
-        }
+        }        
 
         private bool _isSelected = false;
         public bool IsSelected {
@@ -450,7 +435,8 @@
                 return _isSelected;
             }
             set {
-                if (_isSelected != value) {
+                //if (_isSelected != value) 
+                {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
                     OnPropertyChanged(nameof(TileBorderBrush));
@@ -465,7 +451,8 @@
                 return _isHovering;
             }
             set {
-                if (_isHovering != value) {
+                //if (_isHovering != value) 
+                {
                     _isHovering = value;
                     OnPropertyChanged(nameof(IsHovering));
                     OnPropertyChanged(nameof(TileBorderBrush));
@@ -547,6 +534,9 @@
 
         public string CurrentTemplateText {
             get {
+                if(TemplateTokenLookupDictionary.Count == 0) {
+                    return string.Empty;
+                }
                 var curTemplateText = TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Value;
                 if(IsCurrentTemplateTextBoxFocused) {
                     if (curTemplateText == CurrentTemplateTextBoxPlaceHolderText) {
@@ -570,26 +560,13 @@
                     OnPropertyChanged(nameof(PasteTemplateToolbarButtonVisibility));
                 }
             }
-        }
-
-        private bool _isCurrentTemplateTextBoxFocused = false;
-        public bool IsCurrentTemplateTextBoxFocused {
-            get {
-                return _isCurrentTemplateTextBoxFocused;
-            }
-            set {
-                if (_isCurrentTemplateTextBoxFocused != value) {
-                    _isCurrentTemplateTextBoxFocused = value;
-                    OnPropertyChanged(nameof(IsCurrentTemplateTextBoxFocused));
-                    OnPropertyChanged(nameof(CurrentTemplateText));
-                    OnPropertyChanged(nameof(CurrentTemplateTextBoxFontStyle));
-                    OnPropertyChanged(nameof(CurrentTemplateTextBrush));
-                }
-            }
-        }
+        }        
 
         public string CurrentTemplateTextBoxPlaceHolderText {
             get {
+                if(TemplateTokenLookupDictionary.Count == 0) {
+                    return string.Empty;
+                }
                 return TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Key + "...";
             }
         }
@@ -614,10 +591,7 @@
 
         public List<Hyperlink> TemplateTokenList {
             get {
-                RichTextBox tempRtb = new RichTextBox();
-                tempRtb.Document = MpHelpers.ConvertRichTextToFlowDocument(CopyItemRichText);
-                tempRtb.CreateHyperlinks();
-                return tempRtb.GetTemplateHyperlinkList();
+                return _rtb.GetTemplateHyperlinkList();
             }
         }
 
@@ -625,15 +599,16 @@
         public Dictionary<string, string> TemplateTokenLookupDictionary {
             get {
                 if(_templateTokenLookupDictionary == null) {
-                    var ttld = new Dictionary<string, string>();
+                    _templateTokenLookupDictionary = new Dictionary<string, string>();
                     foreach (var templateLink in TemplateTokenList) {
-                        if (!ttld.ContainsKey(templateLink.TargetName)) {
-                            ttld.Add(templateLink.TargetName, string.Empty);
+                        if (!_templateTokenLookupDictionary.ContainsKey(templateLink.TargetName)) {
+                            _templateTokenLookupDictionary.Add(templateLink.TargetName, string.Empty);
                         }
                     }
                 }
                 return _templateTokenLookupDictionary;
-            } set {
+            } 
+            set {
                 if(_templateTokenLookupDictionary != value) {
                     _templateTokenLookupDictionary = value;
                     OnPropertyChanged(nameof(TemplateTokenLookupDictionary));
@@ -642,6 +617,69 @@
         }
 
         public bool IsPasteToolbarAnimating { get; set; } = false;
+        #endregion
+
+        #region Focus Properties
+        private bool _isClipTitleTextBoxFocused = false;
+        public bool IsClipTitleTextBoxFocused {
+            get {
+                return _isClipTitleTextBoxFocused;
+            }
+            set {
+                //omitting duplicate check to enforce change in ui
+                //if (_isClipItemFocused != value) 
+                {
+                    _isClipTitleTextBoxFocused = value;
+                    OnPropertyChanged(nameof(IsClipTitleTextBoxFocused));
+                }
+            }
+        }
+
+        private bool _isClipRichTextBoxFocused = false;
+        public bool IsClipRichTextBoxFocused {
+            get {
+                return _isClipRichTextBoxFocused;
+            }
+            set {
+                //omitting duplicate check to enforce change in ui
+                //if (_isClipItemFocused != value) 
+                {
+                    _isClipRichTextBoxFocused = value;
+                    OnPropertyChanged(nameof(IsClipRichTextBoxFocused));
+                }
+            }
+        }
+
+        private bool _isClipItemFocused = false;
+        public bool IsClipItemFocused {
+            get {
+                return _isClipItemFocused;
+            }
+            set {
+                //omitting duplicate check to enforce change in ui
+                //if (_isClipItemFocused != value) 
+                {
+                    _isClipItemFocused = value;
+                    OnPropertyChanged(nameof(IsClipItemFocused));
+                }
+            }
+        }
+
+        private bool _isCurrentTemplateTextBoxFocused = false;
+        public bool IsCurrentTemplateTextBoxFocused {
+            get {
+                return _isCurrentTemplateTextBoxFocused;
+            }
+            set {
+                if (_isCurrentTemplateTextBoxFocused != value) {
+                    _isCurrentTemplateTextBoxFocused = value;
+                    OnPropertyChanged(nameof(IsCurrentTemplateTextBoxFocused));
+                    OnPropertyChanged(nameof(CurrentTemplateText));
+                    OnPropertyChanged(nameof(CurrentTemplateTextBoxFontStyle));
+                    OnPropertyChanged(nameof(CurrentTemplateTextBrush));
+                }
+            }
+        }
         #endregion
 
         #region Text Editor Properties
@@ -721,7 +759,21 @@
         public bool IsEditToolbarAnimating { get; set; } = false;
         #endregion
 
-        #region Model Propertiese
+        #region Model Properties
+        public Brush TitleColor {
+            get {
+                return new SolidColorBrush(CopyItem.ItemColor.Color);
+            }
+            set {
+                if (CopyItem.ItemColor.Color != ((SolidColorBrush)value).Color) {
+                    CopyItem.ItemColor = new MpColor(((SolidColorBrush)value).Color);
+                    //CopyItem.ItemTitleSwirl = CopyItem.InitSwirl();
+                    OnPropertyChanged(nameof(TitleColor));
+                    OnPropertyChanged(nameof(CopyItem));
+                }
+            }
+        }
+
         private string _shortcutKeyList = string.Empty;
         public string ShortcutKeyList {
             get {
@@ -793,15 +845,15 @@
             }
         }        
 
-        private BitmapSource _titleSwirl = null;
         public BitmapSource TitleSwirl {
             get {
-                return _titleSwirl;
+                return CopyItem.ItemTitleSwirl;
             }
             set {
-                if (_titleSwirl != value) {
-                    _titleSwirl = value;
+                if (CopyItem.ItemTitleSwirl != value) {
+                    CopyItem.ItemTitleSwirl = value;
                     OnPropertyChanged(nameof(TitleSwirl));
+                    OnPropertyChanged(nameof(CopyItem));
                 }
             }
         }
@@ -864,6 +916,7 @@
                     OnPropertyChanged(nameof(CopyItemUsageScore));
                     OnPropertyChanged(nameof(CopyItemAppId));
                     OnPropertyChanged(nameof(CopyItemType));
+                    OnPropertyChanged(nameof(TitleSwirl));
                     OnPropertyChanged(nameof(CopyItemCreatedDateTime));
                     OnPropertyChanged(nameof(DetailText));
                     OnPropertyChanged(nameof(FileListViewModels));
@@ -886,33 +939,25 @@
                         if (IsSelected) {
                             //this check ensures that as user types in search that 
                             //resetselection doesn't take the focus from the search box
-                            if (!MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.IsFocused) {
-                                IsFocused = true;
+                            if (!MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
+                                IsClipItemFocused = true;
                             }
                         } else {
                             //below must be called to clear focus when deselected (it may not have focus)
-                            IsFocused = false;
+                            IsClipItemFocused = false;
+                            IsClipRichTextBoxFocused = false;
+                            IsClipTitleTextBoxFocused = false;
+                            IsCurrentTemplateTextBoxFocused = false;
                             IsEditingTile = false;
                         }
                         break;
                 }
-            };
-            
+            };            
             IsLoading = true;
             CopyItem = ci;
-
-            InitSwirl();
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            MainWindowViewModel.SearchBoxViewModel.PropertyChanged += (s, e2) => {
-                switch (e2.PropertyName) {
-                    case nameof(MainWindowViewModel.SearchBoxViewModel.SearchText):
-                        OnPropertyChanged(nameof(SearchText));
-                        break;
-                }
-            };
-
             var clipTileBorder = (MpClipBorder)sender;
             clipTileBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
@@ -926,7 +971,7 @@
                 }
             };
             clipTileBorder.PreviewMouseLeftButtonDown += (s, e5) => {
-                if (e5.ClickCount == 2) {
+                if (e5.ClickCount == 2 && !IsEditingTile) {
                     //only for richtext type
                     EditClipTextCommand.Execute(null);
                     e5.Handled = true;
@@ -946,8 +991,9 @@
             clipTileTitleTextBlock.MouseLeave += (s, e7) => {
                 Application.Current.MainWindow.Cursor = Cursors.Arrow;
             };
-            clipTileTitleTextBlock.PreviewMouseLeftButtonUp += (s, e7) => {
+            clipTileTitleTextBlock.PreviewMouseLeftButtonDown += (s, e7) => {
                 IsEditingTitle = true;
+                e7.Handled = true;
             };
 
             var clipTileTitleTextBox = (TextBox)titleCanvas.FindName("ClipTileTitleTextBox");
@@ -990,19 +1036,22 @@
         public void ClipTileRichTextDockPanel_Loaded(object sender, RoutedEventArgs e) {
             var rtbdp = (DockPanel)sender;
             var cb = (MpClipBorder)rtbdp.GetVisualAncestor<MpClipBorder>();
-            var rtb = (RichTextBox)rtbdp.FindName("ClipTileRichTextBox");
+            _rtb = (RichTextBox)rtbdp.FindName("ClipTileRichTextBox");
             var et = (Border)rtbdp.FindName("ClipTileEditorToolbar");
             var cet = (Border)rtbdp.FindName("ClipTileConfirmEditToolbar");
             var pt = (Border)rtbdp.FindName("ClipTilePasteTemplateToolbar");
 
-            rtb.ContextMenu = (ContextMenu)rtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
-            rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
-            rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
+            _rtb.ContextMenu = (ContextMenu)_rtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+            _rtb.Document.PageWidth = _rtb.Width - _rtb.Padding.Left - _rtb.Padding.Right;
+            _rtb.Document.PageHeight = _rtb.Height - _rtb.Padding.Top - _rtb.Padding.Bottom;
 
             //not sure why but calling this is only way templates are shown when loaded
             //TemplateTokenList = rtb.GetTemplateHyperlinkList();
-            rtb.GetTemplateHyperlinkList();
+            _rtb.GetTemplateHyperlinkList();
 
+            //rtb.LostFocus += (s, e3) => {
+            //    IsEditingTile = false;
+            //};
             #region Editor Toolbar & Confirm Edit Toolbar
 
             #region Basic Editor 
@@ -1013,7 +1062,7 @@
                     return;
                 }
                 var fontFamily = fontFamilyComboBox.SelectedItem.ToString();
-                var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
+                var textRange = new TextRange(_rtb.Selection.Start, _rtb.Selection.End);
                 textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
             };
 
@@ -1033,7 +1082,7 @@
                 // Process selection
                 var pointSize = fontSizeCombo.SelectedItem.ToString();
                 var pixelSize = System.Convert.ToDouble(pointSize) * (96 / 72);
-                var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
+                var textRange = new TextRange(_rtb.Selection.Start, _rtb.Selection.End);
                 textRange.ApplyPropertyValue(TextElement.FontSizeProperty, pixelSize);
             };
 
@@ -1084,15 +1133,15 @@
 
             #region Template & Confirm Toolbar
             var addTemplateButton = (Button)et.FindName("AddTemplateButton");
-            addTemplateButton.MouseLeftButtonUp += (s, e3) => {
-                var templateTokens = rtb.GetTemplateHyperlinkList(true);
+            addTemplateButton.Click += (s, e3) => {
+                var templateTokens = _rtb.GetTemplateHyperlinkList(true);
                 if (templateTokens.Count == 0) {
-                    var result = MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, null);
+                    var result = MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(_rtb, null);
                     if (result) {
-                        CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+                        CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(_rtb.Document);
                     } else {
                         //clear any link if cancled
-                        rtb.Selection.Text = rtb.Selection.Text;
+                        _rtb.Selection.Text = _rtb.Selection.Text;
                     }
                 } else {
                     var templateContextMenu = new ContextMenu();
@@ -1116,12 +1165,12 @@
                         MenuItem tmi = new MenuItem();
                         tmi.Header = dp;
                         tmi.Click += (s1, e5) => {
-                            var result = MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, tl);
+                            var result = MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(_rtb, tl);
                             if (result) {
-                                CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+                                CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(_rtb.Document);
                             } else {
                                 //clear any link if cancled
-                                rtb.Selection.Text = rtb.Selection.Text;
+                                _rtb.Selection.Text = _rtb.Selection.Text;
                             }
                         };
                         templateContextMenu.Items.Add(tmi);
@@ -1134,12 +1183,12 @@
                     tb2.VerticalAlignment = VerticalAlignment.Center;
                     addNewMenuItem.Header = tb2;
                     addNewMenuItem.Click += (s1, e5) => {
-                        var result = MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, null);
+                        var result = MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(_rtb, null);
                         if (result) {
-                            CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+                            CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(_rtb.Document);
                         } else {
                             //clear any link if cancled
-                            rtb.Selection.Text = rtb.Selection.Text;
+                            _rtb.Selection.Text = _rtb.Selection.Text;
                         }
                     };
                     templateContextMenu.Items.Add(addNewMenuItem);
@@ -1165,29 +1214,29 @@
 
                 if (et.Visibility == Visibility.Visible) {
                     fromWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
-                    toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);                    
+                    toWidthTile = Math.Max(625, _rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);                    
                     
-                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-                    rtb.ScrollToHome();
-                    rtb.CaretPosition = rtb.Document.ContentStart;
+                    _rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+                    _rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                    _rtb.ScrollToHome();
+                    _rtb.CaretPosition = _rtb.Document.ContentStart;
 
-                    rtb.ClearHyperlinks();
-                    _origClipRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
-                    rtb.CreateHyperlinks();
+                    _rtb.ClearHyperlinks();
+                    _origClipRichText = MpHelpers.ConvertFlowDocumentToRichText(_rtb.Document);
+                    _rtb.CreateHyperlinks();
                 } else {
                     if(_wasEditConfirmed) {
-                        rtb.ClearHyperlinks();
-                        CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);                        
+                        _rtb.ClearHyperlinks();
+                        CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(_rtb.Document);                        
                     } else {
                         CopyItemRichText = _origClipRichText;
                     }
-                    fromWidthTile = rtb.Width;
+                    fromWidthTile = _rtb.Width;
                     toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
                     
                     //TemplateTokenList = rtb.Tag == null ? new List<Hyperlink>() : (List<Hyperlink>)rtb.Tag;
-                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                    _rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                    _rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
                 }
                 IsEditToolbarAnimating = true;
                 double fromLeft = Canvas.GetLeft(titleIconImageButton);
@@ -1206,7 +1255,7 @@
                 };
                 cb.BeginAnimation(MpClipBorder.WidthProperty, twa);
                 titleSwirl.BeginAnimation(Image.WidthProperty, twa);
-                rtb.BeginAnimation(RichTextBox.WidthProperty, twa);
+                _rtb.BeginAnimation(RichTextBox.WidthProperty, twa);
                 et.BeginAnimation(Border.WidthProperty, twa);
                 dp.BeginAnimation(DockPanel.WidthProperty, twa);
 
@@ -1225,9 +1274,9 @@
                 //et.BeginAnimation(Border.Ma, la);
             };
 
-            rtb.SelectionChanged += (s, e6) => {
+            _rtb.SelectionChanged += (s, e6) => {
                 // Set font family combo
-                var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
+                var textRange = new TextRange(_rtb.Selection.Start, _rtb.Selection.End);
                 var fontFamily = textRange.GetPropertyValue(TextElement.FontFamilyProperty);
                 fontFamilyComboBox.SelectedItem = fontFamily;
 
@@ -1274,18 +1323,18 @@
                     TemplateRichText = string.Empty;
 
                     fromWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
-                    toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
+                    toWidthTile = Math.Max(625, _rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
                     
-                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-                    rtb.ScrollToHome();
-                    rtb.CaretPosition = rtb.Document.ContentStart;
+                    _rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+                    _rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                    _rtb.ScrollToHome();
+                    _rtb.CaretPosition = _rtb.Document.ContentStart;
                 } else {
-                    fromWidthTile = rtb.Width;
+                    fromWidthTile = _rtb.Width;
                     toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
 
-                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                    _rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                    _rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
                 }
                 double fromLeft = Canvas.GetLeft(titleIconImageButton);
                 double toLeft = toWidthTile - TileTitleHeight - 10;
@@ -1308,7 +1357,7 @@
                 };
                 cb.BeginAnimation(MpClipBorder.WidthProperty, twa);
                 titleSwirl.BeginAnimation(Image.WidthProperty, twa);
-                rtb.BeginAnimation(RichTextBox.WidthProperty, twa);
+                _rtb.BeginAnimation(RichTextBox.WidthProperty, twa);
                 pt.BeginAnimation(Border.WidthProperty, twa);
                 dp.BeginAnimation(DockPanel.WidthProperty, twa);
 
@@ -1394,32 +1443,7 @@
             OnPropertyChanged(nameof(FileListViewModels));
         }
 
-        public void InitSwirl(BitmapSource sharedSwirl = null) {
-            if (sharedSwirl == null) {
-                SolidColorBrush lighterColor = MpHelpers.ChangeBrushAlpha(
-                                MpHelpers.ChangeBrushBrightness((SolidColorBrush)TitleColor, -0.5f), 100);
-                SolidColorBrush darkerColor = MpHelpers.ChangeBrushAlpha(
-                                MpHelpers.ChangeBrushBrightness((SolidColorBrush)TitleColor, -0.4f), 50);
-                SolidColorBrush accentColor = MpHelpers.ChangeBrushAlpha(
-                                MpHelpers.ChangeBrushBrightness((SolidColorBrush)TitleColor, -0.0f), 100);
-                var path = @"pack://application:,,,/Resources/Images/";
-                var swirl1 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0001.png"));
-                swirl1 = MpHelpers.TintBitmapSource(swirl1, ((SolidColorBrush)TitleColor).Color);
-
-                var swirl2 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0002.png"));
-                swirl2 = MpHelpers.TintBitmapSource(swirl2, lighterColor.Color);
-
-                var swirl3 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0003.png"));
-                swirl3 = MpHelpers.TintBitmapSource(swirl3, darkerColor.Color);
-
-                var swirl4 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0004.png"));
-                swirl4 = MpHelpers.TintBitmapSource(swirl4, accentColor.Color);
-
-                TitleSwirl = MpHelpers.MergeImages(new List<BitmapSource>() { swirl1, swirl2, swirl3, swirl4 });
-            } else {
-                TitleSwirl = sharedSwirl;
-            }
-        }
+        
 
         public void DeleteTempFiles() {
             foreach (var f in _tempFileList) {
