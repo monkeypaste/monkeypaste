@@ -48,7 +48,6 @@ namespace MpWpfApp {
             if (activatedHandle == IntPtr.Zero) {
                 return false;       // No window is currently activated
             }
-
             var procId = Process.GetCurrentProcess().Id;
             WinApi.GetWindowThreadProcessId(activatedHandle, out uint activeProcId);
 

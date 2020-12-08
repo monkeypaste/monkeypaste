@@ -100,46 +100,8 @@ namespace MpWpfApp {
                                 }
                                 rtb.EndChange();
                             }
-                            //rtb.ClearHyperlinks();
-                            //rtb.CreateHyperlinks();
-                            //var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
-                            //if (mwvm.ClipTrayViewModel.VisibileClipTiles.Count == 0 &&
-                            //   !string.IsNullOrEmpty(SearchText) &&
-                            //   SearchText != Properties.Settings.Default.SearchPlaceHolderText) {
-                            //    mwvm.SearchBoxViewModel.SearchTextBoxBorderBrush = Brushes.Red;
-                            //    mwvm.ClipTrayViewModel.ClipTrayVisibility = Visibility.Collapsed;
-                            //    mwvm.ClipTrayViewModel.EmptyListMessageVisibility = Visibility.Visible;
-                            //} else {
-                            //    mwvm.SearchBoxViewModel.SearchTextBoxBorderBrush = Brushes.Transparent;
-                            //    mwvm.ClipTrayViewModel.ClipTrayVisibility = Visibility.Visible;
-                            //    mwvm.ClipTrayViewModel.EmptyListMessageVisibility = Visibility.Collapsed;
-                            //}
-                            //var fullDocRange = new TextRange(Document.ContentStart, Document.ContentEnd);
-                            ////fullDocRange.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
-
-                            //ScrollToHome();
-                            //if (SearchText != Properties.Settings.Default.SearchPlaceHolderText && !string.IsNullOrEmpty(SearchText)) {
-                            //    string rtbt = fullDocRange.Text.ToLower();
-                            //    SearchText = SearchText.ToLower();
-                            //    var tokenIdxList = rtbt.AllIndexesOf(SearchText);
-                            //    TextRange lastTokenRange = null;
-                            //    CaretPosition = Document.ContentStart;
-                            //    foreach (int idx in tokenIdxList) {
-                            //        TextPointer startPoint = lastTokenRange == null ? Document.ContentStart : lastTokenRange.End;
-                            //        startPoint.Po
-                            //        var range = MpHelpers.FindStringRangeFromPosition(startPoint, SearchText);
-                            //        if (range == null) {
-                            //            Console.WriteLine("Cannot find '" + SearchText + "' in tile");
-                            //        }
-                            //        range?.ApplyPropertyValue(TextElement.BackgroundProperty, highlightColor);
-                            //        lastTokenRange = range;
-                            //    }
-                            //    if (lastTokenRange != null) {
-                            //        Rect r = lastTokenRange.End.GetCharacterRect(LogicalDirection.Backward);
-                            //        ScrollToVerticalOffset(r.Y - (FontSize * 0.5));
-                            //    }
-                            //}
-                            //EndChange();
+                            rtb.ClearHyperlinks();
+                            rtb.CreateHyperlinks(hlt);                            
                         }));
                 }
             });

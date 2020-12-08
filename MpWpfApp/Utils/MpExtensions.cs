@@ -95,7 +95,8 @@ namespace MpWpfApp {
             }
             rtb.Tag = null;
         }
-        public static List<Hyperlink> CreateHyperlinks(this RichTextBox rtb) {        
+
+        public static List<Hyperlink> CreateHyperlinks(this RichTextBox rtb, string searchText = "") {        
             var regExGroupList = new List<string> {
                 //WebLink
                 @"(?:https?://|www\.)\S+", 
@@ -144,18 +145,24 @@ namespace MpWpfApp {
                                 hl.IsEnabled = true;
                                 hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
                                 hl.RequestNavigate += (s4, e4) => {
-                                    MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenAssignmentModalWindow(rtb, hl);
+                                    MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl);
                                 };
+                                hl.PreviewKeyDown += (s, e5) => {
+                                    rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
+                                    rtb.Selection.Text = string.Empty;
+                                };
+
                                 var editTemplateMenuItem = new MenuItem();
                                 editTemplateMenuItem.Header = "Edit";
                                 editTemplateMenuItem.Click += (s4, e4) => {
-                                    MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenAssignmentModalWindow(rtb, hl);
+                                    MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl);
                                 };
 
                                 var deleteTemplateMenuItem = new MenuItem();
                                 deleteTemplateMenuItem.Header = "Delete";
                                 deleteTemplateMenuItem.Click += (s4, e4) => {
-                                    //add remove stuff
+                                    rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
+                                    rtb.Selection.Text = string.Empty;
                                 };
                                 hl.ContextMenu = new ContextMenu();
                                 hl.ContextMenu.Items.Add(editTemplateMenuItem);
@@ -250,6 +257,14 @@ namespace MpWpfApp {
                                     default:
                                         Console.WriteLine("Unhandled token type: " + Enum.GetName(typeof(MpSubTextTokenType), (MpSubTextTokenType)hl.Tag) + " with value: " + linkText);
                                         break;
+                                }
+                            }
+
+                            if(!string.IsNullOrEmpty(searchText)) {
+                                //only occurs at end of highlighttext when tokens are refreshed
+                                if(c.Value.ToLower().Contains(searchText.ToLower())) {
+                                    var highlightRange = MpHelpers.FindStringRangeFromPosition(matchRange.Start, searchText);
+                                    highlightRange.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString));
                                 }
                             }
                             linkList.Add(hl);

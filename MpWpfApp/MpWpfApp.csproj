@@ -191,14 +191,8 @@
     <Compile Include="Views\MpBalloonControl.xaml.cs">
       <DependentUpon>MpBalloonControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MpEditableTokenizedRichTextBox.xaml.cs">
-      <DependentUpon>MpEditableTokenizedRichTextBox.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MpSettingsWindow.xaml.cs">
       <DependentUpon>MpSettingsWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MpTemplateTokenClipBorder.xaml.cs">
-      <DependentUpon>MpTemplateTokenClipBorder.xaml</DependentUpon>
     </Compile>
     <Page Include="Styles\ResourceDictionary.xaml">
       <SubType>Designer</SubType>
@@ -236,15 +230,7 @@
     <Compile Include="ViewModels\Main Window\MpAppModeViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpTagTileViewModel.cs" />
     <Compile Include="ViewModels\Base\MpViewModelBase.cs" />
-    <Page Include="Views\MpEditableTokenizedRichTextBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\MpSettingsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MpTemplateTokenClipBorder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -586,8 +572,8 @@
     <Resource Include="Resources\Images\MpRichTextBox\templateadd.png" />
     <Resource Include="Resources\Images\MpRichTextBox\templateremove.png" />
     <Resource Include="Resources\Images\MpRichTextBox\templaterename.png" />
-    <Resource Include="Resources\Images\back_black.png" />
     <Resource Include="Resources\Images\forward_black.png" />
+    <Resource Include="Resources\Images\back_black.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />

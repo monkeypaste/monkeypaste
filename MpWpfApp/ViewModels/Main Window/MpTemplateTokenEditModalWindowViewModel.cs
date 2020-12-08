@@ -130,7 +130,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Static Methods
-        public static bool ShowTemplateTokenAssignmentModalWindow(RichTextBox rtb, Hyperlink templateLink) {
+        public static bool ShowTemplateTokenEditModalWindow(RichTextBox rtb, Hyperlink templateLink) {
             var ttmw = new MpTemplateTokenEditModalWindow(rtb, templateLink);
             var ttmwvm = (MpTemplateTokenEditModalWindowViewModel)ttmw.DataContext;
 
@@ -168,7 +168,7 @@ namespace MpWpfApp {
                 templateLink.IsEnabled = true;
                 templateLink.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
                 templateLink.RequestNavigate += (s, e1) => {
-                    MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenAssignmentModalWindow(rtb, templateLink);
+                    MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, templateLink);
                 };
             }
 

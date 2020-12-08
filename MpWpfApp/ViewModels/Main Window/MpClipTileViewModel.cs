@@ -36,6 +36,10 @@
 
         private ToggleButton _selectedAlignmentButton = null;
         private ToggleButton _selectedListButton = null;
+
+        private string _origClipRichText = string.Empty;
+
+        private bool _wasEditConfirmed = false;
         #endregion
 
         #region View Models
@@ -304,15 +308,6 @@
                 }
             }
         }
-
-        public Visibility EditToolbarVisibility {
-            get {
-                if(IsEditingTile || IsPastingTemplateTile) {
-                    return Visibility.Visible;
-                }
-                return Visibility.Collapsed;
-            }
-        }
         #endregion
 
         #region Business Logic Properties
@@ -411,6 +406,7 @@
                     OnPropertyChanged(nameof(IsRtbReadOnly));
                     OnPropertyChanged(nameof(ContentCursor));
                     OnPropertyChanged(nameof(EditToolbarVisibility));
+                    OnPropertyChanged(nameof(PasteTemplateToolbarVisibility));
                     OnPropertyChanged(nameof(CopyItem));
                 }
             }
@@ -428,12 +424,13 @@
                     OnPropertyChanged(nameof(IsRtbReadOnly));
                     OnPropertyChanged(nameof(ContentCursor));
                     OnPropertyChanged(nameof(EditToolbarVisibility));
+                    OnPropertyChanged(nameof(PasteTemplateToolbarVisibility));
                     OnPropertyChanged(nameof(CopyItem));
                 }
             }
         }
 
-        //public bool ContainsTemplates { get; set; }
+        public bool IsTileAnimating { get; set; } = false;
 
         public bool IsRtbReadOnly {
             get {
@@ -478,6 +475,175 @@
         }
         #endregion
 
+        #region Template Toolbar Properties
+        public Visibility PasteTemplateToolbarVisibility {
+            get {
+                if (IsPastingTemplateTile) {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+
+        public Visibility ClearAllTemplateToolbarButtonVisibility {
+            get {
+                foreach (var templateLookup in TemplateTokenLookupDictionary) {
+                    if (!string.IsNullOrEmpty(templateLookup.Value)) {
+                        return Visibility.Visible;
+                    }
+                }
+                return Visibility.Collapsed;
+            }
+        }
+
+        public Visibility PasteTemplateToolbarButtonVisibility {
+            get {
+                bool areTemplatesFilled = true;
+                foreach (var templateLookup in TemplateTokenLookupDictionary) {
+                    if (string.IsNullOrEmpty(templateLookup.Value)) {
+                        areTemplatesFilled = false;
+                    }
+                }
+                return areTemplatesFilled ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        public Visibility ClearCurrentTemplateTextboxButtonVisibility {
+            get {
+                if (CurrentTemplateText.Length > 0 &&
+                    CurrentTemplateText != CurrentTemplateTextBoxPlaceHolderText) {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+
+        public Visibility TemplateNavigationButtonStackVisibility {
+            get {
+                if(TemplateTokenLookupDictionary.Count > 0) {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+
+        private int _currentTemplateLookupIdx = 0;
+        public int CurrentTemplateLookupIdx {
+            get {
+                return _currentTemplateLookupIdx;
+            }
+            set {
+                if (_currentTemplateLookupIdx != value) {
+                    _currentTemplateLookupIdx = value;
+                    OnPropertyChanged(nameof(CurrentTemplateLookupIdx));
+                    OnPropertyChanged(nameof(CurrentTemplateText));
+                    OnPropertyChanged(nameof(CurrentTemplateTextBoxFontStyle));
+                    OnPropertyChanged(nameof(CurrentTemplateTextBrush));
+                    OnPropertyChanged(nameof(ClearCurrentTemplateTextboxButtonVisibility));
+                    OnPropertyChanged(nameof(CurrentTemplateTextBoxPlaceHolderText));
+                }
+            }
+        }
+
+        public string CurrentTemplateText {
+            get {
+                var curTemplateText = TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Value;
+                if(IsCurrentTemplateTextBoxFocused) {
+                    if (curTemplateText == CurrentTemplateTextBoxPlaceHolderText) {
+                        return string.Empty;
+                    }
+                    return curTemplateText;
+                }
+                if(string.IsNullOrEmpty(curTemplateText)) {
+                    return CurrentTemplateTextBoxPlaceHolderText;
+                }
+                return curTemplateText;
+            }
+            set {
+                if(TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Value != value) {
+                    TemplateTokenLookupDictionary[TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Key] = value;
+                    OnPropertyChanged(nameof(CurrentTemplateText));
+                    OnPropertyChanged(nameof(CurrentTemplateTextBoxFontStyle));
+                    OnPropertyChanged(nameof(CurrentTemplateTextBrush));
+                    OnPropertyChanged(nameof(ClearCurrentTemplateTextboxButtonVisibility));
+                    OnPropertyChanged(nameof(ClearAllTemplateToolbarButtonVisibility));
+                    OnPropertyChanged(nameof(PasteTemplateToolbarButtonVisibility));
+                }
+            }
+        }
+
+        private bool _isCurrentTemplateTextBoxFocused = false;
+        public bool IsCurrentTemplateTextBoxFocused {
+            get {
+                return _isCurrentTemplateTextBoxFocused;
+            }
+            set {
+                if (_isCurrentTemplateTextBoxFocused != value) {
+                    _isCurrentTemplateTextBoxFocused = value;
+                    OnPropertyChanged(nameof(IsCurrentTemplateTextBoxFocused));
+                    OnPropertyChanged(nameof(CurrentTemplateText));
+                    OnPropertyChanged(nameof(CurrentTemplateTextBoxFontStyle));
+                    OnPropertyChanged(nameof(CurrentTemplateTextBrush));
+                }
+            }
+        }
+
+        public string CurrentTemplateTextBoxPlaceHolderText {
+            get {
+                return TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Key + "...";
+            }
+        }
+
+        public Brush CurrentTemplateTextBrush {
+            get {
+                if (CurrentTemplateText != CurrentTemplateTextBoxPlaceHolderText || IsCurrentTemplateTextBoxFocused) {
+                    return Brushes.Black;
+                }
+                return Brushes.DimGray;
+            }
+        }
+
+        public FontStyle CurrentTemplateTextBoxFontStyle {
+            get {
+                if(CurrentTemplateText == CurrentTemplateTextBoxPlaceHolderText) {
+                    return FontStyles.Italic;
+                }
+                return FontStyles.Normal;
+            }
+        }
+
+        public List<Hyperlink> TemplateTokenList {
+            get {
+                RichTextBox tempRtb = new RichTextBox();
+                tempRtb.Document = MpHelpers.ConvertRichTextToFlowDocument(CopyItemRichText);
+                tempRtb.CreateHyperlinks();
+                return tempRtb.GetTemplateHyperlinkList();
+            }
+        }
+
+        private Dictionary<string, string> _templateTokenLookupDictionary = null;
+        public Dictionary<string, string> TemplateTokenLookupDictionary {
+            get {
+                if(_templateTokenLookupDictionary == null) {
+                    var ttld = new Dictionary<string, string>();
+                    foreach (var templateLink in TemplateTokenList) {
+                        if (!ttld.ContainsKey(templateLink.TargetName)) {
+                            ttld.Add(templateLink.TargetName, string.Empty);
+                        }
+                    }
+                }
+                return _templateTokenLookupDictionary;
+            } set {
+                if(_templateTokenLookupDictionary != value) {
+                    _templateTokenLookupDictionary = value;
+                    OnPropertyChanged(nameof(TemplateTokenLookupDictionary));
+                }
+            }
+        }
+
+        public bool IsPasteToolbarAnimating { get; set; } = false;
+        #endregion
+
         #region Text Editor Properties
         public ICollection<FontFamily> SystemFonts {
             get {
@@ -508,19 +674,6 @@
             }
         }
 
-        private Dictionary<string, string> _templateTokenLookupDictionary = new Dictionary<string, string>();
-        public Dictionary<string, string> TemplateTokenLookupDictionary {
-            get {
-                return _templateTokenLookupDictionary;
-            }
-            set {
-                if (_templateTokenLookupDictionary != value) {
-                    _templateTokenLookupDictionary = value;
-                    OnPropertyChanged(nameof(TemplateTokenLookupDictionary));
-                }
-            }
-        }
-
         public Cursor ContentCursor {
             get {
                 if(IsEditingTile) {
@@ -529,6 +682,43 @@
                 return Cursors.Arrow;
             }
         }
+
+        public Visibility EditToolbarVisibility {
+            get {
+                if (IsEditingTile) {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+
+        private Visibility _confirmEditButtonVisibility = Visibility.Visible;
+        public Visibility ConfirmEditButtonVisibility {
+            get {
+                return _confirmEditButtonVisibility;
+            }
+            set {
+                if(_confirmEditButtonVisibility != value) {
+                    _confirmEditButtonVisibility = value;
+                    OnPropertyChanged(nameof(ConfirmEditButtonVisibility));
+                }
+            }
+        }
+
+        private bool _isAddTemplateButtonEnabled = true;
+        public bool IsAddTemplateButtonEnabled {
+            get {
+                return _isAddTemplateButtonEnabled;
+            }
+            set {
+                if(_isAddTemplateButtonEnabled != value) {
+                    _isAddTemplateButtonEnabled = value;
+                    OnPropertyChanged(nameof(IsAddTemplateButtonEnabled));
+                }
+            }
+        }
+
+        public bool IsEditToolbarAnimating { get; set; } = false;
         #endregion
 
         #region Model Propertiese
@@ -578,13 +768,18 @@
                 //if (CopyItem.ItemRichText != value) 
                     {
                     CopyItem.SetData(value);
+                    TemplateTokenLookupDictionary = null;
                     OnPropertyChanged(nameof(CopyItemRichText));
+                    OnPropertyChanged(nameof(TemplateTokenList));
+                    OnPropertyChanged(nameof(TemplateTokenLookupDictionary));
                     OnPropertyChanged(nameof(CopyItem));
                 }
             }
         }  
         
-        public string TemplateRichText { get; set; }
+        public string TemplateRichText { 
+            get; set; 
+        }
 
         public BitmapSource CopyItemBmp {
             get {
@@ -596,33 +791,7 @@
             get {
                 return CopyItem.GetFileList(string.Empty, MainWindowViewModel.ClipTrayViewModel.GetTargetFileType());
             }
-        }
-
-        private List<Hyperlink> _tokens = new List<Hyperlink>();
-        public List<Hyperlink> TokenList {
-            get {
-                return _tokens;
-            }
-            set {
-                if (_tokens != value) {
-                    _tokens = value;
-                    OnPropertyChanged(nameof(TokenList));
-                }
-            }
-        }
-
-        private List<MpTemplateTokenViewModel> _templateTokenList = new List<MpTemplateTokenViewModel>();
-        public List<MpTemplateTokenViewModel> TemplateTokenList {
-            get {
-                return _templateTokenList;
-            }
-            set {
-                if (_templateTokenList != value) {
-                    _templateTokenList = value;
-                    OnPropertyChanged(nameof(TemplateTokenList));
-                }
-            }
-        }
+        }        
 
         private BitmapSource _titleSwirl = null;
         public BitmapSource TitleSwirl {
@@ -818,198 +987,27 @@
             Canvas.SetTop(titleDetailTextBlock, TileTitleHeight - 14);
         }
 
-        public void ClipTileRichTextBox_Loaded(object sender, RoutedEventArgs e) {
-            var rtb = (RichTextBox)sender; 
-            var cb = (MpClipBorder)rtb.GetVisualAncestor<MpClipBorder>();
-            var ctet = (Border)cb.FindName("ClipTileEditorToolbar");
+        public void ClipTileRichTextDockPanel_Loaded(object sender, RoutedEventArgs e) {
+            var rtbdp = (DockPanel)sender;
+            var cb = (MpClipBorder)rtbdp.GetVisualAncestor<MpClipBorder>();
+            var rtb = (RichTextBox)rtbdp.FindName("ClipTileRichTextBox");
+            var et = (Border)rtbdp.FindName("ClipTileEditorToolbar");
+            var cet = (Border)rtbdp.FindName("ClipTileConfirmEditToolbar");
+            var pt = (Border)rtbdp.FindName("ClipTilePasteTemplateToolbar");
 
             rtb.ContextMenu = (ContextMenu)rtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
             rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
             rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
 
             //not sure why but calling this is only way templates are shown when loaded
-            TokenList = rtb.GetTemplateHyperlinkList();
-                        
-            rtb.LostFocus += (s, e5) => {
+            //TemplateTokenList = rtb.GetTemplateHyperlinkList();
+            rtb.GetTemplateHyperlinkList();
 
-            };           
+            #region Editor Toolbar & Confirm Edit Toolbar
 
-            var addTemplateButton = (Button)ctet.FindName("AddTemplateButton");
-            addTemplateButton.Click += (s, e3) => {
-                var templateTokens = rtb.GetTemplateHyperlinkList(true);
-                if(templateTokens.Count == 0) {
-                    var result = MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenAssignmentModalWindow(rtb, null);
-                    if (result) {
-                        CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
-                    } else {
-                        //clear any link if cancled
-                        rtb.Selection.Text = rtb.Selection.Text;
-                    }
-                    return;
-                }
-                var templateContextMenu = new ContextMenu();
-                foreach(var tl in templateTokens) {
-                    DockPanel dp = new DockPanel();
-                    Rectangle rect = new Rectangle();
-                    rect.Fill = tl.Background;
-                    rect.Width = 20;
-                    rect.Height = 20;
-                    rect.VerticalAlignment = VerticalAlignment.Center;
-                    rect.HorizontalAlignment = HorizontalAlignment.Left;
-                    dp.Children.Add(rect);
-                    rect.SetValue(DockPanel.DockProperty, Dock.Left);
-                    TextBlock tb = new TextBlock();
-                    tb.Text = tl.TargetName;
-                    tb.FontSize = 14;
-                    tb.HorizontalAlignment = HorizontalAlignment.Left;
-                    tb.VerticalAlignment = VerticalAlignment.Center;
-                    dp.Children.Add(tb);
-                    tb.SetValue(DockPanel.DockProperty, Dock.Right);
-                    MenuItem tmi = new MenuItem();
-                    tmi.Header = dp;
-                    tmi.Click += (s1, e5) => {
-                        var result = MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenAssignmentModalWindow(rtb, tl);
-                        if (result) {
-                            CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
-                        } else {
-                            //clear any link if cancled
-                            rtb.Selection.Text = rtb.Selection.Text;
-                        }
-                    };
-                    templateContextMenu.Items.Add(tmi);
-                }
-                var addNewMenuItem = new MenuItem();
-                TextBlock tb2 = new TextBlock();
-                tb2.Text = "Add New...";
-                tb2.FontSize = 14;
-                tb2.HorizontalAlignment = HorizontalAlignment.Left;
-                tb2.VerticalAlignment = VerticalAlignment.Center;
-                addNewMenuItem.Header = tb2;
-                addNewMenuItem.Click += (s1, e5) => {
-                    var result = MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenAssignmentModalWindow(rtb, null);
-                    if (result) {
-                        CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
-                    } else {
-                        //clear any link if cancled
-                        rtb.Selection.Text = rtb.Selection.Text;
-                    }
-                };
-                templateContextMenu.Items.Add(addNewMenuItem);
-                addTemplateButton.ContextMenu = templateContextMenu;
-                templateContextMenu.PlacementTarget = addTemplateButton;
-                templateContextMenu.IsOpen = true;
-            };
+            #region Basic Editor 
 
-            addTemplateButton.PreviewMouseDown += (s, e2) => {
-                return;
-                MainWindowViewModel.IsShowingDialog = true;
-                e2.Handled = true;
-                var result = MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenAssignmentModalWindow(rtb, null);
-                if (result) {
-                    CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
-                } else {
-                    //clear any link if cancled
-                    rtb.Selection.Text = rtb.Selection.Text;
-                }
-                TokenList = rtb.Tag == null ? new List<Hyperlink>() : (List<Hyperlink>)rtb.Tag;
-                MainWindowViewModel.IsShowingDialog = false;
-            };            
-
-            ctet.IsVisibleChanged += (s, e1) => {
-                var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
-                var titleSwirl = (Image)cb.FindName("TitleSwirl");
-                var dp = (DockPanel)cb.FindName("ClipTileRichTextDockPanel");
-
-                double fromWidthTile = 0;
-                double toWidthTile = 0;
-                double fromWidthContent = 0;
-                double toWidthContent = 0;
-                double scrollbarWidth = 20;
-
-                if (ctet.Visibility == Visibility.Visible) {
-                    //etrtb.TokenizedRichTextBox.Document = (MpEventEnabledFlowDocument)etrtb.TokenizedRichTextBox.Document;
-                    //etrtb.TokenizedRichTextBox.IsDocumentEnabled = true;
-                    //etrtb.TokenizedRichTextBox.Document.IsEnabled = true;
-                    fromWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
-                    fromWidthContent = fromWidthTile;
-                    toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
-                    toWidthContent = toWidthTile - scrollbarWidth;
-                    //rtb.Focusable = true;
-                    //etrtb.TokenizedRichTextBox.Focusable = true;                    
-                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-                    rtb.ScrollToHome();
-                    rtb.CaretPosition = rtb.Document.ContentStart;
-                } else {
-                    // TODO add check to see if template token was added if not use convertflowdoctoricktext
-                    //etrtb.TokenizedRichTextBox.Document = etrtb.TokenizedRichTextBox.GetTemplateDocument();
-                    //CopyItem.ItemXaml = MpHelpers.ConvertFlowDocumentToXaml(etrtb.TokenizedRichTextBox.GetTemplateDocument());
-                    //CopyItem.SubTextTokenList = etrtb.TokenizedRichTextBox.Tokens.ToList();
-                    CopyItem.WriteToDatabase();
-                    fromWidthTile = rtb.Width;
-                    fromWidthContent = fromWidthTile - scrollbarWidth;
-                    toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
-                    toWidthContent = toWidthTile;
-                    //rtb.Focusable = false;
-                    //ContainsTemplates = rtb.Tag != null && ((List<Hyperlink>)rtb.Tag).Count > 0;
-                    TokenList = rtb.Tag == null ? new List<Hyperlink>() : (List<Hyperlink>)rtb.Tag;
-                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                }
-                double fromLeft = Canvas.GetLeft(titleIconImageButton);
-                double toLeft = toWidthTile - TileTitleHeight - 10;
-
-                DoubleAnimation twa = new DoubleAnimation();
-                twa.From = fromWidthTile;
-                twa.To = toWidthTile;
-                twa.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
-                CubicEase easing = new CubicEase();
-                easing.EasingMode = EasingMode.EaseIn;
-                twa.EasingFunction = easing;
-                twa.Completed += (s1, e2) => {
-                    ((MpMultiSelectListBox)cb.GetVisualAncestor<MpMultiSelectListBox>())?.ScrollIntoView(cb);
-
-                };
-                cb.BeginAnimation(MpClipBorder.WidthProperty, twa);
-                titleSwirl.BeginAnimation(Image.WidthProperty, twa);
-                rtb.BeginAnimation(RichTextBox.WidthProperty, twa);
-                ctet.BeginAnimation(Border.WidthProperty, twa);
-                dp.BeginAnimation(DockPanel.WidthProperty, twa);
-
-                DoubleAnimation cwa = new DoubleAnimation();
-                cwa.From = fromWidthContent;
-                cwa.To = toWidthContent;
-                cwa.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
-                easing = new CubicEase();
-                easing.EasingMode = EasingMode.EaseIn;
-                cwa.EasingFunction = easing;
-
-
-                DoubleAnimation la = new DoubleAnimation();
-                la.From = fromLeft;
-                la.To = toLeft;
-                la.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
-                la.EasingFunction = easing;
-                titleIconImageButton.BeginAnimation(Canvas.LeftProperty, la);
-
-                //if (IsPastingTemplateTile) {
-                //    TemplateTokenLookupDictionary = MpTemplateTokenPasteModalWindowViewModel.ShowTemplateTokenPasteModalWindow(rtb);
-                //    var tempDoc = rtb.Document.Clone();
-                //    var templateLinkList = (List<Hyperlink>)rtb.Tag;
-                //    foreach (var templateLink in templateLinkList) {
-                //        Span span = new Span(templateLink.ContentStart, templateLink.ContentEnd);
-                //        span.Inlines.Clear();
-                //        span.Inlines.Add(new Run(TemplateTokenLookupDictionary[templateLink.TargetName]));
-                //    }
-                //    TemplateRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
-                //    rtb.Document = tempDoc;
-                //    rtb.ClearHyperlinks();
-                //    CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
-                //}
-            };
-
-            #region Editor Events
-            var fontFamilyComboBox = (ComboBox)ctet.FindName("FontFamilyCombo");
+            var fontFamilyComboBox = (ComboBox)et.FindName("FontFamilyCombo");
             fontFamilyComboBox.SelectionChanged += (s, e1) => {
                 if (fontFamilyComboBox.SelectedItem == null) {
                     return;
@@ -1019,7 +1017,7 @@
                 textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
             };
 
-            var fontSizeCombo = (ComboBox)ctet.FindName("FontSizeCombo");
+            var fontSizeCombo = (ComboBox)et.FindName("FontSizeCombo");
             fontSizeCombo.SelectionChanged += (s, e1) => {
                 // Exit if no selection
                 if (fontSizeCombo.SelectedItem == null) {
@@ -1039,10 +1037,10 @@
                 textRange.ApplyPropertyValue(TextElement.FontSizeProperty, pixelSize);
             };
 
-            var leftAlignmentButton = (ToggleButton)ctet.FindName("LeftButton");
-            var centerAlignmentButton = (ToggleButton)ctet.FindName("CenterButton");
-            var rightAlignmentButton = (ToggleButton)ctet.FindName("RightButton");
-            var justifyAlignmentButton = (ToggleButton)ctet.FindName("JustifyButton");
+            var leftAlignmentButton = (ToggleButton)et.FindName("LeftButton");
+            var centerAlignmentButton = (ToggleButton)et.FindName("CenterButton");
+            var rightAlignmentButton = (ToggleButton)et.FindName("RightButton");
+            var justifyAlignmentButton = (ToggleButton)et.FindName("JustifyButton");
             leftAlignmentButton.Click += (s, e3) => {
                 var clickedButton = (ToggleButton)s;
                 var buttonGroup = new ToggleButton[] { leftAlignmentButton, centerAlignmentButton, rightAlignmentButton, justifyAlignmentButton };
@@ -1068,8 +1066,8 @@
                 _selectedAlignmentButton = clickedButton;
             };
 
-            var bulletsButton = (ToggleButton)ctet.FindName("BulletsButton");
-            var numberingButton = (ToggleButton)ctet.FindName("NumberingButton");
+            var bulletsButton = (ToggleButton)et.FindName("BulletsButton");
+            var numberingButton = (ToggleButton)et.FindName("NumberingButton");
             bulletsButton.Click += (s, e3) => {
                 var clickedButton = (ToggleButton)s;
                 var buttonGroup = new[] { bulletsButton, numberingButton };
@@ -1082,6 +1080,150 @@
                 this.SetButtonGroupSelection(clickedButton, _selectedListButton, buttonGroup, false);
                 _selectedListButton = clickedButton;
             };
+            #endregion
+
+            #region Template & Confirm Toolbar
+            var addTemplateButton = (Button)et.FindName("AddTemplateButton");
+            addTemplateButton.MouseLeftButtonUp += (s, e3) => {
+                var templateTokens = rtb.GetTemplateHyperlinkList(true);
+                if (templateTokens.Count == 0) {
+                    var result = MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, null);
+                    if (result) {
+                        CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+                    } else {
+                        //clear any link if cancled
+                        rtb.Selection.Text = rtb.Selection.Text;
+                    }
+                } else {
+                    var templateContextMenu = new ContextMenu();
+                    foreach (var tl in templateTokens) {
+                        DockPanel dp = new DockPanel();
+                        Rectangle rect = new Rectangle();
+                        rect.Fill = tl.Background;
+                        rect.Width = 20;
+                        rect.Height = 20;
+                        rect.VerticalAlignment = VerticalAlignment.Center;
+                        rect.HorizontalAlignment = HorizontalAlignment.Left;
+                        dp.Children.Add(rect);
+                        rect.SetValue(DockPanel.DockProperty, Dock.Left);
+                        TextBlock tb = new TextBlock();
+                        tb.Text = tl.TargetName;
+                        tb.FontSize = 14;
+                        tb.HorizontalAlignment = HorizontalAlignment.Left;
+                        tb.VerticalAlignment = VerticalAlignment.Center;
+                        dp.Children.Add(tb);
+                        tb.SetValue(DockPanel.DockProperty, Dock.Right);
+                        MenuItem tmi = new MenuItem();
+                        tmi.Header = dp;
+                        tmi.Click += (s1, e5) => {
+                            var result = MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, tl);
+                            if (result) {
+                                CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+                            } else {
+                                //clear any link if cancled
+                                rtb.Selection.Text = rtb.Selection.Text;
+                            }
+                        };
+                        templateContextMenu.Items.Add(tmi);
+                    }
+                    var addNewMenuItem = new MenuItem();
+                    TextBlock tb2 = new TextBlock();
+                    tb2.Text = "Add New...";
+                    tb2.FontSize = 14;
+                    tb2.HorizontalAlignment = HorizontalAlignment.Left;
+                    tb2.VerticalAlignment = VerticalAlignment.Center;
+                    addNewMenuItem.Header = tb2;
+                    addNewMenuItem.Click += (s1, e5) => {
+                        var result = MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, null);
+                        if (result) {
+                            CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+                        } else {
+                            //clear any link if cancled
+                            rtb.Selection.Text = rtb.Selection.Text;
+                        }
+                    };
+                    templateContextMenu.Items.Add(addNewMenuItem);
+                    addTemplateButton.ContextMenu = templateContextMenu;
+                    templateContextMenu.PlacementTarget = addTemplateButton;
+                    templateContextMenu.IsOpen = true;
+                }
+            };
+
+            et.IsVisibleChanged += (s, e1) => {
+                var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
+                var titleSwirl = (Image)cb.FindName("TitleSwirl");
+                var dp = (DockPanel)cb.FindName("ClipTileRichTextDockPanel");
+
+                double fromBottomEditToolbar = 0;
+                double toBottomEditToolbar = 24;
+
+                double fromTopConfirmEditToolbar = MpMeasurements.Instance.ClipTileBorderSize;
+                double toTopConfirmEditToolbar = fromTopConfirmEditToolbar - 30;
+
+                double fromWidthTile = 0;
+                double toWidthTile = 0;
+
+                if (et.Visibility == Visibility.Visible) {
+                    fromWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
+                    toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);                    
+                    
+                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                    rtb.ScrollToHome();
+                    rtb.CaretPosition = rtb.Document.ContentStart;
+
+                    rtb.ClearHyperlinks();
+                    _origClipRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+                    rtb.CreateHyperlinks();
+                } else {
+                    if(_wasEditConfirmed) {
+                        rtb.ClearHyperlinks();
+                        CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);                        
+                    } else {
+                        CopyItemRichText = _origClipRichText;
+                    }
+                    fromWidthTile = rtb.Width;
+                    toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
+                    
+                    //TemplateTokenList = rtb.Tag == null ? new List<Hyperlink>() : (List<Hyperlink>)rtb.Tag;
+                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                }
+                IsEditToolbarAnimating = true;
+                double fromLeft = Canvas.GetLeft(titleIconImageButton);
+                double toLeft = toWidthTile - TileTitleHeight - 10;
+
+                DoubleAnimation twa = new DoubleAnimation();
+                twa.From = fromWidthTile;
+                twa.To = toWidthTile;
+                twa.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
+                CubicEase easing = new CubicEase();
+                easing.EasingMode = EasingMode.EaseIn;
+                twa.EasingFunction = easing;
+                twa.Completed += (s1, e2) => {
+                    ((MpMultiSelectListBox)cb.GetVisualAncestor<MpMultiSelectListBox>())?.ScrollIntoView(cb);
+                    IsEditToolbarAnimating = false;
+                };
+                cb.BeginAnimation(MpClipBorder.WidthProperty, twa);
+                titleSwirl.BeginAnimation(Image.WidthProperty, twa);
+                rtb.BeginAnimation(RichTextBox.WidthProperty, twa);
+                et.BeginAnimation(Border.WidthProperty, twa);
+                dp.BeginAnimation(DockPanel.WidthProperty, twa);
+
+                DoubleAnimation la = new DoubleAnimation();
+                la.From = fromLeft;
+                la.To = toLeft;
+                la.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
+                la.EasingFunction = easing;
+                titleIconImageButton.BeginAnimation(Canvas.LeftProperty, la);
+
+                DoubleAnimation da = new DoubleAnimation();
+                da.From = fromBottomEditToolbar;
+                da.To = toBottomEditToolbar;
+                la.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
+                la.EasingFunction = easing;
+                //et.BeginAnimation(Border.Ma, la);
+            };
 
             rtb.SelectionChanged += (s, e6) => {
                 // Set font family combo
@@ -1092,23 +1234,93 @@
                 // Set font size combo
                 var fontSize = textRange.GetPropertyValue(TextElement.FontSizeProperty);
                 fontSizeCombo.Text = fontSize.ToString();
-                // Set Font buttons
-                //if (!String.IsNullOrEmpty(textRange.Text)) {
 
-                //}
-                ((ToggleButton)ctet.FindName("BoldButton")).IsChecked = textRange.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
-                ((ToggleButton)ctet.FindName("ItalicButton")).IsChecked = textRange.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
-                ((ToggleButton)ctet.FindName("UnderlineButton")).IsChecked = textRange?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
+                // Set Font buttons
+                ((ToggleButton)et.FindName("BoldButton")).IsChecked = textRange.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
+                ((ToggleButton)et.FindName("ItalicButton")).IsChecked = textRange.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
+                ((ToggleButton)et.FindName("UnderlineButton")).IsChecked = textRange?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
 
                 // Set Alignment buttons
                 leftAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
                 centerAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
                 rightAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
                 justifyAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Justify);
+
+                IsAddTemplateButtonEnabled = true;
+                foreach (var templateHyperlink in TemplateTokenList) {
+                    if ((textRange.Start.CompareTo(templateHyperlink.ContentStart) >= 0 &&
+                        textRange.Start.CompareTo(templateHyperlink.ContentEnd) <= 0) ||
+                       (textRange.End.CompareTo(templateHyperlink.ContentStart) >= 0 &&
+                        textRange.End.CompareTo(templateHyperlink.ContentEnd) <= 0)) {
+                        IsAddTemplateButtonEnabled = false;
+                    }
+                }
+                OnPropertyChanged(nameof(IsAddTemplateButtonEnabled));
+            };
+            #endregion
+            
+            #endregion
+
+            #region Paste Template Toolbar
+            pt.IsVisibleChanged += (s, e1) => {
+                var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
+                var titleSwirl = (Image)cb.FindName("TitleSwirl");
+                var dp = (DockPanel)cb.FindName("ClipTileRichTextDockPanel");
+
+                double fromWidthTile = 0;
+                double toWidthTile = 0;
+
+                if (pt.Visibility == Visibility.Visible) {
+                    TemplateRichText = string.Empty;
+
+                    fromWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
+                    toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
+                    
+                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                    rtb.ScrollToHome();
+                    rtb.CaretPosition = rtb.Document.ContentStart;
+                } else {
+                    fromWidthTile = rtb.Width;
+                    toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
+
+                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                }
+                double fromLeft = Canvas.GetLeft(titleIconImageButton);
+                double toLeft = toWidthTile - TileTitleHeight - 10;
+
+                DoubleAnimation twa = new DoubleAnimation();
+                twa.From = fromWidthTile;
+                twa.To = toWidthTile;
+                twa.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
+                CubicEase easing = new CubicEase();
+                easing.EasingMode = EasingMode.EaseIn;
+                twa.EasingFunction = easing;
+                twa.Completed += (s1, e2) => {
+                    MainWindowViewModel.ClipTrayViewModel.OnPropertyChanged(nameof(MainWindowViewModel.ClipTrayViewModel.IsScrollingAutomated));
+                    ((MpMultiSelectListBox)cb.GetVisualAncestor<MpMultiSelectListBox>())?.ScrollIntoView(cb);
+                    if (IsPastingTemplateTile) {
+                        // TODO replace hyperlinks with inline ui element textblocks w/ Text Bound their dictionary value
+                    } else {
+
+                    }
+                };
+                cb.BeginAnimation(MpClipBorder.WidthProperty, twa);
+                titleSwirl.BeginAnimation(Image.WidthProperty, twa);
+                rtb.BeginAnimation(RichTextBox.WidthProperty, twa);
+                pt.BeginAnimation(Border.WidthProperty, twa);
+                dp.BeginAnimation(DockPanel.WidthProperty, twa);
+
+                DoubleAnimation la = new DoubleAnimation();
+                la.From = fromLeft;
+                la.To = toLeft;
+                la.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
+                la.EasingFunction = easing;
+                titleIconImageButton.BeginAnimation(Canvas.LeftProperty, la);
             };
             #endregion
         }
-
         public void ClipTileImage_Loaded(object sender, RoutedEventArgs e) {
             var img = (Image)sender;
             img.ContextMenu = (ContextMenu)img.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
@@ -1264,6 +1476,7 @@
             // Select the clicked button
             clickedButton.IsChecked = true;
         }
+        
         private string GetCurrentDetail(int detailId) {
             string info = "I dunno";// string.Empty;
             switch (detailId) {
@@ -1297,7 +1510,87 @@
         #endregion
 
         #region Commands
-        
+        private RelayCommand _pasteTemplateCommand;
+        public ICommand PasteTemplateCommand {
+            get {
+                if (_pasteTemplateCommand == null) {
+                    _pasteTemplateCommand = new RelayCommand(PasteTemplate);
+                }
+                return _pasteTemplateCommand;
+            }
+        }
+        private void PasteTemplate() {
+            //TemplateRichText = 
+        }
+
+        private RelayCommand _clearAllTemplatesCommand;
+        public ICommand ClearAllTemplatesCommand {
+            get {
+                if (_clearAllTemplatesCommand == null) {
+                    _clearAllTemplatesCommand = new RelayCommand(ClearAllTemplates, CanClearAllTemplates);
+                }
+                return _clearAllTemplatesCommand;
+            }
+        }
+        private bool CanClearAllTemplates() {
+            return ClearAllTemplateToolbarButtonVisibility == Visibility.Visible;
+        }
+        private void ClearAllTemplates() {
+            foreach(var templateLink in TemplateTokenList) {
+                TemplateTokenLookupDictionary[templateLink.TargetName] = string.Empty;
+            }
+            CurrentTemplateLookupIdx = 0;
+        }
+
+        private RelayCommand _clearCurrentTemplatesCommand;
+        public ICommand ClearCurrentTemplatesCommand {
+            get {
+                if (_clearCurrentTemplatesCommand == null) {
+                    _clearCurrentTemplatesCommand = new RelayCommand(ClearCurrentTemplates, CanClearCurrentTemplates);
+                }
+                return _clearCurrentTemplatesCommand;
+            }
+        }
+        private bool CanClearCurrentTemplates() {
+            return ClearCurrentTemplateTextboxButtonVisibility == Visibility.Visible;
+        }
+        private void ClearCurrentTemplates() {
+            IsCurrentTemplateTextBoxFocused = true;
+            CurrentTemplateText = string.Empty;
+        }
+
+        private RelayCommand _nextTemplateTokenCommand;
+        public ICommand NextTemplateTokenCommand {
+            get {
+                if (_nextTemplateTokenCommand == null) {
+                    _nextTemplateTokenCommand = new RelayCommand(NextTemplateToken, CanNextTemplateToken);
+                }
+                return _nextTemplateTokenCommand;
+            }
+        }
+        private bool CanNextTemplateToken() {
+            return TemplateTokenLookupDictionary.Count > 1;
+        }
+        private void NextTemplateToken() {
+            CurrentTemplateLookupIdx = CurrentTemplateLookupIdx + 1 >= TemplateTokenLookupDictionary.Count ? 0 : CurrentTemplateLookupIdx + 1;
+        }
+
+        private RelayCommand _previousTemplateTokenCommand;
+        public ICommand PreviousTemplateTokenCommand {
+            get {
+                if (_previousTemplateTokenCommand == null) {
+                    _previousTemplateTokenCommand = new RelayCommand(PreviousTemplateToken, CanPreviousTemplateToken);
+                }
+                return _previousTemplateTokenCommand;
+            }
+        }
+        private bool CanPreviousTemplateToken() {
+            return TemplateTokenLookupDictionary.Count > 1;
+        }
+        private void PreviousTemplateToken() {
+            CurrentTemplateLookupIdx = CurrentTemplateLookupIdx - 1 < 0 ? TemplateTokenLookupDictionary.Count - 1 : CurrentTemplateLookupIdx - 1;
+        }
+
         private RelayCommand _sendClipToEmailCommand;
         public ICommand SendClipToEmailCommand {
             get {
@@ -1316,20 +1609,7 @@
             //IsSelected = true;
             //MpHelpers.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
         }
-
-        private RelayCommand _addTemplateCommand;
-        public ICommand AddTemplateCommand {
-            get {
-                if (_addTemplateCommand == null) {
-                    _addTemplateCommand = new RelayCommand(AddTemplate);
-                }
-                return _addTemplateCommand;
-            }
-        }
-        private void AddTemplate() {
-            
-        }
-
+                
         private RelayCommand _editClipTextCommand;
         public ICommand EditClipTextCommand {
             get {
@@ -1342,12 +1622,30 @@
         private bool CanEditClipText() {
             return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 && 
                   CopyItemType == MpCopyItemType.RichText && 
-                  !IsEditingTile;
+                  !IsEditingTile &&
+                  !IsEditToolbarAnimating;
         }
         private void EditClipText() {
             IsEditingTile = true;
-            //IsPastingTemplateTile = true;
             IsSelected = true;
+            //all other action is handled in the ertb visibility changed handler in ertb_loaded
+        }
+
+        private RelayCommand _cancelEditClipTextCommand;
+        public ICommand CancelEditClipTextCommand {
+            get {
+                if (_cancelEditClipTextCommand == null) {
+                    _cancelEditClipTextCommand = new RelayCommand(CancelEditClipText, CanCancelEditClipText);
+                }
+                return _cancelEditClipTextCommand;
+            }
+        }
+        private bool CanCancelEditClipText() {
+            return IsEditingTile;
+        }
+        private void CancelEditClipText() {
+            _wasEditConfirmed = false;
+            IsEditingTile = false;
             //all other action is handled in the ertb visibility changed handler in ertb_loaded
         }
 
@@ -1364,8 +1662,7 @@
             return IsEditingTile;// !IsEditingTitle;
         }
         private void CommitEditClipText() {
-            //RtbVisibility = Visibility.Visible;
-            //ErtbVisibility = Visibility.Collapsed;
+            _wasEditConfirmed = true;
             IsEditingTile = false;
             //all other action is handled in the ertb visibility changed handler in ertb_loaded
         }

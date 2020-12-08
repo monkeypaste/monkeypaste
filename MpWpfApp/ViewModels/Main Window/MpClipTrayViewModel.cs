@@ -7,6 +7,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Speech.Synthesis;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -84,6 +86,23 @@ namespace MpWpfApp {
             }
         }
 
+        public bool IsPastingTemplateClipTile {
+            get {
+                foreach (var sctvm in SelectedClipTiles) {
+                    if (sctvm.IsPastingTemplateTile) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        public bool IsScrollingAutomated {
+            get {
+                return IsEditingClipTile || IsPastingTemplateClipTile;
+            }
+        }
+
         public Visibility EmptyListMessageVisibility {
             get {
                 if(VisibileClipTiles.Count == 0) {
@@ -119,7 +138,7 @@ namespace MpWpfApp {
             get {
                 string outStr = string.Empty;
                 foreach (var sctvm in SelectedClipTiles) {
-                    if (sctvm.TokenList != null && sctvm.TokenList.Count > 0) {
+                    if (sctvm.TemplateTokenList != null && sctvm.TemplateTokenList.Count > 0) {
                         outStr += MpHelpers.ConvertRichTextToPlainText(sctvm.TemplateRichText) + Environment.NewLine;
                     } else {
                         outStr += sctvm.CopyItemPlainText + Environment.NewLine;
@@ -133,34 +152,29 @@ namespace MpWpfApp {
             get {
                 string outStr = MpHelpers.ConvertPlainTextToRichText(string.Empty);
                 foreach (var sctvm in SelectedClipTiles) {
-                    if(sctvm.TokenList != null && sctvm.TokenList.Count > 0) {
-                        var tempRtb = new RichTextBox();
-                        tempRtb.Document = MpHelpers.ConvertRichTextToFlowDocument(sctvm.CopyItemRichText);
-                        tempRtb.CreateHyperlinks();
-                        //var templateLinkList = (List<Hyperlink>)tempRtb.Tag;
-                        var templateTokenLookupDictionary = MpTemplateTokenPasteModalWindowViewModel.ShowTemplateTokenPasteModalWindow(tempRtb.GetTemplateHyperlinkList());
-                        var temp = new Dictionary<Span, Hyperlink>();
-                        foreach (var templateLink in tempRtb.GetTemplateHyperlinkList()) {
-                            //TextRange tr = new TextRange(templateLink.ElementStart, templateLink.ElementEnd);
-                            ///tr.Text = string.Empty;
-                            Span span = new Span(templateLink.ElementStart, templateLink.ElementEnd);
-                            span.Inlines.Clear();
-                            span.Inlines.Add(new Run(templateTokenLookupDictionary[templateLink.TargetName]));
-                            temp.Add(span, templateLink);
-                        }
-                        sctvm.TemplateRichText = MpHelpers.ConvertFlowDocumentToRichText(tempRtb.Document);
-                        //foreach (var span in temp.Keys) {
-                        //    Hyperlink hl = new Hyperlink(span.ElementStart, span.ElementEnd);
-                        //    hl.Inlines.Clear();
-                        //    hl.Inlines.Add(new Run(temp[span].TargetName));
-                        //    hl.TargetName = temp[span].TargetName;
-                        //    hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
-                        //    hl.IsEnabled = true;
-                        //    hl.Tag = MpSubTextTokenType.TemplateSegment;
-                        //    hl.RequestNavigate += (s4, e4) => {
-                        //        MessageBox.Show("Sup");
-                        //    };
+                    if(sctvm.TemplateTokenList != null && sctvm.TemplateTokenList.Count > 0) {
+                        //sctvm.IsPastingTemplateTile = true;
+                        //Task fillTemplateTask = Task.Factory.StartNew(() => {
+                        //    while(string.IsNullOrEmpty(sctvm.TemplateRichText)) {
+                        //        Thread.Sleep(10);
+                        //    }
+                        //});
+                        //fillTemplateTask.Wait();
+
+                        //var tempRtb = new RichTextBox();
+                        //tempRtb.Document = MpHelpers.ConvertRichTextToFlowDocument(sctvm.CopyItemRichText);
+                        //tempRtb.CreateHyperlinks();
+                        //var templateTokenLookupDictionary = MpTemplateTokenPasteModalWindowViewModel.ShowTemplateTokenPasteModalWindow(tempRtb.GetTemplateHyperlinkList());
+                        //var temp = new Dictionary<Span, Hyperlink>();
+                        //foreach (var templateLink in tempRtb.GetTemplateHyperlinkList()) {
+                        //    //TextRange tr = new TextRange(templateLink.ElementStart, templateLink.ElementEnd);
+                        //    ///tr.Text = string.Empty;
+                        //    Span span = new Span(templateLink.ElementStart, templateLink.ElementEnd);
+                        //    span.Inlines.Clear();
+                        //    span.Inlines.Add(new Run(templateTokenLookupDictionary[templateLink.TargetName]));
+                        //    temp.Add(span, templateLink);
                         //}
+                        //sctvm.TemplateRichText = MpHelpers.ConvertFlowDocumentToRichText(tempRtb.Document);
                         outStr = MpHelpers.CombineRichText2(outStr, sctvm.TemplateRichText);
                     } else {
                         outStr = MpHelpers.CombineRichText2(outStr, sctvm.CopyItemRichText);

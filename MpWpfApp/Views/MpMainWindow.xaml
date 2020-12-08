@@ -865,10 +865,121 @@
                                                    MinHeight="{Binding TileContentHeight}"
                                                    Visibility="{Binding RtbVisibility}"
                                                    Width="{Binding TileBorderWidth}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Loaded">
+                                                    <i:CallMethodAction TargetObject="{Binding}"
+                                                                        MethodName="ClipTileRichTextDockPanel_Loaded" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <Border x:Name="ClipTilePasteTemplateToolbar"
+                                                    DockPanel.Dock="Top"
+                                                    Background="LightBlue"
+                                                    Visibility="{Binding PasteTemplateToolbarVisibility}">
+                                                <Grid Height="30">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="3*" />
+                                                        <ColumnDefinition Width="0.5*" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Button x:Name="ClearAllTemplatesButton"
+                                                            Grid.Column="0"
+                                                            TabIndex="0"
+                                                            Visibility="{Binding ClearAllTemplateToolbarButtonVisibility}"
+                                                            Command="{Binding ClearAllTemplatesCommand}"
+                                                            Margin="15,5,15,5"
+                                                            Padding="0,0,0,0"
+                                                            FontSize="12"
+                                                            VerticalContentAlignment="Top"
+                                                            VerticalAlignment="Center"
+                                                            Content="CLEAR ALL" />
+                                                    <local:MpClipBorder Grid.Column="1"
+                                                                        CornerRadius="10"
+                                                                        Background="White"
+                                                                        BorderThickness="1"
+                                                                        BorderBrush="DimGray"
+                                                                        Margin="1"
+                                                                        Padding="0"
+                                                                        VerticalAlignment="Center"
+                                                                        HorizontalAlignment="Stretch">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*" />
+                                                                <ColumnDefinition Width="0.1*" />
+                                                            </Grid.ColumnDefinitions>
+                                                            <TextBox x:Name="CurrentTemplateTextBox"
+                                                                     Grid.Column="0"
+                                                                     TabIndex="1"
+                                                                     BorderThickness="0"
+                                                                     Text="{Binding CurrentTemplateText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                                     FontStyle="{Binding CurrentTemplateTextBoxFontStyle}"
+                                                                     Foreground="{Binding CurrentTemplateTextBrush}"
+                                                                     local:MpFocusExtension.IsFocused="{Binding IsCurrentTemplateTextBoxFocused, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                                     FontSize="14"
+                                                                     Width="240"
+                                                                     Padding="0,0,0,0"
+                                                                     Margin="5,0,0,0"
+                                                                     VerticalAlignment="Top"
+                                                                     HorizontalAlignment="Left"
+                                                                     VerticalContentAlignment="Top" />
+                                                            <Button x:Name="ClearCurrentTemplateButton"
+                                                                    Grid.Column="1"
+                                                                    Visibility="{Binding ClearCurrentTemplateTextboxButtonVisibility}"
+                                                                    Command="{Binding ClearCurrentTemplatesCommand}"
+                                                                    Background="Transparent"
+                                                                    BorderThickness="0"
+                                                                    Width="15"
+                                                                    Height="15">
+                                                                <Image x:Name="ClearCurrentTemplateButtonImage"
+                                                                       Source="/Resources/Images/close1.png" />
+                                                            </Button>
+                                                        </Grid>
+                                                    </local:MpClipBorder>
+                                                    <StackPanel Orientation="Horizontal"
+                                                                Grid.Column="2"
+                                                                Visibility="{Binding TemplateNavigationButtonStackVisibility}"
+                                                                HorizontalAlignment="Center"
+                                                                Margin="8,3,0,3">
+                                                        <Button x:Name="PreviousTemplateButton"
+                                                                TabIndex="2"
+                                                                Command="{Binding PreviousTemplateTokenCommand}"
+                                                                Width="20"
+                                                                Height="20"
+                                                                Padding="5">
+                                                            <Image Source="/Resources/Images/back_black.png" />
+                                                        </Button>
+                                                        <Button x:Name="NextTemplateButton"
+                                                                TabIndex="3"
+                                                                Command="{Binding NextTemplateTokenCommand}"
+                                                                Width="20"
+                                                                Height="20"
+                                                                Padding="5">
+                                                            <Image Source="/Resources/Images/forward_black.png" />
+                                                        </Button>
+                                                    </StackPanel>
+                                                    <Button x:Name="PasteTemplateButton"
+                                                            Grid.Column="3"
+                                                            TabIndex="4"
+                                                            Visibility="{Binding PasteTemplateToolbarButtonVisibility}"
+                                                            Command="{Binding PasteTemplateCommand}"
+                                                            Margin="15,5,15,5"
+                                                            Padding="0,0,0,0"
+                                                            FontSize="12"
+                                                            VerticalContentAlignment="Top"
+                                                            VerticalAlignment="Center"
+                                                            Content="PASTE" />
+                                                </Grid>
+                                            </Border>
                                             <Border x:Name="ClipTileEditorToolbar"
                                                     Visibility="{Binding EditToolbarVisibility}"
-                                                    DockPanel.Dock="Top" 
+                                                    DockPanel.Dock="Top"
                                                     SnapsToDevicePixels="True">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Loaded">
+                                                        <i:CallMethodAction TargetObject="{Binding}"
+                                                                            MethodName="ClipTileEditorToolbar_Loaded" />
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
                                                 <StackPanel Orientation="Horizontal"
                                                             Height="24">
                                                     <ComboBox x:Name="FontFamilyCombo"
@@ -902,6 +1013,7 @@
                                                     <Button x:Name="AddTemplateButton"
                                                             ToolTip="Add Template"
                                                             Template="{StaticResource FlatButtonControlTemplate}"
+                                                            IsEnabled="{Binding IsAddTemplateButtonEnabled}"
                                                             Margin="0,1,0,1">
                                                         <Image Source="/Resources/Images/MpRichTextBox/templateadd.png"
                                                                Stretch="None"
@@ -1093,13 +1205,37 @@
                                                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                                          BorderThickness="0"
                                                          Padding="10,0,10,10">
-                                                <i:Interaction.Triggers>
-                                                    <i:EventTrigger EventName="Loaded">
-                                                        <i:CallMethodAction TargetObject="{Binding}"
-                                                                            MethodName="ClipTileRichTextBox_Loaded" />
-                                                    </i:EventTrigger>
-                                                </i:Interaction.Triggers>
                                             </RichTextBox>
+                                            <Border x:Name="ClipTileConfirmEditToolbar"
+                                                    DockPanel.Dock="Bottom"
+                                                    Background="LightGray"
+                                                    Visibility="{Binding EditToolbarVisibility}">
+                                                <Grid Height="30">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Button x:Name="CancelEditButton"
+                                                            Grid.Column="0"
+                                                            TabIndex="0"
+                                                            Command="{Binding CancelEditClipTextCommand}"
+                                                            Background="DimGray"
+                                                            Padding="0,0,0,0"
+                                                            FontSize="16"
+                                                            VerticalContentAlignment="Top"
+                                                            VerticalAlignment="Center"
+                                                            Content="Cancel" />                                                    
+                                                    <Button x:Name="ConfirmButton"
+                                                            Grid.Column="1"
+                                                            TabIndex="1"
+                                                            Visibility="{Binding ConfirmEditButtonVisibility}"
+                                                            Command="{Binding CommitEditClipTextCommand}"
+                                                            FontSize="16"
+                                                            VerticalContentAlignment="Top"
+                                                            VerticalAlignment="Center"
+                                                            Content="Confirm" />
+                                                </Grid>
+                                            </Border>
                                         </DockPanel>
                                         <!-- Image Content-->
                                         <Grid Width="{Binding TileBorderWidth}"
