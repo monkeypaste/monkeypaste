@@ -108,6 +108,8 @@
     <Compile Include="Attached Properties\MpTextBoxBehavior.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
+    <Compile Include="Controls\MpHyperlink.cs" />
+    <Compile Include="ViewModels\Main Window\MpTemplateHyperlinkViewModel.cs" />
     <Compile Include="Controls\MpMultiSelectListBox.cs" />
     <Compile Include="Converters\MpFlowDocumentToXamlConverter.cs" />
     <Compile Include="Converters\MpIntToMpRoutingTypeConverter.cs" />
@@ -120,7 +122,6 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Models\MpApp.cs" />
     <Compile Include="Models\MpClient.cs" />
-    <Compile Include="Models\MpHyperlink.cs" />
     <Compile Include="Models\MpRichTextStyle.cs" />
     <Compile Include="Models\MpShortcut.cs" />
     <Compile Include="Models\MpColor.cs" />

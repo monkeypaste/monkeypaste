@@ -150,7 +150,7 @@ namespace MpWpfApp {
             get {
                 string outStr = string.Empty;
                 foreach (var sctvm in SelectedClipTiles) {
-                    if (sctvm.TemplateTokenList != null && sctvm.TemplateTokenList.Count > 0) {
+                    if (sctvm.TemplateTokenLookupDictionary != null && sctvm.TemplateTokenLookupDictionary.Count > 0) {
                         outStr += MpHelpers.ConvertRichTextToPlainText(sctvm.TemplateRichText) + Environment.NewLine;
                     } else {
                         outStr += sctvm.CopyItemPlainText + Environment.NewLine;
@@ -164,14 +164,15 @@ namespace MpWpfApp {
             get {
                 string outStr = MpHelpers.ConvertPlainTextToRichText(string.Empty);
                 foreach (var sctvm in SelectedClipTiles) {
-                    if(sctvm.TemplateTokenList != null && sctvm.TemplateTokenList.Count > 0) {
-                        //sctvm.IsPastingTemplateTile = true;
-                        //Task fillTemplateTask = Task.Factory.StartNew(() => {
-                        //    while(string.IsNullOrEmpty(sctvm.TemplateRichText)) {
-                        //        Thread.Sleep(10);
-                        //    }
-                        //});
-                        //fillTemplateTask.Wait();
+                    
+                    if(sctvm.TemplateTokenLookupDictionary != null && sctvm.TemplateTokenLookupDictionary.Count > 0) {
+                        sctvm.IsPastingTemplateTile = true;
+                        Task fillTemplateTask = Task.Factory.StartNew(() => {
+                            while (string.IsNullOrEmpty(sctvm.TemplateRichText)) {
+                                Thread.Sleep(300);
+                            }
+                        });
+                        fillTemplateTask.Wait();
 
                         //var tempRtb = new RichTextBox();
                         //tempRtb.Document = MpHelpers.ConvertRichTextToFlowDocument(sctvm.CopyItemRichText);

@@ -22,13 +22,59 @@ namespace MpWpfApp {
         //    var run = hyperlink.Inlines.FirstInline as Run;
         //    return run == null ? string.Empty : run.Text;
         //}
-        public static void SetHyperlinkText(this Hyperlink hyperlink, string text) {
-            var run = hyperlink.Inlines.FirstInline as Run;
-            if (run == null) {
-                run = new Run();
-                hyperlink.Inlines.Add(run);
-            }
-            run.Text = text;
+        public static Hyperlink ConvertToTemplateHyperlink(
+            this Hyperlink hl,
+            RichTextBox rtb,
+            string templateName, 
+            Brush templateColor) {
+            hl.TargetName = templateName;
+            hl.Background = templateColor;
+            hl.Foreground = MpHelpers.IsBright(((SolidColorBrush)hl.Background).Color) ? Brushes.Black : Brushes.White;
+
+            Run run = new Run(hl.TargetName);
+            run.Background = hl.Background;
+            run.Foreground = hl.Foreground;
+            hl.Inlines.Clear();
+            hl.Inlines.Add(run);
+            hl.Tag = MpSubTextTokenType.TemplateSegment;
+            hl.IsEnabled = true;
+            hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
+            hl.RequestNavigate += (s4, e4) => {
+                // TODO Add logic to convert to editable region if in paste mode on click
+                rtb.Selection.Select(hl.ContentStart, hl.ContentEnd);
+                MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
+            };
+            hl.PreviewKeyDown += (s, e5) => {
+                rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
+                rtb.Selection.Text = string.Empty;
+            };
+
+            var editTemplateMenuItem = new MenuItem();
+            editTemplateMenuItem.Header = "Edit";
+            editTemplateMenuItem.PreviewMouseDown += (s4, e4) => {
+                e4.Handled = true;
+                rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
+                MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
+                //if (result) {
+                //    rtb.ClearHyperlinks();
+                //    rtb.CreateHyperlinks();
+                //} else {
+                //    //clear any link if cancled
+                //    rtb.Selection.Text = rtb.Selection.Text;
+                //}
+            };
+
+            var deleteTemplateMenuItem = new MenuItem();
+            deleteTemplateMenuItem.Header = "Delete";
+            deleteTemplateMenuItem.Click += (s4, e4) => {
+                rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
+                rtb.Selection.Text = string.Empty;
+            };
+            hl.ContextMenu = new ContextMenu();
+            hl.ContextMenu.Items.Add(editTemplateMenuItem);
+            hl.ContextMenu.Items.Add(deleteTemplateMenuItem);
+
+            return hl;
         }
 
         public static List<Hyperlink> GetAllHyperlinkList(this RichTextBox rtb) {
@@ -36,22 +82,17 @@ namespace MpWpfApp {
                 return new List<Hyperlink>();
             }
             return (List<Hyperlink>)rtb.Tag;
-
-            var hyperlinkList = (List<Hyperlink>)rtb.Tag;
-            foreach (var paragraph in rtb.Document.Blocks.OfType<Paragraph>()) {
-                foreach (var hyperlink in paragraph.Inlines.OfType<Hyperlink>()) {
-                    hyperlinkList.Add(hyperlink);
-                }
-            }
-            return hyperlinkList;
         }
 
         public static List<Hyperlink> GetTemplateHyperlinkList(this RichTextBox rtb, bool unique = false) {
-            var templateLinks = rtb.GetAllHyperlinkList().Where(x => x.NavigateUri?.OriginalString == Properties.Settings.Default.TemplateTokenUri).ToList();
-            if(unique) {
+            var templateLinkList = rtb.GetAllHyperlinkList().Where(x => x.NavigateUri?.OriginalString == Properties.Settings.Default.TemplateTokenUri).ToList();
+            if(templateLinkList == null) {
+                templateLinkList = new List<Hyperlink>();
+            }
+            if (unique) {
                 var toRemove = new List<Hyperlink>();
-                foreach(var hl in templateLinks) {
-                    foreach(var hl2 in templateLinks) {
+                foreach(var hl in templateLinkList) {
+                    foreach(var hl2 in templateLinkList) {
                         if(hl == hl2 || toRemove.Contains(hl) || toRemove.Contains(hl2)) {
                             continue;
                         }
@@ -61,37 +102,32 @@ namespace MpWpfApp {
                     }
                 }
                 foreach (var hlr in toRemove) {
-                    templateLinks.Remove(hlr);
+                    templateLinkList.Remove(hlr);
                 }
             }
-            return templateLinks;
-            //var hyperlinkList = (List<Hyperlink>)rtb.Tag;//new List<Hyperlink>();
-            ////string test = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
-            //foreach (var paragraph in rtb.Document.Blocks.OfType<Paragraph>()) {
-            //    foreach (var hyperlink in paragraph.Inlines.OfType<Hyperlink>()) {
-            //        if (hyperlink.NavigateUri.OriginalString == Properties.Settings.Default.TemplateTokenUri) {
-            //            hyperlinkList.Add(hyperlink);
-            //        }
-            //    }
-            //}
-            //return hyperlinkList;
+            return templateLinkList;
         }
 
         public static void ClearHyperlinks(this RichTextBox rtb) {
             //replaces hyperlinks with runs of there textrange text
             //if hl is templatee it decodes the run into #templatename#templatecolor# 
-            var hll = rtb.GetAllHyperlinkList();
+            var hll = rtb.GetTemplateHyperlinkList();
             foreach (var hl in hll) {
-                //if(hl.ElementStart.IsInSameDocument(rtb.Document.ContentStart)) 
-                {
+                if(hl.ElementStart.IsInSameDocument(rtb.Document.ContentStart)){
                     rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
                     rtb.Selection.Text = rtb.Selection.Text;
-                    if (hl.NavigateUri.OriginalString == Properties.Settings.Default.TemplateTokenUri) {
-                        rtb.Selection.Text = string.Format(@"{0}{1}{0}{2}{0}", Properties.Settings.Default.TemplateTokenMarker, rtb.Selection.Text, hl.Background.ToString());
+                    if (hl.NavigateUri != null && hl.NavigateUri.OriginalString == Properties.Settings.Default.TemplateTokenUri) {
+                        rtb.Selection.Text = string.Format(
+                            @"{0}{1}{0}{2}{0}", 
+                            Properties.Settings.Default.TemplateTokenMarker, 
+                            rtb.Selection.Text, 
+                            ((SolidColorBrush)hl.Background).ToString());
                     }
-                } /*else {
+                } else {
+                    Console.WriteLine("Error clearing templates for rtf: ");
+                    Console.WriteLine(rtb.GetRtf());
                     continue;
-                }    */            
+                }          
             }
             rtb.Tag = null;
         }
@@ -126,7 +162,7 @@ namespace MpWpfApp {
                 foreach (Match m in mc) {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
-                            Hyperlink hl = null;
+                            Hyperlink hl = null; 
                             var matchRange = MpHelpers.FindStringRangeFromPosition(lastRangeEnd, c.Value);                            
                             if (matchRange == null) {
                                 continue;
@@ -135,38 +171,7 @@ namespace MpWpfApp {
                             if ((MpSubTextTokenType)(i + 1) == MpSubTextTokenType.TemplateSegment) {
                                 var tokenProps = matchRange.Text.Split(new string[] { Properties.Settings.Default.TemplateTokenMarker }, System.StringSplitOptions.RemoveEmptyEntries);
                                 matchRange.Text = tokenProps[0];
-                                hl = new Hyperlink(matchRange.Start, matchRange.End);
-                                hl.TargetName = matchRange.Text;
-                                hl.Background = (SolidColorBrush)(new BrushConverter().ConvertFrom(tokenProps[1]));
-                                hl.Inlines.FirstInline.Background = hl.Background;
-                                hl.Foreground = Brushes.White;
-                                hl.Inlines.FirstInline.Foreground = Brushes.White;
-                                hl.Tag = MpSubTextTokenType.TemplateSegment;
-                                hl.IsEnabled = true;
-                                hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
-                                hl.RequestNavigate += (s4, e4) => {
-                                    MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl);
-                                };
-                                hl.PreviewKeyDown += (s, e5) => {
-                                    rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
-                                    rtb.Selection.Text = string.Empty;
-                                };
-
-                                var editTemplateMenuItem = new MenuItem();
-                                editTemplateMenuItem.Header = "Edit";
-                                editTemplateMenuItem.Click += (s4, e4) => {
-                                    MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl);
-                                };
-
-                                var deleteTemplateMenuItem = new MenuItem();
-                                deleteTemplateMenuItem.Header = "Delete";
-                                deleteTemplateMenuItem.Click += (s4, e4) => {
-                                    rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
-                                    rtb.Selection.Text = string.Empty;
-                                };
-                                hl.ContextMenu = new ContextMenu();
-                                hl.ContextMenu.Items.Add(editTemplateMenuItem);
-                                hl.ContextMenu.Items.Add(deleteTemplateMenuItem);
+                                hl = new Hyperlink(matchRange.Start, matchRange.End).ConvertToTemplateHyperlink(rtb,matchRange.Text, (SolidColorBrush)(new BrushConverter().ConvertFrom(tokenProps[1])));
                                 //Console.WriteLine("Creating template link w/ taget name: " + hl.TargetName);
                             } else {
                                 hl = new Hyperlink(matchRange.Start, matchRange.End);
@@ -267,6 +272,7 @@ namespace MpWpfApp {
                                     highlightRange.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString));
                                 }
                             }
+
                             linkList.Add(hl);
                         }
                     }
@@ -461,6 +467,10 @@ namespace MpWpfApp {
                 rtb.SelectAll();
                 rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);
             }
+        }
+
+        public static string GetRtf(this RichTextBox rtb) {
+            return MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
         }
 
         public static void SetXaml(this System.Windows.Controls.RichTextBox rtb, string document) {
