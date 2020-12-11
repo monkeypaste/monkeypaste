@@ -35,25 +35,6 @@ using static QRCoder.PayloadGenerator;
 
 namespace MpWpfApp {
     public static class MpHelpers {
-        public static Random Rand { get; set; } = new Random();
-
-        public static bool IsInDesignMode {
-            get {
-                return DesignerProperties.GetIsInDesignMode(new DependencyObject());
-            }
-        }
-
-        public static bool ApplicationIsActivated() {
-            var activatedHandle = WinApi.GetForegroundWindow();
-            if (activatedHandle == IntPtr.Zero) {
-                return false;       // No window is currently activated
-            }
-            var procId = Process.GetCurrentProcess().Id;
-            WinApi.GetWindowThreadProcessId(activatedHandle, out uint activeProcId);
-
-            return (int)activeProcId == procId;
-        }
-
         #region Documents
         //public static Hyperlink CreateHyperlink(TextPointer s, TextPointer e, string text, Brush bg, MpSubTextTokenType tokenType) {
         //    Hyperlink hl = new Hyperlink(s, e);
@@ -352,6 +333,25 @@ namespace MpWpfApp {
         #endregion
 
         #region System
+        public static Random Rand { get; set; } = new Random();
+
+        public static bool IsInDesignMode {
+            get {
+                return DesignerProperties.GetIsInDesignMode(new DependencyObject());
+            }
+        }
+
+        public static bool ApplicationIsActivated() {
+            var activatedHandle = WinApi.GetForegroundWindow();
+            if (activatedHandle == IntPtr.Zero) {
+                return false;       // No window is currently activated
+            }
+            var procId = Process.GetCurrentProcess().Id;
+            WinApi.GetWindowThreadProcessId(activatedHandle, out uint activeProcId);
+
+            return (int)activeProcId == procId;
+        }
+
         public static void OpenUrl(string url, bool openInNewWindow = true) {
             if(url.StartsWith(@"http") && !openInNewWindow) {
                 //WinApi.SetActiveWindow()
@@ -646,7 +646,7 @@ namespace MpWpfApp {
             }
             catch (Exception e) {
                 Console.WriteLine("MpHelpers.GetProcessPath error (likely) cannot find process path: " + e.ToString());
-                return GetProcessPath(((MpClipTrayViewModel)((MpMainWindowViewModel)((MpMainWindow)App.Current.MainWindow).DataContext).ClipTrayViewModel).ClipboardMonitor.LastWindowWatcher.ThisAppHandle);
+                return GetProcessPath(((MpClipTrayViewModel)((MpMainWindowViewModel)((MpMainWindow)App.Current.MainWindow).DataContext).ClipTrayViewModel).ClipboardManager.LastWindowWatcher.ThisAppHandle);
             }
         }
 
@@ -915,6 +915,10 @@ namespace MpWpfApp {
                 return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
             }
             return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
+        }
+
+        public static Brush GetRandomBrushColor(byte alpha = 255) {
+            return (Brush)new SolidColorBrush() { Color = GetRandomColor(alpha) };
         }
 
         public static System.Drawing.Icon GetIconFromBitmap(System.Drawing.Bitmap bmp) {

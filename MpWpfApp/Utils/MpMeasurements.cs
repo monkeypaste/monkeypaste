@@ -88,6 +88,16 @@ namespace MpWpfApp {
                 return 5;
             }
         }
+        public double ClipTilePasteToolbarHeight {
+            get {
+                return 30;
+            }
+        }
+        public double ClipTileEditToolbarHeight {
+            get {
+                return 24;
+            }
+        }
         public double ClipTileTitleHeight {
             get {
                 return ClipTileSize / 5;

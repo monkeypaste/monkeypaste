@@ -294,27 +294,31 @@ namespace MpWpfApp {
             mw.BeginAnimation(Window.TopProperty, ta);
         }
 
-        private RelayCommand _hideWindowCommand;
+        private RelayCommand<bool> _hideWindowCommand;
         public ICommand HideWindowCommand {
             get {
                 if (_hideWindowCommand == null) {
-                    _hideWindowCommand = new RelayCommand(HideWindow, CanHideWindow);
+                    _hideWindowCommand = new RelayCommand<bool>(HideWindow, CanHideWindow);
                 }
                 return _hideWindowCommand;
             }
         }
-        private bool CanHideWindow() {
+        private bool CanHideWindow(bool pasteSelected) {
             return Application.Current.MainWindow != null && 
                    Application.Current.MainWindow.Visibility == Visibility.Visible &&
                    IsShowingDialog == false &&
                    !MpTemplateTokenEditModalWindowViewModel.IsOpen &&
                    !MpTemplateTokenPasteModalWindowViewModel.IsOpen;
         }
-        private void HideWindow() {
+        private async void HideWindow(bool pasteSelected) {
+            IDataObject pasteDataObject = null;
+            if(pasteSelected) {
+                pasteDataObject = await ClipTrayViewModel.GetDataObjectFromSelectedClips();
+            }
             IsOpen = false;
             var mw = (MpMainWindow)Application.Current.MainWindow;
 
-            ClipTrayViewModel.ResetClipSelection();
+            
 
             DoubleAnimation ta = new DoubleAnimation();
             ta.From = _endMainWindowTop;
@@ -322,9 +326,17 @@ namespace MpWpfApp {
             ta.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
             ta.Completed += (s, e) => {
                 mw.Visibility = Visibility.Collapsed;
-                //ShowMainWindowHotKey.Enabled = true;
-                //HideMainWindowHotKey.Enabled = false;
-                //_clipTrayPhysicsBody.Stop();
+                if(pasteSelected) {
+                    Console.WriteLine("Pasting " + ClipTrayViewModel.SelectedClipTiles.Count + " items");
+                    ClipTrayViewModel.ClipboardManager.PasteDataObject(pasteDataObject);
+
+                    //resort list so pasted items are in front
+                    for (int i = ClipTrayViewModel.SelectedClipTiles.Count - 1; i >= 0; i--) {
+                        var sctvm = ClipTrayViewModel.SelectedClipTiles[i];
+                        ClipTrayViewModel.Move(ClipTrayViewModel.IndexOf(sctvm), 0);
+                    }
+                }
+                ClipTrayViewModel.ResetClipSelection();
             };
             CubicEase easing = new CubicEase();  // or whatever easing class you want
             easing.EasingMode = EasingMode.EaseIn;

@@ -147,6 +147,26 @@ namespace MpWpfApp {
                 return true;
             }
         }
+
+        //public static bool ShowTemplateTokenEditModalWindow(
+        //    RichTextBox rtb,
+        //    MpTemplateHyperlinkViewModel thlvm,
+        //    bool isEditMode) {
+        //    var ttmw = new MpTemplateTokenEditModalWindow(rtb, thlvm, isEditMode);
+
+        //    if (isEditMode) {
+        //        ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).IsShowingDialog = true;
+        //        var result = ttmw.ShowDialog();
+        //        ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).IsShowingDialog = false;
+        //        if (result == null || result.Value == true) {
+        //            return true;
+        //        } else {
+        //            return false;
+        //        }
+        //    } else {
+        //        return true;
+        //    }
+        //}
         #endregion
 
         #region Public Methods
@@ -173,6 +193,30 @@ namespace MpWpfApp {
                 return;
             }          
         }
+
+        //public MpTemplateTokenEditModalWindowViewModel(
+        //    RichTextBox rtb,
+        //    MpTemplateHyperlinkViewModel thlvm,
+        //    bool isEditMode) : base() {
+
+        //    _rtb = rtb;
+        //    _originalLink = templateLink;
+        //    _isEditMode = isEditMode;
+
+        //    if (thlvm == null) {
+        //        templateLink = new Hyperlink().ConvertToTemplateHyperlink(
+        //            _rtb,
+        //            GetUniqueTemplateName(),
+        //            GetUniqueTemplateColor());
+        //    }
+
+        //    SelectedTokenHyperlink = templateLink;
+
+        //    if (!_isEditMode) {
+        //        OkCommand.Execute(null);
+        //        return;
+        //    }
+        //}
 
 
         public void TemplateTokenModalWindow_Loaded(object sender, RoutedEventArgs e) {
@@ -278,7 +322,6 @@ namespace MpWpfApp {
                 Properties.Settings.Default.TemplateTokenMarker,
                 SelectedTokenName,
                 ((SolidColorBrush)SelectedTokenBrush).ToString());
-            //_rtb.CreateHyperlinks();
             _rtb.ClearHyperlinks();
             var ctvm = (MpClipTileViewModel)_rtb.DataContext;
             ctvm.CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(_rtb.Document);

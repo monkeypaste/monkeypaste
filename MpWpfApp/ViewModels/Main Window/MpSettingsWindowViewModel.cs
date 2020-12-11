@@ -248,7 +248,7 @@ namespace MpWpfApp {
         private void SetLoadOnLogin(bool loadOnLogin) {
             Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             string appName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
-            string appPath = MainWindowViewModel.ClipTrayViewModel.ClipboardMonitor.LastWindowWatcher.ThisAppPath;
+            string appPath = MainWindowViewModel.ClipTrayViewModel.ClipboardManager.LastWindowWatcher.ThisAppPath;
             if (loadOnLogin) {
                 rk.SetValue(appName, appPath);
             } else {

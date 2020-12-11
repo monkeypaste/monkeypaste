@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -27,15 +28,119 @@ namespace MpWpfApp {
             RichTextBox rtb,
             string templateName, 
             Brush templateColor) {
-            hl.TargetName = templateName;
-            hl.Background = templateColor;
-            hl.Foreground = MpHelpers.IsBright(((SolidColorBrush)hl.Background).Color) ? Brushes.Black : Brushes.White;
+            var ctvm = (MpClipTileViewModel)rtb.DataContext;
+            hl.DataContext = new MpTemplateHyperlinkViewModel(
+                ctvm,
+                templateName,
+                templateColor,
+                hl.FontSize);
+            var thlvm = (MpTemplateHyperlinkViewModel)hl.DataContext;
 
-            Run run = new Run(hl.TargetName);
-            run.Background = hl.Background;
-            run.Foreground = hl.Foreground;
+            Binding borderBrushBinding = new Binding();
+            borderBrushBinding.Source = thlvm;
+            borderBrushBinding.Path = new PropertyPath(nameof(thlvm.TemplateBorderBrush));
+
+            Binding borderWidthBinding = new Binding();
+            borderWidthBinding.Source = thlvm;
+            borderWidthBinding.Path = new PropertyPath(nameof(thlvm.TemplateBorderWidth));
+
+            Binding fontSizeBinding = new Binding();
+            fontSizeBinding.Source = thlvm;
+            fontSizeBinding.Path = new PropertyPath(nameof(thlvm.TemplateFontSize));
+            fontSizeBinding.Mode = BindingMode.TwoWay;
+            fontSizeBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+
+            Binding foregroundBinding = new Binding();
+            foregroundBinding.Source = thlvm;
+            foregroundBinding.Path = new PropertyPath(nameof(thlvm.TemplateForegroundBrush));
+
+            Binding backgroundBinding = new Binding();
+            backgroundBinding.Source = thlvm;
+            backgroundBinding.Path = new PropertyPath(nameof(thlvm.TemplateBackgroundBrush));
+            backgroundBinding.Mode = BindingMode.TwoWay;
+            backgroundBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+
+            Binding templateTextBinding = new Binding();
+            templateTextBinding.Source = thlvm;
+            templateTextBinding.Path = new PropertyPath(nameof(thlvm.TemplateText));
+            templateTextBinding.Mode = BindingMode.TwoWay;
+            templateTextBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+
+            Binding templateNameBinding = new Binding();
+            templateNameBinding.Source = thlvm;
+            templateNameBinding.Path = new PropertyPath(nameof(thlvm.TemplateName));
+            templateNameBinding.Mode = BindingMode.TwoWay;
+            templateNameBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+
+            Binding templateTextBlockVisibilityBinding = new Binding();
+            templateTextBlockVisibilityBinding.Source = thlvm;
+            templateTextBinding.Path = new PropertyPath(nameof(thlvm.TemplateTextBlockVisibility));
+
+            Binding templateTextBoxVisibilityBinding = new Binding();
+            templateTextBoxVisibilityBinding.Source = thlvm;
+            templateTextBinding.Path = new PropertyPath(nameof(thlvm.TemplateTextBoxVisibility));
+
+            //hl.TargetName = thlvm.TemplateName;
+            //hl.Foreground = thlvm.TemplateForegroundBrush;
+            //hl.Background = thlvm.TemplateBackgroundBrush;
+
+            BindingOperations.SetBinding(hl, Hyperlink.TargetNameProperty, templateNameBinding);
+            BindingOperations.SetBinding(hl, Hyperlink.BackgroundProperty, backgroundBinding);
+            BindingOperations.SetBinding(hl, Hyperlink.ForegroundProperty, foregroundBinding);
+            BindingOperations.SetBinding(hl, Hyperlink.FontSizeProperty, fontSizeBinding);
+
+
+            TextBlock tb = new TextBlock();
+            tb.Background = Brushes.Transparent;
+            //tb.Foreground = hl.Foreground;
+            //tb.Text = hl.TargetName;
+            //tb.FontSize = hl.FontSize;
+            tb.Padding = new Thickness(5);
+            tb.HorizontalAlignment = HorizontalAlignment.Center;
+            tb.VerticalAlignment = VerticalAlignment.Center;
+            //tb.Width = tb.Text.Length * tb.FontSize;
+            //tb.Height = tb.FontSize;
+            BindingOperations.SetBinding(tb, TextBlock.ForegroundProperty, foregroundBinding);
+            BindingOperations.SetBinding(tb, TextBlock.TextProperty, templateNameBinding);
+            BindingOperations.SetBinding(tb, TextBlock.FontSizeProperty, fontSizeBinding);
+            BindingOperations.SetBinding(tb, TextBlock.WidthProperty, borderWidthBinding);
+            BindingOperations.SetBinding(tb, TextBlock.HeightProperty, fontSizeBinding);
+
+            Border b = new Border();
+            b.Focusable = true;
+            b.Background = hl.Background;
+            b.BorderBrush = hl.Foreground;
+            b.BorderThickness = new Thickness(1);
+            b.CornerRadius = new CornerRadius(3);
+            b.Child = tb;
+            b.MouseEnter += (s, e) => {
+                if(thlvm.IsFocused) {
+                    return;
+                }
+                thlvm.IsHovering = true;
+            };
+            b.MouseLeave += (s, e) => {
+                if (thlvm.IsFocused) {
+                    return;
+                }
+                thlvm.IsHovering = false;
+            };
+            b.PreviewMouseLeftButtonDown += (s, e) => {
+                thlvm.IsFocused = true;
+            };
+            BindingOperations.SetBinding(b, Border.BackgroundProperty, backgroundBinding);
+            BindingOperations.SetBinding(b, Border.BorderBrushProperty, borderBrushBinding);
+            BindingOperations.SetBinding(b, Border.WidthProperty, borderWidthBinding);
+            BindingOperations.SetBinding(b, Border.HeightProperty, fontSizeBinding);
+
+            InlineUIContainer container = new InlineUIContainer(b);
+            //Run run = new Run(hl.TargetName);
+            //run.Background = hl.Background;
+            //run.Foreground = hl.Foreground;
+            
             hl.Inlines.Clear();
-            hl.Inlines.Add(run);
+            hl.Inlines.Add(container);
+
             hl.Tag = MpSubTextTokenType.TemplateSegment;
             hl.IsEnabled = true;
             hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
@@ -44,24 +149,13 @@ namespace MpWpfApp {
                 rtb.Selection.Select(hl.ContentStart, hl.ContentEnd);
                 MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
             };
-            hl.PreviewKeyDown += (s, e5) => {
-                rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
-                rtb.Selection.Text = string.Empty;
-            };
 
             var editTemplateMenuItem = new MenuItem();
             editTemplateMenuItem.Header = "Edit";
             editTemplateMenuItem.PreviewMouseDown += (s4, e4) => {
                 e4.Handled = true;
                 rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
-                MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
-                //if (result) {
-                //    rtb.ClearHyperlinks();
-                //    rtb.CreateHyperlinks();
-                //} else {
-                //    //clear any link if cancled
-                //    rtb.Selection.Text = rtb.Selection.Text;
-                //}
+                MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);                
             };
 
             var deleteTemplateMenuItem = new MenuItem();
@@ -77,11 +171,52 @@ namespace MpWpfApp {
             return hl;
         }
 
+        public static List<Hyperlink> FindHyperlinks(this RichTextBox rtb) {
+            List<Hyperlink> hlList = new List<Hyperlink>();
+            TextPointer tp = rtb.Document.ContentStart;
+            while (tp != null && tp != rtb.Document.ContentEnd) {
+                var nextLink = rtb.FindNextHyperlink(tp);
+                if(nextLink == null) {
+                    break;
+                }
+                hlList.Add(nextLink);
+                tp = nextLink.ElementEnd;
+            }
+            return hlList;
+        }
+
+        public static Hyperlink FindNextHyperlink(this RichTextBox rtb, TextPointer fromTextPointer) {
+            // This method returns the position just inside of the first text Run (if any) in a 
+            // specified text container.
+            TextPointer position = fromTextPointer;
+
+            // Traverse content in forward direction until the position is immediately after the opening 
+            // tag of a Run element, or the end of content is encountered.
+            while (position != null) {
+                // Is the current position just after an opening element tag?
+                if (position.GetPointerContext(LogicalDirection.Backward) == TextPointerContext.ElementStart) {
+                    // If so, is the tag a Run?
+                    if (position.Parent is Hyperlink) {
+                        return (Hyperlink)position.Parent;
+                    }
+                }
+
+                // Not what we're looking for; on to the next position.
+                position = position.GetNextContextPosition(LogicalDirection.Forward);
+            }
+
+            // This will be either null if no Run is found, or a position just inside of the first Run element in the
+            // specifed text container.  Because position is formed from ContentStart, it will have a logical direction
+            // of Backward.
+            return null;
+        }
+
         public static List<Hyperlink> GetAllHyperlinkList(this RichTextBox rtb) {
             if (rtb.Tag == null) {
                 return new List<Hyperlink>();
             }
             return (List<Hyperlink>)rtb.Tag;
+            //return rtb.FindHyperlinks();
         }
 
         public static List<Hyperlink> GetTemplateHyperlinkList(this RichTextBox rtb, bool unique = false) {
@@ -111,7 +246,7 @@ namespace MpWpfApp {
         public static void ClearHyperlinks(this RichTextBox rtb) {
             //replaces hyperlinks with runs of there textrange text
             //if hl is templatee it decodes the run into #templatename#templatecolor# 
-            var hll = rtb.GetTemplateHyperlinkList();
+            var hll = rtb.GetAllHyperlinkList();
             foreach (var hl in hll) {
                 if(hl.ElementStart.IsInSameDocument(rtb.Document.ContentStart)){
                     rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);

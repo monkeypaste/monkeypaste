@@ -866,9 +866,9 @@
                                             Grid.Row="1"
                                             Grid.Column="0">
                                         <!-- RichText Content -->
-                                        <DockPanel x:Name="ClipTileRichTextDockPanel" 
+                                        <StackPanel x:Name="ClipTileRichTextDockPanel" 
                                                    MinWidth="{Binding TileBorderWidth}"
-                                                   MinHeight="{Binding TileContentHeight}"
+                                                   Height="{Binding TileContentHeight}"
                                                    Visibility="{Binding RtbVisibility}"
                                                    Width="{Binding TileBorderWidth}">
                                             <i:Interaction.Triggers>
@@ -878,11 +878,9 @@
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
                                             <Border x:Name="ClipTileEditorToolbar"
-                                                    Visibility="{Binding EditToolbarVisibility}"
-                                                    DockPanel.Dock="Top"
-                                                    SnapsToDevicePixels="True">
+                                                    Visibility="{Binding EditToolbarVisibility}">
                                                 <StackPanel Orientation="Horizontal"
-                                                            Height="24">
+                                                            Height="{Binding TileContentEditToolbarHeight}">
                                                     <ComboBox x:Name="FontFamilyCombo"
                                                               Height="23"
                                                               Width="100"
@@ -1095,9 +1093,9 @@
                                                          local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText}"                                                         
                                                          IsReadOnly="{Binding IsRtbReadOnly}"
                                                          IsDocumentEnabled="{Binding IsSelected}"
-                                                         Focusable="{Binding IsEditingTile}"
+                                                         Focusable="{Binding IsEditingTile}" 
                                                          Cursor="{Binding ContentCursor}"
-                                                         MinHeight="{Binding TileContentHeight}"
+                                                         Height="{Binding RichTextBoxHeight}"
                                                          local:MpFocusExtension.IsFocused="{Binding IsClipRichTextBoxFocused}"
                                                          IsUndoEnabled="True" 
                                                          Background="White"
@@ -1109,10 +1107,9 @@
                                                          Padding="10,0,10,10">
                                             </RichTextBox>
                                             <Border x:Name="ClipTilePasteTemplateToolbar"
-                                                    DockPanel.Dock="Top"
-                                                    Background="LightBlue"
+                                                    Background="LightBlue"                                                    
                                                     Visibility="{Binding PasteTemplateToolbarVisibility}">
-                                                <Grid Height="30">
+                                                <Grid Height="{Binding TileContentPasteToolbarHeight}">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="*" />
                                                         <ColumnDefinition Width="3*" />
@@ -1207,7 +1204,7 @@
                                                             Content="PASTE" />
                                                 </Grid>
                                             </Border>
-                                        </DockPanel>
+                                        </StackPanel>
                                         <!-- Image Content-->
                                         <Grid Width="{Binding TileBorderWidth}"
                                               Height="{Binding TileContentHeight}"

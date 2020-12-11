@@ -6,7 +6,7 @@ using System.Windows.Documents;
 using System.Windows.Interop;
 
 namespace MpWpfApp {
-    public class MpClipboardMonitor : IDisposable {
+    public class MpClipboardManager : IDisposable {
         private const int WM_DRAWCLIPBOARD = 0x0308;
         private const int WM_CHANGECBCHAIN = 0x030D;
         private const int WM_PASTE = 0x0302;
@@ -19,7 +19,7 @@ namespace MpWpfApp {
         private readonly HwndSource hwndSource;
         private IntPtr _nextClipboardViewer;
 
-        public MpClipboardMonitor(HwndSource hwnd) {
+        public MpClipboardManager(HwndSource hwnd) {
             LastWindowWatcher = new MpLastWindowWatcher(hwnd.Handle);
 
             hwndSource = hwnd;
@@ -34,6 +34,19 @@ namespace MpWpfApp {
         public event EventHandler ClipboardChanged;
         protected virtual void OnClipboardChanged() => ClipboardChanged?.Invoke(this, EventArgs.Empty);
 
+        public void PasteDataObject(IDataObject dataObject) {
+            IgnoreClipboardChangeEvent = true;
+            try {
+                Clipboard.Clear();
+                Clipboard.SetDataObject(dataObject);
+                WinApi.SetForegroundWindow(LastWindowWatcher.LastHandle);
+                System.Windows.Forms.SendKeys.SendWait("^v");
+            }
+            catch (Exception e) {
+                Console.WriteLine("ClipboardMonitor error during paste: " + e.ToString());
+            }
+            IgnoreClipboardChangeEvent = false;
+        }
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
             switch (msg) {
                 case WM_DRAWCLIPBOARD:
@@ -78,7 +91,7 @@ namespace MpWpfApp {
             Dispose(true);
             GC.SuppressFinalize(this);
         }
-        ~MpClipboardMonitor() {
+        ~MpClipboardManager() {
             Dispose(false);
         }
         #endregion

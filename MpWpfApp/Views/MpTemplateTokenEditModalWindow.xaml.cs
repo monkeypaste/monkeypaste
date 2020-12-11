@@ -21,5 +21,9 @@ namespace MpWpfApp {
             this.DataContext = new MpTemplateTokenEditModalWindowViewModel(rtb,templateLink, isEditMode);
             InitializeComponent();
         }
+        //public MpTemplateTokenEditModalWindow(RichTextBox rtb, MpTemplateHyperlinkViewModel thlvm, bool isEditMode) {
+        //    this.DataContext = new MpTemplateTokenEditModalWindowViewModel(rtb, thlvm, isEditMode);
+        //    InitializeComponent();
+        //}
     }
 }

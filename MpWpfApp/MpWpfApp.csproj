@@ -145,7 +145,7 @@
     <Compile Include="Utils\MpBindingProxy.cs" />
     <Compile Include="Utils\MpExtensions.cs" />
     <Compile Include="Utils\MpExtraLargeIconLoader.cs" />
-    <Compile Include="Utils\MpClipboardMonitor.cs" />
+    <Compile Include="Utils\MpClipboardManager.cs" />
     <Compile Include="Utils\MpHelpers.cs" />
     <Compile Include="Utils\MpLastWindowWatcher.cs" />
     <Compile Include="Utils\MpMeasurements.cs" />
