@@ -36,7 +36,7 @@
                     HorizontalAlignment="Center"
                     Grid.Row="1">
             <Button x:Name="TemplateColorButton"
-                    Background="{Binding SelectedTokenBrush, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                    Background="{Binding SelectedTemplateTokenViewModel.TemplateBackgroundBrush, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                     Width="30"
                     Height="30"
                     VerticalAlignment="Top"
@@ -52,7 +52,7 @@
                          VerticalContentAlignment="Center"
                          BorderBrush="{Binding TemplateNameTextBoxBorderBrush}"
                          BorderThickness="{Binding TemplateNameTextBoxBorderBrushThickness}"
-                         Text="{Binding SelectedTokenName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                         Text="{Binding SelectedTemplateTokenViewModel.TemplateName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                          FontSize="18"
                          MinWidth="275"
                          IsReadOnly="False"

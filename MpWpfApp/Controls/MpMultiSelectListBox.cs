@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpMultiSelectListBox : ListBox {
@@ -36,6 +37,14 @@ namespace MpWpfApp {
                 // abort deferred Down
                 _deferSelection = false;
                 base.OnMouseLeave(e);
+            }
+        }
+
+        public ScrollViewer ScrollViewer {
+            get {
+                Border border = (Border)VisualTreeHelper.GetChild(this, 0);
+
+                return (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
             }
         }
     }

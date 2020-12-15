@@ -210,7 +210,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpSettingsWindowViewModel() : this(null) { }
+        public MpSettingsWindowViewModel() : base() { }
 
         public void SettingsWindow_Loaded(object sender, RoutedEventArgs e) {
             _windowRef = (Window)sender;

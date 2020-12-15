@@ -26,23 +26,21 @@ namespace MpWpfApp {
         public static Hyperlink ConvertToTemplateHyperlink(
             this Hyperlink hl,
             RichTextBox rtb,
-            string templateName, 
+            string templateName,
             Brush templateColor) {
             var ctvm = (MpClipTileViewModel)rtb.DataContext;
             hl.DataContext = new MpTemplateHyperlinkViewModel(
                 ctvm,
                 templateName,
                 templateColor,
-                hl.FontSize);
+                hl.FontSize,
+                rtb);
+
             var thlvm = (MpTemplateHyperlinkViewModel)hl.DataContext;
 
             Binding borderBrushBinding = new Binding();
             borderBrushBinding.Source = thlvm;
             borderBrushBinding.Path = new PropertyPath(nameof(thlvm.TemplateBorderBrush));
-
-            Binding borderWidthBinding = new Binding();
-            borderWidthBinding.Source = thlvm;
-            borderWidthBinding.Path = new PropertyPath(nameof(thlvm.TemplateBorderWidth));
 
             Binding fontSizeBinding = new Binding();
             fontSizeBinding.Source = thlvm;
@@ -60,31 +58,19 @@ namespace MpWpfApp {
             backgroundBinding.Mode = BindingMode.TwoWay;
             backgroundBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
 
-            Binding templateTextBinding = new Binding();
-            templateTextBinding.Source = thlvm;
-            templateTextBinding.Path = new PropertyPath(nameof(thlvm.TemplateText));
-            templateTextBinding.Mode = BindingMode.TwoWay;
-            templateTextBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
-
-            Binding templateNameBinding = new Binding();
-            templateNameBinding.Source = thlvm;
-            templateNameBinding.Path = new PropertyPath(nameof(thlvm.TemplateName));
-            templateNameBinding.Mode = BindingMode.TwoWay;
-            templateNameBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            Binding templateDisplayValueBinding = new Binding();
+            templateDisplayValueBinding.Source = thlvm;
+            templateDisplayValueBinding.Path = new PropertyPath(nameof(thlvm.TemplateDisplayValue));
 
             Binding templateTextBlockVisibilityBinding = new Binding();
             templateTextBlockVisibilityBinding.Source = thlvm;
-            templateTextBinding.Path = new PropertyPath(nameof(thlvm.TemplateTextBlockVisibility));
+            templateTextBlockVisibilityBinding.Path = new PropertyPath(nameof(thlvm.TemplateTextBlockVisibility));
 
-            Binding templateTextBoxVisibilityBinding = new Binding();
-            templateTextBoxVisibilityBinding.Source = thlvm;
-            templateTextBinding.Path = new PropertyPath(nameof(thlvm.TemplateTextBoxVisibility));
+            Binding templateDeleteTemplateTextButtonVisibilityBinding = new Binding();
+            templateDeleteTemplateTextButtonVisibilityBinding.Source = thlvm;
+            templateDeleteTemplateTextButtonVisibilityBinding.Path = new PropertyPath(nameof(thlvm.DeleteTemplateTextButtonVisibility));
 
-            //hl.TargetName = thlvm.TemplateName;
-            //hl.Foreground = thlvm.TemplateForegroundBrush;
-            //hl.Background = thlvm.TemplateBackgroundBrush;
-
-            BindingOperations.SetBinding(hl, Hyperlink.TargetNameProperty, templateNameBinding);
+            BindingOperations.SetBinding(hl, Hyperlink.TargetNameProperty, templateDisplayValueBinding);
             BindingOperations.SetBinding(hl, Hyperlink.BackgroundProperty, backgroundBinding);
             BindingOperations.SetBinding(hl, Hyperlink.ForegroundProperty, foregroundBinding);
             BindingOperations.SetBinding(hl, Hyperlink.FontSizeProperty, fontSizeBinding);
@@ -92,29 +78,56 @@ namespace MpWpfApp {
 
             TextBlock tb = new TextBlock();
             tb.Background = Brushes.Transparent;
-            //tb.Foreground = hl.Foreground;
-            //tb.Text = hl.TargetName;
-            //tb.FontSize = hl.FontSize;
-            tb.Padding = new Thickness(5);
             tb.HorizontalAlignment = HorizontalAlignment.Center;
             tb.VerticalAlignment = VerticalAlignment.Center;
-            //tb.Width = tb.Text.Length * tb.FontSize;
-            //tb.Height = tb.FontSize;
+            tb.FontSize = 10;            
             BindingOperations.SetBinding(tb, TextBlock.ForegroundProperty, foregroundBinding);
-            BindingOperations.SetBinding(tb, TextBlock.TextProperty, templateNameBinding);
-            BindingOperations.SetBinding(tb, TextBlock.FontSizeProperty, fontSizeBinding);
-            BindingOperations.SetBinding(tb, TextBlock.WidthProperty, borderWidthBinding);
+            BindingOperations.SetBinding(tb, TextBlock.TextProperty, templateDisplayValueBinding);
             BindingOperations.SetBinding(tb, TextBlock.HeightProperty, fontSizeBinding);
+
+            var path = @"pack://application:,,,/Resources/Images/";
+            Image dbImg = new Image();
+            dbImg.Source = (BitmapSource)new BitmapImage(new Uri(path + "close2.png"));
+            //Button db = new Button();
+            //db.Background = new ImageBrush((BitmapSource)new BitmapImage(new Uri(path + "close2.png")));
+            dbImg.Margin = new Thickness(5, 0, 0, 0);
+            //db.BorderThickness = new Thickness(0);
+            dbImg.Width = 15;
+            dbImg.Height = 15;
+            //dbImg.Background = Brushes.Transparent;
+            //db.Content = dbImg;
+            dbImg.MouseEnter += (s, e) => {
+                //db.Background = Brushes.Transparent;
+                dbImg.Source = new BitmapImage(new Uri(path + "close2.png"));
+            };
+            dbImg.MouseLeave += (s, e) => {
+                //db.Background = Brushes.Transparent;
+                dbImg.Source = new BitmapImage(new Uri(path + "close1.png"));
+            };
+            dbImg.MouseLeftButtonUp += (s, e) => {
+                rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
+                rtb.Selection.Text = string.Empty;
+                thlvm.Dispose();
+            };
+            BindingOperations.SetBinding(dbImg, Button.VisibilityProperty, templateDeleteTemplateTextButtonVisibilityBinding);
+
+            DockPanel dp = new DockPanel();
+            dp.Children.Add(tb);
+            dp.Children.Add(dbImg);
+            DockPanel.SetDock(tb, Dock.Left);
+            DockPanel.SetDock(dbImg, Dock.Right);
 
             Border b = new Border();
             b.Focusable = true;
             b.Background = hl.Background;
             b.BorderBrush = hl.Foreground;
             b.BorderThickness = new Thickness(1);
-            b.CornerRadius = new CornerRadius(3);
-            b.Child = tb;
+            b.CornerRadius = new CornerRadius(5);
+            b.VerticalAlignment = VerticalAlignment.Stretch;
+            b.Padding = new Thickness(0.5);
+            b.Child = dp;
             b.MouseEnter += (s, e) => {
-                if(thlvm.IsFocused) {
+                if (thlvm.IsFocused) {
                     return;
                 }
                 thlvm.IsHovering = true;
@@ -130,20 +143,24 @@ namespace MpWpfApp {
             };
             BindingOperations.SetBinding(b, Border.BackgroundProperty, backgroundBinding);
             BindingOperations.SetBinding(b, Border.BorderBrushProperty, borderBrushBinding);
-            BindingOperations.SetBinding(b, Border.WidthProperty, borderWidthBinding);
-            BindingOperations.SetBinding(b, Border.HeightProperty, fontSizeBinding);
+            //BindingOperations.SetBinding(b, Border.HeightProperty, fontSizeBinding);
 
             InlineUIContainer container = new InlineUIContainer(b);
             //Run run = new Run(hl.TargetName);
             //run.Background = hl.Background;
             //run.Foreground = hl.Foreground;
-            
+
             hl.Inlines.Clear();
             hl.Inlines.Add(container);
-
             hl.Tag = MpSubTextTokenType.TemplateSegment;
             hl.IsEnabled = true;
+            hl.TextDecorations = null;
             hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
+            hl.Unloaded += (s, e) => {
+                if (hl.DataContext != null) {
+                    ((MpTemplateHyperlinkViewModel)hl.DataContext).Dispose();
+                }
+            };
             hl.RequestNavigate += (s4, e4) => {
                 // TODO Add logic to convert to editable region if in paste mode on click
                 rtb.Selection.Select(hl.ContentStart, hl.ContentEnd);
@@ -155,7 +172,7 @@ namespace MpWpfApp {
             editTemplateMenuItem.PreviewMouseDown += (s4, e4) => {
                 e4.Handled = true;
                 rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
-                MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);                
+                MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
             };
 
             var deleteTemplateMenuItem = new MenuItem();
@@ -246,17 +263,20 @@ namespace MpWpfApp {
         public static void ClearHyperlinks(this RichTextBox rtb) {
             //replaces hyperlinks with runs of there textrange text
             //if hl is templatee it decodes the run into #templatename#templatecolor# 
+            //TextRange ts = rtb.Selection;
             var hll = rtb.GetAllHyperlinkList();
             foreach (var hl in hll) {
                 if(hl.ElementStart.IsInSameDocument(rtb.Document.ContentStart)){
-                    rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
-                    rtb.Selection.Text = rtb.Selection.Text;
+                    var hlRange = new TextRange(hl.ElementStart, hl.ElementEnd);
+                    //rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
                     if (hl.NavigateUri != null && hl.NavigateUri.OriginalString == Properties.Settings.Default.TemplateTokenUri) {
-                        rtb.Selection.Text = string.Format(
+                        hlRange.Text = string.Format(
                             @"{0}{1}{0}{2}{0}", 
                             Properties.Settings.Default.TemplateTokenMarker, 
-                            rtb.Selection.Text, 
+                            hl.TargetName, 
                             ((SolidColorBrush)hl.Background).ToString());
+                    } else {
+                        hlRange.Text = hlRange.Text;
                     }
                 } else {
                     Console.WriteLine("Error clearing templates for rtf: ");
@@ -267,7 +287,8 @@ namespace MpWpfApp {
             rtb.Tag = null;
         }
 
-        public static List<Hyperlink> CreateHyperlinks(this RichTextBox rtb, string searchText = "") {        
+        public static void CreateHyperlinks(this RichTextBox rtb, string searchText = "") {
+            //rtb.ClearHyperlinks();
             var regExGroupList = new List<string> {
                 //WebLink
                 @"(?:https?://|www\.)\S+", 
@@ -307,7 +328,9 @@ namespace MpWpfApp {
                                 var tokenProps = matchRange.Text.Split(new string[] { Properties.Settings.Default.TemplateTokenMarker }, System.StringSplitOptions.RemoveEmptyEntries);
                                 matchRange.Text = tokenProps[0];
                                 hl = new Hyperlink(matchRange.Start, matchRange.End).ConvertToTemplateHyperlink(rtb,matchRange.Text, (SolidColorBrush)(new BrushConverter().ConvertFrom(tokenProps[1])));
-                                //Console.WriteLine("Creating template link w/ taget name: " + hl.TargetName);
+                                
+                                //this ensures highlighting has an effective textrange since template ranges alter document
+                                matchRange = new TextRange(hl.ContentStart, hl.ContentEnd);
                             } else {
                                 hl = new Hyperlink(matchRange.Start, matchRange.End);
                                 var linkText = c.Value;
@@ -414,7 +437,6 @@ namespace MpWpfApp {
                 }
             }
             rtb.Tag = linkList;
-            return linkList;
         }
 
         public static FlowDocument Clone(this FlowDocument doc) {

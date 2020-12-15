@@ -24,6 +24,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using Alturos.Yolo;
@@ -699,6 +700,19 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual
+        public static void AnimateDoubleProperty(double from, double to, double dt, UIElement element, DependencyProperty property, EventHandler onCompleted) {
+            DoubleAnimation animation = new DoubleAnimation();
+            animation.From = from;
+            animation.To = to;
+            animation.Duration = new Duration(TimeSpan.FromMilliseconds(dt));
+
+            CubicEase easing = new CubicEase();
+            easing.EasingMode = EasingMode.EaseIn;
+            animation.EasingFunction = easing;
+            animation.Completed += onCompleted;
+
+            element.BeginAnimation(property, animation);
+        } 
         public static Brush ShowColorDialog(Brush currentBrush) {
             System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
             cd.AllowFullOpen = true;
@@ -714,6 +728,7 @@ namespace MpWpfApp {
             }
             return null;
         }
+
         public static List<string> DetectObjects(byte[] image, double confidence = 0.0) {
             var detectedObjectList = new List<string>();
             var configurationDetector = new ConfigurationDetector();
@@ -735,6 +750,7 @@ namespace MpWpfApp {
                 return detectedObjectList;
             }
         }
+        
         public static BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint) {
             var bmp = new WriteableBitmap(bmpSrc);
             var pixels = GetPixels(bmp);
@@ -764,6 +780,7 @@ namespace MpWpfApp {
 
             return Color.FromArgb(255, r, g, b);
         }
+
         public static BitmapSource GetIconImage(string sourcePath) {
             if (!File.Exists(sourcePath)) {
                 if (!Directory.Exists(sourcePath)) {
@@ -1099,7 +1116,7 @@ namespace MpWpfApp {
 
         public static string ConvertRichTextToPlainText(string richText) {
             if (IsStringRichText(richText)) {
-                System.Windows.Controls.RichTextBox rtb = new System.Windows.Controls.RichTextBox();
+                RichTextBox rtb = new RichTextBox();
                 rtb.SetRtf(richText);
                 return new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.Replace("''", "'");
             } else {

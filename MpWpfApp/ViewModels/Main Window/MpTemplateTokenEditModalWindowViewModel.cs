@@ -67,61 +67,87 @@ namespace MpWpfApp {
 
         public double TemplateNameTextBoxBorderBrushThickness {
             get {
-                if(string.IsNullOrEmpty(ValidationText)) {
+                if (string.IsNullOrEmpty(ValidationText)) {
                     return 1;
-                } 
+                }
                 return 3;
             }
         }
 
         public Brush TemplateNameTextBoxBorderBrush {
             get {
-                if(string.IsNullOrEmpty(ValidationText)) {
+                if (string.IsNullOrEmpty(ValidationText)) {
                     return Brushes.Black;
                 }
                 return Brushes.Red;
             }
         }
 
-        private Hyperlink _selectedTokenHyperlink = null;
-        public Hyperlink SelectedTokenHyperlink {
-            get {
-                return _selectedTokenHyperlink;
-            }
-            set {
-                if (_selectedTokenHyperlink != value) {
-                    _selectedTokenHyperlink = value;
-                    OnPropertyChanged(nameof(SelectedTokenHyperlink));
-                    OnPropertyChanged(nameof(SelectedTokenName));
-                    OnPropertyChanged(nameof(SelectedTokenBrush));
-                }
-            }
-        }
+        //private Hyperlink _selectedTokenHyperlink = null;
+        //public Hyperlink SelectedTokenHyperlink {
+        //    get {
+        //        return _selectedTokenHyperlink;
+        //    }
+        //    set {
+        //        if (_selectedTokenHyperlink != value) {
+        //            _selectedTokenHyperlink = value;
+        //            OnPropertyChanged(nameof(SelectedTokenHyperlink));
+        //            OnPropertyChanged(nameof(SelectedTokenName));
+        //            OnPropertyChanged(nameof(SelectedTokenBrush));
+        //            OnPropertyChanged(nameof(SelectedTemplateTokenViewModel));
+        //        }
+        //    }
+        //}
 
-        public string SelectedTokenName {
-            get {
-                return SelectedTokenHyperlink.TargetName;
-            }
-            set {
-                if(string.IsNullOrEmpty(value)) {
-                    return;
-                }
-                SelectedTokenHyperlink.TargetName = value;
-                Validate();
-                OnPropertyChanged(nameof(SelectedTokenName));
-                OnPropertyChanged(nameof(SelectedTokenBrush));
-                OnPropertyChanged(nameof(SelectedTokenHyperlink));
-            }
-        }
+        //public string SelectedTokenName {
+        //    get {
+        //        return SelectedTokenHyperlink.TargetName;
+        //    }
+        //    set {
+        //        if(string.IsNullOrEmpty(value)) {
+        //            return;
+        //        }
+        //        SelectedTokenHyperlink.TargetName = value;
+        //        Validate();
+        //        OnPropertyChanged(nameof(SelectedTokenName));
+        //        OnPropertyChanged(nameof(SelectedTokenBrush));
+        //        OnPropertyChanged(nameof(SelectedTokenHyperlink));
 
-        public Brush SelectedTokenBrush {
+        //        foreach(var thlvm in ((MpClipTileViewModel)_rtb.DataContext).TemplateTokens) {
+        //            if(thlvm.TemplateName == _originalLink.TargetName) {
+        //                thlvm.TemplateName = SelectedTokenName;
+        //            }
+        //        }
+        //    }
+        //}
+
+        //public Brush SelectedTokenBrush {
+        //    get {
+        //        return SelectedTokenHyperlink.Background;
+        //    }
+        //    set {
+        //        SelectedTokenHyperlink.Background = value;
+        //        OnPropertyChanged(nameof(SelectedTokenBrush));
+        //        OnPropertyChanged(nameof(SelectedTokenHyperlink));
+
+        //        foreach (var thlvm in ((MpClipTileViewModel)_rtb.DataContext).TemplateTokens) {
+        //            if (thlvm.TemplateName == _originalLink.TargetName) {
+        //                thlvm.TemplateName = SelectedTokenName;
+        //            }
+        //        }
+        //    }
+        //}
+
+        private MpTemplateHyperlinkViewModel _selectedTemplateTokenViewModel = null;
+        public MpTemplateHyperlinkViewModel SelectedTemplateTokenViewModel {
             get {
-                return SelectedTokenHyperlink.Background;
+                return _selectedTemplateTokenViewModel;
             }
             set {
-                SelectedTokenHyperlink.Background = value;
-                OnPropertyChanged(nameof(SelectedTokenBrush));
-                OnPropertyChanged(nameof(SelectedTokenHyperlink));
+                if (_selectedTemplateTokenViewModel != value) {
+                    _selectedTemplateTokenViewModel = value;
+                    OnPropertyChanged(nameof(SelectedTemplateTokenViewModel));
+                }
             }
         }
 
@@ -186,38 +212,13 @@ namespace MpWpfApp {
                     GetUniqueTemplateColor());                
             }
 
-            SelectedTokenHyperlink = templateLink;
-
+            //SelectedTokenHyperlink = templateLink;
+            SelectedTemplateTokenViewModel = (MpTemplateHyperlinkViewModel)templateLink.DataContext;
             if (!_isEditMode) {
                 OkCommand.Execute(null);
                 return;
             }          
         }
-
-        //public MpTemplateTokenEditModalWindowViewModel(
-        //    RichTextBox rtb,
-        //    MpTemplateHyperlinkViewModel thlvm,
-        //    bool isEditMode) : base() {
-
-        //    _rtb = rtb;
-        //    _originalLink = templateLink;
-        //    _isEditMode = isEditMode;
-
-        //    if (thlvm == null) {
-        //        templateLink = new Hyperlink().ConvertToTemplateHyperlink(
-        //            _rtb,
-        //            GetUniqueTemplateName(),
-        //            GetUniqueTemplateColor());
-        //    }
-
-        //    SelectedTokenHyperlink = templateLink;
-
-        //    if (!_isEditMode) {
-        //        OkCommand.Execute(null);
-        //        return;
-        //    }
-        //}
-
 
         public void TemplateTokenModalWindow_Loaded(object sender, RoutedEventArgs e) {
             _windowRef = (Window)sender;
@@ -244,14 +245,24 @@ namespace MpWpfApp {
         }
 
         private bool Validate() {
-            if (string.IsNullOrEmpty(SelectedTokenName)) {
+            //if (string.IsNullOrEmpty(SelectedTokenName)) {
+            //    ValidationText = "Name cannot be empty!";
+            //    return false;
+            //}
+            ////if new name is a duplicate of another just delete this one and set it to the duplicate
+            //var dupTokenHyperlink = _rtb.GetTemplateHyperlinkList().Where(x => x.TargetName == SelectedTokenName && x != SelectedTokenHyperlink).ToList();
+            //if (dupTokenHyperlink != null && dupTokenHyperlink.Count > 0) {
+            //    ValidationText = SelectedTokenName + " already exists!";
+            //    return false;
+            //}
+            if (string.IsNullOrEmpty(SelectedTemplateTokenViewModel.TemplateName)) {
                 ValidationText = "Name cannot be empty!";
                 return false;
             }
             //if new name is a duplicate of another just delete this one and set it to the duplicate
-            var dupTokenHyperlink = _rtb.GetTemplateHyperlinkList().Where(x => x.TargetName == SelectedTokenName && x != SelectedTokenHyperlink).ToList();
+            var dupTokenHyperlink = _rtb.GetTemplateHyperlinkList().Where(x => x.TargetName == SelectedTemplateTokenViewModel.TemplateName && _originalLink != null && x.DataContext != _originalLink.DataContext).ToList();
             if (dupTokenHyperlink != null && dupTokenHyperlink.Count > 0) {
-                ValidationText = SelectedTokenName + " already exists!";
+                ValidationText = SelectedTemplateTokenViewModel.TemplateName + " already exists!";
                 return false;
             }
             ValidationText = string.Empty;
@@ -270,9 +281,13 @@ namespace MpWpfApp {
             }
         }
         private void ChangeTemplateColor() {
-            var result = MpHelpers.ShowColorDialog(SelectedTokenBrush);
-            if(result != null) {
-                SelectedTokenBrush = result;
+            //var result = MpHelpers.ShowColorDialog(SelectedTokenBrush);
+            //if(result != null) {
+            //    SelectedTokenBrush = result;
+            //}
+            var result = MpHelpers.ShowColorDialog(SelectedTemplateTokenViewModel.TemplateBackgroundBrush);
+            if (result != null) {
+                SelectedTemplateTokenViewModel.TemplateBackgroundBrush = result;
             }
         }
 
@@ -286,7 +301,8 @@ namespace MpWpfApp {
             }
         }
         private void Cancel() {
-            //_rtb.Selection.Text = _rtb.Selection.Text;
+            //SelectedTokenHyperlink = _originalLink;
+            SelectedTemplateTokenViewModel = (MpTemplateHyperlinkViewModel)_originalLink.DataContext;
             _windowRef.DialogResult = false;
             _windowRef.Close();
             IsOpen = false;
@@ -317,11 +333,14 @@ namespace MpWpfApp {
             return Validate();
         }
         private void Ok() {
+            //TextRange ts = _rtb.Selection;
+            //_rtb.ClearHyperlinks();
+            //_rtb.Selection.Select(ts.Start, ts.End);
             _rtb.Selection.Text = String.Format(
                 @"{0}{1}{0}{2}{0}",
                 Properties.Settings.Default.TemplateTokenMarker,
-                SelectedTokenName,
-                ((SolidColorBrush)SelectedTokenBrush).ToString());
+                SelectedTemplateTokenViewModel.TemplateName,
+                ((SolidColorBrush)SelectedTemplateTokenViewModel.TemplateBackgroundBrush).ToString());
             _rtb.ClearHyperlinks();
             var ctvm = (MpClipTileViewModel)_rtb.DataContext;
             ctvm.CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(_rtb.Document);

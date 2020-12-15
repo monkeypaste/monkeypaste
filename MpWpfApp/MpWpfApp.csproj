@@ -109,6 +109,9 @@
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpHyperlink.cs" />
+    <Compile Include="ViewModels\Main Window\MpClipTileTitleViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpEditableTextBlockViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpPlaceholderTextBoxViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpTemplateHyperlinkViewModel.cs" />
     <Compile Include="Controls\MpMultiSelectListBox.cs" />
     <Compile Include="Converters\MpFlowDocumentToXamlConverter.cs" />
@@ -176,10 +179,23 @@
     <Compile Include="ViewModels\Main Window\MpShortcutViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSortTypeComboBoxItemViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpSoundPlayerGroupCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpTemplateTokenCollectionViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpTemplateTokenPasteModalWindowViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpTemplateTokenEditModalWindowViewModel.cs" />
     <Compile Include="Views\MpAppendBalloonControl.xaml.cs">
       <DependentUpon>MpAppendBalloonControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MpClipTileTitle.xaml.cs">
+      <DependentUpon>MpClipTileTitle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MpEditableTextBlock.xaml.cs">
+      <DependentUpon>MpEditableTextBlock.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MpPlaceholderTextBox.xaml.cs">
+      <DependentUpon>MpPlaceholderTextBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MpTemplateHyperlink.xaml.cs">
+      <DependentUpon>MpTemplateHyperlink.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MpTemplateTokenPasteModalWindow.xaml.cs">
       <DependentUpon>MpTemplateTokenPasteModalWindow.xaml</DependentUpon>
@@ -196,6 +212,22 @@
     <Page Include="Styles\ResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MpClipTileTitle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MpEditableTextBlock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MpPlaceholderTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MpTemplateHyperlink.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MpTemplateTokenPasteModalWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -573,6 +605,7 @@
     <Resource Include="Resources\Images\MpRichTextBox\templaterename.png" />
     <Resource Include="Resources\Images\forward_black.png" />
     <Resource Include="Resources\Images\back_black.png" />
+    <Resource Include="Resources\Images\close1.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />

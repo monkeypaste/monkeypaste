@@ -67,8 +67,8 @@ namespace MpWpfApp {
             }
         }
 
-        private MpSearchBoxViewModel _searchBoxViewModel = null;
-        public MpSearchBoxViewModel SearchBoxViewModel {
+        private MpPlaceholderTextBoxViewModel _searchBoxViewModel = null;
+        public MpPlaceholderTextBoxViewModel SearchBoxViewModel {
             get {
                 return _searchBoxViewModel;
             }
@@ -160,7 +160,7 @@ namespace MpWpfApp {
 
         public MpMainWindowViewModel() : base() {
             IsLoading = true;
-            SearchBoxViewModel = new MpSearchBoxViewModel();
+            SearchBoxViewModel = new MpPlaceholderTextBoxViewModel() { PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText };
             ClipTrayViewModel = new MpClipTrayViewModel();
             ClipTileSortViewModel = new MpClipTileSortViewModel();
             AppModeViewModel = new MpAppModeViewModel();
@@ -173,7 +173,13 @@ namespace MpWpfApp {
             mw.Deactivated += (s, e2) => {
                 HideWindowCommand.Execute(null);
             };
-
+            ClipTrayViewModel.ItemsVisibilityChanged += (s1, e7) => {
+                if(ClipTrayViewModel.VisibileClipTiles.Count == 0 && SearchBoxViewModel.HasText) {
+                    SearchBoxViewModel.IsTextValid = false;
+                } else {
+                    SearchBoxViewModel.IsTextValid = true;
+                }
+            };
             SetupMainWindowRect();
 
             InitWindowStyle();
@@ -266,12 +272,12 @@ namespace MpWpfApp {
                 !MpSettingsWindowViewModel.IsOpen) && !IsOpen;
         }
         private void ShowWindow() {
+            IsOpen = true;
+
             if (Application.Current.MainWindow == null) {
                 Application.Current.MainWindow = new MpMainWindow();
             }
-            SetupMainWindowRect();
-
-            IsOpen = true;
+            SetupMainWindowRect();            
 
             var mw = (MpMainWindow)Application.Current.MainWindow;
             mw.Show();
@@ -281,17 +287,15 @@ namespace MpWpfApp {
 
             ClipTrayViewModel.ResetClipSelection();
 
-            DoubleAnimation ta = new DoubleAnimation();
-            ta.From = _startMainWindowTop;
-            ta.To = _endMainWindowTop;
-            ta.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
-            CubicEase easing = new CubicEase();
-            easing.EasingMode = EasingMode.EaseIn;
-            ta.EasingFunction = easing;
-            ta.Completed += (s, e1) => {
-                IsLoading = false;
-            };
-            mw.BeginAnimation(Window.TopProperty, ta);
+            MpHelpers.AnimateDoubleProperty(
+                _startMainWindowTop,
+                _endMainWindowTop,
+                Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                mw,
+                Window.TopProperty,
+                (s,e) => { 
+                    IsLoading = false;
+                });
         }
 
         private RelayCommand<bool> _hideWindowCommand;
@@ -311,37 +315,33 @@ namespace MpWpfApp {
                    !MpTemplateTokenPasteModalWindowViewModel.IsOpen;
         }
         private async void HideWindow(bool pasteSelected) {
+            IsOpen = false;
+
             IDataObject pasteDataObject = null;
             if(pasteSelected) {
-                pasteDataObject = await ClipTrayViewModel.GetDataObjectFromSelectedClips();
+                pasteDataObject = await ClipTrayViewModel.GetDataObjectFromSelectedClips(pasteSelected);
             }
-            IsOpen = false;
             var mw = (MpMainWindow)Application.Current.MainWindow;
+            MpHelpers.AnimateDoubleProperty(
+                _endMainWindowTop,
+                _startMainWindowTop,
+                Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                mw,
+                Window.TopProperty,
+                (s, e) => {
+                    if (pasteSelected) {
+                        Console.WriteLine("Pasting " + ClipTrayViewModel.SelectedClipTiles.Count + " items");
+                        ClipTrayViewModel.ClipboardManager.PasteDataObject(pasteDataObject);
 
-            
-
-            DoubleAnimation ta = new DoubleAnimation();
-            ta.From = _endMainWindowTop;
-            ta.To = _startMainWindowTop;
-            ta.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
-            ta.Completed += (s, e) => {
-                mw.Visibility = Visibility.Collapsed;
-                if(pasteSelected) {
-                    Console.WriteLine("Pasting " + ClipTrayViewModel.SelectedClipTiles.Count + " items");
-                    ClipTrayViewModel.ClipboardManager.PasteDataObject(pasteDataObject);
-
-                    //resort list so pasted items are in front
-                    for (int i = ClipTrayViewModel.SelectedClipTiles.Count - 1; i >= 0; i--) {
-                        var sctvm = ClipTrayViewModel.SelectedClipTiles[i];
-                        ClipTrayViewModel.Move(ClipTrayViewModel.IndexOf(sctvm), 0);
+                        //resort list so pasted items are in front
+                        for (int i = ClipTrayViewModel.SelectedClipTiles.Count - 1; i >= 0; i--) {
+                            var sctvm = ClipTrayViewModel.SelectedClipTiles[i];
+                            ClipTrayViewModel.Move(ClipTrayViewModel.IndexOf(sctvm), 0);
+                        }
                     }
-                }
-                ClipTrayViewModel.ResetClipSelection();
-            };
-            CubicEase easing = new CubicEase();  // or whatever easing class you want
-            easing.EasingMode = EasingMode.EaseIn;
-            ta.EasingFunction = easing;
-            mw.BeginAnimation(Window.TopProperty, ta);
+                    ClipTrayViewModel.ResetClipSelection();
+                    mw.Visibility = Visibility.Collapsed;
+                });
         }
         #endregion
     }

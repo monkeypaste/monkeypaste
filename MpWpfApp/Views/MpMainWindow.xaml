@@ -33,7 +33,7 @@
         <local:MpSolidColorBrushToBrushConverter x:Key="SolidColorBrushToBrushConverter" />
         <local:MpImageSourceToBitmapSourceConverter x:Key="ImageSourceToBitmapSourceConverter" />
         <!--ScrollBars-->
-        
+
         <!-- Button Styles -->
         <Style x:Key="Transparent_Button"
                TargetType="{x:Type Button}">
@@ -237,8 +237,8 @@
               Background="DarkViolet">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" />
-                <ColumnDefinition Width="7*" />
-                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="1.5*" />
             </Grid.ColumnDefinitions>
             <!-- Sort Combobox -->
             <Grid Grid.Row="0"
@@ -438,63 +438,12 @@
                 </Button>
             </StackPanel>
             <!-- Search Border -->
-            <local:MpClipBorder x:Name="SearchTextBoxBorder"
-                                DataContext="{Binding SearchBoxViewModel}"
-                                Grid.Row="0"
-                                Grid.Column="2"
-                                Margin="0"
-                                BorderBrush="{Binding SearchTextBoxBorderBrush}"
-                                BorderThickness="5"
-                                Focusable="False"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Stretch"
-                                Background="White"
-                                CornerRadius="15">
-                <local:MpClipBorder.Resources>
-                    <local:MpBindingProxy x:Key="SearchTextProxy"
-                                          Data="{Binding}" />
-                </local:MpClipBorder.Resources>
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Loaded">
-                        <i:CallMethodAction MethodName="SearchBoxBorder_Loaded"
-                                            TargetObject="{Binding}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-                <StackPanel Margin="5"
-                            Orientation="Horizontal">
-                    <Button Background="Transparent"
-                            Style="{StaticResource Transparent_Button}"
-                            BorderThickness="0">
-                        <Image Source="pack://application:,,,/Resources/Images/search.png"
-                               Stretch="Fill" />
-                    </Button>
-                    <!-- Search TextBox-->
-                    <TextBox x:Name="SearchTextBox"
-                                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
-                                FontStyle="{Binding SearchTextBoxFontStyle}"
-                                Foreground="{Binding SearchTextBoxTextBrush}"
-                                local:MpFocusExtension.IsFocused="{Binding IsTextBoxFocused}"
-                                BorderThickness="0"
-                                FontSize="18"
-                                Width="240"
-                                VerticalAlignment="Top"
-                                HorizontalAlignment="Left"
-                                VerticalContentAlignment="Top">
-                    </TextBox>
-                    <Button Background="Transparent"
-                            Width="20"
-                            Height="20"
-                            Visibility="{Binding ClearSearchTextButtonVisibility}"
-                            Command="{Binding ClearSearchTextCommand}"
-                            Style="{StaticResource Transparent_Button}"
-                            BorderThickness="0">
-                        <Image Source="/Resources/Images/close2.png"
-                                Stretch="Fill" />
-                    </Button>
-                </StackPanel>
-            </local:MpClipBorder>
+            <local:MpPlaceholderTextBox x:Name="SearchTextBoxBorder"
+                                        Grid.Row="0"
+                                        Grid.Column="2"
+                                        Margin="5"
+                                        DataContext="{Binding SearchBoxViewModel}" />
         </Grid>
-        <!--3rd row row for tray -->
         <Grid Grid.Row="2"
               Grid.Column="0"
               Focusable="True"
@@ -618,8 +567,7 @@
                                                     CanVerticallyScroll="False"
                                                     CanHorizontallyScroll="True"
                                                     VerticalAlignment="Stretch"
-                                                    Orientation="Horizontal">
-                            </VirtualizingStackPanel>
+                                                    Orientation="Horizontal" />
                         </ItemsPanelTemplate>
                     </local:MpMultiSelectListBox.ItemsPanel>
                     <local:MpMultiSelectListBox.ItemTemplate>
@@ -636,6 +584,10 @@
                                                 Background="White"
                                                 ToolTipService.ShowDuration="1000"
                                                 CornerRadius="10">
+                                <local:MpClipBorder.Resources>
+                                    <local:MpBindingProxy x:Key="ClipTileProxy"
+                                                          Data="{Binding}" />
+                                </local:MpClipBorder.Resources>
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Loaded">
                                         <i:CallMethodAction TargetObject="{Binding}"
@@ -646,10 +598,6 @@
                                                             MethodName="ClipTile_Loaded" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                                <local:MpClipBorder.Resources>
-                                    <local:MpBindingProxy x:Key="ClipTileProxy"
-                                                          Data="{Binding}" />
-                                </local:MpClipBorder.Resources>
                                 <local:MpClipBorder.ContextMenu>
                                     <ContextMenu x:Name="ClipTile_ContextMenu">
                                         <i:Interaction.Triggers>
@@ -669,21 +617,21 @@
                                                   Command="{Binding ExcludeApplicationCommand}" />
                                         <MenuItem Header="Export To">
                                             <MenuItem Header="File(s)..."
-                                                      Command="{Binding Data.ExportSelectedClipTilesCommand,Source={StaticResource ClipTrayProxy}}"
+                                                      Command="{Binding Data.ExportSelectedClipTilesCommand, Source={StaticResource ClipTrayProxy}}"
                                                       CommandParameter="{StaticResource Files}" />
                                             <MenuItem Header="CSV"
-                                                      Command="{Binding Data.ExportSelectedClipTilesCommand,Source={StaticResource ClipTrayProxy}}"
+                                                      Command="{Binding Data.ExportSelectedClipTilesCommand, Source={StaticResource ClipTrayProxy}}"
                                                       CommandParameter="{StaticResource Csv}" />
                                             <MenuItem Header="Zip"
-                                                      Command="{Binding Data.ExportSelectedClipTilesCommand,Source={StaticResource ClipTrayProxy}}"
+                                                      Command="{Binding Data.ExportSelectedClipTilesCommand, Source={StaticResource ClipTrayProxy}}"
                                                       CommandParameter="{StaticResource Zip}" />
                                         </MenuItem>
                                         <MenuItem Header="Share..."
                                                   Command="{Binding ShareClipCommand}" />
                                         <MenuItem Header="Rename"
-                                                  Command="{Binding Data.RenameClipCommand,Source={StaticResource ClipTrayProxy}}" />
+                                                  Command="{Binding Data.RenameClipCommand, Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Duplicate"
-                                                  Command="{Binding Data.DuplicateSelectedClipsCommand,Source={StaticResource ClipTrayProxy}}" />
+                                                  Command="{Binding Data.DuplicateSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Edit"
                                                   Command="{Binding EditClipTextCommand}" />
                                         <MenuItem Header="Send as Email"
@@ -691,13 +639,13 @@
                                         <MenuItem Header="Change Color"
                                                   Command="{Binding Data.ChangeSelectedClipsColorCommand, Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Delete"
-                                                  Command="{Binding Data.DeleteSelectedClipsCommand,Source={StaticResource ClipTrayProxy}}" />
+                                                  Command="{Binding Data.DeleteSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Run in Command Prompt"
-                                                  Command="{Binding Data.RunSelectedClipsInShellCommand,Source={StaticResource ClipTrayProxy}}" />
+                                                  Command="{Binding Data.RunSelectedClipsInShellCommand, Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Say"
-                                                  Command="{Binding Data.SpeakSelectedClipsCommand,Source={StaticResource ClipTrayProxy}}" />
+                                                  Command="{Binding Data.SpeakSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Merge"
-                                                  Command="{Binding Data.MergeSelectedClipsCommand,Source={StaticResource ClipTrayProxy}}" />
+                                                  Command="{Binding Data.MergeSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
                                         <MenuItem Header="Search Web">
                                             <MenuItem Header="Google">
                                                 <i:Interaction.Triggers>
@@ -733,7 +681,7 @@
                                             </MenuItem>
                                         </MenuItem>
                                         <MenuItem Header="Convert To"
-                                                  ItemsSource="{Binding Data.ConvertClipTypes,Source={StaticResource ClipTileProxy}}">
+                                                  ItemsSource="{Binding Data.ConvertClipTypes, Source={StaticResource ClipTileProxy}}">
                                             <MenuItem.ItemContainerStyle>
                                                 <Style TargetType="{x:Type MenuItem}">
                                                     <Setter Property="Header"
@@ -750,7 +698,7 @@
                                             </MenuItem.ItemContainerStyle>
                                         </MenuItem>
                                         <MenuItem Header="Pin To"
-                                                  ItemsSource="{Binding Data.TagMenuItems,Source={StaticResource ClipTileProxy}}">
+                                                  ItemsSource="{Binding Data.TagMenuItems, Source={StaticResource ClipTileProxy}}">
                                             <MenuItem.ItemContainerStyle>
                                                 <Style TargetType="{x:Type MenuItem}">
                                                     <Setter Property="Header"
@@ -823,7 +771,7 @@
                                                  IsReadOnly="False"
                                                  Visibility="{Binding TileTitleTextBoxVisibility}"
                                                  local:MpFocusExtension.IsFocused="{Binding IsClipTitleTextBoxFocused}"
-                                                 Text="{Binding CopyItemTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                                                 Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
                                         <!-- Clip Title Detail TextBlock -->
                                         <TextBlock x:Name="ClipTileTitleDetailTextBlock"
                                                    Background="Transparent"
@@ -866,15 +814,14 @@
                                             Grid.Row="1"
                                             Grid.Column="0">
                                         <!-- RichText Content -->
-                                        <StackPanel x:Name="ClipTileRichTextDockPanel" 
-                                                   MinWidth="{Binding TileBorderWidth}"
-                                                   Height="{Binding TileContentHeight}"
-                                                   Visibility="{Binding RtbVisibility}"
-                                                   Width="{Binding TileBorderWidth}">
+                                        <StackPanel x:Name="ClipTileRichTextStackPanel"
+                                                    Height="{Binding TileContentHeight}"
+                                                    Visibility="{Binding RtbVisibility}"
+                                                    Width="{Binding TileBorderWidth, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Loaded">
                                                     <i:CallMethodAction TargetObject="{Binding}"
-                                                                        MethodName="ClipTileRichTextDockPanel_Loaded" />
+                                                                        MethodName="ClipTileRichTextStackPanel_Loaded" />
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
                                             <Border x:Name="ClipTileEditorToolbar"
@@ -906,7 +853,7 @@
                                                               Width="40"
                                                               Margin="5,2,5,2"
                                                               IsEditable="True"
-                                                              ItemsSource="{Binding FontSizeList}"/>
+                                                              ItemsSource="{Binding FontSizeList}" />
                                                     <Image Source="/Resources/Images/MpRichTextBox/separator.png"
                                                            Stretch="None" />
                                                     <Button x:Name="AddTemplateButton"
@@ -969,7 +916,7 @@
                                                     </Button>
                                                     <Image Source="/Resources/Images/MpRichTextBox/separator.png"
                                                            Stretch="None"
-                                                           SnapsToDevicePixels="True" />                                                    
+                                                           SnapsToDevicePixels="True" />
                                                     <ToggleButton x:Name="BoldButton"
                                                                   Command="EditingCommands.ToggleBold"
                                                                   CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
@@ -1002,7 +949,7 @@
                                                     </ToggleButton>
                                                     <Image Source="/Resources/Images/MpRichTextBox/separator.png"
                                                            Stretch="None"
-                                                           SnapsToDevicePixels="True" />                                                    
+                                                           SnapsToDevicePixels="True" />
                                                     <ToggleButton x:Name="LeftButton"
                                                                   Command="EditingCommands.AlignLeft"
                                                                   CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
@@ -1085,29 +1032,29 @@
                                                         <Image Source="/Resources/Images/MpRichTextBox/indentdecrease.png"
                                                                Stretch="None"
                                                                SnapsToDevicePixels="True" />
-                                                    </Button>                                                    
+                                                    </Button>
                                                 </StackPanel>
                                             </Border>
                                             <RichTextBox x:Name="ClipTileRichTextBox"
-                                                         local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.SearchText}"
-                                                         local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText}"                                                         
+                                                         local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.Text}"
+                                                         local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText}"
                                                          IsReadOnly="{Binding IsRtbReadOnly}"
+                                                         IsInactiveSelectionHighlightEnabled="True"
                                                          IsDocumentEnabled="{Binding IsSelected}"
-                                                         Focusable="{Binding IsEditingTile}" 
+                                                         Focusable="{Binding IsEditingTile}"
                                                          Cursor="{Binding ContentCursor}"
                                                          Height="{Binding RichTextBoxHeight}"
                                                          local:MpFocusExtension.IsFocused="{Binding IsClipRichTextBoxFocused}"
-                                                         IsUndoEnabled="True" 
+                                                         IsUndoEnabled="True"
                                                          Background="White"
                                                          VerticalAlignment="Top"
                                                          HorizontalAlignment="Left"
                                                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                                          BorderThickness="0"
-                                                         Padding="10,0,10,10">
-                                            </RichTextBox>
+                                                         Padding="10,0,10,10" />
                                             <Border x:Name="ClipTilePasteTemplateToolbar"
-                                                    Background="LightBlue"                                                    
+                                                    Background="LightBlue"
                                                     Visibility="{Binding PasteTemplateToolbarVisibility}">
                                                 <Grid Height="{Binding TileContentPasteToolbarHeight}">
                                                     <Grid.ColumnDefinitions>
@@ -1121,7 +1068,7 @@
                                                             TabIndex="0"
                                                             Visibility="{Binding ClearAllTemplateToolbarButtonVisibility}"
                                                             Command="{Binding ClearAllTemplatesCommand}"
-                                                            Margin="15,5,15,5"
+                                                            Margin="15,0,15,0"
                                                             Padding="0,0,0,0"
                                                             FontSize="12"
                                                             VerticalContentAlignment="Top"
@@ -1145,10 +1092,9 @@
                                                                      Grid.Column="0"
                                                                      TabIndex="1"
                                                                      BorderThickness="0"
-                                                                     Text="{Binding CurrentTemplateText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                                     Text="{Binding Path=CurrentTemplateText, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                                                                      FontStyle="{Binding CurrentTemplateTextBoxFontStyle}"
                                                                      Foreground="{Binding CurrentTemplateTextBrush}"
-                                                                     local:MpFocusExtension.IsFocused="{Binding IsCurrentTemplateTextBoxFocused}"
                                                                      FontSize="14"
                                                                      Width="240"
                                                                      Padding="0,0,0,0"
@@ -1173,7 +1119,7 @@
                                                                 Grid.Column="2"
                                                                 Visibility="{Binding TemplateNavigationButtonStackVisibility}"
                                                                 HorizontalAlignment="Center"
-                                                                Margin="8,3,0,3">
+                                                                Margin="8,0,0,0">
                                                         <Button x:Name="PreviousTemplateButton"
                                                                 TabIndex="2"
                                                                 Command="{Binding PreviousTemplateTokenCommand}"
@@ -1194,9 +1140,9 @@
                                                     <Button x:Name="PasteTemplateButton"
                                                             Grid.Column="3"
                                                             TabIndex="4"
-                                                            Visibility="{Binding PasteTemplateToolbarButtonVisibility}"
+                                                            IsEnabled="{Binding IsTemplateReadyToPaste}"
                                                             Command="{Binding PasteTemplateCommand}"
-                                                            Margin="15,5,15,5"
+                                                            Margin="15,0,15,0"
                                                             Padding="0,0,0,0"
                                                             FontSize="12"
                                                             VerticalContentAlignment="Top"
@@ -1232,7 +1178,7 @@
                                                  Height="{Binding TileContentHeight}"
                                                  ItemsSource="{Binding FileListViewModels}"
                                                  Visibility="{Binding FileListVisibility}"
-                                                 IsEnabled="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                 IsEnabled="{Binding IsSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                                                  BorderThickness="0"
                                                  Focusable="False">
                                             <i:Interaction.Triggers>
@@ -1252,8 +1198,7 @@
                                                                     Orientation="Horizontal">
                                                             <Image Source="{Binding Icon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
                                                                    Height="22"
-                                                                   Stretch="Fill">
-                                                            </Image>
+                                                                   Stretch="Fill" />
                                                             <TextBlock x:Name="FileListItemTextBlock"
                                                                        Margin="3,0,0,0"
                                                                        VerticalAlignment="Center"
@@ -1298,5 +1243,6 @@
                            FontSize="34" />
             </Grid>
         </Grid>
+        <!--3rd row row for tray -->
     </Grid>
 </Window>
