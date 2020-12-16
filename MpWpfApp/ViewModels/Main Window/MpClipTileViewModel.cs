@@ -95,6 +95,17 @@
             }
         }
 
+        //private ObservableCollection<MpClipTileContextMenuItemViewModel> _translateLanguageMenuItems = new ObservableCollection<MpClipTileContextMenuItemViewModel>();
+        public List<MpClipTileContextMenuItemViewModel> TranslateLanguageMenuItems {
+            get {
+                var translateLanguageMenuItems = new List<MpClipTileContextMenuItemViewModel>();
+                foreach(var languageName in MpLanguageTranslator.Instance.LanguageList) {
+                    translateLanguageMenuItems.Add(new MpClipTileContextMenuItemViewModel(languageName, TranslateClipTextCommand, languageName, false));
+                }
+                return translateLanguageMenuItems;
+            }
+        }
+
         #endregion
 
         #region Property Reflection Referencer
@@ -1664,6 +1675,25 @@
         #endregion
 
         #region Commands
+        private RelayCommand<string> _translateClipTextCommand;
+        public ICommand TranslateClipTextCommand {
+            get {
+                if (_translateClipTextCommand == null) {
+                    _translateClipTextCommand = new RelayCommand<string>(TranslateClipText, CanTranslateClipText);
+                }
+                return _translateClipTextCommand;
+            }
+        }
+        private bool CanTranslateClipText(string toLanguage) {
+            return CopyItemType == MpCopyItemType.RichText;
+        }
+        private async void TranslateClipText(string toLanguage) {            
+            var translatedText = await MpLanguageTranslator.Instance.Translate(CopyItemPlainText, toLanguage, false);
+            if(!string.IsNullOrEmpty(translatedText)) {
+                CopyItemRichText = MpHelpers.ConvertPlainTextToRichText(translatedText);
+            }
+        }
+
         private RelayCommand _pasteTemplateCommand;
         public ICommand PasteTemplateCommand {
             get {

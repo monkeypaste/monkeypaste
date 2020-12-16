@@ -201,7 +201,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static MpCurrencyType GetCurrencyTypeFromString(string moneyStr) {
+        public static MpCurrencyType GetCurrencyTypeFromString2(string moneyStr) {
             if (moneyStr == null || moneyStr.Length == 0) {
                 return MpCurrencyType.None;
             }
@@ -219,11 +219,37 @@ namespace MpWpfApp {
 
             return MpCurrencyType.None;
         }
-
-        public static double GetCurrencyValueFromString(string moneyStr) {
-            if (GetCurrencyTypeFromString(moneyStr) != MpCurrencyType.None) {
+        public static double GetCurrencyValueFromString2(string moneyStr) {
+            if (GetCurrencyTypeFromString2(moneyStr) != MpCurrencyType.None) {
                 moneyStr = moneyStr.Remove(0, 1);
             }
+            try {
+                return Convert.ToDouble(moneyStr);
+            }
+            catch (Exception ex) {
+                Console.WriteLine("MpHelper exception cannot convert moneyStr '" + moneyStr + "' to a value, returning 0");
+                return 0;
+            }
+        }
+
+        public static MpCurrency GetCurrencyTypeFromString(string moneyStr) {
+            if (moneyStr == null || moneyStr.Length == 0) {
+                return null;
+            }
+            char currencyLet = moneyStr[0];
+            foreach(var c in MpCurrencyConverter.Instance.CurrencyList) {
+                 if(c.CurrencySymbol == currencyLet.ToString()) {
+                    return c;
+                }
+            }
+            return null;
+        }
+
+        public static double GetCurrencyValueFromString(string moneyStr) {
+            if(GetCurrencyTypeFromString(moneyStr) == null) {
+                return 0;
+            }
+            moneyStr = moneyStr.Remove(0, 1);
             try {
                 return Convert.ToDouble(moneyStr);
             }

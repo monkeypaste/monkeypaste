@@ -297,7 +297,7 @@ namespace MpWpfApp {
                 //PhoneNumber
                 @"(\+?\d{1,3}?[ -.]?)?\(?(\d{3})\)?[ -.]?(\d{3})[ -.]?(\d{4})",
                 //Currency
-                @"[$|£|€|¥]([0-9]{1,3},([0-9]{3},)*[0-9]{3}|[0-9]+)?(\.[0-9][0-9])?",
+                @"[$|£|€|¥][\d|\.]([0-9]{0,3},([0-9]{3},)*[0-9]{3}|[0-9]+)?(\.\d{0,2})?",
                 //HexColor (no alpha)
                 @"#([0-9]|[a-fA-F]){5}([^" + Properties.Settings.Default.TemplateTokenMarker + "][ ])",
                 //StreetAddress
@@ -381,22 +381,22 @@ namespace MpWpfApp {
                                         //"https://www.google.com/search?q=%24500.80+to+yen"
                                         MenuItem convertCurrencyMenuItem = new MenuItem();
                                         convertCurrencyMenuItem.Header = "Convert Currency To";
-                                        foreach (MpCurrencyType ct in Enum.GetValues(typeof(MpCurrencyType))) {
-                                            if (ct == MpCurrencyType.None || ct == MpHelpers.GetCurrencyTypeFromString(linkText)) {
+                                        var fromCurrency = MpHelpers.GetCurrencyTypeFromString(linkText);
+                                        Enum.TryParse(fromCurrency.CurrencyName, out CurrencyType fromCurrencyType);
+                                        foreach (MpCurrency currency in MpCurrencyConverter.Instance.CurrencyList) {
+                                            if (currency.CurrencySymbol == fromCurrency.CurrencySymbol) {
                                                 continue;
                                             }
                                             MenuItem subItem = new MenuItem();
-                                            subItem.Header = Enum.GetName(typeof(MpCurrencyType), ct);
+                                            subItem.Header = currency.CurrencyName + "(" + currency.CurrencySymbol + ")";
                                             subItem.Click += (s2, e2) => {
-                                                // use https://free.currencyconverterapi.com/ instead of google
-                                                //string convertedCurrency = MpHelpers.CurrencyConvert(
-                                                //    (decimal)MpHelpers.GetCurrencyValueFromString(linkText),
-                                                //    Enum.GetName(typeof(MpCurrencyType), MpHelpers.GetCurrencyTypeFromString(linkText)),
-                                                //    Enum.GetName(typeof(MpCurrencyType), ct));
-                                                //hyperlink.Inlines.Clear();
-                                                //hyperlink.Inlines.Add(new Run(convertedCurrency));
-                                                ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).HideWindowCommand.Execute(null);
-                                                MpHelpers.OpenUrl(@"https://www.google.com/search?q=" + linkText + "+to+" + subItem.Header);
+                                                Enum.TryParse(currency.CurrencyName, out CurrencyType toCurrencyType);
+                                                var convertedValue = MpCurrencyConverter.Instance.Convert(MpHelpers.GetCurrencyValueFromString(linkText), fromCurrencyType, toCurrencyType);
+                                                Span span = new Span(hl.ContentStart, hl.ContentEnd);
+                                                span.Inlines.Add(new Run(currency.CurrencySymbol + convertedValue));
+                                                if(rtb.Tag != null && ((List<Hyperlink>)rtb.Tag).Contains(hl)) {
+                                                    ((List<Hyperlink>)rtb.Tag).Remove(hl);
+                                                }
                                             };
                                             convertCurrencyMenuItem.Items.Add(subItem);
                                         }

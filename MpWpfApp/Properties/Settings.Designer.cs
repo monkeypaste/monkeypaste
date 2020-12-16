@@ -613,5 +613,23 @@ namespace MpWpfApp.Properties {
                 this["HighlightColorHexString"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("b455280a2c66456e926b66a1e6656ce3")]
+        public string AzureCognitiveServicesKey {
+            get {
+                return ((string)(this["AzureCognitiveServicesKey"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("897d0d9538155ebeaff7")]
+        public string CurrencyConverterFreeApiKey {
+            get {
+                return ((string)(this["CurrencyConverterFreeApiKey"]));
+            }
+        }
     }
 }
