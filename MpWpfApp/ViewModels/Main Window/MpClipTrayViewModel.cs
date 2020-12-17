@@ -290,7 +290,7 @@ namespace MpWpfApp {
                 } else {
                     dropVm = (MpClipTileViewModel)((MpClipBorder)item).DataContext;
                 }
-                if(dragClipViewModel.Contains(dropVm)) {
+                if(dragClipViewModel == null || dragClipViewModel.Contains(dropVm)) {
                     e2.Effects = DragDropEffects.None;
                     e2.Handled = true;
                     return;
@@ -338,13 +338,13 @@ namespace MpWpfApp {
                 scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + (e3.Delta * -1) / 5);
             };
 
-            clipTray.PreviewMouseLeftButtonUp += (s, e4) => {
-                var p = e4.MouseDevice.GetPosition(clipTray);
-                var hitTestResult = VisualTreeHelper.HitTest(clipTray, p);
-                if (hitTestResult.VisualHit.GetType() != typeof(MpClipBorder)) {
-                    ClearClipEdits();
-                }
-            };
+            //clipTray.PreviewMouseLeftButtonUp += (s, e4) => {
+            //    var p = e4.MouseDevice.GetPosition(clipTray);
+            //    var hitTestResult = VisualTreeHelper.HitTest(clipTray, p);
+            //    if (hitTestResult.VisualHit.GetType() != typeof(MpClipBorder)) {
+            //        ClearClipEdits();
+            //    }
+            //};
             ClipboardManager = new MpClipboardManager((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow));
 
             // Attach the handler to the event raising on WM_DRAWCLIPBOARD message is received

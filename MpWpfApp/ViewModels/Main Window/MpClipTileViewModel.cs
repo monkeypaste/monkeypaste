@@ -82,6 +82,16 @@
             }
         }
 
+        public ObservableCollection<MpDetectedImageObjectViewModel> DetectedImageObjectViewModels {
+            get {
+                var diovms = new ObservableCollection<MpDetectedImageObjectViewModel>();
+                foreach (var dio in CopyItem.ImageItemObjectList) {
+                    diovms.Add(new MpDetectedImageObjectViewModel(dio));
+                }
+                return diovms;
+            }
+        }
+
         private ObservableCollection<MpTemplateHyperlinkViewModel> _templateTokens = new ObservableCollection<MpTemplateHyperlinkViewModel>();
         public ObservableCollection<MpTemplateHyperlinkViewModel> TemplateTokens {
             get {
@@ -96,9 +106,9 @@
         }
 
         //private ObservableCollection<MpClipTileContextMenuItemViewModel> _translateLanguageMenuItems = new ObservableCollection<MpClipTileContextMenuItemViewModel>();
-        public List<MpClipTileContextMenuItemViewModel> TranslateLanguageMenuItems {
+        public ObservableCollection<MpClipTileContextMenuItemViewModel> TranslateLanguageMenuItems {
             get {
-                var translateLanguageMenuItems = new List<MpClipTileContextMenuItemViewModel>();
+                var translateLanguageMenuItems = new ObservableCollection<MpClipTileContextMenuItemViewModel>();
                 foreach(var languageName in MpLanguageTranslator.Instance.LanguageList) {
                     translateLanguageMenuItems.Add(new MpClipTileContextMenuItemViewModel(languageName, TranslateClipTextCommand, languageName, false));
                 }
@@ -132,6 +142,18 @@
         #region Properties
 
         #region Layout Properties
+        private FontFamily _rtbFontFamily = null;
+        public FontFamily RtbFontFamily {
+            get {
+                return _rtbFontFamily;
+            }
+            set {
+                if(_rtbFontFamily != value) {
+                    _rtbFontFamily = value;
+                    OnPropertyChanged(nameof(RtbFontFamily));
+                }
+            }
+        }
         private double _tileTitleIconSize = MpMeasurements.Instance.ClipTileTitleIconSize;
         public double TileTitleIconSize {
             get {
@@ -879,10 +901,10 @@
                 if (CopyItem.ItemRichText != value) {
                     //value should be raw rtf where templates are encoded into #name#color# groups
                     CopyItem.SetData(value);
+                    OnPropertyChanged(nameof(CopyItem));
                     OnPropertyChanged(nameof(CopyItemRichText));
                     //OnPropertyChanged(nameof(TemplateTokenList));
-                    OnPropertyChanged(nameof(TemplateTokenLookupDictionary));
-                    OnPropertyChanged(nameof(CopyItem));
+                    //OnPropertyChanged(nameof(TemplateTokenLookupDictionary));
                 }
             }
         }  
@@ -977,6 +999,7 @@
                     OnPropertyChanged(nameof(CopyItemCreatedDateTime));
                     OnPropertyChanged(nameof(DetailText));
                     OnPropertyChanged(nameof(FileListViewModels));
+                    OnPropertyChanged(nameof(DetectedImageObjectViewModels));
 
                     CopyItem.WriteToDatabase();
                 }
@@ -1123,7 +1146,6 @@
             rtb.ContextMenu = (ContextMenu)rtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
             rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
             rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
-
             //not sure why but calling this is only way templates are shown when loaded
             //TemplateTokenList = rtb.GetTemplateHyperlinkList();
             HasTemplate = rtb.GetTemplateHyperlinkList().Count > 0;
@@ -1691,6 +1713,8 @@
             var translatedText = await MpLanguageTranslator.Instance.Translate(CopyItemPlainText, toLanguage, false);
             if(!string.IsNullOrEmpty(translatedText)) {
                 CopyItemRichText = MpHelpers.ConvertPlainTextToRichText(translatedText);
+                //RtbFontFamily = new FontFamily("Arial");
+
             }
         }
 

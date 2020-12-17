@@ -186,72 +186,27 @@ namespace MpWpfApp {
             }
         }        
 
-        public static string GetCurrencySymbol(MpCurrencyType ct) {
-            switch (ct) {
-                case MpCurrencyType.Dollars:
-                    return "$";
-                case MpCurrencyType.Pounds:
-                    return "£";
-                case MpCurrencyType.Euros:
-                    return "€";
-                case MpCurrencyType.Yen:
-                    return "¥";
-                default:
-                    return "?";
-            }
-        }
-
-        public static MpCurrencyType GetCurrencyTypeFromString2(string moneyStr) {
+        public static CurrencyType GetCurrencyTypeFromString(string moneyStr) {
             if (moneyStr == null || moneyStr.Length == 0) {
-                return MpCurrencyType.None;
-            }
-            char currencyLet = moneyStr[0];
-            switch (currencyLet) {
-                case '$':
-                    return MpCurrencyType.Dollars;
-                case '£':
-                    return MpCurrencyType.Pounds;
-                case '€':
-                    return MpCurrencyType.Euros;
-                case '¥':
-                    return MpCurrencyType.Yen;
-            }
-
-            return MpCurrencyType.None;
-        }
-        public static double GetCurrencyValueFromString2(string moneyStr) {
-            if (GetCurrencyTypeFromString2(moneyStr) != MpCurrencyType.None) {
-                moneyStr = moneyStr.Remove(0, 1);
-            }
-            try {
-                return Convert.ToDouble(moneyStr);
-            }
-            catch (Exception ex) {
-                Console.WriteLine("MpHelper exception cannot convert moneyStr '" + moneyStr + "' to a value, returning 0");
-                return 0;
-            }
-        }
-
-        public static MpCurrency GetCurrencyTypeFromString(string moneyStr) {
-            if (moneyStr == null || moneyStr.Length == 0) {
-                return null;
+                return CurrencyType.USD;
             }
             char currencyLet = moneyStr[0];
             foreach(var c in MpCurrencyConverter.Instance.CurrencyList) {
                  if(c.CurrencySymbol == currencyLet.ToString()) {
-                    return c;
+                    Enum.TryParse(c.Id, out CurrencyType ct);
+                    return ct;
                 }
             }
-            return null;
+            return CurrencyType.USD;
         }
 
         public static double GetCurrencyValueFromString(string moneyStr) {
-            if(GetCurrencyTypeFromString(moneyStr) == null) {
+            if(string.IsNullOrEmpty(moneyStr) || moneyStr.Length < 2) {
                 return 0;
             }
             moneyStr = moneyStr.Remove(0, 1);
             try {
-                return Convert.ToDouble(moneyStr);
+                return Math.Round(Convert.ToDouble(moneyStr), 2);
             }
             catch (Exception ex) {
                 Console.WriteLine("MpHelper exception cannot convert moneyStr '" + moneyStr + "' to a value, returning 0");
@@ -755,15 +710,23 @@ namespace MpWpfApp {
             return null;
         }
 
-        public static List<string> DetectObjects(byte[] image, double confidence = 0.0) {
-            var detectedObjectList = new List<string>();
+        public static List<MpDetectedImageObject> DetectObjects(byte[] image, double confidence = 0.0) {
+            var detectedObjectList = new List<MpDetectedImageObject>();
             var configurationDetector = new ConfigurationDetector();
             var config = configurationDetector.Detect();
             using (var yoloWrapper = new YoloWrapper(config)) {
                 var items = yoloWrapper.Detect(image);
                 foreach(var item in items) {
                     if(item.Confidence >= confidence) {
-                        detectedObjectList.Add(item.Type);
+                        detectedObjectList.Add(new MpDetectedImageObject(
+                            0,
+                            0,
+                            item.Confidence,
+                            item.X,
+                            item.Y,
+                            item.Width,
+                            item.Height,
+                            item.Type));
                     }                    
                 }
                 //items[0].Type -> "Person , Car, ..."
@@ -772,7 +735,6 @@ namespace MpWpfApp {
                 //items[0].Y -> bounding box
                 //items[0].Width -> bounding box
                 //items[0].Height -> bounding box
-
                 return detectedObjectList;
             }
         }
@@ -1096,7 +1058,8 @@ namespace MpWpfApp {
             TextRange range = new TextRange(fd.ContentStart, fd.ContentEnd);
             using (MemoryStream stream = new MemoryStream()) {
                 range.Save(stream, DataFormats.XamlPackage);
-                return ASCIIEncoding.Default.GetString(stream.ToArray());
+                //return ASCIIEncoding.Default.GetString(stream.ToArray());
+                return UTF8Encoding.Default.GetString(stream.ToArray());
             }
         }
 
@@ -1133,11 +1096,9 @@ namespace MpWpfApp {
         }
 
         public static string ConvertPlainTextToRichText(string plainText) {
-            string escapedPlainText = plainText.Replace(@"\", @"\\").Replace("{", @"\{").Replace("}", @"\}");
-            string rtf = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard ";
-            rtf += escapedPlainText.Replace(Environment.NewLine, @" \par ");
-            rtf += " }";
-            return rtf;
+            System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox();
+            rtb.Text = plainText;
+            return rtb.Rtf;
         }
 
         public static string ConvertRichTextToPlainText(string richText) {
@@ -1190,7 +1151,8 @@ namespace MpWpfApp {
 
         public static MpEventEnabledFlowDocument ConvertRichTextToFlowDocument(string rtf) {
             if(IsStringRichText(rtf)) {
-                using (var stream = new MemoryStream(Encoding.Default.GetBytes(rtf))) {
+                //using (var stream = new MemoryStream(Encoding.Default.GetBytes(rtf))) {
+                using (var stream = new MemoryStream(UTF8Encoding.Default.GetBytes(rtf))) {
                     var flowDocument = new MpEventEnabledFlowDocument();
                     var range = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
                     range.Load(stream, System.Windows.DataFormats.Rtf);

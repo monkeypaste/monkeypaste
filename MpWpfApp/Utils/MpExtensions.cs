@@ -381,22 +381,29 @@ namespace MpWpfApp {
                                         //"https://www.google.com/search?q=%24500.80+to+yen"
                                         MenuItem convertCurrencyMenuItem = new MenuItem();
                                         convertCurrencyMenuItem.Header = "Convert Currency To";
-                                        var fromCurrency = MpHelpers.GetCurrencyTypeFromString(linkText);
-                                        Enum.TryParse(fromCurrency.CurrencyName, out CurrencyType fromCurrencyType);
+                                        var fromCurrencyType = MpHelpers.GetCurrencyTypeFromString(linkText);
                                         foreach (MpCurrency currency in MpCurrencyConverter.Instance.CurrencyList) {
-                                            if (currency.CurrencySymbol == fromCurrency.CurrencySymbol) {
+                                            if (currency.Id == Enum.GetName(typeof(CurrencyType),fromCurrencyType)) {
                                                 continue;
                                             }
                                             MenuItem subItem = new MenuItem();
                                             subItem.Header = currency.CurrencyName + "(" + currency.CurrencySymbol + ")";
                                             subItem.Click += (s2, e2) => {
-                                                Enum.TryParse(currency.CurrencyName, out CurrencyType toCurrencyType);
-                                                var convertedValue = MpCurrencyConverter.Instance.Convert(MpHelpers.GetCurrencyValueFromString(linkText), fromCurrencyType, toCurrencyType);
-                                                Span span = new Span(hl.ContentStart, hl.ContentEnd);
-                                                span.Inlines.Add(new Run(currency.CurrencySymbol + convertedValue));
+                                                Enum.TryParse(currency.Id, out CurrencyType toCurrencyType);
+                                                var convertedValue = MpCurrencyConverter.Instance.Convert(
+                                                    MpHelpers.GetCurrencyValueFromString(linkText), 
+                                                    fromCurrencyType, 
+                                                    toCurrencyType);
+                                                convertedValue = Math.Round(convertedValue, 2);                                                
                                                 if(rtb.Tag != null && ((List<Hyperlink>)rtb.Tag).Contains(hl)) {
                                                     ((List<Hyperlink>)rtb.Tag).Remove(hl);
                                                 }
+                                                Run run = new Run(currency.CurrencySymbol + convertedValue);
+                                                hl.Inlines.Clear();
+                                                hl.Inlines.Add(run);
+                                                rtb.ClearHyperlinks();
+                                                ((MpClipTileViewModel)rtb.DataContext).CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+                                                rtb.CreateHyperlinks();
                                             };
                                             convertCurrencyMenuItem.Items.Add(subItem);
                                         }
@@ -618,7 +625,7 @@ namespace MpWpfApp {
         }
 
         public static void SetRtf(this System.Windows.Controls.RichTextBox rtb, string document) {
-            var documentBytes = Encoding.Default.GetBytes(document);
+            var documentBytes = UTF8Encoding.Default.GetBytes(document);
             using (var reader = new MemoryStream(documentBytes)) {
                 reader.Position = 0;
                 rtb.SelectAll();
@@ -713,6 +720,7 @@ namespace MpWpfApp {
                 if (addUnsentHeader) {
                     var binaryWriter = new BinaryWriter(filestream);
                     //Write the Unsent header to the file so the mail client knows this mail must be presented in "New message" mode
+                    //binaryWriter.Write(System.Text.Encoding.UTF8.GetBytes("X-Unsent: 1" + Environment.NewLine));
                     binaryWriter.Write(System.Text.Encoding.UTF8.GetBytes("X-Unsent: 1" + Environment.NewLine));
                 }
 

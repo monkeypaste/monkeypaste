@@ -112,9 +112,14 @@
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpHyperlink.cs" />
+    <Compile Include="Models\MpDetectedImageObject.cs" />
+    <Compile Include="Utils\AdornedControl.cs" />
+    <Compile Include="Utils\AdornerPlacement.cs" />
+    <Compile Include="Utils\FrameworkElementAdorner.cs" />
     <Compile Include="Utils\MpCurrencyConverter.cs" />
     <Compile Include="Utils\MpLanguageTranslator.cs" />
     <Compile Include="ViewModels\Main Window\MpClipTileTitleViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpDetectedImageObjectViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpEditableTextBlockViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpPlaceholderTextBoxViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpTemplateHyperlinkViewModel.cs" />

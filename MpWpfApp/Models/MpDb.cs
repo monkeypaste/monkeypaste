@@ -488,6 +488,18 @@ namespace MpWpfApp {
                     , CONSTRAINT FK_MpCopyItemTag_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     , CONSTRAINT FK_MpCopyItemTag_1_0 FOREIGN KEY (fk_MpTagId) REFERENCES MpTag (pk_MpTagId)
                     );
+                    ---------------------------------------------------------------------------------------------------------------------
+                    CREATE TABLE MpDetectedImageObject (
+                      pk_MpDetectedImageObjectId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , fk_MpCopyItemId integer NOT NULL
+                    , Confidence real NOT NULL
+                    , X real NOT NULL
+                    , Y real NOT NULL
+                    , Width real NOT NULL
+                    , Height real NOT NULL                    
+                    , TypeCsv text
+                    , CONSTRAINT FK_MpSubTextToken_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
+                    );
                      ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpSubTextTokenType (
                       pk_MpSubTextTokenTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

@@ -22,7 +22,7 @@ namespace MpWpfApp {
 
         public abstract void WriteToDatabase();
 
-        public override string ToString() {
+        public override string ToString() {            
             string outstr = "";
             foreach (KeyValuePair<string, object> cd in columnData) {
                 if (cd.Value == null) {

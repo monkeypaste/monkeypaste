@@ -136,6 +136,9 @@ namespace MpWpfApp {
         private MpCurrencyConverter() {
             ApiKey = Properties.Settings.Default.CurrencyConverterFreeApiKey;
             CurrencyList = GetAllCurrencies();
+
+            CurrencyList = CurrencyList.OrderBy(x => x.CurrencyName).ToList();
+
             CurrencySymbols = string.Empty;
             foreach(var currency in CurrencyList) {
                 if(string.IsNullOrEmpty(currency.CurrencySymbol) || CurrencySymbols.Contains(currency.CurrencySymbol)) {

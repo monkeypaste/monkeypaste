@@ -1065,7 +1065,12 @@
                                                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                                          BorderThickness="0"
-                                                         Padding="10,0,10,10" />
+                                                         Padding="10,0,10,10">
+                                                <RichTextBox.Resources>
+                                                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                                                     Color="Blue" />
+                                                </RichTextBox.Resources>
+                                            </RichTextBox>
                                             <Border x:Name="ClipTilePasteTemplateToolbar"
                                                     Background="LightBlue"
                                                     Visibility="{Binding PasteTemplateToolbarVisibility}">
@@ -1169,21 +1174,62 @@
                                               Height="{Binding TileContentHeight}"
                                               Focusable="False"
                                               IsEnabled="False">
-                                            <Image x:Name="ClipTileImage"
-                                                   Focusable="False"
-                                                   IsEnabled="False"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   Visibility="{Binding ImgVisibility}"
-                                                   Source="{Binding CopyItemBmp}"
-                                                   Stretch="Uniform">
-                                                <i:Interaction.Triggers>
-                                                    <i:EventTrigger EventName="Loaded">
-                                                        <i:CallMethodAction TargetObject="{Binding}"
-                                                                            MethodName="ClipTileImage_Loaded" />
-                                                    </i:EventTrigger>
-                                                </i:Interaction.Triggers>
-                                            </Image>
+                                            <local:AdornedControl HorizontalAlignment="Center"
+                                                               VerticalAlignment="Center" 
+                                                                  IsAdornerVisible="True"
+                                                               HorizontalAdornerPlacement="Inside"
+                                                               VerticalAdornerPlacement="Inside">
+                                                <local:AdornedControl.AdornerContent>
+                                                    <ListBox Width="{Binding TileBorderWidth}"
+                                                             Height="{Binding TileContentHeight}"
+                                                             Background="Transparent"
+                                                             ItemsSource="{Binding DetectedImageObjectViewModels}">
+                                                        <ListBox.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Canvas Width="{Binding TileBorderWidth}"
+                                                                        Height="{Binding TileContentHeight}"
+                                                                        Background="Red">
+                                                                    <Border Canvas.Left="{Binding X}"
+                                                                            Canvas.Top="{Binding Y}"
+                                                                            Width="{Binding Width}"
+                                                                            Height="{Binding Height}"
+                                                                            BorderThickness="3"
+                                                                            BorderBrush="Yellow"
+                                                                            Background="Orange">
+                                                                        <Canvas Width="{Binding Width}"
+                                                                                Height="{Binding Height}"
+                                                                                Background="Green">
+                                                                            <TextBlock HorizontalAlignment="Center"
+                                                                                       VerticalAlignment="Center"
+                                                                                       Text="{Binding ObjectTypeName}"
+                                                                                       Canvas.Left="{Binding LabelX}"
+                                                                                       Canvas.Top="{Binding LabelY}"
+                                                                                       Background="Black"
+                                                                                       Foreground="Pink" />
+                                                                        </Canvas>
+                                                                    </Border>
+                                                                               
+                                                                </Canvas>
+                                                            </DataTemplate>
+                                                        </ListBox.ItemTemplate>
+                                                    </ListBox>
+                                                </local:AdornedControl.AdornerContent>
+                                                <Image x:Name="ClipTileImage"
+                                                       Focusable="False"
+                                                       IsEnabled="True"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Visibility="{Binding ImgVisibility}"
+                                                       Source="{Binding CopyItemBmp}"
+                                                       Stretch="Uniform">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="Loaded">
+                                                            <i:CallMethodAction TargetObject="{Binding}"
+                                                                                MethodName="ClipTileImage_Loaded" />
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </Image>
+                                            </local:AdornedControl>
                                         </Grid>
                                         <!--File List Content -->
                                         <ListBox x:Name="ClipTileFileListBox"
