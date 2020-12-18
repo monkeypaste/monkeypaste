@@ -65,7 +65,7 @@
                 return _tagMenuItems;
             }
             set {
-                if(_tagMenuItems != value) {
+                if (_tagMenuItems != value) {
                     _tagMenuItems = value;
                     OnPropertyChanged(nameof(TagMenuItems));
                 }
@@ -82,13 +82,16 @@
             }
         }
 
+        private ObservableCollection<MpDetectedImageObjectViewModel> _detectedImageObjectViewModels = new ObservableCollection<MpDetectedImageObjectViewModel>();
         public ObservableCollection<MpDetectedImageObjectViewModel> DetectedImageObjectViewModels {
             get {
-                var diovms = new ObservableCollection<MpDetectedImageObjectViewModel>();
-                foreach (var dio in CopyItem.ImageItemObjectList) {
-                    diovms.Add(new MpDetectedImageObjectViewModel(dio));
+                return _detectedImageObjectViewModels;
+            }
+            set {
+                if (_detectedImageObjectViewModels != value) {
+                    _detectedImageObjectViewModels = value;
+                    OnPropertyChanged(nameof(DetectedImageObjectViewModels));
                 }
-                return diovms;
             }
         }
 
@@ -109,7 +112,7 @@
         public ObservableCollection<MpClipTileContextMenuItemViewModel> TranslateLanguageMenuItems {
             get {
                 var translateLanguageMenuItems = new ObservableCollection<MpClipTileContextMenuItemViewModel>();
-                foreach(var languageName in MpLanguageTranslator.Instance.LanguageList) {
+                foreach (var languageName in MpLanguageTranslator.Instance.LanguageList) {
                     translateLanguageMenuItems.Add(new MpClipTileContextMenuItemViewModel(languageName, TranslateClipTextCommand, languageName, false));
                 }
                 return translateLanguageMenuItems;
@@ -148,7 +151,7 @@
                 return _rtbFontFamily;
             }
             set {
-                if(_rtbFontFamily != value) {
+                if (_rtbFontFamily != value) {
                     _rtbFontFamily = value;
                     OnPropertyChanged(nameof(RtbFontFamily));
                 }
@@ -220,7 +223,7 @@
         }
 
         public double TileContentHeight {
-            get {                
+            get {
                 return MpMeasurements.Instance.ClipTileContentHeight;
             }
         }
@@ -337,7 +340,7 @@
 
         public Visibility RtbVisibility {
             get {
-                if(CopyItemType == MpCopyItemType.RichText) {
+                if (CopyItemType == MpCopyItemType.RichText) {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -346,7 +349,7 @@
 
         public Visibility TileTitleTextBlockVisibility {
             get {
-                if(IsEditingTitle) {
+                if (IsEditingTitle) {
                     return Visibility.Collapsed;
                 }
                 return Visibility.Visible;
@@ -404,15 +407,15 @@
         #region Brush Properties
         public Brush DetailTextColor {
             get {
-                if(IsSelected) {
+                if (IsSelected) {
                     return Brushes.DarkGray;
                 }
-                if(IsHovering) {
+                if (IsHovering) {
                     return Brushes.DimGray;
                 }
                 return Brushes.Transparent;
             }
-        }       
+        }
 
         public Brush TileBorderBrush {
             get {
@@ -509,7 +512,7 @@
             get {
                 return CopyItem.CopyItemId == 0;
             }
-        }        
+        }
 
         private bool _isSelected = false;
         public bool IsSelected {
@@ -577,7 +580,7 @@
 
         public Visibility TemplateNavigationButtonStackVisibility {
             get {
-                if(TemplateTokenLookupDictionary.Count > 0) {
+                if (TemplateTokenLookupDictionary.Count > 0) {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -604,7 +607,7 @@
 
         public string CurrentTemplateText {
             get {
-                if(TemplateTokenLookupDictionary.Count == 0) {
+                if (TemplateTokenLookupDictionary.Count == 0) {
                     return string.Empty;
                 }
                 var curTemplateText = TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Value;
@@ -614,7 +617,7 @@
                 return curTemplateText;
             }
             set {
-                if(!string.IsNullOrEmpty(value) && TemplateTokenLookupDictionary.Count > 0 && TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Value != value) {
+                if (!string.IsNullOrEmpty(value) && TemplateTokenLookupDictionary.Count > 0 && TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Value != value) {
                     var templateName = TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Key;
                     TemplateTokenLookupDictionary[templateName] = value;
 
@@ -633,7 +636,7 @@
                             canPaste = false;
                         }
                     }
-                    if(canPaste) {
+                    if (canPaste) {
                         IsTemplateReadyToPaste = true;
                     }
                     OnPropertyChanged(nameof(CurrentTemplateText));
@@ -644,11 +647,11 @@
                     OnPropertyChanged(nameof(ClearAllTemplateToolbarButtonVisibility));
                 }
             }
-        }        
+        }
 
         public string CurrentTemplateTextBoxPlaceHolderText {
             get {
-                if(TemplateTokenLookupDictionary.Count == 0) {
+                if (TemplateTokenLookupDictionary.Count == 0) {
                     return string.Empty;
                 }
                 return TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Key + "...";
@@ -666,7 +669,7 @@
 
         public FontStyle CurrentTemplateTextBoxFontStyle {
             get {
-                if(CurrentTemplateText == CurrentTemplateTextBoxPlaceHolderText) {
+                if (CurrentTemplateText == CurrentTemplateTextBoxPlaceHolderText) {
                     return FontStyles.Italic;
                 }
                 return FontStyles.Normal;
@@ -677,9 +680,9 @@
         public Dictionary<string, string> TemplateTokenLookupDictionary {
             get {
                 return _templateTokenLookupDictionary;
-            } 
+            }
             set {
-                if(_templateTokenLookupDictionary != value) {
+                if (_templateTokenLookupDictionary != value) {
                     _templateTokenLookupDictionary = value;
                     OnPropertyChanged(nameof(TemplateTokenLookupDictionary));
                     OnPropertyChanged(nameof(TemplateNavigationButtonStackVisibility));
@@ -763,7 +766,7 @@
         private List<string> _fontSizeList = null;
         public List<string> FontSizeList {
             get {
-                if(_fontSizeList == null) {
+                if (_fontSizeList == null) {
                     _fontSizeList = new List<string>() {
                         "10",
                         "12",
@@ -776,7 +779,7 @@
                 return _fontSizeList;
             }
             set {
-                if(_fontSizeList != value) {
+                if (_fontSizeList != value) {
                     _fontSizeList = value;
                     OnPropertyChanged(nameof(FontSizeList));
                 }
@@ -785,7 +788,7 @@
 
         public Cursor ContentCursor {
             get {
-                if(IsEditingTile) {
+                if (IsEditingTile) {
                     return Cursors.IBeam;
                 }
                 return Cursors.Arrow;
@@ -807,7 +810,7 @@
                 return _confirmEditButtonVisibility;
             }
             set {
-                if(_confirmEditButtonVisibility != value) {
+                if (_confirmEditButtonVisibility != value) {
                     _confirmEditButtonVisibility = value;
                     OnPropertyChanged(nameof(ConfirmEditButtonVisibility));
                 }
@@ -820,7 +823,7 @@
                 return _isAddTemplateButtonEnabled;
             }
             set {
-                if(_isAddTemplateButtonEnabled != value) {
+                if (_isAddTemplateButtonEnabled != value) {
                     _isAddTemplateButtonEnabled = value;
                     OnPropertyChanged(nameof(IsAddTemplateButtonEnabled));
                     OnPropertyChanged(nameof(AddTemplateButtonBackgroundBrush));
@@ -830,7 +833,7 @@
 
         public Brush AddTemplateButtonBackgroundBrush {
             get {
-                if(IsAddTemplateButtonEnabled) {
+                if (IsAddTemplateButtonEnabled) {
                     return Brushes.Transparent;
                 }
                 return Brushes.LightGray;
@@ -907,12 +910,21 @@
                     //OnPropertyChanged(nameof(TemplateTokenLookupDictionary));
                 }
             }
-        }  
-        
-        public string TemplateRichText { 
-            get; set; 
         }
 
+        private BitmapSource _viewBmp = null;
+        public BitmapSource ViewBmp {
+            get {
+                return _viewBmp;
+            }
+            set {
+                if(_viewBmp != value) {
+                    _viewBmp = value;
+                    OnPropertyChanged(nameof(ViewBmp));
+                    OnPropertyChanged(nameof(DetectedImageObjectViewModels));
+                }
+            }
+        }
         public BitmapSource CopyItemBmp {
             get {
                 return CopyItem.ItemBitmapSource;
@@ -923,7 +935,11 @@
             get {
                 return CopyItem.GetFileList(string.Empty, MainWindowViewModel.ClipTrayViewModel.GetTargetFileType());
             }
-        }        
+        }
+
+        public string TemplateRichText { 
+            get; set; 
+        }             
 
         public BitmapSource TitleSwirl {
             get {
@@ -1512,24 +1528,43 @@
             };
         }
 
-        public void ClipTileImage_Loaded(object sender, RoutedEventArgs e) {
-            var img = (Image)sender;
-            img.ContextMenu = (ContextMenu)img.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
-            //aspect ratio
+        public void ClipTileImageCanvas_Loaded(object sender, RoutedEventArgs e) {
+            var img = (Image)((Grid)sender).FindName("ClipTileImage");
+            img.ContextMenu = (ContextMenu)((Grid)sender).GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+
+            //this resizes image to clip content so its longest side matches its respective content side's size
+            //and then the other side is adjusted based off the original image's aspect ratio
             double ar = CopyItemBmp.Width / CopyItemBmp.Height;
-            double contentWidth = 0;
-            double contentHeight = 0;
+            double contentWidth, contentHeight, offsetX, offsetY;
             if (CopyItemBmp.Width >= CopyItemBmp.Height) {
                 contentWidth = TileBorderWidth;
                 contentHeight = contentWidth * ar;
+
+                //this offset assume image is center aligned both horizontally and vertically
+                offsetY = (TileContentHeight / 2) - (contentHeight / 2);
+                Canvas.SetTop(img, offsetY);
             } else {
                 contentHeight = TileContentHeight;
                 contentWidth = contentHeight * ar;
-            }
-            MpHelpers.ResizeBitmapSource(CopyItemBmp, new Size((int)contentWidth, (int)contentHeight));
 
-            Canvas.SetLeft(img, (TileBorderWidth / 2) - (contentWidth / 2));
-            Canvas.SetTop(img, (TileContentHeight / 2) - (contentHeight / 2));
+                //this offsets assume image is center aligned both horizontally and vertically
+                offsetX = (TileBorderWidth / 2) - (contentWidth / 2);
+                Canvas.SetLeft(img, offsetX);
+            }
+            ViewBmp = MpHelpers.ResizeBitmapSource(CopyItemBmp, new Size((int)contentWidth, (int)contentHeight));
+            
+            foreach (var dio in CopyItem.ImageItemObjectList) {
+                DetectedImageObjectViewModels.Add(new MpDetectedImageObjectViewModel(
+                    dio,
+                    CopyItemBmp.Width,
+                    CopyItemBmp.Height,
+                    contentWidth,
+                    contentHeight,
+                    offsetX,
+                    offsetY));
+                Console.WriteLine("Adorner: " + dio.ToString());
+            }
+            OnPropertyChanged(nameof(DetectedImageObjectViewModels));
         }
 
         public void ClipTileFileListBox_Loaded(object sender, RoutedEventArgs e) {
@@ -1676,7 +1711,7 @@
                 //chars/lines
                 case 1:
                     if (CopyItemType == MpCopyItemType.Image) {
-                        info = "(" + CopyItemBmp.Width + ") x (" + CopyItemBmp.Height + ")";
+                        info = "(" + (int)CopyItemBmp.Width + ") x (" + (int)CopyItemBmp.Height + ")";
                     } else if (CopyItemType == MpCopyItemType.RichText) {
                         info = CopyItem.ItemPlainText.Length + " chars | " + MpHelpers.GetRowCount(CopyItem.ItemPlainText) + " lines";
                     } else if (CopyItemType == MpCopyItemType.FileList) {

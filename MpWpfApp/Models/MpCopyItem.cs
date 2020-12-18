@@ -596,9 +596,6 @@ namespace MpWpfApp {
                             { "@ii", itemImage},
                             { "@ciid", CopyItemId},
                         });
-                foreach (var imgObj in ImageItemObjectList) {
-                    imgObj.WriteToDatabase();
-                }
                 isNew = false;
             } else {
                 MpDb.Instance.ExecuteWrite(
@@ -617,12 +614,12 @@ namespace MpWpfApp {
                             { "@ii", itemImage},
                             { "@ciid", CopyItemId},
                         });
-                this.CopyItemId = MpDb.Instance.GetLastRowId("MpCopyItem", "pk_MpCopyItemId");
-                foreach(var imgObj in ImageItemObjectList) {
-                    imgObj.CopyItemId = CopyItemId;
-                    imgObj.WriteToDatabase();
-                }
+                this.CopyItemId = MpDb.Instance.GetLastRowId("MpCopyItem", "pk_MpCopyItemId");                
                 isNew = true;
+            }
+            foreach (var imgObj in ImageItemObjectList) {
+                imgObj.CopyItemId = CopyItemId;
+                imgObj.WriteToDatabase();
             }
 
             MapDataToColumns();
