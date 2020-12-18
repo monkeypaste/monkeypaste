@@ -43,7 +43,7 @@ namespace MpWpfApp {
             }
         }
 
-        private double _fontSize = 14;
+        private double _fontSize = 16;
         public double FontSize {
             get {
                 return _fontSize;

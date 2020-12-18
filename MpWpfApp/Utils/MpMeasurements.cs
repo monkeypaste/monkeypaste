@@ -110,7 +110,7 @@ namespace MpWpfApp {
         }
         public double ClipTileContentWidth {
             get {
-                return ClipTileSize - (ClipTileMargin * 2);
+                return ClipTileSize - (ClipTileMargin * 2) - (ClipTileBorderThickness * 2);
             }
         }
         public double ClipTileFileListRowHeight {

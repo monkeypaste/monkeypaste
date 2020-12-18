@@ -1017,6 +1017,10 @@
                     OnPropertyChanged(nameof(FileListViewModels));
                     OnPropertyChanged(nameof(DetectedImageObjectViewModels));
 
+                    OnPropertyChanged(nameof(ImgVisibility));
+
+                    OnPropertyChanged(nameof(RtbVisibility));
+                    OnPropertyChanged(nameof(FileListVisibility));
                     CopyItem.WriteToDatabase();
                 }
             }
@@ -1529,39 +1533,40 @@
         }
 
         public void ClipTileImageCanvas_Loaded(object sender, RoutedEventArgs e) {
+            if(ImgVisibility == Visibility.Collapsed) {
+                return;
+            }
             var img = (Image)((Grid)sender).FindName("ClipTileImage");
+            var ic = (ItemsControl)((Grid)sender).FindName("ClipTileImageDetectedObjectItemscontrol");
             img.ContextMenu = (ContextMenu)((Grid)sender).GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
 
             //this resizes image to clip content so its longest side matches its respective content side's size
             //and then the other side is adjusted based off the original image's aspect ratio
-            double ar = CopyItemBmp.Width / CopyItemBmp.Height;
-            double contentWidth, contentHeight, offsetX, offsetY;
-            if (CopyItemBmp.Width >= CopyItemBmp.Height) {
-                contentWidth = TileBorderWidth;
-                contentHeight = contentWidth * ar;
 
+            double ar = CopyItemBmp.Height / CopyItemBmp.Width;
+            double contentWidth, contentHeight, offsetX = 0, offsetY = 0;
+            if (CopyItemBmp.Width >= CopyItemBmp.Height) {
+                contentWidth = TileContentWidth;
+                contentHeight = contentWidth * ar;
                 //this offset assume image is center aligned both horizontally and vertically
                 offsetY = (TileContentHeight / 2) - (contentHeight / 2);
                 Canvas.SetTop(img, offsetY);
+                Canvas.SetTop(ic, offsetY);
             } else {
                 contentHeight = TileContentHeight;
                 contentWidth = contentHeight * ar;
-
                 //this offsets assume image is center aligned both horizontally and vertically
                 offsetX = (TileBorderWidth / 2) - (contentWidth / 2);
                 Canvas.SetLeft(img, offsetX);
+                Canvas.SetLeft(ic, offsetX);
             }
             ViewBmp = MpHelpers.ResizeBitmapSource(CopyItemBmp, new Size((int)contentWidth, (int)contentHeight));
-            
-            foreach (var dio in CopyItem.ImageItemObjectList) {
+            ic.Width = contentWidth;
+            ic.Height = contentHeight;
+
+            foreach (var dio in MpHelpers.DetectObjects(MpHelpers.ConvertBitmapSourceToByteArray(ViewBmp))) {
                 DetectedImageObjectViewModels.Add(new MpDetectedImageObjectViewModel(
-                    dio,
-                    CopyItemBmp.Width,
-                    CopyItemBmp.Height,
-                    contentWidth,
-                    contentHeight,
-                    offsetX,
-                    offsetY));
+                    dio));
                 Console.WriteLine("Adorner: " + dio.ToString());
             }
             OnPropertyChanged(nameof(DetectedImageObjectViewModels));

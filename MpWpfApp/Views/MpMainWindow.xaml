@@ -442,7 +442,7 @@
             <local:MpPlaceholderTextBox x:Name="SearchTextBoxBorder"
                                         Grid.Row="0"
                                         Grid.Column="2"
-                                        Margin="5"
+                                        Margin="5" 
                                         DataContext="{Binding SearchBoxViewModel}" />
         </Grid>
         <Grid Grid.Row="2"
@@ -1171,7 +1171,7 @@
                                             </Border>
                                         </StackPanel>
                                         <!-- Image Content-->
-                                        <Grid Width="{Binding TileBorderWidth}"
+                                        <Grid Width="{Binding TileContentWidth}"
                                                 Height="{Binding TileContentHeight}"
                                                 Visibility="{Binding ImgVisibility}"
                                                 Focusable="False"
@@ -1182,11 +1182,14 @@
                                                                         MethodName="ClipTileImageCanvas_Loaded" />
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
-                                            <local:AdornedControl IsAdornerVisible="True" 
+                                            <local:AdornedControl IsAdornerVisible="True" IsEnabled="False"
                                                                   HorizontalAdornerPlacement="Inside"
                                                                   VerticalAdornerPlacement="Inside">
                                                 <local:AdornedControl.AdornerContent>
-                                                    <ItemsControl ItemsSource="{Binding DetectedImageObjectViewModels}">
+                                                    <ItemsControl x:Name="ClipTileImageDetectedObjectItemscontrol"
+                                                                  Background="Transparent"
+                                                                  IsEnabled="False"
+                                                                  ItemsSource="{Binding DetectedImageObjectViewModels}">
                                                         <ItemsControl.ItemsPanel>
                                                             <ItemsPanelTemplate>
                                                                 <Canvas />
@@ -1194,7 +1197,7 @@
                                                         </ItemsControl.ItemsPanel>
                                                         <ItemsControl.Resources>
                                                             <DataTemplate DataType="{x:Type local:MpDetectedImageObjectViewModel}" >
-                                                                <Canvas >
+                                                                <Canvas>
                                                                     <Border Canvas.Left="{Binding X}"
                                                                             Canvas.Top="{Binding Y}"
                                                                             Width="{Binding Width}"
@@ -1202,13 +1205,13 @@
                                                                             BorderThickness="1"
                                                                             BorderBrush="Yellow"
                                                                             Background="Transparent">
-                                                                        <!--<TextBlock HorizontalAlignment="Center"
+                                                                        <TextBlock HorizontalAlignment="Center"
                                                                                    VerticalAlignment="Center"
                                                                                    Text="{Binding ObjectTypeName}"
                                                                                    Canvas.Left="{Binding LabelX}"
                                                                                    Canvas.Top="{Binding LabelY}"
                                                                                    Background="Black"
-                                                                                   Foreground="White" />-->
+                                                                                   Foreground="White" />
                                                                     </Border>
                                                                 </Canvas>
                                                             </DataTemplate>
@@ -1216,7 +1219,8 @@
                                                     </ItemsControl>
                                                 </local:AdornedControl.AdornerContent>
                                                 <Image x:Name="ClipTileImage"
-                                                       Focusable="False" 
+                                                       Focusable="False"
+                                                       Visibility="{Binding ImgVisibility}"
                                                        HorizontalAlignment="Center"
                                                        VerticalAlignment="Center"
                                                        IsEnabled="False"
