@@ -439,11 +439,73 @@
                 </Button>
             </StackPanel>
             <!-- Search Border -->
-            <local:MpPlaceholderTextBox x:Name="SearchTextBoxBorder"
-                                        Grid.Row="0"
-                                        Grid.Column="2"
-                                        Margin="5" 
-                                        DataContext="{Binding SearchBoxViewModel}" />
+            <local:MpClipBorder x:Name="SearchTextBoxBorder"
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Margin="5"
+                                DataContext="{Binding SearchBoxViewModel}"
+                                CornerRadius="{Binding CornerRadius}"
+                                BorderBrush="{Binding TextBoxBorderBrush}"
+                                Background="White"
+                                BorderThickness="3">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Loaded">
+                        <i:CallMethodAction MethodName="SearchBoxBorder_Loaded"
+                                            TargetObject="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="0.1*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="SearchBox"
+                             Grid.Column="0"
+                             FontSize="{Binding FontSize}"
+                             Background="Transparent"
+                             Foreground="{Binding TextBoxTextBrush}"
+                             FontStyle="{Binding TextBoxFontStyle}"
+                             BorderThickness="0"
+                             VerticalContentAlignment="Center"
+                             Padding="5,0,0,0"
+                             local:MpFocusExtension.IsFocused="{Binding IsTextBoxFocused, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                             Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
+                    </TextBox>
+                    <Button x:Name="ClearTextBoxButton"
+                            Grid.Column="1"
+                            Width="15"
+                            Height="15"
+                            Visibility="{Binding ClearTextButtonVisibility}"
+                            Command="{Binding ClearTextCommand}"
+                            Template="{DynamicResource BackgroundButton}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/MpWpfApp;component/Resources/Images/close2.png" />
+                        </Button.Background>
+                        <Button.Resources>
+                            <ControlTemplate x:Key="BackgroundButton"
+                                             TargetType="Button">
+                                <Border x:Name="border"
+                                        BorderThickness="0"
+                                        Background="{TemplateBinding Background}">
+                                    <ContentPresenter HorizontalAlignment="Center"
+                                                      VerticalAlignment="Center" />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver"
+                                             Value="True">
+                                        <Setter Property="Background"
+                                                TargetName="border">
+                                            <Setter.Value>
+                                                <ImageBrush ImageSource="/MpWpfApp;component/Resources/Images/close2.png" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Resources>
+                    </Button>
+                </Grid>
+            </local:MpClipBorder>
         </Grid>
         <Grid Grid.Row="2"
               Grid.Column="0"
@@ -761,6 +823,7 @@
                                         <!-- Clip Title TextBlock -->
                                         <TextBlock x:Name="ClipTileTitleTextBlock"
                                                    Text="{Binding CopyItemTitle}"
+                                                   local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.SearchText}"
                                                    Canvas.Top="-2"
                                                    Canvas.Left="5"
                                                    FontSize="24"
@@ -1050,7 +1113,7 @@
                                                 </StackPanel>
                                             </Border>
                                             <RichTextBox x:Name="ClipTileRichTextBox"
-                                                         local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.Text}"
+                                                         local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.SearchText}"
                                                          local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText}"
                                                          IsReadOnly="{Binding IsRtbReadOnly}"
                                                          IsInactiveSelectionHighlightEnabled="True"
@@ -1059,7 +1122,7 @@
                                                          Cursor="{Binding ContentCursor}"
                                                          Height="{Binding RichTextBoxHeight}"
                                                          local:MpFocusExtension.IsFocused="{Binding IsClipRichTextBoxFocused}"
-                                                         IsUndoEnabled="True"
+                                                         IsUndoEnabled="True" 
                                                          Background="White"
                                                          VerticalAlignment="Top"
                                                          HorizontalAlignment="Left"
@@ -1172,68 +1235,84 @@
                                         </StackPanel>
                                         <!-- Image Content-->
                                         <Grid Width="{Binding TileContentWidth}"
-                                                Height="{Binding TileContentHeight}"
-                                                Visibility="{Binding ImgVisibility}"
-                                                Focusable="False"
-                                                IsEnabled="False">
+                                              Height="{Binding TileContentHeight}"
+                                              Visibility="{Binding ImgVisibility}"
+                                              Focusable="False"
+                                              IsEnabled="False">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Loaded">
                                                     <i:CallMethodAction TargetObject="{Binding}"
                                                                         MethodName="ClipTileImageCanvas_Loaded" />
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
-                                            <local:AdornedControl IsAdornerVisible="True" IsEnabled="False"
-                                                                  HorizontalAdornerPlacement="Inside"
-                                                                  VerticalAdornerPlacement="Inside">
-                                                <local:AdornedControl.AdornerContent>
-                                                    <ItemsControl x:Name="ClipTileImageDetectedObjectItemscontrol"
-                                                                  Background="Transparent"
-                                                                  IsEnabled="False"
-                                                                  ItemsSource="{Binding DetectedImageObjectViewModels}">
-                                                        <ItemsControl.ItemsPanel>
-                                                            <ItemsPanelTemplate>
-                                                                <Canvas />
-                                                            </ItemsPanelTemplate>
-                                                        </ItemsControl.ItemsPanel>
-                                                        <ItemsControl.Resources>
-                                                            <DataTemplate DataType="{x:Type local:MpDetectedImageObjectViewModel}" >
-                                                                <Canvas>
-                                                                    <Border Canvas.Left="{Binding X}"
-                                                                            Canvas.Top="{Binding Y}"
-                                                                            Width="{Binding Width}"
-                                                                            Height="{Binding Height}"
-                                                                            BorderThickness="1"
-                                                                            BorderBrush="Yellow"
-                                                                            Background="Transparent">
-                                                                        <TextBlock HorizontalAlignment="Center"
-                                                                                   VerticalAlignment="Center"
-                                                                                   Text="{Binding ObjectTypeName}"
-                                                                                   Canvas.Left="{Binding LabelX}"
-                                                                                   Canvas.Top="{Binding LabelY}"
-                                                                                   Background="Black"
-                                                                                   Foreground="White" />
-                                                                    </Border>
-                                                                </Canvas>
-                                                            </DataTemplate>
-                                                        </ItemsControl.Resources>
-                                                    </ItemsControl>
-                                                </local:AdornedControl.AdornerContent>
+                                            <Viewbox>
                                                 <Image x:Name="ClipTileImage"
                                                        Focusable="False"
-                                                       Visibility="{Binding ImgVisibility}"
-                                                       HorizontalAlignment="Center"
-                                                       VerticalAlignment="Center"
                                                        IsEnabled="False"
-                                                       Source="{Binding ViewBmp}"
-                                                       Stretch="Uniform">                                                    
+                                                       Source="{Binding CopyItemBmp}"
+                                                       local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.SearchText}"
+                                                       Stretch="Uniform">
                                                 </Image>
-                                            </local:AdornedControl>
+                                                <!--<local:AdornedControl x:Name="ClipTileImageDetectedObjectAdornedControl"
+                                                                      IsAdornerVisible="True"
+                                                                      IsEnabled="False"
+                                                                      HorizontalAdornerPlacement="Inside"
+                                                                      VerticalAdornerPlacement="Inside">
+                                                    <local:AdornedControl.AdornerContent>
+                                                        <ItemsControl x:Name="ClipTileImageDetectedObjectItemscontrol"
+                                                                      Background="Purple"
+                                                                      IsEnabled="False"
+                                                                      ItemsSource="{Binding DetectedImageObjectViewModels}">
+                                                            <ItemsControl.ItemsPanel>
+                                                                <ItemsPanelTemplate>
+                                                                    <Canvas />
+                                                                </ItemsPanelTemplate>
+                                                            </ItemsControl.ItemsPanel>
+                                                            <ItemsControl.Resources>
+                                                                <DataTemplate DataType="{x:Type local:MpDetectedImageObjectViewModel}">
+                                                                    <Canvas>
+                                                                        <i:Interaction.Triggers>
+                                                                            <i:EventTrigger EventName="Loaded">
+                                                                                <i:CallMethodAction TargetObject="{Binding}"
+                                                                                                    MethodName="ClipTileImageDetectedObjectCanvas_Loaded" />
+                                                                            </i:EventTrigger>
+                                                                        </i:Interaction.Triggers>
+                                                                        <Border x:Name="DetectedObjectBorder"
+                                                                                Canvas.Left="{Binding X}"
+                                                                                Canvas.Top="{Binding Y}"
+                                                                                Width="{Binding Width}"
+                                                                                Height="{Binding Height}"
+                                                                                BorderThickness="1"
+                                                                                BorderBrush="Yellow"
+                                                                                Background="Transparent">
+                                                                            <TextBlock HorizontalAlignment="Center"
+                                                                                       VerticalAlignment="Center"
+                                                                                       Text="{Binding ObjectTypeName}"
+                                                                                       Canvas.Left="{Binding LabelX}"
+                                                                                       Canvas.Top="{Binding LabelY}"
+                                                                                       Background="Black"
+                                                                                       Foreground="White" />
+                                                                        </Border>
+                                                                    </Canvas>
+                                                                </DataTemplate>
+                                                            </ItemsControl.Resources>
+                                                        </ItemsControl>
+                                                    </local:AdornedControl.AdornerContent>
+                                                    <Image x:Name="ClipTileImage"
+                                                           Focusable="False"
+                                                           IsEnabled="False"
+                                                           Source="{Binding ViewBmp}"
+                                                           Stretch="Uniform">
+                                                    </Image>
+                                                </local:AdornedControl>-->
+                                            </Viewbox>
                                         </Grid>
                                         <!--File List Content -->
                                         <ListBox x:Name="ClipTileFileListBox"
                                                  Width="{Binding TileBorderWidth}"
                                                  Height="{Binding TileContentHeight}"
                                                  ItemsSource="{Binding FileListViewModels}"
+                                                 local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.SearchText}"
                                                  Visibility="{Binding FileListVisibility}"
                                                  IsEnabled="{Binding IsSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                                                  BorderThickness="0"

@@ -11,7 +11,11 @@ using Hardcodet.Wpf.TaskbarNotification;
 namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase {
         #region Statics
-        public static bool IsOpen = false;
+        public static bool IsOpen {
+            get {
+                return Application.Current.MainWindow.Visibility == Visibility.Visible;
+            }
+        }
         #endregion
 
         #region View Models
@@ -67,8 +71,8 @@ namespace MpWpfApp {
             }
         }
 
-        private MpPlaceholderTextBoxViewModel _searchBoxViewModel = null;
-        public MpPlaceholderTextBoxViewModel SearchBoxViewModel {
+        private MpSearchBoxViewModel _searchBoxViewModel = null;
+        public MpSearchBoxViewModel SearchBoxViewModel {
             get {
                 return _searchBoxViewModel;
             }
@@ -160,7 +164,7 @@ namespace MpWpfApp {
 
         public MpMainWindowViewModel() : base() {
             IsLoading = true;
-            SearchBoxViewModel = new MpPlaceholderTextBoxViewModel() { PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText };
+            SearchBoxViewModel = new MpSearchBoxViewModel() { PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText };
             ClipTrayViewModel = new MpClipTrayViewModel();
             ClipTileSortViewModel = new MpClipTileSortViewModel();
             AppModeViewModel = new MpAppModeViewModel();
@@ -272,7 +276,7 @@ namespace MpWpfApp {
                 !MpSettingsWindowViewModel.IsOpen) && !IsOpen;
         }
         private void ShowWindow() {
-            IsOpen = true;
+            //IsOpen = true;
 
             if (Application.Current.MainWindow == null) {
                 Application.Current.MainWindow = new MpMainWindow();
@@ -315,7 +319,7 @@ namespace MpWpfApp {
                    !MpTemplateTokenPasteModalWindowViewModel.IsOpen;
         }
         private async void HideWindow(bool pasteSelected) {
-            IsOpen = false;
+            //IsOpen = false;
 
             IDataObject pasteDataObject = null;
             if(pasteSelected) {

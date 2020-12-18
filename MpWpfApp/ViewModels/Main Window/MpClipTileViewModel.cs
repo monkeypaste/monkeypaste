@@ -82,17 +82,21 @@
             }
         }
 
-        private ObservableCollection<MpDetectedImageObjectViewModel> _detectedImageObjectViewModels = new ObservableCollection<MpDetectedImageObjectViewModel>();
+        //private ObservableCollection<MpDetectedImageObjectViewModel> _detectedImageObjectViewModels = new ObservableCollection<MpDetectedImageObjectViewModel>();
         public ObservableCollection<MpDetectedImageObjectViewModel> DetectedImageObjectViewModels {
             get {
-                return _detectedImageObjectViewModels;
-            }
-            set {
-                if (_detectedImageObjectViewModels != value) {
-                    _detectedImageObjectViewModels = value;
-                    OnPropertyChanged(nameof(DetectedImageObjectViewModels));
+                var diovms = new ObservableCollection<MpDetectedImageObjectViewModel>();
+                foreach(var dio in CopyItem.ImageItemObjectList) {
+                    diovms.Add(new MpDetectedImageObjectViewModel(dio, 0, 0));
                 }
+                return diovms;
             }
+            //set {
+            //    if (_detectedImageObjectViewModels != value) {
+            //        _detectedImageObjectViewModels = value;
+            //        OnPropertyChanged(nameof(DetectedImageObjectViewModels));
+            //    }
+            //}
         }
 
         private ObservableCollection<MpTemplateHyperlinkViewModel> _templateTokens = new ObservableCollection<MpTemplateHyperlinkViewModel>();
@@ -1001,6 +1005,10 @@
 
                     OnPropertyChanged(nameof(CopyItem));
                     OnPropertyChanged(nameof(CopyItemId));
+                    OnPropertyChanged(nameof(CopyItemType));
+                    OnPropertyChanged(nameof(ImgVisibility));
+                    OnPropertyChanged(nameof(RtbVisibility));
+                    OnPropertyChanged(nameof(FileListVisibility));
                     OnPropertyChanged(nameof(CopyItemTitle));
                     OnPropertyChanged(nameof(CopyItemPlainText));
                     OnPropertyChanged(nameof(CopyItemRichText));
@@ -1010,17 +1018,12 @@
                     OnPropertyChanged(nameof(CopyItemAppName));
                     OnPropertyChanged(nameof(CopyItemUsageScore));
                     OnPropertyChanged(nameof(CopyItemAppId));
-                    OnPropertyChanged(nameof(CopyItemType));
                     OnPropertyChanged(nameof(TitleSwirl));
                     OnPropertyChanged(nameof(CopyItemCreatedDateTime));
                     OnPropertyChanged(nameof(DetailText));
                     OnPropertyChanged(nameof(FileListViewModels));
                     OnPropertyChanged(nameof(DetectedImageObjectViewModels));
 
-                    OnPropertyChanged(nameof(ImgVisibility));
-
-                    OnPropertyChanged(nameof(RtbVisibility));
-                    OnPropertyChanged(nameof(FileListVisibility));
                     CopyItem.WriteToDatabase();
                 }
             }
@@ -1068,6 +1071,7 @@
             };
 
             IsLoading = true;
+
             CopyItem = ci;
         }
 
@@ -1148,6 +1152,9 @@
         }
 
         public void ClipTileRichTextStackPanel_Loaded(object sender, RoutedEventArgs e) {
+            if(RtbVisibility == Visibility.Collapsed) {
+                return;
+            }
             var sp = (StackPanel)sender;
             var ct = (MpMultiSelectListBox)sp.GetVisualAncestor<MpMultiSelectListBox>();
             var cb = (MpClipBorder)sp.GetVisualAncestor<MpClipBorder>();
@@ -1305,6 +1312,8 @@
                     templateContextMenu.PlacementTarget = addTemplateButton;
                     templateContextMenu.IsOpen = true;
                 }
+                rtb.ScrollToHome();
+                rtb.CaretPosition = rtb.Document.ContentStart;
             };
 
             cttb.GotFocus += (s, e4) => {
@@ -1537,42 +1546,56 @@
                 return;
             }
             var img = (Image)((Grid)sender).FindName("ClipTileImage");
-            var ic = (ItemsControl)((Grid)sender).FindName("ClipTileImageDetectedObjectItemscontrol");
             img.ContextMenu = (ContextMenu)((Grid)sender).GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+            return;
+            //var ac = (AdornedControl)((Grid)sender).FindName("ClipTileImageDetectedObjectAdornedControl");
+            //var ic = (ItemsControl)((Grid)sender).FindName("ClipTileImageDetectedObjectItemscontrol");
 
-            //this resizes image to clip content so its longest side matches its respective content side's size
-            //and then the other side is adjusted based off the original image's aspect ratio
+            ////this resizes image to clip content so its longest side matches its respective content side's size
+            ////and then the other side is adjusted based off the original image's aspect ratio
 
-            double ar = CopyItemBmp.Height / CopyItemBmp.Width;
-            double contentWidth, contentHeight, offsetX = 0, offsetY = 0;
-            if (CopyItemBmp.Width >= CopyItemBmp.Height) {
-                contentWidth = TileContentWidth;
-                contentHeight = contentWidth * ar;
-                //this offset assume image is center aligned both horizontally and vertically
-                offsetY = (TileContentHeight / 2) - (contentHeight / 2);
-                Canvas.SetTop(img, offsetY);
-                Canvas.SetTop(ic, offsetY);
-            } else {
-                contentHeight = TileContentHeight;
-                contentWidth = contentHeight * ar;
-                //this offsets assume image is center aligned both horizontally and vertically
-                offsetX = (TileBorderWidth / 2) - (contentWidth / 2);
-                Canvas.SetLeft(img, offsetX);
-                Canvas.SetLeft(ic, offsetX);
-            }
-            ViewBmp = MpHelpers.ResizeBitmapSource(CopyItemBmp, new Size((int)contentWidth, (int)contentHeight));
-            ic.Width = contentWidth;
-            ic.Height = contentHeight;
 
-            foreach (var dio in MpHelpers.DetectObjects(MpHelpers.ConvertBitmapSourceToByteArray(ViewBmp))) {
-                DetectedImageObjectViewModels.Add(new MpDetectedImageObjectViewModel(
-                    dio));
-                Console.WriteLine("Adorner: " + dio.ToString());
-            }
-            OnPropertyChanged(nameof(DetectedImageObjectViewModels));
+            //double contentWidth, contentHeight, offsetX = 0, offsetY = 0;
+            //if (CopyItemBmp.Width >= CopyItemBmp.Height) {
+            //    double ar = CopyItemBmp.Height / CopyItemBmp.Width;
+            //    contentWidth = TileContentWidth;
+            //    contentHeight = contentWidth * ar;
+            //    offsetX = (TileContentWidth / 2) - (contentWidth / 2);
+            //} else {
+            //    double ar = CopyItemBmp.Width / CopyItemBmp.Height;
+            //    contentHeight = TileContentHeight;
+            //    contentWidth = contentHeight * ar;
+            //    offsetY = (TileContentHeight / 2) - (contentHeight / 2);
+            //}
+            //ViewBmp = MpHelpers.ResizeBitmapSource(CopyItemBmp, new Size((int)contentWidth, (int)contentHeight));
+            //ic.Width = contentWidth;
+            //ic.Height = contentHeight;
+
+            //this offset assume image is center aligned both horizontally and vertically
+
+
+
+            //Canvas.SetTop(img, offsetY);
+            //Canvas.SetTop(ic, offsetY);
+            //Canvas.SetLeft(img, offsetX);
+            //Canvas.SetLeft(ic, offsetX);
+            //foreach (var dio in MpHelpers.DetectObjects(MpHelpers.ConvertBitmapSourceToByteArray(ViewBmp))) {
+            //    DetectedImageObjectViewModels.Add(new MpDetectedImageObjectViewModel(
+            //        dio));
+            //    Console.WriteLine("Adorner: " + dio.ToString());
+            //}
+
+            //DetectedImageObjectViewModels.Add(
+            //    new MpDetectedImageObjectViewModel(
+            //        new MpDetectedImageObject(0, CopyItemId, 0, 0, 0, 100, 100, "test"),
+            //        0,0));
+            //OnPropertyChanged(nameof(DetectedImageObjectViewModels));
         }
 
         public void ClipTileFileListBox_Loaded(object sender, RoutedEventArgs e) {
+            if(FileListVisibility == Visibility.Collapsed) {
+                return;
+            }
             var flb = (ListBox)sender;
             flb.ContextMenu = (ContextMenu)flb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
         }

@@ -70,11 +70,15 @@ namespace MpWpfApp {
             templateDeleteTemplateTextButtonVisibilityBinding.Source = thlvm;
             templateDeleteTemplateTextButtonVisibilityBinding.Path = new PropertyPath(nameof(thlvm.DeleteTemplateTextButtonVisibility));
 
+            Binding isEnabledBinding = new Binding();
+            isEnabledBinding.Source = ctvm;
+            isEnabledBinding.Path = new PropertyPath(nameof(ctvm.IsEditingTile));
+
             BindingOperations.SetBinding(hl, Hyperlink.TargetNameProperty, templateDisplayValueBinding);
             BindingOperations.SetBinding(hl, Hyperlink.BackgroundProperty, backgroundBinding);
             BindingOperations.SetBinding(hl, Hyperlink.ForegroundProperty, foregroundBinding);
             BindingOperations.SetBinding(hl, Hyperlink.FontSizeProperty, fontSizeBinding);
-
+            BindingOperations.SetBinding(hl, Hyperlink.IsEnabledProperty, isEnabledBinding);
 
             TextBlock tb = new TextBlock();
             tb.Background = Brushes.Transparent;
@@ -86,7 +90,7 @@ namespace MpWpfApp {
             BindingOperations.SetBinding(tb, TextBlock.HeightProperty, fontSizeBinding);
 
             var path = @"pack://application:,,,/Resources/Images/";
-            Image dbImg = new Image();
+            Image dbImg = new Image(); 
             dbImg.Source = (BitmapSource)new BitmapImage(new Uri(path + "close2.png"));
             //Button db = new Button();
             //db.Background = new ImageBrush((BitmapSource)new BitmapImage(new Uri(path + "close2.png")));
@@ -98,11 +102,11 @@ namespace MpWpfApp {
             //db.Content = dbImg;
             dbImg.MouseEnter += (s, e) => {
                 //db.Background = Brushes.Transparent;
-                dbImg.Source = new BitmapImage(new Uri(path + "close2.png"));
+                dbImg.Source = new BitmapImage(new Uri(path + "close1.png"));
             };
             dbImg.MouseLeave += (s, e) => {
                 //db.Background = Brushes.Transparent;
-                dbImg.Source = new BitmapImage(new Uri(path + "close1.png"));
+                dbImg.Source = new BitmapImage(new Uri(path + "close2.png"));
             };
             dbImg.MouseLeftButtonUp += (s, e) => {
                 rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
@@ -153,7 +157,6 @@ namespace MpWpfApp {
             hl.Inlines.Clear();
             hl.Inlines.Add(container);
             hl.Tag = MpSubTextTokenType.TemplateSegment;
-            hl.IsEnabled = true;
             hl.TextDecorations = null;
             hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
             hl.Unloaded += (s, e) => {
@@ -276,7 +279,7 @@ namespace MpWpfApp {
                             hl.TargetName, 
                             ((SolidColorBrush)hl.Background).ToString());
                     } else {
-                        hlRange.Text = hlRange.Text;
+                        //hlRange.Text = hlRange.Text;
                     }
                 } else {
                     Console.WriteLine("Error clearing templates for rtf: ");
@@ -430,12 +433,29 @@ namespace MpWpfApp {
                                 }
                             }
 
-                            if(!string.IsNullOrEmpty(searchText)) {
+                            if(!string.IsNullOrEmpty(searchText) && hl != null) {
                                 //only occurs at end of highlighttext when tokens are refreshed
-                                if(c.Value.ToLower().Contains(searchText.ToLower())) {
-                                    var highlightRange = MpHelpers.FindStringRangeFromPosition(matchRange.Start, searchText);
-                                    highlightRange.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString));
+                                if((MpSubTextTokenType)hl.Tag == MpSubTextTokenType.TemplateSegment) {
+                                    string linkText = ((MpTemplateHyperlinkViewModel)hl.DataContext).TemplateName;
+                                    if (linkText.ToLower().Contains(searchText.ToLower())) {
+                                        ((MpClipTileViewModel)rtb.DataContext).TileVisibility = Visibility.Visible;
+                                        var tb = (TextBlock)((DockPanel)((Border)((InlineUIContainer)hl.Inlines.FirstInline).Child).Child).Children[0];
+                                        
+                                        var highlightRange = MpHelpers.FindStringRangeFromPosition(tb.ContentStart, searchText);
+                                        if (highlightRange != null) {
+                                            highlightRange.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString));
+                                        }
+                                    }
+                                } else {
+                                    string linkText = new TextRange(hl.ContentStart, hl.ContentEnd).Text; 
+                                    if (linkText.ToLower().Contains(searchText.ToLower())) {
+                                        var highlightRange = MpHelpers.FindStringRangeFromPosition(hl.ContentStart, searchText);
+                                        if (highlightRange != null) {
+                                            highlightRange.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString));
+                                        }
+                                    }
                                 }
+                                
                             }
 
                             linkList.Add(hl);
@@ -444,6 +464,7 @@ namespace MpWpfApp {
                 }
             }
             rtb.Tag = linkList;
+            rtb.ScrollToHome();
         }
 
         public static FlowDocument Clone(this FlowDocument doc) {
@@ -624,7 +645,7 @@ namespace MpWpfApp {
             return descendentList;
         }
 
-        public static void SetRtf(this System.Windows.Controls.RichTextBox rtb, string document) {
+        public static void SetRtf(this System.Windows.Controls.RichTextBox rtb, string document) {            
             var documentBytes = UTF8Encoding.Default.GetBytes(document);
             using (var reader = new MemoryStream(documentBytes)) {
                 reader.Position = 0;

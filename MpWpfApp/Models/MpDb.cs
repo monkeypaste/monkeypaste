@@ -468,7 +468,7 @@ namespace MpWpfApp {
                     , Title text NULL 
                     , CopyCount integer not null default 1
                     , PasteCount integer not null default 0
-                    , ItemImage longblob NOT NULL
+                    , ItemImage longblob
                     , ItemText text NOT NULL                     
                     , TitleSwirl longblob NOT NULL
                     , Screenshot longblob

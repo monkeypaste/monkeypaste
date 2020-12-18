@@ -1,4 +1,9 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -6,21 +11,91 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpSearchBoxViewModel : MpViewModelBase {
-        #region View Models
+        #region Private Variables
+
         #endregion
 
-        #region Properties
-        private bool _isTextBoxFocused = false;
-        public bool IsTextBoxFocused {
+        #region Properties     
+
+        private double _width = 125;
+        public double Width {
             get {
-                return _isTextBoxFocused;
+                return _width;
             }
             set {
-                //omitting duplicate check to enforce change in ui
-                //if (_isTextBoxFocused != value) 
-                {
-                    _isTextBoxFocused = value;
-                    OnPropertyChanged(nameof(IsTextBoxFocused));
+                if (_width != value) {
+                    _width = value;
+                    OnPropertyChanged(nameof(Width));
+                }
+            }
+        }
+
+        private double _height = 25;
+        public double Height {
+            get {
+                return _height;
+            }
+            set {
+                if (_height != value) {
+                    _height = value;
+                    OnPropertyChanged(nameof(Height));
+                }
+            }
+        }
+
+        private double _fontSize = 16;
+        public double FontSize {
+            get {
+                return _fontSize;
+            }
+            set {
+                if (_fontSize != value) {
+                    _fontSize = value;
+                    OnPropertyChanged(nameof(FontSize));
+                }
+            }
+        }
+
+        private double _cornerRadius = 10;
+        public double CornerRadius {
+            get {
+                return _cornerRadius;
+            }
+            set {
+                if (_cornerRadius != value) {
+                    _cornerRadius = value;
+                    OnPropertyChanged(nameof(CornerRadius));
+                }
+            }
+        }
+
+        private string _placeholderText = "Placeholder Text";
+        public string PlaceholderText {
+            get {
+                return _placeholderText;
+            }
+            set {
+                if (_placeholderText != value) {
+                    _placeholderText = value;
+                    OnPropertyChanged(nameof(PlaceholderText));
+                }
+            }
+        }
+
+        private string _text = string.Empty;
+        public string Text {
+            get {
+                return _text;
+            }
+            set {
+                if (_text != value) {
+                    _text = value;
+                    //SearchText = Text;
+                    OnPropertyChanged(nameof(Text));
+                    OnPropertyChanged(nameof(HasText));
+                    OnPropertyChanged(nameof(ClearTextButtonVisibility));
+                    OnPropertyChanged(nameof(TextBoxFontStyle));
+                    OnPropertyChanged(nameof(TextBoxBorderBrush));
                 }
             }
         }
@@ -31,49 +106,79 @@ namespace MpWpfApp {
                 return _searchText;
             }
             set {
-                if (_searchText != value) {
+                //if (_searchText != value) 
+                    {
                     _searchText = value;
                     OnPropertyChanged(nameof(SearchText));
-                    OnPropertyChanged(nameof(SearchTextBoxFontStyle));
-                    OnPropertyChanged(nameof(SearchTextBoxTextBrush));
-                    OnPropertyChanged(nameof(SearchTextBoxBorderBrush));
                 }
             }
         }
 
-        public Brush SearchTextBoxBorderBrush {
+        private bool _isTextBoxFocused = false;
+        public bool IsTextBoxFocused {
             get {
-                if(MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles.Count == 0 && 
-                    SearchText != Properties.Settings.Default.SearchPlaceHolderText &&
-                    !string.IsNullOrEmpty(SearchText)) {
-                    return Brushes.Red;
+                return _isTextBoxFocused;
+            }
+            set {
+                //omitting duplicate check to enforce change in ui
+                if (_isTextBoxFocused != value) {
+                    _isTextBoxFocused = value;
+                    OnPropertyChanged(nameof(IsTextBoxFocused));
                 }
-                return Brushes.Transparent;
             }
         }
 
-        public SolidColorBrush SearchTextBoxTextBrush {
+        private bool _isTextValid = true;
+        public bool IsTextValid {
             get {
-                if (SearchText != Properties.Settings.Default.SearchPlaceHolderText || IsTextBoxFocused) {
+                return _isTextValid;
+            }
+            set {
+                //omitting duplicate check to enforce change in ui
+                if (_isTextValid != value) {
+                    _isTextValid = value;
+                    OnPropertyChanged(nameof(IsTextValid));
+                    OnPropertyChanged(nameof(TextBoxBorderBrush));
+                }
+            }
+        }
+
+        public bool HasText {
+            get {
+                return Text.Length > 0 && Text != PlaceholderText;
+            }
+        }
+
+        public Brush TextBoxBorderBrush {
+            get {
+                if (IsTextValid) {
+                    return Brushes.Transparent;
+                }
+                return Brushes.Red;
+            }
+        }
+
+        public SolidColorBrush TextBoxTextBrush {
+            get {
+                if (HasText) {
                     return Brushes.Black;
                 }
                 return Brushes.DimGray;
             }
         }
 
-        public FontStyle SearchTextBoxFontStyle {
+        public FontStyle TextBoxFontStyle {
             get {
-                if(SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
-                    return FontStyles.Italic;
+                if (HasText) {
+                    return FontStyles.Normal;
                 }
-                return FontStyles.Normal;
+                return FontStyles.Italic;
             }
         }
 
-        public Visibility ClearSearchTextButtonVisibility {
+        public Visibility ClearTextButtonVisibility {
             get {
-                if (SearchText.Length > 0 && 
-                    SearchText != Properties.Settings.Default.SearchPlaceHolderText) {
+                if (HasText) {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -82,51 +187,67 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
+        public MpSearchBoxViewModel() : base() { }
 
-        public MpSearchBoxViewModel() : base() {
-        }
-        public void SearchBoxBorder_Loaded(object sender, RoutedEventArgs e) {
-            var searchBox = (TextBox)((MpClipBorder)sender).FindName("SearchTextBox");
-            searchBox.GotFocus += (s, e4) => {
-                //make text
-                if (SearchText == Properties.Settings.Default.SearchPlaceHolderText) {
-                    SearchText = string.Empty;
+        public void SearchBoxBorder_Loaded(object sender, RoutedEventArgs args) {
+            var tb = (TextBox)((MpClipBorder)sender).FindName("SearchBox");
+            tb.GotFocus += (s, e4) => {
+                if (!HasText) {
+                    Text = string.Empty;
                 }
-                
+
                 IsTextBoxFocused = true;
                 MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();
-                OnPropertyChanged(nameof(SearchTextBoxFontStyle));
-                OnPropertyChanged(nameof(SearchTextBoxTextBrush));
+                OnPropertyChanged(nameof(TextBoxFontStyle));
+                OnPropertyChanged(nameof(TextBoxTextBrush));
             };
-            searchBox.LostFocus += (s, e5) => {
+            tb.LostFocus += (s, e5) => {
                 IsTextBoxFocused = false;
-                if (string.IsNullOrEmpty(SearchText)) {
-                    SearchText = Properties.Settings.Default.SearchPlaceHolderText;
+                if (!HasText) {
+                    Text = Properties.Settings.Default.SearchPlaceHolderText;
                 }
             };
-            SearchText = Properties.Settings.Default.SearchPlaceHolderText;
-            MainWindowViewModel.ClipTrayViewModel.ItemsVisibilityChanged += (s1, e7) => {
-                OnPropertyChanged(nameof(SearchTextBoxBorderBrush));
+            if (string.IsNullOrEmpty(Text)) {
+                Text = Properties.Settings.Default.SearchPlaceHolderText;
+            }
+            tb.KeyDown += (s, e6) => {
+                if (e6.Key == Key.Enter) {
+                    PerformSearchCommand.Execute(null);
+                }
             };
         }
         #endregion
 
         #region Commands
-        private RelayCommand _clearSearchTextCommand;
-        public ICommand ClearSearchTextCommand {
+        private RelayCommand _clearTextCommand;
+        public ICommand ClearTextCommand {
             get {
-                if (_clearSearchTextCommand == null) {
-                    _clearSearchTextCommand = new RelayCommand(ClearSearchText, CanClearSearchText);
+                if (_clearTextCommand == null) {
+                    _clearTextCommand = new RelayCommand(ClearText, CanClearText);
                 }
-                return _clearSearchTextCommand;
+                return _clearTextCommand;
             }
         }
-        private bool CanClearSearchText() {
-            return SearchText.Length > 0;
+        private bool CanClearText() {
+            return Text.Length > 0;
         }
-        private void ClearSearchText() {
-            SearchText = string.Empty;
+        private void ClearText() {
+            Text = string.Empty;
             IsTextBoxFocused = true;
+            SearchText = Text;
+        }
+
+        private RelayCommand _performSearchCommand;
+        public ICommand PerformSearchCommand {
+            get {
+                if(_performSearchCommand == null) {
+                    _performSearchCommand = new RelayCommand(PerformSearch);
+                }
+                return _performSearchCommand;
+            }
+        }
+        private void PerformSearch() {
+            SearchText = Text;
         }
         #endregion
     }

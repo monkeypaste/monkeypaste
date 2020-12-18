@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace MpWpfApp {
     public class MpDetectedImageObjectViewModel : MpViewModelBase {
         #region Private Variables
-        private double _xo, _yo;
+        private double _xo, _yo, _xc, _yc;
         #endregion
 
         #region Properties
@@ -179,12 +181,22 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpDetectedImageObjectViewModel(
-            MpDetectedImageObject dio) {
+            MpDetectedImageObject dio, double xc, double yc) {
+            _xc = xc;
+            _yc = yc;
             _xo = 0;
             _yo = 0;
             WidthRatio = 1;
             HeightRatio = 1;
             DetectedImageObject = dio;
+        }
+
+        public void ClipTileImageDetectedObjectCanvas_Loaded(object sender, RoutedEventArgs args) {
+            var bc = (Canvas)sender;
+            var dob = (Border)bc.FindName("DetectedObjectBorder");
+
+            Canvas.SetLeft(dob, _xc);
+            Canvas.SetTop(dob, _yc);
         }
         #endregion
 

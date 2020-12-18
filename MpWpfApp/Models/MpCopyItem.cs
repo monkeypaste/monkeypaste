@@ -100,12 +100,12 @@ namespace MpWpfApp {
         public BitmapSource ItemBitmapSource {
             get {
                 switch (CopyItemType) {
-                    case MpCopyItemType.FileList:
-                        return MpHelpers.ConvertRichTextToBitmapSource(MpHelpers.ConvertPlainTextToRichText((string)_itemData));
+                    //case MpCopyItemType.FileList:
+                    //    return MpHelpers.ConvertRichTextToBitmapSource(MpHelpers.ConvertPlainTextToRichText((string)_itemData));
                     case MpCopyItemType.Image:
                         return (BitmapSource)_itemData;
-                    case MpCopyItemType.RichText:
-                        return MpHelpers.ConvertRichTextToBitmapSource((string)_itemData);
+                    //case MpCopyItemType.RichText:
+                    //    return MpHelpers.ConvertRichTextToBitmapSource((string)_itemData);
                 }
                 return new BitmapImage();
             }
@@ -579,7 +579,7 @@ namespace MpWpfApp {
                 ColorId = ItemColor.ColorId;
             }
             string itemText = this.CopyItemType == MpCopyItemType.RichText ? ItemRichText : ItemPlainText;
-            byte[] itemImage = MpHelpers.ConvertBitmapSourceToByteArray(ItemBitmapSource);
+            byte[] itemImage = this.CopyItemType == MpCopyItemType.Image ? MpHelpers.ConvertBitmapSourceToByteArray(ItemBitmapSource) : null;
             //if copyitem already exists
             if (this.CopyItemId > 0) {
                 MpDb.Instance.ExecuteWrite(

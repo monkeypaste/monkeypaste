@@ -1098,6 +1098,7 @@ namespace MpWpfApp {
         public static string ConvertPlainTextToRichText(string plainText) {
             System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox();
             rtb.Text = plainText;
+            rtb.Font = new System.Drawing.Font(rtb.Font.FontFamily.Name, 12);
             return rtb.Rtf;
         }
 

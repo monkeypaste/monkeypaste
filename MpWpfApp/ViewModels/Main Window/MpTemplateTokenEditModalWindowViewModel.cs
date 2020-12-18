@@ -24,6 +24,7 @@ namespace MpWpfApp {
         private Window _windowRef = null;
         private RichTextBox _rtb = null;
         private Hyperlink _originalLink = null;
+        public TextPointer _selectionEnd = null;
         #endregion
 
         #region Properties
@@ -173,26 +174,6 @@ namespace MpWpfApp {
                 return true;
             }
         }
-
-        //public static bool ShowTemplateTokenEditModalWindow(
-        //    RichTextBox rtb,
-        //    MpTemplateHyperlinkViewModel thlvm,
-        //    bool isEditMode) {
-        //    var ttmw = new MpTemplateTokenEditModalWindow(rtb, thlvm, isEditMode);
-
-        //    if (isEditMode) {
-        //        ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).IsShowingDialog = true;
-        //        var result = ttmw.ShowDialog();
-        //        ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).IsShowingDialog = false;
-        //        if (result == null || result.Value == true) {
-        //            return true;
-        //        } else {
-        //            return false;
-        //        }
-        //    } else {
-        //        return true;
-        //    }
-        //}
         #endregion
 
         #region Public Methods
@@ -212,7 +193,6 @@ namespace MpWpfApp {
                     GetUniqueTemplateColor());                
             }
 
-            //SelectedTokenHyperlink = templateLink;
             SelectedTemplateTokenViewModel = (MpTemplateHyperlinkViewModel)templateLink.DataContext;
             if (!_isEditMode) {
                 OkCommand.Execute(null);
@@ -302,7 +282,7 @@ namespace MpWpfApp {
         }
         private void Cancel() {
             //SelectedTokenHyperlink = _originalLink;
-            SelectedTemplateTokenViewModel = (MpTemplateHyperlinkViewModel)_originalLink.DataContext;
+            //SelectedTemplateTokenViewModel = (MpTemplateHyperlinkViewModel)_originalLink.DataContext;
             _windowRef.DialogResult = false;
             _windowRef.Close();
             IsOpen = false;
@@ -333,9 +313,7 @@ namespace MpWpfApp {
             return Validate();
         }
         private void Ok() {
-            //TextRange ts = _rtb.Selection;
-            //_rtb.ClearHyperlinks();
-            //_rtb.Selection.Select(ts.Start, ts.End);
+            TextPointer tokenEnd = _rtb.Selection.End;
             _rtb.Selection.Text = String.Format(
                 @"{0}{1}{0}{2}{0}",
                 Properties.Settings.Default.TemplateTokenMarker,
@@ -344,7 +322,7 @@ namespace MpWpfApp {
             _rtb.ClearHyperlinks();
             var ctvm = (MpClipTileViewModel)_rtb.DataContext;
             ctvm.CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(_rtb.Document);
-            //_rtb.Selection.Select(_rtb.Selection.End, _rtb.Selection.End);
+
             if (_windowRef != null) {
                 _windowRef.DialogResult = true;
                 _windowRef.Close();
