@@ -69,56 +69,121 @@ namespace MpWpfApp {
         //    return hyperlink;
         //}
 
-        public static FlowDocument HighlightFlowDocument(FlowDocument flowDocument, string highlightText, SolidColorBrush highlightBrush, bool isCaseSensitive = false) {
-            new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd).ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
+        //public static TextRange FindStringRangeFromPosition(TextPointer position, string str, bool isCaseSensitive = false) {
+        //    while (position != null) {
+        //        if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
+        //            position = position.GetNextContextPosition(LogicalDirection.Forward);
+        //            continue;
+        //        }
+        //        string textRun = isCaseSensitive ? position.GetTextInRun(LogicalDirection.Forward) : position.GetTextInRun(LogicalDirection.Forward).ToLower();
 
-            for (TextPointer position = flowDocument.ContentStart;
-                 position != null && position.CompareTo(flowDocument.ContentEnd) <= 0;
-                 position = position.GetNextContextPosition(LogicalDirection.Forward)) {
-                if (position.CompareTo(flowDocument.ContentEnd) == 0) {
-                    return flowDocument;
+        //        // Find the starting index of any substring that matches "str".
+        //        int indexInRun = textRun.IndexOf(isCaseSensitive ? str : str.ToLower());
+        //        if (indexInRun >= 0) {
+        //            return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + str.Length));
+        //        }
+        //        position = position.GetNextContextPosition(LogicalDirection.Forward);
+        //    }
+        //    // position will be null if "word" is not found.
+        //    return null;
+        //}
+
+        public static List<TextRange> FindAllStringRangesFromPosition(TextRange textRange, string matchStr, bool isCaseSensitive = false) {
+            var matchRangeList = new List<TextRange>();
+            TextPointer position = textRange.Start;
+            while (position != null) {
+                TextRange searchRange = new TextRange(position, textRange.End);
+                var hlr = FindTextInRange(searchRange, matchStr);
+                if (hlr == null) {
+                    break;
+                } else {
+                    matchRangeList.Add(hlr);
+                    position = hlr.End;
                 }
+            }
+            return matchRangeList;
+        }
+        /* The idea is to find the offset of the first character (IndexOf) and 
+         * then to find the TextPointer at this index (but by counting only text characters).
+         * 
+         * Good solution, but there is a minor problem. GetTextRunLength does not consider \r and \n characters. 
+         * If you have those in searchRange.Text then the resulting TextRange will be ahead of the correct 
+         * position by the number of new line characters*/
+        public static TextRange FindTextInRange(TextRange searchRange, string searchText) {
+            int offset = searchRange.Text.IndexOf(searchText, StringComparison.OrdinalIgnoreCase);
+            if (offset < 0)
+                return null;  // Not found
+
+            var start = GetTextPositionAtOffset(searchRange.Start, offset);
+            TextRange result = new TextRange(start, GetTextPositionAtOffset(start, searchText.Length));
+
+            return result;
+        }
+
+        public static TextPointer GetTextPositionAtOffset(TextPointer position, int characterCount) {
+            while (position != null) {
+                if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.Text) {
+                    int count = position.GetTextRunLength(LogicalDirection.Forward);
+                    if (characterCount <= count) {
+                        return position.GetPositionAtOffset(characterCount);
+                    }
+
+                    characterCount -= count;
+                }
+
+                TextPointer nextContextPosition = position.GetNextContextPosition(LogicalDirection.Forward);
+                if (nextContextPosition == null)
+                    return position;
+
+                position = nextContextPosition;
+            }
+
+            return position;
+        }
+        //public static TextRange FindStringRangeFromPosition(TextPointer position, string str, bool isCaseSensitive = false) {
+        //    while (position != null) {
+        //        var dir = LogicalDirection.Forward;
+        //        if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
+        //            dir = LogicalDirection.Backward;
+        //        }
+        //        string textRun = isCaseSensitive ? position.GetTextInRun(dir) : position.GetTextInRun(dir).ToLower();
+
+        //        // Find the starting index of any substring that matches "str".
+        //        int indexInRun = textRun.IndexOf(isCaseSensitive ? str : str.ToLower());
+        //        if (indexInRun >= 0) {
+        //            if (dir == LogicalDirection.Forward) {
+        //                return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + str.Length));
+        //            } else {
+        //                return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun - str.Length));
+        //            }
+        //        }
+        //        position = position.GetNextContextPosition(dir);
+        //    }
+        //    // position will be null if "word" is not found.
+        //    return null;
+        //}
+        public static TextRange FindStringRangeFromPosition(TextPointer position, string str, bool isCaseSensitive = false) {
+            for (;
+             position != null;
+             position = position.GetNextContextPosition(LogicalDirection.Forward)) {                
                 string textRun = string.Empty;
                 int indexInRun = -1;
                 if (isCaseSensitive) {
                     textRun = position.GetTextInRun(LogicalDirection.Forward);
-                    indexInRun = textRun.IndexOf(highlightText, StringComparison.CurrentCulture);
+                    indexInRun = textRun.IndexOf(str, StringComparison.CurrentCulture);
                 } else {
                     textRun = position.GetTextInRun(LogicalDirection.Forward).ToLower();
-                    indexInRun = textRun.IndexOf(highlightText.ToLower(), StringComparison.CurrentCulture);
+                    indexInRun = textRun.IndexOf(str.ToLower(), StringComparison.CurrentCulture);
                 }
                 if (indexInRun >= 0) {
                     position = position.GetPositionAtOffset(indexInRun);
                     if (position != null) {
-                        TextPointer nextPointer = position.GetPositionAtOffset(highlightText.Length);
-                        TextRange textRange = new TextRange(position, nextPointer);
-                        textRange.ApplyPropertyValue(TextElement.BackgroundProperty, highlightBrush);
+                        TextPointer nextPointer = position.GetPositionAtOffset(str.Length);
+                        return new TextRange(position, nextPointer);
+                        //lastSearchTextRange.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString));
                     }
                 }
             }
-            return flowDocument;
-        }
-        
-        public static TextRange FindStringRangeFromPosition(TextPointer position, string str, bool isCaseSensitive = false) {
-            while (position != null) {
-                var dir = LogicalDirection.Forward;
-                if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
-                    dir = LogicalDirection.Backward;
-                }
-                string textRun = isCaseSensitive ? position.GetTextInRun(dir) : position.GetTextInRun(dir).ToLower();
-
-                // Find the starting index of any substring that matches "word".
-                int indexInRun = textRun.IndexOf(isCaseSensitive ? str : str.ToLower());
-                if (indexInRun >= 0) {
-                    if (dir == LogicalDirection.Forward) {
-                        return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + str.Length));
-                    } else {
-                        return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun - str.Length));
-                    }
-                }
-                position = position.GetNextContextPosition(LogicalDirection.Forward);
-            }
-            // position will be null if "word" is not found.
             return null;
         }
 

@@ -643,6 +643,7 @@
                                                 Height="{Binding TileSize}"
                                                 Visibility="{Binding TileVisibility}"
                                                 local:MpFocusExtension.IsFocused="{Binding IsClipItemFocused}"
+                                                local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.SearchText}"
                                                 Focusable="True"
                                                 Background="White"
                                                 ToolTipService.ShowDuration="1000"
@@ -823,7 +824,6 @@
                                         <!-- Clip Title TextBlock -->
                                         <TextBlock x:Name="ClipTileTitleTextBlock"
                                                    Text="{Binding CopyItemTitle}"
-                                                   local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.SearchText}"
                                                    Canvas.Top="-2"
                                                    Canvas.Left="5"
                                                    FontSize="24"
@@ -1113,7 +1113,6 @@
                                                 </StackPanel>
                                             </Border>
                                             <RichTextBox x:Name="ClipTileRichTextBox"
-                                                         local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.SearchText}"
                                                          local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText}"
                                                          IsReadOnly="{Binding IsRtbReadOnly}"
                                                          IsInactiveSelectionHighlightEnabled="True"
@@ -1250,8 +1249,7 @@
                                                        Focusable="False"
                                                        IsEnabled="False"
                                                        Source="{Binding CopyItemBmp}"
-                                                       local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.SearchText}"
-                                                       Stretch="Uniform">
+                                                      Stretch="Uniform">
                                                 </Image>
                                                 <!--<local:AdornedControl x:Name="ClipTileImageDetectedObjectAdornedControl"
                                                                       IsAdornerVisible="True"
@@ -1312,7 +1310,6 @@
                                                  Width="{Binding TileBorderWidth}"
                                                  Height="{Binding TileContentHeight}"
                                                  ItemsSource="{Binding FileListViewModels}"
-                                                 local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.SearchText}"
                                                  Visibility="{Binding FileListVisibility}"
                                                  IsEnabled="{Binding IsSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                                                  BorderThickness="0"

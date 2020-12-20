@@ -406,6 +406,10 @@
                 }
             }
         }
+
+        public List<TextRange> LastContentHighlightRangeList { get; set; } = new List<TextRange>();
+
+        public List<TextRange> LastTitleHighlightRangeList { get; set; } = new List<TextRange>();
         #endregion
 
         #region Brush Properties
@@ -888,8 +892,9 @@
             set {
                 if (CopyItem.Title != value) {
                     CopyItem.Title = value;
+                    CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItemTitle));
-                    OnPropertyChanged(nameof(CopyItem));
+                    //OnPropertyChanged(nameof(CopyItem));
                 }
             }
         }
@@ -908,7 +913,7 @@
                 if (CopyItem.ItemRichText != value) {
                     //value should be raw rtf where templates are encoded into #name#color# groups
                     CopyItem.SetData(value);
-                    OnPropertyChanged(nameof(CopyItem));
+                    //OnPropertyChanged(nameof(CopyItem));
                     OnPropertyChanged(nameof(CopyItemRichText));
                     //OnPropertyChanged(nameof(TemplateTokenList));
                     //OnPropertyChanged(nameof(TemplateTokenLookupDictionary));
@@ -1000,7 +1005,8 @@
                 return _copyItem;
             }
             set {
-                if (_copyItem != value) {
+                if (_copyItem != value) 
+                    {
                     _copyItem = value;
 
                     OnPropertyChanged(nameof(CopyItem));
@@ -1094,6 +1100,17 @@
                     EditClipTextCommand.Execute(null);
                     e5.Handled = true;
                     return;
+                }
+            };
+            clipTileBorder.KeyDown += (s, e6) => {
+                if(CopyItemType != MpCopyItemType.RichText) {
+                    return;
+                }
+                var rtb = (RichTextBox)((FrameworkElement)s).FindName("ClipTileRichTextBox");
+                if(e6.Key == Key.Down) {
+                    rtb.FontSize -= 1;
+                } else if(e6.Key == Key.Up) {
+                    rtb.FontSize += 1;
                 }
             };
             IsLoading = false;

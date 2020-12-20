@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -106,7 +107,7 @@ namespace MpWpfApp {
                 return _searchText;
             }
             set {
-                //if (_searchText != value) 
+                if (_searchText != value) 
                     {
                     _searchText = value;
                     OnPropertyChanged(nameof(SearchText));
@@ -210,9 +211,19 @@ namespace MpWpfApp {
             if (string.IsNullOrEmpty(Text)) {
                 Text = Properties.Settings.Default.SearchPlaceHolderText;
             }
-            tb.KeyDown += (s, e6) => {
-                if (e6.Key == Key.Enter) {
-                    PerformSearchCommand.Execute(null);
+
+            Timer timer = new Timer();
+            timer.Interval = 500;
+            timer.AutoReset = false;
+            timer.Elapsed += (s, e) => {
+                PerformSearchCommand.Execute(null);
+            };
+            PropertyChanged += (s, e7) => {
+                switch (e7.PropertyName) {
+                    case nameof(Text):
+                        timer.Stop();
+                        timer.Start();
+                        break;
                 }
             };
         }

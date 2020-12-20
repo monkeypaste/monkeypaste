@@ -184,5 +184,11 @@
     <Setting Name="CurrencyConverterFreeApiKey" Type="System.String" Scope="Application">
       <Value Profile="(Default)">897d0d9538155ebeaff7</Value>
     </Setting>
+    <Setting Name="MainWindowStartHeight" Type="System.Double" Scope="Application">
+      <Value Profile="(Default)">10000</Value>
+    </Setting>
+    <Setting Name="ClipTileBackgroundColor" Type="System.String" Scope="User">
+      <Value Profile="(Default)">#FFFFFF</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

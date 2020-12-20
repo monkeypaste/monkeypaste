@@ -631,5 +631,26 @@ namespace MpWpfApp.Properties {
                 return ((string)(this["CurrencyConverterFreeApiKey"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10000")]
+        public double MainWindowStartHeight {
+            get {
+                return ((double)(this["MainWindowStartHeight"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFFFFF")]
+        public string ClipTileBackgroundColor {
+            get {
+                return ((string)(this["ClipTileBackgroundColor"]));
+            }
+            set {
+                this["ClipTileBackgroundColor"] = value;
+            }
+        }
     }
 }

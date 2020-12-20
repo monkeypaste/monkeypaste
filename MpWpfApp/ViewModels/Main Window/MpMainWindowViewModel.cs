@@ -13,7 +13,8 @@ namespace MpWpfApp {
         #region Statics
         public static bool IsOpen {
             get {
-                return Application.Current.MainWindow.Visibility == Visibility.Visible;
+                return Application.Current.MainWindow.Visibility == Visibility.Visible && 
+                    Application.Current.MainWindow.Top < Properties.Settings.Default.MainWindowStartHeight;
             }
         }
         #endregion

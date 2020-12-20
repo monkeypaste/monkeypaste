@@ -766,5 +766,15 @@ namespace MpWpfApp {
                 closeMethod.Invoke(mailWriter, BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { }, null);
             }
         }
+
+        public static bool ContainsByCaseSetting(this string str, string compareStr) {
+            if(string.IsNullOrEmpty(str) || string.IsNullOrEmpty(compareStr)) {
+                return false;
+            }
+            if(Properties.Settings.Default.IsSearchCaseSensitive) {
+                return str.Contains(compareStr);
+            }
+            return str.ToLower().Contains(compareStr.ToLower());
+        }
     }
 }
