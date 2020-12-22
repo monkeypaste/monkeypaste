@@ -651,148 +651,7 @@
                                 <local:MpClipBorder.Resources>
                                     <local:MpBindingProxy x:Key="ClipTileProxy"
                                                           Data="{Binding}" />
-                                </local:MpClipBorder.Resources>
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="Loaded">
-                                        <i:CallMethodAction TargetObject="{Binding}"
-                                                            MethodName="ClipTile_Loaded" />
-                                    </i:EventTrigger>
-                                    <i:EventTrigger EventName="Loaded">
-                                        <i:CallMethodAction TargetObject="{Binding MainWindowViewModel.ClipTrayViewModel}"
-                                                            MethodName="ClipTile_Loaded" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                                <local:MpClipBorder.ContextMenu>
-                                    <ContextMenu x:Name="ClipTile_ContextMenu">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="Opened">
-                                                <i:CallMethodAction TargetObject="{Binding}"
-                                                                    MethodName="ClipTile_ContextMenu_Opened" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                        <MenuItem Header="Bring to Front"
-                                                  Command="{Binding Data.BringSelectedClipTilesToFrontCommand, Source={StaticResource ClipTrayProxy}}" />
-                                        <MenuItem Header="Send to Back"
-                                                  Command="{Binding Data.SendSelectedClipTilesToBackCommand, Source={StaticResource ClipTrayProxy}}" />
-                                        <MenuItem Header="Assign Hotkey"
-                                                  InputGestureText="{Binding ShortcutKeyList}"
-                                                  Command="{Binding AssignHotkeyCommand}" />
-                                        <MenuItem Header="Exclude Application"
-                                                  Command="{Binding ExcludeApplicationCommand}" />
-                                        <MenuItem Header="Export To">
-                                            <MenuItem Header="File(s)..."
-                                                      Command="{Binding Data.ExportSelectedClipTilesCommand, Source={StaticResource ClipTrayProxy}}"
-                                                      CommandParameter="{StaticResource Files}" />
-                                            <MenuItem Header="CSV"
-                                                      Command="{Binding Data.ExportSelectedClipTilesCommand, Source={StaticResource ClipTrayProxy}}"
-                                                      CommandParameter="{StaticResource Csv}" />
-                                            <MenuItem Header="Zip"
-                                                      Command="{Binding Data.ExportSelectedClipTilesCommand, Source={StaticResource ClipTrayProxy}}"
-                                                      CommandParameter="{StaticResource Zip}" />
-                                        </MenuItem>
-                                        <MenuItem Header="Share..."
-                                                  Command="{Binding ShareClipCommand}" />
-                                        <MenuItem Header="Rename"
-                                                  Command="{Binding Data.RenameClipCommand, Source={StaticResource ClipTrayProxy}}" />
-                                        <MenuItem Header="Duplicate"
-                                                  Command="{Binding Data.DuplicateSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
-                                        <MenuItem Header="Edit"
-                                                  Command="{Binding EditClipTextCommand}" />
-                                        <MenuItem Header="Send as Email"
-                                                  Command="{Binding SendClipToEmailCommand}" />
-                                        <MenuItem Header="Change Color"
-                                                  Command="{Binding Data.ChangeSelectedClipsColorCommand, Source={StaticResource ClipTrayProxy}}" />
-                                        <MenuItem Header="Delete"
-                                                  Command="{Binding Data.DeleteSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
-                                        <MenuItem Header="Run in Command Prompt"
-                                                  Command="{Binding Data.RunSelectedClipsInShellCommand, Source={StaticResource ClipTrayProxy}}" />
-                                        <MenuItem Header="Say"
-                                                  Command="{Binding Data.SpeakSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
-                                        <MenuItem Header="Merge"
-                                                  Command="{Binding Data.MergeSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
-                                        <MenuItem Header="Search Web">
-                                            <MenuItem Header="Google">
-                                                <i:Interaction.Triggers>
-                                                    <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                                                        <i:CallMethodAction MethodName="ContextMenuMouseLeftButtonUpOnSearchGoogle"
-                                                                            TargetObject="{Binding Data, Source={StaticResource ClipTileProxy}}" />
-                                                    </i:EventTrigger>
-                                                </i:Interaction.Triggers>
-                                            </MenuItem>
-                                            <MenuItem Header="Bing">
-                                                <i:Interaction.Triggers>
-                                                    <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                                                        <i:CallMethodAction MethodName="ContextMenuMouseLeftButtonUpOnSearchBing"
-                                                                            TargetObject="{Binding Data, Source={StaticResource ClipTileProxy}}" />
-                                                    </i:EventTrigger>
-                                                </i:Interaction.Triggers>
-                                            </MenuItem>
-                                            <MenuItem Header="DuckDuckGo">
-                                                <i:Interaction.Triggers>
-                                                    <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                                                        <i:CallMethodAction MethodName="ContextMenuMouseLeftButtonUpOnSearchDuckDuckGo"
-                                                                            TargetObject="{Binding Data, Source={StaticResource ClipTileProxy}}" />
-                                                    </i:EventTrigger>
-                                                </i:Interaction.Triggers>
-                                            </MenuItem>
-                                            <MenuItem Header="Yandex">
-                                                <i:Interaction.Triggers>
-                                                    <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                                                        <i:CallMethodAction MethodName="ContextMenuMouseLeftButtonUpOnSearchYandex"
-                                                                            TargetObject="{Binding Data, Source={StaticResource ClipTileProxy}}" />
-                                                    </i:EventTrigger>
-                                                </i:Interaction.Triggers>
-                                            </MenuItem>
-                                        </MenuItem>
-                                        <MenuItem Header="Convert To"
-                                                  ItemsSource="{Binding Data.ConvertClipTypes, Source={StaticResource ClipTileProxy}}">
-                                            <MenuItem.ItemContainerStyle>
-                                                <Style TargetType="{x:Type MenuItem}">
-                                                    <Setter Property="Header"
-                                                            Value="{Binding Header}" />
-                                                    <Setter Property="Command"
-                                                            Value="{Binding Command}" />
-                                                    <Setter Property="CommandParameter"
-                                                            Value="{Binding CommandParameter}" />
-                                                    <Setter Property="IsCheckable"
-                                                            Value="True" />
-                                                    <Setter Property="IsChecked"
-                                                            Value="{Binding IsChecked}" />
-                                                </Style>
-                                            </MenuItem.ItemContainerStyle>
-                                        </MenuItem>
-                                        <MenuItem Header="Translate"
-                                                  ItemsSource="{Binding Data.TranslateLanguageMenuItems, Source={StaticResource ClipTileProxy}}">
-                                            <MenuItem.ItemContainerStyle>
-                                                <Style TargetType="{x:Type MenuItem}">
-                                                    <Setter Property="Header"
-                                                            Value="{Binding Header}" />
-                                                    <Setter Property="Command"
-                                                            Value="{Binding Command}" />
-                                                    <Setter Property="CommandParameter"
-                                                            Value="{Binding CommandParameter}" />
-                                                </Style>
-                                            </MenuItem.ItemContainerStyle>
-                                        </MenuItem>
-                                        <MenuItem Header="Pin To"
-                                                  ItemsSource="{Binding Data.TagMenuItems, Source={StaticResource ClipTileProxy}}">
-                                            <MenuItem.ItemContainerStyle>
-                                                <Style TargetType="{x:Type MenuItem}">
-                                                    <Setter Property="Header"
-                                                            Value="{Binding Header}" />
-                                                    <Setter Property="Command"
-                                                            Value="{Binding Command}" />
-                                                    <Setter Property="CommandParameter"
-                                                            Value="{Binding CommandParameter}" />
-                                                    <Setter Property="IsCheckable"
-                                                            Value="True" />
-                                                    <Setter Property="IsChecked"
-                                                            Value="{Binding IsChecked}" />
-                                                </Style>
-                                            </MenuItem.ItemContainerStyle>
-                                        </MenuItem>
-                                    </ContextMenu>
-                                </local:MpClipBorder.ContextMenu>
+                                </local:MpClipBorder.Resources>                                
                                 <!--<local:MpClipBorder.Effect>
                                     <DropShadowEffect Color="Black"
                                                       BlurRadius="10" />
@@ -801,6 +660,147 @@
                                     <Label Content="Loading"
                                            Visibility="{Binding LoadingSpinnerVisibility}" />
                                     <Grid Visibility="{Binding ContentVisibility}">
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Loaded">
+                                                <i:CallMethodAction TargetObject="{Binding}"
+                                                                    MethodName="ClipTile_Loaded" />
+                                            </i:EventTrigger>
+                                            <i:EventTrigger EventName="Loaded">
+                                                <i:CallMethodAction TargetObject="{Binding MainWindowViewModel.ClipTrayViewModel}"
+                                                                    MethodName="ClipTile_Loaded" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                        <Grid.ContextMenu>
+                                            <ContextMenu x:Name="ClipTile_ContextMenu">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Opened">
+                                                        <i:CallMethodAction TargetObject="{Binding}"
+                                                                            MethodName="ClipTile_ContextMenu_Opened" />
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                                <MenuItem Header="Bring to Front"
+                                                          Command="{Binding Data.BringSelectedClipTilesToFrontCommand, Source={StaticResource ClipTrayProxy}}" />
+                                                <MenuItem Header="Send to Back"
+                                                          Command="{Binding Data.SendSelectedClipTilesToBackCommand, Source={StaticResource ClipTrayProxy}}" />
+                                                <MenuItem Header="Assign Hotkey"
+                                                          InputGestureText="{Binding ShortcutKeyList}"
+                                                          Command="{Binding AssignHotkeyCommand}" />
+                                                <MenuItem Header="Exclude Application"
+                                                          Command="{Binding ExcludeApplicationCommand}" />
+                                                <MenuItem Header="Export To">
+                                                    <MenuItem Header="File(s)..."
+                                                              Command="{Binding Data.ExportSelectedClipTilesCommand, Source={StaticResource ClipTrayProxy}}"
+                                                              CommandParameter="{StaticResource Files}" />
+                                                    <MenuItem Header="CSV"
+                                                              Command="{Binding Data.ExportSelectedClipTilesCommand, Source={StaticResource ClipTrayProxy}}"
+                                                              CommandParameter="{StaticResource Csv}" />
+                                                    <MenuItem Header="Zip"
+                                                              Command="{Binding Data.ExportSelectedClipTilesCommand, Source={StaticResource ClipTrayProxy}}"
+                                                              CommandParameter="{StaticResource Zip}" />
+                                                </MenuItem>
+                                                <MenuItem Header="Share..."
+                                                          Command="{Binding ShareClipCommand}" />
+                                                <MenuItem Header="Rename"
+                                                          Command="{Binding Data.RenameClipCommand, Source={StaticResource ClipTrayProxy}}" />
+                                                <MenuItem Header="Duplicate"
+                                                          Command="{Binding Data.DuplicateSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
+                                                <MenuItem Header="Edit"
+                                                          Command="{Binding EditClipTextCommand}" />
+                                                <MenuItem Header="Send as Email"
+                                                          Command="{Binding SendClipToEmailCommand}" />
+                                                <MenuItem Header="Change Color"
+                                                          Command="{Binding Data.ChangeSelectedClipsColorCommand, Source={StaticResource ClipTrayProxy}}" />
+                                                <MenuItem Header="Delete"
+                                                          Command="{Binding Data.DeleteSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
+                                                <MenuItem Header="Run in Command Prompt"
+                                                          Command="{Binding Data.RunSelectedClipsInShellCommand, Source={StaticResource ClipTrayProxy}}" />
+                                                <MenuItem Header="Say"
+                                                          Command="{Binding Data.SpeakSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
+                                                <MenuItem Header="Merge"
+                                                          Command="{Binding Data.MergeSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
+                                                <MenuItem Header="Search Web">
+                                                    <MenuItem Header="Google">
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                                                <i:CallMethodAction MethodName="ContextMenuMouseLeftButtonUpOnSearchGoogle"
+                                                                                    TargetObject="{Binding Data, Source={StaticResource ClipTileProxy}}" />
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </MenuItem>
+                                                    <MenuItem Header="Bing">
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                                                <i:CallMethodAction MethodName="ContextMenuMouseLeftButtonUpOnSearchBing"
+                                                                                    TargetObject="{Binding Data, Source={StaticResource ClipTileProxy}}" />
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </MenuItem>
+                                                    <MenuItem Header="DuckDuckGo">
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                                                <i:CallMethodAction MethodName="ContextMenuMouseLeftButtonUpOnSearchDuckDuckGo"
+                                                                                    TargetObject="{Binding Data, Source={StaticResource ClipTileProxy}}" />
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </MenuItem>
+                                                    <MenuItem Header="Yandex">
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                                                <i:CallMethodAction MethodName="ContextMenuMouseLeftButtonUpOnSearchYandex"
+                                                                                    TargetObject="{Binding Data, Source={StaticResource ClipTileProxy}}" />
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                    </MenuItem>
+                                                </MenuItem>
+                                                <MenuItem Header="Convert To"
+                                                          ItemsSource="{Binding Data.ConvertClipTypes, Source={StaticResource ClipTileProxy}}">
+                                                    <MenuItem.ItemContainerStyle>
+                                                        <Style TargetType="{x:Type MenuItem}">
+                                                            <Setter Property="Header"
+                                                                    Value="{Binding Header}" />
+                                                            <Setter Property="Command"
+                                                                    Value="{Binding Command}" />
+                                                            <Setter Property="CommandParameter"
+                                                                    Value="{Binding CommandParameter}" />
+                                                            <Setter Property="IsCheckable"
+                                                                    Value="True" />
+                                                            <Setter Property="IsChecked"
+                                                                    Value="{Binding IsChecked}" />
+                                                        </Style>
+                                                    </MenuItem.ItemContainerStyle>
+                                                </MenuItem>
+                                                <MenuItem Header="Translate"
+                                                          ItemsSource="{Binding Data.TranslateLanguageMenuItems, Source={StaticResource ClipTileProxy}}">
+                                                    <MenuItem.ItemContainerStyle>
+                                                        <Style TargetType="{x:Type MenuItem}">
+                                                            <Setter Property="Header"
+                                                                    Value="{Binding Header}" />
+                                                            <Setter Property="Command"
+                                                                    Value="{Binding Command}" />
+                                                            <Setter Property="CommandParameter"
+                                                                    Value="{Binding CommandParameter}" />
+                                                        </Style>
+                                                    </MenuItem.ItemContainerStyle>
+                                                </MenuItem>
+                                                <MenuItem Header="Pin To"
+                                                          ItemsSource="{Binding Data.TagMenuItems, Source={StaticResource ClipTileProxy}}">
+                                                    <MenuItem.ItemContainerStyle>
+                                                        <Style TargetType="{x:Type MenuItem}">
+                                                            <Setter Property="Header"
+                                                                    Value="{Binding Header}" />
+                                                            <Setter Property="Command"
+                                                                    Value="{Binding Command}" />
+                                                            <Setter Property="CommandParameter"
+                                                                    Value="{Binding CommandParameter}" />
+                                                            <Setter Property="IsCheckable"
+                                                                    Value="True" />
+                                                            <Setter Property="IsChecked"
+                                                                    Value="{Binding IsChecked}" />
+                                                        </Style>
+                                                    </MenuItem.ItemContainerStyle>
+                                                </MenuItem>
+                                            </ContextMenu>
+                                        </Grid.ContextMenu>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="{Binding TileTitleHeight}" />
                                             <RowDefinition Height="{Binding TileContentHeight}" />

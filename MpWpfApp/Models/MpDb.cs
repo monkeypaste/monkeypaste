@@ -495,27 +495,7 @@ namespace MpWpfApp {
                     , Width real NOT NULL
                     , Height real NOT NULL                    
                     , TypeCsv text
-                    , CONSTRAINT FK_MpSubTextToken_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
-                    );
-                     ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpSubTextTokenType (
-                      pk_MpSubTextTokenTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , TokenTypeName text NOT NULL 
-                    );
-                    INSERT INTO MpSubTextTokenType(TokenTypeName) VALUES('URI'),('Email'),('Phone Number'),('Currency'),('Hex Color'),('Street Address'),('Clip'),('Template');
-                    ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpSubTextToken (
-                      pk_MpSubTextTokenId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , fk_MpCopyItemId integer NOT NULL
-                    , fk_MpSubTextTokenTypeId integer NOT NULL
-                    , StartIdx integer NOT NULL
-                    , EndIdx integer NOT NULL
-                    , BlockIdx int NOT NULL
-                    , InlineIdx int NOT NULL
-                    , TokenText text NOT NULL                    
-                    , TokenName text
-                    , CONSTRAINT FK_MpSubTextToken_0_0 FOREIGN KEY (fk_MpSubTextTokenTypeId) REFERENCES MpSubTextTokenType (pk_MpSubTextTokenTypeId) 
-                    , CONSTRAINT FK_MpSubTextToken_1_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
+                    , CONSTRAINT FK_MpDetectedImageObject_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpRichTextStyle (
@@ -553,7 +533,6 @@ namespace MpWpfApp {
                 select * from MpFileDropListItem where pk_MpFileDropListItemId > 0;
                 select * from MpFileDropListSubItem where pk_MpFileDropListSubItemId > 0;
                 select * from MpPasteHistory where pk_MpPasteHistoryId > 0;
-                select * from MpSubTextToken where pk_MpSubTextTokenId > 0;
                 select * from MpTagType where pk_MpTagTypeId > 0;
                 select * from MpTag where pk_MpTag > 0; 
                 select * from MpSetting where pk_MpSetting > 0; 

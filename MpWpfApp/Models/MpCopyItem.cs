@@ -212,7 +212,7 @@ namespace MpWpfApp {
             ItemColor = new MpColor(MpHelpers.GetRandomColor());
             Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
             Title = "Loading";
-            ItemTitleSwirl = InitSwirl();
+            ItemTitleSwirl = new BitmapImage();
             CopyDateTime = DateTime.Now;
             App = new MpApp();
             _itemData = "Default";
@@ -228,9 +228,7 @@ namespace MpWpfApp {
             CopyDateTime = DateTime.Now;
             Title = "Untitled";
             CopyCount = 1;
-            Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
-            ItemTitleSwirl = InitSwirl();
-            ImageItemObjectList = new List<MpDetectedImageObject>();
+            Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);            
 
             var appPath = MpHelpers.GetProcessPath(hwnd);
             var app = _AppList.Where(x => x.AppPath == appPath).ToList();
@@ -248,7 +246,9 @@ namespace MpWpfApp {
             } else {
                 ItemColor = color[0];
             }
-            
+
+            ItemTitleSwirl = InitSwirl();
+            ImageItemObjectList = new List<MpDetectedImageObject>();
 
             switch (itemType) {
                 case MpCopyItemType.FileList:
@@ -464,11 +464,6 @@ namespace MpWpfApp {
                         { "@ciid", CopyItemId }
                     });
             MpDb.Instance.ExecuteWrite(
-                "delete from MpSubTextToken where fk_MpCopyItemId=@ciid",
-                new System.Collections.Generic.Dictionary<string, object> {
-                        { "@ciid", CopyItemId }
-                    });
-            MpDb.Instance.ExecuteWrite(
                 "delete from MpCopyItemTag where fk_MpCopyItemId=@ciid",
                 new System.Collections.Generic.Dictionary<string, object> {
                         { "@ciid", CopyItemId }
@@ -512,20 +507,6 @@ namespace MpWpfApp {
             }
         }
 
-        private void MapDataToColumns() {
-            TableName = "MpCopyItem";
-            columnData.Clear();
-            columnData.Add("pk_MpCopyItemId", CopyItemId);
-            columnData.Add("fk_MpCopyItemTypeId", CopyItemType);
-            columnData.Add("fk_MpClientId", Client.ClientId);
-            columnData.Add("fk_MpAppId", App.AppId);
-            columnData.Add("fk_MpColorId", ItemColor.ColorId);
-            columnData.Add("CopyDateTime", CopyDateTime);
-            columnData.Add("Title", Title);
-            columnData.Add("ItemText",ItemRichText);
-            columnData.Add("CopyCount", CopyCount);
-        }
-
         #endregion
 
         #region Overrides
@@ -541,6 +522,7 @@ namespace MpWpfApp {
             CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
             ItemTitleSwirl = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["TitleSwirl"]);
 
+            Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
             App = _AppList.Where(x => x.AppId == appId).ToList()[0];
             ItemColor = _ColorList.Where(x => x.ColorId == colorId).ToList()[0];
             
@@ -550,31 +532,10 @@ namespace MpWpfApp {
             } else {
                 SetData(dr["ItemText"].ToString());
             }
-
-            MapDataToColumns();
         }
         
         // still req'd if NoDb=true
         public override void WriteToDatabase() {
-            bool isNew = false;
-            //if (App == null) {
-            //    App = new MpApp(SourcePath, false, SourceHandle);
-            //    AppId = App.AppId;
-            //}
-            //if (AppId == 0) {
-            //    DataTable dt = MpDb.Instance.Execute(
-            //        "select * from MpApp where pk_MpAppId=@aid",
-            //        new System.Collections.Generic.Dictionary<string, object> {
-            //                { "@aid", AppId }
-            //            });
-            //    if (dt != null && dt.Rows.Count > 0) {
-            //        App = new MpApp(dt.Rows[0]);
-            //        App.AppId = 0;
-            //    } else {
-            //        //this case occur
-            //        //Console.WriteLine("MpCopyItem Error: error retrieving MpApp with id " + appId);
-            //    }
-            //}
             App.WriteToDatabase();
             ItemColor.WriteToDatabase();
 
@@ -596,7 +557,6 @@ namespace MpWpfApp {
                             { "@ii", itemImage},
                             { "@ciid", CopyItemId},
                         });
-                isNew = false;
             } else {
                 MpDb.Instance.ExecuteWrite(
                     "insert into MpCopyItem(TitleSwirl,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) " + 
@@ -614,17 +574,12 @@ namespace MpWpfApp {
                             { "@ii", itemImage},
                             { "@ciid", CopyItemId},
                         });
-                CopyItemId = MpDb.Instance.GetLastRowId("MpCopyItem", "pk_MpCopyItemId");                
-                isNew = true;
+                CopyItemId = MpDb.Instance.GetLastRowId("MpCopyItem", "pk_MpCopyItemId");  
             }
             foreach (var imgObj in ImageItemObjectList) {
                 imgObj.CopyItemId = CopyItemId;
                 imgObj.WriteToDatabase();
             }
-
-            MapDataToColumns();
-            Console.WriteLine(isNew ? "Created " : "Updated " + " MpCopyItem");
-            Console.WriteLine(ToString());
         }
 
         public object Clone() {

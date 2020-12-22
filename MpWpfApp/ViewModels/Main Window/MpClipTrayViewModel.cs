@@ -314,19 +314,27 @@ namespace MpWpfApp {
             };
             clipTray.SelectionChanged += (s, e8) => {
                 MergeClipsCommandVisibility = MergeSelectedClipsCommand.CanExecute(null) ? Visibility.Visible : Visibility.Collapsed;
+                Dispatcher.CurrentDispatcher.BeginInvoke(
+                        DispatcherPriority.Background,
+                        (Action)(() => {
+                            foreach (var ttvm in MainWindowViewModel.TagTrayViewModel) {
+                                if (ttvm == MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel() || ttvm.IsSelected) {
+                                    continue;
+                                }
+                                
+                                bool isTagLinkedToAllSelectedClips = true;
+                                foreach (var sctvm in SelectedClipTiles) {
+                                    while(sctvm.IsLoading) {
+                                        Thread.Sleep(100);
+                                    }
+                                    if (!ttvm.Tag.IsLinkedWithCopyItem(sctvm.CopyItem)) {
+                                        isTagLinkedToAllSelectedClips = false;
+                                    }
+                                }
+                                ttvm.IsHovering = isTagLinkedToAllSelectedClips && VisibileClipTiles.Count > 0;
 
-                foreach(var ttvm in MainWindowViewModel.TagTrayViewModel) {
-                    if(ttvm == MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel() || ttvm.IsSelected) {
-                        continue;
-                    }
-                    bool isTagLinkedToAllSelectedClips = true;
-                    foreach(var sctvm in SelectedClipTiles) {
-                        if(!ttvm.Tag.IsLinkedWithCopyItem(sctvm.CopyItem)) {
-                            isTagLinkedToAllSelectedClips = false;
-                        }
-                    }
-                    ttvm.IsHovering = isTagLinkedToAllSelectedClips && VisibileClipTiles.Count > 0;
-                }
+                            }
+                        }));
             };
             clipTray.PreviewMouseWheel += (s, e3) => {
                 if(IsEditingClipTile) {
@@ -392,7 +400,7 @@ namespace MpWpfApp {
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            var clipTileBorder = (MpClipBorder)sender;
+            var clipTileBorder = (Grid)sender;
 
             clipTileBorder.PreviewMouseLeftButtonDown += (s, e6) => {
                 var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");

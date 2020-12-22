@@ -87,17 +87,6 @@ namespace MpWpfApp {
                         { "@iid", IconId }
                     });
             }
-            if (isNew) {
-                MapDataToColumns();
-            }
-            Console.WriteLine(isNew ? "Created " : "Updated " + " MpIcon");
-            Console.WriteLine(ToString());
-        }
-
-        private void MapDataToColumns() {
-            TableName = "MpIcon";
-            columnData.Add("pk_MpIconId", IconId);
-            columnData.Add("IconBlob", IconImage);
         }
     }
 }

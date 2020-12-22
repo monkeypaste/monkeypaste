@@ -75,6 +75,9 @@ namespace MpWpfApp {
             }
         }
         public bool IsLinkedWithCopyItem(MpCopyItem ci) {
+            if(ci == null) {
+                return false;
+            }
             DataTable dt = MpDb.Instance.Execute(
                 "select * from MpCopyItemTag where fk_MpTagId=@tid and fk_MpCopyItemId=@ciid",
                 new Dictionary<string, object> {
@@ -140,13 +143,6 @@ namespace MpWpfApp {
                     { "@tid", TagId }
                 });
             //MpDb.Instance.ExecuteWrite("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
-        }
-        private void MapDataToColumns() {
-            TableName = "MpTag";
-            columnData.Clear();
-            columnData.Add("pk_MpTagId", this.TagId);
-            columnData.Add("fk_MpColorId", this.ColorId);
-            columnData.Add("TagName", this.TagName);
         }
     }
 }

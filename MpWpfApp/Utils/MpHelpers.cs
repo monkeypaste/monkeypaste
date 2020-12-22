@@ -73,9 +73,8 @@ namespace MpWpfApp {
         public static TextRange FindStringRangeFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
             int curIdx = 0;
             TextPointer startPointer = null;
-            TextPointer endPointer = null;
             StringComparison stringComparison = isCaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase;
-            while (position != null && curIdx < matchStr.Length) {
+            while (position != null) {
                 if(position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
                     position = position.GetNextContextPosition(LogicalDirection.Forward);
                     continue;
@@ -88,21 +87,15 @@ namespace MpWpfApp {
                 int indexInRun = searchStr.IndexOf(matchStr[curIdx].ToString(), stringComparison);
                 if(indexInRun == -1) {
                     curIdx = 0;
-                    startPointer = endPointer = null;
+                    startPointer = null;
+                    position = position.GetNextContextPosition(LogicalDirection.Forward);
                     continue;
                 }
-                var curPointer = position.GetPositionAtOffset(indexInRun);
-                //if(curPointer == null) {
-                //    curIdx = 0;
-                //    startPointer = endPointer = null;
-                //    continue;
-                //}
                 if (curIdx == 0) {
-                    startPointer = curPointer;                    
+                    startPointer = position.GetPositionAtOffset(indexInRun);                    
                 }
                 if(curIdx == matchStr.Length - 1) {
-                    endPointer = curPointer;
-                    return new TextRange(startPointer, endPointer);
+                    return new TextRange(startPointer, position.GetPositionAtOffset(indexInRun + 1));
                 } else {
                     curIdx++;
                     if (indexInRun == searchStr.Length - 1) {
@@ -676,12 +669,13 @@ namespace MpWpfApp {
 
         public static string GetProcessPath(IntPtr hwnd) { 
             try {
-                if (hwnd == null) {
-                    return GetProcessPath(((MpClipTrayViewModel)((MpMainWindowViewModel)((MpMainWindow)App.Current.MainWindow).DataContext).ClipTrayViewModel).ClipboardManager.LastWindowWatcher.ThisAppHandle);
+                if (hwnd == null || hwnd == IntPtr.Zero) {
+                    return string.Empty;
+                    //return GetProcessPath(((MpClipTrayViewModel)((MpMainWindowViewModel)((MpMainWindow)App.Current.MainWindow).DataContext).ClipTrayViewModel).ClipboardManager.LastWindowWatcher.ThisAppHandle);
                 }
-                if (hwnd == IntPtr.Zero) {
-                    return GetProcessPath(((MpClipTrayViewModel)((MpMainWindowViewModel)((MpMainWindow)App.Current.MainWindow).DataContext).ClipTrayViewModel).ClipboardManager.LastWindowWatcher.ThisAppHandle);
-                }
+                //if (hwnd == IntPtr.Zero) {
+                //    return GetProcessPath(((MpClipTrayViewModel)((MpMainWindowViewModel)((MpMainWindow)App.Current.MainWindow).DataContext).ClipTrayViewModel).ClipboardManager.LastWindowWatcher.ThisAppHandle);
+                //}
                 WinApi.GetWindowThreadProcessId(hwnd, out uint pid);
                 using (Process proc = Process.GetProcessById((int)pid)) {
                     //Process mainProc = Process.GetProcessById(Process.GetProcessById(proc.Handle.ToInt32()).MainWindowHandle.ToInt32());

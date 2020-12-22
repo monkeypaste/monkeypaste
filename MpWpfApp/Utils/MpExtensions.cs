@@ -322,7 +322,7 @@ namespace MpWpfApp {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
                             Hyperlink hl = null; 
-                            var matchRange = MpHelpers.FindStringRangeFromPosition(lastRangeEnd, c.Value);                            
+                            var matchRange = MpHelpers.FindStringRangeFromPosition(lastRangeEnd, c.Value, true);                            
                             if (matchRange == null) {
                                 continue;
                             }
@@ -433,30 +433,30 @@ namespace MpWpfApp {
                                 }
                             }
 
-                            if(!string.IsNullOrEmpty(searchText) && hl != null) {
-                                //only occurs at end of highlighttext when tokens are refreshed
-                                if((MpSubTextTokenType)hl.Tag == MpSubTextTokenType.TemplateSegment) {
-                                    string linkText = ((MpTemplateHyperlinkViewModel)hl.DataContext).TemplateName;
-                                    if (linkText.ToLower().Contains(searchText.ToLower())) {
-                                        ((MpClipTileViewModel)rtb.DataContext).TileVisibility = Visibility.Visible;
-                                        var tb = (TextBlock)((DockPanel)((Border)((InlineUIContainer)hl.Inlines.FirstInline).Child).Child).Children[0];
+                            //if(!string.IsNullOrEmpty(searchText) && hl != null) {
+                            //    //only occurs at end of highlighttext when tokens are refreshed
+                            //    if((MpSubTextTokenType)hl.Tag == MpSubTextTokenType.TemplateSegment) {
+                            //        string linkText = ((MpTemplateHyperlinkViewModel)hl.DataContext).TemplateName;
+                            //        if (linkText.ToLower().Contains(searchText.ToLower())) {
+                            //            ((MpClipTileViewModel)rtb.DataContext).TileVisibility = Visibility.Visible;
+                            //            var tb = (TextBlock)((DockPanel)((Border)((InlineUIContainer)hl.Inlines.FirstInline).Child).Child).Children[0];
                                         
-                                        var highlightRange = MpHelpers.FindStringRangeFromPosition(tb.ContentStart, searchText);
-                                        if (highlightRange != null) {
-                                            highlightRange.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString));
-                                        }
-                                    }
-                                } else {
-                                    string linkText = new TextRange(hl.ContentStart, hl.ContentEnd).Text; 
-                                    if (linkText.ToLower().Contains(searchText.ToLower())) {
-                                        var highlightRange = MpHelpers.FindStringRangeFromPosition(hl.ContentStart, searchText);
-                                        if (highlightRange != null) {
-                                            highlightRange.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString));
-                                        }
-                                    }
-                                }
+                            //            var highlightRange = MpHelpers.FindStringRangeFromPosition(tb.ContentStart, searchText);
+                            //            if (highlightRange != null) {
+                            //                highlightRange.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString));
+                            //            }
+                            //        }
+                            //    } else {
+                            //        string linkText = new TextRange(hl.ContentStart, hl.ContentEnd).Text; 
+                            //        if (linkText.ToLower().Contains(searchText.ToLower())) {
+                            //            var highlightRange = MpHelpers.FindStringRangeFromPosition(hl.ContentStart, searchText);
+                            //            if (highlightRange != null) {
+                            //                highlightRange.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString));
+                            //            }
+                            //        }
+                            //    }
                                 
-                            }
+                            //}
 
                             linkList.Add(hl);
                         }

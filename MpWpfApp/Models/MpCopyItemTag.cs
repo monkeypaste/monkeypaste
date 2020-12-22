@@ -106,12 +106,5 @@ namespace MpWpfApp {
                     { "@citid", CopyItemTagId }
                 });
         }
-        private void MapDataToColumns() {
-            TableName = "MpCopyItemTag";
-            columnData.Clear();
-            columnData.Add("pk_MpCopyItemTagId", this.CopyItemTagId);
-            columnData.Add("fk_MpCopyItemId", this.CopyItemId);
-            columnData.Add("fk_MpTagId", this.TagId);
-        }
     }
 }

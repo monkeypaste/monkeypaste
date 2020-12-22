@@ -75,6 +75,9 @@
 
         public ObservableCollection<MpFileListItemViewModel> FileListViewModels {
             get {
+                if(CopyItem == null) {
+                    return new ObservableCollection<MpFileListItemViewModel>();
+                }
                 var fileListViewModels = new ObservableCollection<MpFileListItemViewModel>();
                 foreach (var path in CopyItem.GetFileList()) {
                     fileListViewModels.Add(new MpFileListItemViewModel(this, path));
@@ -86,6 +89,9 @@
         //private ObservableCollection<MpDetectedImageObjectViewModel> _detectedImageObjectViewModels = new ObservableCollection<MpDetectedImageObjectViewModel>();
         public ObservableCollection<MpDetectedImageObjectViewModel> DetectedImageObjectViewModels {
             get {
+                if (CopyItem == null) {
+                    return new ObservableCollection<MpDetectedImageObjectViewModel>();
+                }
                 var diovms = new ObservableCollection<MpDetectedImageObjectViewModel>();
                 foreach(var dio in CopyItem.ImageItemObjectList) {
                     diovms.Add(new MpDetectedImageObjectViewModel(dio, 0, 0));
@@ -327,7 +333,7 @@
         #region Visibility Properties
         public Visibility ImgVisibility {
             get {
-                if (CopyItemType == MpCopyItemType.Image) {
+                if (!IsLoading && CopyItemType == MpCopyItemType.Image) {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -336,7 +342,7 @@
 
         public Visibility FileListVisibility {
             get {
-                if (CopyItemType == MpCopyItemType.FileList) {
+                if (!IsLoading && CopyItemType == MpCopyItemType.FileList) {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -345,7 +351,7 @@
 
         public Visibility RtbVisibility {
             get {
-                if (CopyItemType == MpCopyItemType.RichText) {
+                if (!IsLoading && CopyItemType == MpCopyItemType.RichText) {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -405,19 +411,22 @@
 
         #region Business Logic Properties
 
-        private bool _isLoading = true;
+        //private bool _isLoading = true;
         public bool IsLoading {
             get {
-                return _isLoading;
+                return CopyItem == null || CopyItem.CopyItemId == 0;
             }
-            set {
-                if(_isLoading != value) {
-                    _isLoading = value;
-                    OnPropertyChanged(nameof(IsLoading));
-                    OnPropertyChanged(nameof(LoadingSpinnerVisibility));
-                    OnPropertyChanged(nameof(ContentVisibility));
-                }
-            } 
+            //set {
+            //    if(_isLoading != value) {
+            //        _isLoading = value;
+            //        OnPropertyChanged(nameof(IsLoading));
+            //        OnPropertyChanged(nameof(LoadingSpinnerVisibility));
+            //        OnPropertyChanged(nameof(ContentVisibility));
+            //        OnPropertyChanged(nameof(RtbVisibility));
+            //        OnPropertyChanged(nameof(ImgVisibility));
+            //        OnPropertyChanged(nameof(FileListVisibility));
+            //    }
+            //} 
         }
 
         public string DetailText {
@@ -545,12 +554,6 @@
         public bool IsRtbReadOnly {
             get {
                 return !IsEditingTile;
-            }
-        }
-
-        public bool IsNew {
-            get {
-                return CopyItem.CopyItemId == 0;
             }
         }
 
@@ -886,6 +889,9 @@
         #region Model Properties
         public Brush TitleColor {
             get {
+                if (CopyItem == null) {
+                    return Brushes.Red;
+                }
                 return new SolidColorBrush(CopyItem.ItemColor.Color);
             }
             set {
@@ -913,12 +919,18 @@
 
         public int CopyItemId {
             get {
+                if (CopyItem == null) {
+                    return 0;
+                }
                 return CopyItem.CopyItemId;
             }
         }
 
         public string CopyItemTitle {
             get {
+                if (CopyItem == null) {
+                    return string.Empty;
+                }
                 return CopyItem.Title;
             }
             set {
@@ -933,12 +945,18 @@
 
         public string CopyItemPlainText {
             get {
+                if (CopyItem == null) {
+                    return string.Empty;
+                }
                 return CopyItem.ItemPlainText;
             }
         }
 
         public string CopyItemRichText {
             get {
+                if (CopyItem == null) {
+                    return string.Empty;
+                }
                 return CopyItem.ItemRichText;
             }
             set {
@@ -969,12 +987,18 @@
         }
         public BitmapSource CopyItemBmp {
             get {
+                if (CopyItem == null) {
+                    return new BitmapImage();
+                }
                 return CopyItem.ItemBitmapSource;
             }
         }
 
         public List<string> CopyItemFileDropList {
             get {
+                if (CopyItem == null) {
+                    return new List<string>();
+                }
                 return CopyItem.GetFileList(string.Empty, MainWindowViewModel.ClipTrayViewModel.GetTargetFileType());
             }
         }
@@ -985,6 +1009,9 @@
 
         public BitmapSource TitleSwirl {
             get {
+                if (CopyItem == null) {
+                    return new BitmapImage();
+                }
                 return CopyItem.ItemTitleSwirl;
             }
             set {
@@ -998,18 +1025,27 @@
 
         public BitmapSource CopyItemAppIcon {
             get {
+                if (CopyItem == null) {
+                    return new BitmapImage();
+                }
                 return CopyItem.App.IconImage;
             }
         }
 
         public string CopyItemAppName {
             get {
+                if (CopyItem == null) {
+                    return string.Empty;
+                }
                 return CopyItem.App.AppName;
             }
         }
 
         public int CopyCount {
             get {
+                if (CopyItem == null) {
+                    return 0;
+                }
                 return CopyItem.CopyCount;
             }
             set {
@@ -1022,6 +1058,9 @@
         }
         public DateTime CopyDateTime {
             get {
+                if (CopyItem == null) {
+                    return DateTime.Now;
+                }
                 return CopyItem.CopyDateTime;
             }
             set {
@@ -1034,24 +1073,36 @@
         }
         public int CopyItemUsageScore {
             get {
+                if (CopyItem == null) {
+                    return 0;
+                }
                 return CopyItem.RelevanceScore;
             }
         }
 
         public int CopyItemAppId {
             get {
+                if (CopyItem == null) {
+                    return 0;
+                }
                 return CopyItem.App.AppId;
             }
         }
 
         public MpCopyItemType CopyItemType {
             get {
+                if (CopyItem == null) {
+                    return MpCopyItemType.None;
+                }
                 return CopyItem.CopyItemType;
             }
         }
 
         public DateTime CopyItemCreatedDateTime {
             get {
+                if(CopyItem == null) {
+                    return DateTime.Now;
+                }
                 return CopyItem.CopyDateTime;
             }
         }
@@ -1086,8 +1137,9 @@
                     OnPropertyChanged(nameof(DetailText));
                     OnPropertyChanged(nameof(FileListViewModels));
                     OnPropertyChanged(nameof(DetectedImageObjectViewModels));
-
-                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(LoadingSpinnerVisibility));
+                    OnPropertyChanged(nameof(ContentVisibility));
+                    //CopyItem.WriteToDatabase();
                 }
             }
         }
@@ -1096,9 +1148,13 @@
         #endregion
 
         #region Public Methods
-        public MpClipTileViewModel() : base() {
+        public MpClipTileViewModel() : this(null) {
             //empty constructor only directly called when creating from the clipboard
 
+            
+        }
+
+        public MpClipTileViewModel(MpCopyItem ci) : base() {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
                     case nameof(IsSelected):
@@ -1126,22 +1182,22 @@
                         break;
                 }
             };
-
-            IsLoading = true;
-        }
-
-        public MpClipTileViewModel(MpCopyItem ci) : this() {
             SetCopyItem(ci);
         }
 
         public void SetCopyItem(MpCopyItem ci) {
-            if(ci.CopyItemId == 0) {
+            if (ci == null) {
+                CopyItem = new MpCopyItem();
+                return;
+            } 
+            if (ci.CopyItemId == 0) {
                 ci.WriteToDatabase();
             }
+
             CopyItem = ci;
         }
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            var clipTileBorder = (MpClipBorder)sender;
+            var clipTileBorder = (Grid)sender;
             clipTileBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
             };
@@ -1614,8 +1670,6 @@
             rtb.TextChanged += (s, e8) => {
 
             };
-
-            IsLoading = false;
         }
 
         public void ClipTileImageCanvas_Loaded(object sender, RoutedEventArgs e) {
@@ -1625,7 +1679,6 @@
             var img = (Image)((Grid)sender).FindName("ClipTileImage");
             img.ContextMenu = (ContextMenu)((Grid)sender).GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
 
-            IsLoading = false;
             return;
             //var ac = (AdornedControl)((Grid)sender).FindName("ClipTileImageDetectedObjectAdornedControl");
             //var ic = (ItemsControl)((Grid)sender).FindName("ClipTileImageDetectedObjectItemscontrol");
@@ -1678,7 +1731,6 @@
             var flb = (ListBox)sender;
             flb.ContextMenu = (ContextMenu)flb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
 
-            IsLoading = false;
         }
 
         public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {

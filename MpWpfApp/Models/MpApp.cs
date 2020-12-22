@@ -73,7 +73,6 @@ namespace MpWpfApp {
             } else {
                 IsAppRejected = true;
             }
-            MapDataToColumns();
         }
         public override void WriteToDatabase() {
             if (AppId == 0) {
@@ -112,12 +111,6 @@ namespace MpWpfApp {
 
         public string GetAppName() {
             return AppPath == null || AppPath == string.Empty ? "None" : Path.GetFileNameWithoutExtension(AppPath);
-        }
-        private void MapDataToColumns() {
-            TableName = "MpApp";
-            columnData.Add("pk_MpAppId", AppId);
-            columnData.Add("SourcePath", AppPath);
-            columnData.Add("IsAppRejected", IsAppRejected);
         }
     }
 }

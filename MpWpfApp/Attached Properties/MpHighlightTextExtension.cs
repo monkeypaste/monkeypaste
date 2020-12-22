@@ -140,6 +140,8 @@ namespace MpWpfApp {
                             //ctvm.TileVisibility = isInTitle || isInContent || isSearchBlank ? Visibility.Visible : Visibility.Collapsed;
                             //return;
 
+                            ctvm.TileVisibility = Visibility.Visible;
+
                             ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, ctbb);
                             ctvm.LastTitleHighlightRangeList.Clear();
 

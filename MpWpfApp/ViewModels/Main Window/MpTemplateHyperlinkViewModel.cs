@@ -11,6 +11,25 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
+    public enum MpCurrencyType {
+        None = 0,
+        Dollars,
+        Pounds,
+        Euros,
+        Yen
+    }
+
+    public enum MpSubTextTokenType {
+        None = 0,
+        Uri = 1,
+        Email,
+        PhoneNumber,
+        Currency,
+        HexColor,
+        StreetAddress,
+        TemplateSegment,
+        CopyItemSegment
+    }
     public class MpTemplateHyperlinkViewModel : MpViewModelBase, IDisposable {
         #region Private Variables
         private RichTextBox _rtb = null;

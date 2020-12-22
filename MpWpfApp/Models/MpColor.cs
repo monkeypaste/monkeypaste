@@ -97,14 +97,5 @@ namespace MpWpfApp {
                     });
             }
         }
-        private void MapDataToColumns() {
-            TableName = "MpColor";
-            columnData.Clear();
-            columnData.Add("pk_MpColorId", this.ColorId);
-            columnData.Add("R", this._r);
-            columnData.Add("G", this._g);
-            columnData.Add("B", this._b);
-            columnData.Add("A", this._a);
-        }
     }
 }

@@ -63,15 +63,5 @@ namespace MpWpfApp {
                     });
             }
         }
-        private void MapDataToColumns() {
-            TableName = "MpClient";
-            columnData.Clear();
-            columnData.Add("pk_MpClientId", this.ClientId);
-            columnData.Add("fk_MpPlatformId", this.PlatformId);
-            columnData.Add("Ip4Address", this.Ip4Address);
-            columnData.Add("AccessToken", this.AccessToken);
-            columnData.Add("LoginDateTime", this.LoginDateTime);
-            columnData.Add("LogoutDateTime", this.LogoutDateTime);
-        }
     }
 }

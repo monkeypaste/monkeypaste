@@ -112,12 +112,5 @@ namespace MpWpfApp {
                     { "@rtsid", RichTextStyleId }
                 });
         }
-        private void MapDataToColumns() {
-            TableName = "MpRichTextStyle";
-            columnData.Clear();
-            columnData.Add("pk_MpRichTextStyleId", this.RichTextStyleId);
-            columnData.Add("fk_MpFontColorId", this.FontColorId);
-            columnData.Add("FontFamilyName", this.FontFamilyName);
-        }
     }
 }

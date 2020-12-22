@@ -123,11 +123,6 @@ namespace MpWpfApp {
                     { "@sid", ShortcutId }
                 });
         }
-        private void MapDataToColumns() {
-            TableName = "MpShortcut";
-            columnData.Clear();
-            columnData.Add("pk_MpShortcutId", this.ShortcutId);
-        }
         public override string ToString() {
             string outStr = "Shortcut Name: " + ShortcutName + " Id: " + ShortcutId;
             outStr += " " + KeyList;
