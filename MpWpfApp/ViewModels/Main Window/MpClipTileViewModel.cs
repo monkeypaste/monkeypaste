@@ -20,6 +20,7 @@
     using System.Windows.Media.Animation;
     using System.Windows.Media.Imaging;
     using System.Windows.Shapes;
+    using System.Windows.Threading;
     using System.Xml;
     using GalaSoft.MvvmLight.CommandWpf;
     using Gma.System.MouseKeyHook;
@@ -351,6 +352,24 @@
             }
         }
 
+        public Visibility LoadingSpinnerVisibility {
+            get {
+                if(IsLoading) {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+
+        public Visibility ContentVisibility {
+            get {
+                if(IsLoading) {
+                    return Visibility.Collapsed;
+                }
+                return Visibility.Visible;
+            }
+        }
+
         public Visibility TileTitleTextBlockVisibility {
             get {
                 if (IsEditingTitle) {
@@ -386,7 +405,20 @@
 
         #region Business Logic Properties
 
-        public bool IsLoading { get; set; } = false;
+        private bool _isLoading = true;
+        public bool IsLoading {
+            get {
+                return _isLoading;
+            }
+            set {
+                if(_isLoading != value) {
+                    _isLoading = value;
+                    OnPropertyChanged(nameof(IsLoading));
+                    OnPropertyChanged(nameof(LoadingSpinnerVisibility));
+                    OnPropertyChanged(nameof(ContentVisibility));
+                }
+            } 
+        }
 
         public string DetailText {
             get {
@@ -913,6 +945,7 @@
                 if (CopyItem.ItemRichText != value) {
                     //value should be raw rtf where templates are encoded into #name#color# groups
                     CopyItem.SetData(value);
+                    CopyItem.WriteToDatabase();
                     //OnPropertyChanged(nameof(CopyItem));
                     OnPropertyChanged(nameof(CopyItemRichText));
                     //OnPropertyChanged(nameof(TemplateTokenList));
@@ -965,7 +998,7 @@
 
         public BitmapSource CopyItemAppIcon {
             get {
-                return CopyItem.App.Icon.IconImage;
+                return CopyItem.App.IconImage;
             }
         }
 
@@ -975,6 +1008,30 @@
             }
         }
 
+        public int CopyCount {
+            get {
+                return CopyItem.CopyCount;
+            }
+            set {
+                if(CopyItem.CopyCount != value) {
+                    CopyItem.CopyCount = value;
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyCount));
+                }
+            }
+        }
+        public DateTime CopyDateTime {
+            get {
+                return CopyItem.CopyDateTime;
+            }
+            set {
+                if (CopyItem.CopyDateTime != value) {
+                    CopyItem.CopyDateTime = value;
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyCount));
+                }
+            }
+        }
         public int CopyItemUsageScore {
             get {
                 return CopyItem.RelevanceScore;
@@ -983,7 +1040,7 @@
 
         public int CopyItemAppId {
             get {
-                return CopyItem.AppId;
+                return CopyItem.App.AppId;
             }
         }
 
@@ -999,12 +1056,12 @@
             }
         }
 
-        private MpCopyItem _copyItem = new MpCopyItem();
+        private MpCopyItem _copyItem = null;
         public MpCopyItem CopyItem {
             get {
                 return _copyItem;
             }
-            set {
+            private set {
                 if (_copyItem != value) 
                     {
                     _copyItem = value;
@@ -1039,9 +1096,9 @@
         #endregion
 
         #region Public Methods
-        public MpClipTileViewModel() : this(new MpCopyItem()) { }
+        public MpClipTileViewModel() : base() {
+            //empty constructor only directly called when creating from the clipboard
 
-        public MpClipTileViewModel(MpCopyItem ci) : base() {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
                     case nameof(IsSelected):
@@ -1060,8 +1117,8 @@
                             IsEditingTile = false;
                             //IsPastingTemplateTile = false;
                         }
-                        if(TemplateTokens != null) {
-                            foreach(var tthlvm in TemplateTokens) {
+                        if (TemplateTokens != null) {
+                            foreach (var tthlvm in TemplateTokens) {
                                 //tthlvm.OnPropertyChanged(nameof(tthlvm.DeleteTemplateTextButtonVisibility));
                                 tthlvm.DeleteTemplateTextButtonVisibility = IsSelected ? Visibility.Visible : Visibility.Hidden;
                             }
@@ -1070,17 +1127,19 @@
                 }
             };
 
-            TemplateTokens.CollectionChanged += (s, e2) => {
-                if(e2.NewItems != null && e2.NewItems.Count > 0) {
-
-                }
-            };
-
             IsLoading = true;
-
-            CopyItem = ci;
         }
 
+        public MpClipTileViewModel(MpCopyItem ci) : this() {
+            SetCopyItem(ci);
+        }
+
+        public void SetCopyItem(MpCopyItem ci) {
+            if(ci.CopyItemId == 0) {
+                ci.WriteToDatabase();
+            }
+            CopyItem = ci;
+        }
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             var clipTileBorder = (MpClipBorder)sender;
             clipTileBorder.MouseEnter += (s, e1) => {
@@ -1113,7 +1172,6 @@
                     rtb.FontSize += 1;
                 }
             };
-            IsLoading = false;
         }
 
         public void ClipTileTitle_Loaded(object sender, RoutedEventArgs e) {
@@ -1556,6 +1614,8 @@
             rtb.TextChanged += (s, e8) => {
 
             };
+
+            IsLoading = false;
         }
 
         public void ClipTileImageCanvas_Loaded(object sender, RoutedEventArgs e) {
@@ -1564,6 +1624,8 @@
             }
             var img = (Image)((Grid)sender).FindName("ClipTileImage");
             img.ContextMenu = (ContextMenu)((Grid)sender).GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+
+            IsLoading = false;
             return;
             //var ac = (AdornedControl)((Grid)sender).FindName("ClipTileImageDetectedObjectAdornedControl");
             //var ic = (ItemsControl)((Grid)sender).FindName("ClipTileImageDetectedObjectItemscontrol");
@@ -1615,6 +1677,8 @@
             }
             var flb = (ListBox)sender;
             flb.ContextMenu = (ContextMenu)flb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+
+            IsLoading = false;
         }
 
         public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
@@ -1777,6 +1841,7 @@
         #endregion
 
         #region Commands
+
         private RelayCommand<string> _translateClipTextCommand;
         public ICommand TranslateClipTextCommand {
             get {

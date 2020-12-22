@@ -448,13 +448,10 @@ namespace MpWpfApp {
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpApp (
                       pk_MpAppId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , fk_MpIconId integer NOT NULL
                     , SourcePath text NOT NULL 
                     , AppName text 
-                    , IsAppRejected integer NOT NULL
-                    , fk_ColorId integer 
-                    , CONSTRAINT FK_MpApp_0_0 FOREIGN KEY (fk_MpIconId) REFERENCES MpIcon (pk_MpIconId)
-                    , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_ColorId) REFERENCES MpColor (pk_MpColorId)
+                    , IsAppRejected integer NOT NULL                    
+                    , IconBlob image NOT NULL
                     );                
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCopyItem (
@@ -536,7 +533,7 @@ namespace MpWpfApp {
                       pk_MpPasteHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemId integer NOT NULL
                     , fk_MpClientId integer NOT NULL
-                    , fk_MpAppId integer NOT NULL
+                    , fk_MpAppId integer 
                     , PasteDateTime datetime NOT NULL
                     , CONSTRAINT FK_MpPasteHistory_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
                     , CONSTRAINT FK_MpPasteHistory_1_0 FOREIGN KEY (fk_MpClientId) REFERENCES MpClient (pk_MpClientId)

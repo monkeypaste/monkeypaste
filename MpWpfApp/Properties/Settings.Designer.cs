@@ -652,5 +652,41 @@ namespace MpWpfApp.Properties {
                 this["ClipTileBackgroundColor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IgnoreNewDuplicates {
+            get {
+                return ((bool)(this["IgnoreNewDuplicates"]));
+            }
+            set {
+                this["IgnoreNewDuplicates"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("12")]
+        public double DefaultFontSize {
+            get {
+                return ((double)(this["DefaultFontSize"]));
+            }
+            set {
+                this["DefaultFontSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Arial")]
+        public string DefaultFontFamily {
+            get {
+                return ((string)(this["DefaultFontFamily"]));
+            }
+            set {
+                this["DefaultFontFamily"] = value;
+            }
+        }
     }
 }

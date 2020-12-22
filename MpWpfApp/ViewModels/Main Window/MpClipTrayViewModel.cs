@@ -29,6 +29,7 @@ namespace MpWpfApp {
         private ListBox _clipTrayRef = null;
         //private object _dragClipBorderElement = null;
 
+        Stopwatch sw = new Stopwatch();
         #endregion
 
         #region Properties
@@ -349,30 +350,42 @@ namespace MpWpfApp {
 
             // Attach the handler to the event raising on WM_DRAWCLIPBOARD message is received
             ClipboardManager.ClipboardChanged += (s, e53) => {
-                MpCopyItem newCopyItem = MpCopyItem.CreateFromClipboard(ClipboardManager.LastWindowWatcher.LastHandle);
-                if (MainWindowViewModel.AppModeViewModel.IsInAppendMode) {
-                    //when in append mode just append the new items text to selecteditem
-                    SelectedClipTiles[0].AppendContent(new MpClipTileViewModel(newCopyItem));
-                    return;
-                }
+                //Add(new MpClipTileViewModel(new MpCopyItem()));
+                //ResetClipSelection();
+                //return;
 
-                if (newCopyItem != null) {
-                    //check if copyitem is duplicate
-                    var existingClipTile = FindClipTileByModel(newCopyItem);
-                    if (existingClipTile == null) {
-                        newCopyItem.WriteToDatabase();
-                        var ctvm = new MpClipTileViewModel(newCopyItem);
-                        MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
-                        this.Add(ctvm);
-                    } else {
-                        Console.WriteLine("Ignoring duplicate copy item");
-                        existingClipTile.CopyItem.CopyCount++;
-                        existingClipTile.CopyItem.CopyDateTime = DateTime.Now;
-                        this.Move(this.IndexOf(existingClipTile), 0);
-                    }
-
-                    ResetClipSelection();
-                }
+                var sw = new Stopwatch();
+                sw.Start();
+                var nctvm = new MpClipTileViewModel();
+                this.Add(nctvm);
+                Dispatcher.CurrentDispatcher.BeginInvoke(
+                        DispatcherPriority.Background,
+                        (Action)(() => {
+                            var newCopyItem = MpCopyItem.CreateFromClipboard(MainWindowViewModel.ClipTrayViewModel.ClipboardManager.LastWindowWatcher.LastHandle);
+                            if (MainWindowViewModel.AppModeViewModel.IsInAppendMode) {
+                                //when in append mode just append the new items text to selecteditem
+                                SelectedClipTiles[0].AppendContent(new MpClipTileViewModel(newCopyItem));
+                                return;
+                            }
+                            if (newCopyItem.CopyItemId > 0) {
+                                //item is a duplicate
+                                var existingClipTile = this.Where(x => x.CopyItemId == newCopyItem.CopyItemId).ToList();
+                                if(existingClipTile != null && existingClipTile.Count > 0) {
+                                    Console.WriteLine("Ignoring duplicate copy item");
+                                    existingClipTile[0].CopyCount++;
+                                    existingClipTile[0].CopyDateTime = DateTime.Now;
+                                    this.Remove(nctvm);
+                                    this.Move(this.IndexOf(existingClipTile[0]), 0);
+                                }
+                            } else {
+                                nctvm.SetCopyItem(newCopyItem);
+                                MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(nctvm);
+                            }
+                        }));
+                
+                sw.Stop();
+                Console.WriteLine("Time to create new copyitem: " + sw.ElapsedMilliseconds + " ms");
+                ResetClipSelection();
             };
 
             SortAndFilterClipTiles();            
@@ -479,13 +492,17 @@ namespace MpWpfApp {
             _clipTrayRef?.Items.Refresh();
         }
 
-        public new void Remove(MpClipTileViewModel clipTileToRemove) {
+        public new void Remove(MpClipTileViewModel clipTileToRemove) {            
+            base.Remove(clipTileToRemove);
+            if(clipTileToRemove.CopyItem == null) {
+                //occurs when duplicate detected on background thread
+                return;
+            }
             foreach (var ttvm in MainWindowViewModel.TagTrayViewModel) {
                 if (ttvm.Tag.IsLinkedWithCopyItem(clipTileToRemove.CopyItem)) {
                     ttvm.TagClipCount--;
                 }
             }
-            base.Remove(clipTileToRemove);
             clipTileToRemove.CopyItem.DeleteFromDatabase();
 
             //remove any shortcuts associated with clip
@@ -671,35 +688,35 @@ namespace MpWpfApp {
             return 0;
         }
 
-        private MpClipTileViewModel FindClipTileByModel(MpCopyItem ci) {
-            foreach(var ctvm in this) {
-                if(ctvm.CopyItemType != ci.CopyItemType) {
-                    continue;
-                }
-                if(ctvm.CopyItem.GetData() == ci.GetData()) {
-                    return ctvm;
-                }
-                //switch(ci.CopyItemType) {
-                //    case MpCopyItemType.RichText:
-                //        if (string.Compare((string)ctvm.CopyItem.ItemXaml, ci.ItemXaml) == 0) {
+        //private MpClipTileViewModel FindClipTileByModel(MpCopyItem ci) {
+        //    foreach(var ctvm in this) {
+        //        if(ctvm.CopyItemType != ci.CopyItemType) {
+        //            continue;
+        //        }
+        //        if(ctvm.CopyItem.GetData() == ci.GetData()) {
+        //            return ctvm;
+        //        }
+        //        //switch(ci.CopyItemType) {
+        //        //    case MpCopyItemType.RichText:
+        //        //        if (string.Compare((string)ctvm.CopyItem.ItemXaml, ci.ItemXaml) == 0) {
                             
-                //            return ctvm;
-                //        }
-                //        break;
-                //    case MpCopyItemType.FileList:
-                //        if (string.Compare((string)ctvm.CopyItem.ItemPlainText, ci.ItemPlainText) == 0) {
-                //            return ctvm;
-                //        }
-                //        break;
-                //    case MpCopyItemType.Image:
-                //        if(MpHelpers.ByteArrayCompare(MpHelpers.ConvertBitmapSourceToByteArray(ctvm.CopyItem.ItemBitmapSource), MpHelpers.ConvertBitmapSourceToByteArray(ci.ItemBitmapSource))) {
-                //            return ctvm;
-                //        }
-                //        break;
-                //}                
-            }
-            return null;
-        }
+        //        //            return ctvm;
+        //        //        }
+        //        //        break;
+        //        //    case MpCopyItemType.FileList:
+        //        //        if (string.Compare((string)ctvm.CopyItem.ItemPlainText, ci.ItemPlainText) == 0) {
+        //        //            return ctvm;
+        //        //        }
+        //        //        break;
+        //        //    case MpCopyItemType.Image:
+        //        //        if(MpHelpers.ByteArrayCompare(MpHelpers.ConvertBitmapSourceToByteArray(ctvm.CopyItem.ItemBitmapSource), MpHelpers.ConvertBitmapSourceToByteArray(ci.ItemBitmapSource))) {
+        //        //            return ctvm;
+        //        //        }
+        //        //        break;
+        //        //}                
+        //    }
+        //    return null;
+        //}
 
         #endregion
 

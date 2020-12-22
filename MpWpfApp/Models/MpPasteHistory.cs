@@ -44,18 +44,12 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase() {
-            //if new paste item (it should always be)
-            if (DestAppId == 0) {
-                _destApp = new MpApp(0, 0, _destHandle, false);
-                DestAppId = _destApp.AppId;
-                //MpSingletonController.Instance.GetMpData().AddMpApp(_destApp);
-            }
+            // TODO use _destHandle to find app but this tracking paste history is not critical so leaving DestAppId to null for now
             MpDb.Instance.ExecuteWrite(
-                "insert into MpPasteHistory(fk_MpCopyItemId,fk_MpClientId,fk_MpAppId,PasteDateTime) values (@ciid, @cid, @aid, @pdt)",
+                "insert into MpPasteHistory(fk_MpCopyItemId,fk_MpClientId,PasteDateTime) values (@ciid, @cid, @pdt)",
                 new Dictionary<string, object> {
                     { "@ciid", CopyItemId },
                     { "@cid", MpDb.Instance.Client.ClientId },
-                    { "@aid", DestAppId },
                     { "@pdt", PasteDateTime.ToString("yyyy-MM-dd HH:mm:ss") }
                 });
             PasteHistoryId = MpDb.Instance.GetLastRowId("MpPasteHistory", "pk_MpPasteHistoryId");

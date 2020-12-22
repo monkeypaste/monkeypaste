@@ -3,23 +3,25 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
 
     public class MpApp : MpDbObject {
+        
         public static int TotalAppCount = 0;
 
-        public int AppId { get; set; }
-        public int IconId { get; set; }
-        public string AppPath { get; set; }
-        public string AppName { get; set; }
-        public bool IsAppRejected { get; set; }
+        public int AppId { get; set; } = 0;
+        public string AppPath { get; set; } = string.Empty;
+        public string AppName { get; set; } = string.Empty;
+        public bool IsAppRejected { get; set; } = false;
 
-        public MpIcon Icon { get; set; }
+        public BitmapSource IconImage { get; set; }
+        //public MpIcon Icon { get; set; }
 
         #region Static Methods
         public static List<MpApp> GetAllApps() {
-            List<MpApp> apps = new List<MpApp>();
+            var apps = new List<MpApp>();
             DataTable dt = MpDb.Instance.Execute("select * from MpApp", null);
             if (dt != null && dt.Rows.Count > 0) {
                 foreach (DataRow dr in dt.Rows) {
@@ -41,89 +43,59 @@ namespace MpWpfApp {
             return GetAllApps().Where(x => x.IsAppRejected == true).ToList();
         }
         #endregion
-        public MpApp(String sourcePath, bool isAppRejected, string appName) {
-            this.IconId = this.AppId = 0;
-            this.AppPath = sourcePath;
-            this.AppName = appName;
-            this.IsAppRejected = isAppRejected;
-            this.Icon = new MpIcon(MpHelpers.GetIconImage(this.AppPath));
+
+        public MpApp(bool isAppRejected, IntPtr hwnd) {
+            AppPath = MpHelpers.GetProcessPath(hwnd);
+            AppName = MpHelpers.GetProcessMainWindowTitle(hwnd);
+            IsAppRejected = isAppRejected;
+            IconImage = MpHelpers.GetIconImage(AppPath);
         }
-        //for new MpApp's set appId and iconId to 0
-        public MpApp(String sourcePath, bool isAppRejected, IntPtr hwnd) {
-            this.IconId = this.AppId = 0;
-            this.AppPath = sourcePath;
-            this.AppName = MpHelpers.GetProcessMainWindowTitle(hwnd);
-            this.IsAppRejected = isAppRejected;
-            this.Icon = new MpIcon(MpHelpers.GetIconImage(this.AppPath));
+        public MpApp(string appPath) {
+            //only called when user selects rejected app in settings
+            AppPath = appPath;
+            AppName = appPath;
+            IsAppRejected = true;
+            IconImage = MpHelpers.GetIconImage(AppPath);
         }
-        public MpApp(int appId, int iconId, IntPtr sourceHandle, bool isAppRejected) {
-            this.AppId = appId;
-            this.IconId = iconId;
-            this.AppPath = MpHelpers.GetProcessPath(sourceHandle);
-            this.AppName = MpHelpers.GetProcessApplicationName(sourceHandle);
-            this.IsAppRejected = isAppRejected;
-        }
-        public MpApp() : this(string.Empty, true, IntPtr.Zero) { }
+        public MpApp() : this(false, IntPtr.Zero) { }
 
         public MpApp(DataRow dr) {
             LoadDataRow(dr);
         }
         
         public override void LoadDataRow(DataRow dr) {
-            this.AppId = Convert.ToInt32(dr["pk_MpAppId"].ToString());
-            this.IconId = Convert.ToInt32(dr["fk_MpIconId"].ToString());
-            Icon = new MpIcon(IconId);
-            this.AppPath = dr["SourcePath"].ToString();
-            this.AppName = dr["AppName"].ToString();
+            AppId = Convert.ToInt32(dr["pk_MpAppId"].ToString());
+            AppPath = dr["SourcePath"].ToString();
+            AppName = dr["AppName"].ToString();
+            IconImage = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
             if (Convert.ToInt32(dr["IsAppRejected"].ToString()) == 0) {
-                this.IsAppRejected = false;
+                IsAppRejected = false;
             } else {
-                this.IsAppRejected = true;
+                IsAppRejected = true;
             }
             MapDataToColumns();
         }
         public override void WriteToDatabase() {
-            bool isNew = false;
-            if (this.IconId == 0) {
-                Icon = new MpIcon(MpHelpers.GetIconImage(this.AppPath));
-            }
-            Icon.WriteToDatabase();
-            this.IconId = Icon.IconId;
-            if (this.AppId == 0) {
-                DataTable dt = MpDb.Instance.Execute(
-                    "select * from MpApp where SourcePath=@ap",
-                    new Dictionary<string, object> {
-                        { "@ap", AppPath }
-                    });
-                if (dt.Rows.Count > 0) {
-                    this.AppId = Convert.ToInt32(dt.Rows[0]["pk_MpAppId"]);
-                    this.IconId = Convert.ToInt32(dt.Rows[0]["fk_MpIconId"]);
-                    isNew = false;
-                } else {
-                    MpDb.Instance.ExecuteWrite(
-                        "insert into MpApp(fk_MpIconId,SourcePath,IsAppRejected,AppName) values (@iId,@sp,@iar,@an)",
+            if (AppId == 0) {
+                MpDb.Instance.ExecuteWrite(
+                        "insert into MpApp(IconBlob,SourcePath,IsAppRejected,AppName) values (@ib,@sp,@iar,@an)",
                         new Dictionary<string, object> {
-                            { "@iId", IconId },
+                            { "@ib", MpHelpers.ConvertBitmapSourceToByteArray(IconImage) },
                             { "@sp", AppPath },
                             { "@iar", Convert.ToInt32(IsAppRejected) },
                             { "@an", AppName }
                         });
-                    this.AppId = MpDb.Instance.GetLastRowId("MpApp", "pk_MpAppId");
-                    isNew = false;
-                }
+                AppId = MpDb.Instance.GetLastRowId("MpApp", "pk_MpAppId");
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpApp set fk_MpIconId=@iid, IsAppRejected=@iar, SourcePath=@sp, AppName=@an where pk_MpAppId=@aid",
+                    "update MpApp set IconBlob=@ib, IsAppRejected=@iar, SourcePath=@sp, AppName=@an where pk_MpAppId=@aid",
                     new Dictionary<string, object> {
-                        { "@iid", IconId },
+                        { "@ib", MpHelpers.ConvertBitmapSourceToByteArray(IconImage) },
                         { "@iar", Convert.ToInt32(IsAppRejected) },
                         { "@sp", AppPath },
                         { "@an", AppName },
                         { "@aid", AppId }
                     });
-            }
-            if (isNew) {
-                MapDataToColumns();
             }
         }
         public void DeleteFromDatabase() {
@@ -143,10 +115,9 @@ namespace MpWpfApp {
         }
         private void MapDataToColumns() {
             TableName = "MpApp";
-            columnData.Add("pk_MpAppId", this.AppId);
-            columnData.Add("fk_MpIconId", this.IconId);
-            columnData.Add("SourcePath", this.AppPath);
-            columnData.Add("IsAppRejected", this.IsAppRejected);
+            columnData.Add("pk_MpAppId", AppId);
+            columnData.Add("SourcePath", AppPath);
+            columnData.Add("IsAppRejected", IsAppRejected);
         }
     }
 }

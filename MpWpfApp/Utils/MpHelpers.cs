@@ -37,37 +37,6 @@ using static QRCoder.PayloadGenerator;
 namespace MpWpfApp {
     public static class MpHelpers {
         #region Documents
-        //public static Hyperlink CreateHyperlink(TextPointer s, TextPointer e, string text, Brush bg, MpSubTextTokenType tokenType) {
-        //    Hyperlink hl = new Hyperlink(s, e);
-        //    hl = SetHyperlinkText(hl, text);
-        //    hl = SetHyperlinkBackgroundBrush(hl, bg);
-        //    hl.Tag = tokenType;
-        //    return hl;
-        //}
-        //public static string GetHyperlinkText(Hyperlink hyperlink) {
-        //    var run = hyperlink.Inlines.FirstOrDefault() as Run;
-        //    return run == null ? string.Empty : run.Text;
-        //}
-
-        //public static Hyperlink SetHyperlinkText(Hyperlink hyperlink, string text) {
-        //    var run = hyperlink.Inlines.FirstOrDefault() as Run;
-        //    if(run == null) {
-        //        run = new Run(); 
-        //        hyperlink.Inlines.Add(run);
-        //    }
-        //    run.Text = text;
-        //    return hyperlink;
-        //}
-
-        //public static Brush GetHyperlinkBrush(Hyperlink hyperlink) {
-        //    return hyperlink.Background;
-        //}
-
-        //public static Hyperlink SetHyperlinkBackgroundBrush(Hyperlink hyperlink, Brush brush) {
-        //    hyperlink.Background = brush;
-        //    (hyperlink.Inlines.FirstOrDefault() as Run).Background = brush;
-        //    return hyperlink;
-        //}
 
         //public static TextRange FindStringRangeFromPosition(TextPointer position, string str, bool isCaseSensitive = false) {
         //    while (position != null) {
@@ -88,12 +57,10 @@ namespace MpWpfApp {
         //    return null;
         //}
 
-        public static List<TextRange> FindAllStringRangesFromPosition(TextRange textRange, string matchStr, bool isCaseSensitive = false) {
+        public static List<TextRange> FindStringRangesFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
             var matchRangeList = new List<TextRange>();
-            TextPointer position = textRange.Start;
             while (position != null) {
-                TextRange searchRange = new TextRange(position, textRange.End);
-                var hlr = FindTextInRange(searchRange, matchStr);
+                var hlr = FindStringRangeFromPosition(position, matchStr, isCaseSensitive);
                 if (hlr == null) {
                     break;
                 } else {
@@ -102,6 +69,48 @@ namespace MpWpfApp {
                 }
             }
             return matchRangeList;
+        }
+        public static TextRange FindStringRangeFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
+            int curIdx = 0;
+            TextPointer startPointer = null;
+            TextPointer endPointer = null;
+            StringComparison stringComparison = isCaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase;
+            while (position != null && curIdx < matchStr.Length) {
+                if(position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
+                    position = position.GetNextContextPosition(LogicalDirection.Forward);
+                    continue;
+                }
+                var searchStr = position.GetTextInRun(LogicalDirection.Forward);
+                if(string.IsNullOrEmpty(searchStr)) {
+                    position = position.GetNextContextPosition(LogicalDirection.Forward);
+                    continue;
+                }
+                int indexInRun = searchStr.IndexOf(matchStr[curIdx].ToString(), stringComparison);
+                if(indexInRun == -1) {
+                    curIdx = 0;
+                    startPointer = endPointer = null;
+                    continue;
+                }
+                var curPointer = position.GetPositionAtOffset(indexInRun);
+                //if(curPointer == null) {
+                //    curIdx = 0;
+                //    startPointer = endPointer = null;
+                //    continue;
+                //}
+                if (curIdx == 0) {
+                    startPointer = curPointer;                    
+                }
+                if(curIdx == matchStr.Length - 1) {
+                    endPointer = curPointer;
+                    return new TextRange(startPointer, endPointer);
+                } else {
+                    curIdx++;
+                    if (indexInRun == searchStr.Length - 1) {
+                        position = position.GetNextContextPosition(LogicalDirection.Forward);
+                    }
+                }
+            }
+            return null;
         }
         /* The idea is to find the offset of the first character (IndexOf) and 
          * then to find the TextPointer at this index (but by counting only text characters).
@@ -162,7 +171,7 @@ namespace MpWpfApp {
         //    // position will be null if "word" is not found.
         //    return null;
         //}
-        public static TextRange FindStringRangeFromPosition(TextPointer position, string str, bool isCaseSensitive = false) {
+        public static TextRange FindStringRangeFromPosition2(TextPointer position, string str, bool isCaseSensitive = false)             {
             for (;
              position != null;
              position = position.GetNextContextPosition(LogicalDirection.Forward)) {                
@@ -590,19 +599,6 @@ namespace MpWpfApp {
             return cpuInfo;
         }
 
-        public static string GetProcessMainWindowTitle(IntPtr hWnd) {
-            if (hWnd == null) {
-                throw new Exception("MpHelpers error hWnd is null");
-            }
-            if (hWnd == IntPtr.Zero) {
-                return string.Empty;
-            }
-            uint processId;
-            WinApi.GetWindowThreadProcessId(hWnd, out processId);
-            Process proc = Process.GetProcessById((int)processId);
-            return proc.MainWindowTitle;
-        }
-
         public static string GetShortcutTargetPath(string file) {
             try {
                 if (System.IO.Path.GetExtension(file).ToLower() != ".lnk") {
@@ -678,25 +674,38 @@ namespace MpWpfApp {
             return mwta[mwta.Length - 1].Trim();
         }
 
-        public static string GetProcessPath(IntPtr hwnd) {
+        public static string GetProcessPath(IntPtr hwnd) { 
             try {
                 if (hwnd == null) {
-                    throw new Exception("MpHelpers error hWnd is null");
+                    return GetProcessPath(((MpClipTrayViewModel)((MpMainWindowViewModel)((MpMainWindow)App.Current.MainWindow).DataContext).ClipTrayViewModel).ClipboardManager.LastWindowWatcher.ThisAppHandle);
                 }
                 if (hwnd == IntPtr.Zero) {
-                    return string.Empty;
+                    return GetProcessPath(((MpClipTrayViewModel)((MpMainWindowViewModel)((MpMainWindow)App.Current.MainWindow).DataContext).ClipTrayViewModel).ClipboardManager.LastWindowWatcher.ThisAppHandle);
                 }
                 WinApi.GetWindowThreadProcessId(hwnd, out uint pid);
-                Process proc = Process.GetProcessById((int)pid);
-                //Process mainProc = Process.GetProcessById(Process.GetProcessById(proc.Handle.ToInt32()).MainWindowHandle.ToInt32());
-                return proc.MainModule.FileName.ToString();
+                using (Process proc = Process.GetProcessById((int)pid)) {
+                    //Process mainProc = Process.GetProcessById(Process.GetProcessById(proc.Handle.ToInt32()).MainWindowHandle.ToInt32());
+                    return proc.MainModule.FileName.ToString();
+                }
             }
             catch (Exception e) {
                 Console.WriteLine("MpHelpers.GetProcessPath error (likely) cannot find process path: " + e.ToString());
                 return GetProcessPath(((MpClipTrayViewModel)((MpMainWindowViewModel)((MpMainWindow)App.Current.MainWindow).DataContext).ClipTrayViewModel).ClipboardManager.LastWindowWatcher.ThisAppHandle);
             }
         }
-
+        public static string GetProcessMainWindowTitle(IntPtr hWnd) {
+            if (hWnd == null) {
+                throw new Exception("MpHelpers error hWnd is null");
+            }
+            if (hWnd == IntPtr.Zero) {
+                return string.Empty;
+            }
+            uint processId;
+            WinApi.GetWindowThreadProcessId(hWnd, out processId);
+            using (Process proc = Process.GetProcessById((int)processId)) {
+                return proc.MainWindowTitle;
+            }
+        }
         public static Point GetMousePosition() {
             WinApi.Win32Point w32Mouse = new WinApi.Win32Point();
             WinApi.GetCursorPos(ref w32Mouse);
@@ -1163,7 +1172,7 @@ namespace MpWpfApp {
         public static string ConvertPlainTextToRichText(string plainText) {
             System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox();
             rtb.Text = plainText;
-            rtb.Font = new System.Drawing.Font(rtb.Font.FontFamily.Name, 12);
+            rtb.Font = new System.Drawing.Font(Properties.Settings.Default.DefaultFontFamily,(float)Properties.Settings.Default.DefaultFontSize);
             return rtb.Rtf;
         }
 
@@ -1173,7 +1182,7 @@ namespace MpWpfApp {
                 rtb.SetRtf(richText);
                 return new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.Replace("''", "'");
             } else {
-                return ConvertXamlToPlainText(richText);
+                return richText;
             }
         }
 

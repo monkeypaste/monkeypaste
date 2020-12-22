@@ -326,6 +326,7 @@ namespace MpWpfApp {
             if(pasteSelected) {
                 pasteDataObject = await ClipTrayViewModel.GetDataObjectFromSelectedClips(pasteSelected);
             }
+
             var mw = (MpMainWindow)Application.Current.MainWindow;
             MpHelpers.AnimateDoubleProperty(
                 _endMainWindowTop,

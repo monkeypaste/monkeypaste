@@ -798,38 +798,41 @@
                                                       BlurRadius="10" />
                                 </local:MpClipBorder.Effect>-->
                                 <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="{Binding TileTitleHeight}" />
-                                        <RowDefinition Height="{Binding TileContentHeight}" />
-                                    </Grid.RowDefinitions>
-                                    <!-- Tile Title StackPanel -->
-                                    <Canvas Grid.Row="0"
-                                            Grid.Column="0"
-                                            VerticalAlignment="Top"
-                                            HorizontalAlignment="Left">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="Loaded">
-                                                <i:CallMethodAction TargetObject="{Binding}"
-                                                                    MethodName="ClipTileTitle_Loaded" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                        <Image x:Name="TitleSwirl"
-                                               Canvas.Top="-1"
-                                               Canvas.Left="-1"
-                                               RenderOptions.BitmapScalingMode="HighQuality"
-                                               Stretch="Fill"
-                                               Width="{Binding TileBorderWidth}"
-                                               Height="{Binding TileTitleHeight}"
-                                               Source="{Binding TitleSwirl}" />
-                                        <!-- Clip Title TextBlock -->
-                                        <TextBlock x:Name="ClipTileTitleTextBlock"
-                                                   Text="{Binding CopyItemTitle}"
-                                                   Canvas.Top="-2"
-                                                   Canvas.Left="5"
-                                                   FontSize="24"
-                                                   Foreground="White"
-                                                   Background="Transparent"
-                                                   Visibility="{Binding TileTitleTextBlockVisibility}">
+                                    <Label Content="Loading"
+                                           Visibility="{Binding LoadingSpinnerVisibility}" />
+                                    <Grid Visibility="{Binding ContentVisibility}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="{Binding TileTitleHeight}" />
+                                            <RowDefinition Height="{Binding TileContentHeight}" />
+                                        </Grid.RowDefinitions>
+                                        <!-- Tile Title StackPanel -->
+                                        <Canvas Grid.Row="0"
+                                                Grid.Column="0"
+                                                VerticalAlignment="Top"
+                                                HorizontalAlignment="Left">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Loaded">
+                                                    <i:CallMethodAction TargetObject="{Binding}"
+                                                                        MethodName="ClipTileTitle_Loaded" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <Image x:Name="TitleSwirl"
+                                                   Canvas.Top="-1"
+                                                   Canvas.Left="-1"
+                                                   RenderOptions.BitmapScalingMode="HighQuality"
+                                                   Stretch="Fill"
+                                                   Width="{Binding TileBorderWidth}"
+                                                   Height="{Binding TileTitleHeight}"
+                                                   Source="{Binding TitleSwirl}" />
+                                            <!-- Clip Title TextBlock -->
+                                            <TextBlock x:Name="ClipTileTitleTextBlock"
+                                                       Text="{Binding CopyItemTitle}"
+                                                       Canvas.Top="-2"
+                                                       Canvas.Left="5"
+                                                       FontSize="24"
+                                                       Foreground="White"
+                                                       Background="Transparent"
+                                                       Visibility="{Binding TileTitleTextBlockVisibility}">
                                             <!--<TextBlock.Effect>
                                                 <DropShadowEffect ShadowDepth="2"
                                                                   Direction="330"
@@ -837,421 +840,421 @@
                                                                   Opacity="1.0"
                                                                   BlurRadius="7" />
                                             </TextBlock.Effect>-->
-                                        </TextBlock>
-                                        <!-- Clip Title TextBox -->
-                                        <TextBox x:Name="ClipTileTitleTextBox"
-                                                 Background="White"
-                                                 Foreground="Black"
-                                                 Canvas.Top="-2"
-                                                 Canvas.Left="5"
-                                                 FontSize="24"
-                                                 IsReadOnly="False"
-                                                 Visibility="{Binding TileTitleTextBoxVisibility}"
-                                                 local:MpFocusExtension.IsFocused="{Binding IsClipTitleTextBoxFocused}"
-                                                 Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
-                                        <!-- Clip Title Detail TextBlock -->
-                                        <TextBlock x:Name="ClipTileTitleDetailTextBlock"
-                                                   Background="Transparent"
-                                                   Foreground="{Binding DetailTextColor}"
-                                                   FontSize="9"
-                                                   Text="{Binding DetailText}" />
-                                        <!-- Clip Title Icon Image -->
-                                        <Button x:Name="ClipTileAppIconImageButton"
-                                                Style="{StaticResource Transparent_Button}"
-                                                Background="Transparent"
-                                                BorderThickness="0">
-                                            <Image x:Name="ClipTileAppIconImage"
-                                                   Source="{Binding CopyItemAppIcon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
-                                                   Stretch="Fill"
-                                                   ToolTip="{Binding CopyItemAppName}"
-                                                   Width="{Binding TileTitleIconSize}"
-                                                   Height="{Binding TileTitleIconSize}">
-                                                <Image.Style>
-                                                    <Style TargetType="{x:Type Image}">
-                                                        <Style.Triggers>
-                                                            <Trigger Property="IsMouseOver"
-                                                                     Value="True">
-                                                                <Setter Property="Effect">
-                                                                    <Setter.Value>
-                                                                        <DropShadowEffect ShadowDepth="3"
-                                                                                          Color="White"
-                                                                                          Opacity="1"
-                                                                                          BlurRadius="50" />
-                                                                    </Setter.Value>
-                                                                </Setter>
-                                                            </Trigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </Image.Style>
-                                            </Image>
-                                        </Button>
-                                    </Canvas>
-                                    <!-- Content Container Canvas -->
-                                    <Canvas x:Name="ClipTileContentCanvas"
-                                            Grid.Row="1"
-                                            Grid.Column="0">
-                                        <!-- RichText Content -->
-                                        <StackPanel x:Name="ClipTileRichTextStackPanel"
-                                                    Height="{Binding TileContentHeight}"
-                                                    Visibility="{Binding RtbVisibility}"
-                                                    Width="{Binding TileBorderWidth, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}">
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="Loaded">
-                                                    <i:CallMethodAction TargetObject="{Binding}"
-                                                                        MethodName="ClipTileRichTextStackPanel_Loaded" />
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                            <Border x:Name="ClipTileEditorToolbar"
-                                                    Visibility="{Binding EditToolbarVisibility}">
-                                                <StackPanel Orientation="Horizontal"
-                                                            Height="{Binding TileContentEditToolbarHeight}">
-                                                    <ComboBox x:Name="FontFamilyCombo"
-                                                              Height="23"
-                                                              Width="100"
-                                                              Margin="5,2,0,2"
-                                                              IsEditable="True"
-                                                              ItemsSource="{Binding SystemFonts}">
-                                                        <ComboBox.ItemsPanel>
-                                                            <ItemsPanelTemplate>
-                                                                <VirtualizingStackPanel Width="250" />
-                                                            </ItemsPanelTemplate>
-                                                        </ComboBox.ItemsPanel>
-                                                        <ComboBox.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <TextBlock Text="{Binding}"
-                                                                           FontFamily="{Binding}"
-                                                                           FontSize="15"
-                                                                           Height="20" />
-                                                            </DataTemplate>
-                                                        </ComboBox.ItemTemplate>
-                                                    </ComboBox>
-                                                    <ComboBox x:Name="FontSizeCombo"
-                                                              Height="23"
-                                                              Width="40"
-                                                              Margin="5,2,5,2"
-                                                              IsEditable="True"
-                                                              ItemsSource="{Binding FontSizeList}" />
-                                                    <Image Source="/Resources/Images/MpRichTextBox/separator.png"
-                                                           Stretch="None" />
-                                                    <Button x:Name="AddTemplateButton"
-                                                            ToolTip="Add Template"
-                                                            Template="{StaticResource FlatButtonControlTemplate}"
-                                                            IsEnabled="{Binding IsAddTemplateButtonEnabled}"
-                                                            Background="{Binding AddTemplateButtonBackgroundBrush}"
-                                                            Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/templateadd.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </Button>
-                                                    <Image Source="/Resources/Images/MpRichTextBox/separator.png"
-                                                           Stretch="None"
-                                                           SnapsToDevicePixels="True" />
-                                                    <Button Command="ApplicationCommands.Cut"
-                                                            CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                            ToolTip="Cut"
-                                                            Template="{StaticResource FlatButtonControlTemplate}"
-                                                            Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/editcut.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </Button>
-                                                    <Button Command="ApplicationCommands.Copy"
-                                                            CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                            ToolTip="Copy"
-                                                            Template="{StaticResource FlatButtonControlTemplate}"
-                                                            Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/editcopy.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </Button>
-                                                    <Button Command="ApplicationCommands.Paste"
-                                                            CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                            ToolTip="Paste"
-                                                            Template="{StaticResource FlatButtonControlTemplate}"
-                                                            Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/editpaste.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </Button>
-                                                    <Button Command="ApplicationCommands.Undo"
-                                                            CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                            ToolTip="Undo"
-                                                            Template="{StaticResource FlatButtonControlTemplate}"
-                                                            Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/editundo.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </Button>
-                                                    <Button Command="ApplicationCommands.Redo"
-                                                            CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                            ToolTip="Redo"
-                                                            Template="{StaticResource FlatButtonControlTemplate}"
-                                                            Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/editredo.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </Button>
-                                                    <Image Source="/Resources/Images/MpRichTextBox/separator.png"
-                                                           Stretch="None"
-                                                           SnapsToDevicePixels="True" />
-                                                    <ToggleButton x:Name="BoldButton"
-                                                                  Command="EditingCommands.ToggleBold"
-                                                                  CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                                  ToolTip="Bold"
-                                                                  Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                  Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/fontbold.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </ToggleButton>
-                                                    <ToggleButton x:Name="ItalicButton"
-                                                                  Command="EditingCommands.ToggleItalic"
-                                                                  CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                                  ToolTip="Italic"
-                                                                  Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                  Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/fontitalic.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </ToggleButton>
-                                                    <ToggleButton x:Name="UnderlineButton"
-                                                                  Command="EditingCommands.ToggleUnderline"
-                                                                  CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                                  ToolTip="Underline"
-                                                                  Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                  Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/fontunderline.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </ToggleButton>
-                                                    <Image Source="/Resources/Images/MpRichTextBox/separator.png"
-                                                           Stretch="None"
-                                                           SnapsToDevicePixels="True" />
-                                                    <ToggleButton x:Name="LeftButton"
-                                                                  Command="EditingCommands.AlignLeft"
-                                                                  CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                                  ToolTip="Align Left"
-                                                                  Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                  Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/alignleft.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </ToggleButton>
-                                                    <ToggleButton x:Name="CenterButton"
-                                                                  Command="EditingCommands.AlignCenter"
-                                                                  CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                                  ToolTip="Align Center"
-                                                                  Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                  Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/aligncenter.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </ToggleButton>
-                                                    <ToggleButton x:Name="RightButton"
-                                                                  Command="EditingCommands.AlignRight"
-                                                                  CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                                  ToolTip="Align Right"
-                                                                  Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                  Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/alignright.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </ToggleButton>
-                                                    <ToggleButton x:Name="JustifyButton"
-                                                                  Command="EditingCommands.AlignJustify"
-                                                                  CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                                  ToolTip="Align Justify"
-                                                                  Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                  Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/alignjustify.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </ToggleButton>
-                                                    <Image Source="/Resources/Images/MpRichTextBox/separator.png"
-                                                           Stretch="None"
-                                                           SnapsToDevicePixels="True" />
-                                                    <ToggleButton x:Name="BulletsButton"
-                                                                  Command="EditingCommands.ToggleBullets"
-                                                                  CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                                  ToolTip="Bullets"
-                                                                  Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                  Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/listbullets.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </ToggleButton>
-                                                    <ToggleButton x:Name="NumberingButton"
-                                                                  Command="EditingCommands.ToggleNumbering"
-                                                                  CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                                  ToolTip="Numbering"
-                                                                  Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                  Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/listnumbers.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </ToggleButton>
-                                                    <Image Source="/Resources/Images/MpRichTextBox/separator.png"
-                                                           Stretch="None" />
-                                                    <Button Command="EditingCommands.IncreaseIndentation"
-                                                            CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                            ToolTip="Increase Indentation"
-                                                            Template="{StaticResource FlatButtonControlTemplate}"
-                                                            Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/indentincrease.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </Button>
-                                                    <Button Command="EditingCommands.DecreaseIndentation"
-                                                            CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                            ToolTip="Decrease Indentation"
-                                                            Template="{StaticResource FlatButtonControlTemplate}"
-                                                            Margin="0,1,0,1">
-                                                        <Image Source="/Resources/Images/MpRichTextBox/indentdecrease.png"
-                                                               Stretch="None"
-                                                               SnapsToDevicePixels="True" />
-                                                    </Button>
-                                                </StackPanel>
-                                            </Border>
-                                            <RichTextBox x:Name="ClipTileRichTextBox"
-                                                         local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText}"
-                                                         IsReadOnly="{Binding IsRtbReadOnly}"
-                                                         IsInactiveSelectionHighlightEnabled="True"
-                                                         IsDocumentEnabled="{Binding IsSelected}"
-                                                         Focusable="{Binding IsEditingTile}"
-                                                         Cursor="{Binding ContentCursor}"
-                                                         Height="{Binding RichTextBoxHeight}"
-                                                         local:MpFocusExtension.IsFocused="{Binding IsClipRichTextBoxFocused}"
-                                                         IsUndoEnabled="True" 
-                                                         Background="White"
-                                                         VerticalAlignment="Top"
-                                                         HorizontalAlignment="Left"
-                                                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                                         BorderThickness="0"
-                                                         Padding="10,0,10,10">
-                                                <RichTextBox.Resources>
-                                                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                                                                     Color="Blue" />
-                                                </RichTextBox.Resources>
-                                            </RichTextBox>
-                                            <Border x:Name="ClipTilePasteTemplateToolbar"
-                                                    Background="LightBlue"
-                                                    Visibility="{Binding PasteTemplateToolbarVisibility}">
-                                                <Grid Height="{Binding TileContentPasteToolbarHeight}">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*" />
-                                                        <ColumnDefinition Width="3*" />
-                                                        <ColumnDefinition Width="0.5*" />
-                                                        <ColumnDefinition Width="*" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <Button x:Name="ClearAllTemplatesButton"
-                                                            Grid.Column="0"
-                                                            TabIndex="0"
-                                                            Visibility="{Binding ClearAllTemplateToolbarButtonVisibility}"
-                                                            Command="{Binding ClearAllTemplatesCommand}"
-                                                            Margin="15,0,15,0"
-                                                            Padding="0,0,0,0"
-                                                            FontSize="12"
-                                                            VerticalContentAlignment="Top"
-                                                            VerticalAlignment="Center"
-                                                            Content="CLEAR ALL" />
-                                                    <local:MpClipBorder Grid.Column="1"
-                                                                        CornerRadius="10"
-                                                                        Background="White"
-                                                                        BorderThickness="1"
-                                                                        BorderBrush="DimGray"
-                                                                        Margin="1"
-                                                                        Padding="0"
-                                                                        VerticalAlignment="Center"
-                                                                        HorizontalAlignment="Stretch">
-                                                        <Grid>
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="*" />
-                                                                <ColumnDefinition Width="0.1*" />
-                                                            </Grid.ColumnDefinitions>
-                                                            <TextBox x:Name="CurrentTemplateTextBox"
-                                                                     Grid.Column="0"
-                                                                     TabIndex="1"
-                                                                     BorderThickness="0"
-                                                                     Text="{Binding Path=CurrentTemplateText, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
-                                                                     FontStyle="{Binding CurrentTemplateTextBoxFontStyle}"
-                                                                     Foreground="{Binding CurrentTemplateTextBrush}"
-                                                                     FontSize="14"
-                                                                     Width="240"
-                                                                     Padding="0,0,0,0"
-                                                                     Margin="5,0,0,0"
-                                                                     VerticalAlignment="Top"
-                                                                     HorizontalAlignment="Left"
-                                                                     VerticalContentAlignment="Top" />
-                                                            <Button x:Name="ClearCurrentTemplateButton"
-                                                                    Grid.Column="1"
-                                                                    Visibility="{Binding ClearCurrentTemplateTextboxButtonVisibility}"
-                                                                    Command="{Binding ClearCurrentTemplatesCommand}"
-                                                                    Background="Transparent"
-                                                                    BorderThickness="0"
-                                                                    Width="15"
-                                                                    Height="15">
-                                                                <Image x:Name="ClearCurrentTemplateButtonImage"
-                                                                       Source="/Resources/Images/close1.png" />
-                                                            </Button>
-                                                        </Grid>
-                                                    </local:MpClipBorder>
+                                            </TextBlock>
+                                            <!-- Clip Title TextBox -->
+                                            <TextBox x:Name="ClipTileTitleTextBox"
+                                                     Background="White"
+                                                     Foreground="Black"
+                                                     Canvas.Top="-2"
+                                                     Canvas.Left="5"
+                                                     FontSize="24"
+                                                     IsReadOnly="False"
+                                                     Visibility="{Binding TileTitleTextBoxVisibility}"
+                                                     local:MpFocusExtension.IsFocused="{Binding IsClipTitleTextBoxFocused}"
+                                                     Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
+                                            <!-- Clip Title Detail TextBlock -->
+                                            <TextBlock x:Name="ClipTileTitleDetailTextBlock"
+                                                       Background="Transparent"
+                                                       Foreground="{Binding DetailTextColor}"
+                                                       FontSize="9"
+                                                       Text="{Binding DetailText}" />
+                                            <!-- Clip Title Icon Image -->
+                                            <Button x:Name="ClipTileAppIconImageButton"
+                                                    Style="{StaticResource Transparent_Button}"
+                                                    Background="Transparent"
+                                                    BorderThickness="0">
+                                                <Image x:Name="ClipTileAppIconImage"
+                                                       Source="{Binding CopyItemAppIcon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
+                                                       Stretch="Fill"
+                                                       ToolTip="{Binding CopyItemAppName}"
+                                                       Width="{Binding TileTitleIconSize}"
+                                                       Height="{Binding TileTitleIconSize}">
+                                                    <Image.Style>
+                                                        <Style TargetType="{x:Type Image}">
+                                                            <Style.Triggers>
+                                                                <Trigger Property="IsMouseOver"
+                                                                         Value="True">
+                                                                    <Setter Property="Effect">
+                                                                        <Setter.Value>
+                                                                            <DropShadowEffect ShadowDepth="3"
+                                                                                              Color="White"
+                                                                                              Opacity="1"
+                                                                                              BlurRadius="50" />
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Trigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Image.Style>
+                                                </Image>
+                                            </Button>
+                                        </Canvas>
+                                        <!-- Content Container Canvas -->
+                                        <Canvas x:Name="ClipTileContentCanvas"
+                                                Grid.Row="1"
+                                                Grid.Column="0">
+                                            <!-- RichText Content -->
+                                            <StackPanel x:Name="ClipTileRichTextStackPanel"
+                                                        Height="{Binding TileContentHeight}"
+                                                        Visibility="{Binding RtbVisibility}"
+                                                        Width="{Binding TileBorderWidth, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Loaded">
+                                                        <i:CallMethodAction TargetObject="{Binding}"
+                                                                            MethodName="ClipTileRichTextStackPanel_Loaded" />
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                                <Border x:Name="ClipTileEditorToolbar"
+                                                        Visibility="{Binding EditToolbarVisibility}">
                                                     <StackPanel Orientation="Horizontal"
-                                                                Grid.Column="2"
-                                                                Visibility="{Binding TemplateNavigationButtonStackVisibility}"
-                                                                HorizontalAlignment="Center"
-                                                                Margin="8,0,0,0">
-                                                        <Button x:Name="PreviousTemplateButton"
-                                                                TabIndex="2"
-                                                                Command="{Binding PreviousTemplateTokenCommand}"
-                                                                Width="20"
-                                                                Height="20"
-                                                                Padding="5">
-                                                            <Image Source="/Resources/Images/back_black.png" />
+                                                                Height="{Binding TileContentEditToolbarHeight}">
+                                                        <ComboBox x:Name="FontFamilyCombo"
+                                                                  Height="23"
+                                                                  Width="100"
+                                                                  Margin="5,2,0,2"
+                                                                  IsEditable="True"
+                                                                  ItemsSource="{Binding SystemFonts}">
+                                                            <ComboBox.ItemsPanel>
+                                                                <ItemsPanelTemplate>
+                                                                    <VirtualizingStackPanel Width="250" />
+                                                                </ItemsPanelTemplate>
+                                                            </ComboBox.ItemsPanel>
+                                                            <ComboBox.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <TextBlock Text="{Binding}"
+                                                                               FontFamily="{Binding}"
+                                                                               FontSize="15"
+                                                                               Height="20" />
+                                                                </DataTemplate>
+                                                            </ComboBox.ItemTemplate>
+                                                        </ComboBox>
+                                                        <ComboBox x:Name="FontSizeCombo"
+                                                                  Height="23"
+                                                                  Width="40"
+                                                                  Margin="5,2,5,2"
+                                                                  IsEditable="True"
+                                                                  ItemsSource="{Binding FontSizeList}" />
+                                                        <Image Source="/Resources/Images/MpRichTextBox/separator.png"
+                                                               Stretch="None" />
+                                                        <Button x:Name="AddTemplateButton"
+                                                                ToolTip="Add Template"
+                                                                Template="{StaticResource FlatButtonControlTemplate}"
+                                                                IsEnabled="{Binding IsAddTemplateButtonEnabled}"
+                                                                Background="{Binding AddTemplateButtonBackgroundBrush}"
+                                                                Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/templateadd.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
                                                         </Button>
-                                                        <Button x:Name="NextTemplateButton"
-                                                                TabIndex="3"
-                                                                Command="{Binding NextTemplateTokenCommand}"
-                                                                Width="20"
-                                                                Height="20"
-                                                                Padding="5">
-                                                            <Image Source="/Resources/Images/forward_black.png" />
+                                                        <Image Source="/Resources/Images/MpRichTextBox/separator.png"
+                                                               Stretch="None"
+                                                               SnapsToDevicePixels="True" />
+                                                        <Button Command="ApplicationCommands.Cut"
+                                                                CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                                ToolTip="Cut"
+                                                                Template="{StaticResource FlatButtonControlTemplate}"
+                                                                Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/editcut.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
+                                                        </Button>
+                                                        <Button Command="ApplicationCommands.Copy"
+                                                                CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                                ToolTip="Copy"
+                                                                Template="{StaticResource FlatButtonControlTemplate}"
+                                                                Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/editcopy.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
+                                                        </Button>
+                                                        <Button Command="ApplicationCommands.Paste"
+                                                                CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                                ToolTip="Paste"
+                                                                Template="{StaticResource FlatButtonControlTemplate}"
+                                                                Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/editpaste.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
+                                                        </Button>
+                                                        <Button Command="ApplicationCommands.Undo"
+                                                                CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                                ToolTip="Undo"
+                                                                Template="{StaticResource FlatButtonControlTemplate}"
+                                                                Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/editundo.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
+                                                        </Button>
+                                                        <Button Command="ApplicationCommands.Redo"
+                                                                CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                                ToolTip="Redo"
+                                                                Template="{StaticResource FlatButtonControlTemplate}"
+                                                                Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/editredo.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
+                                                        </Button>
+                                                        <Image Source="/Resources/Images/MpRichTextBox/separator.png"
+                                                               Stretch="None"
+                                                               SnapsToDevicePixels="True" />
+                                                        <ToggleButton x:Name="BoldButton"
+                                                                      Command="EditingCommands.ToggleBold"
+                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                                      ToolTip="Bold"
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
+                                                                      Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/fontbold.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
+                                                        </ToggleButton>
+                                                        <ToggleButton x:Name="ItalicButton"
+                                                                      Command="EditingCommands.ToggleItalic"
+                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                                      ToolTip="Italic"
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
+                                                                      Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/fontitalic.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
+                                                        </ToggleButton>
+                                                        <ToggleButton x:Name="UnderlineButton"
+                                                                      Command="EditingCommands.ToggleUnderline"
+                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                                      ToolTip="Underline"
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
+                                                                      Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/fontunderline.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
+                                                        </ToggleButton>
+                                                        <Image Source="/Resources/Images/MpRichTextBox/separator.png"
+                                                               Stretch="None"
+                                                               SnapsToDevicePixels="True" />
+                                                        <ToggleButton x:Name="LeftButton"
+                                                                      Command="EditingCommands.AlignLeft"
+                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                                      ToolTip="Align Left"
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
+                                                                      Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/alignleft.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
+                                                        </ToggleButton>
+                                                        <ToggleButton x:Name="CenterButton"
+                                                                      Command="EditingCommands.AlignCenter"
+                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                                      ToolTip="Align Center"
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
+                                                                      Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/aligncenter.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
+                                                        </ToggleButton>
+                                                        <ToggleButton x:Name="RightButton"
+                                                                      Command="EditingCommands.AlignRight"
+                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                                      ToolTip="Align Right"
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
+                                                                      Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/alignright.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
+                                                        </ToggleButton>
+                                                        <ToggleButton x:Name="JustifyButton"
+                                                                      Command="EditingCommands.AlignJustify"
+                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                                      ToolTip="Align Justify"
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
+                                                                      Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/alignjustify.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
+                                                        </ToggleButton>
+                                                        <Image Source="/Resources/Images/MpRichTextBox/separator.png"
+                                                               Stretch="None"
+                                                               SnapsToDevicePixels="True" />
+                                                        <ToggleButton x:Name="BulletsButton"
+                                                                      Command="EditingCommands.ToggleBullets"
+                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                                      ToolTip="Bullets"
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
+                                                                      Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/listbullets.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
+                                                        </ToggleButton>
+                                                        <ToggleButton x:Name="NumberingButton"
+                                                                      Command="EditingCommands.ToggleNumbering"
+                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                                      ToolTip="Numbering"
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
+                                                                      Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/listnumbers.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
+                                                        </ToggleButton>
+                                                        <Image Source="/Resources/Images/MpRichTextBox/separator.png"
+                                                               Stretch="None" />
+                                                        <Button Command="EditingCommands.IncreaseIndentation"
+                                                                CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                                ToolTip="Increase Indentation"
+                                                                Template="{StaticResource FlatButtonControlTemplate}"
+                                                                Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/indentincrease.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
+                                                        </Button>
+                                                        <Button Command="EditingCommands.DecreaseIndentation"
+                                                                CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                                ToolTip="Decrease Indentation"
+                                                                Template="{StaticResource FlatButtonControlTemplate}"
+                                                                Margin="0,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/indentdecrease.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
                                                         </Button>
                                                     </StackPanel>
-                                                    <Button x:Name="PasteTemplateButton"
-                                                            Grid.Column="3"
-                                                            TabIndex="4"
-                                                            IsEnabled="{Binding IsTemplateReadyToPaste}"
-                                                            Command="{Binding PasteTemplateCommand}"
-                                                            Margin="15,0,15,0"
-                                                            Padding="0,0,0,0"
-                                                            FontSize="12"
-                                                            VerticalContentAlignment="Top"
-                                                            VerticalAlignment="Center"
-                                                            Content="PASTE" />
-                                                </Grid>
-                                            </Border>
-                                        </StackPanel>
-                                        <!-- Image Content-->
-                                        <Grid Width="{Binding TileContentWidth}"
-                                              Height="{Binding TileContentHeight}"
-                                              Visibility="{Binding ImgVisibility}"
-                                              Focusable="False"
-                                              IsEnabled="False">
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="Loaded">
-                                                    <i:CallMethodAction TargetObject="{Binding}"
-                                                                        MethodName="ClipTileImageCanvas_Loaded" />
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                            <Viewbox>
-                                                <Image x:Name="ClipTileImage"
-                                                       Focusable="False"
-                                                       IsEnabled="False"
-                                                       Source="{Binding CopyItemBmp}"
-                                                      Stretch="Uniform">
-                                                </Image>
-                                                <!--<local:AdornedControl x:Name="ClipTileImageDetectedObjectAdornedControl"
+                                                </Border>
+                                                <RichTextBox x:Name="ClipTileRichTextBox"
+                                                             local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText}"
+                                                             IsReadOnly="{Binding IsRtbReadOnly}"
+                                                             IsInactiveSelectionHighlightEnabled="True"
+                                                             IsDocumentEnabled="{Binding IsSelected}"
+                                                             Focusable="{Binding IsEditingTile}"
+                                                             Cursor="{Binding ContentCursor}"
+                                                             Height="{Binding RichTextBoxHeight}"
+                                                             local:MpFocusExtension.IsFocused="{Binding IsClipRichTextBoxFocused}"
+                                                             IsUndoEnabled="True"
+                                                             Background="White"
+                                                             VerticalAlignment="Top"
+                                                             HorizontalAlignment="Left"
+                                                             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                                             ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                                             BorderThickness="0"
+                                                             Padding="10,0,10,10">
+                                                    <RichTextBox.Resources>
+                                                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                                                         Color="Blue" />
+                                                    </RichTextBox.Resources>
+                                                </RichTextBox>
+                                                <Border x:Name="ClipTilePasteTemplateToolbar"
+                                                        Background="LightBlue"
+                                                        Visibility="{Binding PasteTemplateToolbarVisibility}">
+                                                    <Grid Height="{Binding TileContentPasteToolbarHeight}">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="3*" />
+                                                            <ColumnDefinition Width="0.5*" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Button x:Name="ClearAllTemplatesButton"
+                                                                Grid.Column="0"
+                                                                TabIndex="0"
+                                                                Visibility="{Binding ClearAllTemplateToolbarButtonVisibility}"
+                                                                Command="{Binding ClearAllTemplatesCommand}"
+                                                                Margin="15,0,15,0"
+                                                                Padding="0,0,0,0"
+                                                                FontSize="12"
+                                                                VerticalContentAlignment="Top"
+                                                                VerticalAlignment="Center"
+                                                                Content="CLEAR ALL" />
+                                                        <local:MpClipBorder Grid.Column="1"
+                                                                            CornerRadius="10"
+                                                                            Background="White"
+                                                                            BorderThickness="1"
+                                                                            BorderBrush="DimGray"
+                                                                            Margin="1"
+                                                                            Padding="0"
+                                                                            VerticalAlignment="Center"
+                                                                            HorizontalAlignment="Stretch">
+                                                            <Grid>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="*" />
+                                                                    <ColumnDefinition Width="0.1*" />
+                                                                </Grid.ColumnDefinitions>
+                                                                <TextBox x:Name="CurrentTemplateTextBox"
+                                                                         Grid.Column="0"
+                                                                         TabIndex="1"
+                                                                         BorderThickness="0"
+                                                                         Text="{Binding Path=CurrentTemplateText, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                                                                         FontStyle="{Binding CurrentTemplateTextBoxFontStyle}"
+                                                                         Foreground="{Binding CurrentTemplateTextBrush}"
+                                                                         FontSize="14"
+                                                                         Width="240"
+                                                                         Padding="0,0,0,0"
+                                                                         Margin="5,0,0,0"
+                                                                         VerticalAlignment="Top"
+                                                                         HorizontalAlignment="Left"
+                                                                         VerticalContentAlignment="Top" />
+                                                                <Button x:Name="ClearCurrentTemplateButton"
+                                                                        Grid.Column="1"
+                                                                        Visibility="{Binding ClearCurrentTemplateTextboxButtonVisibility}"
+                                                                        Command="{Binding ClearCurrentTemplatesCommand}"
+                                                                        Background="Transparent"
+                                                                        BorderThickness="0"
+                                                                        Width="15"
+                                                                        Height="15">
+                                                                    <Image x:Name="ClearCurrentTemplateButtonImage"
+                                                                           Source="/Resources/Images/close1.png" />
+                                                                </Button>
+                                                            </Grid>
+                                                        </local:MpClipBorder>
+                                                        <StackPanel Orientation="Horizontal"
+                                                                    Grid.Column="2"
+                                                                    Visibility="{Binding TemplateNavigationButtonStackVisibility}"
+                                                                    HorizontalAlignment="Center"
+                                                                    Margin="8,0,0,0">
+                                                            <Button x:Name="PreviousTemplateButton"
+                                                                    TabIndex="2"
+                                                                    Command="{Binding PreviousTemplateTokenCommand}"
+                                                                    Width="20"
+                                                                    Height="20"
+                                                                    Padding="5">
+                                                                <Image Source="/Resources/Images/back_black.png" />
+                                                            </Button>
+                                                            <Button x:Name="NextTemplateButton"
+                                                                    TabIndex="3"
+                                                                    Command="{Binding NextTemplateTokenCommand}"
+                                                                    Width="20"
+                                                                    Height="20"
+                                                                    Padding="5">
+                                                                <Image Source="/Resources/Images/forward_black.png" />
+                                                            </Button>
+                                                        </StackPanel>
+                                                        <Button x:Name="PasteTemplateButton"
+                                                                Grid.Column="3"
+                                                                TabIndex="4"
+                                                                IsEnabled="{Binding IsTemplateReadyToPaste}"
+                                                                Command="{Binding PasteTemplateCommand}"
+                                                                Margin="15,0,15,0"
+                                                                Padding="0,0,0,0"
+                                                                FontSize="12"
+                                                                VerticalContentAlignment="Top"
+                                                                VerticalAlignment="Center"
+                                                                Content="PASTE" />
+                                                    </Grid>
+                                                </Border>
+                                            </StackPanel>
+                                            <!-- Image Content-->
+                                            <Grid Width="{Binding TileContentWidth}"
+                                                  Height="{Binding TileContentHeight}"
+                                                  Visibility="{Binding ImgVisibility}"
+                                                  Focusable="False"
+                                                  IsEnabled="False">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Loaded">
+                                                        <i:CallMethodAction TargetObject="{Binding}"
+                                                                            MethodName="ClipTileImageCanvas_Loaded" />
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                                <Viewbox>
+                                                    <Image x:Name="ClipTileImage"
+                                                           Focusable="False"
+                                                           IsEnabled="False"
+                                                           Source="{Binding CopyItemBmp}"
+                                                           Stretch="Uniform">
+                                                    </Image>
+                                                    <!--<local:AdornedControl x:Name="ClipTileImageDetectedObjectAdornedControl"
                                                                       IsAdornerVisible="True"
                                                                       IsEnabled="False"
                                                                       HorizontalAdornerPlacement="Inside"
@@ -1303,49 +1306,49 @@
                                                            Stretch="Uniform">
                                                     </Image>
                                                 </local:AdornedControl>-->
-                                            </Viewbox>
-                                        </Grid>
-                                        <!--File List Content -->
-                                        <ListBox x:Name="ClipTileFileListBox"
-                                                 Width="{Binding TileBorderWidth}"
-                                                 Height="{Binding TileContentHeight}"
-                                                 ItemsSource="{Binding FileListViewModels}"
-                                                 Visibility="{Binding FileListVisibility}"
-                                                 IsEnabled="{Binding IsSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
-                                                 BorderThickness="0"
-                                                 Focusable="False">
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="Loaded">
-                                                    <i:CallMethodAction TargetObject="{Binding}"
-                                                                        MethodName="ClipTileFileListBox_Loaded" />
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Border Height="22"
-                                                            BorderThickness="0">
-                                                        <StackPanel VerticalAlignment="Center"
-                                                                    HorizontalAlignment="Left"
-                                                                    ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                                                    ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                                                    Orientation="Horizontal">
-                                                            <Image Source="{Binding Icon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
-                                                                   Height="22"
-                                                                   Stretch="Fill" />
-                                                            <TextBlock x:Name="FileListItemTextBlock"
-                                                                       Margin="3,0,0,0"
-                                                                       VerticalAlignment="Center"
-                                                                       HorizontalAlignment="Left"
-                                                                       ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                                                       ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                                                       FontSize="16"
-                                                                       Foreground="Black"
-                                                                       Background="Transparent">
-                                                                <TextBlock.ToolTip>
-                                                                    <ToolTip>
-                                                                        <TextBlock Text="{Binding ItemPath}" />
-                                                                    </ToolTip>
-                                                                </TextBlock.ToolTip>
+                                                </Viewbox>
+                                            </Grid>
+                                            <!--File List Content -->
+                                            <ListBox x:Name="ClipTileFileListBox"
+                                                     Width="{Binding TileBorderWidth}"
+                                                     Height="{Binding TileContentHeight}"
+                                                     ItemsSource="{Binding FileListViewModels}"
+                                                     Visibility="{Binding FileListVisibility}"
+                                                     IsEnabled="{Binding IsSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                                                     BorderThickness="0"
+                                                     Focusable="False">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Loaded">
+                                                        <i:CallMethodAction TargetObject="{Binding}"
+                                                                            MethodName="ClipTileFileListBox_Loaded" />
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border Height="22"
+                                                                BorderThickness="0">
+                                                            <StackPanel VerticalAlignment="Center"
+                                                                        HorizontalAlignment="Left"
+                                                                        ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                                                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                                                        Orientation="Horizontal">
+                                                                <Image Source="{Binding Icon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
+                                                                       Height="22"
+                                                                       Stretch="Fill" />
+                                                                <TextBlock x:Name="FileListItemTextBlock"
+                                                                           Margin="3,0,0,0"
+                                                                           VerticalAlignment="Center"
+                                                                           HorizontalAlignment="Left"
+                                                                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                                                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                                                           FontSize="16"
+                                                                           Foreground="Black"
+                                                                           Background="Transparent">
+                                                                    <TextBlock.ToolTip>
+                                                                        <ToolTip>
+                                                                            <TextBlock Text="{Binding ItemPath}" />
+                                                                        </ToolTip>
+                                                                    </TextBlock.ToolTip>
                                                                 <i:Interaction.Triggers>
                                                                         <i:EventTrigger EventName="Loaded">
                                                                             <i:CallMethodAction TargetObject="{Binding}"
@@ -1353,12 +1356,13 @@
                                                                         </i:EventTrigger>
                                                                     </i:Interaction.Triggers>
                                                             </TextBlock>
-                                                        </StackPanel>
-                                                    </Border>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
-                                    </Canvas>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </Canvas>
+                                    </Grid>
                                 </Grid>
                             </local:MpClipBorder>
                         </DataTemplate>

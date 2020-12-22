@@ -22,93 +22,47 @@ namespace MpWpfApp {
             }
         }
 
-        private int _appId = 0;
         public int AppId {
             get {
-                return _appId;
-            }
-            set {
-                if(_appId != value) {
-                    _appId = value;
-                    OnPropertyChanged(nameof(AppId));
-                }
+                return App.AppId;
             }
         }
 
-        private int _iconId = 0;
-        public int IconId {
-            get {
-                return _iconId;
-            }
-            set {
-                if (_iconId != value) {
-                    _iconId = value;
-                    OnPropertyChanged(nameof(IconId));
-                }
-            }
-        }
-
-        private string _appPath = String.Empty;
         public string AppPath {
             get {
-                return _appPath;
-            }
-            set {
-                if (_appPath != value) {
-                    _appPath = value;
-                    OnPropertyChanged(nameof(AppPath));
-                }
+                return App.AppPath;
             }
         }
 
-        private string _appName = String.Empty;
         public string AppName {
             get {
-                return _appName;
-            }
-            set {
-                if (_appName != value) {
-                    _appName = value;
-                    OnPropertyChanged(nameof(AppName));
-                }
+                return App.AppName;
             }
         }
 
-        private bool _isAppRejected = false;
         public bool IsAppRejected {
             get {
-                return _isAppRejected;
+                return App.IsAppRejected;
             }
             set {
-                if (_isAppRejected != value) {
-                    _isAppRejected = value;
+                if(App.IsAppRejected != value) {
+                    App.IsAppRejected = value;
+                    App.WriteToDatabase();
                     OnPropertyChanged(nameof(IsAppRejected));
-                }
-            }
-        }
-
-        private MpIcon _icon = null;
-        public MpIcon Icon {
-            get {
-                return _icon;
-            }
-            set {
-                if (_icon != value) {
-                    _icon = value;
-                    OnPropertyChanged(nameof(Icon));
+                    OnPropertyChanged(nameof(App));
                 }
             }
         }
 
         public bool IsNew {
             get {
-                return App != null && App.AppId == 0;
+                return App != null && AppId == 0;
             }
         }
 
         public BitmapSource IconImage {
             get {
-                return Icon?.IconImage;
+                return App.IconImage;
             }
         }
 
@@ -147,6 +101,11 @@ namespace MpWpfApp {
                 if (_app != value) {
                     _app = value;
                     OnPropertyChanged(nameof(App));
+                    OnPropertyChanged(nameof(AppId));
+                    OnPropertyChanged(nameof(AppPath));
+                    OnPropertyChanged(nameof(AppName));
+                    OnPropertyChanged(nameof(IsAppRejected));
+                    OnPropertyChanged(nameof(IconImage));
                 }
             }
         }
@@ -163,33 +122,9 @@ namespace MpWpfApp {
                             DeleteButtonVisibility = Visibility.Collapsed;
                             AddButtonVisibility = Visibility.Visible;
                         } else {
-                            AppId = App.AppId;
-                            IconId = App.IconId;
-                            AppPath = App.AppPath;
-                            AppName = App.AppName;
-                            IsAppRejected = App.IsAppRejected;
-                            Icon = App.Icon;
                             DeleteButtonVisibility = Visibility.Visible;
                             AddButtonVisibility = Visibility.Collapsed;
                         }
-                        break;
-                    case nameof(AppId):
-                        App.AppId = AppId;
-                        break;
-                    case nameof(IconId):
-                        App.IconId = IconId;
-                        break;
-                    case nameof(AppName):
-                        App.AppName = AppName;
-                        break;
-                    case nameof(AppPath):
-                        App.AppPath = AppPath;
-                        break;
-                    case nameof(IsAppRejected):
-                        App.IsAppRejected = IsAppRejected;
-                        break;
-                    case nameof(Icon):
-                        App.Icon = Icon;
                         break;
                 }
             };

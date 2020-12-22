@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Media;
 
@@ -18,7 +19,18 @@ namespace MpWpfApp {
             }
         }
 
-        private int _r, _g, _b, _a;
+        private int _r, _g, _b, _a; 
+
+        public static List<MpColor> GetAllColors() {
+            var colorList = new List<MpColor>();
+            DataTable dt = MpDb.Instance.Execute("select * from MpColor", null);
+            if (dt != null && dt.Rows.Count > 0) {
+                foreach (DataRow dr in dt.Rows) {
+                    colorList.Add(new MpColor(dr));
+                }
+            }
+            return colorList;
+        }
 
         public MpColor(int colorId) {
             DataTable dt = MpDb.Instance.Execute(

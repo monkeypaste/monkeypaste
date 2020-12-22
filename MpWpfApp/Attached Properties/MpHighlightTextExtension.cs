@@ -117,8 +117,7 @@ namespace MpWpfApp {
                     var ctvm = (MpClipTileViewModel)cb.DataContext;
                     if (ctvm.MainWindowViewModel.IsLoading) {
                         return;
-                    }
-                    
+                    }                    
                     Dispatcher.CurrentDispatcher.BeginInvoke(
                         DispatcherPriority.Background,
                         (Action)(() => {
@@ -135,11 +134,11 @@ namespace MpWpfApp {
                                 ctvm.TileVisibility = Visibility.Collapsed;
                                 return;
                             }
-                            bool isInTitle = ttb.Text.ContainsByCaseSetting(hlt);
-                            bool isInContent = ctvm.ToString().ContainsByCaseSetting(hlt);
-                            bool isSearchBlank = string.IsNullOrEmpty(hlt.Trim()) || hlt == Properties.Settings.Default.SearchPlaceHolderText;
-                            ctvm.TileVisibility = isInTitle || isInContent || isSearchBlank ? Visibility.Visible : Visibility.Collapsed;
-                            return;
+                            //bool isInTitle = ttb.Text.ContainsByCaseSetting(hlt);
+                            //bool isInContent = ctvm.ToString().ContainsByCaseSetting(hlt);
+                            //bool isSearchBlank = string.IsNullOrEmpty(hlt.Trim()) || hlt == Properties.Settings.Default.SearchPlaceHolderText;
+                            //ctvm.TileVisibility = isInTitle || isInContent || isSearchBlank ? Visibility.Visible : Visibility.Collapsed;
+                            //return;
 
                             ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, ctbb);
                             ctvm.LastTitleHighlightRangeList.Clear();
@@ -156,24 +155,21 @@ namespace MpWpfApp {
 
                             //highlight title 
                             if (ttb.Text.ContainsByCaseSetting(hlt)) {
-                                var ttr = MpHelpers.FindStringRangeFromPosition(ttb.ContentStart, hlt);
-                                if (ttr != null) {
-                                    ttr.ApplyPropertyValue(TextElement.BackgroundProperty, hb);
-                                    ctvm.LastTitleHighlightRangeList.Add(ttr);
-                                }
+                                ctvm.LastTitleHighlightRangeList = MpHelpers.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive);
+                                ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, hb);
                             }
                             switch (ctvm.CopyItemType) {
                                 case MpCopyItemType.RichText:
                                     var rtb = (RichTextBox)cb.FindName("ClipTileRichTextBox");
-                                    //rtb.BeginChange();
-                                    ctvm.LastContentHighlightRangeList = MpHelpers.FindAllStringRangesFromPosition(new TextRange(rtb.Document.ContentStart,rtb.Document.ContentEnd), hlt, Properties.Settings.Default.IsSearchCaseSensitive);
+                                    rtb.BeginChange();
+                                    ctvm.LastContentHighlightRangeList = MpHelpers.FindStringRangesFromPosition(rtb.Document.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive);
                                     if(ctvm.LastContentHighlightRangeList.Count > 0){
                                         ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, hb);
                                         rtb.CaretPosition = ctvm.LastContentHighlightRangeList[0].Start;
                                     } else if (ctvm.LastTitleHighlightRangeList.Count == 0) {
                                         ctvm.TileVisibility = Visibility.Collapsed;
                                     } 
-                                    //rtb.EndChange();
+                                    rtb.EndChange();
                                     break;
                                 case MpCopyItemType.Image:
                                     foreach (var diovm in ctvm.DetectedImageObjectViewModels) {

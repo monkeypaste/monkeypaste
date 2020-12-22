@@ -11,14 +11,24 @@ namespace MpWpfApp {
         public int IconId { get; set; }
         public BitmapSource IconImage { get; set; }
 
+        public static List<MpIcon> GetAllIcons() {
+            var iconList = new List<MpIcon>();
+            DataTable dt = MpDb.Instance.Execute("select * from MpIcon", null);
+            if (dt != null && dt.Rows.Count > 0) {
+                foreach (DataRow dr in dt.Rows) {
+                    iconList.Add(new MpIcon(dr));
+                }
+            }
+            return iconList;
+        }
         public MpIcon() {
             IconId = 0;
             IconImage = null;
             ++TotalIconCount;
         }
         public MpIcon(BitmapSource iconImage) : base() {
-            this.IconId = 0;
-            this.IconImage = iconImage;
+            IconId = 0;
+            IconImage = iconImage;
             ++TotalIconCount;
         }
         public MpIcon(int iconId) {
@@ -37,11 +47,8 @@ namespace MpWpfApp {
             LoadDataRow(dr);
         }
         public override void LoadDataRow(DataRow dr) {
-            this.IconId = Convert.ToInt32(dr["pk_MpIconId"].ToString());
-            this.IconImage = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
-            //MapDataToColumns();
-            //Console.WriteLine("Loaded MpIcon");
-            //Console.WriteLine(ToString());
+            IconId = Convert.ToInt32(dr["pk_MpIconId"].ToString());
+            IconImage = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
         }
         public override void WriteToDatabase() {
             bool isNew = false;
@@ -52,14 +59,14 @@ namespace MpWpfApp {
                 DataTable dt = MpDb.Instance.Execute(
                     "select * from MpIcon where IconBlob=@ib",
                     new Dictionary<string, object> {
-                        { "@ib", MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)this.IconImage) }
+                        { "@ib", MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)IconImage) }
                     });
                 if (dt.Rows.Count > 0) {
-                    this.IconId = Convert.ToInt32(dt.Rows[0]["pk_MpIconId"]);
+                    IconId = Convert.ToInt32(dt.Rows[0]["pk_MpIconId"]);
                     MpDb.Instance.ExecuteWrite(
                         "update MpIcon set IconBlob=@ib where pk_MpIconId=@iid",
                         new Dictionary<string, object> {
-                            { "@ib", MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)this.IconImage) },
+                            { "@ib", MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)IconImage) },
                             { "@iid" , IconId}
                         });
                     isNew = false;
@@ -67,16 +74,16 @@ namespace MpWpfApp {
                     MpDb.Instance.ExecuteWrite(
                         "insert into MpIcon(IconBlob) values(@ib)",
                         new Dictionary<string, object> {
-                            { "@ib", MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)this.IconImage) }
+                            { "@ib", MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)IconImage) }
                         });
-                    this.IconId = MpDb.Instance.GetLastRowId("MpIcon", "pk_MpIconId");
+                    IconId = MpDb.Instance.GetLastRowId("MpIcon", "pk_MpIconId");
                     isNew = true;
                 }
             } else {
                 MpDb.Instance.ExecuteWrite(
                     "update MpIcon set IconBlob=@ib where pk_MpIconId=@iid",
                     new Dictionary<string, object> {
-                        { "@ib", MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)this.IconImage) },
+                        { "@ib", MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)IconImage) },
                         { "@iid", IconId }
                     });
             }
@@ -89,8 +96,8 @@ namespace MpWpfApp {
 
         private void MapDataToColumns() {
             TableName = "MpIcon";
-            columnData.Add("pk_MpIconId", this.IconId);
-            columnData.Add("IconBlob", this.IconImage);
+            columnData.Add("pk_MpIconId", IconId);
+            columnData.Add("IconBlob", IconImage);
         }
     }
 }
