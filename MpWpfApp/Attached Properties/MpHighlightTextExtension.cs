@@ -1,6 +1,7 @@
 ﻿using GongSolutions.Wpf.DragDrop.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,98 +25,10 @@ namespace MpWpfApp {
             typeof(string),
             typeof(MpHighlightTextExtension),
             new FrameworkPropertyMetadata {
-                //PropertyChangedCallback = (s, e) => {
-                //    var cb = (MpClipBorder)s;
-                //    var rtb = (RichTextBox)cb.FindName("ClipTileRichTextBox");
-                //    if(rtb == null || rtb.Visibility == Visibility.Collapsed) {
-                //        return;
-                //    }
-                //    var hlt = (string)e.NewValue;
-                //    Dispatcher.CurrentDispatcher.BeginInvoke(
-                //        DispatcherPriority.Background,
-                //        (Action)(() => {
-                //            //var cb = (MpClipBorder)rtb.GetVisualAncestor<MpClipBorder>();
-                //            //if (cb == null) {
-                //            //    Console.WriteLine("TokenizedRichTextBox error, cannot find clipborder");
-                //            //    return;
-                //            //}
-                //            //if (cb.DataContext.GetType() != typeof(MpClipTileViewModel)) {
-                //            //    return;
-                //            //}
-
-                //            var ctvm = (MpClipTileViewModel)cb.DataContext;
-                //            //if (ctvm == null) {
-                //            //    Console.WriteLine("TokenizedRichTextBox error, cannot find cliptile viewmodel");
-                //            //    return;
-                //            //}
-                //            //if(ctvm.MainWindowViewModel.IsLoading) {
-                //            //    return;
-                //            //}
-                //            var sttvm = ctvm.MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel.SelectedTagTile;
-
-                //            rtb.BeginChange();
-                //            new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
-                //            ctvm.TileVisibility = Visibility.Collapsed;
-                //            if (!sttvm.Tag.IsLinkedWithCopyItem(ctvm.CopyItem)) {
-                //                ctvm.TileVisibility = Visibility.Collapsed;
-                //                rtb.EndChange();
-                //                //return;
-                //            } else if (hlt == null ||
-                //                        string.IsNullOrEmpty(hlt.Trim()) ||
-                //                        hlt == Properties.Settings.Default.SearchPlaceHolderText) {
-                //                ctvm.TileVisibility = Visibility.Visible;
-                //                rtb.EndChange();
-                //                //return;
-                //            } else {
-                //                TextRange lastSearchTextRange = null;
-                //                for (TextPointer position = rtb.Document.ContentStart;
-                //                 position != null && position.CompareTo(rtb.Document.ContentEnd) <= 0;
-                //                 position = position.GetNextContextPosition(LogicalDirection.Forward)) {
-                //                    if (position.CompareTo(rtb.Document.ContentEnd) == 0) {
-                //                        break;
-                //                    }
-                //                    string textRun = string.Empty;
-                //                    int indexInRun = -1;
-                //                    if (Properties.Settings.Default.IsSearchCaseSensitive) {
-                //                        textRun = position.GetTextInRun(LogicalDirection.Forward);
-                //                        indexInRun = textRun.IndexOf(hlt, StringComparison.CurrentCulture);
-                //                    } else {
-                //                        textRun = position.GetTextInRun(LogicalDirection.Forward).ToLower();
-                //                        indexInRun = textRun.IndexOf(hlt.ToLower(), StringComparison.CurrentCulture);
-                //                    }
-                //                    if (indexInRun >= 0) {
-                //                        position = position.GetPositionAtOffset(indexInRun);
-                //                        if (position != null) {
-                //                            TextPointer nextPointer = position.GetPositionAtOffset(hlt.Length);
-                //                            lastSearchTextRange = new TextRange(position, nextPointer);
-                //                            lastSearchTextRange.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString));
-                //                        }
-                //                    }
-                //                }
-
-                //                if (lastSearchTextRange != null) {
-                //                    ctvm.TileVisibility = Visibility.Visible;
-                //                    rtb.ScrollToHome();
-                //                    rtb.CaretPosition = rtb.Document.ContentStart;
-                //                    Rect r = lastSearchTextRange.End.GetCharacterRect(LogicalDirection.Backward);
-                //                    rtb.ScrollToVerticalOffset(500);// VerticalOffset r.Y - (FontSize * 0.5));
-                //                                                    //var characterRect = lastTokenPointer.GetCharacterRect(LogicalDirection.Forward);
-                //                                                    //this.ScrollToHorizontalOffset(this.HorizontalOffset + characterRect.Left - this.ActualWidth / 2d);
-                //                                                    //this.ScrollToVerticalOffset(this.VerticalOffset + characterRect.Top - this.ActualHeight / 2d);
-                //                                                    //ScrollToEnd();
-                //                } else {
-                //                    ctvm.TileVisibility = Visibility.Collapsed;
-                //                }
-                //                rtb.EndChange();
-                //            }
-                //            rtb.ClearHyperlinks();
-                //            rtb.CreateHyperlinks(hlt);
-                //        }));
-                //}
                 PropertyChangedCallback = (s, e) => {
                     var cb = (MpClipBorder)s;
                     var ctvm = (MpClipTileViewModel)cb.DataContext;
-                    if (ctvm.MainWindowViewModel.IsLoading) {
+                    if (ctvm.MainWindowViewModel.IsLoading || ctvm.IsEditingTile) {
                         return;
                     }                    
                     Dispatcher.CurrentDispatcher.BeginInvoke(
@@ -126,6 +39,7 @@ namespace MpWpfApp {
 
                             var ttb = (TextBlock)cb.FindName("ClipTileTitleTextBlock");
                             var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
+                            var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
                             var ctbb = Brushes.Transparent;// (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.ClipTileBackgroundColor);
 
                             Console.WriteLine("Beginning highlight clip with title: " + ctvm.CopyItemTitle + " with highlight text: "+(string)e.NewValue);
@@ -142,10 +56,10 @@ namespace MpWpfApp {
 
                             ctvm.TileVisibility = Visibility.Visible;
 
-                            ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, ctbb);
+                            MpHelpers.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, ctbb);
                             ctvm.LastTitleHighlightRangeList.Clear();
 
-                            ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, ctbb);
+                            MpHelpers.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, ctbb);
                             ctvm.LastContentHighlightRangeList.Clear();
 
                             if (string.IsNullOrEmpty(hlt.Trim()) ||
@@ -157,20 +71,27 @@ namespace MpWpfApp {
 
                             //highlight title 
                             if (ttb.Text.ContainsByCaseSetting(hlt)) {
-                                ctvm.LastTitleHighlightRangeList = MpHelpers.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive);
-                                ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, hb);
+                                foreach(var mr in MpHelpers.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive)) {
+                                    ctvm.LastTitleHighlightRangeList.Add(mr);
+                                }
+                                MpHelpers.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, hb);
                             }
                             switch (ctvm.CopyItemType) {
                                 case MpCopyItemType.RichText:
                                     var rtb = (RichTextBox)cb.FindName("ClipTileRichTextBox");
                                     rtb.BeginChange();
-                                    ctvm.LastContentHighlightRangeList = MpHelpers.FindStringRangesFromPosition(rtb.Document.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive);
-                                    if(ctvm.LastContentHighlightRangeList.Count > 0){
-                                        ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, hb);
-                                        rtb.CaretPosition = ctvm.LastContentHighlightRangeList[0].Start;
+                                    foreach (var mr in MpHelpers.FindStringRangesFromPosition(rtb.Document.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive)) {
+                                        ctvm.LastContentHighlightRangeList.Add(mr);
+                                    }
+                                    if (ctvm.LastContentHighlightRangeList.Count > 0){
+                                        MpHelpers.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, hb);
+                                        //rtb.CaretPosition = ctvm.LastContentHighlightRangeList[0].Start;
                                     } else if (ctvm.LastTitleHighlightRangeList.Count == 0) {
                                         ctvm.TileVisibility = Visibility.Collapsed;
-                                    } 
+                                    }
+                                    if (ctvm.LastContentHighlightRangeList.Count > 0 || ctvm.LastTitleHighlightRangeList.Count > 0) {
+                                        ctvm.CurrentHighlightMatchIdx = 0;
+                                    }
                                     rtb.EndChange();
                                     break;
                                 case MpCopyItemType.Image:
@@ -217,15 +138,7 @@ namespace MpWpfApp {
                         }));
                 }
             });
-
-        private static void ApplyBackgroundBrushToRangeList(List<TextRange> rangeList, Brush bgBrush) {
-            if(rangeList == null || rangeList.Count == 0) {
-                return;
-            }
-            foreach(var range in rangeList) {
-                range.ApplyPropertyValue(TextElement.BackgroundProperty, bgBrush);
-            }
-        }
+        
     }
 
 }

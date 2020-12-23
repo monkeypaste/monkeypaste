@@ -688,5 +688,17 @@ namespace MpWpfApp.Properties {
                 this["DefaultFontFamily"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFC0CB")]
+        public string HighlightFocusedHexColorString {
+            get {
+                return ((string)(this["HighlightFocusedHexColorString"]));
+            }
+            set {
+                this["HighlightFocusedHexColorString"] = value;
+            }
+        }
     }
 }

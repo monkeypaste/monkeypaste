@@ -12,6 +12,7 @@
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Controls.Primitives;
+    using System.Windows.Data;
     using System.Windows.Documents;
     using System.Windows.Input;
     using System.Windows.Interop;
@@ -448,9 +449,9 @@
             }
         }
 
-        public List<TextRange> LastContentHighlightRangeList { get; set; } = new List<TextRange>();
+        public ObservableCollection<TextRange> LastContentHighlightRangeList { get; set; } = new ObservableCollection<TextRange>();
 
-        public List<TextRange> LastTitleHighlightRangeList { get; set; } = new List<TextRange>();
+        public ObservableCollection<TextRange> LastTitleHighlightRangeList { get; set; } = new ObservableCollection<TextRange>();
         #endregion
 
         #region Brush Properties
@@ -479,7 +480,21 @@
         }
         #endregion
 
-        #region State Properties
+        #region State Properties        
+        private int _currentHighlightMatchIdx = -1;
+        public int CurrentHighlightMatchIdx {
+            get {
+                return _currentHighlightMatchIdx;
+            }
+            set {
+                //if (_currentHighlightMatchIdx != value) 
+                {
+                    _currentHighlightMatchIdx = value;
+                    OnPropertyChanged(nameof(CurrentHighlightMatchIdx));
+                }
+            }
+        }
+
         private bool _isEditingTitle = false;
         public bool IsEditingTitle {
             get {
@@ -509,6 +524,7 @@
                     OnPropertyChanged(nameof(EditToolbarVisibility));
                     OnPropertyChanged(nameof(RichTextBoxHeight));
                     OnPropertyChanged(nameof(PasteTemplateToolbarVisibility));
+                    OnPropertyChanged((nameof(CopyItemRichText)));
                     OnPropertyChanged(nameof(CopyItem));
                 }
             }
@@ -985,6 +1001,7 @@
                 }
             }
         }
+
         public BitmapSource CopyItemBmp {
             get {
                 if (CopyItem == null) {
@@ -1180,8 +1197,18 @@
                             }
                         }
                         break;
+                    case nameof(IsEditingTile):
+                        MainWindowViewModel.SearchBoxViewModel.IsSearchEnabled = IsEditingTile;
+                        var hb = IsEditingTile ? Brushes.Transparent : (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
+                        MpHelpers.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
+                        MpHelpers.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
+                        break;
                 }
             };
+            object lockObj = new object();
+            object lockObj2 = new object();
+            BindingOperations.EnableCollectionSynchronization(LastTitleHighlightRangeList, lockObj);
+            BindingOperations.EnableCollectionSynchronization(LastContentHighlightRangeList, lockObj2);
             SetCopyItem(ci);
         }
 
@@ -1196,6 +1223,7 @@
 
             CopyItem = ci;
         }
+
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             var clipTileBorder = (Grid)sender;
             clipTileBorder.MouseEnter += (s, e1) => {
@@ -1228,6 +1256,7 @@
                     rtb.FontSize += 1;
                 }
             };
+
         }
 
         public void ClipTileTitle_Loaded(object sender, RoutedEventArgs e) {
@@ -1300,15 +1329,18 @@
             var ptb = (Button)pt.FindName("PasteTemplateButton");
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
             var titleSwirl = (Image)cb.FindName("TitleSwirl");
+            var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
+            var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
 
-            rtb.ContextMenu = (ContextMenu)rtb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+            rtb.ContextMenu = (ContextMenu)cb.FindName("ClipTile_ContextMenu");
             rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
             rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
+
             //not sure why but calling this is only way templates are shown when loaded
             //TemplateTokenList = rtb.GetTemplateHyperlinkList();
             HasTemplate = rtb.GetTemplateHyperlinkList().Count > 0;
 
-            #region Basic Editor 
+            #region Editor 
 
             var fontFamilyComboBox = (ComboBox)et.FindName("FontFamilyCombo");
             fontFamilyComboBox.SelectionChanged += (s, e1) => {
@@ -1383,11 +1415,149 @@
                 this.SetButtonGroupSelection(clickedButton, _selectedListButton, buttonGroup, false);
                 _selectedListButton = clickedButton;
             };
-            #endregion
+
+            var hiddenClipTiles = new List<MpClipTileViewModel>();
+            et.IsVisibleChanged += (s, e1) => {
+                double fromBottomEditToolbar = 0;
+                double toBottomEditToolbar = 24;
+
+                double fromTopConfirmEditToolbar = MpMeasurements.Instance.ClipTileBorderSize;
+                double toTopConfirmEditToolbar = fromTopConfirmEditToolbar - 30;
+
+                double fromWidthTile = cb.ActualWidth;
+                double toWidthTile = 0;
+
+                if (et.Visibility == Visibility.Visible) {
+                    //hide and store all other clip tiles
+                    foreach (var vctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
+                        if (vctvm != this) {
+                            hiddenClipTiles.Add(vctvm);
+                            vctvm.TileVisibility = Visibility.Collapsed;
+                        }
+                    }
+
+                    toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
+
+                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+                    rtb.ScrollToHome();
+                    rtb.CaretPosition = rtb.Document.ContentStart;
+
+                    //clear all other visible
+                    
+
+                } else {
+                    //restore all other clip tiles
+                    foreach (var vctvm in hiddenClipTiles) {
+                        vctvm.TileVisibility = Visibility.Visible;
+                    }
+                    hiddenClipTiles.Clear();
+                    toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
+                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+
+                    rtb.ClearHyperlinks();
+                    //clear any search highlighting when saving the document then restore after save
+                    MpHelpers.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, Brushes.Transparent);
+                    MpHelpers.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, Brushes.Transparent);
+                    CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+                    MpHelpers.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
+                    MpHelpers.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
+                }
+                IsEditToolbarAnimating = true;
+                double fromLeft = Canvas.GetLeft(titleIconImageButton);
+                double toLeft = toWidthTile - TileTitleHeight - 10;
+
+                DoubleAnimation twa = new DoubleAnimation();
+                twa.From = fromWidthTile;
+                twa.To = toWidthTile;
+                twa.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
+                CubicEase easing = new CubicEase();
+                easing.EasingMode = EasingMode.EaseIn;
+                twa.EasingFunction = easing;
+                twa.Completed += (s1, e2) => {
+                    //Point p = new Point();
+                    //p = cb.TranslatePoint(p, ct);
+                    //Rect rectangleBounds = cb.RenderTransform.TransformBounds(new Rect(p.X, p.Y, cb.Width, cb.Height));
+                    //ct.ScrollViewer.ScrollToHorizontalOffset(rectangleBounds.Right);
+                    IsEditToolbarAnimating = false;
+                };
+                cb.BeginAnimation(MpClipBorder.WidthProperty, twa);
+                titleSwirl.BeginAnimation(Image.WidthProperty, twa);
+                rtb.BeginAnimation(RichTextBox.WidthProperty, twa);
+                et.BeginAnimation(Border.WidthProperty, twa);
+                pt.BeginAnimation(Border.WidthProperty, twa);
+                sp.BeginAnimation(StackPanel.WidthProperty, twa);
+
+                DoubleAnimation la = new DoubleAnimation();
+                la.From = fromLeft;
+                la.To = toLeft;
+                la.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
+                la.EasingFunction = easing;
+                titleIconImageButton.BeginAnimation(Canvas.LeftProperty, la);
+
+                DoubleAnimation da = new DoubleAnimation();
+                da.From = fromBottomEditToolbar;
+                da.To = toBottomEditToolbar;
+                la.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
+                la.EasingFunction = easing;
+                //et.BeginAnimation(Border.Ma, la);
+            };
+
+            rtb.SelectionChanged += (s, e6) => {
+                // Set font family combo
+                var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
+                var fontFamily = textRange.GetPropertyValue(TextElement.FontFamilyProperty);
+                fontFamilyComboBox.SelectedItem = fontFamily;
+
+                // Set font size combo
+                var fontSize = textRange.GetPropertyValue(TextElement.FontSizeProperty);
+                fontSizeCombo.Text = fontSize.ToString();
+
+                // Set Font buttons
+                ((ToggleButton)et.FindName("BoldButton")).IsChecked = textRange.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
+                ((ToggleButton)et.FindName("ItalicButton")).IsChecked = textRange.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
+                ((ToggleButton)et.FindName("UnderlineButton")).IsChecked = textRange?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
+
+                // Set Alignment buttons
+                leftAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
+                centerAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
+                rightAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
+                justifyAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Justify);
+
+                IsAddTemplateButtonEnabled = true;
+                foreach (var templateHyperlink in rtb.GetTemplateHyperlinkList()) {
+                    if (!textRange.Start.IsInSameDocument(templateHyperlink.ContentStart) ||
+                       !textRange.Start.IsInSameDocument(templateHyperlink.ContentEnd)) {
+                        continue;
+                    }
+                    if ((textRange.Start.CompareTo(templateHyperlink.ContentStart) >= 0 &&
+                        textRange.Start.CompareTo(templateHyperlink.ContentEnd) <= 0) ||
+                       (textRange.End.CompareTo(templateHyperlink.ContentStart) >= 0 &&
+                        textRange.End.CompareTo(templateHyperlink.ContentEnd) <= 0)) {
+                        IsAddTemplateButtonEnabled = false;
+                    }
+                }
+                OnPropertyChanged(nameof(IsAddTemplateButtonEnabled));
+            };
 
             //rtb.LostFocus += (s, e3) => {
             //    IsEditingTile = false;
             //};
+            //rtb.LostKeyboardFocus += (s, e7) => {
+            //    e7.Handled = true;
+            //};
+
+            //rtb.LostFocus += (s, e7) => {
+            //    e7.Handled = true;
+            //};
+            
+            rtb.TextChanged += (s, e8) => {
+
+            };
+            #endregion
+
+            #region Templates
             var addTemplateButton = (Button)et.FindName("AddTemplateButton");
             addTemplateButton.PreviewMouseDown += (s, e3) => {
                 e3.Handled = true;
@@ -1542,134 +1712,88 @@
                     IsPastingTemplateTile = false;
                 }
             };
+            #endregion
 
-            var hiddenClipTiles = new List<MpClipTileViewModel>();
-            et.IsVisibleChanged += (s, e1) => {                
-                double fromBottomEditToolbar = 0;
-                double toBottomEditToolbar = 24;
-
-                double fromTopConfirmEditToolbar = MpMeasurements.Instance.ClipTileBorderSize;
-                double toTopConfirmEditToolbar = fromTopConfirmEditToolbar - 30;
-
-                double fromWidthTile = cb.ActualWidth;
-                double toWidthTile = 0;
-
-                if (et.Visibility == Visibility.Visible) {
-                    //hide and store all other clip tiles
+            #region Search
+            LastContentHighlightRangeList.CollectionChanged += (s, e9) => {
+                //var oldNavButtonPanelVisibility = MainWindowViewModel.SearchBoxViewModel.SearchNavigationButtonPanelVisibility;
+                if (LastContentHighlightRangeList.Count > 1 || LastTitleHighlightRangeList.Count > 1) {
+                    //show search match nav buttons when any clip tile has more than one match
+                    MainWindowViewModel.SearchBoxViewModel.SearchNavigationButtonPanelVisibility = Visibility.Visible;
+                } else {
+                    //confirm all visible clip tiles have one or less matches then hide nav buttons
+                    bool showMatchNav = false;
                     foreach (var vctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
-                        if (vctvm != this) {
-                            hiddenClipTiles.Add(vctvm);
-                            vctvm.TileVisibility = Visibility.Collapsed;
+                        if (vctvm.LastContentHighlightRangeList.Count > 1 || vctvm.LastTitleHighlightRangeList.Count > 1) {
+                            showMatchNav = true;
                         }
                     }
+                    if (showMatchNav) {
+                        MainWindowViewModel.SearchBoxViewModel.SearchNavigationButtonPanelVisibility = Visibility.Visible;
+                    } else {
+                        MainWindowViewModel.SearchBoxViewModel.SearchNavigationButtonPanelVisibility = Visibility.Collapsed;
+                    }
+                }
+            };
 
-                    toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
-
-                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
-                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
-                    rtb.ScrollToHome();
-                    rtb.CaretPosition = rtb.Document.ContentStart;
-
-                    //clear all other visible
-
+            LastTitleHighlightRangeList.CollectionChanged += (s, e9) => {
+                bool showMatchNav = false;
+                //var oldNavButtonPanelVisibility = MainWindowViewModel.SearchBoxViewModel.SearchNavigationButtonPanelVisibility;
+                if (LastContentHighlightRangeList.Count > 1 || LastTitleHighlightRangeList.Count > 1) {
+                    //show search match nav buttons when any clip tile has more than one match
+                    MainWindowViewModel.SearchBoxViewModel.SearchNavigationButtonPanelVisibility = Visibility.Visible;
+                    showMatchNav = true;
                 } else {
-                    //restore all other clip tiles
-                    foreach (var vctvm in hiddenClipTiles) {
-                        vctvm.TileVisibility = Visibility.Visible;
+                    //confirm all visible clip tiles have one or less matches then hide nav buttons
+                    foreach (var vctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
+                        if (vctvm.LastContentHighlightRangeList.Count > 1 || vctvm.LastTitleHighlightRangeList.Count > 1) {
+                            showMatchNav = true;
+                        }
                     }
-                    hiddenClipTiles.Clear();
-                    toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
-                    rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                    rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                }
-                IsEditToolbarAnimating = true;
-                double fromLeft = Canvas.GetLeft(titleIconImageButton);
-                double toLeft = toWidthTile - TileTitleHeight - 10;
-
-                DoubleAnimation twa = new DoubleAnimation();
-                twa.From = fromWidthTile;
-                twa.To = toWidthTile;
-                twa.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
-                CubicEase easing = new CubicEase();
-                easing.EasingMode = EasingMode.EaseIn;
-                twa.EasingFunction = easing;
-                twa.Completed += (s1, e2) => {
-                    //Point p = new Point();
-                    //p = cb.TranslatePoint(p, ct);
-                    //Rect rectangleBounds = cb.RenderTransform.TransformBounds(new Rect(p.X, p.Y, cb.Width, cb.Height));
-                    //ct.ScrollViewer.ScrollToHorizontalOffset(rectangleBounds.Right);
-                    IsEditToolbarAnimating = false;
-                };
-                cb.BeginAnimation(MpClipBorder.WidthProperty, twa);
-                titleSwirl.BeginAnimation(Image.WidthProperty, twa);
-                rtb.BeginAnimation(RichTextBox.WidthProperty, twa);
-                et.BeginAnimation(Border.WidthProperty, twa);
-                pt.BeginAnimation(Border.WidthProperty, twa);
-                sp.BeginAnimation(StackPanel.WidthProperty, twa);
-
-                DoubleAnimation la = new DoubleAnimation();
-                la.From = fromLeft;
-                la.To = toLeft;
-                la.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
-                la.EasingFunction = easing;
-                titleIconImageButton.BeginAnimation(Canvas.LeftProperty, la);
-
-                DoubleAnimation da = new DoubleAnimation();
-                da.From = fromBottomEditToolbar;
-                da.To = toBottomEditToolbar;
-                la.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
-                la.EasingFunction = easing;
-                //et.BeginAnimation(Border.Ma, la);
-            };
-
-            rtb.SelectionChanged += (s, e6) => {
-                // Set font family combo
-                var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
-                var fontFamily = textRange.GetPropertyValue(TextElement.FontFamilyProperty);
-                fontFamilyComboBox.SelectedItem = fontFamily;
-
-                // Set font size combo
-                var fontSize = textRange.GetPropertyValue(TextElement.FontSizeProperty);
-                fontSizeCombo.Text = fontSize.ToString();
-
-                // Set Font buttons
-                ((ToggleButton)et.FindName("BoldButton")).IsChecked = textRange.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
-                ((ToggleButton)et.FindName("ItalicButton")).IsChecked = textRange.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
-                ((ToggleButton)et.FindName("UnderlineButton")).IsChecked = textRange?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
-
-                // Set Alignment buttons
-                leftAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
-                centerAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
-                rightAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
-                justifyAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Justify);
-
-                IsAddTemplateButtonEnabled = true;
-                foreach (var templateHyperlink in rtb.GetTemplateHyperlinkList()) {
-                    if (!textRange.Start.IsInSameDocument(templateHyperlink.ContentStart) ||
-                       !textRange.Start.IsInSameDocument(templateHyperlink.ContentEnd)) {
-                        continue;
-                    }
-                    if ((textRange.Start.CompareTo(templateHyperlink.ContentStart) >= 0 &&
-                        textRange.Start.CompareTo(templateHyperlink.ContentEnd) <= 0) ||
-                       (textRange.End.CompareTo(templateHyperlink.ContentStart) >= 0 &&
-                        textRange.End.CompareTo(templateHyperlink.ContentEnd) <= 0)) {
-                        IsAddTemplateButtonEnabled = false;
+                    if (showMatchNav) {
+                        MainWindowViewModel.SearchBoxViewModel.SearchNavigationButtonPanelVisibility = Visibility.Visible;
+                    } else {
+                        MainWindowViewModel.SearchBoxViewModel.SearchNavigationButtonPanelVisibility = Visibility.Collapsed;
                     }
                 }
-                OnPropertyChanged(nameof(IsAddTemplateButtonEnabled));
             };
 
-            //rtb.LostKeyboardFocus += (s, e7) => {
-            //    e7.Handled = true;
-            //};
-
-            //rtb.LostFocus += (s, e7) => {
-            //    e7.Handled = true;
-            //};
-
-            rtb.TextChanged += (s, e8) => {
-
+            MainWindowViewModel.SearchBoxViewModel.PrevMatchClicked += (s, e11) => {
+                CurrentHighlightMatchIdx--;
             };
+
+            MainWindowViewModel.SearchBoxViewModel.NextMatchClicked += (s, e11) => {
+                CurrentHighlightMatchIdx++;                
+            };
+
+            PropertyChanged += (s, e2) => {
+                switch(e2.PropertyName) {
+                    case nameof(CurrentHighlightMatchIdx):
+                        int maxIdx = LastContentHighlightRangeList.Count + LastTitleHighlightRangeList.Count - 1;
+                        if (CurrentHighlightMatchIdx < 0) {
+                            _currentHighlightMatchIdx = maxIdx;
+                        } else if (CurrentHighlightMatchIdx > maxIdx) {
+                            _currentHighlightMatchIdx = 0;
+                        }
+                        MpHelpers.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
+                        MpHelpers.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
+                        if (CurrentHighlightMatchIdx < LastTitleHighlightRangeList.Count) {
+                            LastTitleHighlightRangeList[CurrentHighlightMatchIdx].ApplyPropertyValue(TextElement.BackgroundProperty, hfb);
+                        } else if (CurrentHighlightMatchIdx < LastContentHighlightRangeList.Count) {
+                            int contentIdx = CurrentHighlightMatchIdx - LastTitleHighlightRangeList.Count;
+                            LastContentHighlightRangeList[contentIdx].ApplyPropertyValue(TextElement.BackgroundProperty, hfb);
+                            //rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+                            //rtb.CaretPosition = LastContentHighlightRangeList[contentIdx].End;
+                            //Rect r = LastContentHighlightRangeList[contentIdx].End.GetCharacterRect(LogicalDirection.Backward);
+                            //rtb.ScrollToVerticalOffset(r.Y);
+                            var characterRect = LastContentHighlightRangeList[contentIdx].End.GetCharacterRect(LogicalDirection.Forward);
+                            rtb.ScrollToHorizontalOffset(rtb.HorizontalOffset + characterRect.Left - rtb.ActualWidth / 2d);
+                            rtb.ScrollToVerticalOffset(rtb.VerticalOffset + characterRect.Top - rtb.ActualHeight / 2d);
+                        }
+                        break;
+                }
+            };
+            #endregion
         }
 
         public void ClipTileImageCanvas_Loaded(object sender, RoutedEventArgs e) {

@@ -16,8 +16,15 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Properties     
+        #region Events
+        public event EventHandler NextMatchClicked;
+        protected virtual void OnNextMatchClicked() => NextMatchClicked?.Invoke(this, EventArgs.Empty);
 
+        public event EventHandler PrevMatchClicked;
+        protected virtual void OnPrevMatchClicked() => PrevMatchClicked?.Invoke(this, EventArgs.Empty);
+        #endregion
+
+        #region Properties     
         private double _width = 125;
         public double Width {
             get {
@@ -107,8 +114,8 @@ namespace MpWpfApp {
                 return _searchText;
             }
             set {
-                if (_searchText != value) 
-                    {
+                //if (_searchText != value) 
+                {
                     _searchText = value;
                     OnPropertyChanged(nameof(SearchText));
                 }
@@ -126,6 +133,29 @@ namespace MpWpfApp {
                     _isTextBoxFocused = value;
                     OnPropertyChanged(nameof(IsTextBoxFocused));
                 }
+            }
+        }
+
+        private bool _isSearchEnabled = true;
+        public bool IsSearchEnabled {
+            get {
+                return _isSearchEnabled;
+            }
+            set {
+                //omitting duplicate check to enforce change in ui
+                if (_isSearchEnabled != value) {
+                    _isSearchEnabled = value;
+                    OnPropertyChanged(nameof(IsSearchEnabled));
+                }
+            }
+        }
+
+        public int SearchBorderColumnSpan {
+            get {
+                if(SearchNavigationButtonPanelVisibility == Visibility.Visible) {
+                    return 1;
+                }
+                return 2;
             }
         }
 
@@ -183,6 +213,20 @@ namespace MpWpfApp {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
+            }
+        }
+
+        private Visibility _searchNavigationButtonPanelVisibility = Visibility.Collapsed;
+        public Visibility SearchNavigationButtonPanelVisibility {
+            get {
+                return _searchNavigationButtonPanelVisibility;
+            }
+            set {
+                if (_searchNavigationButtonPanelVisibility != value) {
+                    _searchNavigationButtonPanelVisibility = value;
+                    OnPropertyChanged(nameof(SearchNavigationButtonPanelVisibility));
+                    OnPropertyChanged(nameof(SearchBorderColumnSpan));
+                }
             }
         }
         #endregion
@@ -259,6 +303,32 @@ namespace MpWpfApp {
         }
         private void PerformSearch() {
             SearchText = Text;
+        }
+
+        private RelayCommand _nextMatchCommand;
+        public ICommand NextMatchCommand {
+            get {
+                if (_nextMatchCommand == null) {
+                    _nextMatchCommand = new RelayCommand(NextMatch);
+                }
+                return _nextMatchCommand;
+            }
+        }
+        private void NextMatch() {
+            OnNextMatchClicked();
+        }
+
+        private RelayCommand _prevMatchCommand;
+        public ICommand PrevMatchCommand {
+            get {
+                if (_prevMatchCommand == null) {
+                    _prevMatchCommand = new RelayCommand(PrevMatch);
+                }
+                return _prevMatchCommand;
+            }
+        }
+        private void PrevMatch() {
+            OnPrevMatchClicked();
         }
         #endregion
     }

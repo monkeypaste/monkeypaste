@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Imaging;
@@ -56,7 +57,14 @@ namespace MpWpfApp {
         //    // position will be null if "word" is not found.
         //    return null;
         //}
-
+        public static void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRange> rangeList, Brush bgBrush) {
+            if (rangeList == null || rangeList.Count == 0) {
+                return;
+            }
+            foreach (var range in rangeList) {
+                range.ApplyPropertyValue(TextElement.BackgroundProperty, bgBrush);
+            }
+        }
         public static List<TextRange> FindStringRangesFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
             var matchRangeList = new List<TextRange>();
             while (position != null) {

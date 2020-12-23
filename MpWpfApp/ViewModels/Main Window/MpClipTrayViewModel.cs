@@ -347,13 +347,14 @@ namespace MpWpfApp {
                 scrollViewer.ScrollToHorizontalOffset(scrollViewer.HorizontalOffset + (e3.Delta * -1) / 5);
             };
 
-            //clipTray.PreviewMouseLeftButtonUp += (s, e4) => {
-            //    var p = e4.MouseDevice.GetPosition(clipTray);
-            //    var hitTestResult = VisualTreeHelper.HitTest(clipTray, p);
-            //    if (hitTestResult.VisualHit.GetType() != typeof(MpClipBorder)) {
-            //        ClearClipEdits();
-            //    }
-            //};
+            clipTray.PreviewMouseLeftButtonUp += (s, e4) => {
+                var p = e4.MouseDevice.GetPosition(clipTray);
+                var hitTestResult = VisualTreeHelper.HitTest(clipTray, p);
+                if (hitTestResult.VisualHit.GetVisualAncestor<ListBoxItem>() == null) {
+                    ClearClipEdits();
+                    e4.Handled = true;
+                }
+            };
             ClipboardManager = new MpClipboardManager((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow));
 
             // Attach the handler to the event raising on WM_DRAWCLIPBOARD message is received
@@ -401,6 +402,7 @@ namespace MpWpfApp {
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             var clipTileBorder = (Grid)sender;
+            var ctvm = (MpClipTileViewModel)clipTileBorder.DataContext;
 
             clipTileBorder.PreviewMouseLeftButtonDown += (s, e6) => {
                 var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");

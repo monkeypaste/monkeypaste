@@ -651,6 +651,7 @@ namespace MpWpfApp {
                 reader.Position = 0;
                 rtb.SelectAll();
                 rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);
+                rtb.CaretPosition = rtb.Document.ContentStart;
             }
         }
 
