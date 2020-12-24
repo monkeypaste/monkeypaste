@@ -78,37 +78,74 @@ namespace MpWpfApp {
             }
             return matchRangeList;
         }
+
         public static TextRange FindStringRangeFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
             int curIdx = 0;
             TextPointer startPointer = null;
             StringComparison stringComparison = isCaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase;
-            while (position != null) {
-                if(position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
+            while (position != null) {   
+                if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
+                    if(position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.EmbeddedElement) {
+                        var tb = (TextBlock)((DockPanel)((Border)((InlineUIContainer)position.Parent).Child).Child).Children[0];
+                        var highlightRange = MpHelpers.FindStringRangeFromPosition(tb.ContentStart, matchStr);
+                        if (highlightRange != null) {
+                            return highlightRange;
+                        }
+                    }
                     position = position.GetNextContextPosition(LogicalDirection.Forward);
                     continue;
                 }
-                var searchStr = position.GetTextInRun(LogicalDirection.Forward);
-                if(string.IsNullOrEmpty(searchStr)) {
+                var runStr = position.GetTextInRun(LogicalDirection.Forward);
+                if (string.IsNullOrEmpty(runStr)) {
                     position = position.GetNextContextPosition(LogicalDirection.Forward);
                     continue;
                 }
-                int indexInRun = searchStr.IndexOf(matchStr[curIdx].ToString(), stringComparison);
-                if(indexInRun == -1) {
+                //only concerned with current character of match string
+                int runIdx = runStr.IndexOf(matchStr[curIdx].ToString(), stringComparison);
+                if (runIdx == -1) {
+                    //if no match found reset search
                     curIdx = 0;
-                    startPointer = null;
-                    position = position.GetNextContextPosition(LogicalDirection.Forward);
+                    if (startPointer == null) {
+                        position = position.GetNextContextPosition(LogicalDirection.Forward);
+                    } else {
+                        //when no match somewhere after first character reset search to the position AFTER beginning of last partial match
+                        position = startPointer.GetPositionAtOffset(1, LogicalDirection.Forward);
+                        startPointer = null;
+                    }
                     continue;
                 }
                 if (curIdx == 0) {
-                    startPointer = position.GetPositionAtOffset(indexInRun);                    
+                    //beginning of range found at runIdx
+                    startPointer = position.GetPositionAtOffset(runIdx, LogicalDirection.Forward);
                 }
-                if(curIdx == matchStr.Length - 1) {
-                    return new TextRange(startPointer, position.GetPositionAtOffset(indexInRun + 1));
-                } else {
-                    curIdx++;
-                    if (indexInRun == searchStr.Length - 1) {
-                        position = position.GetNextContextPosition(LogicalDirection.Forward);
+                if (curIdx == matchStr.Length - 1) {
+                    //each character has been matched
+                    var endPointer = position.GetPositionAtOffset(runIdx, LogicalDirection.Forward);
+                    //for edge cases of repeating characters these loops ensure start is not early and last character isn't lost 
+                    if (isCaseSensitive) {
+                        while (endPointer != null && !new TextRange(startPointer, endPointer).Text.Contains(matchStr)) {
+                            endPointer = endPointer.GetPositionAtOffset(1, LogicalDirection.Forward);
+                        }
+                    } else {
+                        while (endPointer != null && !new TextRange(startPointer, endPointer).Text.ToLower().Contains(matchStr.ToLower())) {
+                            endPointer = endPointer.GetPositionAtOffset(1, LogicalDirection.Forward);
+                        }
                     }
+                    if (endPointer == null) {
+                        return null;
+                    }
+                    while (startPointer != null && new TextRange(startPointer, endPointer).Text.Length > matchStr.Length) {
+                        startPointer = startPointer.GetPositionAtOffset(1, LogicalDirection.Forward);
+                    }
+                    if (startPointer == null) {
+                        return null;
+                    }
+                    return new TextRange(startPointer, endPointer);
+                } else {
+                    //prepare loop for next match character
+                    curIdx++;
+                    //iterate position one offset AFTER match offset
+                    position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
                 }
             }
             return null;
@@ -766,7 +803,10 @@ namespace MpWpfApp {
             CubicEase easing = new CubicEase();
             easing.EasingMode = EasingMode.EaseIn;
             animation.EasingFunction = easing;
-            animation.Completed += onCompleted;
+            
+            if(onCompleted != null) {
+                animation.Completed += onCompleted;
+            }
 
             element.BeginAnimation(property, animation);
         } 
@@ -847,8 +887,9 @@ namespace MpWpfApp {
 
         public static BitmapSource GetIconImage(string sourcePath) {
             if (!File.Exists(sourcePath)) {
-                if (!Directory.Exists(sourcePath)) {
-                    return ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Warning.ToBitmap());
+                if (!Directory.Exists(sourcePath)) {                    
+                    //return (BitmapSource)new BitmapImage(new Uri(@"pack://application:,,,/Resources/Images/monkey (2).png"));
+                    return ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Question.ToBitmap());
                 } else {
                     return GetBitmapFromFolderPath(sourcePath, IconSizeEnum.MediumIcon32);
                 }

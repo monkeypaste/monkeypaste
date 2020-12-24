@@ -312,6 +312,7 @@ namespace MpWpfApp {
                     Console.WriteLine("MainWindow drop error cannot find lasrt moused over tile");
                 }
             };
+
             clipTray.SelectionChanged += (s, e8) => {
                 MergeClipsCommandVisibility = MergeSelectedClipsCommand.CanExecute(null) ? Visibility.Visible : Visibility.Collapsed;
                 Dispatcher.CurrentDispatcher.BeginInvoke(
@@ -327,7 +328,7 @@ namespace MpWpfApp {
                                     while(sctvm.IsLoading) {
                                         Thread.Sleep(100);
                                     }
-                                    if (!ttvm.Tag.IsLinkedWithCopyItem(sctvm.CopyItem)) {
+                                    if (!ttvm.IsLinkedWithClipTile(sctvm)) {
                                         isTagLinkedToAllSelectedClips = false;
                                     }
                                 }
@@ -509,7 +510,7 @@ namespace MpWpfApp {
                 return;
             }
             foreach (var ttvm in MainWindowViewModel.TagTrayViewModel) {
-                if (ttvm.Tag.IsLinkedWithCopyItem(clipTileToRemove.CopyItem)) {
+                if (ttvm.IsLinkedWithClipTile(clipTileToRemove)) {
                     ttvm.TagClipCount--;
                 }
             }
@@ -928,16 +929,16 @@ namespace MpWpfApp {
             if (SelectedClipTiles.Count == 1) {
                 return true;
             }
-            bool isLastClipTileLinked = tagToLink.Tag.IsLinkedWithCopyItem(SelectedClipTiles[0].CopyItem);
+            bool isLastClipTileLinked = tagToLink.IsLinkedWithClipTile(SelectedClipTiles[0]);
             foreach (var selectedClipTile in SelectedClipTiles) {
-                if (tagToLink.Tag.IsLinkedWithCopyItem(selectedClipTile.CopyItem) != isLastClipTileLinked) {
+                if (tagToLink.IsLinkedWithClipTile(selectedClipTile) != isLastClipTileLinked) {
                     return false;
                 }
             }
             return true;
         }
         private void LinkTagToCopyItem(MpTagTileViewModel tagToLink) {
-            bool isUnlink = tagToLink.Tag.IsLinkedWithCopyItem(SelectedClipTiles[0].CopyItem);
+            bool isUnlink = tagToLink.IsLinkedWithClipTile(SelectedClipTiles[0]);
             foreach (var selectedClipTile in SelectedClipTiles) {
                 if (isUnlink) {
                     tagToLink.Tag.UnlinkWithCopyItem(selectedClipTile.CopyItem);

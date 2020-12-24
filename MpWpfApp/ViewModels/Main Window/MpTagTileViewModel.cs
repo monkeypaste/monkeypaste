@@ -328,7 +328,7 @@ namespace MpWpfApp {
                 RenameTagCommand.Execute(null);
             } else {
                 foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel) {
-                    if (Tag.IsLinkedWithCopyItem(ctvm.CopyItem)) {
+                    if (IsLinkedWithClipTile(ctvm)) {
                         TagClipCount++;
                     }
                 }
@@ -338,6 +338,17 @@ namespace MpWpfApp {
         public void AddClip(MpClipTileViewModel ctvm) {
             Tag.LinkWithCopyItem(ctvm.CopyItem);
             TagClipCount++;
+        }
+
+        public bool IsLinkedWithClipTile(MpClipTileViewModel ctvm) {
+            if (ctvm == null || 
+                ctvm.CopyItem == null || 
+                ctvm.CopyItemId == 0 || 
+                Tag == null || 
+                Tag.TagId == 0) {
+                return false;
+            }
+            return Tag.IsLinkedWithCopyItem(ctvm.CopyItem);
         }
         #endregion
 

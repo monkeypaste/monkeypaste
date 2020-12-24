@@ -154,14 +154,23 @@ namespace MpWpfApp {
             WebRequest.Headers.Add("Accept-Language", "en");
             WebResponse response = null;
             // Read and parse the JSON response
-            response = WebRequest.GetResponse();
-            using (var reader = new StreamReader(response.GetResponseStream(), UnicodeEncoding.UTF8)) {
-                var result = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(reader.ReadToEnd());
-                var languages = result["translation"];
+            try {
+                response = WebRequest.GetResponse();
+                using (var reader = new StreamReader(response.GetResponseStream(), UnicodeEncoding.UTF8)) {
+                    var result = JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(reader.ReadToEnd());
+                    var languages = result["translation"];
 
-                languageCodes = languages.Keys.ToArray();
-                foreach (var kv in languages) {
-                    languageCodesAndTitles.Add(kv.Value["name"], kv.Key);
+                    languageCodes = languages.Keys.ToArray();
+                    foreach (var kv in languages) {
+                        languageCodesAndTitles.Add(kv.Value["name"], kv.Key);
+                    }
+                }
+            } catch(Exception ex) {
+                if(MpHelpers.CheckForInternetConnection()) {
+                    Console.WriteLine("Problem connecting to language server (" + ex.ToString() + "), re-attempting to connect..");
+                    GetLanguagesForTranslate();
+                } else {
+                    Console.WriteLine("Problem connecting to language server (" + ex.ToString() + ")");
                 }
             }
         }

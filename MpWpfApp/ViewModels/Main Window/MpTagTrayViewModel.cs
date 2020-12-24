@@ -64,7 +64,7 @@ namespace MpWpfApp {
                             foreach (MpClipTileViewModel clipTile in MainWindowViewModel.ClipTrayViewModel) {
                                 //this ensures when switching between tags the last selected tag in a list reset
                                 clipTile.IsSelected = false;
-                                if (tagChanged.Tag.IsLinkedWithCopyItem(clipTile.CopyItem)) {
+                                if (tagChanged.IsLinkedWithClipTile(clipTile)) {
                                     clipTile.TileVisibility = Visibility.Visible;
                                 } else {
                                     clipTile.TileVisibility = Visibility.Collapsed;
@@ -115,6 +115,7 @@ namespace MpWpfApp {
         public MpTagTileViewModel GetHistoryTagTileViewModel() {
             return this.Where(tt => tt.Tag.TagName == Properties.Settings.Default.HistoryTagTitle).ToList()[0];
         }
+        
 
         #endregion
 

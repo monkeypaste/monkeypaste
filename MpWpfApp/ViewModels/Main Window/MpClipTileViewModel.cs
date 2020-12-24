@@ -15,6 +15,7 @@
     using System.Windows.Data;
     using System.Windows.Documents;
     using System.Windows.Input;
+    using System.Windows.Interactivity;
     using System.Windows.Interop;
     using System.Windows.Markup;
     using System.Windows.Media;
@@ -31,6 +32,43 @@
     using Windows.Storage;
     using WPF.JoshSmith.ServiceProviders.UI;
 
+    public class AnimatedVisibilityFadeBehavior : Behavior<MpClipBorder> {
+        public Duration AnimationDuration { get; set; }
+        public Visibility InitialState { get; set; }
+
+        DoubleAnimation m_animationOut;
+        DoubleAnimation m_animationIn;
+
+        protected override void OnAttached() {
+            base.OnAttached();
+
+            m_animationIn = new DoubleAnimation(1, AnimationDuration, FillBehavior.HoldEnd);
+            m_animationOut = new DoubleAnimation(0, AnimationDuration, FillBehavior.HoldEnd);
+            m_animationOut.Completed += (sender, args) => {
+                AssociatedObject.SetCurrentValue(Border.VisibilityProperty, Visibility.Collapsed);
+            };
+
+            AssociatedObject.SetCurrentValue(Border.VisibilityProperty,
+                                             InitialState == Visibility.Collapsed
+                                                ? Visibility.Collapsed
+                                                : Visibility.Visible);
+
+            Binding.AddTargetUpdatedHandler(AssociatedObject, Updated);
+        }
+
+        private void Updated(object sender, DataTransferEventArgs e) {
+            var value = (Visibility)AssociatedObject.GetValue(Border.VisibilityProperty);
+            switch (value) {
+                case Visibility.Collapsed:
+                    AssociatedObject.SetCurrentValue(Border.VisibilityProperty, Visibility.Visible);
+                    AssociatedObject.BeginAnimation(Border.OpacityProperty, m_animationOut);
+                    break;
+                case Visibility.Visible:
+                    AssociatedObject.BeginAnimation(Border.OpacityProperty, m_animationIn);
+                    break;
+            }
+        }
+    }
     public class MpClipTileViewModel : MpViewModelBase {
         #region Private Variables
 
@@ -1256,7 +1294,22 @@
                     rtb.FontSize += 1;
                 }
             };
-
+            //clipTileBorder.IsVisibleChanged += (s, e7) => {
+            //    double startOpacity, endOpacity;
+            //    if (TileVisibility == Visibility.Visible) {
+            //        startOpacity = 0;
+            //        endOpacity = 1;
+            //    } else {
+            //        startOpacity = 1;
+            //        endOpacity = 0;
+            //    }
+            //    MpHelpers.AnimateDoubleProperty(
+            //        startOpacity, 
+            //        endOpacity,
+            //        Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+            //        clipTileBorder,
+            //        FrameworkElement.OpacityProperty, null);
+            //};
         }
 
         public void ClipTileTitle_Loaded(object sender, RoutedEventArgs e) {
@@ -1863,7 +1916,12 @@
                 if (tagTile.TagName == Properties.Settings.Default.HistoryTagTitle) {
                     continue;
                 }
-                TagMenuItems.Add(new MpClipTileContextMenuItemViewModel(tagTile.TagName, MainWindowViewModel.ClipTrayViewModel.LinkTagToCopyItemCommand, tagTile, tagTile.Tag.IsLinkedWithCopyItem(CopyItem)));
+                TagMenuItems.Add(
+                    new MpClipTileContextMenuItemViewModel(
+                        tagTile.TagName, 
+                        MainWindowViewModel.ClipTrayViewModel.LinkTagToCopyItemCommand, 
+                        tagTile, 
+                        tagTile.IsLinkedWithClipTile(this)));
             }
             ConvertClipTypes.Clear();
             switch(MainWindowViewModel.ClipTrayViewModel.GetSelectedClipsType()) {

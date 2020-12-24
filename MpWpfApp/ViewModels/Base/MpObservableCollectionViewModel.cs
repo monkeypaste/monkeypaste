@@ -1,11 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Data;
 
 namespace MpWpfApp {
-    public class MpObservableCollectionViewModel<T> : ObservableCollection<T> {
+    public class MpObservableCollection<T> : ObservableCollection<T> {
+        private static readonly object _ItemsLock = new object();
+
+        public MpObservableCollection() : base() {
+            BindingOperations.EnableCollectionSynchronization(this, _ItemsLock);
+        }
+        public MpObservableCollection(List<T> list) : base(list) {
+            BindingOperations.EnableCollectionSynchronization(this, _ItemsLock);
+        }
+        public MpObservableCollection(IEnumerable<T> collection) : base(collection) {
+            BindingOperations.EnableCollectionSynchronization(this, _ItemsLock);
+        }
+
+    }
+    public class MpObservableCollectionViewModel<T> : MpObservableCollection<T> {
         public MpMainWindowViewModel MainWindowViewModel {
             get {
                 return (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;

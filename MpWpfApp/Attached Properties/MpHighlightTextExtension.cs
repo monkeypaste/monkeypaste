@@ -43,7 +43,7 @@ namespace MpWpfApp {
                             var ctbb = Brushes.Transparent;// (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.ClipTileBackgroundColor);
 
                             Console.WriteLine("Beginning highlight clip with title: " + ctvm.CopyItemTitle + " with highlight text: "+(string)e.NewValue);
-                            if (!sttvm.Tag.IsLinkedWithCopyItem(ctvm.CopyItem)) {
+                            if (!sttvm.IsLinkedWithClipTile(ctvm)) {
                                 Console.WriteLine("Clip tile w/ title " + ctvm.CopyItemTitle + " is not linked with current tag");
                                 ctvm.TileVisibility = Visibility.Collapsed;
                                 return;
