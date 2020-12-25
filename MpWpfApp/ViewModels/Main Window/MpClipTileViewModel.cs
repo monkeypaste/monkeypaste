@@ -2,11 +2,9 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Data;
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Speech.Synthesis;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
     using System.Windows;
@@ -17,20 +15,15 @@
     using System.Windows.Input;
     using System.Windows.Interactivity;
     using System.Windows.Interop;
-    using System.Windows.Markup;
     using System.Windows.Media;
     using System.Windows.Media.Animation;
     using System.Windows.Media.Imaging;
     using System.Windows.Shapes;
-    using System.Windows.Threading;
-    using System.Xml;
     using GalaSoft.MvvmLight.CommandWpf;
-    using Gma.System.MouseKeyHook;
     using GongSolutions.Wpf.DragDrop.Utilities;
     using NativeCode;
     using Windows.ApplicationModel.DataTransfer;
     using Windows.Storage;
-    using WPF.JoshSmith.ServiceProviders.UI;
 
     public class AnimatedVisibilityFadeBehavior : Behavior<MpClipBorder> {
         public Duration AnimationDuration { get; set; }
@@ -133,7 +126,7 @@
                 }
                 var diovms = new ObservableCollection<MpDetectedImageObjectViewModel>();
                 foreach(var dio in CopyItem.ImageItemObjectList) {
-                    diovms.Add(new MpDetectedImageObjectViewModel(dio, 0, 0));
+                    diovms.Add(new MpDetectedImageObjectViewModel(dio));
                 }
                 return diovms;
             }
@@ -1194,6 +1187,7 @@
                     OnPropertyChanged(nameof(DetectedImageObjectViewModels));
                     OnPropertyChanged(nameof(LoadingSpinnerVisibility));
                     OnPropertyChanged(nameof(ContentVisibility));
+                    OnPropertyChanged(nameof(IsLoading));
                     //CopyItem.WriteToDatabase();
                 }
             }
@@ -1853,9 +1847,52 @@
             if(ImgVisibility == Visibility.Collapsed) {
                 return;
             }
-            var img = (Image)((Grid)sender).FindName("ClipTileImage");
-            img.ContextMenu = (ContextMenu)((Grid)sender).GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+            var ic = (Canvas)sender;
+            var img = (Image)ic.FindName("ClipTileImage");
+            var doc = (Canvas)ic.FindName("ClipTileImageDetectedObjectsCanvas");
 
+            img.ContextMenu = (ContextMenu)((FrameworkElement)sender).GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+                       
+
+            DetectedImageObjectViewModels.Add(
+                new MpDetectedImageObjectViewModel(
+                    new MpDetectedImageObject(0, CopyItemId, 0, 0, 0, 100, 100, "test")));
+
+            //foreach (var dio in MpHelpers.DetectObjects(MpHelpers.ConvertBitmapSourceToByteArray(ViewBmp))) {
+            //    DetectedImageObjectViewModels.Add(new MpDetectedImageObjectViewModel(dio));
+            //}
+
+            foreach(var dio in DetectedImageObjectViewModels) {
+                Border b = new Border();
+                //b.Width = dio.Width;
+                //b.Height = dio.Height;
+                b.BorderThickness = new Thickness(3);
+                b.Background = Brushes.Green;
+                b.Loaded += dio.ClipTileImageDetectedObjectCanvas_Loaded;
+
+                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.BorderBrush)), b, Border.BorderBrushProperty);
+                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.Width)), b, Border.WidthProperty, BindingMode.TwoWay);
+                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.Height)), b, Border.HeightProperty, BindingMode.TwoWay);
+                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.X)), b, Canvas.LeftProperty, BindingMode.TwoWay);
+                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.Y)), b, Canvas.TopProperty, BindingMode.TwoWay);
+
+                TextBox tb = new TextBox();
+                tb.Background = Brushes.Black;
+                tb.Foreground = Brushes.White;
+                tb.HorizontalContentAlignment = HorizontalAlignment.Center;
+                tb.VerticalContentAlignment = VerticalAlignment.Center;
+                tb.HorizontalAlignment = HorizontalAlignment.Center;
+                tb.VerticalAlignment = VerticalAlignment.Center;
+                tb.FontSize = 14;
+
+                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.ObjectTypeName)), tb, TextBox.TextProperty, BindingMode.TwoWay);
+
+                b.Child = tb;
+
+                doc.Children.Add(b);
+            }
+            
+            OnPropertyChanged(nameof(DetectedImageObjectViewModels));
             return;
             //var ac = (AdornedControl)((Grid)sender).FindName("ClipTileImageDetectedObjectAdornedControl");
             //var ic = (ItemsControl)((Grid)sender).FindName("ClipTileImageDetectedObjectItemscontrol");
@@ -1888,17 +1925,7 @@
             //Canvas.SetTop(ic, offsetY);
             //Canvas.SetLeft(img, offsetX);
             //Canvas.SetLeft(ic, offsetX);
-            //foreach (var dio in MpHelpers.DetectObjects(MpHelpers.ConvertBitmapSourceToByteArray(ViewBmp))) {
-            //    DetectedImageObjectViewModels.Add(new MpDetectedImageObjectViewModel(
-            //        dio));
-            //    Console.WriteLine("Adorner: " + dio.ToString());
-            //}
-
-            //DetectedImageObjectViewModels.Add(
-            //    new MpDetectedImageObjectViewModel(
-            //        new MpDetectedImageObject(0, CopyItemId, 0, 0, 0, 100, 100, "test"),
-            //        0,0));
-            //OnPropertyChanged(nameof(DetectedImageObjectViewModels));
+            
         }
 
         public void ClipTileFileListBox_Loaded(object sender, RoutedEventArgs e) {

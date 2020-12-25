@@ -196,7 +196,7 @@ namespace MpWpfApp {
                 DataTable dt = MpDb.Instance.Execute(
                     "select * from MpCopyItem where ItemImage=@ii",
                     new System.Collections.Generic.Dictionary<string, object> {
-                            { "@it", MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)data) }
+                            { "@ii", MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)data) }
                         });
                 if (dt != null && dt.Rows.Count > 0) {
                     return new MpCopyItem(dt.Rows[0]);

@@ -5,11 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpDetectedImageObjectViewModel : MpViewModelBase {
         #region Private Variables
         private double _xo, _yo, _xc, _yc;
+        private Point _mouseEnterPosition, _lastMousePosition;
         #endregion
 
         #region Properties
@@ -61,6 +64,7 @@ namespace MpWpfApp {
                 }
             }
         }
+        
 
         public double X {
             get {
@@ -177,13 +181,53 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public Brush BorderBrush {
+            get {
+                if (IsSelected) {
+                    return Brushes.Blue;
+                }
+                if (IsHovering) {
+                    return Brushes.Red;
+                }
+                return Brushes.Yellow;
+            }
+        }
+
+        private bool _isSelected = false;
+        public bool IsSelected {
+            get {
+                return _isSelected;
+            }
+            set {
+                if (_isSelected != value) {
+                    _isSelected = value;
+                    OnPropertyChanged(nameof(IsSelected));
+                    OnPropertyChanged(nameof(BorderBrush));
+                }
+            }
+        }
+
+        private bool _isHovering = false;
+        public bool IsHovering {
+            get {
+                return _isHovering;
+            }
+            set {
+                if (_isHovering != value) {
+                    _isHovering = value;
+                    OnPropertyChanged(nameof(IsHovering));
+                    OnPropertyChanged(nameof(BorderBrush));
+                }
+            }
+        }
         #endregion
 
         #region Public Methods
         public MpDetectedImageObjectViewModel(
-            MpDetectedImageObject dio, double xc, double yc) {
-            _xc = xc;
-            _yc = yc;
+            MpDetectedImageObject dio) {
+            _xc = 0;
+            _yc = 0;
             _xo = 0;
             _yo = 0;
             WidthRatio = 1;
@@ -192,11 +236,87 @@ namespace MpWpfApp {
         }
 
         public void ClipTileImageDetectedObjectCanvas_Loaded(object sender, RoutedEventArgs args) {
-            var bc = (Canvas)sender;
-            var dob = (Border)bc.FindName("DetectedObjectBorder");
+            var b = (Border)sender;
 
-            Canvas.SetLeft(dob, _xc);
-            Canvas.SetTop(dob, _yc);
+            var c =new Point(Width / 2, Height / 2);
+            var tl = new Point(0, 0);
+            var tr = new Point(Width, 0);
+            var br = new Point(Width, Height);
+            var bl = new Point(0, Height);
+            double maxCornerDistance = 3;
+            double maxResizeDistance = 15;
+
+            b.MouseEnter += (s, e2) => {
+                IsHovering = true;
+                var mp = e2.GetPosition(b);
+                _lastMousePosition = _mouseEnterPosition = mp;                
+            };
+            b.MouseMove += (s, e2) => {
+                if(!IsHovering) {
+                    return;
+                }
+
+                var mp = e2.GetPosition(b);
+                if(MpHelpers.DistanceBetweenPoints(mp,_mouseEnterPosition) <= maxResizeDistance) {
+                    //all CW from centroid
+                    bool isFromLeft = MpHelpers.IsPointInTriangle(mp, c, bl, tl);
+                    bool isFromTop = MpHelpers.IsPointInTriangle(mp, c, tl, tr);
+                    bool isFromRight = MpHelpers.IsPointInTriangle(mp, c, tr, br);
+                    bool isFromBottom = MpHelpers.IsPointInTriangle(mp, c, br, bl);
+
+                    bool isFromTopLeft = MpHelpers.DistanceBetweenPoints(mp, tl) <= maxCornerDistance;
+                    bool isFromTopRight = MpHelpers.DistanceBetweenPoints(mp, tr) <= maxCornerDistance;
+                    bool isFromBottomRight = MpHelpers.DistanceBetweenPoints(mp, br) <= maxCornerDistance;
+                    bool isFromBottomLeft = MpHelpers.DistanceBetweenPoints(mp, bl) <= maxCornerDistance;
+
+                    if(isFromTopLeft || isFromBottomRight) {
+                        Application.Current.MainWindow.Cursor = Cursors.SizeNWSE;
+                    } else if (isFromTopRight || isFromBottomRight) {
+                        Application.Current.MainWindow.Cursor = Cursors.SizeNESW;
+                    } else if(isFromLeft || isFromRight) {
+                        Application.Current.MainWindow.Cursor = Cursors.SizeWE;
+                    } else if (isFromTop || isFromBottom) {
+                        Application.Current.MainWindow.Cursor = Cursors.SizeNS;
+                    } else {
+                        Application.Current.MainWindow.Cursor = Cursors.Arrow;
+                    }
+                } else {
+                    Application.Current.MainWindow.Cursor = Cursors.SizeAll;
+                }
+                
+                if(IsSelected) {
+                    var diff = new Point(mp.X - _lastMousePosition.X, mp.Y - _lastMousePosition.Y);
+
+                    switch(Application.Current.MainWindow.Cursor.ToString()) {
+                        case "SizeNWSE":
+                            
+                            break;
+                        case "SizeNESW":
+
+                            break;
+                        case "SizeWE":
+
+                            break;
+                        case "SizeNS":
+
+                            break;
+                        case "SizeAll":
+
+                            break;
+                    }
+                }
+            };
+            b.MouseLeave += (s, e2) => {
+                IsHovering = false;
+
+                Application.Current.MainWindow.Cursor = Cursors.Arrow;
+            };
+            b.MouseLeftButtonDown += (s, e3) => {
+                IsSelected = true;
+            };
+            b.MouseLeftButtonUp += (s, e3) => {
+                IsSelected = false;
+            };
         }
         #endregion
 

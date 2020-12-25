@@ -1273,77 +1273,33 @@
                                                 </Border>
                                             </StackPanel>
                                             <!-- Image Content-->
-                                            <Grid Width="{Binding TileContentWidth}"
-                                                  Height="{Binding TileContentHeight}"
-                                                  Visibility="{Binding ImgVisibility}"
-                                                  Focusable="False"
-                                                  IsEnabled="False">
+                                            <Canvas Margin="0" 
+                                                    Background="Pink"
+                                                    Height="{Binding TileContentHeight}"
+                                                    Width="{Binding TileBorderWidth}"
+                                                    Visibility="{Binding ImgVisibility}"
+                                                    Focusable="{Binding IsSelected}"
+                                                    IsEnabled="{Binding IsSelected}">
                                                 <i:Interaction.Triggers>
                                                     <i:EventTrigger EventName="Loaded">
                                                         <i:CallMethodAction TargetObject="{Binding}"
                                                                             MethodName="ClipTileImageCanvas_Loaded" />
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
-                                                <Viewbox>
-                                                    <Image x:Name="ClipTileImage"
-                                                           Focusable="False"
-                                                           IsEnabled="False"
-                                                           Source="{Binding CopyItemBmp}"
-                                                           Stretch="Uniform" />
-                                                    <!--<local:AdornedControl x:Name="ClipTileImageDetectedObjectAdornedControl"
-                                                                      IsAdornerVisible="True"
-                                                                      IsEnabled="False"
-                                                                      HorizontalAdornerPlacement="Inside"
-                                                                      VerticalAdornerPlacement="Inside">
-                                                    <local:AdornedControl.AdornerContent>
-                                                        <ItemsControl x:Name="ClipTileImageDetectedObjectItemscontrol"
-                                                                      Background="Purple"
-                                                                      IsEnabled="False"
-                                                                      ItemsSource="{Binding DetectedImageObjectViewModels}">
-                                                            <ItemsControl.ItemsPanel>
-                                                                <ItemsPanelTemplate>
-                                                                    <Canvas />
-                                                                </ItemsPanelTemplate>
-                                                            </ItemsControl.ItemsPanel>
-                                                            <ItemsControl.Resources>
-                                                                <DataTemplate DataType="{x:Type local:MpDetectedImageObjectViewModel}">
-                                                                    <Canvas>
-                                                                        <i:Interaction.Triggers>
-                                                                            <i:EventTrigger EventName="Loaded">
-                                                                                <i:CallMethodAction TargetObject="{Binding}"
-                                                                                                    MethodName="ClipTileImageDetectedObjectCanvas_Loaded" />
-                                                                            </i:EventTrigger>
-                                                                        </i:Interaction.Triggers>
-                                                                        <Border x:Name="DetectedObjectBorder"
-                                                                                Canvas.Left="{Binding X}"
-                                                                                Canvas.Top="{Binding Y}"
-                                                                                Width="{Binding Width}"
-                                                                                Height="{Binding Height}"
-                                                                                BorderThickness="1"
-                                                                                BorderBrush="Yellow"
-                                                                                Background="Transparent">
-                                                                            <TextBlock HorizontalAlignment="Center"
-                                                                                       VerticalAlignment="Center"
-                                                                                       Text="{Binding ObjectTypeName}"
-                                                                                       Canvas.Left="{Binding LabelX}"
-                                                                                       Canvas.Top="{Binding LabelY}"
-                                                                                       Background="Black"
-                                                                                       Foreground="White" />
-                                                                        </Border>
-                                                                    </Canvas>
-                                                                </DataTemplate>
-                                                            </ItemsControl.Resources>
-                                                        </ItemsControl>
-                                                    </local:AdornedControl.AdornerContent>
-                                                    <Image x:Name="ClipTileImage"
-                                                           Focusable="False"
-                                                           IsEnabled="False"
-                                                           Source="{Binding ViewBmp}"
-                                                           Stretch="Uniform">
-                                                    </Image>
-                                                </local:AdornedControl>-->
-                                                </Viewbox>
-                                            </Grid>
+                                                <Grid>
+                                                    <Viewbox Height="{Binding TileContentHeight}"
+                                                             Width="{Binding TileBorderWidth}">
+                                                        <Grid>
+                                                            <Image x:Name="ClipTileImage"
+                                                                   Source="{Binding CopyItemBmp}"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   Stretch="None" />
+                                                            <Canvas x:Name="ClipTileImageDetectedObjectsCanvas" />
+                                                        </Grid>
+                                                    </Viewbox>
+                                                </Grid>
+                                            </Canvas>
                                             <!--File List Content -->
                                             <ListBox x:Name="ClipTileFileListBox"
                                                      Width="{Binding TileBorderWidth}"

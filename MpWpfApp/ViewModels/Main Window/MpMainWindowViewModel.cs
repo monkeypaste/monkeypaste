@@ -199,6 +199,8 @@ namespace MpWpfApp {
 #endif
             var taskbarIcon = (TaskbarIcon)mw.FindName("TaskbarIcon");
             MpSoundPlayerGroupCollectionViewModel.Instance.Init();
+
+            //MpWordsApiDictionary.Instance.TestWordsGet();
         }
         #endregion
 

@@ -22,6 +22,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Markup;
 using System.Windows.Media;
@@ -427,6 +428,22 @@ namespace MpWpfApp {
         #endregion
 
         #region System
+        public static void CreateBinding(
+            object source, 
+            PropertyPath sourceProperty, 
+            DependencyObject target, 
+            DependencyProperty targetProperty, 
+            BindingMode mode = BindingMode.OneWay) {
+            Binding b = new Binding();
+            b.Source = source;
+            b.Path = sourceProperty;
+            b.Mode = mode;
+            if(b.Mode == BindingMode.TwoWay) {
+                b.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+            }
+            BindingOperations.SetBinding(target, targetProperty, b);
+        }
+
         public static Random Rand { get; set; } = new Random();
 
         public static bool IsInDesignMode {
@@ -794,6 +811,28 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual
+        private static double sign(Point p1, Point p2, Point p3) {
+            return (p1.X - p3.X) * (p2.Y - p3.Y) - (p2.X - p3.X) * (p1.Y - p3.Y);
+        }
+
+        public static bool IsPointInTriangle(Point pt, Point v1, Point v2, Point v3) {
+            double d1, d2, d3;
+            bool has_neg, has_pos;
+
+            d1 = sign(pt, v1, v2);
+            d2 = sign(pt, v2, v3);
+            d3 = sign(pt, v3, v1);
+
+            has_neg = (d1 < 0) || (d2 < 0) || (d3 < 0);
+            has_pos = (d1 > 0) || (d2 > 0) || (d3 > 0);
+            
+            return !(has_neg && has_pos);
+        }
+
+        public static double DistanceBetweenPoints(Point a, Point b) {
+            return Math.Sqrt(Math.Pow(b.X - a.X, 2) + Math.Pow(b.Y - a.Y, 2));
+        }
+
         public static void AnimateDoubleProperty(double from, double to, double dt, UIElement element, DependencyProperty property, EventHandler onCompleted) {
             DoubleAnimation animation = new DoubleAnimation();
             animation.From = from;
