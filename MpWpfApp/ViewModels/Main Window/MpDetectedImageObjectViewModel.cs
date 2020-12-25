@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GongSolutions.Wpf.DragDrop.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,8 +12,9 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpDetectedImageObjectViewModel : MpViewModelBase {
         #region Private Variables
-        private double _xo, _yo, _xc, _yc;
         private Point _mouseEnterPosition, _lastMousePosition;
+        private bool _isMouseDown = false;
+        private bool _isDragging = false;
         #endregion
 
         #region Properties
@@ -22,10 +24,9 @@ namespace MpWpfApp {
                 return _detectedImageObject;
             }
             set {
-                //if(_detectedImageObject != value) 
-                {
+                if(_detectedImageObject != value) {
                     _detectedImageObject = value;
-                    DetectedImageObject.WriteToDatabase();
+                    
                     OnPropertyChanged(nameof(DetectedImageObject));
 
                     OnPropertyChanged(nameof(X));
@@ -38,41 +39,15 @@ namespace MpWpfApp {
                 }
             }
         }
-
-        private double _widthRatio = 1;
-        public double WidthRatio {
-            get {
-                return _widthRatio;
-            }
-            set {
-                if(_widthRatio != value) {
-                    _widthRatio = value;
-                    OnPropertyChanged(nameof(WidthRatio));
-                }
-            }
-        }
-
-        private double _heightRatio = 1;
-        public double HeightRatio {
-            get {
-                return _heightRatio;
-            }
-            set {
-                if (_heightRatio != value) {
-                    _heightRatio = value;
-                    OnPropertyChanged(nameof(HeightRatio));
-                }
-            }
-        }
         
 
         public double X {
             get {
-                return (DetectedImageObject.X * WidthRatio) + _xo;
+                return DetectedImageObject.X;
             }
             set {
                 if (X != value) {
-                    DetectedImageObject.X = (value / WidthRatio) - _xo;
+                    DetectedImageObject.X = value;
                     OnPropertyChanged(nameof(X));
 
                     OnPropertyChanged(nameof(DetectedImageObject));
@@ -82,11 +57,11 @@ namespace MpWpfApp {
 
         public double Y {
             get {
-                return (DetectedImageObject.Y * HeightRatio) + _yo;
+                return DetectedImageObject.Y;
             }
             set {
                 if (Y != value) {
-                    DetectedImageObject.Y = (value / HeightRatio) - _yo;
+                    DetectedImageObject.Y = value;
                     OnPropertyChanged(nameof(Y));
 
                     OnPropertyChanged(nameof(DetectedImageObject));
@@ -114,11 +89,11 @@ namespace MpWpfApp {
 
         public double Width {
             get {
-                return DetectedImageObject.Width * WidthRatio;
+                return DetectedImageObject.Width;
             }
             set {
                 if (Width != value) {
-                    DetectedImageObject.Width = value / WidthRatio;
+                    DetectedImageObject.Width = value;
                     OnPropertyChanged(nameof(Width));
 
                     OnPropertyChanged(nameof(DetectedImageObject));
@@ -128,11 +103,11 @@ namespace MpWpfApp {
 
         public double Height {
             get {
-                return DetectedImageObject.Height * HeightRatio;
+                return DetectedImageObject.Height;
             }
             set {
                 if (Height != value) {
-                    DetectedImageObject.Height = value / HeightRatio;
+                    DetectedImageObject.Height = value;
                     OnPropertyChanged(nameof(Height));
 
                     OnPropertyChanged(nameof(DetectedImageObject));
@@ -226,96 +201,147 @@ namespace MpWpfApp {
         #region Public Methods
         public MpDetectedImageObjectViewModel(
             MpDetectedImageObject dio) {
-            _xc = 0;
-            _yc = 0;
-            _xo = 0;
-            _yo = 0;
-            WidthRatio = 1;
-            HeightRatio = 1;
             DetectedImageObject = dio;
         }
 
         public void ClipTileImageDetectedObjectCanvas_Loaded(object sender, RoutedEventArgs args) {
             var b = (Border)sender;
+            Console.WriteLine("Border render height: " + b.RenderSize.Height + " actual height: " + Height);
+            var canvas = b.GetVisualAncestor<Canvas>();
+            var canvasWidth = canvas.ActualWidth;
+            var canvasHeight = canvas.ActualHeight;
 
-            var c =new Point(Width / 2, Height / 2);
-            var tl = new Point(0, 0);
-            var tr = new Point(Width, 0);
-            var br = new Point(Width, Height);
-            var bl = new Point(0, Height);
+            
             double maxCornerDistance = 3;
             double maxResizeDistance = 15;
 
+            bool isFromLeft=false,isFromTop=false,isFromRight=false,isFromBottom=false;
+            bool isFromTopLeft=false,isFromTopRight=false,isFromBottomRight=false,isFromBottomLeft=false;
+
             b.MouseEnter += (s, e2) => {
-                IsHovering = true;
-                var mp = e2.GetPosition(b);
-                _lastMousePosition = _mouseEnterPosition = mp;                
-            };
-            b.MouseMove += (s, e2) => {
-                if(!IsHovering) {
+                if(_isMouseDown) {
                     return;
                 }
+                IsHovering = true;
+                var mp = e2.GetPosition(b);
+                _mouseEnterPosition = mp;                
+            };
+            canvas.MouseMove += (s, e2) => {
+                //if(!IsHovering) {
+                //    return;
+                //}
 
                 var mp = e2.GetPosition(b);
-                if(MpHelpers.DistanceBetweenPoints(mp,_mouseEnterPosition) <= maxResizeDistance) {
-                    //all CW from centroid
-                    bool isFromLeft = MpHelpers.IsPointInTriangle(mp, c, bl, tl);
-                    bool isFromTop = MpHelpers.IsPointInTriangle(mp, c, tl, tr);
-                    bool isFromRight = MpHelpers.IsPointInTriangle(mp, c, tr, br);
-                    bool isFromBottom = MpHelpers.IsPointInTriangle(mp, c, br, bl);
+                var c = new Point(Width / 2, Height / 2);
+                var tl = new Point(0, 0);
+                var tr = new Point(Width, 0);
+                var br = new Point(Width, Height);
+                var bl = new Point(0, Height);
 
-                    bool isFromTopLeft = MpHelpers.DistanceBetweenPoints(mp, tl) <= maxCornerDistance;
-                    bool isFromTopRight = MpHelpers.DistanceBetweenPoints(mp, tr) <= maxCornerDistance;
-                    bool isFromBottomRight = MpHelpers.DistanceBetweenPoints(mp, br) <= maxCornerDistance;
-                    bool isFromBottomLeft = MpHelpers.DistanceBetweenPoints(mp, bl) <= maxCornerDistance;
+                if (!_isMouseDown) {
+                    isFromLeft = MpHelpers.IsPointInTriangle(mp, c, bl, tl);
+                    isFromTop = MpHelpers.IsPointInTriangle(mp, c, tl, tr);
+                    isFromRight = MpHelpers.IsPointInTriangle(mp, c, tr, br);
+                    isFromBottom = MpHelpers.IsPointInTriangle(mp, c, br, bl);
 
-                    if(isFromTopLeft || isFromBottomRight) {
-                        Application.Current.MainWindow.Cursor = Cursors.SizeNWSE;
-                    } else if (isFromTopRight || isFromBottomRight) {
-                        Application.Current.MainWindow.Cursor = Cursors.SizeNESW;
-                    } else if(isFromLeft || isFromRight) {
-                        Application.Current.MainWindow.Cursor = Cursors.SizeWE;
-                    } else if (isFromTop || isFromBottom) {
-                        Application.Current.MainWindow.Cursor = Cursors.SizeNS;
+                    isFromTopLeft = MpHelpers.DistanceBetweenPoints(mp, tl) <= maxCornerDistance;
+                    isFromTopRight = MpHelpers.DistanceBetweenPoints(mp, tr) <= maxCornerDistance;
+                    isFromBottomRight = MpHelpers.DistanceBetweenPoints(mp, br) <= maxCornerDistance;
+                    isFromBottomLeft = MpHelpers.DistanceBetweenPoints(mp, bl) <= maxCornerDistance;
+                    if (MpHelpers.DistanceBetweenPoints(mp, _mouseEnterPosition) <= maxResizeDistance) {
+                        if (isFromTopLeft || isFromBottomRight) {
+                            Application.Current.MainWindow.Cursor = Cursors.SizeNWSE;
+                        } else if (isFromTopRight || isFromBottomRight) {
+                            Application.Current.MainWindow.Cursor = Cursors.SizeNESW;
+                        } else if (isFromLeft || isFromRight) {
+                            Application.Current.MainWindow.Cursor = Cursors.SizeWE;
+                        } else if (isFromTop || isFromBottom) {
+                            Application.Current.MainWindow.Cursor = Cursors.SizeNS;
+                        } 
+                        //else {
+                        //    Application.Current.MainWindow.Cursor = Cursors.Arrow;
+                        //}
                     } else {
-                        Application.Current.MainWindow.Cursor = Cursors.Arrow;
+                        Application.Current.MainWindow.Cursor = Cursors.SizeAll;
                     }
-                } else {
-                    Application.Current.MainWindow.Cursor = Cursors.SizeAll;
                 }
-                
-                if(IsSelected) {
+                if (_isMouseDown) {
+                    _isDragging = true;
+                    //mp = e2.GetPosition(canvas);
                     var diff = new Point(mp.X - _lastMousePosition.X, mp.Y - _lastMousePosition.Y);
-
+                    
                     switch(Application.Current.MainWindow.Cursor.ToString()) {
-                        case "SizeNWSE":
-                            
-                            break;
-                        case "SizeNESW":
-
-                            break;
+                        //case "SizeNWSE":
+                        //    Y += diff.Y;
+                        //    Width += diff.X;
+                        //    Height += diff.Y;
+                        //    break;
+                        //case "SizeNESW":
+                        //    X += diff.X;
+                        //    Width += diff.X;
+                        //    Height += diff.Y;
+                        //    break;
                         case "SizeWE":
-
+                            if (isFromRight) {
+                                Width -= diff.X;
+                            } else {
+                                X -= diff.X;
+                                Width += diff.X;
+                            }
                             break;
                         case "SizeNS":
-
+                            if(isFromTop) {
+                                Y += diff.Y;
+                                Height -= diff.Y;
+                            } else {
+                                //Y -= diff.Y;
+                                Height += diff.Y;
+                            }
+                            
                             break;
                         case "SizeAll":
-
+                            X += diff.X;
+                            Y += diff.Y;
                             break;
                     }
+
+                    //X = Math.Max(X, 0);
+                    //Y = Math.Max(Y, 0);
+                    //Width = Math.Min(Width, canvasWidth);
+                    //Height = Math.Min(Height, canvasHeight);
                 }
+
+                //_lastMousePosition = mp;
+                //canvas.UpdateLayout(); 
             };
             b.MouseLeave += (s, e2) => {
-                IsHovering = false;
+                //if(!IsSelected) {
+                //    IsHovering = false;
 
+                //    Application.Current.MainWindow.Cursor = Cursors.Arrow;
+                //}
+            };
+            canvas.MouseLeftButtonDown += (s, e3) => {
+                //IsSelected = true;
+                _isMouseDown = true;
+                _isDragging = false;
+                _lastMousePosition = e3.GetPosition(b);
+
+            };
+            canvas.MouseLeftButtonUp += (s, e3) => {
+                //IsSelected = false;
+                _isMouseDown = false;
+                _isDragging = false;
+                isFromLeft = false;
+                isFromTop = false;
+                isFromRight = false;
+                isFromBottom = false;
+                isFromTopLeft = false; 
+                isFromTopRight = false; 
+                isFromBottomRight = false; 
+                isFromBottomLeft = false;
                 Application.Current.MainWindow.Cursor = Cursors.Arrow;
-            };
-            b.MouseLeftButtonDown += (s, e3) => {
-                IsSelected = true;
-            };
-            b.MouseLeftButtonUp += (s, e3) => {
-                IsSelected = false;
+                //DetectedImageObject.WriteToDatabase();
             };
         }
         #endregion

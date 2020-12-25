@@ -406,6 +406,7 @@ namespace MpWpfApp {
             var ctvm = (MpClipTileViewModel)clipTileBorder.DataContext;
 
             clipTileBorder.PreviewMouseLeftButtonDown += (s, e6) => {
+                return;
                 var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
                 IsMouseDown = true;
                 StartDragPoint = e6.GetPosition(clipTray);
@@ -417,6 +418,7 @@ namespace MpWpfApp {
             //          that are appended as text and filelists but  merged into images (by default)
             // TODO Have option to append items to one long image
             clipTileBorder.PreviewMouseMove += (s, e7) => {
+                return;
                 var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
                 var curDragPoint = e7.GetPosition(clipTray);
                 //these tests ensure tile is not being dragged INTO another clip tile or outside tray

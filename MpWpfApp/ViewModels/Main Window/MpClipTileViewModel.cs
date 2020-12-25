@@ -118,24 +118,25 @@
             }
         }
 
-        //private ObservableCollection<MpDetectedImageObjectViewModel> _detectedImageObjectViewModels = new ObservableCollection<MpDetectedImageObjectViewModel>();
+        private ObservableCollection<MpDetectedImageObjectViewModel> _detectedImageObjectViewModels = new ObservableCollection<MpDetectedImageObjectViewModel>();
         public ObservableCollection<MpDetectedImageObjectViewModel> DetectedImageObjectViewModels {
             get {
-                if (CopyItem == null) {
-                    return new ObservableCollection<MpDetectedImageObjectViewModel>();
-                }
-                var diovms = new ObservableCollection<MpDetectedImageObjectViewModel>();
-                foreach(var dio in CopyItem.ImageItemObjectList) {
-                    diovms.Add(new MpDetectedImageObjectViewModel(dio));
-                }
-                return diovms;
+                //if (CopyItem == null) {
+                //    return new ObservableCollection<MpDetectedImageObjectViewModel>();
+                //}
+                //var diovms = new ObservableCollection<MpDetectedImageObjectViewModel>();
+                //foreach(var dio in CopyItem.ImageItemObjectList) {
+                //    diovms.Add(new MpDetectedImageObjectViewModel(dio));
+                //}
+                //return diovms;
+                return _detectedImageObjectViewModels;
             }
-            //set {
-            //    if (_detectedImageObjectViewModels != value) {
-            //        _detectedImageObjectViewModels = value;
-            //        OnPropertyChanged(nameof(DetectedImageObjectViewModels));
-            //    }
-            //}
+            set {
+                if (_detectedImageObjectViewModels != value) {
+                    _detectedImageObjectViewModels = value;
+                    OnPropertyChanged(nameof(DetectedImageObjectViewModels));
+                }
+            }
         }
 
         private ObservableCollection<MpTemplateHyperlinkViewModel> _templateTokens = new ObservableCollection<MpTemplateHyperlinkViewModel>();
@@ -1852,8 +1853,8 @@
             var doc = (Canvas)ic.FindName("ClipTileImageDetectedObjectsCanvas");
 
             img.ContextMenu = (ContextMenu)((FrameworkElement)sender).GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
-                       
 
+            Console.WriteLine("Image loaded");
             DetectedImageObjectViewModels.Add(
                 new MpDetectedImageObjectViewModel(
                     new MpDetectedImageObject(0, CopyItemId, 0, 0, 0, 100, 100, "test")));
@@ -1871,10 +1872,10 @@
                 b.Loaded += dio.ClipTileImageDetectedObjectCanvas_Loaded;
 
                 MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.BorderBrush)), b, Border.BorderBrushProperty);
-                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.Width)), b, Border.WidthProperty, BindingMode.TwoWay);
-                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.Height)), b, Border.HeightProperty, BindingMode.TwoWay);
-                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.X)), b, Canvas.LeftProperty, BindingMode.TwoWay);
-                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.Y)), b, Canvas.TopProperty, BindingMode.TwoWay);
+                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.Width)), b, Border.WidthProperty);
+                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.Height)), b, Border.HeightProperty);
+                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.X)), b, Canvas.LeftProperty);
+                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.Y)), b, Canvas.TopProperty);
 
                 TextBox tb = new TextBox();
                 tb.Background = Brushes.Black;
@@ -1883,7 +1884,7 @@
                 tb.VerticalContentAlignment = VerticalAlignment.Center;
                 tb.HorizontalAlignment = HorizontalAlignment.Center;
                 tb.VerticalAlignment = VerticalAlignment.Center;
-                tb.FontSize = 14;
+                tb.FontSize = 24;
 
                 MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.ObjectTypeName)), tb, TextBox.TextProperty, BindingMode.TwoWay);
 
