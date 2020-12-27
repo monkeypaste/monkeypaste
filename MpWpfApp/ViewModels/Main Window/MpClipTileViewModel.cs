@@ -121,14 +121,6 @@
         private ObservableCollection<MpDetectedImageObjectViewModel> _detectedImageObjectViewModels = new ObservableCollection<MpDetectedImageObjectViewModel>();
         public ObservableCollection<MpDetectedImageObjectViewModel> DetectedImageObjectViewModels {
             get {
-                //if (CopyItem == null) {
-                //    return new ObservableCollection<MpDetectedImageObjectViewModel>();
-                //}
-                //var diovms = new ObservableCollection<MpDetectedImageObjectViewModel>();
-                //foreach(var dio in CopyItem.ImageItemObjectList) {
-                //    diovms.Add(new MpDetectedImageObjectViewModel(dio));
-                //}
-                //return diovms;
                 return _detectedImageObjectViewModels;
             }
             set {
@@ -1865,10 +1857,8 @@
 
             foreach(var dio in DetectedImageObjectViewModels) {
                 Border b = new Border();
-                //b.Width = dio.Width;
-                //b.Height = dio.Height;
                 b.BorderThickness = new Thickness(3);
-                b.Background = Brushes.Green;
+                b.Background = Brushes.Transparent;
                 b.Loaded += dio.ClipTileImageDetectedObjectCanvas_Loaded;
 
                 MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.BorderBrush)), b, Border.BorderBrushProperty);
@@ -1884,16 +1874,17 @@
                 tb.VerticalContentAlignment = VerticalAlignment.Center;
                 tb.HorizontalAlignment = HorizontalAlignment.Center;
                 tb.VerticalAlignment = VerticalAlignment.Center;
-                tb.FontSize = 24;
+                tb.IsReadOnly = true;
+                tb.Cursor = Cursors.Arrow;
 
                 MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.ObjectTypeName)), tb, TextBox.TextProperty, BindingMode.TwoWay);
+                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.FontSize)), b, TextBox.FontSizeProperty);
 
                 b.Child = tb;
 
                 doc.Children.Add(b);
             }
-            
-            OnPropertyChanged(nameof(DetectedImageObjectViewModels));
+
             return;
             //var ac = (AdornedControl)((Grid)sender).FindName("ClipTileImageDetectedObjectAdornedControl");
             //var ic = (ItemsControl)((Grid)sender).FindName("ClipTileImageDetectedObjectItemscontrol");

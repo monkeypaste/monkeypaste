@@ -11,8 +11,9 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpDetectedImageObjectViewModel : MpViewModelBase {
-        #region Private Variables
-        private Point _mouseEnterPosition, _lastMousePosition;
+        #region Private Variables       
+        private double _l = 0, _r = 0, _t = 0, _b = 0;
+        private double _xr = 1, _yr = 1;
         private bool _isMouseDown = false;
         private bool _isDragging = false;
         #endregion
@@ -40,38 +41,9 @@ namespace MpWpfApp {
             }
         }
         
-
-        public double X {
-            get {
-                return DetectedImageObject.X;
-            }
-            set {
-                if (X != value) {
-                    DetectedImageObject.X = value;
-                    OnPropertyChanged(nameof(X));
-
-                    OnPropertyChanged(nameof(DetectedImageObject));
-                }
-            }
-        }
-
-        public double Y {
-            get {
-                return DetectedImageObject.Y;
-            }
-            set {
-                if (Y != value) {
-                    DetectedImageObject.Y = value;
-                    OnPropertyChanged(nameof(Y));
-
-                    OnPropertyChanged(nameof(DetectedImageObject));
-                }
-            }
-        }
-
         public double FontSize {
             get {
-                return 12;
+                return Math.Max(12, Height / 5);
             }
         }
 
@@ -87,31 +59,41 @@ namespace MpWpfApp {
             }
         }
 
+        public double X {
+            get {
+                return Math.Min(_l, _r);
+                //var x = Math.Max(0,Math.Min(_l, _r));
+                //if(x + Width > _cw) {
+                //    return _cw - Width;
+                //}
+                //return x;
+            }
+        }
+
+        public double Y {
+            get {
+                return Math.Min(_t, _b);
+                //var y = Math.Max(0,Math.Min(_t, _b));
+                //if(y + Height > _ch) {
+                //    return _ch - Height;
+                //}
+                //return y;
+            }
+        }
+
         public double Width {
             get {
-                return DetectedImageObject.Width;
-            }
-            set {
-                if (Width != value) {
-                    DetectedImageObject.Width = value;
-                    OnPropertyChanged(nameof(Width));
-
-                    OnPropertyChanged(nameof(DetectedImageObject));
-                }
+                double al = Math.Abs(_l);
+                double ar = Math.Abs(_r);
+                return Math.Max(ar, al) - Math.Min(ar, al);
             }
         }
 
         public double Height {
             get {
-                return DetectedImageObject.Height;
-            }
-            set {
-                if (Height != value) {
-                    DetectedImageObject.Height = value;
-                    OnPropertyChanged(nameof(Height));
-
-                    OnPropertyChanged(nameof(DetectedImageObject));
-                }
+                double at = Math.Abs(_t);
+                double ab = Math.Abs(_b);
+                return Math.Max(at, ab) - Math.Min(at, ab);
             }
         }
 
@@ -159,27 +141,10 @@ namespace MpWpfApp {
 
         public Brush BorderBrush {
             get {
-                if (IsSelected) {
-                    return Brushes.Blue;
-                }
                 if (IsHovering) {
-                    return Brushes.Red;
+                    return Brushes.Yellow;
                 }
-                return Brushes.Yellow;
-            }
-        }
-
-        private bool _isSelected = false;
-        public bool IsSelected {
-            get {
-                return _isSelected;
-            }
-            set {
-                if (_isSelected != value) {
-                    _isSelected = value;
-                    OnPropertyChanged(nameof(IsSelected));
-                    OnPropertyChanged(nameof(BorderBrush));
-                }
+                return Brushes.Blue;
             }
         }
 
@@ -206,132 +171,129 @@ namespace MpWpfApp {
 
         public void ClipTileImageDetectedObjectCanvas_Loaded(object sender, RoutedEventArgs args) {
             var b = (Border)sender;
-            Console.WriteLine("Border render height: " + b.RenderSize.Height + " actual height: " + Height);
             var canvas = b.GetVisualAncestor<Canvas>();
-            var canvasWidth = canvas.ActualWidth;
-            var canvasHeight = canvas.ActualHeight;
+            var containerCanvas = canvas.GetVisualAncestor<Canvas>();
+            var vb = (Viewbox)containerCanvas.FindName("ClipTileImageViewbox");
+            var img = (Image)containerCanvas.FindName("ClipTileImage");
+            var tb = (TextBox)b.Child;
+            var ctvm = (MpClipTileViewModel)img.DataContext;
 
-            
-            double maxCornerDistance = 3;
+            ContainerVisual child = VisualTreeHelper.GetChild(vb, 0) as ContainerVisual;
+            ScaleTransform scale = child.Transform as ScaleTransform;
+            _xr = scale.ScaleX;
+            _yr = scale.ScaleY;
+            Console.WriteLine(string.Format(@"XR:{0} YR:{1}", _xr, _yr));
+
+            _l = DetectedImageObject.X;
+            _t = DetectedImageObject.Y;
+            _r = DetectedImageObject.X + DetectedImageObject.Width;
+            _b = DetectedImageObject.Y + DetectedImageObject.Height;
+
+            //trigger properties from constructor
+            OnPropertyChanged(nameof(X));
+            OnPropertyChanged(nameof(Y));
+            OnPropertyChanged(nameof(Width));
+            OnPropertyChanged(nameof(Height));
+
+            Point mouseEnterPosition = new Point(), mouseDownPosition = new Point(), lastMousePosition = new Point();            
+
+            double maxCornerDistance = 10;
             double maxResizeDistance = 15;
 
             bool isFromLeft=false,isFromTop=false,isFromRight=false,isFromBottom=false;
             bool isFromTopLeft=false,isFromTopRight=false,isFromBottomRight=false,isFromBottomLeft=false;
 
+            var renameMenuItem = new MenuItem();
+            renameMenuItem.Header = "Rename";
+            renameMenuItem.PreviewMouseDown += (s4, e4) => {
+                e4.Handled = true;
+                MainWindowViewModel.IsShowingDialog = true;
+                tb.IsReadOnly = false;
+                tb.Focus();
+                tb.SelectAll();
+                tb.Cursor = Cursors.IBeam;
+                tb.Background = Brushes.White;
+                tb.Foreground = Brushes.Black;
+            };
+            var deleteMenuItem = new MenuItem();
+            deleteMenuItem.Header = "Delete";
+            deleteMenuItem.Click += (s4, e4) => {
+                ctvm.DetectedImageObjectViewModels.Remove(this);
+                canvas.Children.Remove(b);                
+            };
+            b.ContextMenu = new ContextMenu();
+            b.ContextMenu.Items.Add(renameMenuItem);
+            b.ContextMenu.Items.Add(deleteMenuItem);
+
+            tb.PreviewMouseLeftButtonDown += (s, e) => {
+                if(tb.IsReadOnly) {
+                    MainWindowViewModel.IsShowingDialog = true;
+                    tb.IsReadOnly = false;
+                    tb.Focus();
+                    tb.SelectAll();
+                    tb.Cursor = Cursors.IBeam;
+                    tb.Background = Brushes.White;
+                    tb.Foreground = Brushes.Black;
+                    e.Handled = true;
+                }
+            };
+
+            tb.PreviewKeyDown += (s, e) => {
+                if(e.Key == Key.Enter || e.Key == Key.Escape) {
+                    MainWindowViewModel.IsShowingDialog = false;
+                    tb.IsReadOnly = true;
+                    tb.Cursor = Cursors.Arrow;
+                    tb.Background = Brushes.Black;
+                    tb.Foreground = Brushes.White;
+                    e.Handled = true;
+                }
+            };
+
+            tb.MouseEnter += (s, e) => {
+                if (tb.IsReadOnly) {
+                    tb.Foreground = Brushes.Red;
+                }
+            };
+
+            tb.MouseLeave += (s, e) => {
+                if (tb.IsReadOnly) {
+                    tb.Foreground = Brushes.White;
+                }
+            };
+
             b.MouseEnter += (s, e2) => {
-                if(_isMouseDown) {
+                if (_isMouseDown) {
                     return;
                 }
                 IsHovering = true;
-                var mp = e2.GetPosition(b);
-                _mouseEnterPosition = mp;                
+                mouseEnterPosition = e2.GetPosition(canvas);
             };
-            canvas.MouseMove += (s, e2) => {
-                //if(!IsHovering) {
-                //    return;
-                //}
 
-                var mp = e2.GetPosition(b);
-                var c = new Point(Width / 2, Height / 2);
-                var tl = new Point(0, 0);
-                var tr = new Point(Width, 0);
-                var br = new Point(Width, Height);
-                var bl = new Point(0, Height);
-
-                if (!_isMouseDown) {
-                    isFromLeft = MpHelpers.IsPointInTriangle(mp, c, bl, tl);
-                    isFromTop = MpHelpers.IsPointInTriangle(mp, c, tl, tr);
-                    isFromRight = MpHelpers.IsPointInTriangle(mp, c, tr, br);
-                    isFromBottom = MpHelpers.IsPointInTriangle(mp, c, br, bl);
-
-                    isFromTopLeft = MpHelpers.DistanceBetweenPoints(mp, tl) <= maxCornerDistance;
-                    isFromTopRight = MpHelpers.DistanceBetweenPoints(mp, tr) <= maxCornerDistance;
-                    isFromBottomRight = MpHelpers.DistanceBetweenPoints(mp, br) <= maxCornerDistance;
-                    isFromBottomLeft = MpHelpers.DistanceBetweenPoints(mp, bl) <= maxCornerDistance;
-                    if (MpHelpers.DistanceBetweenPoints(mp, _mouseEnterPosition) <= maxResizeDistance) {
-                        if (isFromTopLeft || isFromBottomRight) {
-                            Application.Current.MainWindow.Cursor = Cursors.SizeNWSE;
-                        } else if (isFromTopRight || isFromBottomRight) {
-                            Application.Current.MainWindow.Cursor = Cursors.SizeNESW;
-                        } else if (isFromLeft || isFromRight) {
-                            Application.Current.MainWindow.Cursor = Cursors.SizeWE;
-                        } else if (isFromTop || isFromBottom) {
-                            Application.Current.MainWindow.Cursor = Cursors.SizeNS;
-                        } 
-                        //else {
-                        //    Application.Current.MainWindow.Cursor = Cursors.Arrow;
-                        //}
-                    } else {
-                        Application.Current.MainWindow.Cursor = Cursors.SizeAll;
-                    }
-                }
-                if (_isMouseDown) {
-                    _isDragging = true;
-                    //mp = e2.GetPosition(canvas);
-                    var diff = new Point(mp.X - _lastMousePosition.X, mp.Y - _lastMousePosition.Y);
-                    
-                    switch(Application.Current.MainWindow.Cursor.ToString()) {
-                        //case "SizeNWSE":
-                        //    Y += diff.Y;
-                        //    Width += diff.X;
-                        //    Height += diff.Y;
-                        //    break;
-                        //case "SizeNESW":
-                        //    X += diff.X;
-                        //    Width += diff.X;
-                        //    Height += diff.Y;
-                        //    break;
-                        case "SizeWE":
-                            if (isFromRight) {
-                                Width -= diff.X;
-                            } else {
-                                X -= diff.X;
-                                Width += diff.X;
-                            }
-                            break;
-                        case "SizeNS":
-                            if(isFromTop) {
-                                Y += diff.Y;
-                                Height -= diff.Y;
-                            } else {
-                                //Y -= diff.Y;
-                                Height += diff.Y;
-                            }
-                            
-                            break;
-                        case "SizeAll":
-                            X += diff.X;
-                            Y += diff.Y;
-                            break;
-                    }
-
-                    //X = Math.Max(X, 0);
-                    //Y = Math.Max(Y, 0);
-                    //Width = Math.Min(Width, canvasWidth);
-                    //Height = Math.Min(Height, canvasHeight);
-                }
-
-                //_lastMousePosition = mp;
-                //canvas.UpdateLayout(); 
-            };
             b.MouseLeave += (s, e2) => {
-                //if(!IsSelected) {
-                //    IsHovering = false;
-
-                //    Application.Current.MainWindow.Cursor = Cursors.Arrow;
-                //}
+                if (_isMouseDown) {
+                    return;
+                }
+                IsHovering = false;
             };
-            canvas.MouseLeftButtonDown += (s, e3) => {
-                //IsSelected = true;
-                _isMouseDown = true;
-                _isDragging = false;
-                _lastMousePosition = e3.GetPosition(b);
 
+            MainWindowViewModel.ApplicationHook.MouseDown += (s, e) => {
+                if (e.Button == System.Windows.Forms.MouseButtons.Left) {
+                    _isMouseDown = true;
+                    mouseDownPosition = Mouse.GetPosition(canvas);
+                    var hit = VisualTreeHelper.HitTest(canvas, mouseDownPosition)?.VisualHit;
+                    _isDragging = hit == b;
+                    if(hit != tb) {
+                        MainWindowViewModel.IsShowingDialog = false;
+                        tb.IsReadOnly = true;
+                        tb.Cursor = Cursors.Arrow;
+                        tb.Background = Brushes.Black;
+                        tb.Foreground = Brushes.White;
+                    }
+                }
             };
-            canvas.MouseLeftButtonUp += (s, e3) => {
-                //IsSelected = false;
+
+            MainWindowViewModel.ApplicationHook.MouseUp += (s, e) => {
                 _isMouseDown = false;
-                _isDragging = false;
                 isFromLeft = false;
                 isFromTop = false;
                 isFromRight = false;
@@ -343,11 +305,122 @@ namespace MpWpfApp {
                 Application.Current.MainWindow.Cursor = Cursors.Arrow;
                 //DetectedImageObject.WriteToDatabase();
             };
+
+            MainWindowViewModel.ApplicationHook.MouseMove += (s, e) => {                
+                var p = Mouse.GetPosition(canvas);
+
+                var c = new Point(X + (Width / 2), Y + (Height / 2));
+                var tl = new Point(X, Y);
+                var tr = new Point(X + Width, Y);
+                var br = new Point(X + Width, Y + Height);
+                var bl = new Point(X, Y + Height);
+
+                
+                if (!_isMouseDown) {
+                    isFromLeft = MpHelpers.IsPointInTriangle(p, c, bl, tl);
+                    isFromTop = MpHelpers.IsPointInTriangle(p, c, tl, tr);
+                    isFromRight = MpHelpers.IsPointInTriangle(p, c, tr, br);
+                    isFromBottom = MpHelpers.IsPointInTriangle(p, c, br, bl);
+
+                    isFromTopLeft = MpHelpers.DistanceBetweenPoints(p, tl) <= maxCornerDistance;
+                    isFromTopRight = MpHelpers.DistanceBetweenPoints(p, tr) <= maxCornerDistance;
+                    isFromBottomRight = MpHelpers.DistanceBetweenPoints(p, br) <= maxCornerDistance;
+                    isFromBottomLeft = MpHelpers.DistanceBetweenPoints(p, bl) <= maxCornerDistance;
+
+                    bool isMouseOver = VisualTreeHelper.HitTest(canvas, p)?.VisualHit == b;
+                    if (isMouseOver && MpHelpers.DistanceBetweenPoints(p, mouseEnterPosition) <= maxResizeDistance) {
+                        if (isFromTopLeft || isFromBottomRight) {
+                            Application.Current.MainWindow.Cursor = Cursors.SizeNWSE;
+                        } else if (isFromTopRight || isFromBottomLeft) {
+                            Application.Current.MainWindow.Cursor = Cursors.SizeNESW;
+                        } else if (isFromLeft || isFromRight) {
+                            Application.Current.MainWindow.Cursor = Cursors.SizeWE;
+                        } else if (isFromTop || isFromBottom) {
+                            Application.Current.MainWindow.Cursor = Cursors.SizeNS;
+                        } else {
+                            Application.Current.MainWindow.Cursor = Cursors.Arrow;
+                        }
+                    } else if(isMouseOver) {
+                        Application.Current.MainWindow.Cursor = Cursors.SizeAll;
+                    } else {
+                        Application.Current.MainWindow.Cursor = Cursors.Arrow;
+                    }
+                } else if(!_isDragging) { 
+                    Application.Current.MainWindow.Cursor = Cursors.Arrow;
+                } else {
+                    switch (Application.Current.MainWindow.Cursor.ToString()) {
+                        case "SizeNWSE":
+                            if(isFromTopLeft) {
+                                _l = p.X;
+                                _t = p.Y;
+                            } else {
+                                _r = p.X;
+                                _b = p.Y;
+                            }
+                            break;
+                        case "SizeNESW":
+                            if (isFromTopRight) {
+                                _r = p.X;
+                                _t = p.Y;
+                            } else {
+                                _l = p.X;
+                                _b = p.Y;
+                            }
+                            break;
+                        case "SizeWE":
+                            if (isFromLeft) {
+                                _l = p.X;
+                            } else {
+                                _r = p.X;
+                            }
+                            break;
+                        case "SizeNS":
+                            if (isFromTop) {
+                                _t = p.Y;
+                            } else {
+                                _b = p.Y;
+                            }
+                            break;
+                        case "SizeAll":
+                            var diff = new Point(p.X - lastMousePosition.X, p.Y - lastMousePosition.Y);
+                            double k = 1;
+                            _l += diff.X * k;
+                            _r += diff.X * k;
+                            _t += diff.Y * k;
+                            _b += diff.Y * k;
+                            break;
+                    }
+                    if(Application.Current.MainWindow.Cursor != Cursors.SizeAll) {
+                        _t = Math.Max(_t, 0);
+                        _l = Math.Max(_l, 0);
+                        _b = Math.Min(_b, canvas.Height);
+                        _r = Math.Min(_r, canvas.Width);
+                    }
+                    IsHovering = true;
+                    OnPropertyChanged(nameof(X));
+                    OnPropertyChanged(nameof(Y));
+                    OnPropertyChanged(nameof(Width));
+                    OnPropertyChanged(nameof(Height));
+                    OnPropertyChanged(nameof(FontSize));
+
+                    OnPropertyChanged(nameof(BorderBrush));
+                }
+                lastMousePosition = p;
+            };
         }
         #endregion
 
         #region Commands
 
+        #endregion
+
+        #region Overrides
+        public override string ToString() {
+            return string.Format(
+                "X:{0} Y:{1} Width:{2} Height:{3} L,T,R,B:{4},{5},{6},{7} Mouse Down?{8} Dragging?{9}",
+                X,Y,Width,Height,_l,_t,_r,_b,_isMouseDown ? 1:0, _isDragging ? 1:0
+                );
+        }
         #endregion
     }
 }

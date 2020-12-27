@@ -1274,7 +1274,6 @@
                                             </StackPanel>
                                             <!-- Image Content-->
                                             <Canvas Margin="0" 
-                                                    Background="Pink"
                                                     Height="{Binding TileContentHeight}"
                                                     Width="{Binding TileBorderWidth}"
                                                     Visibility="{Binding ImgVisibility}"
@@ -1287,7 +1286,7 @@
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
                                                 <Grid>
-                                                    <Viewbox Height="{Binding TileContentHeight}"
+                                                    <Viewbox x:Name="ClipTileImageViewbox" Height="{Binding TileContentHeight}"
                                                              Width="{Binding TileBorderWidth}">
                                                         <Grid>
                                                             <Image x:Name="ClipTileImage"
@@ -1295,9 +1294,12 @@
                                                                    HorizontalAlignment="Center"
                                                                    VerticalAlignment="Center"
                                                                    Stretch="None" />
-                                                            <Canvas x:Name="ClipTileImageDetectedObjectsCanvas" />
                                                         </Grid>
                                                     </Viewbox>
+                                                    <Canvas x:Name="ClipTileImageDetectedObjectsCanvas"
+                                                            ClipToBounds="True"
+                                                            Height="{Binding TileContentHeight}"
+                                                            Width="{Binding TileBorderWidth}" />
                                                 </Grid>
                                             </Canvas>
                                             <!--File List Content -->
