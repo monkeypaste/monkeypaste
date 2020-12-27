@@ -319,6 +319,7 @@
                          BorderBrush="Transparent"
                          dd:DragDrop.IsDragSource="True"
                          dd:DragDrop.IsDropTarget="True"
+                         dd:DragDrop.DropHandler="{Binding}"
                          HorizontalAlignment="Center"
                          SelectionMode="Single"
                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
@@ -364,6 +365,12 @@
                                 </i:Interaction.Triggers>
                                 <local:MpClipBorder.ContextMenu>
                                     <ContextMenu>
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Loaded">
+                                                <i:CallMethodAction TargetObject="{Binding}"
+                                                                    MethodName="TagTile_ContextMenu_Loaded" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
                                         <MenuItem Header="Rename"
                                                   Command="{Binding RenameTagCommand}" />
                                         <MenuItem Header="Assign Hotkey"
@@ -371,6 +378,7 @@
                                                   Command="{Binding AssignHotkeyCommand}" />
                                         <MenuItem Header="Change Color"
                                                   Command="{Binding ChangeTagColorCommand}" />
+                                        <MenuItem x:Name="TagTileColorContextMenuItem" />
                                         <MenuItem Header="Delete"
                                                   Command="{Binding TagTrayViewModel.DeleteTagCommand}" />
                                     </ContextMenu>
@@ -417,8 +425,6 @@
                                              IsReadOnly="False"
                                              HorizontalAlignment="Center"
                                              VerticalAlignment="Center"
-                                             local:MpFocusExtension.IsFocused="{Binding IsTextBoxFocused}"
-                                             local:MpTextBoxBehavior.SelectAllTextOnFocus="True"
                                              Visibility="{Binding TextBoxVisibility}"
                                              FontSize="{Binding TagFontSize}"
                                              Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
@@ -463,11 +469,22 @@
                     </i:Interaction.Triggers>
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.1*" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="0.1*" />
                         </Grid.ColumnDefinitions>
+                        <Button Background="Transparent"
+                                Grid.Column="0"
+                                Width="25"
+                                Margin="3,0,0,0"
+                                Height="25"
+                                Style="{StaticResource Transparent_Button}"
+                                BorderThickness="0">
+                            <Image Source="/MpWpfApp;component/Resources/Images/search.png"
+                                   Stretch="Fill" />
+                        </Button>
                         <TextBox x:Name="SearchBox"
-                                 Grid.Column="0"
+                                 Grid.Column="1"
                                  FontSize="{Binding FontSize}"
                                  Background="Transparent"
                                  Foreground="{Binding TextBoxTextBrush}"
@@ -479,7 +496,7 @@
                                  Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
                         </TextBox>
                         <Button x:Name="ClearTextBoxButton"
-                                Grid.Column="1"
+                                Grid.Column="2"
                                 Width="15"
                                 Height="15"
                                 Visibility="{Binding ClearTextButtonVisibility}"
@@ -710,6 +727,10 @@
                                         <Grid.ContextMenu>
                                             <ContextMenu x:Name="ClipTile_ContextMenu">
                                                 <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Loaded">
+                                                        <i:CallMethodAction TargetObject="{Binding}"
+                                                                            MethodName="ClipTile_ContextMenu_Loaded" />
+                                                    </i:EventTrigger>
                                                     <i:EventTrigger EventName="Opened">
                                                         <i:CallMethodAction TargetObject="{Binding}"
                                                                             MethodName="ClipTile_ContextMenu_Opened" />
@@ -742,11 +763,10 @@
                                                 <MenuItem Header="Duplicate"
                                                           Command="{Binding Data.DuplicateSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="Edit"
-                                                          Command="{Binding EditClipTextCommand}" />
+                                                          Command="{Binding EditClipCommand}" />
                                                 <MenuItem Header="Send as Email"
                                                           Command="{Binding SendClipToEmailCommand}" />
-                                                <MenuItem Header="Change Color"
-                                                          Command="{Binding Data.ChangeSelectedClipsColorCommand, Source={StaticResource ClipTrayProxy}}" />
+                                                <MenuItem x:Name="ClipTileColorContextMenuItem" />
                                                 <MenuItem Header="Delete"
                                                           Command="{Binding Data.DeleteSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="Run in Command Prompt"
@@ -1273,7 +1293,7 @@
                                                 </Border>
                                             </StackPanel>
                                             <!-- Image Content-->
-                                            <Canvas Margin="0" 
+                                            <Canvas Margin="0"
                                                     Height="{Binding TileContentHeight}"
                                                     Width="{Binding TileBorderWidth}"
                                                     Visibility="{Binding ImgVisibility}"
@@ -1285,22 +1305,17 @@
                                                                             MethodName="ClipTileImageCanvas_Loaded" />
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
-                                                <Grid>
-                                                    <Viewbox x:Name="ClipTileImageViewbox" Height="{Binding TileContentHeight}"
-                                                             Width="{Binding TileBorderWidth}">
-                                                        <Grid>
-                                                            <Image x:Name="ClipTileImage"
-                                                                   Source="{Binding CopyItemBmp}"
-                                                                   HorizontalAlignment="Center"
-                                                                   VerticalAlignment="Center"
-                                                                   Stretch="None" />
-                                                        </Grid>
-                                                    </Viewbox>
-                                                    <Canvas x:Name="ClipTileImageDetectedObjectsCanvas"
-                                                            ClipToBounds="True"
-                                                            Height="{Binding TileContentHeight}"
-                                                            Width="{Binding TileBorderWidth}" />
-                                                </Grid>
+                                                <Canvas x:Name="ClipTileImageDetectedObjectsCanvas"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        ClipToBounds="True">
+
+                                                    <Image x:Name="ClipTileImage"
+                                                           Source="{Binding ViewBmp}"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           Stretch="None" />
+                                                </Canvas>
                                             </Canvas>
                                             <!--File List Content -->
                                             <ListBox x:Name="ClipTileFileListBox"

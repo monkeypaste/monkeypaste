@@ -12,50 +12,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
-        private bool _isTextBoxFocused = false;
-        public bool IsTextBoxFocused {
-            get {
-                return _isTextBoxFocused;
-            }
-            set {
-                //omitting duplicate check to enforce change in ui
-                //if (_isTextBoxFocused != value) 
-                {
-                    _isTextBoxFocused = value;
-                    OnPropertyChanged(nameof(IsTextBoxFocused));
-                }
-            }
-        }
+        #region State
 
         public bool IsNew {
             get {
                 return Tag == null || Tag.TagId <= 0;
-            }
-        }
-
-        private int _tagId = 0;
-        public int TagId {
-            get {
-                return _tagId;
-            }
-            set {
-                if (_tagId != value) {
-                    _tagId = value;
-                    OnPropertyChanged(nameof(TagId));
-                }
-            }
-        }
-
-        private string _shortcutKeyList = string.Empty;
-        public string ShortcutKeyList {
-            get {
-                return _shortcutKeyList;
-            }
-            set {
-                if(_shortcutKeyList != value) {
-                    _shortcutKeyList = value;
-                    OnPropertyChanged(nameof(ShortcutKeyList));
-                }
             }
         }
 
@@ -68,6 +29,8 @@ namespace MpWpfApp {
                 if (_isSelected != value) {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
+                    OnPropertyChanged(nameof(TagBorderBackgroundBrush));
+                    OnPropertyChanged(nameof(TagTextColor));
                 }
             }
         }
@@ -81,6 +44,8 @@ namespace MpWpfApp {
                 if (_isEditing != value) {
                     _isEditing = value;
                     OnPropertyChanged(nameof(IsEditing));
+                    OnPropertyChanged(nameof(TextBlockVisibility));
+                    OnPropertyChanged(nameof(TextBoxVisibility));
                 }
             }
         }
@@ -94,110 +59,73 @@ namespace MpWpfApp {
                 if (_isHovering != value) {
                     _isHovering = value;
                     OnPropertyChanged(nameof(IsHovering));
-                }
-            }
-        }
-
-        private Brush _tagBorderBackgroundBrush = Brushes.Transparent;
-        public Brush TagBorderBackgroundBrush {
-            get {
-                return _tagBorderBackgroundBrush;
-            }
-            set {
-                if (_tagBorderBackgroundBrush != value) {
-                    _tagBorderBackgroundBrush = value;
                     OnPropertyChanged(nameof(TagBorderBackgroundBrush));
-                }
-            }
-        }
-
-        private Brush _tagTextColor = Brushes.White;
-        public Brush TagTextColor {
-            get {
-                return _tagTextColor;
-            }
-            set {
-                if (_tagTextColor != value) {
-                    _tagTextColor = value;
                     OnPropertyChanged(nameof(TagTextColor));
                 }
             }
         }
+        #endregion
 
-        private Brush _tagCountTextColor = Brushes.White;
-        public Brush TagCountTextColor {
-            get {
-                return _tagCountTextColor;
-            }
-            set {
-                if (_tagCountTextColor != value) {
-                    _tagCountTextColor = value;
-                    OnPropertyChanged(nameof(TagCountTextColor));
-                }
-            }
-        }
-
-        private MpTag _tag;
-        public MpTag Tag {
-            get {
-                return _tag;
-            }
-            set {
-                if (_tag != value) {
-                    _tag = value;
-                    OnPropertyChanged(nameof(Tag));
-                }
-            }
-        }
-
-        private string _tagName;
-        public string TagName {
-            get {
-                return _tagName;
-            }
-            set {
-                if (_tagName != value) {
-                    _tagName = value;
-                    OnPropertyChanged(nameof(TagName));
-                }
-            }
-        }
-
-        private Brush _tagColor;
-        public Brush TagColor {
-            get {
-                return _tagColor;
-            }
-            set {
-                if (_tagColor != value) {
-                    _tagColor = value;
-                    OnPropertyChanged(nameof(TagColor));
-                }
-            }
-        }
-
-        private Visibility _textBoxVisibility = Visibility.Collapsed;
+        #region Visibility
         public Visibility TextBoxVisibility {
             get {
-                return _textBoxVisibility;
-            }
-            set {
-                if (_textBoxVisibility != value) {
-                    _textBoxVisibility = value;
-                    OnPropertyChanged(nameof(TextBoxVisibility));
+                if(IsEditing) {
+                    return Visibility.Visible;
                 }
+                return Visibility.Collapsed;
             }
         }
 
-        private Visibility _textBlockVisibility = Visibility.Visible;
         public Visibility TextBlockVisibility {
             get {
-                return _textBlockVisibility;
+                if (IsEditing) {
+                    return Visibility.Collapsed;
+                }
+                return Visibility.Visible;
+            }
+        }
+        #endregion
+
+        #region Visual
+        public Brush TagBorderBackgroundBrush {
+            get {
+                if (IsSelected) {
+                    return Brushes.DimGray;
+                }
+                if(IsHovering) {
+                    return Brushes.LightGray;
+                }
+                return Brushes.Transparent;
+            }
+        }
+        
+        public Brush TagTextColor {
+            get {
+                if(IsSelected) {
+                    return Brushes.White;
+                }
+                if(IsHovering) {
+                    return Brushes.Black;
+                }
+                return Brushes.White;
+            }
+        }
+
+        public Brush TagCountTextColor {
+            get {
+                return MpHelpers.IsBright(((SolidColorBrush)TagColor).Color) ? Brushes.Black : Brushes.White; ;
+            }
+        }
+
+        private string _shortcutKeyList = string.Empty;
+        public string ShortcutKeyList {
+            get {
+                return _shortcutKeyList;
             }
             set {
-                if (_textBlockVisibility != value) {
-                    _textBlockVisibility = value;
-                    OnPropertyChanged(nameof(TextBlockVisibility));
+                if (_shortcutKeyList != value) {
+                    _shortcutKeyList = value;
+                    OnPropertyChanged(nameof(ShortcutKeyList));
                 }
             }
         }
@@ -226,74 +154,93 @@ namespace MpWpfApp {
                 return TagHeight * 0.5;
             }
         }
+        #endregion
 
-        public bool IsHistory() {
-            return Tag.TagId == 1;
+        #region Model
+        public int TagId {
+            get {
+                return Tag.TagId;
+            }
+            set {
+                if (Tag.TagId != value) {
+                    Tag.TagId = value;
+                    Tag.WriteToDatabase();
+                    OnPropertyChanged(nameof(TagId));
+                }
+            }
         }
+
+        public int TagSortIdx {
+            get {
+                return Tag.TagSortIdx;
+            }
+            set {
+                if (Tag.TagSortIdx != value) {
+                    Tag.TagSortIdx = value;
+                    Tag.WriteToDatabase();
+                    OnPropertyChanged(nameof(TagSortIdx));
+                }
+            }
+        }
+
+        public string TagName {
+            get {
+                return Tag.TagName;
+            }
+            set {
+                if (Tag.TagName != value) {
+                    Tag.TagName = value;
+                    if (Tag.TagName.Trim() == string.Empty) {
+                        Tag.TagName = "Untitled";
+                        IsEditing = true;
+                    }
+                    Tag.WriteToDatabase();
+                    OnPropertyChanged(nameof(TagName));
+                }
+            }
+        }
+
+        public Brush TagColor {
+            get {
+                return new SolidColorBrush(Tag.TagColor.Color);
+            }
+            set {
+                if (new SolidColorBrush(Tag.TagColor.Color) != value) {
+                    Tag.TagColor.Color = ((SolidColorBrush)value).Color;
+                    Tag.TagColor.WriteToDatabase();
+                    OnPropertyChanged(nameof(TagColor));
+                    OnPropertyChanged(nameof(TagCountTextColor));
+                }
+            }
+        }
+
+        private MpTag _tag;
+        public MpTag Tag {
+            get {
+                return _tag;
+            }
+            set {
+                if (_tag != value) {
+                    _tag = value;
+                    OnPropertyChanged(nameof(Tag));
+                    OnPropertyChanged(nameof(TagColor));
+                    OnPropertyChanged(nameof(TagName));
+                    OnPropertyChanged(nameof(TagId));
+                }
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Public Methods
         public MpTagTileViewModel(MpTag tag) : base() {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
-                    case nameof(TagId):
-                        Tag.TagId = TagId;
-                        break;
-                    case nameof(TagColor):
-                        Tag.TagColor.Color = ((SolidColorBrush)TagColor).Color;
-                        Tag.WriteToDatabase();
-                        TagCountTextColor = MpHelpers.IsBright(Tag.TagColor.Color) ? Brushes.Black : Brushes.White;
-                        break;
-                    case nameof(IsEditing):
-                        if (IsEditing) {
-                            //show textbox and select all text
-                            TextBoxVisibility = Visibility.Visible;
-                            TextBlockVisibility = Visibility.Collapsed;
-                            IsTextBoxFocused = true;
-                            //TagTextBox?.SelectAll();
-                        } else {
-                            //tag names cannot be blank so don't allow the textblock to reappear and change name back to 'untitled'
-                            if (TagName.Trim() == string.Empty) {
-                                TagName = "Untitled";
-                                //to trigger selectall unfocus and refocus tag textbox
-                                //IsTextBoxFocused = true;
-                                IsEditing = true;
-                                return;
-                            }
-                            TextBoxVisibility = Visibility.Collapsed;
-                            TextBlockVisibility = Visibility.Visible;
-                            Tag.TagName = TagName;
-                            Tag.WriteToDatabase();
-                            IsTextBoxFocused = false;
-                        }
-                        break;
-                    case nameof(IsSelected):
-                        if (IsSelected) {
-                            TagTextColor = Brushes.White;
-                            TagBorderBackgroundBrush = Brushes.DimGray;
-                        } else {
-                            TagBorderBackgroundBrush = Brushes.Transparent;
-                            TagTextColor = Brushes.LightGray;
-                        }
-                        break;
-                    case nameof(IsHovering):
-                        if (!IsSelected) {
-                            if (IsHovering) {
-                                TagBorderBackgroundBrush = Brushes.LightGray;
-                                TagTextColor = Brushes.Black;
-                            } else {
-                                TagBorderBackgroundBrush = Brushes.Transparent;
-                                TagTextColor = Brushes.White;
-                            }
-                        }
-                        break;
                 }
             };
 
             Tag = tag;
-            TagId = Tag.TagId;
-            TagColor = new SolidColorBrush(Tag.TagColor.Color);
-            TagName = Tag.TagName;
         }
 
         public void TagTile_Loaded(object sender, RoutedEventArgs e) {
@@ -317,8 +264,11 @@ namespace MpWpfApp {
 
             var tagTextBox = (TextBox)tagBorder.FindName("TagTextBox");
             //this is called 
-            tagTextBox.GotFocus += (s, e1) => {
-                //TagTextBox.SelectAll();
+            tagTextBox.IsVisibleChanged += (s, e1) => {
+                if(TextBoxVisibility == Visibility.Visible) {
+                    tagTextBox.Focus();
+                    tagTextBox.SelectAll();
+                }
             };
             tagTextBox.LostFocus += (s, e2) => {
                 IsEditing = false;
@@ -333,6 +283,28 @@ namespace MpWpfApp {
                     }
                 }
             }
+        }
+
+        public void TagTile_ContextMenu_Loaded(object sender, RoutedEventArgs e) {
+            var cm = (ContextMenu)sender;
+            MenuItem cmi = null;
+            foreach (MenuItem mi in cm.Items) {
+                if (mi.Name == "TagTileColorContextMenuItem") {
+                    cmi = mi;
+                    break;
+                }
+            }
+            MpHelpers.SetColorChooserMenuItem(
+                cm,
+                cmi,
+                (s, e1) => {
+                    ChangeTagColorCommand.Execute(((Border)s).Background);
+                },
+                MpHelpers.GetColorColumn(TagColor),
+                MpHelpers.GetColorRow(TagColor)
+            );
+
+            cm.Width = 300;
         }
 
         public void AddClip(MpClipTileViewModel ctvm) {
@@ -369,17 +341,17 @@ namespace MpWpfApp {
             ShortcutKeyList = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(this, "Select " + TagName, ShortcutKeyList, SelectTagCommand);
         }
 
-        private RelayCommand _changeTagColorCommand;
+        private RelayCommand<Brush> _changeTagColorCommand;
         public ICommand ChangeTagColorCommand {
             get {
                 if (_changeTagColorCommand == null) {
-                    _changeTagColorCommand = new RelayCommand(ChangeTagColor);
+                    _changeTagColorCommand = new RelayCommand<Brush>(ChangeTagColor);
                 }
                 return _changeTagColorCommand;
             }
         }
-        private void ChangeTagColor() {
-            var result = MpHelpers.ShowColorDialog(TagColor);
+        private void ChangeTagColor(Brush newBrush) {
+            var result = newBrush != null ? newBrush : MpHelpers.ShowColorDialog(TagColor);
             if(result != null) {
                 TagColor = result;
             }
@@ -400,7 +372,6 @@ namespace MpWpfApp {
         private void RenameTag() {
             MainWindowViewModel.TagTrayViewModel.ClearTagSelection();
             IsSelected = true;
-            IsTextBoxFocused = true;
             IsEditing = true;
         }
 

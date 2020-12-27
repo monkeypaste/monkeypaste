@@ -6,15 +6,17 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpTag : MpDbObject {
         public int TagId { get; set; }
+        public int TagSortIdx { get; set; }
         public int ColorId { get; set; }
         public string TagName { get; set; }
         public MpColor TagColor { get; set; }
         //unused
         public int ParentTagId { get; set; }
 
-        public MpTag(string tagName, Color tagColor) {
+        public MpTag(string tagName, Color tagColor, int tagCount) {
             TagName = tagName;
             TagColor = new MpColor((int)tagColor.R, (int)tagColor.G, (int)tagColor.B, 255);
+            TagSortIdx = tagCount;
         }
         public MpTag(int tagId) {
             DataTable dt = MpDb.Instance.Execute(
@@ -41,6 +43,7 @@ namespace MpWpfApp {
         }
         public override void LoadDataRow(DataRow dr) {
             TagId = Convert.ToInt32(dr["pk_MpTagId"].ToString());
+            TagSortIdx = Convert.ToInt32(dr["SortIdx"].ToString());
             TagName = dr["TagName"].ToString();
             ColorId = Convert.ToInt32(dr["fk_MpColorId"].ToString());
             TagColor = new MpColor(ColorId);
@@ -56,21 +59,23 @@ namespace MpWpfApp {
                 TagColor.WriteToDatabase();
                 ColorId = TagColor.ColorId;
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpTag(TagName,fk_MpColorId) values(@tn,@cid)",
+                    "insert into MpTag(TagName,fk_MpColorId,SortIdx) values(@tn,@cid,@si)",
                     new Dictionary<string, object> {
                         { "@tn", TagName },
-                        { "@cid", ColorId }
+                        { "@cid", ColorId },
+                        { "@si", TagSortIdx }
                     });
                 TagId = MpDb.Instance.GetLastRowId("MpTag", "pk_MpTagId");
             } else {
                 TagColor.WriteToDatabase();
                 ColorId = TagColor.ColorId;
                 MpDb.Instance.ExecuteWrite(
-                    "update MpTag set TagName=@tn, fk_MpColorId=@cid where pk_MpTagId=@tid",
+                    "update MpTag set TagName=@tn, fk_MpColorId=@cid, SortIdx=@si where pk_MpTagId=@tid",
                     new Dictionary<string, object> {
                         { "@tn", TagName },
                         { "@cid", ColorId },
-                        { "@tid", TagId }
+                        { "@tid", TagId },
+                        { "@si", TagSortIdx }
                     });
             }
         }

@@ -24,6 +24,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
@@ -40,25 +41,25 @@ namespace MpWpfApp {
     public static class MpHelpers {
         #region Documents
 
-        //public static TextRange FindStringRangeFromPosition(TextPointer position, string str, bool isCaseSensitive = false) {
-        //    while (position != null) {
-        //        if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
-        //            position = position.GetNextContextPosition(LogicalDirection.Forward);
-        //            continue;
-        //        }
-        //        string textRun = isCaseSensitive ? position.GetTextInRun(LogicalDirection.Forward) : position.GetTextInRun(LogicalDirection.Forward).ToLower();
+//public static TextRange FindStringRangeFromPosition(TextPointer position, string str, bool isCaseSensitive = false) {
+//    while (position != null) {
+//        if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
+//            position = position.GetNextContextPosition(LogicalDirection.Forward);
+//            continue;
+//        }
+//        string textRun = isCaseSensitive ? position.GetTextInRun(LogicalDirection.Forward) : position.GetTextInRun(LogicalDirection.Forward).ToLower();
 
-        //        // Find the starting index of any substring that matches "str".
-        //        int indexInRun = textRun.IndexOf(isCaseSensitive ? str : str.ToLower());
-        //        if (indexInRun >= 0) {
-        //            return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + str.Length));
-        //        }
-        //        position = position.GetNextContextPosition(LogicalDirection.Forward);
-        //    }
-        //    // position will be null if "word" is not found.
-        //    return null;
-        //}
-        public static void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRange> rangeList, Brush bgBrush) {
+//        // Find the starting index of any substring that matches "str".
+//        int indexInRun = textRun.IndexOf(isCaseSensitive ? str : str.ToLower());
+//        if (indexInRun >= 0) {
+//            return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + str.Length));
+//        }
+//        position = position.GetNextContextPosition(LogicalDirection.Forward);
+//    }
+//    // position will be null if "word" is not found.
+//    return null;
+//}
+public static void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRange> rangeList, Brush bgBrush) {
             if (rangeList == null || rangeList.Count == 0) {
                 return;
             }
@@ -811,6 +812,178 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual
+        private static List<List<Brush>> _ContentColors = new List<List<Brush>> {
+                new List<Brush> {
+                    new SolidColorBrush(Color.FromRgb(248, 160, 174)),
+                    new SolidColorBrush(Color.FromRgb(243, 69, 68)),
+                    new SolidColorBrush(Color.FromRgb(229, 116, 102)),
+                    new SolidColorBrush(Color.FromRgb(211, 159, 161)),
+                    new SolidColorBrush(Color.FromRgb(191, 53, 50))
+                },
+                new List<Brush> {
+                    new SolidColorBrush(Color.FromRgb(252, 168, 69)),
+                    new SolidColorBrush(Color.FromRgb(251, 108, 40)),
+                    new SolidColorBrush(Color.FromRgb(253, 170, 130)),
+                    new SolidColorBrush(Color.FromRgb(189, 141, 103)),
+                    new SolidColorBrush(Color.FromRgb(177, 86, 55))
+                },
+                new List<Brush> {
+                    new SolidColorBrush(Color.FromRgb(215, 157, 60)),
+                    new SolidColorBrush(Color.FromRgb(168, 123, 82)),
+                    new SolidColorBrush(Color.FromRgb(214, 182, 133)),
+                    new SolidColorBrush(Color.FromRgb(162, 144, 122)),
+                    new SolidColorBrush(Color.FromRgb(123, 85, 72))
+                },
+                new List<Brush> {
+                    new SolidColorBrush(Color.FromRgb(247, 245, 144)),
+                    new SolidColorBrush(Color.FromRgb(252, 240, 78)),
+                    new SolidColorBrush(Color.FromRgb(239, 254, 185)),
+                    new SolidColorBrush(Color.FromRgb(198, 193, 127)),
+                    new SolidColorBrush(Color.FromRgb(224, 200, 42))
+                },
+                new List<Brush> {
+                    new SolidColorBrush(Color.FromRgb(189, 254, 40)),
+                    new SolidColorBrush(Color.FromRgb(143, 254, 115)),
+                    new SolidColorBrush(Color.FromRgb(217, 231, 170)),
+                    new SolidColorBrush(Color.FromRgb(172, 183, 38)),
+                    new SolidColorBrush(Color.FromRgb(140, 157, 45))
+                },
+                new List<Brush> {
+                    new SolidColorBrush(Color.FromRgb(50, 255, 76)),
+                    new SolidColorBrush(Color.FromRgb(68, 199, 33)),
+                    new SolidColorBrush(Color.FromRgb(193, 214, 135)),
+                    new SolidColorBrush(Color.FromRgb(127, 182, 99)),
+                    new SolidColorBrush(Color.FromRgb(92, 170, 58))
+                },
+                new List<Brush> {
+                    new SolidColorBrush(Color.FromRgb(54, 255, 173)),
+                    new SolidColorBrush(Color.FromRgb(32, 195, 178)),
+                    new SolidColorBrush(Color.FromRgb(170, 206, 160)),
+                    new SolidColorBrush(Color.FromRgb(160, 201, 197)),
+                    new SolidColorBrush(Color.FromRgb(32, 159, 148))
+                },
+                new List<Brush> {
+                    new SolidColorBrush(Color.FromRgb(96, 255, 227)),
+                    new SolidColorBrush(Color.FromRgb(46, 238, 249)),
+                    new SolidColorBrush(Color.FromRgb(218, 253, 233)),
+                    new SolidColorBrush(Color.FromRgb(174, 193, 208)),
+                    new SolidColorBrush(Color.FromRgb(40, 103, 146))
+                },
+                new List<Brush> {
+                    new SolidColorBrush(Color.FromRgb(149, 204, 243)),
+                    new SolidColorBrush(Color.FromRgb(43, 167, 237)),
+                    new SolidColorBrush(Color.FromRgb(215, 244, 248)),
+                    new SolidColorBrush(Color.FromRgb(153, 178, 198)),
+                    new SolidColorBrush(Color.FromRgb(30, 51, 160))
+                },
+                new List<Brush> {
+                    new SolidColorBrush(Color.FromRgb(99, 141, 227)),
+                    new SolidColorBrush(Color.FromRgb(22, 127, 193)),
+                    new SolidColorBrush(Color.FromRgb(201, 207, 233)),
+                    new SolidColorBrush(Color.FromRgb(150, 163, 208)),
+                    new SolidColorBrush(Color.FromRgb(52, 89, 170))
+                },
+                new List<Brush> {
+                    new SolidColorBrush(Color.FromRgb(157, 176, 255)),
+                    new SolidColorBrush(Color.FromRgb(148, 127, 220)),
+                    new SolidColorBrush(Color.FromRgb(216, 203, 233)),
+                    new SolidColorBrush(Color.FromRgb(180, 168, 192)),
+                    new SolidColorBrush(Color.FromRgb(109, 90, 179))
+                },
+                new List<Brush> {
+                    new SolidColorBrush(Color.FromRgb(221, 126, 230)),
+                    new SolidColorBrush(Color.FromRgb(186, 141, 200)),
+                    new SolidColorBrush(Color.FromRgb(185, 169, 231)),
+                    new SolidColorBrush(Color.FromRgb(203, 178, 200)),
+                    new SolidColorBrush(Color.FromRgb(170, 90, 179))
+                },
+                new List<Brush> {
+                    new SolidColorBrush(Color.FromRgb(225, 103, 164)),
+                    new SolidColorBrush(Color.FromRgb(252, 74, 210)),
+                    new SolidColorBrush(Color.FromRgb(238, 233, 237)),
+                    new SolidColorBrush(Color.FromRgb(195, 132, 163)),
+                    new SolidColorBrush(Color.FromRgb(205, 60, 117))
+                },
+                new List<Brush> {
+                    new SolidColorBrush(Color.FromRgb(255, 255, 255)),
+                    new SolidColorBrush(Color.FromRgb(223, 223, 223)),
+                    new SolidColorBrush(Color.FromRgb(187, 187, 187)),
+                    new SolidColorBrush(Color.FromRgb(137, 137, 137)),
+                    new SolidColorBrush(Color.FromRgb(65, 65, 65))
+                }
+            };
+
+        public static Brush GetContentColor(int c, int r) {
+            return _ContentColors[c][r];
+        }
+        public static void SetColorChooserMenuItem(
+            ContextMenu cm,
+            MenuItem cmi,
+            MouseButtonEventHandler selectedEventHandler, 
+            int defX, 
+            int defY) {
+            var cmic = new Canvas();
+            double s = 15;
+            double pad = 2.5;
+            double w = (_ContentColors.Count * (s + pad)) + pad;
+            double h = (_ContentColors[0].Count * (s + pad)) + pad;
+            for (int x = 0; x < _ContentColors.Count; x++) {
+                for (int y = 0; y < _ContentColors[0].Count; y++) {
+                    Border b = new Border();
+                    b.Background = _ContentColors[x][y];
+                    b.BorderThickness = new Thickness(1.5);
+                    b.BorderBrush = Brushes.DarkGray;
+                    b.CornerRadius = new CornerRadius(2);
+                    b.Width = b.Height = s;
+
+                    b.MouseEnter += (s1, e1) => {
+                        b.BorderBrush = Brushes.DimGray;
+                    };
+
+                    b.MouseLeave += (s1, e1) => {
+                        b.BorderBrush = Brushes.DarkGray;
+                    };
+
+                    b.MouseLeftButtonUp += selectedEventHandler;
+
+                    if (x == defX && y == defY) {
+                        b.Focus();
+                    }
+
+                    cmic.Children.Add(b);
+                    //b.RegisterName(b.Name, b);
+
+                    Canvas.SetLeft(b, (x * (s + pad)) + pad);
+                    Canvas.SetTop(b, (y * (s + pad)) + pad - (h / 2));
+                }
+            }
+            cmic.Background = Brushes.Transparent;
+            cmi.Header = cmic;
+            cmi.Height = h;
+        }
+        
+        public static int GetColorColumn(Brush scb) {
+            for (int c = 0; c < _ContentColors.Count; c++) {
+                for (int r = 0; r < _ContentColors[0].Count; r++) {
+                    if(scb == _ContentColors[c][r]) {
+                        return c;
+                    }
+                }
+            }
+            return 0;
+        }
+
+        public static int GetColorRow(Brush scb) {
+            for (int c = 0; c < _ContentColors.Count; c++) {
+                for (int r = 0; r < _ContentColors[0].Count; r++) {
+                    if (scb == _ContentColors[c][r]) {
+                        return r;
+                    }
+                }
+            }
+            return 0;
+        }
+
         private static double sign(Point p1, Point p2, Point p3) {
             return (p1.X - p3.X) * (p2.Y - p3.Y) - (p2.X - p3.X) * (p1.Y - p3.Y);
         }
@@ -849,6 +1022,7 @@ namespace MpWpfApp {
 
             element.BeginAnimation(property, animation);
         } 
+        
         public static Brush ShowColorDialog(Brush currentBrush) {
             System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
             cd.AllowFullOpen = true;
@@ -938,6 +1112,7 @@ namespace MpWpfApp {
         }
 
         public static BitmapSource ResizeBitmapSource(BitmapSource bmpSrc, Size newSize) {
+            
             using (System.Drawing.Bitmap result = new System.Drawing.Bitmap((int)newSize.Width, (int)newSize.Height)) {
                 using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage((System.Drawing.Image)result)) {
                     //The interpolation mode produces high quality images
@@ -1072,10 +1247,13 @@ namespace MpWpfApp {
         }
 
         public static Color GetRandomColor(byte alpha = 255) {
-            if (alpha == 255) {
-                return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
-            }
-            return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
+            //if (alpha == 255) {
+            //    return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
+            //}
+            //return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
+            int x = Rand.Next(0, _ContentColors.Count);
+            int y = Rand.Next(0, _ContentColors[0].Count);
+            return ((SolidColorBrush)GetContentColor(x, y)).Color;
         }
 
         public static Brush GetRandomBrushColor(byte alpha = 255) {

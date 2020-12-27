@@ -47,37 +47,15 @@ namespace MpWpfApp {
             }
         }
 
-        public double LabelX {
-            get {
-                return Width / 2;
-            }
-        }
-
-        public double LabelY {
-            get {
-                return Height / 2;
-            }
-        }
-
         public double X {
             get {
                 return Math.Min(_l, _r);
-                //var x = Math.Max(0,Math.Min(_l, _r));
-                //if(x + Width > _cw) {
-                //    return _cw - Width;
-                //}
-                //return x;
             }
         }
 
         public double Y {
             get {
                 return Math.Min(_t, _b);
-                //var y = Math.Max(0,Math.Min(_t, _b));
-                //if(y + Height > _ch) {
-                //    return _ch - Height;
-                //}
-                //return y;
             }
         }
 
@@ -161,6 +139,19 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        private bool _isNameReadOnly = true;
+        public bool IsNameReadOnly {
+            get {
+                return _isNameReadOnly;
+            }
+            set {
+                if (_isNameReadOnly != value) {
+                    _isNameReadOnly = value;
+                    OnPropertyChanged(nameof(IsNameReadOnly));
+                }
+            }
+        }
         #endregion
 
         #region Public Methods
@@ -172,17 +163,23 @@ namespace MpWpfApp {
         public void ClipTileImageDetectedObjectCanvas_Loaded(object sender, RoutedEventArgs args) {
             var b = (Border)sender;
             var canvas = b.GetVisualAncestor<Canvas>();
+            var canvasGrid = canvas.GetVisualAncestor<Grid>();
             var containerCanvas = canvas.GetVisualAncestor<Canvas>();
-            var vb = (Viewbox)containerCanvas.FindName("ClipTileImageViewbox");
+            //var vb = (Viewbox)containerCanvas.FindName("ClipTileImageViewbox");
+            //var vbGrid = vb.GetVisualAncestor<Grid>();
             var img = (Image)containerCanvas.FindName("ClipTileImage");
             var tb = (TextBox)b.Child;
             var ctvm = (MpClipTileViewModel)img.DataContext;
 
-            ContainerVisual child = VisualTreeHelper.GetChild(vb, 0) as ContainerVisual;
-            ScaleTransform scale = child.Transform as ScaleTransform;
-            _xr = scale.ScaleX;
-            _yr = scale.ScaleY;
-            Console.WriteLine(string.Format(@"XR:{0} YR:{1}", _xr, _yr));
+            //var np = img.TranslatePoint(new Point(), vbGrid);
+            //Canvas.SetLeft(canvas, np.X);
+            //Canvas.SetTop(canvas, np.Y);
+
+            //ContainerVisual child = VisualTreeHelper.GetChild(vb, 0) as ContainerVisual;
+            //ScaleTransform scale = child.Transform as ScaleTransform;
+            //_xr = scale.ScaleX;
+            //_yr = scale.ScaleY;
+            //Console.WriteLine(string.Format(@"XR:{0} YR:{1}", _xr, _yr));
 
             _l = DetectedImageObject.X;
             _t = DetectedImageObject.Y;
@@ -226,7 +223,7 @@ namespace MpWpfApp {
             b.ContextMenu.Items.Add(deleteMenuItem);
 
             tb.PreviewMouseLeftButtonDown += (s, e) => {
-                if(tb.IsReadOnly) {
+                if(tb.IsReadOnly && ctvm.IsEditingTile) {
                     MainWindowViewModel.IsShowingDialog = true;
                     tb.IsReadOnly = false;
                     tb.Focus();
@@ -250,13 +247,13 @@ namespace MpWpfApp {
             };
 
             tb.MouseEnter += (s, e) => {
-                if (tb.IsReadOnly) {
+                if (tb.IsReadOnly && ctvm.IsEditingTile) {
                     tb.Foreground = Brushes.Red;
                 }
             };
 
             tb.MouseLeave += (s, e) => {
-                if (tb.IsReadOnly) {
+                if (tb.IsReadOnly && ctvm.IsEditingTile) {
                     tb.Foreground = Brushes.White;
                 }
             };
@@ -277,6 +274,9 @@ namespace MpWpfApp {
             };
 
             MainWindowViewModel.ApplicationHook.MouseDown += (s, e) => {
+                if(!ctvm.IsEditingTile) {
+                    return;
+                }
                 if (e.Button == System.Windows.Forms.MouseButtons.Left) {
                     _isMouseDown = true;
                     mouseDownPosition = Mouse.GetPosition(canvas);
@@ -293,6 +293,9 @@ namespace MpWpfApp {
             };
 
             MainWindowViewModel.ApplicationHook.MouseUp += (s, e) => {
+                if (!ctvm.IsEditingTile) {
+                    return;
+                }
                 _isMouseDown = false;
                 isFromLeft = false;
                 isFromTop = false;
@@ -315,7 +318,13 @@ namespace MpWpfApp {
                 var br = new Point(X + Width, Y + Height);
                 var bl = new Point(X, Y + Height);
 
-                
+                if(!ctvm.IsEditingTile) {
+                    Application.Current.MainWindow.Cursor = Cursors.Arrow;
+                    return;
+                }
+
+                bool isMouseOverBorder = VisualTreeHelper.HitTest(canvas, p)?.VisualHit == b;
+               
                 if (!_isMouseDown) {
                     isFromLeft = MpHelpers.IsPointInTriangle(p, c, bl, tl);
                     isFromTop = MpHelpers.IsPointInTriangle(p, c, tl, tr);
@@ -327,8 +336,8 @@ namespace MpWpfApp {
                     isFromBottomRight = MpHelpers.DistanceBetweenPoints(p, br) <= maxCornerDistance;
                     isFromBottomLeft = MpHelpers.DistanceBetweenPoints(p, bl) <= maxCornerDistance;
 
-                    bool isMouseOver = VisualTreeHelper.HitTest(canvas, p)?.VisualHit == b;
-                    if (isMouseOver && MpHelpers.DistanceBetweenPoints(p, mouseEnterPosition) <= maxResizeDistance) {
+                    
+                    if (isMouseOverBorder && MpHelpers.DistanceBetweenPoints(p, mouseEnterPosition) <= maxResizeDistance) {
                         if (isFromTopLeft || isFromBottomRight) {
                             Application.Current.MainWindow.Cursor = Cursors.SizeNWSE;
                         } else if (isFromTopRight || isFromBottomLeft) {
@@ -340,7 +349,7 @@ namespace MpWpfApp {
                         } else {
                             Application.Current.MainWindow.Cursor = Cursors.Arrow;
                         }
-                    } else if(isMouseOver) {
+                    } else if(isMouseOverBorder) {
                         Application.Current.MainWindow.Cursor = Cursors.SizeAll;
                     } else {
                         Application.Current.MainWindow.Cursor = Cursors.Arrow;

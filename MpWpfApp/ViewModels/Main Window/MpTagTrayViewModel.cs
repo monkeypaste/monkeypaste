@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MpWpfApp {
@@ -18,7 +19,7 @@ namespace MpWpfApp {
         #region Properties
         public bool IsEditingTagName {
             get {
-                return SelectedTagTile.IsTextBoxFocused || SelectedTagTile.IsEditing;
+                return SelectedTagTile.IsEditing;
             }
         }
         #endregion--
@@ -33,9 +34,13 @@ namespace MpWpfApp {
         }
 
         public void TagTray_Loaded(object sender, RoutedEventArgs e) {
-            var tagTrayGrid = (UIElement)sender;
-            tagTrayGrid.PreviewMouseDown += (s, e10) => {
+            var tagTrayStackPanel = (StackPanel)sender;
+            var tagTray = (ListBox)tagTrayStackPanel.FindName("TagTray");
+            tagTrayStackPanel.PreviewMouseDown += (s, e10) => {
                 MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();
+            };
+            tagTray.Drop += (s, e2) => {
+                return;
             };
             //select history tag by default
             GetHistoryTagTileViewModel().IsSelected = true;
@@ -102,14 +107,14 @@ namespace MpWpfApp {
         public void ClearTagSelection() {
             foreach (var tagTile in this) {
                 tagTile.IsSelected = false;
-                tagTile.IsTextBoxFocused = false;
+                //tagTile.IsTextBoxFocused = false;
             }
         }
 
         public void ResetTagSelection() {
             ClearTagSelection();
             GetHistoryTagTileViewModel().IsSelected = true;
-            GetHistoryTagTileViewModel().IsTextBoxFocused = true;
+           // GetHistoryTagTileViewModel().IsTextBoxFocused = true;
         }
 
         public MpTagTileViewModel GetHistoryTagTileViewModel() {
@@ -148,7 +153,7 @@ namespace MpWpfApp {
         }
         private void CreateTag() {
             //add tag to datastore so TagTile collection will automatically add the tile
-            MpTag newTag = new MpTag("Untitled", MpHelpers.GetRandomColor());
+            MpTag newTag = new MpTag("Untitled", MpHelpers.GetRandomColor(),this.Count);
             this.Add(new MpTagTileViewModel(newTag));
         }
 

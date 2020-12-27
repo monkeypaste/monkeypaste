@@ -342,11 +342,12 @@ namespace MpWpfApp {
                       pk_MpTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_ParentTagId integer
                     , TagName text
+                    , SortIdx integer
                     , fk_MpColorId integer 
                     , CONSTRAINT FK_MpTag_0_0 FOREIGN KEY (fk_ParentTagId) REFERENCES MpTagType (pk_MpTagId)
                     , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId)
                     );
-                    INSERT INTO MpTag(TagName,fk_MpColorId) VALUES ('All',3),('Favorites',2);
+                    INSERT INTO MpTag(TagName,fk_MpColorId,SortIdx) VALUES ('All',3,0),('Favorites',2,1);
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPlatformType (
                       pk_MpPlatformTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

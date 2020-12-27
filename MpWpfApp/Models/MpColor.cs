@@ -53,8 +53,6 @@ namespace MpWpfApp {
         public MpColor(DataRow dr) {
             LoadDataRow(dr);
         }
-
-
         public override void LoadDataRow(DataRow dr) {
             ColorId = Convert.ToInt32(dr["pk_MpColorId"].ToString());
             _r = Convert.ToInt32(dr["R"].ToString());
@@ -62,6 +60,7 @@ namespace MpWpfApp {
             _b = Convert.ToInt32(dr["B"].ToString());
             _a = Convert.ToInt32(dr["A"].ToString());
         }
+
         public override void WriteToDatabase() {
             if (ColorId == 0) {
                 DataTable dt = MpDb.Instance.Execute(

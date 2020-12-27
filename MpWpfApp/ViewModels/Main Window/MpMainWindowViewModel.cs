@@ -162,7 +162,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods        
-
         public MpMainWindowViewModel() : base() {
             IsLoading = true;
             SearchBoxViewModel = new MpSearchBoxViewModel() { PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText };
@@ -201,6 +200,19 @@ namespace MpWpfApp {
             MpSoundPlayerGroupCollectionViewModel.Instance.Init();
 
             //MpWordsApiDictionary.Instance.TestWordsGet();
+        }
+
+        public void ClearEdits() {
+            foreach (var clip in ClipTrayViewModel) {
+                clip.IsEditingTile = false;
+                clip.IsPastingTemplateTile = false;
+                foreach(var diovm in clip.DetectedImageObjectViewModels) {
+
+                }
+            }
+            foreach (var tag in TagTrayViewModel) {
+                tag.IsEditing = false;
+            }
         }
         #endregion
 

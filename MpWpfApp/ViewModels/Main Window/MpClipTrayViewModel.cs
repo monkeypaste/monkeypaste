@@ -270,12 +270,10 @@ namespace MpWpfApp {
                 
                 //using current mp if drag is to the right (else part) adjust point to locate next tile, otherwise adjust to point to previous tile
                 var mpo = e2.GetPosition(clipTray);
-                bool isDragLeft = true;
                 if (mpo.X - StartDragPoint.X > 0) {
                     mpo.X -= MpMeasurements.Instance.ClipTileMargin * 5;
                 } else {
                     mpo.X += MpMeasurements.Instance.ClipTileMargin * 5;
-                    isDragLeft = false;
                 }
 
                 MpClipTileViewModel dropVm = null;
@@ -352,7 +350,7 @@ namespace MpWpfApp {
                 var p = e4.MouseDevice.GetPosition(clipTray);
                 var hitTestResult = VisualTreeHelper.HitTest(clipTray, p);
                 if (hitTestResult.VisualHit.GetVisualAncestor<ListBoxItem>() == null) {
-                    ClearClipEdits();
+                    MainWindowViewModel.ClearEdits();
                     e4.Handled = true;
                 }
             };
@@ -469,13 +467,6 @@ namespace MpWpfApp {
                 }
             }
             return firstType;
-        }
-
-        public void ClearClipEdits() {
-            foreach (var clip in this) {
-                clip.IsEditingTile = false;
-                clip.IsPastingTemplateTile = false;
-            }
         }
 
         public void ClearClipSelection() {
@@ -764,21 +755,21 @@ namespace MpWpfApp {
                 if(sctvm.CopyItemType == ct) {
                     continue;
                 }
-                sctvm.Convert(ct);
+                sctvm.ConvertContent(ct);
             }
         }
 
-        private RelayCommand _changeSelectedClipsColorCommand;
+        private RelayCommand<Brush> _changeSelectedClipsColorCommand;
         public ICommand ChangeSelectedClipsColorCommand {
             get {
                 if (_changeSelectedClipsColorCommand == null) {
-                    _changeSelectedClipsColorCommand = new RelayCommand(ChangeSelectedClipsColor);
+                    _changeSelectedClipsColorCommand = new RelayCommand<Brush>(ChangeSelectedClipsColor);
                 }
                 return _changeSelectedClipsColorCommand;
             }
         }
-        private void ChangeSelectedClipsColor() {
-            var result = MpHelpers.ShowColorDialog(SelectedClipTiles[0].TitleColor);
+        private void ChangeSelectedClipsColor(Brush brush) {
+            var result = brush != null ? brush : MpHelpers.ShowColorDialog(SelectedClipTiles[0].TitleColor);
             if(result != null) {
                 BitmapSource sharedSwirl = null;
                 foreach (var sctvm in SelectedClipTiles) {
