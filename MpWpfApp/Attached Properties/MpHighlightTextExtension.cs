@@ -95,7 +95,7 @@ namespace MpWpfApp {
                                     rtb.EndChange();
                                     break;
                                 case MpCopyItemType.Image:
-                                    foreach (var diovm in ctvm.DetectedImageObjectViewModels) {
+                                    foreach (var diovm in ctvm.DetectedImageObjectCollectionViewModel) {
                                         if (diovm.ObjectTypeName.ContainsByCaseSetting(hlt)) {
                                             ctvm.TileVisibility = Visibility.Visible;
                                             return;

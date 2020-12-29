@@ -313,27 +313,27 @@ namespace MpWpfApp {
 
             clipTray.SelectionChanged += (s, e8) => {
                 MergeClipsCommandVisibility = MergeSelectedClipsCommand.CanExecute(null) ? Visibility.Visible : Visibility.Collapsed;
-                Dispatcher.CurrentDispatcher.BeginInvoke(
-                        DispatcherPriority.Background,
-                        (Action)(() => {
-                            foreach (var ttvm in MainWindowViewModel.TagTrayViewModel) {
-                                if (ttvm == MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel() || ttvm.IsSelected) {
-                                    continue;
-                                }
+                //Dispatcher.CurrentDispatcher.BeginInvoke(
+                //        DispatcherPriority.Background,
+                //        (Action)(() => {
+                //            foreach (var ttvm in MainWindowViewModel.TagTrayViewModel) {
+                //                if (ttvm == MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel() || ttvm.IsSelected) {
+                //                    continue;
+                //                }
                                 
-                                bool isTagLinkedToAllSelectedClips = true;
-                                foreach (var sctvm in SelectedClipTiles) {
-                                    while(sctvm.IsLoading) {
-                                        Thread.Sleep(100);
-                                    }
-                                    if (!ttvm.IsLinkedWithClipTile(sctvm)) {
-                                        isTagLinkedToAllSelectedClips = false;
-                                    }
-                                }
-                                ttvm.IsHovering = isTagLinkedToAllSelectedClips && VisibileClipTiles.Count > 0;
+                //                bool isTagLinkedToAllSelectedClips = true;
+                //                foreach (var sctvm in SelectedClipTiles) {
+                //                    while(sctvm.IsLoading) {
+                //                        Thread.Sleep(100);
+                //                    }
+                //                    if (!ttvm.IsLinkedWithClipTile(sctvm)) {
+                //                        isTagLinkedToAllSelectedClips = false;
+                //                    }
+                //                }
+                //                ttvm.IsHovering = isTagLinkedToAllSelectedClips && VisibileClipTiles.Count > 0;
 
-                            }
-                        }));
+                //            }
+                //        }));
             };
             clipTray.PreviewMouseWheel += (s, e3) => {
                 if(IsEditingClipTile) {
@@ -349,7 +349,7 @@ namespace MpWpfApp {
             clipTray.PreviewMouseLeftButtonUp += (s, e4) => {
                 var p = e4.MouseDevice.GetPosition(clipTray);
                 var hitTestResult = VisualTreeHelper.HitTest(clipTray, p);
-                if (hitTestResult.VisualHit.GetVisualAncestor<ListBoxItem>() == null) {
+                if (hitTestResult == null || hitTestResult.VisualHit.GetVisualAncestor<ListBoxItem>() == null) {
                     MainWindowViewModel.ClearEdits();
                     e4.Handled = true;
                 }
@@ -367,7 +367,7 @@ namespace MpWpfApp {
                 var nctvm = new MpClipTileViewModel();
                 this.Add(nctvm);
                 Dispatcher.CurrentDispatcher.BeginInvoke(
-                        DispatcherPriority.Background,
+                        DispatcherPriority.Normal,
                         (Action)(() => {
                             var newCopyItem = MpCopyItem.CreateFromClipboard(MainWindowViewModel.ClipTrayViewModel.ClipboardManager.LastWindowWatcher.LastHandle);
                             if (MainWindowViewModel.AppModeViewModel.IsInAppendMode) {

@@ -951,15 +951,15 @@ public static void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRang
                     }
 
                     cmic.Children.Add(b);
-                    //b.RegisterName(b.Name, b);
 
                     Canvas.SetLeft(b, (x * (s + pad)) + pad);
-                    Canvas.SetTop(b, (y * (s + pad)) + pad - (h / 2));
+                    Canvas.SetTop(b, (y * (s + pad)) + pad);
                 }
             }
             cmic.Background = Brushes.Transparent;
             cmi.Header = cmic;
             cmi.Height = h;
+            cmi.Style = (Style)Application.Current.MainWindow.FindResource("MenuItemStyle");
         }
         
         public static int GetColorColumn(Brush scb) {
@@ -1006,7 +1006,7 @@ public static void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRang
             return Math.Sqrt(Math.Pow(b.X - a.X, 2) + Math.Pow(b.Y - a.Y, 2));
         }
 
-        public static void AnimateDoubleProperty(double from, double to, double dt, UIElement element, DependencyProperty property, EventHandler onCompleted) {
+        public static void AnimateDoubleProperty(double from, double to, double dt, object obj, DependencyProperty property, EventHandler onCompleted) {
             DoubleAnimation animation = new DoubleAnimation();
             animation.From = from;
             animation.To = to;
@@ -1019,8 +1019,13 @@ public static void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRang
             if(onCompleted != null) {
                 animation.Completed += onCompleted;
             }
-
-            element.BeginAnimation(property, animation);
+            if(obj.GetType() == typeof(List<FrameworkElement>)) {
+                foreach(var fe in (List<FrameworkElement>)obj) {
+                    fe.BeginAnimation(property, animation);
+                }
+            } else {
+                ((FrameworkElement)obj).BeginAnimation(property, animation);
+            }
         } 
         
         public static Brush ShowColorDialog(Brush currentBrush) {

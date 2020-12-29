@@ -52,7 +52,7 @@ namespace MpWpfApp {
             get {
                 var outStr = string.Empty;
                 foreach (var obj in ImageItemObjectList) {
-                    outStr += obj.TypeCsv + ",";
+                    outStr += obj.ObjectTypeName + ",";
                 }
                 return string.IsNullOrEmpty(outStr) ? outStr : outStr.Remove(0, 1);
             }
@@ -262,10 +262,10 @@ namespace MpWpfApp {
                     SetData((BitmapSource)data);
                     ImageItemObjectList = MpHelpers.DetectObjects(MpHelpers.ConvertBitmapSourceToByteArray(ItemBitmapSource));
 
-                    Console.WriteLine("Image metadata: ");
-                    foreach (var iio in ImageItemObjectList) {
-                        Console.WriteLine(iio);
-                    }
+                    //Console.WriteLine("Image metadata: ");
+                    //foreach (var iio in ImageItemObjectList) {
+                    //    Console.WriteLine(iio);
+                    //}
                     break;
                 case MpCopyItemType.RichText:
                     SetData((string)data);

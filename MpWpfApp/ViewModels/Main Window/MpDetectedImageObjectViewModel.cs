@@ -16,6 +16,7 @@ namespace MpWpfApp {
         private double _xr = 1, _yr = 1;
         private bool _isMouseDown = false;
         private bool _isDragging = false;
+        private bool _isDrawing = false;
         #endregion
 
         #region Properties
@@ -43,7 +44,7 @@ namespace MpWpfApp {
         
         public double FontSize {
             get {
-                return Math.Max(12, Height / 5);
+                return Math.Min(Width,Height) / 5;
             }
         }
 
@@ -91,11 +92,11 @@ namespace MpWpfApp {
 
         public string ObjectTypeName {
             get {
-                return DetectedImageObject.TypeCsv;
+                return DetectedImageObject.ObjectTypeName;
             }
             set {
                 if (ObjectTypeName != value) {
-                    DetectedImageObject.TypeCsv = value;
+                    DetectedImageObject.ObjectTypeName = value;
                     OnPropertyChanged(nameof(ObjectTypeName));
 
                     OnPropertyChanged(nameof(DetectedImageObject));
@@ -155,31 +156,25 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpDetectedImageObjectViewModel(
-            MpDetectedImageObject dio) {
+        public MpDetectedImageObjectViewModel(MpDetectedImageObject dio, bool isDrawing = false) {
+            _isDrawing = isDrawing;
             DetectedImageObject = dio;
         }
-
+        
         public void ClipTileImageDetectedObjectCanvas_Loaded(object sender, RoutedEventArgs args) {
             var b = (Border)sender;
-            var canvas = b.GetVisualAncestor<Canvas>();
-            var canvasGrid = canvas.GetVisualAncestor<Grid>();
-            var containerCanvas = canvas.GetVisualAncestor<Canvas>();
-            //var vb = (Viewbox)containerCanvas.FindName("ClipTileImageViewbox");
-            //var vbGrid = vb.GetVisualAncestor<Grid>();
+            var itemsControlCanvas = b.GetVisualAncestor<Canvas>();
+            var itemsControl = b.GetVisualAncestor<ItemsControl>();
+            if(itemsControlCanvas == null) {
+                // this is a strange bug where this dio is loading for richtext clips for some reason
+                return;
+            }
+            var containerCanvas = itemsControlCanvas.GetVisualAncestor<Canvas>();
+            var vb = itemsControlCanvas.GetVisualAncestor<Viewbox>();
+            var vbGrid = vb.GetVisualAncestor<Grid>();
             var img = (Image)containerCanvas.FindName("ClipTileImage");
             var tb = (TextBox)b.Child;
-            var ctvm = (MpClipTileViewModel)img.DataContext;
-
-            //var np = img.TranslatePoint(new Point(), vbGrid);
-            //Canvas.SetLeft(canvas, np.X);
-            //Canvas.SetTop(canvas, np.Y);
-
-            //ContainerVisual child = VisualTreeHelper.GetChild(vb, 0) as ContainerVisual;
-            //ScaleTransform scale = child.Transform as ScaleTransform;
-            //_xr = scale.ScaleX;
-            //_yr = scale.ScaleY;
-            //Console.WriteLine(string.Format(@"XR:{0} YR:{1}", _xr, _yr));
+            var ctvm = (MpClipTileViewModel)vbGrid.DataContext;
 
             _l = DetectedImageObject.X;
             _t = DetectedImageObject.Y;
@@ -191,126 +186,37 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(Y));
             OnPropertyChanged(nameof(Width));
             OnPropertyChanged(nameof(Height));
+            OnPropertyChanged(nameof(FontSize));
+
+            Canvas.SetZIndex(b, 1);
 
             Point mouseEnterPosition = new Point(), mouseDownPosition = new Point(), lastMousePosition = new Point();            
 
+            
             double maxCornerDistance = 10;
             double maxResizeDistance = 15;
 
+            bool isMouseOverBorder = false;
             bool isFromLeft=false,isFromTop=false,isFromRight=false,isFromBottom=false;
             bool isFromTopLeft=false,isFromTopRight=false,isFromBottomRight=false,isFromBottomLeft=false;
 
-            var renameMenuItem = new MenuItem();
-            renameMenuItem.Header = "Rename";
-            renameMenuItem.PreviewMouseDown += (s4, e4) => {
-                e4.Handled = true;
-                MainWindowViewModel.IsShowingDialog = true;
-                tb.IsReadOnly = false;
-                tb.Focus();
-                tb.SelectAll();
-                tb.Cursor = Cursors.IBeam;
-                tb.Background = Brushes.White;
-                tb.Foreground = Brushes.Black;
-            };
-            var deleteMenuItem = new MenuItem();
-            deleteMenuItem.Header = "Delete";
-            deleteMenuItem.Click += (s4, e4) => {
-                ctvm.DetectedImageObjectViewModels.Remove(this);
-                canvas.Children.Remove(b);                
-            };
-            b.ContextMenu = new ContextMenu();
-            b.ContextMenu.Items.Add(renameMenuItem);
-            b.ContextMenu.Items.Add(deleteMenuItem);
+            if (_isDrawing) {
+                mouseEnterPosition = lastMousePosition = mouseDownPosition = Mouse.GetPosition(containerCanvas);
+                _isMouseDown = true;
+                _isDragging = true;
+                isMouseOverBorder = true;
+                isFromTopLeft = true;
+                Mouse.Capture(vbGrid);
+                Application.Current.MainWindow.Cursor = Cursors.SizeNWSE;
+            }
 
-            tb.PreviewMouseLeftButtonDown += (s, e) => {
-                if(tb.IsReadOnly && ctvm.IsEditingTile) {
-                    MainWindowViewModel.IsShowingDialog = true;
-                    tb.IsReadOnly = false;
-                    tb.Focus();
-                    tb.SelectAll();
-                    tb.Cursor = Cursors.IBeam;
-                    tb.Background = Brushes.White;
-                    tb.Foreground = Brushes.Black;
-                    e.Handled = true;
-                }
-            };
-
-            tb.PreviewKeyDown += (s, e) => {
-                if(e.Key == Key.Enter || e.Key == Key.Escape) {
-                    MainWindowViewModel.IsShowingDialog = false;
-                    tb.IsReadOnly = true;
-                    tb.Cursor = Cursors.Arrow;
-                    tb.Background = Brushes.Black;
-                    tb.Foreground = Brushes.White;
-                    e.Handled = true;
-                }
-            };
-
-            tb.MouseEnter += (s, e) => {
-                if (tb.IsReadOnly && ctvm.IsEditingTile) {
-                    tb.Foreground = Brushes.Red;
-                }
-            };
-
-            tb.MouseLeave += (s, e) => {
-                if (tb.IsReadOnly && ctvm.IsEditingTile) {
-                    tb.Foreground = Brushes.White;
-                }
-            };
-
-            b.MouseEnter += (s, e2) => {
-                if (_isMouseDown) {
+            vbGrid.MouseMove += (s, e) => {
+                if (!ctvm.IsSelected) {
+                    Application.Current.MainWindow.Cursor = Cursors.Arrow;
                     return;
                 }
-                IsHovering = true;
-                mouseEnterPosition = e2.GetPosition(canvas);
-            };
 
-            b.MouseLeave += (s, e2) => {
-                if (_isMouseDown) {
-                    return;
-                }
-                IsHovering = false;
-            };
-
-            MainWindowViewModel.ApplicationHook.MouseDown += (s, e) => {
-                if(!ctvm.IsEditingTile) {
-                    return;
-                }
-                if (e.Button == System.Windows.Forms.MouseButtons.Left) {
-                    _isMouseDown = true;
-                    mouseDownPosition = Mouse.GetPosition(canvas);
-                    var hit = VisualTreeHelper.HitTest(canvas, mouseDownPosition)?.VisualHit;
-                    _isDragging = hit == b;
-                    if(hit != tb) {
-                        MainWindowViewModel.IsShowingDialog = false;
-                        tb.IsReadOnly = true;
-                        tb.Cursor = Cursors.Arrow;
-                        tb.Background = Brushes.Black;
-                        tb.Foreground = Brushes.White;
-                    }
-                }
-            };
-
-            MainWindowViewModel.ApplicationHook.MouseUp += (s, e) => {
-                if (!ctvm.IsEditingTile) {
-                    return;
-                }
-                _isMouseDown = false;
-                isFromLeft = false;
-                isFromTop = false;
-                isFromRight = false;
-                isFromBottom = false;
-                isFromTopLeft = false; 
-                isFromTopRight = false; 
-                isFromBottomRight = false; 
-                isFromBottomLeft = false;
-                Application.Current.MainWindow.Cursor = Cursors.Arrow;
-                //DetectedImageObject.WriteToDatabase();
-            };
-
-            MainWindowViewModel.ApplicationHook.MouseMove += (s, e) => {                
-                var p = Mouse.GetPosition(canvas);
+                var p = Mouse.GetPosition(itemsControlCanvas);
 
                 var c = new Point(X + (Width / 2), Y + (Height / 2));
                 var tl = new Point(X, Y);
@@ -318,13 +224,8 @@ namespace MpWpfApp {
                 var br = new Point(X + Width, Y + Height);
                 var bl = new Point(X, Y + Height);
 
-                if(!ctvm.IsEditingTile) {
-                    Application.Current.MainWindow.Cursor = Cursors.Arrow;
-                    return;
-                }
+                isMouseOverBorder = VisualTreeHelper.HitTest(itemsControlCanvas, p)?.VisualHit == b;
 
-                bool isMouseOverBorder = VisualTreeHelper.HitTest(canvas, p)?.VisualHit == b;
-               
                 if (!_isMouseDown) {
                     isFromLeft = MpHelpers.IsPointInTriangle(p, c, bl, tl);
                     isFromTop = MpHelpers.IsPointInTriangle(p, c, tl, tr);
@@ -336,7 +237,6 @@ namespace MpWpfApp {
                     isFromBottomRight = MpHelpers.DistanceBetweenPoints(p, br) <= maxCornerDistance;
                     isFromBottomLeft = MpHelpers.DistanceBetweenPoints(p, bl) <= maxCornerDistance;
 
-                    
                     if (isMouseOverBorder && MpHelpers.DistanceBetweenPoints(p, mouseEnterPosition) <= maxResizeDistance) {
                         if (isFromTopLeft || isFromBottomRight) {
                             Application.Current.MainWindow.Cursor = Cursors.SizeNWSE;
@@ -349,17 +249,17 @@ namespace MpWpfApp {
                         } else {
                             Application.Current.MainWindow.Cursor = Cursors.Arrow;
                         }
-                    } else if(isMouseOverBorder) {
+                    } else if (isMouseOverBorder) {
                         Application.Current.MainWindow.Cursor = Cursors.SizeAll;
                     } else {
-                        Application.Current.MainWindow.Cursor = Cursors.Arrow;
+                        //Application.Current.MainWindow.Cursor = Cursors.Arrow;
                     }
-                } else if(!_isDragging) { 
-                    Application.Current.MainWindow.Cursor = Cursors.Arrow;
+                } else if (!_isDragging) {
+                    //Application.Current.MainWindow.Cursor = Cursors.Arrow;
                 } else {
                     switch (Application.Current.MainWindow.Cursor.ToString()) {
                         case "SizeNWSE":
-                            if(isFromTopLeft) {
+                            if (isFromTopLeft) {
                                 _l = p.X;
                                 _t = p.Y;
                             } else {
@@ -392,20 +292,31 @@ namespace MpWpfApp {
                             break;
                         case "SizeAll":
                             var diff = new Point(p.X - lastMousePosition.X, p.Y - lastMousePosition.Y);
-                            double k = 1;
-                            _l += diff.X * k;
-                            _r += diff.X * k;
-                            _t += diff.Y * k;
-                            _b += diff.Y * k;
+                            _l += diff.X;
+                            _r += diff.X;
+                            _t += diff.Y;
+                            _b += diff.Y;
                             break;
                     }
-                    if(Application.Current.MainWindow.Cursor != Cursors.SizeAll) {
-                        _t = Math.Max(_t, 0);
-                        _l = Math.Max(_l, 0);
-                        _b = Math.Min(_b, canvas.Height);
-                        _r = Math.Min(_r, canvas.Width);
+                    if(_t < 0) {
+                        _b -= _t;
+                        _t = 0;
                     }
+                    if(_b > itemsControlCanvas.Height) {
+                        _t -= _b - itemsControlCanvas.Height; 
+                        _b = itemsControlCanvas.Height;
+                    }
+                    if(_l < 0) {
+                        _r -= _l;
+                        _l = 0;
+                    }
+                    if(_r > itemsControlCanvas.Width) {
+                        _l -= _r - itemsControlCanvas.Width;
+                        _r = itemsControlCanvas.Width;
+                    }
+
                     IsHovering = true;
+
                     OnPropertyChanged(nameof(X));
                     OnPropertyChanged(nameof(Y));
                     OnPropertyChanged(nameof(Width));
@@ -414,8 +325,150 @@ namespace MpWpfApp {
 
                     OnPropertyChanged(nameof(BorderBrush));
                 }
+
                 lastMousePosition = p;
             };
+            
+            vbGrid.MouseLeftButtonDown += (s, e) => {
+                if(!ctvm.IsSelected || !IsHovering) {
+                    return;
+                }
+                _isMouseDown = true;
+                mouseDownPosition = Mouse.GetPosition(itemsControlCanvas);
+                var hit = VisualTreeHelper.HitTest(itemsControlCanvas, mouseDownPosition)?.VisualHit;
+                _isDragging = hit == b;
+                Mouse.Capture(vbGrid);
+                if (hit != tb) {
+                    MainWindowViewModel.IsShowingDialog = false;
+                    tb.IsReadOnly = true;
+                    tb.Cursor = Cursors.Arrow;
+                    tb.Background = Brushes.Black;
+                    tb.Foreground = Brushes.White;
+                }
+            };
+
+            vbGrid.MouseLeftButtonUp += (s, e) => {
+                if (!ctvm.IsSelected) {
+                    return;
+                }
+                _isMouseDown = false;
+                isFromLeft = false;
+                isFromTop = false;
+                isFromRight = false;
+                isFromBottom = false;
+                isFromTopLeft = false; 
+                isFromTopRight = false; 
+                isFromBottomRight = false; 
+                isFromBottomLeft = false;
+
+                Mouse.Capture(null);
+
+                Application.Current.MainWindow.Cursor = Cursors.Arrow;
+
+                WriteModelToDatabase();
+            };
+
+            var renameMenuItem = new MenuItem();
+            renameMenuItem.Header = "Rename";
+            renameMenuItem.PreviewMouseDown += (s4, e4) => {
+                e4.Handled = true;
+                MainWindowViewModel.IsShowingDialog = true;
+                tb.IsReadOnly = false;
+                tb.Focus();
+                tb.SelectAll();
+                tb.Cursor = Cursors.IBeam;
+                tb.Background = Brushes.White;
+                tb.Foreground = Brushes.Black;
+            };
+            var deleteMenuItem = new MenuItem();
+            deleteMenuItem.Header = "Delete";
+            deleteMenuItem.Click += (s4, e4) => {
+                ctvm.DetectedImageObjectCollectionViewModel.Remove(this);
+                DetectedImageObject.DeleteFromDatabase();
+            };
+            b.ContextMenu = new ContextMenu();
+            b.ContextMenu.Items.Add(renameMenuItem);
+            b.ContextMenu.Items.Add(deleteMenuItem);
+
+            PropertyChanged += (s, e) => {
+                switch (e.PropertyName) {
+                    case nameof(IsNameReadOnly):
+                        if(IsNameReadOnly) {
+                            MainWindowViewModel.IsShowingDialog = false;
+                            tb.IsReadOnly = true;
+                            tb.Cursor = Cursors.Arrow;
+                            tb.Background = Brushes.Black;
+                            tb.Foreground = Brushes.White;
+                            WriteModelToDatabase();
+                        } else {
+                            MainWindowViewModel.IsShowingDialog = true;
+                            tb.IsReadOnly = false;
+                            tb.Focus();
+                            tb.SelectAll();
+                            tb.Cursor = Cursors.IBeam;
+                            tb.Background = Brushes.White;
+                            tb.Foreground = Brushes.Black;                            
+                        }
+                        break;
+                }
+            };
+
+            tb.PreviewMouseLeftButtonDown += (s, e) => {
+                if (IsNameReadOnly && ctvm.IsSelected) {
+                    IsNameReadOnly = false;
+                    e.Handled = true;
+                }
+            };
+
+            tb.PreviewKeyDown += (s, e) => {
+                if (e.Key == Key.Enter || e.Key == Key.Escape) {
+                    IsNameReadOnly = true;
+                    e.Handled = true;
+                }
+            };
+
+            tb.LostFocus += (s, e) => {
+                IsNameReadOnly = true;
+            };
+
+            tb.MouseEnter += (s, e) => {
+                if (tb.IsReadOnly && ctvm.IsSelected) {
+                    tb.Foreground = Brushes.Red;
+                }
+            };
+
+            tb.MouseLeave += (s, e) => {
+                if (tb.IsReadOnly && ctvm.IsSelected) {
+                    tb.Foreground = Brushes.White;
+                }
+            };
+
+            b.MouseEnter += (s, e2) => {
+                if (_isMouseDown) {
+                    return;
+                }
+                IsHovering = true;
+                mouseEnterPosition = e2.GetPosition(itemsControlCanvas);
+            };
+
+            b.MouseLeave += (s, e2) => {
+                if (_isMouseDown) {
+                    return;
+                }
+                IsHovering = false;
+            };
+        }
+        #endregion
+
+        #region Private Methods
+        private void WriteModelToDatabase() {
+            DetectedImageObject.X = X;
+            DetectedImageObject.Y = Y;
+            DetectedImageObject.Width = Width;
+            DetectedImageObject.Height = Height;
+            DetectedImageObject.ObjectTypeName = ObjectTypeName;
+
+            DetectedImageObject.WriteToDatabase();
         }
         #endregion
 

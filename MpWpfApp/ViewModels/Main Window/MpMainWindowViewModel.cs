@@ -206,8 +206,8 @@ namespace MpWpfApp {
             foreach (var clip in ClipTrayViewModel) {
                 clip.IsEditingTile = false;
                 clip.IsPastingTemplateTile = false;
-                foreach(var diovm in clip.DetectedImageObjectViewModels) {
-
+                foreach(var diovm in clip.DetectedImageObjectCollectionViewModel) {
+                    diovm.IsNameReadOnly = true;
                 }
             }
             foreach (var tag in TagTrayViewModel) {

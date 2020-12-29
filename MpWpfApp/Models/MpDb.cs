@@ -495,7 +495,7 @@ namespace MpWpfApp {
                     , Y real NOT NULL
                     , Width real NOT NULL
                     , Height real NOT NULL                    
-                    , TypeCsv text
+                    , ObjectTypeName text
                     , CONSTRAINT FK_MpDetectedImageObject_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );
                     ---------------------------------------------------------------------------------------------------------------------

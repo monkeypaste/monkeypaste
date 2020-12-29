@@ -24,44 +24,7 @@
     using NativeCode;
     using Windows.ApplicationModel.DataTransfer;
     using Windows.Storage;
-
-    public class AnimatedVisibilityFadeBehavior : Behavior<MpClipBorder> {
-        public Duration AnimationDuration { get; set; }
-        public Visibility InitialState { get; set; }
-
-        DoubleAnimation m_animationOut;
-        DoubleAnimation m_animationIn;
-
-        protected override void OnAttached() {
-            base.OnAttached();
-
-            m_animationIn = new DoubleAnimation(1, AnimationDuration, FillBehavior.HoldEnd);
-            m_animationOut = new DoubleAnimation(0, AnimationDuration, FillBehavior.HoldEnd);
-            m_animationOut.Completed += (sender, args) => {
-                AssociatedObject.SetCurrentValue(Border.VisibilityProperty, Visibility.Collapsed);
-            };
-
-            AssociatedObject.SetCurrentValue(Border.VisibilityProperty,
-                                             InitialState == Visibility.Collapsed
-                                                ? Visibility.Collapsed
-                                                : Visibility.Visible);
-
-            Binding.AddTargetUpdatedHandler(AssociatedObject, Updated);
-        }
-
-        private void Updated(object sender, DataTransferEventArgs e) {
-            var value = (Visibility)AssociatedObject.GetValue(Border.VisibilityProperty);
-            switch (value) {
-                case Visibility.Collapsed:
-                    AssociatedObject.SetCurrentValue(Border.VisibilityProperty, Visibility.Visible);
-                    AssociatedObject.BeginAnimation(Border.OpacityProperty, m_animationOut);
-                    break;
-                case Visibility.Visible:
-                    AssociatedObject.BeginAnimation(Border.OpacityProperty, m_animationIn);
-                    break;
-            }
-        }
-    }
+    
     public class MpClipTileViewModel : MpViewModelBase {
         #region Private Variables
 
@@ -118,15 +81,15 @@
             }
         }
 
-        private ObservableCollection<MpDetectedImageObjectViewModel> _detectedImageObjectViewModels = new ObservableCollection<MpDetectedImageObjectViewModel>();
-        public ObservableCollection<MpDetectedImageObjectViewModel> DetectedImageObjectViewModels {
+        private MpDetectedImageObjectCollectionViewModel _detectedImageObjectCollectionViewModel = null;
+        public MpDetectedImageObjectCollectionViewModel DetectedImageObjectCollectionViewModel {
             get {
-                return _detectedImageObjectViewModels;
+                return _detectedImageObjectCollectionViewModel;
             }
             set {
-                if (_detectedImageObjectViewModels != value) {
-                    _detectedImageObjectViewModels = value;
-                    OnPropertyChanged(nameof(DetectedImageObjectViewModels));
+                if (_detectedImageObjectCollectionViewModel != value) {
+                    _detectedImageObjectCollectionViewModel = value;
+                    OnPropertyChanged(nameof(DetectedImageObjectCollectionViewModel));
                 }
             }
         }
@@ -478,7 +441,7 @@
         public ObservableCollection<TextRange> LastTitleHighlightRangeList { get; set; } = new ObservableCollection<TextRange>();
         #endregion
 
-        #region Brush Properties
+        #region Brush Properties        
         public Brush DetailTextColor {
             get {
                 if (IsSelected) {
@@ -603,7 +566,7 @@
                 return _isSelected;
             }
             set {
-                //if (_isSelected != value) 
+                if (_isSelected != value) 
                 {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
@@ -1012,20 +975,6 @@
             }
         }
 
-        private BitmapSource _viewBmp = null;
-        public BitmapSource ViewBmp {
-            get {
-                return _viewBmp;
-            }
-            set {
-                if (_viewBmp != value) {
-                    _viewBmp = value;
-                    OnPropertyChanged(nameof(ViewBmp));
-                    OnPropertyChanged(nameof(DetectedImageObjectViewModels));
-                }
-            }
-        }
-
         public BitmapSource CopyItemBmp {
             get {
                 if (CopyItem == null) {
@@ -1176,7 +1125,7 @@
                     OnPropertyChanged(nameof(CopyItemCreatedDateTime));
                     OnPropertyChanged(nameof(DetailText));
                     OnPropertyChanged(nameof(FileListViewModels));
-                    OnPropertyChanged(nameof(DetectedImageObjectViewModels));
+                    OnPropertyChanged(nameof(DetectedImageObjectCollectionViewModel));
                     OnPropertyChanged(nameof(LoadingSpinnerVisibility));
                     OnPropertyChanged(nameof(ContentVisibility));
                     OnPropertyChanged(nameof(IsLoading));
@@ -1269,17 +1218,26 @@
                     return;
                 }
             };
-            clipTileBorder.KeyDown += (s, e6) => {
+            clipTileBorder.PreviewKeyDown += (s, e6) => {
                 if (CopyItemType != MpCopyItemType.RichText) {
                     return;
                 }
                 var rtb = (RichTextBox)((FrameworkElement)s).FindName("ClipTileRichTextBox");
                 if (e6.Key == Key.Down) {
                     rtb.FontSize -= 1;
+                    e.Handled = true;
                 } else if (e6.Key == Key.Up) {
                     rtb.FontSize += 1;
+                    e.Handled = true;
                 }
             };
+            //clipTileBorder.PreviewMouseRightButtonUp += (s, e4) => {
+            //    var p = e4.MouseDevice.GetPosition(clipTileBorder);
+            //    var hitTestResult = VisualTreeHelper.HitTest(clipTileBorder, p);
+            //    if (hitTestResult != null) {
+            //        MessageBox.Show(hitTestResult.VisualHit.ToString());
+            //    }
+            //};
         }
 
         public void ClipTileTitle_Loaded(object sender, RoutedEventArgs e) {
@@ -1823,137 +1781,15 @@
             if (ImgVisibility == Visibility.Collapsed) {
                 return;
             }
-            var ic = (Canvas)sender;
-            var cb = ic.GetVisualAncestor<MpClipBorder>();
-            var img = (Image)ic.FindName("ClipTileImage");
-            var doc = (Canvas)ic.FindName("ClipTileImageDetectedObjectsCanvas");
-            var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
-            var titleSwirl = (Image)cb.FindName("TitleSwirl");
+            var ic = (FrameworkElement)sender;
+            var ctcc = ic.GetVisualAncestor<Canvas>();
+            var vb = (Viewbox)ic.FindName("ClipTileImageItemsControlViewBox");
 
-            img.ContextMenu = (ContextMenu)((FrameworkElement)sender).GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
-            //aspect ratio
-            double contentWidth = 0;
-            double contentHeight = 0;
-            if (CopyItemBmp.Width >= CopyItemBmp.Height) {
-                double ar = CopyItemBmp.Height / CopyItemBmp.Width;
-                contentWidth = TileBorderWidth;
-                contentHeight = contentWidth * ar;
-            } else {
-                double ar = CopyItemBmp.Width / CopyItemBmp.Height;
-                contentHeight = TileContentHeight;
-                contentWidth = contentHeight * ar;
-            }
-            ViewBmp = new TransformedBitmap(CopyItemBmp,
-                            new ScaleTransform(
-                                contentWidth / CopyItemBmp.PixelWidth,
-                                contentHeight / CopyItemBmp.PixelHeight));
-            //ViewBmp = MpHelpers.ResizeBitmapSource(CopyItemBmp, new Size((int)contentWidth*MpScreenInformation.DpiX, (int)contentHeight*MpScreenInformation.DpiY));
-            double x = (TileBorderWidth / 2) - (contentWidth / 2);
-            double y = (TileContentHeight / 2) - (contentHeight / 2);
-            Canvas.SetLeft(doc, x);
-            Canvas.SetTop(doc, y);
-            doc.Width = contentWidth;
-            doc.Height = contentHeight;
+            vb.ContextMenu = ctcc.ContextMenu = ic.ContextMenu = (ContextMenu)((FrameworkElement)sender).GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
 
-            //Canvas.SetLeft(img, x);
-            //Canvas.SetTop(img, y);
-            //img.MouseEnter += (s, e2) => {
-            //    if(IsSelected) {
-            //        Application.Current.MainWindow.Cursor = Cursors.Cross;
-            //    }
-            //};
-            //img.MouseLeave += (s, e2) => {
-            //    Application.Current.MainWindow.Cursor = Cursors.Arrow;
-            //};
-            //List<MpClipTileViewModel> hiddenClipTiles = new List<MpClipTileViewModel>();
-            PropertyChanged += (s, e3) => {
-                switch (e3.PropertyName) {
-                    case nameof(IsEditingTile):
-                        double fromWidthTile = cb.ActualWidth;
-                        double toWidthTile = 0;
-
-                        if (IsEditingTile) {
-                            toWidthTile = CopyItemBmp.Width;
-                        } else {
-                            toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
-                        }
-                        double fromLeftIcon = Canvas.GetLeft(titleIconImageButton);
-                        double toLeftIcon = toWidthTile - TileTitleHeight - 10;
-                        double fromLeftCanvas = Canvas.GetLeft(doc);
-                        double toLeftCanvas = toWidthTile - CopyItemBmp.Width;
-
-                        DoubleAnimation twa = new DoubleAnimation();
-                        twa.From = fromWidthTile;
-                        twa.To = toWidthTile;
-                        twa.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
-                        CubicEase easing = new CubicEase();
-                        easing.EasingMode = EasingMode.EaseIn;
-                        twa.EasingFunction = easing;
-                        twa.Completed += (s1, e2) => {
-                            IsEditToolbarAnimating = false;
-                            ViewBmp = CopyItemBmp;
-                            //Canvas.SetLeft(doc, Canvas.GetLeft(img));
-                            //Canvas.SetTop(doc, Canvas.GetTop(img));
-                        };
-                        cb.BeginAnimation(MpClipBorder.WidthProperty, twa);
-                        //doc.BeginAnimation(MpClipBorder.WidthProperty, twa);
-                        img.BeginAnimation(MpClipBorder.WidthProperty, twa);
-                        titleSwirl.BeginAnimation(MpClipBorder.WidthProperty, twa);
-                        ic.BeginAnimation(MpClipBorder.WidthProperty, twa);
-
-                        DoubleAnimation la = new DoubleAnimation();
-                        la.From = fromLeftIcon;
-                        la.To = toLeftIcon;
-                        la.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
-                        la.EasingFunction = easing;
-                        titleIconImageButton.BeginAnimation(Canvas.LeftProperty, la);
-
-                        DoubleAnimation ca = new DoubleAnimation();
-                        ca.From = 0;
-                        ca.To = toWidthTile - fromWidthTile;
-                        ca.Duration = new Duration(TimeSpan.FromMilliseconds(Properties.Settings.Default.ShowMainWindowAnimationMilliseconds));
-                        ca.EasingFunction = easing;
-                        //doc.BeginAnimation(Canvas.LeftProperty, ca);
-                        break;
-                }
-            };
-            //DetectedImageObjectViewModels.Add(
-            //    new MpDetectedImageObjectViewModel(
-            //        new MpDetectedImageObject(0, CopyItemId, 0, 0, 0, 100, 100, "test")));
-
-            foreach (var dio in MpHelpers.DetectObjects(MpHelpers.ConvertBitmapSourceToByteArray(ViewBmp))) {
-                DetectedImageObjectViewModels.Add(new MpDetectedImageObjectViewModel(dio));
-            }
-
-            foreach (var dio in DetectedImageObjectViewModels) {
-                Border b = new Border();
-                b.BorderThickness = new Thickness(3);
-                b.Background = Brushes.Transparent;
-                b.Loaded += dio.ClipTileImageDetectedObjectCanvas_Loaded;
-
-                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.BorderBrush)), b, Border.BorderBrushProperty);
-                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.Width)), b, Border.WidthProperty);
-                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.Height)), b, Border.HeightProperty);
-                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.X)), b, Canvas.LeftProperty);
-                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.Y)), b, Canvas.TopProperty);
-
-                TextBox tb = new TextBox();
-                tb.Background = Brushes.Black;
-                tb.Foreground = Brushes.White;
-                tb.HorizontalContentAlignment = HorizontalAlignment.Center;
-                tb.VerticalContentAlignment = VerticalAlignment.Center;
-                tb.HorizontalAlignment = HorizontalAlignment.Center;
-                tb.VerticalAlignment = VerticalAlignment.Center;
-                tb.Cursor = Cursors.Arrow;
-
-                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.ObjectTypeName)), tb, TextBox.TextProperty, BindingMode.TwoWay);
-                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.FontSize)), b, TextBox.FontSizeProperty);
-                MpHelpers.CreateBinding(dio, new PropertyPath(nameof(dio.IsNameReadOnly)), b, TextBox.IsReadOnlyProperty);
-
-                b.Child = tb;
-
-                doc.Children.Add(b);
-            }
+            //CopyItem.ImageItemObjectList.Clear();
+            //CopyItem.ImageItemObjectList.Add(new MpDetectedImageObject(0, CopyItemId, 0, 0, 0, 100, 100, "test"));
+            DetectedImageObjectCollectionViewModel = new MpDetectedImageObjectCollectionViewModel(CopyItem);
         }
 
         public void ClipTileFileListBox_Loaded(object sender, RoutedEventArgs e) {

@@ -18,7 +18,7 @@ namespace MpWpfApp {
         public double Width { get; set; } = 0;
         public double Height { get; set; } = 0;
 
-        public string TypeCsv { get; set; } = String.Empty;
+        public string ObjectTypeName { get; set; } = String.Empty;
 
         public static List<MpDetectedImageObject> GetAllObjectsForItem(int copyItemId) {
             DataTable dt = MpDb.Instance.Execute(
@@ -45,7 +45,7 @@ namespace MpWpfApp {
             Y = y;
             Width = w;
             Height = h;
-            TypeCsv = tcsv;
+            ObjectTypeName = tcsv;
         }
 
         public MpDetectedImageObject(DataRow dr) {
@@ -55,7 +55,7 @@ namespace MpWpfApp {
         public override string ToString() {
             return string.Format(
                 "Type: {0} Bounding Box: ({1},{2},{3},{4}) Confidence: {5} CopyItemId: {6}",
-                TypeCsv, X, Y, Width, Height, Confidence, CopyItemId);
+                ObjectTypeName, X, Y, Width, Height, Confidence, CopyItemId);
         }
 
         public override void LoadDataRow(DataRow dr) {
@@ -66,13 +66,13 @@ namespace MpWpfApp {
             Y = Convert.ToDouble(dr["Y"].ToString());
             Width = Convert.ToDouble(dr["Width"].ToString());
             Height = Convert.ToDouble(dr["Height"].ToString());
-            TypeCsv = dr["TypeCsv"].ToString();
+            ObjectTypeName = dr["ObjectTypeName"].ToString();
         }
 
         public override void WriteToDatabase() {
             if(DetectedImageObjectId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpDetectedImageObject(fk_MpCopyItemId,Confidence,X,Y,Width,Height,TypeCsv) " +
+                    "insert into MpDetectedImageObject(fk_MpCopyItemId,Confidence,X,Y,Width,Height,ObjectTypeName) " +
                     "values (@cid,@c,@x,@y,@w,@h,@tcsv)",
                     new Dictionary<string, object> {
                             { "@cid", CopyItemId },
@@ -81,20 +81,20 @@ namespace MpWpfApp {
                             { "@y", Y },
                             { "@w", Width },
                             { "@h", Height },
-                            { "@tcsv", TypeCsv }
+                            { "@tcsv", ObjectTypeName }
                         });
 
                 DetectedImageObjectId = MpDb.Instance.GetLastRowId("MpDetectedImageObject", "pk_MpDetectedImageObjectId");
             } else {
                 MpDb.Instance.ExecuteWrite(
-                        "update MpDetectedImageObject set Confidence=@c,X=@x,Y=@y,Width=@w,Height=@h,TypeCsv=@tcsv where pk_MpDetectedImageObjectId=@dioid",
+                        "update MpDetectedImageObject set Confidence=@c,X=@x,Y=@y,Width=@w,Height=@h,ObjectTypeName=@tcsv where pk_MpDetectedImageObjectId=@dioid",
                         new Dictionary<string, object> {
                             { "@c", Confidence },
                             { "@x", X },
                             { "@y", Y },
                             { "@w", Width },
                             { "@h", Height },
-                            { "@tcsv", TypeCsv },
+                            { "@tcsv", ObjectTypeName },
                             { "@dioid", DetectedImageObjectId }
                         });
             }

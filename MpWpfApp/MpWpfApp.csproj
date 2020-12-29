@@ -109,6 +109,7 @@
     <Compile Include="Attached Properties\MpFocusExtension.cs" />
     <Compile Include="Attached Properties\MpDocumentRtfExtension.cs" />
     <Compile Include="Attached Properties\MpTextBoxBehavior.cs" />
+    <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpHyperlink.cs" />
