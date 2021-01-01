@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
@@ -29,13 +30,19 @@ namespace MpWpfApp {
             string templateName,
             Brush templateColor) {
             var ctvm = (MpClipTileViewModel)rtb.DataContext;
+            double fontSize = (double)rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty) - 2;
+            var typeFace = new Typeface((FontFamily)rtb.Selection.GetPropertyValue(TextElement.FontFamilyProperty),
+                                        (FontStyle)rtb.Selection.GetPropertyValue(TextElement.FontStyleProperty),
+                                        (FontWeight)rtb.Selection.GetPropertyValue(TextElement.FontWeightProperty),
+                                        (FontStretch)rtb.Selection.GetPropertyValue(TextElement.FontStretchProperty));
             hl.DataContext = new MpTemplateHyperlinkViewModel(
                 ctvm,
                 templateName,
                 templateColor,
-                hl.FontSize,
+                typeFace,
+                fontSize,
                 rtb);
-
+            
             var thlvm = (MpTemplateHyperlinkViewModel)hl.DataContext;
 
             Binding borderBrushBinding = new Binding();
@@ -47,6 +54,32 @@ namespace MpWpfApp {
             fontSizeBinding.Path = new PropertyPath(nameof(thlvm.TemplateFontSize));
             fontSizeBinding.Mode = BindingMode.TwoWay;
             fontSizeBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+
+            Binding typefaceBinding = new Binding();
+            typefaceBinding.Source = thlvm;
+            typefaceBinding.Path = new PropertyPath(nameof(thlvm.TemplateTypeFace));
+            typefaceBinding.Mode = BindingMode.TwoWay;
+            typefaceBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+
+            Binding textblockWidthBinding = new Binding();
+            textblockWidthBinding.Source = thlvm;
+            textblockWidthBinding.Path = new PropertyPath(nameof(thlvm.TemplateTextBlockWidth));
+
+            Binding textblockHeightBinding = new Binding();
+            textblockHeightBinding.Source = thlvm;
+            textblockHeightBinding.Path = new PropertyPath(nameof(thlvm.TemplateTextBlockHeight));
+
+            Binding borderWidthBinding = new Binding();
+            borderWidthBinding.Source = thlvm;
+            borderWidthBinding.Path = new PropertyPath(nameof(thlvm.TemplateBorderWidth));
+
+            Binding borderHeightBinding = new Binding();
+            borderHeightBinding.Source = thlvm;
+            borderHeightBinding.Path = new PropertyPath(nameof(thlvm.TemplateBorderHeight));
+
+            Binding buttonSizeBinding = new Binding();
+            buttonSizeBinding.Source = thlvm;
+            buttonSizeBinding.Path = new PropertyPath(nameof(thlvm.TemplateDeleteButtonSize));
 
             Binding foregroundBinding = new Binding();
             foregroundBinding.Source = thlvm;
@@ -84,20 +117,38 @@ namespace MpWpfApp {
             tb.Background = Brushes.Transparent;
             tb.HorizontalAlignment = HorizontalAlignment.Center;
             tb.VerticalAlignment = VerticalAlignment.Center;
-            tb.FontSize = 10;            
+            tb.FontFamily = typeFace.FontFamily;
+            tb.FontStyle = typeFace.Style;
+            tb.FontWeight = typeFace.Weight;
+            tb.FontStretch = typeFace.Stretch;
+
+
+            tb.MouseEnter += (s, e) => {
+                if(ctvm.IsEditingTile) {
+                    tb.Cursor = Cursors.Hand;
+                } else {
+                    tb.Cursor = Cursors.Arrow;
+                }
+            };
+
+            tb.MouseLeave += (s, e) => {
+                tb.Cursor = Cursors.Arrow;
+            };
+            
             BindingOperations.SetBinding(tb, TextBlock.ForegroundProperty, foregroundBinding);
             BindingOperations.SetBinding(tb, TextBlock.TextProperty, templateDisplayValueBinding);
-            BindingOperations.SetBinding(tb, TextBlock.HeightProperty, fontSizeBinding);
+            BindingOperations.SetBinding(tb, TextBlock.HeightProperty, textblockHeightBinding);
+            BindingOperations.SetBinding(tb, TextBlock.WidthProperty, textblockWidthBinding);
+            BindingOperations.SetBinding(tb, TextBlock.FontSizeProperty, fontSizeBinding);
+            
 
             var path = @"pack://application:,,,/Resources/Images/";
             Image dbImg = new Image(); 
             dbImg.Source = (BitmapSource)new BitmapImage(new Uri(path + "close2.png"));
             //Button db = new Button();
             //db.Background = new ImageBrush((BitmapSource)new BitmapImage(new Uri(path + "close2.png")));
-            dbImg.Margin = new Thickness(5, 0, 0, 0);
+            dbImg.Margin = new Thickness(0, 0, 0, 0);
             //db.BorderThickness = new Thickness(0);
-            dbImg.Width = 15;
-            dbImg.Height = 15;
             //dbImg.Background = Brushes.Transparent;
             //db.Content = dbImg;
             dbImg.MouseEnter += (s, e) => {
@@ -114,6 +165,8 @@ namespace MpWpfApp {
                 thlvm.Dispose();
             };
             BindingOperations.SetBinding(dbImg, Button.VisibilityProperty, templateDeleteTemplateTextButtonVisibilityBinding);
+            BindingOperations.SetBinding(dbImg, Button.WidthProperty, buttonSizeBinding);
+            BindingOperations.SetBinding(dbImg, Button.HeightProperty, buttonSizeBinding);
 
             DockPanel dp = new DockPanel();
             dp.Children.Add(tb);
@@ -123,12 +176,10 @@ namespace MpWpfApp {
 
             Border b = new Border();
             b.Focusable = true;
-            b.Background = hl.Background;
-            b.BorderBrush = hl.Foreground;
-            b.BorderThickness = new Thickness(1);
-            b.CornerRadius = new CornerRadius(5);
-            b.VerticalAlignment = VerticalAlignment.Stretch;
-            b.Padding = new Thickness(0.5);
+            b.BorderThickness = new Thickness(2);
+            b.CornerRadius = new CornerRadius(2.5);
+            b.VerticalAlignment = VerticalAlignment.Center;
+            //b.Padding = new Thickness(0.5);
             b.Child = dp;
             b.MouseEnter += (s, e) => {
                 if (thlvm.IsFocused) {
@@ -144,10 +195,16 @@ namespace MpWpfApp {
             };
             b.PreviewMouseLeftButtonDown += (s, e) => {
                 thlvm.IsFocused = true;
+                if(ctvm.IsEditingTile) {
+                    e.Handled = true;
+                    rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
+                    MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
+                }
             };
             BindingOperations.SetBinding(b, Border.BackgroundProperty, backgroundBinding);
             BindingOperations.SetBinding(b, Border.BorderBrushProperty, borderBrushBinding);
-            //BindingOperations.SetBinding(b, Border.HeightProperty, fontSizeBinding);
+            BindingOperations.SetBinding(b, Border.WidthProperty, borderWidthBinding);
+            BindingOperations.SetBinding(b, Border.HeightProperty, borderHeightBinding);
 
             InlineUIContainer container = new InlineUIContainer(b);
             //Run run = new Run(hl.TargetName);
@@ -169,7 +226,10 @@ namespace MpWpfApp {
                 rtb.Selection.Select(hl.ContentStart, hl.ContentEnd);
                 MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
             };
-
+            hl.DataContextChanged += (s7, e7) => {
+                thlvm.OnPropertyChanged(nameof(thlvm.TemplateBorderWidth));
+                thlvm.OnPropertyChanged(nameof(thlvm.TemplateDisplayValue));
+            };
             var editTemplateMenuItem = new MenuItem();
             editTemplateMenuItem.Header = "Edit";
             editTemplateMenuItem.PreviewMouseDown += (s4, e4) => {
@@ -432,32 +492,6 @@ namespace MpWpfApp {
                                         break;
                                 }
                             }
-
-                            //if(!string.IsNullOrEmpty(searchText) && hl != null) {
-                            //    //only occurs at end of highlighttext when tokens are refreshed
-                            //    if((MpSubTextTokenType)hl.Tag == MpSubTextTokenType.TemplateSegment) {
-                            //        string linkText = ((MpTemplateHyperlinkViewModel)hl.DataContext).TemplateName;
-                            //        if (linkText.ToLower().Contains(searchText.ToLower())) {
-                            //            ((MpClipTileViewModel)rtb.DataContext).TileVisibility = Visibility.Visible;
-                            //            var tb = (TextBlock)((DockPanel)((Border)((InlineUIContainer)hl.Inlines.FirstInline).Child).Child).Children[0];
-                                        
-                            //            var highlightRange = MpHelpers.FindStringRangeFromPosition(tb.ContentStart, searchText);
-                            //            if (highlightRange != null) {
-                            //                highlightRange.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString));
-                            //            }
-                            //        }
-                            //    } else {
-                            //        string linkText = new TextRange(hl.ContentStart, hl.ContentEnd).Text; 
-                            //        if (linkText.ToLower().Contains(searchText.ToLower())) {
-                            //            var highlightRange = MpHelpers.FindStringRangeFromPosition(hl.ContentStart, searchText);
-                            //            if (highlightRange != null) {
-                            //                highlightRange.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString));
-                            //            }
-                            //        }
-                            //    }
-                                
-                            //}
-
                             linkList.Add(hl);
                         }
                     }

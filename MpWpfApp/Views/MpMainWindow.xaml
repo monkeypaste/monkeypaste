@@ -514,7 +514,7 @@
                     </i:Interaction.Triggers>
                     <Grid Grid.Column="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.1*" />
+                            <ColumnDefinition Width="0.15*" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="0.1*" />
                         </Grid.ColumnDefinitions>
@@ -536,7 +536,7 @@
                                  FontStyle="{Binding TextBoxFontStyle}"
                                  BorderThickness="0"
                                  VerticalContentAlignment="Center"
-                                 Padding="5,0,0,0"
+                                 Padding="0,0,0,0"
                                  local:MpFocusExtension.IsFocused="{Binding IsTextBoxFocused, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                  Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
                         </TextBox>
@@ -872,7 +872,8 @@
                                                         </Style>
                                                     </MenuItem.ItemContainerStyle>
                                                 </MenuItem>
-                                                <MenuItem Header="Translate"
+                                                <MenuItem x:Name="TranslateMenuItem" 
+                                                          Header="Translate"
                                                           ItemsSource="{Binding Data.TranslateLanguageMenuItems, Source={StaticResource ClipTileProxy}}">
                                                     <MenuItem.ItemContainerStyle>
                                                         <Style TargetType="{x:Type MenuItem}">

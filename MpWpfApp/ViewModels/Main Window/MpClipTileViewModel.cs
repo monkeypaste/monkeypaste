@@ -37,6 +37,8 @@
 
         private string _origClipRichText = string.Empty;
 
+        private TextSelection _curRtbSelection = null;
+
         private bool _wasEditConfirmed = true;
         #endregion
 
@@ -677,7 +679,7 @@
                         } else {
                             thlvm.IsEditMode = false;
                             thlvm.IsSelected = false;
-                        }
+                         }
                         if (thlvm.WasTypeViewed == false) {
                             canPaste = false;
                         }
@@ -1140,8 +1142,6 @@
         #region Public Methods
         public MpClipTileViewModel() : this(null) {
             //empty constructor only directly called when creating from the clipboard
-
-
         }
 
         public MpClipTileViewModel(MpCopyItem ci) : base() {
@@ -1165,23 +1165,25 @@
                         }
                         if (TemplateTokens != null) {
                             foreach (var tthlvm in TemplateTokens) {
-                                //tthlvm.OnPropertyChanged(nameof(tthlvm.DeleteTemplateTextButtonVisibility));
-                                tthlvm.DeleteTemplateTextButtonVisibility = IsSelected ? Visibility.Visible : Visibility.Hidden;
+                                tthlvm.OnPropertyChanged(nameof(tthlvm.DeleteTemplateTextButtonVisibility));
+                                //tthlvm.DeleteTemplateTextButtonVisibility = IsSelected ? Visibility.Visible : Visibility.Hidden;
                             }
                         }
                         break;
-                    case nameof(IsEditingTile):
-                        MainWindowViewModel.SearchBoxViewModel.IsSearchEnabled = IsEditingTile;
-                        var hb = IsEditingTile ? Brushes.Transparent : (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
-                        MpHelpers.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
-                        MpHelpers.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
-                        break;
+                    //case nameof(IsEditingTile):
+                    //    MainWindowViewModel.SearchBoxViewModel.IsSearchEnabled = IsEditingTile;
+                    //    var hb = IsEditingTile ? Brushes.Transparent : (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
+                    //    MpHelpers.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
+                    //    MpHelpers.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
+                    //    break;
                 }
             };
             object lockObj = new object();
             object lockObj2 = new object();
+            object lockObj3 = new object();
             BindingOperations.EnableCollectionSynchronization(LastTitleHighlightRangeList, lockObj);
             BindingOperations.EnableCollectionSynchronization(LastContentHighlightRangeList, lockObj2);
+            BindingOperations.EnableCollectionSynchronization(TemplateTokens, lockObj3);
             SetCopyItem(ci);
         }
 
@@ -1312,8 +1314,8 @@
             var titleSwirl = (Image)cb.FindName("TitleSwirl");
             var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
             var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
-
-            rtb.ContextMenu = (ContextMenu)cb.FindName("ClipTile_ContextMenu");
+           
+            //rtb.ContextMenu = (ContextMenu)cb.FindName("ClipTile_ContextMenu");
             rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
             rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
 
@@ -1409,30 +1411,13 @@
                 double toWidthTile = 0;
 
                 if (et.Visibility == Visibility.Visible) {
-                    //hide and store all other clip tiles
-                    //foreach (var vctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
-                    //    if (vctvm != this) {
-                    //        hiddenClipTiles.Add(vctvm);
-                    //        vctvm.TileVisibility = Visibility.Collapsed;
-                    //    }
-                    //}
-
                     toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
 
                     rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
                     rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
                     rtb.ScrollToHome();
                     rtb.CaretPosition = rtb.Document.ContentStart;
-
-                    //clear all other visible
-
-
                 } else {
-                    //restore all other clip tiles
-                    //foreach (var vctvm in hiddenClipTiles) {
-                    //    vctvm.TileVisibility = Visibility.Visible;
-                    //}
-                    //hiddenClipTiles.Clear();
                     toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
                     rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
                     rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
@@ -1444,6 +1429,10 @@
                     CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
                     MpHelpers.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
                     MpHelpers.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
+                    rtb.CreateHyperlinks();
+
+
+                    rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
                 }
                 IsEditToolbarAnimating = true;
                 double fromLeft = Canvas.GetLeft(titleIconImageButton);
@@ -1487,41 +1476,41 @@
 
             rtb.SelectionChanged += (s, e6) => {
                 // Set font family combo
-                var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
-                var fontFamily = textRange.GetPropertyValue(TextElement.FontFamilyProperty);
+                _curRtbSelection = rtb.Selection;
+                var fontFamily = _curRtbSelection.GetPropertyValue(TextElement.FontFamilyProperty);
                 fontFamilyComboBox.SelectedItem = fontFamily;
 
                 // Set font size combo
-                var fontSize = textRange.GetPropertyValue(TextElement.FontSizeProperty);
+                var fontSize = _curRtbSelection.GetPropertyValue(TextElement.FontSizeProperty);
                 fontSizeCombo.Text = fontSize.ToString();
 
                 // Set Font buttons
-                ((ToggleButton)et.FindName("BoldButton")).IsChecked = textRange.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
-                ((ToggleButton)et.FindName("ItalicButton")).IsChecked = textRange.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
-                ((ToggleButton)et.FindName("UnderlineButton")).IsChecked = textRange?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
+                ((ToggleButton)et.FindName("BoldButton")).IsChecked = _curRtbSelection.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
+                ((ToggleButton)et.FindName("ItalicButton")).IsChecked = _curRtbSelection.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
+                ((ToggleButton)et.FindName("UnderlineButton")).IsChecked = _curRtbSelection?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
 
                 // Set Alignment buttons
-                leftAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
-                centerAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
-                rightAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
-                justifyAlignmentButton.IsChecked = textRange.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Justify);
+                leftAlignmentButton.IsChecked = _curRtbSelection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
+                centerAlignmentButton.IsChecked = _curRtbSelection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
+                rightAlignmentButton.IsChecked = _curRtbSelection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
+                justifyAlignmentButton.IsChecked = _curRtbSelection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Justify);
 
                 IsAddTemplateButtonEnabled = true;
                 foreach (var templateHyperlink in rtb.GetTemplateHyperlinkList()) {
-                    if (!textRange.Start.IsInSameDocument(templateHyperlink.ContentStart) ||
-                       !textRange.Start.IsInSameDocument(templateHyperlink.ContentEnd)) {
+                    if (!_curRtbSelection.Start.IsInSameDocument(templateHyperlink.ContentStart) ||
+                       !_curRtbSelection.Start.IsInSameDocument(templateHyperlink.ContentEnd)) {
                         continue;
                     }
-                    if ((textRange.Start.CompareTo(templateHyperlink.ContentStart) >= 0 &&
-                        textRange.Start.CompareTo(templateHyperlink.ContentEnd) <= 0) ||
-                       (textRange.End.CompareTo(templateHyperlink.ContentStart) >= 0 &&
-                        textRange.End.CompareTo(templateHyperlink.ContentEnd) <= 0)) {
+                    if ((_curRtbSelection.Start.CompareTo(templateHyperlink.ContentStart) >= 0 &&
+                        _curRtbSelection.Start.CompareTo(templateHyperlink.ContentEnd) <= 0) ||
+                       (_curRtbSelection.End.CompareTo(templateHyperlink.ContentStart) >= 0 &&
+                        _curRtbSelection.End.CompareTo(templateHyperlink.ContentEnd) <= 0)) {
                         IsAddTemplateButtonEnabled = false;
                     }
                 }
+
                 OnPropertyChanged(nameof(IsAddTemplateButtonEnabled));
             };
-
             //rtb.LostFocus += (s, e3) => {
             //    IsEditingTile = false;
             //};
@@ -1541,15 +1530,15 @@
             #region Templates
             var addTemplateButton = (Button)et.FindName("AddTemplateButton");
             addTemplateButton.PreviewMouseDown += (s, e3) => {
-                e3.Handled = true;
+                //e3.Handled = true;
                 //rtb.Focus();
                 // note! must be preview mouse down to retain rtb selection
                 //TextRange ts = rtb.Selection;
                 //gather unique list of all templates
+                var ts = rtb.Selection;
                 rtb.ClearHyperlinks();
                 rtb.CreateHyperlinks();
                 var templateTokens = rtb.GetTemplateHyperlinkList(true);
-                //rtb.Selection.Select(ts.Start,ts.End);
                 if (templateTokens.Count == 0) {
                     //if tags are NOT in the clip yet add one w/ default name
                     MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, null, true);
@@ -1591,11 +1580,13 @@
                     };
                     templateContextMenu.Items.Add(addNewMenuItem);
                     addTemplateButton.ContextMenu = templateContextMenu;
-                    templateContextMenu.PlacementTarget = addTemplateButton;
+                    templateContextMenu.PlacementTarget = addTemplateButton;   
                     templateContextMenu.IsOpen = true;
+                    //rtb.Selection.Select(ts.Start,ts.End);
                 }
-                rtb.ScrollToHome();
-                rtb.CaretPosition = rtb.Document.ContentStart;
+                //rtb.ScrollToHome();
+                //rtb.CaretPosition = rtb.Document.ContentStart;
+                HasTemplate = rtb.GetTemplateHyperlinkList().Count > 0;
             };
 
             cttb.GotFocus += (s, e4) => {
@@ -1769,7 +1760,8 @@
                             //rtb.ScrollToVerticalOffset(r.Y);
                             var characterRect = LastContentHighlightRangeList[contentIdx].End.GetCharacterRect(LogicalDirection.Forward);
                             rtb.ScrollToHorizontalOffset(rtb.HorizontalOffset + characterRect.Left - rtb.ActualWidth / 2d);
-                            rtb.ScrollToVerticalOffset(rtb.VerticalOffset + characterRect.Top - rtb.ActualHeight / 2d);
+                            rtb.ScrollToVerticalOffset(rtb.VerticalOffset + characterRect.Top - rtb.ActualHeight / 2d);                            
+                            
                         }
                         break;
                 }
@@ -1798,7 +1790,6 @@
             }
             var flb = (ListBox)sender;
             flb.ContextMenu = (ContextMenu)flb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
-
         }
 
         public void ClipTile_ContextMenu_Loaded(object sender, RoutedEventArgs e) {
@@ -1824,6 +1815,22 @@
         }
 
         public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
+            //if (CopyItemType == MpCopyItemType.RichText) {
+            //    var cm = (ContextMenu)sender;
+            //    RichTextBox rtb = null;
+            //    if (cm.PlacementTarget is Grid) {
+            //        rtb = (RichTextBox)((Grid)cm.PlacementTarget).FindName("ClipTileRichTextBox");
+            //    } else {
+            //        rtb = (RichTextBox)cm.PlacementTarget;
+            //    }
+            //    if (IsEditingTile) {
+            //        RichTextBox tempRtb = new RichTextBox();
+            //        rtb.ContextMenu = tempRtb.ContextMenu;
+            //        return;
+            //    } else {
+            //        rtb.ContextMenu = rtb.GetVisualAncestor<MpClipBorder>().ContextMenu;
+            //    }
+            //} 
             TagMenuItems.Clear();
             foreach (var tagTile in MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel) {
                 if (tagTile.TagName == Properties.Settings.Default.HistoryTagTitle) {

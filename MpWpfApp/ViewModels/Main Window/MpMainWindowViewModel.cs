@@ -200,14 +200,19 @@ namespace MpWpfApp {
             MpSoundPlayerGroupCollectionViewModel.Instance.Init();
 
             //MpWordsApiDictionary.Instance.TestWordsGet();
+            //for (int i = 0; i < 50; i++) {
+            //    ClipTrayViewModel.Add(new MpClipTileViewModel(MpCopyItem.CreateRandomItem(MpCopyItemType.RichText)));
+            //}
         }
 
         public void ClearEdits() {
             foreach (var clip in ClipTrayViewModel) {
                 clip.IsEditingTile = false;
                 clip.IsPastingTemplateTile = false;
-                foreach(var diovm in clip.DetectedImageObjectCollectionViewModel) {
-                    diovm.IsNameReadOnly = true;
+                if(clip.DetectedImageObjectCollectionViewModel != null) {
+                    foreach (var diovm in clip.DetectedImageObjectCollectionViewModel) {
+                        diovm.IsNameReadOnly = true;
+                    }
                 }
             }
             foreach (var tag in TagTrayViewModel) {

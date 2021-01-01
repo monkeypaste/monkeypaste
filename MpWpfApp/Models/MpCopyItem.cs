@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -167,6 +168,22 @@ namespace MpWpfApp {
             }
         }        
 
+        public static MpCopyItem CreateRandomItem(MpCopyItemType itemType) {
+            switch(itemType) {
+                case MpCopyItemType.RichText:
+                    var ci =  new MpCopyItem(
+                        MpCopyItemType.RichText,
+                        MpHelpers.ConvertPlainTextToRichText(
+                            MpHelpers.GetRandomString(80, MpHelpers.Rand.Next(1, 100))),
+                        MpHelpers.GetRandomColor(),
+                        new WindowInteropHelper(Application.Current.MainWindow).Handle);//((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).MainWindowViewModel.ClipTrayViewModel.ClipboardManager.LastWindowWatcher.ThisAppHandle);
+                    ci.WriteToDatabase();
+                    return ci;
+                    
+
+            }
+            return null;
+        }
         public static List<MpCopyItem> GetAllCopyItems() {
             _AppList = MpApp.GetAllApps();
             _ColorList = MpColor.GetAllColors();
@@ -272,6 +289,7 @@ namespace MpWpfApp {
                     break;
             }
         }
+
         protected MpCopyItem(DataRow dr) {
             LoadDataRow(dr);
         }

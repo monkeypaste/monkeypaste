@@ -40,27 +40,126 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+
+        #region Layout Properties
+        private double _templateFontSize = 12;
+        public double TemplateFontSize {
+            get {
+                return _templateFontSize;
+            }
+            set {
+                if (_templateFontSize != value) {
+                    _templateFontSize = value;
+                    OnPropertyChanged(nameof(TemplateFontSize));
+                    OnPropertyChanged(nameof(TemplateBorderWidth));
+                }
+            }
+        }
+
+        private Typeface _templateTypeface = null;
+        public Typeface TemplateTypeFace {
+            get {
+                return _templateTypeface;
+            }
+            set {
+                if (_templateTypeface != value) {
+                    _templateTypeface = value;
+                    OnPropertyChanged(nameof(TemplateTypeFace));
+                    OnPropertyChanged(nameof(TemplateBorderWidth));
+                }
+            }
+        }
+
+        public double TemplateBorderPadding {
+            get {
+                return 5;
+            }
+        }
+
+        public double TemplateBorderHeight {
+            get {
+                return TemplateFontSize + 2;
+            }
+        }
+
+        public double TemplateBorderWidth {
+            get {
+                return TemplateTextBlockWidth + TemplateDeleteButtonSize + (TemplateBorderPadding * 2);
+            }
+        }
+
+        public double TemplateTextBlockWidth {
+            get {
+                //return TemplateBorderWidth - 5;
+                return MpHelpers.MeasureText(
+                    TemplateDisplayValue,
+                    TemplateTypeFace,
+                    TemplateFontSize).Width;
+            }
+        }
+
+        public double TemplateTextBlockHeight {
+            get {
+                //return TemplateBorderWidth - 5;
+                return MpHelpers.MeasureText(
+                    TemplateDisplayValue,
+                    TemplateTypeFace,
+                    TemplateFontSize).Height;
+            }
+        }
+
+        public double TemplateDeleteButtonSize {
+            get {
+                if(DeleteTemplateTextButtonVisibility == Visibility.Collapsed) {
+                    return 0;
+                }
+                return TemplateTextBlockHeight - 2;
+            }
+        }
+        #endregion
+
+        #region Visibility Properties
+        public Visibility DeleteTemplateTextButtonVisibility {
+            get {
+                if (ClipTileViewModel != null && ClipTileViewModel.IsSelected && ClipTileViewModel.IsEditingTile && !IsPasteMode) {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+
+        public Visibility TemplateTextBlockVisibility {
+            get {
+                if (IsEditMode) {
+                    return Visibility.Collapsed;
+                }
+                return Visibility.Visible;
+            }
+        }
+        #endregion
+
+        #region Brush Properties
         public Brush TemplateBorderBrush {
             get {
                 if (IsHovering) {
                     return Brushes.LightGray;
                 }
                 if (IsSelected) {
-                    if(string.IsNullOrEmpty(TemplateText)) {
+                    if (string.IsNullOrEmpty(TemplateText)) {
                         return Brushes.Red;
                     }
                     return Brushes.Green;
-                } 
-                if (IsPasteMode) {
-                    return Brushes.White;
                 }
-                return Brushes.DarkGray;
+                //if (IsPasteMode) {
+                //    return Brushes.White;
+                //}
+                return TemplateBackgroundBrush;
             }
         }
 
-        public Brush TemplateForegroundBrush { 
+        public Brush TemplateForegroundBrush {
             get {
-                if(MpHelpers.IsBright(((SolidColorBrush)TemplateBackgroundBrush).Color)) {
+                if (MpHelpers.IsBright(((SolidColorBrush)TemplateBackgroundBrush).Color)) {
                     return Brushes.Black;
                 }
                 return Brushes.White;
@@ -80,102 +179,9 @@ namespace MpWpfApp {
                 }
             }
         }
+        #endregion
 
-        private Visibility _deleteTemplateTextButtonVisibility = Visibility.Hidden;
-        public Visibility DeleteTemplateTextButtonVisibility  {
-            get {
-                if(ClipTileViewModel.IsSelected) {
-                    return Visibility.Visible;
-                }
-                return Visibility.Hidden;
-            }
-            set {
-                if(_deleteTemplateTextButtonVisibility != value) {
-                    _deleteTemplateTextButtonVisibility = value;
-                    OnPropertyChanged(nameof(DeleteTemplateTextButtonVisibility));
-                }
-            }
-        }
-
-        public Visibility TemplateTextBlockVisibility {
-            get {
-                if (IsEditMode) {
-                    return Visibility.Collapsed;
-                }
-                return Visibility.Visible;
-            }
-        }
-
-        private double _templateFontSize = 12;
-        public double TemplateFontSize {
-            get {
-                return _templateFontSize;
-            }
-            set {
-                if(_templateFontSize != value) {
-                    _templateFontSize = value;
-                    OnPropertyChanged(nameof(TemplateFontSize));
-                    OnPropertyChanged(nameof(TemplateBorderWidth));
-                }
-            }
-        }
-
-        public double TemplateBorderWidth {
-            get {
-                if(IsEditMode) {
-                    return (TemplateText.Length * TemplateFontSize) * 0.65;
-                }
-                return (TemplateName.Length * TemplateFontSize) * 0.65;
-            }
-        }
-
-        public double TemplateTextBlockWidth {
-            get {
-                return TemplateBorderWidth - 5;
-            }
-        }
-
-        private string _templateText = string.Empty;
-        public string TemplateText {
-            get {
-                return _templateText;
-            }
-            set {
-                if (_templateText != value) {
-                    _templateText = value;
-                    OnPropertyChanged(nameof(TemplateText));
-                    OnPropertyChanged(nameof(TemplateBorderWidth));
-                    OnPropertyChanged(nameof(TemplateDisplayValue));
-                }
-            }
-        }
-
-        private string _templateName = string.Empty;
-        public string TemplateName {
-            get {
-                return _templateName;
-            }
-            set {
-                if (_templateName != value) {
-                    _templateName = value;
-                    OnPropertyChanged(nameof(TemplateName));
-                    OnPropertyChanged(nameof(TemplateBorderWidth));
-                    OnPropertyChanged(nameof(TemplateDisplayValue));
-                }
-            }
-        }
-
-        public string TemplateDisplayValue {
-            get {
-                if (IsPasteMode) {
-                    if(WasTypeViewed) {
-                        return TemplateText;
-                    }
-                }
-                return TemplateName;
-            }
-        }
-
+        #region State Properties
         private bool _isHovering = false;
         public bool IsHovering {
             get {
@@ -256,6 +262,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(IsPasteMode));
                     OnPropertyChanged(nameof(TemplateBorderBrush));
                     OnPropertyChanged(nameof(TemplateBorderWidth));
+                    OnPropertyChanged(nameof(DeleteTemplateTextButtonVisibility));
                     OnPropertyChanged(nameof(TemplateTextBlockVisibility));
                     OnPropertyChanged(nameof(TemplateDisplayValue));
                 }
@@ -274,21 +281,80 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(TemplateBorderBrush));
                     OnPropertyChanged(nameof(TemplateBorderWidth));
                     OnPropertyChanged(nameof(TemplateTextBlockVisibility));
+                    OnPropertyChanged(nameof(DeleteTemplateTextButtonVisibility));
                     OnPropertyChanged(nameof(TemplateDisplayValue));
                 }
             }
         }
         #endregion
 
+        #region Model Properties
+        private string _templateText = string.Empty;
+        public string TemplateText {
+            get {
+                return _templateText;
+            }
+            set {
+                if (_templateText != value) {
+                    _templateText = value;
+                    OnPropertyChanged(nameof(TemplateText));
+                    OnPropertyChanged(nameof(TemplateDisplayValue));
+                    OnPropertyChanged(nameof(TemplateBorderWidth));
+                    OnPropertyChanged(nameof(TemplateBorderHeight));
+                    OnPropertyChanged(nameof(TemplateTextBlockHeight));
+                    OnPropertyChanged(nameof(TemplateTextBlockWidth));
+                }
+            }
+        }
+
+        private string _templateName = string.Empty;
+        public string TemplateName {
+            get {
+                return _templateName;
+            }
+            set {
+                if (_templateName != value) {
+                    _templateName = value;
+                    OnPropertyChanged(nameof(TemplateName));
+                    OnPropertyChanged(nameof(TemplateBorderWidth));
+                    OnPropertyChanged(nameof(TemplateBorderHeight));
+                    OnPropertyChanged(nameof(TemplateTextBlockHeight));
+                    OnPropertyChanged(nameof(TemplateTextBlockWidth));
+                    OnPropertyChanged(nameof(TemplateDisplayValue));
+                }
+            }
+        }
+
+        public string TemplateDisplayValue {
+            get {
+                if (IsPasteMode) {
+                    if (WasTypeViewed) {
+                        return TemplateText;
+                    }
+                }
+                return TemplateName;
+            }
+        }
+        #endregion
+
+        #endregion
+
         #region Public Methods
         public MpTemplateHyperlinkViewModel() : this(null) { }
 
-        public MpTemplateHyperlinkViewModel(MpClipTileViewModel ctvm) : this(ctvm, "Template Name", MpHelpers.GetRandomBrushColor(), 0, null) { }
+        public MpTemplateHyperlinkViewModel(MpClipTileViewModel ctvm) : this(
+            ctvm, 
+            "Template Name", 
+            MpHelpers.GetRandomBrushColor(), 
+            new Typeface(SystemFonts.CaptionFontFamily.ToString()),
+            12, 
+            null) { }
 
         public MpTemplateHyperlinkViewModel(
             MpClipTileViewModel ctvm,
             string templateName,
             Brush templateColor,
+            Typeface typeface,
             double fontSize,
             RichTextBox rtb) {
             PropertyChanged += (s, e) => {
@@ -302,9 +368,13 @@ namespace MpWpfApp {
             };
             _rtb = rtb;
             ClipTileViewModel = ctvm;
+
             TemplateName = templateName;
             TemplateBackgroundBrush = templateColor;
-            TemplateFontSize = Math.Max(fontSize, 12);
+            TemplateTypeFace = typeface;
+            TemplateFontSize = fontSize;
+
+            
         }
 
         public void TemplateHyperLink_Loaded(object sender, RoutedEventArgs args) {

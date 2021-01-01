@@ -41,25 +41,25 @@ namespace MpWpfApp {
     public static class MpHelpers {
         #region Documents
 
-//public static TextRange FindStringRangeFromPosition(TextPointer position, string str, bool isCaseSensitive = false) {
-//    while (position != null) {
-//        if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
-//            position = position.GetNextContextPosition(LogicalDirection.Forward);
-//            continue;
-//        }
-//        string textRun = isCaseSensitive ? position.GetTextInRun(LogicalDirection.Forward) : position.GetTextInRun(LogicalDirection.Forward).ToLower();
+        //public static TextRange FindStringRangeFromPosition(TextPointer position, string str, bool isCaseSensitive = false) {
+        //    while (position != null) {
+        //        if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
+        //            position = position.GetNextContextPosition(LogicalDirection.Forward);
+        //            continue;
+        //        }
+        //        string textRun = isCaseSensitive ? position.GetTextInRun(LogicalDirection.Forward) : position.GetTextInRun(LogicalDirection.Forward).ToLower();
 
-//        // Find the starting index of any substring that matches "str".
-//        int indexInRun = textRun.IndexOf(isCaseSensitive ? str : str.ToLower());
-//        if (indexInRun >= 0) {
-//            return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + str.Length));
-//        }
-//        position = position.GetNextContextPosition(LogicalDirection.Forward);
-//    }
-//    // position will be null if "word" is not found.
-//    return null;
-//}
-public static void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRange> rangeList, Brush bgBrush) {
+        //        // Find the starting index of any substring that matches "str".
+        //        int indexInRun = textRun.IndexOf(isCaseSensitive ? str : str.ToLower());
+        //        if (indexInRun >= 0) {
+        //            return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + str.Length));
+        //        }
+        //        position = position.GetNextContextPosition(LogicalDirection.Forward);
+        //    }
+        //    // position will be null if "word" is not found.
+        //    return null;
+        //}
+        public static void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRange> rangeList, Brush bgBrush) {
             if (rangeList == null || rangeList.Count == 0) {
                 return;
             }
@@ -339,7 +339,18 @@ public static void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRang
         }
 
         public static int GetRowCount(string text) {
-            return text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Length;
+            if(string.IsNullOrEmpty(text)) {
+                return 0;
+            }
+            if(IsStringRichText(text)) {
+                int nlCount = text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Length - 1;
+                int parCount = text.Split(new string[] { @"\par" }, StringSplitOptions.RemoveEmptyEntries).Length - 1;
+                if(nlCount + parCount == 0) {
+                    return 1;
+                }
+                return nlCount + parCount;
+            }
+            return text.Split(new string[] { Environment.NewLine }, StringSplitOptions.None).Length;
         }
 
         public static string GetRandomString(int charsPerLine = 32, int lines = 1) {
@@ -916,6 +927,7 @@ public static void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRang
         public static Brush GetContentColor(int c, int r) {
             return _ContentColors[c][r];
         }
+
         public static void SetColorChooserMenuItem(
             ContextMenu cm,
             MenuItem cmi,
@@ -1026,8 +1038,22 @@ public static void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRang
             } else {
                 ((FrameworkElement)obj).BeginAnimation(property, animation);
             }
-        } 
-        
+        }
+
+        public static Size MeasureText(string text, Typeface typeface, double fontSize) {
+            var formattedText = new FormattedText(
+                text,
+                CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                typeface,
+                fontSize,
+                Brushes.Black,
+                new NumberSubstitution(),
+                VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip);
+
+            return new Size(formattedText.Width, formattedText.Height);
+        }
+
         public static Brush ShowColorDialog(Brush currentBrush) {
             System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
             cd.AllowFullOpen = true;
@@ -1440,12 +1466,24 @@ public static void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRang
             rtb.Font = new System.Drawing.Font(Properties.Settings.Default.DefaultFontFamily,(float)Properties.Settings.Default.DefaultFontSize);
             return rtb.Rtf;
         }
-
+        public static string ConvertPlainTextToRichText2(string plainText) {
+            string escapedPlainText = plainText.Replace(@"\", @"\\").Replace("{", @"\{").Replace("}", @"\}");
+            string rtf = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard ";
+            rtf += escapedPlainText.Replace(Environment.NewLine, @" \par ");
+            rtf += " }";
+            return rtf;
+        }
         public static string ConvertRichTextToPlainText(string richText) {
             if (IsStringRichText(richText)) {
                 RichTextBox rtb = new RichTextBox();
                 rtb.SetRtf(richText);
-                return new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text.Replace("''", "'");
+                var pt = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
+                int rtcount = GetRowCount(richText);
+                int ptcount = GetRowCount(pt);
+                if(rtcount != ptcount) {
+                    return pt.Trim(new char[] { '\r', '\n' });
+                }
+                return pt;
             } else {
                 return richText;
             }

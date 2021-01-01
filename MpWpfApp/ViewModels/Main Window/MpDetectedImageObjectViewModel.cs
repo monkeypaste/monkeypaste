@@ -44,7 +44,7 @@ namespace MpWpfApp {
         
         public double FontSize {
             get {
-                return Math.Min(Width,Height) / 5;
+                return Math.Max(8,Math.Min(Width,Height) / 5);
             }
         }
 

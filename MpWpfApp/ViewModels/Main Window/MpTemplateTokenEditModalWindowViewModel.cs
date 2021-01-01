@@ -24,6 +24,8 @@ namespace MpWpfApp {
         private Window _windowRef = null;
         private RichTextBox _rtb = null;
         private Hyperlink _originalLink = null;
+        private string _originalTemplateName = string.Empty;
+        private Brush _originalTemplateColor = Brushes.Pink;
         public TextPointer _selectionEnd = null;
         #endregion
 
@@ -191,6 +193,9 @@ namespace MpWpfApp {
                     _rtb, 
                     GetUniqueTemplateName(), 
                     GetUniqueTemplateColor());                
+            } else {
+                _originalTemplateName = ((MpTemplateHyperlinkViewModel)templateLink.DataContext).TemplateName;
+                _originalTemplateColor = ((MpTemplateHyperlinkViewModel)templateLink.DataContext).TemplateBackgroundBrush;
             }
 
             SelectedTemplateTokenViewModel = (MpTemplateHyperlinkViewModel)templateLink.DataContext;
@@ -281,23 +286,21 @@ namespace MpWpfApp {
             }
         }
         private void Cancel() {
-            //SelectedTokenHyperlink = _originalLink;
-            //SelectedTemplateTokenViewModel = (MpTemplateHyperlinkViewModel)_originalLink.DataContext;
+            if(_originalLink != null) {
+                _rtb.Selection.Text = String.Format(
+                @"{0}{1}{0}{2}{0}",
+                Properties.Settings.Default.TemplateTokenMarker,
+                _originalTemplateName,
+                ((SolidColorBrush)_originalTemplateColor).ToString());
+                _rtb.ClearHyperlinks();
+                var ctvm = (MpClipTileViewModel)_rtb.DataContext;
+                ctvm.CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(_rtb.Document);
+                _rtb.CreateHyperlinks();
+            }
+
             _windowRef.DialogResult = false;
             _windowRef.Close();
             IsOpen = false;
-        }
-
-        private RelayCommand _clearCommand;
-        public ICommand ClearCommand {
-            get {
-                if (_clearCommand == null) {
-                    _clearCommand = new RelayCommand(Clear);
-                }
-                return _clearCommand;
-            }
-        }
-        private void Clear() {
         }
 
         private RelayCommand _okCommand;
@@ -313,7 +316,6 @@ namespace MpWpfApp {
             return Validate();
         }
         private void Ok() {
-            TextPointer tokenEnd = _rtb.Selection.End;
             _rtb.Selection.Text = String.Format(
                 @"{0}{1}{0}{2}{0}",
                 Properties.Settings.Default.TemplateTokenMarker,
