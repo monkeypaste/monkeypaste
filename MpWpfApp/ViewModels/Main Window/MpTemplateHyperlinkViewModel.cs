@@ -140,19 +140,16 @@ namespace MpWpfApp {
 
         #region Brush Properties
         public Brush TemplateBorderBrush {
-            get {
-                if (IsHovering) {
-                    return Brushes.LightGray;
-                }
+            get {                
                 if (IsSelected) {
-                    if (string.IsNullOrEmpty(TemplateText)) {
-                        return Brushes.Red;
-                    }
+                    //if (string.IsNullOrEmpty(TemplateText)) {
+                    //    return Brushes.Red;
+                    //}
                     return Brushes.Green;
                 }
-                //if (IsPasteMode) {
-                //    return Brushes.White;
-                //}
+                if (IsHovering) {
+                    return Brushes.Yellow;
+                }
                 return TemplateBackgroundBrush;
             }
         }
@@ -220,6 +217,9 @@ namespace MpWpfApp {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
                     OnPropertyChanged(nameof(TemplateBorderBrush));
+                    OnPropertyChanged(nameof(TemplateDisplayValue));
+                    OnPropertyChanged(nameof(TemplateTextBlockWidth));
+                    OnPropertyChanged(nameof(TemplateBorderWidth));
                 }
             }
         }
@@ -281,6 +281,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(TemplateBorderBrush));
                     OnPropertyChanged(nameof(TemplateBorderWidth));
                     OnPropertyChanged(nameof(TemplateTextBlockVisibility));
+                    OnPropertyChanged(nameof(TemplateDeleteButtonSize));
                     OnPropertyChanged(nameof(DeleteTemplateTextButtonVisibility));
                     OnPropertyChanged(nameof(TemplateDisplayValue));
                 }
@@ -374,7 +375,19 @@ namespace MpWpfApp {
             TemplateTypeFace = typeface;
             TemplateFontSize = fontSize;
 
-            
+            if(ClipTileViewModel != null) {
+                ClipTileViewModel.PropertyChanged += (s, e) => {
+                    switch (e.PropertyName) {
+                        case nameof(ClipTileViewModel.IsEditingTile):
+                            if (ClipTileViewModel.IsEditingTile) {
+                                IsEditMode = true;
+                            } else {
+                                IsEditMode = false;
+                            }
+                            break;
+                    }
+                };
+            }
         }
 
         public void TemplateHyperLink_Loaded(object sender, RoutedEventArgs args) {

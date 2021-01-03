@@ -8,8 +8,45 @@ using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpTemplateTokenCollectionViewModel : MpObservableCollectionViewModel<MpTemplateHyperlinkViewModel> {
-
         #region Properties
+
+        private bool _isTemplateReadyToPaste = false;
+        public bool IsTemplateReadyToPaste {
+            get {
+                return _isTemplateReadyToPaste;
+            }
+            set {
+                if (_isTemplateReadyToPaste != value) {
+                    _isTemplateReadyToPaste = value;
+                    OnPropertyChanged(nameof(IsTemplateReadyToPaste));
+                }
+            }
+        }
+
+        private bool _isCurrentTemplateTextBoxFocused = false;
+        public bool IsCurrentTemplateTextBoxFocused {
+            get {
+                return _isCurrentTemplateTextBoxFocused;
+            }
+            set {
+                if (_isCurrentTemplateTextBoxFocused != value) {
+                    _isCurrentTemplateTextBoxFocused = value;
+                    OnPropertyChanged(nameof(IsCurrentTemplateTextBoxFocused));
+                }
+            }
+        }
+        private bool _isPastingTemplateTile = false;
+        public bool IsPastingTemplateTile {
+            get {
+                return _isPastingTemplateTile;
+            }
+            set {
+                if(_isPastingTemplateTile != value) {
+                    _isPastingTemplateTile = value;
+                    OnPropertyChanged(nameof(IsPastingTemplateTile));
+                }
+            }
+        }
         public Visibility PasteTemplateToolbarVisibility {
             get {
                 if (IsPastingTemplateTile) {
@@ -74,7 +111,7 @@ namespace MpWpfApp {
                 }
                 var curTemplateText = TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Value;
                 if (string.IsNullOrEmpty(curTemplateText) && !IsCurrentTemplateTextBoxFocused) {
-                    return CurrentTemplateTextBoxPlaceHolderText;
+                    return CurrentTemplateTextBoxPlaceHolderText;   
                 }
                 return curTemplateText;
             }
@@ -84,7 +121,7 @@ namespace MpWpfApp {
                     TemplateTokenLookupDictionary[templateName] = value;
 
                     bool canPaste = true;
-                    foreach (var thlvm in TemplateTokens) {
+                    foreach (var thlvm in this) {
                         if (thlvm.TemplateName == templateName) {
                             thlvm.IsEditMode = true;
                             thlvm.IsSelected = true;
@@ -102,7 +139,7 @@ namespace MpWpfApp {
                         IsTemplateReadyToPaste = true;
                     }
                     OnPropertyChanged(nameof(CurrentTemplateText));
-                    OnPropertyChanged(nameof(TemplateTokens));
+                    //OnPropertyChanged(nameof(TemplateTokens));
                     OnPropertyChanged(nameof(CurrentTemplateTextBoxFontStyle));
                     OnPropertyChanged(nameof(CurrentTemplateTextBrush));
                     OnPropertyChanged(nameof(ClearCurrentTemplateTextboxButtonVisibility));

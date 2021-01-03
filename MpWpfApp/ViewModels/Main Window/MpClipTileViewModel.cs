@@ -24,7 +24,7 @@
     using NativeCode;
     using Windows.ApplicationModel.DataTransfer;
     using Windows.Storage;
-    
+
     public class MpClipTileViewModel : MpViewModelBase {
         #region Private Variables
 
@@ -568,8 +568,7 @@
                 return _isSelected;
             }
             set {
-                if (_isSelected != value) 
-                {
+                if (_isSelected != value) {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
                     OnPropertyChanged(nameof(TileBorderBrush));
@@ -665,7 +664,10 @@
                 return curTemplateText;
             }
             set {
-                if (!string.IsNullOrEmpty(value) && TemplateTokenLookupDictionary.Count > 0 && TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Value != value) {
+                if (/* !string.IsNullOrEmpty(value) && */
+                    TemplateTokenLookupDictionary.Count > 0 && 
+                    TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Value != value &&
+                    CurrentTemplateTextBoxPlaceHolderText != value) {
                     var templateName = TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Key;
                     TemplateTokenLookupDictionary[templateName] = value;
 
@@ -679,7 +681,7 @@
                         } else {
                             thlvm.IsEditMode = false;
                             thlvm.IsSelected = false;
-                         }
+                        }
                         if (thlvm.WasTypeViewed == false) {
                             canPaste = false;
                         }
@@ -1170,12 +1172,12 @@
                             }
                         }
                         break;
-                    //case nameof(IsEditingTile):
-                    //    MainWindowViewModel.SearchBoxViewModel.IsSearchEnabled = IsEditingTile;
-                    //    var hb = IsEditingTile ? Brushes.Transparent : (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
-                    //    MpHelpers.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
-                    //    MpHelpers.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
-                    //    break;
+                        //case nameof(IsEditingTile):
+                        //    MainWindowViewModel.SearchBoxViewModel.IsSearchEnabled = IsEditingTile;
+                        //    var hb = IsEditingTile ? Brushes.Transparent : (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
+                        //    MpHelpers.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
+                        //    MpHelpers.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
+                        //    break;
                 }
             };
             object lockObj = new object();
@@ -1314,7 +1316,7 @@
             var titleSwirl = (Image)cb.FindName("TitleSwirl");
             var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
             var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
-           
+
             //rtb.ContextMenu = (ContextMenu)cb.FindName("ClipTile_ContextMenu");
             rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
             rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
@@ -1418,6 +1420,7 @@
                     rtb.ScrollToHome();
                     rtb.CaretPosition = rtb.Document.ContentStart;
                 } else {
+                    IsPastingTemplateTile = false;
                     toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
                     rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
                     rtb.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
@@ -1580,7 +1583,7 @@
                     };
                     templateContextMenu.Items.Add(addNewMenuItem);
                     addTemplateButton.ContextMenu = templateContextMenu;
-                    templateContextMenu.PlacementTarget = addTemplateButton;   
+                    templateContextMenu.PlacementTarget = addTemplateButton;
                     templateContextMenu.IsOpen = true;
                     //rtb.Selection.Select(ts.Start,ts.End);
                 }
@@ -1677,7 +1680,7 @@
                     foreach (var thl in rtb.GetTemplateHyperlinkList()) {
                         TemplateTokens.Add((MpTemplateHyperlinkViewModel)thl.DataContext);
                     }
-
+                    CurrentTemplateText = string.Empty;
                     //cttb.Focus();
                     //IsCurrentTemplateTextBoxFocused = true;
                 } else {
@@ -1760,8 +1763,8 @@
                             //rtb.ScrollToVerticalOffset(r.Y);
                             var characterRect = LastContentHighlightRangeList[contentIdx].End.GetCharacterRect(LogicalDirection.Forward);
                             rtb.ScrollToHorizontalOffset(rtb.HorizontalOffset + characterRect.Left - rtb.ActualWidth / 2d);
-                            rtb.ScrollToVerticalOffset(rtb.VerticalOffset + characterRect.Top - rtb.ActualHeight / 2d);                            
-                            
+                            rtb.ScrollToVerticalOffset(rtb.VerticalOffset + characterRect.Top - rtb.ActualHeight / 2d);
+
                         }
                         break;
                 }
@@ -1810,7 +1813,7 @@
                 MpHelpers.GetColorColumn(TitleColor),
                 MpHelpers.GetColorRow(TitleColor)
             );
-            
+
             cm.Width = 300;
         }
 
@@ -1876,6 +1879,7 @@
                 IsEditingTile = true;
                 IsPastingTemplateTile = true;
                 IsTemplateReadyToPaste = false;
+                var temp = CopyItemRichText;
                 foreach (var tthlvm in TemplateTokens) {
                     tthlvm.IsPasteMode = true;
                     tthlvm.IsEditMode = false;
@@ -1901,6 +1905,7 @@
                     tthlvm.WasTypeViewed = false;
                     tthlvm.TemplateText = string.Empty;
                 }
+                CopyItemRichText = temp;
                 return TemplateRichText;
             }
             return CopyItemRichText;

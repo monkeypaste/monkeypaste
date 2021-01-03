@@ -122,7 +122,13 @@ namespace MpWpfApp {
             tb.FontWeight = typeFace.Weight;
             tb.FontStretch = typeFace.Stretch;
 
-
+            tb.PreviewMouseLeftButtonDown += (s, e) => {
+                if (ctvm.IsEditingTile && !ctvm.IsPastingTemplateTile) {
+                    e.Handled = true;
+                    rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
+                    MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
+                }
+            };
             tb.MouseEnter += (s, e) => {
                 if(ctvm.IsEditingTile) {
                     tb.Cursor = Cursors.Hand;
@@ -159,7 +165,7 @@ namespace MpWpfApp {
                 //db.Background = Brushes.Transparent;
                 dbImg.Source = new BitmapImage(new Uri(path + "close2.png"));
             };
-            dbImg.MouseLeftButtonUp += (s, e) => {
+            dbImg.MouseLeftButtonDown += (s, e) => {
                 rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
                 rtb.Selection.Text = string.Empty;
                 thlvm.Dispose();
@@ -195,10 +201,17 @@ namespace MpWpfApp {
             };
             b.PreviewMouseLeftButtonDown += (s, e) => {
                 thlvm.IsFocused = true;
-                if(ctvm.IsEditingTile) {
+                if(ctvm.IsPastingTemplateTile) {
                     e.Handled = true;
-                    rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
-                    MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
+                    int i = 0;
+                    for (; i < ctvm.TemplateTokenLookupDictionary.Count; i++) {
+                        if(ctvm.TemplateTokenLookupDictionary.ElementAt(i).Key == thlvm.TemplateName) {
+                            break;
+                        }
+                    }
+                    ctvm.CurrentTemplateLookupIdx = i;
+                    thlvm.IsSelected = true;
+                    thlvm.WasTypeViewed = true;
                 }
             };
             BindingOperations.SetBinding(b, Border.BackgroundProperty, backgroundBinding);
@@ -389,8 +402,15 @@ namespace MpWpfApp {
                             lastRangeEnd = matchRange.End;
                             if ((MpSubTextTokenType)(i + 1) == MpSubTextTokenType.TemplateSegment) {
                                 var tokenProps = matchRange.Text.Split(new string[] { Properties.Settings.Default.TemplateTokenMarker }, System.StringSplitOptions.RemoveEmptyEntries);
-                                matchRange.Text = tokenProps[0];
-                                hl = new Hyperlink(matchRange.Start, matchRange.End).ConvertToTemplateHyperlink(rtb,matchRange.Text, (SolidColorBrush)(new BrushConverter().ConvertFrom(tokenProps[1])));
+                                if(tokenProps.Length == 1) {
+                                    //this is when the template is blank probably not going to actually happen
+                                    matchRange.Text = string.Empty;
+                                    hl = new Hyperlink(matchRange.Start, matchRange.End).ConvertToTemplateHyperlink(rtb, matchRange.Text, (SolidColorBrush)(new BrushConverter().ConvertFrom(tokenProps[0])));
+                                } else {
+                                    matchRange.Text = tokenProps[0]; 
+                                    hl = new Hyperlink(matchRange.Start, matchRange.End).ConvertToTemplateHyperlink(rtb, matchRange.Text, (SolidColorBrush)(new BrushConverter().ConvertFrom(tokenProps[1])));
+                                }
+                                
                                 
                                 //this ensures highlighting has an effective textrange since template ranges alter document
                                 matchRange = new TextRange(hl.ContentStart, hl.ContentEnd);
@@ -401,7 +421,9 @@ namespace MpWpfApp {
                                 hl.Tag = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);
                                 hl.IsEnabled = true;
                                 hl.MouseLeftButtonDown += (s4, e4) => {
-                                    MpHelpers.OpenUrl(hl.NavigateUri.ToString());
+                                    if(hl.NavigateUri != null) {
+                                        MpHelpers.OpenUrl(hl.NavigateUri.ToString());
+                                    }
                                 };
 
                                 MenuItem convertToQrCodeMenuItem = new MenuItem();
