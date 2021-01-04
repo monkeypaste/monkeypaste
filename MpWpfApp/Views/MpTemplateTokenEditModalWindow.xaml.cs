@@ -17,13 +17,9 @@ namespace MpWpfApp {
     /// Interaction logic for MpAssignHotkeyModalWindow.xaml
     /// </summary>
     public partial class MpTemplateTokenEditModalWindow : Window {
-        public MpTemplateTokenEditModalWindow(RichTextBox rtb, Hyperlink templateLink, bool isEditMode) {
-            this.DataContext = new MpTemplateTokenEditModalWindowViewModel(rtb,templateLink, isEditMode);
+        public MpTemplateTokenEditModalWindow(MpPasteTemplateToolbarViewModel pttbvm,MpTemplateTokenCollectionViewModel ttcvm,bool isEditMode) {
+            this.DataContext = new MpTemplateTokenEditModalWindowViewModel(pttbvm, ttcvm);
             InitializeComponent();
         }
-        //public MpTemplateTokenEditModalWindow(RichTextBox rtb, MpTemplateHyperlinkViewModel thlvm, bool isEditMode) {
-        //    this.DataContext = new MpTemplateTokenEditModalWindowViewModel(rtb, thlvm, isEditMode);
-        //    InitializeComponent();
-        //}
     }
 }

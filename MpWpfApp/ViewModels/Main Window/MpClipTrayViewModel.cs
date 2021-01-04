@@ -153,7 +153,7 @@ namespace MpWpfApp {
             get {
                 string outStr = string.Empty;
                 foreach (var sctvm in SelectedClipTiles) {
-                    if (sctvm.TemplateTokenLookupDictionary != null && sctvm.TemplateTokenLookupDictionary.Count > 0) {
+                    if (sctvm.HasTemplate) {
                         outStr += MpHelpers.ConvertRichTextToPlainText(sctvm.TemplateRichText) + Environment.NewLine;
                     } else {
                         outStr += sctvm.CopyItemPlainText + Environment.NewLine;

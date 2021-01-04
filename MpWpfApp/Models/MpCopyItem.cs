@@ -123,6 +123,7 @@ namespace MpWpfApp {
 
         public List<MpDetectedImageObject> ImageItemObjectList = new List<MpDetectedImageObject>();
 
+        public List<MpCopyItemTemplate> TemplateList = new List<MpCopyItemTemplate>();
         //this is only set wheen ci is created to name app
         //public IntPtr SourceHandle { get; set; } = IntPtr.Zero;
         #endregion
@@ -235,6 +236,7 @@ namespace MpWpfApp {
             _itemData = "Default";
             CopyItemType = MpCopyItemType.RichText;
             ImageItemObjectList = new List<MpDetectedImageObject>();
+            TemplateList = new List<MpCopyItemTemplate>();
         }
         private MpCopyItem(
             MpCopyItemType itemType,
@@ -245,7 +247,8 @@ namespace MpWpfApp {
             CopyDateTime = DateTime.Now;
             Title = "Untitled";
             CopyCount = 1;
-            Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);            
+            Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
+            TemplateList = new List<MpCopyItemTemplate>();
 
             var appPath = MpHelpers.GetProcessPath(hwnd);
             var app = _AppList.Where(x => x.AppPath == appPath).ToList();
@@ -491,6 +494,9 @@ namespace MpWpfApp {
                 new System.Collections.Generic.Dictionary<string, object> {
                         { "@ciid", CopyItemId }
                     });
+            foreach(var cit in TemplateList) {
+                cit.DeleteFromDatabase();
+            }
         }
 
         #endregion
@@ -543,7 +549,9 @@ namespace MpWpfApp {
             Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
             App = _AppList.Where(x => x.AppId == appId).ToList()[0];
             ItemColor = _ColorList.Where(x => x.ColorId == colorId).ToList()[0];
-            
+
+            TemplateList = MpCopyItemTemplate.GetAllTemplatesForCopyItem(CopyItemId);
+
             if (CopyItemType == MpCopyItemType.Image) {
                 SetData(MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]));
                 ImageItemObjectList = MpDetectedImageObject.GetAllObjectsForItem(CopyItemId);
@@ -597,6 +605,10 @@ namespace MpWpfApp {
             foreach (var imgObj in ImageItemObjectList) {
                 imgObj.CopyItemId = CopyItemId;
                 imgObj.WriteToDatabase();
+            }
+            foreach(var cit in TemplateList) {
+                cit.CopyItemId = CopyItemId;
+                cit.WriteToDatabase();
             }
         }
 

@@ -22,8 +22,8 @@ namespace MpWpfApp {
         #region Private Variables
         private bool _isEditMode = false;
         private Window _windowRef = null;
-        private RichTextBox _rtb = null;
-        private Hyperlink _originalLink = null;
+        //private RichTextBox _rtb = null;
+        //private Hyperlink _originalLink = null;
         private string _originalTemplateName = string.Empty;
         private Brush _originalTemplateColor = Brushes.Pink;
         public TextPointer _selectionEnd = null;
@@ -141,15 +141,15 @@ namespace MpWpfApp {
         //    }
         //}
 
-        private MpTemplateHyperlinkViewModel _selectedTemplateTokenViewModel = null;
-        public MpTemplateHyperlinkViewModel SelectedTemplateTokenViewModel {
+        private MpTemplateTokenCollectionViewModel _templateTokenCollectionViewModel = null;
+        public MpTemplateTokenCollectionViewModel TemplateTokenCollectionViewModel {
             get {
-                return _selectedTemplateTokenViewModel;
+                return _templateTokenCollectionViewModel;
             }
             set {
-                if (_selectedTemplateTokenViewModel != value) {
-                    _selectedTemplateTokenViewModel = value;
-                    OnPropertyChanged(nameof(SelectedTemplateTokenViewModel));
+                if (_templateTokenCollectionViewModel != value) {
+                    _templateTokenCollectionViewModel = value;
+                    OnPropertyChanged(nameof(TemplateTokenCollectionViewModel));
                 }
             }
         }
@@ -158,10 +158,10 @@ namespace MpWpfApp {
 
         #region Static Methods
         public static bool ShowTemplateTokenEditModalWindow(
-            RichTextBox rtb, 
-            Hyperlink templateLink,
+            MpPasteTemplateToolbarViewModel pttbvm,
+            MpTemplateTokenCollectionViewModel ttcvm,
             bool isEditMode) {
-            var ttmw = new MpTemplateTokenEditModalWindow(rtb, templateLink, isEditMode);
+            var ttmw = new MpTemplateTokenEditModalWindow(pttbvm, ttcvm, isEditMode);
 
             if(isEditMode) {
                 ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).IsShowingDialog = true;
@@ -180,25 +180,27 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpTemplateTokenEditModalWindowViewModel(
-            RichTextBox rtb, 
-            Hyperlink templateLink,
-            bool isEditMode) : base() {
+            MpPasteTemplateToolbarViewModel pttbvm,
+            MpTemplateTokenCollectionViewModel ttcvm) : base() {
 
-            _rtb = rtb; 
-            _originalLink = templateLink;
-            _isEditMode = isEditMode;
-
-           if(templateLink == null) {
-                templateLink = new Hyperlink().ConvertToTemplateHyperlink(
-                    _rtb, 
-                    GetUniqueTemplateName(), 
-                    GetUniqueTemplateColor());                
+           if(ttcvm == null) {
+                TemplateTokenCollectionViewModel = new MpTemplateTokenCollectionViewModel(
+                    pttbvm, 
+                    new MpCopyItemTemplate(
+                        pttbvm.ClipTileViewModel.CopyItemId, 
+                        GetUniqueTemplateColor(), 
+                        GetUniqueTemplateName()));
+                //templateLink = new Hyperlink().ConvertToTemplateHyperlink(
+                //    _rtb, 
+                //    GetUniqueTemplateName(), 
+                //    GetUniqueTemplateColor());                
             } else {
-                _originalTemplateName = ((MpTemplateHyperlinkViewModel)templateLink.DataContext).TemplateName;
-                _originalTemplateColor = ((MpTemplateHyperlinkViewModel)templateLink.DataContext).TemplateBackgroundBrush;
+                _originalTemplateName = ttcvm.TemplateName;
+                _originalTemplateColor = ttcvm.TemplateBrush;
+                TemplateTokenCollectionViewModel = ttcvm;
             }
 
-            SelectedTemplateTokenViewModel = (MpTemplateHyperlinkViewModel)templateLink.DataContext;
+            //SelectedTemplateTokenViewModel = (MpTemplateHyperlinkViewModel)templateLink.DataContext;
             if (!_isEditMode) {
                 OkCommand.Execute(null);
                 return;
@@ -215,7 +217,7 @@ namespace MpWpfApp {
         private string GetUniqueTemplateName() {
             int uniqueIdx = 1;
             string namePrefix = "Template #";
-            while(_rtb.GetTemplateHyperlinkList().Where(x => x.TargetName == namePrefix + uniqueIdx && x != _originalLink).ToList().Count > 0) {
+            while(TemplateTokenCollectionViewModel.PasteTemplateToolbarViewModel.Where(x => x.TemplateName == namePrefix + uniqueIdx && x != TemplateTokenCollectionViewModel).ToList().Count > 0) {
                 uniqueIdx++;
             }
             return namePrefix + uniqueIdx;
@@ -223,7 +225,7 @@ namespace MpWpfApp {
 
         private Brush GetUniqueTemplateColor() {
             Brush randColor = (Brush)new SolidColorBrush(MpHelpers.GetRandomColor());
-            while (_rtb.GetTemplateHyperlinkList().Where(x => x.Background == randColor).ToList().Count > 0) {
+            while (TemplateTokenCollectionViewModel.PasteTemplateToolbarViewModel.Where(x => x.TemplateBrush == randColor).ToList().Count > 0) {
                 randColor = (Brush)new SolidColorBrush(MpHelpers.GetRandomColor());
             }
             return randColor;
@@ -240,14 +242,14 @@ namespace MpWpfApp {
             //    ValidationText = SelectedTokenName + " already exists!";
             //    return false;
             //}
-            if (string.IsNullOrEmpty(SelectedTemplateTokenViewModel.TemplateName)) {
+            if (string.IsNullOrEmpty(TemplateTokenCollectionViewModel.TemplateName)) {
                 ValidationText = "Name cannot be empty!";
                 return false;
             }
             //if new name is a duplicate of another just delete this one and set it to the duplicate
-            var dupTokenHyperlink = _rtb.GetTemplateHyperlinkList().Where(x => x.TargetName == SelectedTemplateTokenViewModel.TemplateName && _originalLink != null && x.DataContext != _originalLink.DataContext).ToList();
+            var dupTokenHyperlink = TemplateTokenCollectionViewModel.PasteTemplateToolbarViewModel.Where(x => x.TemplateName == TemplateTokenCollectionViewModel.TemplateName && !string.IsNullOrEmpty(_originalTemplateName) && x != TemplateTokenCollectionViewModel).ToList();
             if (dupTokenHyperlink != null && dupTokenHyperlink.Count > 0) {
-                ValidationText = SelectedTemplateTokenViewModel.TemplateName + " already exists!";
+                ValidationText = TemplateTokenCollectionViewModel.TemplateName + " already exists!";
                 return false;
             }
             ValidationText = string.Empty;
@@ -270,9 +272,9 @@ namespace MpWpfApp {
             //if(result != null) {
             //    SelectedTokenBrush = result;
             //}
-            var result = MpHelpers.ShowColorDialog(SelectedTemplateTokenViewModel.TemplateBackgroundBrush);
+            var result = MpHelpers.ShowColorDialog(TemplateTokenCollectionViewModel.TemplateBrush);
             if (result != null) {
-                SelectedTemplateTokenViewModel.TemplateBackgroundBrush = result;
+                TemplateTokenCollectionViewModel.TemplateBrush = result;
             }
         }
 
@@ -286,16 +288,17 @@ namespace MpWpfApp {
             }
         }
         private void Cancel() {
-            if(_originalLink != null) {
-                _rtb.Selection.Text = String.Format(
+            if(!string.IsNullOrEmpty(_originalTemplateName)) {
+                var rtb = TemplateTokenCollectionViewModel.PasteTemplateToolbarViewModel.ClipTileViewModel.GetRtb();
+                rtb.Selection.Text = String.Format(
                 @"{0}{1}{0}{2}{0}",
                 Properties.Settings.Default.TemplateTokenMarker,
                 _originalTemplateName,
                 ((SolidColorBrush)_originalTemplateColor).ToString());
-                _rtb.ClearHyperlinks();
-                var ctvm = (MpClipTileViewModel)_rtb.DataContext;
-                ctvm.CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(_rtb.Document);
-                _rtb.CreateHyperlinks();
+                rtb.ClearHyperlinks();
+                var ctvm = (MpClipTileViewModel)rtb.DataContext;
+                ctvm.CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+                rtb.CreateHyperlinks();
             }
 
             _windowRef.DialogResult = false;
@@ -316,14 +319,27 @@ namespace MpWpfApp {
             return Validate();
         }
         private void Ok() {
-            _rtb.Selection.Text = String.Format(
-                @"{0}{1}{0}{2}{0}",
-                Properties.Settings.Default.TemplateTokenMarker,
-                SelectedTemplateTokenViewModel.TemplateName,
-                ((SolidColorBrush)SelectedTemplateTokenViewModel.TemplateBackgroundBrush).ToString());
-            _rtb.ClearHyperlinks();
-            var ctvm = (MpClipTileViewModel)_rtb.DataContext;
-            ctvm.CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(_rtb.Document);
+            if(string.IsNullOrEmpty(_originalTemplateName)) {
+                var rtb = TemplateTokenCollectionViewModel.PasteTemplateToolbarViewModel.ClipTileViewModel.GetRtb();
+                TemplateTokenCollectionViewModel.CopyItemTemplate.WriteToDatabase();
+
+                var nthlvm = new MpTemplateHyperlinkViewModel(
+                    TemplateTokenCollectionViewModel,
+                    new MpTemplateTextRange(
+                        TemplateTokenCollectionViewModel.CopyItemTemplateId,
+                        rtb.Document.ContentStart.GetOffsetToPosition(rtb.Selection.Start),
+                        rtb.Document.ContentStart.GetOffsetToPosition(rtb.Selection.End)));  
+                
+                TemplateTokenCollectionViewModel.Add(nthlvm);
+            }
+            //_rtb.Selection.Text = String.Format(
+            //    @"{0}{1}{0}{2}{0}",
+            //    Properties.Settings.Default.TemplateTokenMarker,
+            //    SelectedTemplateTokenViewModel.TemplateName,
+            //    ((SolidColorBrush)SelectedTemplateTokenViewModel.TemplateBackgroundBrush).ToString());
+            //_rtb.ClearHyperlinks();
+            //var ctvm = (MpClipTileViewModel)_rtb.DataContext;
+            //ctvm.CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(_rtb.Document);
 
             if (_windowRef != null) {
                 _windowRef.DialogResult = true;

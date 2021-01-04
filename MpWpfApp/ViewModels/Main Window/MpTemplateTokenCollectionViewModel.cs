@@ -1,198 +1,196 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpTemplateTokenCollectionViewModel : MpObservableCollectionViewModel<MpTemplateHyperlinkViewModel> {
+        #region View Models
+        private MpPasteTemplateToolbarViewModel _pasteTemplateToolbarViewModel = new MpPasteTemplateToolbarViewModel();
+        public MpPasteTemplateToolbarViewModel PasteTemplateToolbarViewModel {
+            get {
+                return _pasteTemplateToolbarViewModel;
+            }
+            set {
+                if (_pasteTemplateToolbarViewModel != value) {
+                    _pasteTemplateToolbarViewModel = value;
+                    OnPropertyChanged(nameof(PasteTemplateToolbarViewModel));
+                }
+            }
+        }
+        #endregion
+
         #region Properties
 
-        private bool _isTemplateReadyToPaste = false;
-        public bool IsTemplateReadyToPaste {
+        #region Business Logic Properties
+        private string _templateText = string.Empty;
+        public string TemplateText {
             get {
-                return _isTemplateReadyToPaste;
+                return _templateText;
             }
             set {
-                if (_isTemplateReadyToPaste != value) {
-                    _isTemplateReadyToPaste = value;
-                    OnPropertyChanged(nameof(IsTemplateReadyToPaste));
+                if (_templateText != value) {
+                    _templateText = value;
+                    OnPropertyChanged(nameof(TemplateText));
+                    foreach(var thvm in this) {
+                        thvm.OnPropertyChanged(nameof(thvm.TemplateDisplayValue));
+                        thvm.OnPropertyChanged(nameof(thvm.TemplateBorderWidth));
+                        thvm.OnPropertyChanged(nameof(thvm.TemplateBorderHeight));
+                        thvm.OnPropertyChanged(nameof(thvm.TemplateTextBlockHeight));
+                        thvm.OnPropertyChanged(nameof(thvm.TemplateTextBlockWidth));
+                    }
+                    
                 }
             }
         }
 
-        private bool _isCurrentTemplateTextBoxFocused = false;
-        public bool IsCurrentTemplateTextBoxFocused {
+        private bool _isSelected = false;
+        public bool IsSelected {
             get {
-                return _isCurrentTemplateTextBoxFocused;
+                return _isSelected;
             }
             set {
-                if (_isCurrentTemplateTextBoxFocused != value) {
-                    _isCurrentTemplateTextBoxFocused = value;
-                    OnPropertyChanged(nameof(IsCurrentTemplateTextBoxFocused));
-                }
-            }
-        }
-        private bool _isPastingTemplateTile = false;
-        public bool IsPastingTemplateTile {
-            get {
-                return _isPastingTemplateTile;
-            }
-            set {
-                if(_isPastingTemplateTile != value) {
-                    _isPastingTemplateTile = value;
-                    OnPropertyChanged(nameof(IsPastingTemplateTile));
-                }
-            }
-        }
-        public Visibility PasteTemplateToolbarVisibility {
-            get {
-                if (IsPastingTemplateTile) {
-                    return Visibility.Visible;
-                }
-                return Visibility.Collapsed;
-            }
-        }
-
-        public Visibility ClearAllTemplateToolbarButtonVisibility {
-            get {
-                foreach (var templateLookup in TemplateTokenLookupDictionary) {
-                    if (!string.IsNullOrEmpty(templateLookup.Value)) {
-                        return Visibility.Visible;
+                if (_isSelected != value) {
+                    _isSelected = value;
+                    OnPropertyChanged(nameof(IsSelected));
+                    foreach (var thvm in this) {
+                        thvm.OnPropertyChanged(nameof(thvm.TemplateBorderBrush));
+                        thvm.OnPropertyChanged(nameof(thvm.TemplateBorderWidth));
+                        thvm.OnPropertyChanged(nameof(thvm.TemplateBorderHeight));
+                        thvm.OnPropertyChanged(nameof(thvm.TemplateTextBlockHeight));
+                        thvm.OnPropertyChanged(nameof(thvm.TemplateTextBlockWidth));
+                    }
+                    if(!IsSelected) {
+                        FocusedTemplateHyperlinkViewModel = null;
                     }
                 }
-                return Visibility.Collapsed;
             }
         }
 
-        public Visibility ClearCurrentTemplateTextboxButtonVisibility {
+        private MpTemplateHyperlinkViewModel _focusedTemplateHyperlinkViewModel = null;
+        public MpTemplateHyperlinkViewModel FocusedTemplateHyperlinkViewModel {
             get {
-                if (CurrentTemplateText.Length > 0 &&
-                    CurrentTemplateText != CurrentTemplateTextBoxPlaceHolderText) {
-                    return Visibility.Visible;
-                }
-                return Visibility.Collapsed;
-            }
-        }
-
-        public Visibility TemplateNavigationButtonStackVisibility {
-            get {
-                if (TemplateTokenLookupDictionary.Count > 0) {
-                    return Visibility.Visible;
-                }
-                return Visibility.Collapsed;
-            }
-        }
-
-        private int _currentTemplateLookupIdx = 0;
-        public int CurrentTemplateLookupIdx {
-            get {
-                return _currentTemplateLookupIdx;
+                return _focusedTemplateHyperlinkViewModel;
             }
             set {
-                if (_currentTemplateLookupIdx != value) {
-                    _currentTemplateLookupIdx = value;
-                    OnPropertyChanged(nameof(CurrentTemplateLookupIdx));
-                    OnPropertyChanged(nameof(CurrentTemplateText));
-                    OnPropertyChanged(nameof(CurrentTemplateTextBoxFontStyle));
-                    OnPropertyChanged(nameof(CurrentTemplateTextBrush));
-                    OnPropertyChanged(nameof(ClearCurrentTemplateTextboxButtonVisibility));
-                    OnPropertyChanged(nameof(CurrentTemplateTextBoxPlaceHolderText));
+                if (_focusedTemplateHyperlinkViewModel != value) {
+                    _focusedTemplateHyperlinkViewModel = value;
+                    OnPropertyChanged(nameof(FocusedTemplateHyperlinkViewModel));
                 }
             }
         }
-
-        public string CurrentTemplateText {
-            get {
-                if (TemplateTokenLookupDictionary.Count == 0) {
-                    return string.Empty;
-                }
-                var curTemplateText = TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Value;
-                if (string.IsNullOrEmpty(curTemplateText) && !IsCurrentTemplateTextBoxFocused) {
-                    return CurrentTemplateTextBoxPlaceHolderText;   
-                }
-                return curTemplateText;
-            }
-            set {
-                if (!string.IsNullOrEmpty(value) && TemplateTokenLookupDictionary.Count > 0 && TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Value != value) {
-                    var templateName = TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Key;
-                    TemplateTokenLookupDictionary[templateName] = value;
-
-                    bool canPaste = true;
-                    foreach (var thlvm in this) {
-                        if (thlvm.TemplateName == templateName) {
-                            thlvm.IsEditMode = true;
-                            thlvm.IsSelected = true;
-                            thlvm.WasTypeViewed = true;
-                            thlvm.TemplateText = TemplateTokenLookupDictionary[templateName];
-                        } else {
-                            thlvm.IsEditMode = false;
-                            thlvm.IsSelected = false;
-                        }
-                        if (thlvm.WasTypeViewed == false) {
-                            canPaste = false;
-                        }
-                    }
-                    if (canPaste) {
-                        IsTemplateReadyToPaste = true;
-                    }
-                    OnPropertyChanged(nameof(CurrentTemplateText));
-                    //OnPropertyChanged(nameof(TemplateTokens));
-                    OnPropertyChanged(nameof(CurrentTemplateTextBoxFontStyle));
-                    OnPropertyChanged(nameof(CurrentTemplateTextBrush));
-                    OnPropertyChanged(nameof(ClearCurrentTemplateTextboxButtonVisibility));
-                    OnPropertyChanged(nameof(ClearAllTemplateToolbarButtonVisibility));
-                }
-            }
-        }
-
-        public string CurrentTemplateTextBoxPlaceHolderText {
-            get {
-                if (TemplateTokenLookupDictionary.Count == 0) {
-                    return string.Empty;
-                }
-                return TemplateTokenLookupDictionary.ElementAt(CurrentTemplateLookupIdx).Key + "...";
-            }
-        }
-
-        public Brush CurrentTemplateTextBrush {
-            get {
-                if (CurrentTemplateText != CurrentTemplateTextBoxPlaceHolderText) {
-                    return Brushes.Black;
-                }
-                return Brushes.DimGray;
-            }
-        }
-
-        public FontStyle CurrentTemplateTextBoxFontStyle {
-            get {
-                if (CurrentTemplateText == CurrentTemplateTextBoxPlaceHolderText) {
-                    return FontStyles.Italic;
-                }
-                return FontStyles.Normal;
-            }
-        }
-
-        private Dictionary<string, string> _templateTokenLookupDictionary = new Dictionary<string, string>();
-        public Dictionary<string, string> TemplateTokenLookupDictionary {
-            get {
-                return _templateTokenLookupDictionary;
-            }
-            set {
-                if (_templateTokenLookupDictionary != value) {
-                    _templateTokenLookupDictionary = value;
-                    OnPropertyChanged(nameof(TemplateTokenLookupDictionary));
-                    OnPropertyChanged(nameof(TemplateNavigationButtonStackVisibility));
-                }
-            }
-        }
-
-        public bool IsPasteToolbarAnimating { get; set; } = false;
         #endregion
-        #region Public Methods
 
+        #region Model Properties
+        public int CopyItemTemplateId {
+            get {
+                return CopyItemTemplate.CopyItemTemplateId;
+            }
+        }
+
+        public int CopyItemId {
+            get {
+                return CopyItemTemplate.CopyItemId;
+            }
+        }
+
+        public string TemplateName {
+            get {
+                return CopyItemTemplate.TemplateName;
+            }
+            set {
+                if(CopyItemTemplate.TemplateName != value) {
+                    CopyItemTemplate.TemplateName = value;
+                    OnPropertyChanged(nameof(TemplateName));
+                }
+            }
+        }
+
+        public Brush TemplateBrush {
+            get {
+                return CopyItemTemplate.TemplateColor;
+            }
+            set {
+                if(CopyItemTemplate.TemplateColor != value) {
+                    CopyItemTemplate.TemplateColor = value;
+                    OnPropertyChanged(nameof(TemplateBrush));
+                }
+            }
+        }
+        private MpCopyItemTemplate _copyItemTemplate = new MpCopyItemTemplate();
+        public MpCopyItemTemplate CopyItemTemplate {
+            get {
+                return _copyItemTemplate;
+            }
+            set {
+                if(_copyItemTemplate != value) {
+                    _copyItemTemplate = value;
+                    OnPropertyChanged(nameof(CopyItemTemplate));
+                    OnPropertyChanged(nameof(TemplateBrush));
+                    OnPropertyChanged(nameof(TemplateName));
+                    OnPropertyChanged(nameof(CopyItemTemplateId));
+                    OnPropertyChanged(nameof(CopyItemId));
+                }
+            }
+        }
+        #endregion
+        #endregion
+
+        #region Public Methods
+        public MpTemplateTokenCollectionViewModel() : this(new MpPasteTemplateToolbarViewModel(),new MpCopyItemTemplate()) { }
+
+        public MpTemplateTokenCollectionViewModel(MpPasteTemplateToolbarViewModel pttbvm, MpCopyItemTemplate cit) : base() {
+            PasteTemplateToolbarViewModel = pttbvm;
+            foreach(var ttr in cit.TemplateTextRangeList) {
+                this.Add(new MpTemplateHyperlinkViewModel(this,ttr));
+            }
+        }
+        #endregion
+
+        #region Commands
+        private RelayCommand _editTemplateCommand;
+        public ICommand EditTemplateCommand {
+            get {
+                if (_editTemplateCommand == null) {
+                    _editTemplateCommand = new RelayCommand(EditTemplate, CanEditTemplate);
+                }
+                return _editTemplateCommand;
+            }
+        }
+        private bool CanEditTemplate() {
+            return PasteTemplateToolbarViewModel.ClipTileViewModel.IsEditingTile;
+        }
+        private void EditTemplate() {
+            // _rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
+            //MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(_rtb, hl, true);
+        }
+        #endregion
+
+        #region Overrides
+        public new void Add(MpTemplateHyperlinkViewModel thlvm) {
+            base.Add(thlvm);
+            thlvm.TemplateTextRange.WriteToDatabase();
+            CopyItemTemplate.TemplateTextRangeList.Add(thlvm.TemplateTextRange);
+            CopyItemTemplate.WriteToDatabase();
+
+            var rtb = PasteTemplateToolbarViewModel.ClipTileViewModel.GetRtb();
+            var thlb = new MpTemplateHyperlinkBorder(thlvm);
+            var container = new InlineUIContainer(thlb);
+            new Hyperlink(container, thlvm.TemplateStart);            
+        }
+
+        public new void Remove(MpTemplateHyperlinkViewModel thlvm) {
+            base.Remove(thlvm);
+            CopyItemTemplate.TemplateTextRangeList.Remove(thlvm.TemplateTextRange);
+            thlvm.TemplateTextRange.DeleteFromDatabase();
+        }
         #endregion
     }
 }

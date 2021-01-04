@@ -1009,7 +1009,14 @@
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
                                                 <Border x:Name="ClipTileEditorToolbar"
+                                                        DataContext="{Binding EditRichTextBoxToolbarViewModel}"
                                                         Visibility="{Binding EditToolbarVisibility}">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="Loaded">
+                                                            <i:CallMethodAction TargetObject="{Binding}"
+                                                                                MethodName="ClipTileEditorToolbarBorder_Loaded" />
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
                                                     <StackPanel Orientation="Horizontal"
                                                                 Height="{Binding TileContentEditToolbarHeight}">
                                                         <ComboBox x:Name="FontFamilyCombo"
@@ -1232,8 +1239,8 @@
                                                              Background="White"
                                                              VerticalAlignment="Top"
                                                              HorizontalAlignment="Left"
-                                                             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                                             ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                                             ScrollViewer.HorizontalScrollBarVisibility="{Binding RtbHorizontalScrollbarVisibility}"
+                                                             ScrollViewer.VerticalScrollBarVisibility="{Binding RtbVerticalScrollbarVisibility}"
                                                              BorderThickness="0"
                                                              Padding="10,0,10,10">
                                                     <RichTextBox.Resources>
@@ -1242,8 +1249,15 @@
                                                     </RichTextBox.Resources>
                                                 </RichTextBox>
                                                 <Border x:Name="ClipTilePasteTemplateToolbar"
+                                                        DataContext="{Binding PasteTemplateToolbarViewModel}"
                                                         Background="LightBlue"
                                                         Visibility="{Binding PasteTemplateToolbarVisibility}">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="Loaded">
+                                                            <i:CallMethodAction TargetObject="{Binding}"
+                                                                                MethodName="ClipTilePasteTemplateToolbarBorder_Loaded" />
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
                                                     <Grid Height="{Binding TileContentPasteToolbarHeight}">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*" />
@@ -1280,9 +1294,9 @@
                                                                          Grid.Column="0"
                                                                          TabIndex="1"
                                                                          BorderThickness="0"
-                                                                         Text="{Binding CurrentTemplateText, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
-                                                                         FontStyle="{Binding CurrentTemplateTextBoxFontStyle}"
-                                                                         Foreground="{Binding CurrentTemplateTextBrush}"
+                                                                         Text="{Binding SelectedTemplateText, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                                                                         FontStyle="{Binding SelectedTemplateTextBoxFontStyle}"
+                                                                         Foreground="{Binding SelectedTemplateTextBrush}"
                                                                          FontSize="14"
                                                                          Width="240"
                                                                          Padding="0,0,0,0"
@@ -1292,7 +1306,7 @@
                                                                          VerticalContentAlignment="Top" />
                                                                 <Button x:Name="ClearCurrentTemplateButton"
                                                                         Grid.Column="1"
-                                                                        Visibility="{Binding ClearCurrentTemplateTextboxButtonVisibility}"
+                                                                        Visibility="{Binding ClearSelectedTemplateTextboxButtonVisibility}"
                                                                         Command="{Binding ClearCurrentTemplatesCommand}"
                                                                         Background="Transparent"
                                                                         BorderThickness="0"
@@ -1329,7 +1343,7 @@
                                                                 Grid.Column="3"
                                                                 TabIndex="4"
                                                                 IsEnabled="{Binding IsTemplateReadyToPaste}"
-                                                                Command="{Binding PasteTemplateCommand}"
+                                                                Command="{Binding ClipTileViewModel.PasteTemplateCommand}"
                                                                 Margin="15,0,15,0"
                                                                 Padding="0,0,0,0"
                                                                 FontSize="12"

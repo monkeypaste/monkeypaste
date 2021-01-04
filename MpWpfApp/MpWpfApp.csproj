@@ -113,6 +113,8 @@
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpHyperlink.cs" />
+    <Compile Include="Models\MpCopyItemTemplate.cs" />
+    <Compile Include="Models\MpTemplateTextRange.cs" />
     <Compile Include="Models\MpDetectedImageObject.cs" />
     <Compile Include="Utils\AdornedControl.cs" />
     <Compile Include="Utils\AdornerPlacement.cs" />
@@ -124,6 +126,8 @@
     <Compile Include="ViewModels\Main Window\MpDetectedImageObjectCollectionViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpDetectedImageObjectViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpEditableTextBlockViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpEditRichTextBoxToolbarViewModel.cs" />
+    <Compile Include="ViewModels\Main Window\MpPasteTemplateToolbarViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpPlaceholderTextBoxViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpTemplateHyperlinkViewModel.cs" />
     <Compile Include="Controls\MpMultiSelectListBox.cs" />
@@ -206,8 +210,8 @@
     <Compile Include="Views\MpPlaceholderTextBox.xaml.cs">
       <DependentUpon>MpPlaceholderTextBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MpTemplateHyperlink.xaml.cs">
-      <DependentUpon>MpTemplateHyperlink.xaml</DependentUpon>
+    <Compile Include="Views\MpTemplateHyperlinkBorder.xaml.cs">
+      <DependentUpon>MpTemplateHyperlinkBorder.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MpTemplateTokenPasteModalWindow.xaml.cs">
       <DependentUpon>MpTemplateTokenPasteModalWindow.xaml</DependentUpon>
@@ -237,7 +241,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MpTemplateHyperlink.xaml">
+    <Page Include="Views\MpTemplateHyperlinkBorder.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

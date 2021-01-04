@@ -17,10 +17,10 @@ namespace MpWpfApp {
     /// <summary>
     /// Interaction logic for MpTemplateHyperlink.xaml
     /// </summary>
-    public partial class MpTemplateHyperlink : UserControl {
-        public MpTemplateHyperlink() : this(new MpTemplateHyperlinkViewModel()) { }
+    public partial class MpTemplateHyperlinkBorder : UserControl {
+        public MpTemplateHyperlinkBorder() : this(new MpTemplateHyperlinkViewModel()) { }
 
-        public MpTemplateHyperlink(MpTemplateHyperlinkViewModel thlvm) {
+        public MpTemplateHyperlinkBorder(MpTemplateHyperlinkViewModel thlvm) {
             DataContext = thlvm;
             InitializeComponent();
         }

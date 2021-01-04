@@ -35,13 +35,13 @@ namespace MpWpfApp {
                                         (FontStyle)rtb.Selection.GetPropertyValue(TextElement.FontStyleProperty),
                                         (FontWeight)rtb.Selection.GetPropertyValue(TextElement.FontWeightProperty),
                                         (FontStretch)rtb.Selection.GetPropertyValue(TextElement.FontStretchProperty));
-            hl.DataContext = new MpTemplateHyperlinkViewModel(
-                ctvm,
-                templateName,
-                templateColor,
-                typeFace,
-                fontSize,
-                rtb);
+            //hl.DataContext = new MpTemplateHyperlinkViewModel(
+            //    ctvm,
+            //    templateName,
+            //    templateColor,
+            //    typeFace,
+            //    fontSize,
+            //    rtb);
             
             var thlvm = (MpTemplateHyperlinkViewModel)hl.DataContext;
 
@@ -95,10 +95,6 @@ namespace MpWpfApp {
             templateDisplayValueBinding.Source = thlvm;
             templateDisplayValueBinding.Path = new PropertyPath(nameof(thlvm.TemplateDisplayValue));
 
-            Binding templateTextBlockVisibilityBinding = new Binding();
-            templateTextBlockVisibilityBinding.Source = thlvm;
-            templateTextBlockVisibilityBinding.Path = new PropertyPath(nameof(thlvm.TemplateTextBlockVisibility));
-
             Binding templateDeleteTemplateTextButtonVisibilityBinding = new Binding();
             templateDeleteTemplateTextButtonVisibilityBinding.Source = thlvm;
             templateDeleteTemplateTextButtonVisibilityBinding.Path = new PropertyPath(nameof(thlvm.DeleteTemplateTextButtonVisibility));
@@ -126,7 +122,7 @@ namespace MpWpfApp {
                 if (ctvm.IsEditingTile && !ctvm.IsPastingTemplateTile) {
                     e.Handled = true;
                     rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
-                    MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
+                    //MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
                 }
             };
             tb.MouseEnter += (s, e) => {
@@ -204,14 +200,14 @@ namespace MpWpfApp {
                 if(ctvm.IsPastingTemplateTile) {
                     e.Handled = true;
                     int i = 0;
-                    for (; i < ctvm.TemplateTokenLookupDictionary.Count; i++) {
-                        if(ctvm.TemplateTokenLookupDictionary.ElementAt(i).Key == thlvm.TemplateName) {
-                            break;
-                        }
-                    }
-                    ctvm.CurrentTemplateLookupIdx = i;
-                    thlvm.IsSelected = true;
-                    thlvm.WasTypeViewed = true;
+                    //for (; i < ctvm.TemplateTokenLookupDictionary.Count; i++) {
+                    //    if(ctvm.TemplateTokenLookupDictionary.ElementAt(i).Key == thlvm.TemplateName) {
+                    //        break;
+                    //    }
+                    //}
+                    //ctvm.CurrentTemplateLookupIdx = i;
+                    //thlvm.IsSelected = true;
+                    //thlvm.WasTypeViewed = true;
                 }
             };
             BindingOperations.SetBinding(b, Border.BackgroundProperty, backgroundBinding);
@@ -237,7 +233,7 @@ namespace MpWpfApp {
             hl.RequestNavigate += (s4, e4) => {
                 // TODO Add logic to convert to editable region if in paste mode on click
                 rtb.Selection.Select(hl.ContentStart, hl.ContentEnd);
-                MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
+                //MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
             };
             hl.DataContextChanged += (s7, e7) => {
                 thlvm.OnPropertyChanged(nameof(thlvm.TemplateBorderWidth));
@@ -248,7 +244,7 @@ namespace MpWpfApp {
             editTemplateMenuItem.PreviewMouseDown += (s4, e4) => {
                 e4.Handled = true;
                 rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
-                MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
+                //MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
             };
 
             var deleteTemplateMenuItem = new MenuItem();
