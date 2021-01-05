@@ -101,23 +101,6 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsPastingTemplateClipTile {
-            get {
-                foreach (var sctvm in SelectedClipTiles) {
-                    if (sctvm.IsPastingTemplateTile) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
-
-        public bool IsScrollingAutomated {
-            get {
-                return IsEditingClipTile || IsPastingTemplateClipTile;
-            }
-        }
-
         public Visibility EmptyListMessageVisibility {
             get {
                 if(VisibileClipTiles.Count == 0) {
@@ -456,7 +439,8 @@ namespace MpWpfApp {
         public void ClearClipSelection() {
             foreach (var clip in this) {
                 clip.IsEditingTile = false;
-                clip.IsPastingTemplateTile = false;
+                clip.TemplateToolbarViewModel.IsPastingTemplateTile = false;
+                clip.TemplateToolbarViewModel.IsEditingTemplate = false;
                 clip.IsSelected = false;
                 //clip.IsClipItemFocused = false;
                 //clip.IsClipRichTextBoxFocused = false;
@@ -583,7 +567,7 @@ namespace MpWpfApp {
             ResetClipSelection();
         }
 
-        public async Task<IDataObject> GetDataObjectFromSelectedClips(bool isPasting, bool isDragDrop = false) {
+        public async Task<IDataObject> GetDataObjectFromSelectedClips(bool isDragDrop = false) {
             IDataObject d = new DataObject();
             //only when pasting into explorer must have file drop
             if (string.IsNullOrEmpty(ClipboardManager.LastWindowWatcher.LastTitle.Trim()) && isDragDrop) {
@@ -594,7 +578,7 @@ namespace MpWpfApp {
 
             string rtf =string.Empty;
             foreach (var sctvm in SelectedClipTiles) {
-                var task = sctvm.GetPastableRichTextTemplate(isPasting);
+                var task = sctvm.GetPastableRichText();
                 string rt = await task;
                 if(string.IsNullOrEmpty(rtf)) {
                     rtf = rt;

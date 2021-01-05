@@ -18,14 +18,14 @@ namespace MpWpfApp {
         #endregion
 
         #region View Models
-        private MpClipTileViewModel _clipTileViewModel = new MpClipTileViewModel();
+        private MpClipTileViewModel _clipTileViewModel = null;
         public MpClipTileViewModel ClipTileViewModel {
             get {
                 return _clipTileViewModel;
             }
             set {
                 if (_clipTileViewModel != value) {
-                    ClipTileViewModel = value;
+                    _clipTileViewModel = value;
                     OnPropertyChanged(nameof(ClipTileViewModel));
                 }
             }
@@ -37,6 +37,18 @@ namespace MpWpfApp {
         public double TileContentEditToolbarHeight {
             get {
                 return MpMeasurements.Instance.ClipTileEditToolbarHeight;
+            }
+        }
+        private double _editToolbarTop = 0;
+        public double EditToolbarTop {
+            get {
+                return _editToolbarTop;
+            }
+            set {
+                if (_editToolbarTop != value) {
+                    _editToolbarTop = value;
+                    OnPropertyChanged(nameof(EditToolbarTop));
+                }
             }
         }
         #endregion
@@ -113,7 +125,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpEditRichTextBoxToolbarViewModel() : this(new MpClipTileViewModel()) { }
+        //public MpEditRichTextBoxToolbarViewModel() : this(new MpClipTileViewModel()) { }
 
         public MpEditRichTextBoxToolbarViewModel(MpClipTileViewModel ctvm) {
             ClipTileViewModel = ctvm;
@@ -123,7 +135,7 @@ namespace MpWpfApp {
             var et = (Border)sender;
             var rtb = ClipTileViewModel.GetRtb();
             var cb = (MpClipBorder)et.GetVisualAncestor<MpClipBorder>();
-            var sp = (StackPanel)cb.FindName("ClipTileRichTextStackPanel");
+            var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxCanvas");
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
             var titleSwirl = (Image)cb.FindName("TitleSwirl");
 
@@ -208,17 +220,54 @@ namespace MpWpfApp {
                 double fromWidthTile = cb.ActualWidth;
                 double toWidthTile = 0;
 
+                double fromTopToolbar = 0;
+                double toTopToolbar = 0;
+
+                double fromTopRtb = 0;
+                double toTopRtb = 0;
                 if (et.Visibility == Visibility.Visible) {
-                    toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);                    
+                    toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
+                    
+                    fromTopToolbar = -TileContentEditToolbarHeight;
+                    toTopToolbar = 0;
+
+                    fromTopRtb = 0;
+                    toTopRtb = TileContentEditToolbarHeight;
                 } else {
                     toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
+
+                    fromTopToolbar = 0;
+                    toTopToolbar = -TileContentEditToolbarHeight;
+
+                    fromTopRtb = TileContentEditToolbarHeight;
+                    toTopRtb = 0;
                 }
-                
+
+                MpHelpers.AnimateDoubleProperty(
+                    fromTopRtb,
+                    toTopRtb,
+                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    rtb,
+                    Canvas.TopProperty,
+                    (s1, e) => {
+
+                    });
+
+                MpHelpers.AnimateDoubleProperty(
+                    fromTopToolbar,
+                    toTopToolbar,
+                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    et,
+                    Canvas.TopProperty,
+                    (s1, e) => {
+
+                    });
+
                 MpHelpers.AnimateDoubleProperty(
                     fromWidthTile,
                     toWidthTile,
                     Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    new List<FrameworkElement> { cb, titleSwirl, rtb, et, sp },
+                    new List<FrameworkElement> { cb, titleSwirl, rtb, et, rtbc },
                     FrameworkElement.WidthProperty,
                     (s1, e) => {
                         
@@ -257,19 +306,21 @@ namespace MpWpfApp {
                 rightAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
                 justifyAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Justify);
 
-                IsAddTemplateButtonEnabled = true;
-                foreach (var templateHyperlink in rtb.GetTemplateHyperlinkList()) {
-                    if (!rtb.Selection.Start.IsInSameDocument(templateHyperlink.ContentStart) ||
-                       !rtb.Selection.Start.IsInSameDocument(templateHyperlink.ContentEnd)) {
-                        continue;
-                    }
-                    if ((rtb.Selection.Start.CompareTo(templateHyperlink.ContentStart) >= 0 &&
-                        rtb.Selection.Start.CompareTo(templateHyperlink.ContentEnd) <= 0) ||
-                       (rtb.Selection.End.CompareTo(templateHyperlink.ContentStart) >= 0 &&
-                        rtb.Selection.End.CompareTo(templateHyperlink.ContentEnd) <= 0)) {
-                        IsAddTemplateButtonEnabled = false;
-                    }
-                }
+                Console.WriteLine("Selection parent: " + rtb.Selection.Start.Parent.ToString());
+                IsAddTemplateButtonEnabled = true;// rtb.Selection.Start.Parent.GetType() != typeof(InlineUIContainer);
+
+                //foreach (var templateHyperlink in rtb.GetTemplateHyperlinkList()) {
+                //    if (!rtb.Selection.Start.IsInSameDocument(templateHyperlink.ContentStart) ||
+                //       !rtb.Selection.Start.IsInSameDocument(templateHyperlink.ContentEnd)) {
+                //        continue;
+                //    }
+                //    if ((rtb.Selection.Start.CompareTo(templateHyperlink.ContentStart) >= 0 &&
+                //        rtb.Selection.Start.CompareTo(templateHyperlink.ContentEnd) <= 0) ||
+                //       (rtb.Selection.End.CompareTo(templateHyperlink.ContentStart) >= 0 &&
+                //        rtb.Selection.End.CompareTo(templateHyperlink.ContentEnd) <= 0)) {
+                //        IsAddTemplateButtonEnabled = false;
+                //    }
+                //}
 
                 OnPropertyChanged(nameof(IsAddTemplateButtonEnabled));
             };
@@ -283,10 +334,6 @@ namespace MpWpfApp {
             //rtb.LostFocus += (s, e7) => {
             //    e7.Handled = true;
             //};
-
-            rtb.TextChanged += (s, e8) => {
-
-            };
         }
         #endregion
 

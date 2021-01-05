@@ -9,7 +9,6 @@ namespace MpWpfApp {
         public int CopyItemId { get; set; } = 0;
         public Brush TemplateColor { get; set; } = Brushes.Red;
         public string TemplateName { get; set; } = String.Empty;
-        public List<MpTemplateTextRange> TemplateTextRangeList = new List<MpTemplateTextRange>();
 
         public static List<MpCopyItemTemplate> GetAllTemplatesForCopyItem(int copyItemId) {
             var copyItemTemplateList = new List<MpCopyItemTemplate>();
@@ -32,7 +31,6 @@ namespace MpWpfApp {
             CopyItemId = ciid;
             TemplateColor = templateColor;
             TemplateName = templateName;
-            TemplateTextRangeList = new List<MpTemplateTextRange>();
         }
 
         public MpCopyItemTemplate(DataRow dr) {
@@ -43,7 +41,6 @@ namespace MpWpfApp {
             CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemId"].ToString());
             TemplateName = dr["TemplateName"].ToString();
             TemplateColor = (Brush)new BrushConverter().ConvertFromString(dr["HexColor"].ToString());
-            TemplateTextRangeList = MpTemplateTextRange.GetAllTextRangesForTemplate(CopyItemTemplateId);
         }
 
         public override void WriteToDatabase() {
@@ -66,10 +63,6 @@ namespace MpWpfApp {
                         { "@tn", TemplateName }
                     });
             }
-            foreach(var ttr in TemplateTextRangeList) {
-                ttr.CopyItemTemplateId = CopyItemTemplateId;
-                ttr.WriteToDatabase();
-            }
         }
         public void DeleteFromDatabase() {
             MpDb.Instance.ExecuteWrite(
@@ -77,9 +70,6 @@ namespace MpWpfApp {
                 new Dictionary<string, object> {
                     { "@citid", CopyItemTemplateId }
                 });
-            foreach (var ttr in TemplateTextRangeList) {
-                ttr.DeleteFromDatabase();
-            }
         }
     }
 }

@@ -5,10 +5,7 @@
            xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
            xmlns:local="clr-namespace:MpWpfApp"
-           mc:Ignorable="d">
-    <UserControl.DataContext>
-        <local:MpTemplateHyperlinkViewModel />
-    </UserControl.DataContext>      
+           mc:Ignorable="d">  
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="Loaded">
                 <i:CallMethodAction TargetObject="{Binding}"
@@ -19,8 +16,8 @@
                     Focusable="True"
                     CornerRadius="3"
                     BorderThickness="1"
-                    Background="{Binding TemplateBackgroundBrush}"
-                    BorderBrush="{Binding TemplateForegroundBrush}"
+                    Background="{Binding TemplateBrush}"
+                    BorderBrush="{Binding TemplateBorderBrush}"
                     VerticalAlignment="Center"
                     Padding="0.5">
                 <DockPanel>
@@ -29,12 +26,14 @@
                                Background="Transparent"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Center"
-                               FontSize="10"
+                               Foreground="{Binding TemplateForegroundBrush}"
                                Text="{Binding TemplateDisplayValue}" />
                     <Button x:Name="DeleteTemplateTokenButton"
                             DockPanel.Dock="Right"
                             Width="15"
                             Height="15"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
                             Visibility="{Binding DeleteTemplateTextButtonVisibility}"
                             Template="{DynamicResource BackgroundButton}">
                         <Button.Background>

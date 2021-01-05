@@ -24,342 +24,303 @@ namespace MpWpfApp {
         //    var run = hyperlink.Inlines.FirstInline as Run;
         //    return run == null ? string.Empty : run.Text;
         //}
-        public static Hyperlink ConvertToTemplateHyperlink(
-            this Hyperlink hl,
-            RichTextBox rtb,
-            string templateName,
-            Brush templateColor) {
-            var ctvm = (MpClipTileViewModel)rtb.DataContext;
-            double fontSize = (double)rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty) - 2;
-            var typeFace = new Typeface((FontFamily)rtb.Selection.GetPropertyValue(TextElement.FontFamilyProperty),
-                                        (FontStyle)rtb.Selection.GetPropertyValue(TextElement.FontStyleProperty),
-                                        (FontWeight)rtb.Selection.GetPropertyValue(TextElement.FontWeightProperty),
-                                        (FontStretch)rtb.Selection.GetPropertyValue(TextElement.FontStretchProperty));
-            //hl.DataContext = new MpTemplateHyperlinkViewModel(
-            //    ctvm,
-            //    templateName,
-            //    templateColor,
-            //    typeFace,
-            //    fontSize,
-            //    rtb);
+        //public static Hyperlink ConvertToTemplateHyperlink(
+        //    this Hyperlink hl,
+        //    RichTextBox rtb,
+        //    string templateName,
+        //    Brush templateColor) {
+        //    var ctvm = (MpClipTileViewModel)rtb.DataContext;
+        //    double fontSize = (double)rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty) - 2;
+        //    var typeFace = new Typeface((FontFamily)rtb.Selection.GetPropertyValue(TextElement.FontFamilyProperty),
+        //                                (FontStyle)rtb.Selection.GetPropertyValue(TextElement.FontStyleProperty),
+        //                                (FontWeight)rtb.Selection.GetPropertyValue(TextElement.FontWeightProperty),
+        //                                (FontStretch)rtb.Selection.GetPropertyValue(TextElement.FontStretchProperty));
+        //    //hl.DataContext = new MpTemplateHyperlinkViewModel(
+        //    //    ctvm,
+        //    //    templateName,
+        //    //    templateColor,
+        //    //    typeFace,
+        //    //    fontSize,
+        //    //    rtb);
             
-            var thlvm = (MpTemplateHyperlinkViewModel)hl.DataContext;
+        //    var thlvm = (MpTemplateHyperlinkViewModel)hl.DataContext;
 
-            Binding borderBrushBinding = new Binding();
-            borderBrushBinding.Source = thlvm;
-            borderBrushBinding.Path = new PropertyPath(nameof(thlvm.TemplateBorderBrush));
+        //    Binding borderBrushBinding = new Binding();
+        //    borderBrushBinding.Source = thlvm;
+        //    borderBrushBinding.Path = new PropertyPath(nameof(thlvm.TemplateBorderBrush));
 
-            Binding fontSizeBinding = new Binding();
-            fontSizeBinding.Source = thlvm;
-            fontSizeBinding.Path = new PropertyPath(nameof(thlvm.TemplateFontSize));
-            fontSizeBinding.Mode = BindingMode.TwoWay;
-            fontSizeBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+        //    Binding fontSizeBinding = new Binding();
+        //    fontSizeBinding.Source = thlvm;
+        //    fontSizeBinding.Path = new PropertyPath(nameof(thlvm.TemplateFontSize));
+        //    fontSizeBinding.Mode = BindingMode.TwoWay;
+        //    fontSizeBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
 
-            Binding typefaceBinding = new Binding();
-            typefaceBinding.Source = thlvm;
-            typefaceBinding.Path = new PropertyPath(nameof(thlvm.TemplateTypeFace));
-            typefaceBinding.Mode = BindingMode.TwoWay;
-            typefaceBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+        //    Binding typefaceBinding = new Binding();
+        //    typefaceBinding.Source = thlvm;
+        //    typefaceBinding.Path = new PropertyPath(nameof(thlvm.TemplateTypeFace));
+        //    typefaceBinding.Mode = BindingMode.TwoWay;
+        //    typefaceBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
 
-            Binding textblockWidthBinding = new Binding();
-            textblockWidthBinding.Source = thlvm;
-            textblockWidthBinding.Path = new PropertyPath(nameof(thlvm.TemplateTextBlockWidth));
+        //    Binding textblockWidthBinding = new Binding();
+        //    textblockWidthBinding.Source = thlvm;
+        //    textblockWidthBinding.Path = new PropertyPath(nameof(thlvm.TemplateTextBlockWidth));
 
-            Binding textblockHeightBinding = new Binding();
-            textblockHeightBinding.Source = thlvm;
-            textblockHeightBinding.Path = new PropertyPath(nameof(thlvm.TemplateTextBlockHeight));
+        //    Binding textblockHeightBinding = new Binding();
+        //    textblockHeightBinding.Source = thlvm;
+        //    textblockHeightBinding.Path = new PropertyPath(nameof(thlvm.TemplateTextBlockHeight));
 
-            Binding borderWidthBinding = new Binding();
-            borderWidthBinding.Source = thlvm;
-            borderWidthBinding.Path = new PropertyPath(nameof(thlvm.TemplateBorderWidth));
+        //    Binding borderWidthBinding = new Binding();
+        //    borderWidthBinding.Source = thlvm;
+        //    borderWidthBinding.Path = new PropertyPath(nameof(thlvm.TemplateBorderWidth));
 
-            Binding borderHeightBinding = new Binding();
-            borderHeightBinding.Source = thlvm;
-            borderHeightBinding.Path = new PropertyPath(nameof(thlvm.TemplateBorderHeight));
+        //    Binding borderHeightBinding = new Binding();
+        //    borderHeightBinding.Source = thlvm;
+        //    borderHeightBinding.Path = new PropertyPath(nameof(thlvm.TemplateBorderHeight));
 
-            Binding buttonSizeBinding = new Binding();
-            buttonSizeBinding.Source = thlvm;
-            buttonSizeBinding.Path = new PropertyPath(nameof(thlvm.TemplateDeleteButtonSize));
+        //    Binding buttonSizeBinding = new Binding();
+        //    buttonSizeBinding.Source = thlvm;
+        //    buttonSizeBinding.Path = new PropertyPath(nameof(thlvm.TemplateDeleteButtonSize));
 
-            Binding foregroundBinding = new Binding();
-            foregroundBinding.Source = thlvm;
-            foregroundBinding.Path = new PropertyPath(nameof(thlvm.TemplateForegroundBrush));
+        //    Binding foregroundBinding = new Binding();
+        //    foregroundBinding.Source = thlvm;
+        //    foregroundBinding.Path = new PropertyPath(nameof(thlvm.TemplateForegroundBrush));
 
-            Binding backgroundBinding = new Binding();
-            backgroundBinding.Source = thlvm;
-            backgroundBinding.Path = new PropertyPath(nameof(thlvm.TemplateBackgroundBrush));
-            backgroundBinding.Mode = BindingMode.TwoWay;
-            backgroundBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
+        //    Binding backgroundBinding = new Binding();
+        //    backgroundBinding.Source = thlvm;
+        //    backgroundBinding.Path = new PropertyPath(nameof(thlvm.TemplateBrush));
+        //    backgroundBinding.Mode = BindingMode.TwoWay;
+        //    backgroundBinding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
 
-            Binding templateDisplayValueBinding = new Binding();
-            templateDisplayValueBinding.Source = thlvm;
-            templateDisplayValueBinding.Path = new PropertyPath(nameof(thlvm.TemplateDisplayValue));
+        //    Binding templateDisplayValueBinding = new Binding();
+        //    templateDisplayValueBinding.Source = thlvm;
+        //    templateDisplayValueBinding.Path = new PropertyPath(nameof(thlvm.TemplateDisplayValue));
 
-            Binding templateDeleteTemplateTextButtonVisibilityBinding = new Binding();
-            templateDeleteTemplateTextButtonVisibilityBinding.Source = thlvm;
-            templateDeleteTemplateTextButtonVisibilityBinding.Path = new PropertyPath(nameof(thlvm.DeleteTemplateTextButtonVisibility));
+        //    Binding templateDeleteTemplateTextButtonVisibilityBinding = new Binding();
+        //    templateDeleteTemplateTextButtonVisibilityBinding.Source = thlvm;
+        //    templateDeleteTemplateTextButtonVisibilityBinding.Path = new PropertyPath(nameof(thlvm.DeleteTemplateTextButtonVisibility));
 
-            Binding isEnabledBinding = new Binding();
-            isEnabledBinding.Source = ctvm;
-            isEnabledBinding.Path = new PropertyPath(nameof(ctvm.IsEditingTile));
+        //    Binding isEnabledBinding = new Binding();
+        //    isEnabledBinding.Source = ctvm;
+        //    isEnabledBinding.Path = new PropertyPath(nameof(ctvm.IsEditingTile));
 
-            BindingOperations.SetBinding(hl, Hyperlink.TargetNameProperty, templateDisplayValueBinding);
-            BindingOperations.SetBinding(hl, Hyperlink.BackgroundProperty, backgroundBinding);
-            BindingOperations.SetBinding(hl, Hyperlink.ForegroundProperty, foregroundBinding);
-            BindingOperations.SetBinding(hl, Hyperlink.FontSizeProperty, fontSizeBinding);
-            BindingOperations.SetBinding(hl, Hyperlink.IsEnabledProperty, isEnabledBinding);
+        //    BindingOperations.SetBinding(hl, Hyperlink.TargetNameProperty, templateDisplayValueBinding);
+        //    BindingOperations.SetBinding(hl, Hyperlink.BackgroundProperty, backgroundBinding);
+        //    BindingOperations.SetBinding(hl, Hyperlink.ForegroundProperty, foregroundBinding);
+        //    BindingOperations.SetBinding(hl, Hyperlink.FontSizeProperty, fontSizeBinding);
+        //    BindingOperations.SetBinding(hl, Hyperlink.IsEnabledProperty, isEnabledBinding);
 
-            TextBlock tb = new TextBlock();
-            tb.Background = Brushes.Transparent;
-            tb.HorizontalAlignment = HorizontalAlignment.Center;
-            tb.VerticalAlignment = VerticalAlignment.Center;
-            tb.FontFamily = typeFace.FontFamily;
-            tb.FontStyle = typeFace.Style;
-            tb.FontWeight = typeFace.Weight;
-            tb.FontStretch = typeFace.Stretch;
+        //    TextBlock tb = new TextBlock();
+        //    tb.Background = Brushes.Transparent;
+        //    tb.HorizontalAlignment = HorizontalAlignment.Center;
+        //    tb.VerticalAlignment = VerticalAlignment.Center;
+        //    tb.FontFamily = typeFace.FontFamily;
+        //    tb.FontStyle = typeFace.Style;
+        //    tb.FontWeight = typeFace.Weight;
+        //    tb.FontStretch = typeFace.Stretch;
 
-            tb.PreviewMouseLeftButtonDown += (s, e) => {
-                if (ctvm.IsEditingTile && !ctvm.IsPastingTemplateTile) {
-                    e.Handled = true;
-                    rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
-                    //MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
-                }
-            };
-            tb.MouseEnter += (s, e) => {
-                if(ctvm.IsEditingTile) {
-                    tb.Cursor = Cursors.Hand;
-                } else {
-                    tb.Cursor = Cursors.Arrow;
-                }
-            };
+        //    tb.PreviewMouseLeftButtonDown += (s, e) => {
+        //        if (ctvm.IsEditingTile && !ctvm.IsPastingTemplateTile) {
+        //            e.Handled = true;
+        //            rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
+        //            //MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
+        //        }
+        //    };
+        //    tb.MouseEnter += (s, e) => {
+        //        if(ctvm.IsEditingTile) {
+        //            tb.Cursor = Cursors.Hand;
+        //        } else {
+        //            tb.Cursor = Cursors.Arrow;
+        //        }
+        //    };
 
-            tb.MouseLeave += (s, e) => {
-                tb.Cursor = Cursors.Arrow;
-            };
+        //    tb.MouseLeave += (s, e) => {
+        //        tb.Cursor = Cursors.Arrow;
+        //    };
             
-            BindingOperations.SetBinding(tb, TextBlock.ForegroundProperty, foregroundBinding);
-            BindingOperations.SetBinding(tb, TextBlock.TextProperty, templateDisplayValueBinding);
-            BindingOperations.SetBinding(tb, TextBlock.HeightProperty, textblockHeightBinding);
-            BindingOperations.SetBinding(tb, TextBlock.WidthProperty, textblockWidthBinding);
-            BindingOperations.SetBinding(tb, TextBlock.FontSizeProperty, fontSizeBinding);
+        //    BindingOperations.SetBinding(tb, TextBlock.ForegroundProperty, foregroundBinding);
+        //    BindingOperations.SetBinding(tb, TextBlock.TextProperty, templateDisplayValueBinding);
+        //    BindingOperations.SetBinding(tb, TextBlock.HeightProperty, textblockHeightBinding);
+        //    BindingOperations.SetBinding(tb, TextBlock.WidthProperty, textblockWidthBinding);
+        //    BindingOperations.SetBinding(tb, TextBlock.FontSizeProperty, fontSizeBinding);
             
 
-            var path = @"pack://application:,,,/Resources/Images/";
-            Image dbImg = new Image(); 
-            dbImg.Source = (BitmapSource)new BitmapImage(new Uri(path + "close2.png"));
-            //Button db = new Button();
-            //db.Background = new ImageBrush((BitmapSource)new BitmapImage(new Uri(path + "close2.png")));
-            dbImg.Margin = new Thickness(0, 0, 0, 0);
-            //db.BorderThickness = new Thickness(0);
-            //dbImg.Background = Brushes.Transparent;
-            //db.Content = dbImg;
-            dbImg.MouseEnter += (s, e) => {
-                //db.Background = Brushes.Transparent;
-                dbImg.Source = new BitmapImage(new Uri(path + "close1.png"));
-            };
-            dbImg.MouseLeave += (s, e) => {
-                //db.Background = Brushes.Transparent;
-                dbImg.Source = new BitmapImage(new Uri(path + "close2.png"));
-            };
-            dbImg.MouseLeftButtonDown += (s, e) => {
-                rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
-                rtb.Selection.Text = string.Empty;
-                thlvm.Dispose();
-            };
-            BindingOperations.SetBinding(dbImg, Button.VisibilityProperty, templateDeleteTemplateTextButtonVisibilityBinding);
-            BindingOperations.SetBinding(dbImg, Button.WidthProperty, buttonSizeBinding);
-            BindingOperations.SetBinding(dbImg, Button.HeightProperty, buttonSizeBinding);
+        //    var path = @"pack://application:,,,/Resources/Images/";
+        //    Image dbImg = new Image(); 
+        //    dbImg.Source = (BitmapSource)new BitmapImage(new Uri(path + "close2.png"));
+        //    //Button db = new Button();
+        //    //db.Background = new ImageBrush((BitmapSource)new BitmapImage(new Uri(path + "close2.png")));
+        //    dbImg.Margin = new Thickness(0, 0, 0, 0);
+        //    //db.BorderThickness = new Thickness(0);
+        //    //dbImg.Background = Brushes.Transparent;
+        //    //db.Content = dbImg;
+        //    dbImg.MouseEnter += (s, e) => {
+        //        //db.Background = Brushes.Transparent;
+        //        dbImg.Source = new BitmapImage(new Uri(path + "close1.png"));
+        //    };
+        //    dbImg.MouseLeave += (s, e) => {
+        //        //db.Background = Brushes.Transparent;
+        //        dbImg.Source = new BitmapImage(new Uri(path + "close2.png"));
+        //    };
+        //    dbImg.MouseLeftButtonDown += (s, e) => {
+        //        rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
+        //        rtb.Selection.Text = string.Empty;
+        //        thlvm.Dispose();
+        //    };
+        //    BindingOperations.SetBinding(dbImg, Button.VisibilityProperty, templateDeleteTemplateTextButtonVisibilityBinding);
+        //    BindingOperations.SetBinding(dbImg, Button.WidthProperty, buttonSizeBinding);
+        //    BindingOperations.SetBinding(dbImg, Button.HeightProperty, buttonSizeBinding);
 
-            DockPanel dp = new DockPanel();
-            dp.Children.Add(tb);
-            dp.Children.Add(dbImg);
-            DockPanel.SetDock(tb, Dock.Left);
-            DockPanel.SetDock(dbImg, Dock.Right);
+        //    DockPanel dp = new DockPanel();
+        //    dp.Children.Add(tb);
+        //    dp.Children.Add(dbImg);
+        //    DockPanel.SetDock(tb, Dock.Left);
+        //    DockPanel.SetDock(dbImg, Dock.Right);
 
-            Border b = new Border();
-            b.Focusable = true;
-            b.BorderThickness = new Thickness(2);
-            b.CornerRadius = new CornerRadius(2.5);
-            b.VerticalAlignment = VerticalAlignment.Center;
-            //b.Padding = new Thickness(0.5);
-            b.Child = dp;
-            b.MouseEnter += (s, e) => {
-                if (thlvm.IsFocused) {
-                    return;
-                }
-                thlvm.IsHovering = true;
-            };
-            b.MouseLeave += (s, e) => {
-                if (thlvm.IsFocused) {
-                    return;
-                }
-                thlvm.IsHovering = false;
-            };
-            b.PreviewMouseLeftButtonDown += (s, e) => {
-                thlvm.IsFocused = true;
-                if(ctvm.IsPastingTemplateTile) {
-                    e.Handled = true;
-                    int i = 0;
-                    //for (; i < ctvm.TemplateTokenLookupDictionary.Count; i++) {
-                    //    if(ctvm.TemplateTokenLookupDictionary.ElementAt(i).Key == thlvm.TemplateName) {
-                    //        break;
-                    //    }
-                    //}
-                    //ctvm.CurrentTemplateLookupIdx = i;
-                    //thlvm.IsSelected = true;
-                    //thlvm.WasTypeViewed = true;
-                }
-            };
-            BindingOperations.SetBinding(b, Border.BackgroundProperty, backgroundBinding);
-            BindingOperations.SetBinding(b, Border.BorderBrushProperty, borderBrushBinding);
-            BindingOperations.SetBinding(b, Border.WidthProperty, borderWidthBinding);
-            BindingOperations.SetBinding(b, Border.HeightProperty, borderHeightBinding);
+        //    Border b = new Border();
+        //    b.Focusable = true;
+        //    b.BorderThickness = new Thickness(2);
+        //    b.CornerRadius = new CornerRadius(2.5);
+        //    b.VerticalAlignment = VerticalAlignment.Center;
+        //    //b.Padding = new Thickness(0.5);
+        //    b.Child = dp;
+        //    b.MouseEnter += (s, e) => {
+        //        if (thlvm.IsSelected) {
+        //            return;
+        //        }
+        //        thlvm.IsHovering = true;
+        //    };
+        //    b.MouseLeave += (s, e) => {
+        //        if (thlvm.IsSelected) {
+        //            return;
+        //        }
+        //        thlvm.IsHovering = false;
+        //    };
+        //    b.PreviewMouseLeftButtonDown += (s, e) => {
+        //        thlvm.IsSelected = true;
+        //        if(ctvm.IsPastingTemplateTile) {
+        //            e.Handled = true;
+        //            int i = 0;
+        //            //for (; i < ctvm.TemplateTokenLookupDictionary.Count; i++) {
+        //            //    if(ctvm.TemplateTokenLookupDictionary.ElementAt(i).Key == thlvm.TemplateName) {
+        //            //        break;
+        //            //    }
+        //            //}
+        //            //ctvm.CurrentTemplateLookupIdx = i;
+        //            //thlvm.IsSelected = true;
+        //            //thlvm.WasTypeViewed = true;
+        //        }
+        //    };
+        //    BindingOperations.SetBinding(b, Border.BackgroundProperty, backgroundBinding);
+        //    BindingOperations.SetBinding(b, Border.BorderBrushProperty, borderBrushBinding);
+        //    BindingOperations.SetBinding(b, Border.WidthProperty, borderWidthBinding);
+        //    BindingOperations.SetBinding(b, Border.HeightProperty, borderHeightBinding);
 
-            InlineUIContainer container = new InlineUIContainer(b);
-            //Run run = new Run(hl.TargetName);
-            //run.Background = hl.Background;
-            //run.Foreground = hl.Foreground;
+        //    InlineUIContainer container = new InlineUIContainer(b);
+        //    //Run run = new Run(hl.TargetName);
+        //    //run.Background = hl.Background;
+        //    //run.Foreground = hl.Foreground;
 
-            hl.Inlines.Clear();
-            hl.Inlines.Add(container);
-            hl.Tag = MpSubTextTokenType.TemplateSegment;
-            hl.TextDecorations = null;
-            hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
-            hl.Unloaded += (s, e) => {
-                if (hl.DataContext != null) {
-                    ((MpTemplateHyperlinkViewModel)hl.DataContext).Dispose();
-                }
-            };
-            hl.RequestNavigate += (s4, e4) => {
-                // TODO Add logic to convert to editable region if in paste mode on click
-                rtb.Selection.Select(hl.ContentStart, hl.ContentEnd);
-                //MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
-            };
-            hl.DataContextChanged += (s7, e7) => {
-                thlvm.OnPropertyChanged(nameof(thlvm.TemplateBorderWidth));
-                thlvm.OnPropertyChanged(nameof(thlvm.TemplateDisplayValue));
-            };
-            var editTemplateMenuItem = new MenuItem();
-            editTemplateMenuItem.Header = "Edit";
-            editTemplateMenuItem.PreviewMouseDown += (s4, e4) => {
-                e4.Handled = true;
-                rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
-                //MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
-            };
+        //    hl.Inlines.Clear();
+        //    hl.Inlines.Add(container);
+        //    hl.Tag = MpSubTextTokenType.TemplateSegment;
+        //    hl.TextDecorations = null;
+        //    hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
+        //    hl.Unloaded += (s, e) => {
+        //        if (hl.DataContext != null) {
+        //            ((MpTemplateHyperlinkViewModel)hl.DataContext).Dispose();
+        //        }
+        //    };
+        //    hl.RequestNavigate += (s4, e4) => {
+        //        // TODO Add logic to convert to editable region if in paste mode on click
+        //        rtb.Selection.Select(hl.ContentStart, hl.ContentEnd);
+        //        //MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
+        //    };
+        //    hl.DataContextChanged += (s7, e7) => {
+        //        thlvm.OnPropertyChanged(nameof(thlvm.TemplateBorderWidth));
+        //        thlvm.OnPropertyChanged(nameof(thlvm.TemplateDisplayValue));
+        //    };
+        //    var editTemplateMenuItem = new MenuItem();
+        //    editTemplateMenuItem.Header = "Edit";
+        //    editTemplateMenuItem.PreviewMouseDown += (s4, e4) => {
+        //        e4.Handled = true;
+        //        rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
+        //        //MpTemplateTokenEditModalWindowViewModel.ShowTemplateTokenEditModalWindow(rtb, hl, true);
+        //    };
 
-            var deleteTemplateMenuItem = new MenuItem();
-            deleteTemplateMenuItem.Header = "Delete";
-            deleteTemplateMenuItem.Click += (s4, e4) => {
-                rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
-                rtb.Selection.Text = string.Empty;
-            };
-            hl.ContextMenu = new ContextMenu();
-            hl.ContextMenu.Items.Add(editTemplateMenuItem);
-            hl.ContextMenu.Items.Add(deleteTemplateMenuItem);
+        //    var deleteTemplateMenuItem = new MenuItem();
+        //    deleteTemplateMenuItem.Header = "Delete";
+        //    deleteTemplateMenuItem.Click += (s4, e4) => {
+        //        rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
+        //        rtb.Selection.Text = string.Empty;
+        //    };
+        //    hl.ContextMenu = new ContextMenu();
+        //    hl.ContextMenu.Items.Add(editTemplateMenuItem);
+        //    hl.ContextMenu.Items.Add(deleteTemplateMenuItem);
 
-            return hl;
-        }
+        //    return hl;
+        //}
 
-        public static List<Hyperlink> FindHyperlinks(this RichTextBox rtb) {
-            List<Hyperlink> hlList = new List<Hyperlink>();
-            TextPointer tp = rtb.Document.ContentStart;
-            while (tp != null && tp != rtb.Document.ContentEnd) {
-                var nextLink = rtb.FindNextHyperlink(tp);
-                if(nextLink == null) {
-                    break;
-                }
-                hlList.Add(nextLink);
-                tp = nextLink.ElementEnd;
-            }
-            return hlList;
-        }
+        //public static List<Hyperlink> GetAllHyperlinkList(this RichTextBox rtb) {
+        //    if (rtb.Tag == null) {
+        //        return new List<Hyperlink>();
+        //    }
+        //    return (List<Hyperlink>)rtb.Tag;
+        //    //return rtb.FindHyperlinks();
+        //}
 
-        public static Hyperlink FindNextHyperlink(this RichTextBox rtb, TextPointer fromTextPointer) {
-            // This method returns the position just inside of the first text Run (if any) in a 
-            // specified text container.
-            TextPointer position = fromTextPointer;
+        //public static List<Hyperlink> GetTemplateHyperlinkList(this RichTextBox rtb, bool unique = false) {
+        //    var templateLinkList = rtb.GetAllHyperlinkList().Where(x => x.NavigateUri?.OriginalString == Properties.Settings.Default.TemplateTokenUri).ToList();
+        //    if(templateLinkList == null) {
+        //        templateLinkList = new List<Hyperlink>();
+        //    }
+        //    if (unique) {
+        //        var toRemove = new List<Hyperlink>();
+        //        foreach(var hl in templateLinkList) {
+        //            foreach(var hl2 in templateLinkList) {
+        //                if(hl == hl2 || toRemove.Contains(hl) || toRemove.Contains(hl2)) {
+        //                    continue;
+        //                }
+        //                if(hl.TargetName == hl2.TargetName) {
+        //                    toRemove.Add(hl2);
+        //                }
+        //            }
+        //        }
+        //        foreach (var hlr in toRemove) {
+        //            templateLinkList.Remove(hlr);
+        //        }
+        //    }
+        //    return templateLinkList;
+        //}
 
-            // Traverse content in forward direction until the position is immediately after the opening 
-            // tag of a Run element, or the end of content is encountered.
-            while (position != null) {
-                // Is the current position just after an opening element tag?
-                if (position.GetPointerContext(LogicalDirection.Backward) == TextPointerContext.ElementStart) {
-                    // If so, is the tag a Run?
-                    if (position.Parent is Hyperlink) {
-                        return (Hyperlink)position.Parent;
-                    }
-                }
-
-                // Not what we're looking for; on to the next position.
-                position = position.GetNextContextPosition(LogicalDirection.Forward);
-            }
-
-            // This will be either null if no Run is found, or a position just inside of the first Run element in the
-            // specifed text container.  Because position is formed from ContentStart, it will have a logical direction
-            // of Backward.
-            return null;
-        }
-
-        public static List<Hyperlink> GetAllHyperlinkList(this RichTextBox rtb) {
-            if (rtb.Tag == null) {
-                return new List<Hyperlink>();
-            }
-            return (List<Hyperlink>)rtb.Tag;
-            //return rtb.FindHyperlinks();
-        }
-
-        public static List<Hyperlink> GetTemplateHyperlinkList(this RichTextBox rtb, bool unique = false) {
-            var templateLinkList = rtb.GetAllHyperlinkList().Where(x => x.NavigateUri?.OriginalString == Properties.Settings.Default.TemplateTokenUri).ToList();
-            if(templateLinkList == null) {
-                templateLinkList = new List<Hyperlink>();
-            }
-            if (unique) {
-                var toRemove = new List<Hyperlink>();
-                foreach(var hl in templateLinkList) {
-                    foreach(var hl2 in templateLinkList) {
-                        if(hl == hl2 || toRemove.Contains(hl) || toRemove.Contains(hl2)) {
-                            continue;
-                        }
-                        if(hl.TargetName == hl2.TargetName) {
-                            toRemove.Add(hl2);
-                        }
-                    }
-                }
-                foreach (var hlr in toRemove) {
-                    templateLinkList.Remove(hlr);
-                }
-            }
-            return templateLinkList;
-        }
-
-        public static void ClearHyperlinks(this RichTextBox rtb) {
-            //replaces hyperlinks with runs of there textrange text
-            //if hl is templatee it decodes the run into #templatename#templatecolor# 
-            //TextRange ts = rtb.Selection;
-            var hll = rtb.GetAllHyperlinkList();
-            foreach (var hl in hll) {
-                if(hl.ElementStart.IsInSameDocument(rtb.Document.ContentStart)){
-                    var hlRange = new TextRange(hl.ElementStart, hl.ElementEnd);
-                    //rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
-                    if (hl.NavigateUri != null && hl.NavigateUri.OriginalString == Properties.Settings.Default.TemplateTokenUri) {
-                        hlRange.Text = string.Format(
-                            @"{0}{1}{0}{2}{0}", 
-                            Properties.Settings.Default.TemplateTokenMarker, 
-                            hl.TargetName, 
-                            ((SolidColorBrush)hl.Background).ToString());
-                    } else {
-                        //hlRange.Text = hlRange.Text;
-                    }
-                } else {
-                    Console.WriteLine("Error clearing templates for rtf: ");
-                    Console.WriteLine(rtb.GetRtf());
-                    continue;
-                }          
-            }
-            rtb.Tag = null;
-        }
+        //public static void ClearHyperlinks(this RichTextBox rtb) {
+        //    //replaces hyperlinks with runs of there textrange text
+        //    //if hl is templatee it decodes the run into #templatename#templatecolor# 
+        //    //TextRange ts = rtb.Selection;
+        //    var hll = rtb.GetAllHyperlinkList();
+        //    foreach (var hl in hll) {
+        //        if(hl.ElementStart.IsInSameDocument(rtb.Document.ContentStart)){
+        //            var hlRange = new TextRange(hl.ElementStart, hl.ElementEnd);
+        //            //rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
+        //            if (hl.NavigateUri != null && hl.NavigateUri.OriginalString == Properties.Settings.Default.TemplateTokenUri) {
+        //                hlRange.Text = string.Format(
+        //                    @"{0}{1}{0}{2}{0}", 
+        //                    Properties.Settings.Default.TemplateTokenMarker, 
+        //                    hl.TargetName, 
+        //                    ((SolidColorBrush)hl.Background).ToString());
+        //            } else {
+        //                //hlRange.Text = hlRange.Text;
+        //            }
+        //        } else {
+        //            Console.WriteLine("Error clearing templates for rtf: ");
+        //            Console.WriteLine(rtb.GetRtf());
+        //            continue;
+        //        }          
+        //    }
+        //    rtb.Tag = null;
+        //}
 
         public static void CreateHyperlinks(this RichTextBox rtb, string searchText = "") {
+            var ctvm = (MpClipTileViewModel)rtb.DataContext;
             //rtb.ClearHyperlinks();
             var regExGroupList = new List<string> {
                 //WebLink
@@ -374,18 +335,21 @@ namespace MpWpfApp {
                 @"#([0-9]|[a-fA-F]){5}([^" + Properties.Settings.Default.TemplateTokenMarker + "][ ])",
                 //StreetAddress
                 @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Lane|Road|Boulevard|Drive|Street|Ave|Dr|Rd|Blvd|Ln|St)\.?,\s(?:[A-Z][a-z.-]+[ ]?)+ \b\d{5}(?:-\d{4})?\b",                
-                //Text Template
-                string.Format(
-                    @"[{0}].*?[{0}].*?[{0}]", 
-                    Properties.Settings.Default.TemplateTokenMarker),                
+                //Text Template (dynamically matching from CopyItemTemplate.TemplateName)
+                ctvm.CopyItem.TemplateRegExMatchString,                
                 //HexColor (with alpha)
                 @"#([0-9]|[a-fA-F]){7}([^" + Properties.Settings.Default.TemplateTokenMarker + "][ ])",
             };
             List<Hyperlink> linkList = new List<Hyperlink>();
             TextRange fullDocRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
             for (int i = 0; i < regExGroupList.Count; i++) {
+                var linkType = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);
                 TextPointer lastRangeEnd = rtb.Document.ContentStart;
                 var regExStr = regExGroupList[i];
+                if(string.IsNullOrEmpty(regExStr)) {
+                    //this occurs for templates when copyitem has no templates
+                    continue;
+                }
                 MatchCollection mc = Regex.Matches(fullDocRange.Text, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);                                
                 foreach (Match m in mc) {
                     foreach (Group mg in m.Groups) {
@@ -396,17 +360,9 @@ namespace MpWpfApp {
                                 continue;
                             }
                             lastRangeEnd = matchRange.End;
-                            if ((MpSubTextTokenType)(i + 1) == MpSubTextTokenType.TemplateSegment) {
-                                var tokenProps = matchRange.Text.Split(new string[] { Properties.Settings.Default.TemplateTokenMarker }, System.StringSplitOptions.RemoveEmptyEntries);
-                                if(tokenProps.Length == 1) {
-                                    //this is when the template is blank probably not going to actually happen
-                                    matchRange.Text = string.Empty;
-                                    hl = new Hyperlink(matchRange.Start, matchRange.End).ConvertToTemplateHyperlink(rtb, matchRange.Text, (SolidColorBrush)(new BrushConverter().ConvertFrom(tokenProps[0])));
-                                } else {
-                                    matchRange.Text = tokenProps[0]; 
-                                    hl = new Hyperlink(matchRange.Start, matchRange.End).ConvertToTemplateHyperlink(rtb, matchRange.Text, (SolidColorBrush)(new BrushConverter().ConvertFrom(tokenProps[1])));
-                                }
-                                
+                            if (linkType == MpSubTextTokenType.TemplateSegment) {
+                                var copyItemTemplate = ctvm.CopyItem.GetTemplateByName(matchRange.Text);
+                                hl = ctvm.TemplateToolbarViewModel.Add(new MpTemplateHyperlinkViewModel(ctvm.TemplateToolbarViewModel, copyItemTemplate), matchRange);
                                 
                                 //this ensures highlighting has an effective textrange since template ranges alter document
                                 matchRange = new TextRange(hl.ContentStart, hl.ContentEnd);
@@ -414,7 +370,7 @@ namespace MpWpfApp {
                                 hl = new Hyperlink(matchRange.Start, matchRange.End);
                                 var linkText = c.Value;
                                 //account for special case for hexcolor w/ alpha
-                                hl.Tag = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);
+                                hl.Tag = linkType;
                                 hl.IsEnabled = true;
                                 hl.MouseLeftButtonDown += (s4, e4) => {
                                     if(hl.NavigateUri != null) {
@@ -482,9 +438,9 @@ namespace MpWpfApp {
                                                 Run run = new Run(currency.CurrencySymbol + convertedValue);
                                                 hl.Inlines.Clear();
                                                 hl.Inlines.Add(run);
-                                                rtb.ClearHyperlinks();
-                                                ((MpClipTileViewModel)rtb.DataContext).CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
-                                                rtb.CreateHyperlinks();
+                                                //rtb.ClearHyperlinks();
+                                                //((MpClipTileViewModel)rtb.DataContext).CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+                                                //rtb.CreateHyperlinks();
                                             };
                                             convertCurrencyMenuItem.Items.Add(subItem);
                                         }

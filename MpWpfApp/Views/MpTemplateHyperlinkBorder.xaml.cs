@@ -18,7 +18,7 @@ namespace MpWpfApp {
     /// Interaction logic for MpTemplateHyperlink.xaml
     /// </summary>
     public partial class MpTemplateHyperlinkBorder : UserControl {
-        public MpTemplateHyperlinkBorder() : this(new MpTemplateHyperlinkViewModel()) { }
+        //public MpTemplateHyperlinkBorder() : this(new MpTemplateHyperlinkViewModel()) { }
 
         public MpTemplateHyperlinkBorder(MpTemplateHyperlinkViewModel thlvm) {
             DataContext = thlvm;

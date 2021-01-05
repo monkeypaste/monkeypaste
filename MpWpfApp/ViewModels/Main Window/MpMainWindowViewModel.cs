@@ -208,7 +208,7 @@ namespace MpWpfApp {
         public void ClearEdits() {
             foreach (var clip in ClipTrayViewModel) {
                 clip.IsEditingTile = false;
-                clip.IsPastingTemplateTile = false;
+                clip.TemplateToolbarViewModel.IsPastingTemplateTile = false;
                 if(clip.DetectedImageObjectCollectionViewModel != null) {
                     foreach (var diovm in clip.DetectedImageObjectCollectionViewModel) {
                         diovm.IsNameReadOnly = true;
@@ -332,11 +332,10 @@ namespace MpWpfApp {
             }
         }
         private bool CanHideWindow(bool pasteSelected) {
+            return false;
             return Application.Current.MainWindow != null && 
                    Application.Current.MainWindow.Visibility == Visibility.Visible &&
-                   IsShowingDialog == false &&
-                   !MpTemplateTokenEditModalWindowViewModel.IsOpen &&
-                   !MpTemplateTokenPasteModalWindowViewModel.IsOpen;
+                   IsShowingDialog == false;
         }
         private async void HideWindow(bool pasteSelected) {
             //IsOpen = false;

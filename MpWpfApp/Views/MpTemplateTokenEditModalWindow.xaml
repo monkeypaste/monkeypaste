@@ -37,13 +37,13 @@
                     Grid.Row="1">
             <Button x:Name="TemplateColorButton"
                     Background="{Binding SelectedTemplateTokenViewModel.TemplateBackgroundBrush, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                    Command="{Binding ChangeTemplateColorCommand}"
                     Width="30"
                     Height="30"
                     VerticalAlignment="Top"
                     Margin="0,0,10,0"
                     BorderBrush="Black"
-                    BorderThickness="1"
-                    Command="{Binding ChangeTemplateColorCommand}" />
+                    BorderThickness="1" />
             <StackPanel Orientation="Vertical">
                 <TextBox x:Name="TemplateNameEditorTextBox"
                          Foreground="Black"
@@ -78,14 +78,16 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Button Margin="10,10,10,10"
+            <Button x:Name="CancelButton" 
+                    Margin="10,10,10,10"
                     Grid.Column="0"
                     FontSize="18"
                     Content="Cancel"
                     IsCancel="True"
                     HorizontalAlignment="Stretch"
                     Command="{Binding CancelCommand}" />
-            <Button Margin="10,10,10,10.5"
+            <Button x:Name="OkButton" 
+                    Margin="10,10,10,10.5"
                     Grid.Column="3"
                     FontSize="18"
                     Content="Ok"

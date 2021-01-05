@@ -91,20 +91,6 @@ namespace MpWpfApp {
             }
         }
 
-        //public MpEventEnabledFlowDocument ItemFlowDocument {
-        //    get {
-        //        switch (CopyItemType) {
-        //            case MpCopyItemType.FileList:
-        //                return MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
-        //            case MpCopyItemType.Image:
-        //                return MpHelpers.ConvertRichTextToFlowDocument(ItemRichText);
-        //            case MpCopyItemType.RichText:
-        //                return MpHelpers.ConvertRichTextToFlowDocument((string)_itemData);
-        //        }
-        //        return new MpEventEnabledFlowDocument();
-        //    }
-        //}
-
         public BitmapSource ItemBitmapSource {
             get {
                 switch (CopyItemType) {
@@ -124,8 +110,19 @@ namespace MpWpfApp {
         public List<MpDetectedImageObject> ImageItemObjectList = new List<MpDetectedImageObject>();
 
         public List<MpCopyItemTemplate> TemplateList = new List<MpCopyItemTemplate>();
-        //this is only set wheen ci is created to name app
-        //public IntPtr SourceHandle { get; set; } = IntPtr.Zero;
+
+        public string TemplateRegExMatchString {
+            get {
+                var outStr = string.Empty;
+                foreach(var t in TemplateList) {
+                    outStr += t.TemplateName + "|";
+                }
+                if(!string.IsNullOrEmpty(outStr)) {
+                    return outStr.Remove(outStr.Length - 1, 1);
+                }
+                return outStr;
+            }
+        }
         #endregion
 
         #region Static Methods
@@ -303,6 +300,15 @@ namespace MpWpfApp {
 
         public object GetData() {
             return _itemData;
+        }
+
+        public MpCopyItemTemplate GetTemplateByName(string templateName) {
+            foreach(var t in TemplateList) {
+                if(t.TemplateName == templateName) {
+                    return t;
+                }
+            }
+            return null;
         }
 
         public int GetPasteCount() {

@@ -504,18 +504,8 @@ namespace MpWpfApp {
                     , fk_MpCopyItemId integer NOT NULL
                     , HexColor integer NOT NULL
                     , TemplateName text NOT NULL 
-                    , CONSTRAINT FK_MpCopyItemTemplate_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
-                    , CONSTRAINT FK_MpCopyItemTemplate_1_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId)
-                    );
-                    INSERT INTO MpSubTextTokenType(TokenTypeName) VALUES('URI'),('Email'),('Phone Number'),('Currency'),('Hex Color'),('Street Address');
-                    ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpTemplateTextRange (
-                      pk_MpTemplateTextRangeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , fk_MpCopyItemTemplateId integer NOT NULL
-                    , StartIdx integer NOT NULL
-                    , EndIdx integer NOT NULL
-                    , CONSTRAINT FK_MpTemplateTextRange_0_0 FOREIGN KEY (fk_MpSubTextTokenTypeId) REFERENCES MpSubTextTokenType (pk_MpSubTextTokenTypeId)                     
-                    );
+                    , CONSTRAINT FK_MpCopyItemTemplate_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)                    
+                    );                    
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpRichTextStyle (
                       pk_MpRichTextStyleId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
