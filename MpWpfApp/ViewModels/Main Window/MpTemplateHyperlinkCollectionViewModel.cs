@@ -26,6 +26,23 @@ namespace MpWpfApp {
             }
         }
 
+        public List<MpTemplateHyperlinkViewModel> UniqueTemplateHyperlinkViewModelList {
+            get {
+                var ul = new List<MpTemplateHyperlinkViewModel>();
+                foreach(var thlvm in this) {
+                    bool itExists = false;
+                    foreach(var unm in ul) {
+                        if(unm.TemplateName == thlvm.TemplateName) {
+                            itExists = true;
+                        }
+                    }
+                    if(!itExists) {
+                        ul.Add(thlvm);
+                    }
+                }
+                return ul;
+            }
+        }
         public MpTemplateHyperlinkViewModel SelectedTemplateHyperlinkViewModel {
             get {
                 foreach (var ttcvm in this) {
@@ -58,11 +75,28 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
-
+        private Dictionary<string, string> _templateTextLookUpDictionary = new Dictionary<string, string>();
+        public Dictionary<string,string> TemplateTextLookUpDictionary {
+            get {
+                return _templateTextLookUpDictionary;
+            }
+            set {
+                if(_templateTextLookUpDictionary != value) {
+                    _templateTextLookUpDictionary = value;
+                    OnPropertyChanged(nameof(TemplateTextLookUpDictionary));
+                }
+            }
+        }
         #endregion
 
         #region Public Methods
         public MpTemplateHyperlinkCollectionViewModel(MpClipTileViewModel parent) :base() {
+            CollectionChanged += (s, e) => {
+                TemplateTextLookUpDictionary = new Dictionary<string, string>();
+                foreach (var uthlvm in UniqueTemplateHyperlinkViewModelList) {
+                    TemplateTextLookUpDictionary.Add(uthlvm.TemplateName, string.Empty);
+                }
+            };
             ClipTileViewModel = parent;
             
             //templates are added in the CreateHyperlinks rtb extension
@@ -79,56 +113,53 @@ namespace MpWpfApp {
         #endregion
 
         #region Overrides
-        private new void Add(MpTemplateHyperlinkViewModel thlvm) {
-            //disable default collection to enforce associated text range
+        //private new void Add(MpTemplateHyperlinkViewModel thlvm) {
+        //    //disable default collection to enforce associated text range
+        //    base.Add(thlvm);
+        //}
+        //public new bool Contains(MpTemplateHyperlinkViewModel thlvm) {
+        //    foreach(var vm in this) {
+        //        if(vm.TemplateName == thlvm.TemplateName) {
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
+
+        public new void Add(MpTemplateHyperlinkViewModel thlvm) {
+            //if (!this.Contains(thlvm)) {
+            //    base.Add(thlvm);
+            //    if(!_templateHyperlinkInstanceLookUp.ContainsKey(thlvm.TemplateName)) {
+            //        _templateHyperlinkInstanceLookUp.Add(thlvm.TemplateName, 1);
+            //    } else {
+            //        _templateHyperlinkInstanceLookUp[thlvm.TemplateName]++;
+            //    }
+
+            //    if (!ClipTileViewModel.CopyItem.TemplateList.Contains(thlvm.CopyItemTemplate)) {
+            //        ClipTileViewModel.CopyItem.TemplateList.Add(thlvm.CopyItemTemplate);
+            //    }
+            //} 
             base.Add(thlvm);
-        }
-        public new bool Contains(MpTemplateHyperlinkViewModel thlvm) {
-            foreach(var vm in this) {
-                if(vm.TemplateName == thlvm.TemplateName) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public Hyperlink Add(MpTemplateHyperlinkViewModel thlvm, TextRange tr) {
-            if (!this.Contains(thlvm)) {
-                base.Add(thlvm);
-                if(!_templateHyperlinkInstanceLookUp.ContainsKey(thlvm.TemplateName)) {
-                    _templateHyperlinkInstanceLookUp.Add(thlvm.TemplateName, 1);
-                } else {
-                    _templateHyperlinkInstanceLookUp[thlvm.TemplateName]++;
-                }
-
-                if (!ClipTileViewModel.CopyItem.TemplateList.Contains(thlvm.CopyItemTemplate)) {
-                    ClipTileViewModel.CopyItem.TemplateList.Add(thlvm.CopyItemTemplate);
-                }
-            } 
-            var thlb = new MpTemplateHyperlinkBorder(thlvm);
-            var container = new InlineUIContainer(thlb);
-            tr.Text = string.Empty;
-            var hl = new Hyperlink(tr.Start, tr.End);
-            hl.Inlines.Clear();
-            hl.Inlines.Add(container);
-            thlvm.RangeList.Add(tr);
-
-            return hl;
         }
 
         public new void Remove(MpTemplateHyperlinkViewModel thlvm) {
-            if(_templateHyperlinkInstanceLookUp.ContainsKey(thlvm.TemplateName)) {
-                _templateHyperlinkInstanceLookUp[thlvm.TemplateName]--;
-                if(_templateHyperlinkInstanceLookUp[thlvm.TemplateName] <= 0) {
-                    base.Remove(thlvm);
-                    _templateHyperlinkInstanceLookUp.Remove(thlvm.TemplateName);
+            //if(_templateHyperlinkInstanceLookUp.ContainsKey(thlvm.TemplateName)) {
+            //    _templateHyperlinkInstanceLookUp[thlvm.TemplateName]--;
+            //    if(_templateHyperlinkInstanceLookUp[thlvm.TemplateName] <= 0) {
+            //        base.Remove(thlvm);
+            //        _templateHyperlinkInstanceLookUp.Remove(thlvm.TemplateName);
 
-                    if (ClipTileViewModel.CopyItem.TemplateList.Contains(thlvm.CopyItemTemplate)) {
-                        ClipTileViewModel.CopyItem.TemplateList.Remove(thlvm.CopyItemTemplate);
-                        thlvm.CopyItemTemplate.DeleteFromDatabase();
-                    }
-                }
-            }
+            //        if (ClipTileViewModel.CopyItem.TemplateList.Contains(thlvm.CopyItemTemplate)) {
+            //            ClipTileViewModel.CopyItem.TemplateList.Remove(thlvm.CopyItemTemplate);
+            //            thlvm.CopyItemTemplate.DeleteFromDatabase();
+            //        }
+            //    }
+            //}
+            base.Remove(thlvm);
+            //var remainingTemplatesOfRemovalType = this.Where(x => x.TemplateName == thlvm.TemplateName).ToList();
+            //if(remainingTemplatesOfRemovalType == null || remainingTemplatesOfRemovalType.Count == 0) {
+            //    thlvm.CopyItemTemplate.DeleteFromDatabase();
+            //}
         }
         #endregion
     }

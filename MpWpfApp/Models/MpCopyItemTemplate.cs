@@ -9,7 +9,8 @@ namespace MpWpfApp {
         public int CopyItemId { get; set; } = 0;
         public Brush TemplateColor { get; set; } = Brushes.Red;
         public string TemplateName { get; set; } = String.Empty;
-
+        //only set at runtime
+        public string TemplateText { get; set; } = string.Empty;
         public static List<MpCopyItemTemplate> GetAllTemplatesForCopyItem(int copyItemId) {
             var copyItemTemplateList = new List<MpCopyItemTemplate>();
             DataTable dt = MpDb.Instance.Execute("select * from MpCopyItemTemplate where fk_MpCopyItemId=@ciid",

@@ -41,24 +41,96 @@ namespace MpWpfApp {
     public static class MpHelpers {
         #region Documents
 
-        //public static TextRange FindStringRangeFromPosition(TextPointer position, string str, bool isCaseSensitive = false) {
-        //    while (position != null) {
-        //        if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
-        //            position = position.GetNextContextPosition(LogicalDirection.Forward);
-        //            continue;
-        //        }
-        //        string textRun = isCaseSensitive ? position.GetTextInRun(LogicalDirection.Forward) : position.GetTextInRun(LogicalDirection.Forward).ToLower();
+        public static Hyperlink CreateTemplateHyperlink(MpTemplateHyperlinkViewModel thlvm, TextRange tr) {
+            var ctvm = thlvm.ClipTileViewModel;
 
-        //        // Find the starting index of any substring that matches "str".
-        //        int indexInRun = textRun.IndexOf(isCaseSensitive ? str : str.ToLower());
-        //        if (indexInRun >= 0) {
-        //            return new TextRange(position.GetPositionAtOffset(indexInRun), position.GetPositionAtOffset(indexInRun + str.Length));
-        //        }
-        //        position = position.GetNextContextPosition(LogicalDirection.Forward);
-        //    }
-        //    // position will be null if "word" is not found.
-        //    return null;
-        //}
+            var r = new Run();
+            r.Loaded += thlvm.TemplateHyperLinkRun_Loaded;
+            
+            CreateBinding(thlvm, new PropertyPath(nameof(thlvm.TemplateDisplayValue)), r, Run.TextProperty);
+            CreateBinding(thlvm, new PropertyPath(nameof(thlvm.TemplateBackgroundBrush)), r, Run.BackgroundProperty);
+            CreateBinding(thlvm, new PropertyPath(nameof(thlvm.TemplateForegroundBrush)), r, Run.ForegroundProperty);
+            CreateBinding(thlvm, new PropertyPath(nameof(thlvm.TemplateTextBlockCursor)), r, Run.CursorProperty);
+
+            var hl = new Hyperlink(tr.Start, tr.End);
+            hl.DataContext = thlvm;
+            hl.Inlines.Clear();
+            hl.Inlines.Add(r);
+            CreateBinding(thlvm, new PropertyPath(nameof(thlvm.TemplateTextBlockCursor)), hl, Hyperlink.CursorProperty);
+
+            hl.Tag = MpSubTextTokenType.TemplateSegment;
+            hl.IsEnabled = true;
+            
+            hl.TextDecorations = null;
+            hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
+            hl.Unloaded += (s, e) => {
+                if (hl.DataContext != null && hl.DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
+                    ((MpTemplateHyperlinkViewModel)hl.DataContext).Dispose();
+                }
+            };
+            hl.RequestNavigate += (s4, e4) => {
+                if (!ctvm.IsSelected) {
+                    return;
+                }
+                if (ctvm.IsEditingTile || ctvm.IsPastingTemplateTile) {
+                    thlvm.IsSelected = true;
+                }
+                if (ctvm.IsEditingTile) {
+                    e4.Handled = true;
+                    //ctvm.GetRtb().Selection.Select(hl.ElementStart, hl.ElementEnd);
+                    ctvm.EditTemplateToolbarViewModel.SetTemplate(thlvm, true);
+                }
+            };
+            hl.MouseEnter += (s, e) => {
+                thlvm.IsHovering = true;
+            };
+            hl.MouseLeave += (s, e) => {
+                thlvm.IsHovering = false;
+            };
+            hl.PreviewMouseLeftButtonDown += (s, e) => {
+                if(!ctvm.IsSelected) {
+                    return;
+                }
+                if(ctvm.IsEditingTile || ctvm.IsPastingTemplateTile) {
+                    thlvm.IsSelected = true;
+                }
+                if(ctvm.IsEditingTile) {
+                    e.Handled = true;
+                    //ctvm.GetRtb().Selection.Select(hl.ElementStart, hl.ElementEnd);
+                    ctvm.EditTemplateToolbarViewModel.SetTemplate(thlvm, true);
+                }
+            };
+
+            var editTemplateMenuItem = new MenuItem();
+            editTemplateMenuItem.Header = "Edit";
+            editTemplateMenuItem.PreviewMouseDown += (s4, e4) => {
+                if (!ctvm.IsSelected) {
+                    return;
+                }
+                if (ctvm.IsEditingTile || ctvm.IsPastingTemplateTile) {
+                    thlvm.IsSelected = true;
+                }
+                if (ctvm.IsEditingTile) {
+                    e4.Handled = true;
+                    //ctvm.GetRtb().Selection.Select(hl.ElementStart, hl.ElementEnd);
+                    ctvm.EditTemplateToolbarViewModel.SetTemplate(thlvm, true);
+                }
+            };
+
+            var deleteTemplateMenuItem = new MenuItem();
+            deleteTemplateMenuItem.Header = "Delete";
+            deleteTemplateMenuItem.Click += (s4, e4) => {
+                ctvm.GetRtb().Selection.Select(hl.ElementStart, hl.ElementEnd);
+                ctvm.GetRtb().Selection.Text = string.Empty;
+                thlvm.Dispose();
+            };
+            hl.ContextMenu = new ContextMenu();
+            hl.ContextMenu.Items.Add(editTemplateMenuItem);
+            hl.ContextMenu.Items.Add(deleteTemplateMenuItem);
+
+            return hl;
+        }
+
         public static void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRange> rangeList, Brush bgBrush) {
             if (rangeList == null || rangeList.Count == 0) {
                 return;
@@ -67,15 +139,164 @@ namespace MpWpfApp {
                 range.ApplyPropertyValue(TextElement.BackgroundProperty, bgBrush);
             }
         }
+
+        public static DependencyObject FindParentOfType(DependencyObject dpo, Type type) {
+            if (dpo == null) {
+                return null;
+            }
+            if (dpo.GetType() == type) {
+                return dpo;
+            }
+            if(dpo.GetType().IsSubclassOf(typeof(FrameworkContentElement))) {
+                return FindParentOfType(((FrameworkContentElement)dpo).Parent, type);
+            } else if (dpo.GetType().IsSubclassOf(typeof(FrameworkElement))) {
+                return FindParentOfType(((FrameworkElement)dpo).Parent, type);
+            } else {
+                return null;
+            }
+        }
+        //public static List<TextRange> FindStringRangesFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
+        //    var matchRangeList = new List<TextRange>();
+        //    TextPointer lastDocPosition = null; 
+        //    int curIdx = 0;
+        //    TextPointer rootPosition = position;
+        //    TextPointer lastMatchParentEndPosition = null;
+        //    TextPointer startPointer = null;
+        //    StringComparison stringComparison = isCaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase;
+
+        //    while (position != null) {
+        //        while(position != null && 
+        //              position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
+        //            position = position.GetPositionAtOffset(1, LogicalDirection.Forward);
+        //        }
+        //        var runStr = position.GetTextInRun(LogicalDirection.Forward);
+        //        if (string.IsNullOrEmpty(runStr)) {
+        //            position = position.GetPositionAtOffset(1, LogicalDirection.Forward);
+        //            continue;
+        //        }
+        //        //only concerned with current character of match string
+        //        int runIdx = runStr.IndexOf(matchStr[curIdx].ToString(), stringComparison);
+        //        if (runIdx == -1) {
+        //            //if no match found reset search
+        //            curIdx = 0;
+        //            if (startPointer == null) {
+        //                position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
+        //            } else {
+        //                //when no match somewhere after first character reset search to the position AFTER beginning of last partial match
+        //                position = startPointer.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
+        //            }
+        //            continue;
+        //        }
+        //        if (curIdx == 0) {
+        //            //beginning of range found at runIdx
+        //            startPointer = position.GetPositionAtOffset(runIdx, LogicalDirection.Forward);
+        //        }
+        //        if (curIdx == matchStr.Length - 1) {
+        //            //each character has been matched
+        //            var endPointer = position.GetPositionAtOffset(runIdx, LogicalDirection.Forward);
+        //            //for edge cases of repeating characters these loops ensure start is not early and last character isn't lost 
+        //            if (isCaseSensitive) {
+        //                while (endPointer != null && !new TextRange(startPointer, endPointer).Text.Contains(matchStr)) {
+        //                    endPointer = endPointer.GetPositionAtOffset(1, LogicalDirection.Forward);
+        //                }
+        //            } else {
+        //                while (endPointer != null && !new TextRange(startPointer, endPointer).Text.ToLower().Contains(matchStr.ToLower())) {
+        //                    endPointer = endPointer.GetPositionAtOffset(1, LogicalDirection.Forward);
+        //                }
+        //            }
+        //            if (endPointer == null) {
+        //                curIdx = 0;
+        //                startPointer = null;
+        //                position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
+        //                continue;
+        //            }
+        //            while (startPointer != null && new TextRange(startPointer, endPointer).Text.Length > matchStr.Length) {
+        //                startPointer = startPointer.GetPositionAtOffset(1, LogicalDirection.Forward);
+        //            }
+        //            if (startPointer == null) {
+        //                curIdx = 0;
+        //                startPointer = null;
+        //                position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
+        //                continue;
+        //            }
+        //            matchRangeList.Add(new TextRange(startPointer, endPointer));
+        //            position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
+        //        } else {
+        //            //prepare loop for next match character
+        //            curIdx++;
+        //            //iterate position one offset AFTER match offset
+        //            if (rootPosition.IsInSameDocument(position)) {
+        //                position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
+        //            } else {
+        //                var nextPosition = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
+        //                if (nextPosition == null) {
+        //                    //this occurs when a uielement match was found at the end of its textblock and
+        //                    //position needs to iterate passed the uielement
+        //                    position = ((Hyperlink)FindParentOfType(position.Parent, typeof(Hyperlink))).ElementEnd;
+        //                } else {
+        //                    position = nextPosition;
+        //                }
+        //            }
+        //        }
+        //        var hlr = FindStringRangeFromPosition(position, matchStr, isCaseSensitive);
+        //        if (hlr == null) {
+        //            //this occurs when no more matchStr's are found AND
+        //            //more importantly if the last match was within a inlineuicontainer textblock
+        //            if (lastDocPosition != null && matchRangeList.Count > 0) {
+        //                //this occurs when the match is outside the document
+        //                var lastMatch = matchRangeList[matchRangeList.Count - 1];
+        //                //find inlineuielement parent to return to document
+        //                var phl = FindParentOfType(lastMatch.End.Parent, typeof(Hyperlink));
+        //                if (phl != null) {
+        //                    //if parent found move position to its big pretty tail
+        //                    position = ((Hyperlink)phl).ElementEnd;
+        //                    //clear lastdocposition to terminate matching 
+        //                    lastDocPosition = null;
+        //                    continue;
+        //                }
+        //            }
+        //            break;
+        //        } else {
+        //            matchRangeList.Add(hlr);
+        //            if (!position.IsInSameDocument(hlr.End)) {
+        //                lastDocPosition = position;
+        //            }
+        //            position = hlr.End;
+
+        //        }
+        //    }
+        //    return matchRangeList;
+        //}
+        
         public static List<TextRange> FindStringRangesFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
             var matchRangeList = new List<TextRange>();
+            TextPointer lastDocPosition = null;
             while (position != null) {
-                var hlr = FindStringRangeFromPosition(position, matchStr, isCaseSensitive);
+                var hlr = FindStringRangeFromPosition(position, matchStr, isCaseSensitive);                
                 if (hlr == null) {
+                    //this occurs when no more matchStr's are found AND
+                    //more importantly if the last match was within a inlineuicontainer textblock
+                    if (lastDocPosition != null && matchRangeList.Count > 0) {
+                        //this occurs when the match is outside the document
+                        var lastMatch = matchRangeList[matchRangeList.Count - 1];
+                        //find inlineuielement parent to return to document
+                        var phl = FindParentOfType(lastMatch.End.Parent, typeof(Hyperlink));
+                        if (phl != null) {
+                            //if parent found move position to position after element end to not get stuck within embedded element
+                            position = ((Hyperlink)phl).ElementEnd.GetNextContextPosition(LogicalDirection.Forward);
+                            //clear lastdocposition to terminate matching 
+                            lastDocPosition = null;
+                            continue;
+                        }
+                    }
                     break;
                 } else {
                     matchRangeList.Add(hlr);
-                    position = hlr.End;
+                    if (!position.IsInSameDocument(hlr.End)) {
+                        lastDocPosition = position;
+                    }
+                    position = hlr.End.GetPositionAtOffset(1, LogicalDirection.Forward);;
+
                 }
             }
             return matchRangeList;
@@ -83,16 +304,21 @@ namespace MpWpfApp {
 
         public static TextRange FindStringRangeFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
             int curIdx = 0;
+            TextPointer rootPosition = position;
+            TextPointer lastMatchParentEndPosition = null;
             TextPointer startPointer = null;
             StringComparison stringComparison = isCaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase;
             while (position != null) {   
                 if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
                     if(position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.EmbeddedElement) {
                         var inlineUIContainer = (InlineUIContainer)position.Parent;
-                        var templateHyperlinkBorder = (MpTemplateHyperlinkBorder)inlineUIContainer.Child;
+                        var templateHyperlinkBorder = (MpTemplateHyperlink)inlineUIContainer.Child;
                         var border = (Border)templateHyperlinkBorder.Content;
                         var dockPanel = (DockPanel)border.Child;
                         var tb = (TextBlock)dockPanel.Children[0];
+                        //var subMatchStr = matchStr.Substring(curIdx);
+                        position = tb.ContentStart;
+                        continue;
                         //var highlightRange = MpHelpers.FindStringRangeFromPosition(tb.ContentStart, matchStr);
                         //if (highlightRange != null) {
                         //    return highlightRange;
@@ -114,6 +340,14 @@ namespace MpWpfApp {
                     //if no match found reset search
                     curIdx = 0;
                     if (startPointer == null) {
+                        var nextPosition = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
+                        if (nextPosition == null && !rootPosition.IsInSameDocument(position)) {
+                            //this occurs within a uielement when a partial but not full match was found and
+                            //position needs to iterate passed the uielement
+                            position = ((Hyperlink)FindParentOfType(position.Parent, typeof(Hyperlink))).ElementEnd.GetPositionAtOffset(1, LogicalDirection.Forward);
+                        } else {
+                            position = nextPosition;
+                        }
                         position = position.GetNextContextPosition(LogicalDirection.Forward);
                     } else {
                         //when no match somewhere after first character reset search to the position AFTER beginning of last partial match
@@ -153,7 +387,18 @@ namespace MpWpfApp {
                     //prepare loop for next match character
                     curIdx++;
                     //iterate position one offset AFTER match offset
-                    position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
+                    if(rootPosition.IsInSameDocument(position)) {
+                        position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
+                    } else {
+                        var nextPosition = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
+                        if(nextPosition == null) {
+                            //this occurs when a uielement match was found at the end of its textblock and
+                            //position needs to iterate passed the uielement
+                            position = ((Hyperlink)FindParentOfType(position.Parent, typeof(Hyperlink))).ElementEnd.GetPositionAtOffset(1,LogicalDirection.Forward);
+                        } else {
+                            position = nextPosition;
+                        }
+                    }                    
                 }
             }
             return null;
@@ -164,6 +409,7 @@ namespace MpWpfApp {
          * Good solution, but there is a minor problem. GetTextRunLength does not consider \r and \n characters. 
          * If you have those in searchRange.Text then the resulting TextRange will be ahead of the correct 
          * position by the number of new line characters*/
+
         public static TextRange FindTextInRange(TextRange searchRange, string searchText) {
             int offset = searchRange.Text.IndexOf(searchText, StringComparison.OrdinalIgnoreCase);
             if (offset < 0)
@@ -1559,8 +1805,10 @@ namespace MpWpfApp {
         public static string ConvertFlowDocumentToRichText(FlowDocument fd) {
             var rtb = (RichTextBox)fd.Parent;
             if(rtb.DataContext.GetType() == typeof(MpClipTileViewModel)) {
-                rtb.ClearHyperlinks();
+                //rtb.ClearTemplates();
             }
+            Console.WriteLine("Flow Doc Contents:");
+            Console.WriteLine(new TextRange(fd.ContentStart, fd.ContentEnd).Text);
             string rtf = string.Empty;
             using (var ms = new MemoryStream()) {
                 var range2 = new TextRange(fd.ContentStart, fd.ContentEnd);
@@ -1569,6 +1817,9 @@ namespace MpWpfApp {
                 using (var sr = new StreamReader(ms)) {
                     rtf = sr.ReadToEnd();
                 }
+            }
+            if (rtb.DataContext.GetType() == typeof(MpClipTileViewModel)) {
+                //rtb.CreateHyperlinks();
             }
             return rtf;
         }

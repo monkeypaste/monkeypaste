@@ -996,6 +996,7 @@
                                         <!-- Content Container Canvas -->
                                         <Canvas x:Name="ClipTileContentCanvas"
                                                 Grid.Row="1"
+                                                ClipToBounds="True"
                                                 Grid.Column="0">
                                             <!-- RichText Content -->
                                             <Canvas x:Name="ClipTileRichTextBoxCanvas"
@@ -1009,7 +1010,6 @@
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
                                                 <Border x:Name="ClipTileEditorToolbar"
-                                                        Canvas.Top="{Binding EditToolbarTop, Mode=TwoWay}"
                                                         Visibility="{Binding EditToolbarVisibility}"
                                                         Height="{Binding EditRichTextBoxToolbarHeight}">
                                                     <StackPanel Orientation="Horizontal"
@@ -1228,7 +1228,6 @@
                                                     </StackPanel>
                                                 </Border>
                                                 <RichTextBox x:Name="ClipTileRichTextBox"
-                                                             local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText}"
                                                              IsReadOnly="{Binding IsRtbReadOnly}" 
                                                              IsInactiveSelectionHighlightEnabled="True"
                                                              IsDocumentEnabled="{Binding IsSelected}"
@@ -1244,7 +1243,7 @@
                                                              ScrollViewer.HorizontalScrollBarVisibility="{Binding RtbHorizontalScrollbarVisibility}"
                                                              ScrollViewer.VerticalScrollBarVisibility="{Binding RtbVerticalScrollbarVisibility}"
                                                              BorderThickness="1"
-                                                             Padding="10,0,10,10">
+                                                             Padding="10,10,0,10">
                                                     <RichTextBox.Resources>
                                                         <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                                                                          Color="Blue" />
@@ -1265,33 +1264,32 @@
                                                         </i:Interaction.Triggers>
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="0.5*" />
-                                                            <ColumnDefinition Width="*" />
-                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="3*" />
+                                                            <ColumnDefinition Width="1.2*" />
                                                         </Grid.ColumnDefinitions>
                                                         <Button x:Name="TemplateColorButton"
                                                                 Grid.Column="0"
                                                                 Background="{Binding SelectedTemplateHyperlinkViewModel.TemplateBrush, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
-                                                                Width="15"
-                                                                Height="15"
+                                                                Width="20"
+                                                                Height="20"
                                                                 VerticalAlignment="Top"
-                                                                Margin="10,5,10,0"
+                                                                Margin="10,5,5,0"
                                                                 BorderBrush="Black"
                                                                 BorderThickness="1" />
                                                         <StackPanel Orientation="Vertical"
                                                                     Grid.Column="1">
                                                             <TextBox x:Name="TemplateNameEditorTextBox"
                                                                      Foreground="Black"
-                                                                     VerticalAlignment="Top"
                                                                      HorizontalAlignment="Left"
-                                                                     VerticalContentAlignment="Center"
                                                                      BorderBrush="{Binding SelectedTemplateNameTextBoxBorderBrush}"
                                                                      BorderThickness="{Binding SelectedTemplateNameTextBoxBorderBrushThickness}"
                                                                      Text="{Binding SelectedTemplateHyperlinkViewModel.TemplateName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
-                                                                     FontSize="18"
-                                                                     MinWidth="275"
+                                                                     FontSize="16"
+                                                                     Height="22"
+                                                                     MinWidth="200"
                                                                      IsReadOnly="False"
-                                                                     Padding="5,0,0,0"
-                                                                     Height="32" />
+                                                                     Margin="0,4,0,0"
+                                                                     Padding="0,0,0,0" />
                                                             <Label x:Name="TemplateNameValidationLabel"
                                                                    Content="{Binding ValidationText}"
                                                                    Visibility="{Binding ValidationVisibility}"
@@ -1310,16 +1308,18 @@
                                                                     HorizontalAlignment="Center"
                                                                     Margin="8,0,0,0">
                                                             <Button x:Name="CancelButton"
-                                                                    Margin="10,10,10,10"
-                                                                    FontSize="18"
-                                                                    Content="Cancel"
+                                                                    Margin="10,3,10,3"
+                                                                    Padding="5,0,5,0"
+                                                                    FontSize="14"
+                                                                    Content="CANCEL"
                                                                     IsCancel="True"
                                                                     HorizontalAlignment="Stretch"
                                                                     Command="{Binding CancelCommand}" />
                                                             <Button x:Name="OkButton"
-                                                                    Margin="10,10,10,10.5"
-                                                                    FontSize="18"
-                                                                    Content="Ok"
+                                                                    Margin="0,3,10,3"
+                                                                    Padding="5,0,5,0"
+                                                                    FontSize="14"
+                                                                    Content="DONE"
                                                                     HorizontalAlignment="Stretch"
                                                                     Command="{Binding OkCommand}"
                                                                     IsDefault="True" />
@@ -1327,7 +1327,6 @@
                                                     </Grid>
                                                 </Border>
                                                 <Border x:Name="ClipTilePasteTemplateToolbar"
-                                                        Canvas.Top="{Binding PasteTemplateToolbarTop, Mode=TwoWay}"
                                                         HorizontalAlignment="Stretch"
                                                         Height="{Binding PasteTemplateToolbarHeight}"
                                                         BorderBrush="Black" 

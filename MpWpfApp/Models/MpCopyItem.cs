@@ -109,7 +109,11 @@ namespace MpWpfApp {
 
         public List<MpDetectedImageObject> ImageItemObjectList = new List<MpDetectedImageObject>();
 
-        public List<MpCopyItemTemplate> TemplateList = new List<MpCopyItemTemplate>();
+        public List<MpCopyItemTemplate> TemplateList {
+            get {
+                return MpCopyItemTemplate.GetAllTemplatesForCopyItem(CopyItemId);
+            }
+        }
 
         public string TemplateRegExMatchString {
             get {
@@ -233,7 +237,6 @@ namespace MpWpfApp {
             _itemData = "Default";
             CopyItemType = MpCopyItemType.RichText;
             ImageItemObjectList = new List<MpDetectedImageObject>();
-            TemplateList = new List<MpCopyItemTemplate>();
         }
         private MpCopyItem(
             MpCopyItemType itemType,
@@ -245,8 +248,7 @@ namespace MpWpfApp {
             Title = "Untitled";
             CopyCount = 1;
             Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
-            TemplateList = new List<MpCopyItemTemplate>();
-
+            
             var appPath = MpHelpers.GetProcessPath(hwnd);
             var app = _AppList.Where(x => x.AppPath == appPath).ToList();
             if(app == null || app.Count == 0) {
@@ -555,8 +557,6 @@ namespace MpWpfApp {
             Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
             App = _AppList.Where(x => x.AppId == appId).ToList()[0];
             ItemColor = _ColorList.Where(x => x.ColorId == colorId).ToList()[0];
-
-            TemplateList = MpCopyItemTemplate.GetAllTemplatesForCopyItem(CopyItemId);
 
             if (CopyItemType == MpCopyItemType.Image) {
                 SetData(MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]));

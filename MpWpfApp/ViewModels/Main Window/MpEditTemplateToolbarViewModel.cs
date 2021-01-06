@@ -16,7 +16,8 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpEditTemplateToolbarViewModel : MpViewModelBase {
         #region Private Variables
-
+        private Hyperlink _selectedTemplateHyperlink = null;
+        private string _originalText = string.Empty;
         private string _originalTemplateName = string.Empty;
         private Brush _originalTemplateColor = Brushes.Pink;
         #endregion
@@ -141,6 +142,7 @@ namespace MpWpfApp {
             var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxCanvas");
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
             var titleSwirl = (Image)cb.FindName("TitleSwirl");
+            var tb = (TextBox)editTemplateToolbarBorder.FindName("TemplateNameEditorTextBox");
 
             templateColorButton.Click += (s, e) => {
                 var colorMenuItem = new MenuItem();
@@ -150,7 +152,7 @@ namespace MpWpfApp {
                     colorContextMenu,
                     colorMenuItem,
                     (s1, e1) => {
-                        SelectedTemplateHyperlinkViewModel.TemplateBrush = ((Button)s).Background;
+                        SelectedTemplateHyperlinkViewModel.TemplateBrush = ((Border)s1).Background;
                     },
                     MpHelpers.GetColorColumn(SelectedTemplateHyperlinkViewModel.TemplateBrush),
                     MpHelpers.GetColorRow(SelectedTemplateHyperlinkViewModel.TemplateBrush)
@@ -168,13 +170,16 @@ namespace MpWpfApp {
                 double toBottomRtb = 0;
 
                 if (editTemplateToolbarBorder.Visibility == Visibility.Visible) {
+                    if(!ClipTileViewModel.IsEditingTile) {
+                        ClipTileViewModel.IsEditingTile = true;
+                    }
                     fromTopToolbar = ClipTileViewModel.TileContentHeight;
-                    toTopToolbar = fromTopToolbar - ClipTileViewModel.EditTemplateToolbarHeight;
+                    toTopToolbar = fromTopToolbar - ClipTileViewModel.EditTemplateToolbarHeight + ClipTileViewModel.TileMargin;
 
                     fromBottomRtb = ClipTileViewModel.TileContentHeight;
                     toBottomRtb = fromBottomRtb - ClipTileViewModel.EditTemplateToolbarHeight;
                 } else {
-                    fromTopToolbar = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight;
+                    fromTopToolbar = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight + ClipTileViewModel.TileMargin;
                     toTopToolbar = ClipTileViewModel.TileContentHeight;
 
                     fromBottomRtb = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight;
@@ -198,7 +203,9 @@ namespace MpWpfApp {
                     editTemplateToolbarBorder,
                     Canvas.TopProperty,
                     (s1, e) => {
-
+                        if(editTemplateToolbarBorder.Visibility == Visibility.Visible) {
+                            tb.Focus();
+                        }
                     });
 
                 
@@ -210,6 +217,8 @@ namespace MpWpfApp {
             if (ttcvm == null) {
                 //for new template create the vm but wait to add it in OkCommand
                 SelectedTemplateHyperlinkViewModel = new MpTemplateHyperlinkViewModel(ClipTileViewModel,null);
+                _originalText = ClipTileViewModel.GetRtb().Selection.Text;
+                _selectedTemplateHyperlink = MpHelpers.CreateTemplateHyperlink(SelectedTemplateHyperlinkViewModel, ClipTileViewModel.GetRtb().Selection);
             } else {
                 _originalTemplateName = ttcvm.TemplateName;
                 _originalTemplateColor = ttcvm.TemplateBrush;
@@ -218,8 +227,8 @@ namespace MpWpfApp {
             ClipTileViewModel.IsEditingTemplate = isEditMode;
 
             if (!ClipTileViewModel.IsEditingTemplate) {
+                MpHelpers.CreateTemplateHyperlink(SelectedTemplateHyperlinkViewModel, ClipTileViewModel.GetRtb().Selection);
                 OkCommand.Execute(null);
-                return;
             }
         }
         #endregion
@@ -255,13 +264,14 @@ namespace MpWpfApp {
             }
         }
         private void Cancel() {
-            if(!IsSelectedNewTemplate) {
-                if(!string.IsNullOrEmpty(_originalTemplateName)) {
-                    //restore original name/color to datacontext
-                    SelectedTemplateHyperlinkViewModel.TemplateName = _originalTemplateName;
-                    SelectedTemplateHyperlinkViewModel.TemplateBrush = _originalTemplateColor;
-                } 
+            if(IsSelectedNewTemplate) {
+                ClipTileViewModel.GetRtb().Selection.Text = _originalText;
+            } else {
+                //restore original name/color to datacontext
+                SelectedTemplateHyperlinkViewModel.TemplateName = _originalTemplateName;
+                SelectedTemplateHyperlinkViewModel.TemplateBrush = _originalTemplateColor;
             }
+            SelectedTemplateHyperlinkViewModel.IsSelected = false;
             ClipTileViewModel.IsEditingTemplate = false;
         }
 
@@ -280,10 +290,10 @@ namespace MpWpfApp {
         private void Ok() {            
             SelectedTemplateHyperlinkViewModel.CopyItemTemplate.WriteToDatabase();
 
-            //if(IsSelectedNewTemplate) 
-                {
-                ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Add(SelectedTemplateHyperlinkViewModel, ClipTileViewModel.GetRtb().Selection);
+            if(IsSelectedNewTemplate) {
+                ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Add(SelectedTemplateHyperlinkViewModel);
             }
+            SelectedTemplateHyperlinkViewModel.IsSelected = false;
             ClipTileViewModel.IsEditingTemplate = false;
         }
         #endregion

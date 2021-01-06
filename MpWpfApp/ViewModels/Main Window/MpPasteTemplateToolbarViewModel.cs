@@ -237,7 +237,7 @@ namespace MpWpfApp {
                 double fromWidthTile = cb.ActualWidth;
                 double toWidthTile = 0;
 
-                double fromBottomRtb = ClipTileViewModel.RtbBottom;
+                double fromBottomRtb = ClipTileViewModel.TileContentHeight;
                 double toBottomRtb = 0;
                 if (et.Visibility == Visibility.Visible) {
                     fromTopToolbar = cb.ActualHeight;
@@ -245,7 +245,7 @@ namespace MpWpfApp {
 
                     toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
 
-                    toBottomRtb = ClipTileViewModel.RtbBottom - ClipTileViewModel.PasteTemplateToolbarHeight;
+                    toBottomRtb = fromBottomRtb - ClipTileViewModel.PasteTemplateToolbarHeight;
 
                     ClipTileViewModel.TemplateRichText = string.Empty;
                     SelectedTemplateText = string.Empty;
@@ -255,7 +255,7 @@ namespace MpWpfApp {
 
                     toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
 
-                    toBottomRtb = ClipTileViewModel.RtbBottom + ClipTileViewModel.PasteTemplateToolbarHeight;
+                    toBottomRtb = fromBottomRtb + ClipTileViewModel.PasteTemplateToolbarHeight;
 
                     ClipTileViewModel.IsPastingTemplateTile = false;
                 }

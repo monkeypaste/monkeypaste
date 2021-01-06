@@ -179,58 +179,84 @@
         #region Properties
 
         #region Layout Properties
-        private double _rtbTop = 0;
-        public double RtbTop {
-            get {
-                return _rtbTop;
-            }
-            set {
-                if (_rtbTop != value) {
-                    _rtbTop = value;
-                    OnPropertyChanged(nameof(RtbTop));
-                }
-            }
-        }
+        //private double _rtbTop = 0;
+        //public double RtbTop {
+        //    get {
+        //        return _rtbTop;
+        //    }
+        //    set {
+        //        if (_rtbTop != value) {
+        //            _rtbTop = value;
+        //            OnPropertyChanged(nameof(RtbTop));
+        //        }
+        //    }
+        //}
 
-        private double _rtbBottom = MpMeasurements.Instance.ClipTileContentHeight;
-        public double RtbBottom {
-            get {
-                return _rtbBottom;
-            }
-            set {
-                if (_rtbBottom != value) {
-                    _rtbBottom = value;
-                    OnPropertyChanged(nameof(RtbBottom));
-                }
-            }
-        }
+        //private double _rtbBottom = MpMeasurements.Instance.ClipTileContentHeight;
+        //public double RtbBottom {
+        //    get {
+        //        return _rtbBottom;
+        //    }
+        //    set {
+        //        if (_rtbBottom != value) {
+        //            _rtbBottom = value;
+        //            OnPropertyChanged(nameof(RtbBottom));
+        //        }
+        //    }
+        //}
 
+        //private double _pasteTemplateToolbarTop = MpMeasurements.Instance.ClipTileContentHeight;
+        //public double PasteTemplateToolbarTop {
+        //    get {
+        //        return _pasteTemplateToolbarTop;
+        //    }
+        //    set {
+        //        if (_pasteTemplateToolbarTop != value) {
+        //            _pasteTemplateToolbarTop = value;
+        //            OnPropertyChanged(nameof(PasteTemplateToolbarTop));
+        //        }
+        //    }
+        //}
+
+        //private double _editTemplateToolbarTop = MpMeasurements.Instance.ClipTileContentHeight;
+        //public double EditTemplateToolbarTop {
+        //    get {
+        //        return _editTemplateToolbarTop;
+        //    }
+        //    set {
+        //        if (_editTemplateToolbarTop != value) {
+        //            _editTemplateToolbarTop = value;
+        //            OnPropertyChanged(nameof(EditTemplateToolbarTop));
+        //        }
+        //    }
+        //}
+        //private double _editToolbarTop = -MpMeasurements.Instance.ClipTileEditToolbarHeight;
+        //public double EditToolbarTop {
+        //    get {
+        //        return _editToolbarTop;
+        //    }
+        //    set {
+        //        if (_editToolbarTop != value) {
+        //            _editToolbarTop = value;
+        //            OnPropertyChanged(nameof(EditToolbarTop));
+        //        }
+        //    }
+        //}
         public double RtbHeight {
             get {
-                //double h = MpMeasurements.Instance.ClipTileContentHeight;
-                //if (IsEditingTile) {
-                //    h -= EditRichTextBoxToolbarViewModel.TileContentEditToolbarHeight;
-                //}
-                //if (PasteTemplateToolbarViewModel.TemplateToolbarVisibility == Visibility.Visible) {
-                //    h -= PasteTemplateToolbarViewModel.PasteTemplateToolbarHeight;
-                //}
-                //return h;
-                return RtbBottom - RtbTop;
+                double h = MpMeasurements.Instance.ClipTileContentHeight;
+                if (IsEditingTile) {
+                    h -= EditRichTextBoxToolbarHeight;
+                }
+                if (IsPastingTemplateTile) {
+                    h -= PasteTemplateToolbarHeight;
+                }
+                return h;
+                //return RtbBottom - RtbTop;
             }
         }
 
-        private double _editToolbarTop = -MpMeasurements.Instance.ClipTileEditToolbarHeight;
-        public double EditToolbarTop {
-            get {
-                return _editToolbarTop;
-            }
-            set {
-                if (_editToolbarTop != value) {
-                    _editToolbarTop = value;
-                    OnPropertyChanged(nameof(EditToolbarTop));
-                }
-            }
-        }       
+        
 
         public double EditTemplateToolbarHeight {
             get {
@@ -250,31 +276,7 @@
             }
         }
 
-        private double _pasteTemplateToolbarTop = MpMeasurements.Instance.ClipTileContentHeight;
-        public double PasteTemplateToolbarTop {
-            get {
-                return _pasteTemplateToolbarTop;
-            }
-            set {
-                if (_pasteTemplateToolbarTop != value) {
-                    _pasteTemplateToolbarTop = value;
-                    OnPropertyChanged(nameof(PasteTemplateToolbarTop));
-                }
-            }
-        }
-
-        private double _editTemplateToolbarTop = MpMeasurements.Instance.ClipTileContentHeight;
-        public double EditTemplateToolbarTop {
-            get {
-                return _editTemplateToolbarTop;
-            }
-            set {
-                if (_editTemplateToolbarTop != value) {
-                    _editTemplateToolbarTop = value;
-                    OnPropertyChanged(nameof(EditTemplateToolbarTop));
-                }
-            }
-        }
+        
 
         private FontFamily _rtbFontFamily = null;
         public FontFamily RtbFontFamily {
@@ -427,13 +429,16 @@
         #endregion
 
         #region Visibility Properties
-
+        private Visibility _editToolbarVisibility = Visibility.Collapsed;
         public Visibility EditToolbarVisibility {
             get {
-                if (IsEditingTile) {
-                    return Visibility.Visible;
+                return _editToolbarVisibility;
+            }
+            set {
+                if(_editToolbarVisibility != value) {
+                    _editToolbarVisibility = value;
+                    OnPropertyChanged(nameof(EditToolbarVisibility));
                 }
-                return Visibility.Collapsed;
             }
         }
 
@@ -1224,15 +1229,11 @@
             var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
             var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
 
-            //rtb.ContextMenu = (ContextMenu)cb.FindName("ClipTile_ContextMenu");
-            //rtb.CreateHyperlinks();
+            rtb.Document = MpHelpers.ConvertRichTextToFlowDocument(CopyItemRichText);
+            rtb.CreateHyperlinks();
             rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
             rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
             _rtb = rtb;
-                       
-            //not sure why but calling this is only way templates are shown when loaded
-            //TemplateTokenList = rtb.GetTemplateHyperlinkList();
-            //HasTemplate = rtb.GetTemplateHyperlinkList().Count > 0;
 
             #region Search
             LastContentHighlightRangeList.CollectionChanged += (s, e9) => {

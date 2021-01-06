@@ -208,8 +208,8 @@
     <Compile Include="Views\MpPlaceholderTextBox.xaml.cs">
       <DependentUpon>MpPlaceholderTextBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MpTemplateHyperlinkBorder.xaml.cs">
-      <DependentUpon>MpTemplateHyperlinkBorder.xaml</DependentUpon>
+    <Compile Include="Views\MpTemplateHyperlink.xaml.cs">
+      <DependentUpon>MpTemplateHyperlink.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MpTemplateTokenPasteModalWindow.xaml.cs">
       <DependentUpon>MpTemplateTokenPasteModalWindow.xaml</DependentUpon>
@@ -236,7 +236,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MpTemplateHyperlinkBorder.xaml">
+    <Page Include="Views\MpTemplateHyperlink.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

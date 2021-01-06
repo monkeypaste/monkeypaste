@@ -121,21 +121,19 @@ namespace MpWpfApp {
             var addTemplateButton = (Button)et.FindName("AddTemplateButton");
             var editTemplateToolbarBorder = (Border)cb.FindName("ClipTileEditTemplateToolbar");
             var pasteTemplateToolbarBorder = (Border)cb.FindName("ClipTilePasteTemplateToolbar");
+            Canvas.SetZIndex(et, 3);
+            Canvas.SetZIndex(rtb, 1);
 
             addTemplateButton.PreviewMouseDown += (s, e3) => {
                 e3.Handled = true;
                 if (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Count == 0) {
                     //if templates are NOT in the clip yet add one w/ default name
-                    //MpEditTemplateHyperlinkViewModel.ShowTemplateTokenEditModalWindow(this, null, true);
-                    var rtbSelection = rtb.Selection;
+                    //var rtbSelection = rtb.Selection;
                     ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);
-                    //ClipTileViewModel.EditTemplateToolbarViewModel.IsEditingTemplate = true;
-                    //ettbg.UpdateLayout();                    
-                    //cb.GetVisualAncestor<ListBox>().Items.Refresh();
-                    rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+                    //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
                 } else {
                     var templateContextMenu = new ContextMenu();
-                    foreach (var ttcvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
+                    foreach (var ttcvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelList) {
                         Rectangle rect = new Rectangle();
                         rect.Fill = ttcvm.TemplateBrush;
                         rect.Width = 14;
@@ -186,6 +184,7 @@ namespace MpWpfApp {
                 //HasTemplate = rtb.GetTemplateHyperlinkList().Count > 0;
             };
 
+            #region Editor
             ToggleButton selectedAlignmentButton = null;
             ToggleButton selectedListButton = null;
 
@@ -262,76 +261,99 @@ namespace MpWpfApp {
                 this.SetButtonGroupSelection(clickedButton, selectedListButton, buttonGroup, false);
                 selectedListButton = clickedButton;
             };
+            #endregion
 
-            et.IsVisibleChanged += (s, e1) => {
-                //animates tile width, rtb top and edit tb top
-                double fromWidthTile = cb.ActualWidth;
-                double toWidthTile = 0;
+            ClipTileViewModel.PropertyChanged += (s, e) => {
+                switch(e.PropertyName) {
+                    case nameof(ClipTileViewModel.IsEditingTile):
+                        //animates tile width, rtb top and edit tb top
+                        double fromWidthTile = 0;
+                        double toWidthTile = 0;
 
-                double fromTopToolbar = ClipTileViewModel.EditToolbarTop;
-                double toTopToolbar = 0;
+                        double fromWidthContent = 0;
+                        double toWidthContent = 0;
 
-                double fromTopRtb = ClipTileViewModel.RtbTop;
-                double toTopRtb = 0;
-                if (et.Visibility == Visibility.Visible) {
-                    toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
-                    
-                    //fromTopToolbar = -EditRichTextBoxToolbarHeight;
-                    toTopToolbar = 0;
+                        double fromTopToolbar = 0;
+                        double toTopToolbar = 0;
 
-                    //fromTopRtb = 0;
-                    toTopRtb = ClipTileViewModel.EditRichTextBoxToolbarHeight;
-                } else {
-                    toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
+                        double fromTopRtb = 0;
+                        double toTopRtb = 0;
+                        if (ClipTileViewModel.IsEditingTile) {
+                            ClipTileViewModel.EditToolbarVisibility = Visibility.Visible;
+                            fromWidthTile = cb.ActualWidth;
+                            toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
 
-                    //fromTopToolbar = 0;
-                    toTopToolbar = -ClipTileViewModel.EditRichTextBoxToolbarHeight;
+                            fromWidthContent = rtb.ActualWidth;
+                            toWidthContent = ClipTileViewModel.TileContentWidth;
 
-                    //fromTopRtb = EditRichTextBoxToolbarHeight;
-                    toTopRtb = 0;
+                            fromTopToolbar = -ClipTileViewModel.EditRichTextBoxToolbarHeight;
+                            toTopToolbar = 0;
+
+                            fromTopRtb = 0;
+                            toTopRtb = ClipTileViewModel.EditRichTextBoxToolbarHeight;
+                        } else {
+                            fromWidthTile = cb.ActualWidth;
+                            toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
+
+                            fromWidthContent = rtb.ActualWidth;
+                            toWidthContent = ClipTileViewModel.TileContentWidth;
+
+                            fromTopToolbar = 0;
+                            toTopToolbar = -ClipTileViewModel.EditRichTextBoxToolbarHeight;
+
+                            fromTopRtb = ClipTileViewModel.EditRichTextBoxToolbarHeight;
+                            toTopRtb = 0;
+                        }
+
+                        MpHelpers.AnimateDoubleProperty(
+                            fromTopRtb,
+                            toTopRtb,
+                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                            rtb,
+                            Canvas.TopProperty,
+                            (s1, e44) => {
+
+                            });
+
+                        MpHelpers.AnimateDoubleProperty(
+                            fromTopToolbar,
+                            toTopToolbar,
+                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                            et,
+                            Canvas.TopProperty,
+                            (s1, e4) => {
+                                if(!ClipTileViewModel.IsEditingTile) {
+                                    ClipTileViewModel.EditToolbarVisibility = Visibility.Collapsed;
+                                }
+                            });
+
+                        MpHelpers.AnimateDoubleProperty(
+                            fromWidthTile,
+                            toWidthTile,
+                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                            new List<FrameworkElement> { cb, titleSwirl, rtb, et, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
+                            FrameworkElement.WidthProperty,
+                            (s1, e44) => {
+                                rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
+                                rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
+                            });
+
+                        double fromLeft = Canvas.GetLeft(titleIconImageButton);
+                        double toLeft = toWidthTile - ClipTileViewModel.TileTitleHeight - 10;
+                        MpHelpers.AnimateDoubleProperty(
+                            fromLeft,
+                            toLeft,
+                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                            titleIconImageButton,
+                            Canvas.LeftProperty,
+                            (s1, e23) => {
+
+                            });
+                        break;
                 }
-
-                MpHelpers.AnimateDoubleProperty(
-                    fromTopRtb,
-                    toTopRtb,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    rtb,
-                    Canvas.TopProperty,
-                    (s1, e) => {
-
-                    });
-
-                MpHelpers.AnimateDoubleProperty(
-                    fromTopToolbar,
-                    toTopToolbar,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    et,
-                    Canvas.TopProperty,
-                    (s1, e) => {
-
-                    });
-
-                MpHelpers.AnimateDoubleProperty(
-                    fromWidthTile,
-                    toWidthTile,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    new List<FrameworkElement> { cb, titleSwirl, rtb, et, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
-                    FrameworkElement.WidthProperty,
-                    (s1, e) => {
-                        
-                    });
-
-                double fromLeft = Canvas.GetLeft(titleIconImageButton);
-                double toLeft = toWidthTile - ClipTileViewModel.TileTitleHeight - 10;
-                MpHelpers.AnimateDoubleProperty(
-                    fromLeft,
-                    toLeft,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    titleIconImageButton,
-                    Canvas.LeftProperty,
-                    (s1, e) => {
-
-                    });
+            };
+            et.IsVisibleChanged += (s, e1) => {
+                
             };
 
             rtb.SelectionChanged += (s, e6) => {
@@ -362,26 +384,41 @@ namespace MpWpfApp {
                 //       !rtb.Selection.Start.IsInSameDocument(templateHyperlink.ContentEnd)) {
                 //        continue;
                 //    }
-                //    if ((rtb.Selection.Start.CompareTo(templateHyperlink.ContentStart) >= 0 &&
-                //        rtb.Selection.Start.CompareTo(templateHyperlink.ContentEnd) <= 0) ||
-                //       (rtb.Selection.End.CompareTo(templateHyperlink.ContentStart) >= 0 &&
-                //        rtb.Selection.End.CompareTo(templateHyperlink.ContentEnd) <= 0)) {
-                //        IsAddTemplateButtonEnabled = false;
-                //    }
+                //    
                 //}
+
+                if (((TextElement)rtb.Selection.Start.Parent).DataContext != null && ((TextElement)rtb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
+                    var thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.Start.Parent).DataContext;
+                    rtb.Selection.Select(thlvm.TemplateTextRange.Start, thlvm.TemplateTextRange.End);
+                } else if (((TextElement)rtb.Selection.End.Parent).DataContext != null && ((TextElement)rtb.Selection.End.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
+                    var thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.End.Parent).DataContext;
+                    rtb.Selection.Select(thlvm.TemplateTextRange.Start, thlvm.TemplateTextRange.End);
+                }
 
                 //OnPropertyChanged(nameof(IsAddTemplateButtonEnabled));
             };
-            //rtb.LostFocus += (s, e3) => {
-            //    IsEditingTile = false;
-            //};
-            //rtb.LostKeyboardFocus += (s, e7) => {
-            //    e7.Handled = true;
-            //};
-
-            //rtb.LostFocus += (s, e7) => {
-            //    e7.Handled = true;
-            //};
+            Key lastKey = Key.None;
+            TextPointer lastKeyPosition = null;
+            rtb.PreviewKeyDown += (s, e4) => {
+                lastKey = e4.Key;
+                if (lastKey == Key.Back) {
+                    lastKeyPosition = rtb.CaretPosition.GetNextContextPosition(LogicalDirection.Backward);
+                } else if (lastKey == Key.Delete) {
+                    lastKeyPosition = rtb.CaretPosition.GetNextInsertionPosition(LogicalDirection.Forward);
+                }
+                e4.Handled = false;
+            };
+            rtb.TextChanged += (s, e4) => {
+                if(lastKeyPosition != null) {
+                    MpTemplateHyperlinkViewModel thlvm = null;
+                    if (((TextElement)lastKeyPosition.Parent).DataContext != null && ((TextElement)lastKeyPosition.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
+                        thlvm = (MpTemplateHyperlinkViewModel)((TextElement)lastKeyPosition.Parent).DataContext;
+                        rtb.Selection.Select(thlvm.TemplateTextRange.Start, thlvm.TemplateTextRange.End);
+                        rtb.Selection.Text = string.Empty;
+                        thlvm.Dispose();
+                    } 
+                }                
+            };
         }
         #endregion
 
