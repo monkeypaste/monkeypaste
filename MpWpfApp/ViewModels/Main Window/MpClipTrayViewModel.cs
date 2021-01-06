@@ -439,13 +439,9 @@ namespace MpWpfApp {
         public void ClearClipSelection() {
             foreach (var clip in this) {
                 clip.IsEditingTile = false;
-                clip.TemplateToolbarViewModel.IsPastingTemplateTile = false;
-                clip.TemplateToolbarViewModel.IsEditingTemplate = false;
+                clip.IsPastingTemplateTile = false;
+                clip.IsEditingTemplate = false;
                 clip.IsSelected = false;
-                //clip.IsClipItemFocused = false;
-                //clip.IsClipRichTextBoxFocused = false;
-                //clip.IsClipTitleTextBoxFocused = false;
-                //clip.IsCurrentTemplateTextBoxFocused = false;
             }
         }
 

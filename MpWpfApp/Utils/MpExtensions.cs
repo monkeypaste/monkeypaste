@@ -42,7 +42,7 @@ namespace MpWpfApp {
         //    //    typeFace,
         //    //    fontSize,
         //    //    rtb);
-            
+
         //    var thlvm = (MpTemplateHyperlinkViewModel)hl.DataContext;
 
         //    Binding borderBrushBinding = new Binding();
@@ -136,13 +136,13 @@ namespace MpWpfApp {
         //    tb.MouseLeave += (s, e) => {
         //        tb.Cursor = Cursors.Arrow;
         //    };
-            
+
         //    BindingOperations.SetBinding(tb, TextBlock.ForegroundProperty, foregroundBinding);
         //    BindingOperations.SetBinding(tb, TextBlock.TextProperty, templateDisplayValueBinding);
         //    BindingOperations.SetBinding(tb, TextBlock.HeightProperty, textblockHeightBinding);
         //    BindingOperations.SetBinding(tb, TextBlock.WidthProperty, textblockWidthBinding);
         //    BindingOperations.SetBinding(tb, TextBlock.FontSizeProperty, fontSizeBinding);
-            
+
 
         //    var path = @"pack://application:,,,/Resources/Images/";
         //    Image dbImg = new Image(); 
@@ -292,32 +292,28 @@ namespace MpWpfApp {
         //    return templateLinkList;
         //}
 
-        //public static void ClearHyperlinks(this RichTextBox rtb) {
-        //    //replaces hyperlinks with runs of there textrange text
-        //    //if hl is templatee it decodes the run into #templatename#templatecolor# 
-        //    //TextRange ts = rtb.Selection;
-        //    var hll = rtb.GetAllHyperlinkList();
-        //    foreach (var hl in hll) {
-        //        if(hl.ElementStart.IsInSameDocument(rtb.Document.ContentStart)){
-        //            var hlRange = new TextRange(hl.ElementStart, hl.ElementEnd);
-        //            //rtb.Selection.Select(hl.ElementStart, hl.ElementEnd);
-        //            if (hl.NavigateUri != null && hl.NavigateUri.OriginalString == Properties.Settings.Default.TemplateTokenUri) {
-        //                hlRange.Text = string.Format(
-        //                    @"{0}{1}{0}{2}{0}", 
-        //                    Properties.Settings.Default.TemplateTokenMarker, 
-        //                    hl.TargetName, 
-        //                    ((SolidColorBrush)hl.Background).ToString());
-        //            } else {
-        //                //hlRange.Text = hlRange.Text;
-        //            }
-        //        } else {
-        //            Console.WriteLine("Error clearing templates for rtf: ");
-        //            Console.WriteLine(rtb.GetRtf());
-        //            continue;
-        //        }          
-        //    }
-        //    rtb.Tag = null;
-        //}
+        public static void ClearHyperlinks(this RichTextBox rtb) {
+            //replaces hyperlinks with runs of there textrange text
+            var ctvm = (MpClipTileViewModel)rtb.DataContext;
+            foreach (var thlvm in ctvm.TemplateHyperlinkCollectionViewModel) {
+                foreach(var tr in thlvm.RangeList) {
+                    tr.Text = thlvm.TemplateName;
+                }
+                //var templateTextBlockRanges = MpHelpers.FindStringRangesFromPosition(rtb.Document.ContentStart, thlvm.TemplateName);
+                //foreach(var tbRange in templateTextBlockRanges) {
+                //    var run = (Run)tbRange.Start.Parent;
+                //    var tb = (TextBlock)run.Parent;
+                //    var dp = (DockPanel)tb.Parent;
+                //    var b = (Border)dp.Parent;
+                //    var thlb = (MpTemplateHyperlinkBorder)b.Parent;
+                //    var iuic = (InlineUIContainer)thlb.Parent;
+                //    var thl = (Hyperlink)iuic.Parent;
+                //    new TextRange(thl.ContentStart, thl.ContentEnd).Text = thlvm.TemplateName;
+                //    //new Span(thl.ElementStart, thl.ElementEnd).Inlines.Add(thlvm.TemplateName);
+                //}
+            }
+            ctvm.TemplateHyperlinkCollectionViewModel.Clear();
+        }
 
         public static void CreateHyperlinks(this RichTextBox rtb, string searchText = "") {
             var ctvm = (MpClipTileViewModel)rtb.DataContext;
@@ -362,10 +358,10 @@ namespace MpWpfApp {
                             lastRangeEnd = matchRange.End;
                             if (linkType == MpSubTextTokenType.TemplateSegment) {
                                 var copyItemTemplate = ctvm.CopyItem.GetTemplateByName(matchRange.Text);
-                                hl = ctvm.TemplateToolbarViewModel.Add(new MpTemplateHyperlinkViewModel(ctvm.TemplateToolbarViewModel, copyItemTemplate), matchRange);
+                                hl = ctvm.TemplateHyperlinkCollectionViewModel.Add(new MpTemplateHyperlinkViewModel(ctvm, copyItemTemplate), matchRange);
                                 
                                 //this ensures highlighting has an effective textrange since template ranges alter document
-                                matchRange = new TextRange(hl.ContentStart, hl.ContentEnd);
+                                //matchRange = new TextRange(hl.ContentStart, hl.ContentEnd);
                             } else {
                                 hl = new Hyperlink(matchRange.Start, matchRange.End);
                                 var linkText = c.Value;

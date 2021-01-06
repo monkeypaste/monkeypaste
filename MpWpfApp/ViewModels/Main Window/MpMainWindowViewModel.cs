@@ -208,7 +208,7 @@ namespace MpWpfApp {
         public void ClearEdits() {
             foreach (var clip in ClipTrayViewModel) {
                 clip.IsEditingTile = false;
-                clip.TemplateToolbarViewModel.IsPastingTemplateTile = false;
+                clip.IsPastingTemplateTile = false;
                 if(clip.DetectedImageObjectCollectionViewModel != null) {
                     foreach (var diovm in clip.DetectedImageObjectCollectionViewModel) {
                         diovm.IsNameReadOnly = true;

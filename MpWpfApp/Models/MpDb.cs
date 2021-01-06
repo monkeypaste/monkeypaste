@@ -502,7 +502,7 @@ namespace MpWpfApp {
                     CREATE TABLE MpCopyItemTemplate (
                       pk_MpCopyItemTemplateId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemId integer NOT NULL
-                    , HexColor integer NOT NULL
+                    , HexColor text NOT NULL
                     , TemplateName text NOT NULL 
                     , CONSTRAINT FK_MpCopyItemTemplate_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)                    
                     );                    

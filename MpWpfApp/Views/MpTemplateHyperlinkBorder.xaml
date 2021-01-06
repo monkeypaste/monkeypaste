@@ -26,10 +26,12 @@
                                Background="Transparent"
                                HorizontalAlignment="Left"
                                VerticalAlignment="Center"
+                               Cursor="{Binding TemplateTextBlockCursor}"
                                Foreground="{Binding TemplateForegroundBrush}"
                                Text="{Binding TemplateDisplayValue}" />
                     <Button x:Name="DeleteTemplateTokenButton"
                             DockPanel.Dock="Right"
+                            Cursor="Arrow"
                             Width="15"
                             Height="15"
                             VerticalAlignment="Center"

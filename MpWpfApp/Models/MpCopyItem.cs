@@ -161,8 +161,8 @@ namespace MpWpfApp {
             }
             catch (Exception e) {
                 //this catches intermittent COMExceptions (happened copy/pasting in Excel)
-                Console.WriteLine("Caught exception creating copyitem: " + e.ToString());
-                return null;
+                Console.WriteLine("Caught exception creating copyitem (will reattempt to open clipboard): " + e.ToString());
+                return CreateFromClipboard(processHandle);
             }
         }        
 

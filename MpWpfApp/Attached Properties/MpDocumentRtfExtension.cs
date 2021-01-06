@@ -27,7 +27,7 @@ namespace MpWpfApp {
                     }
                     var rtb = (RichTextBox)obj;                    
                     rtb.SetRtf((string)e.NewValue);
-                    //rtb.CreateHyperlinks();
+                    rtb.CreateHyperlinks();
                 }
             });
     }

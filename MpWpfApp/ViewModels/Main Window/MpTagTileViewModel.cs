@@ -303,8 +303,6 @@ namespace MpWpfApp {
                 MpHelpers.GetColorColumn(TagColor),
                 MpHelpers.GetColorRow(TagColor)
             );
-
-            cm.Width = 300;
         }
 
         public void AddClip(MpClipTileViewModel ctvm) {

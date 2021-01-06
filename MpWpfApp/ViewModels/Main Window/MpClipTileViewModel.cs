@@ -92,20 +92,45 @@
             }
         }
 
-        private MpTemplateToolbarViewModel _templateToolbarViewModel = null;
-        public MpTemplateToolbarViewModel TemplateToolbarViewModel {
+        private MpTemplateHyperlinkCollectionViewModel _templateHyperlinkCollectionViewModel = null;
+        public MpTemplateHyperlinkCollectionViewModel TemplateHyperlinkCollectionViewModel {
             get {
-                return _templateToolbarViewModel;
+                return _templateHyperlinkCollectionViewModel;
             }
             set {
-                if(_templateToolbarViewModel != value) {
-                    _templateToolbarViewModel = value;
-                    OnPropertyChanged(nameof(TemplateToolbarViewModel));
+                if (_templateHyperlinkCollectionViewModel != value) {
+                    _templateHyperlinkCollectionViewModel = value;
+                    OnPropertyChanged(nameof(TemplateHyperlinkCollectionViewModel));
+                }
+            }
+        }
+        private MpEditTemplateToolbarViewModel _editTemplateToolbarViewModel = null;
+        public MpEditTemplateToolbarViewModel EditTemplateToolbarViewModel {
+            get {
+                return _editTemplateToolbarViewModel;
+            }
+            set {
+                if(_editTemplateToolbarViewModel != value) {
+                    _editTemplateToolbarViewModel = value;
+                    OnPropertyChanged(nameof(EditTemplateToolbarViewModel));
                 }
             }
         }
 
-        private MpEditRichTextBoxToolbarViewModel _editRichTextBoxToolbarViewModel = null;
+        private MpPasteTemplateToolbarViewModel _pasteTemplateToolbarViewModel = null;
+        public MpPasteTemplateToolbarViewModel PasteTemplateToolbarViewModel {
+            get {
+                return _pasteTemplateToolbarViewModel;
+            }
+            set {
+                if(_pasteTemplateToolbarViewModel != value) {
+                    _pasteTemplateToolbarViewModel = value;
+                    OnPropertyChanged(nameof(PasteTemplateToolbarViewModel));
+                }
+            }
+        }
+
+        private MpEditRichTextBoxToolbarViewModel _editRichTextBoxToolbarViewModel = new MpEditRichTextBoxToolbarViewModel();
         public MpEditRichTextBoxToolbarViewModel EditRichTextBoxToolbarViewModel {
             get {
                 return _editRichTextBoxToolbarViewModel;
@@ -163,6 +188,90 @@
                 if (_rtbTop != value) {
                     _rtbTop = value;
                     OnPropertyChanged(nameof(RtbTop));
+                }
+            }
+        }
+
+        private double _rtbBottom = MpMeasurements.Instance.ClipTileContentHeight;
+        public double RtbBottom {
+            get {
+                return _rtbBottom;
+            }
+            set {
+                if (_rtbBottom != value) {
+                    _rtbBottom = value;
+                    OnPropertyChanged(nameof(RtbBottom));
+                }
+            }
+        }
+
+        public double RtbHeight {
+            get {
+                //double h = MpMeasurements.Instance.ClipTileContentHeight;
+                //if (IsEditingTile) {
+                //    h -= EditRichTextBoxToolbarViewModel.TileContentEditToolbarHeight;
+                //}
+                //if (PasteTemplateToolbarViewModel.TemplateToolbarVisibility == Visibility.Visible) {
+                //    h -= PasteTemplateToolbarViewModel.PasteTemplateToolbarHeight;
+                //}
+                //return h;
+                return RtbBottom - RtbTop;
+            }
+        }
+
+        private double _editToolbarTop = -MpMeasurements.Instance.ClipTileEditToolbarHeight;
+        public double EditToolbarTop {
+            get {
+                return _editToolbarTop;
+            }
+            set {
+                if (_editToolbarTop != value) {
+                    _editToolbarTop = value;
+                    OnPropertyChanged(nameof(EditToolbarTop));
+                }
+            }
+        }       
+
+        public double EditTemplateToolbarHeight {
+            get {
+                return MpMeasurements.Instance.ClipTilePasteToolbarHeight;
+            }
+        }
+
+        public double EditRichTextBoxToolbarHeight {
+            get {
+                return MpMeasurements.Instance.ClipTileEditToolbarHeight;
+            }
+        }
+
+        public double PasteTemplateToolbarHeight {
+            get {
+                return MpMeasurements.Instance.ClipTilePasteToolbarHeight;
+            }
+        }
+
+        private double _pasteTemplateToolbarTop = MpMeasurements.Instance.ClipTileContentHeight;
+        public double PasteTemplateToolbarTop {
+            get {
+                return _pasteTemplateToolbarTop;
+            }
+            set {
+                if (_pasteTemplateToolbarTop != value) {
+                    _pasteTemplateToolbarTop = value;
+                    OnPropertyChanged(nameof(PasteTemplateToolbarTop));
+                }
+            }
+        }
+
+        private double _editTemplateToolbarTop = MpMeasurements.Instance.ClipTileContentHeight;
+        public double EditTemplateToolbarTop {
+            get {
+                return _editTemplateToolbarTop;
+            }
+            set {
+                if (_editTemplateToolbarTop != value) {
+                    _editTemplateToolbarTop = value;
+                    OnPropertyChanged(nameof(EditTemplateToolbarTop));
                 }
             }
         }
@@ -249,20 +358,7 @@
             get {
                 return MpMeasurements.Instance.ClipTileContentHeight;
             }
-        }
-
-        public double RichTextBoxHeight {
-            get {
-                double h = MpMeasurements.Instance.ClipTileContentHeight;
-                if (IsEditingTile) {
-                    h -= EditRichTextBoxToolbarViewModel.TileContentEditToolbarHeight;
-                }
-                if (TemplateToolbarViewModel.TemplateToolbarVisibility == Visibility.Visible) {
-                    h -= TemplateToolbarViewModel.TileContentPasteToolbarHeight;
-                }
-                return h;
-            }
-        }
+        }       
 
         private double _tileContentWidth = MpMeasurements.Instance.ClipTileContentWidth;
         public double TileContentWidth {
@@ -331,6 +427,34 @@
         #endregion
 
         #region Visibility Properties
+
+        public Visibility EditToolbarVisibility {
+            get {
+                if (IsEditingTile) {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+
+        public Visibility EditTemplateToolbarVisibility {
+            get {
+                if (IsEditingTemplate) {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+
+        public Visibility PasteTemplateToolbarVisibility {
+            get {
+                if (IsPastingTemplateTile) {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+
         public ScrollBarVisibility RtbHorizontalScrollbarVisibility {
             get {
                 if(IsEditingTile) {
@@ -547,8 +671,8 @@
                     OnPropertyChanged(nameof(IsEditingTile));
                     OnPropertyChanged(nameof(IsRtbReadOnly));
                     OnPropertyChanged(nameof(ContentCursor));
-                    EditRichTextBoxToolbarViewModel.OnPropertyChanged(nameof(EditRichTextBoxToolbarViewModel.EditToolbarVisibility));
-                    OnPropertyChanged(nameof(RichTextBoxHeight));
+                    OnPropertyChanged(nameof(EditToolbarVisibility));
+                    OnPropertyChanged(nameof(RtbHeight));
                     //OnPropertyChanged(nameof(PasteTemplateToolbarVisibility));
                     OnPropertyChanged(nameof(RtbHorizontalScrollbarVisibility));
                     OnPropertyChanged(nameof(RtbVerticalScrollbarVisibility));
@@ -558,9 +682,39 @@
             }
         }
 
+        private bool _isEditingTemplate = false;
+        public bool IsEditingTemplate {
+            get {
+                return _isEditingTemplate;
+            }
+            set {
+                if (_isEditingTemplate != value) {
+                    _isEditingTemplate = value;
+                    OnPropertyChanged(nameof(IsEditingTemplate));
+                    OnPropertyChanged(nameof(RtbHeight));
+                    OnPropertyChanged(nameof(EditTemplateToolbarVisibility));
+                }
+            }
+        }
+
+        private bool _isPastingTemplateTile = false;
+        public bool IsPastingTemplateTile {
+            get {
+                return _isPastingTemplateTile;
+            }
+            set {
+                if (_isPastingTemplateTile != value) {
+                    _isPastingTemplateTile = value;
+                    OnPropertyChanged(nameof(IsPastingTemplateTile));
+                    OnPropertyChanged(nameof(PasteTemplateToolbarVisibility));
+                    OnPropertyChanged(nameof(RtbHeight));
+                }
+            }
+        }
+
         public bool HasTemplate {
             get {
-                return TemplateToolbarViewModel.Count > 0;
+                return TemplateHyperlinkCollectionViewModel.Count > 0;
             }
         }
 
@@ -903,10 +1057,6 @@
         #endregion
 
         #region Public Methods
-        //public MpClipTileViewModel() : this(new MpCopyItem()) {
-            //empty constructor only directly called when creating from the clipboard
-        //}
-
         public MpClipTileViewModel(MpCopyItem ci) : base() {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
@@ -923,13 +1073,34 @@
                         break;
                 }
             };
+            
             object lockObj = new object();
             object lockObj2 = new object();
             BindingOperations.EnableCollectionSynchronization(LastTitleHighlightRangeList, lockObj);
             BindingOperations.EnableCollectionSynchronization(LastContentHighlightRangeList, lockObj2);
             SetCopyItem(ci);
-            TemplateToolbarViewModel = new MpTemplateToolbarViewModel(this);
+
+            TemplateHyperlinkCollectionViewModel = new MpTemplateHyperlinkCollectionViewModel(this);
+            EditTemplateToolbarViewModel = new MpEditTemplateToolbarViewModel(this);
+            PasteTemplateToolbarViewModel = new MpPasteTemplateToolbarViewModel(this);
             EditRichTextBoxToolbarViewModel = new MpEditRichTextBoxToolbarViewModel(this);
+
+            //TemplateHyperlinkCollectionViewModel.CollectionChanged += (s, e) => {
+            //    if(e.NewItems != null) {
+            //        foreach(MpTemplateHyperlinkViewModel nthlvm in e.NewItems) {
+            //            if(!CopyItem.TemplateList.Contains(nthlvm.CopyItemTemplate)) {
+            //                CopyItem.TemplateList.Add(nthlvm.CopyItemTemplate);
+            //            }
+            //        }
+            //    }
+            //    if (e.OldItems != null) {
+            //        foreach (MpTemplateHyperlinkViewModel nthlvm in e.OldItems) {
+            //            if (CopyItem.TemplateList.Contains(nthlvm.CopyItemTemplate)) {
+            //                CopyItem.TemplateList.Remove(nthlvm.CopyItemTemplate);
+            //            }
+            //        }
+            //    }
+            //};
         }
 
         public void SetCopyItem(MpCopyItem ci) {
@@ -1048,23 +1219,13 @@
                 return;
             }
             var rtbc = (Canvas)sender;
-            var ct = (MpMultiSelectListBox)rtbc.GetVisualAncestor<MpMultiSelectListBox>();
-            var cb = (MpClipBorder)rtbc.GetVisualAncestor<MpClipBorder>();
             var rtb = (RichTextBox)rtbc.FindName("ClipTileRichTextBox");
-            var et = (Border)rtbc.FindName("ClipTileEditorToolbar");
-            var cet = (Border)rtbc.FindName("ClipTileConfirmEditToolbar");
-            var pt = (Border)rtbc.FindName("ClipTilePasteTemplateToolbar");
-            var catb = (Button)pt.FindName("ClearAllTemplatesButton");
-            var cttb = (TextBox)pt.FindName("CurrentTemplateTextBox");
-            var prvtb = (Button)pt.FindName("PreviousTemplateButton");
-            var ntb = (Button)pt.FindName("NextTemplateButton");
-            var ptb = (Button)pt.FindName("PasteTemplateButton");
             
             var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
             var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
 
             //rtb.ContextMenu = (ContextMenu)cb.FindName("ClipTile_ContextMenu");
-            rtb.CreateHyperlinks();
+            //rtb.CreateHyperlinks();
             rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
             rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
             _rtb = rtb;
@@ -1129,7 +1290,7 @@
                 switch (e2.PropertyName) {
                     case nameof(IsEditingTile):
                         if(!IsEditingTile) {
-                            TemplateToolbarViewModel.IsPastingTemplateTile = false;
+                            IsPastingTemplateTile = false;
 
                             //rtb.ClearHyperlinks();
 
@@ -1139,7 +1300,6 @@
                             CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
                             MpHelpers.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
                             MpHelpers.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
-                            //rtb.CreateHyperlinks();
                         }
                         rtb.ScrollToHome();
                         rtb.CaretPosition = rtb.Document.ContentStart;
@@ -1215,8 +1375,6 @@
                 MpHelpers.GetColorColumn(TitleColor),
                 MpHelpers.GetColorRow(TitleColor)
             );
-
-            cm.Width = 300;
         }
 
         public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
@@ -1278,7 +1436,7 @@
         public async Task<string> GetPastableRichText() {
             if (HasTemplate) {
                 IsEditingTile = false;
-                TemplateToolbarViewModel.IsPastingTemplateTile = true;
+                IsPastingTemplateTile = true;
                 var temp = CopyItemRichText;
                 await Task.Run(() => {
                     while (string.IsNullOrEmpty(TemplateRichText)) {
@@ -1390,7 +1548,7 @@
         }
         private bool CanPasteTemplate() {
             //only allow template to be pasted once all template types have been viewed
-            return TemplateToolbarViewModel.IsTemplateReadyToPaste;
+            return PasteTemplateToolbarViewModel.IsTemplateReadyToPaste;
         }
         private void PasteTemplate() {
             // TODO use code below to output templated rich text

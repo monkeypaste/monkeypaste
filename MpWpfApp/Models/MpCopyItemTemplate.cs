@@ -39,7 +39,7 @@ namespace MpWpfApp {
         public override void LoadDataRow(DataRow dr) {
             CopyItemTemplateId = Convert.ToInt32(dr["pk_MpCopyItemTemplateId"].ToString());
             CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemId"].ToString());
-            TemplateName = dr["TemplateName"].ToString();
+            TemplateName = dr["TemplateName"].ToString(); 
             TemplateColor = (Brush)new BrushConverter().ConvertFromString(dr["HexColor"].ToString());
         }
 
@@ -49,7 +49,7 @@ namespace MpWpfApp {
                         "insert into MpCopyItemTemplate(fk_MpCopyItemId,HexColor,TemplateName) values(@ciid,@hc,@tn)",
                         new System.Collections.Generic.Dictionary<string, object> {
                         { "@ciid", CopyItemId },
-                        { "@hc", ((SolidColorBrush)TemplateColor).Color.ToString() },
+                        { "@hc", new BrushConverter().ConvertToString(TemplateColor)},
                         { "@tn", TemplateName }
                     });
                 CopyItemTemplateId = MpDb.Instance.GetLastRowId("MpCopyItemTemplate", "pk_MpCopyItemTemplateId");
@@ -59,7 +59,7 @@ namespace MpWpfApp {
                     new System.Collections.Generic.Dictionary<string, object> {
                         { "@citid", CopyItemTemplateId },
                         { "@ciid", CopyItemId },
-                        { "@hc", ((SolidColorBrush)TemplateColor).Color.ToString() },
+                        { "@hc", new BrushConverter().ConvertToString(TemplateColor) },
                         { "@tn", TemplateName }
                     });
             }

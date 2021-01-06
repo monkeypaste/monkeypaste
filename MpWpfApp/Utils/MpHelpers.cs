@@ -88,11 +88,17 @@ namespace MpWpfApp {
             while (position != null) {   
                 if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
                     if(position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.EmbeddedElement) {
-                        var tb = (TextBlock)((DockPanel)((Border)((InlineUIContainer)position.Parent).Child).Child).Children[0];
-                        var highlightRange = MpHelpers.FindStringRangeFromPosition(tb.ContentStart, matchStr);
-                        if (highlightRange != null) {
-                            return highlightRange;
-                        }
+                        var inlineUIContainer = (InlineUIContainer)position.Parent;
+                        var templateHyperlinkBorder = (MpTemplateHyperlinkBorder)inlineUIContainer.Child;
+                        var border = (Border)templateHyperlinkBorder.Content;
+                        var dockPanel = (DockPanel)border.Child;
+                        var tb = (TextBlock)dockPanel.Children[0];
+                        //var highlightRange = MpHelpers.FindStringRangeFromPosition(tb.ContentStart, matchStr);
+                        //if (highlightRange != null) {
+                        //    return highlightRange;
+                        //}
+                        //position = tb.ContentStart;
+                        //continue;
                     }
                     position = position.GetNextContextPosition(LogicalDirection.Forward);
                     continue;
@@ -972,6 +978,7 @@ namespace MpWpfApp {
             cmi.Header = cmic;
             cmi.Height = h;
             cmi.Style = (Style)Application.Current.MainWindow.FindResource("MenuItemStyle");
+            cm.Width = 300;
         }
         
         public static int GetColorColumn(Brush scb) {
@@ -1550,6 +1557,10 @@ namespace MpWpfApp {
         }
 
         public static string ConvertFlowDocumentToRichText(FlowDocument fd) {
+            var rtb = (RichTextBox)fd.Parent;
+            if(rtb.DataContext.GetType() == typeof(MpClipTileViewModel)) {
+                rtb.ClearHyperlinks();
+            }
             string rtf = string.Empty;
             using (var ms = new MemoryStream()) {
                 var range2 = new TextRange(fd.ContentStart, fd.ContentEnd);

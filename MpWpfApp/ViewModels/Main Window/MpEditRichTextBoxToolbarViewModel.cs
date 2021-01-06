@@ -10,6 +10,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace MpWpfApp {
     public class MpEditRichTextBoxToolbarViewModel : MpViewModelBase {
@@ -33,35 +34,14 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
-        #region Layout Properties
-        public double TileContentEditToolbarHeight {
-            get {
-                return MpMeasurements.Instance.ClipTileEditToolbarHeight;
-            }
-        }
-        private double _editToolbarTop = 0;
-        public double EditToolbarTop {
-            get {
-                return _editToolbarTop;
-            }
-            set {
-                if (_editToolbarTop != value) {
-                    _editToolbarTop = value;
-                    OnPropertyChanged(nameof(EditToolbarTop));
-                }
-            }
-        }
+
+        #region Layout Properties      
+
+        
         #endregion
 
         #region Visibility Properties
-        public Visibility EditToolbarVisibility {
-            get {
-                if (ClipTileViewModel.IsEditingTile) {
-                    return Visibility.Visible;
-                }
-                return Visibility.Collapsed;
-            }
-        }
+        
         #endregion
 
         #region Brush Properties
@@ -125,19 +105,86 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        //public MpEditRichTextBoxToolbarViewModel() : this(new MpClipTileViewModel()) { }
-
-        public MpEditRichTextBoxToolbarViewModel(MpClipTileViewModel ctvm) {
+        public MpEditRichTextBoxToolbarViewModel() :base() { }
+        public MpEditRichTextBoxToolbarViewModel(MpClipTileViewModel ctvm) : base() {
             ClipTileViewModel = ctvm;
         }
 
         public void ClipTileEditorToolbarBorder_Loaded(object sender, RoutedEventArgs args) {
-            var et = (Border)sender;
+            var sp = (StackPanel)sender;
+            var et = sp.GetVisualAncestor<Border>();
             var rtb = ClipTileViewModel.GetRtb();
             var cb = (MpClipBorder)et.GetVisualAncestor<MpClipBorder>();
             var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxCanvas");
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
             var titleSwirl = (Image)cb.FindName("TitleSwirl");
+            var addTemplateButton = (Button)et.FindName("AddTemplateButton");
+            var editTemplateToolbarBorder = (Border)cb.FindName("ClipTileEditTemplateToolbar");
+            var pasteTemplateToolbarBorder = (Border)cb.FindName("ClipTilePasteTemplateToolbar");
+
+            addTemplateButton.PreviewMouseDown += (s, e3) => {
+                e3.Handled = true;
+                if (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Count == 0) {
+                    //if templates are NOT in the clip yet add one w/ default name
+                    //MpEditTemplateHyperlinkViewModel.ShowTemplateTokenEditModalWindow(this, null, true);
+                    var rtbSelection = rtb.Selection;
+                    ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);
+                    //ClipTileViewModel.EditTemplateToolbarViewModel.IsEditingTemplate = true;
+                    //ettbg.UpdateLayout();                    
+                    //cb.GetVisualAncestor<ListBox>().Items.Refresh();
+                    rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+                } else {
+                    var templateContextMenu = new ContextMenu();
+                    foreach (var ttcvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
+                        Rectangle rect = new Rectangle();
+                        rect.Fill = ttcvm.TemplateBrush;
+                        rect.Width = 14;
+                        rect.Height = 14;
+                        rect.VerticalAlignment = VerticalAlignment.Center;
+                        rect.HorizontalAlignment = HorizontalAlignment.Left;
+
+                        TextBlock tb = new TextBlock();
+                        tb.Text = ttcvm.TemplateName;
+                        tb.FontSize = 14;
+                        tb.HorizontalAlignment = HorizontalAlignment.Left;
+                        tb.VerticalAlignment = VerticalAlignment.Center;
+
+                        DockPanel dp1 = new DockPanel();
+                        dp1.Children.Add(rect);
+                        dp1.Children.Add(tb);
+                        rect.SetValue(DockPanel.DockProperty, Dock.Left);
+                        tb.SetValue(DockPanel.DockProperty, Dock.Right);
+
+                        MenuItem tmi = new MenuItem();
+                        tmi.Header = dp1;
+                        tmi.Click += (s1, e5) => {
+                            ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(ttcvm, false);
+                            //ClipTileViewModel.EditTemplateToolbarViewModel.IsEditingTemplate = true;
+                        };
+                        templateContextMenu.Items.Add(tmi);
+                    }
+                    var addNewMenuItem = new MenuItem();
+                    TextBlock tb2 = new TextBlock();
+                    tb2.Text = "Add New...";
+                    tb2.FontSize = 14;
+                    tb2.HorizontalAlignment = HorizontalAlignment.Left;
+                    tb2.VerticalAlignment = VerticalAlignment.Center;
+                    addNewMenuItem.Header = tb2;
+                    addNewMenuItem.Click += (s1, e5) => {
+                        ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);
+                        //ClipTileViewModel.EditTemplateToolbarViewModel.IsEditingTemplate = true;
+
+                    };
+                    templateContextMenu.Items.Add(addNewMenuItem);
+                    addTemplateButton.ContextMenu = templateContextMenu;
+                    templateContextMenu.PlacementTarget = addTemplateButton;
+                    templateContextMenu.IsOpen = true;
+                    //rtb.Selection.Select(ts.Start,ts.End);
+                }
+                //rtb.ScrollToHome();
+                //rtb.CaretPosition = rtb.Document.ContentStart;
+                //HasTemplate = rtb.GetTemplateHyperlinkList().Count > 0;
+            };
 
             ToggleButton selectedAlignmentButton = null;
             ToggleButton selectedListButton = null;
@@ -217,29 +264,30 @@ namespace MpWpfApp {
             };
 
             et.IsVisibleChanged += (s, e1) => {
+                //animates tile width, rtb top and edit tb top
                 double fromWidthTile = cb.ActualWidth;
                 double toWidthTile = 0;
 
-                double fromTopToolbar = 0;
+                double fromTopToolbar = ClipTileViewModel.EditToolbarTop;
                 double toTopToolbar = 0;
 
-                double fromTopRtb = 0;
+                double fromTopRtb = ClipTileViewModel.RtbTop;
                 double toTopRtb = 0;
                 if (et.Visibility == Visibility.Visible) {
                     toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
                     
-                    fromTopToolbar = -TileContentEditToolbarHeight;
+                    //fromTopToolbar = -EditRichTextBoxToolbarHeight;
                     toTopToolbar = 0;
 
-                    fromTopRtb = 0;
-                    toTopRtb = TileContentEditToolbarHeight;
+                    //fromTopRtb = 0;
+                    toTopRtb = ClipTileViewModel.EditRichTextBoxToolbarHeight;
                 } else {
                     toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
 
-                    fromTopToolbar = 0;
-                    toTopToolbar = -TileContentEditToolbarHeight;
+                    //fromTopToolbar = 0;
+                    toTopToolbar = -ClipTileViewModel.EditRichTextBoxToolbarHeight;
 
-                    fromTopRtb = TileContentEditToolbarHeight;
+                    //fromTopRtb = EditRichTextBoxToolbarHeight;
                     toTopRtb = 0;
                 }
 
@@ -267,7 +315,7 @@ namespace MpWpfApp {
                     fromWidthTile,
                     toWidthTile,
                     Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    new List<FrameworkElement> { cb, titleSwirl, rtb, et, rtbc },
+                    new List<FrameworkElement> { cb, titleSwirl, rtb, et, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
                     FrameworkElement.WidthProperty,
                     (s1, e) => {
                         
@@ -306,7 +354,7 @@ namespace MpWpfApp {
                 rightAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
                 justifyAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Justify);
 
-                Console.WriteLine("Selection parent: " + rtb.Selection.Start.Parent.ToString());
+                //Console.WriteLine("Selection parent: " + rtb.Selection.Start.Parent.ToString());
                 IsAddTemplateButtonEnabled = true;// rtb.Selection.Start.Parent.GetType() != typeof(InlineUIContainer);
 
                 //foreach (var templateHyperlink in rtb.GetTemplateHyperlinkList()) {
@@ -322,7 +370,7 @@ namespace MpWpfApp {
                 //    }
                 //}
 
-                OnPropertyChanged(nameof(IsAddTemplateButtonEnabled));
+                //OnPropertyChanged(nameof(IsAddTemplateButtonEnabled));
             };
             //rtb.LostFocus += (s, e3) => {
             //    IsEditingTile = false;
