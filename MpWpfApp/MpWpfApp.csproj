@@ -121,6 +121,7 @@
     <Compile Include="Utils\MpCurrencyConverter.cs" />
     <Compile Include="Utils\MpLanguageTranslator.cs" />
     <Compile Include="Utils\MpWordsApiDictionary.cs" />
+    <Compile Include="ViewModels\Base\MpVirtualizedObservableCollectionViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpClipTileTitleViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpDetectedImageObjectCollectionViewModel.cs" />
     <Compile Include="ViewModels\Main Window\MpDetectedImageObjectViewModel.cs" />
@@ -435,6 +436,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\VirtualizingCollection\VirtualizingCollection.csproj">
+      <Project>{2dbb56ef-47df-42ec-b598-77232fae95e4}</Project>
+      <Name>VirtualizingCollection</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Win32ShareSourceSamples\WpfShareSource\WpfShareSource.csproj">
       <Project>{ea312d52-e025-4f8d-8469-b6d7d8574468}</Project>
       <Name>WpfShareSource</Name>

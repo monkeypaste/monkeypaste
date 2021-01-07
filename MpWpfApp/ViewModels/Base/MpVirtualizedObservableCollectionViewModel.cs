@@ -1,27 +1,22 @@
-﻿using System;
+﻿using AlphaChiTech.Virtualization;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
 namespace MpWpfApp {
-    public class MpObservableCollection<T> : ObservableCollection<T> {
+    public class MpVirtualizedObservableCollectionViewModel<T> : VirtualizingObservableCollection<T>  where T : class {
         private static readonly object _ItemsLock = new object();
 
-        public MpObservableCollection() : base() {
-            BindingOperations.EnableCollectionSynchronization(this, _ItemsLock);
-        }
-        public MpObservableCollection(List<T> list) : base(list) {
-            BindingOperations.EnableCollectionSynchronization(this, _ItemsLock);
-        }
-        public MpObservableCollection(IEnumerable<T> collection) : base(collection) {
+        public MpVirtualizedObservableCollectionViewModel() :base() {
             BindingOperations.EnableCollectionSynchronization(this, _ItemsLock);
         }
 
-    }
-    public class MpObservableCollectionViewModel<T> : MpObservableCollection<T> {
         public MpMainWindowViewModel MainWindowViewModel {
             get {
                 return (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
@@ -56,6 +51,4 @@ namespace MpWpfApp {
             }
         }
     }
-
-
 }
