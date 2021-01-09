@@ -46,88 +46,30 @@ namespace MpWpfApp {
 
             var r = new Run();
             r.Loaded += thlvm.TemplateHyperLinkRun_Loaded;
-            
-            CreateBinding(thlvm, new PropertyPath(nameof(thlvm.TemplateDisplayValue)), r, Run.TextProperty);
-            CreateBinding(thlvm, new PropertyPath(nameof(thlvm.TemplateBackgroundBrush)), r, Run.BackgroundProperty);
-            CreateBinding(thlvm, new PropertyPath(nameof(thlvm.TemplateForegroundBrush)), r, Run.ForegroundProperty);
-            CreateBinding(thlvm, new PropertyPath(nameof(thlvm.TemplateTextBlockCursor)), r, Run.CursorProperty);
+
+            //if the range for the template contains a sub-selection of a hyperlink the hyperlink(s)
+            //needs to be broken into their text before the template hyperlink can be created
+            var trSHl = (Hyperlink)MpHelpers.FindParentOfType(tr.Start.Parent, typeof(Hyperlink));            
+            var trEHl = (Hyperlink)MpHelpers.FindParentOfType(tr.End.Parent, typeof(Hyperlink));
+            var trText = tr.Text;
+
+            if (trSHl != null) {
+                var linkText = new TextRange(trSHl.ElementStart, trSHl.ElementEnd).Text;
+                trSHl.Inlines.Clear();
+                var span = new Span(new Run(linkText), trSHl.ElementStart);
+                tr = FindStringRangeFromPosition(span.ContentStart, trText, true);
+            }
+            if (trEHl != null && trEHl != trSHl) {
+                var linkText = new TextRange(trEHl.ElementStart, trEHl.ElementEnd).Text;
+                trEHl.Inlines.Clear();
+                var span = new Span(new Run(linkText), trEHl.ElementStart);
+                tr = FindStringRangeFromPosition(span.ContentStart, trText, true);
+            }
 
             var hl = new Hyperlink(tr.Start, tr.End);
             hl.DataContext = thlvm;
             hl.Inlines.Clear();
             hl.Inlines.Add(r);
-            CreateBinding(thlvm, new PropertyPath(nameof(thlvm.TemplateTextBlockCursor)), hl, Hyperlink.CursorProperty);
-
-            hl.Tag = MpSubTextTokenType.TemplateSegment;
-            hl.IsEnabled = true;
-            
-            hl.TextDecorations = null;
-            hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
-            hl.Unloaded += (s, e) => {
-                if (hl.DataContext != null && hl.DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
-                    ((MpTemplateHyperlinkViewModel)hl.DataContext).Dispose();
-                }
-            };
-            hl.RequestNavigate += (s4, e4) => {
-                if (!ctvm.IsSelected) {
-                    return;
-                }
-                if (ctvm.IsEditingTile || ctvm.IsPastingTemplateTile) {
-                    thlvm.IsSelected = true;
-                }
-                if (ctvm.IsEditingTile) {
-                    e4.Handled = true;
-                    //ctvm.GetRtb().Selection.Select(hl.ElementStart, hl.ElementEnd);
-                    ctvm.EditTemplateToolbarViewModel.SetTemplate(thlvm, true);
-                }
-            };
-            hl.MouseEnter += (s, e) => {
-                thlvm.IsHovering = true;
-            };
-            hl.MouseLeave += (s, e) => {
-                thlvm.IsHovering = false;
-            };
-            hl.PreviewMouseLeftButtonDown += (s, e) => {
-                if(!ctvm.IsSelected) {
-                    return;
-                }
-                if(ctvm.IsEditingTile || ctvm.IsPastingTemplateTile) {
-                    thlvm.IsSelected = true;
-                }
-                if(ctvm.IsEditingTile) {
-                    e.Handled = true;
-                    //ctvm.GetRtb().Selection.Select(hl.ElementStart, hl.ElementEnd);
-                    ctvm.EditTemplateToolbarViewModel.SetTemplate(thlvm, true);
-                }
-            };
-
-            var editTemplateMenuItem = new MenuItem();
-            editTemplateMenuItem.Header = "Edit";
-            editTemplateMenuItem.PreviewMouseDown += (s4, e4) => {
-                if (!ctvm.IsSelected) {
-                    return;
-                }
-                if (ctvm.IsEditingTile || ctvm.IsPastingTemplateTile) {
-                    thlvm.IsSelected = true;
-                }
-                if (ctvm.IsEditingTile) {
-                    e4.Handled = true;
-                    //ctvm.GetRtb().Selection.Select(hl.ElementStart, hl.ElementEnd);
-                    ctvm.EditTemplateToolbarViewModel.SetTemplate(thlvm, true);
-                }
-            };
-
-            var deleteTemplateMenuItem = new MenuItem();
-            deleteTemplateMenuItem.Header = "Delete";
-            deleteTemplateMenuItem.Click += (s4, e4) => {
-                ctvm.GetRtb().Selection.Select(hl.ElementStart, hl.ElementEnd);
-                ctvm.GetRtb().Selection.Text = string.Empty;
-                thlvm.Dispose();
-            };
-            hl.ContextMenu = new ContextMenu();
-            hl.ContextMenu.Items.Add(editTemplateMenuItem);
-            hl.ContextMenu.Items.Add(deleteTemplateMenuItem);
-
             return hl;
         }
 

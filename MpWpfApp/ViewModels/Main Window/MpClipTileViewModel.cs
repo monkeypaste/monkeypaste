@@ -242,19 +242,19 @@
         //        }
         //    }
         //}
-        public double RtbHeight {
-            get {
-                double h = MpMeasurements.Instance.ClipTileContentHeight;
-                if (IsEditingTile) {
-                    h -= EditRichTextBoxToolbarHeight;
-                }
-                if (IsPastingTemplateTile) {
-                    h -= PasteTemplateToolbarHeight;
-                }
-                return h;
-                //return RtbBottom - RtbTop;
-            }
-        }
+        //public double RtbHeight {
+        //    get {
+        //        double h = MpMeasurements.Instance.ClipTileContentHeight;
+        //        if (IsEditingTile) {
+        //            h -= EditRichTextBoxToolbarHeight;
+        //        }
+        //        if (IsPastingTemplateTile) {
+        //            h -= PasteTemplateToolbarHeight;
+        //        }
+        //        return h;
+        //        //return RtbBottom - RtbTop;
+        //    }
+        //}
 
         
 
@@ -442,21 +442,29 @@
             }
         }
 
+        private Visibility _editTemplateToolbarVisibility = Visibility.Collapsed;
         public Visibility EditTemplateToolbarVisibility {
             get {
-                if (IsEditingTemplate) {
-                    return Visibility.Visible;
+                return _editTemplateToolbarVisibility;
+            }
+            set {
+                if(_editTemplateToolbarVisibility != value) {
+                    _editTemplateToolbarVisibility = value;
+                    OnPropertyChanged(nameof(EditTemplateToolbarVisibility));
                 }
-                return Visibility.Collapsed;
             }
         }
 
+        private Visibility _pasteTemplateToolbarVisibility = Visibility.Collapsed;
         public Visibility PasteTemplateToolbarVisibility {
             get {
-                if (IsPastingTemplateTile) {
-                    return Visibility.Visible;
+                return _pasteTemplateToolbarVisibility;
+            }
+            set {
+                if(_pasteTemplateToolbarVisibility != value) {
+                    _pasteTemplateToolbarVisibility = value;
+                    OnPropertyChanged(nameof(PasteTemplateToolbarVisibility));
                 }
-                return Visibility.Collapsed;
             }
         }
 
@@ -676,11 +684,6 @@
                     OnPropertyChanged(nameof(IsEditingTile));
                     OnPropertyChanged(nameof(IsRtbReadOnly));
                     OnPropertyChanged(nameof(ContentCursor));
-                    OnPropertyChanged(nameof(EditToolbarVisibility));
-                    OnPropertyChanged(nameof(RtbHeight));
-                    //OnPropertyChanged(nameof(PasteTemplateToolbarVisibility));
-                    OnPropertyChanged(nameof(RtbHorizontalScrollbarVisibility));
-                    OnPropertyChanged(nameof(RtbVerticalScrollbarVisibility));
                     OnPropertyChanged((nameof(CopyItemRichText)));
                     OnPropertyChanged(nameof(CopyItem));
                 }
@@ -696,8 +699,6 @@
                 if (_isEditingTemplate != value) {
                     _isEditingTemplate = value;
                     OnPropertyChanged(nameof(IsEditingTemplate));
-                    OnPropertyChanged(nameof(RtbHeight));
-                    OnPropertyChanged(nameof(EditTemplateToolbarVisibility));
                 }
             }
         }
@@ -711,8 +712,6 @@
                 if (_isPastingTemplateTile != value) {
                     _isPastingTemplateTile = value;
                     OnPropertyChanged(nameof(IsPastingTemplateTile));
-                    OnPropertyChanged(nameof(PasteTemplateToolbarVisibility));
-                    OnPropertyChanged(nameof(RtbHeight));
                 }
             }
         }
@@ -1062,6 +1061,8 @@
         #endregion
 
         #region Public Methods
+        public MpClipTileViewModel() : this(new MpCopyItem()) { }
+
         public MpClipTileViewModel(MpCopyItem ci) : base() {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
@@ -1234,6 +1235,7 @@
             rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
             rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
             _rtb = rtb;
+
 
             #region Search
             LastContentHighlightRangeList.CollectionChanged += (s, e9) => {

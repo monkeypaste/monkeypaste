@@ -282,8 +282,66 @@ namespace MpWpfApp {
         }
         
         public void TemplateHyperLinkRun_Loaded(object sender, RoutedEventArgs args) {
-            var run = (Run)sender;
-            var hl = (Hyperlink)run.Parent;
+            var r = (Run)sender;
+            var hl = (Hyperlink)r.Parent;
+
+            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateDisplayValue)), r, Run.TextProperty);
+            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateBackgroundBrush)), r, Run.BackgroundProperty);
+            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateForegroundBrush)), r, Run.ForegroundProperty);
+            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateTextBlockCursor)), r, Run.CursorProperty);
+            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateTextBlockCursor)), hl, Hyperlink.CursorProperty);
+
+            hl.Tag = MpSubTextTokenType.TemplateSegment;
+            hl.IsEnabled = true;
+            hl.TextDecorations = null;
+            hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
+            hl.MouseEnter += (s, e) => {
+                IsHovering = true;
+            };
+            hl.MouseLeave += (s, e) => {
+                IsHovering = false;
+            };
+            hl.PreviewMouseLeftButtonDown += (s, e) => {
+                if (!ClipTileViewModel.IsSelected) {
+                    return;
+                }
+                if (ClipTileViewModel.IsEditingTile || ClipTileViewModel.IsPastingTemplateTile) {
+                    IsSelected = true;
+                }
+                if (ClipTileViewModel.IsEditingTile) {
+                    e.Handled = true;
+                    //ClipTileViewModel.GetRtb().Selection.Select(hl.ElementStart, hl.ElementEnd);
+                    ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(this, true);
+                }
+            };
+            #region Context Menu
+            var editTemplateMenuItem = new MenuItem();
+            editTemplateMenuItem.Header = "Edit";
+            editTemplateMenuItem.PreviewMouseDown += (s4, e4) => {
+                if (!ClipTileViewModel.IsSelected) {
+                    return;
+                }
+                if (ClipTileViewModel.IsEditingTile || ClipTileViewModel.IsPastingTemplateTile) {
+                    IsSelected = true;
+                }
+                if (ClipTileViewModel.IsEditingTile) {
+                    e4.Handled = true;
+                    //ClipTileViewModel.GetRtb().Selection.Select(hl.ElementStart, hl.ElementEnd);
+                    ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(this, true);
+                }
+            };
+
+            var deleteTemplateMenuItem = new MenuItem();
+            deleteTemplateMenuItem.Header = "Delete";
+            deleteTemplateMenuItem.Click += (s4, e4) => {
+                Dispose();
+            };
+
+            hl.ContextMenu = new ContextMenu();
+            hl.ContextMenu.Items.Add(editTemplateMenuItem);
+            hl.ContextMenu.Items.Add(deleteTemplateMenuItem);
+            #endregion
+
             TemplateTextRange = new TextRange(hl.ElementStart, hl.ElementEnd);
         }
         #endregion
@@ -298,12 +356,14 @@ namespace MpWpfApp {
         }
 
         public void Dispose() {
+            ClipTileViewModel.GetRtb().Selection.Select(TemplateTextRange.Start, TemplateTextRange.End);
+            ClipTileViewModel.GetRtb().Selection.Text = string.Empty;
             //remove this individual token reference
             ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Remove(this);
-            //checking clip's remaing templates, if it was the last of its type remove its dictionary keyvalue
-            //if (ClipTileViewModel.TemplateTokens.Where(x => x.TemplateName == TemplateName).ToList().Count == 0) {
-            //    ClipTileViewModel.TemplateTokenLookupDictionary.Remove(TemplateName);
-            //}
+            
+            if(IsSelected && ClipTileViewModel.IsEditingTemplate) {
+                ClipTileViewModel.IsEditingTemplate = false;
+            }
         }
         #endregion
     }

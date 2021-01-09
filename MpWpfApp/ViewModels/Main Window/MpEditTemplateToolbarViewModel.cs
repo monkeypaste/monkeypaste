@@ -162,53 +162,53 @@ namespace MpWpfApp {
                 colorContextMenu.IsOpen = true;
             };
 
-            editTemplateToolbarBorder.IsVisibleChanged += (s, e1) => {
-                double fromTopToolbar = 0;
-                double toTopToolbar = 0;
+            ClipTileViewModel.PropertyChanged += (s, e) => {
+                switch (e.PropertyName) {
+                    case nameof(ClipTileViewModel.IsEditingTemplate):
+                        double rtbBottomMax = ClipTileViewModel.TileContentHeight;
+                        double rtbBottomMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight;
 
-                double fromBottomRtb = 0;
-                double toBottomRtb = 0;
-
-                if (editTemplateToolbarBorder.Visibility == Visibility.Visible) {
-                    if(!ClipTileViewModel.IsEditingTile) {
-                        ClipTileViewModel.IsEditingTile = true;
-                    }
-                    fromTopToolbar = ClipTileViewModel.TileContentHeight;
-                    toTopToolbar = fromTopToolbar - ClipTileViewModel.EditTemplateToolbarHeight + ClipTileViewModel.TileMargin;
-
-                    fromBottomRtb = ClipTileViewModel.TileContentHeight;
-                    toBottomRtb = fromBottomRtb - ClipTileViewModel.EditTemplateToolbarHeight;
-                } else {
-                    fromTopToolbar = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight + ClipTileViewModel.TileMargin;
-                    toTopToolbar = ClipTileViewModel.TileContentHeight;
-
-                    fromBottomRtb = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight;
-                    toBottomRtb = ClipTileViewModel.TileContentHeight;
-                }
-
-                MpHelpers.AnimateDoubleProperty(
-                    fromBottomRtb,
-                    toBottomRtb,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    rtb,
-                    Canvas.BottomProperty,
-                    (s1, e) => {
-
-                    });
-
-                MpHelpers.AnimateDoubleProperty(
-                    fromTopToolbar,
-                    toTopToolbar,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    editTemplateToolbarBorder,
-                    Canvas.TopProperty,
-                    (s1, e) => {
-                        if(editTemplateToolbarBorder.Visibility == Visibility.Visible) {
-                            tb.Focus();
+                        double editTemplateToolbarTopMax = ClipTileViewModel.TileContentHeight;
+                        double editTemplateToolbarTopMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight;
+                        
+                        if (ClipTileViewModel.IsEditingTemplate) {
+                            ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Visible;
                         }
-                    });
 
-                
+                        MpHelpers.AnimateDoubleProperty(
+                            ClipTileViewModel.IsEditingTemplate ? rtbBottomMax : rtbBottomMin,
+                            ClipTileViewModel.IsEditingTemplate ? rtbBottomMin : rtbBottomMax,
+                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                            rtb,
+                            Canvas.BottomProperty,
+                            (s1, e44) => {
+
+                            });
+
+                        MpHelpers.AnimateDoubleProperty(
+                            ClipTileViewModel.IsEditingTemplate ? editTemplateToolbarTopMax : editTemplateToolbarTopMin,
+                            ClipTileViewModel.IsEditingTemplate ? editTemplateToolbarTopMin : editTemplateToolbarTopMax,
+                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                            editTemplateToolbarBorder,
+                            Canvas.TopProperty,
+                            (s1, e44) => {
+                                if (!ClipTileViewModel.IsEditingTemplate) {
+                                    ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Collapsed;
+                                } else {
+                                    tb.Focus();
+                                    if(tb.Text.Length > 2) {
+                                        tb.Select(1, tb.Text.Length - 2);
+                                    }
+                                }
+                            });
+                        break;
+                }
+            };
+
+            rtb.PreviewMouseLeftButtonDown += (s1, e1) => {
+                if(ClipTileViewModel.IsEditingTemplate) {
+                    OkCommand.Execute(null);
+                }
             };
         }
 
@@ -243,7 +243,7 @@ namespace MpWpfApp {
                 return false;
             }
             //if new name is a duplicate of another just delete this one and set it to the duplicate
-            var dupTokenHyperlink = ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName/* && !string.IsNullOrEmpty(_originalTemplateName) */&& x != SelectedTemplateHyperlinkViewModel).ToList();
+            var dupTokenHyperlink = ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName && x.CopyItemTemplateId != SelectedTemplateHyperlinkViewModel.CopyItemTemplateId).ToList();
             if (dupTokenHyperlink != null && dupTokenHyperlink.Count > 0) {
                 ValidationText = SelectedTemplateHyperlinkViewModel.TemplateName + " already exists!";
                 return false;
@@ -290,7 +290,8 @@ namespace MpWpfApp {
         private void Ok() {            
             SelectedTemplateHyperlinkViewModel.CopyItemTemplate.WriteToDatabase();
 
-            if(IsSelectedNewTemplate) {
+           // if(!ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Contains(SelectedTemplateHyperlinkViewModel)) 
+                {
                 ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Add(SelectedTemplateHyperlinkViewModel);
             }
             SelectedTemplateHyperlinkViewModel.IsSelected = false;

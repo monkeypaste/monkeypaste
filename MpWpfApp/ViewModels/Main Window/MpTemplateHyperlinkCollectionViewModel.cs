@@ -113,54 +113,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Overrides
-        //private new void Add(MpTemplateHyperlinkViewModel thlvm) {
-        //    //disable default collection to enforce associated text range
-        //    base.Add(thlvm);
-        //}
-        //public new bool Contains(MpTemplateHyperlinkViewModel thlvm) {
-        //    foreach(var vm in this) {
-        //        if(vm.TemplateName == thlvm.TemplateName) {
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
-
-        public new void Add(MpTemplateHyperlinkViewModel thlvm) {
-            //if (!this.Contains(thlvm)) {
-            //    base.Add(thlvm);
-            //    if(!_templateHyperlinkInstanceLookUp.ContainsKey(thlvm.TemplateName)) {
-            //        _templateHyperlinkInstanceLookUp.Add(thlvm.TemplateName, 1);
-            //    } else {
-            //        _templateHyperlinkInstanceLookUp[thlvm.TemplateName]++;
-            //    }
-
-            //    if (!ClipTileViewModel.CopyItem.TemplateList.Contains(thlvm.CopyItemTemplate)) {
-            //        ClipTileViewModel.CopyItem.TemplateList.Add(thlvm.CopyItemTemplate);
-            //    }
-            //} 
-            base.Add(thlvm);
-        }
-
-        public new void Remove(MpTemplateHyperlinkViewModel thlvm) {
-            //if(_templateHyperlinkInstanceLookUp.ContainsKey(thlvm.TemplateName)) {
-            //    _templateHyperlinkInstanceLookUp[thlvm.TemplateName]--;
-            //    if(_templateHyperlinkInstanceLookUp[thlvm.TemplateName] <= 0) {
-            //        base.Remove(thlvm);
-            //        _templateHyperlinkInstanceLookUp.Remove(thlvm.TemplateName);
-
-            //        if (ClipTileViewModel.CopyItem.TemplateList.Contains(thlvm.CopyItemTemplate)) {
-            //            ClipTileViewModel.CopyItem.TemplateList.Remove(thlvm.CopyItemTemplate);
-            //            thlvm.CopyItemTemplate.DeleteFromDatabase();
-            //        }
-            //    }
-            //}
-            base.Remove(thlvm);
-            //var remainingTemplatesOfRemovalType = this.Where(x => x.TemplateName == thlvm.TemplateName).ToList();
-            //if(remainingTemplatesOfRemovalType == null || remainingTemplatesOfRemovalType.Count == 0) {
-            //    thlvm.CopyItemTemplate.DeleteFromDatabase();
-            //}
-        }
         #endregion
     }
 }

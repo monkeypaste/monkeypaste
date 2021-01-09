@@ -23,6 +23,7 @@ namespace MpWpfApp {
         public static TextPointer GetTextPosition(this FlowDocument doc, int idx) {
             return null;
         }
+
         public static void PrintTextFromPosition(this TextPointer position) {
             TextPointer start = position;
             string outStr = string.Empty;
@@ -36,6 +37,7 @@ namespace MpWpfApp {
             Console.WriteLine("Text from position: ");
             Console.WriteLine(outStr);
         }
+
         public static TextPointer GetNextTextPosition(this TextPointer position) {
             if (position == null) {
                 return null;
@@ -61,6 +63,7 @@ namespace MpWpfApp {
             }
             return curPosition;
         }
+
         public static void ClearTemplates(this RichTextBox rtb) {
             //replaces hyperlinks with runs of there textrange text
             var ctvm = (MpClipTileViewModel)rtb.DataContext;
@@ -84,16 +87,46 @@ namespace MpWpfApp {
             }
             ctvm.TemplateHyperlinkCollectionViewModel.Clear();
         }
-
+        public static List<Hyperlink> GetHyperlinkList(this RichTextBox rtb) {
+            var hlList = new List<Hyperlink>();
+            foreach (var p in rtb.Document.Blocks.OfType<Paragraph>()) {
+                foreach (var hl in p.Inlines.OfType<Hyperlink>()) {
+                    hlList.Add(hl);
+                }
+            }
+            return hlList;
+        }
+        public static void ClearHyperlinks(this RichTextBox rtb) {
+            //replaces hyperlinks with runs of there textrange text
+            var ctvm = (MpClipTileViewModel)rtb.DataContext;
+            var hlList = rtb.GetHyperlinkList();
+            foreach(var hl in hlList) {
+                if (hl.DataContext != null) {
+                    continue;
+                }
+                var linkText = new TextRange(hl.ElementStart, hl.ElementEnd).Text;
+                hl.Inlines.Clear();
+                new Span(new Run(linkText), hl.ElementStart);
+            }
+            foreach (var thlvm in ctvm.TemplateHyperlinkCollectionViewModel) {
+                if(thlvm.TemplateTextRange != null) {
+                    thlvm.TemplateTextRange.Text = string.Empty;
+                    new Span(new Run(thlvm.TemplateName), thlvm.TemplateTextRange.Start);
+                }
+            }
+            ctvm.TemplateHyperlinkCollectionViewModel.Clear();
+        }
         //public static void CreateTemplates(this RichTextBox rtb) {
         //    var ctvm = (MpClipTileViewModel)rtb.DataContext;
         //    foreach (var thlvm in ctvm.TemplateHyperlinkCollectionViewModel) {
         //        MpTemplateHyperlinkBorder.CreateTemplateHyperlink(thlvm, thlvm.TemplateRange);
         //    }
         //}
+
         public static void CreateHyperlinks(this RichTextBox rtb, string searchText = "") {
             var ctvm = (MpClipTileViewModel)rtb.DataContext;
-            //rtb.ClearHyperlinks();
+            //var rtbSelection = rtb.Selection;
+            rtb.ClearHyperlinks();
             var regExGroupList = new List<string> {
                 //WebLink
                 @"(?:https?://|www\.)\S+", 
@@ -112,7 +145,6 @@ namespace MpWpfApp {
                 //HexColor (with alpha)
                 @"#([0-9]|[a-fA-F]){7}([^" + Properties.Settings.Default.TemplateTokenMarker + "][ ])",
             };
-            List<Hyperlink> linkList = new List<Hyperlink>();
             TextRange fullDocRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
             for (int i = 0; i < regExGroupList.Count; i++) {                
                 var linkType = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);
@@ -149,7 +181,7 @@ namespace MpWpfApp {
                                 //this ensures highlighting has an effective textrange since template ranges alter document
                                 //matchRange = new TextRange(hl.ContentStart, hl.ContentEnd);
                             } else {
-                                //matchRange.Text = matchRange.Text;
+                                matchRange.Text = matchRange.Text;
                                 hl = new Hyperlink(matchRange.Start, matchRange.End);
                                 var linkText = c.Value;
                                 //account for special case for hexcolor w/ alpha
@@ -249,13 +281,11 @@ namespace MpWpfApp {
                                         break;
                                 }
                             }
-                            linkList.Add(hl);
                         }
                     }
                 }
             }
-            rtb.Tag = linkList;
-            rtb.ScrollToHome();
+            //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
         }
 
         public static FlowDocument Clone(this FlowDocument doc) {
@@ -315,7 +345,7 @@ namespace MpWpfApp {
             return stringCollection;
         }
 
-        public static void Sort<TSource, TKey>(this ObservableCollection<TSource> source, Func<TSource, TKey> keySelector, bool desc = false) {
+        public static void Sort<TSource, TKey>(this ObservableCollection<TSource> source, Func<TSource, TKey> keySelector, bool desc = false) where TSource : class {
             if (source == null) {
                 return;
             }

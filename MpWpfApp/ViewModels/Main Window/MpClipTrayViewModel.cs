@@ -238,6 +238,7 @@ namespace MpWpfApp {
                 this.Add(new MpClipTileViewModel(ci));
             }
         }
+                
 
         public void ClipTray_Loaded(object sender, RoutedEventArgs e) {           
             var clipTray = (MpMultiSelectListBox)sender;
@@ -457,6 +458,7 @@ namespace MpWpfApp {
 
         public new void Add(MpClipTileViewModel ctvm) {
             this.Insert(0, ctvm);
+            //base.Add(ctvm);
             _clipTrayRef?.Items.Refresh();
         }
 
@@ -656,7 +658,7 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private int GetClipTileFromDrag(Point startLoc,Point curLoc) {
+    private int GetClipTileFromDrag(Point startLoc,Point curLoc) {
             return 0;
         }
 
@@ -777,7 +779,7 @@ namespace MpWpfApp {
             get {
                 if (_bringSelectedClipTilesToFrontCommand == null) {
                     _bringSelectedClipTilesToFrontCommand = new RelayCommand(BringSelectedClipTilesToFront, CanBringSelectedClipTilesToFront);
-                }
+                } 
                 return _bringSelectedClipTilesToFrontCommand;
             }
         }

@@ -13,9 +13,11 @@ namespace MpWpfApp {
         public int GetByteSize() {
             return 0;
         }
+
         public DateTime GetCreationDate() {
             return DateTime.Now;
         }
+
         public int GetOwnerId() {
             return 0;
         }

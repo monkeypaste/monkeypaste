@@ -18,9 +18,20 @@ namespace MpWpfApp {
 
         private static List<MpApp> _AppList = new List<MpApp>();
         private static List<MpColor> _ColorList = new List<MpColor>();
+        private static List<MpCopyItem> _CopyItemList = null;
+
         #endregion
 
         #region Properties
+
+        public static List<MpCopyItem> CopyItemList {
+            get {
+                if(_CopyItemList == null) {
+                    _CopyItemList = MpCopyItem.GetAllCopyItems();
+                }
+                return _CopyItemList;
+            }
+        }
 
         public int CopyItemId { get; set; } = 0;
         public int PreCopyItemId { get; set; } = 0;
@@ -127,6 +138,8 @@ namespace MpWpfApp {
                 return outStr;
             }
         }
+
+
         #endregion
 
         #region Static Methods
@@ -186,6 +199,7 @@ namespace MpWpfApp {
             }
             return null;
         }
+
         public static List<MpCopyItem> GetAllCopyItems() {
             _AppList = MpApp.GetAllApps();
             _ColorList = MpColor.GetAllColors();
