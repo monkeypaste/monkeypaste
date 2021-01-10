@@ -32,7 +32,7 @@ namespace MpWpfApp {
         TemplateSegment,
         CopyItemSegment
     }
-    public class MpTemplateHyperlinkViewModel : MpViewModelBase, IDisposable {
+    public class MpTemplateHyperlinkViewModel : MpViewModelBase, IDisposable, IComparable {
         #region Private Variables
         #endregion
 
@@ -84,7 +84,7 @@ namespace MpWpfApp {
 
         public Brush TemplateBackgroundBrush {
             get {
-                if(ClipTileViewModel.IsSelected) {
+                if(ClipTileViewModel.IsEditingTile || ClipTileViewModel.IsPastingTemplateTile) {
                     if (IsHovering) {
                         return MpHelpers.GetLighterBrush(TemplateBrush);
                     }
@@ -282,13 +282,15 @@ namespace MpWpfApp {
         }
         
         public void TemplateHyperLinkRun_Loaded(object sender, RoutedEventArgs args) {
-            var r = (Run)sender;
-            var hl = (Hyperlink)r.Parent;
+            var tb = (TextBlock)sender;
+            var hl = (Hyperlink)((InlineUIContainer)tb.Parent).Parent;
 
-            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateDisplayValue)), r, Run.TextProperty);
-            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateBackgroundBrush)), r, Run.BackgroundProperty);
-            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateForegroundBrush)), r, Run.ForegroundProperty);
-            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateTextBlockCursor)), r, Run.CursorProperty);
+            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateDisplayValue)), tb, TextBlock.TextProperty);
+            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateBackgroundBrush)), tb, TextBlock.BackgroundProperty);
+            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateForegroundBrush)), tb, TextBlock.ForegroundProperty);
+            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateTextBlockCursor)), tb, TextBlock.CursorProperty);
+            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateBackgroundBrush)), hl, Hyperlink.BackgroundProperty);
+            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateForegroundBrush)), hl, Hyperlink.ForegroundProperty);
             MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateTextBlockCursor)), hl, Hyperlink.CursorProperty);
 
             hl.Tag = MpSubTextTokenType.TemplateSegment;
@@ -364,6 +366,14 @@ namespace MpWpfApp {
             if(IsSelected && ClipTileViewModel.IsEditingTemplate) {
                 ClipTileViewModel.IsEditingTemplate = false;
             }
+        }
+
+        public int CompareTo(object obj) {
+            if(obj.GetType() != typeof(MpTemplateHyperlinkViewModel)) {
+                return -1;
+            }
+            var otherObj = obj as MpTemplateHyperlinkViewModel;
+            return TemplateName.CompareTo(otherObj.TemplateName);
         }
         #endregion
     }

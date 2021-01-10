@@ -165,8 +165,7 @@ namespace MpWpfApp {
         public MpMainWindowViewModel() : base() {
             IsLoading = true;
             SearchBoxViewModel = new MpSearchBoxViewModel() { PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText };
-            ClipTrayViewModel = new MpClipTrayViewModel();
-            
+            ClipTrayViewModel = new MpClipTrayViewModel();            
             ClipTileSortViewModel = new MpClipTileSortViewModel();
             AppModeViewModel = new MpAppModeViewModel();
             TagTrayViewModel = new MpTagTrayViewModel();

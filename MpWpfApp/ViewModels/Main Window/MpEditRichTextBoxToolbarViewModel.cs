@@ -112,10 +112,10 @@ namespace MpWpfApp {
 
         public void ClipTileEditorToolbarBorder_Loaded(object sender, RoutedEventArgs args) {
             var sp = (StackPanel)sender;
-            var et = sp.GetVisualAncestor<Border>();
-            var rtb = ClipTileViewModel.GetRtb();
+            var et = sp.GetVisualAncestor<Border>();            
             var cb = (MpClipBorder)et.GetVisualAncestor<MpClipBorder>();
             var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxCanvas");
+            var rtb = rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
             var titleSwirl = (Image)cb.FindName("TitleSwirl");
             var addTemplateButton = (Button)et.FindName("AddTemplateButton");
@@ -135,23 +135,26 @@ namespace MpWpfApp {
                 } else {
                     var templateContextMenu = new ContextMenu();
                     foreach (var ttcvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelList) {
-                        Rectangle rect = new Rectangle();
-                        rect.Fill = ttcvm.TemplateBrush;
-                        rect.Width = 14;
-                        rect.Height = 14;
-                        rect.VerticalAlignment = VerticalAlignment.Center;
-                        rect.HorizontalAlignment = HorizontalAlignment.Left;
-
+                        Border b = new Border();
+                        b.Background = ttcvm.TemplateBrush;
+                        b.BorderBrush = Brushes.Black;
+                        b.BorderThickness = new Thickness(1);
+                        b.Width = 14;
+                        b.Height = 14;
+                        b.VerticalAlignment = VerticalAlignment.Center;
+                        b.HorizontalAlignment = HorizontalAlignment.Left;
+                        
                         TextBlock tb = new TextBlock();
-                        tb.Text = ttcvm.TemplateName;
+                        tb.Text = ttcvm.TemplateName.Replace("<",string.Empty).Replace(">",string.Empty);
                         tb.FontSize = 14;
                         tb.HorizontalAlignment = HorizontalAlignment.Left;
                         tb.VerticalAlignment = VerticalAlignment.Center;
+                        tb.Margin = new Thickness(5, 0, 0, 0);
 
                         DockPanel dp1 = new DockPanel();
-                        dp1.Children.Add(rect);
+                        dp1.Children.Add(b);
                         dp1.Children.Add(tb);
-                        rect.SetValue(DockPanel.DockProperty, Dock.Left);
+                        b.SetValue(DockPanel.DockProperty, Dock.Left);
                         tb.SetValue(DockPanel.DockProperty, Dock.Right);
 
                         MenuItem tmi = new MenuItem();
@@ -411,7 +414,7 @@ namespace MpWpfApp {
             rtb.KeyUp += (s, e4) => {
                 //var rtbSelection = rtb.Selection;
                 //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-                rtb.CreateHyperlinks();
+                //rtb.CreateHyperlinks();
             };
 
             rtb.TextChanged += (s, e4) => {

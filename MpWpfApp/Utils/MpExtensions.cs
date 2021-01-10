@@ -89,9 +89,22 @@ namespace MpWpfApp {
         }
         public static List<Hyperlink> GetHyperlinkList(this RichTextBox rtb) {
             var hlList = new List<Hyperlink>();
-            foreach (var p in rtb.Document.Blocks.OfType<Paragraph>()) {
-                foreach (var hl in p.Inlines.OfType<Hyperlink>()) {
-                    hlList.Add(hl);
+            //foreach (var p in rtb.Document.Blocks.OfType<Paragraph>()) {
+            //    foreach (var hl in p.Inlines.OfType<Hyperlink>()) {
+            //        if(hl.DataContext != null) {
+            //            continue;
+            //        }
+            //        hlList.Add(hl);
+            //    }
+            //}
+            for (TextPointer position = rtb.Document.ContentStart;
+                position != null && position.CompareTo(rtb.Document.ContentEnd) <= 0;
+                position = position.GetNextContextPosition(LogicalDirection.Forward)) {
+                if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.ElementEnd) {
+                    var hl = MpHelpers.FindParentOfType(position.Parent, typeof(Hyperlink)) as Hyperlink;
+                    if (hl != null && !hlList.Contains(hl)) {
+                        hlList.Add(hl);
+                    }
                 }
             }
             return hlList;
@@ -101,19 +114,22 @@ namespace MpWpfApp {
             var ctvm = (MpClipTileViewModel)rtb.DataContext;
             var hlList = rtb.GetHyperlinkList();
             foreach(var hl in hlList) {
-                if (hl.DataContext != null) {
-                    continue;
+                string linkText = string.Empty;
+                if(hl.DataContext == null || hl.DataContext is MpClipTileViewModel) {
+                    linkText = new TextRange(hl.ElementStart, hl.ElementEnd).Text;                    
+                } else {
+                    var thlvm = (MpTemplateHyperlinkViewModel)hl.DataContext;
+                    linkText = thlvm.TemplateName;
                 }
-                var linkText = new TextRange(hl.ElementStart, hl.ElementEnd).Text;
                 hl.Inlines.Clear();
-                new Span(new Run(linkText), hl.ElementStart);
+                new Span(new Run(linkText), hl.ContentStart);
             }
-            foreach (var thlvm in ctvm.TemplateHyperlinkCollectionViewModel) {
-                if(thlvm.TemplateTextRange != null) {
-                    thlvm.TemplateTextRange.Text = string.Empty;
-                    new Span(new Run(thlvm.TemplateName), thlvm.TemplateTextRange.Start);
-                }
-            }
+            //foreach (var thlvm in ctvm.TemplateHyperlinkCollectionViewModel) {
+            //    if(thlvm.TemplateTextRange != null) {
+            //        thlvm.TemplateTextRange.Text = string.Empty;
+            //        new Span(new Run(thlvm.TemplateName), thlvm.TemplateTextRange.Start);
+            //    }
+            //}
             ctvm.TemplateHyperlinkCollectionViewModel.Clear();
         }
         //public static void CreateTemplates(this RichTextBox rtb) {
@@ -126,7 +142,7 @@ namespace MpWpfApp {
         public static void CreateHyperlinks(this RichTextBox rtb, string searchText = "") {
             var ctvm = (MpClipTileViewModel)rtb.DataContext;
             //var rtbSelection = rtb.Selection;
-            rtb.ClearHyperlinks();
+            //rtb.ClearHyperlinks();
             var regExGroupList = new List<string> {
                 //WebLink
                 @"(?:https?://|www\.)\S+", 

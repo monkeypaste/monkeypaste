@@ -165,10 +165,10 @@ namespace MpWpfApp {
         public void ClipTilePasteTemplateToolbarBorder_Loaded(object sender, RoutedEventArgs args) {
             var pasteTemplateToolbarBorderGrid = (Grid)sender;
             var pasteTemplateToolbarBorder = pasteTemplateToolbarBorderGrid.GetVisualAncestor<Border>();
-            var rtb = ClipTileViewModel.GetRtb();
             var cb = (MpClipBorder)pasteTemplateToolbarBorder.GetVisualAncestor<MpClipBorder>();
             var et = (Border)cb.FindName("ClipTileEditorToolbar");
             var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxCanvas");
+            var rtb = rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
             var titleSwirl = (Image)cb.FindName("TitleSwirl");
             var clearAllTemplatesButton = (Button)pasteTemplateToolbarBorder.FindName("ClearAllTemplatesButton");

@@ -40,9 +40,11 @@ namespace MpWpfApp {
                         ul.Add(thlvm);
                     }
                 }
+                ul.Sort();
                 return ul;
             }
         }
+
         public MpTemplateHyperlinkViewModel SelectedTemplateHyperlinkViewModel {
             get {
                 foreach (var ttcvm in this) {
@@ -58,16 +60,15 @@ namespace MpWpfApp {
                 return null;
             }
             set {
-                if (SelectedTemplateHyperlinkViewModel != value) {
+                if (SelectedTemplateHyperlinkViewModel != value && this.Contains(value)) {
                     foreach (var ttcvm in this) {
-                        if(ttcvm != value) {
+                        if (ttcvm != value) {
                             //clear any other selections
                             ttcvm.IsSelected = false;
+                        } else {
+                            ttcvm.IsSelected = true;
                         }
-                    }
-                    if (value != null && this.Contains(value)) {
-                        this[this.IndexOf(value)].IsSelected = true;
-                    }
+                    }                    
                     OnPropertyChanged(nameof(SelectedTemplateHyperlinkViewModel));
                 }
             }
@@ -113,6 +114,21 @@ namespace MpWpfApp {
         #endregion
 
         #region Overrides
+        public new void Add(MpTemplateHyperlinkViewModel thlvm) {
+            base.Add(thlvm);
+            thlvm.CopyItemTemplate.WriteToDatabase();
+            //SelectedTemplateHyperlinkViewModel = thlvm;
+        }
+
+        public new bool Contains(MpTemplateHyperlinkViewModel thlvm) {
+            foreach (var vm in this) {
+                if (vm.TemplateName == thlvm.TemplateName &&
+                   vm.TemplateTextRange.Start.CompareTo(thlvm.TemplateTextRange.Start) == 0) {
+                    return true;
+                }
+            }
+            return false;
+        }
         #endregion
     }
 }

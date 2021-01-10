@@ -28,7 +28,8 @@ namespace MpWpfApp {
                 PropertyChangedCallback = (s, e) => {
                     var cb = (MpClipBorder)s;
                     var ctvm = (MpClipTileViewModel)cb.DataContext;
-                    if (ctvm.MainWindowViewModel.IsLoading || ctvm.IsEditingTile) {
+                    if (ctvm.MainWindowViewModel.IsLoading || ctvm.IsEditingTile || ctvm.IsLoading) {
+                        ctvm.TileVisibility = Visibility.Visible;
                         return;
                     }                    
                     Dispatcher.CurrentDispatcher.BeginInvoke(
@@ -42,7 +43,6 @@ namespace MpWpfApp {
                             var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
                             var ctbb = Brushes.Transparent;// (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.ClipTileBackgroundColor);
 
-                            Console.WriteLine("Beginning highlight clip with title: " + ctvm.CopyItemTitle + " with highlight text: "+(string)e.NewValue);
                             if (!sttvm.IsLinkedWithClipTile(ctvm)) {
                                 Console.WriteLine("Clip tile w/ title " + ctvm.CopyItemTitle + " is not linked with current tag");
                                 ctvm.TileVisibility = Visibility.Collapsed;
@@ -53,6 +53,7 @@ namespace MpWpfApp {
                             //bool isSearchBlank = string.IsNullOrEmpty(hlt.Trim()) || hlt == Properties.Settings.Default.SearchPlaceHolderText;
                             //ctvm.TileVisibility = isInTitle || isInContent || isSearchBlank ? Visibility.Visible : Visibility.Collapsed;
                             //return;
+                            Console.WriteLine("Beginning highlight clip with title: " + ctvm.CopyItemTitle + " with highlight text: " + (string)e.NewValue);
 
                             ctvm.TileVisibility = Visibility.Visible;
 

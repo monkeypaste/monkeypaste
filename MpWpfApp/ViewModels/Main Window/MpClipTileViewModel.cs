@@ -890,10 +890,8 @@
                     //value should be raw rtf where templates are encoded into #name#color# groups
                     CopyItem.SetData(value);
                     CopyItem.WriteToDatabase();
-                    //OnPropertyChanged(nameof(CopyItem));
                     OnPropertyChanged(nameof(CopyItemRichText));
-                    //OnPropertyChanged(nameof(TemplateTokenList));
-                    //OnPropertyChanged(nameof(TemplateTokenLookupDictionary));
+                    OnPropertyChanged(nameof(CopyItem));
                 }
             }
         }
@@ -1061,7 +1059,7 @@
         #endregion
 
         #region Public Methods
-        public MpClipTileViewModel() : this(new MpCopyItem()) { }
+        //public MpClipTileViewModel() : this(new MpCopyItem()) { }
 
         public MpClipTileViewModel(MpCopyItem ci) : base() {
             PropertyChanged += (s, e1) => {
@@ -1084,12 +1082,13 @@
             object lockObj2 = new object();
             BindingOperations.EnableCollectionSynchronization(LastTitleHighlightRangeList, lockObj);
             BindingOperations.EnableCollectionSynchronization(LastContentHighlightRangeList, lockObj2);
-            SetCopyItem(ci);
+            CopyItem = ci;
+            CopyItem.WriteToDatabase();
 
             TemplateHyperlinkCollectionViewModel = new MpTemplateHyperlinkCollectionViewModel(this);
+            EditRichTextBoxToolbarViewModel = new MpEditRichTextBoxToolbarViewModel(this);
             EditTemplateToolbarViewModel = new MpEditTemplateToolbarViewModel(this);
             PasteTemplateToolbarViewModel = new MpPasteTemplateToolbarViewModel(this);
-            EditRichTextBoxToolbarViewModel = new MpEditRichTextBoxToolbarViewModel(this);
 
             //TemplateHyperlinkCollectionViewModel.CollectionChanged += (s, e) => {
             //    if(e.NewItems != null) {
@@ -1109,17 +1108,17 @@
             //};
         }
 
-        public void SetCopyItem(MpCopyItem ci) {
-            if (ci == null) {
-                CopyItem = new MpCopyItem();
-                return;
-            }
-            if (ci.CopyItemId == 0) {
-                ci.WriteToDatabase();
-            }
-
-            CopyItem = ci;
-        }
+        //public void SetCopyItem(MpCopyItem ci) {
+        //    if (ci == null) {
+        //        CopyItem = new MpCopyItem();
+        //        return;
+        //    }
+        //    if(ci.CopyItemId == 0) {
+        //        ci.WriteToDatabase();
+        //    }
+        //    CopyItem = ci;
+        //    //SaveClipTile(CopyItemRichText);
+        //}
 
         public RichTextBox GetRtb() {
             return _rtb;
@@ -1226,15 +1225,16 @@
             }
             var rtbc = (Canvas)sender;
             var rtb = (RichTextBox)rtbc.FindName("ClipTileRichTextBox");
-            
+            _rtb = rtb;
+
             var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
             var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
 
-            rtb.Document = MpHelpers.ConvertRichTextToFlowDocument(CopyItemRichText);
-            rtb.CreateHyperlinks();
-            rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
-            rtb.Document.PageHeight = rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
-            _rtb = rtb;
+            GetRtb().Document = MpHelpers.ConvertRichTextToFlowDocument(CopyItemRichText);
+            GetRtb().CreateHyperlinks();
+            GetRtb().Document.PageWidth = GetRtb().Width - GetRtb().Padding.Left - GetRtb().Padding.Right;
+            GetRtb().Document.PageHeight = GetRtb().Height - GetRtb().Padding.Top - GetRtb().Padding.Bottom;
+           
 
 
             #region Search
@@ -1295,18 +1295,20 @@
                         if(!IsEditingTile) {
                             IsPastingTemplateTile = false;
 
-                            //rtb.ClearHyperlinks();
+                            GetRtb().ClearHyperlinks();
 
                             //clear any search highlighting when saving the document then restore after save
                             MpHelpers.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, Brushes.Transparent);
                             MpHelpers.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, Brushes.Transparent);
-                            CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+                            CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(GetRtb().Document);
                             MpHelpers.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
                             MpHelpers.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
+
+                            GetRtb().CreateHyperlinks();
                         }
-                        rtb.ScrollToHome();
-                        rtb.CaretPosition = rtb.Document.ContentStart;
-                        rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
+                        GetRtb().ScrollToHome();
+                        GetRtb().CaretPosition = GetRtb().Document.ContentStart;
+                        GetRtb().Selection.Select(GetRtb().Document.ContentStart, GetRtb().Document.ContentStart);
                         break;
                     case nameof(CurrentHighlightMatchIdx):
                         int maxIdx = LastContentHighlightRangeList.Count + LastTitleHighlightRangeList.Count - 1;
@@ -1327,13 +1329,16 @@
                             //Rect r = LastContentHighlightRangeList[contentIdx].End.GetCharacterRect(LogicalDirection.Backward);
                             //rtb.ScrollToVerticalOffset(r.Y);
                             var characterRect = LastContentHighlightRangeList[contentIdx].End.GetCharacterRect(LogicalDirection.Forward);
-                            rtb.ScrollToHorizontalOffset(rtb.HorizontalOffset + characterRect.Left - rtb.ActualWidth / 2d);
-                            rtb.ScrollToVerticalOffset(rtb.VerticalOffset + characterRect.Top - rtb.ActualHeight / 2d);
+                            GetRtb().ScrollToHorizontalOffset(GetRtb().HorizontalOffset + characterRect.Left - GetRtb().ActualWidth / 2d);
+                            GetRtb().ScrollToVerticalOffset(GetRtb().VerticalOffset + characterRect.Top - GetRtb().ActualHeight / 2d);
 
                         }
                         break;
                 }
             };
+
+            OnPropertyChanged(nameof(LoadingSpinnerVisibility));
+            OnPropertyChanged(nameof(ContentVisibility));
             #endregion
         }
 
@@ -1481,6 +1486,30 @@
         public void ContextMenuMouseLeftButtonUpOnSearchYandex() {
             MpHelpers.OpenUrl(@"https://yandex.com/search/?text=" + System.Uri.EscapeDataString(CopyItemPlainText));
         }
+
+        //public void SaveClipTile(string nrtf = "") {
+        //    if(!string.IsNullOrEmpty(nrtf)) {
+        //        CopyItemRichText = nrtf;
+        //    } else {
+        //        GetRtb().ClearHyperlinks();
+
+        //        var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
+        //        var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
+
+        //        //clear any search highlighting when saving the document then restore after save
+        //        MpHelpers.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, Brushes.Transparent);
+        //        MpHelpers.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, Brushes.Transparent);
+        //        CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(GetRtb().Document);
+        //        MpHelpers.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
+        //        MpHelpers.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
+        //    }
+
+        //    if(GetRtb() != null) {
+        //        //ignore when called in SetItem in constructor
+        //        GetRtb().CreateHyperlinks();
+        //    }
+        //    CopyItem.WriteToDatabase();
+        //}
 
         #endregion
 
