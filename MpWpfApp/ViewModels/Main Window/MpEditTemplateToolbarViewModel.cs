@@ -231,7 +231,6 @@ namespace MpWpfApp {
             };
         }
 
-
         public void SetTemplate(MpTemplateHyperlinkViewModel ttcvm, bool isEditMode) {
             //cases
             //1. a new template is being created (null,true)

@@ -20,83 +20,8 @@ using System.Windows.Threading;
 
 namespace MpWpfApp {
     public static class MpExtensions {
-        public static TextPointer GetTextPosition(this FlowDocument doc, int idx) {
-            return null;
-        }
-
-        public static void PrintTextFromPosition(this TextPointer position) {
-            TextPointer start = position;
-            string outStr = string.Empty;
-            if(start.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
-                start = start.GetNextTextPosition();
-            }
-            do {
-                outStr += new TextRange(start, start).Text;
-                start = start.GetNextTextPosition();
-            } while (start != null);
-            Console.WriteLine("Text from position: ");
-            Console.WriteLine(outStr);
-        }
-
-        public static TextPointer GetNextTextPosition(this TextPointer position) {
-            if (position == null) {
-                return null;
-            }
-            TextPointer curPosition = null; 
-            for (curPosition = position.GetPositionAtOffset(1, LogicalDirection.Forward);
-                curPosition != null && curPosition.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text;
-                curPosition = curPosition.GetPositionAtOffset(1, LogicalDirection.Forward)) {
-                if (curPosition.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.EmbeddedElement) {
-                    var inlineUIContainer = (InlineUIContainer)curPosition.Parent;
-                    var templateHyperlinkBorder = (MpTemplateHyperlink)inlineUIContainer.Child;
-                    var border = (Border)templateHyperlinkBorder.Content;
-                    var dockPanel = (DockPanel)border.Child;
-                    var tb = (TextBlock)dockPanel.Children[0];
-                    return tb.ContentStart;
-                }
-            }
-            if(curPosition == null) {
-                var parentHyperlink = MpHelpers.FindParentOfType((DependencyObject)position.Parent, typeof(Hyperlink));
-                if(parentHyperlink != null) {
-                    return GetNextTextPosition(((Hyperlink)parentHyperlink).ElementEnd);
-                }
-            }
-            return curPosition;
-        }
-
-        public static void ClearTemplates(this RichTextBox rtb) {
-            //replaces hyperlinks with runs of there textrange text
-            var ctvm = (MpClipTileViewModel)rtb.DataContext;
-            foreach (var thlvm in ctvm.TemplateHyperlinkCollectionViewModel) {
-                thlvm.TemplateTextRange.Text = thlvm.TemplateName;
-                //foreach(var tr in thlvm.RangeList) {
-                //    tr.Text = thlvm.TemplateName;
-                //}
-                //var templateTextBlockRanges = MpHelpers.FindStringRangesFromPosition(rtb.Document.ContentStart, thlvm.TemplateName);
-                //foreach (var tbRange in templateTextBlockRanges) {
-                //    var run = (Run)tbRange.Start.Parent;
-                //    var tb = (TextBlock)run.Parent;
-                //    var dp = (DockPanel)tb.Parent;
-                //    var b = (Border)dp.Parent;
-                //    var thlb = (MpTemplateHyperlinkBorder)b.Parent;
-                //    var iuic = (InlineUIContainer)thlb.Parent;
-                //    var thl = (Hyperlink)iuic.Parent;
-                //    new TextRange(thl.ContentStart, thl.ContentEnd).Text = thlvm.TemplateName;
-                //    //new Span(thl.ElementStart, thl.ElementEnd).Inlines.Add(thlvm.TemplateName);
-                //}
-            }
-            ctvm.TemplateHyperlinkCollectionViewModel.Clear();
-        }
         public static List<Hyperlink> GetHyperlinkList(this RichTextBox rtb) {
             var hlList = new List<Hyperlink>();
-            //foreach (var p in rtb.Document.Blocks.OfType<Paragraph>()) {
-            //    foreach (var hl in p.Inlines.OfType<Hyperlink>()) {
-            //        if(hl.DataContext != null) {
-            //            continue;
-            //        }
-            //        hlList.Add(hl);
-            //    }
-            //}
             for (TextPointer position = rtb.Document.ContentStart;
                 position != null && position.CompareTo(rtb.Document.ContentEnd) <= 0;
                 position = position.GetNextContextPosition(LogicalDirection.Forward)) {
@@ -109,7 +34,7 @@ namespace MpWpfApp {
             }
             return hlList;
         }
-        public static void ClearHyperlinks(this RichTextBox rtb) {
+        public static void ClearHyperlinks(this RichTextBox rtb, bool TemplateText = false) {
             //replaces hyperlinks with runs of there textrange text
             var ctvm = (MpClipTileViewModel)rtb.DataContext;
             var hlList = rtb.GetHyperlinkList();
@@ -124,21 +49,8 @@ namespace MpWpfApp {
                 hl.Inlines.Clear();
                 new Span(new Run(linkText), hl.ContentStart);
             }
-            //foreach (var thlvm in ctvm.TemplateHyperlinkCollectionViewModel) {
-            //    if(thlvm.TemplateTextRange != null) {
-            //        thlvm.TemplateTextRange.Text = string.Empty;
-            //        new Span(new Run(thlvm.TemplateName), thlvm.TemplateTextRange.Start);
-            //    }
-            //}
             ctvm.TemplateHyperlinkCollectionViewModel.Clear();
         }
-        //public static void CreateTemplates(this RichTextBox rtb) {
-        //    var ctvm = (MpClipTileViewModel)rtb.DataContext;
-        //    foreach (var thlvm in ctvm.TemplateHyperlinkCollectionViewModel) {
-        //        MpTemplateHyperlinkBorder.CreateTemplateHyperlink(thlvm, thlvm.TemplateRange);
-        //    }
-        //}
-
         public static void CreateHyperlinks(this RichTextBox rtb, string searchText = "") {
             var ctvm = (MpClipTileViewModel)rtb.DataContext;
             //var rtbSelection = rtb.Selection;

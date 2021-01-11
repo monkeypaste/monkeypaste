@@ -25,7 +25,7 @@
     using Windows.ApplicationModel.DataTransfer;
     using Windows.Storage;
 
-    public class MpClipTileViewModel : MpViewModelBase {
+    public class MpClipTileViewModel : MpViewModelBase, IDisposable {
         #region Private Variables
 
         private RichTextBox _rtb = null;
@@ -915,7 +915,8 @@
         }
 
         public string TemplateRichText {
-            get; set;
+            get; 
+            set;
         }
 
         public BitmapSource TitleSwirl {
@@ -1073,6 +1074,8 @@
                             }
                         } else {
                             IsEditingTile = false;
+                            IsEditingTemplate = false;
+                            IsPastingTemplateTile = false;
                         }
                         break;
                 }
@@ -1293,7 +1296,7 @@
                 switch (e2.PropertyName) {
                     case nameof(IsEditingTile):
                         if(!IsEditingTile) {
-                            IsPastingTemplateTile = false;
+                            //IsPastingTemplateTile = false;
 
                             GetRtb().ClearHyperlinks();
 
@@ -1443,8 +1446,9 @@
 
         public async Task<string> GetPastableRichText() {
             if (HasTemplate) {
-                IsEditingTile = false;
                 IsPastingTemplateTile = true;
+                TemplateRichText = string.Empty;
+                //MainWindowViewModel.ClipTrayViewModel.GetTray().Items.Refresh();
                 var temp = CopyItemRichText;
                 await Task.Run(() => {
                     while (string.IsNullOrEmpty(TemplateRichText)) {
@@ -1453,9 +1457,15 @@
                     //TemplateRichText is set in PasteTemplateCommand
                 });
                 CopyItemRichText = temp;
+                GetRtb().Document = MpHelpers.ConvertRichTextToFlowDocument(CopyItemRichText);
+                GetRtb().ClearHyperlinks();
+                CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(GetRtb().Document);
+                GetRtb().CreateHyperlinks();
                 return TemplateRichText;
             }
             return CopyItemRichText;
+
+            //both return to ClipTray.GetDataObjectFromSelectedClips
         }
 
         public void DeleteTempFiles() {
@@ -1568,40 +1578,6 @@
 
             }
         }
-
-        private RelayCommand _pasteTemplateCommand;
-        public ICommand PasteTemplateCommand {
-            get {
-                if (_pasteTemplateCommand == null) {
-                    _pasteTemplateCommand = new RelayCommand(PasteTemplate, CanPasteTemplate);
-                }
-                return _pasteTemplateCommand;
-            }
-        }
-        private bool CanPasteTemplate() {
-            //only allow template to be pasted once all template types have been viewed
-            return PasteTemplateToolbarViewModel.IsTemplateReadyToPaste;
-        }
-        private void PasteTemplate() {
-            // TODO use code below to output templated rich text
-
-            //var tempRtb = new RichTextBox();
-            //tempRtb.Document = MpHelpers.ConvertRichTextToFlowDocument(CopyItemRichText);
-            //tempRtb.CreateHyperlinks();
-
-            //foreach (var templateCollection in PasteTemplateToolbarViewModel) {
-            //    foreach(var templateLink in templateCollection) {
-            //        //TextRange tr = new TextRange(templateLink.ElementStart, templateLink.ElementEnd);
-            //        ///tr.Text = string.Empty;
-            //        Span span = new Span(templateLink.TemplateStart, templateLink.TemplateEnd);
-            //        span.Inlines.Clear();
-            //        span.Inlines.Add(new Run(templateCollection.TemplateText));
-            //    }
-            //}
-            TemplateRichText = MpHelpers.ConvertFlowDocumentToRichText(_rtb.Document);
-            //Returned to GetPastableTemplate
-        }
-
 
         private RelayCommand _sendClipToEmailCommand;
         public ICommand SendClipToEmailCommand {
@@ -1783,6 +1759,11 @@
 
         public override string ToString() {
             return CopyItem.ItemPlainText;
+        }
+
+        public void Dispose() {
+            MainWindowViewModel.ClipTrayViewModel.Remove(this);
+            CopyItem.DeleteFromDatabase();
         }
 
         #endregion

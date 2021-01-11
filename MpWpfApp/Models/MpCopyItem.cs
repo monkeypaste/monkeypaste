@@ -516,9 +516,16 @@ namespace MpWpfApp {
                 new System.Collections.Generic.Dictionary<string, object> {
                         { "@ciid", CopyItemId }
                     });
-            foreach(var cit in TemplateList) {
-                cit.DeleteFromDatabase();
-            }
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpShortcut where fk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpCopyItemTemplate where fk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
         }
 
         #endregion

@@ -2,6 +2,7 @@
 using GongSolutions.Wpf.DragDrop.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,19 +40,22 @@ namespace MpWpfApp {
                 }
             }
         }
+        public MpObservableCollection<MpTemplateHyperlinkViewModel> UniqueTemplateHyperlinkViewModelList {
+            get {
+                if(ClipTileViewModel == null) {
+                    return new MpObservableCollectionViewModel<MpTemplateHyperlinkViewModel>();
+                }
+                return ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelList;
+            }
+        }
         #endregion
 
-        #region Properties
-        #region Layout Properties
-        
-        #endregion
+            #region Properties
 
-        #region Visibility Properties
-        
         public Visibility ClearAllTemplateToolbarButtonVisibility {
             get {
-                foreach (var templateLookup in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
-                    if (!string.IsNullOrEmpty(templateLookup.TemplateText)) {
+                foreach (var uthlvm in UniqueTemplateHyperlinkViewModelList) {
+                    if (!string.IsNullOrEmpty(uthlvm.TemplateText)) {
                         return Visibility.Visible;
                     }
                 }
@@ -61,7 +65,7 @@ namespace MpWpfApp {
 
         public Visibility ClearSelectedTemplateTextboxButtonVisibility {
             get {
-                if (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel != null &&
+                if (//SelectedTemplateHyperlinkViewModel != null &&
                     SelectedTemplateText.Length > 0 &&
                     SelectedTemplateText != SelectedTemplateTextBoxPlaceHolderText) {
                     return Visibility.Visible;
@@ -72,37 +76,72 @@ namespace MpWpfApp {
 
         public Visibility PasteTemplateNavigationButtonStackVisibility {
             get {
-                if (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Count > 1) {
+                if (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelList.Count > 1) {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
             }
         }
 
-        #endregion
+        //public int SelectedTemplateUniqueIdx {
+        //    get {
+        //        if(ClipTileViewModel == null) {
+        //            return 0;
+        //        }
+        //        return ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelList.IndexOf(Selected)
+        //    }
+        //    //set {
+        //    //    if(ClipTileViewModel != null &&
+        //    //       value >= 0 &&
+        //    //       value < UniqueTemplateHyperlinkViewModelList.Count &&
+        //    //       _selectedTemplateUniqueIdx != value) {
+        //    //        _selectedTemplateUniqueIdx = value;
+        //    //        OnPropertyChanged(nameof(SelectedTemplateUniqueIdx));
+        //    //    }
+        //    //}
+        //}
 
-        #region Brush Properties
-
-        #endregion
-
-        #region State Properties
-        private bool _isSelectedTemplateTextBoxFocused = false;
-        public bool IsSelectedTemplateTextBoxFocused {
+        private MpTemplateHyperlinkViewModel _selectedTemplate = null;
+        public MpTemplateHyperlinkViewModel SelectedTemplate {
             get {
-                return _isSelectedTemplateTextBoxFocused;
+                return _selectedTemplate;
             }
             set {
-                if (_isSelectedTemplateTextBoxFocused != value) {
-                    _isSelectedTemplateTextBoxFocused = value;
-                    OnPropertyChanged(nameof(IsSelectedTemplateTextBoxFocused));
+                if (_selectedTemplate != value) {
+                    _selectedTemplate = value;
+                    if(SelectedTemplate != null) {
+                        foreach (var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
+                            if (thlvm.TemplateName == SelectedTemplateName) {
+                                thlvm.IsSelected = true;
+                            } else {
+                                thlvm.IsSelected = false;
+                            }
+                        }
+                    }
+                    OnPropertyChanged(nameof(SelectedTemplate));
+                    OnPropertyChanged(nameof(SelectedTemplateName));
+                    OnPropertyChanged(nameof(ClearSelectedTemplateTextboxButtonVisibility));
+                    OnPropertyChanged(nameof(SelectedTemplateText));
+                    OnPropertyChanged(nameof(SelectedTemplateTextBoxPlaceHolderText));
+                    OnPropertyChanged(nameof(SelectedTemplateTextBrush));
+                    OnPropertyChanged(nameof(SelectedTemplateTextBoxFontStyle));
                 }
             }
-        }     
+        }
+
+        public string SelectedTemplateName {
+            get {
+                if(SelectedTemplate == null) {
+                    return string.Empty;
+                }
+                return SelectedTemplate.TemplateName;
+            }
+        }
 
         public bool IsTemplateReadyToPaste {
             get {
-                foreach(var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
-                    if(string.IsNullOrEmpty(thlvm.TemplateText)) {
+                foreach(var uthlvm in UniqueTemplateHyperlinkViewModelList) {
+                    if(string.IsNullOrEmpty(uthlvm.TemplateText)) {
                         return false;
                     }
                 }
@@ -112,27 +151,41 @@ namespace MpWpfApp {
 
         public string SelectedTemplateText {
             get {
-                if(ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel == null) {
+                if(ClipTileViewModel == null || string.IsNullOrEmpty(SelectedTemplateName)) {
                     return string.Empty;
                 }
-                return ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel.TemplateText;
+                return SelectedTemplate.TemplateText;
             }
             set {
-                if (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel != null &&
-                    ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel.TemplateText != value) {
-                    ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel.TemplateText = value;
+                if (ClipTileViewModel != null &&
+                    !string.IsNullOrEmpty(SelectedTemplateName) &&
+                    value != SelectedTemplateTextBoxPlaceHolderText &&
+                    SelectedTemplate.TemplateText != value) {
+                    ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SetTemplateText(SelectedTemplateName,value);
                     OnPropertyChanged(nameof(SelectedTemplateText));
                     OnPropertyChanged(nameof(IsTemplateReadyToPaste));
+                    OnPropertyChanged(nameof(SelectedTemplateTextBoxPlaceHolderText));
+                    OnPropertyChanged(nameof(ClearAllTemplateToolbarButtonVisibility));
+                    OnPropertyChanged(nameof(ClearSelectedTemplateTextboxButtonVisibility));
                 }
+            }
+        }
+
+        public Brush SelectedTemplateBrush {
+            get {
+                if(SelectedTemplate == null) {
+                    return Brushes.Orange;
+                }
+                return SelectedTemplate.TemplateBrush;
             }
         }
 
         public string SelectedTemplateTextBoxPlaceHolderText {
             get {
-                if (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel == null) {
+                if (ClipTileViewModel == null || SelectedTemplate == null) {
                     return string.Empty;
                 }
-                return ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel.TemplateName + "...";
+                return SelectedTemplateName + "...";
             }
         }
 
@@ -155,18 +208,39 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #endregion
-
         #region Public Methods
         public MpPasteTemplateToolbarViewModel(MpClipTileViewModel ctvm) : base() { 
             ClipTileViewModel = ctvm;
+
+            foreach(var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
+                thlvm.PropertyChanged += (s, e) => {
+                    switch (e.PropertyName) {
+                        case nameof(thlvm.IsSelected):
+                            if(thlvm.IsSelected && SelectedTemplate != thlvm) {
+                                SetTemplate(thlvm.TemplateName);
+                            }
+                            break;
+                    }
+                };
+            }
+
+
+            //PropertyChanged += (s, e) => {
+            //    switch (e.PropertyName) {
+            //         case nameof(SelectedTemplate):
+            //            ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel = SelectedTemplate;
+            //            SetTemplate(SelectedTemplateName);
+            //            break;
+            //    }
+            //};
         }
 
         public void ClipTilePasteTemplateToolbarBorder_Loaded(object sender, RoutedEventArgs args) {
             var pasteTemplateToolbarBorderGrid = (Grid)sender;
             var pasteTemplateToolbarBorder = pasteTemplateToolbarBorderGrid.GetVisualAncestor<Border>();
             var cb = (MpClipBorder)pasteTemplateToolbarBorder.GetVisualAncestor<MpClipBorder>();
-            var et = (Border)cb.FindName("ClipTileEditorToolbar");
+            var editRichTextToolbarBorder = (Border)cb.FindName("ClipTileEditorToolbar");
+            var editTemplateToolbarBorder = (Border)cb.FindName("ClipTileEditTemplateToolbar");
             var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxCanvas");
             var rtb = rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
@@ -176,18 +250,23 @@ namespace MpWpfApp {
             var previousTemplateButton = (Button)pasteTemplateToolbarBorder.FindName("PreviousTemplateButton");
             var nextTemplateButton = (Button)pasteTemplateToolbarBorder.FindName("NextTemplateButton");
             var pasteTemplateButton = (Button)pasteTemplateToolbarBorder.FindName("PasteTemplateButton");
+            var selectedTemplateComboBox = (ComboBox)pasteTemplateToolbarBorder.FindName("SelectedTemplateComboBox");
 
+            //selectedTemplateComboBox.SelectionChanged += (s, e4) => {
+            //    SelectedTemplateUniqueIdx = selectedTemplateComboBox.SelectedIndex;
+            //    SetTemplate(ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelList[SelectedTemplateUniqueIdx].TemplateName);
+            //};
             selectedTemplateTextBox.GotFocus += (s, e4) => {
                 if (string.IsNullOrEmpty(SelectedTemplateText) ||
                     SelectedTemplateText == SelectedTemplateTextBoxPlaceHolderText) {
                     SelectedTemplateText = string.Empty;
                 }
 
-                IsSelectedTemplateTextBoxFocused = true;
+                //IsSelectedTemplateTextBoxFocused = true;
             };
             selectedTemplateTextBox.LostFocus += (s, e5) => {
                 //ensures current template textbox show the template name as a placeholder when input is empty
-                IsSelectedTemplateTextBoxFocused = false;
+                //IsSelectedTemplateTextBoxFocused = false;
                 if (string.IsNullOrEmpty(SelectedTemplateText) ||
                     SelectedTemplateText == SelectedTemplateTextBoxPlaceHolderText) {
                     SelectedTemplateText = SelectedTemplateTextBoxPlaceHolderText;
@@ -230,78 +309,134 @@ namespace MpWpfApp {
                 }
             };
 
-            pasteTemplateToolbarBorder.IsVisibleChanged += (s, e1) => {
-                double fromTopToolbar = 0;
-                double toTopToolbar = 0;
+            ClipTileViewModel.PropertyChanged += (s, e) => {
+                switch (e.PropertyName) {
+                    case nameof(ClipTileViewModel.IsPastingTemplateTile):
+                        double rtbBottomMax = ClipTileViewModel.TileContentHeight;
+                        double rtbBottomMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.PasteTemplateToolbarHeight;
 
-                double fromWidthTile = cb.ActualWidth;
-                double toWidthTile = 0;
+                        double pasteTemplateToolbarTopMax = ClipTileViewModel.TileContentHeight;
+                        double pasteTemplateToolbarTopMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.PasteTemplateToolbarHeight;
 
-                double fromBottomRtb = ClipTileViewModel.TileContentHeight;
-                double toBottomRtb = 0;
-                if (et.Visibility == Visibility.Visible) {
-                    fromTopToolbar = cb.ActualHeight;
-                    toTopToolbar = cb.ActualHeight - ClipTileViewModel.PasteTemplateToolbarHeight;
+                        double tileWidthMax = 625;
+                        double tileWidthMin = ClipTileViewModel.TileBorderWidth;
 
-                    toWidthTile = Math.Max(625, rtb.Document.GetFormattedText().WidthIncludingTrailingWhitespace);
+                        double contentWidthMax = 615;
+                        double contentWidthMin = ClipTileViewModel.TileContentWidth;
 
-                    toBottomRtb = fromBottomRtb - ClipTileViewModel.PasteTemplateToolbarHeight;
+                        double iconLeftMax = 500;// tileWidthMax - ClipTileViewModel.TileTitleIconSize;
+                        double iconLeftMin = 204;// tileWidthMin - ClipTileViewModel.TileTitleIconSize;
 
-                    ClipTileViewModel.TemplateRichText = string.Empty;
-                    SelectedTemplateText = string.Empty;
-                } else {
-                    fromTopToolbar = cb.ActualHeight - ClipTileViewModel.PasteTemplateToolbarHeight;
-                    toTopToolbar = cb.ActualHeight;
+                        if (ClipTileViewModel.IsPastingTemplateTile) {
+                            OnPropertyChanged(nameof(UniqueTemplateHyperlinkViewModelList));
+                            OnPropertyChanged(nameof(PasteTemplateNavigationButtonStackVisibility));
+                            OnPropertyChanged(nameof(ClearAllTemplateToolbarButtonVisibility));
 
-                    toWidthTile = MpMeasurements.Instance.ClipTileBorderSize;
+                            ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Visible;
+                            if(UniqueTemplateHyperlinkViewModelList.Count > 0) {
+                                selectedTemplateComboBox.SelectedItem = UniqueTemplateHyperlinkViewModelList[0];
+                            }
+                            //if(UniqueTemplateHyperlinkViewModelList.Count > 0) {
+                            //    selectedTemplateComboBox.Items.Clear();
+                            //    foreach(var uthlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelList) {
+                            //        var b = new Border();
+                            //        b.Width = b.Height = 15;
+                            //        b.Background = uthlvm.TemplateBrush;
+                            //        b.BorderBrush = Brushes.Black;
+                            //        b.BorderThickness = new Thickness(1);
 
-                    toBottomRtb = fromBottomRtb + ClipTileViewModel.PasteTemplateToolbarHeight;
+                            //        var tb = new TextBlock();
+                            //        tb.Text = uthlvm.TemplateName;
 
-                    ClipTileViewModel.IsPastingTemplateTile = false;
+                            //        var dp = new DockPanel();
+                            //        dp.Children.Add(b);
+                            //        dp.Children.Add(tb);
+                            //        DockPanel.SetDock(b, Dock.Left);
+                            //        DockPanel.SetDock(tb, Dock.Right);
+
+                            //        var lbi = new ListBoxItem();
+                            //        lbi.Content = dp;
+                            //        selectedTemplateComboBox.Items.Add(lbi);
+                            //    }
+                            //    //SelectedTemplateUniqueIdx = 0;
+                            //    //SetTemplate(ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelList[0].TemplateName);
+                            //    ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Visible;
+                            //}
+                        } else {
+                            //Debugger.Break();
+                            ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Collapsed;
+                        }
+
+                        //MpHelpers.AnimateDoubleProperty(
+                        //    ClipTileViewModel.IsPastingTemplateTile ? rtbBottomMax : rtbBottomMin,
+                        //    ClipTileViewModel.IsPastingTemplateTile ? rtbBottomMin : rtbBottomMax,
+                        //    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                        //    rtb,
+                        //    Canvas.BottomProperty,
+                        //    (s1, e44) => {
+
+                        //    });
+
+                        MpHelpers.AnimateDoubleProperty(
+                            ClipTileViewModel.IsPastingTemplateTile ? pasteTemplateToolbarTopMax : pasteTemplateToolbarTopMin,
+                            ClipTileViewModel.IsPastingTemplateTile ? pasteTemplateToolbarTopMin : pasteTemplateToolbarTopMax,
+                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                            pasteTemplateToolbarBorder,
+                            Canvas.TopProperty,
+                            (s1, e44) => {
+                                if (!ClipTileViewModel.IsPastingTemplateTile) {
+                                    ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Collapsed;
+                                } else {
+                                    selectedTemplateTextBox.Focus();                                    
+                                }
+                            });
+
+                        MpHelpers.AnimateDoubleProperty(
+                            ClipTileViewModel.IsPastingTemplateTile ? tileWidthMin : tileWidthMax,
+                            ClipTileViewModel.IsPastingTemplateTile ? tileWidthMax : tileWidthMin,
+                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                            new List<FrameworkElement> { cb, titleSwirl },
+                            FrameworkElement.WidthProperty,
+                            (s1, e44) => {
+                            });
+
+                        MpHelpers.AnimateDoubleProperty(
+                            ClipTileViewModel.IsPastingTemplateTile ? contentWidthMin : contentWidthMax,
+                            ClipTileViewModel.IsPastingTemplateTile ? contentWidthMax : contentWidthMin,
+                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                            new List<FrameworkElement> { rtb, editRichTextToolbarBorder, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
+                            FrameworkElement.WidthProperty,
+                            (s1, e44) => {
+                                rtb.Document.PageWidth = ClipTileViewModel.IsPastingTemplateTile ? contentWidthMax - 20 : contentWidthMin;// - rtb.Padding.Left - rtb.Padding.Right;
+
+                                //this is to remove scrollbar flicker during animation
+                                ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
+                                ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
+                            });
+
+                        MpHelpers.AnimateDoubleProperty(
+                            ClipTileViewModel.IsPastingTemplateTile ? iconLeftMin : iconLeftMax,
+                            ClipTileViewModel.IsPastingTemplateTile ? iconLeftMax : iconLeftMin,
+                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                            titleIconImageButton,
+                            Canvas.LeftProperty,
+                            (s1, e23) => {
+
+                            });
+                        break;
                 }
-
-                MpHelpers.AnimateDoubleProperty(
-                    fromTopToolbar,
-                    toTopToolbar,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    pasteTemplateToolbarBorder,
-                    Canvas.TopProperty,
-                    (s1, e) => {
-
-                    });
-
-                MpHelpers.AnimateDoubleProperty(
-                    fromBottomRtb,
-                    toBottomRtb,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    rtb,
-                    Canvas.BottomProperty,
-                    (s1, e) => {
-
-                    });
-
-                MpHelpers.AnimateDoubleProperty(
-                    fromWidthTile,
-                    toWidthTile,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    new List<FrameworkElement> { cb, titleSwirl, rtb, et, rtbc },
-                    FrameworkElement.WidthProperty,
-                    (s1, e) => {
-
-                    });
-
-                double fromLeft = Canvas.GetLeft(titleIconImageButton);
-                double toLeft = toWidthTile - ClipTileViewModel.TileTitleHeight - 10;
-                MpHelpers.AnimateDoubleProperty(
-                    fromLeft,
-                    toLeft,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    titleIconImageButton,
-                    Canvas.LeftProperty,
-                    (s1, e) => {
-
-                    });
             };
+        }
+
+        public void SetTemplate(string templateName) {
+            if(string.IsNullOrEmpty(templateName)) {
+                return;
+            }
+            foreach(var t in UniqueTemplateHyperlinkViewModelList) {
+                if(t.TemplateName == templateName) {
+                    SelectedTemplate = t;                    
+                }
+            }
         }
         #endregion
 
@@ -322,11 +457,13 @@ namespace MpWpfApp {
             return ClearAllTemplateToolbarButtonVisibility == Visibility.Visible;
         }
         private void ClearAllTemplates() {
-            foreach (var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
-                thlvm.TemplateText = string.Empty;
+            foreach (var uthlvm in UniqueTemplateHyperlinkViewModelList) {
+                ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SetTemplateText(uthlvm.TemplateName, string.Empty);
             }
-            if(ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Count > 0) {
-                ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel = ClipTileViewModel.TemplateHyperlinkCollectionViewModel[0];
+            if(UniqueTemplateHyperlinkViewModelList.Count > 0) {
+                SelectedTemplate = UniqueTemplateHyperlinkViewModelList[0];
+            } else {
+                SelectedTemplate = null;
             }
         }
 
@@ -343,7 +480,6 @@ namespace MpWpfApp {
             return ClearSelectedTemplateTextboxButtonVisibility == Visibility.Visible;
         }
         private void ClearCurrentTemplates() {
-            IsSelectedTemplateTextBoxFocused = true;
             SelectedTemplateText = string.Empty;
         }
 
@@ -357,14 +493,14 @@ namespace MpWpfApp {
             }
         }
         private bool CanNextTemplateToken() {
-            return ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Count > 1;
+            return UniqueTemplateHyperlinkViewModelList.Count > 1;
         }
         private void NextTemplateToken() {
-            int nextIdx = ClipTileViewModel.TemplateHyperlinkCollectionViewModel.IndexOf(ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel) + 1;
-            if(nextIdx >= ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Count) {
+            int nextIdx = UniqueTemplateHyperlinkViewModelList.IndexOf(SelectedTemplate) + 1;
+            if(nextIdx >= UniqueTemplateHyperlinkViewModelList.Count) {
                 nextIdx = 0;
             }
-            ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel = ClipTileViewModel.TemplateHyperlinkCollectionViewModel[nextIdx];            
+            SelectedTemplate = UniqueTemplateHyperlinkViewModelList[nextIdx];            
         }
 
         private RelayCommand _previousTemplateTokenCommand;
@@ -377,14 +513,45 @@ namespace MpWpfApp {
             }
         }
         private bool CanPreviousTemplateToken() {
-            return ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Count > 1;
+            return UniqueTemplateHyperlinkViewModelList.Count > 1;
         }
         private void PreviousTemplateToken() {
-            int prevIdx = ClipTileViewModel.TemplateHyperlinkCollectionViewModel.IndexOf(ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel) - 1;
+            int prevIdx = UniqueTemplateHyperlinkViewModelList.IndexOf(SelectedTemplate) - 1;
             if (prevIdx < 0) {
-                prevIdx = ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Count - 1;
+                prevIdx = UniqueTemplateHyperlinkViewModelList.Count - 1;
             }
-            ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel = ClipTileViewModel.TemplateHyperlinkCollectionViewModel[prevIdx];
+            SelectedTemplate = UniqueTemplateHyperlinkViewModelList[prevIdx];
+        }
+
+        private RelayCommand _pasteTemplateCommand;
+        public ICommand PasteTemplateCommand {
+            get {
+                if (_pasteTemplateCommand == null) {
+                    _pasteTemplateCommand = new RelayCommand(PasteTemplate, CanPasteTemplate);
+                }
+                return _pasteTemplateCommand;
+            }
+        }
+        private bool CanPasteTemplate() {
+            //only allow template to be pasted once all template types have been viewed
+            return IsTemplateReadyToPaste;
+        }
+        private void PasteTemplate() {
+            //var tempRtb = new RichTextBox();
+            //tempRtb.Document = ClipTileViewModel.GetRtb().Document.Clone(); 
+            var uthlvmlc = new List<MpTemplateHyperlinkViewModel>();
+            foreach(var uthlvm in UniqueTemplateHyperlinkViewModelList) {
+                uthlvmlc.Add((MpTemplateHyperlinkViewModel)uthlvm.Clone());
+            }
+            ClipTileViewModel.GetRtb().ClearHyperlinks();
+            foreach(var uthlvm in uthlvmlc) {
+                var matchList = MpHelpers.FindStringRangesFromPosition(ClipTileViewModel.GetRtb().Document.ContentStart, uthlvm.TemplateName, true);
+                foreach (var tr in matchList) {
+                    tr.Text = uthlvm.TemplateText;
+                }                
+            }
+            ClipTileViewModel.TemplateRichText = MpHelpers.ConvertFlowDocumentToRichText(ClipTileViewModel.GetRtb().Document);
+            //Returned to GetPastableTemplate
         }
         #endregion
     }

@@ -122,67 +122,6 @@ namespace MpWpfApp {
             var editTemplateToolbarBorder = (Border)cb.FindName("ClipTileEditTemplateToolbar");
             var pasteTemplateToolbarBorder = (Border)cb.FindName("ClipTilePasteTemplateToolbar");
 
-            TextPointer lastKeyPosition = null;
-            Key lastKey = Key.None;
-            
-            addTemplateButton.PreviewMouseDown += (s, e3) => {
-                e3.Handled = true;
-                if (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Count == 0) {
-                    //if templates are NOT in the clip yet add one w/ default name
-                    //var rtbSelection = rtb.Selection;
-                    ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);
-                    //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-                } else {
-                    var templateContextMenu = new ContextMenu();
-                    foreach (var ttcvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelList) {
-                        Border b = new Border();
-                        b.Background = ttcvm.TemplateBrush;
-                        b.BorderBrush = Brushes.Black;
-                        b.BorderThickness = new Thickness(1);
-                        b.Width = 14;
-                        b.Height = 14;
-                        b.VerticalAlignment = VerticalAlignment.Center;
-                        b.HorizontalAlignment = HorizontalAlignment.Left;
-                        
-                        TextBlock tb = new TextBlock();
-                        tb.Text = ttcvm.TemplateName.Replace("<",string.Empty).Replace(">",string.Empty);
-                        tb.FontSize = 14;
-                        tb.HorizontalAlignment = HorizontalAlignment.Left;
-                        tb.VerticalAlignment = VerticalAlignment.Center;
-                        tb.Margin = new Thickness(5, 0, 0, 0);
-
-                        DockPanel dp1 = new DockPanel();
-                        dp1.Children.Add(b);
-                        dp1.Children.Add(tb);
-                        b.SetValue(DockPanel.DockProperty, Dock.Left);
-                        tb.SetValue(DockPanel.DockProperty, Dock.Right);
-
-                        MenuItem tmi = new MenuItem();
-                        tmi.Header = dp1;
-                        tmi.Click += (s1, e5) => {
-                            ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(ttcvm, false);
-                            //ClipTileViewModel.EditTemplateToolbarViewModel.IsEditingTemplate = true;
-                        };
-                        templateContextMenu.Items.Add(tmi);
-                    }
-                    var addNewMenuItem = new MenuItem();
-                    TextBlock tb2 = new TextBlock();
-                    tb2.Text = "Add New...";
-                    tb2.FontSize = 14;
-                    tb2.HorizontalAlignment = HorizontalAlignment.Left;
-                    tb2.VerticalAlignment = VerticalAlignment.Center;
-                    addNewMenuItem.Header = tb2;
-                    addNewMenuItem.Click += (s1, e5) => {
-                        ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);
-
-                    };
-                    templateContextMenu.Items.Add(addNewMenuItem);
-                    addTemplateButton.ContextMenu = templateContextMenu;
-                    templateContextMenu.PlacementTarget = addTemplateButton;
-                    templateContextMenu.IsOpen = true;
-                }
-            };
-
             #region Editor
             ToggleButton selectedAlignmentButton = null;
             ToggleButton selectedListButton = null;
@@ -262,6 +201,66 @@ namespace MpWpfApp {
             };
             #endregion
 
+
+            addTemplateButton.PreviewMouseDown += (s, e3) => {
+                e3.Handled = true;
+                if (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Count == 0) {
+                    //if templates are NOT in the clip yet add one w/ default name
+                    //var rtbSelection = rtb.Selection;
+                    ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);
+                    //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+                } else {
+                    var templateContextMenu = new ContextMenu();
+                    foreach (var ttcvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelList) {
+                        Border b = new Border();
+                        b.Background = ttcvm.TemplateBrush;
+                        b.BorderBrush = Brushes.Black;
+                        b.BorderThickness = new Thickness(1);
+                        b.Width = 14;
+                        b.Height = 14;
+                        b.VerticalAlignment = VerticalAlignment.Center;
+                        b.HorizontalAlignment = HorizontalAlignment.Left;
+
+                        TextBlock tb = new TextBlock();
+                        tb.Text = ttcvm.TemplateName.Replace("<", string.Empty).Replace(">", string.Empty);
+                        tb.FontSize = 14;
+                        tb.HorizontalAlignment = HorizontalAlignment.Left;
+                        tb.VerticalAlignment = VerticalAlignment.Center;
+                        tb.Margin = new Thickness(5, 0, 0, 0);
+
+                        DockPanel dp1 = new DockPanel();
+                        dp1.Children.Add(b);
+                        dp1.Children.Add(tb);
+                        b.SetValue(DockPanel.DockProperty, Dock.Left);
+                        tb.SetValue(DockPanel.DockProperty, Dock.Right);
+
+                        MenuItem tmi = new MenuItem();
+                        tmi.Header = dp1;
+                        tmi.Click += (s1, e5) => {
+                            ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(ttcvm, false);
+                            //ClipTileViewModel.EditTemplateToolbarViewModel.IsEditingTemplate = true;
+                        };
+                        templateContextMenu.Items.Add(tmi);
+                    }
+                    var addNewMenuItem = new MenuItem();
+                    TextBlock tb2 = new TextBlock();
+                    tb2.Text = "Add New...";
+                    tb2.FontSize = 14;
+                    tb2.HorizontalAlignment = HorizontalAlignment.Left;
+                    tb2.VerticalAlignment = VerticalAlignment.Center;
+                    addNewMenuItem.Header = tb2;
+                    addNewMenuItem.Click += (s1, e5) => {
+                        ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);
+
+                    };
+                    templateContextMenu.Items.Add(addNewMenuItem);
+                    addTemplateButton.ContextMenu = templateContextMenu;
+                    templateContextMenu.PlacementTarget = addTemplateButton;
+                    templateContextMenu.IsOpen = true;
+                }
+            };
+
+            //animation
             ClipTileViewModel.PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(ClipTileViewModel.IsEditingTile):
@@ -361,73 +360,22 @@ namespace MpWpfApp {
                 rightAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
                 justifyAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Justify);
 
-                //Console.WriteLine("Selection parent: " + rtb.Selection.Start.Parent.ToString());
-                IsAddTemplateButtonEnabled = true;// rtb.Selection.Start.Parent.GetType() != typeof(InlineUIContainer);
-
-                //foreach (var templateHyperlink in rtb.GetTemplateHyperlinkList()) {
-                //    if (!rtb.Selection.Start.IsInSameDocument(templateHyperlink.ContentStart) ||
-                //       !rtb.Selection.Start.IsInSameDocument(templateHyperlink.ContentEnd)) {
-                //        continue;
-                //    }
-                //    
-                //}
-
-                if(rtb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) && 
+                //disable add template button if current selection intersects with a template
+                //this may not be necessary since templates are inlineuicontainers...
+                MpTemplateHyperlinkViewModel thlvm = null;
+                if (rtb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) && 
                    rtb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
-                    MpTemplateHyperlinkViewModel thlvm = null;
                     if (((TextElement)rtb.Selection.Start.Parent).DataContext != null && ((TextElement)rtb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
                         thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.Start.Parent).DataContext;
                     } else if (((TextElement)rtb.Selection.End.Parent).DataContext != null && ((TextElement)rtb.Selection.End.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
                         thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.End.Parent).DataContext;                        
                     }
-                    if (thlvm != null) {
-                       rtb.Selection.Select(thlvm.TemplateTextRange.Start, thlvm.TemplateTextRange.End);
-                    }
                 }
-            };
-
-            rtb.PreviewKeyDown += (s, e4) => {
-                if(ClipTileViewModel.IsEditingTile) {
-                    lastKey = e4.Key;
-                    //if (lastKey == Key.Back) {
-                    //    lastKeyPosition = rtb.CaretPosition.GetNextContextPosition(LogicalDirection.Backward);
-                    //} else if (lastKey == Key.Delete) {
-                    //    lastKeyPosition = rtb.CaretPosition.GetNextInsertionPosition(LogicalDirection.Forward);
-                    //}
-                    //if(lastKeyPosition != null) {
-                    //    MpTemplateHyperlinkViewModel thlvmToRemove = null;
-                    //    foreach (var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
-                    //        if (thlvm.TemplateTextRange.Contains(rtb.CaretPosition)) {
-                    //            thlvmToRemove = thlvm;
-                    //        }
-                    //    }
-                    //    lastKeyPosition = null;
-                    //    if(thlvmToRemove != null) {
-                    //        //thlvmToRemove?.Dispose();
-                    //        e4.Handled = true;
-                    //    }
-                    //}
-                    e4.Handled = false;
+                if (thlvm != null) {
+                    IsAddTemplateButtonEnabled = true;
+                } else {
+                    IsAddTemplateButtonEnabled = false;
                 }
-            };
-
-            rtb.KeyUp += (s, e4) => {
-                //var rtbSelection = rtb.Selection;
-                //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
-                //rtb.CreateHyperlinks();
-            };
-
-            rtb.TextChanged += (s, e4) => {
-                //if(lastKeyPosition != null) {
-                //    MpTemplateHyperlinkViewModel thlvmToRemove = null;
-                //    foreach(var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
-                //        if(thlvm.TemplateTextRange.Contains(lastKeyPosition)) {
-                //            thlvmToRemove = thlvm;
-                //        }
-                //    }
-                //    //thlvmToRemove?.Dispose();
-                //}
-                //lastKeyPosition = null;
             };
         }
         #endregion

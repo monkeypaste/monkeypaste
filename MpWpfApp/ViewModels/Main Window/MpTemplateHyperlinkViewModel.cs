@@ -3,6 +3,7 @@ using GongSolutions.Wpf.DragDrop.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -32,7 +33,7 @@ namespace MpWpfApp {
         TemplateSegment,
         CopyItemSegment
     }
-    public class MpTemplateHyperlinkViewModel : MpViewModelBase, IDisposable, IComparable {
+    public class MpTemplateHyperlinkViewModel : MpViewModelBase, IDisposable, IComparable, ICloneable {
         #region Private Variables
         #endregion
 
@@ -53,15 +54,37 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Property Reflection Referencer
+        public object this[string propertyName] {
+            get {
+                // probably faster without reflection:
+                // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
+                // instead of the following
+                Type myType = typeof(MpTemplateHyperlinkViewModel);
+                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+                if (myPropInfo == null) {
+                    throw new Exception("Unable to find property: " + propertyName);
+                }
+                return myPropInfo.GetValue(this, null);
+            }
+            set {
+                Type myType = typeof(MpTemplateHyperlinkViewModel);
+                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+                myPropInfo.SetValue(this, value, null);
+            }
+        }
+        #endregion
+
         #region Properties
-        
+
         #region Layout Properties        
         #endregion
 
         #region Appearance Properties
         public Cursor TemplateTextBlockCursor {
             get {
-                if(ClipTileViewModel.IsEditingTile || ClipTileViewModel.IsEditingTemplate) {
+                if(ClipTileViewModel != null && 
+                  (ClipTileViewModel.IsEditingTile || ClipTileViewModel.IsEditingTemplate)) {
                     return Cursors.Hand;
                 }
                 return Cursors.Arrow;
@@ -84,12 +107,13 @@ namespace MpWpfApp {
 
         public Brush TemplateBackgroundBrush {
             get {
-                if(ClipTileViewModel.IsEditingTile || ClipTileViewModel.IsPastingTemplateTile) {
+                if(ClipTileViewModel != null &&
+                    (ClipTileViewModel.IsEditingTile || ClipTileViewModel.IsPastingTemplateTile)) {
                     if (IsHovering) {
-                        return MpHelpers.GetLighterBrush(TemplateBrush);
+                        return MpHelpers.GetDarkerBrush(TemplateBrush);
                     }
                     if (IsSelected) {
-                        return MpHelpers.GetDarkerBrush(TemplateBrush);
+                        return MpHelpers.GetLighterBrush(TemplateBrush);
                     }
                 }
                 return TemplateBrush;
@@ -142,25 +166,12 @@ namespace MpWpfApp {
             }
         }
 
-        private string _dummy = string.Empty;
-        public string Dummy {
-            get {
-                return _dummy;
-            }
-            set {
-                if (_dummy != value) {
-                    _dummy = value;
-                    OnPropertyChanged(nameof(Dummy));
-                }
-            }
-        }
-
         private string _templateText = string.Empty;
         public string TemplateText {
             get {
                 return _templateText;
             }
-            set {
+            private set {
                 if (_templateText != value) {
                     _templateText = value;
                     OnPropertyChanged(nameof(TemplateText));
@@ -182,26 +193,51 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        private Hyperlink _templateHyperlink = null;
+        public Hyperlink TemplateHyperlink {
+            get {
+                return _templateHyperlink;
+            }
+            set {
+                if(_templateHyperlink != value) {
+                    _templateHyperlink = value;
+                    OnPropertyChanged(nameof(TemplateHyperlink));
+                }
+            }
+        }
         #endregion
 
         #region Model Properties
         public int CopyItemTemplateId {
             get {
+                if (CopyItemTemplate == null) {
+                    return 0;
+                }
                 return CopyItemTemplate.CopyItemTemplateId;
             }
         }
 
         public int CopyItemId {
             get {
+                if(CopyItemTemplate == null) {
+                    return 0;
+                }
                 return CopyItemTemplate.CopyItemId;
             }
         }
 
         public string TemplateName {
             get {
+                if (CopyItemTemplate == null) {
+                    return "NOTEMPLATEUNKNOWN";
+                }
                 return CopyItemTemplate.TemplateName;
             }
             set {
+                if (CopyItemTemplate == null) {
+                    return;
+                }
                 if (CopyItemTemplate.TemplateName != value) {
                     CopyItemTemplate.TemplateName = value;
                     if(CopyItemTemplate.TemplateName == null) {
@@ -215,20 +251,26 @@ namespace MpWpfApp {
                     }
                     OnPropertyChanged(nameof(TemplateName));
                     OnPropertyChanged(nameof(TemplateDisplayValue));
+                    OnPropertyChanged(nameof(CopyItemTemplate));
                 }
             }
         }
 
         public Brush TemplateBrush {
             get {
+                if (CopyItemTemplate == null) {
+                    return Brushes.Pink;
+                }
                 return CopyItemTemplate.TemplateColor;
             }
             set {
-                if (CopyItemTemplate.TemplateColor != value) {
+                if (CopyItemTemplate != null &&
+                    CopyItemTemplate.TemplateColor != value) {
                     CopyItemTemplate.TemplateColor = value;
                     OnPropertyChanged(nameof(TemplateBrush));
                     OnPropertyChanged(nameof(TemplateForegroundBrush));
                     OnPropertyChanged(nameof(TemplateBackgroundBrush));
+                    OnPropertyChanged(nameof(CopyItemTemplate));
                 }
             }
         }
@@ -244,6 +286,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(CopyItemTemplate));
                     OnPropertyChanged(nameof(TemplateBrush));
                     OnPropertyChanged(nameof(TemplateName));
+                    OnPropertyChanged(nameof(TemplateDisplayValue));
                     OnPropertyChanged(nameof(CopyItemTemplateId));
                     OnPropertyChanged(nameof(CopyItemId));
                 }
@@ -257,13 +300,6 @@ namespace MpWpfApp {
         //public MpTemplateHyperlinkViewModel() :this(new MpClipTileViewModel(new MpCopyItem()),new MpCopyItemTemplate()) { }
 
         public MpTemplateHyperlinkViewModel(MpClipTileViewModel ctvm, MpCopyItemTemplate cit) : base() {
-            PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
-                    case nameof(IsSelected):
-
-                        break;
-                }
-            };
             ClipTileViewModel = ctvm;
             if (cit == null) {
                 //case of a new template create new w/ unique name & color
@@ -289,6 +325,7 @@ namespace MpWpfApp {
             MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateBackgroundBrush)), tb, TextBlock.BackgroundProperty);
             MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateForegroundBrush)), tb, TextBlock.ForegroundProperty);
             MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateTextBlockCursor)), tb, TextBlock.CursorProperty);
+
             MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateBackgroundBrush)), hl, Hyperlink.BackgroundProperty);
             MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateForegroundBrush)), hl, Hyperlink.ForegroundProperty);
             MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateTextBlockCursor)), hl, Hyperlink.CursorProperty);
@@ -316,6 +353,7 @@ namespace MpWpfApp {
                     ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(this, true);
                 }
             };
+
             #region Context Menu
             var editTemplateMenuItem = new MenuItem();
             editTemplateMenuItem.Header = "Edit";
@@ -344,7 +382,12 @@ namespace MpWpfApp {
             hl.ContextMenu.Items.Add(deleteTemplateMenuItem);
             #endregion
 
+            TemplateHyperlink = hl;
             TemplateTextRange = new TextRange(hl.ElementStart, hl.ElementEnd);
+        }
+        
+        public void SetTemplateText(string templateText) {
+            TemplateText = templateText;
         }
         #endregion
 
@@ -374,6 +417,12 @@ namespace MpWpfApp {
             }
             var otherObj = obj as MpTemplateHyperlinkViewModel;
             return TemplateName.CompareTo(otherObj.TemplateName);
+        }
+
+        public object Clone() {
+            var nthlvm = new MpTemplateHyperlinkViewModel(ClipTileViewModel, CopyItemTemplate);
+            nthlvm.TemplateText = TemplateText;
+            return nthlvm;
         }
         #endregion
     }

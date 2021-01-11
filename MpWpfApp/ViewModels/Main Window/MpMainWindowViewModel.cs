@@ -332,7 +332,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanHideWindow(bool pasteSelected) {
-            return false;
+            //return false;
             return Application.Current.MainWindow != null && 
                    Application.Current.MainWindow.Visibility == Visibility.Visible &&
                    IsShowingDialog == false;
@@ -353,7 +353,7 @@ namespace MpWpfApp {
                 mw,
                 Window.TopProperty,
                 (s, e) => {
-                    if (pasteSelected) {
+                    if (pasteSelected && pasteDataObject != null) {
                         Console.WriteLine("Pasting " + ClipTrayViewModel.SelectedClipTiles.Count + " items");
                         ClipTrayViewModel.ClipboardManager.PasteDataObject(pasteDataObject);
 
@@ -362,6 +362,8 @@ namespace MpWpfApp {
                             var sctvm = ClipTrayViewModel.SelectedClipTiles[i];
                             ClipTrayViewModel.Move(ClipTrayViewModel.IndexOf(sctvm), 0);
                         }
+                    } else if(pasteSelected && pasteDataObject == null) {
+                        Console.WriteLine("MainWindow Hide Command pasteDataObject was null, ignoring paste");
                     }
                     ClipTrayViewModel.ResetClipSelection();
                     mw.Visibility = Visibility.Collapsed;

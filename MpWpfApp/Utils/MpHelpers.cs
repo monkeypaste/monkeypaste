@@ -62,7 +62,7 @@ namespace MpWpfApp {
                 var span = new Span(new Run(linkText), trEHl.ElementStart);
                 tr = FindStringRangeFromPosition(span.ContentStart, trText, true);
             }
-            //thlvm.TemplateTextRange = tr;
+            thlvm.TemplateTextRange = tr;
             //var r = new Run();
             //r.Loaded += thlvm.TemplateHyperLinkRun_Loaded;
 
@@ -74,6 +74,7 @@ namespace MpWpfApp {
             hl.DataContext = thlvm;
             hl.Inlines.Clear();
             hl.Inlines.Add(tb);
+            thlvm.TemplateHyperlink = hl;
             return hl;
         }
 
@@ -1721,9 +1722,9 @@ namespace MpWpfApp {
 
         public static string ConvertFlowDocumentToRichText(FlowDocument fd) {
             var rtb = (RichTextBox)fd.Parent;
-            if(rtb.DataContext.GetType() == typeof(MpClipTileViewModel)) {
-                //rtb.ClearTemplates();
-            }
+            //if(rtb.DataContext.GetType() == typeof(MpClipTileViewModel)) {
+            //    //rtb.ClearTemplates();
+            //}
             Console.WriteLine("Flow Doc Contents:");
             Console.WriteLine(new TextRange(fd.ContentStart, fd.ContentEnd).Text);
             string rtf = string.Empty;
@@ -1735,9 +1736,9 @@ namespace MpWpfApp {
                     rtf = sr.ReadToEnd();
                 }
             }
-            if (rtb.DataContext.GetType() == typeof(MpClipTileViewModel)) {
-                //rtb.CreateHyperlinks();
-            }
+            //if (rtb.DataContext.GetType() == typeof(MpClipTileViewModel)) {
+            //    //rtb.CreateHyperlinks();
+            //}
             return rtf;
         }
 

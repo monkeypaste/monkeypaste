@@ -505,18 +505,7 @@ namespace MpWpfApp {
                     , HexColor text NOT NULL
                     , TemplateName text NOT NULL 
                     , CONSTRAINT FK_MpCopyItemTemplate_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)                    
-                    );                    
-                    ---------------------------------------------------------------------------------------------------------------------
-                    CREATE TABLE MpRichTextStyle (
-                      pk_MpRichTextStyleId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , fk_MpColorId1 integer NOT NULL
-                    , fk_MpColorId2 integer NOT NULL
-                    , FontFamily text NOT NULL
-                    , FontStyle integer NOT NULL
-                    , FontSize real NOT NULL
-                    , CONSTRAINT FK_MpRichTextStyle_0_0 FOREIGN KEY (fk_MpColorId1) REFERENCES MpColor (pk_MpColorId) 
-                    , CONSTRAINT FK_MpRichTextStyle_1_0 FOREIGN KEY (fk_MpColorId2) REFERENCES MpColor (pk_MpColorId) 
-                    );
+                    );       
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPasteHistory (
                       pk_MpPasteHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

@@ -147,6 +147,10 @@ namespace MpWpfApp {
 
         // ***** GET TRANSLATABLE LANGUAGE CODES
         private void GetLanguagesForTranslate() {
+            if(!MpHelpers.CheckForInternetConnection()) {
+                Console.WriteLine("Client offline. Language Translation is inactive");
+                return;
+            }
             // Send a request to get supported language codes
             string uri = String.Format(TEXT_TRANSLATION_API_ENDPOINT, "languages") + "&scope=translation";
             WebRequest WebRequest = WebRequest.Create(uri);

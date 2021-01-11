@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 
 namespace MpWpfApp {
-    public class MpTemplateHyperlinkCollectionViewModel : MpObservableCollectionViewModel<MpTemplateHyperlinkViewModel> {
+    public class MpTemplateHyperlinkCollectionViewModel : MpObservableCollectionViewModel<MpTemplateHyperlinkViewModel>, ICloneable {
         #region Private Variables
-        private Dictionary<string, int> _templateHyperlinkInstanceLookUp = new Dictionary<string, int>();
         #endregion
 
         #region View Models
@@ -26,10 +27,12 @@ namespace MpWpfApp {
             }
         }
 
-        public List<MpTemplateHyperlinkViewModel> UniqueTemplateHyperlinkViewModelList {
+        public MpObservableCollection<MpTemplateHyperlinkViewModel> UniqueTemplateHyperlinkViewModelList {
             get {
-                var ul = new List<MpTemplateHyperlinkViewModel>();
-                foreach(var thlvm in this) {
+                var ul = new MpObservableCollection<MpTemplateHyperlinkViewModel>();
+                var docOrderList = this.ToList();
+                docOrderList.Sort(CompareTemplatesByDocOrder);
+                foreach(var thlvm in docOrderList) {
                     bool itExists = false;
                     foreach(var unm in ul) {
                         if(unm.TemplateName == thlvm.TemplateName) {
@@ -40,10 +43,20 @@ namespace MpWpfApp {
                         ul.Add(thlvm);
                     }
                 }
-                ul.Sort();
+                ul.Sort(x => x["TemplateName"]);
                 return ul;
             }
         }
+
+        //public List<MpTemplateHyperlinkViewModel> UniqueTemplateHyperlinkViewModelListByDocOrder {
+        //    get {
+        //        var uthlvml = UniqueTemplateHyperlinkViewModelList;
+        //        if(uthlvml != null && uthlvml.Count > 0) {
+        //            uthlvml.Sort(CompareTemplatesByDocOrder);
+        //        }
+        //        return uthlvml;
+        //    }
+        //}
 
         public MpTemplateHyperlinkViewModel SelectedTemplateHyperlinkViewModel {
             get {
@@ -73,40 +86,84 @@ namespace MpWpfApp {
                 }
             }
         }
-        #endregion
+        #endregion        
 
         #region Properties
-        private Dictionary<string, string> _templateTextLookUpDictionary = new Dictionary<string, string>();
-        public Dictionary<string,string> TemplateTextLookUpDictionary {
-            get {
-                return _templateTextLookUpDictionary;
-            }
-            set {
-                if(_templateTextLookUpDictionary != value) {
-                    _templateTextLookUpDictionary = value;
-                    OnPropertyChanged(nameof(TemplateTextLookUpDictionary));
-                }
-            }
-        }
+        //private Dictionary<string, string> _templateTextLookUpDictionary = new Dictionary<string, string>();
+        //public Dictionary<string,string> TemplateTextLookUpDictionary {
+        //    get {
+        //        return _templateTextLookUpDictionary;
+        //    }
+        //    set {
+        //        if(_templateTextLookUpDictionary != value) {
+        //            _templateTextLookUpDictionary = value;
+        //            OnPropertyChanged(nameof(TemplateTextLookUpDictionary));
+        //        }
+        //    }
+        //}
         #endregion
 
         #region Public Methods
         public MpTemplateHyperlinkCollectionViewModel(MpClipTileViewModel parent) :base() {
-            CollectionChanged += (s, e) => {
-                TemplateTextLookUpDictionary = new Dictionary<string, string>();
-                foreach (var uthlvm in UniqueTemplateHyperlinkViewModelList) {
-                    TemplateTextLookUpDictionary.Add(uthlvm.TemplateName, string.Empty);
+            //CollectionChanged += (s, e) => {                
+            //    TemplateTextLookUpDictionary = new Dictionary<string, string>();
+            //    foreach (var uthlvm in UniqueTemplateHyperlinkViewModelList) {
+            //        TemplateTextLookUpDictionary.Add(uthlvm.TemplateName, string.Empty);
+            //    }                
+            //};
+            ClipTileViewModel = parent;
+            ClipTileViewModel.PropertyChanged += (s, e) => {
+                switch(e.PropertyName) {
+                    case nameof(ClipTileViewModel.IsPastingTemplateTile):
+                        Reset();
+                        break;
                 }
             };
-            ClipTileViewModel = parent;
-            
             //templates are added in the CreateHyperlinks rtb extension
+        }
+        public void Reset() {
+            foreach (var thlvm in this) {
+                thlvm.SetTemplateText(string.Empty);
+            }
+            if(this.Count > 0) {
+                this[0].IsSelected = true;
+            }
+        }
+        public void SetTemplateText(string templateName, string templateText) {
+            //if(!TemplateTextLookUpDictionary.ContainsKey(templateName)) {
+            //    Console.WriteLine("TemplateCollection error, cannot find template w/ name: " + templateName + " to set text of: " + templateText);
+            //    return;
+            //}
+            //TemplateTextLookUpDictionary[templateName] = templateText;
+            foreach(var thlvm in this) {
+                if(thlvm.TemplateName == templateName) {
+                    thlvm.SetTemplateText(templateText);
+                    thlvm.IsSelected = true;
+                } else {
+                    thlvm.IsSelected = false;
+                }
+            }
         }
         #endregion
 
         #region Private Methods
+        private int CompareTemplatesByDocOrder(MpTemplateHyperlinkViewModel a, MpTemplateHyperlinkViewModel b) {
 
-
+            if (a == null) {
+                if (b == null) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            } else {
+                if (b == null) {
+                    return 1;
+                } else {
+                    return a.TemplateName.CompareTo(b.TemplateName);
+                    //return a.TemplateHyperlink.ElementStart.CompareTo(b.TemplateHyperlink.ElementStart);
+                }
+            }
+        }
         #endregion
 
         #region Commands
@@ -128,6 +185,14 @@ namespace MpWpfApp {
                 }
             }
             return false;
+        }
+
+        public object Clone() {
+            var nthlcvm = new MpTemplateHyperlinkCollectionViewModel(ClipTileViewModel);
+            foreach(var thlvm in this) {
+                nthlcvm.Add((MpTemplateHyperlinkViewModel)thlvm.Clone());
+            }
+            return nthlcvm;
         }
         #endregion
     }

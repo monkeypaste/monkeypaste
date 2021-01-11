@@ -441,6 +441,7 @@ namespace MpWpfApp {
         public void ClearClipSelection() {
             foreach (var clip in this) {
                 clip.IsEditingTile = false;
+                clip.IsEditingTitle = false;
                 clip.IsPastingTemplateTile = false;
                 clip.IsEditingTemplate = false;
                 clip.IsSelected = false;
@@ -459,7 +460,6 @@ namespace MpWpfApp {
 
         public new void Add(MpClipTileViewModel ctvm) {
             this.Insert(0, ctvm);
-            //base.Add(ctvm);
             _clipTrayRef?.Items.Refresh();
         }
 
@@ -589,6 +589,8 @@ namespace MpWpfApp {
             d.SetData(DataFormats.Text, MpHelpers.ConvertRichTextToPlainText(rtf));
             d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
             return d;
+
+            //awaited in MainWindowViewModel.HideWindow
         }
 
         public MpCopyItemType GetTargetFileType() {
@@ -655,6 +657,9 @@ namespace MpWpfApp {
             return filePath;
         }
 
+        public ListBox GetTray() {
+            return _clipTrayRef;
+        }
         #endregion
 
         #region Private Methods
