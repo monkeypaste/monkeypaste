@@ -734,8 +734,8 @@
                             <local:MpClipBorder BorderBrush="{Binding TileBorderBrush}"
                                                 Margin="{Binding TileMargin}"
                                                 BorderThickness="{Binding TileBorderThickness}"
-                                                Width="{Binding TileBorderWidth}"
-                                                Height="{Binding TileSize}"
+                                                Width="{Binding TileBorderWidth}" 
+                                                Height="{Binding TileBorderHeight}"
                                                 Visibility="{Binding TileVisibility, NotifyOnTargetUpdated=True}"
                                                 local:MpFocusExtension.IsFocused="{Binding IsClipItemFocused}"
                                                 local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.SearchText}"
@@ -996,13 +996,13 @@
                                         <!-- Content Container Canvas -->
                                         <Canvas x:Name="ClipTileContentCanvas"
                                                 Grid.Row="1"
-                                                ClipToBounds="True"
+                                                ClipToBounds="True" 
                                                 Grid.Column="0">
                                             <!-- RichText Content -->
                                             <Canvas x:Name="ClipTileRichTextBoxCanvas"
                                                     Visibility="{Binding RtbVisibility}"
                                                     Height="{Binding TileContentHeight}"
-                                                    Width="{Binding TileBorderWidth, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}">
+                                                    Width="{Binding TileContentWidth, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}">
                                                 <i:Interaction.Triggers>
                                                     <i:EventTrigger EventName="Loaded">
                                                         <i:CallMethodAction TargetObject="{Binding}"
@@ -1251,9 +1251,9 @@
                                                 </RichTextBox>
                                                 <Border x:Name="ClipTileEditTemplateToolbar"
                                                         Visibility="{Binding EditTemplateToolbarVisibility}"
-                                                        Height="{Binding EditTemplateToolbarHeight}"                                                 
-                                                        BorderBrush="Black"
-                                                        BorderThickness="1"
+                                                        Height="{Binding EditTemplateToolbarHeight}"      
+                                                        CornerRadius="10,0,0,10"
+                                                        BorderThickness="0"
                                                         Background="LightBlue">
                                                     <Grid DataContext="{Binding EditTemplateToolbarViewModel}">
                                                         <i:Interaction.Triggers>
@@ -1272,8 +1272,8 @@
                                                                 Background="{Binding SelectedTemplateHyperlinkViewModel.TemplateBrush, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                                 Width="20"
                                                                 Height="20"
-                                                                VerticalAlignment="Top"
-                                                                Margin="10,5,5,0"
+                                                                VerticalAlignment="Center"
+                                                                Margin="10,0,0,0"
                                                                 BorderBrush="Black"
                                                                 BorderThickness="1" />
                                                         <StackPanel Orientation="Horizontal"
@@ -1310,7 +1310,7 @@
                                                                     HorizontalAlignment="Center"
                                                                     Margin="8,0,0,0">
                                                             <Button x:Name="CancelButton"
-                                                                    Margin="10,3,10,3"
+                                                                    Margin="10,7,10,7"
                                                                     Padding="5,0,5,0"
                                                                     FontSize="14"
                                                                     Content="CANCEL"
@@ -1318,7 +1318,7 @@
                                                                     HorizontalAlignment="Stretch"
                                                                     Command="{Binding CancelCommand}" />
                                                             <Button x:Name="OkButton"
-                                                                    Margin="0,3,10,3"
+                                                                    Margin="0,7,10,7"
                                                                     Padding="5,0,5,0"
                                                                     FontSize="14"
                                                                     Content="DONE"
@@ -1330,8 +1330,8 @@
                                                 </Border>
                                                 <Border x:Name="ClipTilePasteTemplateToolbar"
                                                         Height="{Binding PasteTemplateToolbarHeight}"
-                                                        BorderBrush="Black" 
-                                                        BorderThickness="1" 
+                                                        CornerRadius="5"
+                                                        BorderThickness="0" 
                                                         Background="LightBlue"
                                                         Visibility="{Binding PasteTemplateToolbarVisibility}">
                                                     <Grid x:Name="PasteTemplateToolbarGrid"
@@ -1354,7 +1354,7 @@
                                                                             HorizontalAlignment="Center"
                                                                             Background="{Binding SelectedTemplateBrush}"
                                                                             CornerRadius="15"
-                                                                            Margin="0">
+                                                                            Margin="0,3,0,3">
                                                             <ComboBox x:Name="SelectedTemplateComboBox" 
                                                                       FontSize="14"
                                                                       Background="Transparent"
@@ -1362,7 +1362,7 @@
                                                                       HorizontalContentAlignment="Left"
                                                                       VerticalContentAlignment="Center"
                                                                       SelectedItem="{Binding SelectedTemplate, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
-                                                                      ItemsSource="{Binding UniqueTemplateHyperlinkViewModelList}">
+                                                                      ItemsSource="{Binding UniqueTemplateHyperlinkViewModelListByDocOrder}">
                                                                 <ComboBox.ItemTemplate>
                                                                     <ItemContainerTemplate>
                                                                         <DockPanel>
@@ -1374,7 +1374,7 @@
                                                                                     BorderThickness="1"
                                                                                     CornerRadius="10" />
                                                                             <TextBlock DockPanel.Dock="Right" 
-                                                                                       Text="{Binding TemplateName}" />
+                                                                                       Text="{Binding TemplateDisplayName}" />
                                                                         </DockPanel>                                                                        
                                                                     </ItemContainerTemplate>
                                                                 </ComboBox.ItemTemplate>
@@ -1385,7 +1385,7 @@
                                                                 TabIndex="0"
                                                                 Visibility="{Binding ClearAllTemplateToolbarButtonVisibility}"
                                                                 Command="{Binding ClearAllTemplatesCommand}"
-                                                                Margin="5,0,5,0"
+                                                                Margin="3,0,3,0"
                                                                 Padding="0,0,0,0"
                                                                 FontSize="12"
                                                                 VerticalContentAlignment="Top"
@@ -1394,7 +1394,7 @@
                                                         <local:MpClipBorder Grid.Column="2"
                                                                             CornerRadius="10"
                                                                             Background="White"
-                                                                            BorderThickness="1"
+                                                                            BorderThickness="0.5"
                                                                             BorderBrush="DimGray"
                                                                             Margin="1"
                                                                             Padding="0"
@@ -1412,7 +1412,8 @@
                                                                          Text="{Binding SelectedTemplateText, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                                                                          FontStyle="{Binding SelectedTemplateTextBoxFontStyle}"
                                                                          Foreground="{Binding SelectedTemplateTextBrush}"
-                                                                         FontSize="14"
+                                                                         FontSize="16"
+                                                                         Height="24"
                                                                          Width="240"
                                                                          Padding="0,0,0,0"
                                                                          Margin="5,0,0,0"

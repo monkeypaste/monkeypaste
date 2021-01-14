@@ -63,14 +63,15 @@ namespace MpWpfApp {
             }
         }
 
-        public double ClipTileDropShadowRadius {
+        public double ClipTilePadding {
             get {
                 return 10;
             }
         }
+
         public double ClipTileSize {
             get {
-                return ClipTrayHeight - (ClipTileMargin * 2) - ClipTileDropShadowRadius;
+                return ClipTrayHeight - (ClipTileMargin * 2) - ClipTilePadding;
             }
         }
         public double ClipTileTitleIconSize {
@@ -80,7 +81,7 @@ namespace MpWpfApp {
         }
         public double ClipTileBorderSize {
             get {
-                return ClipTileSize - ClipTileDropShadowRadius;
+                return ClipTileSize - ClipTilePadding;
             }
         }
         public double ClipTileBorderThickness {
@@ -90,12 +91,12 @@ namespace MpWpfApp {
         }
         public double ClipTilePasteToolbarHeight {
             get {
-                return 30;
+                return 40;
             }
         }
         public double ClipTileEditToolbarHeight {
             get {
-                return 30;
+                return 40;
             }
         }
         public double ClipTileTitleHeight {
@@ -105,7 +106,7 @@ namespace MpWpfApp {
         }
         public double ClipTileContentHeight {
             get {
-                return ClipTileSize - ClipTileTitleHeight - (ClipTileMargin * 2) - ClipTileBorderThickness;
+                return ClipTileSize - ClipTileTitleHeight - (ClipTileMargin) - ClipTileBorderThickness;
             }
         }
         public double ClipTileContentWidth {

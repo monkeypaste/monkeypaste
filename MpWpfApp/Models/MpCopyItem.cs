@@ -252,6 +252,8 @@ namespace MpWpfApp {
             CopyItemType = MpCopyItemType.RichText;
             ImageItemObjectList = new List<MpDetectedImageObject>();
         }
+        public MpCopyItem(MpCopyItemType type, string title, object data) : this(type, data, MpHelpers.GetRandomColor(), ((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow)).Handle) { }
+        
         private MpCopyItem(
             MpCopyItemType itemType,
             object data,

@@ -33,7 +33,7 @@ namespace MpWpfApp {
                         return;
                     }                    
                     Dispatcher.CurrentDispatcher.BeginInvoke(
-                        DispatcherPriority.Background,
+                        DispatcherPriority.Normal,
                         (Action)(() => {
                             var sttvm = ctvm.MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel.SelectedTagTile;
                             var hlt = (string)e.NewValue;

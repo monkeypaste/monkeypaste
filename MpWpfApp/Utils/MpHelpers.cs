@@ -1441,11 +1441,11 @@ namespace MpWpfApp {
         }
 
         public static Brush GetDarkerBrush(Brush b) {
-            return ChangeBrushBrightness((SolidColorBrush)b, 0.1);
+            return ChangeBrushBrightness((SolidColorBrush)b, 0.5);
         }
 
         public static Brush GetLighterBrush(Brush b) {
-            return ChangeBrushBrightness((SolidColorBrush)b, 1.5);
+            return ChangeBrushBrightness((SolidColorBrush)b, 0.5);
         }
 
         public static Color GetRandomColor(byte alpha = 255) {

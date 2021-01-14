@@ -700,5 +700,17 @@ namespace MpWpfApp.Properties {
                 this["HighlightFocusedHexColorString"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsInitialLoad {
+            get {
+                return ((bool)(this["IsInitialLoad"]));
+            }
+            set {
+                this["IsInitialLoad"] = value;
+            }
+        }
     }
 }

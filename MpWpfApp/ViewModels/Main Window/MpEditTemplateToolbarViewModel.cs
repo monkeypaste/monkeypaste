@@ -128,12 +128,28 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        //public string SelectedTemplateDisplayName {
+        //    get {
+        //        if (SelectedTemplateHyperlinkViewModel == null) {
+        //            return string.Empty;
+        //        }
+        //        return SelectedTemplateHyperlinkViewModel.TemplateDisplayName;
+        //    }
+        //    set {
+        //        if (SelectedTemplateHyperlinkViewModel.TemplateDisplayName != value) {
+        //            ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SetTemplateName(SelectedTemplateHyperlinkViewModel.TemplateName, "<" + value + ">");
+        //            OnPropertyChanged(nameof(SelectedTemplateDisplayName));
+        //            OnPropertyChanged(nameof(SelectedTemplateHyperlinkViewModel));
+        //        }
+        //    }
+        //}
         #endregion
 
         #region Model Properties
 
         #endregion
-                
+
         #endregion
 
         #region Public Methods
@@ -180,6 +196,15 @@ namespace MpWpfApp {
                 colorContextMenu.IsOpen = true;
             };
 
+            tb.TextChanged += (s, e) => {
+                if(SelectedTemplateHyperlinkViewModel != null) {
+                    foreach (var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
+                        if (thlvm.CopyItemTemplateId == SelectedTemplateHyperlinkViewModel.CopyItemTemplateId) {
+                            thlvm.TemplateName = tb.Text;
+                        }
+                    }
+                }
+            };
             ClipTileViewModel.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(ClipTileViewModel.IsEditingTemplate):
@@ -187,7 +212,7 @@ namespace MpWpfApp {
                         double rtbBottomMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight;
 
                         double editTemplateToolbarTopMax = ClipTileViewModel.TileContentHeight;
-                        double editTemplateToolbarTopMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight;
+                        double editTemplateToolbarTopMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight + 5;
                         
                         if (ClipTileViewModel.IsEditingTemplate) {
                             ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Visible;
@@ -214,9 +239,7 @@ namespace MpWpfApp {
                                     ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Collapsed;
                                 } else {
                                     tb.Focus();
-                                    if(tb.Text.Length > 2) {
-                                        tb.Select(1, tb.Text.Length - 2);
-                                    }
+                                    tb.SelectAll();
                                 }
                             });
                         break;
@@ -299,7 +322,7 @@ namespace MpWpfApp {
         }
         private void Cancel() {
             if(IsSelectedNewTemplate) {
-                SelectedTemplateHyperlinkViewModel.Dispose();
+                SelectedTemplateHyperlinkViewModel.Dispose(true);
                 ClipTileViewModel.GetRtb().Selection.Text = _originalText;
             } else {
                 //restore original name/color to datacontext

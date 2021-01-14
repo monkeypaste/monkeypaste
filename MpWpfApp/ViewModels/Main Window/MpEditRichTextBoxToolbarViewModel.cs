@@ -222,7 +222,7 @@ namespace MpWpfApp {
                         b.HorizontalAlignment = HorizontalAlignment.Left;
 
                         TextBlock tb = new TextBlock();
-                        tb.Text = ttcvm.TemplateName.Replace("<", string.Empty).Replace(">", string.Empty);
+                        tb.Text = ttcvm.TemplateDisplayName;//TemplateName.Replace("<", string.Empty).Replace(">", string.Empty);
                         tb.FontSize = 14;
                         tb.HorizontalAlignment = HorizontalAlignment.Left;
                         tb.VerticalAlignment = VerticalAlignment.Center;
@@ -371,7 +371,7 @@ namespace MpWpfApp {
                         thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.End.Parent).DataContext;                        
                     }
                 }
-                if (thlvm != null) {
+                if (thlvm == null) {
                     IsAddTemplateButtonEnabled = true;
                 } else {
                     IsAddTemplateButtonEnabled = false;

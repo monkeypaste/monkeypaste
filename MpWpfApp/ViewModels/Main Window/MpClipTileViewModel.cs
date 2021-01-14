@@ -400,32 +400,6 @@
                 }
             }
         }
-
-        private double _tileContentMargin = MpMeasurements.Instance.ClipTileContentMargin;
-        public double TileContentMargin {
-            get {
-                return _tileContentMargin;
-            }
-            set {
-                if (_tileContentMargin != value) {
-                    _tileContentMargin = value;
-                    OnPropertyChanged(nameof(TileContentMargin));
-                }
-            }
-        }
-
-        private double _tileDropShadowRadius = MpMeasurements.Instance.ClipTileDropShadowRadius;
-        public double TileDropShadowRadius {
-            get {
-                return _tileDropShadowRadius;
-            }
-            set {
-                if (_tileDropShadowRadius != value) {
-                    _tileDropShadowRadius = value;
-                    OnPropertyChanged(nameof(TileDropShadowRadius));
-                }
-            }
-        }
         #endregion
 
         #region Visibility Properties
@@ -1327,10 +1301,6 @@
                         } else if (CurrentHighlightMatchIdx < LastContentHighlightRangeList.Count) {
                             int contentIdx = CurrentHighlightMatchIdx - LastTitleHighlightRangeList.Count;
                             LastContentHighlightRangeList[contentIdx].ApplyPropertyValue(TextElement.BackgroundProperty, hfb);
-                            //rtb.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
-                            //rtb.CaretPosition = LastContentHighlightRangeList[contentIdx].End;
-                            //Rect r = LastContentHighlightRangeList[contentIdx].End.GetCharacterRect(LogicalDirection.Backward);
-                            //rtb.ScrollToVerticalOffset(r.Y);
                             var characterRect = LastContentHighlightRangeList[contentIdx].End.GetCharacterRect(LogicalDirection.Forward);
                             GetRtb().ScrollToHorizontalOffset(GetRtb().HorizontalOffset + characterRect.Left - GetRtb().ActualWidth / 2d);
                             GetRtb().ScrollToVerticalOffset(GetRtb().VerticalOffset + characterRect.Top - GetRtb().ActualHeight / 2d);

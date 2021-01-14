@@ -202,5 +202,8 @@
     <Setting Name="HighlightFocusedHexColorString" Type="System.String" Scope="User">
       <Value Profile="(Default)">#FFC0CB</Value>
     </Setting>
+    <Setting Name="IsInitialLoad" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

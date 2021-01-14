@@ -33,7 +33,7 @@ namespace MpWpfApp {
         TemplateSegment,
         CopyItemSegment
     }
-    public class MpTemplateHyperlinkViewModel : MpViewModelBase, IDisposable, IComparable, ICloneable {
+    public class MpTemplateHyperlinkViewModel : MpViewModelBase, ICloneable {
         #region Private Variables
         #endregion
 
@@ -49,6 +49,8 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(ClipTileViewModel));
                     OnPropertyChanged(nameof(TemplateDisplayValue));
                     OnPropertyChanged(nameof(TemplateTextBlockCursor));
+                    OnPropertyChanged(nameof(TemplateName));
+                    OnPropertyChanged(nameof(TemplateDisplayName));
                 }
             }
         }
@@ -166,6 +168,16 @@ namespace MpWpfApp {
             }
         }
 
+        private string _templateDisplayName = string.Empty;
+        public string TemplateDisplayName {
+            get {
+                if(string.IsNullOrEmpty(TemplateName)) {
+                    return string.Empty;
+                }
+                return TemplateName.Replace("<", String.Empty).Replace(">", string.Empty);
+            }
+        }
+
         private string _templateText = string.Empty;
         public string TemplateText {
             get {
@@ -230,7 +242,7 @@ namespace MpWpfApp {
         public string TemplateName {
             get {
                 if (CopyItemTemplate == null) {
-                    return "NOTEMPLATEUNKNOWN";
+                    return "TEMPLATE UNKNOWN";
                 }
                 return CopyItemTemplate.TemplateName;
             }
@@ -249,10 +261,12 @@ namespace MpWpfApp {
                     if(!CopyItemTemplate.TemplateName.EndsWith(">")) {
                         CopyItemTemplate.TemplateName = CopyItemTemplate.TemplateName + ">";
                     }
-                    OnPropertyChanged(nameof(TemplateName));
-                    OnPropertyChanged(nameof(TemplateDisplayValue));
-                    OnPropertyChanged(nameof(CopyItemTemplate));
                 }
+
+                OnPropertyChanged(nameof(TemplateName));
+                OnPropertyChanged(nameof(TemplateDisplayValue));
+                OnPropertyChanged(nameof(TemplateDisplayName));
+                OnPropertyChanged(nameof(CopyItemTemplate));
             }
         }
 
@@ -285,7 +299,8 @@ namespace MpWpfApp {
                     _copyItemTemplate = value;
                     OnPropertyChanged(nameof(CopyItemTemplate));
                     OnPropertyChanged(nameof(TemplateBrush));
-                    OnPropertyChanged(nameof(TemplateName));
+                    OnPropertyChanged(nameof(TemplateName)); 
+                    OnPropertyChanged(nameof(TemplateDisplayName));
                     OnPropertyChanged(nameof(TemplateDisplayValue));
                     OnPropertyChanged(nameof(CopyItemTemplateId));
                     OnPropertyChanged(nameof(CopyItemId));
@@ -334,6 +349,10 @@ namespace MpWpfApp {
             hl.IsEnabled = true;
             hl.TextDecorations = null;
             hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
+            hl.Unloaded += (s, e) => {
+                //occurs when template is deleted in edit tile mode
+                Dispose(false);
+            };
             hl.MouseEnter += (s, e) => {
                 IsHovering = true;
             };
@@ -374,7 +393,7 @@ namespace MpWpfApp {
             var deleteTemplateMenuItem = new MenuItem();
             deleteTemplateMenuItem.Header = "Delete";
             deleteTemplateMenuItem.Click += (s4, e4) => {
-                Dispose();
+                Dispose(true);
             };
 
             hl.ContextMenu = new ContextMenu();
@@ -400,24 +419,26 @@ namespace MpWpfApp {
             return TemplateName;
         }
 
-        public void Dispose() {
-            ClipTileViewModel.GetRtb().Selection.Select(TemplateTextRange.Start, TemplateTextRange.End);
-            ClipTileViewModel.GetRtb().Selection.Text = string.Empty;
+        public void Dispose(bool fromContextMenu) {
+            if(fromContextMenu) {
+                ClipTileViewModel.GetRtb().Selection.Select(TemplateTextRange.Start, TemplateTextRange.End);
+                ClipTileViewModel.GetRtb().Selection.Text = string.Empty;
+            }
             //remove this individual token reference
             ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Remove(this);
             
-            if(IsSelected && ClipTileViewModel.IsEditingTemplate) {
-                ClipTileViewModel.IsEditingTemplate = false;
-            }
+            //if(IsSelected && ClipTileViewModel.IsEditingTemplate) {
+            //    ClipTileViewModel.IsEditingTemplate = false;
+            //}
         }
 
-        public int CompareTo(object obj) {
-            if(obj.GetType() != typeof(MpTemplateHyperlinkViewModel)) {
-                return -1;
-            }
-            var otherObj = obj as MpTemplateHyperlinkViewModel;
-            return TemplateName.CompareTo(otherObj.TemplateName);
-        }
+        //public int CompareTo(object obj) {
+        //    if(obj.GetType() != typeof(MpTemplateHyperlinkViewModel)) {
+        //        return -1;
+        //    }
+        //    var otherObj = obj as MpTemplateHyperlinkViewModel;
+        //    return TemplateName.CompareTo(otherObj.TemplateName);
+        //}
 
         public object Clone() {
             var nthlvm = new MpTemplateHyperlinkViewModel(ClipTileViewModel, CopyItemTemplate);

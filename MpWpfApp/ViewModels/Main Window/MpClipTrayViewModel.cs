@@ -232,7 +232,7 @@ namespace MpWpfApp {
             CollectionChanged += (s, e) => {
                 OnPropertyChanged(nameof(EmptyListMessageVisibility));
                 OnPropertyChanged(nameof(ClipTrayVisibility));
-            };
+            };           
             
             //create tiles for all clips in the database
             foreach (MpCopyItem ci in MpCopyItem.GetAllCopyItems()) {
@@ -366,6 +366,20 @@ namespace MpWpfApp {
                 Console.WriteLine("Time to create new copyitem: " + sw.ElapsedMilliseconds + " ms");
                 ResetClipSelection();
             };
+
+            if (Properties.Settings.Default.IsInitialLoad) {
+                var introItem1 = new MpCopyItem(
+                    MpCopyItemType.RichText,
+                    "Welcome to MonkeyPaste!",
+                    MpHelpers.ConvertPlainTextToRichText("Take a moment to look through the available features in the following tiles, which are always available in the 'Help' pinboard"));
+
+                var introItem2 = new MpCopyItem(
+                    MpCopyItemType.RichText,
+                    "One place for your clipboard",
+                    MpHelpers.ConvertPlainTextToRichText(""))
+                Properties.Settings.Default.IsInitialLoad = false;
+                Properties.Settings.Default.Save();
+            }
 
             SortAndFilterClipTiles();            
         }

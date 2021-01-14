@@ -616,6 +616,7 @@
     <Resource Include="Resources\Images\forward_black.png" />
     <Resource Include="Resources\Images\back_black.png" />
     <Resource Include="Resources\Images\close1.png" />
+    <Resource Include="Resources\Images\catdog.jpg" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />
