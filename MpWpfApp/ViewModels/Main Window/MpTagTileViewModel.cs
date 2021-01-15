@@ -26,7 +26,9 @@ namespace MpWpfApp {
                 return _isSelected;
             }
             set {
-                if (_isSelected != value) {
+                //if (_isSelected != value) 
+                //always update so if filtering by app this will unfilter
+                    {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
                     OnPropertyChanged(nameof(TagBorderBackgroundBrush));
@@ -259,6 +261,8 @@ namespace MpWpfApp {
             tagBorder.PreviewMouseLeftButtonDown += (s, e7) => {
                 if(e7.ClickCount == 2) {
                     RenameTagCommand.Execute(null);
+                } else {
+                    SelectTagCommand.Execute(null);
                 }
             };
 

@@ -84,7 +84,9 @@ namespace MpWpfApp {
             bool isCreatingNewItem = false;
 
             vbGrid.MouseMove += (s, e) => {
-                if (!ctvm.IsSelected) {
+                if (!ctvm.IsSelected && !ctvm.IsHovering) {
+                    Mouse.Capture(null);
+                    Application.Current.MainWindow.Cursor = Cursors.Arrow;
                     return;
                 }
                 foreach (var diovm in this) {
@@ -137,21 +139,6 @@ namespace MpWpfApp {
                 }
             };
 
-            //CollectionChanged += (s, e) => {
-            //    if(e.NewItems != null) {
-            //        foreach(MpDetectedImageObjectViewModel diovm in e.NewItems) {
-            //            int idx = this.IndexOf(diovm);
-            //            if(idx < 0) {
-            //                continue;
-            //            }
-            //            Canvas.SetZIndex(
-            //                (Border)VisualTreeHelper.GetChild(
-            //                    (DependencyObject)itemsControl,
-            //                    idx),
-            //                idx + 1);
-            //        }
-            //    }
-            //};
         }
         #endregion
 

@@ -358,9 +358,18 @@
 
         public double TileContentHeight {
             get {
-                return MpMeasurements.Instance.ClipTileContentHeight;
+                if(TileDetailGridVisibility == Visibility.Visible) {
+                    return MpMeasurements.Instance.ClipTileContentHeight;
+                }
+                return MpMeasurements.Instance.ClipTileContentHeight + TileDetailHeight;
             }
-        }       
+        }
+
+        public double TileDetailHeight {
+            get {
+                return MpMeasurements.Instance.ClipTileDetailHeight;
+            }
+        }
 
         private double _tileContentWidth = MpMeasurements.Instance.ClipTileContentWidth;
         public double TileContentWidth {
@@ -523,6 +532,24 @@
             }
         }
 
+        public Visibility TileDetectedImageItemsVisibility {
+            get {
+                if(IsSelected) {
+                    return Visibility.Visible;
+                }
+                return Visibility.Hidden;
+            }
+        }
+
+        public Visibility TileDetailGridVisibility {
+            get {
+                if (IsEditingTile || IsEditingTemplate || IsPastingTemplateTile) {
+                    return Visibility.Collapsed;
+                }
+                return Visibility.Visible;
+            }
+        }
+
         private Visibility _tileVisibility = Visibility.Visible;
         public Visibility TileVisibility {
             get {
@@ -577,9 +604,9 @@
             }
         }
 
-        public ObservableCollection<TextRange> LastContentHighlightRangeList { get; set; } = new ObservableCollection<TextRange>();
+        public MpObservableCollection<TextRange> LastContentHighlightRangeList { get; set; } = new MpObservableCollection<TextRange>();
 
-        public ObservableCollection<TextRange> LastTitleHighlightRangeList { get; set; } = new ObservableCollection<TextRange>();
+        public MpObservableCollection<TextRange> LastTitleHighlightRangeList { get; set; } = new MpObservableCollection<TextRange>();
 
         public Cursor ContentCursor {
             get {
@@ -660,6 +687,8 @@
                     OnPropertyChanged(nameof(ContentCursor));
                     OnPropertyChanged((nameof(CopyItemRichText)));
                     OnPropertyChanged(nameof(CopyItem));
+                    OnPropertyChanged(nameof(TileDetailGridVisibility));
+                    OnPropertyChanged(nameof(TileContentHeight));
                 }
             }
         }
@@ -673,6 +702,8 @@
                 if (_isEditingTemplate != value) {
                     _isEditingTemplate = value;
                     OnPropertyChanged(nameof(IsEditingTemplate));
+                    OnPropertyChanged(nameof(TileDetailGridVisibility));
+                    OnPropertyChanged(nameof(TileContentHeight));
                 }
             }
         }
@@ -686,9 +717,11 @@
                 if (_isPastingTemplateTile != value) {
                     _isPastingTemplateTile = value;
                     OnPropertyChanged(nameof(IsPastingTemplateTile));
+                    OnPropertyChanged(nameof(TileDetailGridVisibility));
+                    OnPropertyChanged(nameof(TileContentHeight));
                 }
             }
-        }
+        }        
 
         public bool HasTemplate {
             get {
@@ -713,6 +746,7 @@
                     OnPropertyChanged(nameof(IsSelected));
                     OnPropertyChanged(nameof(TileBorderBrush));
                     OnPropertyChanged(nameof(DetailTextColor));
+                    OnPropertyChanged(nameof(TileDetectedImageItemsVisibility));
                 }
             }
         }
@@ -1144,10 +1178,28 @@
             //};
         }
 
+        public void ClipTileDetailGrid_Loaded(object sender, RoutedEventArgs e) {
+            var detailGrid = (Grid)sender;
+            var titleDetailTextBlock = (TextBlock)detailGrid.FindName("ClipTileTitleDetailTextBlock");
+
+            titleDetailTextBlock.MouseEnter += (s, e5) => {
+                if (++_detailIdx > 2) {
+                    _detailIdx = 0;
+                }
+                titleDetailTextBlock.Text = GetCurrentDetail(_detailIdx);
+            };
+            titleDetailTextBlock.Text = GetCurrentDetail(_detailIdx);
+            //Canvas.SetLeft(titleDetailTextBlock, 5);
+            //Canvas.SetTop(titleDetailTextBlock, TileTitleHeight - 14);
+        }
+
         public void ClipTileTitle_Loaded(object sender, RoutedEventArgs e) {
             var titleCanvas = (Canvas)sender;
-
             var clipTileTitleTextBlock = (TextBlock)titleCanvas.FindName("ClipTileTitleTextBlock");
+            var clipTileTitleTextBox = (TextBox)titleCanvas.FindName("ClipTileTitleTextBox");
+            var titleIconImageButton = (Button)titleCanvas.FindName("ClipTileAppIconImageButton");
+            var titleIconImageButtonRotateTransform = (RotateTransform)titleIconImageButton.FindName("ClipTileAppIconImageButtonRotateTransform");
+            
             clipTileTitleTextBlock.MouseEnter += (s, e1) => {
                 Application.Current.MainWindow.Cursor = Cursors.IBeam;
             };
@@ -1159,7 +1211,6 @@
                 e7.Handled = true;
             };
 
-            var clipTileTitleTextBox = (TextBox)titleCanvas.FindName("ClipTileTitleTextBox");
             clipTileTitleTextBox.IsVisibleChanged += (s, e9) => {
                 if (TileTitleTextBoxVisibility == Visibility.Collapsed) {
                     return;
@@ -1172,28 +1223,38 @@
                 IsEditingTitle = false;
             };
 
-            var titleIconImageButton = (Button)titleCanvas.FindName("ClipTileAppIconImageButton");
             Canvas.SetLeft(titleIconImageButton, TileBorderWidth - TileTitleHeight - 10);
             Canvas.SetTop(titleIconImageButton, 2);
+            titleIconImageButton.MouseEnter += (s, e3) => {
+                double t = 50;
+                double angle = 10;
+                var a = new DoubleAnimation(0, angle, new Duration(TimeSpan.FromMilliseconds(t)));
+                a.Completed += (s1, e1) => {
+                    var b = new DoubleAnimation(angle, -angle, new Duration(TimeSpan.FromMilliseconds(t * 2)));
+                    b.Completed += (s2, e2) => {
+                        var c = new DoubleAnimation(-angle, 0, new Duration(TimeSpan.FromMilliseconds(t)));
+                        titleIconImageButtonRotateTransform.BeginAnimation(RotateTransform.AngleProperty, c);
+                    };
+                    titleIconImageButtonRotateTransform.BeginAnimation(RotateTransform.AngleProperty, b);
+                };
+                //CubicEase easing = new CubicEase();
+                //easing.EasingMode = EasingMode.EaseIn;
+                //animation.EasingFunction = easing;
+                titleIconImageButtonRotateTransform.BeginAnimation(RotateTransform.AngleProperty, a);
+            };
             titleIconImageButton.PreviewMouseUp += (s, e7) => {
                 // TODO (somehow) force mainwindow to stay active when switching or opening app process
                 // TODO check if shift is down if so perform paste into target application
                 // TODO check if App is running if it is switch to it or start its process
 
-                MpHelpers.OpenUrl(CopyItem.App.AppPath);
-
-            };
-
-            var titleDetailTextBlock = (TextBlock)titleCanvas.FindName("ClipTileTitleDetailTextBlock");
-            titleDetailTextBlock.MouseEnter += (s, e5) => {
-                if (++_detailIdx > 2) {
-                    _detailIdx = 0;
+                //MpHelpers.OpenUrl(CopyItem.App.AppPath);
+                MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp = true;
+                foreach (var vctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
+                    if(vctvm.CopyItemAppId != CopyItemAppId) {
+                        vctvm.TileVisibility = Visibility.Collapsed;
+                    }
                 }
-                titleDetailTextBlock.Text = GetCurrentDetail(_detailIdx);
             };
-            titleDetailTextBlock.Text = GetCurrentDetail(_detailIdx);
-            Canvas.SetLeft(titleDetailTextBlock, 5);
-            Canvas.SetTop(titleDetailTextBlock, TileTitleHeight - 14);
         }
 
         public void ClipTileRichTextStackPanel_Loaded(object sender, RoutedEventArgs e) {
@@ -1579,7 +1640,7 @@
         }
         private bool CanEditClip() {
             return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
-                  (CopyItemType == MpCopyItemType.RichText || CopyItemType == MpCopyItemType.Image) &&
+                  CopyItemType == MpCopyItemType.RichText &&
                   !IsEditingTile;
         }
         private void EditClip() {
@@ -1728,7 +1789,7 @@
         #region Overrides
 
         public override string ToString() {
-            return CopyItem.ItemPlainText;
+            return CopyItemPlainText;
         }
 
         public void Dispose() {

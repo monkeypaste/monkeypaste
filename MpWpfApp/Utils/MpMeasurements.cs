@@ -65,7 +65,7 @@ namespace MpWpfApp {
 
         public double ClipTilePadding {
             get {
-                return 10;
+                return 15;
             }
         }
 
@@ -104,11 +104,19 @@ namespace MpWpfApp {
                 return ClipTileSize / 5;
             }
         }
-        public double ClipTileContentHeight {
+
+        public double ClipTileDetailHeight {
             get {
-                return ClipTileSize - ClipTileTitleHeight - (ClipTileMargin) - ClipTileBorderThickness;
+                return ClipTileTitleHeight / 4;
             }
         }
+
+        public double ClipTileContentHeight {
+            get {
+                return ClipTileSize - ClipTileTitleHeight - ClipTileMargin - ClipTileBorderThickness - ClipTileDetailHeight;
+            }
+        }
+
         public double ClipTileContentWidth {
             get {
                 return ClipTileSize - (ClipTileMargin * 2) - (ClipTileBorderThickness * 2);

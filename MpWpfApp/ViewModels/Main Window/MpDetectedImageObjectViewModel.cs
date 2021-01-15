@@ -189,9 +189,8 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(FontSize));
 
             Canvas.SetZIndex(b, 1);
-
-            Point mouseEnterPosition = new Point(), mouseDownPosition = new Point(), lastMousePosition = new Point();            
-
+            
+            Point mouseEnterPosition = new Point(), mouseDownPosition = new Point(), lastMousePosition = new Point();  
             
             double maxCornerDistance = 10;
             double maxResizeDistance = 15;
@@ -211,7 +210,8 @@ namespace MpWpfApp {
             }
 
             vbGrid.MouseMove += (s, e) => {
-                if (!ctvm.IsSelected) {
+                if (!ctvm.IsSelected/* && !ctvm.IsHovering*/) {
+                    //Mouse.Capture(null);
                     Application.Current.MainWindow.Cursor = Cursors.Arrow;
                     return;
                 }

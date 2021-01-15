@@ -908,6 +908,7 @@
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="{Binding TileTitleHeight}" />
                                             <RowDefinition Height="{Binding TileContentHeight}" />
+                                            <RowDefinition Height="{Binding TileDetailHeight}" />
                                         </Grid.RowDefinitions>
                                         <!-- Tile Title StackPanel -->
                                         <Canvas Grid.Row="0"
@@ -956,21 +957,18 @@
                                                      Visibility="{Binding TileTitleTextBoxVisibility}"
                                                      local:MpFocusExtension.IsFocused="{Binding IsClipTitleTextBoxFocused}"
                                                      Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
-                                            <!-- Clip Title Detail TextBlock -->
-                                            <TextBlock x:Name="ClipTileTitleDetailTextBlock"
-                                                       Background="Transparent"
-                                                       Foreground="{Binding DetailTextColor}"
-                                                       FontSize="9"
-                                                       Text="{Binding DetailText}" />
                                             <!-- Clip Title Icon Image -->
                                             <Button x:Name="ClipTileAppIconImageButton"
                                                     Style="{StaticResource Transparent_Button}"
+                                                    RenderTransformOrigin="0.5,0.5"
                                                     Background="Transparent"
                                                     BorderThickness="0">
+                                                <Button.RenderTransform>
+                                                    <RotateTransform x:Name="ClipTileAppIconImageButtonRotateTransform" />
+                                                </Button.RenderTransform>
                                                 <Image x:Name="ClipTileAppIconImage"
                                                        Source="{Binding CopyItemAppIcon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
                                                        Stretch="Fill"
-                                                       ToolTip="{Binding CopyItemAppName}"
                                                        Width="{Binding TileTitleIconSize}"
                                                        Height="{Binding TileTitleIconSize}">
                                                     <Image.Style>
@@ -1243,7 +1241,8 @@
                                                              ScrollViewer.HorizontalScrollBarVisibility="{Binding RtbHorizontalScrollbarVisibility}"
                                                              ScrollViewer.VerticalScrollBarVisibility="{Binding RtbVerticalScrollbarVisibility}"
                                                              BorderThickness="1"
-                                                             Padding="10,10,0,10">
+                                                             Margin="0,0,0,0"
+                                                             Padding="10,10,0,0">
                                                     <RichTextBox.Resources>
                                                         <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                                                                          Color="Blue" />
@@ -1514,6 +1513,7 @@
                                                             <DataTemplate DataType="{x:Type local:MpDetectedImageObjectViewModel}">
                                                                 <Border Width="{Binding Width}"
                                                                         Height="{Binding Height}"
+                                                                        Visibility="{Binding Data.TileDetectedImageItemsVisibility, Source={StaticResource ClipTileProxy}}"
                                                                         BorderThickness="3"
                                                                         BorderBrush="{Binding BorderBrush}"
                                                                         Background="Transparent">
@@ -1600,6 +1600,23 @@
                                                 </ListBox.ItemTemplate>
                                             </ListBox>
                                         </Canvas>
+                                        <Grid Grid.Row="2"
+                                              Visibility="{Binding TileDetailGridVisibility}">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="Loaded">
+                                                    <i:CallMethodAction TargetObject="{Binding}"
+                                                                        MethodName="ClipTileDetailGrid_Loaded" />
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                            <!-- Clip Title Detail TextBlock -->
+                                            <TextBlock x:Name="ClipTileTitleDetailTextBlock"
+                                                       Background="Transparent"
+                                                       Foreground="{Binding DetailTextColor}"
+                                                       FontSize="10"
+                                                       VerticalAlignment="Top"
+                                                       HorizontalAlignment="Center"
+                                                       Text="{Binding DetailText}" />
+                                        </Grid>
                                     </Grid>
                                 </Grid>
                             </local:MpClipBorder>

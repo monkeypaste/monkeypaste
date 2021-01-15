@@ -278,8 +278,13 @@ namespace MpWpfApp {
 
                         double iconLeftMax = 500;// tileWidthMax - ClipTileViewModel.TileTitleIconSize;
                         double iconLeftMin = 204;// tileWidthMin - ClipTileViewModel.TileTitleIconSize;
+                        
                         if (ClipTileViewModel.IsEditingTile) {
+                            //show rtb edit toolbar so its visible during animation
                             ClipTileViewModel.EditToolbarVisibility = Visibility.Visible;
+                        } else if(ClipTileViewModel.IsEditingTemplate) {
+                            //animate edit template toolbar when tile is minimizing
+                            ClipTileViewModel.IsEditingTemplate = false;
                         }
 
                         MpHelpers.AnimateDoubleProperty(

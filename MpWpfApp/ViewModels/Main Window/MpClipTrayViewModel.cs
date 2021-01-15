@@ -53,6 +53,19 @@ namespace MpWpfApp {
 
         public Point StartDragPoint;
 
+        private bool _isFilteringByApp = false;
+        public bool IsFilteringByApp {
+            get {
+                return _isFilteringByApp;
+            }
+            set {
+                if (_isFilteringByApp != value) {
+                    _isFilteringByApp = value;
+                    OnPropertyChanged(nameof(IsFilteringByApp));
+                }
+            }
+        }
+
         private bool _isTrayFocused = false;
         public bool IsClipTrayFocused {
             get {
@@ -376,7 +389,7 @@ namespace MpWpfApp {
                 var introItem2 = new MpCopyItem(
                     MpCopyItemType.RichText,
                     "One place for your clipboard",
-                    MpHelpers.ConvertPlainTextToRichText(""))
+                    MpHelpers.ConvertPlainTextToRichText(""));
                 Properties.Settings.Default.IsInitialLoad = false;
                 Properties.Settings.Default.Save();
             }

@@ -1243,9 +1243,7 @@ namespace MpWpfApp {
 
         public static List<MpDetectedImageObject> DetectObjects(byte[] image, double confidence = 0.0) {
             var detectedObjectList = new List<MpDetectedImageObject>();
-            var configurationDetector = new ConfigurationDetector();
-            var config = configurationDetector.Detect();
-            using (var yoloWrapper = new YoloWrapper(config)) {
+            using (var yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect())) {
                 var items = yoloWrapper.Detect(image);
                 foreach(var item in items) {
                     if(item.Confidence >= confidence) {
@@ -1765,8 +1763,6 @@ namespace MpWpfApp {
 
         public static byte[] ConvertBitmapSourceToByteArray(BitmapSource bs) {
             PngBitmapEncoder encoder = new PngBitmapEncoder();
-            //encoder.Frames.Add(BitmapFrame.Create(bitmapSource));
-            // byte[] bit = new byte[0];
             using (MemoryStream stream = new MemoryStream()) {
                 encoder.Frames.Add(BitmapFrame.Create(bs));
                 encoder.Save(stream);
