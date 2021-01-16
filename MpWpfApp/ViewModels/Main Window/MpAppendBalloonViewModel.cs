@@ -56,7 +56,10 @@ namespace MpWpfApp {
             TaskbarIcon tbi = new TaskbarIcon(); 
             var abc = new MpAppendBalloonControl();
             abc.DataContext = new MpAppendBalloonViewModel(ctvm);
-            tbi.ShowCustomBalloon(abc, System.Windows.Controls.Primitives.PopupAnimation.Slide, Properties.Settings.Default.NotificationBalloonVisibilityTimeMs);            
+            tbi.ShowCustomBalloon(
+                abc, 
+                System.Windows.Controls.Primitives.PopupAnimation.Slide, 
+                Properties.Settings.Default.NotificationBalloonVisibilityTimeMs);            
         }
         #endregion
 

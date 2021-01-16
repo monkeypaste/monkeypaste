@@ -1033,7 +1033,8 @@
                 return _copyItem;
             }
             private set {
-                if (_copyItem != value) {
+                if (_copyItem != value) 
+                {
                     _copyItem = value;
 
                     OnPropertyChanged(nameof(CopyItem));
@@ -1472,7 +1473,9 @@
 
         public void AppendContent(MpClipTileViewModel octvm) {
             CopyItem.Combine(octvm.CopyItem);
-            OnPropertyChanged(nameof(CopyItem));
+            //since appending only happens for richtext types
+            OnPropertyChanged(nameof(CopyItemRichText));
+            GetRtb().Document = MpHelpers.ConvertRichTextToFlowDocument(CopyItemRichText);
         }
 
         public async Task<string> GetPastableRichText() {

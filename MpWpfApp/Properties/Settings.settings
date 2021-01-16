@@ -149,7 +149,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="NotificationBalloonVisibilityTimeMs" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">5000</Value>
+      <Value Profile="(Default)">3000</Value>
     </Setting>
     <Setting Name="DbParameterBinary" Type="System.String" Scope="Application">
       <Value Profile="(Default)">@0</Value>

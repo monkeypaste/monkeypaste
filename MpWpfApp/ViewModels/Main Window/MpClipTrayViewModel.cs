@@ -609,7 +609,7 @@ namespace MpWpfApp {
                 if(string.IsNullOrEmpty(rtf)) {
                     rtf = rt;
                 } else {
-                    rtf = MpHelpers.CombineRichText2(rtf, rt);
+                    rtf = MpHelpers.CombineRichText(rtf, rt);
                 }
             }
             d.SetData(DataFormats.Rtf, rtf);

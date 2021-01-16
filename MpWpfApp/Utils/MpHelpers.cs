@@ -460,10 +460,12 @@ namespace MpWpfApp {
             }
         }
 
-        public static string CombineRichText2(string rt1, string rt2) {
+        public static string CombineRichText(string rt1, string rt2,bool insertNewLine = false) {
             using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
                 rtb.Rtf = rt1;
-                //rtb.Text += Environment.NewLine;
+                if(insertNewLine) {
+                    rtb.Text += Environment.NewLine;
+                }
                 rtb.Select(rtb.TextLength, 0);
                 rtb.SelectedRtf = rt2;
                 return rtb.Rtf;
@@ -544,14 +546,14 @@ namespace MpWpfApp {
             return Regex.Replace(str, "[^a-zA-Z0-9_.]+", string.Empty, RegexOptions.Compiled);
         }
 
-        public static string CombineRichText(string from, string to) {
-            return ConvertFlowDocumentToRichText(
-                CombineFlowDocuments(
-                    ConvertRichTextToFlowDocument(from),
-                    ConvertRichTextToFlowDocument(to)
-                )
-            );
-        }
+        //public static string CombineRichText(string from, string to) {
+        //    return ConvertFlowDocumentToRichText(
+        //        CombineFlowDocuments(
+        //            ConvertRichTextToFlowDocument(from),
+        //            ConvertRichTextToFlowDocument(to)
+        //        )
+        //    );
+        //}
 
         public static MpEventEnabledFlowDocument CombineFlowDocuments(MpEventEnabledFlowDocument from, MpEventEnabledFlowDocument to) {
             using (MemoryStream stream = new MemoryStream()) {

@@ -418,8 +418,9 @@ namespace MpWpfApp {
                 case MpCopyItemType.RichText:
                     SetData(
                         MpHelpers.CombineRichText(
-                                otherItem.ItemRichText,
-                                ItemRichText));
+                                ItemRichText,
+                            otherItem.ItemRichText,
+                                true));
                     break;
             }
         }

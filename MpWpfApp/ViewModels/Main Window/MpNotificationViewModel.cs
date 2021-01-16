@@ -81,7 +81,7 @@ namespace MpWpfApp {
             return (bool)_property;
         }
         private void PerformNotification() {
-            Console.WriteLine("EExecuted " + Enum.GetName(typeof(MpNotificationType), NotificationType));
+            Console.WriteLine("Executed " + Enum.GetName(typeof(MpNotificationType), NotificationType));
         }
         #endregion
     }

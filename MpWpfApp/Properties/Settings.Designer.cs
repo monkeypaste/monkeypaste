@@ -517,7 +517,7 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("3000")]
         public int NotificationBalloonVisibilityTimeMs {
             get {
                 return ((int)(this["NotificationBalloonVisibilityTimeMs"]));
