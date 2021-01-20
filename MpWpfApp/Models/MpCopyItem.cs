@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Windows.Storage;
 
 namespace MpWpfApp {
     public class MpCopyItem : MpDbObject, ICloneable {
@@ -192,7 +195,7 @@ namespace MpWpfApp {
                             MpHelpers.GetRandomString(80, MpHelpers.Rand.Next(1, 100))),
                         MpHelpers.GetRandomColor(),
                         new WindowInteropHelper(Application.Current.MainWindow).Handle);//((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).MainWindowViewModel.ClipTrayViewModel.ClipboardManager.LastWindowWatcher.ThisAppHandle);
-                    ci.WriteToDatabase();
+                    //ci.WriteToDatabase();
                     return ci;
                     
 
@@ -236,22 +239,25 @@ namespace MpWpfApp {
                 }
             }
             return null;
-        }
+        }       
         #endregion
 
         #region Public Methods
 
-        public MpCopyItem() {
-            ItemColor = new MpColor(MpHelpers.GetRandomColor());
-            Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
-            Title = "Loading";
-            ItemTitleSwirl = new BitmapImage();
-            CopyDateTime = DateTime.Now;
-            App = new MpApp();
-            _itemData = "Default";
-            CopyItemType = MpCopyItemType.RichText;
-            ImageItemObjectList = new List<MpDetectedImageObject>();
-        }
+        //public MpCopyItem() {
+        //    ItemColor = new MpColor(MpHelpers.GetRandomColor());
+        //    Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
+        //    Title = "Loading";
+        //    ItemTitleSwirl = new BitmapImage();
+        //    CopyDateTime = DateTime.Now;
+        //    App = new MpApp();
+        //    _itemData = "Default";
+        //    CopyItemType = MpCopyItemType.RichText;
+        //    ImageItemObjectList = new List<MpDetectedImageObject>();
+        //}
+
+        public MpCopyItem() { }
+
         public MpCopyItem(MpCopyItemType type, string title, object data) : this(type, data, MpHelpers.GetRandomColor(), ((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow)).Handle) { }
         
         private MpCopyItem(
@@ -308,7 +314,7 @@ namespace MpWpfApp {
             }
         }
 
-        protected MpCopyItem(DataRow dr) {
+        public MpCopyItem(DataRow dr) {
             LoadDataRow(dr);
         }
 
@@ -640,6 +646,8 @@ namespace MpWpfApp {
                 cit.CopyItemId = CopyItemId;
                 cit.WriteToDatabase();
             }
+            var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
+            //mwvm.ClipTileViewModelDataSource.CopyItemDataProvider.OnCopyItemChanged(this);
         }
 
         public object Clone() {

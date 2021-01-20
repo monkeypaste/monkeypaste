@@ -7,6 +7,7 @@ using System.Windows.Media.Animation;
 using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
 using Hardcodet.Wpf.TaskbarNotification;
+using Windows.UI.Core;
 
 namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase {
@@ -111,6 +112,8 @@ namespace MpWpfApp {
 
         public IKeyboardMouseEvents GlobalHook { get; set; }
         public IKeyboardMouseEvents ApplicationHook { get; set; }
+
+        public MpClipTileViewModelDataSource ClipTileViewModelDataSource { get; set; }
         #endregion
 
         #region Properties       
@@ -164,6 +167,7 @@ namespace MpWpfApp {
         #region Public Methods        
         public MpMainWindowViewModel() : base() {
             IsLoading = true;
+            InitData();
             SearchBoxViewModel = new MpSearchBoxViewModel() { PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText };
             ClipTrayViewModel = new MpClipTrayViewModel();            
             ClipTileSortViewModel = new MpClipTileSortViewModel();
@@ -172,7 +176,13 @@ namespace MpWpfApp {
             SystemTrayViewModel = new MpSystemTrayViewModel();
         }
 
-        public void MainWindow_Loaded(object sender, RoutedEventArgs e) {           
+        public void InitData() {
+            //ClipTileViewModelDataSource = MpClipTileViewModelDataSource.GetDataSoure(1).Result;
+        }
+
+        public void MainWindow_Loaded(object sender, RoutedEventArgs e) {
+            
+
             var mw = (MpMainWindow)Application.Current.MainWindow;
             mw.Deactivated += (s, e2) => {
                 HideWindowCommand.Execute(null);

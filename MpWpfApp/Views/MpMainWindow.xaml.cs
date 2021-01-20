@@ -7,6 +7,8 @@ namespace MpWpfApp {
 
         public MpMainWindow() {
             InitializeComponent();
+            var mwvm = (MpMainWindowViewModel)DataContext;
+            //mwvm.InitData();
         }
     }
 }

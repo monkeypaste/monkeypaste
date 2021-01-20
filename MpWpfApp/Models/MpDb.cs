@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Microsoft.Win32;
@@ -155,144 +156,43 @@ namespace MpWpfApp {
                 }
             }
         }
-        /*public void ExecuteWrite(string sql, List<string> paramList = null, List<object> paramValueList = null) {
-            if (NoDb || _passwordAttempts > Properties.Settings.Default.MaxDbPasswordAttempts) {
-                return;
-            }
-            if ((paramList != null && paramValueList != null) && (paramList.Count > 0 && paramValueList.Count > 0 && paramList.Count != paramValueList.Count)) {
-                Console.WriteLine("Param error! Param count: " + paramList.Count + " val count: " + paramValueList.Count);
-                return;
-            }
-            bool wasError = false;
-            SQLiteConnection sql_con = SetConnection();
-            SQLiteCommand sql_cmd = sql_con.CreateCommand();
-            sql_cmd.CommandText = sql;
-
-            if (paramList != null) {
-                for (int i = 0; i < paramList.Count; i++) {
-                    // check p to conditionally set parameter type
-                    SQLiteParameter param = null;
-                    if (paramList[i] == Properties.Settings.Default.DbParameterBinary) {
-                        param = new SQLiteParameter(paramList[i], DbType.Binary);
-                        param.Value = (byte[])paramValueList[i];
-                    } else if (paramList[i] == Properties.Settings.Default.DbParameterString) {
-                        param = new SQLiteParameter(paramList[i], DbType.String);
-                        param.Value = (string)paramValueList[i];
-                    } else if (paramList[i] == Properties.Settings.Default.DbParameterInt) {
-                        param = new SQLiteParameter(paramList[i], DbType.Int32);
-                        param.Value = (int)paramValueList[i];
-                    } else if (paramList[i] == Properties.Settings.Default.DbParameterDateTime) {
-                        param = new SQLiteParameter(paramList[i], DbType.DateTime);
-                        param.Value = (DateTime)paramValueList[i];
+        public async Task<int> ExecuteWriteAsync(string query, Dictionary<string, object> args) {
+            int numberOfRowsAffected;
+            using (var con = SetConnection()) {
+                con.Open();
+                using (var cmd = new SQLiteCommand(query, con)) {
+                    if (args != null) {
+                        foreach (var pair in args) {
+                            cmd.Parameters.AddWithValue(pair.Key, pair.Value);
+                        }
                     }
-                    sql_cmd.Parameters.Add(param);
+                    numberOfRowsAffected = await cmd.ExecuteNonQueryAsync();
                 }
+                return numberOfRowsAffected;
             }
-
-            sql_con.Open();
-            try {
-                sql_cmd.ExecuteWrite();
-            }
-            catch (SQLiteException ex) {
-                wasError = true;
-                Console.WriteLine("Error in executenonquery: " + ex.ToString());
-                if (_isLoaded) {
-                    MessageBoxResult warnDbErrorResult = MessageBox.Show("Error writing data to " + Properties.Settings.Default.DbPath + " and program terminating", "IO Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-                    // MpSingletonController.Instance.ExitApplication();
-                } else {
-                    //MpEnterDbPasswordForm enterPasswordForm = new MpEnterDbPasswordForm();
-                    //MessageBoxResult enterPasswordResult = enterPasswordForm.ShowDialog();
-
-                    _passwordAttempts++;
-                    if (_passwordAttempts < Properties.Settings.Default.MaxDbPasswordAttempts) {
-                        Init();
-                    } else {
-                        return;
-                    }
-
-                    throw new Exception("Create WPF password form and show here");
-                }
-            }
-            if (!wasError) {
-                _passwordAttempts = 0;
-            }
-            sql_con.Close();
-            //sql_con.Dispose();
-            //CloseDb();
         }
-        public DataTable Execute(string sql, List<string> paramList = null, List<object> paramValueList = null) {
-            if (NoDb || _passwordAttempts > Properties.Settings.Default.MaxDbPasswordAttempts) {
+        public async Task<DataTable> ExecuteAsync(string query, Dictionary<string, object> args) {
+            if (string.IsNullOrEmpty(query.Trim())) {
                 return null;
             }
-            if ((paramList != null && paramValueList != null) && (paramList.Count > 0 && paramValueList.Count > 0 && paramList.Count != paramValueList.Count)) {
-                Console.WriteLine("Param error! Param count: " + paramList.Count + " val count: " + paramValueList.Count);
-                return null;
-            }
-            bool wasError = false;
-            SQLiteConnection sql_con = SetConnection();
-            SQLiteCommand sql_cmd = sql_con.CreateCommand();
-            sql_cmd.CommandText = sql;
-            DataSet DS = new DataSet();
-            DataTable DT = new DataTable();
-
-            if (paramList != null) {
-                for (int i = 0; i < paramList.Count; i++) {
-                    // check p to conditionally set parameter type
-                    SQLiteParameter param = null;
-                    if (paramList[i] == Properties.Settings.Default.DbParameterBinary) {
-                        param = new SQLiteParameter(paramList[i], DbType.Binary);
-                        param.Value = (byte[])paramValueList[i];
-                    } else if (paramList[i] == Properties.Settings.Default.DbParameterString) {
-                        param = new SQLiteParameter(paramList[i], DbType.String);
-                        param.Value = (string)paramValueList[i];
-                    } else if (paramList[i] == Properties.Settings.Default.DbParameterInt) {
-                        param = new SQLiteParameter(paramList[i], DbType.Int32);
-                        param.Value = (int)paramValueList[i];
-                    } else if (paramList[i] == Properties.Settings.Default.DbParameterDateTime) {
-                        param = new SQLiteParameter(paramList[i], DbType.DateTime);
-                        param.Value = (DateTime)paramValueList[i];
+            using (var con = SetConnection()) {
+                con.Open();
+                using (var cmd = new SQLiteCommand(query, con)) {
+                    if (args != null) {
+                        foreach (KeyValuePair<string, object> entry in args) {
+                            cmd.Parameters.AddWithValue(entry.Key, entry.Value);
+                        }
                     }
-                    sql_cmd.Parameters.Add(param);
+                    var da = await cmd.ExecuteReaderAsync();
+                    //var da = new SQLiteDataAdapter(cmd);
+                    var dt = new DataTable();
+                    dt.Load(da);
+                    //da.Fill(dt);
+                    da.Dispose();
+                    return dt;
                 }
             }
-            try {
-                sql_con.Open();
-                SQLiteDataAdapter DB = new SQLiteDataAdapter(sql_cmd);
-                DS.Reset();
-                DB.Fill(DS);
-                DT = DS.Tables[0];
-                sql_con.Close();
-                //sql_con.Dispose();
-                //DB.Dispose();
-                //DS.Dispose();
-                //CloseDb();
-            }
-            catch (SQLiteException ex) {
-                wasError = true;
-                Console.WriteLine("Error in sql execute  " + ex.ToString());
-                if (_isLoaded) {
-                    MessageBoxResult warnDbErrorResult = MessageBox.Show("Error writing data to " + Properties.Settings.Default.DbPath + " and program terminating", "IO Error", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
-
-                    throw new Exception("Add exit app call here");
-                } else {
-                    //MpEnterDbPasswordForm enterPasswordForm = new MpEnterDbPasswordForm();
-                    //MessageBoxResult enterPasswordResult = enterPasswordForm.ShowDialog();
-
-                    _passwordAttempts++;
-                    if (_passwordAttempts < Properties.Settings.Default.MaxDbPasswordAttempts) {
-                        Init();
-                    } else {
-                        return null;
-                    }
-
-                    throw new Exception("Create WPF password form and show here");
-                }
-            }
-            if (!wasError) {
-                _passwordAttempts = 0;
-            }
-            return DT;
-        }*/
+        }
         public void CloseDb() {
             SQLiteConnection sql_con = SetConnection();
             sql_con.Close();
