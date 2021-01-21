@@ -247,9 +247,7 @@ namespace MpWpfApp {
             CollectionChanged += (s, e) => {
                 OnPropertyChanged(nameof(EmptyListMessageVisibility));
                 OnPropertyChanged(nameof(ClipTrayVisibility));
-            };
-
-            
+            };            
 
             //create tiles for all clips in the database
             foreach (MpCopyItem ci in MpCopyItem.GetAllCopyItems()) {
@@ -262,7 +260,7 @@ namespace MpWpfApp {
             //for (int i = 0; i < 1000; i++) {
             //    _testList.Add(MpCopyItem.CreateRandomItem(MpCopyItemType.RichText));
             //}
-            var clipTray = (MpMultiSelectListBox)sender;
+            var clipTray = (MpMultiSelectListView)sender;
             _clipTrayRef = clipTray;
 
             clipTray.DragEnter += (s, e1) => {

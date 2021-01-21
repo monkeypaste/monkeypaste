@@ -17,7 +17,6 @@ namespace MpWpfApp {
         #region Private Variables
         private static int _CopyItemCount = 0;
         private object _itemData = null;
-        private string _imageItemObjectSeperator = @"?";
 
         private static List<MpApp> _AppList = new List<MpApp>();
         private static List<MpColor> _ColorList = new List<MpColor>();
@@ -495,48 +494,6 @@ namespace MpWpfApp {
             //}
             //CopyItemType = newType;
         }
-
-        public void DeleteFromDatabase() {
-            if (CopyItemId <= 0) {
-                return;
-            }
-            MpDb.Instance.ExecuteWrite(
-                "delete from MpPasteHistory where fk_MpCopyItemId=@ciid",
-                new System.Collections.Generic.Dictionary<string, object> {
-                        { "@ciid", CopyItemId }
-                    });
-            MpDb.Instance.ExecuteWrite(
-                "delete from MpCopyItem where pk_MpCopyItemId=@ciid",
-                new System.Collections.Generic.Dictionary<string, object> {
-                        { "@ciid", CopyItemId }
-                    });
-            MpDb.Instance.ExecuteWrite(
-                "delete from MpDetectedImageObject where fk_MpCopyItemId=@ciid",
-                new System.Collections.Generic.Dictionary<string, object> {
-                        { "@ciid", CopyItemId }
-                    });
-            MpDb.Instance.ExecuteWrite(
-                "delete from MpCopyItemTag where fk_MpCopyItemId=@ciid",
-                new System.Collections.Generic.Dictionary<string, object> {
-                        { "@ciid", CopyItemId }
-                    });
-            MpDb.Instance.ExecuteWrite(
-                "delete from MpCopyItemSortTypeOrder where fk_MpCopyItemId=@ciid",
-                new System.Collections.Generic.Dictionary<string, object> {
-                        { "@ciid", CopyItemId }
-                    });
-            MpDb.Instance.ExecuteWrite(
-                "delete from MpShortcut where fk_MpCopyItemId=@ciid",
-                new System.Collections.Generic.Dictionary<string, object> {
-                        { "@ciid", CopyItemId }
-                    });
-            MpDb.Instance.ExecuteWrite(
-                "delete from MpCopyItemTemplate where fk_MpCopyItemId=@ciid",
-                new System.Collections.Generic.Dictionary<string, object> {
-                        { "@ciid", CopyItemId }
-                    });
-        }
-
         #endregion
 
         #region Private Methods
@@ -595,9 +552,55 @@ namespace MpWpfApp {
                 SetData(dr["ItemText"].ToString());
             }
         }
-        
+
+        public void DeleteFromDatabase() {
+            if (CopyItemId <= 0) {
+                return;
+            }
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpPasteHistory where fk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpCopyItem where pk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpDetectedImageObject where fk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpCopyItemTag where fk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpCopyItemSortTypeOrder where fk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpShortcut where fk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpCopyItemTemplate where fk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
+
+            var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
+            mwvm.ClipTileViewModelDataSource.CopyItemDataProvider.OnCopyItemChanged(this, new MpCopyItemChangeEventArgs(MpCopyItemChangeType.Remove));
+        }
+
         // still req'd if NoDb=true
         public override void WriteToDatabase() {
+            var changeType = MpCopyItemChangeType.None;
+
             App.WriteToDatabase();
             ItemColor.WriteToDatabase();
 
@@ -605,6 +608,7 @@ namespace MpWpfApp {
             byte[] itemImage = CopyItemType == MpCopyItemType.Image ? MpHelpers.ConvertBitmapSourceToByteArray(ItemBitmapSource) : null;
             //if copyitem already exists
             if (CopyItemId > 0) {
+                changeType = MpCopyItemChangeType.Update;
                 MpDb.Instance.ExecuteWrite(
                         "update MpCopyItem set TitleSwirl=@ts, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemImage=@ii where pk_MpCopyItemId=@ciid",
                         new Dictionary<string, object> {
@@ -620,6 +624,7 @@ namespace MpWpfApp {
                             { "@ciid", CopyItemId},
                         });
             } else {
+                changeType = MpCopyItemChangeType.Add;
                 MpDb.Instance.ExecuteWrite(
                     "insert into MpCopyItem(TitleSwirl,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) " + 
                     "values (@ts,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
@@ -646,8 +651,9 @@ namespace MpWpfApp {
                 cit.CopyItemId = CopyItemId;
                 cit.WriteToDatabase();
             }
+
             var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
-            //mwvm.ClipTileViewModelDataSource.CopyItemDataProvider.OnCopyItemChanged(this);
+            mwvm.ClipTileViewModelDataSource.CopyItemDataProvider.OnCopyItemChanged(this, new MpCopyItemChangeEventArgs(changeType));
         }
 
         public object Clone() {

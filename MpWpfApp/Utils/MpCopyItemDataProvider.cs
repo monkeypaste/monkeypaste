@@ -1,24 +1,98 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Windows.Foundation;
 
 namespace MpWpfApp {
-    public class MpCopyItemDataProvider {
-        private int _tagId = 0;
+    public enum MpCopyItemChangeType {
+        None = 0,
+        Add,
+        Remove,
+        Update,
+        Move,
+        Reset
+    }
 
+    public class MpCopyItemChangeEventArgs : EventArgs {
+        public MpCopyItemChangeType ChangeType { get; set; } = MpCopyItemChangeType.None;
+        public MpCopyItemChangeEventArgs(MpCopyItemChangeType changeType) {
+            ChangeType = changeType;
+        }
+        public override string ToString() {
+            return Enum.GetName(typeof(MpCopyItemChangeType), ChangeType);
+        }
+    }
+
+    public class MpCopyItemDataProvider : INotifyPropertyChanged {
+        #region Private Variables
+        private int _tagId = 0;
+        #endregion
+
+        #region Properties
+        private int _count = 0;
+        public int Count {
+            get {
+                return _count;
+            }
+            set {
+                if(_count != value) {
+                    _count = value;
+                    OnPropertyChanged(nameof(Count));
+                }
+            }
+        }
+        #endregion
+
+        #region Event Definitions
+        public event EventHandler CopyItemChanged;
+        public virtual void OnCopyItemChanged(MpCopyItem ci, MpCopyItemChangeEventArgs args) => CopyItemChanged?.Invoke(ci, args);
+        #endregion
+
+        #region INotifyPropertyChanged Implementation
+        public bool ThrowOnInvalidPropertyName { get; private set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void OnPropertyChanged(string propertyName) {
+            this.VerifyPropertyName(propertyName);
+            PropertyChangedEventHandler handler = this.PropertyChanged;
+            if (handler != null) {
+                var e = new PropertyChangedEventArgs(propertyName);
+                handler(this, e);
+            }
+        }
+
+        [Conditional("DEBUG")]
+        [DebuggerStepThrough]
+        public void VerifyPropertyName(string propertyName) {
+            // Verify that the property name matches a real, 
+            // public, instance property on this object. 
+            if (TypeDescriptor.GetProperties(this)[propertyName] == null) {
+                string msg = "Invalid property name: " + propertyName;
+                if (this.ThrowOnInvalidPropertyName) {
+                    throw new Exception(msg);
+                } else {
+                    Debug.Fail(msg);
+                }
+            }
+        }
+        #endregion
+
+        #region Public Methods
         public MpCopyItemDataProvider(int tagId) {
             SetTagId(tagId);
         }
+
         public void SetTagId(int tagId) {
             _tagId = tagId;
         }
 
         public async Task<int> GetCopyItemsByTagIdCountAsync() {
-            var copyItemList = new List<MpCopyItem>();
             var dt = await MpDb.Instance.ExecuteAsync(
                 "select pk_MpCopyItemId from MpCopyItem where pk_MpCopyItemId=(select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid)",
                 new Dictionary<string, object> {
@@ -62,8 +136,6 @@ namespace MpWpfApp {
             return copyItemList;
         }
 
-        public event EventHandler CopyItemChanged;
-        public virtual void OnCopyItemChanged(MpCopyItem ci) => CopyItemChanged?.Invoke(ci, EventArgs.Empty);
-
+        #endregion
     }
 }

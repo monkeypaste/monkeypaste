@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup> 
+  <PropertyGroup>
     <ContentSQLiteInteropFiles>true</ContentSQLiteInteropFiles>
     <CopySQLiteInteropFiles>false</CopySQLiteInteropFiles>
     <CleanSQLiteInteropFiles>false</CleanSQLiteInteropFiles>
     <CollectSQLiteInteropFiles>false</CollectSQLiteInteropFiles>
- </PropertyGroup>
+  </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -118,6 +118,7 @@
     <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
+    <Compile Include="Controls\MpMultiSelectListView.cs" />
     <Compile Include="Models\MpCopyItemTemplate.cs" />
     <Compile Include="Models\MpDetectedImageObject.cs" />
     <Compile Include="Models\MpRichTextStyle.cs" />
@@ -125,9 +126,9 @@
     <Compile Include="Utils\AdornerPlacement.cs" />
     <Compile Include="Utils\DataVirtualization\Scenario1\MpClipTileViewModelDataSource.cs" />
     <Compile Include="Utils\DataVirtualization\Scenario1\FileItem.cs" />
-    <Compile Include="Utils\DataVirtualization\Scenario1\ItemCacheManager.cs" />
+    <Compile Include="Utils\DataVirtualization\Scenario1\MpItemCacheManager.cs" />
     <Compile Include="Utils\DataVirtualization\Scenario1\ItemIndexRangeExtensions.cs" />
-    <Compile Include="Utils\DataVirtualization\Scenario1\ItemIndexRangeList.cs" />
+    <Compile Include="Utils\DataVirtualization\Scenario1\MpItemIndexRangeList.cs" />
     <Compile Include="Utils\DataVirtualization\Scenario2\FileDataSource2.cs" />
     <Compile Include="Utils\FrameworkElementAdorner.cs" />
     <Compile Include="Utils\MpCopyItemDataProvider.cs" />

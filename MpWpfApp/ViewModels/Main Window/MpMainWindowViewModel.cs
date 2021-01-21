@@ -167,7 +167,9 @@ namespace MpWpfApp {
         #region Public Methods        
         public MpMainWindowViewModel() : base() {
             IsLoading = true;
+
             InitData();
+
             SearchBoxViewModel = new MpSearchBoxViewModel() { PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText };
             ClipTrayViewModel = new MpClipTrayViewModel();            
             ClipTileSortViewModel = new MpClipTileSortViewModel();
@@ -176,13 +178,11 @@ namespace MpWpfApp {
             SystemTrayViewModel = new MpSystemTrayViewModel();
         }
 
-        public void InitData() {
-            //ClipTileViewModelDataSource = MpClipTileViewModelDataSource.GetDataSoure(1).Result;
+        public async void InitData() {
+            ClipTileViewModelDataSource = await MpClipTileViewModelDataSource.GetDataSoure(1);
         }
 
         public void MainWindow_Loaded(object sender, RoutedEventArgs e) {
-            
-
             var mw = (MpMainWindow)Application.Current.MainWindow;
             mw.Deactivated += (s, e2) => {
                 HideWindowCommand.Execute(null);
@@ -266,7 +266,7 @@ namespace MpWpfApp {
 
         }
 
-        public override bool InitHotkeys() {
+        public bool InitHotkeys() {
             try {
                 GlobalHook = Hook.GlobalEvents();
                 ApplicationHook = Hook.AppEvents();

@@ -668,7 +668,7 @@
                     <local:MpBindingProxy x:Key="ClipTrayProxy"
                                           Data="{Binding}" />
                 </Grid.Resources>
-                <local:MpMultiSelectListBox x:Name="ClipTray"
+                <local:MpMultiSelectListView x:Name="ClipTray"
                                             ItemsSource="{Binding}"
                                             Visibility="Visible"
                                             AllowDrop="True" 
@@ -693,11 +693,11 @@
                                                 TargetObject="{Binding}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                    <local:MpMultiSelectListBox.InputBindings>
+                    <local:MpMultiSelectListView.InputBindings>
                         <KeyBinding Gesture="Ctrl+A"
                                     Command="{Binding SelectAllCommand}" />
-                    </local:MpMultiSelectListBox.InputBindings>
-                    <local:MpMultiSelectListBox.ItemContainerStyle>
+                    </local:MpMultiSelectListView.InputBindings>
+                    <local:MpMultiSelectListView.ItemContainerStyle>
                         <Style TargetType="{x:Type ListBoxItem}">
                             <Setter Property="IsSelected"
                                     Value="{Binding IsSelected}" />
@@ -718,8 +718,8 @@
                                 </Setter.Value>
                             </Setter>
                         </Style>
-                    </local:MpMultiSelectListBox.ItemContainerStyle>
-                    <local:MpMultiSelectListBox.ItemsPanel>
+                    </local:MpMultiSelectListView.ItemContainerStyle>
+                    <local:MpMultiSelectListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <VirtualizingStackPanel IsItemsHost="True"
                                                     CanVerticallyScroll="False"
@@ -727,8 +727,8 @@
                                                     VerticalAlignment="Stretch"
                                                     Orientation="Horizontal" />
                         </ItemsPanelTemplate>
-                    </local:MpMultiSelectListBox.ItemsPanel>
-                    <local:MpMultiSelectListBox.ItemTemplate>
+                    </local:MpMultiSelectListView.ItemsPanel>
+                    <local:MpMultiSelectListView.ItemTemplate>
                         <DataTemplate>
                             <!-- Clip Tile -->
                             <local:MpClipBorder BorderBrush="{Binding TileBorderBrush}"
@@ -1621,8 +1621,8 @@
                                 </Grid>
                             </local:MpClipBorder>
                         </DataTemplate>
-                    </local:MpMultiSelectListBox.ItemTemplate>
-                </local:MpMultiSelectListBox>
+                    </local:MpMultiSelectListView.ItemTemplate>
+                </local:MpMultiSelectListView>
                 <TextBlock x:Name="EmptyListTextBlock"
                            Text="This list has no items"
                            Focusable="True"

@@ -6,7 +6,6 @@ using System.Windows;
 
 namespace MpWpfApp {
     public class MpViewModelBase : INotifyPropertyChanged {
-        //private static List<MpViewModelBase> _ViewModelList = new List<MpViewModelBase>();
         public MpMainWindowViewModel MainWindowViewModel {
             get {
                 return (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
@@ -14,21 +13,6 @@ namespace MpWpfApp {
         }
 
         public bool ThrowOnInvalidPropertyName { get; private set; }
-
-        //private bool _isFocused = false;
-        //public bool IsFocused {
-        //    get {
-        //        return _isFocused;
-        //    }
-        //    set {
-        //        //omitting duplicate check to enforce change in ui
-        //        //if (_isFocused != value) 
-        //        {
-        //            _isFocused = value;
-        //            OnPropertyChanged(nameof(IsFocused));
-        //        }
-        //    }
-        //}
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -54,30 +38,6 @@ namespace MpWpfApp {
                     Debug.Fail(msg);
                 }
             }
-        }
-
-        //public MpViewModelBase() {
-            //PropertyChanged += (s, e) => {
-            //    switch(e.PropertyName) {
-            //        case nameof(IsFocused):
-            //            var focusedVm = (MpViewModelBase)s;
-            //            if(focusedVm.IsFocused) {
-            //                foreach (var vm in _ViewModelList) {
-            //                    if (vm == focusedVm) {
-            //                        continue;
-            //                    }
-            //                    vm.IsFocused = false;
-            //                }
-            //            }
-            //            break;
-            //    }
-            //};
-            //_ViewModelList.Add(this);
-        //}
-
-        public virtual bool InitHotkeys() {
-            //do nothing this is overriden in actual viewmodels
-            return true;
         }
     }
 }

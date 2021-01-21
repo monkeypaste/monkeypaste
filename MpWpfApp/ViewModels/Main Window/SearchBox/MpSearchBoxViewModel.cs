@@ -256,7 +256,7 @@ namespace MpWpfApp {
                 Text = Properties.Settings.Default.SearchPlaceHolderText;
             }
 
-            Timer timer = new Timer();
+            var timer = new Timer();
             timer.Interval = 500;
             timer.AutoReset = false;
             timer.Elapsed += (s, e) => {
