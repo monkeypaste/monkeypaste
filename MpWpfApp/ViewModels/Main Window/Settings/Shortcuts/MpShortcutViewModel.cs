@@ -244,7 +244,7 @@ namespace MpWpfApp {
                         Shortcut.KeyList = KeyList;
                         if(IsCustom()) {
                             if (Shortcut.CopyItemId > 0) {
-                                var ctvm = MainWindowViewModel.ClipTrayViewModel.Where(x => x.CopyItem.CopyItemId == Shortcut.CopyItemId).Single();
+                                var ctvm = MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.Where(x => x.CopyItem.CopyItemId == Shortcut.CopyItemId).Single();
                                 ctvm.ShortcutKeyList = Shortcut.KeyList;
                             } else {
                                 var ttvm = MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.TagId == Shortcut.TagId).Single();

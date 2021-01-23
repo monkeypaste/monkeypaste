@@ -6,7 +6,7 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpMultiSelectListView : ListView {
         protected override DependencyObject GetContainerForItemOverride() {
-            return new MpMultiSelectListViewItem();
+            return new MpMultiSelectListViewItem(); 
         }
 
         class MpMultiSelectListViewItem : ListViewItem {

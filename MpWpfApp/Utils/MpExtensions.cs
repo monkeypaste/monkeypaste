@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AlphaChiTech.Virtualization;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -20,6 +21,78 @@ using System.Windows.Threading;
 
 namespace MpWpfApp {
     public static class MpExtensions {
+        #region Collections
+        public static void Move<T>(this IList<T> collection, int oldIdx, int newIdx) where T : class {
+            var item = collection[oldIdx];
+            collection.RemoveAt(oldIdx);
+            collection.Insert(newIdx, item);
+        }
+
+        public static void Sort<TSource, TKey>(this IList<TSource> source, Func<TSource, TKey> keySelector, bool desc = false) where TSource : class {
+            if (source == null) {
+                return;
+            }
+            Comparer<TKey> comparer = Comparer<TKey>.Default;
+
+            for (int i = source.Count - 1; i >= 0; i--) {
+                for (int j = 1; j <= i; j++) {
+                    TSource o1 = source[j - 1];
+                    TSource o2 = source[j];
+                    int comparison = comparer.Compare(keySelector(o1), keySelector(o2));
+                    //(source as IEditableCollectionView).EditItem(o1);
+                    //(source as IEditableCollectionView).EditItem(o2);
+                    if (desc && comparison < 0) {
+                        //var temp = source[j];
+                        //source.RemoveAt(j);
+                        //source.Insert(j - 1, temp);
+                        source.Move(j, j - 1);
+                    } else if (!desc && comparison > 0) {
+                        //var temp = source[j-1];
+                        //source.RemoveAt(j-1);
+                        //source.Insert(j, temp);
+                        source.Move(j - 1, j);
+                    }
+                    //(source as IEditableCollectionView).CommitEdit();
+                }
+            }
+        }
+        #endregion
+
+        #region Visual Tree
+        public static T GetDescendantOfType<T>(this DependencyObject depObj) where T : DependencyObject {
+            if (depObj == null) {
+                return null;
+            }
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++) {
+                var child = VisualTreeHelper.GetChild(depObj, i);
+
+                var result = (child as T) ?? GetDescendantOfType<T>(child);
+                if (result != null) {
+                    return result;
+                }
+            }
+            return null;
+        }
+
+        private static T GetDescendantOfType<T>(this DependencyObject depObj, List<T> curList) where T : DependencyObject {
+            if (depObj == null) {
+                return null;
+            }
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++) {
+                var child = VisualTreeHelper.GetChild(depObj, i);
+
+                var result = (child as T) ?? GetDescendantOfType<T>(child, curList);
+                if (result != null && curList.Contains(result)) {
+                    return result;
+                }
+            }
+            return null;
+        }
+        #endregion
+
+        #region Documents
         public static List<Hyperlink> GetHyperlinkList(this RichTextBox rtb) {
             var hlList = new List<Hyperlink>();
             for (TextPointer position = rtb.Document.ContentStart;
@@ -34,14 +107,15 @@ namespace MpWpfApp {
             }
             return hlList;
         }
+
         public static void ClearHyperlinks(this RichTextBox rtb, bool TemplateText = false) {
             //replaces hyperlinks with runs of there textrange text
             var ctvm = (MpClipTileViewModel)rtb.DataContext;
             var hlList = rtb.GetHyperlinkList();
-            foreach(var hl in hlList) {
+            foreach (var hl in hlList) {
                 string linkText = string.Empty;
-                if(hl.DataContext == null || hl.DataContext is MpClipTileViewModel) {
-                    linkText = new TextRange(hl.ElementStart, hl.ElementEnd).Text;                    
+                if (hl.DataContext == null || hl.DataContext is MpClipTileViewModel) {
+                    linkText = new TextRange(hl.ElementStart, hl.ElementEnd).Text;
                 } else {
                     var thlvm = (MpTemplateHyperlinkViewModel)hl.DataContext;
                     linkText = thlvm.TemplateName;
@@ -51,6 +125,7 @@ namespace MpWpfApp {
             }
             ctvm.TemplateHyperlinkCollectionViewModel.Clear();
         }
+
         public static void CreateHyperlinks(this RichTextBox rtb, string searchText = "") {
             var ctvm = (MpClipTileViewModel)rtb.DataContext;
             //var rtbSelection = rtb.Selection;
@@ -74,20 +149,20 @@ namespace MpWpfApp {
                 @"#([0-9]|[a-fA-F]){7}([^" + Properties.Settings.Default.TemplateTokenMarker + "][ ])",
             };
             TextRange fullDocRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
-            for (int i = 0; i < regExGroupList.Count; i++) {                
+            for (int i = 0; i < regExGroupList.Count; i++) {
                 var linkType = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);
                 TextPointer lastRangeEnd = rtb.Document.ContentStart;
                 var regExStr = regExGroupList[i];
-                if(string.IsNullOrEmpty(regExStr)) {
+                if (string.IsNullOrEmpty(regExStr)) {
                     //this occurs for templates when copyitem has no templates
                     continue;
                 }
-                MatchCollection mc = Regex.Matches(fullDocRange.Text, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);                                
+                MatchCollection mc = Regex.Matches(fullDocRange.Text, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
                 foreach (Match m in mc) {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
-                            Hyperlink hl = null; 
-                            var matchRange = MpHelpers.FindStringRangeFromPosition(lastRangeEnd, c.Value, true);                            
+                            Hyperlink hl = null;
+                            var matchRange = MpHelpers.FindStringRangeFromPosition(lastRangeEnd, c.Value, true);
                             if (matchRange == null) {
                                 continue;
                             }
@@ -105,7 +180,7 @@ namespace MpWpfApp {
                                 //hl.Inlines.Add(container);
                                 //thlvm.RangeList.Add(tr);
                                 //hl = ctvm.TemplateHyperlinkCollectionViewModel.Add(new MpTemplateHyperlinkViewModel(ctvm, copyItemTemplate, matchRange));
-                                
+
                                 //this ensures highlighting has an effective textrange since template ranges alter document
                                 //matchRange = new TextRange(hl.ContentStart, hl.ContentEnd);
                             } else {
@@ -116,7 +191,7 @@ namespace MpWpfApp {
                                 hl.Tag = linkType;
                                 hl.IsEnabled = true;
                                 hl.MouseLeftButtonDown += (s4, e4) => {
-                                    if(hl.NavigateUri != null) {
+                                    if (hl.NavigateUri != null) {
                                         MpHelpers.OpenUrl(hl.NavigateUri.ToString());
                                     }
                                 };
@@ -163,7 +238,7 @@ namespace MpWpfApp {
                                         convertCurrencyMenuItem.Header = "Convert Currency To";
                                         var fromCurrencyType = MpHelpers.GetCurrencyTypeFromString(linkText);
                                         foreach (MpCurrency currency in MpCurrencyConverter.Instance.CurrencyList) {
-                                            if (currency.Id == Enum.GetName(typeof(CurrencyType),fromCurrencyType)) {
+                                            if (currency.Id == Enum.GetName(typeof(CurrencyType), fromCurrencyType)) {
                                                 continue;
                                             }
                                             MenuItem subItem = new MenuItem();
@@ -171,11 +246,11 @@ namespace MpWpfApp {
                                             subItem.Click += (s2, e2) => {
                                                 Enum.TryParse(currency.Id, out CurrencyType toCurrencyType);
                                                 var convertedValue = MpCurrencyConverter.Instance.Convert(
-                                                    MpHelpers.GetCurrencyValueFromString(linkText), 
-                                                    fromCurrencyType, 
+                                                    MpHelpers.GetCurrencyValueFromString(linkText),
+                                                    fromCurrencyType,
                                                     toCurrencyType);
-                                                convertedValue = Math.Round(convertedValue, 2);                                                
-                                                if(rtb.Tag != null && ((List<Hyperlink>)rtb.Tag).Contains(hl)) {
+                                                convertedValue = Math.Round(convertedValue, 2);
+                                                if (rtb.Tag != null && ((List<Hyperlink>)rtb.Tag).Contains(hl)) {
                                                     ((List<Hyperlink>)rtb.Tag).Remove(hl);
                                                 }
                                                 Run run = new Run(currency.CurrencySymbol + convertedValue);
@@ -192,7 +267,7 @@ namespace MpWpfApp {
                                         break;
                                     case MpSubTextTokenType.HexColor:
                                         var rgbColorStr = linkText;
-                                        if(rgbColorStr.Length > 7) {
+                                        if (rgbColorStr.Length > 7) {
                                             rgbColorStr = rgbColorStr.Substring(0, 7);
                                         }
                                         hl.NavigateUri = new Uri(@"https://www.hexcolortool.com/" + rgbColorStr);
@@ -225,7 +300,7 @@ namespace MpWpfApp {
                 TextRange range2 = new TextRange(clonedDoc.ContentEnd, clonedDoc.ContentEnd);
                 range2.Load(stream, DataFormats.XamlPackage);
                 return clonedDoc;
-            }                
+            }
         }
 
         public static TextRange FindStringRangeFromPosition2(this RichTextBox rtb, string findText, bool isCaseSensitive = false) {
@@ -273,128 +348,7 @@ namespace MpWpfApp {
             return stringCollection;
         }
 
-        public static void Sort<TSource, TKey>(this ObservableCollection<TSource> source, Func<TSource, TKey> keySelector, bool desc = false) where TSource : class {
-            if (source == null) {
-                return;
-            }
-
-            Comparer<TKey> comparer = Comparer<TKey>.Default;
-
-            for (int i = source.Count - 1; i >= 0; i--) {
-                for (int j = 1; j <= i; j++) {
-                    TSource o1 = source[j - 1];
-                    TSource o2 = source[j];
-                    int comparison = comparer.Compare(keySelector(o1), keySelector(o2));
-                    //(source as IEditableCollectionView).EditItem(o1);
-                    //(source as IEditableCollectionView).EditItem(o2);
-                    if (desc && comparison < 0) {
-                        //var temp = source[j];
-                        //source.RemoveAt(j);
-                        //source.Insert(j - 1, temp);
-                        source.Move(j, j - 1);
-                    } else if (!desc && comparison > 0) {
-                        //var temp = source[j-1];
-                        //source.RemoveAt(j-1);
-                        //source.Insert(j, temp);
-                        source.Move(j - 1, j);
-                    }
-
-                    //(source as IEditableCollectionView).CommitEdit();
-                }
-            }
-        }
-
-        public static List<int> AllIndexesOf(this string str, string value) {
-            if (string.IsNullOrEmpty(value)) {
-                return new List<int>();
-            }
-            List<int> indexes = new List<int>();
-            for (int index = 0; ; index += value.Length) {
-                index = str.IndexOf(value, index);
-                if (index == -1) {
-                    return indexes;
-                }
-                indexes.Add(index);
-            }
-        }
-
-        //faster version but needs unsafe thing
-        //public unsafe static void CopyPixels(this BitmapSource source, PixelColor[,] pixels, int stride, int offset) {
-        //    fixed (PixelColor* buffer = &pixels[0, 0])
-        //        source.CopyPixels(
-        //          new Int32Rect(0, 0, source.PixelWidth, source.PixelHeight),
-        //          (IntPtr)(buffer + offset),
-        //          pixels.GetLength(0) * pixels.GetLength(1) * sizeof(PixelColor),
-        //          stride);
-        //}
-        public static void CopyPixels(this BitmapSource source, PixelColor[,] pixels, int stride, int offset, bool dummy) {
-            var height = source.PixelHeight;
-            var width = source.PixelWidth;
-            var pixelBytes = new byte[height * width * 4];
-            source.CopyPixels(pixelBytes, stride, 0);
-            int y0 = offset / width;
-            int x0 = offset - width * y0;
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    pixels[x + x0, y + y0] = new PixelColor {
-                        Blue = pixelBytes[(y * width + x) * 4 + 0],
-                        Green = pixelBytes[(y * width + x) * 4 + 1],
-                        Red = pixelBytes[(y * width + x) * 4 + 2],
-                        Alpha = pixelBytes[(y * width + x) * 4 + 3],
-                    };
-                }
-            }
-        }
-
-        public static bool IsNamedObject(this object obj) {
-            return obj.GetType().FullName == "MS.Internal.NamedObject";
-        }
-
-        public static T GetDescendantOfType<T>(this DependencyObject depObj) where T : DependencyObject {
-            if (depObj == null) {
-                return null;
-            }
-
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++) {
-                var child = VisualTreeHelper.GetChild(depObj, i);
-
-                var result = (child as T) ?? GetDescendantOfType<T>(child);
-                if (result != null) {
-                    return result;
-                }
-            }
-            return null;
-        }
-
-        private static T GetDescendantOfType<T>(this DependencyObject depObj, List<T> curList) where T : DependencyObject {
-            if (depObj == null) {
-                return null;
-            }
-
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++) {
-                var child = VisualTreeHelper.GetChild(depObj, i);
-
-                var result = (child as T) ?? GetDescendantOfType<T>(child, curList);
-                if (result != null && curList.Contains(result)) {
-                    return result;
-                }
-            }
-            return null;
-        }
-
-        public static List<T> GetDescendantListOfType<T>(this DependencyObject depObj) where T : DependencyObject {
-            var descendentList = new List<T>();
-            T newDescendant = null;
-            do {
-                newDescendant = depObj.GetDescendantOfType<T>(descendentList);
-                if (newDescendant != null) {
-                    descendentList.Add(newDescendant);
-                }
-            } while (newDescendant != null);
-            return descendentList;
-        }
-
-        public static void SetRtf(this System.Windows.Controls.RichTextBox rtb, string document) {            
+        public static void SetRtf(this System.Windows.Controls.RichTextBox rtb, string document) {
             var documentBytes = UTF8Encoding.Default.GetBytes(document);
             using (var reader = new MemoryStream(documentBytes)) {
                 reader.Position = 0;
@@ -485,6 +439,48 @@ namespace MpWpfApp {
             return sb.ToString();
         }
 
+        public static bool ContainsByCaseSetting(this string str, string compareStr) {
+            if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(compareStr)) {
+                return false;
+            }
+            if (Properties.Settings.Default.IsSearchCaseSensitive) {
+                return str.Contains(compareStr);
+            }
+            return str.ToLower().Contains(compareStr.ToLower());
+        }
+        #endregion
+
+        #region Images
+        //faster version but needs unsafe thing
+        //public unsafe static void CopyPixels(this BitmapSource source, PixelColor[,] pixels, int stride, int offset) {
+        //    fixed (PixelColor* buffer = &pixels[0, 0])
+        //        source.CopyPixels(
+        //          new Int32Rect(0, 0, source.PixelWidth, source.PixelHeight),
+        //          (IntPtr)(buffer + offset),
+        //          pixels.GetLength(0) * pixels.GetLength(1) * sizeof(PixelColor),
+        //          stride);
+        //}
+        public static void CopyPixels(this BitmapSource source, PixelColor[,] pixels, int stride, int offset, bool dummy) {
+            var height = source.PixelHeight;
+            var width = source.PixelWidth;
+            var pixelBytes = new byte[height * width * 4];
+            source.CopyPixels(pixelBytes, stride, 0);
+            int y0 = offset / width;
+            int x0 = offset - width * y0;
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    pixels[x + x0, y + y0] = new PixelColor {
+                        Blue = pixelBytes[(y * width + x) * 4 + 0],
+                        Green = pixelBytes[(y * width + x) * 4 + 1],
+                        Red = pixelBytes[(y * width + x) * 4 + 2],
+                        Alpha = pixelBytes[(y * width + x) * 4 + 3],
+                    };
+                }
+            }
+        }
+        #endregion
+
+        #region Mail
         //Extension method for MailMessage to save to a file on disk
         public static void Save(this MailMessage message, string filename, bool addUnsentHeader = true) {
             using (var filestream = File.Open(filename, FileMode.Create)) {
@@ -516,15 +512,6 @@ namespace MpWpfApp {
                 closeMethod.Invoke(mailWriter, BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { }, null);
             }
         }
-
-        public static bool ContainsByCaseSetting(this string str, string compareStr) {
-            if(string.IsNullOrEmpty(str) || string.IsNullOrEmpty(compareStr)) {
-                return false;
-            }
-            if(Properties.Settings.Default.IsSearchCaseSensitive) {
-                return str.Contains(compareStr);
-            }
-            return str.ToLower().Contains(compareStr.ToLower());
-        }
+        #endregion
     }
 }

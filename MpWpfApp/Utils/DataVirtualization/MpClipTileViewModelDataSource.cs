@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -27,33 +28,44 @@ namespace MpWpfApp {
     /// <summary>
     /// A custom datasource over the file system that supports data virtualization
     /// </summary>
-    public class MpClipTileViewModelDataSource : INotifyCollectionChanged, System.Collections.IList, IItemsRangeInfo {
-        public MpCopyItemDataProvider CopyItemDataProvider { get; set; }
-
-        // Folder that we are browsing
-        //private StorageFolder _folder;
-
+    public class MpClipTileViewModelDataSource : INotifyCollectionChanged, IList, IItemsRangeInfo {
+        #region Private Variables
         private uint _pageSize = 15;
 
         private int _tagId;
-        // Query object that will tell us if the folder content changed
-        //private StorageFileQueryResult _queryResult;
-        // Dispatcher so we can marshal calls back to the UI thread
-        private Dispatcher _dispatcher;
+
         // Cache for the file data that is currently being used
         private MpItemCacheManager<MpClipTileViewModel> _itemCache;
+        // Storage for the keys of the selected items
+        private MpItemCacheManager<int> _selectionCache;
+        // List of ranges that form the selection
+        private MpItemIndexRangeList _selection = new MpItemIndexRangeList();
+        // Dispatcher so we can marshal calls back to the UI thread
+        private Dispatcher _dispatcher;
 
-        // Total number of files available
-        private int _count = 1;
+        // Total number of cliptiles available
+        private int _count = 0;
 
+        private int _enumeratorPosition = -1;
 
+        private object _syncRoot = new object();
+        #endregion
+
+        #region Properties
+        public MpCopyItemDataProvider CopyItemDataProvider { get; set; }
+
+        #endregion
+
+        #region Public Methods
         public event NotifyCollectionChangedEventHandler CollectionChanged;
+
         private MpClipTileViewModelDataSource() {
             //Setup the dispatcher for the UI thread
             _dispatcher = Application.Current.MainWindow.Dispatcher;
             // The ItemCacheManager does most of the heavy lifting. We pass it a callback that it will use to actually fetch data, and the max size of a request
             _itemCache = new MpItemCacheManager<MpClipTileViewModel>(FetchDataCallback, _pageSize);
             _itemCache.CacheChanged += ItemCache_CacheChanged;
+            //_itemCache.StartFetchData();
         }
 
         // Factory method to create the datasource
@@ -76,7 +88,9 @@ namespace MpWpfApp {
             CopyItemDataProvider.CopyItemChanged += CopyItemDataProvider_CopyItemChanged;
             await UpdateCount();
         }
+        #endregion
 
+        #region Private Methods
         private void CopyItemDataProvider_CopyItemChanged(object sender, object args) {
             //This callback can occur on a different thread so we need to marshal it back to the UI thread
             if (!_dispatcher.CheckAccess()) {
@@ -107,6 +121,7 @@ namespace MpWpfApp {
                     break;
             }
         }
+
         // Handles a change notification for the list of files from the OS
         private void ResetCollection() {
             // Unhook the old change notification
@@ -122,12 +137,13 @@ namespace MpWpfApp {
             }
         }
 
-        async Task UpdateCount() {
+        private async Task UpdateCount() {
             _count = await CopyItemDataProvider.GetCopyItemsByTagIdCountAsync();
             if (CollectionChanged != null) {
                 CollectionChanged(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
             }
         }
+#endregion
 
         #region IList Implementation
 
@@ -155,6 +171,7 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region IItemsRangeInfo Implementation
         //Required for the IItemsRangeInfo interface
         public void Dispose() {
             _itemCache = null;
@@ -181,7 +198,7 @@ namespace MpWpfApp {
         // Using this callback model abstracts the details of this specific datasource from the cache implementation
         private async Task<MpClipTileViewModel[]> FetchDataCallback(ItemIndexRange batch, CancellationToken ct) {
             // Fetch file objects from filesystem
-            var results = await CopyItemDataProvider.GetCopyItemsByTagIdAsync((uint)batch.FirstIndex, Math.Max(batch.Length, 20)).AsTask(ct);
+            var results = await CopyItemDataProvider.GetCopyItemsByTagIdAsync((uint)batch.FirstIndex, Math.Max(batch.Length, _pageSize)).AsTask(ct);
             //.GetFilesAsync((uint)batch.FirstIndex, Math.Max(batch.Length, 20)).AsTask(ct);
             var clipTileViewModelList = new List<MpClipTileViewModel>();
             if (results != null) {
@@ -209,6 +226,109 @@ namespace MpWpfApp {
                         args.itemIndex));
             }
         }
+        #endregion
+
+        #region ISelectionInfo Implementation
+        // Called when an item (or items) are selected
+        public void SelectRange(ItemIndexRange range) {
+            _selection.Add(range);
+            _selectionCache.UpdateRanges(_selection.ToArray());
+        }
+
+        // Called when an item (or items) are deselected
+        public void DeselectRange(ItemIndexRange range) {
+            _selection.Subtract(range);
+            _selectionCache.UpdateRanges(_selection.ToArray());
+        }
+
+        //  Called to determine if an item is selected 
+        public bool IsSelected(int index) {
+            foreach (ItemIndexRange range in _selection) {
+                if (index >= range.FirstIndex && index <= range.LastIndex) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Called to get the selected ranges 
+        public IReadOnlyList<ItemIndexRange> GetSelectedRanges() {
+            return _selection.ToList();
+        }
+
+        // Callback from the selection cache manager
+        // Retrieves the keys for selected items
+        private async Task<int[]> FetchSelectionDataCallback(ItemIndexRange batch, CancellationToken ct) {
+#if TRACE_DATASOURCE
+                        Debug.WriteLine("# SelectionDataCallback: " + batch.FirstIndex + "->" + batch.LastIndex);
+#endif
+            // See if we already have the item in the data cache, if so get the key from there so we don't need to go to the filesystem
+            var ctvm = _itemCache[batch.FirstIndex];
+            if (ctvm != null) {
+                return new int[] { ctvm.CopyItemId };
+            }
+
+            // Go get the keys from the file system if necessary
+            var results = await CopyItemDataProvider.GetCopyItemsByTagIdAsync((uint)batch.FirstIndex, batch.Length).AsTask(ct);
+            var keys = new List<int>();
+            if (results != null) {
+                for (int i = 0; i < results.Count; i++) {
+                    ct.ThrowIfCancellationRequested();
+                    keys.Add(results[i].CopyItemId);
+                }
+            }
+            return keys.ToArray();
+        }
+
+        // Called after a reset to figure out the new indexes for the selected items
+        private async Task RemapSelection() {
+            MpItemIndexRangeList oldSelection = _selection;
+            MpItemCacheManager<int> oldSelectionCache = _selectionCache;
+            MpItemIndexRangeList newSelection = new MpItemIndexRangeList();
+            MpItemCacheManager<int> newSelectionCache = new MpItemCacheManager<int>(FetchSelectionDataCallback, _pageSize, "newSelectionCache");
+
+            foreach (ItemIndexRange r in oldSelection) {
+                IReadOnlyList<MpCopyItem> results = null;
+                int lastResultOffset = 0, lastResultsItemIndex = 0;
+                for (int i = 0; i < r.Length; i++) {
+                    int origIndex = r.FirstIndex + i;
+                    int copyItemId = oldSelectionCache[origIndex];
+                    bool matched = false;
+
+                    // Optimization to be able to work in batches. Once we get a batch of files from the filesystem we use that to hunt
+                    // for matches rather than having to go ask for the index of each file
+                    if (results != null) {
+                        for (int j = lastResultOffset + 1; j < results.Count; j++) {
+                            if (results[j].CopyItemId == copyItemId) {
+                                lastResultOffset = j;
+                                int itemIndex = lastResultsItemIndex + j;
+                                newSelection.Add((uint)itemIndex, 1);
+                                newSelectionCache[itemIndex] = oldSelectionCache[origIndex];
+                                matched = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!matched) {
+                        // Get a starting point for the index of the file
+                        lastResultsItemIndex = (int)(await CopyItemDataProvider.GetStartIndexAsync(copyItemId + 1));
+                        lastResultOffset = 0;
+                        // Get the files at that point and see if the keys actually match
+                        results = await CopyItemDataProvider.GetCopyItemsByTagIdAsync((uint)lastResultsItemIndex, _pageSize);
+                        if (results[lastResultOffset].CopyItemId == copyItemId) {
+                            newSelection.Add((uint)lastResultsItemIndex, 1);
+                            newSelectionCache[lastResultsItemIndex] = oldSelectionCache[origIndex];
+                        } else {
+                            // We can't find the item, so its no longer part of the selection
+                        }
+                    }
+                }
+            }
+            // Update the fields for the new selection
+            _selection = newSelection;
+            _selectionCache = newSelectionCache;
+        }
+        #endregion
 
         #region Parts of IList Not Implemented
 
@@ -245,26 +365,51 @@ namespace MpWpfApp {
         }
         public void CopyTo(Array array, int index) {
             throw new NotImplementedException();
-        }
+        }        
 
         public bool IsSynchronized {
-            get { 
+            get {
                 throw new NotImplementedException(); 
+                //return true;
             }
         }
 
         public object SyncRoot {
-            get { 
+            get {
                 throw new NotImplementedException(); 
+                //return _syncRoot;
             }
         }
+        #endregion
 
-        public System.Collections.IEnumerator GetEnumerator() {
-            throw new NotImplementedException();
+        #region IEnumerator Implementation
+        //public void Move(int oldIdx, int newIdx) {
+        //    //will need to implement in datasource
+        //}
+
+        public IEnumerator GetEnumerator() {
+            // return (IEnumerator)this;
+            throw new NotSupportedException();
         }
-
+        ////IEnumerator
+        //public bool MoveNext() {
+        //    _enumeratorPosition++;
+        //    return (_enumeratorPosition < _count);
+        //}
+        ////IEnumerable
+        //public void Reset() {
+        //    _enumeratorPosition = 0;
+        //}
+        ////IEnumerable
+        //public object Current {
+        //    get {
+        //        return _itemCache[_enumeratorPosition];
+        //    }
+        //}
         #endregion
     }
+
+
 
 
 }

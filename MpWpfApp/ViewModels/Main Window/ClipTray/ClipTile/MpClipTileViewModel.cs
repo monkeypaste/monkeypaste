@@ -1787,7 +1787,7 @@
         }
 
         public void Dispose() {
-            MainWindowViewModel.ClipTrayViewModel.Remove(this);
+            MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.Remove(this);
             CopyItem.DeleteFromDatabase();
         }
 

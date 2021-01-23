@@ -71,18 +71,21 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpClipTileSortViewModel() : base() {
+            //must be set before property changed registered for loading order
+            SelectedSortType = SortTypes[0];
+
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(AscSortOrderButtonImageVisibility):
                     case nameof(DescSortOrderButtonImageVisibility):
                     case nameof(SelectedSortType):
-                        MainWindowViewModel.ClipTrayViewModel.SortAndFilterClipTiles();
+                        MainWindowViewModel.ClipTrayViewModel.SortClipTiles();
                         break;
                 }
             };
         }
         public void ClipTileSort_Loaded(object sender, RoutedEventArgs e) {
-            SelectedSortType = SortTypes[0];
+            //SelectedSortType = SortTypes[0];
         }
         #endregion
 

@@ -91,7 +91,7 @@ namespace MpWpfApp {
                     default:
                         try {
                             if (sc.CopyItemId > 0) {
-                                var ctvm = MainWindowViewModel.ClipTrayViewModel.Where(x => x.CopyItem.CopyItemId == sc.CopyItemId).Single();
+                                var ctvm = MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.Where(x => x.CopyItem.CopyItemId == sc.CopyItemId).Single();
                                 ctvm.ShortcutKeyList = sc.KeyList;
                                 shortcutCommand = ctvm.PasteClipCommand;
                             } else if (sc.TagId > 0) {
@@ -153,7 +153,7 @@ namespace MpWpfApp {
             if(scvm.IsCustom()) {
                 scvm.Shortcut.DeleteFromDatabase();
                 if (scvm.Shortcut.CopyItemId > 0) {
-                    foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel.Where(x => x.CopyItem.CopyItemId == scvm.Shortcut.CopyItemId).ToList()) {
+                    foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.Where(x => x.CopyItem.CopyItemId == scvm.Shortcut.CopyItemId).ToList()) {
                         ctvm.ShortcutKeyList = string.Empty;
                     }
                 } else {

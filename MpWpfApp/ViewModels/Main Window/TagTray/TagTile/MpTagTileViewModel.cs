@@ -281,7 +281,7 @@ namespace MpWpfApp {
             if (!MainWindowViewModel.IsLoading) {
                 RenameTagCommand.Execute(null);
             } else {
-                foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel) {
+                foreach (MpClipTileViewModel ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
                     if (IsLinkedWithClipTile(ctvm)) {
                         TagClipCount++;
                     }
@@ -389,6 +389,7 @@ namespace MpWpfApp {
         private void SelectTag() {
             MainWindowViewModel.TagTrayViewModel.ClearTagSelection();
             IsSelected = true;
+            ((MpClipTileViewModelPagedSourceProvider)MainWindowViewModel.ClipTrayViewModel.ClipTileViewModelPaginationManager.Provider).SetTag(TagId);            
             //IsTextBoxFocused = true;
         }
         #endregion

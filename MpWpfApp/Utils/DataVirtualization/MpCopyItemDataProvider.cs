@@ -28,7 +28,7 @@ namespace MpWpfApp {
         }
     }
 
-    public class MpCopyItemDataProvider : INotifyPropertyChanged {
+    public class MpCopyItemDataProvider : INotifyPropertyChanged, IItemsProvider<MpCopyItem> {
         #region Private Variables
         private int _tagId = 0;
         #endregion
@@ -92,9 +92,18 @@ namespace MpWpfApp {
             _tagId = tagId;
         }
 
+        public async Task<uint> GetStartIndexAsync(int copyItemId) {
+            var allItemList = await GetCopyItemsByTagIdAsync();
+            var itemList = allItemList.Where(x => x.CopyItemId == copyItemId).ToList();
+            if(itemList != null && itemList.Count > 0) {
+                return (uint)allItemList.IndexOf(itemList[0]);
+            }
+            return 0;
+        }
+
         public async Task<int> GetCopyItemsByTagIdCountAsync() {
             var dt = await MpDb.Instance.ExecuteAsync(
-                "select pk_MpCopyItemId from MpCopyItem where pk_MpCopyItemId=(select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid)",
+                "select pk_MpCopyItemId from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid)",
                 new Dictionary<string, object> {
                         { "@tid", _tagId }
                     });
@@ -107,7 +116,7 @@ namespace MpWpfApp {
         public IAsyncOperation<List<MpCopyItem>> GetCopyItemsByTagIdAsync(uint startIndex, uint maxNumberOfItems) {
             var copyItemList = new List<MpCopyItem>();
             var dt = MpDb.Instance.ExecuteAsync(
-                "select * from MpCopyItem where pk_MpCopyItemId=(select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid) order by pk_MpCopyItemId limit @mnoi offset @si",
+                "select * from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid) order by pk_MpCopyItemId limit @mnoi offset @si",
                 new Dictionary<string, object> {
                         { "@tid", _tagId },
                         { "@mnoi", maxNumberOfItems },
@@ -124,7 +133,7 @@ namespace MpWpfApp {
         public async Task<List<MpCopyItem>> GetCopyItemsByTagIdAsync() {
             var copyItemList = new List<MpCopyItem>();
             var dt = await MpDb.Instance.ExecuteAsync(
-                "select * from MpCopyItem where pk_MpCopyItemId=(select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid)",
+                "select * from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid)",
                 new Dictionary<string, object> {
                         { "@tid", _tagId }
                     });
@@ -135,7 +144,16 @@ namespace MpWpfApp {
             }
             return copyItemList;
         }
+        #endregion
 
+        #region IItemsProvider Implementation
+        public int FetchCount() {
+            throw new NotImplementedException();
+        }
+
+        public IList<MpCopyItem> FetchRange(int startIndex, int count) {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

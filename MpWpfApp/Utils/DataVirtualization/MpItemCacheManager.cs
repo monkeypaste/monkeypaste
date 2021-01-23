@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Xaml.Data;
 using System.Timers;
+using System.Collections;
 
 namespace MpWpfApp {
     // EventArgs class for the CacheChanged event 
@@ -16,7 +17,7 @@ namespace MpWpfApp {
     }
 
     // Implements a relatively simple cache for items based on a set of ranges
-    public class MpItemCacheManager<T> {
+    public class MpItemCacheManager<T>  {
         // data structure to hold all the items that are in the ranges the cache manager is looking after
         private List<MpCacheEntryBlock<T>> _cacheBlocks;
         // List of ranges for items that are not present in the cache
@@ -37,6 +38,8 @@ namespace MpWpfApp {
 #if DEBUG
         // Name for trace messages, and when debugging so you know which instance of the cache manager you are dealing with
         string debugName = string.Empty;
+
+        public object Current => throw new NotImplementedException();
 #endif
         public MpItemCacheManager(FetchDataCallbackHandler callback, uint batchsize, string debugName = "ItemCacheManager") {
             _cacheBlocks = new List<MpCacheEntryBlock<T>>();
@@ -93,7 +96,6 @@ namespace MpWpfApp {
                 }
                 // No blocks exist, so creating a new block
                 AddOrExtendBlock(index, value, _cacheBlocks.Count);
-
             }
         }
 
@@ -206,7 +208,7 @@ namespace MpWpfApp {
 
 #if TRACE_DATASOURCE
                         s = "└ Pending requests: ";
-                        foreach (ItemIndexRange range in requests)
+                        foreach (ItemIndexRange range in _requests)
                         {
                             s += range.FirstIndex + "->" + range.LastIndex + " ";
                         }
@@ -252,7 +254,7 @@ namespace MpWpfApp {
                 } else {
                     //cancel the existing request
 #if TRACE_DATASOURCE
-                                        Debug.WriteLine("> " + debugName + " Cancelling request: " + requestInProgress.FirstIndex + "->" + requestInProgress.LastIndex);
+                                        Debug.WriteLine("> " + debugName + " Cancelling request: " + _requestInProgress.FirstIndex + "->" + _requestInProgress.LastIndex);
 #endif
                     _cancelTokenSource.Cancel();
                 }
@@ -276,7 +278,7 @@ namespace MpWpfApp {
                 } else {
                     // Cancel the existing request
 #if TRACE_DATASOURCE
-                                        Debug.WriteLine(">" + debugName + " Cancelling request: " + requestInProgress.FirstIndex + "->" + requestInProgress.LastIndex);
+                                        Debug.WriteLine(">" + debugName + " Cancelling request: " + _requestInProgress.FirstIndex + "->" + _requestInProgress.LastIndex);
 #endif
                     _cancelTokenSource.Cancel();
                 }
@@ -368,7 +370,7 @@ namespace MpWpfApp {
         }
 
         // Type for the cache blocks
-        class MpCacheEntryBlock<ITEMTYPE> {
+        public class MpCacheEntryBlock<ITEMTYPE> {
             public int FirstIndex;
             public uint Length;
             public ITEMTYPE[] Items;

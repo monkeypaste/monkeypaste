@@ -45,7 +45,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;TRACE_DATASOURCE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
@@ -124,14 +124,17 @@
     <Compile Include="Models\MpRichTextStyle.cs" />
     <Compile Include="Utils\AdornedControl.cs" />
     <Compile Include="Utils\AdornerPlacement.cs" />
-    <Compile Include="Utils\DataVirtualization\Scenario1\MpClipTileViewModelDataSource.cs" />
-    <Compile Include="Utils\DataVirtualization\Scenario1\FileItem.cs" />
-    <Compile Include="Utils\DataVirtualization\Scenario1\MpItemCacheManager.cs" />
-    <Compile Include="Utils\DataVirtualization\Scenario1\ItemIndexRangeExtensions.cs" />
-    <Compile Include="Utils\DataVirtualization\Scenario1\MpItemIndexRangeList.cs" />
-    <Compile Include="Utils\DataVirtualization\Scenario2\FileDataSource2.cs" />
+    <Compile Include="Utils\DataVirtualization2\AsyncVirtualizingCollection.cs" />
+    <Compile Include="Utils\DataVirtualization2\IItemsProvider.cs" />
+    <Compile Include="Utils\DataVirtualization2\MpClipTileViewModelPagedSourceProvider.cs" />
+    <Compile Include="Utils\DataVirtualization2\VirtualizingCollection.cs" />
+    <Compile Include="Utils\DataVirtualization\FileItem.cs" />
+    <Compile Include="Utils\DataVirtualization\MpItemCacheManager.cs" />
+    <Compile Include="Utils\DataVirtualization\ItemIndexRangeExtensions.cs" />
+    <Compile Include="Utils\DataVirtualization\MpItemIndexRangeList.cs" />
+    <Compile Include="Utils\DataVirtualization\FileDataSource2.cs" />
     <Compile Include="Utils\FrameworkElementAdorner.cs" />
-    <Compile Include="Utils\MpCopyItemDataProvider.cs" />
+    <Compile Include="Utils\DataVirtualization\MpCopyItemDataProvider.cs" />
     <Compile Include="Utils\MpCurrencyConverter.cs" />
     <Compile Include="Utils\MpLanguageTranslator.cs" />
     <Compile Include="Utils\MpWordsApiDictionary.cs" />
@@ -423,7 +426,7 @@
       <Version>1.0.0</Version>
     </PackageReference>
     <PackageReference Include="CsvHelper">
-      <Version>21.0.3</Version>
+      <Version>21.1.0</Version>
     </PackageReference>
     <PackageReference Include="gong-wpf-dragdrop">
       <Version>2.3.2</Version>
@@ -518,11 +521,17 @@
     <PackageReference Include="System.ValueTuple">
       <Version>4.5.0</Version>
     </PackageReference>
+    <PackageReference Include="VirtualizingObservableCollection">
+      <Version>1.2.0</Version>
+    </PackageReference>
     <PackageReference Include="WindowsAPICodePack-Core">
       <Version>1.1.2</Version>
     </PackageReference>
     <PackageReference Include="WindowsAPICodePack-Shell">
       <Version>1.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xceed.Products.Wpf.Toolkit.Full">
+      <Version>4.0.20417.1453</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

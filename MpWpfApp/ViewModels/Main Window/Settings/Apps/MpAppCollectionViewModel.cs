@@ -49,7 +49,7 @@ namespace MpWpfApp {
                 bool wasCanceled = false;
                 if (rejectApp) {
                     var ctrvm = MainWindowViewModel.ClipTrayViewModel;
-                    var clipsFromApp = ctrvm.Where(x => x.CopyItemAppId == app.AppId).ToList();
+                    var clipsFromApp = ctrvm.ClipTileViewModels.Where(x => x.CopyItemAppId == app.AppId).ToList();
                     if(clipsFromApp != null && clipsFromApp.Count > 0) {
                         MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + app.AppName + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
                         if (confirmExclusionResult == MessageBoxResult.Cancel) {
@@ -64,7 +64,7 @@ namespace MpWpfApp {
                                     }
                                 }
                                 foreach (MpClipTileViewModel ctToRemove in clipTilesToRemove) {
-                                    ctrvm.Remove(ctToRemove);
+                                    ctrvm.ClipTileViewModels.Remove(ctToRemove);
                                     ctToRemove.CopyItem.DeleteFromDatabase();
                                 }
                             }
@@ -83,7 +83,7 @@ namespace MpWpfApp {
                 var dupList = this.Where(x => x.AppPath == avm.AppPath).ToList();
                 if (dupList != null && dupList.Count > 0) {
                     var ctrvm = MainWindowViewModel.ClipTrayViewModel;
-                    var ctvms = ctrvm.Where(x => x.CopyItemAppId == dupList[0].AppId).ToList();
+                    var ctvms = ctrvm.ClipTileViewModels.Where(x => x.CopyItemAppId == dupList[0].AppId).ToList();
                     if(ctvms != null && ctvms.Count > 0) {
                         MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + avm.AppName + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
                         if (confirmExclusionResult == MessageBoxResult.Cancel) {
@@ -92,13 +92,13 @@ namespace MpWpfApp {
                             MpApp appToReject = dupList[0].App;
                             if (confirmExclusionResult == MessageBoxResult.Yes) {
                                 var clipTilesToRemove = new List<MpClipTileViewModel>();
-                                foreach (MpClipTileViewModel ctvm in ctrvm) {
+                                foreach (MpClipTileViewModel ctvm in ctrvm.ClipTileViewModels) {
                                     if (ctvm.CopyItemAppId == appToReject.AppId) {
                                         clipTilesToRemove.Add(ctvm);
                                     }
                                 }
                                 foreach (MpClipTileViewModel ctToRemove in clipTilesToRemove) {
-                                    ctrvm.Remove(ctToRemove);
+                                    ctrvm.ClipTileViewModels.Remove(ctToRemove);
                                     ctToRemove.CopyItem.DeleteFromDatabase();
                                 }
                             }

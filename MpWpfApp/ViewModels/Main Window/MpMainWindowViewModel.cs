@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
@@ -112,8 +113,6 @@ namespace MpWpfApp {
 
         public IKeyboardMouseEvents GlobalHook { get; set; }
         public IKeyboardMouseEvents ApplicationHook { get; set; }
-
-        public MpClipTileViewModelDataSource ClipTileViewModelDataSource { get; set; }
         #endregion
 
         #region Properties       
@@ -168,18 +167,12 @@ namespace MpWpfApp {
         public MpMainWindowViewModel() : base() {
             IsLoading = true;
 
-            InitData();
-
             SearchBoxViewModel = new MpSearchBoxViewModel() { PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText };
             ClipTrayViewModel = new MpClipTrayViewModel();            
             ClipTileSortViewModel = new MpClipTileSortViewModel();
             AppModeViewModel = new MpAppModeViewModel();
             TagTrayViewModel = new MpTagTrayViewModel();
             SystemTrayViewModel = new MpSystemTrayViewModel();
-        }
-
-        public async void InitData() {
-            ClipTileViewModelDataSource = await MpClipTileViewModelDataSource.GetDataSoure(1);
         }
 
         public void MainWindow_Loaded(object sender, RoutedEventArgs e) {
@@ -216,7 +209,7 @@ namespace MpWpfApp {
         }
 
         public void ClearEdits() {
-            foreach (var clip in ClipTrayViewModel) {
+            foreach (MpClipTileViewModel clip in ClipTrayViewModel.ClipTileViewModels) {
                 clip.IsEditingTile = false;
                 clip.IsPastingTemplateTile = false;
                 if(clip.DetectedImageObjectCollectionViewModel != null) {
@@ -306,11 +299,10 @@ namespace MpWpfApp {
                 !MpSettingsWindowViewModel.IsOpen) && !IsOpen;
         }
         private void ShowWindow() {
-            //IsOpen = true;
-
             if (Application.Current.MainWindow == null) {
                 Application.Current.MainWindow = new MpMainWindow();
             }
+
             SetupMainWindowRect();            
 
             var mw = (MpMainWindow)Application.Current.MainWindow;
@@ -319,16 +311,19 @@ namespace MpWpfApp {
             mw.Visibility = Visibility.Visible;
             mw.Topmost = true;
 
-            ClipTrayViewModel.ResetClipSelection();
-
             MpHelpers.AnimateDoubleProperty(
                 _startMainWindowTop,
                 _endMainWindowTop,
                 Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
                 mw,
                 Window.TopProperty,
-                (s,e) => { 
-                    IsLoading = false;
+                (s,e) => {
+                    if (IsLoading) {
+                        IsLoading = false;
+                        ClipTrayViewModel.SortClipTiles();
+                    } else {
+                        ClipTrayViewModel.ResetClipSelection();
+                    }
                 });
         }
 
@@ -370,7 +365,7 @@ namespace MpWpfApp {
                         //resort list so pasted items are in front
                         for (int i = ClipTrayViewModel.SelectedClipTiles.Count - 1; i >= 0; i--) {
                             var sctvm = ClipTrayViewModel.SelectedClipTiles[i];
-                            ClipTrayViewModel.Move(ClipTrayViewModel.IndexOf(sctvm), 0);
+                            ClipTrayViewModel.ClipTileViewModels.Move(ClipTrayViewModel.ClipTileViewModels.IndexOf(sctvm), 0);
                         }
                     } else if(pasteSelected && pasteDataObject == null) {
                         Console.WriteLine("MainWindow Hide Command pasteDataObject was null, ignoring paste");

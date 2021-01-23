@@ -7,6 +7,7 @@ namespace MpWpfApp {
     /// Simple application. Check the XAML for comments.
     /// </summary>
     public partial class App : Application {
+
         //from https://stackoverflow.com/questions/12769264/openclipboard-failed-when-copy-pasting-data-from-wpf-datagrid
         //for exception: System.Runtime.InteropServices.COMException: 'OpenClipboard Failed (Exception from HRESULT: 0x800401D0 (CLIPBRD_E_CANT_OPEN))'
         public void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {

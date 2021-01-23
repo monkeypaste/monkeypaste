@@ -18,8 +18,8 @@ namespace MpWpfApp {
         private static int _CopyItemCount = 0;
         private object _itemData = null;
 
-        private static List<MpApp> _AppList = new List<MpApp>();
-        private static List<MpColor> _ColorList = new List<MpColor>();
+        private static List<MpApp> _AppList = null;
+        private static List<MpColor> _ColorList = null;
         private static List<MpCopyItem> _CopyItemList = null;
 
         #endregion
@@ -542,7 +542,13 @@ namespace MpWpfApp {
             ItemTitleSwirl = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["TitleSwirl"]);
 
             Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
+            if(_AppList == null) {
+                _AppList = MpApp.GetAllApps();
+            }
             App = _AppList.Where(x => x.AppId == appId).ToList()[0];
+            if(_ColorList == null) {
+                _ColorList = MpColor.GetAllColors();
+            }
             ItemColor = _ColorList.Where(x => x.ColorId == colorId).ToList()[0];
 
             if (CopyItemType == MpCopyItemType.Image) {
@@ -594,7 +600,7 @@ namespace MpWpfApp {
                     });
 
             var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
-            mwvm.ClipTileViewModelDataSource.CopyItemDataProvider.OnCopyItemChanged(this, new MpCopyItemChangeEventArgs(MpCopyItemChangeType.Remove));
+            //mwvm.ClipTrayViewModel.GetDataSource().CopyItemDataProvider.OnCopyItemChanged(this, new MpCopyItemChangeEventArgs(MpCopyItemChangeType.Remove));
         }
 
         // still req'd if NoDb=true
@@ -653,7 +659,7 @@ namespace MpWpfApp {
             }
 
             var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
-            mwvm.ClipTileViewModelDataSource.CopyItemDataProvider.OnCopyItemChanged(this, new MpCopyItemChangeEventArgs(changeType));
+            //mwvm.ClipTrayViewModel.GetDataSource().CopyItemDataProvider.OnCopyItemChanged(this, new MpCopyItemChangeEventArgs(changeType));
         }
 
         public object Clone() {

@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
@@ -183,12 +184,13 @@ namespace MpWpfApp {
                             cmd.Parameters.AddWithValue(entry.Key, entry.Value);
                         }
                     }
-                    var da = await cmd.ExecuteReaderAsync();
-                    //var da = new SQLiteDataAdapter(cmd);
+                    //var da = await cmd.ExecuteReaderAsync();
+                    var da = new SQLiteDataAdapter(cmd);
                     var dt = new DataTable();
-                    dt.Load(da);
-                    //da.Fill(dt);
+                    //dt.Load(da);
+                    da.Fill(dt);
                     da.Dispose();
+                    await Task.Run(() => { Thread.Sleep(1); });
                     return dt;
                 }
             }

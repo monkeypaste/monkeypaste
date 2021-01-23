@@ -66,7 +66,7 @@ namespace MpWpfApp {
                                 GetHistoryTagTileViewModel().IsSelected = true;
                             }
                         } else {
-                            foreach (var clipTile in MainWindowViewModel.ClipTrayViewModel) {
+                            foreach (MpClipTileViewModel clipTile in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
                                 //this ensures when switching between tags the last selected tag in a list reset
                                 clipTile.IsSelected = false;
                                 if (tagChanged.IsLinkedWithClipTile(clipTile)) {
@@ -75,7 +75,7 @@ namespace MpWpfApp {
                                     clipTile.TileVisibility = Visibility.Collapsed;
                                 }
                             }
-                            if(MainWindowViewModel.ClipTrayViewModel.GetTray() != null) {
+                            if (MainWindowViewModel.ClipTrayViewModel.GetTray() != null) {
                                 //this ensures visibility takes affect if filtering by app
                                 //MainWindowViewModel.ClipTrayViewModel.GetTray().Items.Refresh();
                             }

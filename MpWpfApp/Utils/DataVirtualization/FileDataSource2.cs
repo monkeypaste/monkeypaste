@@ -107,9 +107,9 @@ namespace MpWpfApp {
         // Callback from the selection cache manager
         // Retrieves the keys for selected items
         private async Task<string[]> fetchSelectionDataCallback(ItemIndexRange batch, CancellationToken ct) {
-            //#if TRACE_DATASOURCE
-            //            Debug.WriteLine("# SelectionDataCallback: " + batch.FirstIndex + "->" + batch.LastIndex);
-            //#endif
+#if TRACE_DATASOURCE
+                        Debug.WriteLine("# SelectionDataCallback: " + batch.FirstIndex + "->" + batch.LastIndex);
+#endif
             // See if we already have the item in the data cache, if so get the key from there so we don't need to go to the filesystem
             var file = itemCache[batch.FirstIndex];
             if (file != null) {
@@ -266,11 +266,11 @@ namespace MpWpfApp {
         /// <param name="visibleRange">The range of items that are actually visible</param>
         /// <param name="trackedItems">Additional set of ranges that the list is using, for example the buffer regions and focussed element</param>
         public void RangesChanged(ItemIndexRange visibleRange, IReadOnlyList<ItemIndexRange> trackedItems) {
-            //#if TRACE_DATASOURCE
-            //            string s = string.Format("* RangesChanged fired: Visible {0}->{1}", visibleRange.FirstIndex, visibleRange.LastIndex);
-            //            foreach (ItemIndexRange r in trackedItems) { s += string.Format(" {0}->{1}", r.FirstIndex, r.LastIndex); }
-            //            Debug.WriteLine(s);
-            //#endif
+#if TRACE_DATASOURCE
+                        string s = string.Format("* RangesChanged fired: Visible {0}->{1}", visibleRange.FirstIndex, visibleRange.LastIndex);
+                        foreach (ItemIndexRange r in trackedItems) { s += string.Format(" {0}->{1}", r.FirstIndex, r.LastIndex); }
+                        Debug.WriteLine(s);
+#endif
             // We know that the visible range is included in the broader range so don't need to hand it to the UpdateRanges call
             // Update the cache of items based on the new set of ranges. It will callback for additional data if required
             itemCache.UpdateRanges(trackedItems.ToArray());
@@ -337,7 +337,8 @@ namespace MpWpfApp {
         }
 
         public System.Collections.IEnumerator GetEnumerator() {
-            throw new NotImplementedException();
+            return new MpObservableCollection<MpClipTileViewModel>().GetEnumerator();
+            //throw new NotImplementedException();
         }
 
         #endregion
