@@ -6,6 +6,18 @@ using System.Windows;
 
 namespace MpWpfApp {
     public class MpViewModelBase : INotifyPropertyChanged {
+        private bool _isBusy;
+        public bool IsBusy {
+            get {
+                return _isBusy;
+            }
+            protected set {
+                if(_isBusy != value) {
+                    _isBusy = value;
+                    OnPropertyChanged(nameof(IsBusy));
+                }
+            }            
+        }
         public MpMainWindowViewModel MainWindowViewModel {
             get {
                 return (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;

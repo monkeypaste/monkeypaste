@@ -320,7 +320,7 @@ namespace MpWpfApp {
                 (s,e) => {
                     if (IsLoading) {
                         IsLoading = false;
-                        ClipTrayViewModel.SortClipTiles();
+                        //ClipTrayViewModel.SortClipTiles();
                     } else {
                         ClipTrayViewModel.ResetClipSelection();
                     }

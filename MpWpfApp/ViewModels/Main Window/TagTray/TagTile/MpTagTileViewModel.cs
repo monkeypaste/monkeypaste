@@ -389,7 +389,7 @@ namespace MpWpfApp {
         private void SelectTag() {
             MainWindowViewModel.TagTrayViewModel.ClearTagSelection();
             IsSelected = true;
-            ((MpClipTileViewModelPagedSourceProvider)MainWindowViewModel.ClipTrayViewModel.ClipTileViewModelPaginationManager.Provider).SetTag(TagId);            
+            //((MpClipTileViewModelPagedSourceProvider)MainWindowViewModel.ClipTrayViewModel.ClipTileViewModelPaginationManager.Provider).SetTag(TagId);            
             //IsTextBoxFocused = true;
         }
         #endregion

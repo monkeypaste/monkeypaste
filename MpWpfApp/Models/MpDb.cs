@@ -109,7 +109,7 @@ namespace MpWpfApp {
                 connStr.Password = Properties.Settings.Default.DbPassword;
             }
             //Console.WriteLine("Connection String: " + connStr);
-            SQLiteConnection conn = null;
+            SQLiteConnection conn = null; 
             try {
                 conn = new SQLiteConnection(connStr.ConnectionString);
             }
@@ -144,16 +144,18 @@ namespace MpWpfApp {
             using (var con = SetConnection()) {
                 con.Open();
                 using (var cmd = new SQLiteCommand(query, con)) {
-                    if(args != null) {
+                    if (args != null) {
                         foreach (KeyValuePair<string, object> entry in args) {
                             cmd.Parameters.AddWithValue(entry.Key, entry.Value);
                         }
                     }
-                    var da = new SQLiteDataAdapter(cmd);
-                    var dt = new DataTable();
-                    da.Fill(dt);
-                    da.Dispose();
-                    return dt;
+                    using (var da = new SQLiteDataAdapter(cmd)) {
+                        using (var dt = new DataTable()) {
+                            da.Fill(dt);
+                            da.Dispose();
+                            return dt;
+                        }
+                    }
                 }
             }
         }
@@ -184,14 +186,16 @@ namespace MpWpfApp {
                             cmd.Parameters.AddWithValue(entry.Key, entry.Value);
                         }
                     }
-                    //var da = await cmd.ExecuteReaderAsync();
-                    var da = new SQLiteDataAdapter(cmd);
-                    var dt = new DataTable();
-                    //dt.Load(da);
-                    da.Fill(dt);
-                    da.Dispose();
-                    await Task.Run(() => { Thread.Sleep(1); });
-                    return dt;
+                    using (var da = await cmd.ExecuteReaderAsync()) {
+                        //var da = new SQLiteDataAdapter(cmd);
+                        using (var dt = new DataTable()) {
+                            dt.Load(da);
+                            //da.Fill(dt);
+                            da.Dispose();
+                            //await Task.Run(() => { Thread.Sleep(1); });
+                            return dt;
+                        }
+                    }
                 }
             }
         }

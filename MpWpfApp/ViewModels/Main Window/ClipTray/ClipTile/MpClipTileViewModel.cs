@@ -71,16 +71,20 @@
             }
         }
 
+        private ObservableCollection<MpFileListItemViewModel> _fileListViewModels = null;
         public ObservableCollection<MpFileListItemViewModel> FileListViewModels {
             get {
                 if (CopyItem == null) {
                     return new ObservableCollection<MpFileListItemViewModel>();
                 }
-                var fileListViewModels = new ObservableCollection<MpFileListItemViewModel>();
-                foreach (var path in CopyItem.GetFileList()) {
-                    fileListViewModels.Add(new MpFileListItemViewModel(this, path));
+                if(_fileListViewModels == null) {
+                    _fileListViewModels = new ObservableCollection<MpFileListItemViewModel>();
+                    foreach (var path in CopyItem.GetFileList()) {
+                        _fileListViewModels.Add(new MpFileListItemViewModel(this, path));
+                    }
                 }
-                return fileListViewModels;
+                
+                return _fileListViewModels;
             }
         }
 
@@ -1089,6 +1093,7 @@
                             IsEditingTemplate = false;
                             IsPastingTemplateTile = false;
                         }
+                        MainWindowViewModel.ClipTrayViewModel.BringSelectedClipTilesToFrontCommand.RaiseCanExecuteChanged();
                         break;
                 }
             };
@@ -1112,7 +1117,7 @@
             if (ci == null) {
                 throw new Exception("MpClipTileViewModel error, cannot set null copyitem");
             }
-            if (ci.CopyItemId == 0) {
+            if (ci.CopyItemId == 0 && !MainWindowViewModel.IsLoading) {
                 ci.WriteToDatabase();
             }
             CopyItem = ci;
@@ -1234,7 +1239,7 @@
                 //animation.EasingFunction = easing;
                 titleIconImageButtonRotateTransform.BeginAnimation(RotateTransform.AngleProperty, a);
             };
-            titleIconImageButton.PreviewMouseUp += (s, e7) => {
+            titleIconImageButton.PreviewMouseLeftButtonUp += (s, e7) => {
                 // TODO (somehow) force mainwindow to stay active when switching or opening app process
                 // TODO check if shift is down if so perform paste into target application
                 // TODO check if App is running if it is switch to it or start its process
@@ -1265,8 +1270,6 @@
             GetRtb().Document.PageWidth = GetRtb().Width - GetRtb().Padding.Left - GetRtb().Padding.Right;
             GetRtb().Document.PageHeight = GetRtb().Height - GetRtb().Padding.Top - GetRtb().Padding.Bottom;
            
-
-
             #region Search
             LastContentHighlightRangeList.CollectionChanged += (s, e9) => {
                 //var oldNavButtonPanelVisibility = MainWindowViewModel.SearchBoxViewModel.SearchNavigationButtonPanelVisibility;
@@ -1409,6 +1412,7 @@
                 MpHelpers.GetColorColumn(TitleColor),
                 MpHelpers.GetColorRow(TitleColor)
             );
+            
         }
 
         public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
@@ -1782,9 +1786,9 @@
 
         #region Overrides
 
-        public override string ToString() {
-            return CopyItemPlainText;
-        }
+        //public override string ToString() {
+        //    return CopyItemPlainText;
+        //}
 
         public void Dispose() {
             MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.Remove(this);

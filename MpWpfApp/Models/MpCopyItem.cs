@@ -238,24 +238,26 @@ namespace MpWpfApp {
                 }
             }
             return null;
-        }       
+        }
         #endregion
 
         #region Public Methods
 
-        //public MpCopyItem() {
-        //    ItemColor = new MpColor(MpHelpers.GetRandomColor());
-        //    Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
-        //    Title = "Loading";
-        //    ItemTitleSwirl = new BitmapImage();
-        //    CopyDateTime = DateTime.Now;
-        //    App = new MpApp();
-        //    _itemData = "Default";
-        //    CopyItemType = MpCopyItemType.RichText;
-        //    ImageItemObjectList = new List<MpDetectedImageObject>();
-        //}
+        public MpCopyItem() {
+            ItemColor = new MpColor(MpHelpers.GetRandomColor());
+            Client = new MpClient(0, 0, MpHelpers.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
+            Title = "Loading";
+            ItemTitleSwirl = new BitmapImage();
+            CopyDateTime = DateTime.Now;
+            App = new MpApp();
+            _itemData = "Default";
+            CopyItemType = MpCopyItemType.RichText;
+            ImageItemObjectList = new List<MpDetectedImageObject>();
+        }
 
-        public MpCopyItem() { }
+        //public MpCopyItem() {
+
+        //}
 
         public MpCopyItem(MpCopyItemType type, string title, object data) : this(type, data, MpHelpers.GetRandomColor(), ((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow)).Handle) { }
         
@@ -605,7 +607,7 @@ namespace MpWpfApp {
 
         // still req'd if NoDb=true
         public override void WriteToDatabase() {
-            var changeType = MpCopyItemChangeType.None;
+            //var changeType = MpCopyItemChangeType.None;
 
             App.WriteToDatabase();
             ItemColor.WriteToDatabase();
@@ -614,7 +616,7 @@ namespace MpWpfApp {
             byte[] itemImage = CopyItemType == MpCopyItemType.Image ? MpHelpers.ConvertBitmapSourceToByteArray(ItemBitmapSource) : null;
             //if copyitem already exists
             if (CopyItemId > 0) {
-                changeType = MpCopyItemChangeType.Update;
+                //changeType = MpCopyItemChangeType.Update;
                 MpDb.Instance.ExecuteWrite(
                         "update MpCopyItem set TitleSwirl=@ts, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemImage=@ii where pk_MpCopyItemId=@ciid",
                         new Dictionary<string, object> {
@@ -630,7 +632,7 @@ namespace MpWpfApp {
                             { "@ciid", CopyItemId},
                         });
             } else {
-                changeType = MpCopyItemChangeType.Add;
+                //changeType = MpCopyItemChangeType.Add;
                 MpDb.Instance.ExecuteWrite(
                     "insert into MpCopyItem(TitleSwirl,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) " + 
                     "values (@ts,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",

@@ -8,7 +8,7 @@ using System.Windows.Data;
 
 namespace MpWpfApp {
     public class MpObservableCollection<T> : ObservableCollection<T> {
-        private static readonly object _ItemsLock = new object();
+        private object _ItemsLock = new object();
 
         public MpObservableCollection() : base() {
             BindingOperations.EnableCollectionSynchronization(this, _ItemsLock);

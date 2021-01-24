@@ -1130,6 +1130,10 @@ namespace MpWpfApp {
 
                     b.MouseLeftButtonUp += selectedEventHandler;
 
+                    cm.Closed += (s1, e) => {
+                        b.MouseLeftButtonUp -= selectedEventHandler;
+                    };
+
                     if (x == defX && y == defY) {
                         b.Focus();
                     }

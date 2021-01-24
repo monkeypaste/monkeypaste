@@ -20,6 +20,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using AlphaChiTech.Virtualization;
+using AsyncAwaitBestPractices.MVVM;
 using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop.Utilities;
 using Microsoft.WindowsAPICodePack.Dialogs;
@@ -33,6 +34,7 @@ namespace MpWpfApp {
         Stopwatch sw = new Stopwatch();
 
         private List<MpCopyItem> _testList = new List<MpCopyItem>();
+
         #endregion
 
         #region Properties
@@ -41,7 +43,7 @@ namespace MpWpfApp {
             get {
                 if(_clipTileViewModelPaginationManager == null) {
                     _clipTileViewModelPaginationManager = new PaginationManager<MpClipTileViewModel>(
-                                new MpClipTileViewModelPagedSourceProvider(),
+                                new MpClipTileViewModelPagedSourceProviderAsync(),
                                 null,
                                 null,
                                 7);
@@ -72,7 +74,7 @@ namespace MpWpfApp {
             }
         }
 
-        public MpClipboardManager ClipboardManager { get; private set; }
+        public MpClipboardManager ClipboardManager { get; private set; }        
 
         public bool IsDragging { get; set; } = false;
 
@@ -337,7 +339,7 @@ namespace MpWpfApp {
                     }
 
                     bool isTagLinkedToAllSelectedClips = true;
-                    foreach (var sctvm in SelectedClipTiles) {                        
+                    foreach (var sctvm in SelectedClipTiles) {
                         if (!ttvm.IsLinkedWithClipTile(sctvm)) {
                             isTagLinkedToAllSelectedClips = false;
                         }
@@ -451,7 +453,7 @@ namespace MpWpfApp {
                     //_dragClipBorderElement = null;
                 }
             };
-            clipTileBorder.PreviewMouseUp += (s, e8) => {
+            clipTileBorder.PreviewMouseLeftButtonUp += (s, e8) => {
                 IsMouseDown = false;
                 IsDragging = false;
                 StartDragPoint = new Point();
@@ -565,10 +567,10 @@ namespace MpWpfApp {
                         sortBy = "CopyItemAppId";
                         break;
                     case "Title":
-                        sortBy = "Title";
+                        sortBy = "CopyItemTitle";
                         break;
                     case "Content":
-                        sortBy = "Content";
+                        sortBy = "CopyItemPlainText";
                         break;
                     case "Type":
                         sortBy = "CopyItemType";
@@ -805,17 +807,18 @@ namespace MpWpfApp {
             MainWindowViewModel.HideWindowCommand.Execute(true);                        
         }
 
-        private RelayCommand _bringSelectedClipTilesToFrontCommand;
-        public ICommand BringSelectedClipTilesToFrontCommand {
+        private AsyncCommand _bringSelectedClipTilesToFrontCommand;
+        public IAsyncCommand BringSelectedClipTilesToFrontCommand {
             get {
                 if (_bringSelectedClipTilesToFrontCommand == null) {
-                    _bringSelectedClipTilesToFrontCommand = new RelayCommand(BringSelectedClipTilesToFront, CanBringSelectedClipTilesToFront);
+                    _bringSelectedClipTilesToFrontCommand = new AsyncCommand(BringSelectedClipTilesToFront, CanBringSelectedClipTilesToFront);
                 } 
                 return _bringSelectedClipTilesToFrontCommand;
             }
         }
-        private bool CanBringSelectedClipTilesToFront() {
-            if(MainWindowViewModel.IsLoading || VisibileClipTiles.Count == 0) {
+
+        private bool CanBringSelectedClipTilesToFront(object arg) {
+            if(!IsBusy && (MainWindowViewModel.IsLoading || VisibileClipTiles.Count == 0)) {
                 return false;
             }
             bool canBringForward = false;
@@ -827,9 +830,24 @@ namespace MpWpfApp {
             }
             return canBringForward;
         }
-        private void BringSelectedClipTilesToFront() {
-            foreach (var sctvm in SelectedClipTiles) {
-                ClipTileViewModels.Move(ClipTileViewModels.IndexOf(sctvm), 0);
+
+        private async Task BringSelectedClipTilesToFront() {
+            try {
+                IsBusy = true;
+                await Dispatcher.CurrentDispatcher.BeginInvoke(
+                        DispatcherPriority.Normal,
+                        (Action)(() => {
+                            var tempSelectedClipTiles = SelectedClipTiles;
+                            ClearClipSelection();
+
+                            foreach (var sctvm in tempSelectedClipTiles) {
+                                ClipTileViewModels.Move(ClipTileViewModels.IndexOf(sctvm), 0);
+                                sctvm.IsSelected = true;
+                            }
+                        }));
+            }
+            finally {
+                IsBusy = false;
             }
         }
 
@@ -856,8 +874,12 @@ namespace MpWpfApp {
             return canSendBack;
         }
         private void SendSelectedClipTilesToBack() {
-            foreach(var sctvm in SelectedClipTiles) {
+            var tempSelectedClipTiles = SelectedClipTiles;
+            ClearClipSelection();
+
+            foreach (var sctvm in tempSelectedClipTiles) {
                 ClipTileViewModels.Move(ClipTileViewModels.IndexOf(sctvm), ClipTileViewModels.Count - 1);
+                sctvm.IsSelected = true;
             }
             //for (int i = 0; i < SelectedClipTiles.Count; i++) {
             //    this.Move(VisibileClipTiles.IndexOf(SelectedClipTiles[i]), VisibileClipTiles.Count - 1 - i);

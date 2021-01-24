@@ -16,7 +16,7 @@ namespace MpWpfApp {
 
         public MpClipTileViewModelPagedSourceProvider() {
             SetTag(1);
-            SetSort("CopyDateTime", true);
+            SetSort("CopyDateTime", false);
         }
 
         public void SetTag(int tagId) {
@@ -73,12 +73,12 @@ namespace MpWpfApp {
 
             var dt = MpDb.Instance.Execute(
                 //"select ROW_NUMBER() OVER(ORDER BY pk_MpCopyItemId) AS Idx in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid and fk_MpCopyItemId=@ciid)",
-                "select ROW_NUMBER() OVER(ORDER BY pk_MpCopyItemId) AS Idx from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid and fk_MpCopyItemId=@ciid) order by @st @sd limit @mnoi offset @si",
+                "select ROW_NUMBER() OVER(ORDER BY pk_MpCopyItemId) AS Idx from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid and fk_MpCopyItemId=@ciid) order by @st",
                 new Dictionary<string, object> {
                     { "@tid", _tagId },
                     { @"ciid", item.CopyItemId },
-                    { "@st", _sortType},
-                    { "@sd", _isDescending ? "DESC":"ASC" }
+                    { "@st", _sortType + (_isDescending ? "DESC":"ASC")},
+                    //{ "@sd", _isDescending ? "DESC":"ASC" }
                     });
             if (dt != null && dt.Rows.Count > 0) {
                 return Convert.ToInt32(dt.Rows[0]["Idx"].ToString());
@@ -87,47 +87,6 @@ namespace MpWpfApp {
         }
 
         public void OnReset(int count) {
-        }
-    }
-
-    public class MpClipTileViewModelDataProvider2 : IItemsProvider<MpClipTileViewModel> {
-        private int _tagId = 0;
-
-        public MpClipTileViewModelDataProvider2(int tagId) {
-            SetTag(tagId);
-        }
-
-        public void SetTag(int tagId) {
-            _tagId = tagId;
-        }
-
-        public int FetchCount() {
-            var dt = MpDb.Instance.Execute(
-                "select pk_MpCopyItemId from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid)",
-                new Dictionary<string, object> {
-                        { "@tid", _tagId }
-                    });
-            if (dt != null && dt.Rows.Count > 0) {
-                return dt.Rows.Count;
-            } 
-            return 0;
-        }
-
-        public IList<MpClipTileViewModel> FetchRange(int startIndex, int count) {
-            var clipTileViewModelList = new List<MpClipTileViewModel>();
-            var dt = MpDb.Instance.Execute(
-                "select * from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid) order by pk_MpCopyItemId limit @mnoi offset @si",
-                new Dictionary<string, object> {
-                        { "@tid", _tagId },
-                        { "@mnoi", count },
-                        { "@si", startIndex }
-                    });
-            if (dt != null && dt.Rows.Count > 0) {
-                foreach (DataRow dr in dt.Rows) {
-                    clipTileViewModelList.Add(new MpClipTileViewModel(new MpCopyItem(dr)));
-                }
-            }
-            return clipTileViewModelList;
         }
     }
 }
