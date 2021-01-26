@@ -115,7 +115,7 @@ namespace MpWpfApp {
 
         public Brush TagCountTextColor {
             get {
-                return MpHelpers.IsBright(((SolidColorBrush)TagColor).Color) ? Brushes.Black : Brushes.White; ;
+                return MpHelpers.Instance.IsBright(((SolidColorBrush)TagColor).Color) ? Brushes.Black : Brushes.White; ;
             }
         }
 
@@ -298,14 +298,14 @@ namespace MpWpfApp {
                     break;
                 }
             }
-            MpHelpers.SetColorChooserMenuItem(
+            MpHelpers.Instance.SetColorChooserMenuItem(
                 cm,
                 cmi,
                 (s, e1) => {
                     ChangeTagColorCommand.Execute(((Border)s).Background);
                 },
-                MpHelpers.GetColorColumn(TagColor),
-                MpHelpers.GetColorRow(TagColor)
+                MpHelpers.Instance.GetColorColumn(TagColor),
+                MpHelpers.Instance.GetColorRow(TagColor)
             );
         }
 
@@ -353,7 +353,7 @@ namespace MpWpfApp {
             }
         }
         private void ChangeTagColor(Brush newBrush) {
-            var result = newBrush != null ? newBrush : MpHelpers.ShowColorDialog(TagColor);
+            var result = newBrush != null ? newBrush : MpHelpers.Instance.ShowColorDialog(TagColor);
             if(result != null) {
                 TagColor = result;
             }

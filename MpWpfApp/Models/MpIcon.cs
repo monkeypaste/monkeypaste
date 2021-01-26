@@ -48,7 +48,7 @@ namespace MpWpfApp {
         }
         public override void LoadDataRow(DataRow dr) {
             IconId = Convert.ToInt32(dr["pk_MpIconId"].ToString());
-            IconImage = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
+            IconImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
         }
         public override void WriteToDatabase() {
             bool isNew = false;
@@ -59,14 +59,14 @@ namespace MpWpfApp {
                 DataTable dt = MpDb.Instance.Execute(
                     "select * from MpIcon where IconBlob=@ib",
                     new Dictionary<string, object> {
-                        { "@ib", MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)IconImage) }
+                        { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray((BitmapSource)IconImage) }
                     });
                 if (dt.Rows.Count > 0) {
                     IconId = Convert.ToInt32(dt.Rows[0]["pk_MpIconId"]);
                     MpDb.Instance.ExecuteWrite(
                         "update MpIcon set IconBlob=@ib where pk_MpIconId=@iid",
                         new Dictionary<string, object> {
-                            { "@ib", MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)IconImage) },
+                            { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray((BitmapSource)IconImage) },
                             { "@iid" , IconId}
                         });
                     isNew = false;
@@ -74,7 +74,7 @@ namespace MpWpfApp {
                     MpDb.Instance.ExecuteWrite(
                         "insert into MpIcon(IconBlob) values(@ib)",
                         new Dictionary<string, object> {
-                            { "@ib", MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)IconImage) }
+                            { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray((BitmapSource)IconImage) }
                         });
                     IconId = MpDb.Instance.GetLastRowId("MpIcon", "pk_MpIconId");
                     isNew = true;
@@ -83,7 +83,7 @@ namespace MpWpfApp {
                 MpDb.Instance.ExecuteWrite(
                     "update MpIcon set IconBlob=@ib where pk_MpIconId=@iid",
                     new Dictionary<string, object> {
-                        { "@ib", MpHelpers.ConvertBitmapSourceToByteArray((BitmapSource)IconImage) },
+                        { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray((BitmapSource)IconImage) },
                         { "@iid", IconId }
                     });
             }

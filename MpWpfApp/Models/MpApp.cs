@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Windows.Media.Imaging;
+using System.Threading.Tasks;
 
 namespace MpWpfApp {
 
@@ -31,7 +32,7 @@ namespace MpWpfApp {
             return apps;
         }
         public static bool IsAppRejectedByHandle(IntPtr hwnd) {
-            string appPath = MpHelpers.GetProcessPath(hwnd);
+            string appPath = MpHelpers.Instance.GetProcessPath(hwnd);
             foreach(MpApp app in GetAllApps()) {
                 if(app.AppPath == appPath && app.IsAppRejected) {
                     return true;
@@ -45,17 +46,17 @@ namespace MpWpfApp {
         #endregion
 
         public MpApp(bool isAppRejected, IntPtr hwnd) {
-            AppPath = MpHelpers.GetProcessPath(hwnd);
-            AppName = MpHelpers.GetProcessMainWindowTitle(hwnd);
+            AppPath = MpHelpers.Instance.GetProcessPath(hwnd);
+            AppName = MpHelpers.Instance.GetProcessMainWindowTitle(hwnd);
             IsAppRejected = isAppRejected;
-            IconImage = MpHelpers.GetIconImage(AppPath);
+            IconImage = MpHelpers.Instance.GetIconImage(AppPath);
         }
         public MpApp(string appPath) {
             //only called when user selects rejected app in settings
             AppPath = appPath;
             AppName = appPath;
             IsAppRejected = true;
-            IconImage = MpHelpers.GetIconImage(AppPath);
+            IconImage = MpHelpers.Instance.GetIconImage(AppPath);
         }
         public MpApp() : this(false, IntPtr.Zero) { }
 
@@ -67,7 +68,7 @@ namespace MpWpfApp {
             AppId = Convert.ToInt32(dr["pk_MpAppId"].ToString());
             AppPath = dr["SourcePath"].ToString();
             AppName = dr["AppName"].ToString();
-            IconImage = MpHelpers.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
+            IconImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
             if (Convert.ToInt32(dr["IsAppRejected"].ToString()) == 0) {
                 IsAppRejected = false;
             } else {
@@ -79,7 +80,7 @@ namespace MpWpfApp {
                 MpDb.Instance.ExecuteWrite(
                         "insert into MpApp(IconBlob,SourcePath,IsAppRejected,AppName) values (@ib,@sp,@iar,@an)",
                         new Dictionary<string, object> {
-                            { "@ib", MpHelpers.ConvertBitmapSourceToByteArray(IconImage) },
+                            { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconImage) },
                             { "@sp", AppPath },
                             { "@iar", Convert.ToInt32(IsAppRejected) },
                             { "@an", AppName }
@@ -89,7 +90,7 @@ namespace MpWpfApp {
                 MpDb.Instance.ExecuteWrite(
                     "update MpApp set IconBlob=@ib, IsAppRejected=@iar, SourcePath=@sp, AppName=@an where pk_MpAppId=@aid",
                     new Dictionary<string, object> {
-                        { "@ib", MpHelpers.ConvertBitmapSourceToByteArray(IconImage) },
+                        { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconImage) },
                         { "@iar", Convert.ToInt32(IsAppRejected) },
                         { "@sp", AppPath },
                         { "@an", AppName },

@@ -339,7 +339,7 @@ namespace MpWpfApp {
                             ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Collapsed;
                         }
 
-                        //MpHelpers.AnimateDoubleProperty(
+                        //MpHelpers.Instance.AnimateDoubleProperty(
                         //    ClipTileViewModel.IsPastingTemplateTile ? rtbBottomMax : rtbBottomMin,
                         //    ClipTileViewModel.IsPastingTemplateTile ? rtbBottomMin : rtbBottomMax,
                         //    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
@@ -349,7 +349,7 @@ namespace MpWpfApp {
 
                         //    });
 
-                        MpHelpers.AnimateDoubleProperty(
+                        MpHelpers.Instance.AnimateDoubleProperty(
                             ClipTileViewModel.IsPastingTemplateTile ? pasteTemplateToolbarTopMax : pasteTemplateToolbarTopMin,
                             ClipTileViewModel.IsPastingTemplateTile ? pasteTemplateToolbarTopMin : pasteTemplateToolbarTopMax,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
@@ -363,7 +363,7 @@ namespace MpWpfApp {
                                 }
                             });
 
-                        MpHelpers.AnimateDoubleProperty(
+                        MpHelpers.Instance.AnimateDoubleProperty(
                             ClipTileViewModel.IsPastingTemplateTile ? tileWidthMin : tileWidthMax,
                             ClipTileViewModel.IsPastingTemplateTile ? tileWidthMax : tileWidthMin,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
@@ -372,7 +372,7 @@ namespace MpWpfApp {
                             (s1, e44) => {
                             });
 
-                        MpHelpers.AnimateDoubleProperty(
+                        MpHelpers.Instance.AnimateDoubleProperty(
                             ClipTileViewModel.IsPastingTemplateTile ? contentWidthMin : contentWidthMax,
                             ClipTileViewModel.IsPastingTemplateTile ? contentWidthMax : contentWidthMin,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
@@ -386,7 +386,7 @@ namespace MpWpfApp {
                                 ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
                             });
 
-                        MpHelpers.AnimateDoubleProperty(
+                        MpHelpers.Instance.AnimateDoubleProperty(
                             ClipTileViewModel.IsPastingTemplateTile ? iconLeftMin : iconLeftMax,
                             ClipTileViewModel.IsPastingTemplateTile ? iconLeftMax : iconLeftMin,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
@@ -517,12 +517,12 @@ namespace MpWpfApp {
             }
             ClipTileViewModel.GetRtb().ClearHyperlinks();
             foreach(var uthlvm in uthlvmlc) {
-                var matchList = MpHelpers.FindStringRangesFromPosition(ClipTileViewModel.GetRtb().Document.ContentStart, uthlvm.TemplateName, true);
+                var matchList = MpHelpers.Instance.FindStringRangesFromPosition(ClipTileViewModel.GetRtb().Document.ContentStart, uthlvm.TemplateName, true);
                 foreach (var tr in matchList) {
                     tr.Text = uthlvm.TemplateText;
                 }                
             }
-            ClipTileViewModel.TemplateRichText = MpHelpers.ConvertFlowDocumentToRichText(ClipTileViewModel.GetRtb().Document);
+            ClipTileViewModel.TemplateRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(ClipTileViewModel.GetRtb().Document);
             //Returned to GetPastableTemplate
         }
         #endregion

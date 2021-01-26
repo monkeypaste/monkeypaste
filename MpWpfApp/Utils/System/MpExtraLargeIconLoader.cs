@@ -190,7 +190,7 @@ namespace MpWpfApp {
                     myIcon.Dispose();
                     DestroyIcon(hIcon);
                     SendMessage(hIcon, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
-                    return MpHelpers.ConvertBitmapToBitmapSource(bitmap);
+                    return MpHelpers.Instance.ConvertBitmapToBitmapSource(bitmap);
                 }                    
             }
         }

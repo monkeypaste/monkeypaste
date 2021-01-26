@@ -79,13 +79,13 @@ namespace MpWpfApp {
 
         public double ItemBitSize {
             get {
-                return (double)MpHelpers.FileListSize(new string[] { ItemUri.LocalPath });
+                return (double)MpHelpers.Instance.FileListSize(new string[] { ItemUri.LocalPath });
             }
         }
 
         public bool IsItemDirectory {
             get {
-                return MpHelpers.IsPathDirectory(ItemUri.LocalPath);
+                return MpHelpers.Instance.IsPathDirectory(ItemUri.LocalPath);
             }
         }
 
@@ -98,7 +98,7 @@ namespace MpWpfApp {
             ItemPath = path;
             ItemUri = new Uri(ItemPath,UriKind.Absolute);
             ItemName = Path.GetFileName(ItemUri.LocalPath);
-            Icon = (BitmapSource)MpHelpers.GetIconImage(ItemUri.LocalPath);
+            Icon = (BitmapSource)MpHelpers.Instance.GetIconImage(ItemUri.LocalPath);
         }
 
         public void FileListItemTextBlock_Loaded(object sender, RoutedEventArgs e) {
@@ -111,7 +111,7 @@ namespace MpWpfApp {
             hyperLink.Inlines.Add(ItemName);
             hyperLink.SetBinding(Hyperlink.IsEnabledProperty, "ClipTileViewModel.IsSelected");
             hyperLink.RequestNavigate += (s, e1) => {
-                MpHelpers.OpenUrl(e1.Uri.ToString());
+                MpHelpers.Instance.OpenUrl(e1.Uri.ToString());
             };
             tb.Inlines.Add(hyperLink);
         }

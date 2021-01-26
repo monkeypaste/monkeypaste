@@ -182,14 +182,14 @@ namespace MpWpfApp {
                 var colorMenuItem = new MenuItem();
                 var colorContextMenu = new ContextMenu();
                 colorContextMenu.Items.Add(colorMenuItem);
-                MpHelpers.SetColorChooserMenuItem(
+                MpHelpers.Instance.SetColorChooserMenuItem(
                     colorContextMenu,
                     colorMenuItem,
                     (s1, e1) => {
                         SelectedTemplateHyperlinkViewModel.TemplateBrush = ((Border)s1).Background;
                     },
-                    MpHelpers.GetColorColumn(SelectedTemplateHyperlinkViewModel.TemplateBrush),
-                    MpHelpers.GetColorRow(SelectedTemplateHyperlinkViewModel.TemplateBrush)
+                    MpHelpers.Instance.GetColorColumn(SelectedTemplateHyperlinkViewModel.TemplateBrush),
+                    MpHelpers.Instance.GetColorRow(SelectedTemplateHyperlinkViewModel.TemplateBrush)
                 );
                 templateColorButton.ContextMenu = colorContextMenu;
                 colorContextMenu.PlacementTarget = templateColorButton;
@@ -218,7 +218,7 @@ namespace MpWpfApp {
                             ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Visible;
                         }
 
-                        MpHelpers.AnimateDoubleProperty(
+                        MpHelpers.Instance.AnimateDoubleProperty(
                             ClipTileViewModel.IsEditingTemplate ? rtbBottomMax : rtbBottomMin,
                             ClipTileViewModel.IsEditingTemplate ? rtbBottomMin : rtbBottomMax,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
@@ -228,7 +228,7 @@ namespace MpWpfApp {
 
                             });
 
-                        MpHelpers.AnimateDoubleProperty(
+                        MpHelpers.Instance.AnimateDoubleProperty(
                             ClipTileViewModel.IsEditingTemplate ? editTemplateToolbarTopMax : editTemplateToolbarTopMin,
                             ClipTileViewModel.IsEditingTemplate ? editTemplateToolbarTopMin : editTemplateToolbarTopMax,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
@@ -267,7 +267,7 @@ namespace MpWpfApp {
                 //for new template create the vm but wait to add it in OkCommand
                 SelectedTemplateHyperlinkViewModel = new MpTemplateHyperlinkViewModel(ClipTileViewModel, null);
                 _originalText = ClipTileViewModel.GetRtb().Selection.Text;
-                _selectedTemplateHyperlink = MpHelpers.CreateTemplateHyperlink(SelectedTemplateHyperlinkViewModel, ClipTileViewModel.GetRtb().Selection);
+                _selectedTemplateHyperlink = MpHelpers.Instance.CreateTemplateHyperlink(SelectedTemplateHyperlinkViewModel, ClipTileViewModel.GetRtb().Selection);
                 ClipTileViewModel.GetRtb().Selection.Select(_selectedTemplateHyperlink.ElementStart, _selectedTemplateHyperlink.ElementEnd);
             } else {
                 _originalTemplateName = ttcvm.TemplateName;
@@ -276,7 +276,7 @@ namespace MpWpfApp {
                     SelectedTemplateHyperlinkViewModel = ttcvm;
                 } else {
                     SelectedTemplateHyperlinkViewModel = new MpTemplateHyperlinkViewModel(ClipTileViewModel, ttcvm.CopyItemTemplate);
-                    _selectedTemplateHyperlink = MpHelpers.CreateTemplateHyperlink(SelectedTemplateHyperlinkViewModel, ClipTileViewModel.GetRtb().Selection);
+                    _selectedTemplateHyperlink = MpHelpers.Instance.CreateTemplateHyperlink(SelectedTemplateHyperlinkViewModel, ClipTileViewModel.GetRtb().Selection);
                     ClipTileViewModel.GetRtb().Selection.Select(_selectedTemplateHyperlink.ElementStart, _selectedTemplateHyperlink.ElementEnd);
                 }
                 
@@ -284,7 +284,7 @@ namespace MpWpfApp {
             ClipTileViewModel.IsEditingTemplate = isEditMode;
 
             if (!ClipTileViewModel.IsEditingTemplate) {
-                MpHelpers.CreateTemplateHyperlink(SelectedTemplateHyperlinkViewModel, ClipTileViewModel.GetRtb().Selection);
+                MpHelpers.Instance.CreateTemplateHyperlink(SelectedTemplateHyperlinkViewModel, ClipTileViewModel.GetRtb().Selection);
                 OkCommand.Execute(null);
             }
         }

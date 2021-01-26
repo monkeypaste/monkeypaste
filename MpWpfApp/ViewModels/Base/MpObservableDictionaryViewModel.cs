@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace MpWpfAp {
+namespace MpWpfApp {
     [Serializable]
     public class MpObservableKeyValuePair<TKey, TValue> : INotifyPropertyChanged {
         #region properties

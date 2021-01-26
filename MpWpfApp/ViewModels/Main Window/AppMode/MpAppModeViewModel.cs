@@ -54,7 +54,7 @@ namespace MpWpfApp {
         #endregion
 
         private void GlobalMouseUpEvent(object sender, System.Windows.Forms.MouseEventArgs e) {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.ApplicationIsActivated()) {
+            if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.Instance.ApplicationIsActivated()) {
                 System.Windows.Forms.SendKeys.SendWait("^c");
             }
         }

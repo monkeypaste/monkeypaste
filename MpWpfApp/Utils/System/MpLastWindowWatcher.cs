@@ -38,13 +38,13 @@ namespace MpWpfApp {
             //Process.GetCurrentProcess().Invalidate();
             ThisAppHandle = appHandle;
             LastHandle = IntPtr.Zero;
-            ThisAppPath = MpHelpers.GetProcessPath(ThisAppHandle);
+            ThisAppPath = MpHelpers.Instance.GetProcessPath(ThisAppHandle);
             Console.WriteLine("This app's exe: " + ThisAppPath);
             Timer timer = new Timer(100);
             timer.Elapsed += (s, e) => {
                 IntPtr currentHandle = WinApi.GetForegroundWindow();
                 
-                //RefreshHandleStack();
+                RefreshHandleStack();
 
                 if (ThisAppHandle == IntPtr.Zero) { 
                     ThisAppHandle = Process.GetCurrentProcess().MainWindowHandle;
@@ -56,10 +56,10 @@ namespace MpWpfApp {
                     !MpSettingsWindowViewModel.IsOpen &&
                     !MpAssignShortcutModalWindowViewModel.IsOpen) {
                     LastHandle = currentHandle;
-                    LastTitle = MpHelpers.GetProcessMainWindowTitle(LastHandle);
+                    LastTitle = MpHelpers.Instance.GetProcessMainWindowTitle(LastHandle);
 
-                    //UpdateHandleStack(LastHandle);
-                    Console.WriteLine("Last Window: " + MpHelpers.GetProcessMainWindowTitle(_lastHandle));
+                    UpdateHandleStack(LastHandle);
+                    Console.WriteLine("Last Window: " + MpHelpers.Instance.GetProcessMainWindowTitle(_lastHandle));
                 }
             };
             timer.Start();
@@ -82,7 +82,7 @@ namespace MpWpfApp {
             }
         }
         private void UpdateHandleStack(IntPtr fgHandle) {
-            var processName = MpHelpers.GetProcessPath(fgHandle);
+            var processName = MpHelpers.Instance.GetProcessPath(fgHandle);
             if(_currentProcessWindowHandleStackDictionary.ContainsKey(processName)) {
                 if(_currentProcessWindowHandleStackDictionary[processName].Contains(fgHandle)) {
                     _currentProcessWindowHandleStackDictionary[processName].Remove(fgHandle);

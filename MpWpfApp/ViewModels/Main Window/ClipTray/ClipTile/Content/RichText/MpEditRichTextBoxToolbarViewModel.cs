@@ -287,7 +287,7 @@ namespace MpWpfApp {
                             ClipTileViewModel.IsEditingTemplate = false;
                         }
 
-                        MpHelpers.AnimateDoubleProperty(
+                        MpHelpers.Instance.AnimateDoubleProperty(
                             ClipTileViewModel.IsEditingTile ? rtbTopMin : rtbTopMax,
                             ClipTileViewModel.IsEditingTile ? rtbTopMax : rtbTopMin,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
@@ -297,7 +297,7 @@ namespace MpWpfApp {
 
                             });
 
-                        MpHelpers.AnimateDoubleProperty(
+                        MpHelpers.Instance.AnimateDoubleProperty(
                             ClipTileViewModel.IsEditingTile ? editRtbToolbarTopMin : editRtbToolbarTopMax,
                             ClipTileViewModel.IsEditingTile ? editRtbToolbarTopMax : editRtbToolbarTopMin,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
@@ -309,7 +309,7 @@ namespace MpWpfApp {
                                 }
                             });
 
-                        MpHelpers.AnimateDoubleProperty(
+                        MpHelpers.Instance.AnimateDoubleProperty(
                             ClipTileViewModel.IsEditingTile ? tileWidthMin : tileWidthMax,
                             ClipTileViewModel.IsEditingTile ? tileWidthMax : tileWidthMin,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
@@ -318,7 +318,7 @@ namespace MpWpfApp {
                             (s1, e44) => {
                             });
 
-                        MpHelpers.AnimateDoubleProperty(
+                        MpHelpers.Instance.AnimateDoubleProperty(
                             ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
                             ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
@@ -332,7 +332,7 @@ namespace MpWpfApp {
                                 ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));                                
                             });
 
-                        MpHelpers.AnimateDoubleProperty(
+                        MpHelpers.Instance.AnimateDoubleProperty(
                             ClipTileViewModel.IsEditingTile ? iconLeftMin : iconLeftMax,
                             ClipTileViewModel.IsEditingTile ? iconLeftMax : iconLeftMin,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,

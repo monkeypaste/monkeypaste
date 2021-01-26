@@ -100,7 +100,7 @@ namespace MpWpfApp {
         #region Brush Properties
         public Brush TemplateForegroundBrush {
             get {
-                if (MpHelpers.IsBright(((SolidColorBrush)TemplateBackgroundBrush).Color)) {
+                if (MpHelpers.Instance.IsBright(((SolidColorBrush)TemplateBackgroundBrush).Color)) {
                     return Brushes.Black;
                 }
                 return Brushes.White;
@@ -112,10 +112,10 @@ namespace MpWpfApp {
                 if(ClipTileViewModel != null &&
                     (ClipTileViewModel.IsEditingTile || ClipTileViewModel.IsPastingTemplateTile)) {
                     if (IsHovering) {
-                        return MpHelpers.GetDarkerBrush(TemplateBrush);
+                        return MpHelpers.Instance.GetDarkerBrush(TemplateBrush);
                     }
                     if (IsSelected) {
-                        return MpHelpers.GetLighterBrush(TemplateBrush);
+                        return MpHelpers.Instance.GetLighterBrush(TemplateBrush);
                     }
                 }
                 return TemplateBrush;
@@ -323,9 +323,9 @@ namespace MpWpfApp {
                 while (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == namePrefix + uniqueIdx + ">").ToList().Count > 0) {
                     uniqueIdx++;
                 }
-                Brush randColor = (Brush)new SolidColorBrush(MpHelpers.GetRandomColor());
+                Brush randColor = (Brush)new SolidColorBrush(MpHelpers.Instance.GetRandomColor());
                 //while (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateBrush == randColor).ToList().Count > 0) {
-                //    randColor = (Brush)new SolidColorBrush(MpHelpers.GetRandomColor());
+                //    randColor = (Brush)new SolidColorBrush(MpHelpers.Instance.GetRandomColor());
                 //}
                 cit = new MpCopyItemTemplate(ctvm.CopyItemId, randColor, namePrefix + uniqueIdx + ">");
             }
@@ -336,14 +336,14 @@ namespace MpWpfApp {
             var tb = (TextBlock)sender;
             var hl = (Hyperlink)((InlineUIContainer)tb.Parent).Parent;
 
-            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateDisplayValue)), tb, TextBlock.TextProperty);
-            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateBackgroundBrush)), tb, TextBlock.BackgroundProperty);
-            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateForegroundBrush)), tb, TextBlock.ForegroundProperty);
-            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateTextBlockCursor)), tb, TextBlock.CursorProperty);
+            MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateDisplayValue)), tb, TextBlock.TextProperty);
+            MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateBackgroundBrush)), tb, TextBlock.BackgroundProperty);
+            MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateForegroundBrush)), tb, TextBlock.ForegroundProperty);
+            MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateTextBlockCursor)), tb, TextBlock.CursorProperty);
 
-            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateBackgroundBrush)), hl, Hyperlink.BackgroundProperty);
-            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateForegroundBrush)), hl, Hyperlink.ForegroundProperty);
-            MpHelpers.CreateBinding(this, new PropertyPath(nameof(TemplateTextBlockCursor)), hl, Hyperlink.CursorProperty);
+            MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateBackgroundBrush)), hl, Hyperlink.BackgroundProperty);
+            MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateForegroundBrush)), hl, Hyperlink.ForegroundProperty);
+            MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateTextBlockCursor)), hl, Hyperlink.CursorProperty);
 
             hl.Tag = MpSubTextTokenType.TemplateSegment;
             hl.IsEnabled = true;

@@ -333,7 +333,7 @@ namespace MpWpfApp {
                 if(DuplicatedShortcutViewModel.CopyItemId > 0 || DuplicatedShortcutViewModel.TagId > 0) {
                     if(DuplicatedShortcutViewModel.CopyItemId > 0) {
                         //clear input gesture text
-                        MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.Where(x => x.CopyItem.CopyItemId == DuplicatedShortcutViewModel.CopyItemId).ToList()[0].ShortcutKeyList = string.Empty;
+                        MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(DuplicatedShortcutViewModel.CopyItemId).ShortcutKeyList = string.Empty;
                         // TODO Unregister hotkey here
                     } else {
                         MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.TagId == DuplicatedShortcutViewModel.TagId).ToList()[0].ShortcutKeyList = string.Empty;

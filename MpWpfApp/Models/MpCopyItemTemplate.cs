@@ -25,7 +25,7 @@ namespace MpWpfApp {
             return copyItemTemplateList;
         }
 
-        public MpCopyItemTemplate() : this(0,MpHelpers.GetRandomBrushColor(),"Default Template Name") { }
+        public MpCopyItemTemplate() : this(0,MpHelpers.Instance.GetRandomBrushColor(),"Default Template Name") { }
 
         public MpCopyItemTemplate(int ciid, Brush templateColor, string templateName) {
             CopyItemTemplateId = 0;

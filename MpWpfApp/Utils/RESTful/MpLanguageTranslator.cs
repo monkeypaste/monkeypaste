@@ -147,7 +147,7 @@ namespace MpWpfApp {
 
         // ***** GET TRANSLATABLE LANGUAGE CODES
         private void GetLanguagesForTranslate() {
-            if(!MpHelpers.CheckForInternetConnection()) {
+            if(!MpHelpers.Instance.CheckForInternetConnection()) {
                 Console.WriteLine("Client offline. Language Translation is inactive");
                 return;
             }
@@ -170,7 +170,7 @@ namespace MpWpfApp {
                     }
                 }
             } catch(Exception ex) {
-                if(MpHelpers.CheckForInternetConnection()) {
+                if(MpHelpers.Instance.CheckForInternetConnection()) {
                     Console.WriteLine("Problem connecting to language server (" + ex.ToString() + "), re-attempting to connect..");
                     GetLanguagesForTranslate();
                 } else {

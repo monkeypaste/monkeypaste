@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Animation;
+using DataGridAsyncDemoMVVM.filtersort;
 using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
 using Hardcodet.Wpf.TaskbarNotification;
@@ -166,6 +168,8 @@ namespace MpWpfApp {
         #region Public Methods        
         public MpMainWindowViewModel() : base() {
             IsLoading = true;
+            
+            MpHelpers.Instance.Init();
 
             SearchBoxViewModel = new MpSearchBoxViewModel() { PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText };
             ClipTrayViewModel = new MpClipTrayViewModel();            
@@ -311,7 +315,9 @@ namespace MpWpfApp {
             mw.Visibility = Visibility.Visible;
             mw.Topmost = true;
 
-            MpHelpers.AnimateDoubleProperty(
+            
+
+            MpHelpers.Instance.AnimateDoubleProperty(
                 _startMainWindowTop,
                 _endMainWindowTop,
                 Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
@@ -320,7 +326,7 @@ namespace MpWpfApp {
                 (s,e) => {
                     if (IsLoading) {
                         IsLoading = false;
-                        //ClipTrayViewModel.SortClipTiles();
+                        ClipTileSortViewModel.SelectedSortType = ClipTileSortViewModel.SortTypes[0];
                     } else {
                         ClipTrayViewModel.ResetClipSelection();
                     }
@@ -351,26 +357,16 @@ namespace MpWpfApp {
             }
 
             var mw = (MpMainWindow)Application.Current.MainWindow;
-            MpHelpers.AnimateDoubleProperty(
+            MpHelpers.Instance.AnimateDoubleProperty(
                 _endMainWindowTop,
                 _startMainWindowTop,
                 Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
                 mw,
                 Window.TopProperty,
                 (s, e) => {
-                    if (pasteSelected && pasteDataObject != null) {
-                        Console.WriteLine("Pasting " + ClipTrayViewModel.SelectedClipTiles.Count + " items");
-                        ClipTrayViewModel.ClipboardManager.PasteDataObject(pasteDataObject);
-
-                        //resort list so pasted items are in front
-                        for (int i = ClipTrayViewModel.SelectedClipTiles.Count - 1; i >= 0; i--) {
-                            var sctvm = ClipTrayViewModel.SelectedClipTiles[i];
-                            ClipTrayViewModel.ClipTileViewModels.Move(ClipTrayViewModel.ClipTileViewModels.IndexOf(sctvm), 0);
-                        }
-                    } else if(pasteSelected && pasteDataObject == null) {
-                        Console.WriteLine("MainWindow Hide Command pasteDataObject was null, ignoring paste");
+                    if(pasteSelected) {
+                        ClipTrayViewModel.PerformPaste(pasteDataObject);
                     }
-                    ClipTrayViewModel.ResetClipSelection();
                     mw.Visibility = Visibility.Collapsed;
                 });
         }

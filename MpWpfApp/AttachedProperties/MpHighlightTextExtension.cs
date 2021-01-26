@@ -57,10 +57,10 @@ namespace MpWpfApp {
 
                             ctvm.TileVisibility = Visibility.Visible;
 
-                            MpHelpers.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, ctbb);
+                            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, ctbb);
                             ctvm.LastTitleHighlightRangeList.Clear();
 
-                            MpHelpers.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, ctbb);
+                            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, ctbb);
                             ctvm.LastContentHighlightRangeList.Clear();
 
                             if (string.IsNullOrEmpty(hlt.Trim()) ||
@@ -72,20 +72,20 @@ namespace MpWpfApp {
 
                             //highlight title 
                             if (ttb.Text.ContainsByCaseSetting(hlt)) {
-                                foreach(var mr in MpHelpers.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive)) {
+                                foreach(var mr in MpHelpers.Instance.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive)) {
                                     ctvm.LastTitleHighlightRangeList.Add(mr);
                                 }
-                                MpHelpers.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, hb);
+                                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, hb);
                             }
                             switch (ctvm.CopyItemType) {
                                 case MpCopyItemType.RichText:
                                     var rtb = (RichTextBox)cb.FindName("ClipTileRichTextBox");
                                     rtb.BeginChange();
-                                    foreach (var mr in MpHelpers.FindStringRangesFromPosition(rtb.Document.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive)) {
+                                    foreach (var mr in MpHelpers.Instance.FindStringRangesFromPosition(rtb.Document.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive)) {
                                         ctvm.LastContentHighlightRangeList.Add(mr);
                                     }
                                     if (ctvm.LastContentHighlightRangeList.Count > 0){
-                                        MpHelpers.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, hb);
+                                        MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, hb);
                                         //rtb.CaretPosition = ctvm.LastContentHighlightRangeList[0].Start;
                                     } else if (ctvm.LastTitleHighlightRangeList.Count == 0) {
                                         ctvm.TileVisibility = Visibility.Collapsed;
@@ -119,7 +119,7 @@ namespace MpWpfApp {
                                             if (container != null) {
                                                 var fitb = (TextBlock)container.FindName("FileListItemTextBlock");
                                                 if (fitb != null) {
-                                                    var hlr = MpHelpers.FindStringRangeFromPosition(fitb.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive);
+                                                    var hlr = MpHelpers.Instance.FindStringRangeFromPosition(fitb.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive);
                                                     if (hlr != null) {
                                                         hlr.ApplyPropertyValue(TextBlock.BackgroundProperty, hb);
                                                         ctvm.LastContentHighlightRangeList.Add(hlr);

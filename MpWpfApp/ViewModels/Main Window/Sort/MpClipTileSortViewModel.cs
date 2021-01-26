@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
+﻿using DataGridAsyncDemoMVVM.filtersort;
+using GalaSoft.MvvmLight.CommandWpf;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
@@ -72,20 +73,44 @@ namespace MpWpfApp {
         #region Public Methods
         public MpClipTileSortViewModel() : base() {
             //must be set before property changed registered for loading order
-            SelectedSortType = SortTypes[0];
+            
 
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(AscSortOrderButtonImageVisibility):
                     case nameof(DescSortOrderButtonImageVisibility):
                     case nameof(SelectedSortType):
-                        MainWindowViewModel.ClipTrayViewModel.SortClipTiles();
+                        var sort = new MemberPathSortingDirection();
+                        sort.MemberPath = ConvertSortTypeToMemberPath(SelectedSortType.Header);
+                        sort.SortDirection = DescSortOrderButtonImageVisibility == Visibility.Visible ? System.ComponentModel.ListSortDirection.Descending: System.ComponentModel.ListSortDirection.Ascending;
+                        MainWindowViewModel.ClipTrayViewModel.SortCommand.Execute(sort);
                         break;
                 }
             };
         }
         public void ClipTileSort_Loaded(object sender, RoutedEventArgs e) {
             //SelectedSortType = SortTypes[0];
+        }
+        #endregion
+
+        #region Private Methods
+        private string ConvertSortTypeToMemberPath(string sortType) {
+            switch (sortType) {
+                case "Date":
+                    return "CopyItemCreatedDateTime";
+                case "Application":
+                    return "CopyItemAppId";
+                case "Title":
+                    return "CopyItemTitle";
+                case "Content":
+                    return "CopyItemPlainText";
+                case "Type":
+                    return "CopyItemType";
+                case "Usage":
+                    return "CopyItemUsageScore";
+                default:
+                    return "CopyItemCreatedDateTime";
+            }
         }
         #endregion
 

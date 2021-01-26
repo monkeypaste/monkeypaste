@@ -20,10 +20,8 @@
         ResizeMode="NoResize"
         Background="Transparent"
         Height="350"
-        Width="1680">
-    <Window.DataContext>
-        <local:MpMainWindowViewModel />
-    </Window.DataContext>
+        Width="1680"
+        DataContext="{StaticResource MainWindowViewModel}">
     <Window.Resources>
         <s:Int32 x:Key="Files">1</s:Int32>
         <s:Int32 x:Key="Csv">2</s:Int32>
@@ -224,8 +222,8 @@
           Background="Green">
         <Grid.RowDefinitions>
             <RowDefinition Height="{Binding TitleMenuHeight}" />
-            <RowDefinition Height="{Binding FilterMenuHeight}" />
-            <RowDefinition Height="{Binding ClipTrayHeight}" />
+            <RowDefinition Height="{Binding FilterMenuHeight}"/>
+            <RowDefinition Height="{Binding ClipTrayHeight}"/>
         </Grid.RowDefinitions>
         <tb:TaskbarIcon x:Name="SystemTrayTaskbarIcon"
                         DataContext="{Binding SystemTrayViewModel}"
@@ -780,6 +778,10 @@
                                                     <i:EventTrigger EventName="Opened">
                                                         <i:CallMethodAction TargetObject="{Binding}"
                                                                             MethodName="ClipTile_ContextMenu_Opened" />
+                                                    </i:EventTrigger>
+                                                    <i:EventTrigger EventName="Closed">
+                                                        <i:CallMethodAction TargetObject="{Binding}"
+                                                                            MethodName="ClipTile_ContextMenu_Closed" />
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
                                                 <MenuItem Header="Bring to Front"

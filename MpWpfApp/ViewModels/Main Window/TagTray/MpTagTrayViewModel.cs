@@ -75,7 +75,7 @@ namespace MpWpfApp {
                                     clipTile.TileVisibility = Visibility.Collapsed;
                                 }
                             }
-                            if (MainWindowViewModel.ClipTrayViewModel.GetTray() != null) {
+                            if (MainWindowViewModel.ClipTrayViewModel.GetClipTray() != null) {
                                 //this ensures visibility takes affect if filtering by app
                                 //MainWindowViewModel.ClipTrayViewModel.GetTray().Items.Refresh();
                             }
@@ -158,7 +158,7 @@ namespace MpWpfApp {
         }
         private void CreateTag() {
             //add tag to datastore so TagTile collection will automatically add the tile
-            MpTag newTag = new MpTag("Untitled", MpHelpers.GetRandomColor(),this.Count);
+            MpTag newTag = new MpTag("Untitled", MpHelpers.Instance.GetRandomColor(),this.Count);
             this.Add(new MpTagTileViewModel(newTag));
         }
 

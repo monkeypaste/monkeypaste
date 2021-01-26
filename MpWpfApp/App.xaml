@@ -7,5 +7,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              d1p1:Ignorable="d" 
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
-  
+    <Application.Resources>
+        <local:MpMainWindowViewModel x:Key="MainWindowViewModel" />
+        <vm:ViewModelLocator x:Key="Locator"
+                                  xmlns:vm="clr-namespace:MpWpfApp" />
+    </Application.Resources>
 </Application>

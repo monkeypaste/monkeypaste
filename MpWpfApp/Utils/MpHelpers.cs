@@ -38,16 +38,22 @@ using static MpWpfApp.MpShellEx;
 using static QRCoder.PayloadGenerator;
 
 namespace MpWpfApp {
-    public static class MpHelpers {
-        #region Documents
+    public class MpHelpers {
+        private static readonly Lazy<MpHelpers> _Lazy = new Lazy<MpHelpers>(() => new MpHelpers());
+        public static MpHelpers Instance { get { return _Lazy.Value; } }
+        
+        public void Init() {
+            //empty to init singleton
+        }
 
-        public static Hyperlink CreateTemplateHyperlink(MpTemplateHyperlinkViewModel thlvm, TextRange tr) {
+        #region Documents
+        public Hyperlink CreateTemplateHyperlink(MpTemplateHyperlinkViewModel thlvm, TextRange tr) {
             var ctvm = thlvm.ClipTileViewModel;
                         
             //if the range for the template contains a sub-selection of a hyperlink the hyperlink(s)
             //needs to be broken into their text before the template hyperlink can be created
-            var trSHl = (Hyperlink)MpHelpers.FindParentOfType(tr.Start.Parent, typeof(Hyperlink));            
-            var trEHl = (Hyperlink)MpHelpers.FindParentOfType(tr.End.Parent, typeof(Hyperlink));
+            var trSHl = (Hyperlink)MpHelpers.Instance.FindParentOfType(tr.Start.Parent, typeof(Hyperlink));            
+            var trEHl = (Hyperlink)MpHelpers.Instance.FindParentOfType(tr.End.Parent, typeof(Hyperlink));
             var trText = tr.Text;
 
             if (trSHl != null) {
@@ -78,7 +84,7 @@ namespace MpWpfApp {
             return hl;
         }
 
-        public static void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRange> rangeList, Brush bgBrush) {
+        public void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRange> rangeList, Brush bgBrush) {
             if (rangeList == null || rangeList.Count == 0) {
                 return;
             }
@@ -87,7 +93,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static DependencyObject FindParentOfType(DependencyObject dpo, Type type) {
+        public DependencyObject FindParentOfType(DependencyObject dpo, Type type) {
             if (dpo == null) {
                 return null;
             }
@@ -102,7 +108,7 @@ namespace MpWpfApp {
                 return null;
             }
         }
-        //public static List<TextRange> FindStringRangesFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
+        //public List<TextRange> FindStringRangesFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
         //    var matchRangeList = new List<TextRange>();
         //    TextPointer lastDocPosition = null; 
         //    int curIdx = 0;
@@ -215,7 +221,7 @@ namespace MpWpfApp {
         //    return matchRangeList;
         //}
 
-        public static List<TextRange> FindStringRangesFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
+        public List<TextRange> FindStringRangesFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
             var orgPosition = position;
             TextPointer nextDocPosition = null;
             var matchRangeList = new List<TextRange>();
@@ -240,7 +246,7 @@ namespace MpWpfApp {
             return matchRangeList;
         }
 
-        public static TextRange FindStringRangeFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
+        public TextRange FindStringRangeFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
             int curIdx = 0;
             TextPointer postOfUiElement = null;
             TextPointer startPointer = null;
@@ -256,7 +262,7 @@ namespace MpWpfApp {
                         postOfUiElement = ((position.Parent as InlineUIContainer).Parent as Hyperlink).ElementEnd.GetNextContextPosition(LogicalDirection.Forward);
                         position = tb.ContentStart;
                         continue;
-                        //var highlightRange = MpHelpers.FindStringRangeFromPosition(tb.ContentStart, matchStr);
+                        //var highlightRange = MpHelpers.Instance.FindStringRangeFromPosition(tb.ContentStart, matchStr);
                         //if (highlightRange != null) {
                         //    return highlightRange;
                         //}
@@ -326,7 +332,7 @@ namespace MpWpfApp {
          * If you have those in searchRange.Text then the resulting TextRange will be ahead of the correct 
          * position by the number of new line characters*/
 
-        public static TextRange FindTextInRange(TextRange searchRange, string searchText) {
+        public TextRange FindTextInRange(TextRange searchRange, string searchText) {
             int offset = searchRange.Text.IndexOf(searchText, StringComparison.OrdinalIgnoreCase);
             if (offset < 0)
                 return null;  // Not found
@@ -337,7 +343,7 @@ namespace MpWpfApp {
             return result;
         }
 
-        public static TextPointer GetTextPositionAtOffset(TextPointer position, int characterCount) {
+        public TextPointer GetTextPositionAtOffset(TextPointer position, int characterCount) {
             while (position != null) {
                 if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.Text) {
                     int count = position.GetTextRunLength(LogicalDirection.Forward);
@@ -358,7 +364,7 @@ namespace MpWpfApp {
             return position;
         }
 
-        //public static TextRange FindStringRangeFromPosition(TextPointer position, string str, bool isCaseSensitive = false) {
+        //public TextRange FindStringRangeFromPosition(TextPointer position, string str, bool isCaseSensitive = false) {
         //    while (position != null) {
         //        var dir = LogicalDirection.Forward;
         //        if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
@@ -381,7 +387,7 @@ namespace MpWpfApp {
         //    return null;
         //}
 
-        public static TextRange FindStringRangeFromPosition2(TextPointer position, string str, bool isCaseSensitive = false)             {
+        public TextRange FindStringRangeFromPosition2(TextPointer position, string str, bool isCaseSensitive = false)             {
             for (;
              position != null;
              position = position.GetNextContextPosition(LogicalDirection.Forward)) {                
@@ -406,7 +412,7 @@ namespace MpWpfApp {
             return null;
         }
 
-        public static string PlainTextToRtf2(string input) {
+        public string PlainTextToRtf2(string input) {
             //first take care of special RTF chars
             StringBuilder backslashed = new StringBuilder(input);
             backslashed.Replace(@"\", @"\\");
@@ -425,33 +431,33 @@ namespace MpWpfApp {
             return sb.ToString();
         }
 
-        public static bool IsStringRichText(string text) {
+        public bool IsStringRichText(string text) {
             if(string.IsNullOrEmpty(text)) {
                 return false;
             }
             return text.StartsWith(@"{\rtf");
         }
 
-        public static bool IsStringXaml(string text) {
+        public bool IsStringXaml(string text) {
             return text.StartsWith(@"<Section xmlns=") || text.StartsWith(@"<Span xmlns=");
         }
 
-        public static bool IsStringSpan(string text) {
+        public bool IsStringSpan(string text) {
             return text.StartsWith(@"<Span xmlns=");
         }
 
-        public static bool IsStringSection(string text) {
+        public bool IsStringSection(string text) {
             return text.StartsWith(@"<Section xmlns=");
         }
 
-        public static System.Drawing.Font GetRichTextFont(string rt) {
+        public System.Drawing.Font GetRichTextFont(string rt) {
             using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
                 rtb.Rtf = rt;
                 return rtb.Font;
             }
         }
 
-        public static System.Drawing.Size GetRichTextFontSize(string rt) {
+        public System.Drawing.Size GetRichTextFontSize(string rt) {
             string pt = ConvertRichTextToPlainText(rt);
             using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
                 rtb.Rtf = rt;
@@ -460,7 +466,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static string CombineRichText(string rt1, string rt2,bool insertNewLine = false) {
+        public string CombineRichText(string rt1, string rt2,bool insertNewLine = false) {
             using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
                 rtb.Rtf = rt1;
                 if(insertNewLine) {
@@ -472,7 +478,7 @@ namespace MpWpfApp {
             }
         }        
 
-        public static CurrencyType GetCurrencyTypeFromString(string moneyStr) {
+        public CurrencyType GetCurrencyTypeFromString(string moneyStr) {
             if (moneyStr == null || moneyStr.Length == 0) {
                 return CurrencyType.USD;
             }
@@ -486,7 +492,7 @@ namespace MpWpfApp {
             return CurrencyType.USD;
         }
 
-        public static double GetCurrencyValueFromString(string moneyStr) {
+        public double GetCurrencyValueFromString(string moneyStr) {
             if(string.IsNullOrEmpty(moneyStr) || moneyStr.Length < 2) {
                 return 0;
             }
@@ -500,7 +506,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static int GetColCount(string text) {
+        public int GetColCount(string text) {
             int maxCols = int.MinValue;
             foreach (string row in text.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries)) {
                 if (row.Length > maxCols) {
@@ -510,7 +516,7 @@ namespace MpWpfApp {
             return maxCols;
         }
 
-        public static int GetRowCount(string text) {
+        public int GetRowCount(string text) {
             if(string.IsNullOrEmpty(text)) {
                 return 0;
             }
@@ -525,7 +531,7 @@ namespace MpWpfApp {
             return text.Split(new string[] { Environment.NewLine }, StringSplitOptions.None).Length;
         }
 
-        public static string GetRandomString(int charsPerLine = 32, int lines = 1) {
+        public string GetRandomString(int charsPerLine = 32, int lines = 1) {
             StringBuilder str_build = new StringBuilder();
 
             for (int i = 0; i < lines; i++) {
@@ -542,11 +548,11 @@ namespace MpWpfApp {
             return str_build.ToString();
         }
 
-        public static string RemoveSpecialCharacters(string str) {
+        public string RemoveSpecialCharacters(string str) {
             return Regex.Replace(str, "[^a-zA-Z0-9_.]+", string.Empty, RegexOptions.Compiled);
         }
 
-        //public static string CombineRichText(string from, string to) {
+        //public string CombineRichText(string from, string to) {
         //    return ConvertFlowDocumentToRichText(
         //        CombineFlowDocuments(
         //            ConvertRichTextToFlowDocument(from),
@@ -555,7 +561,7 @@ namespace MpWpfApp {
         //    );
         //}
 
-        public static MpEventEnabledFlowDocument CombineFlowDocuments(MpEventEnabledFlowDocument from, MpEventEnabledFlowDocument to) {
+        public MpEventEnabledFlowDocument CombineFlowDocuments(MpEventEnabledFlowDocument from, MpEventEnabledFlowDocument to) {
             using (MemoryStream stream = new MemoryStream()) {
                 TextRange range = new TextRange(from.ContentStart, from.ContentEnd);
 
@@ -574,7 +580,7 @@ namespace MpWpfApp {
             }            
         }
 
-        public static string CurrencyConvert(decimal amount, string fromCurrency, string toCurrency) {
+        public string CurrencyConvert(decimal amount, string fromCurrency, string toCurrency) {
             try {
                 //Grab your values and build your Web Request to the API
                 string apiURL = String.Format("https://www.google.com/finance/converter?a={0}&from={1}&to={2}&meta={3}", amount, fromCurrency, toCurrency, Guid.NewGuid().ToString());
@@ -597,7 +603,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static void AppendBitmapSourceToFlowDocument(FlowDocument flowDocument, BitmapSource bitmapSource) {
+        public void AppendBitmapSourceToFlowDocument(FlowDocument flowDocument, BitmapSource bitmapSource) {
             Image image = new Image() {
                 Source = bitmapSource,
                 Width = 300,
@@ -612,7 +618,7 @@ namespace MpWpfApp {
         #endregion
 
         #region System
-        public static void CreateBinding(
+        public void CreateBinding(
             object source, 
             PropertyPath sourceProperty, 
             DependencyObject target, 
@@ -628,15 +634,15 @@ namespace MpWpfApp {
             BindingOperations.SetBinding(target, targetProperty, b);
         }
 
-        public static Random Rand { get; set; } = new Random();
+        public Random Rand { get; set; } = new Random();
 
-        public static bool IsInDesignMode {
+        public bool IsInDesignMode {
             get {
                 return DesignerProperties.GetIsInDesignMode(new DependencyObject());
             }
         }
 
-        public static bool ApplicationIsActivated() {
+        public bool ApplicationIsActivated() {
             var activatedHandle = WinApi.GetForegroundWindow();
             if (activatedHandle == IntPtr.Zero) {
                 return false;       // No window is currently activated
@@ -647,21 +653,21 @@ namespace MpWpfApp {
             return (int)activeProcId == procId;
         }
 
-        public static void OpenUrl(string url, bool openInNewWindow = true) {
+        public void OpenUrl(string url, bool openInNewWindow = true) {
             if(url.StartsWith(@"http") && !openInNewWindow) {
                 //WinApi.SetActiveWindow()
             } else {
                 Process.Start(url);
             }
         }
-        public static string CreateEmail(string fromAddress, string subject, object body, string attachmentPath = "") {
+        public string CreateEmail(string fromAddress, string subject, object body, string attachmentPath = "") {
             //this returns the .eml file that will need to be deleted
             var mailMessage = new MailMessage();
             mailMessage.From = new MailAddress(fromAddress);
             mailMessage.Subject = "Your subject here";
             if(body.GetType() == typeof(BitmapSource)) {
                 mailMessage.IsBodyHtml = true;
-                mailMessage.Body = string.Format("<img src='{0}'>", MpHelpers.WriteBitmapSourceToFile(Path.GetTempPath(),(BitmapSource)body), true);
+                mailMessage.Body = string.Format("<img src='{0}'>", MpHelpers.Instance.WriteBitmapSourceToFile(Path.GetTempPath(),(BitmapSource)body), true);
             } else {
                 mailMessage.Body = (string)body;
             }            
@@ -680,7 +686,7 @@ namespace MpWpfApp {
             return filename;
         }
         
-        public static long FileListSize(string[] paths) {
+        public long FileListSize(string[] paths) {
             long total = 0;
             foreach (string path in paths) {
                 if (Directory.Exists(path)) {
@@ -692,7 +698,7 @@ namespace MpWpfApp {
             return total;
         }
 
-        public static string GetUniqueFileName(string fullPath) {
+        public string GetUniqueFileName(string fullPath) {
             int count = 1;
 
             string fileNameOnly = Path.GetFileNameWithoutExtension(fullPath);
@@ -707,7 +713,7 @@ namespace MpWpfApp {
             return newFullPath;
         }
 
-        public static string ReadTextFromFile(string filePath) {
+        public string ReadTextFromFile(string filePath) {
             using (StreamReader f = new StreamReader(filePath)) {
                 string outStr = string.Empty;
                 outStr = f.ReadToEnd();
@@ -716,7 +722,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static string WriteTextToFile(string filePath, string text, bool isTemporary = false) {
+        public string WriteTextToFile(string filePath, string text, bool isTemporary = false) {
             using (StreamWriter of = new StreamWriter(filePath)) {
                 of.Write(text);
                 of.Close();
@@ -724,14 +730,14 @@ namespace MpWpfApp {
             }
         }
 
-        public static string WriteBitmapSourceToFile(string filePath, BitmapSource bmpSrc, bool isTemporary = false) {
-            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(MpHelpers.ConvertBitmapSourceToBitmap(bmpSrc))) {
+        public string WriteBitmapSourceToFile(string filePath, BitmapSource bmpSrc, bool isTemporary = false) {
+            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(MpHelpers.Instance.ConvertBitmapSourceToBitmap(bmpSrc))) {
                 bmp.Save(filePath, ImageFormat.Png);
                 return filePath;
             }
         }
 
-        public static string WriteStringListToCsvFile(string filePath, IList<string> strList, bool isTemporary = false) {
+        public string WriteStringListToCsvFile(string filePath, IList<string> strList, bool isTemporary = false) {
             var textList = new List<string>();
             foreach (var str in strList) {
                 if (!string.IsNullOrEmpty(str.Trim())) {
@@ -751,7 +757,7 @@ namespace MpWpfApp {
             //}
         }
 
-        /* public static long DirSize(string sourceDir,bool recurse) {
+        /* public long DirSize(string sourceDir,bool recurse) {
              long size = 0;
              string[] fileEntries = Directory.GetFiles(sourceDir);
 
@@ -776,7 +782,7 @@ namespace MpWpfApp {
              return size;
          }*/
 
-        /*public static string GeneratePassword() {
+        /*public string GeneratePassword() {
             var generator = new MpPasswordGenerator(minimumLengthPassword: 8,
                                       maximumLengthPassword: 12,
                                       minimumUpperCaseChars: 2,
@@ -784,7 +790,7 @@ namespace MpWpfApp {
             return generator.Generate();
         }*/
 
-        public static void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs) {
+        public void DirectoryCopy(string sourceDirName, string destDirName, bool copySubDirs) {
             DirectoryInfo dir = new DirectoryInfo(sourceDirName);
             DirectoryInfo[] dirs = dir.GetDirectories();
 
@@ -823,7 +829,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static string GetCPUInfo() {
+        public string GetCPUInfo() {
             string cpuInfo = string.Empty;
             ManagementClass mc = new ManagementClass("win32_processor");
             ManagementObjectCollection moc = mc.GetInstances();
@@ -838,7 +844,7 @@ namespace MpWpfApp {
             return cpuInfo;
         }
 
-        public static string GetShortcutTargetPath(string file) {
+        public string GetShortcutTargetPath(string file) {
             try {
                 if (System.IO.Path.GetExtension(file).ToLower() != ".lnk") {
                     throw new Exception("Supplied file must be a .LNK file");
@@ -888,7 +894,7 @@ namespace MpWpfApp {
         }
 
         //exampe RunWithString(@"C:\windows\system32\cmd.exe",
-        public static void RunInShell(string args, bool asAdministrator, bool isSilent, IntPtr forceHandle) {
+        public void RunInShell(string args, bool asAdministrator, bool isSilent, IntPtr forceHandle) {
             System.Diagnostics.ProcessStartInfo processInfo = new System.Diagnostics.ProcessStartInfo();
             processInfo.FileName = Environment.ExpandEnvironmentVariables("%SystemRoot%") + @"\System32\cmd.exe"; //Sets the FileName property of myProcessInfo to %SystemRoot%\System32\cmd.exe where %SystemRoot% is a system variable which is expanded using Environment.ExpandEnvironmentVariables
             processInfo.Arguments = "/K " + args;
@@ -897,11 +903,11 @@ namespace MpWpfApp {
             System.Diagnostics.Process.Start(processInfo); //Starts the process based on myProcessInfo
         }
         
-        public static string GetApplicationDirectory() {
+        public string GetApplicationDirectory() {
             return AppDomain.CurrentDomain.BaseDirectory;
         }
 
-        public static string GetProcessApplicationName(IntPtr hWnd) {
+        public string GetProcessApplicationName(IntPtr hWnd) {
             string mwt = GetProcessMainWindowTitle(hWnd);
             if (string.IsNullOrEmpty(mwt)) {
                 return string.Empty;
@@ -913,7 +919,7 @@ namespace MpWpfApp {
             return mwta[mwta.Length - 1].Trim();
         }
 
-        public static string GetProcessPath(IntPtr hwnd) { 
+        public string GetProcessPath(IntPtr hwnd) { 
             try {
                 if (hwnd == null || hwnd == IntPtr.Zero) {
                     return string.Empty;
@@ -929,11 +935,11 @@ namespace MpWpfApp {
                 }
             }
             catch (Exception e) {
-                Console.WriteLine("MpHelpers.GetProcessPath error (likely) cannot find process path: " + e.ToString());
+                Console.WriteLine("MpHelpers.Instance.GetProcessPath error (likely) cannot find process path: " + e.ToString());
                 return GetProcessPath(((MpClipTrayViewModel)((MpMainWindowViewModel)((MpMainWindow)App.Current.MainWindow).DataContext).ClipTrayViewModel).ClipboardManager.LastWindowWatcher.ThisAppHandle);
             }
         }
-        public static string GetProcessMainWindowTitle(IntPtr hWnd) {
+        public string GetProcessMainWindowTitle(IntPtr hWnd) {
             if (hWnd == null) {
                 throw new Exception("MpHelpers error hWnd is null");
             }
@@ -946,13 +952,13 @@ namespace MpWpfApp {
                 return proc.MainWindowTitle;
             }
         }
-        public static Point GetMousePosition() {
+        public Point GetMousePosition() {
             WinApi.Win32Point w32Mouse = new WinApi.Win32Point();
             WinApi.GetCursorPos(ref w32Mouse);
             return new Point(w32Mouse.X, w32Mouse.Y);
         }
 
-        public static string GetMainModuleFilepath(int processId) {
+        public string GetMainModuleFilepath(int processId) {
             string wmiQueryString = "SELECT ProcessId, ExecutablePath FROM Win32_Process WHERE ProcessId = " + processId;
             using (var searcher = new ManagementObjectSearcher(wmiQueryString)) {
                 using (var results = searcher.Get()) {
@@ -965,7 +971,7 @@ namespace MpWpfApp {
             return null;
         }
 
-        public static IPAddress GetCurrentIPAddress() {
+        public IPAddress GetCurrentIPAddress() {
             Ping ping = new Ping();
             var replay = ping.Send(Dns.GetHostName());
 
@@ -975,7 +981,7 @@ namespace MpWpfApp {
             return null;
         }
 
-        public static bool CheckForInternetConnection() {
+        public bool CheckForInternetConnection() {
             try {
                 using (var client = new WebClient())
                 using (client.OpenRead("http://www.google.com/")) {
@@ -988,14 +994,14 @@ namespace MpWpfApp {
             }
         }
 
-        public static bool IsPathDirectory(string str) {
+        public bool IsPathDirectory(string str) {
             // get the file attributes for file or directory
             return File.GetAttributes(str).HasFlag(FileAttributes.Directory);
         }
         #endregion
 
         #region Visual
-        private static List<List<Brush>> _ContentColors = new List<List<Brush>> {
+        private List<List<Brush>> _ContentColors = new List<List<Brush>> {
                 new List<Brush> {
                     new SolidColorBrush(Color.FromRgb(248, 160, 174)),
                     new SolidColorBrush(Color.FromRgb(243, 69, 68)),
@@ -1096,11 +1102,11 @@ namespace MpWpfApp {
                 }
             };
 
-        public static Brush GetContentColor(int c, int r) {
+        public Brush GetContentColor(int c, int r) {
             return _ContentColors[c][r];
         }
 
-        public static void SetColorChooserMenuItem(
+        public void SetColorChooserMenuItem(
             ContextMenu cm,
             MenuItem cmi,
             MouseButtonEventHandler selectedEventHandler, 
@@ -1151,7 +1157,7 @@ namespace MpWpfApp {
             cm.Width = 300;
         }
         
-        public static int GetColorColumn(Brush scb) {
+        public int GetColorColumn(Brush scb) {
             for (int c = 0; c < _ContentColors.Count; c++) {
                 for (int r = 0; r < _ContentColors[0].Count; r++) {
                     if(scb == _ContentColors[c][r]) {
@@ -1162,7 +1168,7 @@ namespace MpWpfApp {
             return 0;
         }
 
-        public static int GetColorRow(Brush scb) {
+        public int GetColorRow(Brush scb) {
             for (int c = 0; c < _ContentColors.Count; c++) {
                 for (int r = 0; r < _ContentColors[0].Count; r++) {
                     if (scb == _ContentColors[c][r]) {
@@ -1173,11 +1179,11 @@ namespace MpWpfApp {
             return 0;
         }
 
-        private static double sign(Point p1, Point p2, Point p3) {
+        private double sign(Point p1, Point p2, Point p3) {
             return (p1.X - p3.X) * (p2.Y - p3.Y) - (p2.X - p3.X) * (p1.Y - p3.Y);
         }
 
-        public static bool IsPointInTriangle(Point pt, Point v1, Point v2, Point v3) {
+        public bool IsPointInTriangle(Point pt, Point v1, Point v2, Point v3) {
             double d1, d2, d3;
             bool has_neg, has_pos;
 
@@ -1191,11 +1197,11 @@ namespace MpWpfApp {
             return !(has_neg && has_pos);
         }
 
-        public static double DistanceBetweenPoints(Point a, Point b) {
+        public double DistanceBetweenPoints(Point a, Point b) {
             return Math.Sqrt(Math.Pow(b.X - a.X, 2) + Math.Pow(b.Y - a.Y, 2));
         }
 
-        public static void AnimateDoubleProperty(double from, double to, double dt, object obj, DependencyProperty property, EventHandler onCompleted) {
+        public void AnimateDoubleProperty(double from, double to, double dt, object obj, DependencyProperty property, EventHandler onCompleted) {
             DoubleAnimation animation = new DoubleAnimation();
             animation.From = from;
             animation.To = to;
@@ -1217,7 +1223,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static Size MeasureText(string text, Typeface typeface, double fontSize) {
+        public Size MeasureText(string text, Typeface typeface, double fontSize) {
             var formattedText = new FormattedText(
                 text,
                 CultureInfo.CurrentCulture,
@@ -1231,23 +1237,23 @@ namespace MpWpfApp {
             return new Size(formattedText.Width, formattedText.Height);
         }
 
-        public static Brush ShowColorDialog(Brush currentBrush) {
+        public Brush ShowColorDialog(Brush currentBrush) {
             System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
             cd.AllowFullOpen = true;
             cd.ShowHelp = true;
-            cd.Color = MpHelpers.ConvertSolidColorBrushToWinFormsColor((SolidColorBrush)currentBrush);
+            cd.Color = MpHelpers.Instance.ConvertSolidColorBrushToWinFormsColor((SolidColorBrush)currentBrush);
             cd.CustomColors = Properties.Settings.Default.UserCustomColorIdxArray;
 
             var mw = (MpMainWindow)Application.Current.MainWindow;
             ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = true;
             // Update the text box color if the user clicks OK 
             if (cd.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                return MpHelpers.ConvertWinFormsColorToSolidColorBrush(cd.Color);
+                return MpHelpers.Instance.ConvertWinFormsColorToSolidColorBrush(cd.Color);
             }
             return null;
         }
 
-        public static List<MpDetectedImageObject> DetectObjects(byte[] image, double confidence = 0.0) {
+        public List<MpDetectedImageObject> DetectObjects(byte[] image, double confidence = 0.0) {
             var detectedObjectList = new List<MpDetectedImageObject>();
             using (var yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect())) {
                 var items = yoloWrapper.Detect(image);
@@ -1274,7 +1280,7 @@ namespace MpWpfApp {
             }
         }
         
-        public static BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint) {
+        public BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint) {
             var bmp = new WriteableBitmap(bmpSrc);
             var pixels = GetPixels(bmp);
             var pixelColor = new PixelColor[1, 1];
@@ -1292,7 +1298,7 @@ namespace MpWpfApp {
             return bmp;
         }
 
-        public static Color ConvertHexToColor(string hexString) {
+        public Color ConvertHexToColor(string hexString) {
             if (hexString.IndexOf('#') != -1) {
                 hexString = hexString.Replace("#", string.Empty);
             }
@@ -1304,7 +1310,7 @@ namespace MpWpfApp {
             return Color.FromArgb(255, r, g, b);
         }
 
-        public static BitmapSource GetIconImage(string sourcePath) {
+        public BitmapSource GetIconImage(string sourcePath) {
             if (!File.Exists(sourcePath)) {
                 if (!Directory.Exists(sourcePath)) {                    
                     //return (BitmapSource)new BitmapImage(new Uri(@"pack://application:,,,/Resources/Images/monkey (2).png"));
@@ -1317,7 +1323,7 @@ namespace MpWpfApp {
             return GetBitmapFromFilePath(sourcePath, IconSizeEnum.MediumIcon32);
         }
 
-        public static BitmapSource ResizeBitmapSource(BitmapSource bmpSrc, Size newSize) {
+        public BitmapSource ResizeBitmapSource(BitmapSource bmpSrc, Size newSize) {
             
             using (System.Drawing.Bitmap result = new System.Drawing.Bitmap((int)newSize.Width, (int)newSize.Height)) {
                 using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage((System.Drawing.Image)result)) {
@@ -1330,17 +1336,17 @@ namespace MpWpfApp {
             }
         }
 
-        public static bool ByteArrayCompare(byte[] b1, byte[] b2) {
+        public bool ByteArrayCompare(byte[] b1, byte[] b2) {
             // Validate buffers are the same length.
             // This also ensures that the count does not exceed the length of either buffer.  
             return b1.Length == b2.Length && WinApi.memcmp(b1, b2, b1.Length) == 0;
         }
 
-        public static BitmapSource ReadImageFromFile(string filePath) {
+        public BitmapSource ReadImageFromFile(string filePath) {
             return new BitmapImage(new Uri(filePath));
         }
 
-        public static System.Drawing.Color GetDominantColor(System.Drawing.Bitmap bmp) {
+        public System.Drawing.Color GetDominantColor(System.Drawing.Bitmap bmp) {
             //Used for tally
             int r = 0;
             int g = 0;
@@ -1368,7 +1374,7 @@ namespace MpWpfApp {
             return System.Drawing.Color.FromArgb((byte)r, (byte)g, (byte)b);
         }
 
-        public static void ColorToHSV(System.Drawing.Color color, out double hue, out double saturation, out double value) {
+        public void ColorToHSV(System.Drawing.Color color, out double hue, out double saturation, out double value) {
             int max = Math.Max(color.R, Math.Max(color.G, color.B));
             int min = Math.Min(color.R, Math.Min(color.G, color.B));
 
@@ -1377,7 +1383,7 @@ namespace MpWpfApp {
             value = max / 255d;
         }
 
-        public static System.Drawing.Color ColorFromHSV(double hue, double saturation, double value) {
+        public System.Drawing.Color ColorFromHSV(double hue, double saturation, double value) {
             int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
             double f = (hue / 60) - Math.Floor(hue / 60);
 
@@ -1402,27 +1408,27 @@ namespace MpWpfApp {
             }
         }
 
-        public static System.Drawing.Color GetInvertedColor(System.Drawing.Color c) {
+        public System.Drawing.Color GetInvertedColor(System.Drawing.Color c) {
             ColorToHSV(c, out double h, out double s, out double v);
             h = (h + 180) % 360;
             return ColorFromHSV(h, s, v);
         }
 
-        public static bool IsBright(Color c, int brightThreshold = 130) {
+        public bool IsBright(Color c, int brightThreshold = 130) {
             return (int)Math.Sqrt(
             c.R * c.R * .299 +
             c.G * c.G * .587 +
             c.B * c.B * .114) > brightThreshold;
         }
 
-        public static SolidColorBrush ChangeBrushAlpha(SolidColorBrush solidColorBrush, byte alpha) {
+        public SolidColorBrush ChangeBrushAlpha(SolidColorBrush solidColorBrush, byte alpha) {
             var c = solidColorBrush.Color;
             c.A = alpha;
             solidColorBrush.Color = c;
             return solidColorBrush;
         }
 
-        public static SolidColorBrush ChangeBrushBrightness(SolidColorBrush b, double correctionFactor) {
+        public SolidColorBrush ChangeBrushBrightness(SolidColorBrush b, double correctionFactor) {
             if (correctionFactor == 0.0f) {
                 return b.Clone();
             }
@@ -1444,15 +1450,15 @@ namespace MpWpfApp {
             return new SolidColorBrush(Color.FromArgb(b.Color.A, (byte)red, (byte)green, (byte)blue));
         }
 
-        public static Brush GetDarkerBrush(Brush b) {
+        public Brush GetDarkerBrush(Brush b) {
             return ChangeBrushBrightness((SolidColorBrush)b, 0.5);
         }
 
-        public static Brush GetLighterBrush(Brush b) {
+        public Brush GetLighterBrush(Brush b) {
             return ChangeBrushBrightness((SolidColorBrush)b, 0.5);
         }
 
-        public static Color GetRandomColor(byte alpha = 255) {
+        public Color GetRandomColor(byte alpha = 255) {
             //if (alpha == 255) {
             //    return Color.FromArgb(alpha, (byte)Rand.Next(256), (byte)Rand.Next(256), (byte)Rand.Next(256));
             //}
@@ -1462,20 +1468,20 @@ namespace MpWpfApp {
             return ((SolidColorBrush)GetContentColor(x, y)).Color;
         }
 
-        public static Brush GetRandomBrushColor(byte alpha = 255) {
+        public Brush GetRandomBrushColor(byte alpha = 255) {
             return (Brush)new SolidColorBrush() { Color = GetRandomColor(alpha) };
         }
 
-        public static System.Drawing.Icon GetIconFromBitmap(System.Drawing.Bitmap bmp) {
+        public System.Drawing.Icon GetIconFromBitmap(System.Drawing.Bitmap bmp) {
             IntPtr hIcon = bmp.GetHicon();
             return System.Drawing.Icon.FromHandle(hIcon);
         }
 
-        public static string GetColorString(Color c) {
+        public string GetColorString(Color c) {
             return (int)c.A + "," + (int)c.R + "," + (int)c.G + "," + (int)c.B;
         }
 
-        public static System.Drawing.Color GetColorFromString(string colorStr) {
+        public System.Drawing.Color GetColorFromString(string colorStr) {
             if (string.IsNullOrEmpty(colorStr)) {
                 colorStr = GetColorString(GetRandomColor());
             }
@@ -1492,7 +1498,7 @@ namespace MpWpfApp {
             return System.Drawing.Color.FromArgb(c[3], c[0], c[1], c[2]);
         }
 
-        public static BitmapSource MergeImages(IList<BitmapSource> bmpSrcList) {
+        public BitmapSource MergeImages(IList<BitmapSource> bmpSrcList) {
             int width = 0;
             int height = 0;
             int dpiX = 0;
@@ -1516,7 +1522,7 @@ namespace MpWpfApp {
             return ConvertRenderTargetBitmapToBitmapSource(renderTargetBitmap);
         }
 
-        public static BitmapSource ConvertRenderTargetBitmapToBitmapSource(RenderTargetBitmap rtb) {
+        public BitmapSource ConvertRenderTargetBitmapToBitmapSource(RenderTargetBitmap rtb) {
             var bitmapImage = new BitmapImage();
             var bitmapEncoder = new PngBitmapEncoder();
             bitmapEncoder.Frames.Add(BitmapFrame.Create(rtb));
@@ -1533,7 +1539,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static BitmapSource CombineBitmap(IList<BitmapSource> bmpSrcList, bool tileHorizontally = true) {
+        public BitmapSource CombineBitmap(IList<BitmapSource> bmpSrcList, bool tileHorizontally = true) {
             if (bmpSrcList.Count == 1) {
                 return bmpSrcList[0];
             }
@@ -1594,7 +1600,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Converters
-        public static string ConvertFlowDocumentToXaml(MpEventEnabledFlowDocument fd) {
+        public string ConvertFlowDocumentToXaml(MpEventEnabledFlowDocument fd) {
             TextRange range = new TextRange(fd.ContentStart, fd.ContentEnd);
             using (MemoryStream stream = new MemoryStream()) {
                 range.Save(stream, DataFormats.XamlPackage);
@@ -1603,7 +1609,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static MpEventEnabledFlowDocument ConvertXamlToFlowDocument(string xaml) {
+        public MpEventEnabledFlowDocument ConvertXamlToFlowDocument(string xaml) {
             using (var stringReader = new StringReader(xaml)) {
                 var xmlReader = XmlReader.Create(stringReader);
                 //if (!IsStringFlowSection(xaml)) {
@@ -1635,20 +1641,20 @@ namespace MpWpfApp {
             }
         }
 
-        public static string ConvertPlainTextToRichText(string plainText) {
+        public string ConvertPlainTextToRichText(string plainText) {
             System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox();
             rtb.Text = plainText;
             rtb.Font = new System.Drawing.Font(Properties.Settings.Default.DefaultFontFamily,(float)Properties.Settings.Default.DefaultFontSize);
             return rtb.Rtf;
         }
-        public static string ConvertPlainTextToRichText2(string plainText) {
+        public string ConvertPlainTextToRichText2(string plainText) {
             string escapedPlainText = plainText.Replace(@"\", @"\\").Replace("{", @"\{").Replace("}", @"\}");
             string rtf = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard ";
             rtf += escapedPlainText.Replace(Environment.NewLine, @" \par ");
             rtf += " }";
             return rtf;
         }
-        public static string ConvertRichTextToPlainText(string richText) {
+        public string ConvertRichTextToPlainText(string richText) {
             if (IsStringRichText(richText)) {
                 RichTextBox rtb = new RichTextBox();
                 rtb.SetRtf(richText);
@@ -1664,7 +1670,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static string ConvertXamlToRichText(string xaml) {
+        public string ConvertXamlToRichText(string xaml) {
             //return string.Empty;
             var richTextBox = new System.Windows.Controls.RichTextBox();
             if (string.IsNullOrEmpty(xaml)) {
@@ -1693,16 +1699,16 @@ namespace MpWpfApp {
             }
         }
 
-        public static string ConvertXamlToPlainText(string xaml) {
+        public string ConvertXamlToPlainText(string xaml) {
             var fd = ConvertXamlToFlowDocument(xaml);
             return new TextRange(fd.ContentStart, fd.ContentEnd).Text;
         }
 
-        public static string ConvertPlainTextToXaml(string plainText) {
+        public string ConvertPlainTextToXaml(string plainText) {
             return ConvertRichTextToXaml(ConvertPlainTextToRichText(plainText));
         }
 
-        public static MpEventEnabledFlowDocument ConvertRichTextToFlowDocument(string rtf) {
+        public MpEventEnabledFlowDocument ConvertRichTextToFlowDocument(string rtf) {
             if(IsStringRichText(rtf)) {
                 //using (var stream = new MemoryStream(Encoding.Default.GetBytes(rtf))) {
                 using (var stream = new MemoryStream(UTF8Encoding.Default.GetBytes(rtf))) {
@@ -1715,7 +1721,7 @@ namespace MpWpfApp {
             return ConvertXamlToFlowDocument(rtf);
         }
 
-        public static string ConvertRichTextToXaml(string rt) {
+        public string ConvertRichTextToXaml(string rt) {
             var assembly = Assembly.GetAssembly(typeof(System.Windows.FrameworkElement));
             var xamlRtfConverterType = assembly.GetType("System.Windows.Documents.XamlRtfConverter");
             var xamlRtfConverter = Activator.CreateInstance(xamlRtfConverterType, true);
@@ -1724,7 +1730,7 @@ namespace MpWpfApp {
             return xamlContent;
         }
 
-        public static string ConvertFlowDocumentToRichText(FlowDocument fd) {
+        public string ConvertFlowDocumentToRichText(FlowDocument fd) {
             var rtb = (RichTextBox)fd.Parent;
             //if(rtb.DataContext.GetType() == typeof(MpClipTileViewModel)) {
             //    //rtb.ClearTemplates();
@@ -1746,7 +1752,7 @@ namespace MpWpfApp {
             return rtf;
         }
 
-        public static string ConvertBitmapSourceToPlainText(BitmapSource bmpSource) {
+        public string ConvertBitmapSourceToPlainText(BitmapSource bmpSource) {
             string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
             using (System.Drawing.Bitmap image = ConvertBitmapSourceToBitmap(ResizeBitmapSource(bmpSource, new Size(MpMeasurements.Instance.ClipTileBorderSize, MpMeasurements.Instance.ClipTileContentHeight)))) {
                 string outStr = string.Empty;
@@ -1767,7 +1773,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static byte[] ConvertBitmapSourceToByteArray(BitmapSource bs) {
+        public byte[] ConvertBitmapSourceToByteArray(BitmapSource bs) {            
             PngBitmapEncoder encoder = new PngBitmapEncoder();
             using (MemoryStream stream = new MemoryStream()) {
                 encoder.Frames.Add(BitmapFrame.Create(bs));
@@ -1778,11 +1784,11 @@ namespace MpWpfApp {
             }
         }
 
-        public static BitmapSource ConvertByteArrayToBitmapSource(byte[] bytes) {
+        public BitmapSource ConvertByteArrayToBitmapSource(byte[] bytes) {
             return (BitmapSource)new ImageSourceConverter().ConvertFrom(bytes);
         }
 
-        public static BitmapSource ConvertBitmapToBitmapSource(System.Drawing.Bitmap bitmap) {
+        public BitmapSource ConvertBitmapToBitmapSource(System.Drawing.Bitmap bitmap) {
             var bitmapData = bitmap.LockBits(
                 new System.Drawing.Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
 
@@ -1800,7 +1806,7 @@ namespace MpWpfApp {
             return bitmapSource;
         }
 
-        public static System.Drawing.Bitmap ConvertBitmapSourceToBitmap(BitmapSource bitmapsource) {
+        public System.Drawing.Bitmap ConvertBitmapSourceToBitmap(BitmapSource bitmapsource) {
             using (MemoryStream outStream = new MemoryStream()) {
                 BitmapEncoder enc = new BmpBitmapEncoder();
                 enc.Frames.Add(BitmapFrame.Create(bitmapsource));
@@ -1809,15 +1815,15 @@ namespace MpWpfApp {
             }
         }
 
-        public static System.Drawing.Color ConvertSolidColorBrushToWinFormsColor(SolidColorBrush scb) {
+        public System.Drawing.Color ConvertSolidColorBrushToWinFormsColor(SolidColorBrush scb) {
             return System.Drawing.Color.FromArgb(scb.Color.A, scb.Color.R, scb.Color.G, scb.Color.B);
         }
 
-        public static SolidColorBrush ConvertWinFormsColorToSolidColorBrush(System.Drawing.Color c) {
+        public SolidColorBrush ConvertWinFormsColorToSolidColorBrush(System.Drawing.Color c) {
             return new SolidColorBrush(Color.FromArgb(c.A, c.R, c.G, c.B));
         }
 
-        public static BitmapSource ConvertRichTextToBitmapSource(string rt) {
+        public BitmapSource ConvertRichTextToBitmapSource(string rt) {
             System.Drawing.Size ts = GetRichTextFontSize(rt);
             using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(ts.Width, ts.Height)) {
                 using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(bmp)) {
@@ -1832,7 +1838,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Http
-        public static async Task<string> ShortenUrl(string url) {
+        public async Task<string> ShortenUrl(string url) {
             string bitlyToken = @"f6035b9ed05ac82b42d4853c984e34a4f1ba05d8";
             using (HttpClient client = new HttpClient()) {
                 using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://api-ssl.bitly.com/v4/shorten")) {
@@ -1859,7 +1865,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static BitmapSource ConvertUrlToQrCode(string url) {
+        public BitmapSource ConvertUrlToQrCode(string url) {
             Url generator = new Url(url);
             string payload = generator.ToString();
 
@@ -1867,7 +1873,7 @@ namespace MpWpfApp {
                 using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q)) {
                     using (QRCode qrCode = new QRCode(qrCodeData)) {
                         var qrCodeAsBitmap = qrCode.GetGraphic(20);
-                        return MpHelpers.ConvertBitmapToBitmapSource(qrCodeAsBitmap);
+                        return MpHelpers.Instance.ConvertBitmapToBitmapSource(qrCodeAsBitmap);
                     }
                 }
             }
@@ -1875,7 +1881,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-        private static PixelColor[,] GetPixels(BitmapSource source) {
+        private PixelColor[,] GetPixels(BitmapSource source) {
             if (source.Format != PixelFormats.Bgra32) {
                 source = new FormatConvertedBitmap(source, PixelFormats.Bgra32, null, 0);
             }
@@ -1887,17 +1893,17 @@ namespace MpWpfApp {
             return result;
         }
 
-        private static void PutPixels(WriteableBitmap bitmap, PixelColor[,] pixels, int x, int y) {
+        private void PutPixels(WriteableBitmap bitmap, PixelColor[,] pixels, int x, int y) {
             int width = pixels.GetLength(0);
             int height = pixels.GetLength(1);
             bitmap.WritePixels(new Int32Rect(0, 0, width, height), pixels, width * 4, x, y);
         }
 
-        private static long CalcDirSize(string sourceDir, bool recurse = true) {
+        private long CalcDirSize(string sourceDir, bool recurse = true) {
             return CalcDirSizeHelper(new DirectoryInfo(sourceDir), recurse);
         }
 
-        private static long CalcDirSizeHelper(DirectoryInfo di, bool recurse = true) {
+        private long CalcDirSizeHelper(DirectoryInfo di, bool recurse = true) {
             long size = 0;
             FileInfo[] fiEntries = di.GetFiles();
             foreach (var fiEntry in fiEntries) {

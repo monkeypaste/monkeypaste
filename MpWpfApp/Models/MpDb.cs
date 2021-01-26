@@ -42,13 +42,13 @@ namespace MpWpfApp {
         private void InitDb() {
             //if db does not exist create it with a random password and set its path and password properties
             if (string.IsNullOrEmpty(Properties.Settings.Default.DbPath) || !File.Exists(Properties.Settings.Default.DbPath)) {
-                Console.WriteLine("Db does not exist in " + MpHelpers.GetApplicationDirectory());
-                Properties.Settings.Default.DbPath = MpHelpers.GetApplicationDirectory() + Properties.Settings.Default.DbName;
+                Console.WriteLine("Db does not exist in " + MpHelpers.Instance.GetApplicationDirectory());
+                Properties.Settings.Default.DbPath = MpHelpers.Instance.GetApplicationDirectory() + Properties.Settings.Default.DbName;
                 Properties.Settings.Default.DbPassword = string.Empty;
                 Properties.Settings.Default.Save();
                 SQLiteConnection.CreateFile(Properties.Settings.Default.DbPath);
                 ExecuteWrite(GetCreateString(), null);
-                //SetDbPassword(MpHelpers.GetRandomString());
+                //SetDbPassword(MpHelpers.Instance.GetRandomString());
             }
             Console.WriteLine("Database successfully initialized at " + Properties.Settings.Default.DbPath);
             _isLoaded = true;
@@ -57,7 +57,7 @@ namespace MpWpfApp {
             // User = new MpUser() { IdentityToken = idToken };
         }
         public void InitClient(string accessToken) {
-            Client = new MpClient(0, 3, MpHelpers.GetCurrentIPAddress()/*.MapToIPv4()*/.ToString(), accessToken, DateTime.Now);
+            Client = new MpClient(0, 3, MpHelpers.Instance.GetCurrentIPAddress()/*.MapToIPv4()*/.ToString(), accessToken, DateTime.Now);
         }
         public List<MpCopyItem> MergeCopyItemLists(List<MpCopyItem> listA, List<MpCopyItem> listB) {
             //sorts merged list by copy datetime

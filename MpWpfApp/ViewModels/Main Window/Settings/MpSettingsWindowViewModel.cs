@@ -403,7 +403,7 @@ namespace MpWpfApp {
             if (openResult != null && openResult.Value) {
                 string appPath = openFileDialog.FileName;
                 if(Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
-                    appPath = MpHelpers.GetShortcutTargetPath(openFileDialog.FileName);
+                    appPath = MpHelpers.Instance.GetShortcutTargetPath(openFileDialog.FileName);
                 }
                 var neavm = MpAppCollectionViewModel.Instance.GetAppViewModelByProcessPath(appPath);
                 if (neavm == null) {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpViewModelBase : INotifyPropertyChanged {
@@ -14,6 +15,7 @@ namespace MpWpfApp {
             protected set {
                 if(_isBusy != value) {
                     _isBusy = value;
+                    Application.Current.MainWindow.Cursor = IsBusy ? Cursors.Wait : Cursors.Arrow;
                     OnPropertyChanged(nameof(IsBusy));
                 }
             }            
@@ -23,6 +25,7 @@ namespace MpWpfApp {
                 return (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
             }
         }
+
 
         public bool ThrowOnInvalidPropertyName { get; private set; }
 

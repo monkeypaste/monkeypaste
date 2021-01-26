@@ -99,7 +99,7 @@ namespace MpWpfApp {
                 position != null && position.CompareTo(rtb.Document.ContentEnd) <= 0;
                 position = position.GetNextContextPosition(LogicalDirection.Forward)) {
                 if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.ElementEnd) {
-                    var hl = MpHelpers.FindParentOfType(position.Parent, typeof(Hyperlink)) as Hyperlink;
+                    var hl = MpHelpers.Instance.FindParentOfType(position.Parent, typeof(Hyperlink)) as Hyperlink;
                     if (hl != null && !hlList.Contains(hl)) {
                         hlList.Add(hl);
                     }
@@ -162,7 +162,7 @@ namespace MpWpfApp {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
                             Hyperlink hl = null;
-                            var matchRange = MpHelpers.FindStringRangeFromPosition(lastRangeEnd, c.Value, true);
+                            var matchRange = MpHelpers.Instance.FindStringRangeFromPosition(lastRangeEnd, c.Value, true);
                             if (matchRange == null) {
                                 continue;
                             }
@@ -170,7 +170,7 @@ namespace MpWpfApp {
                             if (linkType == MpSubTextTokenType.TemplateSegment) {
                                 var copyItemTemplate = ctvm.CopyItem.GetTemplateByName(matchRange.Text);
                                 var thlvm = new MpTemplateHyperlinkViewModel(ctvm, copyItemTemplate);
-                                hl = MpHelpers.CreateTemplateHyperlink(thlvm, matchRange);
+                                hl = MpHelpers.Instance.CreateTemplateHyperlink(thlvm, matchRange);
                                 ctvm.TemplateHyperlinkCollectionViewModel.Add(thlvm);
                                 //var thlb = new MpTemplateHyperlinkBorder(thlvm);
                                 //var container = new InlineUIContainer(thlb);
@@ -192,7 +192,7 @@ namespace MpWpfApp {
                                 hl.IsEnabled = true;
                                 hl.MouseLeftButtonDown += (s4, e4) => {
                                     if (hl.NavigateUri != null) {
-                                        MpHelpers.OpenUrl(hl.NavigateUri.ToString());
+                                        MpHelpers.Instance.OpenUrl(hl.NavigateUri.ToString());
                                     }
                                 };
 
@@ -200,7 +200,7 @@ namespace MpWpfApp {
                                 convertToQrCodeMenuItem.Header = "Convert to QR Code";
                                 convertToQrCodeMenuItem.Click += (s5, e1) => {
                                     var hyperLink = (Hyperlink)((MenuItem)s5).Tag;
-                                    Clipboard.SetImage(MpHelpers.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString()));
+                                    Clipboard.SetImage(MpHelpers.Instance.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString()));
                                 };
                                 convertToQrCodeMenuItem.Tag = hl;
                                 hl.ContextMenu = new ContextMenu();
@@ -220,7 +220,7 @@ namespace MpWpfApp {
                                         minifyUrl.Header = "Minify with bit.ly";
                                         minifyUrl.Click += (s1, e2) => {
                                             Hyperlink link = (Hyperlink)((MenuItem)s1).Tag;
-                                            string minifiedLink = MpHelpers.ShortenUrl(link.NavigateUri.ToString()).Result;
+                                            string minifiedLink = MpHelpers.Instance.ShortenUrl(link.NavigateUri.ToString()).Result;
                                             Clipboard.SetText(minifiedLink);
                                         };
                                         minifyUrl.Tag = hl;
@@ -236,7 +236,7 @@ namespace MpWpfApp {
                                         //"https://www.google.com/search?q=%24500.80+to+yen"
                                         MenuItem convertCurrencyMenuItem = new MenuItem();
                                         convertCurrencyMenuItem.Header = "Convert Currency To";
-                                        var fromCurrencyType = MpHelpers.GetCurrencyTypeFromString(linkText);
+                                        var fromCurrencyType = MpHelpers.Instance.GetCurrencyTypeFromString(linkText);
                                         foreach (MpCurrency currency in MpCurrencyConverter.Instance.CurrencyList) {
                                             if (currency.Id == Enum.GetName(typeof(CurrencyType), fromCurrencyType)) {
                                                 continue;
@@ -246,7 +246,7 @@ namespace MpWpfApp {
                                             subItem.Click += (s2, e2) => {
                                                 Enum.TryParse(currency.Id, out CurrencyType toCurrencyType);
                                                 var convertedValue = MpCurrencyConverter.Instance.Convert(
-                                                    MpHelpers.GetCurrencyValueFromString(linkText),
+                                                    MpHelpers.Instance.GetCurrencyValueFromString(linkText),
                                                     fromCurrencyType,
                                                     toCurrencyType);
                                                 convertedValue = Math.Round(convertedValue, 2);
@@ -257,7 +257,7 @@ namespace MpWpfApp {
                                                 hl.Inlines.Clear();
                                                 hl.Inlines.Add(run);
                                                 //rtb.ClearHyperlinks();
-                                                //((MpClipTileViewModel)rtb.DataContext).CopyItemRichText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+                                                //((MpClipTileViewModel)rtb.DataContext).CopyItemRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(rtb.Document);
                                                 //rtb.CreateHyperlinks();
                                             };
                                             convertCurrencyMenuItem.Items.Add(subItem);
@@ -275,7 +275,7 @@ namespace MpWpfApp {
                                         MenuItem changeColorItem = new MenuItem();
                                         changeColorItem.Header = "Change Color";
                                         changeColorItem.Click += (s, e) => {
-                                            var result = MpHelpers.ShowColorDialog((Brush)new BrushConverter().ConvertFrom(linkText));
+                                            var result = MpHelpers.Instance.ShowColorDialog((Brush)new BrushConverter().ConvertFrom(linkText));
                                         };
                                         hl.ContextMenu.Items.Add(changeColorItem);
                                         break;
@@ -304,7 +304,7 @@ namespace MpWpfApp {
         }
 
         public static TextRange FindStringRangeFromPosition2(this RichTextBox rtb, string findText, bool isCaseSensitive = false) {
-            var fullText = MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+            var fullText = MpHelpers.Instance.ConvertFlowDocumentToRichText(rtb.Document);
             if (string.IsNullOrEmpty(findText) || string.IsNullOrEmpty(fullText) || findText.Length > fullText.Length)
                 return null;
 
@@ -359,7 +359,7 @@ namespace MpWpfApp {
         }
 
         public static string GetRtf(this RichTextBox rtb) {
-            return MpHelpers.ConvertFlowDocumentToRichText(rtb.Document);
+            return MpHelpers.Instance.ConvertFlowDocumentToRichText(rtb.Document);
         }
 
         public static void SetXaml(this System.Windows.Controls.RichTextBox rtb, string document) {
