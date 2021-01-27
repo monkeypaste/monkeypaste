@@ -4,7 +4,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpMultiSelectListView : ListView {
+    public class MpMultiSelectListView : AnimatedListBox {
         protected override DependencyObject GetContainerForItemOverride() {
             return new MpMultiSelectListViewItem(); 
         }

@@ -11,8 +11,6 @@ namespace MpWpfApp {
         private int _tagId = 0;
 
         public MpClipTileViewModelDataSource(int tagId) {
-            //for (var i = 0; i < itemsCount; i++)
-            //    this._items.Add(new MpClipTileViewModel("Name_" + i, "Str1_" + i, "Str1_" + i, i, i));
             SetTag(tagId);
 
             this.SortDescriptionList.CollectionChanged += this.SortDescriptionListOnCollectionChanged;

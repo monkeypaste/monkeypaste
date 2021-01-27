@@ -151,6 +151,19 @@ namespace MpWpfApp {
             }
         }
 
+        private double _clipTrayWidth = MpMeasurements.Instance.ClipTrayWidth;
+        public double ClipTrayWidth {
+            get {
+                return _clipTrayWidth;
+            }
+            set {
+                if (_clipTrayWidth != value) {
+                    _clipTrayWidth = value;
+                    OnPropertyChanged(nameof(ClipTrayWidth));
+                }
+            }
+        }
+
         public double TitleMenuHeight {
             get {
                 return MpMeasurements.Instance.TitleMenuHeight;
@@ -326,10 +339,8 @@ namespace MpWpfApp {
                 (s,e) => {
                     if (IsLoading) {
                         IsLoading = false;
-                        ClipTileSortViewModel.SelectedSortType = ClipTileSortViewModel.SortTypes[0];
-                    } else {
-                        ClipTrayViewModel.ResetClipSelection();
                     }
+                    ClipTrayViewModel.ResetClipSelection();
                 });
         }
 
@@ -349,8 +360,6 @@ namespace MpWpfApp {
                    IsShowingDialog == false;
         }
         private async void HideWindow(bool pasteSelected) {
-            //IsOpen = false;
-
             IDataObject pasteDataObject = null;
             if(pasteSelected) {
                 pasteDataObject = await ClipTrayViewModel.GetDataObjectFromSelectedClips(pasteSelected);

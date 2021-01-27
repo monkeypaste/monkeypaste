@@ -48,13 +48,18 @@ namespace MpWpfApp {
         //public int AppId { get; set; } = 0;
         //public int IconId { get; set; } = 0;
         public DateTime CopyDateTime { get; set; }
+
+        public int LineCount { get; set; } = 0;
+
+        public int CharCount { get; set; } = 0;
+
         public int CopyCount { get; set; } = 0;
 
-        public int PasteCount {
-            get {
-                return GetPasteCount();
-            }
-        }
+        public int PasteCount { get; set; } = 0;
+
+        public int FileCount { get; set; } = 0;
+
+        public long DataSizeInMb { get; set; } = 0;
 
         public int RelevanceScore {
             get {
@@ -206,8 +211,8 @@ namespace MpWpfApp {
             _AppList = MpApp.GetAllApps();
             _ColorList = MpColor.GetAllColors();
 
-            List<MpCopyItem> clips = new List<MpCopyItem>();
-            DataTable dt = MpDb.Instance.Execute("select * from MpCopyItem", null);
+            var clips = new List<MpCopyItem>();
+            var dt = MpDb.Instance.Execute("select * from MpCopyItem order by CopyDateTime DESC", null);
             if (dt != null && dt.Rows.Count > 0) {
                 foreach (DataRow dr in dt.Rows) {
                     clips.Add(new MpCopyItem(dr));
@@ -320,7 +325,8 @@ namespace MpWpfApp {
         }
 
         public void SetData(object data) {
-            _itemData = data;     
+            _itemData = data;
+            UpdateDetails();
         }
 
         public object GetData() {
@@ -431,10 +437,8 @@ namespace MpWpfApp {
                     break;
             }
         }
-        #endregion
 
-        #region Private Methods
-        
+
         public BitmapSource InitSwirl(BitmapSource sharedSwirl = null) {
             if (sharedSwirl == null) {
                 var itemBrush = new SolidColorBrush() { Color = ItemColor.Color };
@@ -462,6 +466,26 @@ namespace MpWpfApp {
                 return sharedSwirl;
             }
         }
+        #endregion
+
+        #region Private Methods
+
+        private void UpdateDetails() {
+            switch(CopyItemType) {
+                case MpCopyItemType.Image:
+
+                    break;
+                case MpCopyItemType.FileList:
+                    FileCount = GetFileList().Count;
+                    DataSizeInMb = MpHelpers.Instance.FileListSize(GetFileList().ToArray());
+                    break;
+                case MpCopyItemType.RichText:
+                    LineCount = MpHelpers.Instance.GetRowCount(ItemPlainText);
+                    CharCount = ItemPlainText.Length;
+                    break;
+            }
+        }
+        
 
         #endregion
 
@@ -494,6 +518,8 @@ namespace MpWpfApp {
             } else {
                 SetData(dr["ItemText"].ToString());
             }
+
+            PasteCount = GetPasteCount();
         }
 
         public void DeleteFromDatabase() {

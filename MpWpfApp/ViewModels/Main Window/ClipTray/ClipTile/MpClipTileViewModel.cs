@@ -264,9 +264,7 @@
         //        return h;
         //        //return RtbBottom - RtbTop;
         //    }
-        //}
-
-        
+        //}       
 
         public double EditTemplateToolbarHeight {
             get {
@@ -284,9 +282,7 @@
             get {
                 return MpMeasurements.Instance.ClipTilePasteToolbarHeight;
             }
-        }
-
-        
+        }        
 
         private FontFamily _rtbFontFamily = null;
         public FontFamily RtbFontFamily {
@@ -767,9 +763,11 @@
                 return _isHovering;
             }
             set {
-                //if (_isHovering != value) 
-                {
+                if (_isHovering != value) {
                     _isHovering = value;
+                    if(MainWindowViewModel.ClipTrayViewModel.IsScrolling) {
+                        _isHovering = false;
+                    }
                     OnPropertyChanged(nameof(IsHovering));
                     OnPropertyChanged(nameof(TileBorderBrush));
                     OnPropertyChanged(nameof(DetailTextColor));
@@ -826,11 +824,78 @@
         #endregion
 
         #region Text Editor Properties
-        
+
 
         #endregion
 
         #region Model Properties
+        public int CopyCount {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.CopyCount;
+            }
+            set {
+                if(CopyItem.CopyCount != value) {
+                    CopyItem.CopyCount = value;
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyCount));
+                }
+            }
+        }
+
+        public int PasteCount {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.PasteCount;
+            }
+            set {
+                if(CopyItem.PasteCount != value) {
+                    CopyItem.PasteCount = value;
+                    OnPropertyChanged(nameof(PasteCount));
+                }
+            }
+        }
+
+        public int LineCount {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.LineCount;
+            }
+        }
+
+        public int CharCount {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.CharCount;
+            }
+        }
+
+        public int FileCount {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.FileCount;
+            }
+        }
+
+        public double DataSizeInMb {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.DataSizeInMb;
+            }
+        }
+
         public Brush TitleColor {
             get {
                 if (CopyItem == null) {
@@ -909,6 +974,8 @@
                     CopyItem.SetData(value);
                     CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItemRichText));
+                    OnPropertyChanged(nameof(CharCount));
+                    OnPropertyChanged(nameof(LineCount));
                     OnPropertyChanged(nameof(CopyItem));
                 }
             }
@@ -971,21 +1038,6 @@
             }
         }
 
-        public int CopyCount {
-            get {
-                if (CopyItem == null) {
-                    return 0;
-                }
-                return CopyItem.CopyCount;
-            }
-            set {
-                if (CopyItem.CopyCount != value) {
-                    CopyItem.CopyCount = value;
-                    CopyItem.WriteToDatabase();
-                    OnPropertyChanged(nameof(CopyCount));
-                }
-            }
-        }
         public DateTime CopyDateTime {
             get {
                 if (CopyItem == null) {
@@ -1069,6 +1121,12 @@
                     OnPropertyChanged(nameof(DetectedImageObjectCollectionViewModel));
                     OnPropertyChanged(nameof(LoadingSpinnerVisibility));
                     OnPropertyChanged(nameof(ContentVisibility));
+                    OnPropertyChanged(nameof(CopyCount));
+                    OnPropertyChanged(nameof(PasteCount));
+                    OnPropertyChanged(nameof(CharCount));
+                    OnPropertyChanged(nameof(LineCount));
+                    OnPropertyChanged(nameof(FileCount));
+                    OnPropertyChanged(nameof(DataSizeInMb));
                     OnPropertyChanged(nameof(IsLoading));
                     //CopyItem.WriteToDatabase();
                 }
@@ -1095,6 +1153,15 @@
                             IsPastingTemplateTile = false;
                         }
                         RefreshCommands();
+                        break;
+                    case nameof(IsHovering):
+                        if(IsHovering) {
+                            foreach(MpClipTileViewModel ctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
+                                if(ctvm != this) {
+                                    ctvm.IsHovering = false;
+                                }
+                            }
+                        }
                         break;
                 }
             };
@@ -1223,6 +1290,11 @@
             };
             clipTileTitleTextBox.LostFocus += (s, e4) => {
                 IsEditingTitle = false;
+            };
+            clipTileTitleTextBox.PreviewKeyDown += (s, e5) => {
+                if(e5.Key == Key.Enter || e5.Key == Key.Escape) {
+                    IsEditingTitle = false;
+                }
             };
 
             Canvas.SetLeft(titleIconImageButton, TileBorderWidth - TileTitleHeight - 10);
@@ -1528,7 +1600,8 @@
 
         #endregion
 
-        #region Private Methods 
+        #region Private Methods      
+
         private string GetCurrentDetail(int detailId) {
             string info = "I dunno";// string.Empty;
             switch (detailId) {
@@ -1543,9 +1616,9 @@
                     if (CopyItemType == MpCopyItemType.Image) {
                         info = "(" + (int)CopyItemBmp.Width + ") x (" + (int)CopyItemBmp.Height + ")";
                     } else if (CopyItemType == MpCopyItemType.RichText) {
-                        info = CopyItem.ItemPlainText.Length + " chars | " + MpHelpers.Instance.GetRowCount(CopyItem.ItemPlainText) + " lines";
+                        info = CharCount + " chars | " + LineCount + " lines";
                     } else if (CopyItemType == MpCopyItemType.FileList) {
-                        info = FileListViewModels.Count + " files | " + MpHelpers.Instance.FileListSize(CopyItem.GetFileList().ToArray()) + " bytes";
+                        info = FileCount + " files | " + DataSizeInMb + " MB";
                     }
                     break;
                 //# copies/# pastes

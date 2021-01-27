@@ -43,6 +43,12 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+        public bool IsSortDescending {
+            get {
+                return DescSortOrderButtonImageVisibility == Visibility.Visible;
+            }
+        }
+
         private Visibility _ascSortOrderButtonImageVisibility = Visibility.Collapsed;
         public Visibility AscSortOrderButtonImageVisibility {
             get {
@@ -73,27 +79,27 @@ namespace MpWpfApp {
         #region Public Methods
         public MpClipTileSortViewModel() : base() {
             //must be set before property changed registered for loading order
-            
+            SelectedSortType = SortTypes[0];
 
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
-                    case nameof(AscSortOrderButtonImageVisibility):
-                    case nameof(DescSortOrderButtonImageVisibility):
                     case nameof(SelectedSortType):
-                        var sort = new MemberPathSortingDirection();
-                        sort.MemberPath = ConvertSortTypeToMemberPath(SelectedSortType.Header);
-                        sort.SortDirection = DescSortOrderButtonImageVisibility == Visibility.Visible ? System.ComponentModel.ListSortDirection.Descending: System.ComponentModel.ListSortDirection.Ascending;
-                        MainWindowViewModel.ClipTrayViewModel.SortCommand.Execute(sort);
+                        PerformSelectedSort();
                         break;
                 }
             };
         }
         public void ClipTileSort_Loaded(object sender, RoutedEventArgs e) {
-            //SelectedSortType = SortTypes[0];
         }
         #endregion
 
         #region Private Methods
+        private void PerformSelectedSort() {
+            var sort = new MemberPathSortingDirection();
+            sort.MemberPath = ConvertSortTypeToMemberPath(SelectedSortType.Header);
+            sort.SortDirection = IsSortDescending ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending;
+            MainWindowViewModel.ClipTrayViewModel.SortCommand.Execute(sort);
+        }
         private string ConvertSortTypeToMemberPath(string sortType) {
             switch (sortType) {
                 case "Date":
@@ -132,6 +138,7 @@ namespace MpWpfApp {
                 AscSortOrderButtonImageVisibility = Visibility.Visible;
                 DescSortOrderButtonImageVisibility = Visibility.Collapsed;
             }
+            PerformSelectedSort();
         }
         #endregion
     }

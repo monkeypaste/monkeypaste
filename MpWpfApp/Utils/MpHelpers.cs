@@ -618,6 +618,10 @@ namespace MpWpfApp {
         #endregion
 
         #region System
+        public double ConvertBytesToMegabytes(long bytes, int precision = 2) {
+            return Math.Round((bytes / 1024f) / 1024f,precision);
+        }
+
         public void CreateBinding(
             object source, 
             PropertyPath sourceProperty, 
@@ -1201,7 +1205,7 @@ namespace MpWpfApp {
             return Math.Sqrt(Math.Pow(b.X - a.X, 2) + Math.Pow(b.Y - a.Y, 2));
         }
 
-        public void AnimateDoubleProperty(double from, double to, double dt, object obj, DependencyProperty property, EventHandler onCompleted) {
+        public DoubleAnimation AnimateDoubleProperty(double from, double to, double dt, object obj, DependencyProperty property, EventHandler onCompleted) {
             DoubleAnimation animation = new DoubleAnimation();
             animation.From = from;
             animation.To = to;
@@ -1221,6 +1225,8 @@ namespace MpWpfApp {
             } else {
                 ((FrameworkElement)obj).BeginAnimation(property, animation);
             }
+
+            return animation;
         }
 
         public Size MeasureText(string text, Typeface typeface, double fontSize) {

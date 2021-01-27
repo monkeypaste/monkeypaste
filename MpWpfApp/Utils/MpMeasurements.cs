@@ -45,6 +45,12 @@ namespace MpWpfApp {
                 return _mainWindowHeight / 7;
             }
         }
+
+        public double ClipTrayWidth {
+            get {
+                return _screenWidth - AppStateButtonPanelWidth;
+            }
+        }
         public double ClipTrayHeight {
             get {
                 return MainWindowRect.Height - TitleMenuHeight - FilterMenuHeight;
