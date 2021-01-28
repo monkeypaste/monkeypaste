@@ -184,12 +184,12 @@ namespace MpWpfApp {
             
             MpHelpers.Instance.Init();
 
+            SystemTrayViewModel = new MpSystemTrayViewModel();
             SearchBoxViewModel = new MpSearchBoxViewModel() { PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText };
             ClipTrayViewModel = new MpClipTrayViewModel();            
             ClipTileSortViewModel = new MpClipTileSortViewModel();
             AppModeViewModel = new MpAppModeViewModel();
             TagTrayViewModel = new MpTagTrayViewModel();
-            SystemTrayViewModel = new MpSystemTrayViewModel();
         }
 
         public void MainWindow_Loaded(object sender, RoutedEventArgs e) {
@@ -355,9 +355,9 @@ namespace MpWpfApp {
         }
         private bool CanHideWindow(bool pasteSelected) {
             //return false;
-            return Application.Current.MainWindow != null && 
+            return (Application.Current.MainWindow != null && 
                    Application.Current.MainWindow.Visibility == Visibility.Visible &&
-                   IsShowingDialog == false;
+                   IsShowingDialog == false) || pasteSelected;
         }
         private async void HideWindow(bool pasteSelected) {
             IDataObject pasteDataObject = null;

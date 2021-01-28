@@ -365,22 +365,11 @@ namespace MpWpfApp {
                     Console.WriteLine("MainWindow drop error cannot find lasrt moused over tile");
                 }
             };
+
             clipTray.SelectionChanged += (s, e8) => {
                 MergeClipsCommandVisibility = MergeSelectedClipsCommand.CanExecute(null) ? Visibility.Visible : Visibility.Collapsed;
-                foreach (var ttvm in MainWindowViewModel.TagTrayViewModel) {
-                    if (ttvm == MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel() || ttvm.IsSelected) {
-                        continue;
-                    }
 
-                    bool isTagLinkedToAllSelectedClips = true;
-                    foreach (var sctvm in SelectedClipTiles) {
-                        if (!ttvm.IsLinkedWithClipTile(sctvm)) {
-                            isTagLinkedToAllSelectedClips = false;
-                        }
-                    }
-                    ttvm.IsHovering = isTagLinkedToAllSelectedClips && VisibileClipTiles.Count > 0;
-
-                }
+                MainWindowViewModel.TagTrayViewModel.UpdateTagAssociation();
             };
 
 
@@ -1137,6 +1126,7 @@ namespace MpWpfApp {
                     tagToLink.TagClipCount++;
                 }
             }
+            MainWindowViewModel.TagTrayViewModel.UpdateTagAssociation();
         }
 
         private RelayCommand<int> _exportSelectedClipTilesCommand;

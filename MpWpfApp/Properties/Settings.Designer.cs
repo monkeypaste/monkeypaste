@@ -712,5 +712,17 @@ namespace MpWpfApp.Properties {
                 this["IsInitialLoad"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseSpellCheck {
+            get {
+                return ((bool)(this["UseSpellCheck"]));
+            }
+            set {
+                this["UseSpellCheck"] = value;
+            }
+        }
     }
 }

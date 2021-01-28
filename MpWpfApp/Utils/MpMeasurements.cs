@@ -18,6 +18,7 @@ namespace MpWpfApp {
                 return SystemParameters.PrimaryScreenHeight * _mainWindowToScreenHeightRatio;
             }
         }
+
         private double _taskBarHeight = SystemParameters.PrimaryScreenHeight - SystemParameters.WorkArea.Height;
 
         public Rect MainWindowRect {
@@ -35,11 +36,13 @@ namespace MpWpfApp {
                 return _mainWindowHeight / 20;
             }
         }
+
         public double FilterMenuHeight {
             get {
                 return _mainWindowHeight / 8;
             }
         }
+
         public double AppStateButtonPanelWidth {
             get {
                 return _mainWindowHeight / 7;
@@ -80,31 +83,73 @@ namespace MpWpfApp {
                 return ClipTrayHeight - (ClipTileMargin * 2) - ClipTilePadding;
             }
         }
+
         public double ClipTileTitleIconSize {
             get {
                 return ClipTileTitleHeight * 0.75;
             }
         }
+
+        public double ClipTileTitleIconRightMargin {
+            get {
+                return 10;
+            }
+        }
+
+        public double ClipTileTitleIconCanvasLeft {
+            get {
+                return ClipTileBorderSize - ClipTileTitleHeight - ClipTileTitleIconRightMargin;
+            }
+        }
+
+        public double ClipTileTitleTextGridCanvasTop {
+            get {
+                return 2;
+            }
+        }
+
+        public double ClipTileTitleTextGridCanvasLeft {
+            get {
+                return 5;
+            }
+        }
+
+        public double ClipTileTitleTextGridCanvasRight {
+            get {
+                return ClipTileTitleIconCanvasLeft - 5;
+            }
+        }
+
+        public double ClipTileTitleTextGridWidth {
+            get {
+                return ClipTileTitleTextGridCanvasRight - ClipTileTitleTextGridCanvasLeft;
+            }
+        }
+
         public double ClipTileBorderSize {
             get {
                 return ClipTileSize - ClipTilePadding;
             }
         }
+
         public double ClipTileBorderThickness {
             get {
                 return 5;
             }
         }
+
         public double ClipTilePasteToolbarHeight {
             get {
                 return 40;
             }
         }
+
         public double ClipTileEditToolbarHeight {
             get {
                 return 40;
             }
         }
+
         public double ClipTileTitleHeight {
             get {
                 return ClipTileSize / 5;

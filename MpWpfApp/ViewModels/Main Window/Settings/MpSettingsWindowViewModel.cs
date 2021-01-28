@@ -69,6 +69,21 @@ namespace MpWpfApp {
 
         #region Properties
 
+        private bool _useSpellCheck = Properties.Settings.Default.UseSpellCheck;
+        public bool UseSpellCheck {
+            get {
+                return _useSpellCheck;
+            }
+            set {
+                if(_useSpellCheck != value) {
+                    _useSpellCheck = value;
+                    Properties.Settings.Default.UseSpellCheck = _useSpellCheck;
+                    Properties.Settings.Default.Save();
+                    OnPropertyChanged(nameof(UseSpellCheck));
+                }
+            }
+        }
+
         private Visibility _settingsPanel1Visibility;
         public Visibility SettingsPanel1Visibility {
             get { 
@@ -202,15 +217,26 @@ namespace MpWpfApp {
         #endregion
 
         #region Static Methods
-        public static bool ShowSettingsWindow(MpSystemTrayViewModel stvm) {
-            var sw = new MpSettingsWindow();
-            sw.DataContext = new MpSettingsWindowViewModel(stvm);
-            return sw.ShowDialog() ?? false;
-        }
+        
         #endregion
 
         #region Public Methods
         public MpSettingsWindowViewModel() : base() { }
+
+        public MpSettingsWindowViewModel(MpSystemTrayViewModel stvm) : base() {
+            PropertyChanged += (s, e) => {
+                switch (e.PropertyName) {
+                    case nameof(IsLoadOnLoginChecked):
+                        SetLoadOnLogin(IsLoadOnLoginChecked);
+                        break;
+                }
+            };
+            SystemTrayViewModel = stvm;
+            IsLoadOnLoginChecked = Properties.Settings.Default.LoadOnLogin;
+            UseSpellCheck = Properties.Settings.Default.UseSpellCheck;
+            MpAppCollectionViewModel.Instance.Init();
+            return;
+        }
 
         public void SettingsWindow_Loaded(object sender, RoutedEventArgs e) {
             _windowRef = (Window)sender;
@@ -228,27 +254,20 @@ namespace MpWpfApp {
             SettingsPanel5Visibility = Visibility.Collapsed;
         }
 
+        public bool ShowSettingsWindow() {
+            var sw = new MpSettingsWindow();
+            sw.DataContext = this;
+            return sw.ShowDialog() ?? false;
+        }
         #endregion
 
         #region Private Methods
-        private MpSettingsWindowViewModel(MpSystemTrayViewModel stvm) : base() {
-            PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
-                    case nameof(IsLoadOnLoginChecked):
-                        SetLoadOnLogin(IsLoadOnLoginChecked);
-                        break;
-                }
-            };
-            SystemTrayViewModel = stvm;
-            IsLoadOnLoginChecked = Properties.Settings.Default.LoadOnLogin;
-            MpAppCollectionViewModel.Instance.Init();
-            return;
-        }
+        
 
         private void SetLoadOnLogin(bool loadOnLogin) {
             Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             string appName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
-            string appPath = MainWindowViewModel.ClipTrayViewModel.ClipboardManager.LastWindowWatcher.ThisAppPath;
+            string appPath = MpHelpers.Instance.GetApplicationDirectory();// MainWindowViewModel.ClipTrayViewModel.ClipboardManager.LastWindowWatcher.ThisAppPath;
             if (loadOnLogin) {
                 rk.SetValue(appName, appPath);
             } else {

@@ -66,6 +66,22 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        private bool _isAssociated = false;
+        public bool IsAssociated {
+            get {
+                return _isAssociated;
+            }
+            set {
+                if (_isAssociated != value) {
+                    _isAssociated = value;
+                    OnPropertyChanged(nameof(IsAssociated));
+                    OnPropertyChanged(nameof(TagBorderBackgroundBrush));
+                    OnPropertyChanged(nameof(TagBorderBrush));
+                    OnPropertyChanged(nameof(TagTextColor));
+                }
+            }
+        }
         #endregion
 
         #region Visibility
@@ -100,7 +116,16 @@ namespace MpWpfApp {
                 return Brushes.Transparent;
             }
         }
-        
+
+        public Brush TagBorderBrush {
+            get {
+                if (IsAssociated) {
+                    return Brushes.Red;
+                }
+                return Brushes.Transparent;
+            }
+        }
+
         public Brush TagTextColor {
             get {
                 if(IsSelected) {

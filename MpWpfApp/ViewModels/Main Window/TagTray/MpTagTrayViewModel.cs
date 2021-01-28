@@ -122,6 +122,23 @@ namespace MpWpfApp {
            // GetHistoryTagTileViewModel().IsTextBoxFocused = true;
         }
 
+        public void UpdateTagAssociation() {
+            foreach (var ttvm in this) {
+                if (ttvm == GetHistoryTagTileViewModel() || ttvm.IsSelected) {
+                    continue;
+                }
+
+                bool isTagLinkedToAllSelectedClips = true;
+                foreach (var sctvm in MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles) {
+                    if (!ttvm.IsLinkedWithClipTile(sctvm)) {
+                        isTagLinkedToAllSelectedClips = false;
+                    }
+                }
+                ttvm.IsAssociated = isTagLinkedToAllSelectedClips && MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles.Count > 0;
+
+            }
+        }
+
         public MpTagTileViewModel GetHistoryTagTileViewModel() {
             return this.Where(tt => tt.Tag.TagName == Properties.Settings.Default.HistoryTagTitle).ToList()[0];
         }

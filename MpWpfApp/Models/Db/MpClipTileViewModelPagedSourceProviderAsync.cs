@@ -55,6 +55,7 @@ namespace MpWpfApp {
 
         #region IPagedSourceProvider Implementation
         public void OnReset(int count) {
+            return;
         }
         //public int IndexOf(MpClipTileViewModel item) {
         //    var dt = MpDb.Instance.Execute(

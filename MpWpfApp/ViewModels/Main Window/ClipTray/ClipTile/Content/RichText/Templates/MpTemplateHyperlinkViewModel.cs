@@ -218,6 +218,19 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        private TextBlock _templateTextBlock = null;
+        public TextBlock TemplateTextBlock {
+            get {
+                return _templateTextBlock;
+            }
+            set {
+                if (_templateTextBlock != value) {
+                    _templateTextBlock = value;
+                    OnPropertyChanged(nameof(TemplateTextBlock));
+                }
+            }
+        }
         #endregion
 
         #region Model Properties
@@ -402,6 +415,7 @@ namespace MpWpfApp {
             #endregion
 
             TemplateHyperlink = hl;
+            TemplateTextBlock = tb;
             TemplateTextRange = new TextRange(hl.ElementStart, hl.ElementEnd);
         }
         

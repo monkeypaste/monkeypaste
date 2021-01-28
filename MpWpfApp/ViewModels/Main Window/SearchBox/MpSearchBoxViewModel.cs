@@ -1,14 +1,20 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
+﻿using AsyncAwaitBestPractices.MVVM;
+using DataGridAsyncDemoMVVM.filtersort;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace MpWpfApp {
     public class MpSearchBoxViewModel : MpViewModelBase {
@@ -165,11 +171,25 @@ namespace MpWpfApp {
                 return _isTextValid;
             }
             set {
-                //omitting duplicate check to enforce change in ui
                 if (_isTextValid != value) {
                     _isTextValid = value;
                     OnPropertyChanged(nameof(IsTextValid));
                     OnPropertyChanged(nameof(TextBoxBorderBrush));
+                }
+            }
+        }
+
+        private bool _isSearching = false;
+        public bool IsSearching {
+            get {
+                return _isSearching;
+            }
+            set {
+                if (_isSearching != value) {
+                    _isSearching = value;
+                    OnPropertyChanged(nameof(IsSearching));
+                    OnPropertyChanged(nameof(ClearTextButtonVisibility));
+                    OnPropertyChanged(nameof(SearchSpinnerVisibility));
                 }
             }
         }
@@ -209,7 +229,16 @@ namespace MpWpfApp {
 
         public Visibility ClearTextButtonVisibility {
             get {
-                if (HasText) {
+                if (HasText && !IsSearching) {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+
+        public Visibility SearchSpinnerVisibility {
+            get {
+                if (IsSearching) {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -256,11 +285,11 @@ namespace MpWpfApp {
                 Text = Properties.Settings.Default.SearchPlaceHolderText;
             }
 
-            var timer = new Timer();
-            timer.Interval = 500;
-            timer.AutoReset = false;
-            timer.Elapsed += (s, e) => {
+            var timer = new DispatcherTimer();
+            timer.Interval = new TimeSpan(0,0,0,0,500);
+            timer.Tick += (s, e) => {
                 PerformSearchCommand.Execute(null);
+                timer.Stop();
             };
             PropertyChanged += (s, e7) => {
                 switch (e7.PropertyName) {
@@ -302,8 +331,143 @@ namespace MpWpfApp {
             }
         }
         private void PerformSearch() {
+            //var mpft = new MemberPathFilterText();
+            //mpft.FilterText = Text;
+            //mpft.MemberPath = "CopyItemPlainText";
+            //MainWindowViewModel.ClipTrayViewModel.FilterCommand.Execute(mpft);
+
             SearchText = Text;
+
+            IsSearching = true;
+
+            //var vt = new List<MpClipTileViewModel>();
+            //var ct = new List<MpClipTileViewModel>();
+
+            //foreach (MpClipTileViewModel ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
+            //    var ttb = ctvm.GetTitleTextBlock();
+            //    var rtb = ctvm.GetRtb();
+            //    var flb = ctvm.GetFileListBox();
+            //    Visibility result = await Dispatcher.CurrentDispatcher.Invoke(
+            //        new Func<Task<Visibility>>(async () => await PerformHighlight(ctvm, SearchText,ttb,rtb,flb)));
+            //    if(result == Visibility.Visible) {
+            //        vt.Add(ctvm);
+            //    } else {
+            //        ct.Add(ctvm);
+            //    }
+            //}
+
+            //foreach(var ctvm in vt) {
+            //    ctvm.TileVisibility = Visibility.Visible;
+            //}
+
+            //foreach (var ctvm in ct) {
+            //    ctvm.TileVisibility = Visibility.Collapsed;
+            //;}
         }
+
+        //private async Task<Visibility> PerformHighlight(MpClipTileViewModel ctvm, string hlt, TextBlock ttb, RichTextBox rtb, ListBox flb) {
+        //    var sttvm = ctvm.MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel.SelectedTagTile;
+
+        //    //var ttb = ctvm.GetTitleTextBlock();
+        //    var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
+        //    var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
+        //    var ctbb = Brushes.Transparent;
+
+        //    if (!sttvm.IsLinkedWithClipTile(ctvm)) {
+        //        Console.WriteLine("Clip tile w/ title " + ctvm.CopyItemTitle + " is not linked with current tag");
+        //        return Visibility.Collapsed;
+        //        //return;
+        //    }
+        //    //bool isInTitle = ttb.Text.ContainsByCaseSetting(hlt);
+        //    //bool isInContent = ctvm.ToString().ContainsByCaseSetting(hlt);
+        //    //bool isSearchBlank = string.IsNullOrEmpty(hlt.Trim()) || hlt == Properties.Settings.Default.SearchPlaceHolderText;
+        //    //ctvm.TileVisibility = isInTitle || isInContent || isSearchBlank ? Visibility.Visible : Visibility.Collapsed;
+        //    //return;
+        //    Console.WriteLine("Beginning highlight clip with title: " + ctvm.CopyItemTitle + " with highlight text: " + hlt);
+
+        //    ctvm.TileVisibility = Visibility.Visible;
+
+        //    MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, ctbb);
+        //    ctvm.LastTitleHighlightRangeList.Clear();
+
+        //    MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, ctbb);
+        //    ctvm.LastContentHighlightRangeList.Clear();
+
+        //    if (string.IsNullOrEmpty(hlt.Trim()) ||
+        //        hlt == Properties.Settings.Default.SearchPlaceHolderText) {
+        //        //if search text is empty clear any highlights and show clip (if associated w/ current tag)
+        //        return Visibility.Visible;
+        //    }
+
+        //    //highlight title 
+        //    if (ttb.Text.ContainsByCaseSetting(hlt)) {
+        //        foreach (var mr in MpHelpers.Instance.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive)) {
+        //            ctvm.LastTitleHighlightRangeList.Add(mr);
+        //        }
+        //        MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, hb);
+        //    }
+        //    switch (ctvm.CopyItemType) {
+        //        case MpCopyItemType.RichText:
+        //            //var rtb = ctvm.GetRtb();
+        //            var mc = Regex.Matches(ctvm.CopyItemPlainText, hlt, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+        //            if (mc.Count == 0) {
+        //                if (ctvm.LastTitleHighlightRangeList.Count == 0) {
+        //                    return Visibility.Collapsed;
+        //                }
+        //                return Visibility.Visible;
+        //            }
+
+        //            rtb.BeginChange();
+        //            foreach (var mr in MpHelpers.Instance.FindStringRangesFromPosition(rtb.Document.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive)) {
+        //                ctvm.LastContentHighlightRangeList.Add(mr);
+        //            }
+        //            if (ctvm.LastContentHighlightRangeList.Count > 0) {
+        //                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, hb);
+        //                //rtb.CaretPosition = ctvm.LastContentHighlightRangeList[0].Start;
+        //            } else if (ctvm.LastTitleHighlightRangeList.Count == 0) {
+        //                return Visibility.Collapsed;
+        //            }
+        //            if (ctvm.LastContentHighlightRangeList.Count > 0 || ctvm.LastTitleHighlightRangeList.Count > 0) {
+        //                ctvm.CurrentHighlightMatchIdx = 0;
+        //            }
+        //            rtb.EndChange();
+        //            break;
+        //        case MpCopyItemType.Image:
+        //            foreach (var diovm in ctvm.DetectedImageObjectCollectionViewModel) {
+        //                if (diovm.ObjectTypeName.ContainsByCaseSetting(hlt)) {
+        //                    return Visibility.Visible;
+        //                }
+        //            }
+        //            if (ctvm.LastContentHighlightRangeList.Count == 0) {
+        //                return Visibility.Collapsed;
+        //            }
+        //            break;
+        //        case MpCopyItemType.FileList:
+        //            //var flb = ctvm.GetFileListBox();
+        //            foreach (var fivm in ctvm.FileListViewModels) {
+        //                if (fivm.ItemPath.ContainsByCaseSetting(hlt)) {
+        //                    var container = flb.ItemContainerGenerator.ContainerFromItem(fivm) as FrameworkElement;
+        //                    if (container != null) {
+        //                        var fitb = (TextBlock)container.FindName("FileListItemTextBlock");
+        //                        if (fitb != null) {
+        //                            var hlr = MpHelpers.Instance.FindStringRangeFromPosition(fitb.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive);
+        //                            if (hlr != null) {
+        //                                hlr.ApplyPropertyValue(TextBlock.BackgroundProperty, hb);
+        //                                ctvm.LastContentHighlightRangeList.Add(hlr);
+        //                            }
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //            if (ctvm.LastContentHighlightRangeList.Count == 0) {
+        //                return Visibility.Collapsed;
+        //            }
+        //            return Visibility.Visible;
+        //    }
+        //    Console.WriteLine("Ending highlighting clip with title: " + ctvm.CopyItemTitle);
+
+        //    return Visibility.Visible;
+        //}
 
         private RelayCommand _nextMatchCommand;
         public ICommand NextMatchCommand {

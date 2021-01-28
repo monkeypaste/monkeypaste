@@ -31,7 +31,9 @@
     public class MpClipTileViewModel : MpViewModelBase, IDisposable {        
         #region Private Variables
 
-        private RichTextBox _rtb = null;
+        private RichTextBox _rtb;
+        private TextBlock _tb;
+        private ListBox _flb;
 
         private int _detailIdx = 0;
 
@@ -75,7 +77,7 @@
         private ObservableCollection<MpFileListItemViewModel> _fileListViewModels = null;
         public ObservableCollection<MpFileListItemViewModel> FileListViewModels {
             get {
-                if (CopyItem == null) {
+                if (CopyItem == null || CopyItemType != MpCopyItemType.FileList) {
                     return new ObservableCollection<MpFileListItemViewModel>();
                 }
                 if(_fileListViewModels == null) {
@@ -114,6 +116,7 @@
                 }
             }
         }
+
         private MpEditTemplateToolbarViewModel _editTemplateToolbarViewModel = null;
         public MpEditTemplateToolbarViewModel EditTemplateToolbarViewModel {
             get {
@@ -189,83 +192,6 @@
         #region Properties
 
         #region Layout Properties
-        //private double _rtbTop = 0;
-        //public double RtbTop {
-        //    get {
-        //        return _rtbTop;
-        //    }
-        //    set {
-        //        if (_rtbTop != value) {
-        //            _rtbTop = value;
-        //            OnPropertyChanged(nameof(RtbTop));
-        //        }
-        //    }
-        //}
-
-        //private double _rtbBottom = MpMeasurements.Instance.ClipTileContentHeight;
-        //public double RtbBottom {
-        //    get {
-        //        return _rtbBottom;
-        //    }
-        //    set {
-        //        if (_rtbBottom != value) {
-        //            _rtbBottom = value;
-        //            OnPropertyChanged(nameof(RtbBottom));
-        //        }
-        //    }
-        //}
-
-        //private double _pasteTemplateToolbarTop = MpMeasurements.Instance.ClipTileContentHeight;
-        //public double PasteTemplateToolbarTop {
-        //    get {
-        //        return _pasteTemplateToolbarTop;
-        //    }
-        //    set {
-        //        if (_pasteTemplateToolbarTop != value) {
-        //            _pasteTemplateToolbarTop = value;
-        //            OnPropertyChanged(nameof(PasteTemplateToolbarTop));
-        //        }
-        //    }
-        //}
-
-        //private double _editTemplateToolbarTop = MpMeasurements.Instance.ClipTileContentHeight;
-        //public double EditTemplateToolbarTop {
-        //    get {
-        //        return _editTemplateToolbarTop;
-        //    }
-        //    set {
-        //        if (_editTemplateToolbarTop != value) {
-        //            _editTemplateToolbarTop = value;
-        //            OnPropertyChanged(nameof(EditTemplateToolbarTop));
-        //        }
-        //    }
-        //}
-        //private double _editToolbarTop = -MpMeasurements.Instance.ClipTileEditToolbarHeight;
-        //public double EditToolbarTop {
-        //    get {
-        //        return _editToolbarTop;
-        //    }
-        //    set {
-        //        if (_editToolbarTop != value) {
-        //            _editToolbarTop = value;
-        //            OnPropertyChanged(nameof(EditToolbarTop));
-        //        }
-        //    }
-        //}
-        //public double RtbHeight {
-        //    get {
-        //        double h = MpMeasurements.Instance.ClipTileContentHeight;
-        //        if (IsEditingTile) {
-        //            h -= EditRichTextBoxToolbarHeight;
-        //        }
-        //        if (IsPastingTemplateTile) {
-        //            h -= PasteTemplateToolbarHeight;
-        //        }
-        //        return h;
-        //        //return RtbBottom - RtbTop;
-        //    }
-        //}       
-
         public double EditTemplateToolbarHeight {
             get {
                 return MpMeasurements.Instance.ClipTilePasteToolbarHeight;
@@ -358,6 +284,19 @@
                 if (_tileTitleHeight != value) {
                     _tileTitleHeight = value;
                     OnPropertyChanged(nameof(TileTitleHeight));
+                }
+            }
+        }
+
+        private double _tileTitleTextGridWidth;
+        public double TileTitleTextGridWidth {
+            get {
+                return _tileTitleTextGridWidth;
+            }
+            set {
+                if(_tileTitleTextGridWidth != value) {
+                    _tileTitleTextGridWidth = value;
+                    OnPropertyChanged(nameof(TileTitleTextGridWidth));
                 }
             }
         }
@@ -648,9 +587,32 @@
                 return Brushes.Transparent;
             }
         }
+
+        public Brush TileTitleTextGridBackgroundBrush {
+            get {
+                if(IsHoveringOnTitleTextGrid && !IsEditingTitle) {
+                    return new SolidColorBrush(Color.FromArgb(50, 255, 255, 255));
+                }
+                return Brushes.Transparent;
+            }
+        }
         #endregion
 
         #region State Properties        
+        private bool _isHoveringOnTitleTextGrid = false;
+        public bool IsHoveringOnTitleTextGrid {
+            get {
+                return _isHoveringOnTitleTextGrid;
+            }
+            set {
+                if (_isHoveringOnTitleTextGrid != value) {
+                    _isHoveringOnTitleTextGrid = value;
+                    OnPropertyChanged(nameof(IsHoveringOnTitleTextGrid));
+                    OnPropertyChanged(nameof(TileTitleTextGridBackgroundBrush));
+                }
+            }
+        }
+
         private int _currentHighlightMatchIdx = -1;
         public int CurrentHighlightMatchIdx {
             get {
@@ -676,6 +638,7 @@
                     OnPropertyChanged(nameof(IsEditingTitle));
                     OnPropertyChanged(nameof(TileTitleTextBlockVisibility));
                     OnPropertyChanged(nameof(TileTitleTextBoxVisibility));
+                    OnPropertyChanged(nameof(TileTitleTextGridBackgroundBrush));
                 }
             }
         }
@@ -777,21 +740,6 @@
         #endregion
 
         #region Focus Properties
-        private bool _isClipTitleTextBoxFocused = false;
-        public bool IsClipTitleTextBoxFocused {
-            get {
-                return _isClipTitleTextBoxFocused;
-            }
-            set {
-                //omitting duplicate check to enforce change in ui
-                //if (_isClipItemFocused != value) 
-                {
-                    _isClipTitleTextBoxFocused = value;
-                    OnPropertyChanged(nameof(IsClipTitleTextBoxFocused));
-                }
-            }
-        }
-
         private bool _isClipRichTextBoxFocused = false;
         public bool IsClipRichTextBoxFocused {
             get {
@@ -824,7 +772,6 @@
         #endregion
 
         #region Text Editor Properties
-
 
         #endregion
 
@@ -1199,6 +1146,13 @@
             return _rtb;
         }
 
+        public TextBlock GetTitleTextBlock() {
+            return _tb;
+        }
+
+        public ListBox GetFileListBox() {
+            return _flb;
+        }
         public void RefreshCommands() {
             MainWindowViewModel.ClipTrayViewModel.BringSelectedClipTilesToFrontCommand.RaiseCanExecuteChanged();
             MainWindowViewModel.ClipTrayViewModel.SendSelectedClipTilesToBackCommand.RaiseCanExecuteChanged();
@@ -1264,21 +1218,28 @@
 
         public void ClipTileTitle_Loaded(object sender, RoutedEventArgs e) {
             var titleCanvas = (Canvas)sender;
+            var titleTextGrid = (Grid)titleCanvas.FindName("ClipTileTitleTextGrid");
             var clipTileTitleTextBlock = (TextBlock)titleCanvas.FindName("ClipTileTitleTextBlock");
             var clipTileTitleTextBox = (TextBox)titleCanvas.FindName("ClipTileTitleTextBox");
             var titleIconImageButton = (Button)titleCanvas.FindName("ClipTileAppIconImageButton");
             var titleIconImageButtonRotateTransform = (RotateTransform)titleIconImageButton.FindName("ClipTileAppIconImageButtonRotateTransform");
-            
-            clipTileTitleTextBlock.MouseEnter += (s, e1) => {
+            _tb = clipTileTitleTextBlock;
+
+            titleTextGrid.MouseEnter += (s, e1) => {
                 Application.Current.MainWindow.Cursor = Cursors.IBeam;
+                IsHoveringOnTitleTextGrid = true;
             };
-            clipTileTitleTextBlock.MouseLeave += (s, e7) => {
+            titleTextGrid.MouseLeave += (s, e7) => {
                 Application.Current.MainWindow.Cursor = Cursors.Arrow;
+                IsHoveringOnTitleTextGrid = false;
             };
-            clipTileTitleTextBlock.PreviewMouseLeftButtonDown += (s, e7) => {
+            titleTextGrid.PreviewMouseLeftButtonDown += (s, e7) => {
                 IsEditingTitle = true;
                 e7.Handled = true;
             };
+            Canvas.SetLeft(titleTextGrid, MpMeasurements.Instance.ClipTileTitleTextGridCanvasLeft);
+            Canvas.SetTop(titleTextGrid, MpMeasurements.Instance.ClipTileTitleTextGridCanvasTop);
+            titleTextGrid.Width = MpMeasurements.Instance.ClipTileTitleTextGridWidth;
 
             clipTileTitleTextBox.IsVisibleChanged += (s, e9) => {
                 if (TileTitleTextBoxVisibility == Visibility.Collapsed) {
@@ -1296,8 +1257,8 @@
                     IsEditingTitle = false;
                 }
             };
-
-            Canvas.SetLeft(titleIconImageButton, TileBorderWidth - TileTitleHeight - 10);
+            
+            Canvas.SetLeft(titleIconImageButton, MpMeasurements.Instance.ClipTileTitleIconCanvasLeft);
             Canvas.SetTop(titleIconImageButton, 2);
             titleIconImageButton.MouseEnter += (s, e3) => {
                 double t = 50;
@@ -1329,6 +1290,8 @@
                     }
                 }
             };
+
+            
         }
 
         public void ClipTileRichTextStackPanel_Loaded(object sender, RoutedEventArgs e) {
@@ -1469,6 +1432,8 @@
             }
             var flb = (ListBox)sender;
             flb.ContextMenu = (ContextMenu)flb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+
+            _flb = flb;
         }
 
         public void ClipTile_ContextMenu_Loaded(object sender, RoutedEventArgs e) {

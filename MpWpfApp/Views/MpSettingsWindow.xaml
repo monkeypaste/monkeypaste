@@ -142,6 +142,10 @@
                     <Label Content="Load On Login" />
                     <CheckBox IsChecked="{Binding IsLoadOnLoginChecked}" />
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Spell Check" />
+                    <CheckBox IsChecked="{Binding UseSpellCheck}" />
+                </StackPanel>
             </StackPanel>
         </Grid>
         <!-- Security -->

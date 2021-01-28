@@ -42,7 +42,8 @@ namespace MpWpfApp {
         public MpClient Client { get; set; }
         public MpColor ItemColor { get; set; }
         //public int ColorId { get; private set; } = 1;
-        public string Title { get; set; } = "Untitled";
+        public string Title { get; set; } = string.Empty;
+
         public MpCopyItemType CopyItemType { get; private set; } = MpCopyItemType.None;
         //public int ClientId { get; private set; } = 0;
         //public int AppId { get; set; } = 0;
@@ -80,20 +81,8 @@ namespace MpWpfApp {
         //public string SourcePath { get; set; } = string.Empty;
 
         //public string ItemMetaCsv { get; set; } = string.Empty;
-
-        public string ItemPlainText { 
-            get {
-                switch(CopyItemType) {
-                    case MpCopyItemType.FileList:
-                        return (string)_itemData;
-                    case MpCopyItemType.Image:
-                        return ImageObjectTypeCsv;
-                    case MpCopyItemType.RichText:
-                        return MpHelpers.Instance.ConvertRichTextToPlainText((string)_itemData);
-                }
-                return (string)_itemData;
-            }
-        }
+                
+        public string ItemPlainText { get; set; }
 
         public string ItemRichText {
             get {
@@ -273,7 +262,7 @@ namespace MpWpfApp {
             IntPtr hwnd) {
             CopyItemType = itemType;
             CopyDateTime = DateTime.Now;
-            Title = "Untitled";
+            Title = string.Empty;
             CopyCount = 1;
             Client = new MpClient(0, 0, MpHelpers.Instance.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
             
@@ -326,6 +315,7 @@ namespace MpWpfApp {
 
         public void SetData(object data) {
             _itemData = data;
+            UpdateItemData();
             UpdateDetails();
         }
 
@@ -438,7 +428,6 @@ namespace MpWpfApp {
             }
         }
 
-
         public BitmapSource InitSwirl(BitmapSource sharedSwirl = null) {
             if (sharedSwirl == null) {
                 var itemBrush = new SolidColorBrush() { Color = ItemColor.Color };
@@ -469,6 +458,20 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+
+        private void UpdateItemData() {
+            switch (CopyItemType) {
+                case MpCopyItemType.FileList:
+                    ItemPlainText = (string)_itemData;
+                    break;
+                case MpCopyItemType.Image:
+                    ItemPlainText = ImageObjectTypeCsv;
+                    break;
+                case MpCopyItemType.RichText:
+                    ItemPlainText = MpHelpers.Instance.ConvertRichTextToPlainText((string)_itemData);
+                    break;
+            }            
+        }
 
         private void UpdateDetails() {
             switch(CopyItemType) {

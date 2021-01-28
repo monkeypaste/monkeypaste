@@ -7,6 +7,18 @@ using System.Windows.Input;
 namespace MpWpfApp {
     public class MpSystemTrayViewModel : MpViewModelBase {
         #region View Models
+        private MpSettingsWindowViewModel _settingsWindowViewModel = null;
+        public MpSettingsWindowViewModel SettingsWindowViewModel {
+            get {
+                return _settingsWindowViewModel;
+            }
+            set {
+                if(_settingsWindowViewModel != value) {
+                    _settingsWindowViewModel = value;
+                    OnPropertyChanged(nameof(SettingsWindowViewModel));
+                }
+            }
+        }
         #endregion
 
         #region Private Variables
@@ -30,7 +42,7 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpSystemTrayViewModel() : base() {
-
+            SettingsWindowViewModel = new MpSettingsWindowViewModel(this);
         }
 
         public void SystemTrayTaskbarIcon_Loaded(object sender, RoutedEventArgs e) {
@@ -74,8 +86,11 @@ namespace MpWpfApp {
         }
         private void ShowSettingsWindow() {
             MainWindowViewModel.IsShowingDialog = true;
-            MainWindowViewModel.HideWindowCommand.Execute(null);            
-            MpSettingsWindowViewModel.ShowSettingsWindow(this);
+
+            MainWindowViewModel.HideWindowCommand.Execute(null);       
+            
+            SettingsWindowViewModel.ShowSettingsWindow();
+
             MainWindowViewModel.IsShowingDialog = false;
         }
         #endregion

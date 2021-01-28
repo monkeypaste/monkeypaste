@@ -122,9 +122,13 @@
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedListBox.cs" />
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedScrollViewer.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
+    <Compile Include="Controls\MpCollectionView.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpMultiSelectListView.cs" />
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
+    <Compile Include="Models\Db\MpClipTileViewModelDataSource.cs" />
+    <Compile Include="Models\Db\MpClipTileViewModelPagedSourceProviderAsync.cs" />
+    <Compile Include="Models\Db\MpDb.cs" />
     <Compile Include="Models\MpCopyItemTemplate.cs" />
     <Compile Include="Models\MpDetectedImageObject.cs" />
     <Compile Include="Models\MpRichTextStyle.cs" />
@@ -135,9 +139,6 @@
     <Compile Include="Utils\DataVirtualization\IFilterOrderDescription.cs" />
     <Compile Include="Utils\DataVirtualization\MemberPathFilterText.cs" />
     <Compile Include="Utils\DataVirtualization\MemberPathSortingDirection.cs" />
-    <Compile Include="Utils\DataVirtualization\MpClipTileViewModelDataSource.cs" />
-    <Compile Include="Utils\DataVirtualization\MpClipTileViewModelPagedSourceProviderAsync.cs" />
-    <Compile Include="Utils\DataVirtualization\MpClipTileViewModelPagedSourceProvider.cs" />
     <Compile Include="Utils\Adorners\AdornedControl.cs" />
     <Compile Include="Utils\Adorners\AdornerPlacement.cs" />
     <Compile Include="Utils\Adorners\DragAdorner.cs" />
@@ -186,7 +187,6 @@
     <Compile Include="Models\MpColor.cs" />
     <Compile Include="Models\MpCopyItem.cs" />
     <Compile Include="Models\MpCopyItemTag.cs" />
-    <Compile Include="Models\MpDb.cs" />
     <Compile Include="Models\Base\MpDbObject.cs" />
     <Compile Include="Models\MpIcon.cs" />
     <Compile Include="Models\Base\MpObject.cs" />
@@ -226,6 +226,24 @@
     <Compile Include="Views\MpSettingsWindow.xaml.cs">
       <DependentUpon>MpSettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Spinners\ucSpinnerApple.xaml.cs">
+      <DependentUpon>ucSpinnerApple.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Spinners\ucSpinnerCogs.xaml.cs">
+      <DependentUpon>ucSpinnerCogs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Spinners\ucSpinnerDotCircle.xaml.cs">
+      <DependentUpon>ucSpinnerDotCircle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Spinners\ucSpinnerPiston.xaml.cs">
+      <DependentUpon>ucSpinnerPiston.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Spinners\ucSpinnerSwirl.xaml.cs">
+      <DependentUpon>ucSpinnerSwirl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Spinners\ucTail.xaml.cs">
+      <DependentUpon>ucTail.xaml</DependentUpon>
+    </Compile>
     <Page Include="Styles\ResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -259,6 +277,30 @@
     <Page Include="Views\MpSettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Spinners\ucSpinnerApple.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Spinners\ucSpinnerCogs.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Spinners\ucSpinnerDotCircle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Spinners\ucSpinnerPiston.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Spinners\ucSpinnerSwirl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Spinners\ucTail.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>

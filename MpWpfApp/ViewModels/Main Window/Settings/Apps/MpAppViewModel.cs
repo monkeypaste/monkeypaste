@@ -24,28 +24,40 @@ namespace MpWpfApp {
 
         public int AppId {
             get {
+                if(App == null) {
+                    return 0;
+                }
                 return App.AppId;
             }
         }
 
         public string AppPath {
             get {
+                if (App == null) {
+                    return string.Empty;
+                }
                 return App.AppPath;
             }
         }
 
         public string AppName {
             get {
+                if (App == null) {
+                    return string.Empty;
+                }
                 return App.AppName;
             }
         }
 
         public bool IsAppRejected {
             get {
+                if (App == null) {
+                    return false;
+                }
                 return App.IsAppRejected;
             }
             set {
-                if(App.IsAppRejected != value) {
+                if(App != null && App.IsAppRejected != value) {
                     App.IsAppRejected = value;
                     App.WriteToDatabase();
                     OnPropertyChanged(nameof(IsAppRejected));
@@ -62,6 +74,9 @@ namespace MpWpfApp {
 
         public BitmapSource IconImage {
             get {
+                if (App == null) {
+                    return new BitmapImage();
+                }
                 return App.IconImage;
             }
         }
