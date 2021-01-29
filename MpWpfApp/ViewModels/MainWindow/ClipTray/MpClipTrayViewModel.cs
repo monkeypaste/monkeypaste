@@ -427,7 +427,7 @@ namespace MpWpfApp {
             clipTray.PreviewMouseLeftButtonUp += (s, e4) => {
                 var p = e4.MouseDevice.GetPosition(clipTray);
                 var hitTestResult = VisualTreeHelper.HitTest(clipTray, p);
-                if (hitTestResult == null || hitTestResult.VisualHit.GetVisualAncestor<ListBoxItem>() == null) {
+                if (!IsPastingTemplate && (hitTestResult == null || hitTestResult.VisualHit.GetVisualAncestor<ListBoxItem>() == null)) {
                     MainWindowViewModel.ClearEdits();
                     e4.Handled = true;
                 }

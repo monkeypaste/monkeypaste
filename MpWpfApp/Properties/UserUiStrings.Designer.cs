@@ -13,7 +13,7 @@ namespace MpWpfApp.Properties {
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0")]
-    internal sealed partial class UserUiStrings : global::System.Configuration.ApplicationSettingsBase {
+    public sealed partial class UserUiStrings : global::System.Configuration.ApplicationSettingsBase {
         
         private static UserUiStrings defaultInstance = ((UserUiStrings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new UserUiStrings())));
         

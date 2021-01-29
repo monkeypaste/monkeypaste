@@ -3,6 +3,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -68,6 +69,32 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+
+        private ObservableCollection<string> _languages = null;
+        public ObservableCollection<string> Languages {
+            get {
+                if(_languages == null) {
+                    _languages = new ObservableCollection<string>();
+                    foreach(var lang in MpLanguageTranslator.Instance.LanguageList) {
+                        _languages.Add(lang);
+                    }
+                }
+                return _languages;
+            }
+        }
+
+        private string _selectedLanguage = Properties.Settings.Default.UserLanguage;
+        public string SelectedLanguage {
+            get {
+                return _selectedLanguage;
+            }
+            set {
+                if(_selectedLanguage != value) {
+                    _selectedLanguage = value;
+                    OnPropertyChanged(nameof(SelectedLanguage));
+                }
+            }
+        }
 
         private bool _useSpellCheck = Properties.Settings.Default.UseSpellCheck;
         public bool UseSpellCheck {
@@ -229,6 +256,9 @@ namespace MpWpfApp {
                     case nameof(IsLoadOnLoginChecked):
                         SetLoadOnLogin(IsLoadOnLoginChecked);
                         break;
+                    case nameof(SelectedLanguage):
+                        SetLanguage(SelectedLanguage);
+                        break;
                 }
             };
             SystemTrayViewModel = stvm;
@@ -261,8 +291,19 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Private Methods
-        
+        #region Private Methods       
+        private async Task SetLanguage(string newLanguage) {
+            foreach (SettingsProperty dsp in Properties.DefaultUiStrings.Default.Properties) {
+                foreach (SettingsProperty usp in Properties.UserUiStrings.Default.Properties) {
+                    if(dsp.Name == usp.Name) {
+                        usp.DefaultValue = await MpLanguageTranslator.Instance.Translate((string)dsp.DefaultValue, newLanguage, false);
+                        Console.WriteLine("Default: " + (string)dsp.DefaultValue + "New: " + (string)usp.DefaultValue);
+                    }
+                }
+            }
+            Properties.Settings.Default.Save();
+            Properties.UserUiStrings.Default.Save();
+        }
 
         private void SetLoadOnLogin(bool loadOnLogin) {
             Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);

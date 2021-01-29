@@ -1675,7 +1675,7 @@
                                                              Focusable="{Binding IsEditingTile}"
                                                              Cursor="{Binding ContentCursor}"
                                                              Width="{Binding TileContentWidth}"
-                                                             Height="{Binding TileContentHeight}"
+                                                             Height="{Binding TileRtbHeight}"
                                                              local:MpFocusExtension.IsFocused="{Binding IsClipRichTextBoxFocused}"
                                                              IsUndoEnabled="True"
                                                              SpellCheck.IsEnabled="{Binding SystemTrayViewModel.SettingsWindowViewModel.UseSpellCheck, Source={StaticResource MainWindowViewModel}}"
@@ -1735,23 +1735,22 @@
                                                                      IsReadOnly="False"
                                                                      Margin="0,0,0,0"
                                                                      Padding="0,0,0,0" />
-                                                            <Label x:Name="TemplateNameValidationLabel"
-                                                                   Content="{Binding ValidationText}"
+                                                            <TextBlock x:Name="TemplateNameValidationTextBlock"
+                                                                   Text="{Binding ValidationText}"
                                                                    Visibility="{Binding ValidationVisibility}"
                                                                    Foreground="Red"
                                                                    FontStyle="Oblique"
-                                                                   VerticalAlignment="Center"
-                                                                   VerticalContentAlignment="Center"
+                                                                       HorizontalAlignment="Right"
+                                                                   VerticalAlignment="Stretch"
+                                                                   TextWrapping="Wrap" FontSize="12"
                                                                    Padding="0,0,0,0"
-                                                                   Margin="20,0,0,0"
-                                                                   FontSize="12"
-                                                                   Width="300"
-                                                                   Height="24" />
+                                                                   Margin="5,0,0,0"
+                                                                   Width="300" />
                                                         </StackPanel>
                                                         <StackPanel Orientation="Horizontal"
                                                                     Grid.Column="2"
                                                                     HorizontalAlignment="Center"
-                                                                    Margin="8,0,0,0">
+                                                                    Margin="0,0,0,0">
                                                             <Button x:Name="CancelButton"
                                                                     Margin="10,7,10,7"
                                                                     Padding="5,0,5,0"

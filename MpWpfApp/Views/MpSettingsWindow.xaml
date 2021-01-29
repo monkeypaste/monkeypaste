@@ -146,6 +146,11 @@
                     <Label Content="Spell Check" />
                     <CheckBox IsChecked="{Binding UseSpellCheck}" />
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Language" />
+                    <ComboBox ItemsSource="{Binding Languages}"
+                              SelectedItem="{Binding SelectedLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                </StackPanel>
             </StackPanel>
         </Grid>
         <!-- Security -->

@@ -204,6 +204,9 @@ namespace MpWpfApp {
 
             addTemplateButton.PreviewMouseDown += (s, e3) => {
                 e3.Handled = true;
+
+                ClipTileViewModel.SaveToDatabase();
+
                 if (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Count == 0) {
                     //if templates are NOT in the clip yet add one w/ default name
                     //var rtbSelection = rtb.Selection;
@@ -285,6 +288,10 @@ namespace MpWpfApp {
                         } else if(ClipTileViewModel.IsEditingTemplate) {
                             //animate edit template toolbar when tile is minimizing
                             ClipTileViewModel.IsEditingTemplate = false;
+                        } else {
+                            //this is to remove scrollbar flicker during animation
+                            ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
+                            ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
                         }
 
                         MpHelpers.Instance.AnimateDoubleProperty(
@@ -325,7 +332,8 @@ namespace MpWpfApp {
                             new List<FrameworkElement> { rtb, et, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
                             FrameworkElement.WidthProperty,
                             (s1, e44) => {
-                                rtb.Document.PageWidth = ClipTileViewModel.IsEditingTile ? contentWidthMax - 20 : contentWidthMin;// - rtb.Padding.Left - rtb.Padding.Right;
+                                rtb.Document.PageWidth = ClipTileViewModel.IsEditingTile ? contentWidthMax - rtb.Padding.Left - rtb.Padding.Right - 20 : contentWidthMin - rtb.Padding.Left - rtb.Padding.Right;// - rtb.Padding.Left - rtb.Padding.Right;
+                                //rtb.Document.PageHeight = rtb.ActualHeight;// ClipTileViewModel.IsEditingTile ? rtb.Document.GetDocumentSize().Height : ClipTileViewModel.TileContentHeight;
 
                                 //this is to remove scrollbar flicker during animation
                                 ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
@@ -410,6 +418,7 @@ namespace MpWpfApp {
             clickedButton.IsChecked = true;
         }
         #endregion
+
         #region Commands
 
         #endregion

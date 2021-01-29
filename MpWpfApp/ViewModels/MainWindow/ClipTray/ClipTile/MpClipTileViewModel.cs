@@ -310,6 +310,12 @@
             }
         }
 
+        public double TileRtbHeight {
+            get {
+                return MpMeasurements.Instance.ClipTileContentHeight - MpMeasurements.Instance.ClipTileEditToolbarHeight;
+            }
+        }
+
         public double TileDetailHeight {
             get {
                 return MpMeasurements.Instance.ClipTileDetailHeight;
@@ -398,7 +404,7 @@
 
         public ScrollBarVisibility RtbHorizontalScrollbarVisibility {
             get {
-                if(IsEditingTile) {
+                if(IsEditingTile || IsPastingTemplateTile) {
                     return ScrollBarVisibility.Auto;
                 }
                 return ScrollBarVisibility.Hidden;
@@ -407,7 +413,7 @@
 
         public ScrollBarVisibility RtbVerticalScrollbarVisibility {
             get {
-                if (IsEditingTile) {
+                if (IsEditingTile || IsPastingTemplateTile) {
                     return ScrollBarVisibility.Auto;
                 }
                 return ScrollBarVisibility.Hidden;
@@ -1184,13 +1190,13 @@
                     return;
                 }
                 var rtb = (RichTextBox)((FrameworkElement)s).FindName("ClipTileRichTextBox");
-                if (e6.Key == Key.Down) {
-                    rtb.FontSize -= 1;
-                    e.Handled = true;
-                } else if (e6.Key == Key.Up) {
-                    rtb.FontSize += 1;
-                    e.Handled = true;
-                }
+                //if (e6.Key == Key.Down) {
+                //    rtb.FontSize -= 1;
+                //    e.Handled = true;
+                //} else if (e6.Key == Key.Up) {
+                //    rtb.FontSize += 1;
+                //    e.Handled = true;
+                //}
             };
             //clipTileBorder.PreviewMouseRightButtonUp += (s, e4) => {
             //    var p = e4.MouseDevice.GetPosition(clipTileBorder);
@@ -1308,8 +1314,11 @@
             GetRtb().Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(CopyItemRichText);
             GetRtb().CreateHyperlinks();
             GetRtb().Document.PageWidth = GetRtb().Width - GetRtb().Padding.Left - GetRtb().Padding.Right;
-            GetRtb().Document.PageHeight = GetRtb().Height - GetRtb().Padding.Top - GetRtb().Padding.Bottom;
-           
+            //GetRtb().Document.PageHeight = 10000;// GetRtb().Height - GetRtb().Padding.Top - GetRtb().Padding.Bottom;
+
+            //var si = GetRtb().Document.GetDocumentSize();
+            //GetRtb().Height = si.Height;
+            //GetRtb().Document.PageHeight = si.Height;
             #region Search
             LastContentHighlightRangeList.CollectionChanged += (s, e9) => {
                 //var oldNavButtonPanelVisibility = MainWindowViewModel.SearchBoxViewModel.SearchNavigationButtonPanelVisibility;
@@ -1368,16 +1377,7 @@
                         if(!IsEditingTile) {
                             //IsPastingTemplateTile = false;
 
-                            GetRtb().ClearHyperlinks();
-
-                            //clear any search highlighting when saving the document then restore after save
-                            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, Brushes.Transparent);
-                            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, Brushes.Transparent);
-                            CopyItemRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(GetRtb().Document);
-                            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
-                            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
-
-                            GetRtb().CreateHyperlinks();
+                            SaveToDatabase();
                         }
                         GetRtb().ScrollToHome();
                         GetRtb().CaretPosition = GetRtb().Document.ContentStart;
@@ -1499,6 +1499,22 @@
         }
 
         public void SaveToDatabase() {
+            if(CopyItemType == MpCopyItemType.RichText) {
+                GetRtb().ClearHyperlinks();
+                var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
+
+                //clear any search highlighting when saving the document then restore after save
+                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, Brushes.Transparent);
+                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, Brushes.Transparent);
+                CopyItemRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(GetRtb().Document);
+                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
+                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
+
+                GetRtb().CreateHyperlinks();
+
+                GetRtb().Document.PageWidth = GetRtb().Width - GetRtb().Padding.Left - GetRtb().Padding.Right;
+                GetRtb().Document.PageHeight = 10000;// GetRtb().Height - GetRtb().Padding.Top - GetRtb().Padding.Bottom;
+            }
             MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(CopyItemId).CopyItem.WriteToDatabase();
         }
 
@@ -1663,7 +1679,7 @@
         }
         private bool CanEditClip() {
             return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
-                  CopyItemType == MpCopyItemType.RichText &&
+                  CopyItemType == MpCopyItemType.RichText && !IsPastingTemplateTile &&
                   !IsEditingTile;
         }
         private void EditClip() {

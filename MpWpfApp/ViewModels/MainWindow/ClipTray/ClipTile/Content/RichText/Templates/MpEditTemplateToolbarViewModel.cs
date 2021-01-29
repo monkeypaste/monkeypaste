@@ -128,22 +128,6 @@ namespace MpWpfApp {
                 }
             }
         }
-
-        //public string SelectedTemplateDisplayName {
-        //    get {
-        //        if (SelectedTemplateHyperlinkViewModel == null) {
-        //            return string.Empty;
-        //        }
-        //        return SelectedTemplateHyperlinkViewModel.TemplateDisplayName;
-        //    }
-        //    set {
-        //        if (SelectedTemplateHyperlinkViewModel.TemplateDisplayName != value) {
-        //            ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SetTemplateName(SelectedTemplateHyperlinkViewModel.TemplateName, "<" + value + ">");
-        //            OnPropertyChanged(nameof(SelectedTemplateDisplayName));
-        //            OnPropertyChanged(nameof(SelectedTemplateHyperlinkViewModel));
-        //        }
-        //    }
-        //}
         #endregion
 
         #region Model Properties
@@ -203,8 +187,10 @@ namespace MpWpfApp {
                             thlvm.TemplateName = tb.Text;
                         }
                     }
+                    Validate();
                 }
             };
+
             ClipTileViewModel.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(ClipTileViewModel.IsEditingTemplate):
@@ -216,6 +202,11 @@ namespace MpWpfApp {
                         
                         if (ClipTileViewModel.IsEditingTemplate) {
                             ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Visible;
+                        } else if(!Validate()) {
+                            //occurs if template name is invalid and user clicks away from app or tile
+                            CancelCommand.Execute(null);
+                        } else {
+                            OkCommand.Execute(null);
                         }
 
                         MpHelpers.Instance.AnimateDoubleProperty(
@@ -302,7 +293,11 @@ namespace MpWpfApp {
             //if new name is a duplicate of another just delete this one and set it to the duplicate
             var dupTokenHyperlink = ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName && x.CopyItemTemplateId != SelectedTemplateHyperlinkViewModel.CopyItemTemplateId).ToList();
             if (dupTokenHyperlink != null && dupTokenHyperlink.Count > 0) {
-                ValidationText = SelectedTemplateHyperlinkViewModel.TemplateName + " already exists!";
+                ValidationText = SelectedTemplateHyperlinkViewModel.TemplateName + " already exists";
+                return false;
+            }
+            if(ClipTileViewModel.CopyItemPlainText.ToLower().Contains(SelectedTemplateHyperlinkViewModel.TemplateName.ToLower())) {
+                ValidationText = "'" + SelectedTemplateHyperlinkViewModel.TemplateName + "'" + " already exists in text";
                 return false;
             }
             ValidationText = string.Empty;

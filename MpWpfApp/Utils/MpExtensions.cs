@@ -395,18 +395,36 @@ namespace MpWpfApp {
             }
         }
 
+        public static Size GetDocumentSize(this FlowDocument doc) {
+            var tp = doc.ContentStart;
+            Rect lastRect = tp.GetCharacterRect(LogicalDirection.Forward);
+            double w = lastRect.Width, h = lastRect.Height, y = lastRect.Y;
+            while(tp != null && tp.CompareTo(doc.ContentEnd) < 0) {
+                tp = tp.GetPositionAtOffset(1, LogicalDirection.Forward);
+                Rect newRect = tp.GetCharacterRect(LogicalDirection.Forward);
+                if(newRect.Y > lastRect.Y) {
+                    //w = Math.Max(w, newRect.X);
+                    h += newRect.Y;// Math.Max(h, newRect.Y);
+                }
+                lastRect = newRect;
+            }
+            return new Size(w, h);
+        }
+
         public static FormattedText GetFormattedText(this FlowDocument doc) {
             if (doc == null) {
                 throw new ArgumentNullException("doc");
             }
 
-            FormattedText output = new FormattedText(
+            var output = new FormattedText(
               GetText(doc),
               CultureInfo.CurrentCulture,
               doc.FlowDirection,
               new Typeface(doc.FontFamily, doc.FontStyle, doc.FontWeight, doc.FontStretch),
               doc.FontSize,
-              doc.Foreground);
+              doc.Foreground,
+                new NumberSubstitution(),
+                VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip);
 
             int offset = 0;
 

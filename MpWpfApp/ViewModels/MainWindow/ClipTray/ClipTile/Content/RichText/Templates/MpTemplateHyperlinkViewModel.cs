@@ -333,7 +333,8 @@ namespace MpWpfApp {
                 //case of a new template create new w/ unique name & color
                 int uniqueIdx = 1;
                 string namePrefix = "<Template #";
-                while (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == namePrefix + uniqueIdx + ">").ToList().Count > 0) {
+                while (ClipTileViewModel.CopyItemPlainText.ToLower().Contains(namePrefix.ToLower() + uniqueIdx) || 
+                       ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == namePrefix + uniqueIdx + ">").ToList().Count > 0) {
                     uniqueIdx++;
                 }
                 Brush randColor = (Brush)new SolidColorBrush(MpHelpers.Instance.GetRandomColor());
