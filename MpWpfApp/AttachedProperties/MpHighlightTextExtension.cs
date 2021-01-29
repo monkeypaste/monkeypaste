@@ -27,11 +27,21 @@ namespace MpWpfApp {
             typeof(MpHighlightTextExtension),
             new FrameworkPropertyMetadata {
                 PropertyChangedCallback = (s, e) => {
+                    if(e.OldValue == null) {
+                        //occurs when cliptile created
+                        return;
+                    }
                     var cb = (MpClipBorder)s;
                     var ctvm = (MpClipTileViewModel)cb.DataContext; 
                     var hlt = (string)e.NewValue;
                     if (ctvm.MainWindowViewModel.IsLoading || ctvm.IsEditingTile || ctvm.IsLoading) {
                         ctvm.TileVisibility = Visibility.Visible;
+                        return;
+                    }
+                    var mc1 = Regex.Matches(ctvm.CopyItemPlainText, hlt, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+                    var mc2 = Regex.Matches(ctvm.CopyItemTitle, hlt, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+                    if (mc1.Count == 0 && mc2.Count == 0) {
+                        ctvm.TileVisibility = Visibility.Collapsed;
                         return;
                     }
                     PerformHighlight(cb, ctvm, hlt);
@@ -88,14 +98,7 @@ namespace MpWpfApp {
                                 }
                                 switch (ctvm.CopyItemType) {
                                     case MpCopyItemType.RichText:
-                                        var rtb = (RichTextBox)cb.FindName("ClipTileRichTextBox");
-                                        var mc = Regex.Matches(ctvm.CopyItemPlainText, hlt, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
-                                        if (mc.Count == 0) {
-                                            if (ctvm.LastTitleHighlightRangeList.Count == 0) {
-                                                ctvm.TileVisibility = Visibility.Collapsed;
-                                            }
-                                            break;
-                                        }
+                                        var rtb = (RichTextBox)cb.FindName("ClipTileRichTextBox");                                       
 
                                         rtb.BeginChange();
                                         foreach (var mr in MpHelpers.Instance.FindStringRangesFromPosition(rtb.Document.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive)) {

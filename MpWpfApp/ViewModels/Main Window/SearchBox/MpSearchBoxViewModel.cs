@@ -338,7 +338,9 @@ namespace MpWpfApp {
 
             SearchText = Text;
 
-            IsSearching = true;
+            if(!string.IsNullOrEmpty(SearchText) && SearchText != PlaceholderText) {
+                IsSearching = true;
+            }
 
             //var vt = new List<MpClipTileViewModel>();
             //var ct = new List<MpClipTileViewModel>();

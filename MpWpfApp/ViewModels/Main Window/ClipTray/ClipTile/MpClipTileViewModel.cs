@@ -1460,6 +1460,17 @@
         }
 
         public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
+            if(CopyItemType == MpCopyItemType.Image && !string.IsNullOrEmpty(CopyItemPlainText)) {
+                var cm = (ContextMenu)sender;
+                var cmi = new MenuItem();
+                cmi.Header = "Convert to Text";
+                cmi.Click += (s, e1) => {
+                    System.Windows.Clipboard.SetText(CopyItemPlainText);
+                    //MainWindowViewModel.ClipTrayViewModel.Remove(this);
+                };
+                cm.Items.Add(cmi);
+            }
+
             RefreshCommands();
 
             TagMenuItems.Clear();

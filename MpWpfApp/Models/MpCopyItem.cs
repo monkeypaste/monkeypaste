@@ -135,7 +135,17 @@ namespace MpWpfApp {
             }
         }
 
-
+        public bool HasOcrText {
+            get {
+                if(CopyItemType != MpCopyItemType.Image) {
+                    return false;
+                }
+                if((ImageItemObjectList == null || ImageItemObjectList.Count == 0) && !string.IsNullOrEmpty(ItemPlainText)) {
+                    return true;
+                }
+                return false;
+            }
+        }
         #endregion
 
         #region Static Methods
@@ -262,7 +272,7 @@ namespace MpWpfApp {
             IntPtr hwnd) {
             CopyItemType = itemType;
             CopyDateTime = DateTime.Now;
-            Title = string.Empty;
+            Title = CopyItemType == MpCopyItemType.RichText ? "Text" : Enum.GetName(typeof(MpCopyItemType), CopyItemType);
             CopyCount = 1;
             Client = new MpClient(0, 0, MpHelpers.Instance.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
             
@@ -296,12 +306,6 @@ namespace MpWpfApp {
                     break;
                 case MpCopyItemType.Image:
                     SetData((BitmapSource)data);
-                    ImageItemObjectList = MpHelpers.Instance.DetectObjects(MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource));
-
-                    //Console.WriteLine("Image metadata: ");
-                    //foreach (var iio in ImageItemObjectList) {
-                    //    Console.WriteLine(iio);
-                    //}
                     break;
                 case MpCopyItemType.RichText:
                     SetData((string)data);
@@ -459,13 +463,29 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private void UpdateItemData() {
+        private async Task UpdateItemData() {
             switch (CopyItemType) {
                 case MpCopyItemType.FileList:
                     ItemPlainText = (string)_itemData;
                     break;
                 case MpCopyItemType.Image:
-                    ItemPlainText = ImageObjectTypeCsv;
+                    if(Application.Current.MainWindow.DataContext == null || ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).IsLoading) {
+                        ImageItemObjectList = MpDetectedImageObject.GetAllObjectsForItem(CopyItemId);
+                    } else {
+                        // first scan image with ocr, if no text is found then detect objects, then either way delete the img file
+                        var imgPath = GetFileList()[0];
+                        var ocrText = await MpHelpers.Instance.ConvertBitmapSourceToPlainText(imgPath);
+                        if (string.IsNullOrEmpty(ocrText)) {
+                            ImageItemObjectList = MpHelpers.Instance.DetectObjects(MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource));
+                            ItemPlainText = ImageObjectTypeCsv;
+                        } else {
+                            ItemPlainText = ocrText;
+                        }
+                        File.Delete(imgPath);
+                        if (string.IsNullOrEmpty(ItemPlainText)) {
+                            ItemPlainText = "Image";
+                        }
+                    }
                     break;
                 case MpCopyItemType.RichText:
                     ItemPlainText = MpHelpers.Instance.ConvertRichTextToPlainText((string)_itemData);
@@ -488,8 +508,8 @@ namespace MpWpfApp {
                     break;
             }
         }
-        
 
+        
         #endregion
 
         #region Overrides
@@ -517,7 +537,7 @@ namespace MpWpfApp {
 
             if (CopyItemType == MpCopyItemType.Image) {
                 SetData(MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]));
-                ImageItemObjectList = MpDetectedImageObject.GetAllObjectsForItem(CopyItemId);
+                ItemPlainText = dr["ItemText"].ToString();
             } else {
                 SetData(dr["ItemText"].ToString());
             }
@@ -577,6 +597,9 @@ namespace MpWpfApp {
             ItemColor.WriteToDatabase();
 
             string itemText = CopyItemType == MpCopyItemType.RichText ? ItemRichText : ItemPlainText;
+            if(string.IsNullOrEmpty(itemText)) {
+                itemText = string.Empty;
+            }
             byte[] itemImage = CopyItemType == MpCopyItemType.Image ? MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource) : null;
             //if copyitem already exists
             if (CopyItemId > 0) {

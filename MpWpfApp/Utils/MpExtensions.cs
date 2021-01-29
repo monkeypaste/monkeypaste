@@ -149,8 +149,12 @@ namespace MpWpfApp {
                 @"#([0-9]|[a-fA-F]){7}([^" + Properties.Settings.Default.TemplateTokenMarker + "][ ])",
             };
             //TextRange fullDocRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
-            for (int i = 0; i < regExGroupList.Count; i++) {
+            for (int i = 0; i < regExGroupList.Count; i++) {                
                 var linkType = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);
+                if(linkType == MpSubTextTokenType.StreetAddress) {
+                    //doesn't consistently work and presents bugs so disabling for now
+                    continue;
+                }
                 TextPointer lastRangeEnd = rtb.Document.ContentStart;
                 var regExStr = regExGroupList[i];
                 if (string.IsNullOrEmpty(regExStr)) {

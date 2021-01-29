@@ -8,7 +8,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Management;
-using System.Media;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -31,11 +30,13 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using Alturos.Yolo;
-using CsvHelper;
 using Newtonsoft.Json;
 using QRCoder;
 using static MpWpfApp.MpShellEx;
 using static QRCoder.PayloadGenerator;
+using Windows.Graphics.Imaging;
+using Windows.Media.Ocr;
+using CsvHelper;
 
 namespace MpWpfApp {
     public class MpHelpers {
@@ -1531,7 +1532,7 @@ namespace MpWpfApp {
         public BitmapSource ConvertRenderTargetBitmapToBitmapSource(RenderTargetBitmap rtb) {
             var bitmapImage = new BitmapImage();
             var bitmapEncoder = new PngBitmapEncoder();
-            bitmapEncoder.Frames.Add(BitmapFrame.Create(rtb));
+            bitmapEncoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(rtb));
             using (var stream = new MemoryStream()) {
                 bitmapEncoder.Save(stream);
                 stream.Seek(0, SeekOrigin.Begin);
@@ -1606,6 +1607,20 @@ namespace MpWpfApp {
         #endregion
 
         #region Converters
+        public async Task<string> ConvertBitmapSourceToPlainText(string image) {
+            var engine = OcrEngine.TryCreateFromLanguage(new Windows.Globalization.Language("en-US")); 
+            var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(image);
+            using (var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read)) {
+                var decoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream);
+                var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
+                var ocrResult = await engine.RecognizeAsync(softwareBitmap);
+
+                Console.WriteLine(ocrResult.Text);
+
+                return ocrResult.Text;
+            }            
+        }
+
         public string ConvertFlowDocumentToXaml(MpEventEnabledFlowDocument fd) {
             TextRange range = new TextRange(fd.ContentStart, fd.ContentEnd);
             using (MemoryStream stream = new MemoryStream()) {
@@ -1782,7 +1797,7 @@ namespace MpWpfApp {
         public byte[] ConvertBitmapSourceToByteArray(BitmapSource bs) {            
             PngBitmapEncoder encoder = new PngBitmapEncoder();
             using (MemoryStream stream = new MemoryStream()) {
-                encoder.Frames.Add(BitmapFrame.Create(bs));
+                encoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bs));
                 encoder.Save(stream);
                 byte[] bit = stream.ToArray();
                 stream.Close();
@@ -1814,8 +1829,8 @@ namespace MpWpfApp {
 
         public System.Drawing.Bitmap ConvertBitmapSourceToBitmap(BitmapSource bitmapsource) {
             using (MemoryStream outStream = new MemoryStream()) {
-                BitmapEncoder enc = new BmpBitmapEncoder();
-                enc.Frames.Add(BitmapFrame.Create(bitmapsource));
+                System.Windows.Media.Imaging.BitmapEncoder enc = new BmpBitmapEncoder();
+                enc.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bitmapsource));
                 enc.Save(outStream);
                 return new System.Drawing.Bitmap(outStream);
             }

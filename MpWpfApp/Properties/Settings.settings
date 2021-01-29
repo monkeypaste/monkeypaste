@@ -208,5 +208,11 @@
     <Setting Name="UseSpellCheck" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="AzureCognitiveServicesEndpoint" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://mp-azure-cognitive-services-resource-instance.cognitiveservices.azure.com/</Value>
+    </Setting>
+    <Setting Name="UserLanguage" Type="System.String" Scope="User">
+      <Value Profile="(Default)">en-US</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

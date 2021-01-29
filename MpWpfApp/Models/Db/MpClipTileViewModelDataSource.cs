@@ -20,6 +20,10 @@ namespace MpWpfApp {
             _tagId = tagId;
             _items.Clear();
             foreach (var ci in MpCopyItem.GetAllCopyItems()) {
+                if(ci.CopyItemId == 79) {
+                    ci.DeleteFromDatabase();
+                    continue;
+                }
                 _items.Add(new MpClipTileViewModel(ci));
             }
         }
