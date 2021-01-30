@@ -89,6 +89,17 @@ namespace MpWpfApp {
                 return ClipTileTitleHeight * 0.75;
             }
         }
+        public double ClipTileTitleIconBorderSizeRatio {
+            get {
+                return 1.25;
+            }
+        }
+
+        public double ClipTileTitleIconBorderSize {
+            get {
+                return ClipTileTitleIconSize * ClipTileTitleIconBorderSizeRatio;
+            }
+        }
 
         public double ClipTileTitleIconRightMargin {
             get {

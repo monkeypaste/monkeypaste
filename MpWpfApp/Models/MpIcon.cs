@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -10,6 +11,7 @@ namespace MpWpfApp {
         public static int TotalIconCount = 0;
         public int IconId { get; set; }
         public BitmapSource IconImage { get; set; }
+        public BitmapSource IconBorderImage { get; set; }
 
         public static List<MpIcon> GetAllIcons() {
             var iconList = new List<MpIcon>();
@@ -24,11 +26,13 @@ namespace MpWpfApp {
         public MpIcon() {
             IconId = 0;
             IconImage = null;
+            IconBorderImage = null;
             ++TotalIconCount;
         }
         public MpIcon(BitmapSource iconImage) : base() {
             IconId = 0;
             IconImage = iconImage;
+            IconBorderImage = CreateBorder(iconImage, 1.25);
             ++TotalIconCount;
         }
         public MpIcon(int iconId) {
@@ -49,6 +53,7 @@ namespace MpWpfApp {
         public override void LoadDataRow(DataRow dr) {
             IconId = Convert.ToInt32(dr["pk_MpIconId"].ToString());
             IconImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
+            IconBorderImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBorderBlob"]);
         }
         public override void WriteToDatabase() {
             bool isNew = false;
@@ -87,6 +92,12 @@ namespace MpWpfApp {
                         { "@iid", IconId }
                     });
             }
+        }
+
+        private BitmapSource CreateBorder(BitmapSource img, double scale) {
+            var border = MpHelpers.Instance.TintBitmapSource(img, Colors.White);
+            var borderSize = new Size(img.Width * scale, img.Height * scale);
+            return MpHelpers.Instance.ResizeBitmapSource(border, borderSize);
         }
     }
 }

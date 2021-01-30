@@ -434,27 +434,39 @@ namespace MpWpfApp {
 
         public BitmapSource InitSwirl(BitmapSource sharedSwirl = null) {
             if (sharedSwirl == null) {
-                var itemBrush = new SolidColorBrush() { Color = ItemColor.Color };
-                SolidColorBrush lighterColor = MpHelpers.Instance.ChangeBrushAlpha(
-                                MpHelpers.Instance.ChangeBrushBrightness(itemBrush, -0.5f), 100);
-                SolidColorBrush darkerColor = MpHelpers.Instance.ChangeBrushAlpha(
-                                MpHelpers.Instance.ChangeBrushBrightness(itemBrush, -0.4f), 50);
-                SolidColorBrush accentColor = MpHelpers.Instance.ChangeBrushAlpha(
-                                MpHelpers.Instance.ChangeBrushBrightness(itemBrush, -0.0f), 100);
+                //var itemBrush = new SolidColorBrush() { Color = ItemColor.Color };
+                //SolidColorBrush lighterColor = MpHelpers.Instance.ChangeBrushAlpha(
+                //                MpHelpers.Instance.ChangeBrushBrightness(itemBrush, -0.5f), 100);
+                //SolidColorBrush darkerColor = MpHelpers.Instance.ChangeBrushAlpha(
+                //                MpHelpers.Instance.ChangeBrushBrightness(itemBrush, -0.4f), 50);
+                //SolidColorBrush accentColor = MpHelpers.Instance.ChangeBrushAlpha(
+                //                MpHelpers.Instance.ChangeBrushBrightness(itemBrush, -0.0f), 100);
+
                 var path = @"pack://application:,,,/Resources/Images/";
-                var swirl1 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0001.png"));
-                swirl1 = MpHelpers.Instance.TintBitmapSource(swirl1, (itemBrush).Color);
+                
+                //var swirl1 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0001.png"));
+                //swirl1 = MpHelpers.Instance.TintBitmapSource(swirl1, (itemBrush).Color);
 
-                var swirl2 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0002.png"));
-                swirl2 = MpHelpers.Instance.TintBitmapSource(swirl2, lighterColor.Color);
+                //var swirl2 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0002.png"));
+                //swirl2 = MpHelpers.Instance.TintBitmapSource(swirl2, lighterColor.Color);
 
-                var swirl3 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0003.png"));
-                swirl3 = MpHelpers.Instance.TintBitmapSource(swirl3, darkerColor.Color);
+                //var swirl3 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0003.png"));
+                //swirl3 = MpHelpers.Instance.TintBitmapSource(swirl3, darkerColor.Color);
 
-                var swirl4 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0004.png"));
-                swirl4 = MpHelpers.Instance.TintBitmapSource(swirl4, accentColor.Color);
+                //var swirl4 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0004.png"));
+                //swirl4 = MpHelpers.Instance.TintBitmapSource(swirl4, accentColor.Color);
 
-                return MpHelpers.Instance.MergeImages(new List<BitmapSource>() { swirl1, swirl2, swirl3, swirl4 });
+                var swirlList = new List<BitmapSource>();
+
+                for (int i = 0; i < 4; i++) {
+                    var c = App.PrimaryIconColorList[i].Color;
+                    c.A = 75;
+                    var swirl = (BitmapSource)new BitmapImage(new Uri(path + string.Format(@"title_swirl000{0}.png",i+1)));
+                    swirl = MpHelpers.Instance.TintBitmapSource(swirl, c);
+                    swirlList.Add(swirl);
+                }
+
+                return MpHelpers.Instance.MergeImages(new List<BitmapSource>() { swirlList[0], swirlList[1], swirlList[2], swirlList[3] });
             } else {
                 return sharedSwirl;
             }

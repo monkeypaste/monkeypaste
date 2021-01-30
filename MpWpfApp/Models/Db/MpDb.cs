@@ -264,6 +264,7 @@ namespace MpWpfApp {
                     CREATE TABLE MpIcon (
                       pk_MpIconId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , IconBlob image NOT NULL
+                    , IconBorderBlob image 
                     );
                     ---------------------------------------------------------------------------------------------------------------------                    
                     CREATE TABLE MpShortcut (
@@ -359,6 +360,17 @@ namespace MpWpfApp {
                     , AppName text 
                     , IsAppRejected integer NOT NULL                    
                     , IconBlob image NOT NULL
+                    , IconBorderBlob image NOT NULL
+                    , fk_MpColorId1 integer default 0
+                    , fk_MpColorId2 integer default 0
+                    , fk_MpColorId3 integer default 0
+                    , fk_MpColorId4 integer default 0
+                    , fk_MpColorId5 integer default 0
+                    , CONSTRAINT FK_MpApp_0_0 FOREIGN KEY (fk_MpColorId1) REFERENCES MpColor (pk_MpColorId)
+                    , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpColorId2) REFERENCES MpColor (pk_MpColorId)
+                    , CONSTRAINT FK_MpApp_2_0 FOREIGN KEY (fk_MpColorId3) REFERENCES MpColor (pk_MpColorId)
+                    , CONSTRAINT FK_MpApp_3_0 FOREIGN KEY (fk_MpColorId4) REFERENCES MpColor (pk_MpColorId)
+                    , CONSTRAINT FK_MpApp_4_0 FOREIGN KEY (fk_MpColorId5) REFERENCES MpColor (pk_MpColorId)
                     );                
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCopyItem (

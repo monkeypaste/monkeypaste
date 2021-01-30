@@ -1288,7 +1288,23 @@ namespace MpWpfApp {
         }
         
         public BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint) {
-            var bmp = new WriteableBitmap(bmpSrc);
+            BitmapSource formattedBmpSrc = null;
+            if(bmpSrc.Width != bmpSrc.PixelWidth || bmpSrc.Height != bmpSrc.PixelHeight) {
+                //means bmp dpi isn't 96
+                double dpi = 96;
+                int width = bmpSrc.PixelWidth;
+                int height = bmpSrc.PixelHeight;
+
+                int stride = width * 4; // 4 bytes per pixel
+                byte[] pixelData = new byte[stride * height];
+                bmpSrc.CopyPixels(pixelData, stride, 0);
+
+                formattedBmpSrc = BitmapSource.Create(width, height, dpi, dpi, PixelFormats.Bgra32, null, pixelData, stride);
+            } else {
+                formattedBmpSrc = bmpSrc;
+            }
+
+            var bmp = new WriteableBitmap(formattedBmpSrc);
             var pixels = GetPixels(bmp);
             var pixelColor = new PixelColor[1, 1];
             pixelColor[0, 0] = new PixelColor { Alpha = tint.A, Red = tint.R, Green = tint.G, Blue = tint.B };
@@ -1296,13 +1312,20 @@ namespace MpWpfApp {
             for (int x = 0; x < bmp.Width; x++) {
                 for (int y = 0; y < bmp.Height; y++) {
                     PixelColor c = pixels[x, y];
-                    //Color gotColor = Color.FromArgb(c.Alpha, c.Red, c.Green, c.Blue);
                     if (c.Alpha > 0) {
                         PutPixels(bmp, pixelColor, x, y);
                     }
                 }
             }
             return bmp;
+        }
+
+        public double ColorDistance(Color e1, Color e2) {
+            long rmean = ((long)e1.R + (long)e2.R) / 2;
+            long r = (long)e1.R - (long)e2.R;
+            long g = (long)e1.G - (long)e2.G;
+            long b = (long)e1.B - (long)e2.B;
+            return Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
         }
 
         public Color ConvertHexToColor(string hexString) {
@@ -1330,17 +1353,17 @@ namespace MpWpfApp {
             return GetBitmapFromFilePath(sourcePath, IconSizeEnum.MediumIcon32);
         }
 
-        public BitmapSource ResizeBitmapSource(BitmapSource bmpSrc, Size newSize) {
-            
-            using (System.Drawing.Bitmap result = new System.Drawing.Bitmap((int)newSize.Width, (int)newSize.Height)) {
-                using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage((System.Drawing.Image)result)) {
-                    //The interpolation mode produces high quality images
-                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                    g.DrawImage(ConvertBitmapSourceToBitmap(bmpSrc), 0, 0, (int)newSize.Width, (int)newSize.Height);
-                    g.Dispose();
-                    return ConvertBitmapToBitmapSource(result);
-                }
-            }
+        public BitmapSource ResizeBitmapSource(BitmapSource bmpSrc, Size newScale) {
+            return new TransformedBitmap(bmpSrc, new ScaleTransform(newScale.Width,newScale.Height));
+            //using (System.Drawing.Bitmap result = new System.Drawing.Bitmap((int)newSize.Width, (int)newSize.Height)) {
+            //    using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage((System.Drawing.Image)result)) {
+            //        //The interpolation mode produces high quality images
+            //        g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+            //        g.DrawImage(ConvertBitmapSourceToBitmap(bmpSrc), 0, 0, (int)newSize.Width, (int)newSize.Height);
+            //        g.Dispose();
+            //        return ConvertBitmapToBitmapSource(result);
+            //    }
+            //}
         }
 
         public bool ByteArrayCompare(byte[] b1, byte[] b2) {
@@ -1677,15 +1700,26 @@ namespace MpWpfApp {
         }
         public string ConvertRichTextToPlainText(string richText) {
             if (IsStringRichText(richText)) {
-                RichTextBox rtb = new RichTextBox();
-                rtb.SetRtf(richText);
-                var pt = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
-                int rtcount = GetRowCount(richText);
-                int ptcount = GetRowCount(pt);
-                if(rtcount != ptcount) {
-                    return pt.Trim(new char[] { '\r', '\n' });
+               try {
+                    RichTextBox rtb = new RichTextBox();
+                    rtb.SetRtf(richText);
+                    var pt = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
+                    int rtcount = GetRowCount(richText);
+                    int ptcount = GetRowCount(pt);
+                    if (rtcount != ptcount) {
+                        return pt.Trim(new char[] { '\r', '\n' });
+                    }
+                    return pt;
                 }
-                return pt;
+                catch(Exception ex) {
+                    //rtb.SetRtf throws an exception when richText is from excel (contains cell information?)
+                    //so falling back winforms richtextbox
+                    using (System.Windows.Forms.RichTextBox wf_rtb = new System.Windows.Forms.RichTextBox()) {
+                        wf_rtb.Rtf = richText;
+                        return wf_rtb.Text;
+                    }
+                    
+                }
             } else {
                 return richText;
             }
@@ -1902,7 +1936,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-        private PixelColor[,] GetPixels(BitmapSource source) {
+        public PixelColor[,] GetPixels(BitmapSource source) {
             if (source.Format != PixelFormats.Bgra32) {
                 source = new FormatConvertedBitmap(source, PixelFormats.Bgra32, null, 0);
             }

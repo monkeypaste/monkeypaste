@@ -19,6 +19,15 @@ namespace MpWpfApp {
             }
         }
 
+        public Brush ColorBrush {
+            get {
+                if(Color == null) {
+                    return Brushes.Pink;
+                }
+                return new SolidColorBrush(Color);
+            }
+
+        }
         private int _r, _g, _b, _a; 
 
         public static List<MpColor> GetAllColors() {
@@ -60,6 +69,17 @@ namespace MpWpfApp {
             _b = Convert.ToInt32(dr["B"].ToString());
             _a = Convert.ToInt32(dr["A"].ToString());
         }
+        //public void DeleteFromDatabase() {
+        //    if (ColorId <= 0) {
+        //        return;
+        //    }
+
+        //    MpDb.Instance.ExecuteWrite(
+        //        "delete from MpColor where pk_MpColorId=@cid",
+        //        new Dictionary<string, object> {
+        //            { "@cid", ColorId }
+        //        });
+        //}
 
         public override void WriteToDatabase() {
             if (ColorId == 0) {

@@ -847,7 +847,7 @@
                                         </i:Interaction.Triggers>
                                         <MenuItem Header="Rename"
                                                   Command="{Binding RenameTagCommand}" />
-                                        <MenuItem Header="Assign Hotkey"
+                                        <MenuItem Header="Hotkey"
                                                   InputGestureText="{Binding ShortcutKeyList}"
                                                   Command="{Binding AssignHotkeyCommand}" />
                                         <MenuItem Header="Change Color"
@@ -1409,29 +1409,42 @@
                                                 <Button.RenderTransform>
                                                     <RotateTransform x:Name="ClipTileAppIconImageButtonRotateTransform" />
                                                 </Button.RenderTransform>
-                                                <Image x:Name="ClipTileAppIconImage"
-                                                       Source="{Binding CopyItemAppIcon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
-                                                       Stretch="Fill"
-                                                       Width="{Binding TileTitleIconSize}"
-                                                       Height="{Binding TileTitleIconSize}">
-                                                    <Image.Style>
-                                                        <Style TargetType="{x:Type Image}">
-                                                            <Style.Triggers>
-                                                                <Trigger Property="IsMouseOver"
-                                                                         Value="True">
-                                                                    <Setter Property="Effect">
-                                                                        <Setter.Value>
-                                                                            <DropShadowEffect ShadowDepth="3"
-                                                                                              Color="White"
-                                                                                              Opacity="1"
-                                                                                              BlurRadius="50" />
-                                                                        </Setter.Value>
-                                                                    </Setter>
-                                                                </Trigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </Image.Style>
-                                                </Image>
+                                                <Grid>
+                                                    <Image x:Name="ClipTileAppIconBorderImage"
+                                                           Source="{Binding CopyItemAppIconBorder, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
+                                                           Stretch="Fill"
+                                                           RenderTransformOrigin="0.5, 0.5"
+                                                           Visibility="Hidden"
+                                                           Width="{Binding TileTitleIconSize}"
+                                                           Height="{Binding TileTitleIconSize}">
+                                                        <Image.RenderTransform>
+                                                            <ScaleTransform x:Name="ClipTileAppIconBorderImageScaleTransform" />
+                                                        </Image.RenderTransform>
+                                                    </Image>
+                                                    <Image x:Name="ClipTileAppIconImage"
+                                                           Source="{Binding CopyItemAppIcon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
+                                                           Stretch="Fill"
+                                                           Width="{Binding TileTitleIconSize}"
+                                                           Height="{Binding TileTitleIconSize}">
+                                                        <!--<Image.Style>
+                                                            <Style TargetType="{x:Type Image}">
+                                                                <Style.Triggers>
+                                                                    <Trigger Property="IsMouseOver"
+                                                                             Value="True">
+                                                                        <Setter Property="Effect">
+                                                                            <Setter.Value>
+                                                                                <DropShadowEffect ShadowDepth="3"
+                                                                                                  Color="White"
+                                                                                                  Opacity="1"
+                                                                                                  BlurRadius="50" />
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                    </Trigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Image.Style>-->
+                                                    </Image>
+                                                </Grid>
                                             </Button>
                                         </Canvas>
                                         <!-- Content Container Canvas -->

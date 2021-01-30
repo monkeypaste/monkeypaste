@@ -153,6 +153,7 @@
     <Compile Include="Utils\DragDrop\ListBoxDragDropManager.cs" />
     <Compile Include="Utils\DragDrop\ListViewDragDropManager.cs" />
     <Compile Include="Utils\DragDrop\MouseUtilities.cs" />
+    <Compile Include="Utils\MpImageHistogram.cs" />
     <Compile Include="Utils\RESTful\MpCurrencyConverter.cs" />
     <Compile Include="Utils\RESTful\MpLanguageTranslator.cs" />
     <Compile Include="Utils\RESTful\MpWordsApiDictionary.cs" />

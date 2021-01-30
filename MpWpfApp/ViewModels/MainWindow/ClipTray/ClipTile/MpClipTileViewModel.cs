@@ -236,6 +236,19 @@
             }
         }
 
+        private double _tileTitleIconBorderSize = MpMeasurements.Instance.ClipTileTitleIconBorderSize;
+        public double TileTitleIconBorderSize {
+            get {
+                return _tileTitleIconBorderSize;
+            }
+            set {
+                if (_tileTitleIconBorderSize != value) {
+                    _tileTitleIconBorderSize = value;
+                    OnPropertyChanged(nameof(TileTitleIconBorderSize));
+                }
+            }
+        }
+
         private double _tileSize = MpMeasurements.Instance.ClipTileSize;
         public double TileSize {
             get {
@@ -982,6 +995,15 @@
             }
         }
 
+        public BitmapSource CopyItemAppIconBorder {
+            get {
+                if (CopyItem == null) {
+                    return new BitmapImage();
+                }
+                return CopyItem.App.IconBorderImage;
+            }
+        }
+
         public string CopyItemAppName {
             get {
                 if (CopyItem == null) {
@@ -1229,6 +1251,9 @@
             var clipTileTitleTextBox = (TextBox)titleCanvas.FindName("ClipTileTitleTextBox");
             var titleIconImageButton = (Button)titleCanvas.FindName("ClipTileAppIconImageButton");
             var titleIconImageButtonRotateTransform = (RotateTransform)titleIconImageButton.FindName("ClipTileAppIconImageButtonRotateTransform");
+            var titleIconBorderImage = (Image)titleCanvas.FindName("ClipTileAppIconBorderImage");
+            var titleIconBorderImageScaleTransform = (ScaleTransform)titleCanvas.FindName("ClipTileAppIconBorderImageScaleTransform");
+            
             _tb = clipTileTitleTextBlock;
 
             titleTextGrid.MouseEnter += (s, e1) => {
@@ -1268,7 +1293,7 @@
             Canvas.SetTop(titleIconImageButton, 2);
             titleIconImageButton.MouseEnter += (s, e3) => {
                 double t = 50;
-                double angle = 10;
+                double angle = 5;
                 var a = new DoubleAnimation(0, angle, new Duration(TimeSpan.FromMilliseconds(t)));
                 a.Completed += (s1, e1) => {
                     var b = new DoubleAnimation(angle, -angle, new Duration(TimeSpan.FromMilliseconds(t * 2)));
@@ -1278,10 +1303,36 @@
                     };
                     titleIconImageButtonRotateTransform.BeginAnimation(RotateTransform.AngleProperty, b);
                 };
-                //CubicEase easing = new CubicEase();
-                //easing.EasingMode = EasingMode.EaseIn;
-                //animation.EasingFunction = easing;
+                
                 titleIconImageButtonRotateTransform.BeginAnimation(RotateTransform.AngleProperty, a);
+
+
+                //< DoubleAnimation Duration = "0:0:0.2" From = "1" To = "1.2" AutoReverse = "True"
+                //             Storyboard.TargetName = "ScaleImage" Storyboard.TargetProperty = "ScaleX" />
+                titleIconBorderImage.Visibility = Visibility.Visible;
+                double fromScale = 1;
+                double toScale = 1.1;
+                double st = 300;
+                var sa = new DoubleAnimation(fromScale, toScale, new Duration(TimeSpan.FromMilliseconds(st)));
+                var easing = new CubicEase();
+                easing.EasingMode = EasingMode.EaseOut;
+                sa.EasingFunction = easing;
+                titleIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, sa);
+                titleIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, sa);
+            };
+            titleIconImageButton.MouseLeave += (s, e3) => {
+                double fromScale = 1.15;
+                double toScale = 1;
+                double st = 300;
+                var sa = new DoubleAnimation(fromScale, toScale, new Duration(TimeSpan.FromMilliseconds(st)));
+                sa.Completed += (s1, e31) => {
+                    titleIconBorderImage.Visibility = Visibility.Hidden;
+                };
+                var easing = new CubicEase();
+                easing.EasingMode = EasingMode.EaseIn;
+                sa.EasingFunction = easing;
+                titleIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, sa);
+                titleIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, sa);
             };
             titleIconImageButton.PreviewMouseLeftButtonUp += (s, e7) => {
                 // TODO (somehow) force mainwindow to stay active when switching or opening app process

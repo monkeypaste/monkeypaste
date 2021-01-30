@@ -51,19 +51,19 @@ namespace MpWpfApp {
                     this._orderedItems.Clear();
 
                     try {
-                        if (string.IsNullOrWhiteSpace(this.WhereLinqExpression) &&
-                            string.IsNullOrWhiteSpace(this.OrderByLinqExpression))
+                        bool hasNoWhere = string.IsNullOrWhiteSpace(this.WhereLinqExpression);
+                        bool hasNoOrderBy = string.IsNullOrWhiteSpace(this.OrderByLinqExpression);
+                        if (hasNoWhere && hasNoOrderBy) {
                             this._orderedItems.AddRange(this._items);
-                        else if (!string.IsNullOrWhiteSpace(this.WhereLinqExpression) &&
-                                 string.IsNullOrWhiteSpace(this.OrderByLinqExpression))
+                        } else if (!hasNoWhere && hasNoOrderBy) {
                             this._orderedItems.AddRange(this._items.Where(this.WhereLinqExpression));
-                        else if (string.IsNullOrWhiteSpace(this.WhereLinqExpression) &&
-                                 !string.IsNullOrWhiteSpace(this.OrderByLinqExpression))
+                        } else if (hasNoWhere && !hasNoOrderBy) {
                             this._orderedItems.AddRange(this._items.OrderBy(this.OrderByLinqExpression));
-                        else if (!string.IsNullOrWhiteSpace(this.WhereLinqExpression) &&
-                                 !string.IsNullOrWhiteSpace(this.OrderByLinqExpression))
+                        } else if (!hasNoWhere && !hasNoOrderBy) {
                             this._orderedItems.AddRange(this._items.Where(this.WhereLinqExpression)
                                 .OrderBy(this.OrderByLinqExpression));
+                        }
+                            
                     }
                     catch {
                     }
@@ -107,6 +107,11 @@ namespace MpWpfApp {
         public void Where(string whereExpression) {
             if (!string.Equals(whereExpression, this.WhereLinqExpression))
                 this.WhereLinqExpression = whereExpression;
+        }
+
+        public void InsertAt(int index, MpClipTileViewModel newItem) {
+            _items.Insert(index, newItem);
+            _isFilteredItemsValid = false;
         }
 
         #endregion

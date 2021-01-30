@@ -440,11 +440,15 @@ namespace MpWpfApp {
                 var sw = new Stopwatch();
                 sw.Start();
                 var newCopyItem = MpCopyItem.CreateFromClipboard(MainWindowViewModel.ClipTrayViewModel.ClipboardManager.LastWindowWatcher.LastHandle);
-                if (MainWindowViewModel.AppModeViewModel.IsInAppendMode) {
+                if(newCopyItem == null) {
+                    //this occurs if the copy item is not a known format
+                    return;
+                }
+                if (MainWindowViewModel.AppModeViewModel.IsInAppendMode && SelectedClipTiles.Count > 0) {
                     //when in append mode just append the new items text to selecteditem
                     SelectedClipTiles[0].AppendContent(new MpClipTileViewModel(newCopyItem));
                     return;
-                }
+                } 
                 if (newCopyItem.CopyItemId > 0) {
                     //item is a duplicate
                     var existingClipTile = _clipTileViewModels.Where(x => x.CopyItemId == newCopyItem.CopyItemId).ToList();
@@ -456,6 +460,9 @@ namespace MpWpfApp {
                     }
                 } else {
                     var nctvm = new MpClipTileViewModel(newCopyItem);
+                    if (_clipTileViewModels.Count == 0) {
+                        ClipTileViewModelDataSource.InsertAt(0, nctvm);
+                    }
                     this.Add(nctvm);
                     MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(nctvm);
                 }
@@ -574,7 +581,7 @@ namespace MpWpfApp {
         }
 
         public void Add(MpClipTileViewModel ctvm) {
-            _clipTileViewModels.Insert(0, ctvm);
+            _clipTileViewModels.Insert(0, ctvm); 
             _clipTrayRef?.Items.Refresh();
         }
 
