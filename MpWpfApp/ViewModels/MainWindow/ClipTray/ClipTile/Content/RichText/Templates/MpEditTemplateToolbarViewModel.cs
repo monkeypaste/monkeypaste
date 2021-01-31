@@ -19,6 +19,7 @@ namespace MpWpfApp {
         private Hyperlink _selectedTemplateHyperlink = null;
         private string _originalText = string.Empty;
         private string _originalTemplateName = string.Empty;
+        private TextRange _originalSelection = null;
         private Brush _originalTemplateColor = Brushes.Pink;
         #endregion
 
@@ -170,7 +171,11 @@ namespace MpWpfApp {
                     colorContextMenu,
                     colorMenuItem,
                     (s1, e1) => {
-                        SelectedTemplateHyperlinkViewModel.TemplateBrush = ((Border)s1).Background;
+                        foreach(var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
+                            if(thlvm.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName) {
+                                thlvm.TemplateBrush = ((Border)s1).Background;
+                            }
+                        }
                     },
                     MpHelpers.Instance.GetColorColumn(SelectedTemplateHyperlinkViewModel.TemplateBrush),
                     MpHelpers.Instance.GetColorRow(SelectedTemplateHyperlinkViewModel.TemplateBrush)
@@ -253,6 +258,7 @@ namespace MpWpfApp {
             _originalText = _originalTemplateName = string.Empty;
             _originalTemplateColor = null;
             _selectedTemplateHyperlink = null;
+            _originalSelection = ClipTileViewModel.GetRtb().Selection;
             SelectedTemplateHyperlinkViewModel = null;
             if (ttcvm == null) {
                 //for new template create the vm but wait to add it in OkCommand
@@ -291,17 +297,46 @@ namespace MpWpfApp {
                 return false;
             }
             //if new name is a duplicate of another just delete this one and set it to the duplicate
-            var dupTokenHyperlink = ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName && x.CopyItemTemplateId != SelectedTemplateHyperlinkViewModel.CopyItemTemplateId).ToList();
-            if (dupTokenHyperlink != null && dupTokenHyperlink.Count > 0) {
+            //var dupTokenHyperlink = ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName && x.CopyItemTemplateId != SelectedTemplateHyperlinkViewModel.CopyItemTemplateId).ToList();
+            MpTemplateHyperlinkViewModel dthlvm = null;
+            foreach(var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
+                //check if another template has this name
+                if(thlvm != SelectedTemplateHyperlinkViewModel &&
+                   thlvm.CopyItemTemplateId != SelectedTemplateHyperlinkViewModel.CopyItemTemplateId &&
+                   thlvm.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName) {
+                    dthlvm = thlvm;
+                }
+            }
+            if (dthlvm != null) {
                 ValidationText = SelectedTemplateHyperlinkViewModel.TemplateName + " already exists";
                 return false;
             }
-            if(ClipTileViewModel.CopyItemPlainText.ToLower().Contains(SelectedTemplateHyperlinkViewModel.TemplateName.ToLower())) {
-                ValidationText = "'" + SelectedTemplateHyperlinkViewModel.TemplateName + "'" + " already exists in text";
-                return false;
+            var templateNameRanges = MpHelpers.Instance.FindStringRangesFromPosition(ClipTileViewModel.GetRtb().Document.ContentStart, SelectedTemplateHyperlinkViewModel.TemplateName, true);
+            foreach(var tnr in templateNameRanges) {
+                //check if templatename exists in the document
+                var thlr = (Hyperlink)MpHelpers.Instance.FindParentOfType(tnr.Start.Parent, typeof(Hyperlink));
+                if (SelectedTemplateHyperlinkViewModel.TemplateHyperlinkRange != null &&
+                    (thlr == null || !thlr.ElementStart.IsInSameDocument(SelectedTemplateHyperlinkViewModel.TemplateHyperlinkRange.Start)) &&
+                   !thlr.Equals(SelectedTemplateHyperlinkViewModel.TemplateHyperlinkRange)) {
+                    //the first condition will occur when use is adding an already created template
+                    //the second condition ensures the found range is not part of a template which the earlier loop would have been detected
+                    //then the or ensures IF the first condition is non-null (a link with the template name) it won't be part of the selected thlvm
+                    ValidationText = SelectedTemplateHyperlinkViewModel.TemplateName + " already exists";
+                    return false;
+                }
             }
+            
             ValidationText = string.Empty;
             return true;
+        }
+        private void ResetState() {
+            SelectedTemplateHyperlinkViewModel = null;
+            ValidationText = string.Empty;
+            _selectedTemplateHyperlink = null;
+            _originalText = string.Empty;
+            _originalTemplateName = string.Empty;
+            _originalSelection = null;
+           _originalTemplateColor = Brushes.Pink;
         }
         #endregion
 
@@ -316,16 +351,21 @@ namespace MpWpfApp {
             }
         }
         private void Cancel() {
-            if(IsSelectedNewTemplate) {
-                SelectedTemplateHyperlinkViewModel.Dispose(true);
-                ClipTileViewModel.GetRtb().Selection.Text = _originalText;
+            ClipTileViewModel.GetRtb().Focus();
+            if (IsSelectedNewTemplate) {
+                var selectionStart = SelectedTemplateHyperlinkViewModel.TemplateHyperlinkRange.Start;
+                SelectedTemplateHyperlinkViewModel.Dispose(false);
+                _originalSelection.Text = _originalText;
+                var sr = MpHelpers.Instance.FindStringRangeFromPosition(selectionStart, _originalText, true);
+                ClipTileViewModel.GetRtb().Selection.Select(sr.Start, sr.End);                
             } else {
                 //restore original name/color to datacontext
                 SelectedTemplateHyperlinkViewModel.TemplateName = _originalTemplateName;
                 SelectedTemplateHyperlinkViewModel.TemplateBrush = _originalTemplateColor;
             }
-            //SelectedTemplateHyperlinkViewModel.IsSelected = false;
             ClipTileViewModel.IsEditingTemplate = false;
+            
+            ResetState();
         }
 
         private RelayCommand _okCommand;
@@ -347,6 +387,9 @@ namespace MpWpfApp {
 
             SelectedTemplateHyperlinkViewModel.IsSelected = true;
             ClipTileViewModel.IsEditingTemplate = false;
+
+            ClipTileViewModel.GetRtb().Focus();
+            ResetState();
         }
         #endregion
 

@@ -69,7 +69,7 @@ namespace MpWpfApp {
                 var span = new Span(new Run(linkText), trEHl.ElementStart);
                 tr = FindStringRangeFromPosition(span.ContentStart, trText, true);
             }
-            thlvm.TemplateTextRange = tr;
+            thlvm.TemplateHyperlinkRange = tr;
             //var r = new Run();
             //r.Loaded += thlvm.TemplateHyperLinkRun_Loaded;
 
@@ -77,10 +77,20 @@ namespace MpWpfApp {
             tb.DataContext = thlvm;
             tb.Loaded += thlvm.TemplateHyperLinkRun_Loaded;
 
+            var b = new Border();
+            b.CornerRadius = new CornerRadius(5);
+            b.BorderThickness = new Thickness(1.5);
+            b.DataContext = thlvm;
+            b.Child = tb;
+
+            var iuic = new InlineUIContainer();
+            iuic.DataContext = thlvm;
+            iuic.Child = b;
+
             var hl = new Hyperlink(tr.Start, tr.End);
             hl.DataContext = thlvm;
             hl.Inlines.Clear();
-            hl.Inlines.Add(tb);
+            hl.Inlines.Add(iuic);
             thlvm.TemplateHyperlink = hl;
             return hl;
         }
@@ -109,118 +119,6 @@ namespace MpWpfApp {
                 return null;
             }
         }
-        //public List<TextRange> FindStringRangesFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
-        //    var matchRangeList = new List<TextRange>();
-        //    TextPointer lastDocPosition = null; 
-        //    int curIdx = 0;
-        //    TextPointer rootPosition = position;
-        //    TextPointer lastMatchParentEndPosition = null;
-        //    TextPointer startPointer = null;
-        //    StringComparison stringComparison = isCaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase;
-
-        //    while (position != null) {
-        //        while(position != null && 
-        //              position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
-        //            position = position.GetPositionAtOffset(1, LogicalDirection.Forward);
-        //        }
-        //        var runStr = position.GetTextInRun(LogicalDirection.Forward);
-        //        if (string.IsNullOrEmpty(runStr)) {
-        //            position = position.GetPositionAtOffset(1, LogicalDirection.Forward);
-        //            continue;
-        //        }
-        //        //only concerned with current character of match string
-        //        int runIdx = runStr.IndexOf(matchStr[curIdx].ToString(), stringComparison);
-        //        if (runIdx == -1) {
-        //            //if no match found reset search
-        //            curIdx = 0;
-        //            if (startPointer == null) {
-        //                position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
-        //            } else {
-        //                //when no match somewhere after first character reset search to the position AFTER beginning of last partial match
-        //                position = startPointer.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
-        //            }
-        //            continue;
-        //        }
-        //        if (curIdx == 0) {
-        //            //beginning of range found at runIdx
-        //            startPointer = position.GetPositionAtOffset(runIdx, LogicalDirection.Forward);
-        //        }
-        //        if (curIdx == matchStr.Length - 1) {
-        //            //each character has been matched
-        //            var endPointer = position.GetPositionAtOffset(runIdx, LogicalDirection.Forward);
-        //            //for edge cases of repeating characters these loops ensure start is not early and last character isn't lost 
-        //            if (isCaseSensitive) {
-        //                while (endPointer != null && !new TextRange(startPointer, endPointer).Text.Contains(matchStr)) {
-        //                    endPointer = endPointer.GetPositionAtOffset(1, LogicalDirection.Forward);
-        //                }
-        //            } else {
-        //                while (endPointer != null && !new TextRange(startPointer, endPointer).Text.ToLower().Contains(matchStr.ToLower())) {
-        //                    endPointer = endPointer.GetPositionAtOffset(1, LogicalDirection.Forward);
-        //                }
-        //            }
-        //            if (endPointer == null) {
-        //                curIdx = 0;
-        //                startPointer = null;
-        //                position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
-        //                continue;
-        //            }
-        //            while (startPointer != null && new TextRange(startPointer, endPointer).Text.Length > matchStr.Length) {
-        //                startPointer = startPointer.GetPositionAtOffset(1, LogicalDirection.Forward);
-        //            }
-        //            if (startPointer == null) {
-        //                curIdx = 0;
-        //                startPointer = null;
-        //                position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
-        //                continue;
-        //            }
-        //            matchRangeList.Add(new TextRange(startPointer, endPointer));
-        //            position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
-        //        } else {
-        //            //prepare loop for next match character
-        //            curIdx++;
-        //            //iterate position one offset AFTER match offset
-        //            if (rootPosition.IsInSameDocument(position)) {
-        //                position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
-        //            } else {
-        //                var nextPosition = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
-        //                if (nextPosition == null) {
-        //                    //this occurs when a uielement match was found at the end of its textblock and
-        //                    //position needs to iterate passed the uielement
-        //                    position = ((Hyperlink)FindParentOfType(position.Parent, typeof(Hyperlink))).ElementEnd;
-        //                } else {
-        //                    position = nextPosition;
-        //                }
-        //            }
-        //        }
-        //        var hlr = FindStringRangeFromPosition(position, matchStr, isCaseSensitive);
-        //        if (hlr == null) {
-        //            //this occurs when no more matchStr's are found AND
-        //            //more importantly if the last match was within a inlineuicontainer textblock
-        //            if (lastDocPosition != null && matchRangeList.Count > 0) {
-        //                //this occurs when the match is outside the document
-        //                var lastMatch = matchRangeList[matchRangeList.Count - 1];
-        //                //find inlineuielement parent to return to document
-        //                var phl = FindParentOfType(lastMatch.End.Parent, typeof(Hyperlink));
-        //                if (phl != null) {
-        //                    //if parent found move position to its big pretty tail
-        //                    position = ((Hyperlink)phl).ElementEnd;
-        //                    //clear lastdocposition to terminate matching 
-        //                    lastDocPosition = null;
-        //                    continue;
-        //                }
-        //            }
-        //            break;
-        //        } else {
-        //            matchRangeList.Add(hlr);
-        //            if (!position.IsInSameDocument(hlr.End)) {
-        //                lastDocPosition = position;
-        //            }
-        //            position = hlr.End;
-
-        //        }
-        //    }
-        //    return matchRangeList;
-        //}
 
         public List<TextRange> FindStringRangesFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
             var orgPosition = position;
@@ -259,14 +157,12 @@ namespace MpWpfApp {
                 }
                 if (position.GetPointerContext(LogicalDirection.Forward) != TextPointerContext.Text) {
                     if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.EmbeddedElement) {
-                        var tb = (position.Parent as InlineUIContainer).Child as TextBlock;
-                        postOfUiElement = ((position.Parent as InlineUIContainer).Parent as Hyperlink).ElementEnd.GetNextContextPosition(LogicalDirection.Forward);
+                        var iuc = (InlineUIContainer)FindParentOfType(position.Parent, typeof(InlineUIContainer));
+                        var hl = (Hyperlink)iuc.Parent;
+                        var tb = (iuc.Child as Border).Child as TextBlock;
+                        postOfUiElement = hl.ElementEnd.GetNextContextPosition(LogicalDirection.Forward);
                         position = tb.ContentStart;
                         continue;
-                        //var highlightRange = MpHelpers.Instance.FindStringRangeFromPosition(tb.ContentStart, matchStr);
-                        //if (highlightRange != null) {
-                        //    return highlightRange;
-                        //}
                     }
                     position = position.GetNextContextPosition(LogicalDirection.Forward);
                     continue;
@@ -1006,6 +902,21 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual
+        public List<T> GetRandomizedList<T>(List<T> orderedList) where T : class {
+            var preRandomList = new List<T>();
+            foreach (var c in orderedList) {
+                preRandomList.Add(c);
+            }
+            var randomList = new List<T>();
+            for (int i = 0; i < orderedList.Count; i++) {
+                int randIdx = MpHelpers.Instance.Rand.Next(0, preRandomList.Count - 1);
+                var t = preRandomList[randIdx];
+                preRandomList.RemoveAt(randIdx);
+                randomList.Add(t);
+            }
+            return randomList;
+        }
+
         private List<List<Brush>> _ContentColors = new List<List<Brush>> {
                 new List<Brush> {
                     new SolidColorBrush(Color.FromRgb(248, 160, 174)),
@@ -1287,7 +1198,7 @@ namespace MpWpfApp {
             }
         }
         
-        public BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint) {
+        public BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint, bool retainAlpha = false) {
             BitmapSource formattedBmpSrc = null;
             if(bmpSrc.Width != bmpSrc.PixelWidth || bmpSrc.Height != bmpSrc.PixelHeight) {
                 //means bmp dpi isn't 96
@@ -1313,6 +1224,9 @@ namespace MpWpfApp {
                 for (int y = 0; y < bmp.Height; y++) {
                     PixelColor c = pixels[x, y];
                     if (c.Alpha > 0) {
+                        if(retainAlpha) {
+                            pixelColor[0, 0].Alpha = c.Alpha;
+                        }
                         PutPixels(bmp, pixelColor, x, y);
                     }
                 }
@@ -1481,7 +1395,7 @@ namespace MpWpfApp {
         }
 
         public Brush GetDarkerBrush(Brush b) {
-            return ChangeBrushBrightness((SolidColorBrush)b, 0.5);
+            return ChangeBrushBrightness((SolidColorBrush)b, -0.5);
         }
 
         public Brush GetLighterBrush(Brush b) {

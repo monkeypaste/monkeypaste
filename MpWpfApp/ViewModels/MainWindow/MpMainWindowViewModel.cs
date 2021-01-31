@@ -337,10 +337,7 @@ namespace MpWpfApp {
                 mw,
                 Window.TopProperty,
                 (s,e) => {
-                    if (IsLoading) {
-                        IsLoading = false;
-                    }
-                    ClipTrayViewModel.ResetClipSelection();
+                    IsLoading = false;
                 });
         }
 
@@ -376,6 +373,9 @@ namespace MpWpfApp {
                     if(pasteSelected) {
                         ClipTrayViewModel.PerformPaste(pasteDataObject);
                     }
+
+                    ClipTrayViewModel.ResetClipSelection();
+
                     mw.Visibility = Visibility.Collapsed;
                 });
         }

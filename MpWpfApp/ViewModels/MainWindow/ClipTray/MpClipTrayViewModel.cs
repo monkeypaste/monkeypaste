@@ -372,64 +372,12 @@ namespace MpWpfApp {
                 MainWindowViewModel.TagTrayViewModel.UpdateTagAssociation();
             };
 
-
-            //double startX = 0, startXOffset = 0, lastX = 0, velocity = 0, targetX = 0, dt = 0;
-            //double friction = 0.95;
-
-            //var timer = new DispatcherTimer(DispatcherPriority.Render);
-            //timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
-            //timer.Tick += (s, e5) => {
-            //    scrollViewer.ScrollToHorizontalOffset(targetX);
-            //    targetX += velocity;
-            //    velocity *= friction;
-            //    if (Math.Abs(velocity) < 0.5) {
-            //        timer.Stop();
-            //        IsScrolling = false;
-            //        velocity = targetX = dt = 0;
-            //    } else {
-            //        IsScrolling = true;
-            //    }
-            //};
-            //DoubleAnimation scrollAnimation = null;
-            //clipTray.PreviewMouseWheel += (s, e3) => {
-            //    //return;
-            //    if(IsEditingClipTile) {
-            //        return;
-            //    }
-            //    e3.Handled = true;
-
-            //    velocity += (e3.Delta * -1) / 7;
-
-            //    targetX = scrollViewer.HorizontalOffset + velocity;
-
-            //    if (/*timer.IsEnabled*/scrollAnimation != null) {
-            //        //already scrolling
-            //        scrollAnimation.To = targetX;
-                    
-            //    } else {
-            //        //timer.Start();
-            //        IsScrolling = true;
-            //        scrollAnimation = MpHelpers.Instance.AnimateDoubleProperty(
-            //            scrollViewer.HorizontalOffset,
-            //            targetX,
-            //            3,
-            //            scrollViewer,
-            //            ScrollViewer.HorizontalOffsetProperty,
-            //            (s3,e4) => {
-            //                IsScrolling = false;
-            //                scrollAnimation = null;
-            //            });
-            //    }
-
-            //    Console.WriteLine(string.Format(@"Wheel Delta: {0}, Velocity: {1}, TargetX: {2}", e3.Delta, velocity, targetX));
-            //};
-
-            clipTray.PreviewMouseLeftButtonUp += (s, e4) => {
+            clipTray.MouseLeftButtonUp += (s, e4) => {
                 var p = e4.MouseDevice.GetPosition(clipTray);
                 var hitTestResult = VisualTreeHelper.HitTest(clipTray, p);
                 if (!IsPastingTemplate && (hitTestResult == null || hitTestResult.VisualHit.GetVisualAncestor<ListBoxItem>() == null)) {
                     MainWindowViewModel.ClearEdits();
-                    e4.Handled = true;
+                    //e4.Handled = true;
                 }
             };
 
@@ -464,6 +412,9 @@ namespace MpWpfApp {
                         ClipTileViewModelDataSource.InsertAt(0, nctvm);
                     }
                     this.Add(nctvm);
+                    
+                    
+
                     MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(nctvm);
                 }
                 sw.Stop();

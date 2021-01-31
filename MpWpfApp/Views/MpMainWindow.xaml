@@ -1465,7 +1465,9 @@
                                                 </i:Interaction.Triggers>
                                                 <Border x:Name="ClipTileEditorToolbar"
                                                         Visibility="{Binding EditToolbarVisibility}"
-                                                        Height="{Binding EditRichTextBoxToolbarHeight}">
+                                                        Height="{Binding EditRichTextBoxToolbarHeight}"
+                                                        BorderThickness="0,0,0,1"
+                                                        BorderBrush="OldLace">
                                                     <StackPanel Orientation="Horizontal"
                                                                 DataContext="{Binding EditRichTextBoxToolbarViewModel}">
                                                         <i:Interaction.Triggers>
@@ -1699,7 +1701,7 @@
                                                              ScrollViewer.VerticalScrollBarVisibility="{Binding RtbVerticalScrollbarVisibility}"
                                                              BorderThickness="0"
                                                              Margin="0,0,0,0"
-                                                             Padding="10,10,0,0">
+                                                             Padding="10,5,0,0">
                                                     <RichTextBox.Resources>
                                                         <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                                                                          Color="Blue" />

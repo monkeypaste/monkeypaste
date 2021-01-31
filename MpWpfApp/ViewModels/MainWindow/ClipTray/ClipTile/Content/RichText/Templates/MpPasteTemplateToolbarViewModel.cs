@@ -201,7 +201,7 @@ namespace MpWpfApp {
                         } else if(SelectedTemplate == null) {
                             return;
                         }
-                        var templateRect = SelectedTemplate.TemplateTextRange.Start.GetCharacterRect(LogicalDirection.Forward);
+                        var templateRect = SelectedTemplate.TemplateHyperlinkRange.Start.GetCharacterRect(LogicalDirection.Forward);
                         double y = templateRect.Y - (templateRect.Height / 2);
                         ClipTileViewModel.GetRtb().ScrollToVerticalOffset(y);
                         break;
@@ -357,7 +357,7 @@ namespace MpWpfApp {
                             FrameworkElement.WidthProperty,
                             (s1, e44) => {
                                 rtb.Document.PageWidth = ClipTileViewModel.IsEditingTile ? contentWidthMax - rtb.Padding.Left - rtb.Padding.Right - 20 : contentWidthMin - rtb.Padding.Left - rtb.Padding.Right;// - rtb.Padding.Left - rtb.Padding.Right;
-
+                                
                                 //this is to remove scrollbar flicker during animation
                                 ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
                                 ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));

@@ -93,6 +93,15 @@ namespace MpWpfApp {
         #endregion
 
         #region Documents
+        public static bool Equals(this TextRange tra, TextRange trb) {
+            if(!tra.Start.IsInSameDocument(trb.Start)) {
+                return false;
+            }
+            if (tra.Start.CompareTo(trb.Start) == 0 && tra.End.CompareTo(trb.End) == 0) {
+                return true;
+            }
+            return false;
+        }
         public static List<Hyperlink> GetHyperlinkList(this RichTextBox rtb) {
             var hlList = new List<Hyperlink>();
             for (TextPointer position = rtb.Document.ContentStart;
@@ -108,7 +117,7 @@ namespace MpWpfApp {
             return hlList;
         }
 
-        public static void ClearHyperlinks(this RichTextBox rtb, bool TemplateText = false) {
+        public static void ClearHyperlinks(this RichTextBox rtb) {
             //replaces hyperlinks with runs of there textrange text
             var ctvm = (MpClipTileViewModel)rtb.DataContext;
             var hlList = rtb.GetHyperlinkList();
@@ -125,8 +134,12 @@ namespace MpWpfApp {
             }
             ctvm.TemplateHyperlinkCollectionViewModel.Clear();
         }
+        //public static void UpdateDocumentLayout(this RichTextBox rtb) {
+        //    rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
+        //    rtb.Document.PageHeight = 10000;// rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
+        //}
 
-        public static void CreateHyperlinks(this RichTextBox rtb, string searchText = "") {
+        public static void CreateHyperlinks(this RichTextBox rtb) {
             var ctvm = (MpClipTileViewModel)rtb.DataContext;
             //var rtbSelection = rtb.Selection;
             //rtb.ClearHyperlinks();
@@ -148,20 +161,20 @@ namespace MpWpfApp {
                 //HexColor (with alpha)
                 @"#([0-9]|[a-fA-F]){7}([^" + Properties.Settings.Default.TemplateTokenMarker + "][ ])",
             };
-            //TextRange fullDocRange = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd);
+            var docPlainText = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
             for (int i = 0; i < regExGroupList.Count; i++) {                
                 var linkType = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);
                 if(linkType == MpSubTextTokenType.StreetAddress) {
                     //doesn't consistently work and presents bugs so disabling for now
                     continue;
                 }
-                TextPointer lastRangeEnd = rtb.Document.ContentStart;
+                var lastRangeEnd = rtb.Document.ContentStart;
                 var regExStr = regExGroupList[i];
                 if (string.IsNullOrEmpty(regExStr)) {
                     //this occurs for templates when copyitem has no templates
                     continue;
                 }
-                MatchCollection mc = Regex.Matches(ctvm.CopyItemPlainText, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+                var mc = Regex.Matches(docPlainText, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
                 foreach (Match m in mc) {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
@@ -191,11 +204,16 @@ namespace MpWpfApp {
                                 matchRange.Text = matchRange.Text;
                                 hl = new Hyperlink(matchRange.Start, matchRange.End);
                                 var linkText = c.Value;
-                                //account for special case for hexcolor w/ alpha
                                 hl.Tag = linkType;
-                                hl.IsEnabled = true;
+                                MpHelpers.Instance.CreateBinding(ctvm, new PropertyPath(nameof(ctvm.IsSelected)), hl, Hyperlink.IsEnabledProperty);
+                                hl.MouseEnter += (s3, e3) => {
+                                    hl.Cursor = ctvm.IsSelected ? Cursors.Hand : Cursors.Arrow;
+                                };
+                                hl.MouseLeave += (s3, e3) => {
+                                    hl.Cursor = Cursors.Arrow;
+                                };
                                 hl.MouseLeftButtonDown += (s4, e4) => {
-                                    if (hl.NavigateUri != null) {
+                                    if (hl.NavigateUri != null && ctvm.IsSelected) {
                                         MpHelpers.Instance.OpenUrl(hl.NavigateUri.ToString());
                                     }
                                 };
@@ -357,7 +375,7 @@ namespace MpWpfApp {
             using (var reader = new MemoryStream(documentBytes)) {
                 reader.Position = 0;
                 rtb.SelectAll();
-                rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);
+                rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);                
                 rtb.CaretPosition = rtb.Document.ContentStart;
             }
         }

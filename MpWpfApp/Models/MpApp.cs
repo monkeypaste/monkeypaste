@@ -178,7 +178,7 @@ namespace MpWpfApp {
             return PrimaryIconColorList;
         }
         private BitmapSource CreateBorder(BitmapSource img, double scale) {
-            return MpHelpers.Instance.TintBitmapSource(img, Colors.White);
+            return MpHelpers.Instance.TintBitmapSource(img, Colors.White,true);
             //var borderSize = new Size(img.Width * scale, img.Height * scale);
             //return MpHelpers.Instance.ResizeBitmapSource(border, new Size(scale,scale));
         }

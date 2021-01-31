@@ -41,6 +41,8 @@
 
         private string _origClipRichText = string.Empty;
 
+        private bool _wasAddedAtRuntime = false;
+
         private bool _wasEditConfirmed = true;
         #endregion
 
@@ -1166,6 +1168,7 @@
             }
             if (ci.CopyItemId == 0 && !MainWindowViewModel.IsLoading) {
                 ci.WriteToDatabase();
+                _wasAddedAtRuntime = true;
             }
             CopyItem = ci;
         }
@@ -1291,9 +1294,12 @@
             
             Canvas.SetLeft(titleIconImageButton, MpMeasurements.Instance.ClipTileTitleIconCanvasLeft);
             Canvas.SetTop(titleIconImageButton, 2);
+
+
+            
             titleIconImageButton.MouseEnter += (s, e3) => {
-                double t = 50;
-                double angle = 5;
+                double t = 100;
+                double angle = 15;
                 var a = new DoubleAnimation(0, angle, new Duration(TimeSpan.FromMilliseconds(t)));
                 a.Completed += (s1, e1) => {
                     var b = new DoubleAnimation(angle, -angle, new Duration(TimeSpan.FromMilliseconds(t * 2)));
@@ -1303,12 +1309,15 @@
                     };
                     titleIconImageButtonRotateTransform.BeginAnimation(RotateTransform.AngleProperty, b);
                 };
+                //a.RepeatBehavior = RepeatBehavior.Forever;
                 
+                //Storyboard.SetTarget(a, titleIconImageButtonRotateTransform);
+                //Storyboard.SetTargetProperty(a, new PropertyPath(RotateTransform.AngleProperty));                
+                //sb.Children.Add(a);
+                //sb.Begin(
+
                 titleIconImageButtonRotateTransform.BeginAnimation(RotateTransform.AngleProperty, a);
 
-
-                //< DoubleAnimation Duration = "0:0:0.2" From = "1" To = "1.2" AutoReverse = "True"
-                //             Storyboard.TargetName = "ScaleImage" Storyboard.TargetProperty = "ScaleX" />
                 titleIconBorderImage.Visibility = Visibility.Visible;
                 double fromScale = 1;
                 double toScale = 1.1;
@@ -1365,11 +1374,15 @@
             GetRtb().Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(CopyItemRichText);
             GetRtb().CreateHyperlinks();
             GetRtb().Document.PageWidth = GetRtb().Width - GetRtb().Padding.Left - GetRtb().Padding.Right;
-            //GetRtb().Document.PageHeight = 10000;// GetRtb().Height - GetRtb().Padding.Top - GetRtb().Padding.Bottom;
+            GetRtb().Document.PageHeight = GetRtb().Height - GetRtb().Padding.Top - GetRtb().Padding.Bottom;
 
-            //var si = GetRtb().Document.GetDocumentSize();
-            //GetRtb().Height = si.Height;
-            //GetRtb().Document.PageHeight = si.Height;
+            if(_wasAddedAtRuntime) {
+                //force new items to have left alignment
+                GetRtb().SelectAll();
+                GetRtb().Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
+                GetRtb().CaretPosition = GetRtb().Document.ContentStart;
+            }
+
             #region Search
             LastContentHighlightRangeList.CollectionChanged += (s, e9) => {
                 //var oldNavButtonPanelVisibility = MainWindowViewModel.SearchBoxViewModel.SearchNavigationButtonPanelVisibility;
@@ -1549,22 +1562,23 @@
             GetRtb().Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(CopyItemRichText);
         }
 
+        public void SyncModelWithView() {
+            GetRtb().ClearHyperlinks();
+            var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
+
+            //clear any search highlighting when saving the document then restore after save
+            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, Brushes.Transparent);
+            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, Brushes.Transparent);
+            CopyItemRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(GetRtb().Document);
+            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
+            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
+
+            GetRtb().CreateHyperlinks();
+        }
+
         public void SaveToDatabase() {
             if(CopyItemType == MpCopyItemType.RichText) {
-                GetRtb().ClearHyperlinks();
-                var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
-
-                //clear any search highlighting when saving the document then restore after save
-                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, Brushes.Transparent);
-                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, Brushes.Transparent);
-                CopyItemRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(GetRtb().Document);
-                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
-                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
-
-                GetRtb().CreateHyperlinks();
-
-                GetRtb().Document.PageWidth = GetRtb().Width - GetRtb().Padding.Left - GetRtb().Padding.Right;
-                GetRtb().Document.PageHeight = 10000;// GetRtb().Height - GetRtb().Padding.Top - GetRtb().Padding.Bottom;
+                SyncModelWithView();
             }
             MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(CopyItemId).CopyItem.WriteToDatabase();
         }

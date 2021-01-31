@@ -132,6 +132,7 @@ namespace MpWpfApp {
                     return;
                 }
                 var fontFamily = fontFamilyComboBox.SelectedItem.ToString();
+                rtb.Focus();
                 var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
                 textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
             };
@@ -150,8 +151,9 @@ namespace MpWpfApp {
                 }
 
                 // Process selection
+                rtb.Focus();
                 var pointSize = fontSizeCombo.SelectedItem.ToString();
-                var pixelSize = System.Convert.ToDouble(pointSize) * (96 / 72);
+                var pixelSize = System.Convert.ToDouble(pointSize); // * (96 / 72);
                 var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
                 textRange.ApplyPropertyValue(TextElement.FontSizeProperty, pixelSize);
             };
@@ -184,6 +186,10 @@ namespace MpWpfApp {
                 SetButtonGroupSelection(clickedButton, selectedAlignmentButton, buttonGroup, true);
                 selectedAlignmentButton = clickedButton;
             };
+            //rtb.SelectAll();
+            //var alignment = (TextAlignment)rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty);
+            //rtb.CaretPosition = rtb.Document.ContentStart;
+            //SetButtonGroupSelection(clickedButton, selectedAlignmentButton, buttonGroup, true);
 
             var bulletsButton = (ToggleButton)et.FindName("BulletsButton");
             var numberingButton = (ToggleButton)et.FindName("NumberingButton");
@@ -201,15 +207,15 @@ namespace MpWpfApp {
             };
             #endregion
 
-
             addTemplateButton.PreviewMouseDown += (s, e3) => {
                 e3.Handled = true;
+
+                var rtbSelection = rtb.Selection;
 
                 ClipTileViewModel.SaveToDatabase();
 
                 if (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Count == 0) {
                     //if templates are NOT in the clip yet add one w/ default name
-                    //var rtbSelection = rtb.Selection;
                     ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);
                     //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
                 } else {
@@ -254,7 +260,6 @@ namespace MpWpfApp {
                     addNewMenuItem.Header = tb2;
                     addNewMenuItem.Click += (s1, e5) => {
                         ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);
-
                     };
                     templateContextMenu.Items.Add(addNewMenuItem);
                     addTemplateButton.ContextMenu = templateContextMenu;
@@ -334,7 +339,7 @@ namespace MpWpfApp {
                             (s1, e44) => {
                                 rtb.Document.PageWidth = ClipTileViewModel.IsEditingTile ? contentWidthMax - rtb.Padding.Left - rtb.Padding.Right - 20 : contentWidthMin - rtb.Padding.Left - rtb.Padding.Right;// - rtb.Padding.Left - rtb.Padding.Right;
                                 //rtb.Document.PageHeight = rtb.ActualHeight;// ClipTileViewModel.IsEditingTile ? rtb.Document.GetDocumentSize().Height : ClipTileViewModel.TileContentHeight;
-
+                                //rtb.UpdateDocumentLayout();
                                 //this is to remove scrollbar flicker during animation
                                 ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
                                 ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));                                
@@ -359,7 +364,7 @@ namespace MpWpfApp {
                 fontFamilyComboBox.SelectedItem = fontFamily;
 
                 // Set font size combo
-                var fontSize = rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
+                var fontSize = Math.Round((double)rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty));
                 fontSizeCombo.Text = fontSize.ToString();
 
                 // Set Font buttons
@@ -372,6 +377,7 @@ namespace MpWpfApp {
                 centerAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
                 rightAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
                 justifyAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Justify);
+                
 
                 //disable add template button if current selection intersects with a template
                 //this may not be necessary since templates are inlineuicontainers...
@@ -389,6 +395,11 @@ namespace MpWpfApp {
                 } else {
                     IsAddTemplateButtonEnabled = false;
                 }
+            };
+
+            rtb.KeyUp += (s, e6) => {
+                ClipTileViewModel.GetRtb().ClearHyperlinks();
+                ClipTileViewModel.GetRtb().CreateHyperlinks();
             };
         }
         #endregion

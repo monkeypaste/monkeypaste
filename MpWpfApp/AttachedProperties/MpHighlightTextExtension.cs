@@ -66,12 +66,7 @@ namespace MpWpfApp {
                                     ctvm.TileVisibility = Visibility.Collapsed;
                                     return;
                                 }
-                            //bool isInTitle = ttb.Text.ContainsByCaseSetting(hlt);
-                            //bool isInContent = ctvm.ToString().ContainsByCaseSetting(hlt);
-                            //bool isSearchBlank = string.IsNullOrEmpty(hlt.Trim()) || hlt == Properties.Settings.Default.SearchPlaceHolderText;
-                            //ctvm.TileVisibility = isInTitle || isInContent || isSearchBlank ? Visibility.Visible : Visibility.Collapsed;
-                            //return;
-                            Console.WriteLine("Beginning highlight clip with title: " + ctvm.CopyItemTitle + " with highlight text: " + hlt);
+                                Console.WriteLine("Beginning highlight clip with title: " + ctvm.CopyItemTitle + " with highlight text: " + hlt);
 
 
                                 ctvm.TileVisibility = Visibility.Visible;
@@ -89,8 +84,8 @@ namespace MpWpfApp {
                                     return;
                                 }
 
-                            //highlight title 
-                            if (ttb.Text.ContainsByCaseSetting(hlt)) {
+                                //highlight title 
+                                if (ttb.Text.ContainsByCaseSetting(hlt)) {
                                     foreach (var mr in MpHelpers.Instance.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive)) {
                                         ctvm.LastTitleHighlightRangeList.Add(mr);
                                     }

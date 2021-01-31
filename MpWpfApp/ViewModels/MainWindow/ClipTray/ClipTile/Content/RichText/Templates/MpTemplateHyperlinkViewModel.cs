@@ -98,6 +98,18 @@ namespace MpWpfApp {
         #endregion
 
         #region Brush Properties
+        public Brush TemplateBorderBrush {
+            get {
+                if(IsSelected) {
+                    return Brushes.Red;
+                }
+                if(IsHovering) {
+                    return Brushes.Yellow;
+                }
+                return Brushes.Transparent;
+            }
+        }
+
         public Brush TemplateForegroundBrush {
             get {
                 if (MpHelpers.Instance.IsBright(((SolidColorBrush)TemplateBackgroundBrush).Color)) {
@@ -134,6 +146,7 @@ namespace MpWpfApp {
                     _isHovering = value;
                     OnPropertyChanged(nameof(IsHovering));
                     OnPropertyChanged(nameof(TemplateForegroundBrush));
+                    OnPropertyChanged(nameof(TemplateBorderBrush));
                     OnPropertyChanged(nameof(TemplateBackgroundBrush));
                     OnPropertyChanged(nameof(TemplateTextBlockCursor));
                 }
@@ -150,6 +163,7 @@ namespace MpWpfApp {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
                     OnPropertyChanged(nameof(TemplateForegroundBrush));
+                    OnPropertyChanged(nameof(TemplateBorderBrush));
                     OnPropertyChanged(nameof(TemplateBackgroundBrush));
                     OnPropertyChanged(nameof(TemplateTextBlockCursor));
                 }
@@ -193,14 +207,14 @@ namespace MpWpfApp {
         }
 
         private TextRange _templateTextRange = null;
-        public TextRange TemplateTextRange {
+        public TextRange TemplateHyperlinkRange {
             get {
                 return _templateTextRange;
             }
             set {
                 if (_templateTextRange != value) {
                     _templateTextRange = value;
-                    OnPropertyChanged(nameof(TemplateTextRange));
+                    OnPropertyChanged(nameof(TemplateHyperlinkRange));
                     OnPropertyChanged(nameof(TemplateDisplayValue));
                 }
             }
@@ -348,15 +362,20 @@ namespace MpWpfApp {
         
         public void TemplateHyperLinkRun_Loaded(object sender, RoutedEventArgs args) {
             var tb = (TextBlock)sender;
-            var hl = (Hyperlink)((InlineUIContainer)tb.Parent).Parent;
+            var b = (Border)tb.Parent;
+            var hl = (Hyperlink)MpHelpers.Instance.FindParentOfType(b, typeof(Hyperlink));
 
             MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateDisplayValue)), tb, TextBlock.TextProperty);
-            MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateBackgroundBrush)), tb, TextBlock.BackgroundProperty);
+            //MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateBackgroundBrush)), tb, TextBlock.BackgroundProperty);
             MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateForegroundBrush)), tb, TextBlock.ForegroundProperty);
             MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateTextBlockCursor)), tb, TextBlock.CursorProperty);
 
-            MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateBackgroundBrush)), hl, Hyperlink.BackgroundProperty);
-            MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateForegroundBrush)), hl, Hyperlink.ForegroundProperty);
+            MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateBackgroundBrush)), b, Border.BackgroundProperty);
+            MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateBorderBrush)), b, Border.BorderBrushProperty);
+            MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateTextBlockCursor)), b, Border.CursorProperty);
+
+            //MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateBackgroundBrush)), hl, Hyperlink.BackgroundProperty);
+            //MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateForegroundBrush)), hl, Hyperlink.ForegroundProperty);
             MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(TemplateTextBlockCursor)), hl, Hyperlink.CursorProperty);
 
             hl.Tag = MpSubTextTokenType.TemplateSegment;
@@ -417,7 +436,7 @@ namespace MpWpfApp {
 
             TemplateHyperlink = hl;
             TemplateTextBlock = tb;
-            TemplateTextRange = new TextRange(hl.ElementStart, hl.ElementEnd);
+            TemplateHyperlinkRange = new TextRange(hl.ElementStart, hl.ElementEnd);
         }
         
         public void SetTemplateText(string templateText) {
@@ -436,7 +455,7 @@ namespace MpWpfApp {
 
         public void Dispose(bool fromContextMenu) {
             if(fromContextMenu) {
-                ClipTileViewModel.GetRtb().Selection.Select(TemplateTextRange.Start, TemplateTextRange.End);
+                ClipTileViewModel.GetRtb().Selection.Select(TemplateHyperlinkRange.Start, TemplateHyperlinkRange.End);
                 ClipTileViewModel.GetRtb().Selection.Text = string.Empty;
             }
             //remove this individual token reference
