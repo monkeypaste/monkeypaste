@@ -351,7 +351,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanHideWindow(bool pasteSelected) {
-            //return false;
+            return false;
             return (Application.Current.MainWindow != null && 
                    Application.Current.MainWindow.Visibility == Visibility.Visible &&
                    IsShowingDialog == false) || pasteSelected;

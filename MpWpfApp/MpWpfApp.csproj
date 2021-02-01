@@ -154,6 +154,7 @@
     <Compile Include="Utils\DragDrop\ListViewDragDropManager.cs" />
     <Compile Include="Utils\DragDrop\MouseUtilities.cs" />
     <Compile Include="Utils\MpImageHistogram.cs" />
+    <Compile Include="Utils\MpSolidColorBrushComparer.cs" />
     <Compile Include="Utils\RESTful\MpCurrencyConverter.cs" />
     <Compile Include="Utils\RESTful\MpLanguageTranslator.cs" />
     <Compile Include="Utils\RESTful\MpWordsApiDictionary.cs" />
@@ -669,6 +670,10 @@
     <Resource Include="Resources\Images\close1.png" />
     <Resource Include="Resources\Images\catdog.jpg" />
     <Resource Include="Resources\Images\wrench.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\Backcolor.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\Print.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\Strikeout.png" />
+    <Resource Include="Resources\Images\MpRichTextBox\Textcolor.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />

@@ -1026,8 +1026,8 @@ namespace MpWpfApp {
             ContextMenu cm,
             MenuItem cmi,
             MouseButtonEventHandler selectedEventHandler, 
-            int defX, 
-            int defY) {
+            int defX = 0, 
+            int defY = 0) {
             var cmic = new Canvas();
             double s = 15;
             double pad = 2.5;
@@ -1075,8 +1075,8 @@ namespace MpWpfApp {
         
         public int GetColorColumn(Brush scb) {
             for (int c = 0; c < _ContentColors.Count; c++) {
-                for (int r = 0; r < _ContentColors[0].Count; r++) {
-                    if(scb == _ContentColors[c][r]) {
+                for (int r = 0; r < _ContentColors[0].Count; r++) {                    
+                    if (new MpSolidColorBrushComparer().Equals((SolidColorBrush)scb, (SolidColorBrush)_ContentColors[c][r])) {
                         return c;
                     }
                 }
@@ -1087,8 +1087,8 @@ namespace MpWpfApp {
         public int GetColorRow(Brush scb) {
             for (int c = 0; c < _ContentColors.Count; c++) {
                 for (int r = 0; r < _ContentColors[0].Count; r++) {
-                    if (scb == _ContentColors[c][r]) {
-                        return r;
+                    if (new MpSolidColorBrushComparer().Equals((SolidColorBrush)scb, (SolidColorBrush)_ContentColors[c][r])) {
+                        return c;
                     }
                 }
             }

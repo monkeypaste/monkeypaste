@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace MpWpfApp {
+
     public class MpEditRichTextBoxToolbarViewModel : MpViewModelBase {
         #region Private Variables
 
@@ -72,31 +73,41 @@ namespace MpWpfApp {
         #endregion
 
         #region Business Logic Properties
-        public ICollection<FontFamily> SystemFonts {
+        public MpObservableCollection<FontFamily> SystemFonts {
             get {
-                return Fonts.SystemFontFamilies;
+                return new MpObservableCollection<FontFamily>(Fonts.SystemFontFamilies);
             }
         }
 
-        private List<string> _fontSizeList = null;
-        public List<string> FontSizeList {
+        private MpObservableCollection<string> _fontSizes = null;
+        public MpObservableCollection<string> FontSizes {
             get {
-                if (_fontSizeList == null) {
-                    _fontSizeList = new List<string>() {
+                if (_fontSizes == null) {
+                    _fontSizes = new MpObservableCollection<string>() {
+                         "8",
+                        "9",
                         "10",
+                        "11",
                         "12",
                         "14",
+                        "16",
                         "18",
+                        "20",
+                        "22",
                         "24",
-                        "36"
-                    };
+                        "26",
+                        "28",
+                        "36",
+                        "48",
+                        "72"
+                };
                 }
-                return _fontSizeList;
+                return _fontSizes;
             }
             set {
-                if (_fontSizeList != value) {
-                    _fontSizeList = value;
-                    OnPropertyChanged(nameof(FontSizeList));
+                if (_fontSizes != value) {
+                    _fontSizes = value;
+                    OnPropertyChanged(nameof(FontSizes));
                 }
             }
         }
@@ -158,6 +169,54 @@ namespace MpWpfApp {
                 textRange.ApplyPropertyValue(TextElement.FontSizeProperty, pixelSize);
             };
 
+            var foregroundColorButton = (Button)et.FindName("ForegroundColorButton");
+            foregroundColorButton.Click += (s, e3) => {
+                var colorMenuItem = new MenuItem();
+                var colorContextMenu = new ContextMenu();
+                colorContextMenu.Items.Add(colorMenuItem);
+                MpHelpers.Instance.SetColorChooserMenuItem(
+                    colorContextMenu,
+                    colorMenuItem,
+                    (s1, e1) => {
+                        rtb.Selection.ApplyPropertyValue(FlowDocument.ForegroundProperty, ((Border)s1).Background);
+                    }
+                );
+                foregroundColorButton.ContextMenu = colorContextMenu;
+                colorContextMenu.PlacementTarget = foregroundColorButton;
+                colorContextMenu.IsOpen = true;
+            };
+            var backgroundColorButton = (Button)et.FindName("BackgroundColorButton");
+            backgroundColorButton.Click += (s, e3) => {
+                var colorMenuItem = new MenuItem();
+                var colorContextMenu = new ContextMenu();
+                colorContextMenu.Items.Add(colorMenuItem);
+                MpHelpers.Instance.SetColorChooserMenuItem(
+                    colorContextMenu,
+                    colorMenuItem,
+                    (s1, e1) => {
+                        rtb.Selection.ApplyPropertyValue(FlowDocument.BackgroundProperty, ((Border)s1).Background);
+                    }
+                );
+                
+                backgroundColorButton.ContextMenu = colorContextMenu;
+                colorContextMenu.PlacementTarget = backgroundColorButton;
+                colorContextMenu.IsOpen = true;
+            };
+
+            var printButton = (Button)et.FindName("PrintButton");
+            printButton.Click += (s, e3) => {
+                // Configure printer dialog box
+                var dlg = new PrintDialog();
+                dlg.PageRangeSelection = PageRangeSelection.AllPages;
+                dlg.UserPageRangeEnabled = true;
+                // Show and process save file dialog box results
+                if (dlg.ShowDialog() == true) {
+                    //use either one of the below    
+                    // dlg.PrintVisual(RichTextControl as Visual, "printing as visual");
+                    dlg.PrintDocument((((IDocumentPaginatorSource)rtb.Document).DocumentPaginator), "Printing Clipboard Item");
+                }
+            };
+
             var leftAlignmentButton = (ToggleButton)et.FindName("LeftButton");
             var centerAlignmentButton = (ToggleButton)et.FindName("CenterButton");
             var rightAlignmentButton = (ToggleButton)et.FindName("RightButton");
@@ -186,10 +245,6 @@ namespace MpWpfApp {
                 SetButtonGroupSelection(clickedButton, selectedAlignmentButton, buttonGroup, true);
                 selectedAlignmentButton = clickedButton;
             };
-            //rtb.SelectAll();
-            //var alignment = (TextAlignment)rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty);
-            //rtb.CaretPosition = rtb.Document.ContentStart;
-            //SetButtonGroupSelection(clickedButton, selectedAlignmentButton, buttonGroup, true);
 
             var bulletsButton = (ToggleButton)et.FindName("BulletsButton");
             var numberingButton = (ToggleButton)et.FindName("NumberingButton");
@@ -272,10 +327,10 @@ namespace MpWpfApp {
             ClipTileViewModel.PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(ClipTileViewModel.IsEditingTile):
-                        double tileWidthMax = 625;
+                        double tileWidthMax = MpMeasurements.Instance.ClipTileEditModeMinWidth;
                         double tileWidthMin = ClipTileViewModel.TileBorderWidth;
 
-                        double contentWidthMax = 615;
+                        double contentWidthMax = MpMeasurements.Instance.ClipTileEditModeContentMinWidth;
                         double contentWidthMin = ClipTileViewModel.TileContentWidth;
 
                         double rtbTopMax = ClipTileViewModel.EditRichTextBoxToolbarHeight;
@@ -284,7 +339,7 @@ namespace MpWpfApp {
                         double editRtbToolbarTopMax = 0;
                         double editRtbToolbarTopMin = -ClipTileViewModel.EditRichTextBoxToolbarHeight;
 
-                        double iconLeftMax = 500;// tileWidthMax - ClipTileViewModel.TileTitleIconSize;
+                        double iconLeftMax = MpMeasurements.Instance.ClipTileEditModeMinWidth-125;// tileWidthMax - ClipTileViewModel.TileTitleIconSize;
                         double iconLeftMin = 204;// tileWidthMin - ClipTileViewModel.TileTitleIconSize;
                         
                         if (ClipTileViewModel.IsEditingTile) {
@@ -364,7 +419,12 @@ namespace MpWpfApp {
                 fontFamilyComboBox.SelectedItem = fontFamily;
 
                 // Set font size combo
-                var fontSize = Math.Round((double)rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty));
+                var fontSize = rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
+                if(fontSize == null || fontSize.ToString() == "{DependencyProperty.UnsetValue}") {
+                    fontSize = string.Empty;
+                } else {
+                    fontSize = Math.Round((double)fontSize);
+                }
                 fontSizeCombo.Text = fontSize.ToString();
 
                 // Set Font buttons
@@ -378,7 +438,6 @@ namespace MpWpfApp {
                 rightAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
                 justifyAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Justify);
                 
-
                 //disable add template button if current selection intersects with a template
                 //this may not be necessary since templates are inlineuicontainers...
                 MpTemplateHyperlinkViewModel thlvm = null;

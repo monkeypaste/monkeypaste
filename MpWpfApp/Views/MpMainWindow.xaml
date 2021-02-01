@@ -539,6 +539,7 @@
                          TargetType="{x:Type Button}">
             <Border x:Name="OuterBorder"
                     BorderBrush="Transparent"
+                    Margin="0,8,0,8"
                     BorderThickness="1"
                     CornerRadius="2">
                 <Border x:Name="InnerBorder"
@@ -584,6 +585,7 @@
                          TargetType="{x:Type ToggleButton}">
             <Border x:Name="OuterBorder"
                     BorderBrush="Transparent"
+                    Margin="0,8,0,8"
                     BorderThickness="1"
                     CornerRadius="2">
                 <Border x:Name="InnerBorder"
@@ -1476,6 +1478,16 @@
                                                                                     MethodName="ClipTileEditorToolbarBorder_Loaded" />
                                                             </i:EventTrigger>
                                                         </i:Interaction.Triggers>
+                                                        <Button x:Name="PrintButton"
+                                                                Template="{StaticResource FlatButtonControlTemplate}"
+                                                                Margin="10,1,0,1">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/Print.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True"/>
+                                                        </Button>
+                                                        <Image Source="/Resources/Images/MpRichTextBox/separator.png"
+                                                               Stretch="None"
+                                                               SnapsToDevicePixels="True" />
                                                         <ComboBox x:Name="FontFamilyCombo"
                                                                   Height="23"
                                                                   Width="100"
@@ -1501,15 +1513,15 @@
                                                                   Width="40"
                                                                   Margin="5,2,5,2"
                                                                   IsEditable="True"
-                                                                  ItemsSource="{Binding FontSizeList}" />
+                                                                  ItemsSource="{Binding FontSizes}" />
                                                         <Image Source="/Resources/Images/MpRichTextBox/separator.png"
-                                                               Stretch="None" />
+                                                               Stretch="None" 
+                                                               SnapsToDevicePixels="True"/>
                                                         <Button x:Name="AddTemplateButton"
                                                                 ToolTip="Add Template"
                                                                 Template="{StaticResource FlatButtonControlTemplate}"
                                                                 IsEnabled="{Binding IsAddTemplateButtonEnabled}"
-                                                                Background="{Binding AddTemplateButtonBackgroundBrush}"
-                                                                Margin="0,1,0,1">
+                                                                Background="{Binding AddTemplateButtonBackgroundBrush}" >
                                                             <Image Source="/Resources/Images/MpRichTextBox/templateadd.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
@@ -1520,8 +1532,7 @@
                                                         <Button Command="ApplicationCommands.Cut"
                                                                 CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                 ToolTip="Cut"
-                                                                Template="{StaticResource FlatButtonControlTemplate}"
-                                                                Margin="0,1,0,1">
+                                                                Template="{StaticResource FlatButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/editcut.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
@@ -1529,8 +1540,7 @@
                                                         <Button Command="ApplicationCommands.Copy"
                                                                 CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                 ToolTip="Copy"
-                                                                Template="{StaticResource FlatButtonControlTemplate}"
-                                                                Margin="0,1,0,1">
+                                                                Template="{StaticResource FlatButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/editcopy.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
@@ -1538,8 +1548,7 @@
                                                         <Button Command="ApplicationCommands.Paste"
                                                                 CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                 ToolTip="Paste"
-                                                                Template="{StaticResource FlatButtonControlTemplate}"
-                                                                Margin="0,1,0,1">
+                                                                Template="{StaticResource FlatButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/editpaste.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
@@ -1547,8 +1556,7 @@
                                                         <Button Command="ApplicationCommands.Undo"
                                                                 CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                 ToolTip="Undo"
-                                                                Template="{StaticResource FlatButtonControlTemplate}"
-                                                                Margin="0,1,0,1">
+                                                                Template="{StaticResource FlatButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/editundo.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
@@ -1556,8 +1564,7 @@
                                                         <Button Command="ApplicationCommands.Redo"
                                                                 CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                 ToolTip="Redo"
-                                                                Template="{StaticResource FlatButtonControlTemplate}"
-                                                                Margin="0,1,0,1">
+                                                                Template="{StaticResource FlatButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/editredo.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
@@ -1569,8 +1576,7 @@
                                                                       Command="EditingCommands.ToggleBold"
                                                                       CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Bold"
-                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                      Margin="0,1,0,1">
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/fontbold.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
@@ -1579,8 +1585,7 @@
                                                                       Command="EditingCommands.ToggleItalic"
                                                                       CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Italic"
-                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                      Margin="0,1,0,1">
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/fontitalic.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
@@ -1589,8 +1594,7 @@
                                                                       Command="EditingCommands.ToggleUnderline"
                                                                       CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Underline"
-                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                      Margin="0,1,0,1">
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/fontunderline.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
@@ -1598,12 +1602,30 @@
                                                         <Image Source="/Resources/Images/MpRichTextBox/separator.png"
                                                                Stretch="None"
                                                                SnapsToDevicePixels="True" />
+                                                        <Button x:Name="ForegroundColorButton"
+                                                                Template="{StaticResource FlatButtonControlTemplate}">
+                                                            <Border x:Name="ForegroundColorButtonBorder">
+                                                                <Image Source="/Resources/Images/MpRichTextBox/Textcolor.png"
+                                                                       Stretch="None" Opacity="1"
+                                                                       SnapsToDevicePixels="False" />
+                                                            </Border>
+                                                        </Button>                                                        
+                                                        <Button x:Name="BackgroundColorButton"
+                                                                Template="{StaticResource FlatButtonControlTemplate}">
+                                                            <Border x:Name="BackgroundColorButtonBorder">
+                                                                <Image Source="/Resources/Images/MpRichTextBox/Backcolor.png"
+                                                                       Stretch="None"
+                                                                       SnapsToDevicePixels="True" />
+                                                            </Border>
+                                                        </Button>
+                                                        <Image Source="/Resources/Images/MpRichTextBox/separator.png"
+                                                               Stretch="None"
+                                                               SnapsToDevicePixels="True" />
                                                         <ToggleButton x:Name="LeftButton"
                                                                       Command="EditingCommands.AlignLeft"
                                                                       CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Align Left"
-                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                      Margin="0,1,0,1">
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/alignleft.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
@@ -1612,8 +1634,7 @@
                                                                       Command="EditingCommands.AlignCenter"
                                                                       CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Align Center"
-                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                      Margin="0,1,0,1">
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/aligncenter.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
@@ -1622,8 +1643,7 @@
                                                                       Command="EditingCommands.AlignRight"
                                                                       CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Align Right"
-                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                      Margin="0,1,0,1">
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/alignright.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
@@ -1632,8 +1652,7 @@
                                                                       Command="EditingCommands.AlignJustify"
                                                                       CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Align Justify"
-                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                      Margin="0,1,0,1">
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/alignjustify.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
@@ -1645,8 +1664,7 @@
                                                                       Command="EditingCommands.ToggleBullets"
                                                                       CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Bullets"
-                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                      Margin="0,1,0,1">
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/listbullets.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
@@ -1655,19 +1673,18 @@
                                                                       Command="EditingCommands.ToggleNumbering"
                                                                       CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Numbering"
-                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}"
-                                                                      Margin="0,1,0,1">
+                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/listnumbers.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
                                                         </ToggleButton>
-                                                        <Image Source="/Resources/Images/MpRichTextBox/separator.png"
+                                                        <!--<Image Source="/Resources/Images/MpRichTextBox/separator.png"
                                                                Stretch="None" />
                                                         <Button Command="EditingCommands.IncreaseIndentation"
                                                                 CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                 ToolTip="Increase Indentation"
                                                                 Template="{StaticResource FlatButtonControlTemplate}"
-                                                                Margin="0,1,0,1">
+                                                                >
                                                             <Image Source="/Resources/Images/MpRichTextBox/indentincrease.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
@@ -1676,11 +1693,11 @@
                                                                 CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                 ToolTip="Decrease Indentation"
                                                                 Template="{StaticResource FlatButtonControlTemplate}"
-                                                                Margin="0,1,0,1">
+                                                                >
                                                             <Image Source="/Resources/Images/MpRichTextBox/indentdecrease.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
-                                                        </Button>
+                                                        </Button>-->
                                                     </StackPanel>
                                                 </Border>
                                                 <RichTextBox x:Name="ClipTileRichTextBox"

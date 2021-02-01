@@ -161,6 +161,24 @@ namespace MpWpfApp {
             }
         }
 
+        public double ClipTileEditModeMinWidth {
+            get {
+                return 700;
+            }
+        }
+
+        public double ClipTileEditModeContentMinWidth {
+            get {
+                return ClipTileEditModeMinWidth - 10;
+            }
+        }
+
+        public double ClipTileEditToolbarIconSize {
+            get {
+                return 22;
+            }
+        }
+
         public double ClipTileTitleHeight {
             get {
                 return ClipTileSize / 5;
