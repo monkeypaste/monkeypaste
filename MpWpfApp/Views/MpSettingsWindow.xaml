@@ -151,6 +151,10 @@
                     <ComboBox ItemsSource="{Binding Languages}"
                               SelectedItem="{Binding SelectedLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Max Rtf Char Count" />
+                    <TextBox Text="{Binding MaxRtfCharCount}" />
+                </StackPanel>
             </StackPanel>
         </Grid>
         <!-- Security -->

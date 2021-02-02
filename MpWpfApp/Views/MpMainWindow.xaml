@@ -969,7 +969,6 @@
                                  BorderThickness="0"
                                  VerticalContentAlignment="Center"
                                  Padding="0,0,0,0"
-                                 local:MpFocusExtension.IsFocused="{Binding IsTextBoxFocused, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                  Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
                         </TextBox>
                         <spinners:ucSpinnerApple x:Name="IsSearchingSpinner"
@@ -1179,7 +1178,6 @@
                                                 Width="{Binding TileBorderWidth}" 
                                                 Height="{Binding TileBorderHeight}"
                                                 Visibility="{Binding TileVisibility, NotifyOnTargetUpdated=True}"
-                                                local:MpFocusExtension.IsFocused="{Binding IsClipItemFocused}"
                                                 local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.SearchText}"
                                                 Focusable="True"
                                                 Background="White"
@@ -1648,15 +1646,6 @@
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
                                                         </ToggleButton>
-                                                        <ToggleButton x:Name="JustifyButton"
-                                                                      Command="EditingCommands.AlignJustify"
-                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
-                                                                      ToolTip="Align Justify"
-                                                                      Template="{StaticResource FlatToggleButtonControlTemplate}">
-                                                            <Image Source="/Resources/Images/MpRichTextBox/alignjustify.png"
-                                                                   Stretch="None"
-                                                                   SnapsToDevicePixels="True" />
-                                                        </ToggleButton>
                                                         <Image Source="/Resources/Images/MpRichTextBox/separator.png"
                                                                Stretch="None"
                                                                SnapsToDevicePixels="True" />
@@ -1678,9 +1667,18 @@
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
                                                         </ToggleButton>
-                                                        <!--<Image Source="/Resources/Images/MpRichTextBox/separator.png"
+                                                        <Image Source="/Resources/MpRichTextBox/separator.png"
                                                                Stretch="None" />
-                                                        <Button Command="EditingCommands.IncreaseIndentation"
+                                                        <Button x:Name="RefreshDocumentButton"
+                                                                Command="{Binding RefreshDocumentCommand}"
+                                                                Template="{StaticResource FlatButtonControlTemplate}">
+                                                            <Image Source="/Resources/Images/MpRichTextBox/arrow_refresh.png"
+                                                                   Stretch="None"
+                                                                   SnapsToDevicePixels="True" />
+                                                        </Button>
+                                                        
+                                                        
+                                                        <!--<Button Command="EditingCommands.IncreaseIndentation"
                                                                 CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                 ToolTip="Increase Indentation"
                                                                 Template="{StaticResource FlatButtonControlTemplate}"
@@ -1701,24 +1699,23 @@
                                                     </StackPanel>
                                                 </Border>
                                                 <RichTextBox x:Name="ClipTileRichTextBox"
-                                                             IsReadOnly="{Binding IsRtbReadOnly}" 
-                                                             IsInactiveSelectionHighlightEnabled="True"
-                                                             IsDocumentEnabled="{Binding IsSelected}"
-                                                             Focusable="{Binding IsEditingTile}"
-                                                             Cursor="{Binding ContentCursor}"
-                                                             Width="{Binding TileContentWidth}"
-                                                             Height="{Binding TileRtbHeight}"
-                                                             local:MpFocusExtension.IsFocused="{Binding IsClipRichTextBoxFocused}"
-                                                             IsUndoEnabled="True"
-                                                             SpellCheck.IsEnabled="{Binding SystemTrayViewModel.SettingsWindowViewModel.UseSpellCheck, Source={StaticResource MainWindowViewModel}}"
-                                                             Background="White"
-                                                             VerticalAlignment="Top"
-                                                             HorizontalAlignment="Left"
-                                                             ScrollViewer.HorizontalScrollBarVisibility="{Binding RtbHorizontalScrollbarVisibility}"
-                                                             ScrollViewer.VerticalScrollBarVisibility="{Binding RtbVerticalScrollbarVisibility}"
-                                                             BorderThickness="0"
-                                                             Margin="0,0,0,0"
-                                                             Padding="10,5,0,0">
+                                                                     IsReadOnly="{Binding IsRtbReadOnly}"
+                                                                     IsInactiveSelectionHighlightEnabled="True"
+                                                                     IsDocumentEnabled="{Binding IsSelected}"                                                             
+                                                                     Focusable="{Binding IsEditingTile}"
+                                                                     Cursor="{Binding ContentCursor}"
+                                                                     Width="{Binding TileContentWidth}"
+                                                                     Height="{Binding TileRtbHeight}"
+                                                                     IsUndoEnabled="True"
+                                                                     SpellCheck.IsEnabled="{Binding SystemTrayViewModel.SettingsWindowViewModel.UseSpellCheck, Source={StaticResource MainWindowViewModel}}"
+                                                                     Background="White"
+                                                                     VerticalAlignment="Top"
+                                                                     HorizontalAlignment="Left"
+                                                                     ScrollViewer.HorizontalScrollBarVisibility="{Binding RtbHorizontalScrollbarVisibility}"
+                                                                     ScrollViewer.VerticalScrollBarVisibility="{Binding RtbVerticalScrollbarVisibility}"
+                                                                     BorderThickness="0"
+                                                                     Margin="0,0,0,0"
+                                                                     Padding="10,5,0,0">
                                                     <RichTextBox.Resources>
                                                         <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                                                                          Color="Blue" />

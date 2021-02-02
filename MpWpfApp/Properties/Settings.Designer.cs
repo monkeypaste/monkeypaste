@@ -746,5 +746,134 @@ namespace MpWpfApp.Properties {
                 this["UserLanguage"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int RestfulTranslationCount {
+            get {
+                return ((int)(this["RestfulTranslationCount"]));
+            }
+            set {
+                this["RestfulTranslationCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int RestfulCurrencyConversionCount {
+            get {
+                return ((int)(this["RestfulCurrencyConversionCount"]));
+            }
+            set {
+                this["RestfulCurrencyConversionCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int RestfulDictionaryDefinitionCount {
+            get {
+                return ((int)(this["RestfulDictionaryDefinitionCount"]));
+            }
+            set {
+                this["RestfulDictionaryDefinitionCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int RestfulLinkMinificationCount {
+            get {
+                return ((int)(this["RestfulLinkMinificationCount"]));
+            }
+            set {
+                this["RestfulLinkMinificationCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int RestfulCurrencyConversionMaxCount {
+            get {
+                return ((int)(this["RestfulCurrencyConversionMaxCount"]));
+            }
+            set {
+                this["RestfulCurrencyConversionMaxCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int RestfulTranslationMaxCount {
+            get {
+                return ((int)(this["RestfulTranslationMaxCount"]));
+            }
+            set {
+                this["RestfulTranslationMaxCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int RestfulDictionaryDefinitionMaxCount {
+            get {
+                return ((int)(this["RestfulDictionaryDefinitionMaxCount"]));
+            }
+            set {
+                this["RestfulDictionaryDefinitionMaxCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int RestfulLinkMinificationMaxCount {
+            get {
+                return ((int)(this["RestfulLinkMinificationMaxCount"]));
+            }
+            set {
+                this["RestfulLinkMinificationMaxCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("02/02/2021 08:22:00")]
+        public global::System.DateTime RestfulBillingDate {
+            get {
+                return ((global::System.DateTime)(this["RestfulBillingDate"]));
+            }
+            set {
+                this["RestfulBillingDate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("f6035b9ed05ac82b42d4853c984e34a4f1ba05d8")]
+        public string BitlyApiToken {
+            get {
+                return ((string)(this["BitlyApiToken"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50000")]
+        public int MaxRtfCharCount {
+            get {
+                return ((int)(this["MaxRtfCharCount"]));
+            }
+            set {
+                this["MaxRtfCharCount"] = value;
+            }
+        }
     }
 }

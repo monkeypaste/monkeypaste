@@ -10,6 +10,7 @@ using System.Net.Mail;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -102,6 +103,7 @@ namespace MpWpfApp {
             }
             return false;
         }
+
         public static List<Hyperlink> GetHyperlinkList(this RichTextBox rtb) {
             var hlList = new List<Hyperlink>();
             for (TextPointer position = rtb.Document.ContentStart;
@@ -117,32 +119,28 @@ namespace MpWpfApp {
             return hlList;
         }
 
-        public static void ClearHyperlinks(this RichTextBox rtb) {
-            //replaces hyperlinks with runs of there textrange text
+        public static void ClearHyperlinks(this RichTextBox rtb, bool ignoreTemplates = false) {
+            //replaces hyperlinks with spans of there textrange text
             var ctvm = (MpClipTileViewModel)rtb.DataContext;
             var hlList = rtb.GetHyperlinkList();
             foreach (var hl in hlList) {
                 string linkText = string.Empty;
                 if (hl.DataContext == null || hl.DataContext is MpClipTileViewModel) {
                     linkText = new TextRange(hl.ElementStart, hl.ElementEnd).Text;
-                } else {
+                } else if(!ignoreTemplates) {
                     var thlvm = (MpTemplateHyperlinkViewModel)hl.DataContext;
                     linkText = thlvm.TemplateName;
                 }
                 hl.Inlines.Clear();
                 new Span(new Run(linkText), hl.ContentStart);
             }
-            ctvm.TemplateHyperlinkCollectionViewModel.Clear();
+            if(!ignoreTemplates) {
+                ctvm.TemplateHyperlinkCollectionViewModel.Clear();
+            }
         }
-        //public static void UpdateDocumentLayout(this RichTextBox rtb) {
-        //    rtb.Document.PageWidth = rtb.Width - rtb.Padding.Left - rtb.Padding.Right;
-        //    rtb.Document.PageHeight = 10000;// rtb.Height - rtb.Padding.Top - rtb.Padding.Bottom;
-        //}
 
-        public static void CreateHyperlinks(this RichTextBox rtb) {
+        public static void CreateHyperlinks(this RichTextBox rtb, bool ignoreTemplates = false) {
             var ctvm = (MpClipTileViewModel)rtb.DataContext;
-            //var rtbSelection = rtb.Selection;
-            //rtb.ClearHyperlinks();
             var regExGroupList = new List<string> {
                 //WebLink
                 @"(?:https?://|www\.)\S+", 
@@ -162,9 +160,12 @@ namespace MpWpfApp {
                 @"#([0-9]|[a-fA-F]){7}([^" + Properties.Settings.Default.TemplateTokenMarker + "][ ])",
             };
             var docPlainText = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
-            for (int i = 0; i < regExGroupList.Count; i++) {                
+            for (int i = 0; i < regExGroupList.Count; i++) {
                 var linkType = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);
-                if(linkType == MpSubTextTokenType.StreetAddress) {
+                if(linkType == MpSubTextTokenType.TemplateSegment && ignoreTemplates) {
+                    continue;
+                }
+                if (linkType == MpSubTextTokenType.StreetAddress) {
                     //doesn't consistently work and presents bugs so disabling for now
                     continue;
                 }
@@ -187,7 +188,7 @@ namespace MpWpfApp {
                             if (linkType == MpSubTextTokenType.TemplateSegment) {
                                 var copyItemTemplate = ctvm.CopyItem.GetTemplateByName(matchRange.Text);
                                 var thlvm = new MpTemplateHyperlinkViewModel(ctvm, copyItemTemplate);
-                                hl = MpHelpers.Instance.CreateTemplateHyperlink(thlvm, matchRange);
+                                hl =  MpHelpers.Instance.CreateTemplateHyperlink(thlvm, matchRange);
                                 ctvm.TemplateHyperlinkCollectionViewModel.Add(thlvm);
                                 //var thlb = new MpTemplateHyperlinkBorder(thlvm);
                                 //var container = new InlineUIContainer(thlb);
@@ -240,10 +241,15 @@ namespace MpWpfApp {
                                         }
                                         MenuItem minifyUrl = new MenuItem();
                                         minifyUrl.Header = "Minify with bit.ly";
-                                        minifyUrl.Click += (s1, e2) => {
+                                        minifyUrl.Click += async (s1, e2) => {
                                             Hyperlink link = (Hyperlink)((MenuItem)s1).Tag;
-                                            string minifiedLink = MpHelpers.Instance.ShortenUrl(link.NavigateUri.ToString()).Result;
-                                            Clipboard.SetText(minifiedLink);
+                                            string minifiedLink = await MpMinifyUrl.Instance.ShortenUrl(link.NavigateUri.ToString());
+                                            if (!string.IsNullOrEmpty(minifiedLink)) {
+                                                matchRange.Text = minifiedLink;
+                                                rtb.ClearHyperlinks();
+                                                rtb.CreateHyperlinks();
+                                            }
+                                            //Clipboard.SetText(minifiedLink);
                                         };
                                         minifyUrl.Tag = hl;
                                         hl.ContextMenu.Items.Add(minifyUrl);
@@ -278,9 +284,9 @@ namespace MpWpfApp {
                                                 Run run = new Run(currency.CurrencySymbol + convertedValue);
                                                 hl.Inlines.Clear();
                                                 hl.Inlines.Add(run);
-                                                //rtb.ClearHyperlinks();
-                                                //((MpClipTileViewModel)rtb.DataContext).CopyItemRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(rtb.Document);
-                                                //rtb.CreateHyperlinks();
+                                                //ClearHyperlinks();
+                                                //((MpClipTileViewModel)DataContext).CopyItemRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(Document);
+                                                //CreateHyperlinks();
                                             };
                                             convertCurrencyMenuItem.Items.Add(subItem);
                                         }
@@ -310,7 +316,6 @@ namespace MpWpfApp {
                     }
                 }
             }
-            //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
         }
 
         public static FlowDocument Clone(this FlowDocument doc) {
@@ -371,12 +376,14 @@ namespace MpWpfApp {
         }
 
         public static void SetRtf(this System.Windows.Controls.RichTextBox rtb, string document) {
+            var rtbSelection = rtb.Selection;
             var documentBytes = UTF8Encoding.Default.GetBytes(document);
             using (var reader = new MemoryStream(documentBytes)) {
                 reader.Position = 0;
                 rtb.SelectAll();
-                rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);                
-                rtb.CaretPosition = rtb.Document.ContentStart;
+                rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);
+                //rtb.CaretPosition = rtb.Document.ContentStart;
+                rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
             }
         }
 
@@ -414,19 +421,21 @@ namespace MpWpfApp {
         }
 
         public static Size GetDocumentSize(this FlowDocument doc) {
-            var tp = doc.ContentStart;
-            Rect lastRect = tp.GetCharacterRect(LogicalDirection.Forward);
-            double w = lastRect.Width, h = lastRect.Height, y = lastRect.Y;
-            while(tp != null && tp.CompareTo(doc.ContentEnd) < 0) {
-                tp = tp.GetPositionAtOffset(1, LogicalDirection.Forward);
-                Rect newRect = tp.GetCharacterRect(LogicalDirection.Forward);
-                if(newRect.Y > lastRect.Y) {
-                    //w = Math.Max(w, newRect.X);
-                    h += newRect.Y;// Math.Max(h, newRect.Y);
-                }
-                lastRect = newRect;
-            }
-            return new Size(w, h);
+            var ft = doc.GetFormattedText();
+            return new Size(ft.Width, ft.Height);
+            //var tp = doc.ContentStart;
+            //Rect lastRect = tp.GetCharacterRect(LogicalDirection.Forward);
+            //double w = lastRect.Width, h = lastRect.Height, y = lastRect.Y;
+            //while(tp != null && tp.CompareTo(doc.ContentEnd) < 0) {
+            //    tp = tp.GetPositionAtOffset(1, LogicalDirection.Forward);
+            //    Rect newRect = tp.GetCharacterRect(LogicalDirection.Forward);
+            //    if(newRect.Y > lastRect.Y) {
+            //        //w = Math.Max(w, newRect.X);
+            //        h += newRect.Y;// Math.Max(h, newRect.Y);
+            //    }
+            //    lastRect = newRect;
+            //}
+            //return new Size(w, h);
         }
 
         public static FormattedText GetFormattedText(this FlowDocument doc) {

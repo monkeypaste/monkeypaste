@@ -29,7 +29,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 namespace MpWpfApp {
     public class MpClipTrayViewModel : MpViewModelBase {
         #region Private Variables      
-        private ListBox _clipTrayRef = null;
+        private MpMultiSelectListView _clipTrayRef = null;
         //private object _dragClipBorderElement = null;
 
         Stopwatch sw = new Stopwatch();
@@ -313,8 +313,8 @@ namespace MpWpfApp {
             var clipTray = (MpMultiSelectListView)sender;
             var scrollViewer = clipTray.GetDescendantOfType<ScrollViewer>();
 
-            _clipTrayRef = clipTray;            
-
+            _clipTrayRef = clipTray;    
+            
             clipTray.DragEnter += (s, e1) => {
                 //used for resorting
                 e1.Effects = e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName) ? DragDropEffects.Move : DragDropEffects.None;
@@ -370,6 +370,23 @@ namespace MpWpfApp {
                 MergeClipsCommandVisibility = MergeSelectedClipsCommand.CanExecute(null) ? Visibility.Visible : Visibility.Collapsed;
 
                 MainWindowViewModel.TagTrayViewModel.UpdateTagAssociation();
+                
+                if(SelectedClipTiles.Count > 1) {
+                    //order selected tiles by ascending datetime 
+                    var selectedTileList = SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime).ToList();
+                    foreach(var sctvm in selectedTileList) {
+                        if(sctvm == selectedTileList[0]) {
+                            sctvm.IsPrimarySelected = true;
+                        } else {
+                            sctvm.IsPrimarySelected = false;
+                        }
+                    }
+                } else if(SelectedClipTiles.Count == 1) {
+                    SelectedClipTiles[0].IsPrimarySelected = false;
+                }
+                foreach(MpClipTileViewModel osctvm in e8.RemovedItems) {
+                    osctvm.IsPrimarySelected = false;
+                }
             };
 
             clipTray.MouseLeftButtonUp += (s, e4) => {
@@ -506,12 +523,13 @@ namespace MpWpfApp {
         }
 
         public void ClearClipSelection() {
-            foreach (MpClipTileViewModel clip in ClipTileViewModels) {
+            foreach (MpClipTileViewModel clip in ClipTileViewModels) {                
                 clip.IsEditingTile = false;
                 clip.IsEditingTitle = false;
                 clip.IsPastingTemplateTile = false;
                 clip.IsEditingTemplate = false;
                 clip.IsSelected = false;
+                clip.IsPrimarySelected = false;
             }
         }
 
@@ -521,6 +539,13 @@ namespace MpWpfApp {
                 VisibileClipTiles[0].IsSelected = true;
                 if(!MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
                     VisibileClipTiles[0].IsClipItemFocused = true;
+                    if(GetClipTray() != null) {
+                        ((ListViewItem)GetClipTray().ItemContainerGenerator.ContainerFromItem(VisibileClipTiles[0]))?.Focus();
+                    }
+                }
+                if(GetClipTray() != null) {
+                    GetClipTray().ScrollViewer.ScrollToHorizontalOffset(0);
+
                 }
             }
         }
@@ -560,64 +585,64 @@ namespace MpWpfApp {
             clipTileToRemove = null;
         }
 
-        public void SortClipTiles() {
-            var sw = new Stopwatch();
-            sw.Start();
+        //public void SortClipTiles() {
+        //    var sw = new Stopwatch();
+        //    sw.Start();
             
-            ClearClipSelection();
-            //var cvs = CollectionViewSource.GetDefaultView(VisibileClipTiles);
-            //var tempSearchText = MainWindowViewModel.SearchBoxViewModel.Text;
-            //if (doFilter) {
-            //    cvs.Filter += item => {
-            //        var ctvm = (MpClipTileViewModel)item;
+        //    ClearClipSelection();
+        //    //var cvs = CollectionViewSource.GetDefaultView(VisibileClipTiles);
+        //    //var tempSearchText = MainWindowViewModel.SearchBoxViewModel.Text;
+        //    //if (doFilter) {
+        //    //    cvs.Filter += item => {
+        //    //        var ctvm = (MpClipTileViewModel)item;
 
-            //        if (tempSearchText.Trim() == string.Empty || tempSearchText == Properties.Settings.Default.SearchPlaceHolderText) {
-            //            return true;
-            //        }
+        //    //        if (tempSearchText.Trim() == string.Empty || tempSearchText == Properties.Settings.Default.SearchPlaceHolderText) {
+        //    //            return true;
+        //    //        }
 
-            //        if (ctvm.CopyItemType == MpCopyItemType.Image) {
-            //            return false;
-            //        }
+        //    //        if (ctvm.CopyItemType == MpCopyItemType.Image) {
+        //    //            return false;
+        //    //        }
 
-            //        if (Properties.Settings.Default.IsSearchCaseSensitive) {
-            //            return ctvm.CopyItem.ItemPlainText.Contains(tempSearchText);
-            //        }
-            //        return ctvm.CopyItem.ItemPlainText.ToLower().Contains(tempSearchText.ToLower());
-            //    };
-            //}
+        //    //        if (Properties.Settings.Default.IsSearchCaseSensitive) {
+        //    //            return ctvm.CopyItem.ItemPlainText.Contains(tempSearchText);
+        //    //        }
+        //    //        return ctvm.CopyItem.ItemPlainText.ToLower().Contains(tempSearchText.ToLower());
+        //    //    };
+        //    //}
 
-            if (true) {
-                ListSortDirection sortDir = MainWindowViewModel.ClipTileSortViewModel.AscSortOrderButtonImageVisibility == Visibility.Visible ? ListSortDirection.Ascending : ListSortDirection.Descending;
-                string sortBy = string.Empty;
-                switch (MainWindowViewModel.ClipTileSortViewModel.SelectedSortType.Header) {
-                    case "Date":
-                        sortBy = "CopyItemCreatedDateTime";
-                        break;
-                    case "Application":
-                        sortBy = "CopyItemAppId";
-                        break;
-                    case "Title":
-                        sortBy = "CopyItemTitle";
-                        break;
-                    case "Content":
-                        sortBy = "CopyItemPlainText";
-                        break;
-                    case "Type":
-                        sortBy = "CopyItemType";
-                        break;
-                    case "Usage":
-                        sortBy = "CopyItemUsageScore";
-                        break;
-                }
-                //cvs.SortDescriptions.Clear();
-                //cvs.SortDescriptions.Add(new SortDescription(sortBy, sortDir));
-                _clipTileViewModels.Sort(x => x[sortBy], sortDir == ListSortDirection.Descending);
-                GetClipTray().Items.Refresh();
-            }
-            sw.Stop();
-            Console.WriteLine("Sort for " + VisibileClipTiles.Count + " items: " + sw.ElapsedMilliseconds + " ms");
-            ResetClipSelection();
-        }
+        //    if (true) {
+        //        ListSortDirection sortDir = MainWindowViewModel.ClipTileSortViewModel.AscSortOrderButtonImageVisibility == Visibility.Visible ? ListSortDirection.Ascending : ListSortDirection.Descending;
+        //        string sortBy = string.Empty;
+        //        switch (MainWindowViewModel.ClipTileSortViewModel.SelectedSortType.Header) {
+        //            case "Date":
+        //                sortBy = "CopyItemCreatedDateTime";
+        //                break;
+        //            case "Application":
+        //                sortBy = "CopyItemAppId";
+        //                break;
+        //            case "Title":
+        //                sortBy = "CopyItemTitle";
+        //                break;
+        //            case "Content":
+        //                sortBy = "CopyItemPlainText";
+        //                break;
+        //            case "Type":
+        //                sortBy = "CopyItemType";
+        //                break;
+        //            case "Usage":
+        //                sortBy = "CopyItemUsageScore";
+        //                break;
+        //        }
+        //        //cvs.SortDescriptions.Clear();
+        //        //cvs.SortDescriptions.Add(new SortDescription(sortBy, sortDir));
+        //        _clipTileViewModels.Sort(x => x[sortBy], sortDir == ListSortDirection.Descending);
+        //        GetClipTray().Items.Refresh();
+        //    }
+        //    sw.Stop();
+        //    Console.WriteLine("Sort for " + VisibileClipTiles.Count + " items: " + sw.ElapsedMilliseconds + " ms");
+        //    ResetClipSelection();
+        //}
 
         public async Task<IDataObject> GetDataObjectFromSelectedClips(bool isDragDrop = false) {
             IDataObject d = new DataObject();
@@ -747,7 +772,7 @@ namespace MpWpfApp {
             return filePath;
         }
 
-        public ListBox GetClipTray() {
+        public MpMultiSelectListView GetClipTray() {
             return _clipTrayRef;
         }
         #endregion
@@ -850,6 +875,7 @@ namespace MpWpfApp {
             }
         }
         private void SelectAll() {
+            ClearClipSelection();
             foreach (var ctvm in VisibileClipTiles) {
                 ctvm.IsSelected = true;
             }
@@ -874,7 +900,7 @@ namespace MpWpfApp {
                             foreach (var sctvm in SelectedClipTiles) {
                                 sctvm.TitleColor = brush;
                                 if (sharedSwirl == null) {
-                                    sctvm.TitleSwirl = sctvm.CopyItem.InitSwirl();
+                                    sctvm.TitleSwirl = sctvm.CopyItem.InitSwirl(null,true);
                                     sharedSwirl = sctvm.TitleSwirl;
                                 } else {
                                     sctvm.TitleSwirl = sctvm.CopyItem.InitSwirl(sharedSwirl);

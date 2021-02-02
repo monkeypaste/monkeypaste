@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpLanguageTranslator {
+    public class MpLanguageTranslator : MpRestfulApi {
         private static readonly Lazy<MpLanguageTranslator> _Lazy = new Lazy<MpLanguageTranslator>(() => new MpLanguageTranslator());
         public static MpLanguageTranslator Instance { get { return _Lazy.Value; } }
 
@@ -29,7 +29,7 @@ namespace MpWpfApp {
 
         public List<string> LanguageList { get; private set; } = new List<string>();
 
-        public MpLanguageTranslator() {
+        public MpLanguageTranslator() : base("Language Translation") {
             // at least show an error dialog if there's an unexpected error
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(HandleExceptions);
 
@@ -180,41 +180,77 @@ namespace MpWpfApp {
         }
 
         public async Task<string> Translate(string textToTranslate, string toLanguage, bool doSpellCheck) {
-            var fromLanguageCode = DetectLanguage(textToTranslate);
-            var toLanguageCode = languageCodesAndTitles[toLanguage];
-
-            // Spell-check the source text if the source language is English
-            if (doSpellCheck) {
-                textToTranslate = CorrectSpelling(textToTranslate);
+            var apiStatus = CheckRestfulApiStatus();
+            if (apiStatus == null || apiStatus.Value == false) {
+                return string.Empty;
             }
 
-            // Handle null operations: no text or same source/target languages
-            if (string.IsNullOrEmpty(textToTranslate) || fromLanguageCode == toLanguageCode) {
-                return textToTranslate;
+            try {
+                var fromLanguageCode = DetectLanguage(textToTranslate);
+                var toLanguageCode = languageCodesAndTitles[toLanguage];
+
+                // Spell-check the source text if the source language is English
+                if (doSpellCheck) {
+                    textToTranslate = CorrectSpelling(textToTranslate);
+                }
+
+                // Handle null operations: no text or same source/target languages
+                if (string.IsNullOrEmpty(textToTranslate) || fromLanguageCode == toLanguageCode) {
+                    return textToTranslate;
+                }
+
+                // Send translation request
+                string endpoint = string.Format(TEXT_TRANSLATION_API_ENDPOINT, "translate");
+                string uri = string.Format(endpoint + "&from={0}&to={1}", fromLanguageCode, toLanguageCode);
+
+                System.Object[] body = new System.Object[] { new { Text = textToTranslate } };
+                var requestBody = JsonConvert.SerializeObject(body);
+
+                using (var client = new HttpClient())
+                using (var request = new HttpRequestMessage()) {
+                    request.Method = HttpMethod.Post;
+                    request.RequestUri = new Uri(uri);
+                    request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+                    request.Headers.Add("Ocp-Apim-Subscription-Key", COGNITIVE_SERVICES_KEY);
+                    request.Headers.Add("Ocp-Apim-Subscription-Region", "westus");
+                    request.Headers.Add("X-ClientTraceId", Guid.NewGuid().ToString());
+
+                    var response = await client.SendAsync(request);
+                    var responseBody = await response.Content.ReadAsStringAsync();
+
+                    var result = JsonConvert.DeserializeObject<List<Dictionary<string, List<Dictionary<string, string>>>>>(responseBody);
+                    var translatedText = result[0]["translations"][0]["text"];
+                    if(!string.IsNullOrEmpty(translatedText)) {
+                        IncrementCallCount();
+                        return translatedText;
+                    }
+                    ShowError();
+                    return string.Empty;
+                }
             }
-
-            // Send translation request
-            string endpoint = string.Format(TEXT_TRANSLATION_API_ENDPOINT, "translate");
-            string uri = string.Format(endpoint + "&from={0}&to={1}", fromLanguageCode, toLanguageCode);
-
-            System.Object[] body = new System.Object[] { new { Text = textToTranslate } };
-            var requestBody = JsonConvert.SerializeObject(body);
-
-            using (var client = new HttpClient())
-            using (var request = new HttpRequestMessage()) {
-                request.Method = HttpMethod.Post;
-                request.RequestUri = new Uri(uri);
-                request.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
-                request.Headers.Add("Ocp-Apim-Subscription-Key", COGNITIVE_SERVICES_KEY);
-                request.Headers.Add("Ocp-Apim-Subscription-Region", "westus");
-                request.Headers.Add("X-ClientTraceId", Guid.NewGuid().ToString());
-
-                var response = await client.SendAsync(request);
-                var responseBody = await response.Content.ReadAsStringAsync();
-
-                var result = JsonConvert.DeserializeObject<List<Dictionary<string, List<Dictionary<string, string>>>>>(responseBody);
-                return result[0]["translations"][0]["text"];
+            catch(Exception ex) {
+                Console.WriteLine("LanguageTranslation exception: " + ex.ToString());
+                ShowError();
+                return string.Empty;
             }
+        }
+
+        protected override int GetMaxCallCount() {
+            return Properties.Settings.Default.RestfulTranslationMaxCount;
+        }
+
+        protected override int GetCurCallCount() {
+            return Properties.Settings.Default.RestfulTranslationCount;
+        }
+
+        protected override void IncrementCallCount() {
+            Properties.Settings.Default.RestfulTranslationCount++;
+            Properties.Settings.Default.Save();
+        }
+
+        protected override void ClearCount() {
+            Properties.Settings.Default.RestfulTranslationCount = 0;
+            Properties.Settings.Default.Save();
         }
 
         // ***** PERFORM TRANSLATION ON BUTTON CLICK

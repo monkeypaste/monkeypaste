@@ -385,7 +385,8 @@ namespace MpWpfApp {
                     , CopyCount integer not null default 1
                     , PasteCount integer not null default 0
                     , ItemImage longblob
-                    , ItemText text NOT NULL                     
+                    , ItemText text NOT NULL       
+                    , ItemCsv text
                     , TitleSwirl longblob NOT NULL
                     , Screenshot longblob
                     , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL

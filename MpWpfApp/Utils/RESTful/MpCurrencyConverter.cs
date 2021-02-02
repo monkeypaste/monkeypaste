@@ -124,7 +124,7 @@ namespace MpWpfApp {
         }
     }
 
-    public class MpCurrencyConverter {
+    public class MpCurrencyConverter : MpRestfulApi {
         private static readonly Lazy<MpCurrencyConverter> _Lazy = new Lazy<MpCurrencyConverter>(() => new MpCurrencyConverter());
         public static MpCurrencyConverter Instance { get { return _Lazy.Value; } }
 
@@ -133,7 +133,7 @@ namespace MpWpfApp {
 
         private string ApiKey { get; }
 
-        private MpCurrencyConverter() {
+        private MpCurrencyConverter() : base("Currency Conversion") {
             ApiKey = Properties.Settings.Default.CurrencyConverterFreeApiKey;
             CurrencyList = GetAllCurrencies();
 
@@ -215,5 +215,22 @@ namespace MpWpfApp {
             return await Task.Run(() => GetHistoryRange(from, to, startDate.ToString("yyyy-MM-dd"), endDate.ToString("yyyy-MM-dd")));
         }
 
+        protected override int GetMaxCallCount() {
+            return Properties.Settings.Default.RestfulCurrencyConversionMaxCount;
+        }
+
+        protected override int GetCurCallCount() {
+            return Properties.Settings.Default.RestfulCurrencyConversionCount;
+        }
+
+        protected override void IncrementCallCount() {
+            Properties.Settings.Default.RestfulCurrencyConversionCount++;
+            Properties.Settings.Default.Save();
+        }
+
+        protected override void ClearCount() {
+            Properties.Settings.Default.RestfulCurrencyConversionCount = 0;
+            Properties.Settings.Default.Save();
+        }
     }
 }

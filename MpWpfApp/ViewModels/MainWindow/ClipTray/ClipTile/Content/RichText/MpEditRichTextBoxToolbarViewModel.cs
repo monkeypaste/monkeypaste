@@ -1,4 +1,5 @@
-﻿using GongSolutions.Wpf.DragDrop.Utilities;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,12 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace MpWpfApp {
 
     public class MpEditRichTextBoxToolbarViewModel : MpViewModelBase {
         #region Private Variables
-
         #endregion
 
         #region View Models
@@ -127,11 +128,14 @@ namespace MpWpfApp {
             var cb = (MpClipBorder)et.GetVisualAncestor<MpClipBorder>();
             var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxCanvas");
             var rtb = rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
+            var clipTray = MainWindowViewModel.ClipTrayViewModel.GetClipTray();
+            var clipTrayScrollViewer = clipTray.GetDescendantOfType<ScrollViewer>(); 
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
             var titleSwirl = (Image)cb.FindName("TitleSwirl");
             var addTemplateButton = (Button)et.FindName("AddTemplateButton");
             var editTemplateToolbarBorder = (Border)cb.FindName("ClipTileEditTemplateToolbar");
             var pasteTemplateToolbarBorder = (Border)cb.FindName("ClipTilePasteTemplateToolbar");
+            var ds = MpHelpers.Instance.ConvertRichTextToFlowDocument(ClipTileViewModel.CopyItemRichText).GetDocumentSize();
 
             #region Editor
             ToggleButton selectedAlignmentButton = null;
@@ -220,28 +224,21 @@ namespace MpWpfApp {
             var leftAlignmentButton = (ToggleButton)et.FindName("LeftButton");
             var centerAlignmentButton = (ToggleButton)et.FindName("CenterButton");
             var rightAlignmentButton = (ToggleButton)et.FindName("RightButton");
-            var justifyAlignmentButton = (ToggleButton)et.FindName("JustifyButton");
             leftAlignmentButton.Click += (s, e3) => {
                 var clickedButton = (ToggleButton)s;
-                var buttonGroup = new ToggleButton[] { leftAlignmentButton, centerAlignmentButton, rightAlignmentButton, justifyAlignmentButton };
+                var buttonGroup = new ToggleButton[] { leftAlignmentButton, centerAlignmentButton, rightAlignmentButton };
                 SetButtonGroupSelection(clickedButton, selectedAlignmentButton, buttonGroup, true);
                 selectedAlignmentButton = clickedButton;
             };
             centerAlignmentButton.Click += (s, e3) => {
                 var clickedButton = (ToggleButton)s;
-                var buttonGroup = new ToggleButton[] { leftAlignmentButton, centerAlignmentButton, rightAlignmentButton, justifyAlignmentButton };
+                var buttonGroup = new ToggleButton[] { leftAlignmentButton, centerAlignmentButton, rightAlignmentButton };
                 SetButtonGroupSelection(clickedButton, selectedAlignmentButton, buttonGroup, true);
                 selectedAlignmentButton = clickedButton;
             };
             rightAlignmentButton.Click += (s, e3) => {
                 var clickedButton = (ToggleButton)s;
-                var buttonGroup = new ToggleButton[] { leftAlignmentButton, centerAlignmentButton, rightAlignmentButton, justifyAlignmentButton };
-                SetButtonGroupSelection(clickedButton, selectedAlignmentButton, buttonGroup, true);
-                selectedAlignmentButton = clickedButton;
-            };
-            justifyAlignmentButton.Click += (s, e3) => {
-                var clickedButton = (ToggleButton)s;
-                var buttonGroup = new ToggleButton[] { leftAlignmentButton, centerAlignmentButton, rightAlignmentButton, justifyAlignmentButton };
+                var buttonGroup = new ToggleButton[] { leftAlignmentButton, centerAlignmentButton, rightAlignmentButton };
                 SetButtonGroupSelection(clickedButton, selectedAlignmentButton, buttonGroup, true);
                 selectedAlignmentButton = clickedButton;
             };
@@ -261,6 +258,12 @@ namespace MpWpfApp {
                 selectedListButton = clickedButton;
             };
             #endregion
+
+            ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).ApplicationHook.MouseWheel += (s, e) => {
+                if (ClipTileViewModel.IsEditingTile) {
+                    rtb.ScrollToVerticalOffset(rtb.VerticalOffset - e.Delta);
+                }
+            };
 
             addTemplateButton.PreviewMouseDown += (s, e3) => {
                 e3.Handled = true;
@@ -327,10 +330,11 @@ namespace MpWpfApp {
             ClipTileViewModel.PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
                     case nameof(ClipTileViewModel.IsEditingTile):
-                        double tileWidthMax = MpMeasurements.Instance.ClipTileEditModeMinWidth;
+                        
+                        double tileWidthMax = Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
                         double tileWidthMin = ClipTileViewModel.TileBorderWidth;
 
-                        double contentWidthMax = MpMeasurements.Instance.ClipTileEditModeContentMinWidth;
+                        double contentWidthMax = tileWidthMax - MpMeasurements.Instance.ClipTileEditModeContentMargin;
                         double contentWidthMin = ClipTileViewModel.TileContentWidth;
 
                         double rtbTopMax = ClipTileViewModel.EditRichTextBoxToolbarHeight;
@@ -339,12 +343,12 @@ namespace MpWpfApp {
                         double editRtbToolbarTopMax = 0;
                         double editRtbToolbarTopMin = -ClipTileViewModel.EditRichTextBoxToolbarHeight;
 
-                        double iconLeftMax = MpMeasurements.Instance.ClipTileEditModeMinWidth-125;// tileWidthMax - ClipTileViewModel.TileTitleIconSize;
+                        double iconLeftMax = tileWidthMax - 125;// tileWidthMax - ClipTileViewModel.TileTitleIconSize;
                         double iconLeftMin = 204;// tileWidthMin - ClipTileViewModel.TileTitleIconSize;
                         
                         if (ClipTileViewModel.IsEditingTile) {
                             //show rtb edit toolbar so its visible during animation
-                            ClipTileViewModel.EditToolbarVisibility = Visibility.Visible;
+                            ClipTileViewModel.EditToolbarVisibility = Visibility.Visible;                            
                         } else if(ClipTileViewModel.IsEditingTemplate) {
                             //animate edit template toolbar when tile is minimizing
                             ClipTileViewModel.IsEditingTemplate = false;
@@ -383,6 +387,14 @@ namespace MpWpfApp {
                             new List<FrameworkElement> { cb, titleSwirl },
                             FrameworkElement.WidthProperty,
                             (s1, e44) => {
+                                if(ClipTileViewModel.IsEditingTile) {
+                                    // Point transform = ((ListViewItem)clipTray.ItemContainerGenerator.ContainerFromItem(ClipTileViewModel)).TransformToVisual((Visual)clipTray.Parent).Transform(new Point());
+                                    //Rect listViewItemBounds = VisualTreeHelper.GetDescendantBounds(cb);
+                                    //listViewItemBounds.Offset(transform.X, transform.Y);
+                                    clipTray.ScrollIntoView(ClipTileViewModel);
+                                } else {
+
+                                }
                             });
 
                         MpHelpers.Instance.AnimateDoubleProperty(
@@ -436,7 +448,6 @@ namespace MpWpfApp {
                 leftAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
                 centerAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
                 rightAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
-                justifyAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Justify);
                 
                 //disable add template button if current selection intersects with a template
                 //this may not be necessary since templates are inlineuicontainers...
@@ -454,11 +465,6 @@ namespace MpWpfApp {
                 } else {
                     IsAddTemplateButtonEnabled = false;
                 }
-            };
-
-            rtb.KeyUp += (s, e6) => {
-                ClipTileViewModel.GetRtb().ClearHyperlinks();
-                ClipTileViewModel.GetRtb().CreateHyperlinks();
             };
         }
         #endregion
@@ -490,7 +496,19 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-
+        private RelayCommand _refreshDocumentCommand = null;
+        public ICommand RefreshDocumentCommand {
+            get {
+                if(_refreshDocumentCommand == null) {
+                    _refreshDocumentCommand = new RelayCommand(RefreshDocument);
+                }
+                return _refreshDocumentCommand;
+            }
+        }
+        private void RefreshDocument() {
+            ClipTileViewModel.GetRtb().ClearHyperlinks();
+            ClipTileViewModel.GetRtb().CreateHyperlinks();
+        }
         #endregion
     }
 }

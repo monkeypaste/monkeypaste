@@ -326,9 +326,11 @@ namespace MpWpfApp {
             mw.Show();
             mw.Activate();
             mw.Visibility = Visibility.Visible;
-            mw.Topmost = true;
+            mw.Topmost = true;            
 
-            
+            if(!IsLoading) {
+                ClipTrayViewModel.ResetClipSelection();
+            }
 
             MpHelpers.Instance.AnimateDoubleProperty(
                 _startMainWindowTop,
@@ -351,7 +353,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanHideWindow(bool pasteSelected) {
-            return false;
+            //return false;
             return (Application.Current.MainWindow != null && 
                    Application.Current.MainWindow.Visibility == Visibility.Visible &&
                    IsShowingDialog == false) || pasteSelected;

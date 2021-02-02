@@ -37,6 +37,7 @@ using static QRCoder.PayloadGenerator;
 using Windows.Graphics.Imaging;
 using Windows.Media.Ocr;
 using CsvHelper;
+using System.Windows.Threading;
 
 namespace MpWpfApp {
     public class MpHelpers {
@@ -48,12 +49,13 @@ namespace MpWpfApp {
         }
 
         #region Documents
+        
+        
+
         public Hyperlink CreateTemplateHyperlink(MpTemplateHyperlinkViewModel thlvm, TextRange tr) {
-            var ctvm = thlvm.ClipTileViewModel;
-                        
             //if the range for the template contains a sub-selection of a hyperlink the hyperlink(s)
             //needs to be broken into their text before the template hyperlink can be created
-            var trSHl = (Hyperlink)MpHelpers.Instance.FindParentOfType(tr.Start.Parent, typeof(Hyperlink));            
+            var trSHl = (Hyperlink)MpHelpers.Instance.FindParentOfType(tr.Start.Parent, typeof(Hyperlink));
             var trEHl = (Hyperlink)MpHelpers.Instance.FindParentOfType(tr.End.Parent, typeof(Hyperlink));
             var trText = tr.Text;
 
@@ -93,6 +95,7 @@ namespace MpWpfApp {
             hl.Inlines.Add(iuic);
             thlvm.TemplateHyperlink = hl;
             return hl;
+
         }
 
         public void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRange> rangeList, Brush bgBrush) {
@@ -193,6 +196,9 @@ namespace MpWpfApp {
                 if (curIdx == matchStr.Length - 1) {
                     //each character has been matched
                     var endPointer = position.GetPositionAtOffset(runIdx, LogicalDirection.Forward);
+                    if(!startPointer.IsInSameDocument(endPointer)) {
+                        endPointer = ((Hyperlink)FindParentOfType(endPointer.Parent, typeof(Hyperlink))).ElementEnd;
+                    }
                     //for edge cases of repeating characters these loops ensure start is not early and last character isn't lost 
                     if (isCaseSensitive) {
                         while (endPointer != null && !new TextRange(startPointer, endPointer).Text.Contains(matchStr)) {
@@ -327,6 +333,12 @@ namespace MpWpfApp {
             }
             return sb.ToString();
         }
+        public bool IsStringCsv(string text) {
+            if(string.IsNullOrEmpty(text) || IsStringRichText(text)) {
+                return false;
+            }
+            return text.Contains(",");
+        }
 
         public bool IsStringRichText(string text) {
             if(string.IsNullOrEmpty(text)) {
@@ -345,22 +357,6 @@ namespace MpWpfApp {
 
         public bool IsStringSection(string text) {
             return text.StartsWith(@"<Section xmlns=");
-        }
-
-        public System.Drawing.Font GetRichTextFont(string rt) {
-            using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
-                rtb.Rtf = rt;
-                return rtb.Font;
-            }
-        }
-
-        public System.Drawing.Size GetRichTextFontSize(string rt) {
-            string pt = ConvertRichTextToPlainText(rt);
-            using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
-                rtb.Rtf = rt;
-                rtb.SelectAll();
-                return System.Windows.Forms.TextRenderer.MeasureText(pt, rtb.SelectionFont);
-            }
         }
 
         public string CombineRichText(string rt1, string rt2,bool insertNewLine = false) {
@@ -1043,6 +1039,10 @@ namespace MpWpfApp {
                     b.Width = b.Height = s;
 
                     b.MouseEnter += (s1, e1) => {
+                        b.BorderBrush = Brushes.DimGray;
+                    };
+
+                    b.GotFocus += (s1, e1) => {
                         b.BorderBrush = Brushes.DimGray;
                     };
 
@@ -1792,48 +1792,9 @@ namespace MpWpfApp {
             return new SolidColorBrush(Color.FromArgb(c.A, c.R, c.G, c.B));
         }
 
-        public BitmapSource ConvertRichTextToBitmapSource(string rt) {
-            System.Drawing.Size ts = GetRichTextFontSize(rt);
-            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(ts.Width, ts.Height)) {
-                using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(bmp)) {
-                    graphics.Clear(System.Drawing.Color.White);
-                    graphics.DrawRtfText(rt, new System.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height), 1f);
-                    graphics.Flush();
-                    graphics.Dispose();
-                }
-                return ConvertBitmapToBitmapSource(bmp);
-            }
-        }        
         #endregion
 
         #region Http
-        public async Task<string> ShortenUrl(string url) {
-            string bitlyToken = @"f6035b9ed05ac82b42d4853c984e34a4f1ba05d8";
-            using (HttpClient client = new HttpClient()) {
-                using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, "https://api-ssl.bitly.com/v4/shorten")) {
-                    request.Content = new StringContent($"{{\"long_url\":\"{url}\"}}", Encoding.UTF8, "application/json");
-                    try {
-                        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", bitlyToken);
-                        using (var response = await client.SendAsync(request).ConfigureAwait(false)) {
-                            if (!response.IsSuccessStatusCode) {
-                                Console.WriteLine("Minify error: " + response.Content.ToString());
-                                return string.Empty;
-                            }
-
-                            var responsestr = await response.Content.ReadAsStringAsync();
-
-                            dynamic jsonResponse = JsonConvert.DeserializeObject<dynamic>(responsestr);
-                            return jsonResponse["link"];
-                        }
-                    }
-                    catch (Exception ex) {
-                        Console.WriteLine("Minify exception: " + ex.ToString());
-                        return string.Empty;
-                    }
-                }
-            }
-        }
-
         public BitmapSource ConvertUrlToQrCode(string url) {
             Url generator = new Url(url);
             string payload = generator.ToString();

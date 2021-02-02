@@ -69,6 +69,18 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+        private int _maxRtfCharCount = Properties.Settings.Default.MaxRtfCharCount;
+        public int MaxRtfCharCount {
+            get {
+                return _maxRtfCharCount;
+            }
+            set {
+                if(_maxRtfCharCount != value && value > 0) {
+                    _maxRtfCharCount = value;
+                    OnPropertyChanged(nameof(MaxRtfCharCount));
+                }
+            }
+        }
 
         private ObservableCollection<string> _languages = null;
         public ObservableCollection<string> Languages {

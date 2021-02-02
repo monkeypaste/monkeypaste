@@ -167,9 +167,15 @@ namespace MpWpfApp {
             }
         }
 
+        public double ClipTileEditModeContentMargin {
+            get {
+                return 10;
+            }
+        }
+
         public double ClipTileEditModeContentMinWidth {
             get {
-                return ClipTileEditModeMinWidth - 10;
+                return ClipTileEditModeMinWidth - ClipTileEditModeContentMargin;
             }
         }
 

@@ -599,6 +599,9 @@
 
         public Brush TileBorderBrush {
             get {
+                if(IsPrimarySelected) {
+                    return Brushes.Blue;
+                }
                 if (IsSelected) {
                     return Brushes.Red;
                 }
@@ -725,6 +728,33 @@
             }
         }
 
+        private DateTime _lastSelectedDateTime;
+        public DateTime LastSelectedDateTime {
+            get {
+                return _lastSelectedDateTime;
+            }
+            set {
+                if(_lastSelectedDateTime != value) {
+                    _lastSelectedDateTime = value;
+                    OnPropertyChanged(nameof(LastSelectedDateTime));
+                }
+            }
+        }
+
+        private bool _isPrimarySelected = false;
+        public bool IsPrimarySelected {
+            get {
+                return _isPrimarySelected;
+            }
+            set {
+                if (_isPrimarySelected != value) {
+                    _isPrimarySelected = value;
+                    OnPropertyChanged(nameof(IsPrimarySelected));
+                    OnPropertyChanged(nameof(TileBorderBrush));
+                }
+            }
+        }
+
         private bool _isSelected = false;
         public bool IsSelected {
             get {
@@ -737,7 +767,7 @@
                     OnPropertyChanged(nameof(TileBorderBrush));
                     OnPropertyChanged(nameof(DetailTextColor));
                     OnPropertyChanged(nameof(TileDetectedImageItemsVisibility));
-                }
+                }                
             }
         }
 
@@ -1119,6 +1149,7 @@
                 switch (e1.PropertyName) {
                     case nameof(IsSelected):
                         if (IsSelected) {
+                            LastSelectedDateTime = DateTime.Now;
                             //this check ensures that as user types in search that 
                             //resetselection doesn't take the focus from the search box
                             if (!MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
@@ -1523,7 +1554,7 @@
                 );
         }
 
-        public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
+        public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {            
             if(CopyItemType == MpCopyItemType.Image && !string.IsNullOrEmpty(CopyItemPlainText)) {
                 var cm = (ContextMenu)sender;
                 var cmi = new MenuItem();
@@ -1709,8 +1740,6 @@
             var translatedText = await MpLanguageTranslator.Instance.Translate(CopyItemPlainText, toLanguage, false);
             if (!string.IsNullOrEmpty(translatedText)) {
                 CopyItemRichText = MpHelpers.Instance.ConvertPlainTextToRichText(translatedText);
-                //RtbFontFamily = new FontFamily("Arial");
-
             }
         }
 
