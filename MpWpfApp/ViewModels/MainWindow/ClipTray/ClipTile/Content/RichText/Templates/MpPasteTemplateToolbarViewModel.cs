@@ -16,7 +16,9 @@ using System.Windows.Shapes;
 namespace MpWpfApp {
     public class MpPasteTemplateToolbarViewModel : MpViewModelBase {
         #region Private Variables
-        private Button _colorButtonRef = null;
+        private TextBox _selectedTemplateTextBox = null;
+        private ComboBox _selectedTemplateComboBox = null;
+        private bool _isLoading = false;
         #endregion
 
         #region View Models
@@ -197,7 +199,8 @@ namespace MpWpfApp {
                 switch (e.PropertyName) {
                     case nameof(SelectedTemplate):
                         if(SelectedTemplate == null && UniqueTemplateHyperlinkViewModelListByDocOrder != null && UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 0) {
-                            SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
+                            //SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
+                            SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
                         } else if(SelectedTemplate == null) {
                             return;
                         }
@@ -239,6 +242,9 @@ namespace MpWpfApp {
             var pasteTemplateButton = (Button)pasteTemplateToolbarBorder.FindName("PasteTemplateButton");
             var selectedTemplateComboBox = (ComboBox)pasteTemplateToolbarBorder.FindName("SelectedTemplateComboBox");
 
+            _selectedTemplateComboBox = selectedTemplateComboBox;
+            _selectedTemplateTextBox = selectedTemplateTextBox;
+
             selectedTemplateTextBox.GotFocus += (s, e4) => {
                 if (string.IsNullOrEmpty(SelectedTemplateText) ||
                     SelectedTemplateText == SelectedTemplateTextBoxPlaceHolderText) {
@@ -265,7 +271,7 @@ namespace MpWpfApp {
                 tbx.Focus();
                 //tbx.SelectAll();
             };
-
+            
             clearAllTemplatesButton.MouseLeftButtonUp += (s, e2) => {
                 //when clear all is clicked it performs the ClearAllTemplate Command and this switches focus to 
                 //first template tbx
@@ -273,24 +279,24 @@ namespace MpWpfApp {
                 //e2.Handled = false;
             };
 
-            previousTemplateButton.MouseLeftButtonUp += (s, e1) => {
-                if (IsTemplateReadyToPaste) {
-                    //when navigating and all templates are filled set the fox to the 
-                    //paste button which is enabled by IsTemplateReadyToPaste also
-                    pasteTemplateButton.Focus();
-                } else {
-                    selectedTemplateTextBox.Focus();
-                }
-            };
-            nextTemplateButton.MouseLeftButtonUp += (s, e1) => {
-                if (IsTemplateReadyToPaste) {
-                    //when navigating and all templates are filled set the fox to the 
-                    //paste button which is enabled by IsTemplateReadyToPaste also
-                    pasteTemplateButton.Focus();
-                } else {
-                    selectedTemplateTextBox.Focus();
-                }
-            };
+            //previousTemplateButton.MouseLeftButtonUp += (s, e1) => {
+            //    if (IsTemplateReadyToPaste) {
+            //        //when navigating and all templates are filled set the fox to the 
+            //        //paste button which is enabled by IsTemplateReadyToPaste also
+            //        pasteTemplateButton.Focus();
+            //    } else {
+            //        selectedTemplateTextBox.Focus();
+            //    }
+            //};
+            //nextTemplateButton.MouseLeftButtonUp += (s, e1) => {
+            //    if (IsTemplateReadyToPaste) {
+            //        //when navigating and all templates are filled set the fox to the 
+            //        //paste button which is enabled by IsTemplateReadyToPaste also
+            //        pasteTemplateButton.Focus();
+            //    } else {
+            //        selectedTemplateTextBox.Focus();
+            //    }
+            //};
 
             
             ClipTileViewModel.PropertyChanged += (s, e) => {
@@ -318,11 +324,13 @@ namespace MpWpfApp {
 
                             ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Visible;
                             if(UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 0) {
-                                selectedTemplateComboBox.SelectedItem = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
+                                //selectedTemplateComboBox.SelectedItem = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
+                                SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
                             }
                         } else {
                             ClearAllTemplates();
-                            SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
+                            //SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
+                            //SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
                             ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Collapsed;
                             
                         }
@@ -337,7 +345,17 @@ namespace MpWpfApp {
                                 if (!ClipTileViewModel.IsPastingTemplateTile) {
                                     ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Collapsed;
                                 } else {
-                                    selectedTemplateTextBox.Focus();                                    
+                                    selectedTemplateTextBox.PreviewKeyDown += (s6, e8) => {
+                                        if (e8.Key == Key.Enter) {
+                                            if (IsTemplateReadyToPaste) {
+                                                PasteTemplateCommand.Execute(null);
+                                            } else {
+                                                NextTemplateTokenCommand.Execute(null);
+                                            }
+                                        }
+                                    };
+                                    selectedTemplateTextBox.Focus();     
+                                    
                                 }
                             });
 
@@ -384,9 +402,21 @@ namespace MpWpfApp {
             }
             foreach(var t in UniqueTemplateHyperlinkViewModelListByDocOrder) {
                 if(t.TemplateName == templateName) {
-                    SelectedTemplate = t;                    
+                    SelectedTemplate = t;
+                    SelectedTemplate.IsSelected = true;
+                } else {
+                    SelectedTemplate.IsSelected = false;
                 }
             }
+            ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectTemplate(SelectedTemplate.TemplateName);
+        }
+
+        public TextBox GetSelectedTemplateTextBox() {
+            return _selectedTemplateTextBox;
+        }
+
+        public ComboBox GetSelectedTemplateComboBox() {
+            return _selectedTemplateComboBox;
         }
         #endregion
 
@@ -417,6 +447,10 @@ namespace MpWpfApp {
                 SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
             } else {
                 SelectedTemplate = null;
+            }
+
+            foreach(var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
+                thlvm.IsSelected = false;
             }
         }
 
@@ -457,7 +491,8 @@ namespace MpWpfApp {
             if(nextIdx >= UniqueTemplateHyperlinkViewModelListByDocOrder.Count) {
                 nextIdx = 0;
             }
-            SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[nextIdx];            
+            SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[nextIdx];
+            GetSelectedTemplateTextBox().Focus();
         }
 
         private RelayCommand _previousTemplateTokenCommand;
@@ -479,7 +514,9 @@ namespace MpWpfApp {
             if (prevIdx < 0) {
                 prevIdx = UniqueTemplateHyperlinkViewModelListByDocOrder.Count - 1;
             }
-            SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[prevIdx];            
+            SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[prevIdx];
+
+            GetSelectedTemplateTextBox().Focus();
         }
 
         private RelayCommand _pasteTemplateCommand;

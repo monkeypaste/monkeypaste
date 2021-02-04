@@ -100,6 +100,9 @@ namespace MpWpfApp {
         #region Brush Properties
         public Brush TemplateBorderBrush {
             get {
+                if(ClipTileViewModel != null && !ClipTileViewModel.IsEditingTile && !ClipTileViewModel.IsPastingTemplateTile) {
+                    return Brushes.Transparent;
+                }
                 if(IsSelected) {
                     return Brushes.Red;
                 }
@@ -159,14 +162,16 @@ namespace MpWpfApp {
                 return _isSelected;
             }
             set {
-                if (_isSelected != value) {
+                if (_isSelected != value) 
+                    {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
-                    OnPropertyChanged(nameof(TemplateForegroundBrush));
-                    OnPropertyChanged(nameof(TemplateBorderBrush));
-                    OnPropertyChanged(nameof(TemplateBackgroundBrush));
-                    OnPropertyChanged(nameof(TemplateTextBlockCursor));
+                    
                 }
+                OnPropertyChanged(nameof(TemplateForegroundBrush));
+                OnPropertyChanged(nameof(TemplateBorderBrush));
+                OnPropertyChanged(nameof(TemplateBackgroundBrush));
+                OnPropertyChanged(nameof(TemplateTextBlockCursor));
             }
         }
         #endregion

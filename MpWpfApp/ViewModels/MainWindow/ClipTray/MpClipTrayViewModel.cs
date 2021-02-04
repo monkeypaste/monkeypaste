@@ -384,8 +384,10 @@ namespace MpWpfApp {
                 } else if(SelectedClipTiles.Count == 1) {
                     SelectedClipTiles[0].IsPrimarySelected = false;
                 }
-                foreach(MpClipTileViewModel osctvm in e8.RemovedItems) {
-                    osctvm.IsPrimarySelected = false;
+                foreach(var osctvm in e8.RemovedItems) {
+                    if(osctvm.GetType() == typeof(MpClipTileViewModel)) {
+                        ((MpClipTileViewModel)osctvm).IsPrimarySelected = false;
+                    }                    
                 }
             };
 

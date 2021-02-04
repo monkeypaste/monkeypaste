@@ -137,6 +137,12 @@ namespace MpWpfApp {
                 this[0].IsSelected = true;
             }
         }
+        public void SelectTemplate(string templateName) {
+            foreach(var thlvm in this) {
+                thlvm.IsSelected = thlvm.TemplateName == templateName;
+            }
+        }
+
         public void SetTemplateText(string templateName, string templateText) {
             foreach(var thlvm in this) {
                 if(thlvm.TemplateName == templateName) {
