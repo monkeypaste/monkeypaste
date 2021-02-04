@@ -13,7 +13,7 @@ namespace MpWpfApp.Properties {
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+    public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
         
@@ -122,12 +122,12 @@ namespace MpWpfApp.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool IsSearchCaseSensitive {
+        public bool SearchByIsCaseSensitive {
             get {
-                return ((bool)(this["IsSearchCaseSensitive"]));
+                return ((bool)(this["SearchByIsCaseSensitive"]));
             }
             set {
-                this["IsSearchCaseSensitive"] = value;
+                this["SearchByIsCaseSensitive"] = value;
             }
         }
         
@@ -873,6 +873,78 @@ namespace MpWpfApp.Properties {
             }
             set {
                 this["MaxRtfCharCount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SearchByTitle {
+            get {
+                return ((bool)(this["SearchByTitle"]));
+            }
+            set {
+                this["SearchByTitle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SearchByTag {
+            get {
+                return ((bool)(this["SearchByTag"]));
+            }
+            set {
+                this["SearchByTag"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SearchByApplicationName {
+            get {
+                return ((bool)(this["SearchByApplicationName"]));
+            }
+            set {
+                this["SearchByApplicationName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SearchByRichText {
+            get {
+                return ((bool)(this["SearchByRichText"]));
+            }
+            set {
+                this["SearchByRichText"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SearchByImage {
+            get {
+                return ((bool)(this["SearchByImage"]));
+            }
+            set {
+                this["SearchByImage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SearchByFileList {
+            get {
+                return ((bool)(this["SearchByFileList"]));
+            }
+            set {
+                this["SearchByFileList"] = value;
             }
         }
     }

@@ -34,6 +34,7 @@
         private RichTextBox _rtb;
         private TextBlock _tb;
         private ListBox _flb;
+        private MpClipBorder _cb;
 
         private int _detailIdx = 0;
 
@@ -1204,6 +1205,10 @@
             CopyItem = ci;
         }
 
+        public MpClipBorder GetBorder() {
+            return _cb;
+        }
+
         public RichTextBox GetRtb() {
             return _rtb;
         }
@@ -1222,6 +1227,8 @@
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             var clipTileBorder = (Grid)sender;
+            _cb = clipTileBorder.GetVisualAncestor<MpClipBorder>();
+
             clipTileBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
             };

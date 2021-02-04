@@ -185,7 +185,14 @@ namespace MpWpfApp {
                     Console.WriteLine("MpData error clipboard data is not known format");
                     return null;
                 }
-                if(Properties.Settings.Default.IgnoreNewDuplicates) {
+                if (((string)itemData).Length > Properties.Settings.Default.MaxRtfCharCount) {
+                    itemData = MpHelpers.Instance.ConvertRichTextToPlainText((string)itemData);
+                    if (((string)itemData).Length > Properties.Settings.Default.MaxRtfCharCount) {
+                        //item is TOO LARGE so ignore
+                        return null;
+                    }
+                }
+                if (Properties.Settings.Default.IgnoreNewDuplicates) {
                     var dupItem = MpCopyItem.GetCopyItemByData(itemData);
                     if(dupItem != null) {
                         return dupItem;
@@ -323,10 +330,7 @@ namespace MpWpfApp {
                 case MpCopyItemType.Image:
                     SetData((BitmapSource)data);
                     break;
-                case MpCopyItemType.RichText:
-                    if(((string)data).Length > Properties.Settings.Default.MaxRtfCharCount) {
-                        data = MpHelpers.Instance.ConvertRichTextToPlainText((string)data);
-                    }
+                case MpCopyItemType.RichText:                    
                     SetData((string)data);
                     break;
             }

@@ -1,7 +1,8 @@
 ﻿{
-  "name": "Getting Started Example",
+  "name": "mphost",
   "version": "1.0",
-  "description": "Build an Extension!",
+  "description": "This extension helps Monkey Paste know the source of Clipboard items",
+  "type": "stdio",
   "permissions": [
     "activeTab",
     "declarativeContent",

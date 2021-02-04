@@ -533,7 +533,50 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
+        <ControlTemplate x:Key="SearchButtonControlTemplate"
+                         TargetType="{x:Type Button}">
+            <Border x:Name="OuterBorder"
+                    BorderBrush="Transparent"
+                    BorderThickness="1"
+                    CornerRadius="2">
+                <Border x:Name="InnerBorder"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        CornerRadius="2">
+                    <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      RecognizesAccessKey="True"
+                                      Margin="{TemplateBinding Padding}" />
+                </Border>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FF7CA0CC" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FFE4EFFD" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FFDAE7F5" />
+                </Trigger>
+                <Trigger Property="IsPressed"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FF2E4E76" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FF116EE4" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FF3272B8" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
         <!-- Flat Button -->
         <ControlTemplate x:Key="FlatButtonControlTemplate"
                          TargetType="{x:Type Button}">
@@ -934,7 +977,7 @@
                                     Grid.Column="0"
                                     Grid.ColumnSpan="{Binding SearchBorderColumnSpan}"
                                     Margin="5"
-                                    CornerRadius="{Binding CornerRadius}"
+                                    CornerRadius="10"
                                     BorderBrush="{Binding TextBoxBorderBrush}"
                                     Background="White"
                                     BorderThickness="3">
@@ -950,19 +993,21 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="0.1*" />
                         </Grid.ColumnDefinitions>
-                        <Button Background="Transparent"
+                        <Button x:Name="SearchDropDownButton" 
+                                Background="Transparent"
                                 Grid.Column="0"
-                                Width="25"
                                 Margin="3,0,0,0"
+                                Width="25"
                                 Height="25"
-                                Style="{StaticResource Transparent_Button}"
+                                Template="{StaticResource SearchButtonControlTemplate}"
                                 BorderThickness="0">
                             <Image Source="/MpWpfApp;component/Resources/Images/search.png"
-                                   Stretch="Fill" />
+                                   Stretch="Fill"
+                                   SnapsToDevicePixels="True"/>                                                
                         </Button>
                         <TextBox x:Name="SearchBox"
                                  Grid.Column="1"
-                                 FontSize="{Binding FontSize}"
+                                 FontSize="16"
                                  Background="Transparent"
                                  Foreground="{Binding TextBoxTextBrush}"
                                  FontStyle="{Binding TextBoxFontStyle}"
@@ -1046,6 +1091,7 @@
                 <ColumnDefinition Width="{Binding AppStateButtonGridWidth}" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
+            <!-- clip tile tray -->
             <!-- Side bar AppState Buttons -->
             <Grid Grid.Row="0"
                   Grid.Column="0"
@@ -1097,7 +1143,7 @@
                                TextWrapping="Wrap" />
                 </ToggleButton>
             </Grid>
-            <Grid x:Name="ClipTrayGrid" 
+            <Grid x:Name="ClipTrayGrid"
                   DataContext="{Binding ClipTrayViewModel}"
                   Grid.Row="0"
                   Grid.Column="1">
@@ -1106,25 +1152,25 @@
                                           Data="{Binding}" />
                 </Grid.Resources>
                 <local:MpMultiSelectListView x:Name="ClipTray"
-                                            ItemsSource="{Binding ClipTileViewModels}"
+                                             ItemsSource="{Binding ClipTileViewModels}"
                                              Width="{Binding MainWindowViewModel.ClipTrayWidth}"
                                              ScrollToSelectedItem="True"
-                                            Visibility="Visible"
-                                            AllowDrop="True" 
-                                            IsSynchronizedWithCurrentItem="True"
-                                            Margin="5,0,0,0"
-                                            Focusable="True"
-                                            BorderThickness="0"
-                                            VerticalAlignment="Stretch"
-                                            Background="Transparent"
-                                            SelectionMode="Extended"       
-                                            VirtualizingPanel.IsVirtualizing="True"
-                                            VirtualizingPanel.ScrollUnit="Pixel"
-                                            VirtualizingPanel.VirtualizationMode="Recycling"
-                                             ScrollViewer.CanContentScroll="True" 
-                                            ScrollViewer.IsDeferredScrollingEnabled="False"
-                                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                            ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                                             Visibility="Visible"
+                                             AllowDrop="True"
+                                             IsSynchronizedWithCurrentItem="True"
+                                             Margin="5,0,0,0"
+                                             Focusable="True"
+                                             BorderThickness="0"
+                                             VerticalAlignment="Stretch"
+                                             Background="Transparent"
+                                             SelectionMode="Extended"
+                                             VirtualizingPanel.IsVirtualizing="True"
+                                             VirtualizingPanel.ScrollUnit="Pixel"
+                                             VirtualizingPanel.VirtualizationMode="Recycling"
+                                             ScrollViewer.CanContentScroll="True"
+                                             ScrollViewer.IsDeferredScrollingEnabled="False"
+                                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                             ScrollViewer.VerticalScrollBarVisibility="Hidden">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Loaded">
                             <i:CallMethodAction MethodName="ClipTray_Loaded"
@@ -1175,7 +1221,7 @@
                             <local:MpClipBorder BorderBrush="{Binding TileBorderBrush}"
                                                 Margin="{Binding TileMargin}"
                                                 BorderThickness="{Binding TileBorderThickness}"
-                                                Width="{Binding TileBorderWidth}" 
+                                                Width="{Binding TileBorderWidth}"
                                                 Height="{Binding TileBorderHeight}"
                                                 Visibility="{Binding TileVisibility, NotifyOnTargetUpdated=True}"
                                                 local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.SearchText}"
@@ -1183,11 +1229,11 @@
                                                 Background="White"
                                                 ToolTipService.ShowDuration="1000"
                                                 CornerRadius="10">
-                                <!--<ii:Interaction.Behaviors>
+                                <ii:Interaction.Behaviors>
                                     <local:MpAnimatedVisibilityFadeBehavior x:Name="ClipTileVisibilityFadeBehavior"                                                                             
-                                                                            AnimationDuration="0:0:0.0003"
+                                                                            AnimationDuration="0:0:0.3"
                                                                             InitialState="Collapsed" />
-                                </ii:Interaction.Behaviors>-->
+                                </ii:Interaction.Behaviors>
                                 <local:MpClipBorder.Resources>
                                     <local:MpBindingProxy x:Key="ClipTileProxy"
                                                           Data="{Binding}" />
@@ -1226,6 +1272,8 @@
                                                                             MethodName="ClipTile_ContextMenu_Closed" />
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
+                                                <MenuItem Header="Paste"
+                                                          Command="{Binding Data.PasteSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}"/>
                                                 <MenuItem Header="Bring to Front"
                                                           Command="{Binding Data.BringSelectedClipTilesToFrontCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="Send to Back"
@@ -1317,7 +1365,7 @@
                                                         </Style>
                                                     </MenuItem.ItemContainerStyle>
                                                 </MenuItem>
-                                                <MenuItem x:Name="TranslateMenuItem" 
+                                                <MenuItem x:Name="TranslateMenuItem"
                                                           Header="Translate"
                                                           ItemsSource="{Binding Data.TranslateLanguageMenuItems, Source={StaticResource ClipTileProxy}}">
                                                     <MenuItem.ItemContainerStyle>
@@ -1399,7 +1447,7 @@
                                                          IsReadOnly="False"
                                                          Visibility="{Binding TileTitleTextBoxVisibility}"
                                                          Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
-                                            </Grid>                                            
+                                            </Grid>
                                             <!-- Clip Title Icon Image -->
                                             <Button x:Name="ClipTileAppIconImageButton"
                                                     Style="{StaticResource Transparent_Button}"
@@ -1450,7 +1498,7 @@
                                         <!-- Content Container Canvas -->
                                         <Canvas x:Name="ClipTileContentCanvas"
                                                 Grid.Row="1"
-                                                ClipToBounds="True" 
+                                                ClipToBounds="True"
                                                 Grid.Column="0">
                                             <!-- RichText Content -->
                                             <Canvas x:Name="ClipTileRichTextBoxCanvas"
@@ -1481,7 +1529,7 @@
                                                                 Margin="10,1,0,1">
                                                             <Image Source="/Resources/Images/MpRichTextBox/Print.png"
                                                                    Stretch="None"
-                                                                   SnapsToDevicePixels="True"/>
+                                                                   SnapsToDevicePixels="True" />
                                                         </Button>
                                                         <Image Source="/Resources/Images/MpRichTextBox/separator.png"
                                                                Stretch="None"
@@ -1513,13 +1561,13 @@
                                                                   IsEditable="True"
                                                                   ItemsSource="{Binding FontSizes}" />
                                                         <Image Source="/Resources/Images/MpRichTextBox/separator.png"
-                                                               Stretch="None" 
-                                                               SnapsToDevicePixels="True"/>
+                                                               Stretch="None"
+                                                               SnapsToDevicePixels="True" />
                                                         <Button x:Name="AddTemplateButton"
                                                                 ToolTip="Add Template"
                                                                 Template="{StaticResource FlatButtonControlTemplate}"
                                                                 IsEnabled="{Binding IsAddTemplateButtonEnabled}"
-                                                                Background="{Binding AddTemplateButtonBackgroundBrush}" >
+                                                                Background="{Binding AddTemplateButtonBackgroundBrush}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/templateadd.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
@@ -1604,10 +1652,11 @@
                                                                 Template="{StaticResource FlatButtonControlTemplate}">
                                                             <Border x:Name="ForegroundColorButtonBorder">
                                                                 <Image Source="/Resources/Images/MpRichTextBox/Textcolor.png"
-                                                                       Stretch="None" Opacity="1"
+                                                                       Stretch="None"
+                                                                       Opacity="1"
                                                                        SnapsToDevicePixels="False" />
                                                             </Border>
-                                                        </Button>                                                        
+                                                        </Button>
                                                         <Button x:Name="BackgroundColorButton"
                                                                 Template="{StaticResource FlatButtonControlTemplate}">
                                                             <Border x:Name="BackgroundColorButtonBorder">
@@ -1676,8 +1725,7 @@
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
                                                         </Button>
-                                                        
-                                                        
+
                                                         <!--<Button Command="EditingCommands.IncreaseIndentation"
                                                                 CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                 ToolTip="Increase Indentation"
@@ -1699,31 +1747,34 @@
                                                     </StackPanel>
                                                 </Border>
                                                 <RichTextBox x:Name="ClipTileRichTextBox"
-                                                                     IsReadOnly="{Binding IsRtbReadOnly}"
-                                                                     IsInactiveSelectionHighlightEnabled="True"
-                                                                     IsDocumentEnabled="{Binding IsSelected}"                                                             
-                                                                     Focusable="{Binding IsEditingTile}"
-                                                                     Cursor="{Binding ContentCursor}"
-                                                                     Width="{Binding TileContentWidth}"
-                                                                     Height="{Binding TileRtbHeight}"
-                                                                     IsUndoEnabled="True"
-                                                                     SpellCheck.IsEnabled="{Binding SystemTrayViewModel.SettingsWindowViewModel.UseSpellCheck, Source={StaticResource MainWindowViewModel}}"
-                                                                     Background="White"
-                                                                     VerticalAlignment="Top"
-                                                                     HorizontalAlignment="Left"
-                                                                     ScrollViewer.HorizontalScrollBarVisibility="{Binding RtbHorizontalScrollbarVisibility}"
-                                                                     ScrollViewer.VerticalScrollBarVisibility="{Binding RtbVerticalScrollbarVisibility}"
-                                                                     BorderThickness="0"
-                                                                     Margin="0,0,0,0"
-                                                                     Padding="10,5,0,0">
+                                                             IsReadOnly="{Binding IsRtbReadOnly}"
+                                                             IsInactiveSelectionHighlightEnabled="True"
+                                                             IsDocumentEnabled="{Binding IsSelected}"
+                                                             Focusable="{Binding IsEditingTile}"
+                                                             Cursor="{Binding ContentCursor}"
+                                                             Width="{Binding TileContentWidth}"
+                                                             Height="{Binding TileRtbHeight}"
+                                                             IsUndoEnabled="True"
+                                                             Background="White"
+                                                             VerticalAlignment="Top"
+                                                             HorizontalAlignment="Left"
+                                                             ScrollViewer.HorizontalScrollBarVisibility="{Binding RtbHorizontalScrollbarVisibility}"
+                                                             ScrollViewer.VerticalScrollBarVisibility="{Binding RtbVerticalScrollbarVisibility}"
+                                                             BorderThickness="0"
+                                                             Margin="0,0,0,0"
+                                                             Padding="10,5,0,0">
                                                     <RichTextBox.Resources>
                                                         <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                                                                          Color="Blue" />
                                                     </RichTextBox.Resources>
+                                                    <SpellCheck.IsEnabled>
+                                                        <Binding Path="SystemTrayViewModel.SettingsWindowViewModel.UseSpellCheck"
+                                                                 Source="{StaticResource MainWindowViewModel}" />
+                                                    </SpellCheck.IsEnabled>
                                                 </RichTextBox>
                                                 <Border x:Name="ClipTileEditTemplateToolbar"
                                                         Visibility="{Binding EditTemplateToolbarVisibility}"
-                                                        Height="{Binding EditTemplateToolbarHeight}"      
+                                                        Height="{Binding EditTemplateToolbarHeight}"
                                                         CornerRadius="10,0,0,10"
                                                         BorderThickness="0"
                                                         Background="LightBlue">
@@ -1741,7 +1792,7 @@
                                                         </Grid.ColumnDefinitions>
                                                         <Button x:Name="TemplateColorButton"
                                                                 Grid.Column="0"
-                                                                Background="{Binding SelectedTemplateHyperlinkViewModel.TemplateBrush, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                                Background="{Binding SelectedTemplateHyperlinkViewModel.TemplateBrush, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                                                                 Width="20"
                                                                 Height="20"
                                                                 VerticalAlignment="Center"
@@ -1757,7 +1808,7 @@
                                                                      VerticalContentAlignment="Top"
                                                                      BorderBrush="{Binding SelectedTemplateNameTextBoxBorderBrush}"
                                                                      BorderThickness="2"
-                                                                     Text="{Binding SelectedTemplateHyperlinkViewModel.TemplateName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                                     Text="{Binding SelectedTemplateHyperlinkViewModel.TemplateName, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                                                                      FontSize="14"
                                                                      Height="25"
                                                                      MinWidth="200"
@@ -1765,16 +1816,17 @@
                                                                      Margin="0,0,0,0"
                                                                      Padding="0,0,0,0" />
                                                             <TextBlock x:Name="TemplateNameValidationTextBlock"
-                                                                   Text="{Binding ValidationText}"
-                                                                   Visibility="{Binding ValidationVisibility}"
-                                                                   Foreground="Red"
-                                                                   FontStyle="Oblique"
+                                                                       Text="{Binding ValidationText}"
+                                                                       Visibility="{Binding ValidationVisibility}"
+                                                                       Foreground="Red"
+                                                                       FontStyle="Oblique"
                                                                        HorizontalAlignment="Right"
-                                                                   VerticalAlignment="Stretch"
-                                                                   TextWrapping="Wrap" FontSize="12"
-                                                                   Padding="0,0,0,0"
-                                                                   Margin="5,0,0,0"
-                                                                   Width="300" />
+                                                                       VerticalAlignment="Stretch"
+                                                                       TextWrapping="Wrap"
+                                                                       FontSize="12"
+                                                                       Padding="0,0,0,0"
+                                                                       Margin="5,0,0,0"
+                                                                       Width="300" />
                                                         </StackPanel>
                                                         <StackPanel Orientation="Horizontal"
                                                                     Grid.Column="2"
@@ -1802,7 +1854,7 @@
                                                 <Border x:Name="ClipTilePasteTemplateToolbar"
                                                         Height="{Binding PasteTemplateToolbarHeight}"
                                                         CornerRadius="5"
-                                                        BorderThickness="0" 
+                                                        BorderThickness="0"
                                                         Background="LightBlue"
                                                         Visibility="{Binding PasteTemplateToolbarVisibility}">
                                                     <Grid x:Name="PasteTemplateToolbarGrid"
@@ -1821,12 +1873,12 @@
                                                             <ColumnDefinition Width="*" />
                                                         </Grid.ColumnDefinitions>
                                                         <local:MpClipBorder x:Name="SelectedTemplateComboBoxBorder"
-                                                                            Grid.Column="0" 
+                                                                            Grid.Column="0"
                                                                             HorizontalAlignment="Center"
                                                                             Background="{Binding SelectedTemplateBrush}"
                                                                             CornerRadius="15"
                                                                             Margin="0,3,0,3">
-                                                            <ComboBox x:Name="SelectedTemplateComboBox" 
+                                                            <ComboBox x:Name="SelectedTemplateComboBox"
                                                                       FontSize="14"
                                                                       Background="Transparent"
                                                                       SelectedIndex="0"
@@ -1844,9 +1896,9 @@
                                                                                     Width="15"
                                                                                     BorderThickness="1"
                                                                                     CornerRadius="10" />
-                                                                            <TextBlock DockPanel.Dock="Right" 
+                                                                            <TextBlock DockPanel.Dock="Right"
                                                                                        Text="{Binding TemplateDisplayName}" />
-                                                                        </DockPanel>                                                                        
+                                                                        </DockPanel>
                                                                     </ItemContainerTemplate>
                                                                 </ComboBox.ItemTemplate>
                                                             </ComboBox>
@@ -1943,7 +1995,8 @@
                                                 </Border>
                                             </Canvas>
                                             <!-- Image Content-->
-                                            <Grid Margin="0" Background="Transparent"
+                                            <Grid Margin="0"
+                                                  Background="Transparent"
                                                   Height="{Binding TileContentHeight}"
                                                   Width="{Binding TileContentWidth}"
                                                   Visibility="{Binding ImgVisibility}"
@@ -1964,6 +2017,43 @@
                                                                   Width="{Binding CopyItemBmpWidth}"
                                                                   Height="{Binding CopyItemBmpHeight}"
                                                                   ItemsSource="{Binding}">
+                                                        <ItemsControl.Resources>
+                                                            <DataTemplate DataType="{x:Type local:MpDetectedImageObjectViewModel}">
+                                                                <Border Width="{Binding Width}"
+                                                                        Height="{Binding Height}"
+                                                                        BorderThickness="3"
+                                                                        BorderBrush="{Binding BorderBrush}"
+                                                                        Background="Transparent">
+                                                                    <Border.Resources>
+                                                                        <local:MpBindingProxy x:Key="DetectedImageObjectProxy"
+                                                                                              Data="{Binding}" />
+                                                                    </Border.Resources>
+                                                                    <Border.Visibility>
+                                                                        <Binding Path="Data.TileDetectedImageItemsVisibility"
+                                                                                 Source="{StaticResource ClipTileProxy}" />
+                                                                    </Border.Visibility>
+                                                                    <Border.RenderTransform>
+                                                                        <TranslateTransform X="{Binding Data.X, Source={StaticResource DetectedImageObjectProxy}}"
+                                                                                            Y="{Binding Data.Y, Source={StaticResource DetectedImageObjectProxy}}" />
+                                                                    </Border.RenderTransform>
+                                                                    <i:Interaction.Triggers>
+                                                                        <i:EventTrigger EventName="Loaded">
+                                                                            <i:CallMethodAction TargetObject="{Binding}"
+                                                                                                MethodName="ClipTileImageDetectedObjectCanvas_Loaded" />
+                                                                        </i:EventTrigger>
+                                                                    </i:Interaction.Triggers>
+                                                                    <TextBox HorizontalAlignment="Center"
+                                                                             VerticalAlignment="Center"
+                                                                             HorizontalContentAlignment="Center"
+                                                                             VerticalContentAlignment="Center"
+                                                                             Text="{Binding ObjectTypeName, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                                                                             FontSize="{Binding FontSize}"
+                                                                             IsReadOnly="{Binding IsNameReadOnly}"
+                                                                             Background="Black"
+                                                                             Foreground="White" />
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.Resources>
                                                         <i:Interaction.Triggers>
                                                             <i:EventTrigger EventName="Loaded">
                                                                 <i:CallMethodAction TargetObject="{Binding}"
@@ -1977,44 +2067,9 @@
                                                                         Height="{Binding Data.DetectedImageObjectCollectionViewModel.CopyItemBmpHeight, Source={StaticResource ClipTileProxy}}"
                                                                         HorizontalAlignment="Center"
                                                                         IsItemsHost="True"
-                                                                        VerticalAlignment="Center">
-                                                                </Canvas>
+                                                                        VerticalAlignment="Center" />
                                                             </ItemsPanelTemplate>
                                                         </ItemsControl.ItemsPanel>
-                                                        <ItemsControl.Resources>
-                                                            <DataTemplate DataType="{x:Type local:MpDetectedImageObjectViewModel}">
-                                                                <Border Width="{Binding Width}"
-                                                                        Height="{Binding Height}"
-                                                                        Visibility="{Binding Data.TileDetectedImageItemsVisibility, Source={StaticResource ClipTileProxy}}"
-                                                                        BorderThickness="3"
-                                                                        BorderBrush="{Binding BorderBrush}"
-                                                                        Background="Transparent">
-                                                                    <Border.Resources>
-                                                                        <local:MpBindingProxy x:Key="DetectedImageObjectProxy"
-                                                                                              Data="{Binding}" />
-                                                                    </Border.Resources>
-                                                                    <Border.RenderTransform>
-                                                                        <TranslateTransform X="{Binding Data.X, Source={StaticResource DetectedImageObjectProxy}}"
-                                                                                            Y="{Binding Data.Y, Source={StaticResource DetectedImageObjectProxy}}" />
-                                                                    </Border.RenderTransform>
-                                                                    <i:Interaction.Triggers>
-                                                                        <i:EventTrigger EventName="Loaded">
-                                                                            <i:CallMethodAction TargetObject="{Binding}"
-                                                                                                MethodName="ClipTileImageDetectedObjectCanvas_Loaded" />
-                                                                        </i:EventTrigger>
-                                                                    </i:Interaction.Triggers>
-                                                                    <TextBox HorizontalAlignment="Center"
-                                                                               VerticalAlignment="Center"
-                                                                               HorizontalContentAlignment="Center"
-                                                                               VerticalContentAlignment="Center"
-                                                                               Text="{Binding ObjectTypeName, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
-                                                                               FontSize="{Binding FontSize}"
-                                                                               IsReadOnly="{Binding IsNameReadOnly}"
-                                                                               Background="Black"
-                                                                               Foreground="White" />
-                                                                </Border>
-                                                            </DataTemplate>
-                                                        </ItemsControl.Resources>
                                                     </ItemsControl>
                                                 </Viewbox>
                                             </Grid>
@@ -2073,7 +2128,7 @@
                                             </ListBox>
                                         </Canvas>
                                         <!-- Tile Detail Grid -->
-                                        <Grid Grid.Row="2" 
+                                        <Grid Grid.Row="2"
                                               Visibility="{Binding TileDetailGridVisibility}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Loaded">
@@ -2114,7 +2169,6 @@
                            FontStyle="Oblique"
                            FontSize="34" />
             </Grid>
-            <!-- clip tile tray -->
         </Grid>
         <!--3rd row row for tray -->
     </Grid>

@@ -535,6 +535,7 @@ namespace MpWpfApp {
 
         public void ResetClipSelection() {
             ClearClipSelection();
+
             if (VisibileClipTiles.Count > 0) {
                 VisibileClipTiles[0].IsSelected = true;
                 if(!MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
@@ -545,7 +546,6 @@ namespace MpWpfApp {
                 }
                 if(GetClipTray() != null) {
                     GetClipTray().ScrollViewer.ScrollToHorizontalOffset(0);
-
                 }
             }
         }

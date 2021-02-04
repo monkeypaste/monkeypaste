@@ -492,7 +492,7 @@ namespace MpWpfApp {
             if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(compareStr)) {
                 return false;
             }
-            if (Properties.Settings.Default.IsSearchCaseSensitive) {
+            if (Properties.Settings.Default.SearchByIsCaseSensitive) {
                 return str.Contains(compareStr);
             }
             return str.ToLower().Contains(compareStr.ToLower());

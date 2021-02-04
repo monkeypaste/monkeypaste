@@ -83,20 +83,27 @@ namespace MpWpfApp {
             if (Properties.Settings.Default.DbPassword != newPassword) {
                 // if db is unpassword protected
                 if (string.IsNullOrEmpty(Properties.Settings.Default.DbPassword)) {
-                    ExecuteWrite(
-                        "PRAGMA key=@np;",
-                        new Dictionary<string, object> {
-                        { "@np", newPassword }
-                        });
+                    using (var con = SetConnection()) {
+                        con.Open();
+                        var query = @"PRAGMA key=" + newPassword;
+                        using (var cmd = new SQLiteCommand(query, con)) {
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
                 } else {
-                    ExecuteWrite(
-                        "PRAGMA rekey=@np;",
-                        new Dictionary<string, object> {
-                        { "@np", newPassword }
-                        });
+                    using (var con = SetConnection()) {
+                        con.Open();
+                        var query = @"PRAGMA rekey=" + newPassword;
+                        using (var cmd = new SQLiteCommand(query, con)) {
+                            cmd.ExecuteNonQuery();
+                        }
+                    }
+                    
                 }
                 Properties.Settings.Default.DbPassword = newPassword;
                 Properties.Settings.Default.Save();
+
+                Console.WriteLine("DbPassword is: " + newPassword);
             }
         }
         private SQLiteConnection SetConnection(bool isInit = false) {
@@ -104,9 +111,10 @@ namespace MpWpfApp {
             // about passwords
             SQLiteConnectionStringBuilder connStr = new SQLiteConnectionStringBuilder();
             connStr.DataSource = Properties.Settings.Default.DbPath;
-            connStr.Version = 3;
+            connStr.Version = 3; 
+            
             if (!string.IsNullOrEmpty(Properties.Settings.Default.DbPassword)) {
-                connStr.Password = Properties.Settings.Default.DbPassword;
+                //connStr.Password = Properties.Settings.Default.DbPassword;
             }
             //Console.WriteLine("Connection String: " + connStr);
             SQLiteConnection conn = null; 
@@ -142,7 +150,7 @@ namespace MpWpfApp {
                 return null;
             }
             using (var con = SetConnection()) {
-                con.Open();
+                con.Open(); 
                 using (var cmd = new SQLiteCommand(query, con)) {
                     if (args != null) {
                         foreach (KeyValuePair<string, object> entry in args) {

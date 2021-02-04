@@ -11,6 +11,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
@@ -295,14 +296,16 @@ namespace MpWpfApp {
                         tb.VerticalAlignment = VerticalAlignment.Center;
                         tb.Margin = new Thickness(5, 0, 0, 0);
 
-                        DockPanel dp1 = new DockPanel();
-                        dp1.Children.Add(b);
-                        dp1.Children.Add(tb);
-                        b.SetValue(DockPanel.DockProperty, Dock.Left);
-                        tb.SetValue(DockPanel.DockProperty, Dock.Right);
+                        
+                        //DockPanel dp1 = new DockPanel();
+                        //dp1.Children.Add(b);
+                        //dp1.Children.Add(tb);
+                        //b.SetValue(DockPanel.DockProperty, Dock.Left);
+                        //tb.SetValue(DockPanel.DockProperty, Dock.Right);
 
                         MenuItem tmi = new MenuItem();
-                        tmi.Header = dp1;
+                        tmi.Icon = b;
+                        tmi.Header = tb;
                         tmi.Click += (s1, e5) => {
                             ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(ttcvm, false);
                             //ClipTileViewModel.EditTemplateToolbarViewModel.IsEditingTemplate = true;
@@ -315,6 +318,10 @@ namespace MpWpfApp {
                     tb2.FontSize = 14;
                     tb2.HorizontalAlignment = HorizontalAlignment.Left;
                     tb2.VerticalAlignment = VerticalAlignment.Center;
+
+                    var img = new Image();
+                    img.Source = (BitmapSource)new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/Silk/icons/add.png"));
+                    addNewMenuItem.Icon = img;
                     addNewMenuItem.Header = tb2;
                     addNewMenuItem.Click += (s1, e5) => {
                         ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);

@@ -227,6 +227,7 @@ namespace MpWpfApp {
             var cb = (MpClipBorder)pasteTemplateToolbarBorder.GetVisualAncestor<MpClipBorder>();
             var editRichTextToolbarBorder = (Border)cb.FindName("ClipTileEditorToolbar");
             var editTemplateToolbarBorder = (Border)cb.FindName("ClipTileEditTemplateToolbar");
+            var clipTray = MainWindowViewModel.ClipTrayViewModel.GetClipTray();
             var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxCanvas");
             var rtb = rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
@@ -357,7 +358,7 @@ namespace MpWpfApp {
                             FrameworkElement.WidthProperty,
                             (s1, e44) => {
                                 rtb.Document.PageWidth = ClipTileViewModel.IsEditingTile ? contentWidthMax - rtb.Padding.Left - rtb.Padding.Right - 20 : contentWidthMin - rtb.Padding.Left - rtb.Padding.Right;// - rtb.Padding.Left - rtb.Padding.Right;
-                                
+                                clipTray.ScrollIntoView(ClipTileViewModel);
                                 //this is to remove scrollbar flicker during animation
                                 ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
                                 ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));

@@ -375,7 +375,7 @@ namespace MpWpfApp {
                     if(pasteSelected) {
                         ClipTrayViewModel.PerformPaste(pasteDataObject);
                     }
-
+                    TagTrayViewModel.ResetTagSelection();
                     ClipTrayViewModel.ResetClipSelection();
 
                     mw.Visibility = Visibility.Collapsed;

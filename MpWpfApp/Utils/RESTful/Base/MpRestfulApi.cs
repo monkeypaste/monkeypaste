@@ -20,6 +20,7 @@ namespace MpWpfApp {
         private void RefreshCount() {
             var diff = DateTime.Today - Properties.Settings.Default.RestfulBillingDate;
             if (diff.TotalDays >= 30) {
+                // TODO refresh billing date probably need to use window store api
                 ClearCount();
             }
         }

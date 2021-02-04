@@ -31,58 +31,108 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties     
-        private double _width = 125;
-        public double Width {
+
+        #region SearchBy Property Settings
+        private bool _searchByIsCaseSensitive = Properties.Settings.Default.SearchByIsCaseSensitive;
+        public bool SearchByIsCaseSensitive {
             get {
-                return _width;
+                return _searchByIsCaseSensitive;
             }
             set {
-                if (_width != value) {
-                    _width = value;
-                    OnPropertyChanged(nameof(Width));
+                if (_searchByIsCaseSensitive != value) {
+                    _searchByIsCaseSensitive = value;
+                    Properties.Settings.Default.SearchByIsCaseSensitive = _searchByIsCaseSensitive;
+                    OnPropertyChanged(nameof(SearchByIsCaseSensitive));
                 }
             }
         }
 
-        private double _height = 25;
-        public double Height {
+        private bool _searchByTitle = Properties.Settings.Default.SearchByTitle;
+        public bool SearchByTitle {
             get {
-                return _height;
+                return _searchByTitle;
             }
             set {
-                if (_height != value) {
-                    _height = value;
-                    OnPropertyChanged(nameof(Height));
+                if (_searchByTitle != value) {
+                    _searchByTitle = value;
+                    Properties.Settings.Default.SearchByTitle = _searchByTitle;
+                    OnPropertyChanged(nameof(SearchByTitle));
                 }
             }
         }
 
-        private double _fontSize = 16;
-        public double FontSize {
+        private bool _searchByRichText = Properties.Settings.Default.SearchByRichText;
+        public bool SearchByRichText {
             get {
-                return _fontSize;
+                return _searchByRichText;
             }
             set {
-                if (_fontSize != value) {
-                    _fontSize = value;
-                    OnPropertyChanged(nameof(FontSize));
+                if (_searchByRichText != value) {
+                    _searchByRichText = value;
+                    Properties.Settings.Default.SearchByRichText = _searchByRichText;
+                    OnPropertyChanged(nameof(SearchByRichText));
                 }
             }
         }
 
-        private double _cornerRadius = 10;
-        public double CornerRadius {
+        private bool _searchByFileList = Properties.Settings.Default.SearchByFileList;
+        public bool SearchByFileList {
             get {
-                return _cornerRadius;
+                return _searchByFileList;
             }
             set {
-                if (_cornerRadius != value) {
-                    _cornerRadius = value;
-                    OnPropertyChanged(nameof(CornerRadius));
+                if (_searchByFileList != value) {
+                    _searchByFileList = value;
+                    Properties.Settings.Default.SearchByFileList = _searchByFileList;
+                    OnPropertyChanged(nameof(SearchByFileList));
                 }
             }
         }
 
+        private bool _searchByImage = Properties.Settings.Default.SearchByImage;
+        public bool SearchByImage {
+            get {
+                return _searchByImage;
+            }
+            set {
+                if (_searchByImage != value) {
+                    _searchByImage = value;
+                    Properties.Settings.Default.SearchByImage = _searchByImage;
+                    OnPropertyChanged(nameof(SearchByImage));
+                }
+            }
+        }
+
+        private bool _searchByApplicationName = Properties.Settings.Default.SearchByApplicationName;
+        public bool SearchByApplicationName {
+            get {
+                return _searchByApplicationName;
+            }
+            set {
+                if (_searchByApplicationName != value) {
+                    _searchByApplicationName = value;
+                    Properties.Settings.Default.SearchByApplicationName = _searchByApplicationName;
+                    OnPropertyChanged(nameof(SearchByApplicationName));
+                }
+            }
+        }
+
+        private bool _searchByTag = Properties.Settings.Default.SearchByTag;
+        public bool SearchByTag {
+            get {
+                return _searchByTag;
+            }
+            set {
+                if (_searchByTag != value) {
+                    _searchByTag = value;
+                    Properties.Settings.Default.SearchByTag = _searchByTitle;
+                    OnPropertyChanged(nameof(SearchByTag));
+                }
+            }
+        }
+        #endregion
+
+        #region Business Logic Properties
         private string _placeholderText = "Placeholder Text";
         public string PlaceholderText {
             get {
@@ -96,7 +146,7 @@ namespace MpWpfApp {
             }
         }
 
-        private string _text = string.Empty;
+        private string _text = Properties.Settings.Default.SearchPlaceHolderText;
         public string Text {
             get {
                 return _text;
@@ -134,7 +184,6 @@ namespace MpWpfApp {
                 return _isTextBoxFocused;
             }
             set {
-                //omitting duplicate check to enforce change in ui
                 if (_isTextBoxFocused != value) {
                     _isTextBoxFocused = value;
                     OnPropertyChanged(nameof(IsTextBoxFocused));
@@ -148,20 +197,10 @@ namespace MpWpfApp {
                 return _isSearchEnabled;
             }
             set {
-                //omitting duplicate check to enforce change in ui
                 if (_isSearchEnabled != value) {
                     _isSearchEnabled = value;
                     OnPropertyChanged(nameof(IsSearchEnabled));
                 }
-            }
-        }
-
-        public int SearchBorderColumnSpan {
-            get {
-                if(SearchNavigationButtonPanelVisibility == Visibility.Visible) {
-                    return 1;
-                }
-                return 2;
             }
         }
 
@@ -199,6 +238,17 @@ namespace MpWpfApp {
                 return Text.Length > 0 && Text != PlaceholderText;
             }
         }
+        #endregion
+
+        #region Appearance
+        public int SearchBorderColumnSpan {
+            get {
+                if (SearchNavigationButtonPanelVisibility == Visibility.Visible) {
+                    return 1;
+                }
+                return 2;
+            }
+        }
 
         public Brush TextBoxBorderBrush {
             get {
@@ -226,7 +276,9 @@ namespace MpWpfApp {
                 return FontStyles.Italic;
             }
         }
+        #endregion
 
+        #region Visibility Proeprties
         public Visibility ClearTextButtonVisibility {
             get {
                 if (HasText && !IsSearching) {
@@ -260,12 +312,17 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #endregion
+
         #region Public Methods
         public MpSearchBoxViewModel() : base() { }
 
         public void SearchBoxBorder_Loaded(object sender, RoutedEventArgs args) {
-            var tb = (TextBox)((MpClipBorder)sender).FindName("SearchBox");
-            tb.GotFocus += (s, e4) => {
+            var searchBorder = (MpClipBorder)sender;
+            var searchBox = (TextBox)searchBorder.FindName("SearchBox");
+            var searchByButton = (Button)((MpClipBorder)sender).FindName("SearchDropDownButton");
+
+            searchBox.GotFocus += (s, e4) => {
                 if (!HasText) {
                     Text = string.Empty;
                 }
@@ -275,15 +332,64 @@ namespace MpWpfApp {
                 OnPropertyChanged(nameof(TextBoxFontStyle));
                 OnPropertyChanged(nameof(TextBoxTextBrush));
             };
-            tb.LostFocus += (s, e5) => {
+
+            searchBox.LostFocus += (s, e5) => {
                 IsTextBoxFocused = false;
                 if (!HasText) {
                     Text = Properties.Settings.Default.SearchPlaceHolderText;
                 }
             };
-            if (string.IsNullOrEmpty(Text)) {
-                Text = Properties.Settings.Default.SearchPlaceHolderText;
-            }
+            //if (string.IsNullOrEmpty(Text)) {
+            //    Text = Properties.Settings.Default.SearchPlaceHolderText;
+            //}
+
+            searchByButton.PreviewMouseDown += (s, e3) => {
+                var searchByContextMenu = new ContextMenu();
+
+                searchByContextMenu.Items.Add(
+                    CreateSearchByMenuItem("Case Sensitive", SearchByIsCaseSensitive));
+                searchByContextMenu.Items.Add(
+                    CreateSearchByMenuItem("Collection", SearchByTag));
+                searchByContextMenu.Items.Add(
+                    CreateSearchByMenuItem("Title", SearchByTitle));
+                searchByContextMenu.Items.Add(
+                    CreateSearchByMenuItem("Text", SearchByRichText));
+                searchByContextMenu.Items.Add(
+                    CreateSearchByMenuItem("File List", SearchByFileList));
+                searchByContextMenu.Items.Add(
+                    CreateSearchByMenuItem("Image", SearchByImage));
+
+                searchByContextMenu.Closed += (s1, e) => {
+                    for (int i = 0; i < searchByContextMenu.Items.Count; i++) {
+                        var isChecked = ((CheckBox)((MenuItem)searchByContextMenu.Items[i]).Icon).IsChecked.Value;
+                        switch(i) {
+                            case 0:
+                                SearchByIsCaseSensitive = isChecked;
+                                break;
+                            case 1:
+                                SearchByTag = isChecked;
+                                break;
+                            case 2:
+                                SearchByTitle = isChecked;
+                                break;
+                            case 3:
+                                SearchByRichText = isChecked;
+                                break;
+                            case 4:
+                                SearchByFileList = isChecked;
+                                break;
+                            case 5:
+                                SearchByImage = isChecked;
+                                break;
+                        }
+                    }
+                    Properties.Settings.Default.Save();
+                };
+
+                searchByButton.ContextMenu = searchByContextMenu;
+                searchByContextMenu.PlacementTarget = searchBorder;
+                searchByContextMenu.IsOpen = true;
+            };
 
             var timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0,0,0,0,500);
@@ -299,6 +405,22 @@ namespace MpWpfApp {
                         break;
                 }
             };
+        }
+        #endregion
+
+        #region Private Methods
+        private MenuItem CreateSearchByMenuItem(string label, bool propertyValue) {
+            var cb = new CheckBox();
+            cb.IsChecked = propertyValue;
+            
+            var l = new Label();
+            l.Content = label;
+
+            var menuItem = new MenuItem();
+            menuItem.Icon = cb;
+            menuItem.Header = l;
+
+            return menuItem;
         }
         #endregion
 
@@ -319,6 +441,7 @@ namespace MpWpfApp {
             Text = string.Empty;
             IsTextBoxFocused = true;
             SearchText = Text;
+            IsSearching = true;
         }
 
         private RelayCommand _performSearchCommand;
@@ -331,146 +454,10 @@ namespace MpWpfApp {
             }
         }
         private void PerformSearch() {
-            //var mpft = new MemberPathFilterText();
-            //mpft.FilterText = Text;
-            //mpft.MemberPath = "CopyItemPlainText";
-            //MainWindowViewModel.ClipTrayViewModel.FilterCommand.Execute(mpft);
-
             SearchText = Text;
-
-            if(!string.IsNullOrEmpty(SearchText) && SearchText != PlaceholderText) {
-                IsSearching = true;
-            }
-
-            //var vt = new List<MpClipTileViewModel>();
-            //var ct = new List<MpClipTileViewModel>();
-
-            //foreach (MpClipTileViewModel ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
-            //    var ttb = ctvm.GetTitleTextBlock();
-            //    var rtb = ctvm.GetRtb();
-            //    var flb = ctvm.GetFileListBox();
-            //    Visibility result = await Dispatcher.CurrentDispatcher.Invoke(
-            //        new Func<Task<Visibility>>(async () => await PerformHighlight(ctvm, SearchText,ttb,rtb,flb)));
-            //    if(result == Visibility.Visible) {
-            //        vt.Add(ctvm);
-            //    } else {
-            //        ct.Add(ctvm);
-            //    }
-            //}
-
-            //foreach(var ctvm in vt) {
-            //    ctvm.TileVisibility = Visibility.Visible;
-            //}
-
-            //foreach (var ctvm in ct) {
-            //    ctvm.TileVisibility = Visibility.Collapsed;
-            //;}
+            IsSearching = true;
         }
-
-        //private async Task<Visibility> PerformHighlight(MpClipTileViewModel ctvm, string hlt, TextBlock ttb, RichTextBox rtb, ListBox flb) {
-        //    var sttvm = ctvm.MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel.SelectedTagTile;
-
-        //    //var ttb = ctvm.GetTitleTextBlock();
-        //    var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
-        //    var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
-        //    var ctbb = Brushes.Transparent;
-
-        //    if (!sttvm.IsLinkedWithClipTile(ctvm)) {
-        //        Console.WriteLine("Clip tile w/ title " + ctvm.CopyItemTitle + " is not linked with current tag");
-        //        return Visibility.Collapsed;
-        //        //return;
-        //    }
-        //    //bool isInTitle = ttb.Text.ContainsByCaseSetting(hlt);
-        //    //bool isInContent = ctvm.ToString().ContainsByCaseSetting(hlt);
-        //    //bool isSearchBlank = string.IsNullOrEmpty(hlt.Trim()) || hlt == Properties.Settings.Default.SearchPlaceHolderText;
-        //    //ctvm.TileVisibility = isInTitle || isInContent || isSearchBlank ? Visibility.Visible : Visibility.Collapsed;
-        //    //return;
-        //    Console.WriteLine("Beginning highlight clip with title: " + ctvm.CopyItemTitle + " with highlight text: " + hlt);
-
-        //    ctvm.TileVisibility = Visibility.Visible;
-
-        //    MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, ctbb);
-        //    ctvm.LastTitleHighlightRangeList.Clear();
-
-        //    MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, ctbb);
-        //    ctvm.LastContentHighlightRangeList.Clear();
-
-        //    if (string.IsNullOrEmpty(hlt.Trim()) ||
-        //        hlt == Properties.Settings.Default.SearchPlaceHolderText) {
-        //        //if search text is empty clear any highlights and show clip (if associated w/ current tag)
-        //        return Visibility.Visible;
-        //    }
-
-        //    //highlight title 
-        //    if (ttb.Text.ContainsByCaseSetting(hlt)) {
-        //        foreach (var mr in MpHelpers.Instance.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive)) {
-        //            ctvm.LastTitleHighlightRangeList.Add(mr);
-        //        }
-        //        MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, hb);
-        //    }
-        //    switch (ctvm.CopyItemType) {
-        //        case MpCopyItemType.RichText:
-        //            //var rtb = ctvm.GetRtb();
-        //            var mc = Regex.Matches(ctvm.CopyItemPlainText, hlt, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
-        //            if (mc.Count == 0) {
-        //                if (ctvm.LastTitleHighlightRangeList.Count == 0) {
-        //                    return Visibility.Collapsed;
-        //                }
-        //                return Visibility.Visible;
-        //            }
-
-        //            rtb.BeginChange();
-        //            foreach (var mr in MpHelpers.Instance.FindStringRangesFromPosition(rtb.Document.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive)) {
-        //                ctvm.LastContentHighlightRangeList.Add(mr);
-        //            }
-        //            if (ctvm.LastContentHighlightRangeList.Count > 0) {
-        //                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, hb);
-        //                //rtb.CaretPosition = ctvm.LastContentHighlightRangeList[0].Start;
-        //            } else if (ctvm.LastTitleHighlightRangeList.Count == 0) {
-        //                return Visibility.Collapsed;
-        //            }
-        //            if (ctvm.LastContentHighlightRangeList.Count > 0 || ctvm.LastTitleHighlightRangeList.Count > 0) {
-        //                ctvm.CurrentHighlightMatchIdx = 0;
-        //            }
-        //            rtb.EndChange();
-        //            break;
-        //        case MpCopyItemType.Image:
-        //            foreach (var diovm in ctvm.DetectedImageObjectCollectionViewModel) {
-        //                if (diovm.ObjectTypeName.ContainsByCaseSetting(hlt)) {
-        //                    return Visibility.Visible;
-        //                }
-        //            }
-        //            if (ctvm.LastContentHighlightRangeList.Count == 0) {
-        //                return Visibility.Collapsed;
-        //            }
-        //            break;
-        //        case MpCopyItemType.FileList:
-        //            //var flb = ctvm.GetFileListBox();
-        //            foreach (var fivm in ctvm.FileListViewModels) {
-        //                if (fivm.ItemPath.ContainsByCaseSetting(hlt)) {
-        //                    var container = flb.ItemContainerGenerator.ContainerFromItem(fivm) as FrameworkElement;
-        //                    if (container != null) {
-        //                        var fitb = (TextBlock)container.FindName("FileListItemTextBlock");
-        //                        if (fitb != null) {
-        //                            var hlr = MpHelpers.Instance.FindStringRangeFromPosition(fitb.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive);
-        //                            if (hlr != null) {
-        //                                hlr.ApplyPropertyValue(TextBlock.BackgroundProperty, hb);
-        //                                ctvm.LastContentHighlightRangeList.Add(hlr);
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //            if (ctvm.LastContentHighlightRangeList.Count == 0) {
-        //                return Visibility.Collapsed;
-        //            }
-        //            return Visibility.Visible;
-        //    }
-        //    Console.WriteLine("Ending highlighting clip with title: " + ctvm.CopyItemTitle);
-
-        //    return Visibility.Visible;
-        //}
-
+        
         private RelayCommand _nextMatchCommand;
         public ICommand NextMatchCommand {
             get {

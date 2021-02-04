@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +14,7 @@ using System.Windows.Threading;
 namespace MpWpfApp {
     public class MpHighlightTextExtension : DependencyObject {
         //public List<TextRange> LastHighlightRangeList { get; set; } = new List<TextRange>();
+        public static ObservableCollection<Task> HighlightTasks = null;
 
         public static string GetHighlightText(DependencyObject obj) {
             return (string)obj.GetValue(HighlightTextProperty);
@@ -27,47 +29,59 @@ namespace MpWpfApp {
             typeof(MpHighlightTextExtension),
             new FrameworkPropertyMetadata {
                 PropertyChangedCallback = (s, e) => {
-                    if(e.OldValue == null) {
-                        //occurs when cliptile created
-                        return;
+                    //if(e.OldValue == null) {
+                    //    //occurs when cliptile created
+                    //    return;
+                    //}
+                    if(HighlightTasks == null) {
+                        HighlightTasks = new ObservableCollection<Task>();
+                        HighlightTasks.CollectionChanged += (s1, e1) => {
+                            if(HighlightTasks.Count == 0) {
+                                ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).SearchBoxViewModel.IsSearching = false;
+                                HighlightTasks = null;
+                            }
+                            
+                        };
                     }
-                    var cb = (MpClipBorder)s;
-                    var ctvm = (MpClipTileViewModel)cb.DataContext; 
                     var hlt = (string)e.NewValue;
-                    if (ctvm.MainWindowViewModel.IsLoading || ctvm.IsEditingTile || ctvm.IsLoading) {
-                        ctvm.TileVisibility = Visibility.Visible;
-                        return;
-                    }
-                    var mc1 = Regex.Matches(ctvm.CopyItemPlainText, hlt, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
-                    var mc2 = Regex.Matches(ctvm.CopyItemTitle, hlt, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
-                    if (mc1.Count == 0 && mc2.Count == 0) {
-                        ctvm.TileVisibility = Visibility.Collapsed;
-                        return;
-                    }
-                    PerformHighlight(cb, ctvm, hlt);
+                    var ctvm = (MpClipTileViewModel)((FrameworkElement)s).DataContext;
+                                        
+                    HighlightTasks.Add(PerformHighlight(ctvm, hlt));
+                    //task.Start();
+                    //while(!task.IsCompleted && !task.IsCanceled && !task.IsFaulted) {
+                    //    Thread.Sleep(10);
+                    //}
+                    //HighlightTasks.Remove(task);
                 }
             });
 
-
-        private static async Task PerformHighlight(MpClipBorder cb, MpClipTileViewModel ctvm, string hlt) {
-            ctvm.MainWindowViewModel.SearchBoxViewModel.IsSearching = true;
-            await Dispatcher.CurrentDispatcher.BeginInvoke(
-                            DispatcherPriority.Background,
+        private static async Task PerformHighlight(MpClipTileViewModel ctvm, string hlt) {
+            await Dispatcher.CurrentDispatcher.InvokeAsync(
                             (Action)(() => {
-                                var sttvm = ctvm.MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel.SelectedTagTile;
-
-                                var ttb = (TextBlock)cb.FindName("ClipTileTitleTextBlock");
+                                var cb = ctvm.GetBorder();
+                                var ttb = ctvm.GetTitleTextBlock();
                                 var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
                                 var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
                                 var ctbb = Brushes.Transparent;
+                                if (ctvm.MainWindowViewModel.IsLoading || ctvm.IsEditingTile || ctvm.IsLoading) {
+                                    ctvm.TileVisibility = Visibility.Visible;
+                                    return;
+                                }
+                                var sttvm = ctvm.MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel.SelectedTagTile;
 
                                 if (!sttvm.IsLinkedWithClipTile(ctvm)) {
                                     Console.WriteLine("Clip tile w/ title " + ctvm.CopyItemTitle + " is not linked with current tag");
                                     ctvm.TileVisibility = Visibility.Collapsed;
                                     return;
                                 }
-                                Console.WriteLine("Beginning highlight clip with title: " + ctvm.CopyItemTitle + " with highlight text: " + hlt);
+                                var mc1 = Regex.Matches(ctvm.CopyItemPlainText, hlt, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+                                var mc2 = Regex.Matches(ctvm.CopyItemTitle, hlt, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+                                if (mc1.Count == 0 && mc2.Count == 0) {
+                                    ctvm.TileVisibility = Visibility.Collapsed;
+                                    return;
+                                }
 
+                                Console.WriteLine("Beginning highlight clip with title: " + ctvm.CopyItemTitle + " with highlight text: " + hlt);
 
                                 ctvm.TileVisibility = Visibility.Visible;
 
@@ -77,32 +91,30 @@ namespace MpWpfApp {
                                 MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, ctbb);
                                 ctvm.LastContentHighlightRangeList.Clear();
 
-                                if (string.IsNullOrEmpty(hlt.Trim()) ||
-                                    hlt == Properties.Settings.Default.SearchPlaceHolderText) {
+                                if (string.IsNullOrEmpty(hlt.Trim()) || hlt == Properties.Settings.Default.SearchPlaceHolderText) {
                                 //if search text is empty clear any highlights and show clip (if associated w/ current tag)
-                                ctvm.TileVisibility = Visibility.Visible;
+                                    ctvm.TileVisibility = Visibility.Visible;
                                     return;
                                 }
 
                                 //highlight title 
                                 if (ttb.Text.ContainsByCaseSetting(hlt)) {
-                                    foreach (var mr in MpHelpers.Instance.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive)) {
+                                    foreach (var mr in MpHelpers.Instance.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive)) {
                                         ctvm.LastTitleHighlightRangeList.Add(mr);
                                     }
                                     MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, hb);
                                 }
                                 switch (ctvm.CopyItemType) {
                                     case MpCopyItemType.RichText:
-                                        var rtb = (RichTextBox)cb.FindName("ClipTileRichTextBox");                                       
+                                        var rtb = ctvm.GetRtb();                                       
 
                                         rtb.BeginChange();
-                                        foreach (var mr in MpHelpers.Instance.FindStringRangesFromPosition(rtb.Document.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive)) {
+                                        foreach (var mr in MpHelpers.Instance.FindStringRangesFromPosition(rtb.Document.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive)) {
                                             ctvm.LastContentHighlightRangeList.Add(mr);
                                         }
                                         if (ctvm.LastContentHighlightRangeList.Count > 0) {
-                                            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, hb);
-                                        //rtb.CaretPosition = ctvm.LastContentHighlightRangeList[0].Start;
-                                    } else if (ctvm.LastTitleHighlightRangeList.Count == 0) {
+                                            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, hb);                                        
+                                        } else if (ctvm.LastTitleHighlightRangeList.Count == 0) {
                                             ctvm.TileVisibility = Visibility.Collapsed;
                                         }
                                         if (ctvm.LastContentHighlightRangeList.Count > 0 || ctvm.LastTitleHighlightRangeList.Count > 0) {
@@ -122,7 +134,7 @@ namespace MpWpfApp {
                                         }
                                         break;
                                     case MpCopyItemType.FileList:
-                                        var flb = (ListBox)cb.FindName("ClipTileFileListBox");
+                                        var flb = ctvm.GetFileListBox();
                                         if (ctvm.LastContentHighlightRangeList != null) {
                                             foreach (var lhr in ctvm.LastContentHighlightRangeList) {
                                                 lhr.ApplyPropertyValue(TextElement.BackgroundProperty, ctbb);
@@ -134,7 +146,7 @@ namespace MpWpfApp {
                                                 if (container != null) {
                                                     var fitb = (TextBlock)container.FindName("FileListItemTextBlock");
                                                     if (fitb != null) {
-                                                        var hlr = MpHelpers.Instance.FindStringRangeFromPosition(fitb.ContentStart, hlt, Properties.Settings.Default.IsSearchCaseSensitive);
+                                                        var hlr = MpHelpers.Instance.FindStringRangeFromPosition(fitb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
                                                         if (hlr != null) {
                                                             hlr.ApplyPropertyValue(TextBlock.BackgroundProperty, hb);
                                                             ctvm.LastContentHighlightRangeList.Add(hlr);
@@ -151,8 +163,12 @@ namespace MpWpfApp {
                                         break;
                                 }
                                 Console.WriteLine("Ending highlighting clip with title: " + ctvm.CopyItemTitle);
-                            }));
-            ctvm.MainWindowViewModel.SearchBoxViewModel.IsSearching = false;
+                            }),
+                            DispatcherPriority.Background);
+
+            if(HighlightTasks.Count > 0) {
+                HighlightTasks.RemoveAt(0);
+            }
         }
     }
 
