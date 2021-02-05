@@ -26,26 +26,7 @@ namespace MpWpfApp {
                 }
             }
         }
-
-        public MpObservableCollection<MpTemplateHyperlinkViewModel> UniqueTemplateHyperlinkViewModelList {
-            get {
-                var ul = new MpObservableCollection<MpTemplateHyperlinkViewModel>();
-                foreach(var thlvm in this) {
-                    bool itExists = false;
-                    foreach(var unm in ul) {
-                        if(unm.TemplateName == thlvm.TemplateName) {
-                            itExists = true;
-                        }
-                    }
-                    if(!itExists) {
-                        ul.Add(thlvm);
-                    }
-                }
-                ul.Sort(x => x["TemplateName"]);
-                return ul;
-            }
-        }
-
+               
         public MpObservableCollection<MpTemplateHyperlinkViewModel> UniqueTemplateHyperlinkViewModelListByDocOrder {
             get {
                 var ul = new MpObservableCollection<MpTemplateHyperlinkViewModel>();
@@ -114,9 +95,7 @@ namespace MpWpfApp {
         #region Public Methods
         public MpTemplateHyperlinkCollectionViewModel(MpClipTileViewModel parent) :base() {
             CollectionChanged += (s, e) => {
-                OnPropertyChanged(nameof(UniqueTemplateHyperlinkViewModelList));
                 OnPropertyChanged(nameof(UniqueTemplateHyperlinkViewModelListByDocOrder));
-                //OnPropertyChanged(nameof(SelectedTemplateHyperlinkViewModel));
             };
             ClipTileViewModel = parent;
 
@@ -182,22 +161,22 @@ namespace MpWpfApp {
             base.Add(thlvm);
             thlvm.CopyItemTemplate.WriteToDatabase();
 
-            thlvm.PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
-                    case nameof(thlvm.IsSelected):
-                    case nameof(thlvm.IsHovering):
-                        foreach(var vm in this) {
-                            if(vm.TemplateName == thlvm.TemplateName) {
-                                vm.IsHovering = thlvm.IsHovering;
-                                vm.IsSelected = thlvm.IsSelected;
-                            } else {
-                                vm.IsHovering = vm.IsSelected = false;
-                            }
+            //thlvm.PropertyChanged += (s, e) => {
+            //    switch(e.PropertyName) {
+            //        case nameof(thlvm.IsSelected):
+            //        case nameof(thlvm.IsHovering):
+            //            foreach(var vm in this) {
+            //                if(vm.TemplateName == thlvm.TemplateName) {
+            //                    vm.IsHovering = thlvm.IsHovering;
+            //                    vm.IsSelected = thlvm.IsSelected;
+            //                } else {
+            //                    vm.IsHovering = vm.IsSelected = false;
+            //                }
                             
-                        }
-                        break;
-                }
-            };
+            //            }
+            //            break;
+            //    }
+            //};
         }
 
         public object Clone() {

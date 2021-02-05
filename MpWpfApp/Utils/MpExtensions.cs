@@ -190,17 +190,6 @@ namespace MpWpfApp {
                                 var thlvm = new MpTemplateHyperlinkViewModel(ctvm, copyItemTemplate);
                                 hl =  MpHelpers.Instance.CreateTemplateHyperlink(thlvm, matchRange);
                                 ctvm.TemplateHyperlinkCollectionViewModel.Add(thlvm);
-                                //var thlb = new MpTemplateHyperlinkBorder(thlvm);
-                                //var container = new InlineUIContainer(thlb);
-                                ////tr.Text = string.Empty;
-                                //hl = new Hyperlink(matchRange.Start, matchRange.End);
-                                //hl.Inlines.Clear();
-                                //hl.Inlines.Add(container);
-                                //thlvm.RangeList.Add(tr);
-                                //hl = ctvm.TemplateHyperlinkCollectionViewModel.Add(new MpTemplateHyperlinkViewModel(ctvm, copyItemTemplate, matchRange));
-
-                                //this ensures highlighting has an effective textrange since template ranges alter document
-                                //matchRange = new TextRange(hl.ContentStart, hl.ContentEnd);
                             } else {
                                 matchRange.Text = matchRange.Text;
                                 hl = new Hyperlink(matchRange.Start, matchRange.End);
@@ -221,9 +210,10 @@ namespace MpWpfApp {
 
                                 MenuItem convertToQrCodeMenuItem = new MenuItem();
                                 convertToQrCodeMenuItem.Header = "Convert to QR Code";
-                                convertToQrCodeMenuItem.Click += (s5, e1) => {
+                                convertToQrCodeMenuItem.Click += async (s5, e1) => {
                                     var hyperLink = (Hyperlink)((MenuItem)s5).Tag;
-                                    Clipboard.SetImage(MpHelpers.Instance.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString()));
+                                    var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString());
+                                    Clipboard.SetImage(bmpSrc);
                                 };
                                 convertToQrCodeMenuItem.Tag = hl;
                                 hl.ContextMenu = new ContextMenu();
@@ -271,9 +261,9 @@ namespace MpWpfApp {
                                             }
                                             MenuItem subItem = new MenuItem();
                                             subItem.Header = currency.CurrencyName + "(" + currency.CurrencySymbol + ")";
-                                            subItem.Click += (s2, e2) => {
+                                            subItem.Click += async (s2, e2) => {
                                                 Enum.TryParse(currency.Id, out CurrencyType toCurrencyType);
-                                                var convertedValue = MpCurrencyConverter.Instance.Convert(
+                                                var convertedValue = await MpCurrencyConverter.Instance.ConvertAsync(
                                                     MpHelpers.Instance.GetCurrencyValueFromString(linkText),
                                                     fromCurrencyType,
                                                     toCurrencyType);
@@ -284,10 +274,8 @@ namespace MpWpfApp {
                                                 Run run = new Run(currency.CurrencySymbol + convertedValue);
                                                 hl.Inlines.Clear();
                                                 hl.Inlines.Add(run);
-                                                //ClearHyperlinks();
-                                                //((MpClipTileViewModel)DataContext).CopyItemRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(Document);
-                                                //CreateHyperlinks();
                                             };
+
                                             convertCurrencyMenuItem.Items.Add(subItem);
                                         }
 

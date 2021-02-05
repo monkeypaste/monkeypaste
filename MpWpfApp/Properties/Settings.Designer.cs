@@ -947,5 +947,26 @@ namespace MpWpfApp.Properties {
                 this["SearchByFileList"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4296")]
+        public int MaxQrCodeCharLength {
+            get {
+                return ((int)(this["MaxQrCodeCharLength"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.3")]
+        public double DetectedImageMinConfidence {
+            get {
+                return ((double)(this["DetectedImageMinConfidence"]));
+            }
+            set {
+                this["DetectedImageMinConfidence"] = value;
+            }
+        }
     }
 }

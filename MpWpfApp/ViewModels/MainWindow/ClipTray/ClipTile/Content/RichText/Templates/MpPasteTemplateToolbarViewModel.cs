@@ -78,7 +78,7 @@ namespace MpWpfApp {
 
         public Visibility PasteTemplateNavigationButtonStackVisibility {
             get {
-                if (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelList.Count > 1) {
+                if (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 1) {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -91,9 +91,10 @@ namespace MpWpfApp {
                 return _selectedTemplate;
             }
             set {
-                if (_selectedTemplate != value) {
+                //if (_selectedTemplate != value) 
+                    {
                     _selectedTemplate = value;
-                    if(SelectedTemplate != null) {
+                    if (SelectedTemplate != null) {
                         foreach (var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
                             if (thlvm.TemplateName == SelectedTemplateName) {
                                 thlvm.IsSelected = true;
@@ -198,10 +199,10 @@ namespace MpWpfApp {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(SelectedTemplate):
-                        if(SelectedTemplate == null && UniqueTemplateHyperlinkViewModelListByDocOrder != null && UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 0) {
+                        if (SelectedTemplate == null && UniqueTemplateHyperlinkViewModelListByDocOrder != null && UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 0) {
                             //SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
                             SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
-                        } else if(SelectedTemplate == null) {
+                        } else if (SelectedTemplate == null) {
                             return;
                         }
                         var templateRect = SelectedTemplate.TemplateHyperlinkRange.Start.GetCharacterRect(LogicalDirection.Forward);
@@ -215,7 +216,7 @@ namespace MpWpfApp {
                 thlvm.PropertyChanged += (s, e) => {
                     switch (e.PropertyName) {
                         case nameof(thlvm.IsSelected):
-                            if(thlvm.IsSelected && SelectedTemplate != thlvm) {
+                            if(thlvm.IsSelected/* && SelectedTemplate != thlvm*/) {
                                 SetTemplate(thlvm.TemplateName);
                             }
                             break;
@@ -225,6 +226,9 @@ namespace MpWpfApp {
         }
 
         public void ClipTilePasteTemplateToolbarBorder_Loaded(object sender, RoutedEventArgs args) {
+            if (ClipTileViewModel.CopyItemType != MpCopyItemType.RichText) {
+                return;
+            }
             var pasteTemplateToolbarBorderGrid = (Grid)sender;
             var pasteTemplateToolbarBorder = pasteTemplateToolbarBorderGrid.GetVisualAncestor<Border>();
             var cb = (MpClipBorder)pasteTemplateToolbarBorder.GetVisualAncestor<MpClipBorder>();
@@ -332,7 +336,7 @@ namespace MpWpfApp {
                             //SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
                             //SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
                             ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Collapsed;
-                            
+                            clipTray.ScrollViewer.ScrollToHome();
                         }
 
                         MpHelpers.Instance.AnimateDoubleProperty(
@@ -400,15 +404,17 @@ namespace MpWpfApp {
             if(string.IsNullOrEmpty(templateName)) {
                 return;
             }
-            foreach(var t in UniqueTemplateHyperlinkViewModelListByDocOrder) {
-                if(t.TemplateName == templateName) {
+            foreach (var t in UniqueTemplateHyperlinkViewModelListByDocOrder) {
+                if (t.TemplateName == templateName) {
                     SelectedTemplate = t;
                     SelectedTemplate.IsSelected = true;
                 } else {
                     SelectedTemplate.IsSelected = false;
                 }
             }
-            ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectTemplate(SelectedTemplate.TemplateName);
+            ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectTemplate(templateName);
+            SelectedTemplate = ClipTileViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel;
+            OnPropertyChanged(nameof(UniqueTemplateHyperlinkViewModelListByDocOrder));
         }
 
         public TextBox GetSelectedTemplateTextBox() {

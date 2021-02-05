@@ -1772,6 +1772,7 @@ namespace MpWpfApp {
                 bitmapData.Stride * bitmapData.Height,
                 bitmapData.Stride);
             bitmap.UnlockBits(bitmapData);
+            //bitmap.Dispose();
             return bitmapSource;
         }
 
@@ -1796,17 +1797,26 @@ namespace MpWpfApp {
 
         #region Http
         public BitmapSource ConvertUrlToQrCode(string url) {
-            Url generator = new Url(url);
-            string payload = generator.ToString();
-
-            using (QRCodeGenerator qrGenerator = new QRCodeGenerator()) {
-                using (QRCodeData qrCodeData = qrGenerator.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q)) {
-                    using (QRCode qrCode = new QRCode(qrCodeData)) {
-                        var qrCodeAsBitmap = qrCode.GetGraphic(20);
-                        return MpHelpers.Instance.ConvertBitmapToBitmapSource(qrCodeAsBitmap);
+            using (var qrGenerator = new QRCodeGenerator()) {
+                using (var qrCodeData = qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q)) {
+                    using (var qrCode = new XamlQRCode(qrCodeData)) {
+                        var qrCodeAsXaml = qrCode.GetGraphic(20);                        
+                        var bmpSrc= ConvertDrawingImageToBitmapSource(qrCodeAsXaml);
+                        return MpHelpers.Instance.ResizeBitmapSource(bmpSrc, new Size(0.2, 0.2));
                     }
                 }
             }
+        }
+
+        public BitmapSource ConvertDrawingImageToBitmapSource(DrawingImage source) {
+            DrawingVisual drawingVisual = new DrawingVisual();
+            DrawingContext drawingContext = drawingVisual.RenderOpen(); 
+            drawingContext.DrawImage(source, new Rect(new Point(0, 0), new Size(source.Width, source.Height)));
+            drawingContext.Close();
+
+            RenderTargetBitmap bmp = new RenderTargetBitmap((int)source.Width, (int)source.Height, 96, 96, PixelFormats.Pbgra32);
+            bmp.Render(drawingVisual); 
+            return bmp;
         }
         #endregion
 

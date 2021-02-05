@@ -20,34 +20,31 @@ namespace MpWpfApp {
 
         private static List<MpApp> _AppList = null;
         private static List<MpColor> _ColorList = null;
-        private static List<MpCopyItem> _CopyItemList = null;
 
         #endregion
 
         #region Properties
 
-        public static List<MpCopyItem> CopyItemList {
-            get {
-                if(_CopyItemList == null) {
-                    _CopyItemList = MpCopyItem.GetAllCopyItems();
-                }
-                return _CopyItemList;
-            }
-        }
-
         public int CopyItemId { get; set; } = 0;
+
         public int PreCopyItemId { get; set; } = 0;
+
         public int PostCopyItemId { get; set; } = 0;
+
         public MpApp App { get; set; }
+
         public MpClient Client { get; set; }
+
         public MpColor ItemColor { get; set; }
-        //public int ColorId { get; private set; } = 1;
+
         public string Title { get; set; } = string.Empty;
 
         public MpCopyItemType CopyItemType { get; private set; } = MpCopyItemType.None;
+
         //public int ClientId { get; private set; } = 0;
         //public int AppId { get; set; } = 0;
         //public int IconId { get; set; } = 0;
+
         public DateTime CopyDateTime { get; set; }
 
         public int LineCount { get; set; } = 0;
@@ -67,11 +64,6 @@ namespace MpWpfApp {
                 return CopyCount + PasteCount;
             }
         }
-
-
-        //public string SourcePath { get; set; } = string.Empty;
-
-        //public string ItemMetaCsv { get; set; } = string.Empty;
                 
         public string ItemPlainText { get; set; }
 
@@ -97,7 +89,7 @@ namespace MpWpfApp {
                     foreach (var obj in ImageItemObjectList) {
                         outStr += obj.ObjectTypeName + ",";
                     }
-                    return string.IsNullOrEmpty(outStr) ? outStr : outStr.Remove(0, 1);
+                    return string.IsNullOrEmpty(outStr) ? outStr : outStr.Remove(outStr.Length-1, 1);
                 }
                 return _itemCsv;
             }
@@ -177,7 +169,7 @@ namespace MpWpfApp {
                     itemData = (string)iData.GetData(DataFormats.Rtf);
                 } else if (iData.GetDataPresent(DataFormats.Bitmap)) {
                     itemType = MpCopyItemType.Image;
-                    itemData = Clipboard.GetImage();
+                    itemData = (BitmapSource)Clipboard.GetImage();
                 } else if ((iData.GetDataPresent(DataFormats.Html) || iData.GetDataPresent(DataFormats.Text)) && !string.IsNullOrEmpty((string)iData.GetData(DataFormats.Text))) {
                     itemType = MpCopyItemType.RichText;
                     itemData = MpHelpers.Instance.ConvertPlainTextToRichText((string)iData.GetData(DataFormats.UnicodeText));
@@ -185,7 +177,7 @@ namespace MpWpfApp {
                     Console.WriteLine("MpData error clipboard data is not known format");
                     return null;
                 }
-                if (((string)itemData).Length > Properties.Settings.Default.MaxRtfCharCount) {
+                if (itemType == MpCopyItemType.RichText && ((string)itemData).Length > Properties.Settings.Default.MaxRtfCharCount) {
                     itemData = MpHelpers.Instance.ConvertRichTextToPlainText((string)itemData);
                     if (((string)itemData).Length > Properties.Settings.Default.MaxRtfCharCount) {
                         //item is TOO LARGE so ignore
@@ -500,27 +492,27 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private async Task UpdateItemData() {
+        private void UpdateItemData() {
             switch (CopyItemType) {
                 case MpCopyItemType.FileList:
                     ItemPlainText = (string)_itemData;
                     break;
                 case MpCopyItemType.Image:
-                    if(Application.Current.MainWindow.DataContext == null || ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).IsLoading) {
+                    if(Application.Current.MainWindow.DataContext == null || 
+                       ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).IsLoading) {
+                        //when loading from database
                         ImageItemObjectList = MpDetectedImageObject.GetAllObjectsForItem(CopyItemId);
-                    } else {
-                        // first scan image with ocr, if no text is found then detect objects, then either way delete the img file
-                        var imgPath = GetFileList()[0];
-                        var ocrText = await MpHelpers.Instance.ConvertBitmapSourceToPlainText(imgPath);
-                        if (string.IsNullOrEmpty(ocrText)) {
-                            ImageItemObjectList = MpHelpers.Instance.DetectObjects(MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource));
-                            ItemPlainText = ItemCsv;
-                        } else {
-                            ItemPlainText = ocrText;
-                        }
-                        File.Delete(imgPath);
+                    } else {                        
+                        //var imgPath = GetFileList()[0];
+                        //ItemPlainText = MpHelpers.Instance.ConvertBitmapSourceToPlainText(imgPath).Result;
+                        //ImageItemObjectList = MpHelpers.Instance.DetectObjects(MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource), Properties.Settings.Default.DetectedImageMinConfidence);                        
+                        //File.Delete(imgPath);
                         if (string.IsNullOrEmpty(ItemPlainText)) {
-                            ItemPlainText = "Image";
+                            if(ImageItemObjectList.Count > 0) {
+                                ItemPlainText = ItemCsv;
+                            } else {
+                                ItemPlainText = "Image";
+                            }                            
                         }
                     }
                     break;
@@ -548,7 +540,6 @@ namespace MpWpfApp {
                     break;
             }
         }
-
         
         #endregion
 
@@ -579,7 +570,7 @@ namespace MpWpfApp {
             if (CopyItemType == MpCopyItemType.Image) {
                 SetData(MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]));
                 ItemPlainText = dr["ItemText"].ToString();
-                ItemCsv = ItemPlainText;
+                //ItemCsv = ItemPlainText;
             } else {
                 SetData(dr["ItemText"].ToString());
             }

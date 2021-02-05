@@ -124,6 +124,9 @@ namespace MpWpfApp {
         }
 
         public void ClipTileEditorToolbarBorder_Loaded(object sender, RoutedEventArgs args) {
+            if(ClipTileViewModel.CopyItemType != MpCopyItemType.RichText) {
+                return;
+            }
             var sp = (StackPanel)sender;
             var et = sp.GetVisualAncestor<Border>();            
             var cb = (MpClipBorder)et.GetVisualAncestor<MpClipBorder>();
@@ -279,7 +282,7 @@ namespace MpWpfApp {
                     //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
                 } else {
                     var templateContextMenu = new ContextMenu();
-                    foreach (var ttcvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelList) {
+                    foreach (var ttcvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder) {
                         Border b = new Border();
                         b.Background = ttcvm.TemplateBrush;
                         b.BorderBrush = Brushes.Black;

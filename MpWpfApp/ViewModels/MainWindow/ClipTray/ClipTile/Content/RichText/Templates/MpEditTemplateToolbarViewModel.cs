@@ -153,6 +153,9 @@ namespace MpWpfApp {
         }
 
         public void EditTemplateToolbarBorder_Loaded(object sender, RoutedEventArgs args) {
+            if (ClipTileViewModel.CopyItemType != MpCopyItemType.RichText) {
+                return;
+            }
             var editTemplateToolbarBorderGrid = (Grid)sender;
             var editTemplateToolbarBorder = editTemplateToolbarBorderGrid.GetVisualAncestor<Border>();
             var templateColorButton = (Button)editTemplateToolbarBorder.FindName("TemplateColorButton");
@@ -310,7 +313,7 @@ namespace MpWpfApp {
             //if new name is a duplicate of another just delete this one and set it to the duplicate
             //var dupTokenHyperlink = ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName && x.CopyItemTemplateId != SelectedTemplateHyperlinkViewModel.CopyItemTemplateId).ToList();
             MpTemplateHyperlinkViewModel dthlvm = null;
-            foreach(var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelList) {
+            foreach(var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder) {
                 //check if another template has this name
                 if(thlvm != SelectedTemplateHyperlinkViewModel &&
                    thlvm.CopyItemTemplateId != SelectedTemplateHyperlinkViewModel.CopyItemTemplateId &&

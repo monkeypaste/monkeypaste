@@ -687,6 +687,9 @@
         <SolidColorBrush x:Key="ClipTileTitleTextBoxBackgroundBrush"
                          Color="White"
                          Opacity="0.5" />
+        <SolidColorBrush x:Key="ClipTileDetectedObjectTextBoxBackgroundBrush"
+                         Color="Black"
+                         Opacity="0.5" />
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -1365,6 +1368,8 @@
                                                         </Style>
                                                     </MenuItem.ItemContainerStyle>
                                                 </MenuItem>
+                                                <MenuItem Header="Duplicate As Qr Code"
+                                                          Command="{Binding Data.CreateQrCodeFromClipCommand, Source={StaticResource ClipTileProxy}}" />
                                                 <MenuItem x:Name="TranslateMenuItem"
                                                           Header="Translate"
                                                           ItemsSource="{Binding Data.TranslateLanguageMenuItems, Source={StaticResource ClipTileProxy}}">
@@ -1716,10 +1721,12 @@
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
                                                         </ToggleButton>
-                                                        <Image Source="/Resources/MpRichTextBox/separator.png"
-                                                               Stretch="None" />
+                                                        <Image Source="/Resources/Images/MpRichTextBox/separator.png"
+                                                               Stretch="None" 
+                                                               SnapsToDevicePixels="True"/>
                                                         <Button x:Name="RefreshDocumentButton"
                                                                 Command="{Binding RefreshDocumentCommand}"
+                                                                ToolTip="Refresh"
                                                                 Template="{StaticResource FlatButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/arrow_refresh.png"
                                                                    Stretch="None"
@@ -1881,7 +1888,6 @@
                                                             <ComboBox x:Name="SelectedTemplateComboBox"
                                                                       FontSize="14"
                                                                       Background="Transparent"
-                                                                      SelectedIndex="0"
                                                                       HorizontalContentAlignment="Left"
                                                                       VerticalContentAlignment="Center"
                                                                       SelectedItem="{Binding SelectedTemplate, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
@@ -2028,10 +2034,10 @@
                                                                         <local:MpBindingProxy x:Key="DetectedImageObjectProxy"
                                                                                               Data="{Binding}" />
                                                                     </Border.Resources>
-                                                                    <Border.Visibility>
+                                                                    <!--<Border.Visibility>
                                                                         <Binding Path="Data.TileDetectedImageItemsVisibility"
                                                                                  Source="{StaticResource ClipTileProxy}" />
-                                                                    </Border.Visibility>
+                                                                    </Border.Visibility>-->
                                                                     <Border.RenderTransform>
                                                                         <TranslateTransform X="{Binding Data.X, Source={StaticResource DetectedImageObjectProxy}}"
                                                                                             Y="{Binding Data.Y, Source={StaticResource DetectedImageObjectProxy}}" />
@@ -2049,7 +2055,7 @@
                                                                              Text="{Binding ObjectTypeName, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                                                                              FontSize="{Binding FontSize}"
                                                                              IsReadOnly="{Binding IsNameReadOnly}"
-                                                                             Background="Black"
+                                                                             Background="{StaticResource ClipTileDetectedObjectTextBoxBackgroundBrush}"
                                                                              Foreground="White" />
                                                                 </Border>
                                                             </DataTemplate>

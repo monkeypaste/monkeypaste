@@ -481,6 +481,7 @@ namespace MpWpfApp {
                     !IsDragging && 
                     !IsEditingClipTile &&
                     !IsEditingClipTitle &&
+                    !IsPastingTemplate &&                    
                     e7.MouseDevice.LeftButton == MouseButtonState.Pressed && 
                     (Math.Abs(curDragPoint.Y - StartDragPoint.Y) > 5 || Math.Abs(curDragPoint.X - StartDragPoint.X) > 5) /*&&
                    // s.GetType() == typeof(MpClipBorder) &&

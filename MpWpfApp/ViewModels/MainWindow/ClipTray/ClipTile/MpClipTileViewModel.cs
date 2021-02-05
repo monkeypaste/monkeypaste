@@ -21,6 +21,7 @@
     using System.Windows.Media.Imaging;
     using System.Windows.Shapes;
     using System.Windows.Threading;
+    using AsyncAwaitBestPractices.MVVM;
     using GalaSoft.MvvmLight.CommandWpf;
     using GongSolutions.Wpf.DragDrop.Utilities;
     using NativeCode;
@@ -163,7 +164,7 @@
             get {
                 var translateLanguageMenuItems = new ObservableCollection<MpClipTileContextMenuItemViewModel>();
                 foreach (var languageName in MpLanguageTranslator.Instance.LanguageList) {
-                    translateLanguageMenuItems.Add(new MpClipTileContextMenuItemViewModel(languageName, TranslateClipTextCommand, languageName, false));
+                    translateLanguageMenuItems.Add(new MpClipTileContextMenuItemViewModel(languageName, TranslateClipTextAsyncCommand, languageName, false));
                 }
                 return translateLanguageMenuItems;
             }
@@ -523,7 +524,7 @@
                 return _tileVisibility;
             }
             set {
-                //if (_tileVisibility != value) 
+                if (_tileVisibility != value) 
                 {
                     _tileVisibility = value;
                     OnPropertyChanged(nameof(TileVisibility));
@@ -1336,6 +1337,9 @@
 
             
             titleIconImageButton.MouseEnter += (s, e3) => {
+                if(IsEditingTemplate || IsPastingTemplateTile) {
+                    return;
+                }
                 double t = 100;
                 double angle = 15;
                 var a = new DoubleAnimation(0, angle, new Duration(TimeSpan.FromMilliseconds(t)));
@@ -1347,12 +1351,6 @@
                     };
                     titleIconImageButtonRotateTransform.BeginAnimation(RotateTransform.AngleProperty, b);
                 };
-                //a.RepeatBehavior = RepeatBehavior.Forever;
-                
-                //Storyboard.SetTarget(a, titleIconImageButtonRotateTransform);
-                //Storyboard.SetTargetProperty(a, new PropertyPath(RotateTransform.AngleProperty));                
-                //sb.Children.Add(a);
-                //sb.Begin(
 
                 titleIconImageButtonRotateTransform.BeginAnimation(RotateTransform.AngleProperty, a);
 
@@ -1368,6 +1366,9 @@
                 titleIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, sa);
             };
             titleIconImageButton.MouseLeave += (s, e3) => {
+                if (IsEditingTemplate || IsPastingTemplateTile) {
+                    return;
+                }
                 double fromScale = 1.15;
                 double toScale = 1;
                 double st = 300;
@@ -1521,7 +1522,7 @@
             var ctcc = ic.GetVisualAncestor<Canvas>();
             var vb = (Viewbox)ic.FindName("ClipTileImageItemsControlViewBox");
 
-            vb.ContextMenu = ctcc.ContextMenu = ic.ContextMenu = (ContextMenu)((FrameworkElement)sender).GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
+            //vb.ContextMenu = ctcc.ContextMenu = ic.ContextMenu = (ContextMenu)((FrameworkElement)sender).GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
 
             //CopyItem.ImageItemObjectList.Clear();
             //CopyItem.ImageItemObjectList.Add(new MpDetectedImageObject(0, CopyItemId, 0, 0, 0, 100, 100, "test"));
@@ -1540,6 +1541,7 @@
 
         public void ClipTile_ContextMenu_Loaded(object sender, RoutedEventArgs e) {
             var cm = (ContextMenu)sender;
+            cm.DataContext = this;
             MenuItem cmi = null;
             foreach (MenuItem mi in cm.Items) {
                 if (mi.Name == "ClipTileColorContextMenuItem") {
@@ -1559,6 +1561,9 @@
                     MpHelpers.Instance.GetColorColumn(TitleColor),
                     MpHelpers.Instance.GetColorRow(TitleColor)
                 );
+        }
+        public void ClipTile_ContextMenu_Closed(object sender, RoutedEventArgs e) {
+            ((MpClipTileViewModel)((FrameworkElement)sender).DataContext).SaveToDatabase();
         }
 
         public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {            
@@ -1589,10 +1594,6 @@
             }
         }
 
-        public void ClipTile_ContextMenu_Closed(object sender, RoutedEventArgs args) {
-            SaveToDatabase();
-        }
-
         public void AppendContent(MpClipTileViewModel octvm) {
             CopyItem.Combine(octvm.CopyItem);
             //since appending only happens for richtext types
@@ -1616,7 +1617,7 @@
 
         public void SaveToDatabase() {
             if(CopyItemType == MpCopyItemType.RichText) {
-                SyncModelWithView();
+                MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(CopyItemId).SyncModelWithView();
             }
             MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(CopyItemId).CopyItem.WriteToDatabase();
         }
@@ -1730,20 +1731,36 @@
         #endregion
 
         #region Commands
-
-        private RelayCommand<string> _translateClipTextCommand;
-        public ICommand TranslateClipTextCommand {
+        private RelayCommand _createQrCodeFromClipCommand;
+        public ICommand CreateQrCodeFromClipCommand {
             get {
-                if (_translateClipTextCommand == null) {
-                    _translateClipTextCommand = new RelayCommand<string>(TranslateClipText, CanTranslateClipText);
+                if (_createQrCodeFromClipCommand == null) {
+                    _createQrCodeFromClipCommand = new RelayCommand(CreateQrCodeFromClip, CanCreateQrCodeFromClip);
                 }
-                return _translateClipTextCommand;
+                return _createQrCodeFromClipCommand;
             }
         }
-        private bool CanTranslateClipText(string toLanguage) {
+        private bool CanCreateQrCodeFromClip() {
+            return CopyItemType == MpCopyItemType.RichText && CopyItemPlainText.Length <= Properties.Settings.Default.MaxQrCodeCharLength;
+        }
+        private void CreateQrCodeFromClip() {
+            var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(CopyItemPlainText);
+            System.Windows.Clipboard.SetImage(bmpSrc);
+        }
+
+        private AsyncCommand<string> _translateClipTextAsyncCommand;
+        public IAsyncCommand<string> TranslateClipTextAsyncCommand {
+            get {
+                if (_translateClipTextAsyncCommand == null) {
+                    _translateClipTextAsyncCommand = new AsyncCommand<string>(TranslateClipTextAsync, CanTranslateClipText);
+                }
+                return _translateClipTextAsyncCommand;
+            }
+        }
+        private bool CanTranslateClipText(object args) {
             return CopyItemType == MpCopyItemType.RichText;
         }
-        private async void TranslateClipText(string toLanguage) {
+        private async Task TranslateClipTextAsync(string toLanguage) {
             var translatedText = await MpLanguageTranslator.Instance.Translate(CopyItemPlainText, toLanguage, false);
             if (!string.IsNullOrEmpty(translatedText)) {
                 CopyItemRichText = MpHelpers.Instance.ConvertPlainTextToRichText(translatedText);

@@ -265,5 +265,11 @@
     <Setting Name="SearchByFileList" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="MaxQrCodeCharLength" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">4296</Value>
+    </Setting>
+    <Setting Name="DetectedImageMinConfidence" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.3</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

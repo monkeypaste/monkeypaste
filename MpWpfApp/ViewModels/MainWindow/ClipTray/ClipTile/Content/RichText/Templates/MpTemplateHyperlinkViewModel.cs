@@ -100,7 +100,10 @@ namespace MpWpfApp {
         #region Brush Properties
         public Brush TemplateBorderBrush {
             get {
-                if(ClipTileViewModel != null && !ClipTileViewModel.IsEditingTile && !ClipTileViewModel.IsPastingTemplateTile) {
+                if(ClipTileViewModel != null && 
+                  !ClipTileViewModel.IsEditingTile && 
+                  !ClipTileViewModel.IsEditingTemplate && 
+                  !ClipTileViewModel.IsPastingTemplateTile) {
                     return Brushes.Transparent;
                 }
                 if(IsSelected) {
@@ -166,12 +169,12 @@ namespace MpWpfApp {
                     {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
-                    
+                    OnPropertyChanged(nameof(TemplateForegroundBrush));
+                    OnPropertyChanged(nameof(TemplateBorderBrush));
+                    OnPropertyChanged(nameof(TemplateBackgroundBrush));
+                    OnPropertyChanged(nameof(TemplateTextBlockCursor));
                 }
-                OnPropertyChanged(nameof(TemplateForegroundBrush));
-                OnPropertyChanged(nameof(TemplateBorderBrush));
-                OnPropertyChanged(nameof(TemplateBackgroundBrush));
-                OnPropertyChanged(nameof(TemplateTextBlockCursor));
+               
             }
         }
         #endregion
@@ -408,6 +411,10 @@ namespace MpWpfApp {
                     e.Handled = true;
                     //ClipTileViewModel.GetRtb().Selection.Select(hl.ElementStart, hl.ElementEnd);
                     ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(this, true);
+                }
+                if(ClipTileViewModel.IsPastingTemplateTile) {
+                    e.Handled = true;
+                    ClipTileViewModel.PasteTemplateToolbarViewModel.SetTemplate(TemplateName);
                 }
             };
 

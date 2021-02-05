@@ -15,6 +15,7 @@ namespace MpWpfApp {
         #region Private Variables
 
         #endregion
+
         #region Properties
         private BitmapSource _copyItemBmp = null;
         public BitmapSource CopyItemBmp {
@@ -138,7 +139,6 @@ namespace MpWpfApp {
                     isCreatingNewItem = false;
                 }
             };
-
         }
         #endregion
 

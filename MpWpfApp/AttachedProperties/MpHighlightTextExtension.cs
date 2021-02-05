@@ -74,6 +74,7 @@ namespace MpWpfApp {
                                     ctvm.TileVisibility = Visibility.Collapsed;
                                     return;
                                 }
+
                                 var mc1 = Regex.Matches(ctvm.CopyItemPlainText, hlt, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
                                 var mc2 = Regex.Matches(ctvm.CopyItemTitle, hlt, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
                                 if (mc1.Count == 0 && mc2.Count == 0) {
