@@ -149,7 +149,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Static Methods
-        public static MpCopyItem CreateFromClipboard(IntPtr processHandle) {
+        public static async Task<MpCopyItem> CreateFromClipboardAsync(IntPtr processHandle) {
             IDataObject iData = Clipboard.GetDataObject();
             if (iData == null) {
                 return null;
@@ -190,12 +190,59 @@ namespace MpWpfApp {
                         return dupItem;
                     }
                 }
-                return new MpCopyItem(itemType, itemData, itemColor, processHandle);
+                //return new MpCopyItem(itemType, itemData, itemColor, processHandle);
+                var newItem = new MpCopyItem();
+                newItem.CopyItemType = itemType;
+                newItem.CopyDateTime = DateTime.Now;
+                newItem.Title = newItem.CopyItemType == MpCopyItemType.RichText || newItem.CopyItemType == MpCopyItemType.Csv ? "Text" : Enum.GetName(typeof(MpCopyItemType), newItem.CopyItemType);
+                newItem.CopyCount = 1;
+                newItem.Client = new MpClient(0, 0, MpHelpers.Instance.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
+
+                var appPath = MpHelpers.Instance.GetProcessPath(processHandle);
+                var app = _AppList.Where(x => x.AppPath == appPath).ToList();
+                if (app == null || app.Count == 0) {
+                    newItem.App = new MpApp(false, processHandle);
+                    _AppList.Add(newItem.App);
+                } else {
+                    newItem.App = app[0];
+                }
+
+                var color = _ColorList.Where(x => x.Color == itemColor).ToList();
+                if (color == null || color.Count == 0) {
+                    newItem.ItemColor = new MpColor(itemColor);
+                    _ColorList.Add(newItem.ItemColor);
+                } else {
+                    newItem.ItemColor = color[0];
+                }
+
+                newItem.ItemTitleSwirl = newItem.InitSwirl();
+                newItem.ImageItemObjectList = new List<MpDetectedImageObject>();
+                switch (itemType) {
+                    case MpCopyItemType.Csv:
+                        newItem.ItemCsv = (string)itemData;
+                        newItem.CopyItemType = MpCopyItemType.RichText;
+                        newItem.SetData(MpHelpers.Instance.ConvertPlainTextToRichText(newItem.ItemCsv));
+                        break;
+                    case MpCopyItemType.FileList:
+                        string paths = string.Empty;
+                        foreach (string str in (string[])itemData) {
+                            paths += str + Environment.NewLine;
+                        }
+                        newItem.SetData(paths);
+                        break;
+                    case MpCopyItemType.Image:
+                        newItem.SetData((BitmapSource)itemData);
+                        break;
+                    case MpCopyItemType.RichText:
+                        newItem.SetData((string)itemData);
+                        break;
+                }
+                return newItem;
             }
             catch (Exception e) {
                 //this catches intermittent COMExceptions (happened copy/pasting in Excel)
                 Console.WriteLine("Caught exception creating copyitem (will reattempt to open clipboard): " + e.ToString());
-                return CreateFromClipboard(processHandle);
+                return await CreateFromClipboardAsync(processHandle);
             }
         }        
 
@@ -332,9 +379,9 @@ namespace MpWpfApp {
             LoadDataRow(dr);
         }
 
-        public void SetData(object data) {
+        public async Task SetData(object data) {
             _itemData = data;
-            UpdateItemData();
+            await UpdateItemData();
             UpdateDetails();
         }
 
@@ -492,7 +539,7 @@ namespace MpWpfApp {
 
         #region Private Methods
 
-        private void UpdateItemData() {
+        private async Task UpdateItemData() {
             switch (CopyItemType) {
                 case MpCopyItemType.FileList:
                     ItemPlainText = (string)_itemData;
@@ -502,11 +549,16 @@ namespace MpWpfApp {
                        ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).IsLoading) {
                         //when loading from database
                         ImageItemObjectList = MpDetectedImageObject.GetAllObjectsForItem(CopyItemId);
-                    } else {                        
-                        //var imgPath = GetFileList()[0];
-                        //ItemPlainText = MpHelpers.Instance.ConvertBitmapSourceToPlainText(imgPath).Result;
-                        //ImageItemObjectList = MpHelpers.Instance.DetectObjects(MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource), Properties.Settings.Default.DetectedImageMinConfidence);                        
-                        //File.Delete(imgPath);
+                    } else {
+                         if(ItemBitmapSource.Width * ItemBitmapSource.Height > 200000) {
+                            _itemData = MpHelpers.Instance.ResizeBitmapSource(ItemBitmapSource, new Size(500 / ItemBitmapSource.Width, 500 / ItemBitmapSource.Height));
+                        }
+                        ImageItemObjectList = await MpHelpers.Instance.DetectObjectsAsync(MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource), Properties.Settings.Default.DetectedImageMinConfidence);
+
+                        // don't perform ocr for now it takes too long on big images
+                        var imgPath = MpHelpers.Instance.WriteBitmapSourceToFile(Path.GetRandomFileName(), ItemBitmapSource);
+                        ItemPlainText = await MpHelpers.Instance.OcrBitmapSourceFileAsync(imgPath);
+                        File.Delete(imgPath);
                         if (string.IsNullOrEmpty(ItemPlainText)) {
                             if(ImageItemObjectList.Count > 0) {
                                 ItemPlainText = ItemCsv;

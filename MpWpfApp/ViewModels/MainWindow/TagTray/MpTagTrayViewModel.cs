@@ -134,7 +134,7 @@ namespace MpWpfApp {
                         isTagLinkedToAllSelectedClips = false;
                     }
                 }
-                ttvm.IsAssociated = isTagLinkedToAllSelectedClips && MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles.Count > 0;
+                ttvm.IsAssociated = isTagLinkedToAllSelectedClips && MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count > 0;
 
             }
         }

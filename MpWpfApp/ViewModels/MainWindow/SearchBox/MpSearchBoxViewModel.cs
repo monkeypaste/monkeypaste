@@ -19,7 +19,7 @@ using System.Windows.Threading;
 namespace MpWpfApp {
     public class MpSearchBoxViewModel : MpViewModelBase {
         #region Private Variables
-
+        private TextBox _searchTextBox = null;
         #endregion
 
         #region Events
@@ -320,8 +320,9 @@ namespace MpWpfApp {
         public void SearchBoxBorder_Loaded(object sender, RoutedEventArgs args) {
             var searchBorder = (MpClipBorder)sender;
             var searchBox = (TextBox)searchBorder.FindName("SearchBox");
-            var searchByButton = (Button)((MpClipBorder)sender).FindName("SearchDropDownButton");
-
+            var searchByButton = (Button)searchBorder.FindName("SearchDropDownButton");
+            var clearSearchBoxButton = (Button)searchBorder.FindName("ClearTextBoxButton");
+            _searchTextBox = searchBox;
             searchBox.GotFocus += (s, e4) => {
                 if (!HasText) {
                     Text = string.Empty;
@@ -439,9 +440,9 @@ namespace MpWpfApp {
         }
         private void ClearText() {
             Text = string.Empty;
-            IsTextBoxFocused = true;
             SearchText = Text;
-            IsSearching = true;
+            _searchTextBox.Focus();
+            //IsSearching = true;
         }
 
         private RelayCommand _performSearchCommand;
@@ -455,7 +456,7 @@ namespace MpWpfApp {
         }
         private void PerformSearch() {
             SearchText = Text;
-            IsSearching = true;
+            //IsSearching = true;
         }
         
         private RelayCommand _nextMatchCommand;

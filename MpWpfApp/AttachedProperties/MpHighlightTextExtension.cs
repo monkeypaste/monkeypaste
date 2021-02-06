@@ -63,7 +63,7 @@ namespace MpWpfApp {
                                 var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
                                 var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
                                 var ctbb = Brushes.Transparent;
-                                if (ctvm.MainWindowViewModel.IsLoading || ctvm.IsEditingTile || ctvm.IsLoading) {
+                                if (ctvm.MainWindowViewModel.IsLoading || ctvm.IsLoading) {
                                     ctvm.TileVisibility = Visibility.Visible;
                                     return;
                                 }
@@ -86,10 +86,10 @@ namespace MpWpfApp {
 
                                 ctvm.TileVisibility = Visibility.Visible;
 
-                                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, ctbb);
+                                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, ctbb, new CancellationToken());
                                 ctvm.LastTitleHighlightRangeList.Clear();
 
-                                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, ctbb);
+                                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, ctbb, new CancellationToken());
                                 ctvm.LastContentHighlightRangeList.Clear();
 
                                 if (string.IsNullOrEmpty(hlt.Trim()) || hlt == Properties.Settings.Default.SearchPlaceHolderText) {
@@ -103,7 +103,7 @@ namespace MpWpfApp {
                                     foreach (var mr in MpHelpers.Instance.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive)) {
                                         ctvm.LastTitleHighlightRangeList.Add(mr);
                                     }
-                                    MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, hb);
+                                    MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, hb, new CancellationToken());
                                 }
                                 switch (ctvm.CopyItemType) {
                                     case MpCopyItemType.RichText:
@@ -114,7 +114,7 @@ namespace MpWpfApp {
                                             ctvm.LastContentHighlightRangeList.Add(mr);
                                         }
                                         if (ctvm.LastContentHighlightRangeList.Count > 0) {
-                                            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, hb);                                        
+                                            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, hb, new CancellationToken());                                        
                                         } else if (ctvm.LastTitleHighlightRangeList.Count == 0) {
                                             ctvm.TileVisibility = Visibility.Collapsed;
                                         }

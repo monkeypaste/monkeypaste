@@ -84,6 +84,12 @@ namespace MpWpfApp {
             }
         }
 
+        public double ClipTileLoadingSpinnerSize {
+            get {
+                return ClipTileSize * 0.333;
+            }
+        }
+
         public double ClipTileTitleIconSize {
             get {
                 return ClipTileTitleHeight * 0.75;
@@ -149,7 +155,13 @@ namespace MpWpfApp {
             }
         }
 
-        public double ClipTilePasteToolbarHeight {
+        public double ClipTilePasteTemplateToolbarHeight {
+            get {
+                return 40;
+            }
+        }
+
+        public double ClipTileEditTemplateToolbarHeight {
             get {
                 return 40;
             }

@@ -114,6 +114,11 @@ namespace MpWpfApp {
             _isFilteredItemsValid = false;
         }
 
+        public void RemoveAt(int index) {
+            _items.RemoveAt(index);
+            _isFilteredItemsValid = false;
+        }
+
         #endregion
 
         #region filter & sort Descrioption list

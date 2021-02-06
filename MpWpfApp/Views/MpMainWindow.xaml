@@ -1227,7 +1227,6 @@
                                                 Width="{Binding TileBorderWidth}"
                                                 Height="{Binding TileBorderHeight}"
                                                 Visibility="{Binding TileVisibility, NotifyOnTargetUpdated=True}"
-                                                local:MpHighlightTextExtension.HighlightText="{Binding MainWindowViewModel.SearchBoxViewModel.SearchText}"
                                                 Focusable="True"
                                                 Background="White"
                                                 ToolTipService.ShowDuration="1000"
@@ -1245,10 +1244,16 @@
                                     <DropShadowEffect Color="Black"
                                                       BlurRadius="10" />
                                 </local:MpClipBorder.Effect>-->
-                                <Grid>
-                                    <Label Content="Loading"
-                                           Visibility="{Binding LoadingSpinnerVisibility}" />
-                                    <Grid Visibility="{Binding ContentVisibility}">
+                                <Grid Background="#FF3D3D3D">
+                                    <Viewbox HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"
+                                             Visibility="{Binding LoadingSpinnerVisibility}"
+                                             Width="{Binding LoadingSpinnerSize}"
+                                             Height="{Binding LoadingSpinnerSize}">
+                                        <spinners:ucSpinnerDotCircle HorizontalAlignment="Center"
+                                                                     VerticalAlignment="Center" />
+                                    </Viewbox>                                    
+                                    <Grid Background="White" Visibility="{Binding ContentVisibility}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="Loaded">
                                                 <i:CallMethodAction TargetObject="{Binding}"

@@ -46,10 +46,11 @@
         private bool _wasAddedAtRuntime = false;
 
         private bool _wasEditConfirmed = true;
+
         #endregion
 
         #region Statics
-        #endregion                           
+        #endregion
 
         #region View Models
         private ObservableCollection<MpClipTileContextMenuItemViewModel> _convertClipTypes = new ObservableCollection<MpClipTileContextMenuItemViewModel>();
@@ -198,7 +199,7 @@
         #region Layout Properties
         public double EditTemplateToolbarHeight {
             get {
-                return MpMeasurements.Instance.ClipTilePasteToolbarHeight;
+                return MpMeasurements.Instance.ClipTileEditTemplateToolbarHeight;
             }
         }
 
@@ -210,7 +211,7 @@
 
         public double PasteTemplateToolbarHeight {
             get {
-                return MpMeasurements.Instance.ClipTilePasteToolbarHeight;
+                return MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
             }
         }        
 
@@ -329,7 +330,17 @@
 
         public double TileRtbHeight {
             get {
-                return MpMeasurements.Instance.ClipTileContentHeight - MpMeasurements.Instance.ClipTileEditToolbarHeight;
+                double ch = MpMeasurements.Instance.ClipTileContentHeight;
+                if (IsEditingTile) {
+                    ch -= MpMeasurements.Instance.ClipTileEditToolbarHeight;
+                }
+                if(IsPastingTemplateTile) {
+                    ch -= MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
+                }
+                if (IsEditingTemplate) {
+                    ch -= MpMeasurements.Instance.ClipTileEditTemplateToolbarHeight;
+                }
+                return ch;
             }
         }
 
@@ -362,6 +373,12 @@
                     _tileBorderThickness = value;
                     OnPropertyChanged(nameof(TileBorderThickness));
                 }
+            }
+        }
+
+        public double LoadingSpinnerSize {
+            get {
+                return MpMeasurements.Instance.ClipTileLoadingSpinnerSize;
             }
         }
 
@@ -684,6 +701,7 @@
                     OnPropertyChanged(nameof(CopyItem));
                     OnPropertyChanged(nameof(TileDetailGridVisibility));
                     OnPropertyChanged(nameof(TileContentHeight));
+                    OnPropertyChanged(nameof(TileRtbHeight));
                 }
             }
         }
@@ -699,6 +717,7 @@
                     OnPropertyChanged(nameof(IsEditingTemplate));
                     OnPropertyChanged(nameof(TileDetailGridVisibility));
                     OnPropertyChanged(nameof(TileContentHeight));
+                    OnPropertyChanged(nameof(TileRtbHeight));
                 }
             }
         }
@@ -714,6 +733,7 @@
                     OnPropertyChanged(nameof(IsPastingTemplateTile));
                     OnPropertyChanged(nameof(TileDetailGridVisibility));
                     OnPropertyChanged(nameof(TileContentHeight));
+                    OnPropertyChanged(nameof(TileRtbHeight));
                 }
             }
         }        
@@ -1104,10 +1124,9 @@
                 return _copyItem;
             }
             private set {
-                if (_copyItem != value) 
+                //if (_copyItem != value) 
                 {
                     _copyItem = value;
-
                     OnPropertyChanged(nameof(CopyItem));
                     OnPropertyChanged(nameof(CopyItemId));
                     OnPropertyChanged(nameof(CopyItemType));
@@ -1127,9 +1146,6 @@
                     OnPropertyChanged(nameof(CopyItemCreatedDateTime));
                     OnPropertyChanged(nameof(DetailText));
                     OnPropertyChanged(nameof(FileListViewModels));
-                    OnPropertyChanged(nameof(DetectedImageObjectCollectionViewModel));
-                    OnPropertyChanged(nameof(LoadingSpinnerVisibility));
-                    OnPropertyChanged(nameof(ContentVisibility));
                     OnPropertyChanged(nameof(CopyCount));
                     OnPropertyChanged(nameof(PasteCount));
                     OnPropertyChanged(nameof(CharCount));
@@ -1137,6 +1153,9 @@
                     OnPropertyChanged(nameof(FileCount));
                     OnPropertyChanged(nameof(DataSizeInMb));
                     OnPropertyChanged(nameof(IsLoading));
+                    OnPropertyChanged(nameof(DetectedImageObjectCollectionViewModel));
+                    OnPropertyChanged(nameof(LoadingSpinnerVisibility));
+                    OnPropertyChanged(nameof(ContentVisibility));
                     //CopyItem.WriteToDatabase();
                 }
             }
@@ -1146,7 +1165,7 @@
         #endregion
 
         #region Public Methods
-        public MpClipTileViewModel(bool isPlaceHolder = false) : base() {
+        public MpClipTileViewModel(bool isPlaceHolder = true) : base() {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
                     case nameof(IsSelected):
@@ -1175,13 +1194,18 @@
                         break;
                 }
             };
+            
             TemplateHyperlinkCollectionViewModel = new MpTemplateHyperlinkCollectionViewModel(this);
             EditRichTextBoxToolbarViewModel = new MpEditRichTextBoxToolbarViewModel(this);
             EditTemplateToolbarViewModel = new MpEditTemplateToolbarViewModel(this);
             PasteTemplateToolbarViewModel = new MpPasteTemplateToolbarViewModel(this);
+
+            if(isPlaceHolder) {
+                SetCopyItem(null);
+            }
         }
 
-        public MpClipTileViewModel(MpCopyItem ci) : this() {
+        public MpClipTileViewModel(MpCopyItem ci) : this(false) {
             SetCopyItem(ci);
         }
         
@@ -1197,7 +1221,8 @@
 
         public void SetCopyItem(MpCopyItem ci) {
             if (ci == null) {
-                throw new Exception("MpClipTileViewModel error, cannot set null copyitem");
+                //throw new Exception("MpClipTileViewModel error, cannot set null copyitem");
+                return;
             }
             if (ci.CopyItemId == 0 && !MainWindowViewModel.IsLoading) {
                 ci.WriteToDatabase();
@@ -1227,6 +1252,7 @@
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
+            
             var clipTileBorder = (Grid)sender;
             _cb = clipTileBorder.GetVisualAncestor<MpClipBorder>();
 
@@ -1282,8 +1308,6 @@
                 titleDetailTextBlock.Text = GetCurrentDetail(_detailIdx);
             };
             titleDetailTextBlock.Text = GetCurrentDetail(_detailIdx);
-            //Canvas.SetLeft(titleDetailTextBlock, 5);
-            //Canvas.SetTop(titleDetailTextBlock, TileTitleHeight - 14);
         }
 
         public void ClipTileTitle_Loaded(object sender, RoutedEventArgs e) {
@@ -1333,8 +1357,6 @@
             
             Canvas.SetLeft(titleIconImageButton, MpMeasurements.Instance.ClipTileTitleIconCanvasLeft);
             Canvas.SetTop(titleIconImageButton, 2);
-
-
             
             titleIconImageButton.MouseEnter += (s, e3) => {
                 if(IsEditingTemplate || IsPastingTemplateTile) {
@@ -1493,8 +1515,8 @@
                         } else if (CurrentHighlightMatchIdx > maxIdx) {
                             _currentHighlightMatchIdx = 0;
                         }
-                        MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
-                        MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
+                        MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb, new CancellationToken());
+                        MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb, new CancellationToken());
                         if (CurrentHighlightMatchIdx < LastTitleHighlightRangeList.Count) {
                             LastTitleHighlightRangeList[CurrentHighlightMatchIdx].ApplyPropertyValue(TextElement.BackgroundProperty, hfb);
                         } else if (CurrentHighlightMatchIdx < LastContentHighlightRangeList.Count) {
@@ -1524,8 +1546,6 @@
 
             //vb.ContextMenu = ctcc.ContextMenu = ic.ContextMenu = (ContextMenu)((FrameworkElement)sender).GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
 
-            //CopyItem.ImageItemObjectList.Clear();
-            //CopyItem.ImageItemObjectList.Add(new MpDetectedImageObject(0, CopyItemId, 0, 0, 0, 100, 100, "test"));
             DetectedImageObjectCollectionViewModel = new MpDetectedImageObjectCollectionViewModel(CopyItem);
         }
 
@@ -1562,6 +1582,7 @@
                     MpHelpers.Instance.GetColorRow(TitleColor)
                 );
         }
+
         public void ClipTile_ContextMenu_Closed(object sender, RoutedEventArgs e) {
             ((MpClipTileViewModel)((FrameworkElement)sender).DataContext).SaveToDatabase();
         }
@@ -1573,7 +1594,6 @@
                 cmi.Header = "Convert to Text";
                 cmi.Click += (s, e1) => {
                     System.Windows.Clipboard.SetText(CopyItemPlainText);
-                    //MainWindowViewModel.ClipTrayViewModel.Remove(this);
                 };
                 cm.Items.Add(cmi);
             }
@@ -1606,11 +1626,11 @@
             var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
 
             //clear any search highlighting when saving the document then restore after save
-            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, Brushes.Transparent);
-            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, Brushes.Transparent);
+            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, Brushes.Transparent, new CancellationToken());
+            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, Brushes.Transparent, new CancellationToken());
             CopyItemRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(GetRtb().Document);
-            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
-            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
+            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb, new CancellationToken());
+            MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb, new CancellationToken());
 
             GetRtb().CreateHyperlinks();
         }
@@ -1626,7 +1646,6 @@
             if (HasTemplate) {
                 IsPastingTemplateTile = true;
                 TemplateRichText = string.Empty;
-                //MainWindowViewModel.ClipTrayViewModel.GetTray().Items.Refresh();
                 var temp = CopyItemRichText;
                 await Task.Run(() => {
                     while (string.IsNullOrEmpty(TemplateRichText)) {
@@ -1670,34 +1689,154 @@
             MpHelpers.Instance.OpenUrl(@"https://yandex.com/search/?text=" + System.Uri.EscapeDataString(CopyItemPlainText));
         }
 
-        //public void SaveClipTile(string nrtf = "") {
-        //    if(!string.IsNullOrEmpty(nrtf)) {
-        //        CopyItemRichText = nrtf;
-        //    } else {
-        //        GetRtb().ClearHyperlinks();
+        public async Task PerformHighlight(MpClipTileViewModel ctvm, string hlt, CancellationToken ct) {
+            ctvm.MainWindowViewModel.ClipTrayViewModel.HighlightTaskCount++;
+            if (ctvm.MainWindowViewModel.IsLoading || ctvm.IsLoading) {
+                ctvm.TileVisibility = Visibility.Visible;
+                ctvm.MainWindowViewModel.ClipTrayViewModel.HighlightTaskCount--;
+                return;
+            }
 
-        //        var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
-        //        var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
+            var sttvm = ctvm.MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel.SelectedTagTile;
+            if (!sttvm.IsLinkedWithClipTile(ctvm)) {
+                Console.WriteLine("Clip tile w/ title " + ctvm.CopyItemTitle + " is not linked with current tag");
+                ctvm.TileVisibility = Visibility.Collapsed;
+                ctvm.MainWindowViewModel.ClipTrayViewModel.HighlightTaskCount--;
+                return;
+            }
 
-        //        //clear any search highlighting when saving the document then restore after save
-        //        MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, Brushes.Transparent);
-        //        MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, Brushes.Transparent);
-        //        CopyItemRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(GetRtb().Document);
-        //        MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastTitleHighlightRangeList, hb);
-        //        MpHelpers.Instance.ApplyBackgroundBrushToRangeList(LastContentHighlightRangeList, hb);
-        //    }
+            if (string.IsNullOrEmpty(hlt.Trim()) || hlt == Properties.Settings.Default.SearchPlaceHolderText) {
+                //if search text is empty clear any highlights and show clip (if associated w/ current tag)
+                ctvm.TileVisibility = Visibility.Visible;
+                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, Brushes.Transparent, ct);
+                ctvm.LastTitleHighlightRangeList.Clear();
 
-        //    if(GetRtb() != null) {
-        //        //ignore when called in SetItem in constructor
-        //        GetRtb().CreateHyperlinks();
-        //    }
-        //    CopyItem.WriteToDatabase();
-        //}
+                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, Brushes.Transparent, ct);
+                ctvm.LastContentHighlightRangeList.Clear();
+                ctvm.MainWindowViewModel.ClipTrayViewModel.HighlightTaskCount--;
+                return;
+            }
 
+            await PerformHighlightAsync(ctvm, hlt, ct);
+            ctvm.MainWindowViewModel.ClipTrayViewModel.HighlightTaskCount--;
+        }
         #endregion
 
         #region Private Methods      
 
+        private async Task PerformHighlightAsync(MpClipTileViewModel ctvm, string hlt, CancellationToken ct) {
+            await Dispatcher.CurrentDispatcher.InvokeAsync(
+                (Action)(() => {
+                    var cb = ctvm.GetBorder();
+                    var ttb = ctvm.GetTitleTextBlock();
+                    var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
+                    var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
+                    var ctbb = Brushes.Transparent;
+
+                    RegexOptions rot = RegexOptions.None;
+                    RegexOptions roc = RegexOptions.None;
+                    if(Properties.Settings.Default.SearchByIsCaseSensitive) {
+                        rot = RegexOptions.ExplicitCapture;
+                        roc = RegexOptions.ExplicitCapture | RegexOptions.Multiline;
+                    } else {
+                        rot = RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture;
+                        roc = RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Multiline;
+                    }
+                    var mct = Regex.Matches(ctvm.CopyItemTitle, hlt, rot);
+                    var mcc = Regex.Matches(ctvm.CopyItemPlainText, hlt, roc);
+                    
+                    if (mct.Count == 0 && mcc.Count == 0) {
+                        ctvm.TileVisibility = Visibility.Collapsed;
+                        return;
+                    }
+                    
+                    Console.WriteLine("Beginning highlight clip with title: " + ctvm.CopyItemTitle + " with highlight text: " + hlt);
+
+                    ctvm.TileVisibility = Visibility.Visible;
+
+                    MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, ctbb, ct);
+                    ctvm.LastTitleHighlightRangeList.Clear();
+
+                    MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, ctbb, ct);
+                    ctvm.LastContentHighlightRangeList.Clear();
+
+
+                    //highlight title 
+                    if (ttb.Text.ContainsByCaseSetting(hlt)) {
+                        var trl = MpHelpers.Instance.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
+                        foreach (var mr in trl) {
+                            ctvm.LastTitleHighlightRangeList.Add(mr);
+                        }
+
+                        MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, hb, ct);
+                    }
+                    switch (ctvm.CopyItemType) {
+                        case MpCopyItemType.RichText:
+                            var rtb = ctvm.GetRtb();
+
+                            rtb.BeginChange();
+                            var trl = MpHelpers.Instance.FindStringRangesFromPosition(rtb.Document.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
+                            foreach (var mr in trl) {
+                                ctvm.LastContentHighlightRangeList.Add(mr);
+                            }
+                            if (ctvm.LastContentHighlightRangeList.Count > 0) {
+                                MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, hb, ct);
+                            } else if (ctvm.LastTitleHighlightRangeList.Count == 0) {
+                                ctvm.TileVisibility = Visibility.Collapsed;
+                            }
+                            if (ctvm.LastContentHighlightRangeList.Count > 0 || ctvm.LastTitleHighlightRangeList.Count > 0) {
+                                ctvm.CurrentHighlightMatchIdx = 0;
+                            }
+                            rtb.EndChange();
+                            break;
+                        case MpCopyItemType.Image:
+                            foreach (var diovm in ctvm.DetectedImageObjectCollectionViewModel) {
+                                if (diovm.ObjectTypeName.ContainsByCaseSetting(hlt)) {
+                                    ctvm.TileVisibility = Visibility.Visible;
+                                    return;
+                                }
+                            }
+                            if (ctvm.LastContentHighlightRangeList.Count == 0) {
+                                ctvm.TileVisibility = Visibility.Collapsed;
+                            }
+                            break;
+                        case MpCopyItemType.FileList:
+                            var flb = ctvm.GetFileListBox();
+                            if (ctvm.LastContentHighlightRangeList != null) {
+                                foreach (var lhr in ctvm.LastContentHighlightRangeList) {
+                                    lhr.ApplyPropertyValue(TextElement.BackgroundProperty, ctbb);
+                                }
+                            }
+                            foreach (var fivm in ctvm.FileListViewModels) {
+                                if (fivm.ItemPath.ContainsByCaseSetting(hlt)) {
+                                    var container = flb.ItemContainerGenerator.ContainerFromItem(fivm) as FrameworkElement;
+                                    if (container != null) {
+                                        var fitb = (TextBlock)container.FindName("FileListItemTextBlock");
+                                        if (fitb != null) {
+                                            var hlr = MpHelpers.Instance.FindStringRangeFromPosition(fitb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
+                                            if (hlr != null) {
+                                                hlr.ApplyPropertyValue(TextBlock.BackgroundProperty, hb);
+                                                ctvm.LastContentHighlightRangeList.Add(hlr);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (ctvm.LastContentHighlightRangeList.Count == 0) {
+                                ctvm.TileVisibility = Visibility.Collapsed;
+                            } else {
+                                ctvm.TileVisibility = Visibility.Visible;
+                            }
+                            break;
+                    }
+                    Console.WriteLine("Ending highlighting clip with title: " + ctvm.CopyItemTitle);
+                }),
+                DispatcherPriority.Background);
+
+            //if (HighlightTasks.Count > 0) {
+            //    HighlightTasks.RemoveAt(0);
+            //}
+        }
         private string GetCurrentDetail(int detailId) {
             string info = "I dunno";// string.Empty;
             switch (detailId) {

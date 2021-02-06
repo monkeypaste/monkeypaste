@@ -44,8 +44,9 @@ namespace MpWpfApp {
         private static readonly Lazy<MpHelpers> _Lazy = new Lazy<MpHelpers>(() => new MpHelpers());
         public static MpHelpers Instance { get { return _Lazy.Value; } }
         
+        private YoloWrapper yoloWrapper = null;
         public void Init() {
-            //empty to init singleton
+            //yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect());
         }
 
         #region Documents
@@ -98,11 +99,16 @@ namespace MpWpfApp {
 
         }
 
-        public void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRange> rangeList, Brush bgBrush) {
+        public void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRange> rangeList, Brush bgBrush, CancellationToken ct) {
             if (rangeList == null || rangeList.Count == 0) {
                 return;
             }
             foreach (var range in rangeList) {
+                if(ct.IsCancellationRequested) {
+                    //throw new OperationCanceledException();
+                    Console.WriteLine("Bg highlighting canceled");
+                    return;
+                }
                 range.ApplyPropertyValue(TextElement.BackgroundProperty, bgBrush);
             }
         }
@@ -1171,31 +1177,35 @@ namespace MpWpfApp {
             return null;
         }
 
-        public List<MpDetectedImageObject> DetectObjects(byte[] image, double confidence = 0.0) {
+        public async Task<List<MpDetectedImageObject>> DetectObjectsAsync(byte[] image, double confidence = 0.0) {
             var detectedObjectList = new List<MpDetectedImageObject>();
-            using (var yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect())) {
-                var items = yoloWrapper.Detect(image);
-                foreach(var item in items) {
-                    if(item.Confidence >= confidence) {
-                        detectedObjectList.Add(new MpDetectedImageObject(
-                            0,
-                            0,
-                            item.Confidence,
-                            item.X,
-                            item.Y,
-                            item.Width,
-                            item.Height,
-                            item.Type));
-                    }                    
-                }
-                //items[0].Type -> "Person , Car, ..."
-                //items[0].Confidence -> 0.0 (low) -> 1.0 (high)
-                //items[0].X -> bounding box
-                //items[0].Y -> bounding box
-                //items[0].Width -> bounding box
-                //items[0].Height -> bounding box
-                return detectedObjectList;
-            }
+            await Dispatcher.CurrentDispatcher.InvokeAsync(
+                () => {
+                    using (var yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect())) {
+                        var items = yoloWrapper.Detect(image);
+                        foreach (var item in items) {
+                            if (item.Confidence >= confidence) {
+                                detectedObjectList.Add(new MpDetectedImageObject(
+                                    0,
+                                    0,
+                                    item.Confidence,
+                                    item.X,
+                                    item.Y,
+                                    item.Width,
+                                    item.Height,
+                                    item.Type));
+                            }
+                        }
+                        //items[0].Type -> "Person , Car, ..."
+                        //items[0].Confidence -> 0.0 (low) -> 1.0 (high)
+                        //items[0].X -> bounding box
+                        //items[0].Y -> bounding box
+                        //items[0].Width -> bounding box
+                        //items[0].Height -> bounding box
+                        //return detectedObjectList;
+                    }
+                }, DispatcherPriority.Background);
+            return detectedObjectList;
         }
         
         public BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint, bool retainAlpha = false) {
@@ -1544,18 +1554,23 @@ namespace MpWpfApp {
         #endregion
 
         #region Converters
-        public async Task<string> ConvertBitmapSourceToPlainText(string image) {
-            var engine = OcrEngine.TryCreateFromLanguage(new Windows.Globalization.Language("en-US")); 
-            var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(image);
-            using (var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read)) {
-                var decoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream);
-                var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
-                var ocrResult = await engine.RecognizeAsync(softwareBitmap);
+        public async Task<string> OcrBitmapSourceFileAsync(string image) {
+            string ocrText = string.Empty;
+            await Dispatcher.CurrentDispatcher.InvokeAsync(async () => {
+                var engine = OcrEngine.TryCreateFromLanguage(new Windows.Globalization.Language("en-US"));
+                var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(image);
+                using (var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read)) {
+                    var decoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream);
+                    var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
+                    var ocrResult = await engine.RecognizeAsync(softwareBitmap);
 
-                Console.WriteLine(ocrResult.Text);
+                    Console.WriteLine(ocrResult.Text);
 
-                return ocrResult.Text;
-            }            
+                    ocrText = ocrResult.Text;
+                }
+            }, DispatcherPriority.Background);
+
+            return ocrText;
         }
 
         public string ConvertFlowDocumentToXaml(MpEventEnabledFlowDocument fd) {
