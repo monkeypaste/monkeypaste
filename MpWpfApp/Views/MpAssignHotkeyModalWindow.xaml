@@ -44,7 +44,7 @@
                FontSize="14"
                FontStyle="Oblique"
                HorizontalAlignment="Center"
-               Text="{Binding KeysString}" />
+               Text="{Binding KeyString}" />
         <TextBlock Grid.Row="3"
                    FontSize="10"
                    FontStyle="Oblique"

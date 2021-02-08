@@ -58,7 +58,7 @@ namespace MpWpfApp {
         public List<string> SendKeysKeyStringList {
             get {
                 var outStrList = new List<string>();
-                var combos = KeyList.Split(',').ToList();
+                var combos = KeyString.Split(',').ToList();
                 foreach (var combo in combos) {
                     var outStr = string.Empty;
                     var keys = combo.Split('+').ToList();
@@ -150,20 +150,21 @@ namespace MpWpfApp {
                 return _routingTypes;
             }
         }
+
         #endregion
 
         #region Model
-        public string DefaultKeyList {
+        public string DefaultKeyString {
             get {
                 if (Shortcut == null) {
                     return String.Empty;
                 }
-                return Shortcut.DefaultKeyList;
+                return Shortcut.DefaultKeyString;
             }
             set {
-                if (Shortcut != null && Shortcut.DefaultKeyList != value) {
-                    Shortcut.DefaultKeyList = value;
-                    OnPropertyChanged(nameof(DefaultKeyList));
+                if (Shortcut != null && Shortcut.DefaultKeyString != value) {
+                    Shortcut.DefaultKeyString = value;
+                    OnPropertyChanged(nameof(DefaultKeyString));
                 }
             }
         }
@@ -213,16 +214,26 @@ namespace MpWpfApp {
             }
         }
 
-        public string KeyList {
+        public List<List<Key>> KeyList {
+            get {
+                if(Shortcut == null) {
+                    return new List<List<Key>>();
+                }
+                return Shortcut.KeyList;
+            }
+        }
+
+        public string KeyString {
             get {
                 if(Shortcut == null) {
                     return string.Empty;
                 }
-                return Shortcut.KeyList;
+                return Shortcut.KeyString;
             }
             set {
-                if (Shortcut != null && Shortcut.KeyList != value) {
-                    Shortcut.KeyList = value;
+                if (Shortcut != null && Shortcut.KeyString != value) {
+                    Shortcut.KeyString = value;
+                    OnPropertyChanged(nameof(KeyString));
                     OnPropertyChanged(nameof(KeyList));
                 }
             }
@@ -269,12 +280,13 @@ namespace MpWpfApp {
                     _shortcut = value;
                     OnPropertyChanged(nameof(Shortcut));
                     OnPropertyChanged(nameof(RoutingType));
+                    OnPropertyChanged(nameof(KeyString));
                     OnPropertyChanged(nameof(KeyList));
                     OnPropertyChanged(nameof(ShortcutDisplayName));
                     OnPropertyChanged(nameof(ShortcutId));
                     OnPropertyChanged(nameof(TagId));
                     OnPropertyChanged(nameof(CopyItemId));
-                    OnPropertyChanged(nameof(DefaultKeyList));
+                    OnPropertyChanged(nameof(DefaultKeyString));
                     OnPropertyChanged(nameof(ResetButtonVisibility));
                     OnPropertyChanged(nameof(DeleteButtonVisibility));
                     OnPropertyChanged(nameof(SelectedRoutingType));
@@ -288,14 +300,14 @@ namespace MpWpfApp {
         public MpShortcutViewModel(MpShortcut s, ICommand command) {
             PropertyChanged += (s1, e) => {
                 switch (e.PropertyName) {
-                    case nameof(KeyList):
+                    case nameof(KeyString):
                         if (IsCustom()) {
                             if (Shortcut.CopyItemId > 0) {
                                 var ctvm = MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(Shortcut.CopyItemId);
-                                ctvm.ShortcutKeyList = Shortcut.KeyList;
+                                ctvm.ShortcutKeyString = Shortcut.KeyString;
                             } else {
                                 var ttvm = MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.TagId == Shortcut.TagId).Single();
-                                ttvm.ShortcutKeyList = Shortcut.KeyList;
+                                ttvm.ShortcutKeyString = Shortcut.KeyString;
                             }
                         }
                         break;
@@ -308,7 +320,7 @@ namespace MpWpfApp {
 
         public void Register() {
             //only register if non-empty keysstring
-            if (string.IsNullOrEmpty(KeyList)) {
+            if (string.IsNullOrEmpty(KeyString)) {
                 if(!IsSequence()) {
                     Unregister();
                 }
@@ -326,7 +338,7 @@ namespace MpWpfApp {
                             //only register sequences at startup
                             hook.OnSequence(new Dictionary<Sequence, Action> {
                                 {
-                                    Sequence.FromString(KeyList),
+                                    Sequence.FromString(KeyString),
                                     () => PerformShortcutCommand.Execute(null)
                                 }
                             });
@@ -334,7 +346,7 @@ namespace MpWpfApp {
                     } else {
                         //unregister if already exists
                         Unregister();
-                        var t = new MouseKeyHook.Rx.Trigger[] { MouseKeyHook.Rx.Trigger.FromString(KeyList) };
+                        var t = new MouseKeyHook.Rx.Trigger[] { MouseKeyHook.Rx.Trigger.FromString(KeyString) };
                         KeysObservable = hook.KeyDownObservable().Matching(t).Subscribe(
                             (trigger) => PerformShortcutCommand.Execute(null)
                         );
@@ -345,7 +357,7 @@ namespace MpWpfApp {
                     return;
                 }
                 Shortcut.WriteToDatabase();
-                Console.WriteLine("Shortcut Successfully registered for '" + ShortcutDisplayName + "' with hotkeys: " + KeyList);
+                Console.WriteLine("Shortcut Successfully registered for '" + ShortcutDisplayName + "' with hotkeys: " + KeyString);
                 return;
             }
         }
@@ -368,13 +380,13 @@ namespace MpWpfApp {
         }
 
         public bool IsSequence() {
-            return KeyList.Contains(",");
+            return KeyString.Contains(",");
         }
         public bool IsCustom() {
             return Shortcut.CopyItemId > 0 || Shortcut.TagId > 0;
         }
-        public void ClearKeyList() {
-            KeyList = string.Empty;
+        public void ClearShortcutKeyString() {
+            KeyString = string.Empty;
         }
 
         public object Clone() {

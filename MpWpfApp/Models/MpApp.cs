@@ -18,8 +18,8 @@ namespace MpWpfApp {
         public string AppPath { get; set; } = string.Empty;
         public string AppName { get; set; } = string.Empty;
         public bool IsAppRejected { get; set; } = false;
-        public BitmapSource IconImage { get; set; }
-        public BitmapSource IconBorderImage { get; set; }
+        public BitmapSource IconImage { get; set; } = new BitmapImage();
+        public BitmapSource IconBorderImage { get; set; } = new BitmapImage();
 
         public int[] ColorId = new int[5];
 
@@ -68,7 +68,7 @@ namespace MpWpfApp {
             PrimaryIconColorList = CreatePrimaryColorList(IconImage);
         }
 
-        public MpApp() : this(false, IntPtr.Zero) { }
+        public MpApp() { }
 
         public MpApp(DataRow dr) {
             LoadDataRow(dr);

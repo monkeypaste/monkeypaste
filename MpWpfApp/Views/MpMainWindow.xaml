@@ -896,7 +896,7 @@
                                         <MenuItem Header="Rename"
                                                   Command="{Binding RenameTagCommand}" />
                                         <MenuItem Header="Hotkey"
-                                                  InputGestureText="{Binding ShortcutKeyList}"
+                                                  InputGestureText="{Binding ShortcutKeyString}"
                                                   Command="{Binding AssignHotkeyCommand}" />
                                         <MenuItem Header="Change Color"
                                                   Command="{Binding ChangeTagColorCommand}" />
@@ -1295,7 +1295,7 @@
                                                 <MenuItem Header="Invert Selection"
                                                           Command="{Binding Data.InvertSelectionCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="Assign Hotkey"
-                                                          InputGestureText="{Binding ShortcutKeyList}"
+                                                          InputGestureText="{Binding ShortcutKeyString}"
                                                           Command="{Binding Data.AssignHotkeyCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="Exclude Application"
                                                           Command="{Binding ExcludeApplicationCommand}" />
@@ -2169,7 +2169,7 @@
                                                        Margin="0,0,5,0"
                                                        Background="Transparent"
                                                        Foreground="{Binding DetailTextColor}"
-                                                       Text="{Binding ShortcutKeyList}" />
+                                                       Text="{Binding ShortcutKeyString}" />
                                         </Grid>
                                     </Grid>
                                 </Grid>

@@ -6,15 +6,8 @@ using System.Reactive.Linq;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpShortcutCombination {
-        public List<Key> KeyList = new List<Key>();
+    public class MpKeyCombination {
 
-        public override string ToString() {
-            var outStr = string.Empty;
-            foreach(var k in KeyList) {
-
-            }
-        }
     }
     public class MpShortcut : MpDbObject {
         #region Public Properties
@@ -22,10 +15,24 @@ namespace MpWpfApp {
         public int CopyItemId { get; set; } = 0;
         public int TagId { get; set; } = 0;
         public string ShortcutName { get; set; } = string.Empty;
-        public string KeyList { get; set; } = string.Empty;
-        public string DefaultKeyList { get; set; } = string.Empty;
+        public string KeyString { get; set; } = string.Empty;
+        public string DefaultKeyString { get; set; } = string.Empty;
         public MpRoutingType RoutingType { get; set; } = MpRoutingType.None;
 
+        public List<List<Key>> KeyList {
+            get {
+                var keyList = new List<List<Key>>();
+                var combos = KeyString.Split(new string[] { ", " },StringSplitOptions.RemoveEmptyEntries).ToList<string>();                
+                foreach(var c in combos) {
+                    var keys = c.Split(new string[] { "+" }, StringSplitOptions.RemoveEmptyEntries);
+                    keyList.Add(new List<Key>());
+                    foreach(var k in keys) {
+                        keyList[keyList.Count - 1].Add(MpHelpers.Instance.ConvertStringToKey(k));
+                    }
+                }
+                return keyList;
+            }
+        }
         #endregion
 
         #region Private Variables
@@ -57,8 +64,8 @@ namespace MpWpfApp {
         public MpShortcut() {
             ShortcutId = 0;
             ShortcutName = string.Empty;
-            KeyList = string.Empty;
-            DefaultKeyList = string.Empty;
+            KeyString = string.Empty;
+            DefaultKeyString = string.Empty;
             RoutingType = MpRoutingType.None;
             CopyItemId = 0;
             TagId = 0;
@@ -72,11 +79,11 @@ namespace MpWpfApp {
                 LoadDataRow(dt.Rows[0]);
             }
         }
-        public MpShortcut(int copyItemId, int tagId, string keyList, string shortcutName) : this() {
+        public MpShortcut(int copyItemId, int tagId, string keyString, string shortcutName) : this() {
             ShortcutName = shortcutName;
             CopyItemId = copyItemId;
             TagId = tagId;
-            KeyList = keyList;
+            KeyString = keyString;
             RoutingType = TagId > 0 ? MpRoutingType.Internal : MpRoutingType.Direct;
         }
 
@@ -84,7 +91,7 @@ namespace MpWpfApp {
             LoadDataRow(dr);
         }
         public void Reset() {
-            KeyList = DefaultKeyList;
+            KeyString = DefaultKeyString;
         }
 
         public override void LoadDataRow(DataRow dr) {
@@ -92,36 +99,33 @@ namespace MpWpfApp {
             CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemId"].ToString());
             TagId = Convert.ToInt32(dr["fk_MpTagId"].ToString());
             ShortcutName = dr["ShortcutName"].ToString();
-            KeyList = dr["KeyList"].ToString();
-            DefaultKeyList = dr["DefaultKeyList"].ToString();
-            //this is used to set default application shortcuts when db is first made
-            if((KeyList == null || KeyList == string.Empty) && DefaultKeyList.Length > 0) {
-                KeyList = DefaultKeyList;
-            }
+            KeyString = dr["KeyString"].ToString();
+            DefaultKeyString = dr["DefaultKeyString"].ToString();
+            
             RoutingType = (MpRoutingType)Convert.ToInt32(dr["RoutingType"].ToString());            
         }
 
         public override void WriteToDatabase() {
             if (ShortcutId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpShortcut(ShortcutName,RoutingType,KeyList,DefaultKeyList,fk_MpCopyItemId,fk_MpTagId) values(@sn,@rt,@kl,@dkl,@ciid,@tid)",
+                    "insert into MpShortcut(ShortcutName,RoutingType,KeyString,DefaultKeyString,fk_MpCopyItemId,fk_MpTagId) values(@sn,@rt,@ks,@dks,@ciid,@tid)",
                     new Dictionary<string, object> {
                         { "@sn", ShortcutName},
                         { "@rt", (int)RoutingType},
-                        { "@kl", KeyList},
-                        { "@dkl", DefaultKeyList},
+                        { "@ks", KeyString},
+                        { "@dks", DefaultKeyString},
                         { "@ciid", CopyItemId},
                         { "@tid", TagId}
                     });
                 ShortcutId = MpDb.Instance.GetLastRowId("MpShortcut", "pk_MpShortcutId");
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpShortcut set ShortcutName=@sn, KeyList=@kl, DefaultKeyList=@dkl, fk_MpCopyItemId=@ciid, fk_MpTagId=@tid, RoutingType=@rtid where pk_MpShortcutId=@sid",
+                    "update MpShortcut set ShortcutName=@sn, KeyString=@ks, DefaultKeyString=@dks, fk_MpCopyItemId=@ciid, fk_MpTagId=@tid, RoutingType=@rtid where pk_MpShortcutId=@sid",
                     new Dictionary<string, object> {
                         { "@sn", ShortcutName},
                         { "@rtid", (int)RoutingType},
-                        { "@kl", KeyList},
-                        { "@dkl", DefaultKeyList},
+                        { "@ks", KeyString},
+                        { "@dks", DefaultKeyString},
                         { "@ciid", CopyItemId},
                         { "@tid", TagId},
                         { "@sid", ShortcutId }
@@ -139,7 +143,7 @@ namespace MpWpfApp {
 
         public override string ToString() {
             string outStr = "Shortcut Name: " + ShortcutName + " Id: " + ShortcutId;
-            outStr += " " + KeyList;
+            outStr += " " + KeyString;
             return outStr;
         }
         #endregion

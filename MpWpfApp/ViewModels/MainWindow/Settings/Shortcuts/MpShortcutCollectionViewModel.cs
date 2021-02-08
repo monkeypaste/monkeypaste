@@ -94,11 +94,11 @@ namespace MpWpfApp {
                         try {
                             if (sc.CopyItemId > 0) {
                                 var ctvm = MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(sc.CopyItemId);
-                                ctvm.ShortcutKeyList = sc.KeyList;
+                                ctvm.ShortcutKeyString = sc.KeyString;
                                 shortcutCommand = ctvm.PasteClipCommand;
                             } else if (sc.TagId > 0) {
                                 var ttvm = MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.TagId == sc.TagId).Single();
-                                ttvm.ShortcutKeyList = sc.KeyList;
+                                ttvm.ShortcutKeyString = sc.KeyString;
                                 shortcutCommand = ttvm.SelectTagCommand;
                             }
                         } catch(Exception ex) {
@@ -118,18 +118,18 @@ namespace MpWpfApp {
             string keys, 
             ICommand command) {
             MainWindowViewModel.IsShowingDialog = true;
-            var shortcutKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(title, keys, command);
+            var shortcutKeyString = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(title, keys, command);
 
-            if (shortcutKeyList == null) {
+            if (shortcutKeyString == null) {
                 //if assignment was canceled ignore but reset skl
-                shortcutKeyList = string.Empty;
-            } else if (shortcutKeyList == string.Empty) {
+                shortcutKeyString = string.Empty;
+            } else if (shortcutKeyString == string.Empty) {
                 //if an empty assignment was ok'd check if exists 
                 var scvml = this.Where(x => x.Command == command).ToList();
                 //if it does clear, save and unregister
                 if (scvml != null && this.Count > 0) {
                     foreach (var scvm in scvml) {
-                        scvm.ClearKeyList();
+                        scvm.ClearShortcutKeyString();
                         scvm.Shortcut.WriteToDatabase();
                         scvm.Unregister();
                     }
@@ -137,10 +137,10 @@ namespace MpWpfApp {
                     //nothing to do since no shortcut created
                 }
             } else {
-                this.Add(vm, shortcutKeyList, command);                
+                this.Add(vm, shortcutKeyString, command);                
             }
             MainWindowViewModel.IsShowingDialog = false;
-            return shortcutKeyList;
+            return shortcutKeyString;
         }
         public void Add(object vm, string keys, ICommand command) {
             if (vm.GetType() == typeof(MpClipTileViewModel)) {
@@ -165,7 +165,7 @@ namespace MpWpfApp {
                             command));
             } else if (vm.GetType() == typeof(MpShortcutViewModel)) {
                 var scvm = (MpShortcutViewModel)vm;
-                scvm.KeyList = keys;
+                scvm.KeyString = keys;
                 scvm.Command = command;
                 scvm.Shortcut.WriteToDatabase();
 
@@ -191,11 +191,11 @@ namespace MpWpfApp {
                 if (scvm.Shortcut.CopyItemId > 0) {
                     var ctvm = MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(scvm.Shortcut.CopyItemId);
                     if(ctvm != null) {
-                        ctvm.ShortcutKeyList = string.Empty;
+                        ctvm.ShortcutKeyString = string.Empty;
                     }
                 } else {
                     foreach(var ttvm in MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.TagId == scvm.Shortcut.TagId).ToList()) {
-                        ttvm.ShortcutKeyList = string.Empty;
+                        ttvm.ShortcutKeyString = string.Empty;
                     }
                 }
             }

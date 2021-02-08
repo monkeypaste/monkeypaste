@@ -1267,8 +1267,8 @@ namespace MpWpfApp {
         public BitmapSource GetIconImage(string sourcePath) {
             if (!File.Exists(sourcePath)) {
                 if (!Directory.Exists(sourcePath)) {                    
-                    //return (BitmapSource)new BitmapImage(new Uri(@"pack://application:,,,/Resources/Images/monkey (2).png"));
-                    return ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Question.ToBitmap());
+                    return (BitmapSource)new BitmapImage(new Uri(@"pack://application:,,,/Resources/Images/monkey (2).png"));
+                    //return ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Question.ToBitmap());
                 } else {
                     return GetBitmapFromFolderPath(sourcePath, IconSizeEnum.MediumIcon32);
                 }
@@ -1554,6 +1554,103 @@ namespace MpWpfApp {
         #endregion
 
         #region Converters
+        public List<List<Key>> ConvertStringToKeySequence(string keyStr) {
+            var keyList = new List<List<Key>>();
+            var combos = keyStr.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries).ToList<string>();
+            foreach (var c in combos) {
+                var keys = c.Split(new string[] { "+" }, StringSplitOptions.RemoveEmptyEntries).ToList<string>();
+                keyList.Add(new List<Key>());
+                foreach (var k in keys) {
+                    keyList[keyList.Count - 1].Add(MpHelpers.Instance.ConvertStringToKey(k));
+                }
+            }
+            return keyList;
+        }
+
+        public string ConvertKeySequenceToString(List<List<Key>> keyList) {
+            var outStr = string.Empty;
+            foreach (var kl in keyList) {
+                if (!string.IsNullOrEmpty(outStr)) {
+                    outStr += ", ";
+                }
+                foreach (var k in kl) {
+                    outStr += GetKeyLiteral(k) + "+";
+                }
+                outStr = outStr.Remove(outStr.Length - 1, 1);
+            }
+            if (!string.IsNullOrEmpty(outStr)) {
+                if (outStr.EndsWith(", ")) {
+                    outStr = outStr.Remove(outStr.Length - 2, 2);
+                }
+            }
+            return outStr;
+        }
+
+        public Key ConvertStringToKey(string keyStr) {
+            string lks = keyStr.ToLower();
+            if(lks == "control") {
+                return Key.LeftCtrl;
+            }
+            if(lks == "alt") {
+                return Key.LeftAlt;
+            }
+            if(lks == "shift") {
+                return Key.LeftShift;
+            }
+            return (Key)Enum.Parse(typeof(Key), keyStr, true);
+        }
+
+        public string ConvertKeyToString(Key key) {
+            if(key == Key.LeftCtrl || key == Key.RightCtrl) {
+                return "Control";
+            }
+            if(key == Key.LeftAlt || key == Key.RightAlt) {
+                return "Alt";
+            }
+            if(key == Key.LeftShift || key == Key.RightShift) {
+                return "Shift";
+            }
+            return key.ToString();
+        }
+
+        public string GetKeyLiteral(Key key) {
+            /*
+                Oem3 = `
+                0-9 = D0-D9
+                Oem6 = ]
+                Oem5 = \
+                Oem1 = ;
+            */
+            if (key == Key.LeftShift) {
+                return "Shift";
+            }
+            if (key == Key.LeftAlt) {
+                return "Alt";
+            }
+            if (key == Key.LeftCtrl) {
+                return "Ctrl";
+            }
+            if(key.ToString() == "Oem3") {
+                return "Backtick";
+            }
+            if (key.ToString() == "Oem6") {
+                return "CloseBrackets";
+            }
+            if (key.ToString() == "Oem5") {
+                return "ForwardSlash";
+            }
+            if (key.ToString() == "Oem1") {
+                return "Semicolon";
+            }
+            if (key.ToString().Contains("Oem")) {
+                return key.ToString().Replace("Oem", string.Empty);
+            }
+            if(key.ToString().Length == 2 && key.ToString()[0] == 'D') {
+                return key.ToString()[1].ToString();
+            }
+            return key.ToString();
+        }
+
         public async Task<string> OcrBitmapSourceFileAsync(string image) {
             string ocrText = string.Empty;
             await Dispatcher.CurrentDispatcher.InvokeAsync(async () => {

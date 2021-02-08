@@ -280,32 +280,32 @@ namespace MpWpfApp {
                     , fk_MpCopyItemId INTEGER DEFAULT 0
                     , fk_MpTagId INTEGER DEFAULT 0
                     , ShortcutName text NOT NULL                    
-                    , KeyList text NULL       
-                    , DefaultKeyList text NULL
+                    , KeyString text NULL       
+                    , DefaultKeyString text NULL
                     , RoutingType integer NOT NULL DEFAULT 0 
                     , CONSTRAINT FK_MpShortcut_1_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpShortcutItemId)
                     , CONSTRAINT FK_MpShortcut_2_0 FOREIGN KEY (fk_MpTagId) REFERENCES MpTag (pk_MpTagId)
                     );
-                    INSERT INTO MpShortcut(ShortcutName,RoutingType,DefaultKeyList) VALUES
-                    ('Show Window',2,'Control+Shift+D')
-                    ,('Hide Window',1,'Escape')
-                    ,('Append Mode',2,'Control+Shift+A')
-                    ,('Auto-Copy Mode',2,'Control+Shift+C')
-                    ,('Right-Click Paste Mode',2,'Control+Shift+R')
-                    ,('Paste Selected Clip',1,'Enter')
-                    ,('Delete Selected Clip',1,'Delete')
-                    ,('Search',1,'S')
-                    ,('Select Next',1,'Right')
-                    ,('Select Previous',1,'Left')
-                    ,('Select All',1,'Control+A')
-                    ,('Invert Selection',1,'Control+Shift+Alt+A')
-                    ,('Bring to front',1,'Home')
-                    ,('Send to back',1,'End')
-                    ,('Assign Hotkey',1,'')
-                    ,('Change Color',1,'')
-                    ,('Share',1,'')
-                    ,('Say',1,'')
-                    ,('Merge',1,'');
+                    INSERT INTO MpShortcut(ShortcutName,RoutingType,KeyString,DefaultKeyString) VALUES
+                    ('Show Window',2,'Control+Shift+D','Control+Shift+D')
+                    ,('Hide Window',1,'Escape','Escape')
+                    ,('Append Mode',2,'Control+Shift+A','Control+Shift+A')
+                    ,('Auto-Copy Mode',2,'Control+Shift+C','Control+Shift+C')
+                    ,('Right-Click Paste Mode',2,'Control+Shift+R','Control+Shift+R')
+                    ,('Paste Selected Clip',1,'Enter','Enter')
+                    ,('Delete Selected Clip',1,'Delete','Delete')
+                    ,('Search',1,'S','S')
+                    ,('Select Next',1,'Right','Right')
+                    ,('Select Previous',1,'Left','Left')
+                    ,('Select All',1,'Control+A','Control+A')
+                    ,('Invert Selection',1,'Control+Shift+Alt+A','Control+Shift+Alt+A')
+                    ,('Bring to front',1,'Home','Home')
+                    ,('Send to back',1,'End','End')
+                    ,('Assign Hotkey',1,'A','A')
+                    ,('Change Color',1,'C','C')
+                    ,('Share',1,'H','H')
+                    ,('Say',1,'Control+S','Control+S')
+                    ,('Merge',1,'M','M');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpDeviceType (
                       pk_MpDeviceTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

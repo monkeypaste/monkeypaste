@@ -144,15 +144,15 @@ namespace MpWpfApp {
             }
         }
 
-        private string _shortcutKeyList = string.Empty;
-        public string ShortcutKeyList {
+        private string _shortcutKeyString = string.Empty;
+        public string ShortcutKeyString {
             get {
-                return _shortcutKeyList;
+                return _shortcutKeyString;
             }
             set {
-                if (_shortcutKeyList != value) {
-                    _shortcutKeyList = value;
-                    OnPropertyChanged(nameof(ShortcutKeyList));
+                if (_shortcutKeyString != value) {
+                    _shortcutKeyString = value;
+                    OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
         }
@@ -365,7 +365,7 @@ namespace MpWpfApp {
             }
         }
         private void AssignHotkey() {
-            ShortcutKeyList = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(this, "Select " + TagName, ShortcutKeyList, SelectTagCommand);
+            ShortcutKeyString = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(this, "Select " + TagName, ShortcutKeyString, SelectTagCommand);
         }
 
         private RelayCommand<Brush> _changeTagColorCommand;

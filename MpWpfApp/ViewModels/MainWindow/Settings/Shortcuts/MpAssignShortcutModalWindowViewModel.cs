@@ -58,18 +58,13 @@ namespace MpWpfApp {
             }
         }
 
-        private string _keysString = string.Empty;
-        public string KeysString {
+        public string KeyString {
             get {
-                return _keysString;
-            }
-            set {
-                if(_keysString != value) {
-                    _keysString = value;
-                    OnPropertyChanged(nameof(KeysString));
-                }
+                return MpHelpers.Instance.ConvertKeySequenceToString(_keyList);
             }
         }
+
+        
 
         private string _warningString = string.Empty;
         public string WarningString {
@@ -92,106 +87,10 @@ namespace MpWpfApp {
             ascw.DataContext = new MpAssignShortcutModalWindowViewModel(shortcutName,keys,command);
             var assignResult = ascw.ShowDialog();
             if (assignResult == true) {
-                return ((MpAssignShortcutModalWindowViewModel)ascw.DataContext).KeysString;
+                return ((MpAssignShortcutModalWindowViewModel)ascw.DataContext).KeyString;
             } else {
                 return null;
             }
-        }
-        #endregion
-
-        #region Private Methods
-
-        private MpAssignShortcutModalWindowViewModel(string shortcutName, string keysList, ICommand command) : base() {
-            PropertyChanged += (s, e) => {
-                switch (e.PropertyName) {
-                    case nameof(KeysString):
-                        //when KeysString changes check full system for duplicates, ignoring order of combinations
-                        WarningString = string.Empty;
-                        DuplicatedShortcutViewModel = null;
-                        //split hotkey into sequences combinations
-                        var combos = KeysString.Split(',').ToList<string>();
-                        //iterate over ALL shortcuts
-                        foreach (var scvm in MpShortcutCollectionViewModel.Instance) {
-                            //ignore same shortcut comparision
-                            if (scvm.Command == _assigningCommand) {
-                                continue;
-                            }
-                            var scCombos = scvm.KeyList.Split(',').ToList<string>();
-                            if (combos.Count != scCombos.Count) {
-                                continue;
-                            }
-                            int curComboIdx = 0;
-                            bool isDuplicate = false;
-                            foreach (string scCombo in scCombos) {
-                                var scKeys = scCombo.Split('+').ToList<string>();
-                                var keys = combos[curComboIdx].Split('+').ToList<string>();
-                                if (keys.Count != scKeys.Count) {
-                                    isDuplicate = false;
-                                    break;
-                                }
-                                foreach (string k in keys) {
-                                    if (scKeys.Contains(k)) {
-                                        isDuplicate = true;
-                                    } else {
-                                        isDuplicate = false;
-                                    }
-                                }
-                                curComboIdx++;
-                            }
-                            if (isDuplicate && KeysString != string.Empty) {
-                                DuplicatedShortcutViewModel = scvm;
-                                WarningString = "This combination conflicts with '" + scvm.ShortcutDisplayName + "' which will be cleared if saved";
-                                break;
-                            }
-                        }
-                        break;
-                }
-            };
-            _assigningCommand = command;
-            ShortcutDisplayName = shortcutName;
-            KeysString = keysList;
-            _isSeqComplete = true;
-        }
-
-        public void AddKey(Key key, bool isNewCombination) {
-            if(isNewCombination && KeysString.Length > 0) {
-                KeysString += ",";
-                _keyList.Add(new List<Key>());
-            }
-            if(_keyList.Count == 0) {
-                _keyList.Add(new List<Key>());
-            }
-            if (!_keyList[_keyList.Count - 1].Contains(key)) {
-                _keyList[_keyList.Count - 1].Add(key);
-                switch (key) {
-                    case Key.LeftCtrl:
-                        KeysString += "+Control";
-                        break;
-                    case Key.LeftShift:
-                        KeysString += "+Shift";
-                        break;
-                    case Key.LeftAlt:
-                        KeysString += "+Alt";
-                        break;
-                    case Key.LWin:
-                        KeysString += "+LWin";
-                        break;
-                    default:
-                        KeysString += "+" + key.ToString();
-                        break;
-                }
-            }
-            if (KeysString.StartsWith("+")) {
-                KeysString = KeysString.Remove(0, 1);
-            }
-            KeysString = KeysString.Replace(",+", ",");
-
-            //sort keysstring by with precedence ctrl, win, alt, shift, text
-            //int sortIdx = 0;
-            //var ksl = KeysString.Split('+').ToList();
-            //while(sortIdx < ksl.Count) {
-
-            //}
         }
         #endregion
 
@@ -209,46 +108,44 @@ namespace MpWpfApp {
 
             _windowRef.PreviewKeyDown += (s, e1) => {
                 seqTimer.Stop();
-
+                
                 if (_isSeqComplete) {
-                    KeysString = string.Empty;
-                    _isSeqComplete = false;
-                    _isNewCombination = true;
+                    ClearCommand.Execute(null);
                 }
-                int precount = KeysString.Length;
+                int precount = KeyString.Length;
                 if (e1.KeyboardDevice.IsKeyDown(Key.LeftCtrl)) {
-                    AddKey(Key.LeftCtrl, _isNewCombination && KeysString.Length == precount);
+                    AddKey(Key.LeftCtrl, _isNewCombination && KeyString.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.RightCtrl)) {
-                    AddKey(Key.LeftCtrl, _isNewCombination && KeysString.Length == precount);
+                    AddKey(Key.LeftCtrl, _isNewCombination && KeyString.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.LeftShift)) {
-                    AddKey(Key.LeftShift, _isNewCombination && KeysString.Length == precount);
+                    AddKey(Key.LeftShift, _isNewCombination && KeyString.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.RightShift)) {
-                    AddKey(Key.LeftShift, _isNewCombination && KeysString.Length == precount);
+                    AddKey(Key.LeftShift, _isNewCombination && KeyString.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.LeftAlt)) {
-                    AddKey(Key.LeftAlt, _isNewCombination && KeysString.Length == precount);
+                    AddKey(Key.LeftAlt, _isNewCombination && KeyString.Length == precount);
                 }
                 if (e1.KeyboardDevice.IsKeyDown(Key.RightAlt)) {
-                    AddKey(Key.LeftAlt, _isNewCombination && KeysString.Length == precount);
+                    AddKey(Key.LeftAlt, _isNewCombination && KeyString.Length == precount);
                 }
-                if (e1.KeyboardDevice.IsKeyDown(Key.LWin)) {
-                    AddKey(Key.LWin, _isNewCombination && KeysString.Length == precount);
-                }
-                if (e1.KeyboardDevice.IsKeyDown(Key.RWin)) {
-                    AddKey(Key.LWin, _isNewCombination && KeysString.Length == precount);
-                }
+                //if (e1.KeyboardDevice.IsKeyDown(Key.LWin)) {
+                //    AddKey(Key.LWin, _isNewCombination && KeysString.Length == precount);
+                //}
+                //if (e1.KeyboardDevice.IsKeyDown(Key.RWin)) {
+                //    AddKey(Key.LWin, _isNewCombination && KeysString.Length == precount);
+                //}
                 if (e1.Key != Key.LeftCtrl &&
                    e1.Key != Key.RightCtrl &&
                    e1.Key != Key.LeftAlt &&
                    e1.Key != Key.RightAlt &&
                    e1.Key != Key.LeftShift &&
-                   e1.Key != Key.RightShift &&
+                   e1.Key != Key.RightShift /*&&
                    e1.Key != Key.LWin &&
-                   e1.Key != Key.RWin) {
-                    if (KeysString.Length != precount) {
+                   e1.Key != Key.RWin*/) {
+                    if (KeyString.Length != precount) {
                         _isNewCombination = false;
                     }
                     AddKey(e1.Key, _isNewCombination);
@@ -260,7 +157,7 @@ namespace MpWpfApp {
             _windowRef.PreviewKeyUp += (s, e1) => {
                 _isNewCombination = true;
                 //KeysString = KeyList;
-                seqTimer.Start();
+                seqTimer.Start(); 
             };
 
             _windowRef.Closed += (s, e1) => {
@@ -277,6 +174,88 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Private Methods
+
+        private MpAssignShortcutModalWindowViewModel(string shortcutName, string keyString, ICommand command) : base() {
+            _keyList = MpHelpers.Instance.ConvertStringToKeySequence(keyString);
+            _assigningCommand = command;
+            ShortcutDisplayName = shortcutName;
+            //KeysString = keysList;
+            _isSeqComplete = true;
+        }
+
+        private void AddKey(Key key, bool isNewCombination) {
+            if (isNewCombination && KeyString.Length > 0) {
+                //KeysString += ",";
+                _keyList.Add(new List<Key>());
+            }
+            if (_keyList.Count == 0) {
+                _keyList.Add(new List<Key>());
+            }
+            if (!_keyList[_keyList.Count - 1].Contains(key)) {
+                _keyList[_keyList.Count - 1].Add(key);
+            }
+
+            for (int i = 0; i < _keyList.Count; i++) {
+                var kl = _keyList[i];
+                if (kl.Contains(Key.LeftShift)) {
+                    kl.Remove(Key.LeftShift);
+                    kl.Insert(0, Key.LeftShift);
+                }
+                if (kl.Contains(Key.LeftAlt)) {
+                    kl.Remove(Key.LeftAlt);
+                    kl.Insert(0, Key.LeftAlt);
+                }
+                if (kl.Contains(Key.LeftCtrl)) {
+                    kl.Remove(Key.LeftCtrl);
+                    kl.Insert(0, Key.LeftCtrl);
+                }
+                _keyList[i] = kl;
+            }
+
+            OnPropertyChanged(nameof(KeyString));
+            Validate();
+        }
+
+        private bool Validate() {
+            //when KeysString changes check full system for duplicates, ignoring order of combinations
+            WarningString = string.Empty;
+            DuplicatedShortcutViewModel = null;
+
+            //iterate over ALL shortcuts
+            foreach (var scvm in MpShortcutCollectionViewModel.Instance) {                
+                if (scvm.Command == _assigningCommand ||
+                    scvm.KeyList.Count != _keyList.Count || 
+                    scvm.KeyList.Count == 0) {
+                    //ignore same, empty or shortcut w/ different key counts
+                    continue;
+                }
+
+                bool isDuplicate = true;
+                int klIdx = 0;
+                foreach(var kl in scvm.KeyList) {
+                    if(kl.Count != _keyList[klIdx].Count) {
+                        isDuplicate = false;
+                        break;
+                    }
+                    foreach(var k in kl) {
+                        if(!_keyList[klIdx].Contains(k)) {
+                            isDuplicate = false;
+                        }
+                    }
+                    klIdx++;
+                }
+                if (isDuplicate && KeyString != string.Empty) {
+                    DuplicatedShortcutViewModel = scvm;
+                    WarningString = "This combination conflicts with '" + scvm.ShortcutDisplayName + "' which will be cleared if saved";
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        #endregion
+
         #region Commands
         private RelayCommand _cancelCommand;
         public ICommand CancelCommand {
@@ -288,7 +267,6 @@ namespace MpWpfApp {
             }
         }
         private void Cancel() {
-            KeysString = string.Empty;
             _windowRef.DialogResult = false;
             _windowRef.Close();
         }
@@ -303,7 +281,12 @@ namespace MpWpfApp {
             }
         }
         private void Clear() {
-            KeysString = string.Empty;
+            _isSeqComplete = false;
+            _isNewCombination = true;
+            _keyList.Clear();
+
+            Validate();
+            OnPropertyChanged(nameof(KeyString));
         }
 
         private RelayCommand _okCommand;
@@ -317,18 +300,15 @@ namespace MpWpfApp {
         }
         private void Ok() {
             if(DuplicatedShortcutViewModel != null) {
-                if(DuplicatedShortcutViewModel.CopyItemId > 0 || DuplicatedShortcutViewModel.TagId > 0) {
+                if(DuplicatedShortcutViewModel.IsCustom()) {
                     if(DuplicatedShortcutViewModel.CopyItemId > 0) {
                         //clear input gesture text
-                        MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(DuplicatedShortcutViewModel.CopyItemId).ShortcutKeyList = string.Empty;
-                        // TODO Unregister hotkey here
+                        MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(DuplicatedShortcutViewModel.CopyItemId).ShortcutKeyString = string.Empty;
                     } else {
-                        MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.TagId == DuplicatedShortcutViewModel.TagId).ToList()[0].ShortcutKeyList = string.Empty;
-                        // TODO Unregister hotkey here
+                        MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.TagId == DuplicatedShortcutViewModel.TagId).ToList()[0].ShortcutKeyString = string.Empty;
                     }
-                    //DuplicatedShortcutViewModel.Shortcut.DeleteFromDatabase();
                 }
-                DuplicatedShortcutViewModel.KeyList = string.Empty;
+                DuplicatedShortcutViewModel.KeyString = string.Empty;
                 DuplicatedShortcutViewModel.Shortcut.WriteToDatabase();
                 DuplicatedShortcutViewModel.Unregister();
             }

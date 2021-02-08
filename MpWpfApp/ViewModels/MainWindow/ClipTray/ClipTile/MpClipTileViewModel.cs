@@ -933,15 +933,15 @@
             }
         }
 
-        private string _shortcutKeyList = string.Empty;
-        public string ShortcutKeyList {
+        private string _shortcutKeyString = string.Empty;
+        public string ShortcutKeyString {
             get {
-                return _shortcutKeyList;
+                return _shortcutKeyString;
             }
             set {
-                if (_shortcutKeyList != value) {
-                    _shortcutKeyList = value;
-                    OnPropertyChanged(nameof(ShortcutKeyList));
+                if (_shortcutKeyString != value) {
+                    _shortcutKeyString = value;
+                    OnPropertyChanged(nameof(ShortcutKeyString));
                 }
             }
         }

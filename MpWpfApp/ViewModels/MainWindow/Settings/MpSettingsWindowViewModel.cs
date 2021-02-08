@@ -390,7 +390,7 @@ namespace MpWpfApp {
             MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(
                 scvm,
                 scvm.ShortcutDisplayName,
-                scvm.KeyList,
+                scvm.KeyString,
                 scvm.Command
             );
         }
@@ -421,7 +421,7 @@ namespace MpWpfApp {
         }
         private void ResetShortcut() {
             Console.WriteLine("Reset row: " + SelectedShortcutIndex);
-            MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].KeyList = MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].Shortcut.DefaultKeyList;
+            MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].KeyString = MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].Shortcut.DefaultKeyString;
             MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].Register();
             MpShortcutCollectionViewModel.Instance[SelectedShortcutIndex].Shortcut.WriteToDatabase();
         }

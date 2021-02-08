@@ -264,7 +264,7 @@
                                         Binding="{Binding ShortcutDisplayName}" />
                     <DataGridTextColumn Header="Shortcut"
                                         Width="150"
-                                        Binding="{Binding KeyList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                                        Binding="{Binding KeyString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                     <DataGridTemplateColumn Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>

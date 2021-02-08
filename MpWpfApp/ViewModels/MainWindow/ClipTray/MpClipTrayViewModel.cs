@@ -1225,10 +1225,10 @@ namespace MpWpfApp {
             return SelectedClipTiles.Count == 1;
         }
         private void AssignHotkey() {
-            SelectedClipTiles[0].ShortcutKeyList = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(
+            SelectedClipTiles[0].ShortcutKeyString = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(
                 this, 
                 "Paste " + SelectedClipTiles[0].CopyItemTitle, 
-                SelectedClipTiles[0].ShortcutKeyList, 
+                SelectedClipTiles[0].ShortcutKeyString, 
                 SelectedClipTiles[0].PasteClipCommand);
         }
 
