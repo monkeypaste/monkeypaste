@@ -3,8 +3,19 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Windows.Input;
 
 namespace MpWpfApp {
+    public class MpShortcutCombination {
+        public List<Key> KeyList = new List<Key>();
+
+        public override string ToString() {
+            var outStr = string.Empty;
+            foreach(var k in KeyList) {
+
+            }
+        }
+    }
     public class MpShortcut : MpDbObject {
         #region Public Properties
         public int ShortcutId { get; set; } = 0;
@@ -89,6 +100,7 @@ namespace MpWpfApp {
             }
             RoutingType = (MpRoutingType)Convert.ToInt32(dr["RoutingType"].ToString());            
         }
+
         public override void WriteToDatabase() {
             if (ShortcutId == 0) {
                 MpDb.Instance.ExecuteWrite(
@@ -116,6 +128,7 @@ namespace MpWpfApp {
                     });
             }
         }
+
         public void DeleteFromDatabase() {
             MpDb.Instance.ExecuteWrite(
                 "delete from MpShortcut where pk_MpShortcutId=@sid",
@@ -123,6 +136,7 @@ namespace MpWpfApp {
                     { "@sid", ShortcutId }
                 });
         }
+
         public override string ToString() {
             string outStr = "Shortcut Name: " + ShortcutName + " Id: " + ShortcutId;
             outStr += " " + KeyList;

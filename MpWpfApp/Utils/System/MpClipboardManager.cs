@@ -53,7 +53,10 @@ namespace MpWpfApp {
                     if (IgnoreClipboardChangeEvent) {
                         //do nothing
                     } else {
-                        if(MpApp.IsAppRejectedByHandle(LastWindowWatcher.LastHandle)) {
+                        if(((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AppModeViewModel.IsAppPaused) {
+                            Console.WriteLine("App Paused, ignoring copy");
+                        }
+                        else if(MpApp.IsAppRejectedByHandle(LastWindowWatcher.LastHandle)) {
                             Console.WriteLine("Clipboard Monitor: Ignoring app '" + MpHelpers.Instance.GetProcessPath(hwnd) + "' with handle: " + hwnd);
                         } else {
                             OnClipboardChanged();

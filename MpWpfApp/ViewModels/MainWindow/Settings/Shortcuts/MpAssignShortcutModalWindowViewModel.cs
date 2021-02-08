@@ -45,19 +45,6 @@ namespace MpWpfApp {
             }
         }
 
-        //private MpShortcut _shortcut;
-        //public MpShortcut Shortcut {
-        //    get {
-        //        return _shortcut;
-        //    }
-        //    set {
-        //        if (_shortcut != value) {
-        //            _shortcut = value;
-        //            OnPropertyChanged(nameof(Shortcut));
-        //        }
-        //    }
-        //}
-
         private string _shortcutDisplayName = string.Empty;
         public string ShortcutDisplayName {
             get {

@@ -1212,6 +1212,48 @@ namespace MpWpfApp {
             MainWindowViewModel.TagTrayViewModel.UpdateTagAssociation();
         }
 
+        private RelayCommand _assignHotkeyCommand;
+        public ICommand AssignHotkeyCommand {
+            get {
+                if (_assignHotkeyCommand == null) {
+                    _assignHotkeyCommand = new RelayCommand(AssignHotkey, CanAssignHotkey);
+                }
+                return _assignHotkeyCommand;
+            }
+        }
+        private bool CanAssignHotkey() {
+            return SelectedClipTiles.Count == 1;
+        }
+        private void AssignHotkey() {
+            SelectedClipTiles[0].ShortcutKeyList = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(
+                this, 
+                "Paste " + SelectedClipTiles[0].CopyItemTitle, 
+                SelectedClipTiles[0].ShortcutKeyList, 
+                SelectedClipTiles[0].PasteClipCommand);
+        }
+
+        private RelayCommand _invertSelectionCommand;
+        public ICommand InvertSelectionCommand {
+            get {
+                if (_invertSelectionCommand == null) {
+                    _invertSelectionCommand = new RelayCommand(InvertSelection, CanInvertSelection);
+                }
+                return _invertSelectionCommand;
+            }
+        }
+        private bool CanInvertSelection() {
+            return SelectedClipTiles.Count != VisibileClipTiles.Count;
+        }
+        private void InvertSelection() {
+            var sctvml = SelectedClipTiles;
+            ClearClipSelection();
+            foreach(var vctvm in VisibileClipTiles) {
+                if(!sctvml.Contains(vctvm)) {
+                    vctvm.IsSelected = true;
+                }
+            }
+        }
+
         private RelayCommand<int> _exportSelectedClipTilesCommand;
         public ICommand ExportSelectedClipTilesCommand {
             get {
@@ -1302,21 +1344,49 @@ namespace MpWpfApp {
             );   
         }
 
-        private RelayCommand _speakSelectedClipsCommand;
-        public ICommand SpeakSelectedClipsCommand {
+        private AsyncCommand _speakSelectedClipsAsyncCommand;
+        public IAsyncCommand SpeakSelectedClipsAsyncCommand {
             get {
-                if (_speakSelectedClipsCommand == null) {
-                    _speakSelectedClipsCommand = new RelayCommand(SpeakSelectedClips);
+                if (_speakSelectedClipsAsyncCommand == null) {
+                    _speakSelectedClipsAsyncCommand = new AsyncCommand(SpeakSelectedClipsAsync, CanSpeakSelectedClipsAsync);
                 }
-                return _speakSelectedClipsCommand;
+                return _speakSelectedClipsAsyncCommand;
             }
         }
-        private void SpeakSelectedClips() {
-            using (SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer()) {
-                foreach (var sctvm in SelectedClipTiles) {
-                    speechSynthesizer.SpeakAsync(sctvm.CopyItemPlainText);
+        private bool CanSpeakSelectedClipsAsync(object args) {
+            foreach(var sctvm in SelectedClipTiles) {
+                if(!string.IsNullOrEmpty(sctvm.CopyItemPlainText)) {
+                    return true;
                 }
             }
+            return false;
+        }
+        private async Task SpeakSelectedClipsAsync() {
+            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+                SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer(); 
+                speechSynthesizer.SetOutputToDefaultAudioDevice();
+                var installedVoices = new List<InstalledVoice>();
+                foreach (InstalledVoice voice in speechSynthesizer.GetInstalledVoices()) {
+                    installedVoices.Add(voice);
+                    Console.WriteLine(voice.VoiceInfo.Name);
+                }
+                speechSynthesizer.SelectVoice(installedVoices[0].VoiceInfo.Name);
+                speechSynthesizer.Rate = 0;
+                speechSynthesizer.SpeakCompleted += (s, e) => {
+                    speechSynthesizer.Dispose();
+                };
+                // Create a PromptBuilder object and append a text string.
+                PromptBuilder promptBuilder = new PromptBuilder();                   
+
+                foreach (var sctvm in SelectedClipTiles) {
+                    //speechSynthesizer.SpeakAsync(sctvm.CopyItemPlainText);
+                    promptBuilder.AppendText(Environment.NewLine + sctvm.CopyItemPlainText);
+                }
+
+                // Speak the contents of the prompt asynchronously.
+                speechSynthesizer.SpeakAsync(promptBuilder);
+                
+            }, DispatcherPriority.Background);            
         }
 
         private RelayCommand _duplicateSelectedClipsCommand;

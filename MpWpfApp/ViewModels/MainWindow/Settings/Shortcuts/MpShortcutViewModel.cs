@@ -11,17 +11,58 @@ using MouseKeyHook.Rx;
 
 namespace MpWpfApp {
     public class MpShortcutViewModel : MpViewModelBase {
-        #region Properties
+        #region Properties        
+
+        #region Visibility 
+        public Visibility GlobalRoutingTypeComboItemVisibility {
+            get {
+                return IsRoutable ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        public Visibility InternalRoutingTypeComboItemVisibility {
+            get {
+                return IsRoutable ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
+
+        public Visibility DeleteButtonVisibility {
+            get {
+                return IsCustom() ? Visibility.Visible:Visibility.Collapsed;
+            }
+        }
+
+        public Visibility ResetButtonVisibility {
+            get {
+                return IsCustom() ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
+        #endregion
+
+        #region Business Logic
+        private ICommand _command = null;
+        public ICommand Command {
+            get {
+                return _command;
+            }
+            set {
+                if (_command != value) {
+                    _command = value;
+                    OnPropertyChanged(nameof(Command));
+                }
+            }
+        }
+
         public IDisposable KeysObservable { get; set; }
 
         public List<string> SendKeysKeyStringList {
             get {
                 var outStrList = new List<string>();
                 var combos = KeyList.Split(',').ToList();
-                foreach(var combo in combos) {
+                foreach (var combo in combos) {
                     var outStr = string.Empty;
                     var keys = combo.Split('+').ToList();
-                    foreach(var key in keys) {
+                    foreach (var key in keys) {
                         switch (key) {
                             case "Control":
                                 outStr += "^";
@@ -53,114 +94,14 @@ namespace MpWpfApp {
             }
         }
 
-        private string _defaultKeyList = string.Empty;
-        public string DefaultKeyList {
+        public bool IsNew {
             get {
-                return _defaultKeyList;
-            }
-            set {
-                if(_defaultKeyList != value) {
-                    _defaultKeyList = value;
-                    OnPropertyChanged(nameof(DefaultKeyList));
-                }
+                return Shortcut.ShortcutId == 0;
             }
         }
 
-        private int _copyItemId = 0;
-        public int CopyItemId {
-            get {
-                return _copyItemId;
-            }
-            set {
-                if (_copyItemId != value) {
-                    _copyItemId = value;
-                    OnPropertyChanged(nameof(CopyItemId));
-                }
-            }
-        }
-
-        private int _tagId = 0;
-        public int TagId {
-            get {
-                return _tagId;
-            }
-            set {
-                if (_tagId != value) {
-                    _tagId = value;
-                    OnPropertyChanged(nameof(TagId));
-                }
-            }
-        }
-
-        private int _shortcutId = 0;
-        public int ShortcutId {
-            get {
-                return _shortcutId;
-            }
-            set {
-                if (_shortcutId != value) {
-                    _shortcutId = value;
-                    OnPropertyChanged(nameof(ShortcutId));
-                }
-            }
-        }
-
-        private ICommand _command = null;
-        public ICommand Command {
-            get {
-                return _command;
-            }
-            set {
-                if (_command != value) {
-                    _command = value;
-                    OnPropertyChanged(nameof(Command));
-                }
-            }
-        }
-
-        private string _keyList = string.Empty;
-        public string KeyList {
-            get {
-                return _keyList;
-            }
-            set {
-                if(_keyList != value) {
-                    _keyList = value;
-                    OnPropertyChanged(nameof(KeyList));
-                }
-            }
-        }
-
-        private string _shortcutDisplayName = string.Empty;
-        public string ShortcutDisplayName {
-            get {
-                return _shortcutDisplayName;
-            }
-            set {
-                if (_shortcutDisplayName != value) {
-                    _shortcutDisplayName = value;
-                    OnPropertyChanged(nameof(ShortcutDisplayName));
-                }
-            }
-        }
-
-        private MpRoutingType _routingType = MpRoutingType.None;
-        public MpRoutingType RoutingType {
-            get {
-                return _routingType;
-            }
-            set {
-                if (_routingType != value) {
-                    _routingType = value;
-                    OnPropertyChanged(nameof(RoutingType));
-                }
-            }
-        }
-
-        //private string _shortcutTypeName = string.Empty;
         public string ShortcutTypeName {
             get {
-                //return _shortcutTypeName;
                 if (IsCustom()) {
                     if (Shortcut.CopyItemId > 0) {
                         return "Clip";
@@ -173,35 +114,148 @@ namespace MpWpfApp {
             }
         }
 
-        private Visibility _deleteButtonVisibility;
-        public Visibility DeleteButtonVisibility {
+        public string SelectedRoutingType {
             get {
-                return _deleteButtonVisibility;
+                if (Shortcut == null) {
+                    return "None";
+                }
+                return Enum.GetName(typeof(MpRoutingType), Shortcut.RoutingType);
             }
             set {
-                if (_deleteButtonVisibility != value) {
-                    _deleteButtonVisibility = value;
-                    OnPropertyChanged(nameof(DeleteButtonVisibility));
+                if (Shortcut != null && Enum.GetName(typeof(MpRoutingType), Shortcut.RoutingType) != value) {
+                    for (int i = 0; i < Enum.GetNames(typeof(MpRoutingType)).Length; i++) {
+                        var rt = Enum.GetNames(typeof(MpRoutingType))[i];
+                        if (rt == value) {
+                            RoutingType = (MpRoutingType)i;
+                        }
+                    }
+                    OnPropertyChanged(nameof(SelectedRoutingType));
                 }
             }
         }
 
-        private Visibility _resetButtonVisibility;
-        public Visibility ResetButtonVisibility {
+        private ObservableCollection<string> _routingTypes = null;
+        public ObservableCollection<string> RoutingTypes {
             get {
-                return _resetButtonVisibility;
+                if(_routingTypes == null) {
+                    _routingTypes = new ObservableCollection<string>();
+                    if(IsRoutable) {
+                        _routingTypes.Add("Direct");
+                        _routingTypes.Add("Bubble");
+                        _routingTypes.Add("Tunnel");
+                    } else {
+                        _routingTypes.Add("Internal");
+                    }
+                }
+                return _routingTypes;
+            }
+        }
+        #endregion
+
+        #region Model
+        public string DefaultKeyList {
+            get {
+                if (Shortcut == null) {
+                    return String.Empty;
+                }
+                return Shortcut.DefaultKeyList;
             }
             set {
-                if (_resetButtonVisibility != value) {
-                    _resetButtonVisibility = value;
-                    OnPropertyChanged(nameof(ResetButtonVisibility));
+                if (Shortcut != null && Shortcut.DefaultKeyList != value) {
+                    Shortcut.DefaultKeyList = value;
+                    OnPropertyChanged(nameof(DefaultKeyList));
                 }
             }
         }
 
-        public bool IsNew {
+        public int CopyItemId {
             get {
-                return Shortcut.ShortcutId == 0;
+                if (Shortcut == null) {
+                    return 0;
+                }
+                return Shortcut.CopyItemId;
+            }
+            set {
+                if (Shortcut != null && Shortcut.CopyItemId != value) {
+                    Shortcut.CopyItemId = value;
+                    OnPropertyChanged(nameof(CopyItemId));
+                }
+            }
+        }
+
+        public int TagId {
+            get {
+                if (Shortcut == null) {
+                    return 0;
+                }
+                return Shortcut.TagId;
+            }
+            set {
+                if (Shortcut != null && Shortcut.TagId != value) {
+                    Shortcut.TagId = value;
+                    OnPropertyChanged(nameof(TagId));
+                }
+            }
+        }
+
+        public int ShortcutId {
+            get {
+                if (Shortcut == null) {
+                    return 0;
+                }
+                return Shortcut.ShortcutId;
+            }
+            set {
+                if (Shortcut != null && Shortcut.ShortcutId != value) {
+                    Shortcut.ShortcutId = value;
+                    OnPropertyChanged(nameof(ShortcutId));
+                }
+            }
+        }
+
+        public string KeyList {
+            get {
+                if(Shortcut == null) {
+                    return string.Empty;
+                }
+                return Shortcut.KeyList;
+            }
+            set {
+                if (Shortcut != null && Shortcut.KeyList != value) {
+                    Shortcut.KeyList = value;
+                    OnPropertyChanged(nameof(KeyList));
+                }
+            }
+        }
+
+        public string ShortcutDisplayName {
+            get {
+                if(Shortcut == null) {
+                    return string.Empty;
+                }
+                return Shortcut.ShortcutName;
+            }
+            set {
+                if (Shortcut != null && Shortcut.ShortcutName != value) {
+                    Shortcut.ShortcutName = value;
+                    OnPropertyChanged(nameof(ShortcutDisplayName));
+                }
+            }
+        }
+
+        public MpRoutingType RoutingType {
+            get {
+                if(Shortcut == null) {
+                    return MpRoutingType.None;
+                }
+                return Shortcut.RoutingType;
+            }
+            set {
+                if (Shortcut != null && Shortcut.RoutingType != value) {
+                    Shortcut.RoutingType = value;
+                    OnPropertyChanged(nameof(RoutingType));
+                    OnPropertyChanged(nameof(SelectedRoutingType));
+                }
             }
         }
 
@@ -214,35 +268,28 @@ namespace MpWpfApp {
                 if(_shortcut != value) {
                     _shortcut = value;
                     OnPropertyChanged(nameof(Shortcut));
+                    OnPropertyChanged(nameof(RoutingType));
+                    OnPropertyChanged(nameof(KeyList));
+                    OnPropertyChanged(nameof(ShortcutDisplayName));
+                    OnPropertyChanged(nameof(ShortcutId));
+                    OnPropertyChanged(nameof(TagId));
+                    OnPropertyChanged(nameof(CopyItemId));
+                    OnPropertyChanged(nameof(DefaultKeyList));
+                    OnPropertyChanged(nameof(ResetButtonVisibility));
+                    OnPropertyChanged(nameof(DeleteButtonVisibility));
+                    OnPropertyChanged(nameof(SelectedRoutingType));
                 }
             }
         }
         #endregion
+        #endregion
 
         #region Public Methods
-        public MpShortcutViewModel(
-            string shortcutName, 
-            MpRoutingType routingType, 
-            ICommand command, 
-            string keys, 
-            string defaultKeys, 
-            int copyItemId = -1, 
-            int tagId = -1, 
-            int shortcutId = -1) : base() {
-            PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
-                    case nameof(CopyItemId):
-                        Shortcut.CopyItemId = CopyItemId;                        
-                        break;
-                    case nameof(TagId):
-                        Shortcut.TagId = TagId;
-                        break;
-                    case nameof(ShortcutId):
-                        Shortcut.ShortcutId = ShortcutId;
-                        break;
+        public MpShortcutViewModel(MpShortcut s, ICommand command) {
+            PropertyChanged += (s1, e) => {
+                switch (e.PropertyName) {
                     case nameof(KeyList):
-                        Shortcut.KeyList = KeyList;
-                        if(IsCustom()) {
+                        if (IsCustom()) {
                             if (Shortcut.CopyItemId > 0) {
                                 var ctvm = MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(Shortcut.CopyItemId);
                                 ctvm.ShortcutKeyList = Shortcut.KeyList;
@@ -252,37 +299,12 @@ namespace MpWpfApp {
                             }
                         }
                         break;
-                    case nameof(ShortcutDisplayName):
-                        Shortcut.ShortcutName = ShortcutDisplayName;
-                        break;
-                    case nameof(RoutingType):
-                        Shortcut.RoutingType = RoutingType;
-                        break;
-                    case nameof(DefaultKeyList):
-                        Shortcut.DefaultKeyList = DefaultKeyList;
-                        break;
                 }
             };
-            Shortcut = new MpShortcut();
-            ShortcutId = shortcutId;
-            CopyItemId = copyItemId;
-            TagId = tagId;
-            ShortcutDisplayName = shortcutName.Replace("'", string.Empty);
-            KeyList = keys;
-            DefaultKeyList = defaultKeys;
-            RoutingType = routingType;
 
+            Shortcut = s;
             Command = command;
-            if (IsCustom()) {
-                ResetButtonVisibility = Visibility.Collapsed;
-                DeleteButtonVisibility = Visibility.Visible;
-            } else {
-                ResetButtonVisibility = Visibility.Visible;
-                DeleteButtonVisibility = Visibility.Collapsed;
-            }
         }
-
-        public MpShortcutViewModel(MpShortcut s, ICommand command) : this(s.ShortcutName, s.RoutingType, command, s.KeyList, s.DefaultKeyList, s.CopyItemId, s.TagId, s.ShortcutId) { }
 
         public void Register() {
             //only register if non-empty keysstring
@@ -317,52 +339,6 @@ namespace MpWpfApp {
                             (trigger) => PerformShortcutCommand.Execute(null)
                         );
                     }
-
-                    //if (RoutingType == MpRoutingType.Internal) {
-                    //    if(IsSequence()) {
-                    //        MainWindowViewModel.GlobalHook.OnSequence(new Dictionary<Sequence, Action> {
-                    //            {
-                    //                Sequence.FromString(KeyList), 
-                    //                () => PeformCommand()
-                    //            }
-                    //        });
-                    //    } else {
-                    //        KeysObservable = MainWindowViewModel.ApplicationHook.KeyDownObservable().Matching(t).Subscribe((trigger) => {
-                    //            if (MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle ||
-                    //                MainWindowViewModel.TagTrayViewModel.IsEditingTagName ||
-                    //                MpAssignShortcutModalWindowViewModel.IsOpen ||
-                    //                MpSettingsWindowViewModel.IsOpen) {
-                    //                //ignore hotkey since attempting to reassign
-                    //            } else {
-                    //                Command?.Execute(null);
-                    //            }
-                    //        });
-                    //    }
-                    //} else {
-                    //    if(IsSequence()) {
-                    //        KeysObservable = MainWindowViewModel.GlobalHook.KeyDownObservable().Matching(t).ForEachAsync((trigger) => {
-                    //            if (MpMainWindowViewModel.IsOpen ||
-                    //                MpAssignShortcutModalWindowViewModel.IsOpen ||
-                    //                MpSettingsWindowViewModel.IsOpen) {
-                    //                //ignore hotkey since attempting to reassign
-                    //            } else {
-                    //                if (RoutingType == MpRoutingType.Bubble) {
-                    //                    PassKeysToForegroundWindow();
-                    //                }
-
-                    //                Command?.Execute(null);
-
-                    //                if (RoutingType == MpRoutingType.Tunnel) {
-                    //                    PassKeysToForegroundWindow();
-                    //                }
-                    //            }
-                    //        });
-                    //    } else {
-                    //        KeysObservable = MainWindowViewModel.GlobalHook.KeyDownObservable().Matching(t).Subscribe((trigger) => {
-                    //            PeformCommand();
-                    //        });
-                    //    }
-                    //}
                 }
                 catch (Exception ex) {
                     Console.WriteLine("Error creating shortcut: " + ex.ToString());
@@ -390,6 +366,7 @@ namespace MpWpfApp {
                 System.Windows.Forms.SendKeys.SendWait(str);
             }
         }
+
         public bool IsSequence() {
             return KeyList.Contains(",");
         }

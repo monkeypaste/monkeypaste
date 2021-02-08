@@ -1100,6 +1100,12 @@
                   Grid.Column="0"
                   DataContext="{Binding AppModeViewModel}"
                   Background="Orange">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Loaded">
+                        <i:CallMethodAction MethodName="AppMode_Loaded"
+                                            TargetObject="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
@@ -1285,10 +1291,12 @@
                                                 <MenuItem Header="Bring to Front"
                                                           Command="{Binding Data.BringSelectedClipTilesToFrontCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="Send to Back"
-                                                          Command="{Binding Data.SendSelectedClipTilesToBackCommand, Source={StaticResource ClipTrayProxy}}" />
+                                                          Command="{Binding Data.SendSelectedClipTilesToBackCommand, Source={StaticResource ClipTrayProxy}}" /> 
+                                                <MenuItem Header="Invert Selection"
+                                                          Command="{Binding Data.InvertSelectionCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="Assign Hotkey"
                                                           InputGestureText="{Binding ShortcutKeyList}"
-                                                          Command="{Binding AssignHotkeyCommand}" />
+                                                          Command="{Binding Data.AssignHotkeyCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="Exclude Application"
                                                           Command="{Binding ExcludeApplicationCommand}" />
                                                 <MenuItem Header="Export To">
@@ -1319,7 +1327,7 @@
                                                 <MenuItem Header="Run in Command Prompt"
                                                           Command="{Binding Data.RunSelectedClipsInShellCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="Say"
-                                                          Command="{Binding Data.SpeakSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
+                                                          Command="{Binding Data.SpeakSelectedClipsAsyncCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="Merge"
                                                           Command="{Binding Data.MergeSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="Search Web">

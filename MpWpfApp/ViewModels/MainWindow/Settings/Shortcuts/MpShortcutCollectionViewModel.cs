@@ -6,18 +6,20 @@ namespace MpWpfApp {
     public class MpShortcutCollectionViewModel : MpObservableCollectionViewModel<MpShortcutViewModel> {
         private static readonly Lazy<MpShortcutCollectionViewModel> _Lazy = new Lazy<MpShortcutCollectionViewModel>(() => new MpShortcutCollectionViewModel());
         public static MpShortcutCollectionViewModel Instance { get { return _Lazy.Value; } }
+
         #region View Models
         #endregion
 
         #region Properties
+
         #endregion
 
         #region Public Methods
         public void Init() {
             //empty call to init singleton
         }
-        public MpShortcutCollectionViewModel() : base() {
 
+        public MpShortcutCollectionViewModel() : base() {
             //using mainwindow, map all saved shortcuts to their commands
             foreach (var sc in MpShortcut.GetAllShortcuts()) {
                 ICommand shortcutCommand = null; 
@@ -36,7 +38,7 @@ namespace MpWpfApp {
                         break;
                     case 5:
                         //right click paste mode
-                        shortcutCommand = null;
+                        shortcutCommand = MainWindowViewModel.AppModeViewModel.ToggleRightClickPasteCommand;
                         break;
                     case 6:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;
@@ -62,7 +64,7 @@ namespace MpWpfApp {
                         break;
                     case 12:
                         //invert selection
-                        shortcutCommand = null;
+                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.InvertSelectionCommand;
                         break;
                     case 13:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.BringSelectedClipTilesToFrontCommand;
@@ -72,18 +74,18 @@ namespace MpWpfApp {
                         break;
                     case 15:
                         //assign hotkey
-                        shortcutCommand = null;
+                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.AssignHotkeyCommand;
                         break;
                     case 16:
                         //change color
-                        shortcutCommand = null;
+                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.ChangeSelectedClipsColorCommand;
                         break;
                     case 17:
                         //share
                         shortcutCommand = null;
                         break;
                     case 18:
-                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SpeakSelectedClipsCommand;
+                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SpeakSelectedClipsAsyncCommand;
                         break;
                     case 19:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.MergeSelectedClipsCommand;
@@ -104,7 +106,9 @@ namespace MpWpfApp {
                         }
                         break;
                 }
-                this.Add(new MpShortcutViewModel(sc, shortcutCommand));
+                var scvm = new MpShortcutViewModel(sc, shortcutCommand);
+                scvm.Register();
+                this.Add(scvm);
             }
         }
 
@@ -138,15 +142,47 @@ namespace MpWpfApp {
             MainWindowViewModel.IsShowingDialog = false;
             return shortcutKeyList;
         }
-        public void Add(MpViewModelBase vm, string keys, ICommand command) {
+        public void Add(object vm, string keys, ICommand command) {
             if (vm.GetType() == typeof(MpClipTileViewModel)) {
-                this.Add((MpClipTileViewModel)vm, keys, command);
+                var ctvm = (MpClipTileViewModel)vm;
+                base.Add(
+                    new MpShortcutViewModel(
+                        new MpShortcut(
+                            ctvm.CopyItem.CopyItemId,
+                            0,
+                            keys,
+                            "Paste " + ctvm.CopyItemTitle),
+                            command));
             } else if (vm.GetType() == typeof(MpTagTileViewModel)) {
-                this.Add((MpTagTileViewModel)vm, keys, command);
+                var ttvm = (MpTagTileViewModel)vm;
+                base.Add(
+                    new MpShortcutViewModel(
+                        new MpShortcut(
+                            0,
+                            ttvm.TagId,
+                            keys,
+                            "Select " + ttvm.TagName),
+                            command));
             } else if (vm.GetType() == typeof(MpShortcutViewModel)) {
-                this.Add((MpShortcutViewModel)vm, keys, command);
+                var scvm = (MpShortcutViewModel)vm;
+                scvm.KeyList = keys;
+                scvm.Command = command;
+                scvm.Shortcut.WriteToDatabase();
+
+                //check by command if shortcut exists if it does swap it with scvm otherwise add and always register
+                var curScvml = this.Where(x => x.Command == scvm.Command).ToList();
+                if (curScvml != null && curScvml.Count > 0) {
+                    foreach (var curscvm in curScvml) {
+                        this[this.IndexOf(curscvm)] = scvm;
+                    }
+                } else {
+                    this.Insert(this.Count, scvm);
+                }
+
+                scvm.Register();
             }
         }
+
         public new void Remove(MpShortcutViewModel scvm) {
             base.Remove(scvm);
             scvm.Unregister();
@@ -167,45 +203,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-        private new void Add(MpShortcutViewModel scvm) {
-            scvm.Shortcut.WriteToDatabase();
-
-            //check by command if shortcut exists if it does swap it with scvm otherwise add and always register
-            var curScvml = this.Where(x => x.Command == scvm.Command).ToList();
-            if (curScvml != null && curScvml.Count > 0) {
-                foreach (var curscvm in curScvml) {
-                    this[this.IndexOf(curscvm)] = scvm;
-                }
-            } else {
-                this.Insert(this.Count, scvm);
-            }
-
-            scvm.Register();
-        }
-
-        private void Add(MpClipTileViewModel ctvm, string keys, ICommand command) {
-            //add new shortcut to collection
-            this.Add(
-                new MpShortcutViewModel(
-                    new MpShortcut(
-                        ctvm.CopyItem.CopyItemId,
-                        0,
-                        keys,
-                        "Paste " + ctvm.CopyItemTitle),
-                    command));
-        }
-
-        private void Add(MpTagTileViewModel ttvm, string keys, ICommand command) {
-            //add new shortcut to collection
-            this.Add(
-                new MpShortcutViewModel(
-                    new MpShortcut(
-                        0,
-                        ttvm.TagId,
-                        keys,
-                        "Select " + ttvm.TagName),
-                    command));
-        }
         #endregion
 
         #region Commands

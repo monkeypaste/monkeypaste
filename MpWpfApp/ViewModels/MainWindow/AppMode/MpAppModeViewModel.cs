@@ -10,7 +10,20 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
-        
+
+        private bool _isRightClickPasteMode = false;
+        public bool IsRightClickPasteMode {
+            get {
+                return _isRightClickPasteMode;
+            }
+            set {
+                if (_isRightClickPasteMode != value) {
+                    _isRightClickPasteMode = value;
+                    Console.WriteLine("IsRightClickPasteMode changed to: " + _isRightClickPasteMode);
+                    OnPropertyChanged(nameof(IsRightClickPasteMode));
+                }
+            }
+        }
 
         private bool _isInAppendMode = false;
         public bool IsInAppendMode {
@@ -53,12 +66,6 @@ namespace MpWpfApp {
         }
         #endregion
 
-        private void GlobalMouseUpEvent(object sender, System.Windows.Forms.MouseEventArgs e) {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.Instance.ApplicationIsActivated()) {
-                System.Windows.Forms.SendKeys.SendWait("^c");
-            }
-        }
-
         #region Public Methods
         public MpAppModeViewModel() : base() {
             PropertyChanged += (s, e) => {
@@ -69,23 +76,44 @@ namespace MpWpfApp {
                             MainWindowViewModel.SystemTrayViewModel.ShowStandardBalloon("Monkey Paste", "Append Mode is " + status, Hardcodet.Wpf.TaskbarNotification.BalloonIcon.Info);
                         }
                         break;
-                    case nameof(IsAutoCopyMode):
-                        if (IsAutoCopyMode) {
-                            MainWindowViewModel.GlobalHook.MouseUp += GlobalMouseUpEvent;
-                        } else {
-                            MainWindowViewModel.GlobalHook.MouseUp -= GlobalMouseUpEvent;
-                        }
-                        break;
                 }
             };
         }
 
-        public void AppMode_Loaded(object sender, RoutedEventArgs e) {
-
+        public void AppMode_Loaded(object sender, RoutedEventArgs args) {
+            MainWindowViewModel.GlobalHook.MouseUp += (s, e) => {
+                if (IsAutoCopyMode) {
+                    if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.Instance.ApplicationIsActivated()) {
+                        System.Windows.Forms.SendKeys.SendWait("^c");
+                    }
+                }
+                if (IsRightClickPasteMode) {
+                    if (e.Button == System.Windows.Forms.MouseButtons.Right && !MpHelpers.Instance.ApplicationIsActivated()) {
+                        System.Windows.Forms.SendKeys.SendWait("^v");
+                    }
+                }
+            };
         }
         #endregion
 
         #region Commands
+        private RelayCommand _toggleRightClickPasteCommand;
+        public ICommand ToggleRightClickPasteCommand {
+            get {
+                if (_toggleRightClickPasteCommand == null) {
+                    _toggleRightClickPasteCommand = new RelayCommand(ToggleRightClickPaste, CanToggleRightClickPaste);
+                }
+                return _toggleRightClickPasteCommand;
+            }
+        }
+        private bool CanToggleRightClickPaste() {
+            //only allow append mode to activate if app is not paused and only ONE clip is selected
+            return !IsAppPaused;
+        }
+        private void ToggleRightClickPaste() {
+            IsRightClickPasteMode = !IsRightClickPasteMode;
+        }
+
         private RelayCommand _toggleAppendModeCommand;
         public ICommand ToggleAppendModeCommand {
             get {
@@ -113,7 +141,6 @@ namespace MpWpfApp {
             }
         }
         private bool CanToggleAutoCopyMode() {
-            //only allow append mode to activate if app is not paused and only ONE clip is selected
             return !IsAppPaused;
         }
         private void ToggleAutoCopyMode() {

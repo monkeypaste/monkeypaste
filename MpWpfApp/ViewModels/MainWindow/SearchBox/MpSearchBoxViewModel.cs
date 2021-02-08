@@ -407,6 +407,10 @@ namespace MpWpfApp {
                 }
             };
         }
+
+        public TextBox GetSearchTextBox() {
+            return _searchTextBox;
+        }
         #endregion
 
         #region Private Methods

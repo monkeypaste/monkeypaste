@@ -289,6 +289,18 @@ namespace MpWpfApp {
                     }
                 };
 
+                ApplicationHook.KeyPress += (s, e) => {
+                    if (!char.IsControl(e.KeyChar)) {
+                        foreach(var scvm in MpShortcutCollectionViewModel.Instance) {
+                            if()
+                        }
+                        if(!SearchBoxViewModel.GetSearchTextBox().IsFocused) {
+                            SearchBoxViewModel.GetSearchTextBox().Text = e.KeyChar.ToString();
+                            SearchBoxViewModel.GetSearchTextBox().Focus();
+                        }
+                    }
+                };
+
                 MpShortcutCollectionViewModel.Instance.Init();
             }
             catch(Exception ex) {

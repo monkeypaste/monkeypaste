@@ -52,23 +52,51 @@ namespace MpWpfApp {
     //   - About Monkey Paste
 
     public class MpSettingsWindowViewModel : MpViewModelBase {
+        #region Private Variables
+        private Window _windowRef;
+
+        //private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsBackup = new ObservableCollection<MpShortcutViewModel>();
+        //private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsToDelete = new ObservableCollection<MpShortcutViewModel>();
+        //private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsToRegister = new ObservableCollection<MpShortcutViewModel>();
+        #endregion
+
         #region Static Variables
         public static bool IsOpen = false;
         #endregion
 
         #region View Models
         public MpSystemTrayViewModel SystemTrayViewModel { get; set; }
-        #endregion
 
-        #region Private Variables
-        private Window _windowRef;
+        public ObservableCollection<MpAppViewModel> ExcludedAppViewModels {
+            get {
+                var cvs = CollectionViewSource.GetDefaultView(MpAppCollectionViewModel.Instance);
+                cvs.Filter += item => {
+                    var avm = (MpAppViewModel)item;
+                    return avm.IsAppRejected;
+                };
+                var eavms = new ObservableCollection<MpAppViewModel>(cvs.Cast<MpAppViewModel>().ToList());
+                //this adds empty row
+                eavms.Add(new MpAppViewModel(null));
+                return eavms;
+            }
+        }
 
-        private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsBackup = new ObservableCollection<MpShortcutViewModel>();
-        private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsToDelete = new ObservableCollection<MpShortcutViewModel>();
-        private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsToRegister = new ObservableCollection<MpShortcutViewModel>();
+        public MpShortcutCollectionViewModel ShortcutCollectionViewModel {
+            get {
+                return MpShortcutCollectionViewModel.Instance;
+            }
+        }
+
+        public MpSoundPlayerGroupCollectionViewModel SoundPlayerGroupCollectionViewModel {
+            get {
+                return MpSoundPlayerGroupCollectionViewModel.Instance;
+            }
+        }
         #endregion
 
         #region Properties
+
+        #region Preferences
         private int _maxRtfCharCount = Properties.Settings.Default.MaxRtfCharCount;
         public int MaxRtfCharCount {
             get {
@@ -123,6 +151,21 @@ namespace MpWpfApp {
             }
         }
 
+        private bool _isLoadOnLoginChecked = false;
+        public bool IsLoadOnLoginChecked {
+            get {
+                return _isLoadOnLoginChecked;
+            }
+            set {
+                if (_isLoadOnLoginChecked != value) {
+                    _isLoadOnLoginChecked = value;
+                    OnPropertyChanged(nameof(IsLoadOnLoginChecked));
+                }
+            }
+        }
+        #endregion
+
+        #region Settings Panel Visibility
         private Visibility _settingsPanel1Visibility;
         public Visibility SettingsPanel1Visibility {
             get { 
@@ -187,19 +230,7 @@ namespace MpWpfApp {
                 }
             }
         }
-
-        private bool _isLoadOnLoginChecked = false;
-        public bool IsLoadOnLoginChecked {
-            get {
-                return _isLoadOnLoginChecked;
-            }
-            set {
-                if (_isLoadOnLoginChecked != value) {
-                    _isLoadOnLoginChecked = value;
-                    OnPropertyChanged(nameof(IsLoadOnLoginChecked));
-                }
-            }
-        }
+        #endregion        
 
         private int _selectedShortcutIndex;
         public int SelectedShortcutIndex {
@@ -224,33 +255,6 @@ namespace MpWpfApp {
                     _selectedExcludedAppIndex = value;
                     OnPropertyChanged(nameof(SelectedExcludedAppIndex));
                 }
-            }
-        }
-
-        public ObservableCollection<MpAppViewModel> ExcludedAppViewModels {
-            get {
-
-                var cvs = CollectionViewSource.GetDefaultView(MpAppCollectionViewModel.Instance);
-                cvs.Filter += item => {
-                    var avm = (MpAppViewModel)item;
-                    return avm.IsAppRejected;
-                };
-                var eavms = new ObservableCollection<MpAppViewModel>(cvs.Cast<MpAppViewModel>().ToList());
-                //this adds empty row
-                eavms.Add(new MpAppViewModel(null));
-                return eavms;
-            }
-        }
-
-        public MpShortcutCollectionViewModel ShortcutCollectionViewModel {
-            get {
-                return MpShortcutCollectionViewModel.Instance;
-            }
-        }
-        
-        public MpSoundPlayerGroupCollectionViewModel SoundPlayerGroupCollectionViewModel {
-            get {
-                return MpSoundPlayerGroupCollectionViewModel.Instance;
             }
         }
         #endregion
@@ -389,23 +393,6 @@ namespace MpWpfApp {
                 scvm.KeyList,
                 scvm.Command
             );
-            //SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
-            
-            //string newKeyList = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(scvm.ShortcutDisplayName,scvm.KeyList, scvm.Command);
-            //if(newKeyList == null) {
-            //    //assignment was canceled so do nothing
-            //} else if(newKeyList == string.Empty) {
-            //    //shortcut was cleared
-            //    scvm.ClearKeyList();
-            //    scvm.Shortcut.WriteToDatabase();
-            //    scvm.Unregister();
-            //} else {
-            //    scvm.KeyList = newKeyList;
-            //    scvm.Shortcut.WriteToDatabase();
-            //    scvm.Register();
-            //}
-            
-            //SystemTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
         }
 
         private RelayCommand _deleteShortcutCommand;

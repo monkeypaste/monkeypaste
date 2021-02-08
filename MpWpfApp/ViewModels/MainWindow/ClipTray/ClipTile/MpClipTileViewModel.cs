@@ -1249,6 +1249,7 @@
         public void RefreshCommands() {
             MainWindowViewModel.ClipTrayViewModel.BringSelectedClipTilesToFrontCommand.RaiseCanExecuteChanged();
             MainWindowViewModel.ClipTrayViewModel.SendSelectedClipTilesToBackCommand.RaiseCanExecuteChanged();
+            MainWindowViewModel.ClipTrayViewModel.SpeakSelectedClipsAsyncCommand.RaiseCanExecuteChanged();
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
@@ -1509,6 +1510,10 @@
                         GetRtb().Selection.Select(GetRtb().Document.ContentStart, GetRtb().Document.ContentStart);
                         break;
                     case nameof(CurrentHighlightMatchIdx):
+                        if(LastContentHighlightRangeList.Count == 0 && LastTitleHighlightRangeList.Count == 0) {
+                            _currentHighlightMatchIdx = 0;
+                            return;
+                        }
                         int maxIdx = LastContentHighlightRangeList.Count + LastTitleHighlightRangeList.Count - 1;
                         if (CurrentHighlightMatchIdx < 0) {
                             _currentHighlightMatchIdx = maxIdx;
@@ -1714,6 +1719,8 @@
                 MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, Brushes.Transparent, ct);
                 ctvm.LastContentHighlightRangeList.Clear();
                 ctvm.MainWindowViewModel.ClipTrayViewModel.HighlightTaskCount--;
+
+                ctvm.GetRtb().ScrollToHome();
                 return;
             }
 
@@ -2036,19 +2043,7 @@
         private void ExcludeApplication() {
             MpAppCollectionViewModel.Instance.UpdateRejection(MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(CopyItemAppId), true);
         }
-
-        private RelayCommand _assignHotkeyCommand;
-        public ICommand AssignHotkeyCommand {
-            get {
-                if (_assignHotkeyCommand == null) {
-                    _assignHotkeyCommand = new RelayCommand(AssignHotkey);
-                }
-                return _assignHotkeyCommand;
-            }
-        }
-        private void AssignHotkey() {
-            ShortcutKeyList = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(this, "Paste " + CopyItemTitle, ShortcutKeyList, PasteClipCommand);
-        }
+               
 
         private RelayCommand _pasteClipCommand;
         public ICommand PasteClipCommand {
