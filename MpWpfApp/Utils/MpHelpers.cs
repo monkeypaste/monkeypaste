@@ -1628,46 +1628,41 @@ namespace MpWpfApp {
                 return "Alt";
             }
             if (key == Key.LeftCtrl) {
-                return "Ctrl";
+                return "Control";
             }
-            if(key.ToString() == "Oem3") {
-                return "Backtick";
-            }
-            if (key.ToString() == "Oem6") {
-                return "CloseBrackets";
-            }
-            if (key.ToString() == "Oem5") {
-                return "ForwardSlash";
-            }
-            if (key.ToString() == "Oem1") {
-                return "Semicolon";
-            }
-            if (key.ToString().Contains("Oem")) {
-                return key.ToString().Replace("Oem", string.Empty);
-            }
-            if(key.ToString().Length == 2 && key.ToString()[0] == 'D') {
-                return key.ToString()[1].ToString();
-            }
+            //if(key.ToString() == "Oem3") {
+            //    return "Backtick";
+            //}
+            //if (key.ToString() == "Oem6") {
+            //    return "CloseBrackets";
+            //}
+            //if (key.ToString() == "Oem5") {
+            //    return "ForwardSlash";
+            //}
+            //if (key.ToString() == "Oem1") {
+            //    return "Semicolon";
+            //}
+            //if (key.ToString().Contains("Oem")) {
+            //    return key.ToString().Replace("Oem", string.Empty);
+            //}
+            //if(key.ToString().Length == 2 && key.ToString()[0] == 'D') {
+            //    return key.ToString()[1].ToString();
+            //}
             return key.ToString();
         }
 
         public async Task<string> OcrBitmapSourceFileAsync(string image) {
-            string ocrText = string.Empty;
-            await Dispatcher.CurrentDispatcher.InvokeAsync(async () => {
-                var engine = OcrEngine.TryCreateFromLanguage(new Windows.Globalization.Language("en-US"));
-                var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(image);
-                using (var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read)) {
-                    var decoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream);
-                    var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
-                    var ocrResult = await engine.RecognizeAsync(softwareBitmap);
+            var engine = OcrEngine.TryCreateFromLanguage(new Windows.Globalization.Language("en-US"));
+            var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(image);
+            using (var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read)) {
+                var decoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream);
+                var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
+                var ocrResult = await engine.RecognizeAsync(softwareBitmap);
 
-                    Console.WriteLine(ocrResult.Text);
+                Console.WriteLine(ocrResult.Text);
 
-                    ocrText = ocrResult.Text;
-                }
-            }, DispatcherPriority.Background);
-
-            return ocrText;
+                return ocrResult.Text;
+            }
         }
 
         public string ConvertFlowDocumentToXaml(MpEventEnabledFlowDocument fd) {

@@ -190,7 +190,7 @@ namespace MpWpfApp {
                         return dupItem;
                     }
                 }
-                //return new MpCopyItem(itemType, itemData, itemColor, processHandle);
+
                 var newItem = new MpCopyItem();
                 newItem.CopyItemType = itemType;
                 newItem.CopyDateTime = DateTime.Now;
@@ -550,22 +550,40 @@ namespace MpWpfApp {
                         //when loading from database
                         ImageItemObjectList = MpDetectedImageObject.GetAllObjectsForItem(CopyItemId);
                     } else {
-                         if(ItemBitmapSource.Width * ItemBitmapSource.Height > 200000) {
-                            _itemData = MpHelpers.Instance.ResizeBitmapSource(ItemBitmapSource, new Size(500 / ItemBitmapSource.Width, 500 / ItemBitmapSource.Height));
-                        }
-                        ImageItemObjectList = await MpHelpers.Instance.DetectObjectsAsync(MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource), Properties.Settings.Default.DetectedImageMinConfidence);
+                        //resize image for scanning to 500x500 regardless of original resolution                        
+                        //var maxSize = new Size(500, 500);
+                        //double scale = Math.Min(maxSize.Width / ItemBitmapSource.Width, maxSize.Height / ItemBitmapSource.Height);
+                        //var scanBmpSrc = MpHelpers.Instance.ResizeBitmapSource(ItemBitmapSource, new Size(scale, scale));
 
-                        // don't perform ocr for now it takes too long on big images
-                        var imgPath = MpHelpers.Instance.WriteBitmapSourceToFile(Path.GetRandomFileName(), ItemBitmapSource);
-                        ItemPlainText = await MpHelpers.Instance.OcrBitmapSourceFileAsync(imgPath);
-                        File.Delete(imgPath);
-                        if (string.IsNullOrEmpty(ItemPlainText)) {
-                            if(ImageItemObjectList.Count > 0) {
-                                ItemPlainText = ItemCsv;
-                            } else {
-                                ItemPlainText = "Image";
-                            }                            
-                        }
+                        var ibsba = MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource);
+
+                        //ImageItemObjectList = await MpHelpers.Instance.DetectObjectsAsync(
+                        //    MpHelpers.Instance.ConvertBitmapSourceToByteArray(scanBmpSrc),
+                        //    Properties.Settings.Default.DetectedImageMinConfidence);
+
+                        //// don't perform ocr for now it takes too long on big images
+                        ////string fp = Path.GetTempFileName();
+                        ////fp = fp.Remove(fp.IndexOf('.'), fp.Length - fp.IndexOf('.')) + ".png";
+                        ////var imgPath = MpHelpers.Instance.WriteBitmapSourceToFile(fp, ItemBitmapSource);
+                        ////ItemPlainText = await MpHelpers.Instance.OcrBitmapSourceFileAsync(imgPath);
+                        ////File.Delete(imgPath);
+                        ///
+                        var ia = await MpImageAnalyzer.Instance.AnalyzeImage(ibsba);
+
+                        Console.WriteLine("-------------------------------------------------------------------");
+                        Console.WriteLine("-------------------------------------------------------------------");
+                        Console.WriteLine("-------------------------------------------------------------------");
+                        await MpImageOcr.Instance.OcrImage(ibsba);
+
+                        //if (string.IsNullOrEmpty(ItemPlainText)) {
+                        //    if(ImageItemObjectList.Count > 0) {
+                        //        ItemPlainText = ItemCsv;
+                        //    } else {
+                        //        ItemPlainText = "Image";
+                        //    }                            
+                        //}
+
+                        ItemPlainText = "Image";
                     }
                     break;
                 case MpCopyItemType.RichText:

@@ -191,7 +191,7 @@
       <Value Profile="(Default)">#FFFFFF</Value>
     </Setting>
     <Setting Name="IgnoreNewDuplicates" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="DefaultFontSize" Type="System.Double" Scope="User">
       <Value Profile="(Default)">12</Value>
