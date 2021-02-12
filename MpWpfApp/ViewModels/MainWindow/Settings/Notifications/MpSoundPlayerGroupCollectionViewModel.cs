@@ -53,8 +53,9 @@ namespace MpWpfApp {
         public void Init() {
         }
         #endregion
+
         #region Private Methods
-        private MpSoundPlayerGroupCollectionViewModel() : this(MpSoundGroup.Minimal) { }
+        private MpSoundPlayerGroupCollectionViewModel() : this((MpSoundGroup)Properties.Settings.Default.NotificationSoundGroupIdx) { }
 
         private MpSoundPlayerGroupCollectionViewModel(MpSoundGroup group) : base() {
             PropertyChanged += (s, e) => {
@@ -72,10 +73,12 @@ namespace MpWpfApp {
                                 this.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOff, Properties.Settings.Default.NotificationAppendModeOffSoundPath));
                                 break;
                         }
+                        Properties.Settings.Default.NotificationSoundGroupIdx = (int)SelectedSoundGroupNameIdx;
+                        Properties.Settings.Default.Save();
                         break;
                 }
             };
-            SelectedSoundGroupNameIdx = 0;
+            SelectedSoundGroupNameIdx = (int)group;
         }
         #endregion
 
@@ -94,6 +97,22 @@ namespace MpWpfApp {
         }
         private void PlayCopySound() {
             this.Where(x => x.SoundType == MpSoundType.Copy).ToList()[0].Play();
+        }
+
+        private RelayCommand<bool> _playModeChangeCommand = null;
+        public ICommand PlayModeChangeCommand {
+            get {
+                if (_playModeChangeCommand == null) {
+                    _playModeChangeCommand = new RelayCommand<bool>(PlayModeChange, CanPlayModeChange);
+                }
+                return _playModeChangeCommand;
+            }
+        }
+        private bool CanPlayModeChange(bool isOn) {
+            return Properties.Settings.Default.NotificationDoModeChangeSound && this.Count > 0;
+        }
+        private void PlayModeChange(bool isOn) {
+            this.Where(x => isOn ? x.SoundType == MpSoundType.AppendOn: x.SoundType == MpSoundType.AppendOff).ToList()[0].Play();
         }
         #endregion
     }

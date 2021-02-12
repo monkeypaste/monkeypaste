@@ -24,6 +24,11 @@
         <local:MpVisibilityToBoolConverter x:Key="VisibilityToBoolConverter" />
         <local:MpImageSourceToBitmapSourceConverter x:Key="ImageSourceToBitmapSourceConverter" />
         <local:MpIntToMpRoutingTypeConverter x:Key="IntToMpRoutingTypeConverter" />
+        <s:Int32 x:Key="SettingsTabAccount">0</s:Int32>
+        <s:Int32 x:Key="SettingsTabPreferences">1</s:Int32>
+        <s:Int32 x:Key="SettingsTabSecurity">2</s:Int32>
+        <s:Int32 x:Key="SettingsTabShortcuts">3</s:Int32>
+        <s:Int32 x:Key="SettingsTabHelp">4</s:Int32>
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -49,7 +54,8 @@
             <!-- Account Tab Button -->
             <ToggleButton Grid.Column="0"
                           IsChecked="{Binding SettingsPanel1Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
-                          Command="{Binding ClickSettingsPanel1Command}">
+                          Command="{Binding ClickSettingsPanelCommand}"
+                          CommandParameter="{StaticResource SettingsTabAccount}">
                 <StackPanel Orientation="Vertical">
                     <Image Stretch="Fill"
                            Height="50"
@@ -64,7 +70,8 @@
             <!-- Prefs Tab Button -->
             <ToggleButton Grid.Column="1"
                           IsChecked="{Binding SettingsPanel2Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
-                          Command="{Binding ClickSettingsPanel2Command}">
+                          Command="{Binding ClickSettingsPanelCommand}"
+                          CommandParameter="{StaticResource SettingsTabPreferences}">
                 <StackPanel Orientation="Vertical">
                     <Image Stretch="Fill"
                            Height="50"
@@ -79,7 +86,8 @@
             <!-- Security Tab Button -->
             <ToggleButton Grid.Column="2"
                           IsChecked="{Binding SettingsPanel3Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
-                          Command="{Binding ClickSettingsPanel3Command}">
+                          Command="{Binding ClickSettingsPanelCommand}"
+                          CommandParameter="{StaticResource SettingsTabSecurity}">
                 <StackPanel Orientation="Vertical">
                     <Image Stretch="Fill"
                            Height="50"
@@ -94,7 +102,8 @@
             <!-- Shortcuts tab button -->
             <ToggleButton Grid.Column="3"
                           IsChecked="{Binding SettingsPanel4Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
-                          Command="{Binding ClickSettingsPanel4Command}">
+                          Command="{Binding ClickSettingsPanelCommand}"
+                          CommandParameter="{StaticResource SettingsTabShortcuts}">
                 <StackPanel Orientation="Vertical">
                     <Image Stretch="Fill"
                            Height="50"
@@ -109,7 +118,8 @@
             <!-- Help tab Button -->
             <ToggleButton Grid.Column="4"
                           IsChecked="{Binding SettingsPanel5Visibility, Converter={StaticResource VisibilityToBoolConverter}}"
-                          Command="{Binding ClickSettingsPanel5Command}">
+                          Command="{Binding ClickSettingsPanelCommand}"
+                          CommandParameter="{StaticResource SettingsTabHelp}">
                 <StackPanel Orientation="Vertical">
                     <Image Stretch="Fill"
                            Height="50"
@@ -129,8 +139,9 @@
         </Grid>
         <!-- Preferences -->
         <Grid Grid.Row="1"
-              Visibility="{Binding SettingsPanel2Visibility}">
-            <StackPanel Orientation="Vertical">
+              Visibility="{Binding SettingsPanel2Visibility}">            
+            <StackPanel Orientation="Vertical"
+                        DataContext="{Binding PreferencesViewModel}">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Sound Notifications" />
                     <ComboBox DataContext="{Binding SoundPlayerGroupCollectionViewModel}"
@@ -160,68 +171,79 @@
         <!-- Security -->
         <Grid Grid.Row="1"
               Visibility="{Binding SettingsPanel3Visibility}">
-            <DataGrid Grid.Row="1"
-                      x:Name="ExcludedAppDatagrid"
-                      DataContext="{Binding}"
-                      ItemsSource="{Binding ExcludedAppViewModels}"
-                      HorizontalAlignment="Center"
-                      SelectedIndex="{Binding SelectedExcludedAppIndex, Mode=TwoWay}"
-                      SelectionMode="Single"
-                      GridLinesVisibility="None"
-                      IsReadOnly="True"
-                      Margin="15"
-                      AutoGenerateColumns="False">
-                <DataGrid.RowStyle>
-                    <Style TargetType="{x:Type DataGridRow}">
-                        <Setter Property="IsSelected"
-                                Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    </Style>
-                </DataGrid.RowStyle>
-                <DataGrid.Columns>
-                    <DataGridTemplateColumn Width="30">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Image Source="{Binding IconImage, Converter={StaticResource ImageSourceToBitmapSourceConverter}}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Excluded Application"                                             
-                                            Width="300">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock VerticalAlignment="Center" 
-                                           Margin="10,0,0,0"
-                                           Text="{Binding AppName}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Width="30">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel VerticalAlignment="Stretch">
-                                    <Button Background="White"
-                                            BorderThickness="0"
-                                            VerticalAlignment="Stretch" 
-                                            VerticalContentAlignment="Stretch"
-                                            Visibility="{Binding DeleteButtonVisibility}"
-                                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.DeleteExcludedAppCommand}">
-                                        <Image VerticalAlignment="Stretch"
-                                               Source="/MpWpfApp;component/Resources/Images/close.png" />
-                                    </Button>
-                                    <Button Background="White"
-                                            BorderThickness="0"
-                                            Visibility="{Binding AddButtonVisibility}"
-                                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.AddExcludedAppCommand}">
-                                        <Image Width="20"
-                                               Height="20"
-                                               Source="/MpWpfApp;component/Resources/Images/add.png" />
-                                    </Button>
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+            <StackPanel Orientation="Vertical"
+                        DataContext="{Binding SecurityViewModel}">
+                <DataGrid Grid.Row="1"
+                          x:Name="ExcludedAppDatagrid"
+                          ItemsSource="{Binding AppViewModels}"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Top"
+                          Width="Auto"
+                          Height="Auto"
+                          SelectedIndex="{Binding SelectedExcludedAppIndex, Mode=TwoWay}"
+                          SelectionMode="Single"
+                          GridLinesVisibility="None"
+                          CanUserAddRows="False"
+                          Margin="15,15,15,5"
+                          AutoGenerateColumns="False">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Loaded">
+                            <i:CallMethodAction MethodName="AppCollectionDataGrid_Loaded"
+                                                TargetObject="{Binding}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Setter Property="IsSelected"
+                                    Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn Width="30">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image Source="{Binding IconImage, Converter={StaticResource ImageSourceToBitmapSourceConverter}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Header="Known Applications"
+                                                Width="300">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock VerticalAlignment="Center"
+                                               Margin="10,0,0,0"
+                                               Text="{Binding AppName}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTemplateColumn Width="70"
+                                                Header="Excluded?">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox Background="White"
+                                              BorderThickness="1"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Center"
+                                              VerticalContentAlignment="Stretch"
+                                              IsChecked="{Binding IsAppRejected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    </CheckBox>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Button Width="200" 
+                        Command="{Binding AddExcludedAppCommand}">
+                    <DockPanel>
+                        <Image Source="/MpWpfApp;component/Resources/Images/add.png"
+                               DockPanel.Dock="Left"
+                               Width="20"
+                               Height="20" />
+                        <Label DockPanel.Dock="Right"
+                               Content="Add Application" />
+                    </DockPanel>
+                </Button>
+            </StackPanel>
         </Grid>
         <!-- Shortcuts -->
         <Grid Grid.Row="1"

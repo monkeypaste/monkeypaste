@@ -365,7 +365,7 @@ namespace MpWpfApp {
             }
         }
         private void AssignHotkey() {
-            ShortcutKeyString = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(this, "Select " + TagName, ShortcutKeyString, SelectTagCommand);
+            ShortcutKeyString = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(this, "Select " + TagName, ShortcutKeyString, SelectTagCommand, null);
         }
 
         private RelayCommand<Brush> _changeTagColorCommand;

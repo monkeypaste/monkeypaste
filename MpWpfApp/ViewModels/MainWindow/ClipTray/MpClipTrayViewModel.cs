@@ -499,8 +499,13 @@ namespace MpWpfApp {
             ClipboardManager.ClipboardChanged += (s, e53) => {
                 var sw = new Stopwatch();
                 sw.Start();
-                var nctvm = new MpClipTileViewModel();
-                this.Add(nctvm);
+                MpClipTileViewModel nctvm = null;
+                if (MainWindowViewModel.AppModeViewModel.IsInAppendMode && SelectedClipTiles.Count > 0) {
+                    nctvm = SelectedClipTiles[0];
+                } else {
+                    nctvm = new MpClipTileViewModel();
+                    this.Add(nctvm);
+                }
 
                 Dispatcher.CurrentDispatcher.InvokeAsync(() => {
                     var newCopyItem = MpCopyItem.CreateFromClipboardAsync(MainWindowViewModel.ClipTrayViewModel.ClipboardManager.LastWindowWatcher.LastHandle).Result;
@@ -512,8 +517,16 @@ namespace MpWpfApp {
                     }
                     if (MainWindowViewModel.AppModeViewModel.IsInAppendMode && SelectedClipTiles.Count > 0) {
                         //when in append mode just append the new items text to selecteditem
-                        ClipTileViewModelDataSource.RemoveAt(0);
-                        SelectedClipTiles[0].AppendContent(new MpClipTileViewModel(newCopyItem));
+                        nctvm.AppendContent(new MpClipTileViewModel(newCopyItem));
+                        if(Properties.Settings.Default.NotificationShowAppendBufferToast) {
+                            MpStandardBalloonViewModel.ShowBalloon(
+                            "Append Buffer",
+                            SelectedClipTiles[0].CopyItemPlainText,
+                            Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+                        }
+                        if(Properties.Settings.Default.NotificationDoCopySound) {
+                            MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
+                        }
                         return;
                     }
                     if (newCopyItem.CopyItemId > 0) {
@@ -531,6 +544,9 @@ namespace MpWpfApp {
                     } else {
                         //var nctvm = ClipTileViewModelDataSource.FilteredOrderedItems[0];
                         nctvm.SetCopyItem(newCopyItem);
+                        if (Properties.Settings.Default.NotificationDoCopySound) {
+                            MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
+                        }
                         MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(nctvm);
                         GetClipTray().Items.Refresh();
                     }
@@ -540,6 +556,7 @@ namespace MpWpfApp {
                 Console.WriteLine("Time to create new copyitem: " + sw.ElapsedMilliseconds + " ms");
                 ResetClipSelection();
             };
+
             if (Properties.Settings.Default.IsInitialLoad) {
                 var introItem1 = new MpCopyItem(
                     MpCopyItemType.RichText,
@@ -1238,7 +1255,7 @@ namespace MpWpfApp {
                 this, 
                 "Paste " + SelectedClipTiles[0].CopyItemTitle, 
                 SelectedClipTiles[0].ShortcutKeyString, 
-                SelectedClipTiles[0].PasteClipCommand);
+                SelectedClipTiles[0].PasteClipCommand,null);
         }
 
         private RelayCommand _invertSelectionCommand;

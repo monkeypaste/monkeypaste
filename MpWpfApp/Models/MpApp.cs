@@ -52,7 +52,7 @@ namespace MpWpfApp {
 
         public MpApp(bool isAppRejected, IntPtr hwnd) {
             AppPath = MpHelpers.Instance.GetProcessPath(hwnd);
-            AppName = MpHelpers.Instance.GetProcessMainWindowTitle(hwnd);
+            AppName = MpHelpers.Instance.GetProcessApplicationName(hwnd);
             IsAppRejected = isAppRejected;
             IconImage = MpHelpers.Instance.GetIconImage(AppPath);
             IconBorderImage = CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio);
@@ -117,7 +117,7 @@ namespace MpWpfApp {
                             { "@c4", ColorId[3] },
                             { "@c5", ColorId[4] }
                         });
-                AppId = MpDb.Instance.GetLastRowId("MpApp", "pk_MpAppId");
+                AppId = MpDb.Instance.GetLastRowId("MpApp", "pk_MpAppId");                
             } else {
                 MpDb.Instance.ExecuteWrite(
                     "update MpApp set IconBlob=@ib, IconBorderBlob=@ibb, IsAppRejected=@iar, SourcePath=@sp, AppName=@an, fk_MpColorId1=@c1,fk_MpColorId2=@c2,fk_MpColorId3=@c3,fk_MpColorId4=@c4,fk_MpColorId5=@c5 where pk_MpAppId=@aid",
@@ -135,6 +135,7 @@ namespace MpWpfApp {
                             { "@c5", ColorId[4] }
                     });
             }
+            MpAppCollectionViewModel.Instance.Refresh();
         }
 
         public void DeleteFromDatabase() {

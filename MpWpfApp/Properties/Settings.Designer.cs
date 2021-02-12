@@ -968,5 +968,26 @@ namespace MpWpfApp.Properties {
                 this["DetectedImageMinConfidence"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("pack://application:,,,/Resources")]
+        public string AbsoluteResourcesPath {
+            get {
+                return ((string)(this["AbsoluteResourcesPath"]));
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int NotificationSoundGroupIdx {
+            get {
+                return ((int)(this["NotificationSoundGroupIdx"]));
+            }
+            set {
+                this["NotificationSoundGroupIdx"] = value;
+            }
+        }
     }
 }

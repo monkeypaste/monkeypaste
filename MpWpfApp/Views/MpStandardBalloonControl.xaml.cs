@@ -16,40 +16,45 @@ using System.Windows.Shapes;
 using Hardcodet.Wpf.TaskbarNotification;
 
 namespace MpWpfApp {
-    public partial class MpAppendBalloonControl : UserControl {
+    public partial class MpStandardBalloonControl : UserControl {
         private bool isClosing = false;
 
         #region BalloonText dependency property
-        public static readonly DependencyProperty BalloonTextProperty =
-            DependencyProperty.Register(
-                "BalloonText",
-                typeof(string),
-                typeof(MpBalloonControl),
-                new FrameworkPropertyMetadata(string.Empty));
-        public string BalloonText {
-            get { return (string)GetValue(BalloonTextProperty); }
-            set { SetValue(BalloonTextProperty, value); }
-        }
+        //public static readonly DependencyProperty BalloonTextProperty =
+        //    DependencyProperty.Register(
+        //        "BalloonText",
+        //        typeof(string),
+        //        typeof(MpBalloonControl),
+        //        new FrameworkPropertyMetadata("Content"));
+        //public string BalloonText {
+        //    get { return (string)GetValue(BalloonTextProperty); }
+        //    set { SetValue(BalloonTextProperty, value); }
+        //}
 
-        public static readonly DependencyProperty BalloonTitleProperty =
-            DependencyProperty.Register(
-                "BalloonTitle",
-                typeof(string),
-                typeof(MpBalloonControl),
-                new FrameworkPropertyMetadata(string.Empty));
-        public string BalloonTitle {
-            get { return (string)GetValue(BalloonTitleProperty); }
-            set { SetValue(BalloonTitleProperty, value); }
-        }
+        //public static readonly DependencyProperty BalloonTitleProperty =
+        //    DependencyProperty.Register(
+        //        "BalloonTitle",
+        //        typeof(string),
+        //        typeof(MpBalloonControl),
+        //        new FrameworkPropertyMetadata("Title"));
+        //public string BalloonTitle {
+        //    get { return (string)GetValue(BalloonTitleProperty); }
+        //    set { SetValue(BalloonTitleProperty, value); }
+        //}
 
         #endregion
 
-        public MpAppendBalloonControl() {
+        public MpStandardBalloonControl() {
             InitializeComponent();
             TaskbarIcon.AddBalloonClosingHandler(this, OnBalloonClosing);
         }
 
+        public MpStandardBalloonControl(string title, string content, string bitmapSourcePath) {
+            InitializeComponent();
 
+            TaskbarIcon.AddBalloonClosingHandler(this, OnBalloonClosing);
+            DataContext = new MpStandardBalloonViewModel(title, content, bitmapSourcePath);
+        }
         /// <summary>
         /// By subscribing to the <see cref="TaskbarIcon.BalloonClosingEvent"/>
         /// and setting the "Handled" property to true, we suppress the popup
@@ -94,6 +99,19 @@ namespace MpWpfApp {
         private void OnFadeOutCompleted(object sender, EventArgs e) {
             Popup pp = (Popup)Parent;
             pp.IsOpen = false;
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e) {
+            //the tray icon assigned this attached property to simplify access
+            TaskbarIcon taskbarIcon = TaskbarIcon.GetParentTaskbarIcon(this);
+            taskbarIcon.CloseBalloon();
+        }
+
+        private void PropertiesButton_Click(object sender, RoutedEventArgs e) {
+            TaskbarIcon taskbarIcon = TaskbarIcon.GetParentTaskbarIcon(this);
+            taskbarIcon.CloseBalloon();
+            var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
+            mwvm.SystemTrayViewModel.ShowSettingsWindowCommand.Execute(1);
         }
     }
 }

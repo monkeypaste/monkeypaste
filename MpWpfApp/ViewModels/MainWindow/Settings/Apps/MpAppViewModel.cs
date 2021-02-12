@@ -81,29 +81,15 @@ namespace MpWpfApp {
             }
         }
 
-        private Visibility _deleteButtonVisibility;
-        public Visibility DeleteButtonVisibility {
+        public Visibility RejectAppVisibility {
             get {
-                return _deleteButtonVisibility;
-            }
-            set {
-                if (_deleteButtonVisibility != value) {
-                    _deleteButtonVisibility = value;
-                    OnPropertyChanged(nameof(DeleteButtonVisibility));
-                }
+                return App == null ? Visibility.Collapsed:Visibility.Visible;
             }
         }
 
-        private Visibility _addButtonVisibility;
         public Visibility AddButtonVisibility {
             get {
-                return _addButtonVisibility;
-            }
-            set {
-                if (_addButtonVisibility != value) {
-                    _addButtonVisibility = value;
-                    OnPropertyChanged(nameof(AddButtonVisibility));
-                }
+                return App == null ? Visibility.Visible : Visibility.Collapsed;
             }
         }
 
@@ -113,7 +99,8 @@ namespace MpWpfApp {
                 return _app;
             }
             set {
-                if (_app != value) {
+                //if (_app != value) 
+                {
                     _app = value;
                     OnPropertyChanged(nameof(App));
                     OnPropertyChanged(nameof(AppId));
@@ -121,35 +108,20 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(AppName));
                     OnPropertyChanged(nameof(IsAppRejected));
                     OnPropertyChanged(nameof(IconImage));
+                    OnPropertyChanged(nameof(RejectAppVisibility));
+                    OnPropertyChanged(nameof(AddButtonVisibility));
                 }
+
+                
             }
         }
         #endregion
 
         #region Public Methods
+        public MpAppViewModel() : this(null) { }
+
         public MpAppViewModel(MpApp app) : base() {
-            PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
-                    case nameof(App):
-                        //app is null for add row
-                        if(App == null) {
-                            //AppName = "Add Application";
-                            DeleteButtonVisibility = Visibility.Collapsed;
-                            AddButtonVisibility = Visibility.Visible;
-                        } else {
-                            DeleteButtonVisibility = Visibility.Visible;
-                            AddButtonVisibility = Visibility.Collapsed;
-                        }
-                        break;
-                }
-            };
-
             App = app;
-
-            //this check since App will not change for empty row
-            if(App == null) {
-                OnPropertyChanged(nameof(App));
-            }
         }
         #endregion
 

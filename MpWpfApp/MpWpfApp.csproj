@@ -211,15 +211,20 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\MpClipTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MpMainWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\MpSearchBoxViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Account\MpHelpViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Apps\MpAppCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Apps\MpAppViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Help\MpHelpViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\MpSettingsWindowViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpAppendBalloonViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpStandardBalloonViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpNotificationCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpNotificationViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundPlayerGroupCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundPlayerViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Preferences\MpPreferencesViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Security\MpSecurityViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpAssignShortcutModalWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpShortcutPanelViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpShortcutCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpShortcutViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Sort\MpClipTileSortViewModel.cs" />
@@ -227,8 +232,8 @@
     <Compile Include="ViewModels\MainWindow\SystemTray\MpSystemTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\MpTagTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\MpTagTileViewModel.cs" />
-    <Compile Include="Views\MpAppendBalloonControl.xaml.cs">
-      <DependentUpon>MpAppendBalloonControl.xaml</DependentUpon>
+    <Compile Include="Views\MpStandardBalloonControl.xaml.cs">
+      <DependentUpon>MpStandardBalloonControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MpBalloonControl.xaml.cs">
       <DependentUpon>MpBalloonControl.xaml</DependentUpon>
@@ -266,7 +271,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MpAppendBalloonControl.xaml">
+    <Page Include="Views\MpStandardBalloonControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

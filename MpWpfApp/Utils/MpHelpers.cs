@@ -813,9 +813,9 @@ namespace MpWpfApp {
         public string GetProcessApplicationName(IntPtr hWnd) {
             string mwt = GetProcessMainWindowTitle(hWnd);
             if (string.IsNullOrEmpty(mwt)) {
-                return string.Empty;
+                return mwt;
             }
-            var mwta = mwt.Split('-');
+            var mwta = mwt.Split(new string[] { "-" },StringSplitOptions.RemoveEmptyEntries);
             if (mwta.Length == 1) {
                 return "Explorer";
             }

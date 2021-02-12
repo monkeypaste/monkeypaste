@@ -271,5 +271,11 @@
     <Setting Name="DetectedImageMinConfidence" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.3</Value>
     </Setting>
+    <Setting Name="AbsoluteResourcesPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">pack://application:,,,/Resources</Value>
+    </Setting>
+    <Setting Name="NotificationSoundGroupIdx" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

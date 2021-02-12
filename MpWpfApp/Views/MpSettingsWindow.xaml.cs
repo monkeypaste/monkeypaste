@@ -19,6 +19,11 @@ namespace MpWpfApp {
     public partial class MpSettingsWindow : Window {
         public MpSettingsWindow() {
             InitializeComponent();
+            DataContext = new MpSettingsWindowViewModel();
+        }
+        public MpSettingsWindow(int tabToShow) {
+            InitializeComponent();
+            DataContext = new MpSettingsWindowViewModel(tabToShow);
         }
     }
 }

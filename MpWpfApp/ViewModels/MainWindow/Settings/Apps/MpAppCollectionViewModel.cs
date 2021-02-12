@@ -24,10 +24,8 @@ namespace MpWpfApp {
         public void Init() {
             //empty to initialize singleton
         }
-        public MpAppCollectionViewModel() : base() {
-            foreach (var app in MpApp.GetAllApps()) {
-                this.Add(new MpAppViewModel(app));
-            }
+        private MpAppCollectionViewModel() : base() {
+            Refresh();
         }
 
         public MpAppViewModel GetAppViewModelByAppId(int appId) {
@@ -79,7 +77,7 @@ namespace MpWpfApp {
         }
 
         public new void Add(MpAppViewModel avm) {
-            if(avm.IsAppRejected) {
+            if(avm.IsAppRejected && avm.App != null) {
                 var dupList = this.Where(x => x.AppPath == avm.AppPath).ToList();
                 if (dupList != null && dupList.Count > 0) {
                     var ctrvm = MainWindowViewModel.ClipTrayViewModel;
@@ -111,11 +109,19 @@ namespace MpWpfApp {
                     avm.App.WriteToDatabase();
                 }
             }
-            base.Add(avm);
+            //base.Add(avm);
+            Refresh();
         }
 
         public new void Remove(MpAppViewModel avm) {
             base.Remove(avm);
+        }
+
+        public void Refresh() {
+            this.Clear();
+            foreach (var app in MpApp.GetAllApps()) {
+                base.Add(new MpAppViewModel(app));
+            }
         }
         #endregion
 

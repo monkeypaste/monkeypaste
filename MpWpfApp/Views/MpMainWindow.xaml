@@ -455,6 +455,12 @@
         <s:Int32 x:Key="Files">1</s:Int32>
         <s:Int32 x:Key="Csv">2</s:Int32>
         <s:Int32 x:Key="Zip">3</s:Int32>
+        
+        <s:Int32 x:Key="SettingsTabAccount">0</s:Int32>
+        <s:Int32 x:Key="SettingsTabPreferences">1</s:Int32>
+        <s:Int32 x:Key="SettingsTabSecurity">2</s:Int32>
+        <s:Int32 x:Key="SettingsTabShortcuts">3</s:Int32>
+        <s:Int32 x:Key="SettingsTabHelp">4</s:Int32>
         <s:Boolean x:Key="True">True</s:Boolean>
         <s:Boolean x:Key="False">False</s:Boolean>
         <local:MpIntToStringConverter x:Key="IntToStringConverter" />
@@ -533,6 +539,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
         <ControlTemplate x:Key="SearchButtonControlTemplate"
                          TargetType="{x:Type Button}">
             <Border x:Name="OuterBorder"
@@ -718,7 +725,8 @@
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Settings"
-                              Command="{Binding ShowSettingsWindowCommand}" />
+                              Command="{Binding ShowSettingsWindowCommand}"
+                              CommandParameter="{StaticResource SettingsTabAccount}"/>
                     <MenuItem Header="Pause" />
                     <MenuItem Header="Help" />
                     <MenuItem Header="Exit"
@@ -1115,13 +1123,17 @@
                 </Grid.RowDefinitions>
                 <ToggleButton Grid.Row="0"
                               Grid.Column="0"
-                              Padding="0,5,0,5">
+                              Padding="0,5,0,5"
+                              Command="{Binding ToggleIsAppPausedCommand}"
+                              CommandParameter="{StaticResource False}">
                     <TextBlock Text="Pause System"
                                HorizontalAlignment="Center"
                                TextWrapping="Wrap" />
                 </ToggleButton>
                 <ToggleButton Grid.Row="1"
                               Grid.Column="0"
+                              Command="{Binding ToggleAutoCopyModeCommand}"
+                              CommandParameter="{StaticResource False}"
                               IsChecked="{Binding IsAutoCopyMode}"
                               Padding="0,5,0,5">
                     <TextBlock Text="Auto Copy"
@@ -1130,6 +1142,9 @@
                 </ToggleButton>
                 <ToggleButton Grid.Row="2"
                               Grid.Column="0"
+                              Command="{Binding ToggleRightClickPasteCommand}"
+                              CommandParameter="{StaticResource False}"
+                              IsChecked="{Binding IsRightClickPasteMode}"
                               Padding="0,5,0,5">
                     <TextBlock Text="Auto Paste"
                                HorizontalAlignment="Center"
@@ -1138,6 +1153,8 @@
                 <ToggleButton Grid.Row="3"
                               Grid.Column="0"
                               Padding="0,5,0,5"
+                              Command="{Binding ToggleAppendModeCommand}"
+                              CommandParameter="{StaticResource False}"
                               IsChecked="{Binding IsInAppendMode}">
                     <TextBlock Text="Auto Append"
                                FontSize="11"
@@ -1788,7 +1805,7 @@
                                                                          Color="Blue" />
                                                     </RichTextBox.Resources>
                                                     <SpellCheck.IsEnabled>
-                                                        <Binding Path="SystemTrayViewModel.SettingsWindowViewModel.UseSpellCheck"
+                                                        <Binding Path="SystemTrayViewModel.SettingsWindowViewModel.PreferencesViewModel.UseSpellCheck"
                                                                  Source="{StaticResource MainWindowViewModel}" />
                                                     </SpellCheck.IsEnabled>
                                                 </RichTextBox>

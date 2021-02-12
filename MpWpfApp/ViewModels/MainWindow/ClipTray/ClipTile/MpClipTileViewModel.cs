@@ -21,6 +21,7 @@
     using System.Windows.Media.Imaging;
     using System.Windows.Shapes;
     using System.Windows.Threading;
+    using AlphaChiTech.Virtualization;
     using AsyncAwaitBestPractices.MVVM;
     using GalaSoft.MvvmLight.CommandWpf;
     using GongSolutions.Wpf.DragDrop.Utilities;
@@ -799,7 +800,7 @@
                 return _isHovering;
             }
             set {
-                if (_isHovering != value) {
+                if (MainWindowViewModel != null && MainWindowViewModel.ClipTrayViewModel != null && _isHovering != value) {
                     _isHovering = value;
                     if(MainWindowViewModel.ClipTrayViewModel.IsScrolling) {
                         _isHovering = false;
@@ -857,7 +858,7 @@
                 return CopyItem.CopyCount;
             }
             set {
-                if(CopyItem.CopyCount != value) {
+                if(CopyItem != null && CopyItem.CopyCount != value) {
                     CopyItem.CopyCount = value;
                     CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyCount));
@@ -873,7 +874,7 @@
                 return CopyItem.PasteCount;
             }
             set {
-                if(CopyItem.PasteCount != value) {
+                if(CopyItem != null && CopyItem.PasteCount != value) {
                     CopyItem.PasteCount = value;
                     OnPropertyChanged(nameof(PasteCount));
                 }
@@ -924,7 +925,7 @@
                 return new SolidColorBrush(CopyItem.ItemColor.Color);
             }
             set {
-                if (CopyItem.ItemColor.Color != ((SolidColorBrush)value).Color) {
+                if (CopyItem != null && CopyItem.ItemColor.Color != ((SolidColorBrush)value).Color) {
                     CopyItem.ItemColor = new MpColor(((SolidColorBrush)value).Color);
                     //CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(TitleColor));
@@ -963,7 +964,7 @@
                 return CopyItem.Title;
             }
             set {
-                if (CopyItem.Title != value) {
+                if (CopyItem != null && CopyItem.Title != value) {
                     CopyItem.Title = value;
                     CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItemTitle));
@@ -989,7 +990,7 @@
                 return CopyItem.ItemRichText;
             }
             set {
-                if (CopyItem.ItemRichText != value) {
+                if (CopyItem != null && CopyItem.ItemRichText != value) {
                     //value should be raw rtf where templates are encoded into #name#color# groups
                     CopyItem.SetData(value);
                     CopyItem.WriteToDatabase();
@@ -1032,7 +1033,7 @@
                 return CopyItem.ItemTitleSwirl;
             }
             set {
-                if (CopyItem.ItemTitleSwirl != value) {
+                if (CopyItem != null && CopyItem.ItemTitleSwirl != value) {
                     CopyItem.ItemTitleSwirl = value;
                     OnPropertyChanged(nameof(TitleSwirl));
                     OnPropertyChanged(nameof(CopyItem));
@@ -1075,7 +1076,7 @@
                 return CopyItem.CopyDateTime;
             }
             set {
-                if (CopyItem.CopyDateTime != value) {
+                if (CopyItem != null && CopyItem.CopyDateTime != value) {
                     CopyItem.CopyDateTime = value;
                     CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyCount));
@@ -1228,7 +1229,9 @@
                 ci.WriteToDatabase();
                 _wasAddedAtRuntime = true;
             }
-            CopyItem = ci;
+            VirtualizationManager.Instance.RunOnUI(() => {
+                CopyItem = ci;
+            });
         }
 
         public MpClipBorder GetBorder() {

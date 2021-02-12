@@ -42,7 +42,7 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpSystemTrayViewModel() : base() {
-            SettingsWindowViewModel = new MpSettingsWindowViewModel(this);
+            SettingsWindowViewModel = new MpSettingsWindowViewModel();
         }
 
         public void SystemTrayTaskbarIcon_Loaded(object sender, RoutedEventArgs e) {
@@ -50,15 +50,17 @@ namespace MpWpfApp {
             _taskbarIcon.TrayLeftMouseUp += (s, e1) => {
                 MainWindowViewModel.ShowWindowCommand.Execute(null);
             };
+
+            //ShowStandardBalloon("Monkey Paste", "Successfully loaded", BalloonIcon.Info);
             //ShowStandardBalloon("Test title", "Test balloon text", BalloonIcon.Info);
         }
 
-        public void ShowStandardBalloon(string title, string text, BalloonIcon icon) {
-            MpBalloonControl balloon = new MpBalloonControl();
-            balloon.BalloonTitle = title;
-            balloon.BalloonText = text;
-            _taskbarIcon.ShowCustomBalloon(balloon, PopupAnimation.Slide, Properties.Settings.Default.NotificationBalloonVisibilityTimeMs);
-        }
+        //public void ShowStandardBalloon(string title, string text, BalloonIcon icon) {
+        //    MpBalloonControl balloon = new MpBalloonControl();
+        //    balloon.BalloonTitle = title;
+        //    balloon.BalloonText = text;
+        //    _taskbarIcon.ShowCustomBalloon(balloon, PopupAnimation.Slide, Properties.Settings.Default.NotificationBalloonVisibilityTimeMs);
+        //}
         #endregion
 
         #region Commands
@@ -75,21 +77,21 @@ namespace MpWpfApp {
             Application.Current.Shutdown();
         }
 
-        private RelayCommand _showSettingsWindowCommand;
+        private RelayCommand<int> _showSettingsWindowCommand;
         public ICommand ShowSettingsWindowCommand {
             get {
                 if (_showSettingsWindowCommand == null) {
-                    _showSettingsWindowCommand = new RelayCommand(ShowSettingsWindow);
+                    _showSettingsWindowCommand = new RelayCommand<int>(ShowSettingsWindow);
                 }
                 return _showSettingsWindowCommand;
             }
         }
-        private void ShowSettingsWindow() {
+        private void ShowSettingsWindow(int tabIdx) {
             MainWindowViewModel.IsShowingDialog = true;
 
             MainWindowViewModel.HideWindowCommand.Execute(null);       
             
-            SettingsWindowViewModel.ShowSettingsWindow();
+            SettingsWindowViewModel.ShowSettingsWindow(tabIdx);
 
             MainWindowViewModel.IsShowingDialog = false;
         }

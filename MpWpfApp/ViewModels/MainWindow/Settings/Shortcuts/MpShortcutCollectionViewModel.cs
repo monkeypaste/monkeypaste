@@ -22,7 +22,8 @@ namespace MpWpfApp {
         public MpShortcutCollectionViewModel() : base() {
             //using mainwindow, map all saved shortcuts to their commands
             foreach (var sc in MpShortcut.GetAllShortcuts()) {
-                ICommand shortcutCommand = null; 
+                ICommand shortcutCommand = null;
+                object commandParameter = null;
                 switch(sc.ShortcutId) {
                     case 1:
                         shortcutCommand = MainWindowViewModel.ShowWindowCommand;
@@ -32,19 +33,24 @@ namespace MpWpfApp {
                         break;
                     case 3:
                         shortcutCommand = MainWindowViewModel.AppModeViewModel.ToggleAppendModeCommand;
+                        commandParameter = true;
                         break;
                     case 4:
                         shortcutCommand = MainWindowViewModel.AppModeViewModel.ToggleAutoCopyModeCommand;
+                        commandParameter = true;
                         break;
                     case 5:
                         //right click paste mode
                         shortcutCommand = MainWindowViewModel.AppModeViewModel.ToggleRightClickPasteCommand;
+                        commandParameter = true;
                         break;
                     case 6:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;
+                        commandParameter = true;
                         break;
                     case 7:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.DeleteSelectedClipsCommand;
+                        commandParameter = true;
                         break;
                     case 8:                    
                         //search
@@ -103,10 +109,11 @@ namespace MpWpfApp {
                             }
                         } catch(Exception ex) {
                             Console.WriteLine("ShortcutCollection init error, unknown shortcut: " + sc.ToString());
+                            Console.WriteLine("With exception: " + ex.ToString());
                         }
                         break;
                 }
-                var scvm = new MpShortcutViewModel(sc, shortcutCommand);
+                var scvm = new MpShortcutViewModel(sc, shortcutCommand, commandParameter);
                 scvm.Register();
                 this.Add(scvm);
             }
@@ -116,7 +123,8 @@ namespace MpWpfApp {
             MpViewModelBase vm, 
             string title, 
             string keys, 
-            ICommand command) {
+            ICommand command,
+            object commandParameter) {
             MainWindowViewModel.IsShowingDialog = true;
             var shortcutKeyString = MpAssignShortcutModalWindowViewModel.ShowAssignShortcutWindow(title, keys, command);
 
@@ -137,12 +145,12 @@ namespace MpWpfApp {
                     //nothing to do since no shortcut created
                 }
             } else {
-                this.Add(vm, shortcutKeyString, command);                
+                this.Add(vm, shortcutKeyString, command, commandParameter);                
             }
             MainWindowViewModel.IsShowingDialog = false;
             return shortcutKeyString;
         }
-        public void Add(object vm, string keys, ICommand command) {
+        public void Add(object vm, string keys, ICommand command, object commandParameter) {
             if (vm.GetType() == typeof(MpClipTileViewModel)) {
                 var ctvm = (MpClipTileViewModel)vm;
                 base.Add(
@@ -152,7 +160,7 @@ namespace MpWpfApp {
                             0,
                             keys,
                             "Paste " + ctvm.CopyItemTitle),
-                            command));
+                            command,commandParameter));
             } else if (vm.GetType() == typeof(MpTagTileViewModel)) {
                 var ttvm = (MpTagTileViewModel)vm;
                 base.Add(
@@ -162,11 +170,12 @@ namespace MpWpfApp {
                             ttvm.TagId,
                             keys,
                             "Select " + ttvm.TagName),
-                            command));
+                            command,commandParameter));
             } else if (vm.GetType() == typeof(MpShortcutViewModel)) {
                 var scvm = (MpShortcutViewModel)vm;
                 scvm.KeyString = keys;
                 scvm.Command = command;
+                scvm.CommandParameter = commandParameter;
                 scvm.Shortcut.WriteToDatabase();
 
                 //check by command if shortcut exists if it does swap it with scvm otherwise add and always register

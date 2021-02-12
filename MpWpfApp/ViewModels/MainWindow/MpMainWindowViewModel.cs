@@ -211,13 +211,18 @@ namespace MpWpfApp {
             InitHotkeys();
 
 #if DEBUG
-            ShowWindowCommand.Execute(null);
+            //ShowWindowCommand.Execute(null);
             //HideWindowCommand.Execute(null);
 #else
-            HideWindowCommand.Execute(null);
+            //HideWindowCommand.Execute(null);
 #endif
             var taskbarIcon = (TaskbarIcon)mw.FindName("TaskbarIcon");
             MpSoundPlayerGroupCollectionViewModel.Instance.Init();
+
+            MpStandardBalloonViewModel.ShowBalloon(
+                "Monkey Paste",
+                "Successfully loaded w/ " + ClipTrayViewModel.ClipTileViewModelDataSource.FilteredOrderedItems.Count + " items",
+                Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
             //MpWordsApiDictionary.Instance.TestWordsGet();
             //for (int i = 0; i < 50; i++) {

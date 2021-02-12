@@ -151,6 +151,7 @@ namespace MpWpfApp {
             }
         }
 
+        public object CommandParameter { get; set; } = null;
         #endregion
 
         #region Model
@@ -297,7 +298,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpShortcutViewModel(MpShortcut s, ICommand command) {
+        public MpShortcutViewModel(MpShortcut s, ICommand command, object commandParameter) {
             PropertyChanged += (s1, e) => {
                 switch (e.PropertyName) {
                     case nameof(KeyString):
@@ -316,6 +317,7 @@ namespace MpWpfApp {
 
             Shortcut = s;
             Command = command;
+            CommandParameter = commandParameter;
         }
 
         public void Register() {
@@ -390,7 +392,7 @@ namespace MpWpfApp {
         }
 
         public object Clone() {
-            return new MpShortcutViewModel(Shortcut, Command);
+            return new MpShortcutViewModel(Shortcut, Command, CommandParameter);
         }
         #endregion
 
@@ -425,8 +427,8 @@ namespace MpWpfApp {
             if (RoutingType == MpRoutingType.Bubble) {
                 PassKeysToForegroundWindow();
             }
-
-            Command?.Execute(null);
+                        
+            Command?.Execute(CommandParameter);
 
             if (RoutingType == MpRoutingType.Tunnel) {
                 PassKeysToForegroundWindow();
