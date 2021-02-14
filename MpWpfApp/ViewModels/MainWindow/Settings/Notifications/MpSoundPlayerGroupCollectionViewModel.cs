@@ -71,6 +71,7 @@ namespace MpWpfApp {
                                 this.Add(new MpSoundPlayerViewModel(MpSoundType.Copy, Properties.Settings.Default.NotificationCopySound1Path));
                                 this.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOn, Properties.Settings.Default.NotificationAppendModeOnSoundPath));
                                 this.Add(new MpSoundPlayerViewModel(MpSoundType.AppendOff, Properties.Settings.Default.NotificationAppendModeOffSoundPath));
+                                this.Add(new MpSoundPlayerViewModel(MpSoundType.Loaded, Properties.Settings.Default.NotificationLoadedPath));
                                 break;
                         }
                         Properties.Settings.Default.NotificationSoundGroupIdx = (int)SelectedSoundGroupNameIdx;
@@ -97,6 +98,22 @@ namespace MpWpfApp {
         }
         private void PlayCopySound() {
             this.Where(x => x.SoundType == MpSoundType.Copy).ToList()[0].Play();
+        }
+
+        private RelayCommand _playLoadedSoundCommand = null;
+        public ICommand PlayLoadedSoundCommand {
+            get {
+                if (_playLoadedSoundCommand == null) {
+                    _playLoadedSoundCommand = new RelayCommand(PlayLoadedSound, CanPlayLoadedSound);
+                }
+                return _playLoadedSoundCommand;
+            }
+        }
+        private bool CanPlayLoadedSound() {
+            return Properties.Settings.Default.NotificationDoLoadedSound && this.Count > 0;
+        }
+        private void PlayLoadedSound() {
+            this.Where(x => x.SoundType == MpSoundType.Loaded).ToList()[0].Play();
         }
 
         private RelayCommand<bool> _playModeChangeCommand = null;

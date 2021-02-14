@@ -39,9 +39,14 @@ namespace MpWpfApp {
         private int _filterWaitingCount;
 
         private CancellationTokenSource _highlightCancellationTokenSource = null;
+
+        private MpClipTileViewModelPagedSourceProviderAsync _clipTileViewModelPagedSourceProviderAsync = null;
+
+        private MpClipTileViewModelDataSource _clipTileViewModelDataSource = null;
         #endregion
 
         #region Properties
+
         private int _highlightTaskCount = 0;
         public int HighlightTaskCount {
             get {
@@ -55,55 +60,35 @@ namespace MpWpfApp {
             }
         }
 
-        private MpClipTileViewModelDataSource _clipTileViewModelDataSource = null;
-        public MpClipTileViewModelDataSource ClipTileViewModelDataSource {
-            get {
-                return _clipTileViewModelDataSource;
-            }
-            set {
-                if (_clipTileViewModelDataSource != value) {
-                    _clipTileViewModelDataSource = value;
-                    OnPropertyChanged(nameof(ClipTileViewModelDataSource));
-                }
-            }
-        }
-
-        private PaginationManager<MpClipTileViewModel> _clipTileViewModelPaginationManager = null;
-        public PaginationManager<MpClipTileViewModel> ClipTileViewModelPaginationManager { 
-            get {
-                if(_clipTileViewModelPaginationManager == null) {
-                    ClipTileViewModelDataSource = new MpClipTileViewModelDataSource(1);
-                    _clipTileViewModelPaginationManager = new PaginationManager<MpClipTileViewModel>(
-                                new MpClipTileViewModelPagedSourceProviderAsync(ClipTileViewModelDataSource), pageSize: 8, maxPages: 2);
-                }
-                return _clipTileViewModelPaginationManager;
-            }  
-        }
+        #region Items Source
 
         private VirtualizingObservableCollection<MpClipTileViewModel> _clipTileViewModels = null;
-
-        private ICollectionView _clipTileCollectionView = null;
-        public ICollectionView ClipTileViewModels {
+        public VirtualizingObservableCollection<MpClipTileViewModel> ClipTileViewModels {
             get {
-                if (_clipTileViewModels == null) {                    
-                    _clipTileViewModels = new VirtualizingObservableCollection<MpClipTileViewModel>(ClipTileViewModelPaginationManager);
+                if (_clipTileViewModels == null) {
+                    _clipTileViewModelDataSource = new MpClipTileViewModelDataSource();
+                    _clipTileViewModelPagedSourceProviderAsync = 
+                        new MpClipTileViewModelPagedSourceProviderAsync(_clipTileViewModelDataSource);
+                    _clipTileViewModels =
+                        new VirtualizingObservableCollection<MpClipTileViewModel>(
+                            new PaginationManager<MpClipTileViewModel>(_clipTileViewModelPagedSourceProviderAsync,
+                                pageSize: 10, maxPages: 2));
                 }
-                if(_clipTileCollectionView == null) {
-                    _clipTileCollectionView = CollectionViewSource.GetDefaultView(_clipTileViewModels);
-                }
-                return _clipTileCollectionView;
+
+                return _clipTileViewModels;
             }
         }
+        #endregion
 
         public List<MpClipTileViewModel> SelectedClipTiles {
             get {
-                return _clipTileViewModels.Where(ct => ct.IsSelected).ToList();
+                return ClipTileViewModels.Where(ct => ct.IsSelected).ToList();
             }
         }
 
         public List<MpClipTileViewModel> VisibileClipTiles {
             get {
-                return _clipTileViewModels.Where(ct => ct.TileVisibility == Visibility.Visible).ToList();
+                return ClipTileViewModels.Where(ct => ct.TileVisibility == Visibility.Visible).ToList();
             }
         }
 
@@ -391,12 +376,12 @@ namespace MpWpfApp {
                     return;
                 }
                 //var dropClipBorder = (MpClipBorder)ItemsControl.ItemsControlFromItemContainer(clipTray).ItemContainerGenerator.ContainerFromItem(dropVm);
-                int dropIdx = item == null || item == clipTray ? 0 : _clipTileViewModels.IndexOf(dropVm);
+                int dropIdx = item == null || item == clipTray ? 0 : ClipTileViewModels.IndexOf(dropVm);
                 if (dropIdx >= 0) {
                     ClearClipSelection();
                     for (int i = 0; i < dragClipViewModel.Count; i++) {
-                        int dragIdx = _clipTileViewModels.IndexOf(dragClipViewModel[i]);
-                        _clipTileViewModels.Move(dragIdx, dropIdx);
+                        int dragIdx = ClipTileViewModels.IndexOf(dragClipViewModel[i]);
+                        ClipTileViewModels.Move(dragIdx, dropIdx);
                         dragClipViewModel[i].IsSelected = true;
                         if (i == 0) {
                             dragClipViewModel[i].IsClipItemFocused = true;
@@ -443,118 +428,67 @@ namespace MpWpfApp {
 
             ClipboardManager = new MpClipboardManager((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow));
 
-            // Attach the handler to the event raising on WM_DRAWCLIPBOARD message is received
-            //ClipboardManager.ClipboardChanged += async (s, e53) => {
-            //    var sw = new Stopwatch();
-            //    sw.Start();
 
-            //    await Dispatcher.CurrentDispatcher.InvokeAsync(async () => {
-            //        VirtualizationManager.Instance.RunOnUI(
-            //        () => {
-            //            var nctvm = new MpClipTileViewModel();
-            //            if (_clipTileViewModels.Count == 0) {
-            //                ClipTileViewModelDataSource.InsertAt(0, nctvm);
-            //            }
-            //            this.Add(nctvm);
-            //        });
-            //        var newCopyItem = await MpCopyItem.CreateFromClipboardAsync(MainWindowViewModel.ClipTrayViewModel.ClipboardManager.LastWindowWatcher.LastHandle);
-
-            //        VirtualizationManager.Instance.RunOnUI(
-            //        () => {
-            //            if (newCopyItem == null) {
-            //                //this occurs if the copy item is not a known format
-            //                ClipTileViewModelDataSource.RemoveAt(0);
-            //                return;
-            //            }
-            //            if (MainWindowViewModel.AppModeViewModel.IsInAppendMode && SelectedClipTiles.Count > 0) {
-            //                //when in append mode just append the new items text to selecteditem
-            //                ClipTileViewModelDataSource.RemoveAt(0);
-            //                SelectedClipTiles[0].AppendContent(new MpClipTileViewModel(newCopyItem));
-            //                return;
-            //            }
-            //            if (newCopyItem.CopyItemId > 0) {
-            //                //item is a duplicate
-            //                ClipTileViewModelDataSource.RemoveAt(0);
-            //                var existingClipTile = _clipTileViewModels.Where(x => x.CopyItemId == newCopyItem.CopyItemId).ToList();
-            //                if (existingClipTile != null && existingClipTile.Count > 0) {
-            //                    Console.WriteLine("Ignoring duplicate copy item");
-            //                    existingClipTile[0].CopyCount++;
-            //                    existingClipTile[0].CopyDateTime = DateTime.Now;
-            //                    _clipTileViewModels.Move(_clipTileViewModels.IndexOf(existingClipTile[0]), 0);
-            //                    ClearClipSelection();
-            //                    existingClipTile[0].IsSelected = true;
-            //                }
-            //            } else {
-            //                var nctvm = ClipTileViewModelDataSource.FilteredOrderedItems[0];
-            //                nctvm.SetCopyItem(newCopyItem);
-            //                MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(nctvm);
-            //            }
-            //        });
-            //    }, DispatcherPriority.Background);
-
-            //    sw.Stop();
-            //    Console.WriteLine("Time to create new copyitem: " + sw.ElapsedMilliseconds + " ms");
-            //    ResetClipSelection();
-            //};
             ClipboardManager.ClipboardChanged += (s, e53) => {
                 var sw = new Stopwatch();
-                sw.Start();
-                MpClipTileViewModel nctvm = null;
-                if (MainWindowViewModel.AppModeViewModel.IsInAppendMode && SelectedClipTiles.Count > 0) {
-                    nctvm = SelectedClipTiles[0];
-                } else {
-                    nctvm = new MpClipTileViewModel();
-                    this.Add(nctvm);
+                sw.Start();                
+                
+                
+                //var priority = DispatcherPriority.Background;
+                var newCopyItem = MpCopyItem.CreateFromClipboard(MainWindowViewModel.ClipTrayViewModel.ClipboardManager.LastWindowWatcher.LastHandle);
+
+                if (newCopyItem == null) {
+                    //this occurs if the copy item is not a known format
+                    //if (!MainWindowViewModel.AppModeViewModel.IsInAppendMode) {
+                    //    ClipTileViewModels.RemoveAt(0);
+                    //}
+                    return;
                 }
+                if (MainWindowViewModel.AppModeViewModel.IsInAppendMode && SelectedClipTiles.Count > 0) {
+                    //when in append mode just append the new items text to selecteditem
+                    //ClipTileViewModels.RemoveAt(0);
+                    SelectedClipTiles[0].AppendContent(new MpClipTileViewModel(newCopyItem));
+                    if (Properties.Settings.Default.NotificationShowAppendBufferToast) {
+                        MpStandardBalloonViewModel.ShowBalloon(
+                        "Append Buffer",
+                        SelectedClipTiles[0].CopyItemPlainText,
+                        Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+                    }
+                    if (Properties.Settings.Default.NotificationDoCopySound) {
+                        MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
+                    }
+                    return;
+                }
+                if (newCopyItem.CopyItemId > 0) {
+                    //item is a duplicate
+                    //ClipTileViewModels.RemoveAt(0);
+                    var existingClipTile = ClipTileViewModels.Where(x => x.CopyItemId == newCopyItem.CopyItemId).ToList();
+                    if (existingClipTile != null && existingClipTile.Count > 0) {
+                        Console.WriteLine("Ignoring duplicate copy item");
+                        existingClipTile[0].CopyCount++;
+                        existingClipTile[0].CopyDateTime = DateTime.Now;
+                        ClipTileViewModels.Move(ClipTileViewModels.IndexOf(existingClipTile[0]), 0);
+                        ClearClipSelection();
+                        existingClipTile[0].IsSelected = true;
+                    }
+                } else {
+                    //VirtualizationManager.Instance.RunOnUI(() => {
 
-                Dispatcher.CurrentDispatcher.InvokeAsync(() => {
-                    var newCopyItem = MpCopyItem.CreateFromClipboardAsync(MainWindowViewModel.ClipTrayViewModel.ClipboardManager.LastWindowWatcher.LastHandle).Result;
-
-                    if (newCopyItem == null) {
-                        //this occurs if the copy item is not a known format
-                        ClipTileViewModelDataSource.RemoveAt(0);
-                        return;
+                    //});
+                    var nctvm = new MpClipTileViewModel(newCopyItem);
+                    this.Add(nctvm);
+                    //var nctvm = ClipTileViewModels.FilteredOrderedItems[0];
+                    //((MpClipTileViewModel)ClipTileViewModels[0]).SetCopyItem(newCopyItem);
+                    if (Properties.Settings.Default.NotificationDoCopySound) {
+                        MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
                     }
-                    if (MainWindowViewModel.AppModeViewModel.IsInAppendMode && SelectedClipTiles.Count > 0) {
-                        //when in append mode just append the new items text to selecteditem
-                        nctvm.AppendContent(new MpClipTileViewModel(newCopyItem));
-                        if(Properties.Settings.Default.NotificationShowAppendBufferToast) {
-                            MpStandardBalloonViewModel.ShowBalloon(
-                            "Append Buffer",
-                            SelectedClipTiles[0].CopyItemPlainText,
-                            Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
-                        }
-                        if(Properties.Settings.Default.NotificationDoCopySound) {
-                            MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
-                        }
-                        return;
-                    }
-                    if (newCopyItem.CopyItemId > 0) {
-                        //item is a duplicate
-                        ClipTileViewModelDataSource.RemoveAt(0);
-                        var existingClipTile = _clipTileViewModels.Where(x => x.CopyItemId == newCopyItem.CopyItemId).ToList();
-                        if (existingClipTile != null && existingClipTile.Count > 0) {
-                            Console.WriteLine("Ignoring duplicate copy item");
-                            existingClipTile[0].CopyCount++;
-                            existingClipTile[0].CopyDateTime = DateTime.Now;
-                            _clipTileViewModels.Move(_clipTileViewModels.IndexOf(existingClipTile[0]), 0);
-                            ClearClipSelection();
-                            existingClipTile[0].IsSelected = true;
-                        }
-                    } else {
-                        //var nctvm = ClipTileViewModelDataSource.FilteredOrderedItems[0];
-                        nctvm.SetCopyItem(newCopyItem);
-                        if (Properties.Settings.Default.NotificationDoCopySound) {
-                            MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
-                        }
-                        MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(nctvm);
-                        GetClipTray().Items.Refresh();
-                    }
-                }, DispatcherPriority.SystemIdle);
-                                
-                sw.Stop();
-                Console.WriteLine("Time to create new copyitem: " + sw.ElapsedMilliseconds + " ms");
+                    MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(nctvm);
+                    //GetClipTray().Items.Refresh();
+                }
                 ResetClipSelection();
+
+                sw.Stop();
+                Console.WriteLine("Time to create new copyitem: " + sw.ElapsedMilliseconds + " ms");                
             };
 
             if (Properties.Settings.Default.IsInitialLoad) {
@@ -674,19 +608,19 @@ namespace MpWpfApp {
                 ctvm.RefreshCommands();
             }
         }
+
         public void Add(MpClipTileViewModel ctvm) {
-            VirtualizationManager.Instance.RunOnUI(() => {
-                if (_clipTileViewModels.Count == 0) {
-                    ClipTileViewModelDataSource.InsertAt(0, ctvm);
-                }
-                _clipTileViewModels.Insert(0, ctvm);
-                _clipTrayRef?.Items.Refresh();
-            });
-            
+            if (ClipTileViewModels.Count == 0) 
+            {
+                _clipTileViewModelDataSource.InsertAt(0, ctvm);
+            }
+            ClipTileViewModels.Insert(0, ctvm);
+
+            _clipTrayRef?.Items.Refresh();
         }
 
         public void Remove(MpClipTileViewModel clipTileToRemove) {
-            _clipTileViewModels.Remove(clipTileToRemove);
+            ClipTileViewModels.Remove(clipTileToRemove);
             if (clipTileToRemove.CopyItem == null) {
                 //occurs when duplicate detected on background thread
                 return;
@@ -896,6 +830,16 @@ namespace MpWpfApp {
             return filePath;
         }
 
+        public void ResetItems() {
+            _clipTileViewModelPagedSourceProviderAsync = new MpClipTileViewModelPagedSourceProviderAsync(
+                        new MpClipTileViewModelDataSource());
+            _clipTileViewModels =
+                new VirtualizingObservableCollection<MpClipTileViewModel>(
+                    new PaginationManager<MpClipTileViewModel>(_clipTileViewModelPagedSourceProviderAsync,
+                        pageSize: 10, maxPages: 2));
+            OnPropertyChanged(nameof(ClipTileViewModels));
+        }
+
         public MpMultiSelectListView GetClipTray() {
             return _clipTrayRef;
         }
@@ -904,7 +848,7 @@ namespace MpWpfApp {
         #region Private Methods
 
         //private async void InitData() {
-        //    ClipTileViewModelDataSource = await MpClipTileViewModelDataSource.GetDataSoure(1);
+        //    ClipTileViewModels = await MpClipTileViewModels.GetDataSoure(1);
         //}
 
 
@@ -948,10 +892,10 @@ namespace MpWpfApp {
         public RelayCommand<MemberPathFilterText> FilterCommand { get; }
         private async Task Filter(MemberPathFilterText memberPathFilterText) {
             if (string.IsNullOrWhiteSpace(memberPathFilterText.FilterText)) {
-                ClipTileViewModelDataSource.FilterDescriptionList.Remove(memberPathFilterText.MemberPath);
+                _clipTileViewModelPagedSourceProviderAsync.FilterDescriptionList.Remove(memberPathFilterText.MemberPath);
             }
             else {
-                ClipTileViewModelDataSource.FilterDescriptionList.Add(
+                _clipTileViewModelPagedSourceProviderAsync.FilterDescriptionList.Add(
                     new FilterDescription(memberPathFilterText.MemberPath, memberPathFilterText.FilterText));
             }
             Interlocked.Increment(ref this._filterWaitingCount);
@@ -959,7 +903,7 @@ namespace MpWpfApp {
             if (Interlocked.Decrement(ref this._filterWaitingCount) != 0) {
                 return;
             }
-            ClipTileViewModelDataSource.FilterDescriptionList.OnCollectionReset();
+            _clipTileViewModelPagedSourceProviderAsync.FilterDescriptionList.OnCollectionReset();
             _clipTileViewModels.Clear();
             ResetClipSelection();
         }
@@ -973,19 +917,19 @@ namespace MpWpfApp {
             var sortMemberPath = memberPathSortingDirection.MemberPath;
             switch (sortDirection) {
                 case null:
-                    ClipTileViewModelDataSource.SortDescriptionList.Remove(sortMemberPath);
+                    _clipTileViewModelPagedSourceProviderAsync.SortDescriptionList.Remove(sortMemberPath);
                     break;
                 case ListSortDirection.Ascending:
-                    ClipTileViewModelDataSource.SortDescriptionList.Add(
+                    _clipTileViewModelPagedSourceProviderAsync.SortDescriptionList.Add(
                         new DataGridAsyncDemoMVVM.filtersort.SortDescription(sortMemberPath, ListSortDirection.Ascending));
                     break;
                 case ListSortDirection.Descending:
-                    ClipTileViewModelDataSource.SortDescriptionList.Add(
+                    _clipTileViewModelPagedSourceProviderAsync.SortDescriptionList.Add(
                         new DataGridAsyncDemoMVVM.filtersort.SortDescription(sortMemberPath, ListSortDirection.Descending));
                     break;
             }
 
-            ClipTileViewModelDataSource.FilterDescriptionList.OnCollectionReset();
+            _clipTileViewModelPagedSourceProviderAsync.FilterDescriptionList.OnCollectionReset();
             _clipTileViewModels.Clear();
             ResetClipSelection();
         }

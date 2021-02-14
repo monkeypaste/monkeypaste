@@ -151,11 +151,11 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Load On Login" />
-                    <CheckBox IsChecked="{Binding IsLoadOnLoginChecked}" />
+                    <CheckBox IsChecked="{Binding IsLoadOnLoginChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Spell Check" />
-                    <CheckBox IsChecked="{Binding UseSpellCheck}" />
+                    <CheckBox IsChecked="{Binding UseSpellCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Language" />
@@ -164,7 +164,11 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Max Rtf Char Count" />
-                    <TextBox Text="{Binding MaxRtfCharCount}" />
+                    <TextBox Text="{Binding MaxRtfCharCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Ignore Duplicates" />
+                    <CheckBox IsChecked="{Binding IgnoreNewDuplicates, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                 </StackPanel>
             </StackPanel>
         </Grid>

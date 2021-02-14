@@ -1678,6 +1678,7 @@
     <Resource Include="Resources\Icons\Silk\icons\zoom.png" />
     <Resource Include="Resources\Icons\Silk\icons\zoom_in.png" />
     <Resource Include="Resources\Icons\Silk\icons\zoom_out.png" />
+    <Resource Include="Resources\Images\lock.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />

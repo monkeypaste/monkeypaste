@@ -203,7 +203,8 @@ namespace MpWpfApp {
                 } else {
                     SearchBoxViewModel.IsTextValid = true;
                 }
-            };
+            };          
+            
             SetupMainWindowRect();
 
             InitWindowStyle();
@@ -221,8 +222,10 @@ namespace MpWpfApp {
 
             MpStandardBalloonViewModel.ShowBalloon(
                 "Monkey Paste",
-                "Successfully loaded w/ " + ClipTrayViewModel.ClipTileViewModelDataSource.FilteredOrderedItems.Count + " items",
+                "Successfully loaded w/ " + ClipTrayViewModel.ClipTileViewModels.Count + " items",
                 Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+
+            MpSoundPlayerGroupCollectionViewModel.Instance.PlayLoadedSoundCommand.Execute(null);
 
             //MpWordsApiDictionary.Instance.TestWordsGet();
             //for (int i = 0; i < 50; i++) {
@@ -278,7 +281,6 @@ namespace MpWpfApp {
             int exStyle = (int)WinApi.GetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE);
             exStyle |= (int)WinApi.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
             WinApi.SetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
-
         }
 
         public bool InitHotkeys() {
@@ -342,10 +344,13 @@ namespace MpWpfApp {
             mw.Show();
             mw.Activate();
             mw.Visibility = Visibility.Visible;
-            mw.Topmost = true;            
+            mw.Topmost = true;
 
-            if(!IsLoading) {
+            if (!IsLoading) {
                 ClipTrayViewModel.ResetClipSelection();
+            } else {
+                IsLoading = false;
+                ClipTileSortViewModel.SelectedSortType = ClipTileSortViewModel.SortTypes[0];
             }
 
             MpHelpers.Instance.AnimateDoubleProperty(
@@ -355,7 +360,7 @@ namespace MpWpfApp {
                 mw,
                 Window.TopProperty,
                 (s,e) => {
-                    IsLoading = false;
+                    
                 });
         }
 

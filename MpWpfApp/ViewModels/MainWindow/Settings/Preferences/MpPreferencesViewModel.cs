@@ -76,6 +76,21 @@ namespace MpWpfApp {
             }
         }
 
+        private bool _ignoreNewDuplicates = Properties.Settings.Default.IgnoreNewDuplicates;
+        public bool IgnoreNewDuplicates {
+            get {
+                return _ignoreNewDuplicates;
+            }
+            set {
+                if (_ignoreNewDuplicates != value) {
+                    _ignoreNewDuplicates = value;
+                    Properties.Settings.Default.IgnoreNewDuplicates = _ignoreNewDuplicates;
+                    Properties.Settings.Default.Save();
+                    OnPropertyChanged(nameof(IgnoreNewDuplicates));
+                }
+            }
+        }
+
         private bool _isLoadOnLoginChecked = false;
         public bool IsLoadOnLoginChecked {
             get {

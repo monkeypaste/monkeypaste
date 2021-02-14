@@ -363,19 +363,7 @@ namespace MpWpfApp {
 
         public bool IsStringSection(string text) {
             return text.StartsWith(@"<Section xmlns=");
-        }
-
-        public string CombineRichText(string rt1, string rt2,bool insertNewLine = false) {
-            using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
-                rtb.Rtf = rt1;
-                if(insertNewLine) {
-                    rtb.Text += Environment.NewLine;
-                }
-                rtb.Select(rtb.TextLength, 0);
-                rtb.SelectedRtf = rt2;
-                return rtb.Rtf;
-            }
-        }        
+        }         
 
         public CurrencyType GetCurrencyTypeFromString(string moneyStr) {
             if (moneyStr == null || moneyStr.Length == 0) {
@@ -451,32 +439,83 @@ namespace MpWpfApp {
             return Regex.Replace(str, "[^a-zA-Z0-9_.]+", string.Empty, RegexOptions.Compiled);
         }
 
-        //public string CombineRichText(string from, string to) {
-        //    return ConvertFlowDocumentToRichText(
-        //        CombineFlowDocuments(
-        //            ConvertRichTextToFlowDocument(from),
-        //            ConvertRichTextToFlowDocument(to)
-        //        )
-        //    );
-        //}
+        public string CombineRichText2(string rt1, string rt2, bool insertNewLine = false) {
+            using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
+                rtb.Rtf = rt1;
+                if (insertNewLine) {
+                    rtb.Text += Environment.NewLine;
+                }
+                rtb.Select(rtb.TextLength, 0);
+                rtb.SelectedRtf = rt2;
+                return rtb.Rtf;
+            }
+        }
 
-        public MpEventEnabledFlowDocument CombineFlowDocuments(MpEventEnabledFlowDocument from, MpEventEnabledFlowDocument to) {
+        public string CombineRichText(string from, string to, bool insertNewLine = false) {
+            return ConvertFlowDocumentToRichText(
+                CombineFlowDocuments(
+                    ConvertRichTextToFlowDocument(from),
+                    ConvertRichTextToFlowDocument(to),
+                    insertNewLine
+                )
+            );
+        }
+
+        public async Task<string> CombineRichTextAsync(string from, string to, bool insertNewLine = false, DispatcherPriority priority = DispatcherPriority.Background) {
+            return await ConvertFlowDocumentToRichTextAsync(
+                await CombineFlowDocumentsAsync(
+                    await ConvertRichTextToFlowDocumentAsync(from,priority),
+                    await ConvertRichTextToFlowDocumentAsync(to,priority),
+                    insertNewLine,
+                    priority
+                )
+                , priority);
+        }
+
+        public MpEventEnabledFlowDocument CombineFlowDocuments(MpEventEnabledFlowDocument from, MpEventEnabledFlowDocument to, bool insertNewLine = false) {
             using (MemoryStream stream = new MemoryStream()) {
-                TextRange range = new TextRange(from.ContentStart, from.ContentEnd);
+                var rangeFrom = new TextRange(from.ContentStart, from.ContentEnd);
 
-                System.Windows.Markup.XamlWriter.Save(range, stream);
-                range.Save(stream, DataFormats.XamlPackage);
+                System.Windows.Markup.XamlWriter.Save(rangeFrom, stream);
+                rangeFrom.Save(stream, DataFormats.XamlPackage);
 
-                //below removed so meerging follows items characters, no extra formatting
-                //LineBreak lb = new LineBreak();
-                //Paragraph p = (Paragraph)to.Blocks.LastBlock;
-                //p.LineHeight = 1;
-                //p.Inlines.Add(lb);
-                TextRange range2 = new TextRange(to.ContentEnd, to.ContentEnd);
-                range2.Load(stream, DataFormats.XamlPackage);
+                if(insertNewLine) {
+                    var lb = new LineBreak();
+                    var p = (Paragraph)to.Blocks.LastBlock;
+                    p.LineHeight = 1;
+                    p.Inlines.Add(lb);
+                }
+
+                var rangeTo = new TextRange(to.ContentEnd, to.ContentEnd);
+                rangeTo.Load(stream, DataFormats.XamlPackage);
 
                 return to;
             }            
+        }
+
+        public async Task<MpEventEnabledFlowDocument> CombineFlowDocumentsAsync(MpEventEnabledFlowDocument from, MpEventEnabledFlowDocument to, bool insertNewLine = false, DispatcherPriority priority = DispatcherPriority.Background) {
+            MpEventEnabledFlowDocument fd = null;
+            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+                using (MemoryStream stream = new MemoryStream()) {
+                    var rangeFrom = new TextRange(from.ContentStart, from.ContentEnd);
+
+                    System.Windows.Markup.XamlWriter.Save(rangeFrom, stream);
+                    rangeFrom.Save(stream, DataFormats.XamlPackage);
+
+                    if (insertNewLine) {
+                        var lb = new LineBreak();
+                        var p = (Paragraph)to.Blocks.LastBlock;
+                        p.LineHeight = 1;
+                        p.Inlines.Add(lb);
+                    }
+
+                    var rangeTo = new TextRange(to.ContentEnd, to.ContentEnd);
+                    rangeTo.Load(stream, DataFormats.XamlPackage);
+
+                    fd = to;
+                }
+            }, priority);
+            return fd;
         }
 
         public string CurrencyConvert(decimal amount, string fromCurrency, string toCurrency) {
@@ -810,6 +849,17 @@ namespace MpWpfApp {
             return AppDomain.CurrentDomain.BaseDirectory;
         }
 
+        public string GetApplicationProcessPath() {
+            try {
+                var process = Process.GetCurrentProcess();
+                return process.MainModule.FileName;
+            } catch(Exception ex) {
+                Console.WriteLine("Error getting this application process path: " + ex.ToString());
+                Console.WriteLine("Attempting queryfullprocessimagename...");
+                return GetExecutablePathAboveVista(Process.GetCurrentProcess().Handle);
+            }
+        }
+
         public string GetProcessApplicationName(IntPtr hWnd) {
             string mwt = GetProcessMainWindowTitle(hWnd);
             if (string.IsNullOrEmpty(mwt)) {
@@ -822,15 +872,28 @@ namespace MpWpfApp {
             return mwta[mwta.Length - 1].Trim();
         }
 
+        private static string GetExecutablePathAboveVista(IntPtr dwProcessId) {
+            StringBuilder buffer = new StringBuilder(1024);
+            IntPtr hprocess = WinApi.OpenProcess(WinApi.ProcessAccessFlags.QueryLimitedInformation, false, (int)dwProcessId);
+            if (hprocess != IntPtr.Zero) {
+                try {
+                    int size = buffer.Capacity;
+                    if (WinApi.QueryFullProcessImageName(hprocess, 0, buffer, ref size)) {
+                        return buffer.ToString(0, size);
+                    }
+                } finally {
+                    WinApi.CloseHandle(hprocess);
+                }
+            }
+            return string.Empty;
+        }
+
         public string GetProcessPath(IntPtr hwnd) { 
             try {
                 if (hwnd == null || hwnd == IntPtr.Zero) {
-                    return string.Empty;
-                    //return GetProcessPath(((MpClipTrayViewModel)((MpMainWindowViewModel)((MpMainWindow)App.Current.MainWindow).DataContext).ClipTrayViewModel).ClipboardManager.LastWindowWatcher.ThisAppHandle);
+                    return GetApplicationProcessPath();
                 }
-                //if (hwnd == IntPtr.Zero) {
-                //    return GetProcessPath(((MpClipTrayViewModel)((MpMainWindowViewModel)((MpMainWindow)App.Current.MainWindow).DataContext).ClipTrayViewModel).ClipboardManager.LastWindowWatcher.ThisAppHandle);
-                //}
+
                 WinApi.GetWindowThreadProcessId(hwnd, out uint pid);
                 using (Process proc = Process.GetProcessById((int)pid)) {
                     //Process mainProc = Process.GetProcessById(Process.GetProcessById(proc.Handle.ToInt32()).MainWindowHandle.ToInt32());
@@ -839,20 +902,22 @@ namespace MpWpfApp {
             }
             catch (Exception e) {
                 Console.WriteLine("MpHelpers.Instance.GetProcessPath error (likely) cannot find process path: " + e.ToString());
-                return GetProcessPath(((MpClipTrayViewModel)((MpMainWindowViewModel)((MpMainWindow)App.Current.MainWindow).DataContext).ClipTrayViewModel).ClipboardManager.LastWindowWatcher.ThisAppHandle);
+                return GetExecutablePathAboveVista(hwnd);
             }
         }
         public string GetProcessMainWindowTitle(IntPtr hWnd) {
-            if (hWnd == null) {
-                throw new Exception("MpHelpers error hWnd is null");
+            try {
+                if (hWnd == null || hWnd == IntPtr.Zero) {
+                    return "Unknown Application";
+                }
+                uint processId;
+                WinApi.GetWindowThreadProcessId(hWnd, out processId);
+                using (Process proc = Process.GetProcessById((int)processId)) {
+                    return proc.MainWindowTitle;
+                }
             }
-            if (hWnd == IntPtr.Zero) {
-                return string.Empty;
-            }
-            uint processId;
-            WinApi.GetWindowThreadProcessId(hWnd, out processId);
-            using (Process proc = Process.GetProcessById((int)processId)) {
-                return proc.MainWindowTitle;
+            catch(Exception ex) {
+                return "Unknown Application";
             }
         }
         public Point GetMousePosition() {
@@ -1244,6 +1309,13 @@ namespace MpWpfApp {
             return bmp;
         }
 
+        public async Task<BitmapSource> TintBitmapSourceAsync(BitmapSource bmpSrc, Color tint, bool retainAlpha = false, DispatcherPriority priority = DispatcherPriority.Background) {
+            BitmapSource bmpSource = null;
+            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+                bmpSource = TintBitmapSource(bmpSrc, tint, retainAlpha);
+            }, priority);
+            return bmpSource;
+        }
         public double ColorDistance(Color e1, Color e2) {
             long rmean = ((long)e1.R + (long)e2.R) / 2;
             long r = (long)e1.R - (long)e2.R;
@@ -1476,6 +1548,14 @@ namespace MpWpfApp {
             return ConvertRenderTargetBitmapToBitmapSource(renderTargetBitmap);
         }
 
+        public async Task<BitmapSource> MergeImagesAsync(IList<BitmapSource> bmpSrcList, DispatcherPriority priority = DispatcherPriority.Background) {
+            BitmapSource mergedImage = null;
+            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+                mergedImage = MergeImages(bmpSrcList);
+            }, priority);
+            return mergedImage;
+        }
+
         public BitmapSource ConvertRenderTargetBitmapToBitmapSource(RenderTargetBitmap rtb) {
             var bitmapImage = new BitmapImage();
             var bitmapEncoder = new PngBitmapEncoder();
@@ -1706,12 +1786,60 @@ namespace MpWpfApp {
             }
         }
 
-        public string ConvertPlainTextToRichText(string plainText) {
-            System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox();
-            rtb.Text = plainText;
-            rtb.Font = new System.Drawing.Font(Properties.Settings.Default.DefaultFontFamily,(float)Properties.Settings.Default.DefaultFontSize);
-            return rtb.Rtf;
+        public async Task<MpEventEnabledFlowDocument> ConvertXamlToFlowDocumentAsync(string xaml, DispatcherPriority priority = DispatcherPriority.Background) {
+            var doc = new MpEventEnabledFlowDocument();
+            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+                using (var stringReader = new StringReader(xaml)) {
+                    var xmlReader = XmlReader.Create(stringReader);
+                    //if (!IsStringFlowSection(xaml)) {
+                    //    return (MpEventEnabledFlowDocument)XamlReader.Load(xmlReader);
+                    //}
+                    var data = XamlReader.Load(xmlReader);
+                    if (data.GetType() == typeof(Span)) {
+                        Span span = (Span)data;
+                        while (span.Inlines.Count > 0) {
+                            //doc.Blocks.Add(sec.Blocks.FirstBlock);
+                            var inline = span.Inlines.FirstInline;
+                            span.Inlines.Remove(inline);
+                            doc.Blocks.Add(new Paragraph(inline));
+                        }
+                    } else if (data.GetType() == typeof(Section)) {
+                        Section sec = (Section)data;
+                        while (sec.Blocks.Count > 0) {
+                            //doc.Blocks.Add(sec.Blocks.FirstBlock);
+                            var block = sec.Blocks.FirstBlock;
+                            sec.Blocks.Remove(block);
+                            doc.Blocks.Add(block);
+                        }
+                    } else {
+                        doc = (MpEventEnabledFlowDocument)data;
+                    }
+                }
+            }, priority);
+
+            return doc;
         }
+
+        public string ConvertPlainTextToRichText(string plainText) {
+            using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
+                rtb.Text = plainText;
+                rtb.Font = new System.Drawing.Font(Properties.Settings.Default.DefaultFontFamily, (float)Properties.Settings.Default.DefaultFontSize);
+                return rtb.Rtf;
+            }                
+        }
+
+        public async Task<string> ConvertPlainTextToRichTextAsync(string plainText, DispatcherPriority priority = DispatcherPriority.Background) {
+            var rtfString = string.Empty;
+            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+                        using (System.Windows.Forms.RichTextBox rtb = new System.Windows.Forms.RichTextBox()) {
+                            rtb.Text = plainText;
+                            rtb.Font = new System.Drawing.Font(Properties.Settings.Default.DefaultFontFamily, (float)Properties.Settings.Default.DefaultFontSize);
+                            rtfString = rtb.Rtf;
+                        }
+                    }, priority);
+            return rtfString;
+        }
+
         public string ConvertPlainTextToRichText2(string plainText) {
             string escapedPlainText = plainText.Replace(@"\", @"\\").Replace("{", @"\{").Replace("}", @"\}");
             string rtf = @"{\rtf1\ansi{\fonttbl\f0\fswiss Helvetica;}\f0\pard ";
@@ -1719,6 +1847,7 @@ namespace MpWpfApp {
             rtf += " }";
             return rtf;
         }
+
         public string ConvertRichTextToPlainText(string richText) {
             if (IsStringRichText(richText)) {
                try {
@@ -1744,6 +1873,34 @@ namespace MpWpfApp {
             } else {
                 return richText;
             }
+        }
+
+        public async Task<string> ConvertRichTextToPlainTextAsync(string richText, DispatcherPriority priority = DispatcherPriority.Background) {
+            var plainText = richText;
+            if (IsStringRichText(richText)) {
+                await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+                    try {
+                        RichTextBox rtb = new RichTextBox();
+                        rtb.SetRtf(richText);
+                        var pt = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
+                        int rtcount = GetRowCount(richText);
+                        int ptcount = GetRowCount(pt);
+                        if (rtcount != ptcount) {
+                            pt = pt.Trim(new char[] { '\r', '\n' });
+                        }
+                        plainText = pt;
+                    }
+                    catch (Exception ex) {
+                        //rtb.SetRtf throws an exception when richText is from excel (contains cell information?)
+                        //so falling back winforms richtextbox
+                        using (System.Windows.Forms.RichTextBox wf_rtb = new System.Windows.Forms.RichTextBox()) {
+                            wf_rtb.Rtf = richText;
+                            plainText = wf_rtb.Text;
+                        }
+                    }
+                }, priority);               
+            }
+            return plainText;
         }
 
         public string ConvertXamlToRichText(string xaml) {
@@ -1797,6 +1954,20 @@ namespace MpWpfApp {
             return ConvertXamlToFlowDocument(rtf);
         }
 
+        public async Task<MpEventEnabledFlowDocument> ConvertRichTextToFlowDocumentAsync(string rtf, DispatcherPriority priority = DispatcherPriority.Background) {
+            if (IsStringRichText(rtf)) {
+                MpEventEnabledFlowDocument flowDocument = new MpEventEnabledFlowDocument();
+                await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+                    using (var stream = new MemoryStream(UTF8Encoding.Default.GetBytes(rtf))) {
+                        var range = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
+                        range.Load(stream, System.Windows.DataFormats.Rtf);
+                    }
+                }, priority);
+                return flowDocument;
+            }
+            return await ConvertXamlToFlowDocumentAsync(rtf,priority);
+        }
+
         public string ConvertRichTextToXaml(string rt) {
             var assembly = Assembly.GetAssembly(typeof(System.Windows.FrameworkElement));
             var xamlRtfConverterType = assembly.GetType("System.Windows.Documents.XamlRtfConverter");
@@ -1811,8 +1982,8 @@ namespace MpWpfApp {
             //if(rtb.DataContext.GetType() == typeof(MpClipTileViewModel)) {
             //    //rtb.ClearTemplates();
             //}
-            Console.WriteLine("Flow Doc Contents:");
-            Console.WriteLine(new TextRange(fd.ContentStart, fd.ContentEnd).Text);
+            //Console.WriteLine("Flow Doc Contents:");
+            //Console.WriteLine(new TextRange(fd.ContentStart, fd.ContentEnd).Text);
             string rtf = string.Empty;
             using (var ms = new MemoryStream()) {
                 var range2 = new TextRange(fd.ContentStart, fd.ContentEnd);
@@ -1828,7 +1999,31 @@ namespace MpWpfApp {
             return rtf;
         }
 
-        public string ConvertBitmapSourceToPlainText(BitmapSource bmpSource) {
+        public async Task<string> ConvertFlowDocumentToRichTextAsync(FlowDocument fd, DispatcherPriority priority = DispatcherPriority.Background) {
+            var rtf = string.Empty;
+            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+                var rtb = (RichTextBox)fd.Parent;
+                //if(rtb.DataContext.GetType() == typeof(MpClipTileViewModel)) {
+                //    //rtb.ClearTemplates();
+                //}
+                //Console.WriteLine("Flow Doc Contents:");
+                //Console.WriteLine(new TextRange(fd.ContentStart, fd.ContentEnd).Text);
+                using (var ms = new MemoryStream()) {
+                    var range2 = new TextRange(fd.ContentStart, fd.ContentEnd);
+                    range2.Save(ms, System.Windows.DataFormats.Rtf);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    using (var sr = new StreamReader(ms)) {
+                        rtf = sr.ReadToEnd();
+                    }
+                }
+                //if (rtb.DataContext.GetType() == typeof(MpClipTileViewModel)) {
+                //    //rtb.CreateHyperlinks();
+                //}
+            }, priority);
+            return rtf;
+        }
+
+        public string ConvertBitmapSourceToPlainTextAsciiArt(BitmapSource bmpSource) {
             string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
             using (System.Drawing.Bitmap image = ConvertBitmapSourceToBitmap(ResizeBitmapSource(bmpSource, new Size(MpMeasurements.Instance.ClipTileBorderSize, MpMeasurements.Instance.ClipTileContentHeight)))) {
                 string outStr = string.Empty;
@@ -1860,8 +2055,30 @@ namespace MpWpfApp {
             }
         }
 
+        public async Task<byte[]> ConvertBitmapSourceToByteArrayAsync(BitmapSource bs, DispatcherPriority priority) {
+            PngBitmapEncoder encoder = new PngBitmapEncoder();
+            byte[] bit = null;
+            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+                using (MemoryStream stream = new MemoryStream()) {
+                    encoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bs));
+                    encoder.Save(stream);
+                    bit = stream.ToArray();
+                    stream.Close();
+                }
+            }, priority);            
+            return bit;
+        }
+
         public BitmapSource ConvertByteArrayToBitmapSource(byte[] bytes) {
             return (BitmapSource)new ImageSourceConverter().ConvertFrom(bytes);
+        }
+
+        public async Task<BitmapSource> ConvertByteArrayToBitmapSourceAsync(byte[] bytes, DispatcherPriority priority) {
+            BitmapSource bmpSource = null;
+            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+                bmpSource = (BitmapSource)new ImageSourceConverter().ConvertFrom(bytes);
+            }, priority);
+            return bmpSource;
         }
 
         public BitmapSource ConvertBitmapToBitmapSource(System.Drawing.Bitmap bitmap) {

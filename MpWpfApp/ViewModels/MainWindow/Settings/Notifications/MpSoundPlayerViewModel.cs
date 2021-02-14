@@ -87,6 +87,7 @@ namespace MpWpfApp {
         AutoCopyOn,
         AutoCopyOff,
         MousePasteOn,
-        MousePasteOff
+        MousePasteOff,
+        Loaded
     }
 }

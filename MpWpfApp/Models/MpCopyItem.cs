@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using Windows.Storage;
 
 namespace MpWpfApp {
@@ -149,7 +150,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Static Methods
-        public static async Task<MpCopyItem> CreateFromClipboardAsync(IntPtr processHandle) {
+        public static MpCopyItem CreateFromClipboard(IntPtr processHandle) {
             IDataObject iData = Clipboard.GetDataObject();
             if (iData == null) {
                 return null;
@@ -160,12 +161,12 @@ namespace MpWpfApp {
             try {
                 if (iData.GetDataPresent(DataFormats.FileDrop)) {
                     itemType = MpCopyItemType.FileList;
-                    itemData = (string[])iData.GetData(DataFormats.FileDrop, true);                    
+                    itemData = (string[])iData.GetData(DataFormats.FileDrop, true);
                 } else if (iData.GetDataPresent(DataFormats.CommaSeparatedValue)) {
                     itemType = MpCopyItemType.Csv;
                     itemData = (string)iData.GetData(DataFormats.CommaSeparatedValue);
                 } else if (iData.GetDataPresent(DataFormats.Rtf)) {
-                    itemType = MpCopyItemType.RichText; 
+                    itemType = MpCopyItemType.RichText;
                     itemData = (string)iData.GetData(DataFormats.Rtf);
                 } else if (iData.GetDataPresent(DataFormats.Bitmap)) {
                     itemType = MpCopyItemType.Image;
@@ -186,7 +187,7 @@ namespace MpWpfApp {
                 }
                 if (Properties.Settings.Default.IgnoreNewDuplicates) {
                     var dupItem = MpCopyItem.GetCopyItemByData(itemData);
-                    if(dupItem != null) {
+                    if (dupItem != null) {
                         return dupItem;
                     }
                 }
@@ -215,7 +216,7 @@ namespace MpWpfApp {
                     newItem.ItemColor = color[0];
                 }
 
-                newItem.ItemTitleSwirl = newItem.InitSwirl();
+                newItem.ItemTitleSwirl = newItem.InitSwirl(null, false);
                 newItem.ImageItemObjectList = new List<MpDetectedImageObject>();
                 switch (itemType) {
                     case MpCopyItemType.Csv:
@@ -242,8 +243,16 @@ namespace MpWpfApp {
             catch (Exception e) {
                 //this catches intermittent COMExceptions (happened copy/pasting in Excel)
                 Console.WriteLine("Caught exception creating copyitem (will reattempt to open clipboard): " + e.ToString());
-                return await CreateFromClipboardAsync(processHandle);
+                return CreateFromClipboard(processHandle);
             }
+        }
+        public static async Task<MpCopyItem> CreateFromClipboardAsync(IntPtr processHandle, DispatcherPriority priority) {
+            MpCopyItem newItem = null;
+            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
+                newItem = CreateFromClipboard(processHandle);
+            }, priority);
+
+            return newItem;
         }        
 
         public static MpCopyItem CreateRandomItem(MpCopyItemType itemType) {
@@ -300,6 +309,7 @@ namespace MpWpfApp {
             }
             return null;
         }
+
         #endregion
 
         #region Public Methods
@@ -379,12 +389,11 @@ namespace MpWpfApp {
             LoadDataRow(dr);
         }
 
-        public async Task SetData(object data) {
+        public void SetData(object data) {
             _itemData = data;
-            await UpdateItemData();
+            UpdateItemData();
             UpdateDetails();
         }
-
         public object GetData() {
             return _itemData;
         }
@@ -480,21 +489,25 @@ namespace MpWpfApp {
                 case MpCopyItemType.Image:
                     SetData(
                         MpHelpers.Instance.CombineBitmap(
-                            new List<BitmapSource> { 
-                                ItemBitmapSource, 
+                            new List<BitmapSource> {
+                                ItemBitmapSource,
                                 otherItem.ItemBitmapSource}));
                     break;
                 case MpCopyItemType.RichText:
-                    SetData(
-                        MpHelpers.Instance.CombineRichText(
+                    SetData(MpHelpers.Instance.CombineRichText(
                                 ItemRichText,
-                            otherItem.ItemRichText,
+                                otherItem.ItemRichText,
                                 true));
                     break;
             }
         }
 
+        public async Task CombineAsync(MpCopyItem otherItem, DispatcherPriority priority = DispatcherPriority.Background) {
+            await Dispatcher.CurrentDispatcher.InvokeAsync(() => Combine(otherItem), priority);
+        }
+
         public BitmapSource InitSwirl(BitmapSource sharedSwirl = null, bool forceUseItemColor = false) {
+            //return (BitmapSource)new BitmapImage(new Uri(@"pack://application:,,,/Resources/Images/" + "title_swirl0001.png"));
             if (sharedSwirl == null) {
                 var path = @"pack://application:,,,/Resources/Images/";
                 var swirlList = new List<BitmapSource>();
@@ -535,45 +548,72 @@ namespace MpWpfApp {
                 return sharedSwirl;
             }
         }
+
+        public async Task<BitmapSource> InitSwirlAsync(BitmapSource sharedSwirl = null, bool forceUseItemColor = false, bool retainAlpha = true, DispatcherPriority priority = DispatcherPriority.Background) {
+            BitmapSource swirl = null;
+            await Dispatcher.CurrentDispatcher.InvokeAsync(async () => {
+                if (sharedSwirl == null) {
+                    var path = @"pack://application:,,,/Resources/Images/";
+                    var swirlList = new List<BitmapSource>();
+                    if (forceUseItemColor) {
+                        var itemBrush = new SolidColorBrush() { Color = ItemColor.Color };
+                        SolidColorBrush lighterColor = MpHelpers.Instance.ChangeBrushAlpha(
+                                        MpHelpers.Instance.ChangeBrushBrightness(itemBrush, -0.5f), 100);
+                        SolidColorBrush darkerColor = MpHelpers.Instance.ChangeBrushAlpha(
+                                        MpHelpers.Instance.ChangeBrushBrightness(itemBrush, -0.4f), 50);
+                        SolidColorBrush accentColor = MpHelpers.Instance.ChangeBrushAlpha(
+                                        MpHelpers.Instance.ChangeBrushBrightness(itemBrush, -0.0f), 100);
+
+                        var swirl1 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0001.png"));
+                        swirlList.Add(await MpHelpers.Instance.TintBitmapSourceAsync(swirl1, (itemBrush).Color, retainAlpha, priority));
+
+                        var swirl2 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0002.png"));
+                        swirlList.Add(await MpHelpers.Instance.TintBitmapSourceAsync(swirl2, lighterColor.Color, retainAlpha, priority));
+
+                        var swirl3 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0003.png"));
+                        swirlList.Add(await MpHelpers.Instance.TintBitmapSourceAsync(swirl3, darkerColor.Color, retainAlpha, priority));
+
+                        var swirl4 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0004.png"));
+                        swirlList.Add(await MpHelpers.Instance.TintBitmapSourceAsync(swirl4, accentColor.Color, retainAlpha, priority));
+                    } else {
+                        var randomColorList = MpHelpers.Instance.GetRandomizedList<MpColor>(App.PrimaryIconColorList);
+                        for (int i = 0; i < 4; i++) {
+                            var c = randomColorList[i].Color;
+                            c.A = (byte)MpHelpers.Instance.Rand.Next(40, 120);
+                            var s = (BitmapSource)new BitmapImage(new Uri(path + string.Format(@"title_swirl000{0}.png", i + 1)));
+                            s = await MpHelpers.Instance.TintBitmapSourceAsync(s, c, retainAlpha, priority);
+                            swirlList.Add(s);
+                        }
+                    }
+                    //randomize order of layers
+                    var rsl = MpHelpers.Instance.GetRandomizedList<BitmapSource>(swirlList);
+                    swirl = await MpHelpers.Instance.MergeImagesAsync(new List<BitmapSource>() { rsl[0], rsl[1], rsl[2], rsl[3] },priority);
+                } else {
+                    swirl = sharedSwirl;
+                }
+            }, priority);
+
+            return swirl;
+        }
         #endregion
 
         #region Private Methods
-
-        private async Task UpdateItemData() {
+        private void UpdateItemData() {
             switch (CopyItemType) {
                 case MpCopyItemType.FileList:
                     ItemPlainText = (string)_itemData;
                     break;
                 case MpCopyItemType.Image:
-                    if(Application.Current.MainWindow.DataContext == null || 
+                    if (Application.Current.MainWindow.DataContext == null ||
                        ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).IsLoading) {
                         //when loading from database
                         ImageItemObjectList = MpDetectedImageObject.GetAllObjectsForItem(CopyItemId);
                     } else {
-                        //resize image for scanning to 500x500 regardless of original resolution                        
-                        //var maxSize = new Size(500, 500);
-                        //double scale = Math.Min(maxSize.Width / ItemBitmapSource.Width, maxSize.Height / ItemBitmapSource.Height);
-                        //var scanBmpSrc = MpHelpers.Instance.ResizeBitmapSource(ItemBitmapSource, new Size(scale, scale));
-
                         var ibsba = MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource);
 
-                        //ImageItemObjectList = await MpHelpers.Instance.DetectObjectsAsync(
-                        //    MpHelpers.Instance.ConvertBitmapSourceToByteArray(scanBmpSrc),
-                        //    Properties.Settings.Default.DetectedImageMinConfidence);
+                        var ia = MpImageAnalyzer.Instance.AnalyzeImage(ibsba).Result;
 
-                        //// don't perform ocr for now it takes too long on big images
-                        ////string fp = Path.GetTempFileName();
-                        ////fp = fp.Remove(fp.IndexOf('.'), fp.Length - fp.IndexOf('.')) + ".png";
-                        ////var imgPath = MpHelpers.Instance.WriteBitmapSourceToFile(fp, ItemBitmapSource);
-                        ////ItemPlainText = await MpHelpers.Instance.OcrBitmapSourceFileAsync(imgPath);
-                        ////File.Delete(imgPath);
-                        ///
-                        var ia = await MpImageAnalyzer.Instance.AnalyzeImage(ibsba);
-
-                        Console.WriteLine("-------------------------------------------------------------------");
-                        Console.WriteLine("-------------------------------------------------------------------");
-                        Console.WriteLine("-------------------------------------------------------------------");
-                        await MpImageOcr.Instance.OcrImage(ibsba);
+                        var iocr = MpImageOcr.Instance.OcrImage(ibsba).Result;
 
                         //if (string.IsNullOrEmpty(ItemPlainText)) {
                         //    if(ImageItemObjectList.Count > 0) {
@@ -588,11 +628,14 @@ namespace MpWpfApp {
                     break;
                 case MpCopyItemType.RichText:
                     ItemPlainText = MpHelpers.Instance.ConvertRichTextToPlainText((string)_itemData);
-                    if(!string.IsNullOrEmpty(ItemCsv) && MpHelpers.Instance.IsStringCsv(ItemPlainText)) {
+                    if (!string.IsNullOrEmpty(ItemCsv) && MpHelpers.Instance.IsStringCsv(ItemPlainText)) {
                         ItemCsv = ItemPlainText;
                     }
                     break;
-            }            
+            }
+        }
+        private async Task UpdateItemDataAsync(DispatcherPriority priority = DispatcherPriority.Background) {
+                  
         }
 
         private void UpdateDetails() {

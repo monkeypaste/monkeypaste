@@ -79,7 +79,7 @@ namespace MpWpfApp {
         #region Public Methods
         public MpClipTileSortViewModel() : base() {
             //must be set before property changed registered for loading order
-            SelectedSortType = SortTypes[0];
+            //SelectedSortType = SortTypes[0];
 
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
@@ -90,6 +90,7 @@ namespace MpWpfApp {
             };
         }
         public void ClipTileSort_Loaded(object sender, RoutedEventArgs e) {
+            //SelectedSortType = SortTypes[0];
         }
         #endregion
 

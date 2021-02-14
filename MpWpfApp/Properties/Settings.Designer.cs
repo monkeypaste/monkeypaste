@@ -989,5 +989,41 @@ namespace MpWpfApp.Properties {
                 this["NotificationSoundGroupIdx"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsTrialExpired {
+            get {
+                return ((bool)(this["IsTrialExpired"]));
+            }
+            set {
+                this["IsTrialExpired"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Sounds\\MonkeySound1.wav")]
+        public string NotificationLoadedPath {
+            get {
+                return ((string)(this["NotificationLoadedPath"]));
+            }
+            set {
+                this["NotificationLoadedPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool NotificationDoLoadedSound {
+            get {
+                return ((bool)(this["NotificationDoLoadedSound"]));
+            }
+            set {
+                this["NotificationDoLoadedSound"] = value;
+            }
+        }
     }
 }

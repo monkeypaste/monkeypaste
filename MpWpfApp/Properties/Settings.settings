@@ -277,5 +277,14 @@
     <Setting Name="NotificationSoundGroupIdx" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1</Value>
     </Setting>
+    <Setting Name="IsTrialExpired" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="NotificationLoadedPath" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Sounds\MonkeySound1.wav</Value>
+    </Setting>
+    <Setting Name="NotificationDoLoadedSound" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

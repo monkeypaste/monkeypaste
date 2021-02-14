@@ -1275,7 +1275,18 @@
                                              Height="{Binding LoadingSpinnerSize}">
                                         <spinners:ucSpinnerDotCircle HorizontalAlignment="Center"
                                                                      VerticalAlignment="Center" />
-                                    </Viewbox>                                    
+                                    </Viewbox>
+                                    <Grid x:Name="TrialExpiredOverlayGrid"
+                                          Visibility="{Binding TrialOverlayVisibility}">
+                                        <Viewbox HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"
+                                                 Width="{Binding LoadingSpinnerSize}"
+                                                 Height="{Binding LoadingSpinnerSize}">
+                                            <Image Source="/Resources/Images/lock.png"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+                                        </Viewbox>
+                                    </Grid>
                                     <Grid Background="White" Visibility="{Binding ContentVisibility}">
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="Loaded">

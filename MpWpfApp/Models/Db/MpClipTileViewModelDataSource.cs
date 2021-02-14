@@ -10,8 +10,8 @@ namespace MpWpfApp {
     public class MpClipTileViewModelDataSource : IFilteredSortedSourceProviderAsync {
         private int _tagId = 0;
 
-        public MpClipTileViewModelDataSource(int tagId) {
-            SetTag(tagId);
+        public MpClipTileViewModelDataSource() {
+            SetTag(1);
 
             this.SortDescriptionList.CollectionChanged += this.SortDescriptionListOnCollectionChanged;
             this.FilterDescriptionList.CollectionChanged += this.FilterDescriptionListOnCollectionChanged;
@@ -20,12 +20,9 @@ namespace MpWpfApp {
             _tagId = tagId;
             _items.Clear();
             foreach (var ci in MpCopyItem.GetAllCopyItems()) {
-                if(ci.CopyItemId == 79) {
-                    ci.DeleteFromDatabase();
-                    continue;
-                }
                 _items.Add(new MpClipTileViewModel(ci));
             }
+            _isFilteredItemsValid = false;
         }
         public bool Contains(MpClipTileViewModel item) {
             return this._items.Contains(item);
@@ -112,7 +109,7 @@ namespace MpWpfApp {
         public void InsertAt(int index, MpClipTileViewModel newItem) {
             _items.Insert(index, newItem);
             _isFilteredItemsValid = false;
-        }
+        }        
 
         public void RemoveAt(int index) {
             _items.RemoveAt(index);

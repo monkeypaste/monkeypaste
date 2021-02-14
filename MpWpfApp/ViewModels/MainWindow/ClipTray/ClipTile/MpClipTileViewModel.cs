@@ -549,26 +549,35 @@
                 }
             }
         }
+
+        public Visibility TrialOverlayVisibility {
+            get {
+                return IsTrialExpired ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
         #endregion
 
         #region Business Logic Properties
+        private bool _isTrialExpired = Properties.Settings.Default.IsTrialExpired;
+        public bool IsTrialExpired {
+            get {
+                return _isTrialExpired;
+            }
+            set {
+                if (_isTrialExpired != value) {
+                    _isTrialExpired = value;
+                    Properties.Settings.Default.IsTrialExpired = _isTrialExpired;
+                    Properties.Settings.Default.Save();
+                    OnPropertyChanged(nameof(IsTrialExpired));
+                    OnPropertyChanged(nameof(TrialOverlayVisibility));
+                }
+            }
+        }
 
-        //private bool _isLoading = true;
         public bool IsLoading {
             get {
                 return CopyItem == null || CopyItem.CopyItemId == 0;
             }
-            //set {
-            //    if(_isLoading != value) {
-            //        _isLoading = value;
-            //        OnPropertyChanged(nameof(IsLoading));
-            //        OnPropertyChanged(nameof(LoadingSpinnerVisibility));
-            //        OnPropertyChanged(nameof(ContentVisibility));
-            //        OnPropertyChanged(nameof(RtbVisibility));
-            //        OnPropertyChanged(nameof(ImgVisibility));
-            //        OnPropertyChanged(nameof(FileListVisibility));
-            //    }
-            //} 
         }
 
         public string DetailText {
@@ -975,7 +984,7 @@
 
         public string CopyItemPlainText {
             get {
-                if (CopyItem == null) {
+                if (CopyItem == null || CopyItem.ItemPlainText == null) {
                     return string.Empty;
                 }
                 return CopyItem.ItemPlainText;
@@ -1157,6 +1166,7 @@
                     OnPropertyChanged(nameof(DetectedImageObjectCollectionViewModel));
                     OnPropertyChanged(nameof(LoadingSpinnerVisibility));
                     OnPropertyChanged(nameof(ContentVisibility));
+                    OnPropertyChanged(nameof(TrialOverlayVisibility));
                     //CopyItem.WriteToDatabase();
                 }
             }
@@ -1223,6 +1233,7 @@
         public void SetCopyItem(MpCopyItem ci) {
             if (ci == null) {
                 //throw new Exception("MpClipTileViewModel error, cannot set null copyitem");
+                CopyItem = ci;
                 return;
             }
             if (ci.CopyItemId == 0 && !MainWindowViewModel.IsLoading) {
@@ -1231,7 +1242,11 @@
             }
             VirtualizationManager.Instance.RunOnUI(() => {
                 CopyItem = ci;
-            });
+                if (MainWindowViewModel != null) {
+                    //is null during loading and the refresh isn't needed
+                    MainWindowViewModel.ClipTrayViewModel.GetClipTray().Items.Refresh();
+                }
+            });            
         }
 
         public MpClipBorder GetBorder() {
@@ -1623,7 +1638,7 @@
         }
 
         public void AppendContent(MpClipTileViewModel octvm) {
-            CopyItem.Combine(octvm.CopyItem);
+            CopyItem.CombineAsync(octvm.CopyItem);
             //since appending only happens for richtext types
             OnPropertyChanged(nameof(CopyItemRichText));
             GetRtb().Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(CopyItemRichText);
