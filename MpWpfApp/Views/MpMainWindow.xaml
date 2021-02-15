@@ -1259,6 +1259,16 @@
                                                                             AnimationDuration="0:0:0.3"
                                                                             InitialState="Collapsed" />
                                 </ii:Interaction.Behaviors>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Loaded">
+                                        <i:CallMethodAction TargetObject="{Binding}"
+                                                            MethodName="ClipTile_Loaded" />
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="Loaded">
+                                        <i:CallMethodAction TargetObject="{Binding MainWindowViewModel.ClipTrayViewModel}"
+                                                            MethodName="ClipTile_Loaded" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
                                 <local:MpClipBorder.Resources>
                                     <local:MpBindingProxy x:Key="ClipTileProxy"
                                                           Data="{Binding}" />
@@ -1267,37 +1277,8 @@
                                     <DropShadowEffect Color="Black"
                                                       BlurRadius="10" />
                                 </local:MpClipBorder.Effect>-->
-                                <Grid Background="#FF3D3D3D">
-                                    <Viewbox HorizontalAlignment="Center"
-                                             VerticalAlignment="Center"
-                                             Visibility="{Binding LoadingSpinnerVisibility}"
-                                             Width="{Binding LoadingSpinnerSize}"
-                                             Height="{Binding LoadingSpinnerSize}">
-                                        <spinners:ucSpinnerDotCircle HorizontalAlignment="Center"
-                                                                     VerticalAlignment="Center" />
-                                    </Viewbox>
-                                    <Grid x:Name="TrialExpiredOverlayGrid"
-                                          Visibility="{Binding TrialOverlayVisibility}">
-                                        <Viewbox HorizontalAlignment="Center"
-                                                 VerticalAlignment="Center"
-                                                 Width="{Binding LoadingSpinnerSize}"
-                                                 Height="{Binding LoadingSpinnerSize}">
-                                            <Image Source="/Resources/Images/lock.png"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center" />
-                                        </Viewbox>
-                                    </Grid>
-                                    <Grid Background="White" Visibility="{Binding ContentVisibility}">
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="Loaded">
-                                                <i:CallMethodAction TargetObject="{Binding}"
-                                                                    MethodName="ClipTile_Loaded" />
-                                            </i:EventTrigger>
-                                            <i:EventTrigger EventName="Loaded">
-                                                <i:CallMethodAction TargetObject="{Binding MainWindowViewModel.ClipTrayViewModel}"
-                                                                    MethodName="ClipTile_Loaded" />
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
+                                <Grid Background="#FF3D3D3D">                                    
+                                    <Grid Background="White" Visibility="{Binding ContentVisibility}">                                        
                                         <Grid.ContextMenu>
                                             <ContextMenu x:Name="ClipTile_ContextMenu">
                                                 <i:Interaction.Triggers>
@@ -1338,8 +1319,6 @@
                                                               Command="{Binding Data.ExportSelectedClipTilesCommand, Source={StaticResource ClipTrayProxy}}"
                                                               CommandParameter="{StaticResource Zip}" />
                                                 </MenuItem>
-                                                <MenuItem Header="Share..."
-                                                          Command="{Binding ShareClipCommand}" />
                                                 <MenuItem Header="Rename"
                                                           Command="{Binding Data.RenameClipCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="Duplicate"
@@ -1492,7 +1471,7 @@
                                                          FontSize="20"
                                                          IsReadOnly="False"
                                                          Visibility="{Binding TileTitleTextBoxVisibility}"
-                                                         Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
+                                                         Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=LostFocus}" />
                                             </Grid>
                                             <!-- Clip Title Icon Image -->
                                             <Button x:Name="ClipTileAppIconImageButton"
@@ -2199,6 +2178,32 @@
                                                        Foreground="{Binding DetailTextColor}"
                                                        Text="{Binding ShortcutKeyString}" />
                                         </Grid>
+                                    </Grid>
+                                    <Grid x:Name="MenuOverlayGrid"
+                                          Visibility="{Binding MenuOverlayVisibility}"
+                                          Background="#FFFFFF"
+                                          Opacity="0.50">
+                                    </Grid>
+                                    <Viewbox HorizontalAlignment="Center"
+                                             VerticalAlignment="Center"
+                                             Visibility="{Binding LoadingSpinnerVisibility}"
+                                             Width="{Binding LoadingSpinnerSize}"
+                                             Height="{Binding LoadingSpinnerSize}">
+                                        <spinners:ucSpinnerDotCircle HorizontalAlignment="Center"
+                                                                     VerticalAlignment="Center" />
+                                    </Viewbox>
+                                    <Grid x:Name="TrialExpiredOverlayGrid"
+                                          Background="Gray"
+                                          Opacity="0.5"
+                                          Visibility="{Binding TrialOverlayVisibility}">
+                                        <Viewbox HorizontalAlignment="Center"
+                                                 VerticalAlignment="Center"
+                                                 Width="{Binding LoadingSpinnerSize}"
+                                                 Height="{Binding LoadingSpinnerSize}">
+                                            <Image Source="/Resources/Images/lock.png"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center" />
+                                        </Viewbox>
                                     </Grid>
                                 </Grid>
                             </local:MpClipBorder>

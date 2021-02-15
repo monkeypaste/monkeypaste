@@ -10,7 +10,6 @@ using DataGridAsyncDemoMVVM.filtersort;
 using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
 using Hardcodet.Wpf.TaskbarNotification;
-using Windows.UI.Core;
 
 namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase {
@@ -118,7 +117,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties       
-
         private bool _isLoading = true;
         public bool IsLoading {
             get {
@@ -130,7 +128,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(IsLoading));
                 }
             }
-        }
+        }        
 
         public double AppStateButtonGridWidth {
             get {
@@ -297,6 +295,15 @@ namespace MpWpfApp {
                 };
 
                 ApplicationHook.KeyPress += (s, e) => {
+                    if(ClipTrayViewModel != null && (ClipTrayViewModel.IsEditingClipTile || ClipTrayViewModel.IsEditingClipTitle)) {
+                        return;
+                    }
+                    if(SearchBoxViewModel != null && SearchBoxViewModel.IsTextBoxFocused) {
+                        return;
+                    }
+                    if(TagTrayViewModel != null && TagTrayViewModel.IsEditingTagName) {
+                        return;
+                    }
                     if (!char.IsControl(e.KeyChar)) {
                         foreach(var scvm in MpShortcutCollectionViewModel.Instance) {
                         }
@@ -318,6 +325,25 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+        private RelayCommand _undoCommand;
+        public ICommand UndoCommand {
+            get {
+                if (_undoCommand == null) {
+                    _undoCommand = new RelayCommand(() => UndoManager.Undo(), () => UndoManager.CanUndo);
+                }
+                return _undoCommand;
+            }
+        }
+
+        private ICommand _redoCommand;
+        public ICommand RedoCommand {
+            get {
+                if (_redoCommand == null)
+                    _redoCommand = new RelayCommand(() => UndoManager.Redo(), () => UndoManager.CanRedo);
+                return _redoCommand;
+            }
+        }
+
         private RelayCommand _showWindowCommand;
         public ICommand ShowWindowCommand {
             get {

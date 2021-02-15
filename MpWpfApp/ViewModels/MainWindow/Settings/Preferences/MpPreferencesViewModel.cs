@@ -1,11 +1,15 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpPreferencesViewModel : MpViewModelBase {
@@ -22,6 +26,35 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+        private bool _isTerminalAdmin = Properties.Settings.Default.IsTerminalAdministrator;
+        public bool IsTerminalAdmin {
+            get {
+                return _isTerminalAdmin;
+            }
+            set {
+                if(_isTerminalAdmin != value) {
+                    _isTerminalAdmin = value;
+                    Properties.Settings.Default.IsTerminalAdministrator = _isTerminalAdmin;
+                    Properties.Settings.Default.Save();
+                    OnPropertyChanged(nameof(IsTerminalAdmin));
+                }
+            }
+        }
+        private string _pathToTerminal = Properties.Settings.Default.PathToTerminal;
+        public string PathToTerrminal {
+            get {
+                return _pathToTerminal;
+            }
+            set {
+                if(_pathToTerminal != value) {
+                    _pathToTerminal = value;
+                    Properties.Settings.Default.PathToTerminal = _pathToTerminal;
+                    Properties.Settings.Default.Save();
+                    OnPropertyChanged(nameof(PathToTerrminal));
+                }
+            }
+        }
+
         private int _maxRtfCharCount = Properties.Settings.Default.MaxRtfCharCount;
         public int MaxRtfCharCount {
             get {
@@ -30,6 +63,8 @@ namespace MpWpfApp {
             set {
                 if (_maxRtfCharCount != value && value > 0) {
                     _maxRtfCharCount = value;
+                    Properties.Settings.Default.MaxRtfCharCount = _maxRtfCharCount;
+                    Properties.Settings.Default.Save();
                     OnPropertyChanged(nameof(MaxRtfCharCount));
                 }
             }
@@ -56,6 +91,8 @@ namespace MpWpfApp {
             set {
                 if (_selectedLanguage != value) {
                     _selectedLanguage = value;
+                    Properties.Settings.Default.UserLanguage = _selectedLanguage;
+                    Properties.Settings.Default.Save();
                     OnPropertyChanged(nameof(SelectedLanguage));
                 }
             }
@@ -153,7 +190,30 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-
+        private RelayCommand _selectPathToTerminalCommand;
+        public ICommand SelectPathToTerminalCommand {
+            get {
+                if(_selectPathToTerminalCommand == null) {
+                    _selectPathToTerminalCommand = new RelayCommand(SelectPathToTerminal);
+                }
+                return _selectPathToTerminalCommand;
+            }
+        }
+        private void SelectPathToTerminal() {
+            OpenFileDialog openFileDialog = new OpenFileDialog() {
+                Filter = "Applications|*.lnk;*.exe",
+                Title = "Select terminal path",
+                InitialDirectory = Path.GetPathRoot(PathToTerrminal)
+            };
+            bool? openResult = openFileDialog.ShowDialog();
+            if (openResult != null && openResult.Value) {
+                string terminalPath = openFileDialog.FileName;
+                if (Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
+                    terminalPath = MpHelpers.Instance.GetShortcutTargetPath(openFileDialog.FileName);
+                }
+                PathToTerrminal = terminalPath;
+            }
+        }
         #endregion
     }
 }

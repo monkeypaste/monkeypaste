@@ -278,13 +278,19 @@
       <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="IsTrialExpired" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="NotificationLoadedPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">Sounds\MonkeySound1.wav</Value>
     </Setting>
     <Setting Name="NotificationDoLoadedSound" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="PathToTerminal" Type="System.String" Scope="User">
+      <Value Profile="(Default)">C:\Windows\System32\cmd.exe</Value>
+    </Setting>
+    <Setting Name="IsTerminalAdministrator" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

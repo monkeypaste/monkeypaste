@@ -27,7 +27,7 @@ using GongSolutions.Wpf.DragDrop.Utilities;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace MpWpfApp {
-    public class MpClipTrayViewModel : MpViewModelBase {
+    public class MpClipTrayViewModel : MpUndoableViewModelBase<MpClipTrayViewModel> {
         #region Private Variables      
         private MpMultiSelectListView _clipTrayRef = null;
         //private object _dragClipBorderElement = null;
@@ -134,7 +134,7 @@ namespace MpWpfApp {
             set {
                 if (_isScrolling != value) {
                     _isScrolling = value;
-                    OnPropertyChanged(nameof(IsScrolling));
+                    OnPropertyChanged(nameof(IsScrolling));                    
                 }
             }
         }
@@ -431,8 +431,7 @@ namespace MpWpfApp {
 
             ClipboardManager.ClipboardChanged += (s, e53) => {
                 var sw = new Stopwatch();
-                sw.Start();                
-                
+                sw.Start();                                
                 
                 //var priority = DispatcherPriority.Background;
                 var newCopyItem = MpCopyItem.CreateFromClipboard(MainWindowViewModel.ClipTrayViewModel.ClipboardManager.LastWindowWatcher.LastHandle);
@@ -482,6 +481,12 @@ namespace MpWpfApp {
                     if (Properties.Settings.Default.NotificationDoCopySound) {
                         MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
                     }
+                    if(IsTrialExpired) {
+                        MpStandardBalloonViewModel.ShowBalloon(
+                        "Trial Expired",
+                        "Please update your membership to use Monkey Paste",
+                        Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
+                    }
                     MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(nctvm);
                     //GetClipTray().Items.Refresh();
                 }
@@ -507,7 +512,7 @@ namespace MpWpfApp {
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            var clipTileBorder = (Grid)sender;
+            var clipTileBorder = (MpClipBorder)sender;
             var ctvm = (MpClipTileViewModel)clipTileBorder.DataContext;
 
             clipTileBorder.PreviewMouseLeftButtonDown += (s, e6) => {
@@ -934,6 +939,42 @@ namespace MpWpfApp {
             ResetClipSelection();
         }
 
+        private RelayCommand _selectNextItemCommand;
+        public ICommand SelectNextItemCommand {
+            get {
+                if(_selectNextItemCommand == null) {
+                    _selectNextItemCommand = new RelayCommand(SelectNextItem, CanSelectNextItem);
+                }
+                return _selectNextItemCommand;
+            }
+        }
+        private bool CanSelectNextItem() {
+            return SelectedClipTiles.Count > 0 && SelectedClipTiles.Any(x => VisibileClipTiles.IndexOf(x) != VisibileClipTiles.Count - 1);
+        }
+        private void SelectNextItem() {
+            var maxItem = SelectedClipTiles.Max(x => VisibileClipTiles.IndexOf(x));
+            ClearClipSelection();
+            VisibileClipTiles[maxItem + 1].IsSelected = true;
+        }
+
+        private RelayCommand _selectPreviousItemCommand;
+        public ICommand SelectPreviousItemCommand {
+            get {
+                if (_selectPreviousItemCommand == null) {
+                    _selectPreviousItemCommand = new RelayCommand(SelectPreviousItem, CanSelectPreviousItem);
+                }
+                return _selectPreviousItemCommand;
+            }
+        }
+        private bool CanSelectPreviousItem() {
+            return SelectedClipTiles.Count > 0 && SelectedClipTiles.Any(x => VisibileClipTiles.IndexOf(x) != 0);
+        }
+        private void SelectPreviousItem() {
+            var minItem = SelectedClipTiles.Min(x => VisibileClipTiles.IndexOf(x));
+            ClearClipSelection();
+            VisibileClipTiles[minItem - 1].IsSelected = true;
+        }
+
         private RelayCommand _selectAllCommand;
         public ICommand SelectAllCommand {
             get {
@@ -995,7 +1036,8 @@ namespace MpWpfApp {
             return MpAssignShortcutModalWindowViewModel.IsOpen == false && 
                 !IsEditingClipTile && 
                 !IsEditingClipTitle && 
-                !IsPastingTemplate;
+                !IsPastingTemplate &&
+                !IsTrialExpired;
         }
         private void PasteSelectedClips() {
             //In order to paste the app must hide first 

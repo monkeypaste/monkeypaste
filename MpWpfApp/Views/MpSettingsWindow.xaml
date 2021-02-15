@@ -170,6 +170,14 @@
                     <Label Content="Ignore Duplicates" />
                     <CheckBox IsChecked="{Binding IgnoreNewDuplicates, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                 </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Terminal Path" />
+                    <Button x:Name="TerminalPathButton"
+                            Content="{Binding PathToTerrminal}"
+                            Command="{Binding SelectPathToTerminalCommand}" />
+                    <CheckBox IsChecked="{Binding IsTerminalAdmin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                    <Label Content="Administrative Mode" />
+                </StackPanel>
             </StackPanel>
         </Grid>
         <!-- Security -->

@@ -304,8 +304,10 @@ namespace MpWpfApp {
                     ,('Assign Hotkey',1,'A','A')
                     ,('Change Color',1,'C','C')
                     ,('Share',1,'H','H')
-                    ,('Say',1,'Control+S','Control+S')
-                    ,('Merge',1,'M','M');
+                    ,('Say',1,'S','S')
+                    ,('Merge',1,'M','M')
+                    ,('Undo',1,'Control+Z','Control+Z')
+                    ,('Redo',1,'Control+Y','Control+Y');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpDeviceType (
                       pk_MpDeviceTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

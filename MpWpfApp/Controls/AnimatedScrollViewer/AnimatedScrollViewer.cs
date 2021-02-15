@@ -424,6 +424,10 @@ namespace MpWpfApp
             DoubleAnimationUsingKeyFrames animateHScrollKeyFramed = new DoubleAnimationUsingKeyFrames();
             DoubleAnimationUsingKeyFrames animateVScrollKeyFramed = new DoubleAnimationUsingKeyFrames();
 
+            //animateHScrollKeyFramed.Completed += (s, e) => {
+            //    ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).ClipTrayViewModel.IsScrolling = false;
+            //};
+
             SplineDoubleKeyFrame HScrollKey1 = new SplineDoubleKeyFrame(thisScrollViewer.TargetHorizontalOffset, targetKeyTime, targetKeySpline);
             SplineDoubleKeyFrame VScrollKey1 = new SplineDoubleKeyFrame(thisScrollViewer.TargetVerticalOffset, targetKeyTime, targetKeySpline);
             animateHScrollKeyFramed.KeyFrames.Add(HScrollKey1);
@@ -431,6 +435,8 @@ namespace MpWpfApp
 
             thisScrollViewer.BeginAnimation(HorizontalScrollOffsetProperty, animateHScrollKeyFramed);
             thisScrollViewer.BeginAnimation(VerticalScrollOffsetProperty, animateVScrollKeyFramed);
+
+            //((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).ClipTrayViewModel.IsScrolling = true;
 
             CommandBindingCollection testCollection = thisScrollViewer.CommandBindings;
             int blah = testCollection.Count; 

@@ -11,7 +11,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
-using Windows.Storage;
+//using Windows.Storage;
 
 namespace MpWpfApp {
     public class MpCopyItem : MpDbObject, ICloneable {
@@ -287,7 +287,22 @@ namespace MpWpfApp {
         }
 
         public static MpCopyItem GetCopyItemByData(object data) {
-            if (data.GetType() == typeof(string)) {
+            if(data.GetType() == typeof(string[])) {
+                var str = string.Empty;
+                foreach(var s in (string[])data) {
+                    str += s + Environment.NewLine;
+                }
+                DataTable dt = MpDb.Instance.Execute(
+                   "select * from MpCopyItem where ItemText=@it",
+                   new System.Collections.Generic.Dictionary<string, object> {
+                            { "@it", str }
+                       });
+                if (dt != null && dt.Rows.Count > 0) {
+                    return new MpCopyItem(dt.Rows[0]);
+                }
+                return null;
+            }
+            else if (data.GetType() == typeof(string)) {
                 DataTable dt = MpDb.Instance.Execute(
                     "select * from MpCopyItem where ItemText=@it",
                     new System.Collections.Generic.Dictionary<string, object> {

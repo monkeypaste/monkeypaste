@@ -57,19 +57,15 @@ namespace MpWpfApp {
                         shortcutCommand = null;
                         break;
                     case 9:
-                        //left
-                        shortcutCommand = null;
+                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SelectNextItemCommand;
                         break;
                     case 10:
-                        //right
-                        shortcutCommand = null;
+                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SelectPreviousItemCommand;
                         break;
                     case 11:
-                        //select all
-                        shortcutCommand = null;
+                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SelectAllCommand;
                         break;
                     case 12:
-                        //invert selection
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.InvertSelectionCommand;
                         break;
                     case 13:
@@ -79,11 +75,9 @@ namespace MpWpfApp {
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SendSelectedClipTilesToBackCommand;
                         break;
                     case 15:
-                        //assign hotkey
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.AssignHotkeyCommand;
                         break;
                     case 16:
-                        //change color
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.ChangeSelectedClipsColorCommand;
                         break;
                     case 17:
@@ -95,6 +89,12 @@ namespace MpWpfApp {
                         break;
                     case 19:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.MergeSelectedClipsCommand;
+                        break;
+                    case 20:
+                        shortcutCommand = MainWindowViewModel.UndoCommand;
+                        break;
+                    case 21:
+                        shortcutCommand = MainWindowViewModel.RedoCommand;
                         break;
                     default:
                         try {

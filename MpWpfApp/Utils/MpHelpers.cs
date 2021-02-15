@@ -29,13 +29,12 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Xml;
-using Alturos.Yolo;
 using Newtonsoft.Json;
 using QRCoder;
 using static MpWpfApp.MpShellEx;
 using static QRCoder.PayloadGenerator;
-using Windows.Graphics.Imaging;
-using Windows.Media.Ocr;
+//using Windows.Graphics.Imaging;
+//using Windows.Media.Ocr;
 using CsvHelper;
 using System.Windows.Threading;
 
@@ -44,7 +43,7 @@ namespace MpWpfApp {
         private static readonly Lazy<MpHelpers> _Lazy = new Lazy<MpHelpers>(() => new MpHelpers());
         public static MpHelpers Instance { get { return _Lazy.Value; } }
         
-        private YoloWrapper yoloWrapper = null;
+        //private YoloWrapper yoloWrapper = null;
         public void Init() {
             //yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect());
         }
@@ -838,11 +837,13 @@ namespace MpWpfApp {
         //exampe RunWithString(@"C:\windows\system32\cmd.exe",
         public void RunInShell(string args, bool asAdministrator, bool isSilent, IntPtr forceHandle) {
             System.Diagnostics.ProcessStartInfo processInfo = new System.Diagnostics.ProcessStartInfo();
-            processInfo.FileName = Environment.ExpandEnvironmentVariables("%SystemRoot%") + @"\System32\cmd.exe"; //Sets the FileName property of myProcessInfo to %SystemRoot%\System32\cmd.exe where %SystemRoot% is a system variable which is expanded using Environment.ExpandEnvironmentVariables
-            processInfo.Arguments = "/K " + args;
+            processInfo.FileName = Properties.Settings.Default.PathToTerminal;//Environment.ExpandEnvironmentVariables("%SystemRoot%") + @"\System32\cmd.exe"; //Sets the FileName property of myProcessInfo to %SystemRoot%\System32\cmd.exe where %SystemRoot% is a system variable which is expanded using Environment.ExpandEnvironmentVariables
+            processInfo.Arguments = "/K "/* + args*/;
             processInfo.WindowStyle = isSilent ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal; //Sets the WindowStyle of myProcessInfo which indicates the window state to use when the process is started to Hidden
             processInfo.Verb = asAdministrator ? "runas" : string.Empty; //The process should start with elevated permissions
-            System.Diagnostics.Process.Start(processInfo); //Starts the process based on myProcessInfo
+            var process = System.Diagnostics.Process.Start(processInfo); //Starts the process based on myProcessInfo
+
+            // TODO pass args to clipboard (w/ ignore in the manager) then activate window and paste
         }
         
         public string GetApplicationDirectory() {
@@ -901,7 +902,7 @@ namespace MpWpfApp {
                 }
             }
             catch (Exception e) {
-                Console.WriteLine("MpHelpers.Instance.GetProcessPath error (likely) cannot find process path: " + e.ToString());
+                Console.WriteLine("MpHelpers.Instance.GetProcessPath error (likely) cannot find process path (w/ Handle "+hwnd.ToString()+") : " + e.ToString());
                 return GetExecutablePathAboveVista(hwnd);
             }
         }
@@ -1242,36 +1243,36 @@ namespace MpWpfApp {
             return null;
         }
 
-        public async Task<List<MpDetectedImageObject>> DetectObjectsAsync(byte[] image, double confidence = 0.0) {
-            var detectedObjectList = new List<MpDetectedImageObject>();
-            await Dispatcher.CurrentDispatcher.InvokeAsync(
-                () => {
-                    using (var yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect())) {
-                        var items = yoloWrapper.Detect(image);
-                        foreach (var item in items) {
-                            if (item.Confidence >= confidence) {
-                                detectedObjectList.Add(new MpDetectedImageObject(
-                                    0,
-                                    0,
-                                    item.Confidence,
-                                    item.X,
-                                    item.Y,
-                                    item.Width,
-                                    item.Height,
-                                    item.Type));
-                            }
-                        }
-                        //items[0].Type -> "Person , Car, ..."
-                        //items[0].Confidence -> 0.0 (low) -> 1.0 (high)
-                        //items[0].X -> bounding box
-                        //items[0].Y -> bounding box
-                        //items[0].Width -> bounding box
-                        //items[0].Height -> bounding box
-                        //return detectedObjectList;
-                    }
-                }, DispatcherPriority.Background);
-            return detectedObjectList;
-        }
+        //public async Task<List<MpDetectedImageObject>> DetectObjectsAsync(byte[] image, double confidence = 0.0) {
+        //    var detectedObjectList = new List<MpDetectedImageObject>();
+        //    await Dispatcher.CurrentDispatcher.InvokeAsync(
+        //        () => {
+        //            using (var yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect())) {
+        //                var items = yoloWrapper.Detect(image);
+        //                foreach (var item in items) {
+        //                    if (item.Confidence >= confidence) {
+        //                        detectedObjectList.Add(new MpDetectedImageObject(
+        //                            0,
+        //                            0,
+        //                            item.Confidence,
+        //                            item.X,
+        //                            item.Y,
+        //                            item.Width,
+        //                            item.Height,
+        //                            item.Type));
+        //                    }
+        //                }
+        //                //items[0].Type -> "Person , Car, ..."
+        //                //items[0].Confidence -> 0.0 (low) -> 1.0 (high)
+        //                //items[0].X -> bounding box
+        //                //items[0].Y -> bounding box
+        //                //items[0].Width -> bounding box
+        //                //items[0].Height -> bounding box
+        //                //return detectedObjectList;
+        //            }
+        //        }, DispatcherPriority.Background);
+        //    return detectedObjectList;
+        //}
         
         public BitmapSource TintBitmapSource(BitmapSource bmpSrc, Color tint, bool retainAlpha = false) {
             BitmapSource formattedBmpSrc = null;
@@ -1731,19 +1732,19 @@ namespace MpWpfApp {
             return key.ToString();
         }
 
-        public async Task<string> OcrBitmapSourceFileAsync(string image) {
-            var engine = OcrEngine.TryCreateFromLanguage(new Windows.Globalization.Language("en-US"));
-            var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(image);
-            using (var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read)) {
-                var decoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream);
-                var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
-                var ocrResult = await engine.RecognizeAsync(softwareBitmap);
+        //public async Task<string> OcrBitmapSourceFileAsync(string image) {
+        //    var engine = OcrEngine.TryCreateFromLanguage(new Windows.Globalization.Language("en-US"));
+        //    var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(image);
+        //    using (var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read)) {
+        //        var decoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream);
+        //        var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
+        //        var ocrResult = await engine.RecognizeAsync(softwareBitmap);
 
-                Console.WriteLine(ocrResult.Text);
+        //        Console.WriteLine(ocrResult.Text);
 
-                return ocrResult.Text;
-            }
-        }
+        //        return ocrResult.Text;
+        //    }
+        //}
 
         public string ConvertFlowDocumentToXaml(MpEventEnabledFlowDocument fd) {
             TextRange range = new TextRange(fd.ContentStart, fd.ContentEnd);

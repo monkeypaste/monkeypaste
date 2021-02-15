@@ -25,12 +25,8 @@
     using AsyncAwaitBestPractices.MVVM;
     using GalaSoft.MvvmLight.CommandWpf;
     using GongSolutions.Wpf.DragDrop.Utilities;
-    using NativeCode;
-    using Windows.ApplicationModel.DataTransfer;
-    using Windows.Foundation;
-    using Windows.Storage;
 
-    public class MpClipTileViewModel : MpViewModelBase, IDisposable {        
+    public class MpClipTileViewModel : MpUndoableViewModelBase<MpClipTileViewModel>, IDisposable {        
         #region Private Variables
 
         private RichTextBox _rtb;
@@ -555,25 +551,16 @@
                 return IsTrialExpired ? Visibility.Visible : Visibility.Collapsed;
             }
         }
+
+        public Visibility MenuOverlayVisibility {
+            get {
+                return Visibility.Collapsed;
+                //return IsHovering ? Visibility.Visible : Visibility.Hidden;
+            }
+        }
         #endregion
 
         #region Business Logic Properties
-        private bool _isTrialExpired = Properties.Settings.Default.IsTrialExpired;
-        public bool IsTrialExpired {
-            get {
-                return _isTrialExpired;
-            }
-            set {
-                if (_isTrialExpired != value) {
-                    _isTrialExpired = value;
-                    Properties.Settings.Default.IsTrialExpired = _isTrialExpired;
-                    Properties.Settings.Default.Save();
-                    OnPropertyChanged(nameof(IsTrialExpired));
-                    OnPropertyChanged(nameof(TrialOverlayVisibility));
-                }
-            }
-        }
-
         public bool IsLoading {
             get {
                 return CopyItem == null || CopyItem.CopyItemId == 0;
@@ -809,14 +796,12 @@
                 return _isHovering;
             }
             set {
-                if (MainWindowViewModel != null && MainWindowViewModel.ClipTrayViewModel != null && _isHovering != value) {
+                if (_isHovering != value) {
                     _isHovering = value;
-                    if(MainWindowViewModel.ClipTrayViewModel.IsScrolling) {
-                        _isHovering = false;
-                    }
                     OnPropertyChanged(nameof(IsHovering));
                     OnPropertyChanged(nameof(TileBorderBrush));
                     OnPropertyChanged(nameof(DetailTextColor));
+                    OnPropertyChanged(nameof(MenuOverlayVisibility));
                 }
             }
         }
@@ -974,10 +959,10 @@
             }
             set {
                 if (CopyItem != null && CopyItem.Title != value) {
+                    AddUndo(this, nameof(CopyItemTitle), CopyItem.Title, value);
                     CopyItem.Title = value;
                     CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItemTitle));
-                    //OnPropertyChanged(nameof(CopyItem));
                 }
             }
         }
@@ -1205,7 +1190,6 @@
                         break;
                 }
             };
-            
             TemplateHyperlinkCollectionViewModel = new MpTemplateHyperlinkCollectionViewModel(this);
             EditRichTextBoxToolbarViewModel = new MpEditRichTextBoxToolbarViewModel(this);
             EditTemplateToolbarViewModel = new MpEditTemplateToolbarViewModel(this);
@@ -1264,6 +1248,7 @@
         public ListBox GetFileListBox() {
             return _flb;
         }
+
         public void RefreshCommands() {
             MainWindowViewModel.ClipTrayViewModel.BringSelectedClipTilesToFrontCommand.RaiseCanExecuteChanged();
             MainWindowViewModel.ClipTrayViewModel.SendSelectedClipTilesToBackCommand.RaiseCanExecuteChanged();
@@ -1271,9 +1256,8 @@
         }
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            
-            var clipTileBorder = (Grid)sender;
-            _cb = clipTileBorder.GetVisualAncestor<MpClipBorder>();
+            var clipTileBorder = (MpClipBorder)sender;
+            _cb = clipTileBorder;//clipTileBorder.GetVisualAncestor<MpClipBorder>();
 
             clipTileBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
@@ -1576,6 +1560,8 @@
             if (FileListVisibility == Visibility.Collapsed) {
                 return;
             }
+            OnPropertyChanged(nameof(FileListViewModels));
+
             var flb = (ListBox)sender;
             flb.ContextMenu = (ContextMenu)flb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
 
@@ -1634,6 +1620,10 @@
                         MainWindowViewModel.ClipTrayViewModel.LinkTagToCopyItemCommand,
                         tagTile,
                         tagTile.IsLinkedWithClipTile(this)));
+            }
+            Console.WriteLine("Languages:");
+            foreach(var mi in TranslateLanguageMenuItems) {
+                Console.WriteLine(mi.Header);
             }
         }
 
@@ -2006,46 +1996,6 @@
             //all other action is handled in the ertb visibility changed handler in ertb_loaded
         }
 
-        private RelayCommand _shareClipCommand;
-        public ICommand ShareClipCommand {
-            get {
-                if (_shareClipCommand == null) {
-                    _shareClipCommand = new RelayCommand(ShareClip, CanShareClip);
-                }
-                return _shareClipCommand;
-            }
-        }
-        private bool CanShareClip() {
-            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1;
-        }
-        private void ShareClip() {
-            MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = true;
-            IntPtr windowHandle = new WindowInteropHelper(Application.Current.MainWindow).Handle;
-            var dtmHelper = new DataTransferManagerHelper(windowHandle);
-            dtmHelper.DataTransferManager.DataRequested += (s, e) => {
-                DataPackage dp = e.Request.Data;
-                dp.Properties.Title = CopyItemTitle;
-                switch (CopyItemType) {
-                    case MpCopyItemType.RichText:
-                        dp.SetText(MpHelpers.Instance.ConvertRichTextToPlainText(this.CopyItemRichText));
-                        break;
-                    case MpCopyItemType.FileList:
-                    case MpCopyItemType.Image:
-                        var filesToShare = new List<IStorageItem>();
-                        foreach (string path in CopyItem.GetFileList()) {
-                            //StorageFile sf = StorageFile.
-                            //filesToShare.Add(sf);
-                        }
-
-                        dp.SetStorageItems(filesToShare);
-                        break;
-                }
-            };
-
-            dtmHelper.ShowShareUI();
-            //MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.IsShowingDialog = false;
-        }
-
         private RelayCommand _excludeApplicationCommand;
         public ICommand ExcludeApplicationCommand {
             get {
@@ -2060,8 +2010,7 @@
         }
         private void ExcludeApplication() {
             MpAppCollectionViewModel.Instance.UpdateRejection(MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(CopyItemAppId), true);
-        }
-               
+        }               
 
         private RelayCommand _pasteClipCommand;
         public ICommand PasteClipCommand {
@@ -2091,7 +2040,7 @@
             return CopyItemType == MpCopyItemType.RichText;
         }
         private void RunClipInShell() {
-            MpHelpers.Instance.RunInShell(CopyItemPlainText, false, false, IntPtr.Zero);
+            MpHelpers.Instance.RunInShell(CopyItemPlainText, Properties.Settings.Default.IsTerminalAdministrator, false, IntPtr.Zero);
         }
         #endregion
 

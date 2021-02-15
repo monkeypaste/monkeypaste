@@ -992,7 +992,7 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool IsTrialExpired {
             get {
                 return ((bool)(this["IsTrialExpired"]));
@@ -1023,6 +1023,30 @@ namespace MpWpfApp.Properties {
             }
             set {
                 this["NotificationDoLoadedSound"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Windows\\System32\\cmd.exe")]
+        public string PathToTerminal {
+            get {
+                return ((string)(this["PathToTerminal"]));
+            }
+            set {
+                this["PathToTerminal"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsTerminalAdministrator {
+            get {
+                return ((bool)(this["IsTerminalAdministrator"]));
+            }
+            set {
+                this["IsTerminalAdministrator"] = value;
             }
         }
     }

@@ -82,7 +82,10 @@ namespace MpWpfApp {
             }
         }
         private void UpdateHandleStack(IntPtr fgHandle) {
-            var processName = MpHelpers.Instance.GetProcessPath(fgHandle);
+            string processName = GetCurrentProcessPath(fgHandle);
+            if(string.IsNullOrEmpty(processName)) {
+                processName = MpHelpers.Instance.GetProcessPath(fgHandle);
+            } 
             if(_currentProcessWindowHandleStackDictionary.ContainsKey(processName)) {
                 if(_currentProcessWindowHandleStackDictionary[processName].Contains(fgHandle)) {
                     _currentProcessWindowHandleStackDictionary[processName].Remove(fgHandle);
@@ -91,6 +94,14 @@ namespace MpWpfApp {
             } else {
                 _currentProcessWindowHandleStackDictionary.Add(processName, new List<IntPtr> { fgHandle });
             }
+        }
+        private string GetCurrentProcessPath(IntPtr handle) {
+            foreach(var kvp in _currentProcessWindowHandleStackDictionary) {
+                if(kvp.Value.Contains(handle)) {
+                    return kvp.Key;
+                }
+            }
+            return null;
         }
         private void PrintHandleStack() {
             foreach(var handleStack in _currentProcessWindowHandleStackDictionary) {
