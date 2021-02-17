@@ -33,23 +33,51 @@ namespace MpWpfApp {
                 }
                 return Brushes.Red;
             }
-        } 
+        }
+        #endregion
 
+        #region Business Logic
         private bool _isValid = false;
         public bool IsValid {
             get {
                 return _isValid;
             }
             set {
-                if(_isValid != value) {
+                if (_isValid != value) {
                     _isValid = value;
                     OnPropertyChanged(nameof(IsValid));
                     OnPropertyChanged(nameof(PasteToAppPathDataRowBorderBrush));
                 }
             }
         }
-        
+
+        private bool _isRuntime = false;
+        public bool IsRuntime {
+            get {
+                return _isRuntime;
+            }
+            set {
+                if (_isRuntime != value) {
+                    _isRuntime = value;
+                    OnPropertyChanged(nameof(IsRuntime));
+                }
+            }
+        }
+
+        private IntPtr _handle = IntPtr.Zero;
+        public IntPtr Handle {
+            get {
+                return _handle;
+            }
+            set {
+                if(_handle != value) {
+                    _handle = value;
+                    OnPropertyChanged(nameof(Handle));
+                }
+            }
+        }
         #endregion
+
         #region Model Properties
         public bool IsAdmin {
             get {
@@ -136,12 +164,23 @@ namespace MpWpfApp {
             }
         }
         #endregion
+
         #endregion
 
         #region Public Methods
         public MpPasteToAppPathViewModel() : this(null) { }
 
+        public MpPasteToAppPathViewModel(MpPasteToAppPath pasteToAppPath, IntPtr handle) {
+            //constructor used for running applications
+            PasteToAppPath = pasteToAppPath;
+            if(handle != IntPtr.Zero) {
+                Handle = handle;
+                IsRuntime = true;
+            }            
+        }
+
         public MpPasteToAppPathViewModel(MpPasteToAppPath pasteToAppPath) {
+            //constructor used for user defined paste to applications
             PasteToAppPath = pasteToAppPath;
         }
 

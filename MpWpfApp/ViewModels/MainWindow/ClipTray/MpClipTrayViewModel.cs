@@ -36,6 +36,8 @@ namespace MpWpfApp {
 
         private List<MpCopyItem> _testList = new List<MpCopyItem>();
 
+        private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
+
         private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
 
         private int _filterWaitingCount;
@@ -1054,8 +1056,16 @@ namespace MpWpfApp {
         }
         private void PasteSelectedClips(object ptapId) {
             if(ptapId != null && ptapId.GetType() == typeof(int) && (int)ptapId > 0) {
+                //when pasting to a user defined application
+                _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
                 _selectedPasteToAppPathViewModel = MpPasteToAppPathViewModelCollection.Instance.Where(x => x.PasteToAppPathId == (int)ptapId).ToList()[0];                
-            } else {
+            } else if(ptapId != null && ptapId.GetType() == typeof(IntPtr) && (IntPtr)ptapId != IntPtr.Zero) {
+                //when pasting to a running application
+                _selectedPasteToAppPathWindowHandle = (IntPtr)ptapId;
+                _selectedPasteToAppPathViewModel = null;
+            }
+              else {
+                _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
                 _selectedPasteToAppPathViewModel = null;
             }
             //In order to paste the app must hide first 

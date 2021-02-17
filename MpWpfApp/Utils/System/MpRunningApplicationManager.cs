@@ -10,14 +10,24 @@ using System.Windows.Input;
 using HWND = System.IntPtr;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.ComponentModel;
 
 namespace MpWpfApp {
-    public class MpRunningApplicationManager {
+    public class MpRunningApplicationManager : INotifyPropertyChanged {
         private static readonly Lazy<MpRunningApplicationManager> _Lazy = new Lazy<MpRunningApplicationManager>(() => new MpRunningApplicationManager());
         public static MpRunningApplicationManager Instance { get { return _Lazy.Value; } }
 
         #region Private Variables
+
+        #endregion
+
+        #region Properties
         private Dictionary<string, List<IntPtr>> _currentProcessWindowHandleStackDictionary = new Dictionary<string, List<IntPtr>>();
+        public Dictionary<string, List<IntPtr>> CurrentProcessWindowHandleStackDictionary {
+            get {
+                return _currentProcessWindowHandleStackDictionary;
+            }
+        }
         #endregion
 
         #region Public Methods
@@ -29,7 +39,7 @@ namespace MpWpfApp {
             //called in LastWindowWatcher's timer to remove closed window handles and processes
             var toRemoveProcessNameList = new List<string>();
             var toRemoveHandleKeyValueList = new List<KeyValuePair<string, IntPtr>>();
-            foreach (var processStack in _currentProcessWindowHandleStackDictionary) {
+            foreach (var processStack in CurrentProcessWindowHandleStackDictionary) {
                 //loop through all known processes
                 bool isProcessTerminated = true;
                 foreach (var handle in processStack.Value) {
@@ -46,15 +56,24 @@ namespace MpWpfApp {
                     toRemoveProcessNameList.Add(processStack.Key);
                 }
             }
+            bool wasStackChanged = false;
             foreach (var processToRemove in toRemoveProcessNameList) {
                 //remove any processes w/o active handles
-                _currentProcessWindowHandleStackDictionary.Remove(processToRemove);
+                CurrentProcessWindowHandleStackDictionary.Remove(processToRemove);
+                wasStackChanged = true;
+
+                Console.WriteLine(string.Format(@"Process: {0} REMOVED", processToRemove));
             }
             foreach(var handleToRemove in toRemoveHandleKeyValueList) {                
-                if(_currentProcessWindowHandleStackDictionary.ContainsKey(handleToRemove.Key)) {
+                if(CurrentProcessWindowHandleStackDictionary.ContainsKey(handleToRemove.Key)) {
                     //remove individual window handles that were flagged
-                    _currentProcessWindowHandleStackDictionary[handleToRemove.Key].Remove(handleToRemove.Value);
+                    CurrentProcessWindowHandleStackDictionary[handleToRemove.Key].Remove(handleToRemove.Value);
+                    wasStackChanged = true;
+                    Console.WriteLine(string.Format(@"Process: {0} Handle: {1} REMOVED", handleToRemove.Key, handleToRemove.Value));
                 }
+            }
+            if(wasStackChanged) {
+                OnPropertyChanged(nameof(CurrentProcessWindowHandleStackDictionary));
             }
         }
 
@@ -65,22 +84,32 @@ namespace MpWpfApp {
                 //if it is not resolve its process path
                 processName = MpHelpers.Instance.GetProcessPath(fgHandle);
             }
+            bool wasStackChanged = false;
             processName = processName.ToLower();
-            if (_currentProcessWindowHandleStackDictionary.ContainsKey(processName)) {
+            if (CurrentProcessWindowHandleStackDictionary.ContainsKey(processName)) {
                 //if process is already being tracked 
-                if (_currentProcessWindowHandleStackDictionary[processName].Contains(fgHandle)) {
+                if (CurrentProcessWindowHandleStackDictionary[processName].Contains(fgHandle)) {
                     //remove the handle if it is also being tracked
-                    _currentProcessWindowHandleStackDictionary[processName].Remove(fgHandle);
+                    CurrentProcessWindowHandleStackDictionary[processName].Remove(fgHandle);
                 }
                 //set fg handle to the top of its process list
-                _currentProcessWindowHandleStackDictionary[processName].Insert(0, fgHandle);
+                CurrentProcessWindowHandleStackDictionary[processName].Insert(0, fgHandle);
+                wasStackChanged = true;
+
+                Console.WriteLine(string.Format(@"(Known) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
             } else {
                 //if its a new process create a new list with this handle as its element
-                _currentProcessWindowHandleStackDictionary.Add(processName, new List<IntPtr> { fgHandle });
+                CurrentProcessWindowHandleStackDictionary.Add(processName, new List<IntPtr> { fgHandle });
+                wasStackChanged = true;
+
+                Console.WriteLine(string.Format(@"(New) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
+            }
+            if (wasStackChanged) {
+                OnPropertyChanged(nameof(CurrentProcessWindowHandleStackDictionary));
             }
         }
 
-        public IntPtr SetActiveProcess(string processPath, bool isAdmin) {
+        public IntPtr SetActiveProcess(string processPath, bool isAdmin, object forceHandle = null) {
             try {
                 if (string.IsNullOrEmpty(processPath)) {
                     return IntPtr.Zero;
@@ -94,12 +123,12 @@ namespace MpWpfApp {
                 processPath = processPath.Replace(@"\\", @"\").ToLower();
                 Console.WriteLine(processPath);
                 IntPtr handle = IntPtr.Zero;
-                if (!_currentProcessWindowHandleStackDictionary.ContainsKey(processPath)) {
+                if (!CurrentProcessWindowHandleStackDictionary.ContainsKey(processPath)) {
                     //if process is not running start it 
                     handle = MpHelpers.Instance.StartProcess(string.Empty, processPath, isAdmin, false);
                 } else {
                     //ensure the process has a handle matching isAdmin, if not it needs to be created
-                    var handleList = _currentProcessWindowHandleStackDictionary[processPath];
+                    var handleList = CurrentProcessWindowHandleStackDictionary[processPath];
                     foreach (var h in handleList) {
                         if (isAdmin == MpHelpers.Instance.IsProcessAdmin(h)) {
                             handle = h;
@@ -126,10 +155,12 @@ namespace MpWpfApp {
             foreach (KeyValuePair<IntPtr, string> window in OpenWindowGetter.GetOpenWindows()) {                
                 UpdateHandleStack(window.Key);
             }
-            return;
+            Console.WriteLine("RunningApplicationManager Initialized w/ contents: ");
+            Console.WriteLine(this.ToString());
         }
+
         private string GetKnownProcessPath(IntPtr handle) {
-            foreach (var kvp in _currentProcessWindowHandleStackDictionary) {
+            foreach (var kvp in CurrentProcessWindowHandleStackDictionary) {
                 if (kvp.Value.Contains(handle)) {
                     return kvp.Key;
                 }
@@ -141,7 +172,7 @@ namespace MpWpfApp {
         #region Overrides
         public override string ToString() {
             var outStr = string.Empty;
-            foreach (var handleStack in _currentProcessWindowHandleStackDictionary) {
+            foreach (var handleStack in CurrentProcessWindowHandleStackDictionary) {
                 outStr += handleStack.Key + Environment.NewLine;
                 foreach (var handle in handleStack.Value) {
                     outStr += "\t" + handle.ToInt32() + Environment.NewLine;
@@ -152,7 +183,41 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        
+
+        #endregion
+
+        #region INotifyPropertyChanged 
+        public bool ThrowOnInvalidPropertyName { get; private set; }
+
+        private event PropertyChangedEventHandler _propertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged {
+            add { _propertyChanged += value; }
+            remove { _propertyChanged -= value; }
+        }
+
+        public virtual void OnPropertyChanged(string propertyName) {
+            this.VerifyPropertyName(propertyName);
+            PropertyChangedEventHandler handler = _propertyChanged;
+            if (handler != null) {
+                var e = new PropertyChangedEventArgs(propertyName);
+                handler(this, e);
+            }
+        }
+
+        [Conditional("DEBUG")]
+        [DebuggerStepThrough]
+        public void VerifyPropertyName(string propertyName) {
+            // Verify that the property name matches a real, 
+            // public, instance property on this object. 
+            if (TypeDescriptor.GetProperties(this)[propertyName] == null) {
+                string msg = "Invalid property name: " + propertyName;
+                if (this.ThrowOnInvalidPropertyName) {
+                    throw new Exception(msg);
+                } else {
+                    Debug.Fail(msg);
+                }
+            }
+        }
         #endregion
     }
 

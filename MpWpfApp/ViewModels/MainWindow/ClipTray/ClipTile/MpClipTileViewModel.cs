@@ -168,11 +168,6 @@
             }
         }
 
-        public MpPasteToAppPathViewModelCollection PasteToAppPathViewModelCollection {
-            get {
-                return MpPasteToAppPathViewModelCollection.Instance;
-            }
-        }
         #endregion
 
         #region Property Reflection Referencer
@@ -1597,9 +1592,54 @@
             ((MpClipTileViewModel)((FrameworkElement)sender).DataContext).SaveToDatabase();
         }
 
-        public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {            
-            if(CopyItemType == MpCopyItemType.Image && !string.IsNullOrEmpty(CopyItemPlainText)) {
-                var cm = (ContextMenu)sender;
+        public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
+            var cm = (ContextMenu)sender;
+            if(CopyItemType == MpCopyItemType.RichText) {
+                MenuItem ptamir = null;
+                foreach(MenuItem mi in cm.Items) {
+                    if(mi.Name == "PasteToAppPathMenuItem") {
+                        ptamir = mi;
+                    }
+                }
+                if(ptamir == null) {
+                    return;
+                }
+                ptamir.Items.Clear();
+                bool addedSeperator = false;
+                foreach(var ptamivmc in MpPasteToAppPathViewModelCollection.Instance.MenuItemViewModels) {
+                    if(ptamivmc.Count == 0) {
+                        continue;
+                    }
+                    if(ptamivmc[0].IsRuntime) {
+                        var ptamip = new MenuItem();
+                        ptamip.Header = MpHelpers.Instance.GetProcessApplicationName(ptamivmc[0].Handle);
+                        ptamip.Icon = new Image() { Source = ptamivmc[0].AppIcon };
+                        foreach(var ptamivm in ptamivmc) {
+                            var ptami = new MenuItem();
+                            ptami.Header = MpHelpers.Instance.GetProcessMainWindowTitle(ptamivm.Handle) + (ptamivm.IsAdmin ? " (Admin)" : string.Empty);                            
+                            ptami.Icon = new Image() { Source = ptamivm.AppIcon };
+                            ptami.Command = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;
+                            ptami.CommandParameter = ptamivm.Handle;
+
+                            ptamip.Items.Add(ptami);
+                        }
+                        ptamir.Items.Add(ptamip);
+                    } else {
+                        if(!addedSeperator) {
+                            ptamir.Items.Add(new Separator());
+                            addedSeperator = true;
+                        }
+                        var ptaumi = new MenuItem();
+                        ptaumi.Header = ptamivmc[0].AppName + (ptamivmc[0].IsAdmin ? " (Admin)" : string.Empty);
+                        ptaumi.Icon = new Image() { Source = ptamivmc[0].AppIcon }; ;
+                        ptaumi.Command = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;
+                        ptaumi.CommandParameter = ptamivmc[0].PasteToAppPathId;
+
+                        ptamir.Items.Add(ptaumi);
+                    }
+                }
+            }
+            if (CopyItemType == MpCopyItemType.Image && !string.IsNullOrEmpty(CopyItemPlainText)) {
                 var cmi = new MenuItem();
                 cmi.Header = "Convert to Text";
                 cmi.Click += (s, e1) => {

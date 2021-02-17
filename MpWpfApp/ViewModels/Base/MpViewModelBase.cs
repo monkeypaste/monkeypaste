@@ -118,7 +118,7 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region IPropertyChanged 
+        #region INotifyPropertyChanged 
         public bool ThrowOnInvalidPropertyName { get; private set; }
 
         private event PropertyChangedEventHandler _propertyChanged;

@@ -199,7 +199,6 @@
     <Compile Include="Utils\UndoRedo\MpRangeObservableCollection.cs" />
     <Compile Include="Utils\UndoRedo\MpUndoableProperty.cs" />
     <Compile Include="Utils\UndoRedo\MpUndoManager.cs" />
-    <Compile Include="ViewModels\Base\MpObservableDictionaryViewModel.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="ViewModels\Base\MpObservableCollectionViewModel.cs" />
     <Compile Include="ViewModels\Base\MpUndoableViewModelBase.cs" />
