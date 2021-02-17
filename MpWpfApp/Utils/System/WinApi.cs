@@ -39,6 +39,17 @@ namespace MpWpfApp {
             QueryLimitedInformation = 0x00001000,
             Synchronize = 0x00100000
         }
+        public const int STANDARD_RIGHTS_REQUIRED = 0xF0000;
+        public const int TOKEN_ASSIGN_PRIMARY = 0x1;
+        public const int TOKEN_DUPLICATE = 0x2;
+        public const int TOKEN_IMPERSONATE = 0x4;
+        public const int TOKEN_QUERY = 0x8;
+        public const int TOKEN_QUERY_SOURCE = 0x10;
+        public const int TOKEN_ADJUST_GROUPS = 0x40;
+        public const int TOKEN_ADJUST_PRIVILEGES = 0x20;
+        public const int TOKEN_ADJUST_SESSIONID = 0x100;
+        public const int TOKEN_ADJUST_DEFAULT = 0x80;
+        public const int TOKEN_ALL_ACCESS = (STANDARD_RIGHTS_REQUIRED | TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_IMPERSONATE | TOKEN_QUERY | TOKEN_QUERY_SOURCE | TOKEN_ADJUST_PRIVILEGES | TOKEN_ADJUST_GROUPS | TOKEN_ADJUST_SESSIONID | TOKEN_ADJUST_DEFAULT);
 
         //[DllImport("user32.dll")]
         //public static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
@@ -224,5 +235,9 @@ namespace MpWpfApp {
 
         [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool CloseHandle(IntPtr hHandle);
+
+        [DllImport("advapi32.dll", SetLastError = true)]
+        public static extern bool OpenProcessToken(IntPtr ProcessHandle, UInt32 DesiredAccess, out IntPtr TokenHandle);
+
     }
 }

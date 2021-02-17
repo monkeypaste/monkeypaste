@@ -122,6 +122,7 @@
     <Compile Include="Models\Db\MpClipTileViewModelDataSource.cs" />
     <Compile Include="Models\Db\MpClipTileViewModelPagedSourceProviderAsync.cs" />
     <Compile Include="Models\Db\MpDb.cs" />
+    <Compile Include="Models\MpPasteToAppPath.cs" />
     <Compile Include="Models\MpCopyItemTemplate.cs" />
     <Compile Include="Models\MpDetectedImageObject.cs" />
     <Compile Include="Models\MpRichTextStyle.cs" />
@@ -153,6 +154,7 @@
     <Compile Include="Utils\DragDrop\ListViewDragDropManager.cs" />
     <Compile Include="Utils\DragDrop\MouseUtilities.cs" />
     <Compile Include="Utils\MpImageHistogram.cs" />
+    <Compile Include="Utils\System\MpRunningApplicationManager.cs" />
     <Compile Include="Utils\UndoRedo\MpIUndoRedo.cs" />
     <Compile Include="Utils\MpSolidColorBrushComparer.cs" />
     <Compile Include="Utils\RESTful\Base\MpRestfulApi.cs" />
@@ -225,7 +227,9 @@
     <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpNotificationViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundPlayerGroupCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Notifications\MpSoundPlayerViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Preferences\PasteToAppPath\MpPasteToAppPathViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Preferences\MpPreferencesViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Preferences\PasteToAppPath\MpPasteToAppPathViewModelCollection.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Security\MpSecurityViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpAssignShortcutModalWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpShortcutPanelViewModel.cs" />

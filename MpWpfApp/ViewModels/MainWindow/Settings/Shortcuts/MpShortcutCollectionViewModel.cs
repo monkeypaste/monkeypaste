@@ -52,48 +52,40 @@ namespace MpWpfApp {
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.DeleteSelectedClipsCommand;
                         commandParameter = true;
                         break;
-                    case 8:                    
-                        //search
-                        shortcutCommand = null;
-                        break;
-                    case 9:
+                    case 8:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SelectNextItemCommand;
                         break;
-                    case 10:
+                    case 9:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SelectPreviousItemCommand;
                         break;
-                    case 11:
+                    case 10:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SelectAllCommand;
                         break;
-                    case 12:
+                    case 11:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.InvertSelectionCommand;
                         break;
-                    case 13:
+                    case 12:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.BringSelectedClipTilesToFrontCommand;
                         break;
-                    case 14:
+                    case 13:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SendSelectedClipTilesToBackCommand;
                         break;
-                    case 15:
+                    case 14:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.AssignHotkeyCommand;
                         break;
-                    case 16:
+                    case 15:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.ChangeSelectedClipsColorCommand;
                         break;
-                    case 17:
-                        //share
-                        shortcutCommand = null;
-                        break;
-                    case 18:
+                    case 16:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.SpeakSelectedClipsAsyncCommand;
                         break;
-                    case 19:
+                    case 17:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.MergeSelectedClipsCommand;
                         break;
-                    case 20:
+                    case 18:
                         shortcutCommand = MainWindowViewModel.UndoCommand;
                         break;
-                    case 21:
+                    case 19:
                         shortcutCommand = MainWindowViewModel.RedoCommand;
                         break;
                     default:

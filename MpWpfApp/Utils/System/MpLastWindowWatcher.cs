@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Timers;
 using System.Windows;
+using System.Runtime.InteropServices;
 
 namespace MpWpfApp {
     public class MpLastWindowWatcher {
         #region Private Variables
-        private Dictionary<string, List<IntPtr>> _currentProcessWindowHandleStackDictionary = new Dictionary<string, List<IntPtr>>();
+        //private Dictionary<string, List<IntPtr>> _currentProcessWindowHandleStackDictionary = new Dictionary<string, List<IntPtr>>();
         #endregion
 
         public string ThisAppPath { get; set; }
@@ -39,12 +40,16 @@ namespace MpWpfApp {
             ThisAppHandle = appHandle;
             LastHandle = IntPtr.Zero;
             ThisAppPath = MpHelpers.Instance.GetProcessPath(ThisAppHandle);
+            
+            MpRunningApplicationManager.Instance.Init();
+
             Console.WriteLine("This app's exe: " + ThisAppPath);
+            
             Timer timer = new Timer(100);
             timer.Elapsed += (s, e) => {
                 IntPtr currentHandle = WinApi.GetForegroundWindow();
                 
-                RefreshHandleStack();
+                MpRunningApplicationManager.Instance.RefreshHandleStack();
 
                 if (ThisAppHandle == IntPtr.Zero) { 
                     ThisAppHandle = Process.GetCurrentProcess().MainWindowHandle;
@@ -58,59 +63,12 @@ namespace MpWpfApp {
                     LastHandle = currentHandle;
                     LastTitle = MpHelpers.Instance.GetProcessMainWindowTitle(LastHandle);
 
-                    UpdateHandleStack(LastHandle);
+                    MpRunningApplicationManager.Instance.UpdateHandleStack(LastHandle);
                     Console.WriteLine("Last Window: " + MpHelpers.Instance.GetProcessMainWindowTitle(_lastHandle));
                 }
             };
             timer.Start();
         }
-        private void RefreshHandleStack() {
-            var toRemoveProcessNameList = new List<string>();
-            foreach(var processStack in _currentProcessWindowHandleStackDictionary) {
-                bool isProcessTerminated = true;
-                foreach (var handle in processStack.Value) { 
-                    if(WinApi.IsWindow(handle)) {
-                        isProcessTerminated = false;
-                    }
-                }
-                if(isProcessTerminated) {
-                    toRemoveProcessNameList.Add(processStack.Key);
-                }
-            }
-            foreach(var processToRemove in toRemoveProcessNameList) {
-                _currentProcessWindowHandleStackDictionary.Remove(processToRemove);
-            }
-        }
-        private void UpdateHandleStack(IntPtr fgHandle) {
-            string processName = GetCurrentProcessPath(fgHandle);
-            if(string.IsNullOrEmpty(processName)) {
-                processName = MpHelpers.Instance.GetProcessPath(fgHandle);
-            } 
-            if(_currentProcessWindowHandleStackDictionary.ContainsKey(processName)) {
-                if(_currentProcessWindowHandleStackDictionary[processName].Contains(fgHandle)) {
-                    _currentProcessWindowHandleStackDictionary[processName].Remove(fgHandle);
-                }
-                _currentProcessWindowHandleStackDictionary[processName].Insert(0, fgHandle);
-            } else {
-                _currentProcessWindowHandleStackDictionary.Add(processName, new List<IntPtr> { fgHandle });
-            }
-        }
-        private string GetCurrentProcessPath(IntPtr handle) {
-            foreach(var kvp in _currentProcessWindowHandleStackDictionary) {
-                if(kvp.Value.Contains(handle)) {
-                    return kvp.Key;
-                }
-            }
-            return null;
-        }
-        private void PrintHandleStack() {
-            foreach(var handleStack in _currentProcessWindowHandleStackDictionary) {
-                var outStr = handleStack.Key;
-                foreach(var handle in handleStack.Value) {
-                    outStr += " " + handle.ToInt32();
-                }
-                Console.WriteLine(outStr);
-            }
-        }
-    }
+
+    }   
 }

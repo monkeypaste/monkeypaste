@@ -1331,8 +1331,6 @@
                                                           Style="{StaticResource MenuItemStyle}" />
                                                 <MenuItem Header="Delete"
                                                           Command="{Binding Data.DeleteSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
-                                                <MenuItem Header="Run in Command Prompt"
-                                                          Command="{Binding Data.RunSelectedClipsInShellCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="Say"
                                                           Command="{Binding Data.SpeakSelectedClipsAsyncCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="Merge"
@@ -1401,6 +1399,20 @@
                                                                     Value="{Binding Command}" />
                                                             <Setter Property="CommandParameter"
                                                                     Value="{Binding CommandParameter}" />
+                                                        </Style>
+                                                    </MenuItem.ItemContainerStyle>
+                                                </MenuItem>
+                                                <MenuItem x:Name="PasteToAppPathMenuItem"
+                                                          Header="Paste to Application"
+                                                          ItemsSource="{Binding Data.PasteToAppPathViewModelCollection, Source={StaticResource ClipTileProxy}}">
+                                                    <MenuItem.ItemContainerStyle>
+                                                        <Style TargetType="{x:Type MenuItem}">
+                                                            <Setter Property="Header"
+                                                                    Value="{Binding AppName}" />
+                                                            <Setter Property="Command"
+                                                                    Value="{Binding Data.PasteSelectedClipsCommand,Source={StaticResource ClipTrayProxy}}" />
+                                                            <Setter Property="CommandParameter"
+                                                                    Value="{Binding PasteToAppPathId}" />
                                                         </Style>
                                                     </MenuItem.ItemContainerStyle>
                                                 </MenuItem>

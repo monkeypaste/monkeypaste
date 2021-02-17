@@ -23,38 +23,15 @@ namespace MpWpfApp {
                 return MpSoundPlayerGroupCollectionViewModel.Instance;
             }
         }
+
+        public MpPasteToAppPathViewModelCollection PasteToAppPathViewModelCollection {
+            get {
+                return MpPasteToAppPathViewModelCollection.Instance;
+            }
+        }
         #endregion
 
         #region Properties
-        private bool _isTerminalAdmin = Properties.Settings.Default.IsTerminalAdministrator;
-        public bool IsTerminalAdmin {
-            get {
-                return _isTerminalAdmin;
-            }
-            set {
-                if(_isTerminalAdmin != value) {
-                    _isTerminalAdmin = value;
-                    Properties.Settings.Default.IsTerminalAdministrator = _isTerminalAdmin;
-                    Properties.Settings.Default.Save();
-                    OnPropertyChanged(nameof(IsTerminalAdmin));
-                }
-            }
-        }
-        private string _pathToTerminal = Properties.Settings.Default.PathToTerminal;
-        public string PathToTerrminal {
-            get {
-                return _pathToTerminal;
-            }
-            set {
-                if(_pathToTerminal != value) {
-                    _pathToTerminal = value;
-                    Properties.Settings.Default.PathToTerminal = _pathToTerminal;
-                    Properties.Settings.Default.Save();
-                    OnPropertyChanged(nameof(PathToTerrminal));
-                }
-            }
-        }
-
         private int _maxRtfCharCount = Properties.Settings.Default.MaxRtfCharCount;
         public int MaxRtfCharCount {
             get {
@@ -139,7 +116,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(IsLoadOnLoginChecked));
                 }
             }
-        }
+        }        
         #endregion
 
         #region Public Methods
@@ -187,33 +164,13 @@ namespace MpWpfApp {
             Properties.Settings.Default.Save();
             Console.WriteLine("App " + appName + " with path " + appPath + " has load on login set to: " + loadOnLogin);
         }
+
+        
         #endregion
 
         #region Commands
-        private RelayCommand _selectPathToTerminalCommand;
-        public ICommand SelectPathToTerminalCommand {
-            get {
-                if(_selectPathToTerminalCommand == null) {
-                    _selectPathToTerminalCommand = new RelayCommand(SelectPathToTerminal);
-                }
-                return _selectPathToTerminalCommand;
-            }
-        }
-        private void SelectPathToTerminal() {
-            OpenFileDialog openFileDialog = new OpenFileDialog() {
-                Filter = "Applications|*.lnk;*.exe",
-                Title = "Select terminal path",
-                InitialDirectory = Path.GetPathRoot(PathToTerrminal)
-            };
-            bool? openResult = openFileDialog.ShowDialog();
-            if (openResult != null && openResult.Value) {
-                string terminalPath = openFileDialog.FileName;
-                if (Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
-                    terminalPath = MpHelpers.Instance.GetShortcutTargetPath(openFileDialog.FileName);
-                }
-                PathToTerrminal = terminalPath;
-            }
-        }
+        
+
         #endregion
     }
 }

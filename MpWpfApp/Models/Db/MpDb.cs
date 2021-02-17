@@ -294,7 +294,6 @@ namespace MpWpfApp {
                     ,('Right-Click Paste Mode',2,'Control+Shift+R','Control+Shift+R')
                     ,('Paste Selected Clip',1,'Enter','Enter')
                     ,('Delete Selected Clip',1,'Delete','Delete')
-                    ,('Search',1,'S','S')
                     ,('Select Next',1,'Right','Right')
                     ,('Select Previous',1,'Left','Left')
                     ,('Select All',1,'Control+A','Control+A')
@@ -303,11 +302,18 @@ namespace MpWpfApp {
                     ,('Send to back',1,'End','End')
                     ,('Assign Hotkey',1,'A','A')
                     ,('Change Color',1,'C','C')
-                    ,('Share',1,'H','H')
                     ,('Say',1,'S','S')
                     ,('Merge',1,'M','M')
                     ,('Undo',1,'Control+Z','Control+Z')
                     ,('Redo',1,'Control+Y','Control+Y');
+                    ---------------------------------------------------------------------------------------------------------------------
+                    CREATE TABLE MpPasteToAppPath (
+                      pk_MpPasteToAppPathId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , AppPath text NOT NULL
+                    , AppName text
+                    , IsAdmin integer NOT NULL
+                    );
+                    INSERT INTO MpPasteToAppPath(AppPath,IsAdmin) VALUES ('%windir%\System32\cmd.exe',0);
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpDeviceType (
                       pk_MpDeviceTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

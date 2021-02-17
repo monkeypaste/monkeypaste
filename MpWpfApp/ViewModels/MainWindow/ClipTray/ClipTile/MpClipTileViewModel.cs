@@ -168,6 +168,11 @@
             }
         }
 
+        public MpPasteToAppPathViewModelCollection PasteToAppPathViewModelCollection {
+            get {
+                return MpPasteToAppPathViewModelCollection.Instance;
+            }
+        }
         #endregion
 
         #region Property Reflection Referencer
@@ -837,10 +842,6 @@
                 }
             }
         }
-        #endregion
-
-        #region Text Editor Properties
-
         #endregion
 
         #region Model Properties
@@ -1620,11 +1621,7 @@
                         MainWindowViewModel.ClipTrayViewModel.LinkTagToCopyItemCommand,
                         tagTile,
                         tagTile.IsLinkedWithClipTile(this)));
-            }
-            Console.WriteLine("Languages:");
-            foreach(var mi in TranslateLanguageMenuItems) {
-                Console.WriteLine(mi.Header);
-            }
+            }            
         }
 
         public void AppendContent(MpClipTileViewModel octvm) {
@@ -2027,21 +2024,6 @@
             MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand.Execute(null);
         }
 
-        private RelayCommand _runClipInShellCommand;
-        public ICommand RunClipInShellCommand {
-            get {
-                if (_runClipInShellCommand == null) {
-                    _runClipInShellCommand = new RelayCommand(RunClipInShell, CanRunClipInShell);
-                }
-                return _runClipInShellCommand;
-            }
-        }
-        private bool CanRunClipInShell() {
-            return CopyItemType == MpCopyItemType.RichText;
-        }
-        private void RunClipInShell() {
-            MpHelpers.Instance.RunInShell(CopyItemPlainText, Properties.Settings.Default.IsTerminalAdministrator, false, IntPtr.Zero);
-        }
         #endregion
 
         #region Overrides

@@ -170,14 +170,70 @@
                     <Label Content="Ignore Duplicates" />
                     <CheckBox IsChecked="{Binding IgnoreNewDuplicates, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Terminal Path" />
-                    <Button x:Name="TerminalPathButton"
-                            Content="{Binding PathToTerrminal}"
-                            Command="{Binding SelectPathToTerminalCommand}" />
-                    <CheckBox IsChecked="{Binding IsTerminalAdmin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
-                    <Label Content="Administrative Mode" />
-                </StackPanel>
+                <Grid>
+                    <StackPanel Orientation="Vertical"
+                                DataContext="{Binding PasteToAppPathViewModelCollection}">
+                        <Label Content="Paste to Applications" />
+                        <DataGrid x:Name="PasteToAppPathDatagrid"
+                                  ItemsSource="{Binding}"
+                                  SelectedItem="{Binding SelectedPasteToAppPathViewModel, Mode=TwoWay}"
+                                  SelectionMode="Single"
+                                  Width="Auto"
+                                  Height="Auto"
+                                  IsReadOnly="True"
+                                  AutoGenerateColumns="False">
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn Width="50">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Image Width="20"
+                                                   Height="20"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Source="{Binding AppIcon}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Application"
+                                                    Width="200"
+                                                    Binding="{Binding AppName}" />
+                                <DataGridTemplateColumn Header="Admin?" 
+                                                        Width="75">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding IsAdmin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Width="50">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Background="White"
+                                                    BorderThickness="0"
+                                                    ToolTip="Delete"
+                                                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.DeletePasteToAppPathCommand}">
+                                                <Image Width="20"
+                                                       Height="20"
+                                                       Source="/MpWpfApp;component/Resources/Icons/Silk/icons/delete.png" />
+                                            </Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button Width="200"
+                                Command="{Binding AddPasteToAppPathCommand}">
+                            <DockPanel>
+                                <Image Source="/MpWpfApp;component/Resources/Images/add.png"
+                                       DockPanel.Dock="Left"
+                                       Width="20"
+                                       Height="20" />
+                                <Label DockPanel.Dock="Right"
+                                       Content="Add App" />
+                            </DockPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
             </StackPanel>
         </Grid>
         <!-- Security -->

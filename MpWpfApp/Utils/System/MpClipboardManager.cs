@@ -34,12 +34,13 @@ namespace MpWpfApp {
         public event EventHandler ClipboardChanged;
         protected virtual void OnClipboardChanged() => ClipboardChanged?.Invoke(this, EventArgs.Empty);
 
-        public void PasteDataObject(IDataObject dataObject) {
+        public void PasteDataObject(IDataObject dataObject, IntPtr handle) {
             IgnoreClipboardChangeEvent = true;
             try {
                 Clipboard.Clear();
                 Clipboard.SetDataObject(dataObject);
-                WinApi.SetForegroundWindow(LastWindowWatcher.LastHandle);
+                WinApi.SetForegroundWindow(handle);
+                WinApi.SetActiveWindow(handle);
                 System.Windows.Forms.SendKeys.SendWait("^v");
             }
             catch (Exception e) {
@@ -47,6 +48,7 @@ namespace MpWpfApp {
             }
             IgnoreClipboardChangeEvent = false;
         }
+
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {
             switch (msg) {
                 case WM_DRAWCLIPBOARD:

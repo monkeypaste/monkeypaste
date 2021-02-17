@@ -304,6 +304,9 @@ namespace MpWpfApp {
                     if(TagTrayViewModel != null && TagTrayViewModel.IsEditingTagName) {
                         return;
                     }
+                    if(MpSettingsWindowViewModel.IsOpen) {
+                        return;
+                    }
                     if (!char.IsControl(e.KeyChar)) {
                         foreach(var scvm in MpShortcutCollectionViewModel.Instance) {
                         }

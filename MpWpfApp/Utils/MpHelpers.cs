@@ -37,6 +37,7 @@ using static QRCoder.PayloadGenerator;
 //using Windows.Media.Ocr;
 using CsvHelper;
 using System.Windows.Threading;
+using System.Security.Principal;
 
 namespace MpWpfApp {
     public class MpHelpers {
@@ -835,15 +836,50 @@ namespace MpWpfApp {
         }
 
         //exampe RunWithString(@"C:\windows\system32\cmd.exe",
-        public void RunInShell(string args, bool asAdministrator, bool isSilent, IntPtr forceHandle) {
+        public IntPtr StartProcess(string args, string processPath, bool asAdministrator, bool isSilent) {
             System.Diagnostics.ProcessStartInfo processInfo = new System.Diagnostics.ProcessStartInfo();
-            processInfo.FileName = Properties.Settings.Default.PathToTerminal;//Environment.ExpandEnvironmentVariables("%SystemRoot%") + @"\System32\cmd.exe"; //Sets the FileName property of myProcessInfo to %SystemRoot%\System32\cmd.exe where %SystemRoot% is a system variable which is expanded using Environment.ExpandEnvironmentVariables
-            processInfo.Arguments = "/K "/* + args*/;
+            processInfo.FileName = processPath;//Environment.ExpandEnvironmentVariables("%SystemRoot%") + @"\System32\cmd.exe"; //Sets the FileName property of myProcessInfo to %SystemRoot%\System32\cmd.exe where %SystemRoot% is a system variable which is expanded using Environment.ExpandEnvironmentVariables
+            //processInfo.Arguments = "/K "/* + args*/;
             processInfo.WindowStyle = isSilent ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal; //Sets the WindowStyle of myProcessInfo which indicates the window state to use when the process is started to Hidden
             processInfo.Verb = asAdministrator ? "runas" : string.Empty; //The process should start with elevated permissions
-            var process = System.Diagnostics.Process.Start(processInfo); //Starts the process based on myProcessInfo
-
+            using (var process = System.Diagnostics.Process.Start(processInfo)) { //Starts the process based on myProcessInfo
+                return process.Handle;
+            }
             // TODO pass args to clipboard (w/ ignore in the manager) then activate window and paste
+        }
+
+        public bool IsProcessAdmin(IntPtr handle) {
+            if(handle == null || handle == IntPtr.Zero) {
+                return false;
+            }
+            try {
+                WinApi.GetWindowThreadProcessId(handle, out uint pid);
+                using (Process proc = Process.GetProcessById((int)pid)) {
+                    IntPtr ph = IntPtr.Zero;
+                    WinApi.OpenProcessToken(proc.Handle,WinApi.TOKEN_ALL_ACCESS, out ph);
+                    WindowsIdentity iden = new WindowsIdentity(ph);
+                    bool result = false;
+
+                    foreach (IdentityReference role in iden.Groups) {
+                        if (role.IsValidTargetType(typeof(SecurityIdentifier))) {
+                            SecurityIdentifier sid = role as SecurityIdentifier;
+                            if (sid.IsWellKnown(WellKnownSidType.AccountAdministratorSid) || sid.IsWellKnown(WellKnownSidType.BuiltinAdministratorsSid)) {
+                                result = true;
+                                break;
+                            }
+                        }
+                    }
+                    WinApi.CloseHandle(ph);
+                    return result;
+                }                    
+            }
+            catch(Exception ex) {
+                //if app is started using "Run as" is if you get "Access Denied" error. 
+                //That means that running app has rights that your app does not have. 
+                //in this case ADMIN rights
+                Console.WriteLine("IsProcessAdmin error: " + ex.ToString());
+                return true;
+            }
         }
         
         public string GetApplicationDirectory() {

@@ -36,6 +36,8 @@ namespace MpWpfApp {
 
         private List<MpCopyItem> _testList = new List<MpCopyItem>();
 
+        private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
+
         private int _filterWaitingCount;
 
         private CancellationTokenSource _highlightCancellationTokenSource = null;
@@ -171,6 +173,8 @@ namespace MpWpfApp {
                 return false;
             }
         }
+
+        
 
         public Visibility EmptyListMessageVisibility {
             get {
@@ -615,12 +619,14 @@ namespace MpWpfApp {
         }
 
         public void Add(MpClipTileViewModel ctvm) {
-            if (ClipTileViewModels.Count == 0) 
-            {
-                _clipTileViewModelDataSource.InsertAt(0, ctvm);
+            if (ClipTileViewModels.Count == 0) {
+                //_clipTileViewModelDataSource.InsertAt(0, ctvm);
+                ResetItems();
+            } else {
+                ClipTileViewModels.Insert(0, ctvm);
             }
-            ClipTileViewModels.Insert(0, ctvm);
 
+            //ResetItems();
             _clipTrayRef?.Items.Refresh();
         }
 
@@ -738,17 +744,24 @@ namespace MpWpfApp {
             //called in the oncompleted of hide command in mwvm
             if (pasteDataObject != null) {
                 Console.WriteLine("Pasting " + SelectedClipTiles.Count + " items");
-                ClipboardManager.PasteDataObject(pasteDataObject);
+                IntPtr pasteToWindowHandle = ClipboardManager.LastWindowWatcher.LastHandle;
+                if(_selectedPasteToAppPathViewModel != null) {
+                    pasteToWindowHandle = MpRunningApplicationManager.Instance.SetActiveProcess(
+                        _selectedPasteToAppPathViewModel.AppPath, _selectedPasteToAppPathViewModel.IsAdmin);
+                }
+                ClipboardManager.PasteDataObject(pasteDataObject, pasteToWindowHandle);
 
                 //resort list so pasted items are in front and paste is tracked
                 for (int i = SelectedClipTiles.Count - 1; i >= 0; i--) {
                     var sctvm = SelectedClipTiles[i];
-                    _clipTileViewModels.Move(_clipTileViewModels.IndexOf(sctvm), 0);
+                    ClipTileViewModels.Move(ClipTileViewModels.IndexOf(sctvm), 0);
                     new MpPasteHistory(sctvm.CopyItem, ClipboardManager.LastWindowWatcher.LastHandle);
                 }
+                GetClipTray().Items.Refresh();
             } else if (pasteDataObject == null) {
                 Console.WriteLine("MainWindow Hide Command pasteDataObject was null, ignoring paste");
             }
+            _selectedPasteToAppPathViewModel = null;
             ResetClipSelection();
         }
 
@@ -1023,26 +1036,30 @@ namespace MpWpfApp {
             }
         }
 
-        private RelayCommand _pasteSelectedClipsCommand;
+        private RelayCommand<object> _pasteSelectedClipsCommand;
         public ICommand PasteSelectedClipsCommand {
             get {
                 if (_pasteSelectedClipsCommand == null) {
-                    _pasteSelectedClipsCommand = new RelayCommand(PasteSelectedClips, CanPasteSelectedClips);
+                    _pasteSelectedClipsCommand = new RelayCommand<object>(PasteSelectedClips, CanPasteSelectedClips);
                 }
                 return _pasteSelectedClipsCommand;
             }
         }
-        private bool CanPasteSelectedClips() {
+        private bool CanPasteSelectedClips(object ptapId) {
             return MpAssignShortcutModalWindowViewModel.IsOpen == false && 
                 !IsEditingClipTile && 
                 !IsEditingClipTitle && 
                 !IsPastingTemplate &&
                 !IsTrialExpired;
         }
-        private void PasteSelectedClips() {
+        private void PasteSelectedClips(object ptapId) {
+            if(ptapId != null && ptapId.GetType() == typeof(int) && (int)ptapId > 0) {
+                _selectedPasteToAppPathViewModel = MpPasteToAppPathViewModelCollection.Instance.Where(x => x.PasteToAppPathId == (int)ptapId).ToList()[0];                
+            } else {
+                _selectedPasteToAppPathViewModel = null;
+            }
             //In order to paste the app must hide first 
             //this triggers hidewindow to paste selected items
-
             MainWindowViewModel.HideWindowCommand.Execute(true);                        
         }
 
@@ -1420,32 +1437,6 @@ namespace MpWpfApp {
                 MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
                 _clipTileViewModels.Add(ctvm);
                 ctvm.IsSelected = true;
-            }
-        }
-
-        private RelayCommand _runSelectedClipsInShellCommand;
-        public ICommand RunSelectedClipsInShellCommand {
-            get {
-                if (_runSelectedClipsInShellCommand == null) {
-                    _runSelectedClipsInShellCommand = new RelayCommand(RunSelectedClipsInShell, CanRunSelectedClipsInShell);
-                }
-                return _runSelectedClipsInShellCommand;
-            }
-        }
-        private bool CanRunSelectedClipsInShell() {
-            if(MainWindowViewModel.IsLoading) {
-                return false;
-            }
-            foreach(var sctvm in SelectedClipTiles) {
-                if(!sctvm.RunClipInShellCommand.CanExecute(null)) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        private void RunSelectedClipsInShell() {
-            foreach (var sctvm in SelectedClipTiles) {
-                sctvm.RunClipInShellCommand.Execute(null);
             }
         }
         #endregion
