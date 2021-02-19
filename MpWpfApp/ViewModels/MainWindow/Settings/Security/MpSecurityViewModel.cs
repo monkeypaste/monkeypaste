@@ -97,7 +97,8 @@ namespace MpWpfApp {
             Console.WriteLine("Add excluded app : ");
             OpenFileDialog openFileDialog = new OpenFileDialog() {
                 Filter = "Applications|*.lnk;*.exe",
-                Title = "Select an application to exclude"
+                Title = "Select an application to exclude",                
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
             };
             bool? openResult = openFileDialog.ShowDialog();
             if (openResult != null && openResult.Value) {

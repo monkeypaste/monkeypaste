@@ -50,9 +50,6 @@ namespace MpWpfApp {
         }
 
         #region Documents
-        
-        
-
         public Hyperlink CreateTemplateHyperlink(MpTemplateHyperlinkViewModel thlvm, TextRange tr) {
             //if the range for the template contains a sub-selection of a hyperlink the hyperlink(s)
             //needs to be broken into their text before the template hyperlink can be created
@@ -947,14 +944,23 @@ namespace MpWpfApp {
                 if (hWnd == null || hWnd == IntPtr.Zero) {
                     return "Unknown Application";
                 }
-                uint processId;
-                WinApi.GetWindowThreadProcessId(hWnd, out processId);
-                using (Process proc = Process.GetProcessById((int)processId)) {
-                    return proc.MainWindowTitle;
+                //uint processId;
+                //WinApi.GetWindowThreadProcessId(hWnd, out processId);
+                //using (Process proc = Process.GetProcessById((int)processId)) {
+                //    return proc.MainWindowTitle;
+                //}
+                int length = WinApi.GetWindowTextLength(hWnd);
+                if (length == 0) {
+                    return string.Empty;
                 }
+
+                StringBuilder builder = new StringBuilder(length);
+                WinApi.GetWindowText(hWnd, builder, length + 1);
+
+                return builder.ToString();
             }
             catch(Exception ex) {
-                return "Unknown Application";
+                return "MpHelpers.GetProcessMainWindowTitle Exception: "+ex.ToString();
             }
         }
         public Point GetMousePosition() {
@@ -1140,7 +1146,20 @@ namespace MpWpfApp {
             for (int x = 0; x < _ContentColors.Count; x++) {
                 for (int y = 0; y < _ContentColors[0].Count; y++) {
                     Border b = new Border();
-                    b.Background = _ContentColors[x][y];
+                    if(x == _ContentColors.Count -1 && y == _ContentColors[0].Count - 1) {
+                        var addBmpSrc = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/add2.png"));
+                        b.Background = new ImageBrush(addBmpSrc);
+                        b.MouseLeftButtonUp += (s1, e1) => {
+                            var result = MpHelpers.Instance.ShowColorDialog(GetRandomBrushColor());
+                            if(result != null) {
+                                b.Tag = result;
+                            }
+                        };
+                    } else {
+                        b.Background = _ContentColors[x][y];
+                        b.Tag = b.Background;
+                    }
+                    
                     b.BorderThickness = new Thickness(1.5);
                     b.BorderBrush = Brushes.DarkGray;
                     b.CornerRadius = new CornerRadius(2);
@@ -2082,6 +2101,9 @@ namespace MpWpfApp {
         }
 
         public byte[] ConvertBitmapSourceToByteArray(BitmapSource bs) {            
+            if(bs == null) {
+                return null;
+            }
             PngBitmapEncoder encoder = new PngBitmapEncoder();
             using (MemoryStream stream = new MemoryStream()) {
                 encoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bs));

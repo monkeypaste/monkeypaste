@@ -154,6 +154,7 @@
     <Compile Include="Utils\DragDrop\ListViewDragDropManager.cs" />
     <Compile Include="Utils\DragDrop\MouseUtilities.cs" />
     <Compile Include="Utils\MpImageHistogram.cs" />
+    <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
     <Compile Include="Utils\System\MpRunningApplicationManager.cs" />
     <Compile Include="Utils\UndoRedo\MpIUndoRedo.cs" />
     <Compile Include="Utils\MpSolidColorBrushComparer.cs" />
@@ -242,9 +243,6 @@
     <Compile Include="Views\MpStandardBalloonControl.xaml.cs">
       <DependentUpon>MpStandardBalloonControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MpBalloonControl.xaml.cs">
-      <DependentUpon>MpBalloonControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MpSettingsWindow.xaml.cs">
       <DependentUpon>MpSettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -281,10 +279,6 @@
     <Page Include="Views\MpStandardBalloonControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MpBalloonControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MpMainWindow.xaml">
       <SubType>Designer</SubType>
@@ -1653,6 +1647,10 @@
     <Resource Include="Resources\Icons\Silk\icons\zoom_in.png" />
     <Resource Include="Resources\Icons\Silk\icons\zoom_out.png" />
     <Resource Include="Resources\Images\lock.png" />
+    <Resource Include="Resources\Images\eye_closed.png" />
+    <Resource Include="Resources\Images\eye.png" />
+    <Resource Include="Resources\Images\delete.png" />
+    <Resource Include="Resources\Images\image_icon.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />

@@ -1578,7 +1578,7 @@
                     cm,
                     cmi,
                     (s, e1) => {
-                        MainWindowViewModel.ClipTrayViewModel.ChangeSelectedClipsColorCommand.Execute(((Border)s).Background);
+                        MainWindowViewModel.ClipTrayViewModel.ChangeSelectedClipsColorCommand.Execute((Brush)((Border)s).Tag);
                         foreach(var sctvm in MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles) {
                             sctvm.CopyItem.WriteToDatabase();
                         }
@@ -1611,16 +1611,59 @@
                         continue;
                     }
                     if(ptamivmc[0].IsRuntime) {
+                        bool areAllHidden = true;
+                        foreach(var ptamivm in ptamivmc) {
+                            if(!ptamivm.IsHidden) {
+                                areAllHidden = false;
+                            }
+                        }
+                        if(areAllHidden) {
+                            continue;
+                        }
                         var ptamip = new MenuItem();
                         ptamip.Header = MpHelpers.Instance.GetProcessApplicationName(ptamivmc[0].Handle);
                         ptamip.Icon = new Image() { Source = ptamivmc[0].AppIcon };
                         foreach(var ptamivm in ptamivmc) {
+                            if(ptamivm.IsHidden) {
+                                continue;
+                            }
                             var ptami = new MenuItem();
-                            ptami.Header = MpHelpers.Instance.GetProcessMainWindowTitle(ptamivm.Handle) + (ptamivm.IsAdmin ? " (Admin)" : string.Empty);                            
-                            ptami.Icon = new Image() { Source = ptamivm.AppIcon };
-                            ptami.Command = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;
-                            ptami.CommandParameter = ptamivm.Handle;
+                            var l = new Label();
+                            l.Content = MpHelpers.Instance.GetProcessMainWindowTitle(ptamivm.Handle) + (ptamivm.IsAdmin ? " (Admin)" : string.Empty);
+                            
+                            var eyeOpenImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye.png")) };
+                            var eyeClosedImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye_closed.png")) };
+                            var btn = new Button() { Cursor = Cursors.Hand, Content = eyeOpenImg, BorderThickness = new Thickness(0), Background = Brushes.Transparent, Width = 20, Height = 20 , HorizontalAlignment = HorizontalAlignment.Right/*, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center*/ };
+                            bool isOverButton = false;
+                            btn.MouseEnter += (s, e2) => {
+                                btn.Content = eyeClosedImg;
+                                isOverButton = true;
+                            };
+                            btn.MouseLeave += (s, e2) => {
+                                btn.Content = eyeOpenImg;
+                                isOverButton = false;
+                            };
+                            btn.Click += (s, e2) => {
+                                ptamivm.IsHidden = true;
+                                ptamip.Items.Remove(ptami);
+                                if(ptamip.Items.Count == 0) {
+                                    ptamir.Items.Remove(ptamip);
+                                }
+                            };
 
+                            var sp = new StackPanel() { Orientation = Orientation.Horizontal};
+                            sp.Children.Add(l);
+                            sp.Children.Add(btn);
+
+                            ptami.Header = sp;   
+                            ptami.Icon = new Image() { Source = ptamivm.AppIcon };
+                            //ptami.Command = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;
+                            //ptami.CommandParameter = ptamivm.Handle;
+                            ptami.Click += (s, e2) => {
+                                if(!isOverButton) {
+                                    MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand.Execute(ptamivm.Handle);
+                                }
+                            };
                             ptamip.Items.Add(ptami);
                         }
                         ptamir.Items.Add(ptamip);
@@ -1630,15 +1673,23 @@
                             addedSeperator = true;
                         }
                         var ptaumi = new MenuItem();
-                        ptaumi.Header = ptamivmc[0].AppName + (ptamivmc[0].IsAdmin ? " (Admin)" : string.Empty);
-                        ptaumi.Icon = new Image() { Source = ptamivmc[0].AppIcon }; ;
+                        ptaumi.Header = ptamivmc[0].AppName;// + (ptamivmc[0].IsAdmin ? " (Admin)" : string.Empty) + (ptamivmc[0].IsSilent ? " (Silent)" : string.Empty);
+                        ptaumi.Icon = new Image() { Source = ptamivmc[0].AppIcon };
                         ptaumi.Command = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;
                         ptaumi.CommandParameter = ptamivmc[0].PasteToAppPathId;
 
                         ptamir.Items.Add(ptaumi);
                     }
                 }
+                var addNewMenuItem = new MenuItem();
+                addNewMenuItem.Header = "Add Application...";
+                addNewMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Icons/Silk/icons/add.png")) };
+                addNewMenuItem.Click += (s, e3) => {                    
+                    MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand.Execute(1);
+                };
+                ptamir.Items.Add(addNewMenuItem);
             }
+
             if (CopyItemType == MpCopyItemType.Image && !string.IsNullOrEmpty(CopyItemPlainText)) {
                 var cmi = new MenuItem();
                 cmi.Header = "Convert to Text";

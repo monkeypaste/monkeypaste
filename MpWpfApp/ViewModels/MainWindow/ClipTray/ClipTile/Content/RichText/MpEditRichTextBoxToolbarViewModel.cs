@@ -186,7 +186,7 @@ namespace MpWpfApp {
                     colorContextMenu,
                     colorMenuItem,
                     (s1, e1) => {
-                        rtb.Selection.ApplyPropertyValue(FlowDocument.ForegroundProperty, ((Border)s1).Background);
+                        rtb.Selection.ApplyPropertyValue(FlowDocument.ForegroundProperty, (Brush)((Border)s1).Tag);
                     }
                 );
                 foregroundColorButton.ContextMenu = colorContextMenu;
@@ -202,7 +202,7 @@ namespace MpWpfApp {
                     colorContextMenu,
                     colorMenuItem,
                     (s1, e1) => {
-                        rtb.Selection.ApplyPropertyValue(FlowDocument.BackgroundProperty, ((Border)s1).Background);
+                        rtb.Selection.ApplyPropertyValue(FlowDocument.BackgroundProperty, (Brush)((Border)s1).Tag);
                     }
                 );
                 

@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using HWND = System.IntPtr;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
@@ -84,6 +83,9 @@ namespace MpWpfApp {
                 //if it is not resolve its process path
                 processName = MpHelpers.Instance.GetProcessPath(fgHandle);
             }
+            if(processName == MpHelpers.Instance.GetApplicationProcessPath()) {
+                return;
+            }
             bool wasStackChanged = false;
             processName = processName.ToLower();
             if (CurrentProcessWindowHandleStackDictionary.ContainsKey(processName)) {
@@ -109,7 +111,7 @@ namespace MpWpfApp {
             }
         }
 
-        public IntPtr SetActiveProcess(string processPath, bool isAdmin, object forceHandle = null) {
+        public IntPtr SetActiveProcess(string processPath, bool isAdmin, bool isSilent = false, string args = "", object forceHandle = null) {
             try {
                 if (string.IsNullOrEmpty(processPath)) {
                     return IntPtr.Zero;
@@ -125,7 +127,7 @@ namespace MpWpfApp {
                 IntPtr handle = IntPtr.Zero;
                 if (!CurrentProcessWindowHandleStackDictionary.ContainsKey(processPath)) {
                     //if process is not running start it 
-                    handle = MpHelpers.Instance.StartProcess(string.Empty, processPath, isAdmin, false);
+                    handle = MpHelpers.Instance.StartProcess(args, processPath, isAdmin, isSilent);
                 } else {
                     //ensure the process has a handle matching isAdmin, if not it needs to be created
                     var handleList = CurrentProcessWindowHandleStackDictionary[processPath];
@@ -137,7 +139,7 @@ namespace MpWpfApp {
                     }
                     if (handle == IntPtr.Zero) {
                         //no handle found matching admin rights
-                        handle = MpHelpers.Instance.StartProcess(string.Empty,processPath, isAdmin, false);
+                        handle = MpHelpers.Instance.StartProcess(args,processPath, isAdmin, isSilent);
                     }
                 }
                 WinApi.SetActiveWindow(handle);
@@ -152,7 +154,8 @@ namespace MpWpfApp {
 
         #region Private Methods
         private MpRunningApplicationManager() {
-            foreach (KeyValuePair<IntPtr, string> window in OpenWindowGetter.GetOpenWindows()) {                
+            foreach (KeyValuePair<IntPtr, string> window in MpOpenWindowGetter.GetOpenWindows()) {
+                //Console.WriteLine("Window Title: " + window.Value);
                 UpdateHandleStack(window.Key);
             }
             Console.WriteLine("RunningApplicationManager Initialized w/ contents: ");
@@ -221,47 +224,5 @@ namespace MpWpfApp {
         #endregion
     }
 
-    /// <summary>Contains functionality to get all the open windows.</summary>
-    public static class OpenWindowGetter {
-        /// <summary>Returns a dictionary that contains the handle and title of all the open windows.</summary>
-        /// <returns>A dictionary that contains the handle and title of all the open windows.</returns>
-        public static IDictionary<HWND, string> GetOpenWindows() {
-            HWND shellWindow = GetShellWindow();
-            Dictionary<HWND, string> windows = new Dictionary<HWND, string>();
-
-            EnumWindows(delegate (HWND hWnd, int lParam) {
-                if (hWnd == shellWindow) return true;
-                if (!IsWindowVisible(hWnd)) return true;
-
-                int length = GetWindowTextLength(hWnd);
-                if (length == 0) return true;
-
-                StringBuilder builder = new StringBuilder(length);
-                GetWindowText(hWnd, builder, length + 1);
-
-                windows[hWnd] = builder.ToString();
-                return true;
-
-            }, 0);
-
-            return windows;
-        }
-
-        private delegate bool EnumWindowsProc(HWND hWnd, int lParam);
-
-        [DllImport("USER32.DLL")]
-        private static extern bool EnumWindows(EnumWindowsProc enumFunc, int lParam);
-
-        [DllImport("USER32.DLL")]
-        private static extern int GetWindowText(HWND hWnd, StringBuilder lpString, int nMaxCount);
-
-        [DllImport("USER32.DLL")]
-        private static extern int GetWindowTextLength(HWND hWnd);
-
-        [DllImport("USER32.DLL")]
-        private static extern bool IsWindowVisible(HWND hWnd);
-
-        [DllImport("USER32.DLL")]
-        private static extern IntPtr GetShellWindow();
-    }
+    
 }

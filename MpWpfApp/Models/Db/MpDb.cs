@@ -311,9 +311,13 @@ namespace MpWpfApp {
                       pk_MpPasteToAppPathId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , AppPath text NOT NULL
                     , AppName text
-                    , IsAdmin integer NOT NULL
+                    , Args text
+                    , Label text
+                    , IconBlob image
+                    , IsSilent integer NOT NULL default 0
+                    , IsAdmin integer NOT NULL default 0
                     );
-                    INSERT INTO MpPasteToAppPath(AppPath,IsAdmin) VALUES ('%windir%\System32\cmd.exe',0);
+                    INSERT INTO MpPasteToAppPath(AppPath,IsAdmin,IconBlob) VALUES ('%windir%\System32\cmd.exe',0,null);
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpDeviceType (
                       pk_MpDeviceTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

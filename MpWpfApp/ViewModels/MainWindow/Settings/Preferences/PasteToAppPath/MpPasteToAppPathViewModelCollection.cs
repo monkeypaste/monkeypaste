@@ -6,6 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MpWpfApp {
@@ -39,7 +41,23 @@ namespace MpWpfApp {
                                         MpHelpers.Instance.IsProcessAdmin(handle)), 
                                     handle));
                         }
-                        _menuItemViewModels.Add(processHandles);
+                        //check already created menu items and add handles to AppName if it already exists
+                        int mivmIdx = -1;
+                        foreach(var mivm in _menuItemViewModels) {
+                            if(mivm.Count == 0) {
+                                continue;
+                            }
+                            if(appName.ToLower() == MpHelpers.Instance.GetProcessApplicationName(mivm[0].Handle).ToLower()) {
+                                mivmIdx = _menuItemViewModels.IndexOf(mivm);
+                            }
+                        }
+                        if(mivmIdx >= 0) {
+                            foreach(var ph in processHandles) {
+                                _menuItemViewModels[mivmIdx].Add(ph);
+                            }
+                        } else {
+                            _menuItemViewModels.Add(processHandles);
+                        }
                     }
                     foreach(var ptapvm in this) {
                         _menuItemViewModels.Add(new MpObservableCollection<MpPasteToAppPathViewModel>() { ptapvm });
@@ -93,7 +111,14 @@ namespace MpWpfApp {
                 this.Add(new MpPasteToAppPathViewModel(ptap));
             }
         }
-
+        public void PasteToAppPathDataGrid_Loaded(object sender, RoutedEventArgs args) {
+            var dg = (DataGrid)sender;
+            dg.SelectionChanged += (s, e) => {
+                foreach(var ptapvm in this) {
+                    ptapvm.IsSelected = ptapvm == SelectedPasteToAppPathViewModel ? true: false;
+                }
+            };
+        }
         public new void Add(MpPasteToAppPathViewModel ptapvm) {
             base.Add(ptapvm);
         }
@@ -154,7 +179,8 @@ namespace MpWpfApp {
         private void AddPasteToAppPath() {
             var openFileDialog = new OpenFileDialog() {
                 Filter = "Applications|*.lnk;*.exe",
-                Title = "Select application path"
+                Title = "Select application path",                
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
             };
             bool? openResult = openFileDialog.ShowDialog();
             if (openResult != null && openResult.Value) {

@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
+//using HWND = System.IntPtr;
 
 namespace MpWpfApp {
     public static class WinApi {
@@ -224,11 +225,7 @@ namespace MpWpfApp {
         //[DllImport("kernel32.dll")]
         //public static extern IntPtr OpenProcess(ProcessAccessFlags dwDesiredAccess, bool bInheritHandle, int dwProcessId);
         [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern IntPtr OpenProcess(
-             ProcessAccessFlags processAccess,
-             bool bInheritHandle,
-             int processId
-        );
+        public static extern IntPtr OpenProcess(ProcessAccessFlags processAccess,bool bInheritHandle,int processId);
         public static IntPtr OpenProcess(Process proc, ProcessAccessFlags flags) {
             return OpenProcess(flags, false, proc.Id);
         }
@@ -239,5 +236,21 @@ namespace MpWpfApp {
         [DllImport("advapi32.dll", SetLastError = true)]
         public static extern bool OpenProcessToken(IntPtr ProcessHandle, UInt32 DesiredAccess, out IntPtr TokenHandle);
 
+        public delegate bool EnumWindowsProc(IntPtr hWnd, int lParam);
+
+        [DllImport("USER32.DLL")]
+        public static extern bool EnumWindows(EnumWindowsProc enumFunc, int lParam);
+
+        [DllImport("USER32.DLL")]
+        public static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+
+        [DllImport("USER32.DLL")]
+        public static extern int GetWindowTextLength(IntPtr hWnd);
+
+        [DllImport("USER32.DLL")]
+        public static extern bool IsWindowVisible(IntPtr hWnd);
+
+        [DllImport("USER32.DLL")]
+        public static extern IntPtr GetShellWindow();
     }
 }

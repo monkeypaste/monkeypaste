@@ -327,7 +327,7 @@ namespace MpWpfApp {
                 cm,
                 cmi,
                 (s, e1) => {
-                    ChangeTagColorCommand.Execute(((Border)s).Background);
+                    ChangeTagColorCommand.Execute((Brush)((Border)s).Tag);
                 },
                 MpHelpers.Instance.GetColorColumn(TagColor),
                 MpHelpers.Instance.GetColorRow(TagColor)
@@ -381,6 +381,7 @@ namespace MpWpfApp {
             var result = newBrush != null ? newBrush : MpHelpers.Instance.ShowColorDialog(TagColor);
             if(result != null) {
                 TagColor = result;
+                Tag.WriteToDatabase();
             }
         }
 

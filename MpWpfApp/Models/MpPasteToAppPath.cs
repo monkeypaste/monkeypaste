@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     public class MpPasteToAppPath : MpDbObject {
@@ -9,7 +10,11 @@ namespace MpWpfApp {
         public string AppPath { get; set; }
         public string AppName { get; set; }
         public bool IsAdmin { get; set; }
-
+        public bool IsSilent { get; set; }
+        public string Args { get; set; }
+        public string Label { get; set; }
+        public BitmapSource Icon { get; set; }
+        
         public static List<MpPasteToAppPath> GetAllPasteToAppPaths() {
             var pasteToAppPathList = new List<MpPasteToAppPath>();
             DataTable dt = MpDb.Instance.Execute("select * from MpPasteToAppPath", null);
@@ -32,10 +37,14 @@ namespace MpWpfApp {
             }
         }
 
-        public MpPasteToAppPath(string appPath, string appName, bool isAdmin) {
+        public MpPasteToAppPath(string appPath, string appName, bool isAdmin, bool isSilent = false, string label = "",string args = "",BitmapSource icon = null) {
             AppPath = appPath;
             AppName = appName;
             IsAdmin = isAdmin;
+            IsSilent = isSilent;
+            Label = label;
+            Args = args;
+            Icon = icon;
         }
         public MpPasteToAppPath() : this(string.Empty,string.Empty,false) { }
 
@@ -47,6 +56,14 @@ namespace MpWpfApp {
             AppPath = dr["AppPath"].ToString();
             AppName = dr["AppName"].ToString();
             IsAdmin = Convert.ToInt32(dr["IsAdmin"].ToString()) > 0 ? true : false;
+            IsSilent = Convert.ToInt32(dr["IsSilent"].ToString()) > 0 ? true : false;
+            if (dr["IconBlob"] != null && dr["IconBlob"].GetType() != typeof(System.DBNull)) {
+                Icon = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
+            } else {
+                Icon = null;
+            }
+            Label = dr["Label"].ToString();
+            Args = dr["Args"].ToString();
         }
 
         public void DeleteFromDatabase() {
@@ -64,31 +81,41 @@ namespace MpWpfApp {
         public override void WriteToDatabase() {
             if (PasteToAppPathId == 0) {
                 DataTable dt = MpDb.Instance.Execute(
-                    "select * from MpPasteToAppPath where AppPath=@ap and IsAdmin=@ia",
+                    "select * from MpPasteToAppPath where AppPath=@ap and IsAdmin=@ia and IsSilent=@is and Args=@a",
                     new System.Collections.Generic.Dictionary<string, object> {
                         { "@ap", AppPath },
-                        { "@ia", IsAdmin ? 1:0 }
+                        { "@ia", IsAdmin ? 1:0 },
+                        { "@a", Args },
+                        { "@is", IsSilent ? 1:0 }
                     });
                 if (dt != null && dt.Rows.Count > 0) {
                     PasteToAppPathId = Convert.ToInt32(dt.Rows[0]["pk_MpPasteToAppPathId"].ToString());
                 } else {
                     MpDb.Instance.ExecuteWrite(
-                        "insert into MpPasteToAppPath(AppPath,AppName,IsAdmin) values(@ap,@an,@ia)",
+                        "insert into MpPasteToAppPath(AppPath,AppName,IsAdmin,Label,Args,IconBlob,IsSilent) values(@ap,@an,@ia,@l,@a,@ib,@is)",
                         new System.Collections.Generic.Dictionary<string, object> {
                         { "@ap", AppPath },
                         { "@an",AppName },
-                        { "@ia", IsAdmin ? 1:0 }
+                        { "@ia", IsAdmin ? 1:0 },
+                        { "@l", Label },
+                        { "@a", Args },
+                        { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
+                        { "@is", IsSilent ? 1:0 }
                     });
                     PasteToAppPathId = MpDb.Instance.GetLastRowId("MpPasteToAppPath", "pk_MpPasteToAppPathId");
                 }
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpPasteToAppPath set AppPath=@ap, AppName=@an, IsAdmin=@ia where pk_MpPasteToAppPathId=@cid",
+                    "update MpPasteToAppPath set AppPath=@ap, AppName=@an, IsAdmin=@ia, IsSilent=@is, Label=@l, Args=@a, IconBlob=@ib where pk_MpPasteToAppPathId=@cid",
                     new System.Collections.Generic.Dictionary<string, object> {
                         { "@ap", AppPath },
                         { "@an",AppName },
                         { "@ia", IsAdmin ? 1:0 },
-                        { "@cid", PasteToAppPathId }
+                        { "@cid", PasteToAppPathId },
+                        { "@l", Label },
+                        { "@a", Args },
+                        { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
+                        { "@is", IsSilent ? 1:0 }
                     });
             }
         }

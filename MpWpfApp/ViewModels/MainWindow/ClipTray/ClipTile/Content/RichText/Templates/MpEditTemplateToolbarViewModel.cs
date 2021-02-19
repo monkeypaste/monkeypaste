@@ -176,7 +176,7 @@ namespace MpWpfApp {
                     (s1, e1) => {
                         foreach(var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
                             if(thlvm.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName) {
-                                thlvm.TemplateBrush = ((Border)s1).Background;
+                                thlvm.TemplateBrush = (Brush)((Border)s1).Tag;
                             }
                         }
                     },
