@@ -20,6 +20,10 @@ namespace MpWpfApp {
             _tagId = tagId;
             _items.Clear();
             foreach (var ci in MpCopyItem.GetAllCopyItems()) {
+                if(ci.CompositeParentCopyItemId > 0) {
+                    //ignore composite children since they are gathered in the parent
+                    continue;
+                }
                 _items.Add(new MpClipTileViewModel(ci));
             }
             _isFilteredItemsValid = false;

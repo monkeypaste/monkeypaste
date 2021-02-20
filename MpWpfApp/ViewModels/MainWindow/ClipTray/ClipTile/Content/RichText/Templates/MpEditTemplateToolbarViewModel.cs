@@ -153,15 +153,30 @@ namespace MpWpfApp {
         }
 
         public void EditTemplateToolbarBorder_Loaded(object sender, RoutedEventArgs args) {
-            if (ClipTileViewModel.CopyItemType != MpCopyItemType.RichText) {
+            if (ClipTileViewModel.CopyItemType != MpCopyItemType.RichText && ClipTileViewModel.CopyItemType != MpCopyItemType.Composite) {
                 return;
             }
-            var editTemplateToolbarBorderGrid = (Grid)sender;
+            ClipTileViewModel.PropertyChanged += (s23, e43) => {
+                switch (e43.PropertyName) {
+                    case nameof(ClipTileViewModel.SelectedRtb):
+                        if (ClipTileViewModel.SelectedRtb == null) {
+                            return;
+                        }
+                        InitWithRichTextBox((Grid)sender, ClipTileViewModel.SelectedRtb);
+                        break;
+                }
+            };            
+        }
+
+        public void InitWithRichTextBox(Grid editTemplateToolbarBorderGrid, RichTextBox rtb) {
+            //var editTemplateToolbarBorderGrid = (Grid)sender;
             var editTemplateToolbarBorder = editTemplateToolbarBorderGrid.GetVisualAncestor<Border>();
             var templateColorButton = (Button)editTemplateToolbarBorder.FindName("TemplateColorButton");
             var cb = (MpClipBorder)editTemplateToolbarBorder.GetVisualAncestor<MpClipBorder>();
             var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxCanvas");
-            var rtb = rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
+            var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
+            var ctttg = (Grid)cb.FindName("ClipTileTitleTextGrid");
+            //var rtb = rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
             var titleSwirl = (Image)cb.FindName("TitleSwirl");
             var tb = (TextBox)editTemplateToolbarBorder.FindName("TemplateNameEditorTextBox");
@@ -174,8 +189,8 @@ namespace MpWpfApp {
                     colorContextMenu,
                     colorMenuItem,
                     (s1, e1) => {
-                        foreach(var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
-                            if(thlvm.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName) {
+                        foreach (var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
+                            if (thlvm.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName) {
                                 thlvm.TemplateBrush = (Brush)((Border)s1).Tag;
                             }
                         }
@@ -189,7 +204,7 @@ namespace MpWpfApp {
             };
 
             tb.TextChanged += (s, e) => {
-                if(SelectedTemplateHyperlinkViewModel != null) {
+                if (SelectedTemplateHyperlinkViewModel != null) {
                     foreach (var thlvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel) {
                         if (thlvm.CopyItemTemplateId == SelectedTemplateHyperlinkViewModel.CopyItemTemplateId) {
                             thlvm.TemplateName = tb.Text;
@@ -207,10 +222,10 @@ namespace MpWpfApp {
 
                         double editTemplateToolbarTopMax = ClipTileViewModel.TileContentHeight;
                         double editTemplateToolbarTopMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight + 5;
-                        
+
                         if (ClipTileViewModel.IsEditingTemplate) {
                             ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Visible;
-                        } else if(!Validate()) {
+                        } else if (!Validate()) {
                             //occurs if template name is invalid and user clicks away from app or tile
                             CancelCommand.Execute(null);
                         } else {
@@ -221,7 +236,7 @@ namespace MpWpfApp {
                             ClipTileViewModel.IsEditingTemplate ? rtbBottomMax : rtbBottomMin,
                             ClipTileViewModel.IsEditingTemplate ? rtbBottomMin : rtbBottomMax,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            rtb,
+                            new List<FrameworkElement> { rtb, rtblb },
                             Canvas.BottomProperty,
                             (s1, e44) => {
 
@@ -247,7 +262,7 @@ namespace MpWpfApp {
             };
 
             rtb.PreviewMouseLeftButtonDown += (s1, e1) => {
-                if(ClipTileViewModel.IsEditingTemplate) {
+                if (ClipTileViewModel.IsEditingTemplate) {
                     //clicking out of edit template toolbar performs Ok Command (save template & hide toolbar)
                     OkCommand.Execute(null);
                 }

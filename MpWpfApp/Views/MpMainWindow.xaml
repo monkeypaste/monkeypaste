@@ -1249,7 +1249,7 @@
                                                 BorderThickness="{Binding TileBorderThickness}"
                                                 Width="{Binding TileBorderWidth}"
                                                 Height="{Binding TileBorderHeight}"
-                                                Visibility="{Binding TileVisibility, NotifyOnTargetUpdated=True}"
+                                                Visibility="{Binding TileVisibility}"
                                                 Focusable="True"
                                                 Background="White"
                                                 ToolTipService.ShowDuration="1000"
@@ -1600,40 +1600,40 @@
                                                         <Image Source="/Resources/Images/MpRichTextBox/separator.png"
                                                                Stretch="None"
                                                                SnapsToDevicePixels="True" />
-                                                        <Button Command="ApplicationCommands.Cut"
-                                                                CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                        <Button x:Name="CutButton" 
+                                                                Command="ApplicationCommands.Cut"
                                                                 ToolTip="Cut"
                                                                 Template="{StaticResource FlatButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/editcut.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
                                                         </Button>
-                                                        <Button Command="ApplicationCommands.Copy"
-                                                                CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                        <Button x:Name="CopyButton" 
+                                                                Command="ApplicationCommands.Copy"                                                                
                                                                 ToolTip="Copy"
                                                                 Template="{StaticResource FlatButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/editcopy.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
                                                         </Button>
-                                                        <Button Command="ApplicationCommands.Paste"
-                                                                CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                        <Button x:Name="PasteButton" 
+                                                                Command="ApplicationCommands.Paste"
                                                                 ToolTip="Paste"
                                                                 Template="{StaticResource FlatButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/editpaste.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
                                                         </Button>
-                                                        <Button Command="ApplicationCommands.Undo"
-                                                                CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                        <Button x:Name="UndoButton" 
+                                                                Command="ApplicationCommands.Undo"
                                                                 ToolTip="Undo"
                                                                 Template="{StaticResource FlatButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/editundo.png"
                                                                    Stretch="None"
                                                                    SnapsToDevicePixels="True" />
                                                         </Button>
-                                                        <Button Command="ApplicationCommands.Redo"
-                                                                CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
+                                                        <Button x:Name="RedoButton" 
+                                                                Command="ApplicationCommands.Redo"
                                                                 ToolTip="Redo"
                                                                 Template="{StaticResource FlatButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/editredo.png"
@@ -1645,7 +1645,6 @@
                                                                SnapsToDevicePixels="True" />
                                                         <ToggleButton x:Name="BoldButton"
                                                                       Command="EditingCommands.ToggleBold"
-                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Bold"
                                                                       Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/fontbold.png"
@@ -1654,7 +1653,6 @@
                                                         </ToggleButton>
                                                         <ToggleButton x:Name="ItalicButton"
                                                                       Command="EditingCommands.ToggleItalic"
-                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Italic"
                                                                       Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/fontitalic.png"
@@ -1663,7 +1661,6 @@
                                                         </ToggleButton>
                                                         <ToggleButton x:Name="UnderlineButton"
                                                                       Command="EditingCommands.ToggleUnderline"
-                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Underline"
                                                                       Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/fontunderline.png"
@@ -1695,7 +1692,6 @@
                                                                SnapsToDevicePixels="True" />
                                                         <ToggleButton x:Name="LeftButton"
                                                                       Command="EditingCommands.AlignLeft"
-                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Align Left"
                                                                       Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/alignleft.png"
@@ -1704,7 +1700,6 @@
                                                         </ToggleButton>
                                                         <ToggleButton x:Name="CenterButton"
                                                                       Command="EditingCommands.AlignCenter"
-                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Align Center"
                                                                       Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/aligncenter.png"
@@ -1713,7 +1708,6 @@
                                                         </ToggleButton>
                                                         <ToggleButton x:Name="RightButton"
                                                                       Command="EditingCommands.AlignRight"
-                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Align Right"
                                                                       Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/alignright.png"
@@ -1725,7 +1719,6 @@
                                                                SnapsToDevicePixels="True" />
                                                         <ToggleButton x:Name="BulletsButton"
                                                                       Command="EditingCommands.ToggleBullets"
-                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Bullets"
                                                                       Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/listbullets.png"
@@ -1734,7 +1727,6 @@
                                                         </ToggleButton>
                                                         <ToggleButton x:Name="NumberingButton"
                                                                       Command="EditingCommands.ToggleNumbering"
-                                                                      CommandTarget="{Binding ElementName=ClipTileRichTextBox}"
                                                                       ToolTip="Numbering"
                                                                       Template="{StaticResource FlatToggleButtonControlTemplate}">
                                                             <Image Source="/Resources/Images/MpRichTextBox/listnumbers.png"
@@ -1773,32 +1765,76 @@
                                                         </Button>-->
                                                     </StackPanel>
                                                 </Border>
-                                                <RichTextBox x:Name="ClipTileRichTextBox"
-                                                             IsReadOnly="{Binding IsRtbReadOnly}"
-                                                             IsInactiveSelectionHighlightEnabled="True"
-                                                             IsDocumentEnabled="{Binding IsSelected}"
-                                                             Focusable="{Binding IsEditingTile}"
-                                                             Cursor="{Binding ContentCursor}"
-                                                             Width="{Binding TileContentWidth}"
-                                                             Height="{Binding TileRtbHeight}"
-                                                             IsUndoEnabled="True"
-                                                             Background="White"
-                                                             VerticalAlignment="Top"
-                                                             HorizontalAlignment="Left"
-                                                             ScrollViewer.HorizontalScrollBarVisibility="{Binding RtbHorizontalScrollbarVisibility}"
-                                                             ScrollViewer.VerticalScrollBarVisibility="{Binding RtbVerticalScrollbarVisibility}"
-                                                             BorderThickness="0"
-                                                             Margin="0,0,0,0"
-                                                             Padding="10,5,0,0">
-                                                    <RichTextBox.Resources>
-                                                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                                                                         Color="Blue" />
-                                                    </RichTextBox.Resources>
-                                                    <SpellCheck.IsEnabled>
-                                                        <Binding Path="SystemTrayViewModel.SettingsWindowViewModel.PreferencesViewModel.UseSpellCheck"
-                                                                 Source="{StaticResource MainWindowViewModel}" />
-                                                    </SpellCheck.IsEnabled>
-                                                </RichTextBox>
+                                                <ListBox x:Name="ClipTileRichTextBoxListBox"
+                                                         BorderThickness="0"
+                                                         SelectionMode="Single"
+                                                         ItemsSource="{Binding RichTextBoxViewModels}"
+                                                         ScrollViewer.HorizontalScrollBarVisibility="{Binding RtbHorizontalScrollbarVisibility}"
+                                                         ScrollViewer.VerticalScrollBarVisibility="{Binding RtbVerticalScrollbarVisibility}"
+                                                         Width="{Binding TileContentWidth}"
+                                                         Height="{Binding TileRtbHeight}">
+                                                    <ListBox.ItemContainerStyle>
+                                                        <Style TargetType="{x:Type ListBoxItem}">
+                                                            <Setter Property="IsSelected"
+                                                                    Value="{Binding IsSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
+                                                            <Setter Property="FocusVisualStyle"
+                                                                    Value="{x:Null}" />
+                                                            <Setter Property="Template">
+                                                                <Setter.Value>
+                                                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                                        <ContentPresenter />
+                                                                        <ControlTemplate.Triggers>
+                                                                            <Trigger Property="IsSelected"
+                                                                                     Value="True">
+                                                                                <Setter Property="BorderBrush"
+                                                                                        Value="Transparent" />
+                                                                                <Setter Property="Background"
+                                                                                        Value="Transparent" />
+                                                                            </Trigger>
+                                                                        </ControlTemplate.Triggers>
+                                                                    </ControlTemplate>
+                                                                </Setter.Value>
+                                                            </Setter>
+                                                        </Style>
+                                                    </ListBox.ItemContainerStyle>
+                                                    <ListBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <RichTextBox x:Name="ClipTileRichTextBox"
+                                                                         IsReadOnly="{Binding ClipTileViewModel.IsRtbReadOnly}"
+                                                                         DataContext="{Binding}"
+                                                                         IsInactiveSelectionHighlightEnabled="True"
+                                                                         IsDocumentEnabled="{Binding IsSelected}"
+                                                                         Focusable="{Binding ClipTileViewModel.IsEditingTile}"
+                                                                         Cursor="{Binding ClipTileViewModel.ContentCursor}"
+                                                                         Width="{Binding ClipTileViewModel.TileContentWidth}"
+                                                                         Height="{Binding ClipTileViewModel.TileRtbHeight}"
+                                                                         IsUndoEnabled="True"
+                                                                         Background="White"
+                                                                         VerticalAlignment="Top"
+                                                                         HorizontalAlignment="Left"
+                                                                         ScrollViewer.HorizontalScrollBarVisibility="{Binding ClipTileViewModel.RtbHorizontalScrollbarVisibility}"
+                                                                         ScrollViewer.VerticalScrollBarVisibility="{Binding ClipTileViewModel.RtbVerticalScrollbarVisibility}"
+                                                                         BorderThickness="0"
+                                                                         Margin="0,0,0,0"
+                                                                         Padding="10,5,0,0">
+                                                                <RichTextBox.Resources>
+                                                                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                                                                     Color="Blue" />
+                                                                </RichTextBox.Resources>
+                                                                <SpellCheck.IsEnabled>
+                                                                    <Binding Path="SystemTrayViewModel.SettingsWindowViewModel.PreferencesViewModel.UseSpellCheck"
+                                                                             Source="{StaticResource MainWindowViewModel}" />
+                                                                </SpellCheck.IsEnabled>
+                                                                <i:Interaction.Triggers>
+                                                                    <i:EventTrigger EventName="Loaded">
+                                                                        <i:CallMethodAction TargetObject="{Binding}"
+                                                                                            MethodName="ClipTileRichTextBoxListItem_Loaded" />
+                                                                    </i:EventTrigger>
+                                                                </i:Interaction.Triggers>
+                                                            </RichTextBox>
+                                                        </DataTemplate>
+                                                    </ListBox.ItemTemplate>
+                                                </ListBox>                                                
                                                 <Border x:Name="ClipTileEditTemplateToolbar"
                                                         Visibility="{Binding EditTemplateToolbarVisibility}"
                                                         Height="{Binding EditTemplateToolbarHeight}"

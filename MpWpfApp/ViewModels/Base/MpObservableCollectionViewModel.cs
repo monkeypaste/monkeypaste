@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
@@ -19,7 +20,9 @@ namespace MpWpfApp {
         public MpObservableCollection(IEnumerable<T> collection) : base(collection) {
             BindingOperations.EnableCollectionSynchronization(this, _ItemsLock);
         }
-
+        public void OnCollectionChanged() {
+            base.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
     }
     public class MpObservableCollectionViewModel<T> : MpObservableCollection<T> {
         public MpMainWindowViewModel MainWindowViewModel {

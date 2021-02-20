@@ -338,7 +338,7 @@ namespace MpWpfApp {
                       pk_MpCopyItemTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , TypeName text NULL 
                     );
-                    INSERT INTO MpCopyItemType(TypeName) VALUES ('rich_text'),('image'),('file_list'),('xaml');
+                    INSERT INTO MpCopyItemType(TypeName) VALUES ('rich_text'),('image'),('file_list'),('composite');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpSortType (
                       pk_MpSortTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -398,8 +398,6 @@ namespace MpWpfApp {
                     , fk_MpCopyItemTypeId integer NOT NULL
                     , fk_MpClientId integer NOT NULL
                     , fk_MpAppId integer NOT NULL
-                    , fk_MpPreCopyItemId integer
-                    , fk_MpPostCopyItemId integer
                     , fk_MpColorId integer
                     , Title text NULL 
                     , CopyCount integer not null default 1
@@ -414,8 +412,16 @@ namespace MpWpfApp {
                     , CONSTRAINT FK_MpCopyItem_1_0 FOREIGN KEY (fk_MpClientId) REFERENCES MpClient (pk_MpClientId)
                     , CONSTRAINT FK_MpCopyItem_2_0 FOREIGN KEY (fk_MpCopyItemTypeId) REFERENCES MpCopyItemType (pk_MpCopyItemTypeId) 
                     , CONSTRAINT FK_MpCopyItem_3_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId) 
-                    , CONSTRAINT FK_MpCopyItem_4_0 FOREIGN KEY (fk_MpPreCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
-                    , CONSTRAINT FK_MpCopyItem_5_0 FOREIGN KEY (fk_MpPostCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
+                    );
+                    ---------------------------------------------------------------------------------------------------------------------
+                    CREATE TABLE MpCompositeCopyItem (
+                      pk_MpCompositeCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , fk_MpCopyItemId INTEGER NOT NULL
+                    , fk_ParentMpCopyItemId INTEGER NOT NULL
+                    , SortOrderIdx INTEGER NOT NULL DEFAULT 0
+                    , IsInlineWithPreviousItem INTEGER NOT NULL DEFAULT 0
+                    , CONSTRAINT FK_MpCompositeCopyItem_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
+                    , CONSTRAINT FK_MpCompositeCopyItem_1_0 FOREIGN KEY (fk_ParentMpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCopyItemTag (

@@ -124,16 +124,31 @@ namespace MpWpfApp {
         }
 
         public void ClipTileEditorToolbarBorder_Loaded(object sender, RoutedEventArgs args) {
-            if(ClipTileViewModel.CopyItemType != MpCopyItemType.RichText) {
+            if (ClipTileViewModel.CopyItemType != MpCopyItemType.RichText && ClipTileViewModel.CopyItemType != MpCopyItemType.Composite) {
                 return;
             }
-            var sp = (StackPanel)sender;
-            var et = sp.GetVisualAncestor<Border>();            
+            ClipTileViewModel.PropertyChanged += (s23, e43) => {
+                switch(e43.PropertyName) {
+                    case nameof(ClipTileViewModel.SelectedRtb):
+                        if(ClipTileViewModel.SelectedRtb == null) {
+                            return;
+                        }
+                        InitWithRichTextBox((StackPanel)sender, ClipTileViewModel.SelectedRtb);
+                        break;
+                }
+            };
+            
+        }
+
+        public void InitWithRichTextBox(StackPanel sp, RichTextBox rtb) {
+            var et = sp.GetVisualAncestor<Border>();
             var cb = (MpClipBorder)et.GetVisualAncestor<MpClipBorder>();
             var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxCanvas");
-            var rtb = rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
+            var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
+            var ctttg = (Grid)cb.FindName("ClipTileTitleTextGrid");
+            //var rtb = ClipTileViewModel.GetRtb();//rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
             var clipTray = MainWindowViewModel.ClipTrayViewModel.GetClipTray();
-            var clipTrayScrollViewer = clipTray.GetDescendantOfType<ScrollViewer>(); 
+            var clipTrayScrollViewer = clipTray.GetDescendantOfType<ScrollViewer>();
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
             var titleSwirl = (Image)cb.FindName("TitleSwirl");
             var addTemplateButton = (Button)et.FindName("AddTemplateButton");
@@ -146,6 +161,40 @@ namespace MpWpfApp {
             ToggleButton selectedListButton = null;
 
             var fontFamilyComboBox = (ComboBox)et.FindName("FontFamilyCombo");
+            var fontSizeCombo = (ComboBox)et.FindName("FontSizeCombo");
+            var foregroundColorButton = (Button)et.FindName("ForegroundColorButton");
+            var backgroundColorButton = (Button)et.FindName("BackgroundColorButton");
+            var leftAlignmentButton = (ToggleButton)et.FindName("LeftButton");
+            var centerAlignmentButton = (ToggleButton)et.FindName("CenterButton");
+            var rightAlignmentButton = (ToggleButton)et.FindName("RightButton");
+            var printButton = (Button)et.FindName("PrintButton");
+            var bulletsButton = (ToggleButton)et.FindName("BulletsButton");
+            var numberingButton = (ToggleButton)et.FindName("NumberingButton");
+            var italicButton = (ToggleButton)et.FindName("ItalicButton");
+            var boldButton = (ToggleButton)et.FindName("BoldButton");
+            var underlineButton = (ToggleButton)et.FindName("UnderlineButton");
+
+            var cutButton = (Button)et.FindName("CutButton");
+            var copyButton = (Button)et.FindName("CopyButton");
+            var pasteButton = (Button)et.FindName("PasteButton");
+            var undoButton = (Button)et.FindName("UndoButton");
+            var redoButton = (Button)et.FindName("RedoButton");
+
+            cutButton.CommandTarget = rtb;
+            copyButton.CommandTarget = rtb;
+            pasteButton.CommandTarget = rtb;
+            undoButton.CommandTarget = rtb;
+            redoButton.CommandTarget = rtb;
+            printButton.CommandTarget = rtb;
+            italicButton.CommandTarget = rtb;
+            boldButton.CommandTarget = rtb;
+            underlineButton.CommandTarget = rtb;
+            leftAlignmentButton.CommandTarget = rtb;
+            centerAlignmentButton.CommandTarget = rtb;
+            rightAlignmentButton.CommandTarget = rtb;
+            bulletsButton.CommandTarget = rtb;
+            numberingButton.CommandTarget = rtb;
+
             fontFamilyComboBox.SelectionChanged += (s, e1) => {
                 if (fontFamilyComboBox.SelectedItem == null) {
                     return;
@@ -156,7 +205,6 @@ namespace MpWpfApp {
                 textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
             };
 
-            var fontSizeCombo = (ComboBox)et.FindName("FontSizeCombo");
             fontSizeCombo.SelectionChanged += (s, e1) => {
                 // Exit if no selection
                 if (fontSizeCombo.SelectedItem == null) {
@@ -177,7 +225,6 @@ namespace MpWpfApp {
                 textRange.ApplyPropertyValue(TextElement.FontSizeProperty, pixelSize);
             };
 
-            var foregroundColorButton = (Button)et.FindName("ForegroundColorButton");
             foregroundColorButton.Click += (s, e3) => {
                 var colorMenuItem = new MenuItem();
                 var colorContextMenu = new ContextMenu();
@@ -193,7 +240,6 @@ namespace MpWpfApp {
                 colorContextMenu.PlacementTarget = foregroundColorButton;
                 colorContextMenu.IsOpen = true;
             };
-            var backgroundColorButton = (Button)et.FindName("BackgroundColorButton");
             backgroundColorButton.Click += (s, e3) => {
                 var colorMenuItem = new MenuItem();
                 var colorContextMenu = new ContextMenu();
@@ -205,13 +251,12 @@ namespace MpWpfApp {
                         rtb.Selection.ApplyPropertyValue(FlowDocument.BackgroundProperty, (Brush)((Border)s1).Tag);
                     }
                 );
-                
+
                 backgroundColorButton.ContextMenu = colorContextMenu;
                 colorContextMenu.PlacementTarget = backgroundColorButton;
                 colorContextMenu.IsOpen = true;
             };
 
-            var printButton = (Button)et.FindName("PrintButton");
             printButton.Click += (s, e3) => {
                 // Configure printer dialog box
                 var dlg = new PrintDialog();
@@ -225,9 +270,6 @@ namespace MpWpfApp {
                 }
             };
 
-            var leftAlignmentButton = (ToggleButton)et.FindName("LeftButton");
-            var centerAlignmentButton = (ToggleButton)et.FindName("CenterButton");
-            var rightAlignmentButton = (ToggleButton)et.FindName("RightButton");
             leftAlignmentButton.Click += (s, e3) => {
                 var clickedButton = (ToggleButton)s;
                 var buttonGroup = new ToggleButton[] { leftAlignmentButton, centerAlignmentButton, rightAlignmentButton };
@@ -247,8 +289,6 @@ namespace MpWpfApp {
                 selectedAlignmentButton = clickedButton;
             };
 
-            var bulletsButton = (ToggleButton)et.FindName("BulletsButton");
-            var numberingButton = (ToggleButton)et.FindName("NumberingButton");
             bulletsButton.Click += (s, e3) => {
                 var clickedButton = (ToggleButton)s;
                 var buttonGroup = new[] { bulletsButton, numberingButton };
@@ -299,7 +339,7 @@ namespace MpWpfApp {
                         tb.VerticalAlignment = VerticalAlignment.Center;
                         tb.Margin = new Thickness(5, 0, 0, 0);
 
-                        
+
                         //DockPanel dp1 = new DockPanel();
                         //dp1.Children.Add(b);
                         //dp1.Children.Add(tb);
@@ -338,9 +378,9 @@ namespace MpWpfApp {
 
             //animation
             ClipTileViewModel.PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
+                switch (e.PropertyName) {
                     case nameof(ClipTileViewModel.IsEditingTile):
-                        
+
                         double tileWidthMax = Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
                         double tileWidthMin = ClipTileViewModel.TileBorderWidth;
 
@@ -355,11 +395,11 @@ namespace MpWpfApp {
 
                         double iconLeftMax = tileWidthMax - 125;// tileWidthMax - ClipTileViewModel.TileTitleIconSize;
                         double iconLeftMin = 204;// tileWidthMin - ClipTileViewModel.TileTitleIconSize;
-                        
+
                         if (ClipTileViewModel.IsEditingTile) {
                             //show rtb edit toolbar so its visible during animation
-                            ClipTileViewModel.EditToolbarVisibility = Visibility.Visible;                            
-                        } else if(ClipTileViewModel.IsEditingTemplate) {
+                            ClipTileViewModel.EditToolbarVisibility = Visibility.Visible;
+                        } else if (ClipTileViewModel.IsEditingTemplate) {
                             //animate edit template toolbar when tile is minimizing
                             ClipTileViewModel.IsEditingTemplate = false;
                         } else {
@@ -372,7 +412,7 @@ namespace MpWpfApp {
                             ClipTileViewModel.IsEditingTile ? rtbTopMin : rtbTopMax,
                             ClipTileViewModel.IsEditingTile ? rtbTopMax : rtbTopMin,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            rtb,
+                            new List<FrameworkElement> { rtb, rtblb },
                             Canvas.TopProperty,
                             (s1, e44) => {
 
@@ -397,11 +437,11 @@ namespace MpWpfApp {
                             new List<FrameworkElement> { cb, titleSwirl },
                             FrameworkElement.WidthProperty,
                             (s1, e44) => {
-                                if(ClipTileViewModel.IsEditingTile) {
-                                    // Point transform = ((ListViewItem)clipTray.ItemContainerGenerator.ContainerFromItem(ClipTileViewModel)).TransformToVisual((Visual)clipTray.Parent).Transform(new Point());
-                                    //Rect listViewItemBounds = VisualTreeHelper.GetDescendantBounds(cb);
-                                    //listViewItemBounds.Offset(transform.X, transform.Y);
-                                    clipTray.ScrollIntoView(ClipTileViewModel);
+                                if (ClipTileViewModel.IsEditingTile) {
+                                                // Point transform = ((ListViewItem)clipTray.ItemContainerGenerator.ContainerFromItem(ClipTileViewModel)).TransformToVisual((Visual)clipTray.Parent).Transform(new Point());
+                                                //Rect listViewItemBounds = VisualTreeHelper.GetDescendantBounds(cb);
+                                                //listViewItemBounds.Offset(transform.X, transform.Y);
+                                                clipTray.ScrollIntoView(ClipTileViewModel);
                                 } else {
 
                                 }
@@ -411,15 +451,15 @@ namespace MpWpfApp {
                             ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
                             ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            new List<FrameworkElement> { rtb, et, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
+                            new List<FrameworkElement> { rtblb, rtb, et, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
                             FrameworkElement.WidthProperty,
                             (s1, e44) => {
                                 rtb.Document.PageWidth = ClipTileViewModel.IsEditingTile ? contentWidthMax - rtb.Padding.Left - rtb.Padding.Right - 20 : contentWidthMin - rtb.Padding.Left - rtb.Padding.Right;// - rtb.Padding.Left - rtb.Padding.Right;
-                                //rtb.Document.PageHeight = rtb.ActualHeight;// ClipTileViewModel.IsEditingTile ? rtb.Document.GetDocumentSize().Height : ClipTileViewModel.TileContentHeight;
-                                //rtb.UpdateDocumentLayout();
-                                //this is to remove scrollbar flicker during animation
-                                ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
-                                ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));                                
+                                                                                                                                                                                                                //rtb.Document.PageHeight = rtb.ActualHeight;// ClipTileViewModel.IsEditingTile ? rtb.Document.GetDocumentSize().Height : ClipTileViewModel.TileContentHeight;
+                                                                                                                                                                                                                //rtb.UpdateDocumentLayout();
+                                                                                                                                                                                                                //this is to remove scrollbar flicker during animation
+                                            ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
+                                ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
                             });
 
                         MpHelpers.Instance.AnimateDoubleProperty(
@@ -430,11 +470,11 @@ namespace MpWpfApp {
                             Canvas.LeftProperty,
                             (s1, e23) => {
 
-                            });                        
+                            });
                         break;
                 }
             };
-                        
+
             rtb.SelectionChanged += (s, e6) => {
                 // Set font family combo
                 var fontFamily = rtb.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
@@ -442,7 +482,7 @@ namespace MpWpfApp {
 
                 // Set font size combo
                 var fontSize = rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
-                if(fontSize == null || fontSize.ToString() == "{DependencyProperty.UnsetValue}") {
+                if (fontSize == null || fontSize.ToString() == "{DependencyProperty.UnsetValue}") {
                     fontSize = string.Empty;
                 } else {
                     fontSize = Math.Round((double)fontSize);
@@ -458,16 +498,16 @@ namespace MpWpfApp {
                 leftAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
                 centerAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
                 rightAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
-                
+
                 //disable add template button if current selection intersects with a template
                 //this may not be necessary since templates are inlineuicontainers...
                 MpTemplateHyperlinkViewModel thlvm = null;
-                if (rtb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) && 
+                if (rtb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
                    rtb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
                     if (((TextElement)rtb.Selection.Start.Parent).DataContext != null && ((TextElement)rtb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
                         thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.Start.Parent).DataContext;
                     } else if (((TextElement)rtb.Selection.End.Parent).DataContext != null && ((TextElement)rtb.Selection.End.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
-                        thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.End.Parent).DataContext;                        
+                        thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.End.Parent).DataContext;
                     }
                 }
                 if (thlvm == null) {

@@ -107,7 +107,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
-    <Compile Include="AttachedProperties\MpHighlightTextExtension.cs" />
     <Compile Include="AttachedProperties\MpTextBoxBehavior.cs" />
     <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
     <Compile Include="Behaviors\MpKineticBehavior.cs" />
@@ -207,6 +206,7 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpClipTileRichTextBoxViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpEditRichTextBoxToolbarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpEditTemplateToolbarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpPasteTemplateToolbarViewModel.cs" />

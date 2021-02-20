@@ -95,6 +95,14 @@ namespace MpWpfApp {
             return hl;
 
         }
+        public void ApplyBackgroundBrushToRangeList(MpObservableCollection<MpObservableCollection<TextRange>> rangeList, Brush bgBrush, CancellationToken ct) {
+            if (rangeList == null || rangeList.Count == 0) {
+                return;
+            }
+            foreach (var range in rangeList) {
+                ApplyBackgroundBrushToRangeList(range, bgBrush, ct);
+            }
+        }
 
         public void ApplyBackgroundBrushToRangeList(ObservableCollection<TextRange> rangeList, Brush bgBrush, CancellationToken ct) {
             if (rangeList == null || rangeList.Count == 0) {
@@ -637,13 +645,21 @@ namespace MpWpfApp {
             return total;
         }
 
-        public string GetUniqueFileName(string fullPath) {
+        public string GetUniqueFileName(MpCopyItemType fileType,string baseName = "", string baseDir = "") {
+            //only support Image and RichText fileTypes
+            string fp = string.IsNullOrEmpty(baseDir) ? Path.GetTempPath() : baseDir;
+            string fn = string.IsNullOrEmpty(baseName) ? Path.GetRandomFileName() : MpHelpers.Instance.RemoveSpecialCharacters(baseName.Trim());
+            if (string.IsNullOrEmpty(fn)) {
+                fn = Path.GetRandomFileName();
+            }
+            string fe = fileType == MpCopyItemType.RichText ? ".txt" : ".png";
+
             int count = 1;
 
-            string fileNameOnly = Path.GetFileNameWithoutExtension(fullPath);
-            string extension = Path.GetExtension(fullPath);
-            string path = Path.GetDirectoryName(fullPath);
-            string newFullPath = fullPath;
+            string fileNameOnly = Path.GetFileNameWithoutExtension(fp + fn + fe);
+            string extension = Path.GetExtension(fp + fn + fe);
+            string path = Path.GetDirectoryName(fp + fn + fe);
+            string newFullPath = fp + fn + fe;
 
             while (File.Exists(newFullPath)) {
                 string tempFileName = string.Format("{0}({1})", fileNameOnly, count++);

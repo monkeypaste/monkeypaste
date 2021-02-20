@@ -121,7 +121,8 @@ namespace MpWpfApp {
 
         public static void ClearHyperlinks(this RichTextBox rtb, bool ignoreTemplates = false) {
             //replaces hyperlinks with spans of there textrange text
-            var ctvm = (MpClipTileViewModel)rtb.DataContext;
+            var rtbvm = (MpClipTileRichTextBoxViewModel)rtb.DataContext;
+            var ctvm = rtbvm.ClipTileViewModel;
             var hlList = rtb.GetHyperlinkList();
             foreach (var hl in hlList) {
                 string linkText = string.Empty;
@@ -140,7 +141,8 @@ namespace MpWpfApp {
         }
 
         public static void CreateHyperlinks(this RichTextBox rtb, bool ignoreTemplates = false) {
-            var ctvm = (MpClipTileViewModel)rtb.DataContext;
+            var rtbvm = (MpClipTileRichTextBoxViewModel)rtb.DataContext;
+            var ctvm = rtbvm.ClipTileViewModel;
             var regExGroupList = new List<string> {
                 //WebLink
                 @"(?:https?://|www\.)\S+", 

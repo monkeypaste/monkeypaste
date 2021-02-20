@@ -174,9 +174,7 @@ namespace MpWpfApp {
                 }
                 return false;
             }
-        }
-
-        
+        }        
 
         public Visibility EmptyListMessageVisibility {
             get {
@@ -426,7 +424,7 @@ namespace MpWpfApp {
             clipTray.MouseLeftButtonUp += (s, e4) => {
                 var p = e4.MouseDevice.GetPosition(clipTray);
                 var hitTestResult = VisualTreeHelper.HitTest(clipTray, p);
-                if (!IsPastingTemplate && (hitTestResult == null || hitTestResult.VisualHit.GetVisualAncestor<ListBoxItem>() == null)) {
+                if (!IsPastingTemplate && (hitTestResult == null || hitTestResult.VisualHit.GetVisualAncestor<ListViewItem>() == null)) {
                     MainWindowViewModel.ClearEdits();
                     //e4.Handled = true;
                 }

@@ -226,17 +226,31 @@ namespace MpWpfApp {
         }
 
         public void ClipTilePasteTemplateToolbarBorder_Loaded(object sender, RoutedEventArgs args) {
-            if (ClipTileViewModel.CopyItemType != MpCopyItemType.RichText) {
+            if (ClipTileViewModel.CopyItemType != MpCopyItemType.RichText && ClipTileViewModel.CopyItemType != MpCopyItemType.Composite) {
                 return;
             }
-            var pasteTemplateToolbarBorderGrid = (Grid)sender;
+            ClipTileViewModel.PropertyChanged += (s23, e43) => {
+                switch (e43.PropertyName) {
+                    case nameof(ClipTileViewModel.SelectedRtb):
+                        if (ClipTileViewModel.SelectedRtb == null) {
+                            return;
+                        }
+                        InitWithRichTextBox((Grid)sender, ClipTileViewModel.SelectedRtb);
+                        break;
+                }
+            };
+        }
+
+        public void InitWithRichTextBox(Grid pasteTemplateToolbarBorderGrid, RichTextBox rtb) {
             var pasteTemplateToolbarBorder = pasteTemplateToolbarBorderGrid.GetVisualAncestor<Border>();
             var cb = (MpClipBorder)pasteTemplateToolbarBorder.GetVisualAncestor<MpClipBorder>();
             var editRichTextToolbarBorder = (Border)cb.FindName("ClipTileEditorToolbar");
             var editTemplateToolbarBorder = (Border)cb.FindName("ClipTileEditTemplateToolbar");
             var clipTray = MainWindowViewModel.ClipTrayViewModel.GetClipTray();
             var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxCanvas");
-            var rtb = rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
+            var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
+            var ctttg = (Grid)cb.FindName("ClipTileTitleTextGrid");
+            //var rtb = rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
             var titleSwirl = (Image)cb.FindName("TitleSwirl");
             var clearAllTemplatesButton = (Button)pasteTemplateToolbarBorder.FindName("ClearAllTemplatesButton");
@@ -245,6 +259,7 @@ namespace MpWpfApp {
             var nextTemplateButton = (Button)pasteTemplateToolbarBorder.FindName("NextTemplateButton");
             var pasteTemplateButton = (Button)pasteTemplateToolbarBorder.FindName("PasteTemplateButton");
             var selectedTemplateComboBox = (ComboBox)pasteTemplateToolbarBorder.FindName("SelectedTemplateComboBox");
+            var ds = MpHelpers.Instance.ConvertRichTextToFlowDocument(ClipTileViewModel.CopyItemRichText).GetDocumentSize();
 
             _selectedTemplateComboBox = selectedTemplateComboBox;
             _selectedTemplateTextBox = selectedTemplateTextBox;
@@ -275,7 +290,7 @@ namespace MpWpfApp {
                 tbx.Focus();
                 //tbx.SelectAll();
             };
-            
+
             clearAllTemplatesButton.MouseLeftButtonUp += (s, e2) => {
                 //when clear all is clicked it performs the ClearAllTemplate Command and this switches focus to 
                 //first template tbx
@@ -302,7 +317,7 @@ namespace MpWpfApp {
             //    }
             //};
 
-            
+
             ClipTileViewModel.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(ClipTileViewModel.IsPastingTemplateTile):
@@ -312,13 +327,13 @@ namespace MpWpfApp {
                         double pasteTemplateToolbarTopMax = ClipTileViewModel.TileContentHeight;
                         double pasteTemplateToolbarTopMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.PasteTemplateToolbarHeight + 5;
 
-                        double tileWidthMax = 625;
+                        double tileWidthMax = Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
                         double tileWidthMin = ClipTileViewModel.TileBorderWidth;
 
-                        double contentWidthMax = 615;
+                        double contentWidthMax = tileWidthMax - MpMeasurements.Instance.ClipTileEditModeContentMargin;
                         double contentWidthMin = ClipTileViewModel.TileContentWidth;
 
-                        double iconLeftMax = 500;// tileWidthMax - ClipTileViewModel.TileTitleIconSize;
+                        double iconLeftMax = tileWidthMax - 125;// tileWidthMax - ClipTileViewModel.TileTitleIconSize;
                         double iconLeftMin = 204;// tileWidthMin - ClipTileViewModel.TileTitleIconSize;
 
                         if (ClipTileViewModel.IsPastingTemplateTile) {
@@ -327,7 +342,7 @@ namespace MpWpfApp {
                             OnPropertyChanged(nameof(ClearAllTemplateToolbarButtonVisibility));
 
                             ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Visible;
-                            if(UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 0) {
+                            if (UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 0) {
                                 //selectedTemplateComboBox.SelectedItem = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
                                 SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
                             }
@@ -358,8 +373,8 @@ namespace MpWpfApp {
                                             }
                                         }
                                     };
-                                    selectedTemplateTextBox.Focus();     
-                                    
+                                    selectedTemplateTextBox.Focus();
+
                                 }
                             });
 
@@ -376,7 +391,7 @@ namespace MpWpfApp {
                             ClipTileViewModel.IsPastingTemplateTile ? contentWidthMin : contentWidthMax,
                             ClipTileViewModel.IsPastingTemplateTile ? contentWidthMax : contentWidthMin,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            new List<FrameworkElement> { rtb, editRichTextToolbarBorder, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
+                            new List<FrameworkElement> { rtb, rtblb, editRichTextToolbarBorder, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
                             FrameworkElement.WidthProperty,
                             (s1, e44) => {
                                 rtb.Document.PageWidth = ClipTileViewModel.IsEditingTile ? contentWidthMax - rtb.Padding.Left - rtb.Padding.Right - 20 : contentWidthMin - rtb.Padding.Left - rtb.Padding.Right;// - rtb.Padding.Left - rtb.Padding.Right;
@@ -399,7 +414,7 @@ namespace MpWpfApp {
                 }
             };
         }
-
+        
         public void SetTemplate(string templateName) {
             if(string.IsNullOrEmpty(templateName)) {
                 return;

@@ -40,7 +40,6 @@
 
         private string _origClipRichText = string.Empty;
 
-        private bool _wasAddedAtRuntime = false;
 
         private bool _wasEditConfirmed = true;
 
@@ -50,6 +49,19 @@
         #endregion
 
         #region View Models
+        private MpObservableCollection<MpClipTileRichTextBoxViewModel> _richTextBoxViewModels = new MpObservableCollection<MpClipTileRichTextBoxViewModel>();
+        public MpObservableCollection<MpClipTileRichTextBoxViewModel> RichTextBoxViewModels {
+            get {
+                return _richTextBoxViewModels;
+            }
+            set {
+                if (_richTextBoxViewModels != value) {
+                    _richTextBoxViewModels = value;
+                    OnPropertyChanged(nameof(RichTextBoxViewModels));
+                }
+            }
+        }
+
         private ObservableCollection<MpClipTileContextMenuItemViewModel> _convertClipTypes = new ObservableCollection<MpClipTileContextMenuItemViewModel>();
         public ObservableCollection<MpClipTileContextMenuItemViewModel> ConvertClipTypes {
             get {
@@ -471,7 +483,7 @@
 
         public Visibility RtbVisibility {
             get {
-                if (!IsLoading && CopyItemType == MpCopyItemType.RichText) {
+                if (!IsLoading && (CopyItemType == MpCopyItemType.RichText || CopyItemType == MpCopyItemType.Composite)) {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -561,6 +573,19 @@
         #endregion
 
         #region Business Logic Properties
+        private bool _wasAddedAtRuntime = false;
+        public bool WasAddedAtRuntime {
+            get {
+                return _wasAddedAtRuntime;
+            }
+            set {
+                if(_wasAddedAtRuntime != value) {
+                    _wasAddedAtRuntime = value;
+                    OnPropertyChanged(nameof(WasAddedAtRuntime));
+                }
+            }
+        }
+
         public bool IsLoading {
             get {
                 return CopyItem == null || CopyItem.CopyItemId == 0;
@@ -586,9 +611,27 @@
             }
         }
 
-        public MpObservableCollection<TextRange> LastContentHighlightRangeList { get; set; } = new MpObservableCollection<TextRange>();
-
         public MpObservableCollection<TextRange> LastTitleHighlightRangeList { get; set; } = new MpObservableCollection<TextRange>();
+
+        private MpObservableCollection<MpObservableCollection<TextRange>> _lastContentHighlightRangeList = null;
+        public MpObservableCollection<MpObservableCollection<TextRange>> LastContentHighlightRangeList {
+            get {
+                if(_lastContentHighlightRangeList == null) {
+                    _lastContentHighlightRangeList = new MpObservableCollection<MpObservableCollection<TextRange>>();
+                    foreach(var rtbvm in RichTextBoxViewModels) {
+                        _lastContentHighlightRangeList.Add(rtbvm.LastContentHighlightRangeList);
+                        rtbvm.LastContentHighlightRangeList.OnCollectionChanged();
+                    }
+                }
+                return _lastContentHighlightRangeList;
+            }
+            set {
+                if(_lastContentHighlightRangeList != value) {
+                    _lastContentHighlightRangeList = value;
+                    OnPropertyChanged(nameof(LastContentHighlightRangeList));
+                }
+            }
+        }
 
         public Cursor ContentCursor {
             get {
@@ -639,6 +682,25 @@
         #endregion
 
         #region State Properties        
+        public MpClipTileRichTextBoxViewModel SelectedRichTextBoxViewModel {
+            get {
+                var srtbvml = RichTextBoxViewModels.Where(x => x.IsSelected).ToList();
+                if(srtbvml == null || srtbvml.Count == 0) {
+                    return null;
+                }
+                return srtbvml[0];
+            }
+        }
+
+        public RichTextBox SelectedRtb {
+            get {
+                if(SelectedRichTextBoxViewModel == null) {
+                    return null;
+                }
+                return SelectedRichTextBoxViewModel.Rtb;
+            }
+        }
+
         private bool _isHoveringOnTitleTextGrid = false;
         public bool IsHoveringOnTitleTextGrid {
             get {
@@ -1234,7 +1296,13 @@
         }
 
         public RichTextBox GetRtb() {
-            return _rtb;
+            if(SelectedRichTextBoxViewModel != null) {
+                return SelectedRichTextBoxViewModel.Rtb;
+            }
+            if(RichTextBoxViewModels != null && RichTextBoxViewModels.Count > 0) {
+                return RichTextBoxViewModels[0].Rtb;
+            }
+            return null;
         }
 
         public TextBlock GetTitleTextBlock() {
@@ -1278,7 +1346,7 @@
                 if (CopyItemType != MpCopyItemType.RichText) {
                     return;
                 }
-                var rtb = (RichTextBox)((FrameworkElement)s).FindName("ClipTileRichTextBox");
+                //var rtb = (RichTextBox)((FrameworkElement)s).FindName("ClipTileRichTextBox");
                 //if (e6.Key == Key.Down) {
                 //    rtb.FontSize -= 1;
                 //    e.Handled = true;
@@ -1416,44 +1484,50 @@
                     }
                 }
             };
-
-            
         }
+
 
         public void ClipTileRichTextStackPanel_Loaded(object sender, RoutedEventArgs e) {
             if (RtbVisibility == Visibility.Collapsed) {
                 return;
             }
             var rtbc = (Canvas)sender;
-            var rtb = (RichTextBox)rtbc.FindName("ClipTileRichTextBox");
-            _rtb = rtb;
+            var rtblb = (ListBox)rtbc.FindName("ClipTileRichTextBoxListBox");
+            rtblb.MouseLeftButtonUp += (s, e2) => {
+                //IsSelected = true;
+            };
+
+            if(CopyItemType == MpCopyItemType.RichText) {
+                RichTextBoxViewModels.Add(new MpClipTileRichTextBoxViewModel(this,CopyItem));                
+            } else {
+                foreach(var cci in CopyItem.CompositeItemList) {
+                    RichTextBoxViewModels.Add(new MpClipTileRichTextBoxViewModel(this, cci));
+                }
+            }
+            //RichTextBoxViewModels[0].IsSelected = true;
 
             var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
             var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
 
-            GetRtb().Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(CopyItemRichText);
-            GetRtb().CreateHyperlinks();
-            GetRtb().Document.PageWidth = GetRtb().Width - GetRtb().Padding.Left - GetRtb().Padding.Right;
-            GetRtb().Document.PageHeight = GetRtb().Height - GetRtb().Padding.Top - GetRtb().Padding.Bottom;
-
-            if(_wasAddedAtRuntime) {
-                //force new items to have left alignment
-                GetRtb().SelectAll();
-                GetRtb().Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
-                GetRtb().CaretPosition = GetRtb().Document.ContentStart;
-            }
-
             #region Search
             LastContentHighlightRangeList.CollectionChanged += (s, e9) => {
+                int highlightCount = LastTitleHighlightRangeList.Count;
+                foreach(var lchrl in LastContentHighlightRangeList) {
+                    highlightCount += lchrl.Count;                    
+                }
                 //var oldNavButtonPanelVisibility = MainWindowViewModel.SearchBoxViewModel.SearchNavigationButtonPanelVisibility;
-                if (LastContentHighlightRangeList.Count > 1 || LastTitleHighlightRangeList.Count > 1) {
+                if (highlightCount > 1) {
                     //show search match nav buttons when any clip tile has more than one match
                     MainWindowViewModel.SearchBoxViewModel.SearchNavigationButtonPanelVisibility = Visibility.Visible;
                 } else {
                     //confirm all visible clip tiles have one or less matches then hide nav buttons
                     bool showMatchNav = false;
                     foreach (var vctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
-                        if (vctvm.LastContentHighlightRangeList.Count > 1 || vctvm.LastTitleHighlightRangeList.Count > 1) {
+                        int count = vctvm.LastTitleHighlightRangeList.Count;
+                        foreach(var lchrl in vctvm.LastContentHighlightRangeList) {
+                            count += lchrl.Count;
+                        }
+                        if (count > 1) {
                             showMatchNav = true;
                         }
                     }
@@ -1498,21 +1572,28 @@
             PropertyChanged += (s, e2) => {
                 switch (e2.PropertyName) {
                     case nameof(IsEditingTile):
-                        if(!IsEditingTile) {
+                        if (!IsEditingTile) {
                             //IsPastingTemplateTile = false;
 
                             SaveToDatabase();
                         }
-                        GetRtb().ScrollToHome();
-                        GetRtb().CaretPosition = GetRtb().Document.ContentStart;
-                        GetRtb().Selection.Select(GetRtb().Document.ContentStart, GetRtb().Document.ContentStart);
+                        foreach(var rtbvm in RichTextBoxViewModels) {
+                            var rtb = rtbvm.Rtb;
+                            rtb.ScrollToHome();
+                            rtb.CaretPosition = rtb.Document.ContentStart;
+                            rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
+                        }
+                        
                         break;
                     case nameof(CurrentHighlightMatchIdx):
-                        if(LastContentHighlightRangeList.Count == 0 && LastTitleHighlightRangeList.Count == 0) {
+                        if (LastContentHighlightRangeList.Count == 0 && LastTitleHighlightRangeList.Count == 0) {
                             _currentHighlightMatchIdx = 0;
                             return;
                         }
-                        int maxIdx = LastContentHighlightRangeList.Count + LastTitleHighlightRangeList.Count - 1;
+                        int maxIdx = LastTitleHighlightRangeList.Count - 1;
+                        foreach (var lchrl in LastContentHighlightRangeList) {
+                            maxIdx += lchrl.Count;
+                        }
                         if (CurrentHighlightMatchIdx < 0) {
                             _currentHighlightMatchIdx = maxIdx;
                         } else if (CurrentHighlightMatchIdx > maxIdx) {
@@ -1523,11 +1604,23 @@
                         if (CurrentHighlightMatchIdx < LastTitleHighlightRangeList.Count) {
                             LastTitleHighlightRangeList[CurrentHighlightMatchIdx].ApplyPropertyValue(TextElement.BackgroundProperty, hfb);
                         } else if (CurrentHighlightMatchIdx < LastContentHighlightRangeList.Count) {
+                            int baseContentIdx = 0;
                             int contentIdx = CurrentHighlightMatchIdx - LastTitleHighlightRangeList.Count;
-                            LastContentHighlightRangeList[contentIdx].ApplyPropertyValue(TextElement.BackgroundProperty, hfb);
-                            var characterRect = LastContentHighlightRangeList[contentIdx].End.GetCharacterRect(LogicalDirection.Forward);
-                            GetRtb().ScrollToHorizontalOffset(GetRtb().HorizontalOffset + characterRect.Left - GetRtb().ActualWidth / 2d);
-                            GetRtb().ScrollToVerticalOffset(GetRtb().VerticalOffset + characterRect.Top - GetRtb().ActualHeight / 2d);
+                            int rangeListIdx = 0;
+                            for (int i = 0; i < LastContentHighlightRangeList.Count; i++) {
+                                baseContentIdx += LastContentHighlightRangeList[i].Count;
+                                if (contentIdx < baseContentIdx) {
+                                    rangeListIdx = i;
+                                    contentIdx = baseContentIdx - contentIdx - 1;
+                                    break;
+                                }
+                            }
+
+                            LastContentHighlightRangeList[rangeListIdx][contentIdx].ApplyPropertyValue(TextElement.BackgroundProperty, hfb);
+                            var characterRect = LastContentHighlightRangeList[rangeListIdx][contentIdx].End.GetCharacterRect(LogicalDirection.Forward);
+                            var rtb = RichTextBoxViewModels[rangeListIdx].Rtb;
+                            rtb.ScrollToHorizontalOffset(rtb.HorizontalOffset + characterRect.Left - rtb.ActualWidth / 2d);
+                            rtb.ScrollToVerticalOffset(rtb.VerticalOffset + characterRect.Top - rtb.ActualHeight / 2d);
 
                         }
                         break;
@@ -1716,10 +1809,32 @@
         }
 
         public void AppendContent(MpClipTileViewModel octvm) {
-            CopyItem.CombineAsync(octvm.CopyItem);
+            //CopyItem.CombineAsync(octvm.CopyItem);
             //since appending only happens for richtext types
-            OnPropertyChanged(nameof(CopyItemRichText));
-            GetRtb().Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(CopyItemRichText);
+            //OnPropertyChanged(nameof(CopyItemRichText));
+            //GetRtb().Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(CopyItemRichText);
+            GetRtb().BorderThickness = new Thickness(1);
+
+            var appendRtb = new RichTextBox();
+            appendRtb.SetRtf(octvm.CopyItemPlainText);
+            appendRtb.BorderThickness = new Thickness(1);
+
+            appendRtb.Width = GetRtb().Width;
+            appendRtb.Height = GetRtb().Height;
+            appendRtb.Document.PageWidth = GetRtb().Width - GetRtb().Padding.Left - GetRtb().Padding.Right;
+            appendRtb.Document.PageHeight = GetRtb().Height - GetRtb().Padding.Top - GetRtb().Padding.Bottom;
+
+            GetRtb().Width += appendRtb.Width;
+            GetRtb().Height += appendRtb.Height;
+            GetRtb().Document.PageWidth = GetRtb().Width - GetRtb().Padding.Left - GetRtb().Padding.Right;
+            GetRtb().Document.PageHeight = GetRtb().Height - GetRtb().Padding.Top - GetRtb().Padding.Bottom;
+
+            var inlineContainer = new InlineUIContainer();
+            inlineContainer.Child = appendRtb;
+            var paragraph = new Paragraph();
+            paragraph.Inlines.Add(inlineContainer);
+            GetRtb().Document.Blocks.Add(paragraph);
+            MainWindowViewModel.ClipTrayViewModel.GetClipTray().Items.Refresh();
         }
 
         public void SyncModelWithView() {
@@ -1813,7 +1928,9 @@
                 ctvm.LastTitleHighlightRangeList.Clear();
 
                 MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, Brushes.Transparent, ct);
-                ctvm.LastContentHighlightRangeList.Clear();
+                foreach (var lchrl in ctvm.LastContentHighlightRangeList) {
+                    lchrl.Clear();
+                }
                 ctvm.MainWindowViewModel.ClipTrayViewModel.HighlightTaskCount--;
 
                 ctvm.GetRtb().ScrollToHome();
@@ -1861,7 +1978,9 @@
                     ctvm.LastTitleHighlightRangeList.Clear();
 
                     MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, ctbb, ct);
-                    ctvm.LastContentHighlightRangeList.Clear();
+                    foreach(var lchrl in ctvm.LastContentHighlightRangeList) {
+                        lchrl.Clear();
+                    }
 
 
                     //highlight title 
@@ -1874,21 +1993,48 @@
                         MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastTitleHighlightRangeList, hb, ct);
                     }
                     switch (ctvm.CopyItemType) {
+                        case MpCopyItemType.Composite:
+                            int contentChangeCount = 0;
+                            foreach(var rtbvm in ctvm.RichTextBoxViewModels) {
+                                rtbvm.Rtb.BeginChange();
+                                var rtbvmtrl = MpHelpers.Instance.FindStringRangesFromPosition(rtbvm.Rtb.Document.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
+                                foreach (var mr in rtbvmtrl) {
+                                    rtbvm.LastContentHighlightRangeList.Add(mr);
+                                }
+                                if (rtbvm.LastContentHighlightRangeList.Count > 0) {
+                                    MpHelpers.Instance.ApplyBackgroundBrushToRangeList(rtbvm.LastContentHighlightRangeList, hb, ct);
+                                    contentChangeCount += rtbvm.LastContentHighlightRangeList.Count;
+                                } 
+                                rtbvm.Rtb.EndChange();
+                            }
+                            if (ctvm.LastTitleHighlightRangeList.Count == 0 && contentChangeCount == 0) {
+                                ctvm.TileVisibility = Visibility.Collapsed;
+                            }
+                            if (contentChangeCount > 0 || ctvm.LastTitleHighlightRangeList.Count > 0) {
+                                ctvm.CurrentHighlightMatchIdx = 0;
+                                ctvm.LastContentHighlightRangeList = null;
+                                ctvm.OnPropertyChanged(nameof(ctvm.LastContentHighlightRangeList));
+                                LastContentHighlightRangeList.OnCollectionChanged();
+                            }
+                            break;
                         case MpCopyItemType.RichText:
                             var rtb = ctvm.GetRtb();
 
                             rtb.BeginChange();
                             var trl = MpHelpers.Instance.FindStringRangesFromPosition(rtb.Document.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
-                            foreach (var mr in trl) {
-                                ctvm.LastContentHighlightRangeList.Add(mr);
+                            foreach (var mtr in trl) {
+                                ctvm.LastContentHighlightRangeList[0].Add(mtr);
                             }
-                            if (ctvm.LastContentHighlightRangeList.Count > 0) {
+                            if (ctvm.LastContentHighlightRangeList[0].Count > 0) {
                                 MpHelpers.Instance.ApplyBackgroundBrushToRangeList(ctvm.LastContentHighlightRangeList, hb, ct);
                             } else if (ctvm.LastTitleHighlightRangeList.Count == 0) {
                                 ctvm.TileVisibility = Visibility.Collapsed;
                             }
-                            if (ctvm.LastContentHighlightRangeList.Count > 0 || ctvm.LastTitleHighlightRangeList.Count > 0) {
+                            if (ctvm.LastContentHighlightRangeList[0].Count > 0 || ctvm.LastTitleHighlightRangeList.Count > 0) {
                                 ctvm.CurrentHighlightMatchIdx = 0;
+                                ctvm.LastContentHighlightRangeList = null;
+                                ctvm.OnPropertyChanged(nameof(ctvm.LastContentHighlightRangeList));
+                                LastContentHighlightRangeList.OnCollectionChanged();
                             }
                             rtb.EndChange();
                             break;
@@ -1905,10 +2051,8 @@
                             break;
                         case MpCopyItemType.FileList:
                             var flb = ctvm.GetFileListBox();
-                            if (ctvm.LastContentHighlightRangeList != null) {
-                                foreach (var lhr in ctvm.LastContentHighlightRangeList) {
-                                    lhr.ApplyPropertyValue(TextElement.BackgroundProperty, ctbb);
-                                }
+                            foreach (var lhr in ctvm.LastContentHighlightRangeList[0]) {
+                                lhr.ApplyPropertyValue(TextElement.BackgroundProperty, ctbb);
                             }
                             foreach (var fivm in ctvm.FileListViewModels) {
                                 if (fivm.ItemPath.ContainsByCaseSetting(hlt)) {
@@ -1919,7 +2063,7 @@
                                             var hlr = MpHelpers.Instance.FindStringRangeFromPosition(fitb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
                                             if (hlr != null) {
                                                 hlr.ApplyPropertyValue(TextBlock.BackgroundProperty, hb);
-                                                ctvm.LastContentHighlightRangeList.Add(hlr);
+                                                ctvm.LastContentHighlightRangeList[0].Add(hlr);
                                             }
                                         }
                                     }
