@@ -346,6 +346,55 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Factory Methods
+        public static Hyperlink CreateTemplateHyperlink(MpClipTileViewModel ctvm, MpCopyItemTemplate cit, TextRange tr) {
+            var thlvm = new MpTemplateHyperlinkViewModel(ctvm, cit);
+
+            //if the range for the template contains a sub-selection of a hyperlink the hyperlink(s)
+            //needs to be broken into their text before the template hyperlink can be created
+            var trSHl = (Hyperlink)MpHelpers.Instance.FindParentOfType(tr.Start.Parent, typeof(Hyperlink));
+            var trEHl = (Hyperlink)MpHelpers.Instance.FindParentOfType(tr.End.Parent, typeof(Hyperlink));
+            var trText = tr.Text;
+
+            if (trSHl != null) {
+                var linkText = new TextRange(trSHl.ElementStart, trSHl.ElementEnd).Text;
+                trSHl.Inlines.Clear();
+                var span = new Span(new Run(linkText), trSHl.ElementStart);
+                tr =  MpHelpers.Instance.FindStringRangeFromPosition(span.ContentStart, trText, true);
+            }
+            if (trEHl != null && trEHl != trSHl) {
+                var linkText = new TextRange(trEHl.ElementStart, trEHl.ElementEnd).Text;
+                trEHl.Inlines.Clear();
+                var span = new Span(new Run(linkText), trEHl.ElementStart);
+                tr = MpHelpers.Instance.FindStringRangeFromPosition(span.ContentStart, trText, true);
+            }
+            thlvm.TemplateHyperlinkRange = tr;
+            //var r = new Run();
+            //r.Loaded += thlvm.TemplateHyperLinkRun_Loaded;
+
+            var tb = new TextBlock();
+            tb.DataContext = thlvm;
+            tb.Loaded += thlvm.TemplateHyperLinkRun_Loaded;
+
+            var b = new Border();
+            b.CornerRadius = new CornerRadius(5);
+            b.BorderThickness = new Thickness(1.5);
+            b.DataContext = thlvm;
+            b.Child = tb;
+
+            var iuic = new InlineUIContainer();
+            iuic.DataContext = thlvm;
+            iuic.Child = b;
+
+            var hl = new Hyperlink(tr.Start, tr.End);
+            hl.DataContext = thlvm;
+            hl.Inlines.Clear();
+            hl.Inlines.Add(iuic);
+            thlvm.TemplateHyperlink = hl;
+
+            return hl;
+        }
+        #endregion
         #region Public Methods
         //public MpTemplateHyperlinkViewModel() :this(new MpClipTileViewModel(new MpCopyItem()),new MpCopyItemTemplate()) { }
 
@@ -356,11 +405,11 @@ namespace MpWpfApp {
                 int uniqueIdx = 1;
                 string namePrefix = "<Template #";
                 while (ClipTileViewModel.CopyItemPlainText.ToLower().Contains(namePrefix.ToLower() + uniqueIdx) || 
-                       ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == namePrefix + uniqueIdx + ">").ToList().Count > 0) {
+                       ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == namePrefix + uniqueIdx + ">").ToList().Count > 0) {
                     uniqueIdx++;
                 }
                 Brush randColor = (Brush)new SolidColorBrush(MpHelpers.Instance.GetRandomColor());
-                //while (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateBrush == randColor).ToList().Count > 0) {
+                //while (ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateBrush == randColor).ToList().Count > 0) {
                 //    randColor = (Brush)new SolidColorBrush(MpHelpers.Instance.GetRandomColor());
                 //}
                 cit = new MpCopyItemTemplate(ctvm.CopyItemId, randColor, namePrefix + uniqueIdx + ">");
@@ -467,11 +516,11 @@ namespace MpWpfApp {
 
         public void Dispose(bool fromContextMenu) {
             if(fromContextMenu) {
-                ClipTileViewModel.GetRtb().Selection.Select(TemplateHyperlinkRange.Start, TemplateHyperlinkRange.End);
-                ClipTileViewModel.GetRtb().Selection.Text = string.Empty;
+                ClipTileViewModel.RichTextBoxViewModels.SelectedRtb.Selection.Select(TemplateHyperlinkRange.Start, TemplateHyperlinkRange.End);
+                ClipTileViewModel.RichTextBoxViewModels.SelectedRtb.Selection.Text = string.Empty;
             }
             //remove this individual token reference
-            ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Remove(this);
+            ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Remove(this);
             
             //if(IsSelected && ClipTileViewModel.IsEditingTemplate) {
             //    ClipTileViewModel.IsEditingTemplate = false;

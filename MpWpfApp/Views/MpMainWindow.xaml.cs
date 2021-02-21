@@ -1,4 +1,5 @@
 ﻿using AlphaChiTech.Virtualization;
+using AlphaChiTech.VirtualizingCollection;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -15,7 +16,7 @@ namespace MpWpfApp {
                 //we’re using Dispatcher.Invoke to give the VirtualizationManager access
                 //to the dispatcher thread, and using a DispatcherTimer to run the background
                 //operations the VirtualizationManager needs to run to reclaim pages and manage memory.
-                VirtualizationManager.Instance.UIThreadExcecuteAction = (a) => Dispatcher.Invoke(a);
+                VirtualizationManager.Instance.UiThreadExcecuteAction = (a) => Dispatcher.Invoke(a);
 
                 new DispatcherTimer(
                     TimeSpan.FromMilliseconds(10),

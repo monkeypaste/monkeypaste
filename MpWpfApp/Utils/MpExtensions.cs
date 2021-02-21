@@ -104,209 +104,209 @@ namespace MpWpfApp {
             return false;
         }
 
-        public static List<Hyperlink> GetHyperlinkList(this RichTextBox rtb) {
-            var hlList = new List<Hyperlink>();
-            for (TextPointer position = rtb.Document.ContentStart;
-                position != null && position.CompareTo(rtb.Document.ContentEnd) <= 0;
-                position = position.GetNextContextPosition(LogicalDirection.Forward)) {
-                if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.ElementEnd) {
-                    var hl = MpHelpers.Instance.FindParentOfType(position.Parent, typeof(Hyperlink)) as Hyperlink;
-                    if (hl != null && !hlList.Contains(hl)) {
-                        hlList.Add(hl);
-                    }
-                }
-            }
-            return hlList;
-        }
+        //public static List<Hyperlink> GetHyperlinkList(this RichTextBox rtb) {
+        //    var hlList = new List<Hyperlink>();
+        //    for (TextPointer position = rtb.Document.ContentStart;
+        //        position != null && position.CompareTo(rtb.Document.ContentEnd) <= 0;
+        //        position = position.GetNextContextPosition(LogicalDirection.Forward)) {
+        //        if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.ElementEnd) {
+        //            var hl = MpHelpers.Instance.FindParentOfType(position.Parent, typeof(Hyperlink)) as Hyperlink;
+        //            if (hl != null && !hlList.Contains(hl)) {
+        //                hlList.Add(hl);
+        //            }
+        //        }
+        //    }
+        //    return hlList;
+        //}
 
-        public static void ClearHyperlinks(this RichTextBox rtb, bool ignoreTemplates = false) {
-            //replaces hyperlinks with spans of there textrange text
-            var rtbvm = (MpClipTileRichTextBoxViewModel)rtb.DataContext;
-            var ctvm = rtbvm.ClipTileViewModel;
-            var hlList = rtb.GetHyperlinkList();
-            foreach (var hl in hlList) {
-                string linkText = string.Empty;
-                if (hl.DataContext == null || hl.DataContext is MpClipTileViewModel) {
-                    linkText = new TextRange(hl.ElementStart, hl.ElementEnd).Text;
-                } else if(!ignoreTemplates) {
-                    var thlvm = (MpTemplateHyperlinkViewModel)hl.DataContext;
-                    linkText = thlvm.TemplateName;
-                }
-                hl.Inlines.Clear();
-                new Span(new Run(linkText), hl.ContentStart);
-            }
-            if(!ignoreTemplates) {
-                ctvm.TemplateHyperlinkCollectionViewModel.Clear();
-            }
-        }
+        //public static void ClearHyperlinks(this RichTextBox rtb, bool ignoreTemplates = false) {
+        //    //replaces hyperlinks with spans of there textrange text
+        //    var rtbvm = (MpClipTileRichTextBoxViewModel)rtb.DataContext;
+        //    var ctvm = rtbvm.ClipTileViewModel;
+        //    var hlList = rtb.GetHyperlinkList();
+        //    foreach (var hl in hlList) {
+        //        string linkText = string.Empty;
+        //        if (hl.DataContext == null || hl.DataContext is MpClipTileViewModel) {
+        //            linkText = new TextRange(hl.ElementStart, hl.ElementEnd).Text;
+        //        } else if(!ignoreTemplates) {
+        //            var thlvm = (MpTemplateHyperlinkViewModel)hl.DataContext;
+        //            linkText = thlvm.TemplateName;
+        //        }
+        //        hl.Inlines.Clear();
+        //        new Span(new Run(linkText), hl.ContentStart);
+        //    }
+        //    if(!ignoreTemplates) {
+        //        ctvm.TemplateHyperlinkCollectionViewModel.Clear();
+        //    }
+        //}
 
-        public static void CreateHyperlinks(this RichTextBox rtb, bool ignoreTemplates = false) {
-            var rtbvm = (MpClipTileRichTextBoxViewModel)rtb.DataContext;
-            var ctvm = rtbvm.ClipTileViewModel;
-            var regExGroupList = new List<string> {
-                //WebLink
-                @"(?:https?://|www\.)\S+", 
-                //Email
-                @"([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})",
-                //PhoneNumber
-                @"(\+?\d{1,3}?[ -.]?)?\(?(\d{3})\)?[ -.]?(\d{3})[ -.]?(\d{4})",
-                //Currency
-                @"[$|£|€|¥][\d|\.]([0-9]{0,3},([0-9]{3},)*[0-9]{3}|[0-9]+)?(\.\d{0,2})?",
-                //HexColor (no alpha)
-                @"#([0-9]|[a-fA-F]){5}([^" + Properties.Settings.Default.TemplateTokenMarker + "][ ])",
-                //StreetAddress
-                @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Lane|Road|Boulevard|Drive|Street|Ave|Dr|Rd|Blvd|Ln|St)\.?,\s(?:[A-Z][a-z.-]+[ ]?)+ \b\d{5}(?:-\d{4})?\b",                
-                //Text Template (dynamically matching from CopyItemTemplate.TemplateName)
-                ctvm.CopyItem.TemplateRegExMatchString,                
-                //HexColor (with alpha)
-                @"#([0-9]|[a-fA-F]){7}([^" + Properties.Settings.Default.TemplateTokenMarker + "][ ])",
-            };
-            var docPlainText = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
-            for (int i = 0; i < regExGroupList.Count; i++) {
-                var linkType = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);
-                if(linkType == MpSubTextTokenType.TemplateSegment && ignoreTemplates) {
-                    continue;
-                }
-                if (linkType == MpSubTextTokenType.StreetAddress) {
-                    //doesn't consistently work and presents bugs so disabling for now
-                    continue;
-                }
-                var lastRangeEnd = rtb.Document.ContentStart;
-                var regExStr = regExGroupList[i];
-                if (string.IsNullOrEmpty(regExStr)) {
-                    //this occurs for templates when copyitem has no templates
-                    continue;
-                }
-                var mc = Regex.Matches(docPlainText, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
-                foreach (Match m in mc) {
-                    foreach (Group mg in m.Groups) {
-                        foreach (Capture c in mg.Captures) {
-                            Hyperlink hl = null;
-                            var matchRange = MpHelpers.Instance.FindStringRangeFromPosition(lastRangeEnd, c.Value, true);
-                            if (matchRange == null) {
-                                continue;
-                            }
-                            lastRangeEnd = matchRange.End;
-                            if (linkType == MpSubTextTokenType.TemplateSegment) {
-                                var copyItemTemplate = ctvm.CopyItem.GetTemplateByName(matchRange.Text);
-                                var thlvm = new MpTemplateHyperlinkViewModel(ctvm, copyItemTemplate);
-                                hl =  MpHelpers.Instance.CreateTemplateHyperlink(thlvm, matchRange);
-                                ctvm.TemplateHyperlinkCollectionViewModel.Add(thlvm);
-                            } else {
-                                matchRange.Text = matchRange.Text;
-                                hl = new Hyperlink(matchRange.Start, matchRange.End);
-                                var linkText = c.Value;
-                                hl.Tag = linkType;
-                                MpHelpers.Instance.CreateBinding(ctvm, new PropertyPath(nameof(ctvm.IsSelected)), hl, Hyperlink.IsEnabledProperty);
-                                hl.MouseEnter += (s3, e3) => {
-                                    hl.Cursor = ctvm.IsSelected ? Cursors.Hand : Cursors.Arrow;
-                                };
-                                hl.MouseLeave += (s3, e3) => {
-                                    hl.Cursor = Cursors.Arrow;
-                                };
-                                hl.MouseLeftButtonDown += (s4, e4) => {
-                                    if (hl.NavigateUri != null && ctvm.IsSelected) {
-                                        MpHelpers.Instance.OpenUrl(hl.NavigateUri.ToString());
-                                    }
-                                };
+        //public static void CreateHyperlinks(this RichTextBox rtb, bool ignoreTemplates = false) {
+        //    var rtbvm = (MpClipTileRichTextBoxViewModel)rtb.DataContext;
+        //    var ctvm = rtbvm.ClipTileViewModel;
+        //    var regExGroupList = new List<string> {
+        //        //WebLink
+        //        @"(?:https?://|www\.)\S+", 
+        //        //Email
+        //        @"([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})",
+        //        //PhoneNumber
+        //        @"(\+?\d{1,3}?[ -.]?)?\(?(\d{3})\)?[ -.]?(\d{3})[ -.]?(\d{4})",
+        //        //Currency
+        //        @"[$|£|€|¥][\d|\.]([0-9]{0,3},([0-9]{3},)*[0-9]{3}|[0-9]+)?(\.\d{0,2})?",
+        //        //HexColor (no alpha)
+        //        @"#([0-9]|[a-fA-F]){5}([^" + Properties.Settings.Default.TemplateTokenMarker + "][ ])",
+        //        //StreetAddress
+        //        @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Lane|Road|Boulevard|Drive|Street|Ave|Dr|Rd|Blvd|Ln|St)\.?,\s(?:[A-Z][a-z.-]+[ ]?)+ \b\d{5}(?:-\d{4})?\b",                
+        //        //Text Template (dynamically matching from CopyItemTemplate.TemplateName)
+        //        ctvm.CopyItem.TemplateRegExMatchString,                
+        //        //HexColor (with alpha)
+        //        @"#([0-9]|[a-fA-F]){7}([^" + Properties.Settings.Default.TemplateTokenMarker + "][ ])",
+        //    };
+        //    var docPlainText = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
+        //    for (int i = 0; i < regExGroupList.Count; i++) {
+        //        var linkType = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);
+        //        if(linkType == MpSubTextTokenType.TemplateSegment && ignoreTemplates) {
+        //            continue;
+        //        }
+        //        if (linkType == MpSubTextTokenType.StreetAddress) {
+        //            //doesn't consistently work and presents bugs so disabling for now
+        //            continue;
+        //        }
+        //        var lastRangeEnd = rtb.Document.ContentStart;
+        //        var regExStr = regExGroupList[i];
+        //        if (string.IsNullOrEmpty(regExStr)) {
+        //            //this occurs for templates when copyitem has no templates
+        //            continue;
+        //        }
+        //        var mc = Regex.Matches(docPlainText, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+        //        foreach (Match m in mc) {
+        //            foreach (Group mg in m.Groups) {
+        //                foreach (Capture c in mg.Captures) {
+        //                    Hyperlink hl = null;
+        //                    var matchRange = MpHelpers.Instance.FindStringRangeFromPosition(lastRangeEnd, c.Value, true);
+        //                    if (matchRange == null) {
+        //                        continue;
+        //                    }
+        //                    lastRangeEnd = matchRange.End;
+        //                    if (linkType == MpSubTextTokenType.TemplateSegment) {
+        //                        var copyItemTemplate = ctvm.CopyItem.GetTemplateByName(matchRange.Text);
+        //                        var thlvm = new MpTemplateHyperlinkViewModel(ctvm, copyItemTemplate);
+        //                        hl =  MpHelpers.Instance.CreateTemplateHyperlink(thlvm, matchRange);
+        //                        ctvm.TemplateHyperlinkCollectionViewModel.Add(thlvm);
+        //                    } else {
+        //                        matchRange.Text = matchRange.Text;
+        //                        hl = new Hyperlink(matchRange.Start, matchRange.End);
+        //                        var linkText = c.Value;
+        //                        hl.Tag = linkType;
+        //                        MpHelpers.Instance.CreateBinding(ctvm, new PropertyPath(nameof(ctvm.IsSelected)), hl, Hyperlink.IsEnabledProperty);
+        //                        hl.MouseEnter += (s3, e3) => {
+        //                            hl.Cursor = ctvm.IsSelected ? Cursors.Hand : Cursors.Arrow;
+        //                        };
+        //                        hl.MouseLeave += (s3, e3) => {
+        //                            hl.Cursor = Cursors.Arrow;
+        //                        };
+        //                        hl.MouseLeftButtonDown += (s4, e4) => {
+        //                            if (hl.NavigateUri != null && ctvm.IsSelected) {
+        //                                MpHelpers.Instance.OpenUrl(hl.NavigateUri.ToString());
+        //                            }
+        //                        };
 
-                                MenuItem convertToQrCodeMenuItem = new MenuItem();
-                                convertToQrCodeMenuItem.Header = "Convert to QR Code";
-                                convertToQrCodeMenuItem.Click += async (s5, e1) => {
-                                    var hyperLink = (Hyperlink)((MenuItem)s5).Tag;
-                                    var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString());
-                                    Clipboard.SetImage(bmpSrc);
-                                };
-                                convertToQrCodeMenuItem.Tag = hl;
-                                hl.ContextMenu = new ContextMenu();
-                                hl.ContextMenu.Items.Add(convertToQrCodeMenuItem);
+        //                        MenuItem convertToQrCodeMenuItem = new MenuItem();
+        //                        convertToQrCodeMenuItem.Header = "Convert to QR Code";
+        //                        convertToQrCodeMenuItem.Click += async (s5, e1) => {
+        //                            var hyperLink = (Hyperlink)((MenuItem)s5).Tag;
+        //                            var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(hyperLink.NavigateUri.ToString());
+        //                            Clipboard.SetImage(bmpSrc);
+        //                        };
+        //                        convertToQrCodeMenuItem.Tag = hl;
+        //                        hl.ContextMenu = new ContextMenu();
+        //                        hl.ContextMenu.Items.Add(convertToQrCodeMenuItem);
 
-                                switch ((MpSubTextTokenType)hl.Tag) {
-                                    case MpSubTextTokenType.StreetAddress:
-                                        hl.NavigateUri = new Uri("https://google.com/maps/place/" + linkText.Replace(' ', '+'));
-                                        break;
-                                    case MpSubTextTokenType.Uri:
-                                        if (!linkText.Contains("https://")) {
-                                            hl.NavigateUri = new Uri("https://" + linkText);
-                                        } else {
-                                            hl.NavigateUri = new Uri(linkText);
-                                        }
-                                        MenuItem minifyUrl = new MenuItem();
-                                        minifyUrl.Header = "Minify with bit.ly";
-                                        minifyUrl.Click += async (s1, e2) => {
-                                            Hyperlink link = (Hyperlink)((MenuItem)s1).Tag;
-                                            string minifiedLink = await MpMinifyUrl.Instance.ShortenUrl(link.NavigateUri.ToString());
-                                            if (!string.IsNullOrEmpty(minifiedLink)) {
-                                                matchRange.Text = minifiedLink;
-                                                rtb.ClearHyperlinks();
-                                                rtb.CreateHyperlinks();
-                                            }
-                                            //Clipboard.SetText(minifiedLink);
-                                        };
-                                        minifyUrl.Tag = hl;
-                                        hl.ContextMenu.Items.Add(minifyUrl);
-                                        break;
-                                    case MpSubTextTokenType.Email:
-                                        hl.NavigateUri = new Uri("mailto:" + linkText);
-                                        break;
-                                    case MpSubTextTokenType.PhoneNumber:
-                                        hl.NavigateUri = new Uri("tel:" + linkText);
-                                        break;
-                                    case MpSubTextTokenType.Currency:
-                                        //"https://www.google.com/search?q=%24500.80+to+yen"
-                                        MenuItem convertCurrencyMenuItem = new MenuItem();
-                                        convertCurrencyMenuItem.Header = "Convert Currency To";
-                                        var fromCurrencyType = MpHelpers.Instance.GetCurrencyTypeFromString(linkText);
-                                        foreach (MpCurrency currency in MpCurrencyConverter.Instance.CurrencyList) {
-                                            if (currency.Id == Enum.GetName(typeof(CurrencyType), fromCurrencyType)) {
-                                                continue;
-                                            }
-                                            MenuItem subItem = new MenuItem();
-                                            subItem.Header = currency.CurrencyName + "(" + currency.CurrencySymbol + ")";
-                                            subItem.Click += async (s2, e2) => {
-                                                Enum.TryParse(currency.Id, out CurrencyType toCurrencyType);
-                                                var convertedValue = await MpCurrencyConverter.Instance.ConvertAsync(
-                                                    MpHelpers.Instance.GetCurrencyValueFromString(linkText),
-                                                    fromCurrencyType,
-                                                    toCurrencyType);
-                                                convertedValue = Math.Round(convertedValue, 2);
-                                                if (rtb.Tag != null && ((List<Hyperlink>)rtb.Tag).Contains(hl)) {
-                                                    ((List<Hyperlink>)rtb.Tag).Remove(hl);
-                                                }
-                                                Run run = new Run(currency.CurrencySymbol + convertedValue);
-                                                hl.Inlines.Clear();
-                                                hl.Inlines.Add(run);
-                                            };
+        //                        switch ((MpSubTextTokenType)hl.Tag) {
+        //                            case MpSubTextTokenType.StreetAddress:
+        //                                hl.NavigateUri = new Uri("https://google.com/maps/place/" + linkText.Replace(' ', '+'));
+        //                                break;
+        //                            case MpSubTextTokenType.Uri:
+        //                                if (!linkText.Contains("https://")) {
+        //                                    hl.NavigateUri = new Uri("https://" + linkText);
+        //                                } else {
+        //                                    hl.NavigateUri = new Uri(linkText);
+        //                                }
+        //                                MenuItem minifyUrl = new MenuItem();
+        //                                minifyUrl.Header = "Minify with bit.ly";
+        //                                minifyUrl.Click += async (s1, e2) => {
+        //                                    Hyperlink link = (Hyperlink)((MenuItem)s1).Tag;
+        //                                    string minifiedLink = await MpMinifyUrl.Instance.ShortenUrl(link.NavigateUri.ToString());
+        //                                    if (!string.IsNullOrEmpty(minifiedLink)) {
+        //                                        matchRange.Text = minifiedLink;
+        //                                        rtb.ClearHyperlinks();
+        //                                        rtb.CreateHyperlinks();
+        //                                    }
+        //                                    //Clipboard.SetText(minifiedLink);
+        //                                };
+        //                                minifyUrl.Tag = hl;
+        //                                hl.ContextMenu.Items.Add(minifyUrl);
+        //                                break;
+        //                            case MpSubTextTokenType.Email:
+        //                                hl.NavigateUri = new Uri("mailto:" + linkText);
+        //                                break;
+        //                            case MpSubTextTokenType.PhoneNumber:
+        //                                hl.NavigateUri = new Uri("tel:" + linkText);
+        //                                break;
+        //                            case MpSubTextTokenType.Currency:
+        //                                //"https://www.google.com/search?q=%24500.80+to+yen"
+        //                                MenuItem convertCurrencyMenuItem = new MenuItem();
+        //                                convertCurrencyMenuItem.Header = "Convert Currency To";
+        //                                var fromCurrencyType = MpHelpers.Instance.GetCurrencyTypeFromString(linkText);
+        //                                foreach (MpCurrency currency in MpCurrencyConverter.Instance.CurrencyList) {
+        //                                    if (currency.Id == Enum.GetName(typeof(CurrencyType), fromCurrencyType)) {
+        //                                        continue;
+        //                                    }
+        //                                    MenuItem subItem = new MenuItem();
+        //                                    subItem.Header = currency.CurrencyName + "(" + currency.CurrencySymbol + ")";
+        //                                    subItem.Click += async (s2, e2) => {
+        //                                        Enum.TryParse(currency.Id, out CurrencyType toCurrencyType);
+        //                                        var convertedValue = await MpCurrencyConverter.Instance.ConvertAsync(
+        //                                            MpHelpers.Instance.GetCurrencyValueFromString(linkText),
+        //                                            fromCurrencyType,
+        //                                            toCurrencyType);
+        //                                        convertedValue = Math.Round(convertedValue, 2);
+        //                                        if (rtb.Tag != null && ((List<Hyperlink>)rtb.Tag).Contains(hl)) {
+        //                                            ((List<Hyperlink>)rtb.Tag).Remove(hl);
+        //                                        }
+        //                                        Run run = new Run(currency.CurrencySymbol + convertedValue);
+        //                                        hl.Inlines.Clear();
+        //                                        hl.Inlines.Add(run);
+        //                                    };
 
-                                            convertCurrencyMenuItem.Items.Add(subItem);
-                                        }
+        //                                    convertCurrencyMenuItem.Items.Add(subItem);
+        //                                }
 
-                                        hl.ContextMenu.Items.Add(convertCurrencyMenuItem);
-                                        break;
-                                    case MpSubTextTokenType.HexColor:
-                                        var rgbColorStr = linkText;
-                                        if (rgbColorStr.Length > 7) {
-                                            rgbColorStr = rgbColorStr.Substring(0, 7);
-                                        }
-                                        hl.NavigateUri = new Uri(@"https://www.hexcolortool.com/" + rgbColorStr);
+        //                                hl.ContextMenu.Items.Add(convertCurrencyMenuItem);
+        //                                break;
+        //                            case MpSubTextTokenType.HexColor:
+        //                                var rgbColorStr = linkText;
+        //                                if (rgbColorStr.Length > 7) {
+        //                                    rgbColorStr = rgbColorStr.Substring(0, 7);
+        //                                }
+        //                                hl.NavigateUri = new Uri(@"https://www.hexcolortool.com/" + rgbColorStr);
 
-                                        MenuItem changeColorItem = new MenuItem();
-                                        changeColorItem.Header = "Change Color";
-                                        changeColorItem.Click += (s, e) => {
-                                            var result = MpHelpers.Instance.ShowColorDialog((Brush)new BrushConverter().ConvertFrom(linkText));
-                                        };
-                                        hl.ContextMenu.Items.Add(changeColorItem);
-                                        break;
-                                    default:
-                                        Console.WriteLine("Unhandled token type: " + Enum.GetName(typeof(MpSubTextTokenType), (MpSubTextTokenType)hl.Tag) + " with value: " + linkText);
-                                        break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        //                                MenuItem changeColorItem = new MenuItem();
+        //                                changeColorItem.Header = "Change Color";
+        //                                changeColorItem.Click += (s, e) => {
+        //                                    var result = MpHelpers.Instance.ShowColorDialog((Brush)new BrushConverter().ConvertFrom(linkText));
+        //                                };
+        //                                hl.ContextMenu.Items.Add(changeColorItem);
+        //                                break;
+        //                            default:
+        //                                Console.WriteLine("Unhandled token type: " + Enum.GetName(typeof(MpSubTextTokenType), (MpSubTextTokenType)hl.Tag) + " with value: " + linkText);
+        //                                break;
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
         public static FlowDocument Clone(this FlowDocument doc) {
             using (MemoryStream stream = new MemoryStream()) {

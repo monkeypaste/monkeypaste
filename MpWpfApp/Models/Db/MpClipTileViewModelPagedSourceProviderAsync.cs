@@ -1,4 +1,6 @@
 ﻿using AlphaChiTech.Virtualization;
+using AlphaChiTech.Virtualization.Pageing;
+using AlphaChiTech.VirtualizingCollection.Interfaces;
 using DataGridAsyncDemoMVVM.filtersort;
 using System;
 using System.Collections.Generic;
@@ -7,7 +9,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-//using Windows.Foundation;
 
 namespace MpWpfApp {
     public class MpClipTileViewModelPagedSourceProviderAsync : IPagedSourceProviderAsync<MpClipTileViewModel>, IFilteredSortedSourceProviderAsync {
@@ -57,6 +58,88 @@ namespace MpWpfApp {
         public void OnReset(int count) {
             return;
         }
+        
+
+        int IPagedSourceProvider<MpClipTileViewModel>.IndexOf(MpClipTileViewModel item) {
+            return _data.FilteredOrderedItems.IndexOf(item);
+        }
+
+        public bool Contains(MpClipTileViewModel item) {
+            return _data.Contains(item);
+        }
+        
+        public PagedSourceItemsPacket<MpClipTileViewModel> GetItemsAt(int pageoffset, int count, bool usePlaceholder) {
+            return new PagedSourceItemsPacket<MpClipTileViewModel> {
+                LoadedAt = DateTime.Now,
+                Items = (from items in _data.FilteredOrderedItems select items).Skip(pageoffset).Take(count)
+            };
+        }
+        
+
+        public int Count {
+            get {
+                return _data.FilteredOrderedItems.Count;
+                ;
+            }
+        }
+        #endregion
+
+        #region IPagedSourceProviderAsync Implementation
+        public Task<bool> ContainsAsync(MpClipTileViewModel item) {
+            return Task.Run(() => {
+                return _data.Contains(item);
+            });
+        }
+        
+        public Task<int> GetCountAsync() {
+            return Task.Run(() => {
+                return _data.FilteredOrderedItems.Count;
+            });
+        }
+        
+        public Task<PagedSourceItemsPacket<MpClipTileViewModel>> GetItemsAtAsync(int pageoffset, int count,bool usePlaceholder) {
+            //Console.WriteLine("Get");
+            return Task.Run(() => {
+                return new PagedSourceItemsPacket<MpClipTileViewModel> {
+                    LoadedAt = DateTime.Now,
+                    Items = (from items in _data.FilteredOrderedItems select items).Skip(pageoffset)
+                        .Take(count)
+                };
+            });
+        }
+
+        public MpClipTileViewModel GetPlaceHolder(int index, int page, int offset) {
+            return new MpClipTileViewModel();
+        }
+        
+        /// <summary>
+        ///     This returns the index of a specific item. This method is optional – you can just return -1 if you
+        ///     don’t need to use IndexOf. It’s not strictly required if don’t need to be able to seeking to a
+        ///     specific item, but if you are selecting items implementing this method is recommended.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
+        public Task<int> IndexOfAsync(MpClipTileViewModel item) {
+            return Task.Run(() => _data.FilteredOrderedItems.IndexOf(item));
+        }
+        #endregion
+
+        #region Old Implementation
+        //public MpClipTileViewModel GetPlaceHolder(int index, int page, int offset) {
+        //    //var dt = MpDb.Instance.Execute(
+        //    //    "select *, ROW_NUMBER() OVER(ORDER BY pk_MpCopyItemId) AS Idx from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid) and Idx=@index order by @st",
+        //    //    new Dictionary<string, object> {
+        //    //        { "@tid", _tagId },
+        //    //        { "@st", _sortType + (_isDescending ? "DESC":"ASC")},
+        //    //        { "@index", index }
+        //    //        //{ "@sd", _isDescending ? "DESC":"ASC" }
+        //    //        });
+        //    //if (dt != null && dt.Rows.Count > 0) {
+        //    //    return new MpClipTileViewModel(new MpCopyItem(dt.Rows[0]));
+        //    //}
+        //    //return null;
+        //    return new MpClipTileViewModel();
+        //}
         //public int IndexOf(MpClipTileViewModel item) {
         //    var dt = MpDb.Instance.Execute(
         //       "select ROW_NUMBER() OVER(ORDER BY pk_MpCopyItemId) AS Idx from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid and fk_MpCopyItemId=@ciid) order by @st",
@@ -71,15 +154,6 @@ namespace MpWpfApp {
         //    }
         //    return -1;
         //}
-
-        int IPagedSourceProvider<MpClipTileViewModel>.IndexOf(MpClipTileViewModel item) {
-            return _data.FilteredOrderedItems.IndexOf(item);
-        }
-
-        public bool Contains(MpClipTileViewModel item) {
-            return _data.Contains(item);
-        }
-
         //public PagedSourceItemsPacket<MpClipTileViewModel> GetItemsAt(int pageoffset, int count, bool usePlaceholder) {
         //    var clipTileViewModelList = new List<MpClipTileViewModel>();
         //    var dt = MpDb.Instance.Execute(
@@ -101,14 +175,6 @@ namespace MpWpfApp {
         //        Items = clipTileViewModelList
         //    };
         //}
-
-        public PagedSourceItemsPacket<MpClipTileViewModel> GetItemsAt(int pageoffset, int count, bool usePlaceholder) {
-            return new PagedSourceItemsPacket<MpClipTileViewModel> {
-                LoadedAt = DateTime.Now,
-                Items = (from items in _data.FilteredOrderedItems select items).Skip(pageoffset).Take(count)
-            };
-        }
-
         //public int Count {
         //    get {
         //        var dt = MpDb.Instance.Execute(
@@ -122,20 +188,6 @@ namespace MpWpfApp {
         //        return 0;
         //    }
         //}
-
-        public int Count {
-            get {
-                return _data.FilteredOrderedItems.Count;
-                ;
-            }
-        }
-        #endregion
-
-        #region IPagedSourceProviderAsync Implementation
-        public Task<bool> ContainsAsync(MpClipTileViewModel item) {
-            throw new NotImplementedException();
-        }
-
         //public async Task<int> GetCountAsync() {
         //    var dt = await MpDb.Instance.ExecuteAsync(
         //        "select pk_MpCopyItemId from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid)",
@@ -147,13 +199,6 @@ namespace MpWpfApp {
         //    }
         //    return 0;
         //}
-
-        public Task<int> GetCountAsync() {
-            return Task.Run(() => {
-                return _data.FilteredOrderedItems.Count;
-            });
-        }
-
         //public async Task<PagedSourceItemsPacket<MpClipTileViewModel>> GetItemsAtAsync(int pageoffset, int count, bool usePlaceholder) {
         //    var clipTileViewModelList = new List<MpClipTileViewModel>();
         //    var dt = await MpDb.Instance.ExecuteAsync(
@@ -175,34 +220,6 @@ namespace MpWpfApp {
         //        Items = clipTileViewModelList
         //    };
         //}
-
-        public Task<PagedSourceItemsPacket<MpClipTileViewModel>> GetItemsAtAsync(int pageoffset, int count,bool usePlaceholder) {
-            //Console.WriteLine("Get");
-            return Task.Run(() => {
-                return new PagedSourceItemsPacket<MpClipTileViewModel> {
-                    LoadedAt = DateTime.Now,
-                    Items = (from items in _data.FilteredOrderedItems select items).Skip(pageoffset)
-                        .Take(count)
-                };
-            });
-        }
-
-        public MpClipTileViewModel GetPlaceHolder(int index, int page, int offset) {
-            //var dt = MpDb.Instance.Execute(
-            //    "select *, ROW_NUMBER() OVER(ORDER BY pk_MpCopyItemId) AS Idx from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid) and Idx=@index order by @st",
-            //    new Dictionary<string, object> {
-            //        { "@tid", _tagId },
-            //        { "@st", _sortType + (_isDescending ? "DESC":"ASC")},
-            //        { "@index", index }
-            //        //{ "@sd", _isDescending ? "DESC":"ASC" }
-            //        });
-            //if (dt != null && dt.Rows.Count > 0) {
-            //    return new MpClipTileViewModel(new MpCopyItem(dt.Rows[0]));
-            //}
-            //return null;
-            return new MpClipTileViewModel();
-        }
-
         //public async Task<int> IndexOfAsync(MpClipTileViewModel item) {
         //    var dt = await MpDb.Instance.ExecuteAsync(
         //        "select ROW_NUMBER() OVER(ORDER BY pk_MpCopyItemId) AS Idx from MpCopyItem where pk_MpCopyItemId in (select fk_MpCopyItemId from MpCopyItemTag where fk_MpTagId=@tid and fk_MpCopyItemId=@ciid) order by @st",
@@ -217,17 +234,6 @@ namespace MpWpfApp {
         //    }
         //    return -1;
         //}
-
-        /// <summary>
-        ///     This returns the index of a specific item. This method is optional – you can just return -1 if you
-        ///     don’t need to use IndexOf. It’s not strictly required if don’t need to be able to seeking to a
-        ///     specific item, but if you are selecting items implementing this method is recommended.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        public Task<int> IndexOfAsync(MpClipTileViewModel item) {
-            return Task.Run(() => _data.FilteredOrderedItems.IndexOf(item));
-        }
         #endregion
     }
 }

@@ -1,6 +1,9 @@
 ﻿using DataGridAsyncDemoMVVM.filtersort;
 using GalaSoft.MvvmLight.CommandWpf;
+using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
@@ -79,7 +82,7 @@ namespace MpWpfApp {
         #region Public Methods
         public MpClipTileSortViewModel() : base() {
             //must be set before property changed registered for loading order
-            //SelectedSortType = SortTypes[0];
+            SelectedSortType = SortTypes[0];
 
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
@@ -90,17 +93,14 @@ namespace MpWpfApp {
             };
         }
         public void ClipTileSort_Loaded(object sender, RoutedEventArgs e) {
-            //SelectedSortType = SortTypes[0];
+            PerformSelectedSortCommand.Execute(null);
+        }
+        public string GetSortTypeAsMemberPath() {
+            return ConvertSortTypeToMemberPath(SelectedSortType.Name);
         }
         #endregion
 
-        #region Private Methods
-        private void PerformSelectedSort() {
-            var sort = new MemberPathSortingDirection();
-            sort.MemberPath = ConvertSortTypeToMemberPath(SelectedSortType.Header);
-            sort.SortDirection = IsSortDescending ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending;
-            MainWindowViewModel.ClipTrayViewModel.SortCommand.Execute(sort);
-        }
+        #region Private Methods        
         private string ConvertSortTypeToMemberPath(string sortType) {
             switch (sortType) {
                 case "Date":
@@ -140,6 +140,35 @@ namespace MpWpfApp {
                 DescSortOrderButtonImageVisibility = Visibility.Collapsed;
             }
             PerformSelectedSort();
+        }
+
+        private RelayCommand _performSelectedSortCommand;
+        public ICommand PerformSelectedSortCommand {
+            get {
+                if(_performSelectedSortCommand == null) {
+                    _performSelectedSortCommand = new RelayCommand(PerformSelectedSort);
+                }
+                return _performSelectedSortCommand;
+            }
+        }
+        private void PerformSelectedSort() {
+            if (MainWindowViewModel.IsLoading) {
+                return;
+            }
+            var ct = MainWindowViewModel.ClipTrayViewModel;
+            var sw = new Stopwatch();
+            sw.Start();
+
+            ct.ClearClipSelection();
+            ListSortDirection sortDir = AscSortOrderButtonImageVisibility == Visibility.Visible ? ListSortDirection.Ascending : ListSortDirection.Descending;
+            
+            //cvs.SortDescriptions.Clear();
+            //cvs.SortDescriptions.Add(new SortDescription(sortBy, sortDir));
+            ct.ClipTileViewModels.Sort(x => x[GetSortTypeAsMemberPath()], sortDir == ListSortDirection.Descending);
+            ct.Refresh();
+            sw.Stop();
+            Console.WriteLine("Sort for " + ct.VisibileClipTiles.Count + " items: " + sw.ElapsedMilliseconds + " ms");
+            ct.ResetClipSelection();
         }
         #endregion
     }

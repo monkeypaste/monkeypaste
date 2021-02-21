@@ -448,7 +448,8 @@ namespace AlphaChiTech.Virtualization.Pageing
             if (ret == null)
             {
                 //return this.ProviderAsync.GetPlaceHolder(0, 0,0);
-                Debugger.Break();
+
+                //Debugger.Break();
                 //TODO <-
                 if (nullTryCount <= 0) //inconsistency, notify reset collection
                 {
@@ -1209,7 +1210,11 @@ namespace AlphaChiTech.Virtualization.Pageing
             }
             else
             {
-                oldItem = this.Provider.GetItemsAt(index, 1, false).Items.FirstOrDefault();
+                if(this.Provider != null) {
+                    oldItem = this.Provider.GetItemsAt(index, 1, false).Items.FirstOrDefault();
+                } else {
+                    oldItem = this.ProviderAsync.GetItemsAt(index, 1, false).Items.FirstOrDefault();
+                }
                 if (oldItem != default(T)) Debugger.Break();
             }
 

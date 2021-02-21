@@ -1,10 +1,10 @@
-﻿using System;
+﻿using DataGridAsyncDemoMVVM.filtersort;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq.Dynamic;
 using System.Text.RegularExpressions;
-using DataGridAsyncDemoMVVM.filtersort;
 
 namespace MpWpfApp {
     public class MpClipTileViewModelDataSource : IFilteredSortedSourceProviderAsync {
@@ -110,7 +110,12 @@ namespace MpWpfApp {
                 this.WhereLinqExpression = whereExpression;
         }
 
+        public void Add(MpClipTileViewModel ctvm) {
+            _items.Add(ctvm);
+            _isFilteredItemsValid = false;
+        }
         public void InsertAt(int index, MpClipTileViewModel newItem) {
+            
             _items.Insert(index, newItem);
             _isFilteredItemsValid = false;
         }        

@@ -315,14 +315,14 @@ namespace MpWpfApp {
                 var rtbSelection = rtb.Selection;
 
                 ClipTileViewModel.SaveToDatabase();
-
-                if (ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Count == 0) {
+                
+                if (ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Count == 0) {
                     //if templates are NOT in the clip yet add one w/ default name
                     ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);
                     //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
                 } else {
                     var templateContextMenu = new ContextMenu();
-                    foreach (var ttcvm in ClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder) {
+                    foreach (var ttcvm in ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder) {
                         Border b = new Border();
                         b.Background = ttcvm.TemplateBrush;
                         b.BorderBrush = Brushes.Black;
@@ -556,8 +556,10 @@ namespace MpWpfApp {
             }
         }
         private void RefreshDocument() {
-            ClipTileViewModel.GetRtb().ClearHyperlinks();
-            ClipTileViewModel.GetRtb().CreateHyperlinks();
+            foreach(var rtbvm in ClipTileViewModel.RichTextBoxViewModels) {
+                rtbvm.ClearHyperlinks();
+                rtbvm.CreateHyperlinks();
+            }            
         }
         #endregion
     }

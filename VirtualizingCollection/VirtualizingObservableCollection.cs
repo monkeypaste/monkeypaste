@@ -175,7 +175,7 @@ namespace AlphaChiTech.Virtualization
 
         public void CopyTo(Array array, int index)
         {
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         /// <inheritdoc />

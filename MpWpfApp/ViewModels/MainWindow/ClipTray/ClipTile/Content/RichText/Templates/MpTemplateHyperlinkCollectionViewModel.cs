@@ -12,7 +12,23 @@ namespace MpWpfApp {
         #region Private Variables
         #endregion
 
+
+
+        #region Properties
         #region View Models
+        private MpClipTileRichTextBoxViewModel _clipTileRichTextBoxViewModel = null;
+        public MpClipTileRichTextBoxViewModel ClipTileRichTextBoxViewModel {
+            get {
+                return _clipTileRichTextBoxViewModel;
+            }
+            set {
+                if (_clipTileRichTextBoxViewModel != value) {
+                    _clipTileRichTextBoxViewModel = value;
+                    OnPropertyChanged(nameof(ClipTileRichTextBoxViewModel));
+                }
+            }
+        }
+
         private MpClipTileViewModel _clipTileViewModel = null;
         public MpClipTileViewModel ClipTileViewModel {
             get {
@@ -26,7 +42,7 @@ namespace MpWpfApp {
                 }
             }
         }
-               
+
         public MpObservableCollection<MpTemplateHyperlinkViewModel> UniqueTemplateHyperlinkViewModelListByDocOrder {
             get {
                 var ul = new MpObservableCollection<MpTemplateHyperlinkViewModel>();
@@ -55,7 +71,7 @@ namespace MpWpfApp {
                     }
                 }
                 //if none selected but exist select first one
-                if(this.Count > 0) {
+                if (this.Count > 0) {
                     this[0].IsSelected = true;
                     return SelectedTemplateHyperlinkViewModel;
                 }
@@ -70,34 +86,24 @@ namespace MpWpfApp {
                         } else {
                             ttcvm.IsSelected = true;
                         }
-                    }                    
+                    }
                     OnPropertyChanged(nameof(SelectedTemplateHyperlinkViewModel));
                 }
             }
         }
         #endregion        
-
-        #region Properties
-        //private Dictionary<string, string> _templateTextLookUpDictionary = new Dictionary<string, string>();
-        //public Dictionary<string,string> TemplateTextLookUpDictionary {
-        //    get {
-        //        return _templateTextLookUpDictionary;
-        //    }
-        //    set {
-        //        if(_templateTextLookUpDictionary != value) {
-        //            _templateTextLookUpDictionary = value;
-        //            OnPropertyChanged(nameof(TemplateTextLookUpDictionary));
-        //        }
-        //    }
-        //}
         #endregion
 
         #region Public Methods
-        public MpTemplateHyperlinkCollectionViewModel(MpClipTileViewModel parent) :base() {
+        public MpTemplateHyperlinkCollectionViewModel() : base() { }
+
+        public MpTemplateHyperlinkCollectionViewModel(MpClipTileViewModel parent,MpClipTileRichTextBoxViewModel rtbvm) :base() {
             CollectionChanged += (s, e) => {
                 OnPropertyChanged(nameof(UniqueTemplateHyperlinkViewModelListByDocOrder));
             };
+
             ClipTileViewModel = parent;
+            ClipTileRichTextBoxViewModel = rtbvm;
 
             ClipTileViewModel.PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
@@ -180,7 +186,7 @@ namespace MpWpfApp {
         }
 
         public object Clone() {
-            var nthlcvm = new MpTemplateHyperlinkCollectionViewModel(ClipTileViewModel);
+            var nthlcvm = new MpTemplateHyperlinkCollectionViewModel(ClipTileViewModel,ClipTileRichTextBoxViewModel);
             foreach(var thlvm in this) {
                 nthlcvm.Add((MpTemplateHyperlinkViewModel)thlvm.Clone());
             }

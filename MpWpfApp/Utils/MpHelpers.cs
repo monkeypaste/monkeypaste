@@ -50,51 +50,52 @@ namespace MpWpfApp {
         }
 
         #region Documents
-        public Hyperlink CreateTemplateHyperlink(MpTemplateHyperlinkViewModel thlvm, TextRange tr) {
-            //if the range for the template contains a sub-selection of a hyperlink the hyperlink(s)
-            //needs to be broken into their text before the template hyperlink can be created
-            var trSHl = (Hyperlink)MpHelpers.Instance.FindParentOfType(tr.Start.Parent, typeof(Hyperlink));
-            var trEHl = (Hyperlink)MpHelpers.Instance.FindParentOfType(tr.End.Parent, typeof(Hyperlink));
-            var trText = tr.Text;
+        //public Hyperlink CreateTemplateHyperlink(MpTemplateHyperlinkViewModel thlvm, TextRange tr) {
+        //    //if the range for the template contains a sub-selection of a hyperlink the hyperlink(s)
+        //    //needs to be broken into their text before the template hyperlink can be created
+        //    var trSHl = (Hyperlink)MpHelpers.Instance.FindParentOfType(tr.Start.Parent, typeof(Hyperlink));
+        //    var trEHl = (Hyperlink)MpHelpers.Instance.FindParentOfType(tr.End.Parent, typeof(Hyperlink));
+        //    var trText = tr.Text;
 
-            if (trSHl != null) {
-                var linkText = new TextRange(trSHl.ElementStart, trSHl.ElementEnd).Text;
-                trSHl.Inlines.Clear();
-                var span = new Span(new Run(linkText), trSHl.ElementStart);
-                tr = FindStringRangeFromPosition(span.ContentStart, trText, true);
-            }
-            if (trEHl != null && trEHl != trSHl) {
-                var linkText = new TextRange(trEHl.ElementStart, trEHl.ElementEnd).Text;
-                trEHl.Inlines.Clear();
-                var span = new Span(new Run(linkText), trEHl.ElementStart);
-                tr = FindStringRangeFromPosition(span.ContentStart, trText, true);
-            }
-            thlvm.TemplateHyperlinkRange = tr;
-            //var r = new Run();
-            //r.Loaded += thlvm.TemplateHyperLinkRun_Loaded;
+        //    if (trSHl != null) {
+        //        var linkText = new TextRange(trSHl.ElementStart, trSHl.ElementEnd).Text;
+        //        trSHl.Inlines.Clear();
+        //        var span = new Span(new Run(linkText), trSHl.ElementStart);
+        //        tr = FindStringRangeFromPosition(span.ContentStart, trText, true);
+        //    }
+        //    if (trEHl != null && trEHl != trSHl) {
+        //        var linkText = new TextRange(trEHl.ElementStart, trEHl.ElementEnd).Text;
+        //        trEHl.Inlines.Clear();
+        //        var span = new Span(new Run(linkText), trEHl.ElementStart);
+        //        tr = FindStringRangeFromPosition(span.ContentStart, trText, true);
+        //    }
+        //    thlvm.TemplateHyperlinkRange = tr;
+        //    //var r = new Run();
+        //    //r.Loaded += thlvm.TemplateHyperLinkRun_Loaded;
 
-            var tb = new TextBlock();
-            tb.DataContext = thlvm;
-            tb.Loaded += thlvm.TemplateHyperLinkRun_Loaded;
+        //    var tb = new TextBlock();
+        //    tb.DataContext = thlvm;
+        //    tb.Loaded += thlvm.TemplateHyperLinkRun_Loaded;
 
-            var b = new Border();
-            b.CornerRadius = new CornerRadius(5);
-            b.BorderThickness = new Thickness(1.5);
-            b.DataContext = thlvm;
-            b.Child = tb;
+        //    var b = new Border();
+        //    b.CornerRadius = new CornerRadius(5);
+        //    b.BorderThickness = new Thickness(1.5);
+        //    b.DataContext = thlvm;
+        //    b.Child = tb;
 
-            var iuic = new InlineUIContainer();
-            iuic.DataContext = thlvm;
-            iuic.Child = b;
+        //    var iuic = new InlineUIContainer();
+        //    iuic.DataContext = thlvm;
+        //    iuic.Child = b;
 
-            var hl = new Hyperlink(tr.Start, tr.End);
-            hl.DataContext = thlvm;
-            hl.Inlines.Clear();
-            hl.Inlines.Add(iuic);
-            thlvm.TemplateHyperlink = hl;
-            return hl;
+        //    var hl = new Hyperlink(tr.Start, tr.End);
+        //    hl.DataContext = thlvm;
+        //    hl.Inlines.Clear();
+        //    hl.Inlines.Add(iuic);
+        //    thlvm.TemplateHyperlink = hl;
+        //    return hl;
 
-        }
+        //}
+        
         public void ApplyBackgroundBrushToRangeList(MpObservableCollection<MpObservableCollection<TextRange>> rangeList, Brush bgBrush, CancellationToken ct) {
             if (rangeList == null || rangeList.Count == 0) {
                 return;

@@ -10,6 +10,7 @@
     <Authors />
     <PackageId>AlphaChiTech.VirtualizingCollection</PackageId>
     <Product>AlphaChiTech.VirtualizingCollection</Product>
+    <UserSecretsId>0db44801-14da-4a5e-865a-d0de11771949</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
