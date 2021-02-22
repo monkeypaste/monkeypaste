@@ -44,6 +44,32 @@
         #region Statics
         #endregion
 
+       
+
+
+        #region Properties
+
+        #region Property Reflection Referencer
+        public object this[string propertyName] {
+            get {
+                // probably faster without reflection:
+                // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
+                // instead of the following
+                Type myType = typeof(MpClipTileViewModel);
+                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+                if (myPropInfo == null) {
+                    throw new Exception("Unable to find property: " + propertyName);
+                }
+                return myPropInfo.GetValue(this, null);
+            }
+            set {
+                Type myType = typeof(MpClipTileViewModel);
+                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
+                myPropInfo.SetValue(this, value, null);
+            }
+        }
+        #endregion
+
         #region View Models
         private MpHighlightTextRangeViewModelCollection _highlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection();
         public MpHighlightTextRangeViewModelCollection HighlightTextRangeViewModelCollection {
@@ -103,13 +129,13 @@
                 if (CopyItem == null || CopyItemType != MpCopyItemType.FileList) {
                     return new ObservableCollection<MpFileListItemViewModel>();
                 }
-                if(_fileListViewModels == null) {
+                if (_fileListViewModels == null) {
                     _fileListViewModels = new ObservableCollection<MpFileListItemViewModel>();
                     foreach (var path in CopyItem.GetFileList()) {
                         _fileListViewModels.Add(new MpFileListItemViewModel(this, path));
                     }
                 }
-                
+
                 return _fileListViewModels;
             }
         }
@@ -146,7 +172,7 @@
                 return _editTemplateToolbarViewModel;
             }
             set {
-                if(_editTemplateToolbarViewModel != value) {
+                if (_editTemplateToolbarViewModel != value) {
                     _editTemplateToolbarViewModel = value;
                     OnPropertyChanged(nameof(EditTemplateToolbarViewModel));
                 }
@@ -159,7 +185,7 @@
                 return _pasteTemplateToolbarViewModel;
             }
             set {
-                if(_pasteTemplateToolbarViewModel != value) {
+                if (_pasteTemplateToolbarViewModel != value) {
                     _pasteTemplateToolbarViewModel = value;
                     OnPropertyChanged(nameof(PasteTemplateToolbarViewModel));
                 }
@@ -190,29 +216,6 @@
         }
 
         #endregion
-
-        #region Property Reflection Referencer
-        public object this[string propertyName] {
-            get {
-                // probably faster without reflection:
-                // like:  return Properties.Settings.Default.PropertyValues[propertyName] 
-                // instead of the following
-                Type myType = typeof(MpClipTileViewModel);
-                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
-                if (myPropInfo == null) {
-                    throw new Exception("Unable to find property: " + propertyName);
-                }
-                return myPropInfo.GetValue(this, null);
-            }
-            set {
-                Type myType = typeof(MpClipTileViewModel);
-                PropertyInfo myPropInfo = myType.GetProperty(propertyName);
-                myPropInfo.SetValue(this, value, null);
-            }
-        }
-        #endregion
-
-        #region Properties
 
         #region Controls
         private TextBlock _titleTextBlock;
@@ -466,6 +469,15 @@
                 }
             }
         }
+
+        public double TileWidthMax {
+            get {
+                if(CopyItem == null) {
+                    return 0;
+                }
+                return Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, RichTextBoxViewModels.RelativeWidthMax);
+            }
+        }
         #endregion
 
         #region Visibility Properties
@@ -511,7 +523,9 @@
         public ScrollBarVisibility RtbHorizontalScrollbarVisibility {
             get {
                 if(IsEditingTile || IsPastingTemplateTile) {
-                    return ScrollBarVisibility.Auto;
+                    if(RichTextBoxViewModels.RelativeWidthMax > ClipBorder.ActualWidth) {
+                        return ScrollBarVisibility.Visible;
+                    }
                 }
                 return ScrollBarVisibility.Hidden;
             }
@@ -723,24 +737,6 @@
         #endregion
 
         #region State Properties        
-        public MpClipTileRichTextBoxViewModel SelectedRichTextBoxViewModel {
-            get {
-                if(RichTextBoxViewModels.Count == 0) {
-                    return null;
-                }
-                return RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel;
-            }
-        }
-
-        public RichTextBox SelectedRtb {
-            get {
-                if (SelectedRichTextBoxViewModel != null) {
-                    return SelectedRichTextBoxViewModel.Rtb;
-                }
-                return null;
-            }
-        }
-
         private bool _isHoveringOnTitleTextGrid = false;
         public bool IsHoveringOnTitleTextGrid {
             get {
@@ -787,6 +783,7 @@
                     OnPropertyChanged(nameof(TileDetailGridVisibility));
                     OnPropertyChanged(nameof(TileContentHeight));
                     OnPropertyChanged(nameof(TileRtbHeight));
+                    OnPropertyChanged(nameof(IsExpanded));
                 }
             }
         }
@@ -803,6 +800,7 @@
                     OnPropertyChanged(nameof(TileDetailGridVisibility));
                     OnPropertyChanged(nameof(TileContentHeight));
                     OnPropertyChanged(nameof(TileRtbHeight));
+                    OnPropertyChanged(nameof(IsExpanded));
                 }
             }
         }
@@ -819,9 +817,19 @@
                     OnPropertyChanged(nameof(TileDetailGridVisibility));
                     OnPropertyChanged(nameof(TileContentHeight));
                     OnPropertyChanged(nameof(TileRtbHeight));
+                    OnPropertyChanged(nameof(IsExpanded));
                 }
             }
         }        
+
+        public bool IsExpanded {
+            get {
+                if(IsPastingTemplateTile || IsEditingTemplate || IsEditingTile) {
+                    return true;
+                }
+                return false;
+            }
+        }
 
         public bool HasTemplate {
             get {
@@ -1294,16 +1302,6 @@
         public MpClipTileViewModel(MpCopyItem ci) : this(false) {
             SetCopyItem(ci);
         }
-        
-        public static async Task<MpClipTileViewModel> LoadClipTileViewModel(MpCopyItem ci, CancellationToken ct) {
-            var ctvm = new MpClipTileViewModel(ci);
-            await Task.Run(() => {
-                while (ctvm.IsLoading) {
-                    System.Threading.Thread.Sleep(100);
-                }
-            }, ct);
-            return ctvm;
-        }
 
         public void SetCopyItem(MpCopyItem ci) {
             if (ci == null) {
@@ -1722,12 +1720,27 @@
             }            
         }
 
-        public void AppendContent(MpClipTileViewModel octvm) {
-            CopyItem.Combine(octvm.CopyItem,true);
-            //since appending only happens for richtext types
-            //OnPropertyChanged(nameof(CopyItemRichText));
-            //GetRtb().Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(CopyItemRichText);
+        public void MergeClip(MpClipTileViewModel octvm, bool mergeTags = false) {
+            var otherItemTagList = new List<MpTagTileViewModel>();
+            if(mergeTags) {
+                foreach(var tagTile in MainWindowViewModel.TagTrayViewModel) {
+                    if(tagTile != MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel() &&
+                       tagTile.IsLinkedWithClipTile(octvm)) {
+                        otherItemTagList.Add(tagTile);
+                    }
+                }
+            }
+            CopyItem.Combine(octvm.CopyItem,false,true);
+
             OnPropertyChanged(nameof(CopyItem));
+            
+            //tag associationgs are removed in the model combining
+            foreach(var otherItemTagTile in otherItemTagList) {
+                otherItemTagTile.AddClip(this,false);
+            }
+
+            //when initially converting richtext item into composite it needs to be relinked to history
+            MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(this);
             MainWindowViewModel.ClipTrayViewModel.Refresh();
         }
 
@@ -1924,7 +1937,7 @@
         }
         private bool CanEditClip() {
             return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
-                  CopyItemType == MpCopyItemType.RichText && !IsPastingTemplateTile &&
+                  (CopyItemType == MpCopyItemType.RichText || CopyItemType == MpCopyItemType.Composite) && !IsPastingTemplateTile &&
                   !IsEditingTile;
         }
         private void EditClip() {

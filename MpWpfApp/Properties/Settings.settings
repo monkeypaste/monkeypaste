@@ -292,5 +292,8 @@
     <Setting Name="IsTerminalAdministrator" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="NotificationShowCopyItemTooLargeToast" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

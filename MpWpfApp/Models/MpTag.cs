@@ -94,10 +94,10 @@ namespace MpWpfApp {
             }
             return false;
         }
-        public void LinkWithCopyItem(MpCopyItem ci) {
-            if (IsLinkedWithCopyItem(ci)) {
-                //Console.WriteLine("MpTag Warning attempting to relink tag " + TagId + " with copyitem " + ci.copyItemId+" ignoring...");
-                return;
+        public bool LinkWithCopyItem(MpCopyItem ci) {
+            //returns FALSE if copyitem is already linked to maintain correct counts
+            if (IsLinkedWithCopyItem(ci)) {               
+                return false;
             }
             DataTable dt = MpDb.Instance.Execute(
                 "select * from MpCopyItemTag where fk_MpTagId=@tid",
@@ -121,6 +121,7 @@ namespace MpWpfApp {
                 //+ ci.CopyItemId + "," + this.TagId + "," + SortOrderIdx + ")");
             WriteToDatabase();
             Console.WriteLine("Tag link created between tag " + TagId + " with copyitem " + ci.CopyItemId);
+            return true;
         }
         public void UnlinkWithCopyItem(MpCopyItem ci) {
             if (!IsLinkedWithCopyItem(ci)) {

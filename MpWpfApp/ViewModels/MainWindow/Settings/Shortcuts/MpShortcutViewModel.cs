@@ -410,6 +410,7 @@ namespace MpWpfApp {
             //never perform shortcuts in the following states
             if(MpAssignShortcutModalWindowViewModel.IsOpen ||
                MpSettingsWindowViewModel.IsOpen ||
+               MainWindowViewModel.ClipTrayViewModel.IsPastingTemplate ||
                MainWindowViewModel.ClipTrayViewModel.IsEditingClipTile ||
                MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle ||
                MainWindowViewModel.TagTrayViewModel.IsEditingTagName ||

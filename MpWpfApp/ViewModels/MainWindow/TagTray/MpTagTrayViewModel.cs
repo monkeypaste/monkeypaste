@@ -48,10 +48,11 @@ namespace MpWpfApp {
         }
 
         public new void Add(MpTagTileViewModel newTagTile) {
-            if(newTagTile.IsNew) {
+            base.Add(newTagTile);
+
+            if (newTagTile.IsNew) {
                 newTagTile.Tag.WriteToDatabase();
             }
-            base.Add(newTagTile);
             //watches Tag IsSelected so History is selected if none are
             newTagTile.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {

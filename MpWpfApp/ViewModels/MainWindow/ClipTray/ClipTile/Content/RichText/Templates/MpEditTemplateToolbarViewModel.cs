@@ -21,6 +21,8 @@ namespace MpWpfApp {
         private string _originalTemplateName = string.Empty;
         private TextRange _originalSelection = null;
         private Brush _originalTemplateColor = Brushes.Pink;
+
+        private Grid _borderGrid = null;
         #endregion
 
         #region View Models        
@@ -147,7 +149,11 @@ namespace MpWpfApp {
             if (ClipTileViewModel.CopyItemType != MpCopyItemType.RichText && ClipTileViewModel.CopyItemType != MpCopyItemType.Composite) {
                 return;
             }
-            ClipTileViewModel.SelectedRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.PropertyChanged += (s, e) => {
+            _borderGrid = (Grid)sender;                 
+        }
+
+        public void InitWithRichTextBox(RichTextBox rtb) {
+            ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel):
                         //thlvm.IsSelected is triggered on mouse click, this brings up edit toolbar
@@ -155,21 +161,7 @@ namespace MpWpfApp {
                         break;
                 }
             };
-            ClipTileViewModel.PropertyChanged += (s23, e43) => {
-                switch (e43.PropertyName) {
-                    case nameof(ClipTileViewModel.SelectedRtb):
-                        if (ClipTileViewModel.SelectedRtb == null) {
-                            return;
-                        }
-                        InitWithRichTextBox((Grid)sender, ClipTileViewModel.SelectedRtb);
-                        break;
-                }
-            };            
-        }
-
-        public void InitWithRichTextBox(Grid editTemplateToolbarBorderGrid, RichTextBox rtb) {
-            //var editTemplateToolbarBorderGrid = (Grid)sender;
-            var editTemplateToolbarBorder = editTemplateToolbarBorderGrid.GetVisualAncestor<Border>();
+            var editTemplateToolbarBorder = _borderGrid.GetVisualAncestor<Border>();
             var templateColorButton = (Button)editTemplateToolbarBorder.FindName("TemplateColorButton");
             var cb = (MpClipBorder)editTemplateToolbarBorder.GetVisualAncestor<MpClipBorder>();
             var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxCanvas");
@@ -283,10 +275,11 @@ namespace MpWpfApp {
                 //SelectedTemplateHyperlinkViewModel = new MpTemplateHyperlinkViewModel(ClipTileViewModel, null);
                 _originalText = ClipTileViewModel.RichTextBoxViewModels.SelectedRtb.Selection.Text;
                 //_selectedTemplateHyperlink = MpHelpers.Instance.CreateTemplateHyperlink(SelectedTemplateHyperlinkViewModel, ClipTileViewModel.GetRtb().Selection);
-                ClipTileViewModel.RichTextBoxViewModels.SelectedRtb.Selection.Select(_selectedTemplateHyperlink.ElementStart, _selectedTemplateHyperlink.ElementEnd);
-
+                
                 _selectedTemplateHyperlink = MpTemplateHyperlinkViewModel.CreateTemplateHyperlink(ClipTileViewModel, null, ClipTileViewModel.RichTextBoxViewModels.SelectedRtb.Selection);
                 SelectedTemplateHyperlinkViewModel = (MpTemplateHyperlinkViewModel)_selectedTemplateHyperlink.DataContext;
+                ClipTileViewModel.RichTextBoxViewModels.SelectedRtb.Selection.Select(_selectedTemplateHyperlink.ElementStart, _selectedTemplateHyperlink.ElementEnd);
+
             } else {
                 _originalTemplateName = ttcvm.TemplateName;
                 _originalTemplateColor = ttcvm.TemplateBrush;

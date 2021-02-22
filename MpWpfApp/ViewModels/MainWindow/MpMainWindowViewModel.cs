@@ -229,6 +229,7 @@ namespace MpWpfApp {
             //for (int i = 0; i < 50; i++) {
             //    ClipTrayViewModel.Add(new MpClipTileViewModel(MpCopyItem.CreateRandomItem(MpCopyItemType.RichText)));
             //}
+            IsLoading = false;
         }
 
         public void ClearEdits() {
@@ -295,7 +296,7 @@ namespace MpWpfApp {
                 };
 
                 ApplicationHook.KeyPress += (s, e) => {
-                    if(ClipTrayViewModel != null && (ClipTrayViewModel.IsEditingClipTile || ClipTrayViewModel.IsEditingClipTitle)) {
+                    if(ClipTrayViewModel != null && ClipTrayViewModel.IsAnyTileExpanded) {
                         return;
                     }
                     if(SearchBoxViewModel != null && SearchBoxViewModel.IsTextBoxFocused) {

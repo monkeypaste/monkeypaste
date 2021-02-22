@@ -19,6 +19,8 @@ namespace MpWpfApp {
         private TextBox _selectedTemplateTextBox = null;
         private ComboBox _selectedTemplateComboBox = null;
         private bool _isLoading = false;
+
+        private Grid _borderGrid = null;
         #endregion
 
         #region View Models
@@ -83,10 +85,10 @@ namespace MpWpfApp {
 
         public Visibility PasteTemplateNavigationButtonStackVisibility {
             get {
-                if(ClipTileViewModel == null || ClipTileViewModel.SelectedRichTextBoxViewModel == null) {
+                if(ClipTileViewModel == null || ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel == null) {
                     return Visibility.Collapsed;
                 }
-                if (ClipTileViewModel.SelectedRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 1) {
+                if (ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 1) {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -225,31 +227,23 @@ namespace MpWpfApp {
             if (ClipTileViewModel.CopyItemType != MpCopyItemType.RichText && ClipTileViewModel.CopyItemType != MpCopyItemType.Composite) {
                 return;
             }
+            _borderGrid = (Grid)sender;           
+        }
+
+        public void InitWithRichTextBox(RichTextBox rtb) {
             foreach (var thlvm in ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel) {
                 thlvm.PropertyChanged += (s, e) => {
                     switch (e.PropertyName) {
                         case nameof(thlvm.IsSelected):
-                            if (thlvm.IsSelected/* && SelectedTemplate != thlvm*/) {
+                            if (thlvm.IsSelected && SelectedTemplate != thlvm) {
                                 SetTemplate(thlvm.TemplateName);
                             }
                             break;
                     }
                 };
             }
-            ClipTileViewModel.PropertyChanged += (s23, e43) => {
-                switch (e43.PropertyName) {
-                    case nameof(ClipTileViewModel.SelectedRtb):
-                        if (ClipTileViewModel.SelectedRtb == null) {
-                            return;
-                        }
-                        InitWithRichTextBox((Grid)sender, ClipTileViewModel.SelectedRtb);
-                        break;
-                }
-            };
-        }
 
-        public void InitWithRichTextBox(Grid pasteTemplateToolbarBorderGrid, RichTextBox rtb) {
-            var pasteTemplateToolbarBorder = pasteTemplateToolbarBorderGrid.GetVisualAncestor<Border>();
+            var pasteTemplateToolbarBorder = _borderGrid.GetVisualAncestor<Border>();
             var cb = (MpClipBorder)pasteTemplateToolbarBorder.GetVisualAncestor<MpClipBorder>();
             var editRichTextToolbarBorder = (Border)cb.FindName("ClipTileEditorToolbar");
             var editTemplateToolbarBorder = (Border)cb.FindName("ClipTileEditTemplateToolbar");
@@ -304,26 +298,6 @@ namespace MpWpfApp {
                 selectedTemplateTextBox.Focus();
                 //e2.Handled = false;
             };
-
-            //previousTemplateButton.MouseLeftButtonUp += (s, e1) => {
-            //    if (IsTemplateReadyToPaste) {
-            //        //when navigating and all templates are filled set the fox to the 
-            //        //paste button which is enabled by IsTemplateReadyToPaste also
-            //        pasteTemplateButton.Focus();
-            //    } else {
-            //        selectedTemplateTextBox.Focus();
-            //    }
-            //};
-            //nextTemplateButton.MouseLeftButtonUp += (s, e1) => {
-            //    if (IsTemplateReadyToPaste) {
-            //        //when navigating and all templates are filled set the fox to the 
-            //        //paste button which is enabled by IsTemplateReadyToPaste also
-            //        pasteTemplateButton.Focus();
-            //    } else {
-            //        selectedTemplateTextBox.Focus();
-            //    }
-            //};
-
 
             ClipTileViewModel.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {

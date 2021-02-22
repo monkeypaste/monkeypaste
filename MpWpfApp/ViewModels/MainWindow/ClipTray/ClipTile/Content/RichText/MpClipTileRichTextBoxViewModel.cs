@@ -65,6 +65,37 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Layout
+        public double RtbListBoxItemHeight {
+            get {
+                if(ClipTileViewModel == null) {
+                    return 0;
+                }
+                if(!ClipTileViewModel.IsExpanded && ClipTileViewModel.RichTextBoxViewModels.Count == 1) {
+                    return ClipTileViewModel.TileRtbHeight;
+                }
+                if(ClipTileViewModel.IsExpanded) {
+                    if(ClipTileViewModel.RichTextBoxViewModels.Count == 1) {
+                        return Math.Max(CopyItem.ItemFlowDocument.GetDocumentSize().Height,ClipTileViewModel.TileRtbHeight);
+                    }
+                    return CopyItem.ItemFlowDocument.GetDocumentSize().Height;
+                }
+                var doc = CopyItem.ItemFlowDocument;
+                doc.PageWidth = ClipTileViewModel.TileContentWidth;
+                return doc.GetDocumentSize().Height;
+            }
+        }
+
+        public double RtbRelativeWidthMax {
+            get {
+                if(CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.ItemFlowDocument.GetDocumentSize().Width;
+            }
+        }
+        #endregion
+
         #region Business Logic 
         public bool HasTemplate {
             get {
@@ -81,9 +112,9 @@ namespace MpWpfApp {
                 if (_isSelected != value) {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
-                    ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.SelectedRichTextBoxViewModel));
-                    ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.SelectedRtb));
-                    ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.IsSelected));
+                    ClipTileViewModel.RichTextBoxViewModels.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel));
+                    ClipTileViewModel.RichTextBoxViewModels.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModels.SelectedRtb));
+                    //ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.IsSelected));
                 }
             }
         }
@@ -157,6 +188,7 @@ namespace MpWpfApp {
             }
         }
         #endregion
+
         #endregion
 
         #region Public Methods
@@ -176,8 +208,12 @@ namespace MpWpfApp {
 
             CreateHyperlinks();
 
-            Rtb.Document.PageWidth = Rtb.Width - Rtb.Padding.Left - Rtb.Padding.Right;
-            Rtb.Document.PageHeight = Rtb.Height - Rtb.Padding.Top - Rtb.Padding.Bottom;
+            UpdateLayout();
+
+            //Rtb.MouseLeftButtonUp += (s, e2) => {
+            //    ClipTileViewModel.IsSelected = true;
+            //    SetSelection(true);
+            //};
 
             if (ClipTileViewModel.WasAddedAtRuntime) {
                 //force new items to have left alignment
@@ -185,13 +221,34 @@ namespace MpWpfApp {
                 Rtb.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
                 Rtb.CaretPosition = Rtb.Document.ContentStart;
             }
+
+            if(CompositeSortOrderIdx <= 0) {
+                SetSelection(true);
+            }
+        }
+        public void UpdateLayout() {
+            Rtb.Document.PageWidth = Rtb.Width - Rtb.Padding.Left - Rtb.Padding.Right;
+            Rtb.Document.PageHeight = Rtb.Height - Rtb.Padding.Top - Rtb.Padding.Bottom;
+            if (ClipTileViewModel.IsEditingTile) {
+                Rtb.Document.PageWidth -= (MpMeasurements.Instance.ClipTileEditModeContentMargin * 2) + 5;
+            }
+            OnPropertyChanged(nameof(RtbListBoxItemHeight));
+        }
+
+        public void SetSelection(bool newSelection) {
+            IsSelected = newSelection;
+            if(IsSelected) {
+                ClipTileViewModel.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(Rtb);
+                ClipTileViewModel.EditTemplateToolbarViewModel.InitWithRichTextBox(Rtb);
+                ClipTileViewModel.PasteTemplateToolbarViewModel.InitWithRichTextBox(Rtb);
+            }
         }
 
         public void ClearHyperlinks() {
             var hlList = GetHyperlinkList();
             foreach (var hl in hlList) {
                 string linkText = string.Empty;
-                if (hl.DataContext == null || hl.DataContext is MpClipTileViewModel) {
+                if (hl.DataContext == null || hl.DataContext is MpClipTileRichTextBoxViewModel) {
                     linkText = new TextRange(hl.ElementStart, hl.ElementEnd).Text;
                 } else {
                     var thlvm = (MpTemplateHyperlinkViewModel)hl.DataContext;
@@ -214,13 +271,13 @@ namespace MpWpfApp {
                 //Currency
                 @"[$|£|€|¥][\d|\.]([0-9]{0,3},([0-9]{3},)*[0-9]{3}|[0-9]+)?(\.\d{0,2})?",
                 //HexColor (no alpha)
-                @"#([0-9]|[a-fA-F]){5}([^" + Properties.Settings.Default.TemplateTokenMarker + "][ ])",
+                @"#([0-9]|[a-fA-F]){6}",
                 //StreetAddress
                 @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Lane|Road|Boulevard|Drive|Street|Ave|Dr|Rd|Blvd|Ln|St)\.?,\s(?:[A-Z][a-z.-]+[ ]?)+ \b\d{5}(?:-\d{4})?\b",                
                 //Text Template (dynamically matching from CopyItemTemplate.TemplateName)
                 CopyItem.TemplateRegExMatchString,                
                 //HexColor (with alpha)
-                @"#([0-9]|[a-fA-F]){7}([^" + Properties.Settings.Default.TemplateTokenMarker + "][ ])",
+                @"#([0-9]|[a-fA-F]){8}",
             };
             //var docPlainText = new TextRange(Rtb.Document.ContentStart, Rtb.Document.ContentEnd).Text;
             for (int i = 0; i < regExGroupList.Count; i++) {
@@ -234,6 +291,9 @@ namespace MpWpfApp {
                 if (string.IsNullOrEmpty(regExStr)) {
                     //this occurs for templates when copyitem has no templates
                     continue;
+                }
+                if(linkType == MpSubTextTokenType.HexColor) {
+                    linkType = MpSubTextTokenType.HexColor;
                 }
                 var mc = Regex.Matches(CopyItem.ItemPlainText, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
                 foreach (Match m in mc) {

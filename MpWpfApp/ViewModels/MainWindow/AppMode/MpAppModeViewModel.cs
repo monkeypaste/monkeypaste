@@ -88,7 +88,8 @@ namespace MpWpfApp {
 
         #region Private Methods
         private void ShowNotifcation(bool fromHotkey, string modeType, string status, bool isOn) {
-            if(fromHotkey) {
+            //if(fromHotkey) 
+            {
                 if(Properties.Settings.Default.NotificationShowModeChangeToast) {
                     MpStandardBalloonViewModel.ShowBalloon("Monkey Paste", modeType + " is " + status);
                 }
@@ -111,7 +112,9 @@ namespace MpWpfApp {
             }
         }
         private void ToggleIsAppPaused(bool fromHotkey) {
-            IsAppPaused = !IsAppPaused;
+            if(fromHotkey) {
+                IsAppPaused = !IsAppPaused;
+            }
             ShowNotifcation(fromHotkey, "App", IsAppPaused ? "PAUSED":"ACTIVE", IsAppPaused);
         }
 
@@ -129,7 +132,9 @@ namespace MpWpfApp {
             return !IsAppPaused;
         }
         private void ToggleRightClickPaste(bool fromHotkey) {
-            IsRightClickPasteMode = !IsRightClickPasteMode;
+            if (fromHotkey) {
+                IsRightClickPasteMode = !IsRightClickPasteMode; 
+            }
             ShowNotifcation(fromHotkey, "Right-Click Paste Mode", IsRightClickPasteMode ? "ON":"OFF", IsRightClickPasteMode);
         }
 
@@ -144,10 +149,12 @@ namespace MpWpfApp {
         }
         private bool CanToggleAppendMode(bool fromHotkey) {
             //only allow append mode to activate if app is not paused and only ONE clip is selected
-            return !IsAppPaused && MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1;
+            return !IsAppPaused;
         }
         private void ToggleAppendMode(bool fromHotkey) {
-            IsInAppendMode = !IsInAppendMode;
+            if (fromHotkey) {
+                IsInAppendMode = !IsInAppendMode;
+            }
             ShowNotifcation(fromHotkey, "Append Mode", IsInAppendMode ? "ON" : "OFF",IsInAppendMode);
         }
 
@@ -164,7 +171,9 @@ namespace MpWpfApp {
             return !IsAppPaused;
         }
         private void ToggleAutoCopyMode(bool fromHotkey) {
-            IsAutoCopyMode = !IsAutoCopyMode;
+            if (fromHotkey) {
+                IsAutoCopyMode = !IsAutoCopyMode;
+            }
             ShowNotifcation(fromHotkey, "Auto-Copy Mode", IsAutoCopyMode ? "ON" : "OFF",IsAutoCopyMode);
         }
         #endregion

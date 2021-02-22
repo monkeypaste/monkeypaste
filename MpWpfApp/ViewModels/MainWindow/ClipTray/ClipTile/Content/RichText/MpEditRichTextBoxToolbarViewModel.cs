@@ -19,6 +19,7 @@ namespace MpWpfApp {
 
     public class MpEditRichTextBoxToolbarViewModel : MpViewModelBase {
         #region Private Variables
+        private StackPanel _borderStackPanel = null;
         #endregion
 
         #region View Models
@@ -127,21 +128,11 @@ namespace MpWpfApp {
             if (ClipTileViewModel.CopyItemType != MpCopyItemType.RichText && ClipTileViewModel.CopyItemType != MpCopyItemType.Composite) {
                 return;
             }
-            ClipTileViewModel.PropertyChanged += (s23, e43) => {
-                switch(e43.PropertyName) {
-                    case nameof(ClipTileViewModel.SelectedRtb):
-                        if(ClipTileViewModel.SelectedRtb == null) {
-                            return;
-                        }
-                        InitWithRichTextBox((StackPanel)sender, ClipTileViewModel.SelectedRtb);
-                        break;
-                }
-            };
-            
+            _borderStackPanel = (StackPanel)sender;
         }
 
-        public void InitWithRichTextBox(StackPanel sp, RichTextBox rtb) {
-            var et = sp.GetVisualAncestor<Border>();
+        public void InitWithRichTextBox(RichTextBox rtb) {
+            var et = _borderStackPanel.GetVisualAncestor<Border>();
             var cb = (MpClipBorder)et.GetVisualAncestor<MpClipBorder>();
             var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxCanvas");
             var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
@@ -412,11 +403,11 @@ namespace MpWpfApp {
                             ClipTileViewModel.IsEditingTile ? rtbTopMin : rtbTopMax,
                             ClipTileViewModel.IsEditingTile ? rtbTopMax : rtbTopMin,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            new List<FrameworkElement> { rtb, rtblb },
+                            new List<FrameworkElement> { rtblb },
                             Canvas.TopProperty,
                             (s1, e44) => {
 
-                            });
+                            });                        
 
                         MpHelpers.Instance.AnimateDoubleProperty(
                             ClipTileViewModel.IsEditingTile ? editRtbToolbarTopMin : editRtbToolbarTopMax,
@@ -438,10 +429,7 @@ namespace MpWpfApp {
                             FrameworkElement.WidthProperty,
                             (s1, e44) => {
                                 if (ClipTileViewModel.IsEditingTile) {
-                                                // Point transform = ((ListViewItem)clipTray.ItemContainerGenerator.ContainerFromItem(ClipTileViewModel)).TransformToVisual((Visual)clipTray.Parent).Transform(new Point());
-                                                //Rect listViewItemBounds = VisualTreeHelper.GetDescendantBounds(cb);
-                                                //listViewItemBounds.Offset(transform.X, transform.Y);
-                                                clipTray.ScrollIntoView(ClipTileViewModel);
+                                    clipTray.ScrollIntoView(ClipTileViewModel);
                                 } else {
 
                                 }
@@ -451,16 +439,25 @@ namespace MpWpfApp {
                             ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
                             ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            new List<FrameworkElement> { rtblb, rtb, et, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
+                            new List<FrameworkElement> { rtblb, et, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
                             FrameworkElement.WidthProperty,
-                            (s1, e44) => {
-                                rtb.Document.PageWidth = ClipTileViewModel.IsEditingTile ? contentWidthMax - rtb.Padding.Left - rtb.Padding.Right - 20 : contentWidthMin - rtb.Padding.Left - rtb.Padding.Right;// - rtb.Padding.Left - rtb.Padding.Right;
-                                                                                                                                                                                                                //rtb.Document.PageHeight = rtb.ActualHeight;// ClipTileViewModel.IsEditingTile ? rtb.Document.GetDocumentSize().Height : ClipTileViewModel.TileContentHeight;
-                                                                                                                                                                                                                //rtb.UpdateDocumentLayout();
-                                                                                                                                                                                                                //this is to remove scrollbar flicker during animation
-                                            ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
+                            (s1, e44) => {                                
+                                if(ClipTileViewModel.IsEditingTile) {
+                                    //rtblb.Width -= MpMeasurements.Instance.ClipTileEditModeContentMargin * 2;
+                                    //rtbc.Width = rtblb.Width;
+                                }
+                                //this is to remove scrollbar flicker during animation
+                                ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
                                 ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
                             });
+
+                        ClipTileViewModel.RichTextBoxViewModels.AnimateItems(
+                            ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
+                            ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
+                            0, 0,
+                            0, 0,
+                            0, 0
+                        );
 
                         MpHelpers.Instance.AnimateDoubleProperty(
                             ClipTileViewModel.IsEditingTile ? iconLeftMin : iconLeftMax,

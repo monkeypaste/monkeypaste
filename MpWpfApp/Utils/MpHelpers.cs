@@ -360,16 +360,39 @@ namespace MpWpfApp {
         }
 
         public bool IsStringXaml(string text) {
+            if (string.IsNullOrEmpty(text)) {
+                return false;
+            }
             return text.StartsWith(@"<Section xmlns=") || text.StartsWith(@"<Span xmlns=");
         }
 
         public bool IsStringSpan(string text) {
+            if (string.IsNullOrEmpty(text)) {
+                return false;
+            }
             return text.StartsWith(@"<Span xmlns=");
         }
 
         public bool IsStringSection(string text) {
+            if (string.IsNullOrEmpty(text)) {
+                return false;
+            }
             return text.StartsWith(@"<Section xmlns=");
         }         
+
+        public bool IsStringPlainText(string text) {
+            //returns true for csv
+            if(text == null) {
+                return false;
+            }
+            if(text == string.Empty) {
+                return true;
+            }
+            if(IsStringRichText(text) || IsStringSection(text) || IsStringSpan(text) || IsStringXaml(text)) {
+                return false;
+            }
+            return true;
+        }
 
         public CurrencyType GetCurrencyTypeFromString(string moneyStr) {
             if (moneyStr == null || moneyStr.Length == 0) {
@@ -485,12 +508,12 @@ namespace MpWpfApp {
                 System.Windows.Markup.XamlWriter.Save(rangeFrom, stream);
                 rangeFrom.Save(stream, DataFormats.XamlPackage);
 
-                if(insertNewLine) {
-                    var lb = new LineBreak();
-                    var p = (Paragraph)to.Blocks.LastBlock;
-                    p.LineHeight = 1;
-                    p.Inlines.Add(lb);
-                }
+                //if(insertNewLine) {
+                //    var lb = new LineBreak();
+                //    var p = (Paragraph)to.Blocks.LastBlock;
+                //    p.LineHeight = 1;
+                //    p.Inlines.Add(lb);
+                //}
 
                 var rangeTo = new TextRange(to.ContentEnd, to.ContentEnd);
                 rangeTo.Load(stream, DataFormats.XamlPackage);

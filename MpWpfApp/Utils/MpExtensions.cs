@@ -410,6 +410,47 @@ namespace MpWpfApp {
             }
         }
 
+        public static string ToRichText(this string str) {
+            if(str == null) {
+                str = string.Empty;
+            }
+            if(MpHelpers.Instance.IsStringRichText(str)) {
+                return str;
+            }
+            return MpHelpers.Instance.ConvertPlainTextToRichText(str);
+        }
+
+        public static string ToPlainText(this string str) {
+            if (str == null) {
+                return string.Empty;
+            }
+            if (MpHelpers.Instance.IsStringPlainText(str)) {
+                return str;
+            }
+            return MpHelpers.Instance.ConvertRichTextToPlainText(str);
+        }
+
+        public static string ToRichText(this FlowDocument doc) {
+            return MpHelpers.Instance.ConvertFlowDocumentToRichText(doc);
+        }
+
+        public static string ToPlainText(this FlowDocument doc) {
+            return doc.ToRichText().ToPlainText();
+        }
+
+        public static FlowDocument ToFlowDocument(this string str) {
+            if(string.IsNullOrEmpty(str)) {
+                return MpHelpers.Instance.ConvertRichTextToFlowDocument(MpHelpers.Instance.ConvertPlainTextToRichText(string.Empty));
+            }
+            if(MpHelpers.Instance.IsStringPlainText(str)) {
+                return MpHelpers.Instance.ConvertRichTextToFlowDocument(MpHelpers.Instance.ConvertPlainTextToRichText(str));
+            }
+            if(MpHelpers.Instance.IsStringRichText(str)) {
+                return MpHelpers.Instance.ConvertRichTextToFlowDocument(str);
+            }
+            throw new Exception("ToFlowDocument exception string must be plain or rich text. Its content is: " + str);
+        }
+
         public static Size GetDocumentSize(this FlowDocument doc) {
             var ft = doc.GetFormattedText();
             return new Size(ft.Width, ft.Height);

@@ -1769,10 +1769,19 @@
                                                          BorderThickness="0"
                                                          SelectionMode="Single"
                                                          ItemsSource="{Binding RichTextBoxViewModels}"
+                                                         Focusable="{Binding IsEditingTile}"
+                                                         IsEnabled="{Binding IsSelected}"
                                                          ScrollViewer.HorizontalScrollBarVisibility="{Binding RtbHorizontalScrollbarVisibility}"
                                                          ScrollViewer.VerticalScrollBarVisibility="{Binding RtbVerticalScrollbarVisibility}"
                                                          Width="{Binding TileContentWidth}"
-                                                         Height="{Binding TileRtbHeight}">
+                                                         Height="{Binding TileRtbHeight}"
+                                                         Padding="0">
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="Loaded">
+                                                            <i:CallMethodAction TargetObject="{Binding RichTextBoxViewModels}"
+                                                                                MethodName="ClipTileRichTextBoxViewModelCollection_Loaded" />
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
                                                     <ListBox.ItemContainerStyle>
                                                         <Style TargetType="{x:Type ListBoxItem}">
                                                             <Setter Property="IsSelected"
@@ -1802,21 +1811,20 @@
                                                             <RichTextBox x:Name="ClipTileRichTextBox"
                                                                          IsReadOnly="{Binding ClipTileViewModel.IsRtbReadOnly}"
                                                                          DataContext="{Binding}"
+                                                                         IsEnabled="True"
                                                                          IsInactiveSelectionHighlightEnabled="True"
                                                                          IsDocumentEnabled="{Binding IsSelected}"
                                                                          Focusable="{Binding ClipTileViewModel.IsEditingTile}"
                                                                          Cursor="{Binding ClipTileViewModel.ContentCursor}"
                                                                          Width="{Binding ClipTileViewModel.TileContentWidth}"
-                                                                         Height="{Binding ClipTileViewModel.TileRtbHeight}"
+                                                                         Height="{Binding RtbListBoxItemHeight}"
                                                                          IsUndoEnabled="True"
                                                                          Background="White"
                                                                          VerticalAlignment="Top"
                                                                          HorizontalAlignment="Left"
                                                                          ScrollViewer.HorizontalScrollBarVisibility="{Binding ClipTileViewModel.RtbHorizontalScrollbarVisibility}"
                                                                          ScrollViewer.VerticalScrollBarVisibility="{Binding ClipTileViewModel.RtbVerticalScrollbarVisibility}"
-                                                                         BorderThickness="0"
-                                                                         Margin="0,0,0,0"
-                                                                         Padding="10,5,0,0">
+                                                                         BorderThickness="0">
                                                                 <RichTextBox.Resources>
                                                                     <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                                                                                      Color="Blue" />

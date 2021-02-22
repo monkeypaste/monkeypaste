@@ -1049,5 +1049,17 @@ namespace MpWpfApp.Properties {
                 this["IsTerminalAdministrator"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool NotificationShowCopyItemTooLargeToast {
+            get {
+                return ((bool)(this["NotificationShowCopyItemTooLargeToast"]));
+            }
+            set {
+                this["NotificationShowCopyItemTooLargeToast"] = value;
+            }
+        }
     }
 }

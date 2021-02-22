@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 
@@ -13,6 +14,7 @@ namespace MpWpfApp {
         #endregion        
 
         #region Properties
+
         #region ViewModels
         private MpClipTileViewModel _clipTileViewModel;
         public MpClipTileViewModel ClipTileViewModel {
@@ -34,22 +36,12 @@ namespace MpWpfApp {
                 if(ClipTileViewModel == null || this.Count == 0) {
                     return null;
                 }
-                var svm = this.Where(x => x.IsSelected).FirstOrDefault();
-                if(svm == null && this.Count > 0) {
-                    this[0].IsSelected = true;
-                    svm = this[0];
+                foreach(var rtbvm in this) {
+                    if(rtbvm.IsSelected) {
+                        return rtbvm;
+                    }
                 }
-                return svm;
-            }
-            set {
-                if (ClipTileViewModel != null && 
-                    SelectedClipTileRichTextBoxViewModel != value && 
-                    this.Contains(value)) {
-                    ClearSelection();
-                    this[this.IndexOf(value)].IsSelected = true;
-                    OnPropertyChanged(nameof(SelectedClipTileRichTextBoxViewModel));
-                    OnPropertyChanged(nameof(SelectedRtb));
-                }
+                return null;
             }
         }
 
@@ -64,7 +56,7 @@ namespace MpWpfApp {
 
         public MpEventEnabledFlowDocument FullDocument {
             get {
-                var fullDocument = new MpEventEnabledFlowDocument();
+                var fullDocument = MpHelpers.Instance.ConvertRichTextToFlowDocument(MpHelpers.Instance.ConvertPlainTextToRichText(string.Empty));
 
                 foreach(var rtbvm in this) {
                     MpHelpers.Instance.CombineFlowDocuments((MpEventEnabledFlowDocument)rtbvm.Rtb.Document, fullDocument, !rtbvm.CopyItem.IsInlineWithPreviousCompositeItem);
@@ -73,25 +65,94 @@ namespace MpWpfApp {
             }
         }
         #endregion
+
+        #region Layout
+        public double RelativeWidthMax {
+            get {
+                double maxWidth = 0;
+                foreach(var rtbvm in this) {
+                    maxWidth = Math.Max(maxWidth, rtbvm.RtbRelativeWidthMax);
+                }
+                return maxWidth;
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Public Methods
         public MpClipTileRichTextBoxViewModelCollection() { }
 
-        public MpClipTileRichTextBoxViewModelCollection(MpClipTileViewModel ctvm) : base() {
+        public MpClipTileRichTextBoxViewModelCollection(MpClipTileViewModel ctvm) : base() {            
             ClipTileViewModel = ctvm;
         }
 
+        public void ClipTileRichTextBoxViewModelCollection_Loaded(object sender, RoutedEventArgs args) {
+            var rtblb = (ListBox)sender;
+        }
+
+        public void AnimateItems(double fromWidth,double toWidth, double fromHeight, double toHeight,double fromTop, double toTop,double fromBottom, double toBottom) {
+            if(toWidth > 0) {
+                foreach (var rtbvm in this) {
+                    MpHelpers.Instance.AnimateDoubleProperty(
+                            fromWidth,
+                            toWidth,
+                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                            new List<FrameworkElement> { rtbvm.Rtb },
+                            FrameworkElement.WidthProperty,
+                            (s1, e44) => {
+                                rtbvm.UpdateLayout();
+                            });
+                }
+            }
+            if (toHeight > 0) {
+
+            }
+            if (toTop > 0) {
+                foreach(var rtbvm in this) {
+                    MpHelpers.Instance.AnimateDoubleProperty(
+                            fromTop,
+                            toTop,
+                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                            new List<FrameworkElement> { rtbvm.Rtb },
+                            Canvas.TopProperty,
+                            (s1, e44) => {
+
+                            });
+                    fromTop += rtbvm.RtbListBoxItemHeight;
+                    toTop += rtbvm.RtbListBoxItemHeight;
+                }
+            }
+            if (toBottom > 0) {
+
+            }
+        }
+
+        public void SelectRichTextBoxViewModel(int idx) {
+            if(idx < 0 || idx >= this.Count) {
+                return;
+            }
+            for (int i = 0; i < this.Count; i++) {
+                this[i].SetSelection(i == idx);
+            }
+        }
+
+        public void SelectRichTextBoxViewModel(MpClipTileRichTextBoxViewModel rtbvm) {
+            if(!this.Contains(rtbvm)) {
+                return;
+            }
+            SelectRichTextBoxViewModel(this.IndexOf(rtbvm));
+        }
         public void ClearSelection() {
             foreach(var rtbvm in this) {
-                rtbvm.IsSelected = false;
+                rtbvm.SetSelection(false);
             }
         }
 
         public void ResetSelection() {
             ClearSelection();
             if(this.Count > 0) {
-                this[0].IsSelected = true;
+                this[0].SetSelection(true);
             }
         }
         public void ClearAllHyperlinks() {

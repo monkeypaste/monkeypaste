@@ -303,7 +303,7 @@ namespace MpWpfApp {
                 IsEditing = false;
             };
             //if tag is created at runtime show tbox w/ all selected
-            if (!MainWindowViewModel.IsLoading) {
+            if (IsNew) {
                 RenameTagCommand.Execute(null);
             } else {
                 foreach (MpClipTileViewModel ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
@@ -334,9 +334,11 @@ namespace MpWpfApp {
             );
         }
 
-        public void AddClip(MpClipTileViewModel ctvm) {
-            Tag.LinkWithCopyItem(ctvm.CopyItem);
-            TagClipCount++;
+        public void AddClip(MpClipTileViewModel ctvm, bool forceCountUpdate = true) {
+            bool isNewLink = Tag.LinkWithCopyItem(ctvm.CopyItem);
+            if(isNewLink || forceCountUpdate) {
+                TagClipCount++;
+            }
         }
 
         public bool IsLinkedWithClipTile(MpClipTileViewModel ctvm) {
