@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 
 namespace MpWpfApp {
-    public class MpClipTileRichTextBoxViewModelCollection : MpObservableCollectionViewModel<MpClipTileRichTextBoxViewModel> {
+    public class MpClipTileRichTextBoxViewModelCollection : MpObservableCollectionViewModel<MpClipTileRichTextBoxViewModel>, ICloneable {
         #region Private Variables
 
         #endregion        
@@ -89,8 +89,12 @@ namespace MpWpfApp {
 
         public void ClipTileRichTextBoxViewModelCollection_Loaded(object sender, RoutedEventArgs args) {
             var rtblb = (ListBox)sender;
+            
         }
 
+        public new void Add(MpClipTileRichTextBoxViewModel rtbvm) {
+            base.Add(rtbvm);
+        }
         public void AnimateItems(double fromWidth,double toWidth, double fromHeight, double toHeight,double fromTop, double toTop,double fromBottom, double toBottom) {
             if(toWidth > 0) {
                 foreach (var rtbvm in this) {
@@ -165,6 +169,14 @@ namespace MpWpfApp {
             foreach (var rtbvm in this) {
                 rtbvm.CreateHyperlinks();
             }
+        }
+
+        public object Clone() {
+            var nrtbvmc = new MpClipTileRichTextBoxViewModelCollection(ClipTileViewModel);
+            foreach(var rtbvm in this) {
+                nrtbvmc.Add((MpClipTileRichTextBoxViewModel)rtbvm.Clone());
+            }
+            return nrtbvmc;
         }
         #endregion
     }

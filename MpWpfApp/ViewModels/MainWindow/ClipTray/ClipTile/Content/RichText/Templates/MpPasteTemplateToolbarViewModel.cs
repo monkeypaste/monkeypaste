@@ -382,6 +382,14 @@ namespace MpWpfApp {
                                 ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
                             });
 
+                        ClipTileViewModel.RichTextBoxViewModels.AnimateItems(
+                            ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
+                            ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
+                            0, 0,
+                            0, 0,
+                            0, 0
+                        );
+
                         MpHelpers.Instance.AnimateDoubleProperty(
                             ClipTileViewModel.IsPastingTemplateTile ? iconLeftMin : iconLeftMax,
                             ClipTileViewModel.IsPastingTemplateTile ? iconLeftMax : iconLeftMin,
@@ -537,21 +545,30 @@ namespace MpWpfApp {
                 IsTemplateReadyToPaste;
         }
         private void PasteTemplate() {
-            //var tempRtb = new RichTextBox();
-            //tempRtb.Document = ClipTileViewModel.GetRtb().Document.Clone(); 
+            //to paste w/ templated text a clone of the templates is created then 
+            //the links are cleared (returning the edited text to the template names
+            //
             var uthlvmlc = new List<MpTemplateHyperlinkViewModel>();
-            foreach(var uthlvm in UniqueTemplateHyperlinkViewModelListByDocOrder) {
+            foreach (var uthlvm in UniqueTemplateHyperlinkViewModelListByDocOrder) {
                 uthlvmlc.Add((MpTemplateHyperlinkViewModel)uthlvm.Clone());
             }
-            ClipTileViewModel.RichTextBoxViewModels.ClearAllHyperlinks();
-            foreach(var uthlvm in uthlvmlc) {
-                var matchList = MpHelpers.Instance.FindStringRangesFromPosition(ClipTileViewModel.RichTextBoxViewModels.FullDocument.ContentStart, uthlvm.TemplateName, true);
+            ClipTileViewModel.TileVisibility = Visibility.Hidden;
+            var srtbvm = ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel;
+            srtbvm.ClearHyperlinks();
+            var docClone = srtbvm.Rtb.Document.Clone();
+
+            foreach (var uthlvm in uthlvmlc) {
+                var matchList = MpHelpers.Instance.FindStringRangesFromPosition(
+                    docClone.ContentStart,
+                    uthlvm.TemplateName,
+                    true);
                 foreach (var tr in matchList) {
                     tr.Text = uthlvm.TemplateText;
-                }                
+                }
             }
-            ClipTileViewModel.TemplateRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(ClipTileViewModel.RichTextBoxViewModels.FullDocument);
-            //Returned to GetPastableTemplate
+            srtbvm.CreateHyperlinks();
+            srtbvm.TemplateRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(docClone);
+            //Returned to GetPastableRichText
         }
         #endregion
     }

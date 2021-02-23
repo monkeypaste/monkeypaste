@@ -1273,10 +1273,10 @@
                                     <local:MpBindingProxy x:Key="ClipTileProxy"
                                                           Data="{Binding}" />
                                 </local:MpClipBorder.Resources>
-                                <!--<local:MpClipBorder.Effect>
-                                    <DropShadowEffect Color="Black"
-                                                      BlurRadius="10" />
-                                </local:MpClipBorder.Effect>-->
+                                <local:MpClipBorder.Effect>
+                                    <DropShadowEffect Color="DarkGray"
+                                                      BlurRadius="7" />
+                                </local:MpClipBorder.Effect>
                                 <Grid Background="#FF3D3D3D">                                    
                                     <Grid Background="White" Visibility="{Binding ContentVisibility}">                                        
                                         <Grid.ContextMenu>
@@ -1457,11 +1457,11 @@
                                                            Background="Transparent"
                                                            Visibility="{Binding TileTitleTextBlockVisibility}">
                                             <!--<TextBlock.Effect>
-                                                <DropShadowEffect ShadowDepth="2"
-                                                                  Direction="330"
+                                                <DropShadowEffect ShadowDepth="0.5"
+                                                                  Direction="300"
                                                                   Color="Black"
                                                                   Opacity="1.0"
-                                                                  BlurRadius="7" />
+                                                                  BlurRadius="0.1" />
                                             </TextBlock.Effect>-->
                                                 </TextBlock>
                                                 <!-- Clip Title TextBox -->
@@ -1812,6 +1812,7 @@
                                                                          IsReadOnly="{Binding ClipTileViewModel.IsRtbReadOnly}"
                                                                          DataContext="{Binding}"
                                                                          IsEnabled="True"
+                                                                         AutoWordSelection="False"
                                                                          IsInactiveSelectionHighlightEnabled="True"
                                                                          IsDocumentEnabled="{Binding IsSelected}"
                                                                          Focusable="{Binding ClipTileViewModel.IsEditingTile}"

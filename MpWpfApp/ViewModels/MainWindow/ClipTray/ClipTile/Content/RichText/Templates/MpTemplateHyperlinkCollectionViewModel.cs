@@ -166,23 +166,6 @@ namespace MpWpfApp {
         public new void Add(MpTemplateHyperlinkViewModel thlvm) {
             base.Add(thlvm);
             thlvm.CopyItemTemplate.WriteToDatabase();
-
-            //thlvm.PropertyChanged += (s, e) => {
-            //    switch(e.PropertyName) {
-            //        case nameof(thlvm.IsSelected):
-            //        case nameof(thlvm.IsHovering):
-            //            foreach(var vm in this) {
-            //                if(vm.TemplateName == thlvm.TemplateName) {
-            //                    vm.IsHovering = thlvm.IsHovering;
-            //                    vm.IsSelected = thlvm.IsSelected;
-            //                } else {
-            //                    vm.IsHovering = vm.IsSelected = false;
-            //                }
-                            
-            //            }
-            //            break;
-            //    }
-            //};
         }
 
         public object Clone() {

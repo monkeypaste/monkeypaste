@@ -153,19 +153,6 @@
             }
         }
 
-        //private MpTemplateHyperlinkCollectionViewModel _templateHyperlinkCollectionViewModel = null;
-        //public MpTemplateHyperlinkCollectionViewModel TemplateHyperlinkCollectionViewModel {
-        //    get {
-        //        return _templateHyperlinkCollectionViewModel;
-        //    }
-        //    set {
-        //        if (_templateHyperlinkCollectionViewModel != value) {
-        //            _templateHyperlinkCollectionViewModel = value;
-        //            OnPropertyChanged(nameof(TemplateHyperlinkCollectionViewModel));
-        //        }
-        //    }
-        //}
-
         private MpEditTemplateToolbarViewModel _editTemplateToolbarViewModel = null;
         public MpEditTemplateToolbarViewModel EditTemplateToolbarViewModel {
             get {
@@ -1507,13 +1494,17 @@
             };
             RichTextBoxListBox = rtblb;
 
-            if(CopyItemType == MpCopyItemType.RichText) {
-                RichTextBoxViewModels.Add(new MpClipTileRichTextBoxViewModel(this,CopyItem));                
-            } else {
-                foreach(var cci in CopyItem.CompositeItemList) {
-                    RichTextBoxViewModels.Add(new MpClipTileRichTextBoxViewModel(this, cci));
+            //after pasting template rtb's are duplicated so clear them upon refresh
+            if (RichTextBoxViewModels.Count == 0) {
+                if (CopyItemType == MpCopyItemType.RichText) {
+                    RichTextBoxViewModels.Add(new MpClipTileRichTextBoxViewModel(this, CopyItem));
+                } else {
+                    foreach (var cci in CopyItem.CompositeItemList) {
+                        RichTextBoxViewModels.Add(new MpClipTileRichTextBoxViewModel(this, cci));
+                    }
                 }
             }
+            
             //RichTextBoxViewModels[0].IsSelected = true;
 
             var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
@@ -1742,11 +1733,20 @@
             //when initially converting richtext item into composite it needs to be relinked to history
             MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(this);
             MainWindowViewModel.ClipTrayViewModel.Refresh();
+            Refresh();
         }
 
-        public void SyncModelWithView() {
+        public void Refresh() {
+            if(RichTextBoxListBox != null) {
+                RichTextBoxListBox.Items.Refresh();
+            }
+            if (FileListBox != null) {
+                FileListBox.Items.Refresh();
+            }
+        }
+        public void SaveToDatabase() {
+            //remove links to update model rich text
             RichTextBoxViewModels.ClearAllHyperlinks();
-            var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
 
             //clear any search highlighting when saving the document then restore after save
             HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(null);
@@ -1754,41 +1754,19 @@
             HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(null);
 
             RichTextBoxViewModels.CreateAllHyperlinks();
-        }
 
-        public void SaveToDatabase() {
-            if(CopyItemType == MpCopyItemType.RichText) {
-                MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(CopyItemId).SyncModelWithView();
-            }
-            MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(CopyItemId).CopyItem.WriteToDatabase();
+            CopyItem.WriteToDatabase();
         }
 
         public async Task<string> GetPastableRichText() {
             if (HasTemplate) {
                 IsPastingTemplateTile = true;
-                TemplateRichText = string.Empty;
-                var temp = new List<string>();
+                TemplateRichText = string.Empty.ToRichText();
                 foreach(var rtbvm in RichTextBoxViewModels) {
-                    temp.Add(rtbvm.CopyItem.ItemRichText);
-                }
-                await Task.Run(() => {
-                    while (string.IsNullOrEmpty(TemplateRichText)) {
-                        System.Threading.Thread.Sleep(500);
-                    }
-                    //TemplateRichText is set in PasteTemplateCommand
-                });
-                //CopyItemRichText = temp;
-                CopyItemRichText = MpHelpers.Instance.ConvertPlainTextToRichText(string.Empty);
-                for (int i = 0; i < RichTextBoxViewModels.Count; i++) {
-                    var rtbvm = RichTextBoxViewModels[i];
-                    rtbvm.Rtb.Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(temp[i]);
-                    rtbvm.ClearHyperlinks();
-                    CopyItemRichText = MpHelpers.Instance.CombineRichText(
-                        MpHelpers.Instance.ConvertFlowDocumentToRichText(rtbvm.Rtb.Document),
-                        CopyItemRichText);
-                    rtbvm.CreateHyperlinks();
-                }
-                
+                    var rtbvmrt = await rtbvm.GetPastableRichText();
+                    TemplateRichText = MpHelpers.Instance.CombineRichText(rtbvmrt, TemplateRichText, !rtbvm.IsInlineWithPreviousCompositeItem);
+                }               
+
                 return TemplateRichText;
             }
             return CopyItemRichText;

@@ -294,17 +294,12 @@ namespace MpWpfApp {
             };
             #endregion
 
-            ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).ApplicationHook.MouseWheel += (s, e) => {
-                if (ClipTileViewModel.IsEditingTile) {
-                    rtb.ScrollToVerticalOffset(rtb.VerticalOffset - e.Delta);
-                }
-            };
-
+            #region Add Template Button
             addTemplateButton.PreviewMouseDown += (s, e3) => {
                 e3.Handled = true;
 
                 var rtbSelection = rtb.Selection;
-
+                Console.WriteLine("(AddTemplate)Selection Text: " + rtbSelection.Text);
                 ClipTileViewModel.SaveToDatabase();
                 
                 if (ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Count == 0) {
@@ -366,8 +361,9 @@ namespace MpWpfApp {
                     templateContextMenu.IsOpen = true;
                 }
             };
+            #endregion
 
-            //animation
+            #region IsEditingTile Property Changed Animation
             ClipTileViewModel.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(ClipTileViewModel.IsEditingTile):
@@ -471,8 +467,10 @@ namespace MpWpfApp {
                         break;
                 }
             };
+            #endregion
 
             rtb.SelectionChanged += (s, e6) => {
+                //Console.WriteLine("(SelectionChanged)Selection Text: " + rtb.Selection.Text);
                 // Set font family combo
                 var fontFamily = rtb.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
                 fontFamilyComboBox.SelectedItem = fontFamily;
@@ -553,6 +551,7 @@ namespace MpWpfApp {
             }
         }
         private void RefreshDocument() {
+            ClipTileViewModel.SaveToDatabase();
             foreach(var rtbvm in ClipTileViewModel.RichTextBoxViewModels) {
                 rtbvm.ClearHyperlinks();
                 rtbvm.CreateHyperlinks();

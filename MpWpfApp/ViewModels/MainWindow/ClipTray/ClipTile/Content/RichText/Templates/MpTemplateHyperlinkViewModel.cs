@@ -369,8 +369,6 @@ namespace MpWpfApp {
                 tr = MpHelpers.Instance.FindStringRangeFromPosition(span.ContentStart, trText, true);
             }
             thlvm.TemplateHyperlinkRange = tr;
-            //var r = new Run();
-            //r.Loaded += thlvm.TemplateHyperLinkRun_Loaded;
 
             var tb = new TextBlock();
             tb.DataContext = thlvm;
@@ -386,7 +384,11 @@ namespace MpWpfApp {
             iuic.DataContext = thlvm;
             iuic.Child = b;
 
-            var hl = new Hyperlink(tr.Start, tr.End);
+            //var matchRun = new Run(tr.Text);
+            //tr.Text = "";
+            // DO NOT REMOVE this extra link ensures selection is retained!
+            //var hlink = new Hyperlink(matchRun, tr.Start);
+            var hl = new Hyperlink(tr.Start,tr.End);
             hl.DataContext = thlvm;
             hl.Inlines.Clear();
             hl.Inlines.Add(iuic);
@@ -458,7 +460,6 @@ namespace MpWpfApp {
                 }
                 if (ClipTileViewModel.IsEditingTile) {
                     e.Handled = true;
-                    //ClipTileViewModel.GetRtb().Selection.Select(hl.ElementStart, hl.ElementEnd);
                     ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(this, true);
                 }
                 if(ClipTileViewModel.IsPastingTemplateTile) {
@@ -479,7 +480,6 @@ namespace MpWpfApp {
                 }
                 if (ClipTileViewModel.IsEditingTile) {
                     e4.Handled = true;
-                    //ClipTileViewModel.GetRtb().Selection.Select(hl.ElementStart, hl.ElementEnd);
                     ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(this, true);
                 }
             };
@@ -520,20 +520,8 @@ namespace MpWpfApp {
                 ClipTileViewModel.RichTextBoxViewModels.SelectedRtb.Selection.Text = string.Empty;
             }
             //remove this individual token reference
-            ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Remove(this);
-            
-            //if(IsSelected && ClipTileViewModel.IsEditingTemplate) {
-            //    ClipTileViewModel.IsEditingTemplate = false;
-            //}
+            ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Remove(this);            
         }
-
-        //public int CompareTo(object obj) {
-        //    if(obj.GetType() != typeof(MpTemplateHyperlinkViewModel)) {
-        //        return -1;
-        //    }
-        //    var otherObj = obj as MpTemplateHyperlinkViewModel;
-        //    return TemplateName.CompareTo(otherObj.TemplateName);
-        //}
 
         public object Clone() {
             var nthlvm = new MpTemplateHyperlinkViewModel(ClipTileViewModel, CopyItemTemplate);

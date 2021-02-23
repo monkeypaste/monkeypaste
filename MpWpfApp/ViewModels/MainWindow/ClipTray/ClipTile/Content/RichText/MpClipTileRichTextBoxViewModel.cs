@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpClipTileRichTextBoxViewModel : MpUndoableViewModelBase<MpClipTileRichTextBoxViewModel> {
+    public class MpClipTileRichTextBoxViewModel : MpUndoableViewModelBase<MpClipTileRichTextBoxViewModel>, ICloneable {
         #region Private Variables
 
         #endregion
@@ -101,6 +101,10 @@ namespace MpWpfApp {
             get {
                 return TemplateHyperlinkCollectionViewModel.Count > 0;
             }
+        }
+        public string TemplateRichText {
+            get;
+            set;
         }
 
         private bool _isSelected = false;
@@ -215,6 +219,12 @@ namespace MpWpfApp {
             //    SetSelection(true);
             //};
 
+            Rtb.GotFocus += (s, e2) => {
+                ClipTileViewModel.RichTextBoxViewModels.SelectRichTextBoxViewModel(ClipTileViewModel.RichTextBoxViewModels.IndexOf(this));
+                ClipTileViewModel.EditTemplateToolbarViewModel.InitWithRichTextBox(Rtb);
+                ClipTileViewModel.PasteTemplateToolbarViewModel.InitWithRichTextBox(Rtb);
+            };
+
             if (ClipTileViewModel.WasAddedAtRuntime) {
                 //force new items to have left alignment
                 Rtb.SelectAll();
@@ -244,7 +254,28 @@ namespace MpWpfApp {
             }
         }
 
+        public async Task<string> GetPastableRichText() {
+            if (HasTemplate) {
+                TemplateRichText = string.Empty;
+                ClipTileViewModel.RichTextBoxViewModels.SelectRichTextBoxViewModel(ClipTileViewModel.RichTextBoxViewModels.IndexOf(this));
+                ClipTileViewModel.PasteTemplateToolbarViewModel.InitWithRichTextBox(Rtb);
+
+                await Task.Run(() => {
+                    while (string.IsNullOrEmpty(TemplateRichText)) {
+                        System.Threading.Thread.Sleep(500);
+                    }
+                    //TemplateRichText is set in PasteTemplateCommand
+                });
+
+                return TemplateRichText;
+            }
+            return CopyItem.ItemRichText;
+
+            //both return to ClipTray.GetDataObjectFromSelectedClips
+        }
+
         public void ClearHyperlinks() {
+            var rtbSelection = Rtb.Selection;
             var hlList = GetHyperlinkList();
             foreach (var hl in hlList) {
                 string linkText = string.Empty;
@@ -258,6 +289,9 @@ namespace MpWpfApp {
                 new Span(new Run(linkText), hl.ContentStart);
             }
             TemplateHyperlinkCollectionViewModel.Clear();
+            if (rtbSelection != null) {
+                Rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+            }
         }
 
         public void CreateHyperlinks() {
@@ -280,6 +314,8 @@ namespace MpWpfApp {
                 @"#([0-9]|[a-fA-F]){8}",
             };
             //var docPlainText = new TextRange(Rtb.Document.ContentStart, Rtb.Document.ContentEnd).Text;
+
+            var rtbSelection = Rtb.Selection.Clone();
             for (int i = 0; i < regExGroupList.Count; i++) {
                 var linkType = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);                
                 if (linkType == MpSubTextTokenType.StreetAddress) {
@@ -307,12 +343,13 @@ namespace MpWpfApp {
                             lastRangeEnd = matchRange.End;
                             if (linkType == MpSubTextTokenType.TemplateSegment) {
                                 var copyItemTemplate = CopyItem.GetTemplateByName(matchRange.Text);
-                                //var thlvm = new MpTemplateHyperlinkViewModel(ClipTileViewModel, copyItemTemplate);
-                                //hl = MpHelpers.Instance.CreateTemplateHyperlink(thlvm, matchRange);
                                 hl = MpTemplateHyperlinkViewModel.CreateTemplateHyperlink(ClipTileViewModel, copyItemTemplate, matchRange);
                                 TemplateHyperlinkCollectionViewModel.Add((MpTemplateHyperlinkViewModel)hl.DataContext);
                             } else {
-                                matchRange.Text = matchRange.Text;
+                                var matchRun = new Run(matchRange.Text);
+                                matchRange.Text = "";
+                                // DO NOT REMOVE this extra link ensures selection is retained!
+                                var hlink = new Hyperlink(matchRun, matchRange.Start);
                                 hl = new Hyperlink(matchRange.Start, matchRange.End);
                                 var linkText = c.Value;
                                 hl.Tag = linkType;
@@ -329,7 +366,7 @@ namespace MpWpfApp {
                                     }
                                 };
 
-                                MenuItem convertToQrCodeMenuItem = new MenuItem();
+                                var convertToQrCodeMenuItem = new MenuItem();
                                 convertToQrCodeMenuItem.Header = "Convert to QR Code";
                                 convertToQrCodeMenuItem.Click += async (s5, e1) => {
                                     var hyperLink = (Hyperlink)((MenuItem)s5).Tag;
@@ -425,11 +462,16 @@ namespace MpWpfApp {
                     }
                 }
             }
+
+            if (rtbSelection != null) {
+                Rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+            }
         }
         #endregion
 
         #region Private Methods
         private List<Hyperlink> GetHyperlinkList() {
+            var rtbSelection = Rtb.Selection;
             var hlList = new List<Hyperlink>();
             for (TextPointer position = Rtb.Document.ContentStart;
                 position != null && position.CompareTo(Rtb.Document.ContentEnd) <= 0;
@@ -441,7 +483,17 @@ namespace MpWpfApp {
                     }
                 }
             }
+            if (rtbSelection != null) {
+                Rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+            }
             return hlList;
+        }
+
+        public object Clone() {
+            var nrtbvm = new MpClipTileRichTextBoxViewModel(ClipTileViewModel, CopyItem);
+            nrtbvm.Rtb = new RichTextBox();
+            nrtbvm.Rtb.Document = Rtb.Document.Clone();
+            return nrtbvm;
         }
         #endregion
     }

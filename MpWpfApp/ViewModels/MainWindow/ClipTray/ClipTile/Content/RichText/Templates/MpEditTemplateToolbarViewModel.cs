@@ -342,6 +342,9 @@ namespace MpWpfApp {
             foreach (var tnr in templateNameRanges) {
                 //check if templatename exists in the document
                 var thlr = (Hyperlink)MpHelpers.Instance.FindParentOfType(tnr.Start.Parent, typeof(Hyperlink));
+                if(thlr == null) {
+                    continue;
+                }
                 if (SelectedTemplateHyperlinkViewModel.TemplateHyperlinkRange != null &&
 
                    (thlr == null || !thlr.ElementStart.IsInSameDocument(SelectedTemplateHyperlinkViewModel.TemplateHyperlinkRange.Start)) &&

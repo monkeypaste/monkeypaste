@@ -308,9 +308,9 @@ namespace MpWpfApp {
         //    }
         //}
 
-        public static FlowDocument Clone(this FlowDocument doc) {
+        public static MpEventEnabledFlowDocument Clone(this FlowDocument doc) {
             using (MemoryStream stream = new MemoryStream()) {
-                var clonedDoc = new FlowDocument();
+                var clonedDoc = new MpEventEnabledFlowDocument();
                 TextRange range = new TextRange(doc.ContentStart, doc.ContentEnd);
                 System.Windows.Markup.XamlWriter.Save(range, stream);
                 range.Save(stream, DataFormats.XamlPackage);
@@ -365,6 +365,10 @@ namespace MpWpfApp {
             return stringCollection;
         }
 
+        public static TextRange Clone(this TextSelection ts) {
+            return new TextRange(ts.Start, ts.End);
+        }
+
         public static void SetRtf(this System.Windows.Controls.RichTextBox rtb, string document) {
             var rtbSelection = rtb.Selection;
             var documentBytes = UTF8Encoding.Default.GetBytes(document);
@@ -373,7 +377,9 @@ namespace MpWpfApp {
                 rtb.SelectAll();
                 rtb.Selection.Load(reader, System.Windows.DataFormats.Rtf);
                 //rtb.CaretPosition = rtb.Document.ContentStart;
-                rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+                if (rtbSelection != null) {
+                    rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+                }
             }
         }
 

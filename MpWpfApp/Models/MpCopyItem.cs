@@ -147,7 +147,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Static Methods
-        public static MpCopyItem CreateFromClipboard(IntPtr processHandle) {
+        public static MpCopyItem CreateFromClipboard(IntPtr processHandle, int remainingRetryCount = 5) {
+            if(remainingRetryCount < 0) {
+                Console.WriteLine("Retry count exceeded ignoring copy item");
+                return null;
+            }
             IDataObject iData = Clipboard.GetDataObject();
             if (iData == null) {
                 return null;
@@ -246,7 +250,7 @@ namespace MpWpfApp {
             catch (Exception e) {
                 //this catches intermittent COMExceptions (happened copy/pasting in Excel)
                 Console.WriteLine("Caught exception creating copyitem (will reattempt to open clipboard): " + e.ToString());
-                return CreateFromClipboard(processHandle);
+                return CreateFromClipboard(processHandle, remainingRetryCount - 1);
             }
         }
         public static async Task<MpCopyItem> CreateFromClipboardAsync(IntPtr processHandle, DispatcherPriority priority) {

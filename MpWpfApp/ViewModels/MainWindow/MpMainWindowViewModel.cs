@@ -305,7 +305,10 @@ namespace MpWpfApp {
                     if(TagTrayViewModel != null && TagTrayViewModel.IsEditingTagName) {
                         return;
                     }
-                    if(MpSettingsWindowViewModel.IsOpen) {
+                    if (ClipTrayViewModel != null && ClipTrayViewModel.IsEditingClipTitle) {
+                        return;
+                    }
+                    if (MpSettingsWindowViewModel.IsOpen) {
                         return;
                     }
                     if (!char.IsControl(e.KeyChar)) {
@@ -315,6 +318,13 @@ namespace MpWpfApp {
                             SearchBoxViewModel.GetSearchTextBox().Text = e.KeyChar.ToString();
                             SearchBoxViewModel.GetSearchTextBox().Focus();
                         }
+                    }
+                };
+
+                ApplicationHook.MouseWheel += (s, e) => {
+                    if (!MainWindowViewModel.IsLoading && ClipTrayViewModel.IsAnyTileExpanded) {
+                        var activeRtb = ClipTrayViewModel.SelectedClipTiles[0].RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel.Rtb;
+                        activeRtb.ScrollToVerticalOffset(activeRtb.VerticalOffset - e.Delta);
                     }
                 };
 
@@ -425,6 +435,20 @@ namespace MpWpfApp {
                 (s, e) => {
                     if(pasteSelected) {
                         ClipTrayViewModel.PerformPaste(pasteDataObject);
+                        foreach(var sctvm in ClipTrayViewModel.SelectedClipTiles) {
+                            if(sctvm.HasTemplate) {
+                                //cleanup template by recreating hyperlinks
+                                //and reseting tile state
+                                //sctvm.RichTextBoxViewModels.ClearAllHyperlinks();
+                                //sctvm.RichTextBoxViewModels.CreateAllHyperlinks();
+                                sctvm.TileVisibility = Visibility.Visible;
+                                sctvm.IsPastingTemplateTile = false;
+                                sctvm.TemplateRichText = string.Empty;
+                                foreach(var rtbvm in sctvm.RichTextBoxViewModels) {
+                                    rtbvm.TemplateRichText = string.Empty;
+                                }
+                            }                            
+                        }
                     }
                     TagTrayViewModel.ResetTagSelection();
                     ClipTrayViewModel.ResetClipSelection();

@@ -155,7 +155,6 @@ namespace MpWpfApp {
         private List<MpColor> CreatePrimaryColorList(BitmapSource bmpSource) {
             //var sw = new Stopwatch();
             //sw.Start();
-            double distThreshold = 0;
             PrimaryIconColorList.Clear();
             var hist = MpImageHistogram.Instance.GetStatistics(IconImage);
             foreach (var kvp in hist) {
@@ -165,14 +164,23 @@ namespace MpWpfApp {
                 if(PrimaryIconColorList.Count == 5) {
                     break;
                 }
-                if(PrimaryIconColorList.Count == 0) {
+                //between 0-255 where 0 is black 255 is white
+                var rgDiff = Math.Abs((int)c.Color.R - (int)c.Color.G);
+                var rbDiff = Math.Abs((int)c.Color.R - (int)c.Color.B);
+                var gbDiff = Math.Abs((int)c.Color.G - (int)c.Color.B);
+                var totalDiff = rgDiff + rbDiff + gbDiff;
+
+                //0-255 0 is black
+                var grayScaleValue = 0.2126 * (int)c.Color.R + 0.7152 * (int)c.Color.G + 0.0722 * (int)c.Color.B;
+                var relativeDist = PrimaryIconColorList.Count == 0 ? 1 : MpHelpers.Instance.ColorDistance(PrimaryIconColorList[PrimaryIconColorList.Count - 1].Color, c.Color);
+                if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
                     PrimaryIconColorList.Add(c);
-                    continue;
                 }
-                var dist = MpHelpers.Instance.ColorDistance(PrimaryIconColorList[PrimaryIconColorList.Count - 1].Color, c.Color);
-                if(dist >= distThreshold) {
-                    PrimaryIconColorList.Add(c);
-                }
+            }
+
+            //if only 1 color found within threshold make random list
+            for (int i = PrimaryIconColorList.Count; i < 5; i++) {
+                PrimaryIconColorList.Add(new MpColor(MpHelpers.Instance.GetRandomColor()));
             }
             //sw.Stop();
             //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");

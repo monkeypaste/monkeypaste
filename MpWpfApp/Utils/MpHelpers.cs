@@ -136,9 +136,17 @@ namespace MpWpfApp {
         }
 
         public List<TextRange> FindStringRangesFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
+            if (string.IsNullOrEmpty(matchStr)) {
+                return null;
+            }
             var orgPosition = position;
             TextPointer nextDocPosition = null;
             var matchRangeList = new List<TextRange>();
+            TextSelection rtbSelection = null;
+            var rtb = (RichTextBox)FindParentOfType(position.Parent, typeof(RichTextBox));
+            if (rtb != null) {
+                rtbSelection = rtb.Selection;
+            }
             while (position != null) {
                 var hlr = FindStringRangeFromPosition(position, matchStr, isCaseSensitive);
                 if (hlr == null) {
@@ -157,11 +165,22 @@ namespace MpWpfApp {
                     position = hlr.End;
                 }
             }
+            if (rtbSelection != null) {
+                rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+            }
             return matchRangeList;
         }
 
         public TextRange FindStringRangeFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
-            int curIdx = 0;
+            if(string.IsNullOrEmpty(matchStr)) {
+                return null;
+            }
+            int curIdx = 0;            
+            TextSelection rtbSelection = null;
+            var rtb = (RichTextBox)FindParentOfType(position.Parent, typeof(RichTextBox));
+            if(rtb != null) {
+                rtbSelection = rtb.Selection;
+            }
             TextPointer postOfUiElement = null;
             TextPointer startPointer = null;
             StringComparison stringComparison = isCaseSensitive ? StringComparison.CurrentCulture : StringComparison.CurrentCultureIgnoreCase;
@@ -222,13 +241,15 @@ namespace MpWpfApp {
                         }
                     }
                     if (endPointer == null) {
-                        return null;
+                        break;
+                        //return null;
                     }
                     while (startPointer != null && new TextRange(startPointer, endPointer).Text.Length > matchStr.Length) {
                         startPointer = startPointer.GetPositionAtOffset(1, LogicalDirection.Forward);
                     }
                     if (startPointer == null) {
-                        return null;
+                        break;
+                        //return null;
                     }
                     return new TextRange(startPointer, endPointer);
                 } else {
@@ -237,6 +258,9 @@ namespace MpWpfApp {
                     //iterate position one offset AFTER match offset
                     position = position.GetPositionAtOffset(runIdx + 1, LogicalDirection.Forward);
                 }
+            }
+            if(rtbSelection != null) {
+                rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
             }
             return null;
         }
@@ -502,6 +526,16 @@ namespace MpWpfApp {
         }
 
         public MpEventEnabledFlowDocument CombineFlowDocuments(MpEventEnabledFlowDocument from, MpEventEnabledFlowDocument to, bool insertNewLine = false) {
+            RichTextBox fromRtb = null, toRtb = null;
+            TextSelection fromSelection = null, toSelection = null;
+            if(from.Parent != null && from.Parent.GetType() == typeof(RichTextBox)) {
+                fromRtb = (RichTextBox)from.Parent;
+                fromSelection = fromRtb.Selection;
+            }
+            if (to.Parent != null && to.Parent.GetType() == typeof(RichTextBox)) {
+                toRtb = (RichTextBox)to.Parent;
+                toSelection = toRtb.Selection;
+            }
             using (MemoryStream stream = new MemoryStream()) {
                 var rangeFrom = new TextRange(from.ContentStart, from.ContentEnd);
 
@@ -518,6 +552,12 @@ namespace MpWpfApp {
                 var rangeTo = new TextRange(to.ContentEnd, to.ContentEnd);
                 rangeTo.Load(stream, DataFormats.XamlPackage);
 
+                if(fromRtb != null && fromSelection != null) {
+                    fromRtb.Selection.Select(fromSelection.Start, fromSelection.End);
+                }
+                if (toRtb != null && toSelection != null) {
+                    toRtb.Selection.Select(toSelection.Start, toSelection.End);
+                }
                 return to;
             }            
         }
@@ -1413,11 +1453,14 @@ namespace MpWpfApp {
             return bmpSource;
         }
         public double ColorDistance(Color e1, Color e2) {
+            //max between 0 and 764.83331517396653 (found by checking distance from white to black)
             long rmean = ((long)e1.R + (long)e2.R) / 2;
             long r = (long)e1.R - (long)e2.R;
             long g = (long)e1.G - (long)e2.G;
             long b = (long)e1.B - (long)e2.B;
-            return Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
+            double max = 764.83331517396653;
+            double d = Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
+            return d / max;
         }
 
         public Color ConvertHexToColor(string hexString) {
@@ -1975,25 +2018,7 @@ namespace MpWpfApp {
             var plainText = richText;
             if (IsStringRichText(richText)) {
                 await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
-                    try {
-                        RichTextBox rtb = new RichTextBox();
-                        rtb.SetRtf(richText);
-                        var pt = new TextRange(rtb.Document.ContentStart, rtb.Document.ContentEnd).Text;
-                        int rtcount = GetRowCount(richText);
-                        int ptcount = GetRowCount(pt);
-                        if (rtcount != ptcount) {
-                            pt = pt.Trim(new char[] { '\r', '\n' });
-                        }
-                        plainText = pt;
-                    }
-                    catch (Exception ex) {
-                        //rtb.SetRtf throws an exception when richText is from excel (contains cell information?)
-                        //so falling back winforms richtextbox
-                        using (System.Windows.Forms.RichTextBox wf_rtb = new System.Windows.Forms.RichTextBox()) {
-                            wf_rtb.Rtf = richText;
-                            plainText = wf_rtb.Text;
-                        }
-                    }
+                    plainText = ConvertRichTextToPlainText(richText);
                 }, priority);               
             }
             return plainText;
@@ -2052,12 +2077,9 @@ namespace MpWpfApp {
 
         public async Task<MpEventEnabledFlowDocument> ConvertRichTextToFlowDocumentAsync(string rtf, DispatcherPriority priority = DispatcherPriority.Background) {
             if (IsStringRichText(rtf)) {
-                MpEventEnabledFlowDocument flowDocument = new MpEventEnabledFlowDocument();
+                var flowDocument = new MpEventEnabledFlowDocument();
                 await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
-                    using (var stream = new MemoryStream(UTF8Encoding.Default.GetBytes(rtf))) {
-                        var range = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
-                        range.Load(stream, System.Windows.DataFormats.Rtf);
-                    }
+                    flowDocument = ConvertRichTextToFlowDocument(rtf);
                 }, priority);
                 return flowDocument;
             }
@@ -2074,12 +2096,12 @@ namespace MpWpfApp {
         }
 
         public string ConvertFlowDocumentToRichText(FlowDocument fd) {
-            var rtb = (RichTextBox)fd.Parent;
-            //if(rtb.DataContext.GetType() == typeof(MpClipTileViewModel)) {
-            //    //rtb.ClearTemplates();
-            //}
-            //Console.WriteLine("Flow Doc Contents:");
-            //Console.WriteLine(new TextRange(fd.ContentStart, fd.ContentEnd).Text);
+            RichTextBox rtb = null;
+            TextSelection rtbSelection = null;
+            if(fd.Parent != null && fd.Parent.GetType() == typeof(RichTextBox)) {
+                rtb = (RichTextBox)fd.Parent;
+                rtbSelection = rtb.Selection;
+            }
             string rtf = string.Empty;
             using (var ms = new MemoryStream()) {
                 var range2 = new TextRange(fd.ContentStart, fd.ContentEnd);
@@ -2089,32 +2111,16 @@ namespace MpWpfApp {
                     rtf = sr.ReadToEnd();
                 }
             }
-            //if (rtb.DataContext.GetType() == typeof(MpClipTileViewModel)) {
-            //    //rtb.CreateHyperlinks();
-            //}
+            if(rtb != null && rtbSelection != null) {
+                rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+            }
             return rtf;
         }
 
         public async Task<string> ConvertFlowDocumentToRichTextAsync(FlowDocument fd, DispatcherPriority priority = DispatcherPriority.Background) {
             var rtf = string.Empty;
             await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
-                var rtb = (RichTextBox)fd.Parent;
-                //if(rtb.DataContext.GetType() == typeof(MpClipTileViewModel)) {
-                //    //rtb.ClearTemplates();
-                //}
-                //Console.WriteLine("Flow Doc Contents:");
-                //Console.WriteLine(new TextRange(fd.ContentStart, fd.ContentEnd).Text);
-                using (var ms = new MemoryStream()) {
-                    var range2 = new TextRange(fd.ContentStart, fd.ContentEnd);
-                    range2.Save(ms, System.Windows.DataFormats.Rtf);
-                    ms.Seek(0, SeekOrigin.Begin);
-                    using (var sr = new StreamReader(ms)) {
-                        rtf = sr.ReadToEnd();
-                    }
-                }
-                //if (rtb.DataContext.GetType() == typeof(MpClipTileViewModel)) {
-                //    //rtb.CreateHyperlinks();
-                //}
+                rtf = ConvertFlowDocumentToRichText(fd);
             }, priority);
             return rtf;
         }
