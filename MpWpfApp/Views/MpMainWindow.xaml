@@ -463,6 +463,7 @@
         <s:Int32 x:Key="SettingsTabHelp">4</s:Int32>
         <s:Boolean x:Key="True">True</s:Boolean>
         <s:Boolean x:Key="False">False</s:Boolean>
+        <local:MpPointCollectionConverter x:Key="PointCollectionConverter" />
         <local:MpIntToStringConverter x:Key="IntToStringConverter" />
         <local:MpBoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <local:MpSolidColorBrushToBrushConverter x:Key="SolidColorBrushToBrushConverter" />
@@ -539,7 +540,62 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+        <ControlTemplate x:Key="LockToggleButtonControlTemplate"
+                         TargetType="{x:Type ToggleButton}">
+            <Border x:Name="OuterBorder"
+                    BorderBrush="Transparent"
+                    BorderThickness="1"
+                    CornerRadius="2">
+                <Border x:Name="InnerBorder"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        CornerRadius="2">
+                    <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      RecognizesAccessKey="True"
+                                      Margin="{TemplateBinding Padding}" />
+                </Border>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FF7CA0CC" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FFE4EFFD" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FFDAE7F5" />
+                </Trigger>
+                <Trigger Property="IsPressed"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FF2E4E76" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FF116EE4" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FF3272B8" />
+                </Trigger>
+                <Trigger Property="IsChecked"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FFFFC00A" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FFFFDE7F" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FFFFD458" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
         <ControlTemplate x:Key="SearchButtonControlTemplate"
                          TargetType="{x:Type Button}">
             <Border x:Name="OuterBorder"
@@ -768,13 +824,27 @@
               Focusable="True"
               Background="DarkViolet">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.3*" />
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="5*" />
                 <ColumnDefinition Width="1.5*" />
             </Grid.ColumnDefinitions>
+            <ToggleButton x:Name="TogglekMainWindowLockButton"
+                    Grid.Column="0"
+                    Width="35"
+                    Height="35"
+                    Margin="5,0,0,0"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left"
+                    IsChecked="{Binding IsMainWindowLocked}"
+                    Command="{Binding TogglekMainWindowLockCommand}"
+                    Template="{StaticResource LockToggleButtonControlTemplate}">
+                <Image Source="/Resources/Images/lock.png"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center" />
+            </ToggleButton>
             <!-- Sort Combobox -->
-            <Grid Grid.Row="0"
-                  Grid.Column="0"
+            <Grid Grid.Column="1"
                   DataContext="{Binding ClipTileSortViewModel}"
                   Margin="0">
                 <i:Interaction.Triggers>
@@ -791,10 +861,10 @@
                 <Label Grid.Column="0"
                        FontSize="19"
                        Foreground="White"
-                       HorizontalAlignment="Right"
+                       HorizontalAlignment="Left"
                        FontWeight="DemiBold"
                        VerticalContentAlignment="Center"
-                       Padding="0,0,15,0">Sort By</Label>
+                       Padding="0,0,0,0">Sort By</Label>
                 <local:MpClipBorder CornerRadius="15"
                                     Margin="5"
                                     Grid.Column="1">
@@ -831,8 +901,7 @@
                 </Button>
             </Grid>
             <!-- Tag Tray -->
-            <StackPanel Grid.Row="0"
-                        Grid.Column="1"
+            <StackPanel Grid.Column="2"
                         DataContext="{Binding TagTrayViewModel}"
                         Focusable="False"
                         HorizontalAlignment="Center"
@@ -976,8 +1045,7 @@
                            Source="/MpWpfApp;component/Resources/Images/add4.png" />
                 </Button>
             </StackPanel>
-            <Grid Grid.Row="0"
-                  Grid.Column="2"
+            <Grid Grid.Column="3"
                   DataContext="{Binding SearchBoxViewModel}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -1526,7 +1594,7 @@
                                                 ClipToBounds="True"
                                                 Grid.Column="0">
                                             <!-- RichText Content -->
-                                            <Canvas x:Name="ClipTileRichTextBoxCanvas"
+                                            <Canvas x:Name="ClipTileRichTextBoxListBoxCanvas"
                                                     Visibility="{Binding RtbVisibility}"
                                                     Height="{Binding TileContentHeight}"
                                                     Width="{Binding TileContentWidth, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}">
@@ -1792,7 +1860,7 @@
                                                                 <Setter.Value>
                                                                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                                                         <ContentPresenter />
-                                                                        <ControlTemplate.Triggers>
+                                                                        <!--<ControlTemplate.Triggers>
                                                                             <Trigger Property="IsSelected"
                                                                                      Value="True">
                                                                                 <Setter Property="BorderBrush"
@@ -1800,7 +1868,7 @@
                                                                                 <Setter Property="Background"
                                                                                         Value="Transparent" />
                                                                             </Trigger>
-                                                                        </ControlTemplate.Triggers>
+                                                                        </ControlTemplate.Triggers>-->
                                                                     </ControlTemplate>
                                                                 </Setter.Value>
                                                             </Setter>
@@ -1808,39 +1876,81 @@
                                                     </ListBox.ItemContainerStyle>
                                                     <ListBox.ItemTemplate>
                                                         <DataTemplate>
-                                                            <RichTextBox x:Name="ClipTileRichTextBox"
-                                                                         IsReadOnly="{Binding ClipTileViewModel.IsRtbReadOnly}"
-                                                                         DataContext="{Binding}"
-                                                                         IsEnabled="True"
-                                                                         AutoWordSelection="False"
-                                                                         IsInactiveSelectionHighlightEnabled="True"
-                                                                         IsDocumentEnabled="{Binding IsSelected}"
-                                                                         Focusable="{Binding ClipTileViewModel.IsEditingTile}"
-                                                                         Cursor="{Binding ClipTileViewModel.ContentCursor}"
-                                                                         Width="{Binding ClipTileViewModel.TileContentWidth}"
-                                                                         Height="{Binding RtbListBoxItemHeight}"
-                                                                         IsUndoEnabled="True"
-                                                                         Background="White"
-                                                                         VerticalAlignment="Top"
-                                                                         HorizontalAlignment="Left"
-                                                                         ScrollViewer.HorizontalScrollBarVisibility="{Binding ClipTileViewModel.RtbHorizontalScrollbarVisibility}"
-                                                                         ScrollViewer.VerticalScrollBarVisibility="{Binding ClipTileViewModel.RtbVerticalScrollbarVisibility}"
-                                                                         BorderThickness="0">
-                                                                <RichTextBox.Resources>
-                                                                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                                                                                     Color="Blue" />
-                                                                </RichTextBox.Resources>
-                                                                <SpellCheck.IsEnabled>
-                                                                    <Binding Path="SystemTrayViewModel.SettingsWindowViewModel.PreferencesViewModel.UseSpellCheck"
-                                                                             Source="{StaticResource MainWindowViewModel}" />
-                                                                </SpellCheck.IsEnabled>
-                                                                <i:Interaction.Triggers>
-                                                                    <i:EventTrigger EventName="Loaded">
-                                                                        <i:CallMethodAction TargetObject="{Binding}"
-                                                                                            MethodName="ClipTileRichTextBoxListItem_Loaded" />
-                                                                    </i:EventTrigger>
-                                                                </i:Interaction.Triggers>
-                                                            </RichTextBox>
+                                                            <Canvas x:Name="ClipTileRichTextBoxCanvas"
+                                                                    DataContext="{Binding}"
+                                                                    Width="{Binding ClipTileViewModel.TileContentWidth}"
+                                                                    Height="{Binding RtbListBoxItemHeight}">
+                                                                <RichTextBox x:Name="ClipTileRichTextBox"
+                                                                             Canvas.Left="0"
+                                                                             Canvas.Top="0"
+                                                                             IsReadOnly="{Binding ClipTileViewModel.IsRtbReadOnly}"
+                                                                             IsEnabled="True"
+                                                                             AutoWordSelection="False"
+                                                                             IsInactiveSelectionHighlightEnabled="True"
+                                                                             IsDocumentEnabled="{Binding IsSelected}"
+                                                                             Focusable="{Binding ClipTileViewModel.IsEditingTile}"
+                                                                             Cursor="{Binding ClipTileViewModel.ContentCursor}"
+                                                                             Width="{Binding ClipTileViewModel.TileContentWidth}"
+                                                                             Height="{Binding RtbListBoxItemHeight}"
+                                                                             IsUndoEnabled="True"
+                                                                             Background="White"
+                                                                             VerticalAlignment="Top"
+                                                                             HorizontalAlignment="Left"
+                                                                             ScrollViewer.HorizontalScrollBarVisibility="{Binding ClipTileViewModel.RtbHorizontalScrollbarVisibility}"
+                                                                             ScrollViewer.VerticalScrollBarVisibility="{Binding ClipTileViewModel.RtbVerticalScrollbarVisibility}"
+                                                                             BorderThickness="1">
+                                                                    <RichTextBox.Document>
+                                                                        <local:MpEventEnabledFlowDocument IsOptimalParagraphEnabled="True" />
+                                                                    </RichTextBox.Document>
+                                                                    <RichTextBox.Resources>
+                                                                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                                                                         Color="Blue" />
+                                                                    </RichTextBox.Resources>
+                                                                    <SpellCheck.IsEnabled>
+                                                                        <Binding Path="SystemTrayViewModel.SettingsWindowViewModel.PreferencesViewModel.UseSpellCheck"
+                                                                                 Source="{StaticResource MainWindowViewModel}" />
+                                                                    </SpellCheck.IsEnabled>
+                                                                    <i:Interaction.Triggers>
+                                                                        <i:EventTrigger EventName="Loaded">
+                                                                            <i:CallMethodAction TargetObject="{Binding}"
+                                                                                                MethodName="ClipTileRichTextBoxListItem_Loaded" />
+                                                                        </i:EventTrigger>
+                                                                    </i:Interaction.Triggers>
+                                                                </RichTextBox>
+                                                                <Path x:Name="ClipTileRichTextBoxOverlayPath"
+                                                                      DataContext="{Binding RichTextBoxPathOverlayViewModel}"
+                                                                      Stroke="Red"
+                                                                      StrokeThickness="1"
+                                                                      Fill="Blue"
+                                                                      Opacity="0.5">
+                                                                    <i:Interaction.Triggers>
+                                                                        <i:EventTrigger EventName="Loaded">
+                                                                            <i:CallMethodAction TargetObject="{Binding}"
+                                                                                                MethodName="RichTextBoxPathOverlayPath_Loaded" />
+                                                                        </i:EventTrigger>
+                                                                    </i:Interaction.Triggers>
+                                                                    <Path.Data>
+                                                                        <PathGeometry x:Name="ClipTileRichTextBoxOverlayPathGeometry">
+                                                                            <PathGeometry.Figures>
+                                                                                <PathFigure StartPoint="{Binding StartPoint}">
+                                                                                    <PathFigure.Segments>
+                                                                                        <PathSegmentCollection>
+                                                                                            <PolyLineSegment Points="{Binding Points, Converter={StaticResource PointCollectionConverter}}" />
+                                                                                        </PathSegmentCollection>
+                                                                                    </PathFigure.Segments>
+                                                                                </PathFigure>
+                                                                            </PathGeometry.Figures>
+                                                                        </PathGeometry>
+                                                                    </Path.Data>
+                                                                    <!--<Path.Data>
+                                                                        <PathGeometry>
+                                                                            <PathFigure StartPoint="0,0">
+                                                                                <LineSegment Point="200,70" />
+                                                                            </PathFigure>
+                                                                        </PathGeometry>
+                                                                    </Path.Data>-->
+                                                                </Path>
+                                                            </Canvas>
                                                         </DataTemplate>
                                                     </ListBox.ItemTemplate>
                                                 </ListBox>                                                

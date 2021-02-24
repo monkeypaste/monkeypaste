@@ -12,5 +12,8 @@ namespace MpWpfApp {
                 return true;
             }
         }
+        public MpEventEnabledFlowDocument() : base() {
+            IsOptimalParagraphEnabled = true;
+        }
     }
 }

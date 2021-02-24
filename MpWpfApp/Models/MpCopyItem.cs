@@ -997,7 +997,9 @@ namespace MpWpfApp {
                         });
                 CopyItemId = MpDb.Instance.GetLastRowId("MpCopyItem", "pk_MpCopyItemId");  
             }
+
             if(CompositeParentCopyItemId > 0) {
+                //for composite children
                 if(CompositeCopyItemId == 0) {
                     MpDb.Instance.ExecuteWrite(
                     "insert into MpCompositeCopyItem(fk_MpCopyItemId,fk_ParentMpCopyItemId,SortOrderIdx,IsInlineWithPreviousItem) " +
@@ -1022,7 +1024,8 @@ namespace MpWpfApp {
                 }
             }
 
-            foreach(var cci in CompositeItemList) {
+            foreach (var cci in CompositeItemList) {
+                //for composite type items
                 cci.CompositeParentCopyItemId = CopyItemId;
                 cci.WriteToDatabase();
             }

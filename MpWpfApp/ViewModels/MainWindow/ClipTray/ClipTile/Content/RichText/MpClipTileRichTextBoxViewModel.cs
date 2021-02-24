@@ -16,6 +16,8 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Properties
+
         #region ViewModels
         private MpClipTileViewModel _clipTileViewModel;
         public MpClipTileViewModel ClipTileViewModel {
@@ -23,13 +25,15 @@ namespace MpWpfApp {
                 return _clipTileViewModel;
             }
             set {
-                if(_clipTileViewModel != value) {
+                if (_clipTileViewModel != value) {
                     _clipTileViewModel = value;
                     OnPropertyChanged(nameof(ClipTileViewModel));
                     OnPropertyChanged(nameof(CopyItem));
                     OnPropertyChanged(nameof(CompositeParentCopyItemId));
                     OnPropertyChanged(nameof(CompositeSortOrderIdx));
                     OnPropertyChanged(nameof(IsInlineWithPreviousCompositeItem));
+                    OnPropertyChanged(nameof(Next));
+                    OnPropertyChanged(nameof(Previous));
                 }
             }
         }
@@ -46,9 +50,20 @@ namespace MpWpfApp {
                 }
             }
         }
-        #endregion
 
-        #region Properties
+        private MpRichTextBoxPathOverlayViewModel _richTextBoxPathOverlayViewModel;
+        public MpRichTextBoxPathOverlayViewModel RichTextBoxPathOverlayViewModel {
+            get {
+                return _richTextBoxPathOverlayViewModel;
+            }
+            set {
+                if(_richTextBoxPathOverlayViewModel != value) {
+                    _richTextBoxPathOverlayViewModel = value;
+                    OnPropertyChanged(nameof(RichTextBoxPathOverlayViewModel));
+                }
+            }
+        }
+        #endregion
 
         #region Controls 
         private RichTextBox _rtb;
@@ -95,6 +110,40 @@ namespace MpWpfApp {
             }
         }
         #endregion
+
+        #region Header & Footer 
+        public MpClipTileRichTextBoxViewModel Next {
+            get {
+                if(ClipTileViewModel == null || 
+                   ClipTileViewModel.RichTextBoxViewModels == null || 
+                   ClipTileViewModel.RichTextBoxViewModels.Count == 0) {
+                    return null;
+                }
+                int nextIdx = CompositeSortOrderIdx + 1;
+                if(nextIdx >= ClipTileViewModel.RichTextBoxViewModels.Count) {
+                    return null;
+                }
+                return ClipTileViewModel.RichTextBoxViewModels[nextIdx];
+            }
+        }
+
+        public MpClipTileRichTextBoxViewModel Previous {
+            get {
+                if (ClipTileViewModel == null ||
+                   ClipTileViewModel.RichTextBoxViewModels == null ||
+                   ClipTileViewModel.RichTextBoxViewModels.Count == 0) {
+                    return null;
+                }
+                int prevIdx = CompositeSortOrderIdx - 1;
+                if (prevIdx < 0) {
+                    return null;
+                }
+                return ClipTileViewModel.RichTextBoxViewModels[prevIdx];
+            }
+        }
+
+
+        #endregion 
 
         #region Business Logic 
         public bool HasTemplate {
@@ -203,6 +252,7 @@ namespace MpWpfApp {
             ClipTileViewModel = ctvm;
 
             TemplateHyperlinkCollectionViewModel = new MpTemplateHyperlinkCollectionViewModel(ClipTileViewModel, this);
+            RichTextBoxPathOverlayViewModel = new MpRichTextBoxPathOverlayViewModel(this);
         }
 
         public void ClipTileRichTextBoxListItem_Loaded(object sender, RoutedEventArgs e) {
@@ -235,6 +285,9 @@ namespace MpWpfApp {
             if(CompositeSortOrderIdx <= 0) {
                 SetSelection(true);
             }
+
+
+
         }
         public void UpdateLayout() {
             Rtb.Document.PageWidth = Rtb.Width - Rtb.Padding.Left - Rtb.Padding.Right;

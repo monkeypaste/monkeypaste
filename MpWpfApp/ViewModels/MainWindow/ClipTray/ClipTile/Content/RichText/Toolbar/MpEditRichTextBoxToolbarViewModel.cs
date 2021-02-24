@@ -134,7 +134,7 @@ namespace MpWpfApp {
         public void InitWithRichTextBox(RichTextBox rtb) {
             var et = _borderStackPanel.GetVisualAncestor<Border>();
             var cb = (MpClipBorder)et.GetVisualAncestor<MpClipBorder>();
-            var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxCanvas");
+            var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxCanvas");
             var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
             var ctttg = (Grid)cb.FindName("ClipTileTitleTextGrid");
             //var rtb = ClipTileViewModel.GetRtb();//rtbc.FindName("ClipTileRichTextBox") as RichTextBox;

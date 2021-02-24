@@ -76,6 +76,16 @@ namespace MpWpfApp {
                 return maxWidth;
             }
         }
+
+        public double TotalItemHeight {
+            get {
+                double totalHeight = 0;
+                foreach(var rtbvm in this) {
+                    totalHeight += rtbvm.RtbListBoxItemHeight;
+                }
+                return totalHeight;
+            }
+        }
         #endregion
 
         #endregion

@@ -248,7 +248,7 @@ namespace MpWpfApp {
             var editRichTextToolbarBorder = (Border)cb.FindName("ClipTileEditorToolbar");
             var editTemplateToolbarBorder = (Border)cb.FindName("ClipTileEditTemplateToolbar");
             var clipTray = MainWindowViewModel.ClipTrayViewModel.GetClipTray();
-            var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxCanvas");
+            var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxCanvas");
             var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
             var ctttg = (Grid)cb.FindName("ClipTileTitleTextGrid");
             //var rtb = rtbc.FindName("ClipTileRichTextBox") as RichTextBox;

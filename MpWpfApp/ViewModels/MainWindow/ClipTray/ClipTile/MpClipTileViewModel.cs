@@ -509,7 +509,7 @@
 
         public ScrollBarVisibility RtbHorizontalScrollbarVisibility {
             get {
-                if(IsEditingTile || IsPastingTemplateTile) {
+                if(IsExpanded) {
                     if(RichTextBoxViewModels.RelativeWidthMax > ClipBorder.ActualWidth) {
                         return ScrollBarVisibility.Visible;
                     }
@@ -520,8 +520,10 @@
 
         public ScrollBarVisibility RtbVerticalScrollbarVisibility {
             get {
-                if (IsEditingTile || IsPastingTemplateTile) {
-                    return ScrollBarVisibility.Auto;
+                if (IsExpanded) {
+                    if (RichTextBoxViewModels.TotalItemHeight > RichTextBoxListBox.ActualHeight - EditRichTextBoxToolbarHeight) {
+                        return ScrollBarVisibility.Visible;
+                    }
                 }
                 return ScrollBarVisibility.Hidden;
             }
@@ -1987,7 +1989,7 @@
         }
         private void PasteClip() {
             MainWindowViewModel.ClipTrayViewModel.ClearClipSelection();
-            IsSelected = true;
+            IsSelected = true; 
             MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand.Execute(null);
         }
 

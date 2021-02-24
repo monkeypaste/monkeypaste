@@ -303,8 +303,8 @@ namespace MpWpfApp {
                 OnPropertyChanged(nameof(EmptyListMessageVisibility));
                 OnPropertyChanged(nameof(ClipTrayVisibility));
             };
-
-            foreach(var ci in MpCopyItem.GetAllCopyItems()) {
+            var allItems = MpCopyItem.GetAllCopyItems();
+            foreach (var ci in allItems) {
                 if(ci.CompositeParentCopyItemId > 0) {
                     continue;
                 }
@@ -341,12 +341,14 @@ namespace MpWpfApp {
             var clipTray = (MpMultiSelectListView)sender;
             var scrollViewer = clipTray.GetDescendantOfType<ScrollViewer>();
 
-            _clipTrayRef = clipTray;    
-            
+            _clipTrayRef = clipTray;
+
+            #region Drag/Drop
             clipTray.DragEnter += (s, e1) => {
                 //used for resorting
                 e1.Effects = e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName) ? DragDropEffects.Move : DragDropEffects.None;
             };
+
             clipTray.Drop += (s, e2) => {
                 //retrieve custom dataformat object (cliptileviewmodel)
                 var dragClipViewModel = (List<MpClipTileViewModel>)e2.Data.GetData(Properties.Settings.Default.ClipTileDragDropFormatName);
@@ -393,6 +395,7 @@ namespace MpWpfApp {
                     Console.WriteLine("MainWindow drop error cannot find lasrt moused over tile");
                 }
             };
+            #endregion
 
             clipTray.SelectionChanged += (s, e8) => {
                 MergeClipsCommandVisibility = MergeSelectedClipsCommand.CanExecute(null) ? Visibility.Visible : Visibility.Collapsed;
@@ -449,6 +452,11 @@ namespace MpWpfApp {
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             var clipTileBorder = (MpClipBorder)sender;
+            if(clipTileBorder.DataContext == null || clipTileBorder.DataContext.GetType() != typeof(MpClipTileViewModel)) {
+                //occurs intermittently and maybe due to debug.breaking during item creation
+                Console.WriteLine("ClipTray TileLoaded error, no data context so ignoring item");
+                return;
+            }
             var ctvm = (MpClipTileViewModel)clipTileBorder.DataContext;
 
             clipTileBorder.PreviewMouseLeftButtonDown += (s, e6) => {
@@ -792,9 +800,7 @@ namespace MpWpfApp {
 
         private int GetClipTileFromDrag(Point startLoc,Point curLoc) {
             return 0;
-        }
-
-        
+        }       
 
         #endregion
 
@@ -1295,6 +1301,8 @@ namespace MpWpfApp {
             }
         }
         #endregion
+
+        
     }
     public enum MpExportType {
         None = 0,

@@ -164,7 +164,7 @@ namespace MpWpfApp {
             var editTemplateToolbarBorder = _borderGrid.GetVisualAncestor<Border>();
             var templateColorButton = (Button)editTemplateToolbarBorder.FindName("TemplateColorButton");
             var cb = (MpClipBorder)editTemplateToolbarBorder.GetVisualAncestor<MpClipBorder>();
-            var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxCanvas");
+            var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxCanvas");
             var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
             var ctttg = (Grid)cb.FindName("ClipTileTitleTextGrid");
             //var rtb = rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
