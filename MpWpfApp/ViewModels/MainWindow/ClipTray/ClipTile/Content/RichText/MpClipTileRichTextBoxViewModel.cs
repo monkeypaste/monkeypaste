@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GongSolutions.Wpf.DragDrop.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,6 +36,15 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(Next));
                     OnPropertyChanged(nameof(Previous));
                 }
+            }
+        }
+
+        public MpClipTileRichTextBoxViewModelCollection RichTextBoxViewModelCollection {
+            get {
+                if(ClipTileViewModel == null) {
+                    return null;
+                }
+                return ClipTileViewModel.RichTextBoxViewModelCollection;
             }
         }
 
@@ -86,11 +96,11 @@ namespace MpWpfApp {
                 if(ClipTileViewModel == null) {
                     return 0;
                 }
-                if(!ClipTileViewModel.IsExpanded && ClipTileViewModel.RichTextBoxViewModels.Count == 1) {
+                if(!ClipTileViewModel.IsExpanded && ClipTileViewModel.RichTextBoxViewModelCollection.Count == 1) {
                     return ClipTileViewModel.TileRtbHeight;
                 }
                 if(ClipTileViewModel.IsExpanded) {
-                    if(ClipTileViewModel.RichTextBoxViewModels.Count == 1) {
+                    if(ClipTileViewModel.RichTextBoxViewModelCollection.Count == 1) {
                         return Math.Max(CopyItem.ItemFlowDocument.GetDocumentSize().Height,ClipTileViewModel.TileRtbHeight);
                     }
                     return CopyItem.ItemFlowDocument.GetDocumentSize().Height;
@@ -115,30 +125,30 @@ namespace MpWpfApp {
         public MpClipTileRichTextBoxViewModel Next {
             get {
                 if(ClipTileViewModel == null || 
-                   ClipTileViewModel.RichTextBoxViewModels == null || 
-                   ClipTileViewModel.RichTextBoxViewModels.Count == 0) {
+                   ClipTileViewModel.RichTextBoxViewModelCollection == null || 
+                   ClipTileViewModel.RichTextBoxViewModelCollection.Count == 0) {
                     return null;
                 }
                 int nextIdx = CompositeSortOrderIdx + 1;
-                if(nextIdx >= ClipTileViewModel.RichTextBoxViewModels.Count) {
+                if(nextIdx >= ClipTileViewModel.RichTextBoxViewModelCollection.Count) {
                     return null;
                 }
-                return ClipTileViewModel.RichTextBoxViewModels[nextIdx];
+                return ClipTileViewModel.RichTextBoxViewModelCollection[nextIdx];
             }
         }
 
         public MpClipTileRichTextBoxViewModel Previous {
             get {
                 if (ClipTileViewModel == null ||
-                   ClipTileViewModel.RichTextBoxViewModels == null ||
-                   ClipTileViewModel.RichTextBoxViewModels.Count == 0) {
+                   ClipTileViewModel.RichTextBoxViewModelCollection == null ||
+                   ClipTileViewModel.RichTextBoxViewModelCollection.Count == 0) {
                     return null;
                 }
                 int prevIdx = CompositeSortOrderIdx - 1;
                 if (prevIdx < 0) {
                     return null;
                 }
-                return ClipTileViewModel.RichTextBoxViewModels[prevIdx];
+                return ClipTileViewModel.RichTextBoxViewModelCollection[prevIdx];
             }
         }
 
@@ -165,8 +175,8 @@ namespace MpWpfApp {
                 if (_isSelected != value) {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
-                    ClipTileViewModel.RichTextBoxViewModels.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModels.SelectedClipTileRichTextBoxViewModel));
-                    ClipTileViewModel.RichTextBoxViewModels.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModels.SelectedRtb));
+                    ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel));
+                    ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.SelectedRtb));
                     //ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.IsSelected));
                 }
             }
@@ -225,6 +235,64 @@ namespace MpWpfApp {
             }
         }
 
+        public int CopyItemId {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.CopyItemId;
+            }
+        }
+
+        public string CopyItemPlainText {
+            get {
+                if (CopyItem == null || CopyItem.ItemPlainText == null) {
+                    return string.Empty;
+                }
+                return CopyItem.ItemPlainText;
+            }
+        }
+
+        public string CopyItemRichText {
+            get {
+                if (CopyItem == null) {
+                    return string.Empty;
+                }
+                if (string.IsNullOrEmpty(CopyItem.ItemRichText)) {
+                    return string.Empty.ToRichText();
+                }
+                return CopyItem.ItemRichText;
+            }
+            set {
+                if (CopyItem != null && CopyItem.ItemRichText != value) {
+                    //value should be raw rtf where templates are encoded into #name#color# groups
+                    CopyItem.SetData(value);
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyItemRichText));
+                    OnPropertyChanged(nameof(CopyItem));
+                }
+            }
+        }
+
+        private string _copyItemFilePath = string.Empty;
+        public string CopyItemFilePath {
+            get {
+                if (CopyItem == null || MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null) {
+                    return string.Empty;
+                }
+                if(string.IsNullOrEmpty(_copyItemFilePath)) {
+                    _copyItemFilePath = CopyItem.GetFileList()[0];
+                }
+                return _copyItemFilePath;
+            }
+            set {
+                if(_copyItemFilePath != value) {
+                    _copyItemFilePath = value;
+                    OnPropertyChanged(nameof(CopyItemFilePath));
+                }
+            }
+        }
+
         private MpCopyItem _copyItem;
         public MpCopyItem CopyItem {
             get {
@@ -257,20 +325,22 @@ namespace MpWpfApp {
 
         public void ClipTileRichTextBoxListItem_Loaded(object sender, RoutedEventArgs e) {
             Rtb = (RichTextBox)sender;
+            var rtbc = Rtb.GetVisualAncestor<Canvas>();
 
-            Rtb.Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(CopyItem.ItemRichText);
+            Rtb.Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(CopyItemRichText);
 
             CreateHyperlinks();
 
             UpdateLayout();
 
-            //Rtb.MouseLeftButtonUp += (s, e2) => {
-            //    ClipTileViewModel.IsSelected = true;
-            //    SetSelection(true);
-            //};
+            #region Drag & Drop
+            rtbc.PreviewMouseMove += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_PreviewMouseMove;
+            rtbc.GiveFeedback += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_GiveFeedback;
+            rtbc.Drop += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_Drop;
+            #endregion
 
             Rtb.GotFocus += (s, e2) => {
-                ClipTileViewModel.RichTextBoxViewModels.SelectRichTextBoxViewModel(ClipTileViewModel.RichTextBoxViewModels.IndexOf(this));
+                ClipTileViewModel.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(ClipTileViewModel.RichTextBoxViewModelCollection.IndexOf(this));
                 ClipTileViewModel.EditTemplateToolbarViewModel.InitWithRichTextBox(Rtb);
                 ClipTileViewModel.PasteTemplateToolbarViewModel.InitWithRichTextBox(Rtb);
             };
@@ -285,10 +355,8 @@ namespace MpWpfApp {
             if(CompositeSortOrderIdx <= 0) {
                 SetSelection(true);
             }
-
-
-
         }
+
         public void UpdateLayout() {
             Rtb.Document.PageWidth = Rtb.Width - Rtb.Padding.Left - Rtb.Padding.Right;
             Rtb.Document.PageHeight = Rtb.Height - Rtb.Padding.Top - Rtb.Padding.Bottom;
@@ -310,7 +378,7 @@ namespace MpWpfApp {
         public async Task<string> GetPastableRichText() {
             if (HasTemplate) {
                 TemplateRichText = string.Empty;
-                ClipTileViewModel.RichTextBoxViewModels.SelectRichTextBoxViewModel(ClipTileViewModel.RichTextBoxViewModels.IndexOf(this));
+                ClipTileViewModel.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(ClipTileViewModel.RichTextBoxViewModelCollection.IndexOf(this));
                 ClipTileViewModel.PasteTemplateToolbarViewModel.InitWithRichTextBox(Rtb);
 
                 await Task.Run(() => {
@@ -322,7 +390,7 @@ namespace MpWpfApp {
 
                 return TemplateRichText;
             }
-            return CopyItem.ItemRichText;
+            return CopyItemRichText;
 
             //both return to ClipTray.GetDataObjectFromSelectedClips
         }

@@ -44,7 +44,17 @@ namespace MpWpfApp {
             };
             //select history tag by default
             GetHistoryTagTileViewModel().IsSelected = true;
+        }
 
+        public void RefreshAllCounts() {
+            foreach(var ttvm in this) {
+                ttvm.TagClipCount = 0;
+                foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
+                    if(ttvm.IsLinkedWithClipTile(ctvm)) {
+                        ttvm.TagClipCount++;
+                    }
+                }
+            }
         }
 
         public new void Add(MpTagTileViewModel newTagTile) {

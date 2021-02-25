@@ -19,7 +19,7 @@ namespace MpWpfApp {
         public void SetTag(int tagId) {
             _tagId = tagId;
             _items.Clear();
-            foreach (var ci in MpCopyItem.GetAllCopyItems()) {
+            foreach (var ci in MpCopyItem.GetAllCopyItems(out int count)) {
                 if(ci.CompositeParentCopyItemId > 0) {
                     //ignore composite children since they are gathered in the parent
                     continue;

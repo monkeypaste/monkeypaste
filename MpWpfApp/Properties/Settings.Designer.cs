@@ -866,7 +866,7 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("50000")]
+        [global::System.Configuration.DefaultSettingValueAttribute("250000")]
         public int MaxRtfCharCount {
             get {
                 return ((int)(this["MaxRtfCharCount"]));
@@ -1059,6 +1059,15 @@ namespace MpWpfApp.Properties {
             }
             set {
                 this["NotificationShowCopyItemTooLargeToast"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("CompositeItemDragDropFormat")]
+        public string CompositeItemDragDropFormatName {
+            get {
+                return ((string)(this["CompositeItemDragDropFormatName"]));
             }
         }
     }

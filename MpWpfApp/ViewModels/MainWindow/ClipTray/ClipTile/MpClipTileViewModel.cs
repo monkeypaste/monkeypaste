@@ -85,14 +85,14 @@
         }
 
         private MpClipTileRichTextBoxViewModelCollection _richTextBoxViewModels = new MpClipTileRichTextBoxViewModelCollection();
-        public MpClipTileRichTextBoxViewModelCollection RichTextBoxViewModels {
+        public MpClipTileRichTextBoxViewModelCollection RichTextBoxViewModelCollection {
             get {
                 return _richTextBoxViewModels;
             }
             set {
                 if (_richTextBoxViewModels != value) {
                     _richTextBoxViewModels = value;
-                    OnPropertyChanged(nameof(RichTextBoxViewModels));
+                    OnPropertyChanged(nameof(RichTextBoxViewModelCollection));
                 }
             }
         }
@@ -462,7 +462,7 @@
                 if(CopyItem == null) {
                     return 0;
                 }
-                return Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, RichTextBoxViewModels.RelativeWidthMax);
+                return Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, RichTextBoxViewModelCollection.RelativeWidthMax);
             }
         }
         #endregion
@@ -510,7 +510,7 @@
         public ScrollBarVisibility RtbHorizontalScrollbarVisibility {
             get {
                 if(IsExpanded) {
-                    if(RichTextBoxViewModels.RelativeWidthMax > ClipBorder.ActualWidth) {
+                    if(RichTextBoxViewModelCollection.RelativeWidthMax > ClipBorder.ActualWidth) {
                         return ScrollBarVisibility.Visible;
                     }
                 }
@@ -521,7 +521,7 @@
         public ScrollBarVisibility RtbVerticalScrollbarVisibility {
             get {
                 if (IsExpanded) {
-                    if (RichTextBoxViewModels.TotalItemHeight > RichTextBoxListBox.ActualHeight - EditRichTextBoxToolbarHeight) {
+                    if (RichTextBoxViewModelCollection.TotalItemHeight > RichTextBoxListBox.ActualHeight - EditRichTextBoxToolbarHeight) {
                         return ScrollBarVisibility.Visible;
                     }
                 }
@@ -654,6 +654,12 @@
 
         public bool IsLoading {
             get {
+                if(MainWindowViewModel != null && MainWindowViewModel.IsLoading) {
+                    return true;
+                }
+                if(MainWindowViewModel != null && MainWindowViewModel.ClipTrayViewModel != null && MainWindowViewModel.ClipTrayViewModel.IsLoading) {
+                    return true;
+                }
                 return CopyItem == null || CopyItem.CopyItemId == 0;
             }
         }
@@ -725,7 +731,24 @@
         }
         #endregion
 
-        #region State Properties        
+        #region State Properties       
+        public bool IsDragging { get; set; } = false;
+                
+        public Point StartDragPoint;
+        
+        private bool _isMouseDown = false;
+        public bool IsMouseDown {
+            get {
+                return _isMouseDown;
+            }
+            set {
+                if (_isMouseDown != value) {
+                    _isMouseDown = value;
+                    OnPropertyChanged(nameof(IsMouseDown));
+                }
+            }
+        }
+
         private bool _isHoveringOnTitleTextGrid = false;
         public bool IsHoveringOnTitleTextGrid {
             get {
@@ -822,7 +845,7 @@
 
         public bool HasTemplate {
             get {
-                foreach(var rtbvm in RichTextBoxViewModels) {
+                foreach(var rtbvm in RichTextBoxViewModelCollection) {
                     if(rtbvm.HasTemplate) {
                         return true;
                     }
@@ -1067,6 +1090,9 @@
                 if (CopyItem == null) {
                     return string.Empty;
                 }
+                if(string.IsNullOrEmpty(CopyItem.ItemRichText)) {
+                    return string.Empty.ToRichText();
+                }
                 return CopyItem.ItemRichText;
             }
             set {
@@ -1093,7 +1119,7 @@
 
         public List<string> CopyItemFileDropList {
             get {
-                if (CopyItem == null) {
+                if (CopyItem == null || MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null) {
                     return new List<string>();
                 }
                 return CopyItem.GetFileList(string.Empty, MainWindowViewModel.ClipTrayViewModel.GetTargetFileType());
@@ -1238,7 +1264,7 @@
                     OnPropertyChanged(nameof(LoadingSpinnerVisibility));
                     OnPropertyChanged(nameof(ContentVisibility));
                     OnPropertyChanged(nameof(TrialOverlayVisibility));
-                    OnPropertyChanged(nameof(RichTextBoxViewModels));
+                    OnPropertyChanged(nameof(RichTextBoxViewModelCollection));
                     //CopyItem.WriteToDatabase();
                 }
             }
@@ -1277,7 +1303,7 @@
                         break;
                 }
             };
-            RichTextBoxViewModels = new MpClipTileRichTextBoxViewModelCollection(this);
+            RichTextBoxViewModelCollection = new MpClipTileRichTextBoxViewModelCollection(this);
             EditRichTextBoxToolbarViewModel = new MpEditRichTextBoxToolbarViewModel(this);
             EditTemplateToolbarViewModel = new MpEditTemplateToolbarViewModel(this);
             PasteTemplateToolbarViewModel = new MpPasteTemplateToolbarViewModel(this);
@@ -1319,6 +1345,7 @@
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             var clipTileBorder = (MpClipBorder)sender;
+            var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
             ClipBorder = clipTileBorder;//clipTileBorder.GetVisualAncestor<MpClipBorder>();
 
             clipTileBorder.MouseEnter += (s, e1) => {
@@ -1339,6 +1366,9 @@
                     e5.Handled = true;
                     return;
                 }
+                IsMouseDown = true;
+                StartDragPoint = e5.GetPosition(clipTray);
+                //_dragClipBorderElement = (MpClipBorder)VisualTreeHelper.HitTest(clipTray, StartDragPoint).VisualHit.GetVisualAncestor<MpClipBorder>(); ;
             };
             clipTileBorder.PreviewKeyDown += (s, e6) => {
                 if (CopyItemType != MpCopyItemType.RichText) {
@@ -1353,6 +1383,42 @@
                 //    e.Handled = true;
                 //}
             };
+            //Initiate Selected Clips Drag/Drop, Copy/Paste and Export (to file or csv)
+            //Strategy: ALL selected items, regardless of type will have text,rtf,img, and file representations
+            //          that are appended as text and filelists but  merged into images (by default)
+            // TODO Have option to append items to one long image
+            clipTileBorder.PreviewMouseMove += (s, e7) => {
+                var curDragPoint = e7.GetPosition(clipTray);
+                //these tests ensure tile is not being dragged INTO another clip tile or outside tray
+                //var testBorder = (MpClipBorder)VisualTreeHelper.HitTest(clipTray, curDragPoint).VisualHit.GetVisualAncestor<MpClipBorder>();
+                //var testTray = (ListBox)VisualTreeHelper.HitTest(clipTray, curDragPoint).VisualHit.GetVisualAncestor<ListBox>();
+                if (IsMouseDown &&
+                    !IsDragging &&
+                    (MainWindowViewModel != null && 
+                     MainWindowViewModel.ClipTrayViewModel != null && 
+                     !MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded) &&
+                    e7.MouseDevice.LeftButton == MouseButtonState.Pressed &&
+                    (Math.Abs(curDragPoint.Y - StartDragPoint.Y) > 5 || Math.Abs(curDragPoint.X - StartDragPoint.X) > 5) /*&&
+                   // s.GetType() == typeof(MpClipBorder) &&
+                    //_dragClipBorderElement != testBorder &&
+                    testBorder == null &&
+                    testTray != null*/) {
+                    DragDrop.DoDragDrop(clipTray, MainWindowViewModel.ClipTrayViewModel.GetDataObjectFromSelectedClips(true), DragDropEffects.Copy | DragDropEffects.Move);
+                    IsDragging = true;
+                } else if (IsDragging) {
+                    IsMouseDown = false;
+                    IsDragging = false;
+                    StartDragPoint = new Point();
+                    //_dragClipBorderElement = null;
+                }
+            };
+
+            clipTileBorder.PreviewMouseLeftButtonUp += (s, e8) => {
+                IsMouseDown = false;
+                IsDragging = false;
+                StartDragPoint = new Point();
+                //_dragClipBorderElement = null;
+            };
             //clipTileBorder.PreviewMouseRightButtonUp += (s, e4) => {
             //    var p = e4.MouseDevice.GetPosition(clipTileBorder);
             //    var hitTestResult = VisualTreeHelper.HitTest(clipTileBorder, p);
@@ -1360,6 +1426,13 @@
             //        MessageBox.Show(hitTestResult.VisualHit.ToString());
             //    }
             //};
+
+            #region Composite Drag & Drop
+            clipTileBorder.PreviewMouseMove += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_PreviewMouseMove;
+            clipTileBorder.GiveFeedback += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_GiveFeedback;
+            clipTileBorder.Drop += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_Drop;
+            #endregion
+
             HighlightTextRangeViewModelCollection.Init();
         }
 
@@ -1497,12 +1570,12 @@
             RichTextBoxListBox = rtblb;
 
             //after pasting template rtb's are duplicated so clear them upon refresh
-            if (RichTextBoxViewModels.Count == 0) {
+            if (RichTextBoxViewModelCollection.Count == 0) {
                 if (CopyItemType == MpCopyItemType.RichText) {
-                    RichTextBoxViewModels.Add(new MpClipTileRichTextBoxViewModel(this, CopyItem));
+                    RichTextBoxViewModelCollection.Add(new MpClipTileRichTextBoxViewModel(this, CopyItem));
                 } else {
                     foreach (var cci in CopyItem.CompositeItemList) {
-                        RichTextBoxViewModels.Add(new MpClipTileRichTextBoxViewModel(this, cci));
+                        RichTextBoxViewModelCollection.Add(new MpClipTileRichTextBoxViewModel(this, cci));
                     }
                 }
             }
@@ -1521,7 +1594,7 @@
 
                             SaveToDatabase();
                         }
-                        foreach(var rtbvm in RichTextBoxViewModels) {
+                        foreach(var rtbvm in RichTextBoxViewModelCollection) {
                             var rtb = rtbvm.Rtb;
                             rtb.ScrollToHome();
                             rtb.CaretPosition = rtb.Document.ContentStart;
@@ -1714,26 +1787,18 @@
         }
 
         public void MergeClip(MpClipTileViewModel octvm, bool mergeTags = false) {
-            var otherItemTagList = new List<MpTagTileViewModel>();
-            if(mergeTags) {
-                foreach(var tagTile in MainWindowViewModel.TagTrayViewModel) {
-                    if(tagTile != MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel() &&
-                       tagTile.IsLinkedWithClipTile(octvm)) {
-                        otherItemTagList.Add(tagTile);
-                    }
-                }
-            }
-            CopyItem.Combine(octvm.CopyItem,false,true);
+            CopyItem = MpCopyItem.Merge(octvm.CopyItem,CopyItem,false,true);
 
             OnPropertyChanged(nameof(CopyItem));
-            
-            //tag associationgs are removed in the model combining
-            foreach(var otherItemTagTile in otherItemTagList) {
-                otherItemTagTile.AddClip(this,false);
+
+            if (mergeTags) {
+                MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
             }
+            //clear rtbvms so when item is reloading it adds the merged ci
+            RichTextBoxViewModelCollection.Clear();
 
             //when initially converting richtext item into composite it needs to be relinked to history
-            MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(this);
+            MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(this,false);
             MainWindowViewModel.ClipTrayViewModel.Refresh();
             Refresh();
         }
@@ -1748,14 +1813,14 @@
         }
         public void SaveToDatabase() {
             //remove links to update model rich text
-            RichTextBoxViewModels.ClearAllHyperlinks();
+            RichTextBoxViewModelCollection.ClearAllHyperlinks();
 
             //clear any search highlighting when saving the document then restore after save
             HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(null);
-            CopyItemRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(RichTextBoxViewModels.FullDocument);
+            CopyItemRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(RichTextBoxViewModelCollection.FullDocument);
             HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(null);
 
-            RichTextBoxViewModels.CreateAllHyperlinks();
+            RichTextBoxViewModelCollection.CreateAllHyperlinks();
 
             CopyItem.WriteToDatabase();
         }
@@ -1764,7 +1829,7 @@
             if (HasTemplate) {
                 IsPastingTemplateTile = true;
                 TemplateRichText = string.Empty.ToRichText();
-                foreach(var rtbvm in RichTextBoxViewModels) {
+                foreach(var rtbvm in RichTextBoxViewModelCollection) {
                     var rtbvmrt = await rtbvm.GetPastableRichText();
                     TemplateRichText = MpHelpers.Instance.CombineRichText(rtbvmrt, TemplateRichText, !rtbvm.IsInlineWithPreviousCompositeItem);
                 }               
@@ -1804,8 +1869,8 @@
             switch(CopyItemType) {
                 case MpCopyItemType.Composite:
                 case MpCopyItemType.RichText:
-                    RichTextBoxListBox.ScrollIntoView(RichTextBoxViewModels[0]);
-                    foreach(var rtbvm in RichTextBoxViewModels) {
+                    RichTextBoxListBox.ScrollIntoView(RichTextBoxViewModelCollection[0]);
+                    foreach(var rtbvm in RichTextBoxViewModelCollection) {
                         rtbvm.Rtb.ScrollToHome();
                     }
                     break;

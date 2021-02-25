@@ -1,11 +1,14 @@
-﻿using System;
+﻿using GongSolutions.Wpf.DragDrop.Utilities;
+using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -84,6 +87,11 @@ namespace MpWpfApp {
 
         public void RichTextBoxPathOverlayPath_Loaded(object sender, RoutedEventArgs args) {
             var overlayPath = (Path)sender;
+            
+            overlayPath.PreviewMouseMove += ClipTileRichTextBoxViewModel.RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_PreviewMouseMove;
+            overlayPath.GiveFeedback += ClipTileRichTextBoxViewModel.RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_GiveFeedback;
+            overlayPath.Drop += ClipTileRichTextBoxViewModel.RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_Drop;
+            
             UpdatePoints(ClipTileRichTextBoxViewModel.Rtb);
         }
 
@@ -115,7 +123,7 @@ namespace MpWpfApp {
             var blet = contentEndRect.TopRight;
             var tr = new Point(Canvas.GetLeft(rtb) + rtb.ActualWidth, Canvas.GetTop(rtb));
             var br = new Point(Canvas.GetLeft(rtb) + rtb.ActualWidth, blet.Y);
-            var bl = new Point(Canvas.GetLeft(rtb), Canvas.GetTop(rtb) + rtb.ActualHeight);
+            var bl = new Point(Canvas.GetLeft(rtb), bleb.Y);
             var tl = new Point(Canvas.GetLeft(rtb), tlsb.Y);
             StartPoint = tlst;
             Points = new MpObservableCollection<Point>();

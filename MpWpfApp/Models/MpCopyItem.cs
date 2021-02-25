@@ -144,9 +144,21 @@ namespace MpWpfApp {
         public int CompositeParentCopyItemId { get; set; } = -1;
         public int CompositeSortOrderIdx { get; set; } = -1;
         public bool IsInlineWithPreviousCompositeItem { get; set; } = false;
+
+        public bool IsCompositeParent {
+            get {
+                return CopyItemType == MpCopyItemType.Composite;
+            }
+        }
+
+        public bool IsSubCompositeItem {
+            get {
+                return CompositeParentCopyItemId > 0;
+            }
+        }
         #endregion
 
-        #region Static Methods
+        #region Factory Methods
         public static MpCopyItem CreateFromClipboard(IntPtr processHandle, int remainingRetryCount = 5) {
             if(remainingRetryCount < 0) {
                 Console.WriteLine("Retry count exceeded ignoring copy item");
@@ -253,6 +265,7 @@ namespace MpWpfApp {
                 return CreateFromClipboard(processHandle, remainingRetryCount - 1);
             }
         }
+        
         public static async Task<MpCopyItem> CreateFromClipboardAsync(IntPtr processHandle, DispatcherPriority priority) {
             MpCopyItem newItem = null;
             await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
@@ -279,15 +292,19 @@ namespace MpWpfApp {
             return null;
         }
 
-        public static List<MpCopyItem> GetAllCopyItems() {
+        public static List<MpCopyItem> GetAllCopyItems(out int count) {
             _AppList = MpApp.GetAllApps();
             _ColorList = MpColor.GetAllColors();
-
+            count = 0;
             var clips = new List<MpCopyItem>();
             var dt = MpDb.Instance.Execute("select * from MpCopyItem order by CopyDateTime DESC", null);
             if (dt != null && dt.Rows.Count > 0) {
                 foreach (DataRow dr in dt.Rows) {
-                    clips.Add(new MpCopyItem(dr));
+                    var ci = new MpCopyItem(dr);
+                    if(!ci.IsSubCompositeItem) {
+                        count++;
+                    }
+                    clips.Add(ci);
                 }
             }
             return clips;
@@ -347,6 +364,150 @@ namespace MpWpfApp {
             return null;
         }
 
+        public static MpCopyItem Merge(
+            MpCopyItem fromItem,
+            MpCopyItem toItem,
+            bool isInline = false,
+            bool createComposite = false,
+            bool useFileData = false,
+            bool isFileDataMerged = false) {
+            //cases:
+            //(from)->(to) = (Output Types)
+            //RichText->RichText = RichText | Composite
+            //RichText->FileList = FileList (with RichText as file w/ title at eol)
+            //RichText->Composite = Composite     
+
+            //FileList->FileList = FileList
+            //FileList->RichText = RichText (of file path's or data) | Composite (with File Path's (or file data if supported and flagged) as rich text sub-composites (or single if flagged))
+            //FileList->Composite = Composite (each file path or data as sub-composite or merged based on flags)
+            
+            //Composite->Composite = Composite
+            //Composite->FileList = FileList(each sub-composite is file path stored in a userdata folder or is ONE file in userdata folder if merge is flagged)
+            //Composite->RichText = RichText
+            if (fromItem.CopyItemType == MpCopyItemType.Image || toItem.CopyItemType == MpCopyItemType.Image) {
+                // for now, do not allow combining with image types
+                return null;
+            }
+            switch (fromItem.CopyItemType) {
+                case MpCopyItemType.FileList:
+                    switch(toItem.CopyItemType) {
+                        case MpCopyItemType.FileList:
+                            var toPathList = toItem.GetFileList();
+                            foreach (string fromPath in fromItem.GetFileList()) {
+                                toPathList.Add(fromPath);
+                            }
+                            var toString = string.Empty;
+                            foreach(var toPath in toPathList) {
+                                toString += toPath + Environment.NewLine;
+                            }
+                            toItem.SetData(toString);
+                            break;
+                        case MpCopyItemType.RichText:
+                            if(createComposite) {
+                                
+                            } else {
+                                string fromText = string.Empty;
+                                foreach (string fromPath in fromItem.GetFileList()) {
+                                    fromText += useFileData ? MpHelpers.Instance.ReadTextFromFile(fromPath) + Environment.NewLine : fromPath + Environment.NewLine;
+                                }
+                                var toRichText = MpHelpers.Instance.CombineRichText(fromText.ToRichText(), toItem.ItemRichText);
+                                toItem.SetData(toRichText);
+                            }
+                            break;
+                        case MpCopyItemType.Composite:
+
+                            break;
+                    }
+                    foreach (var tag in MpTag.GetAllTags()) {
+                        if (tag.IsLinkedWithCopyItem(fromItem)) {
+                            tag.LinkWithCopyItem(toItem);
+                        }
+                    }
+                    fromItem.DeleteFromDatabase();
+                    toItem.WriteToDatabase();
+                    return toItem;
+                //case MpCopyItemType.Image:
+                //    SetData(
+                //        MpHelpers.Instance.CombineBitmap(
+                //            new List<BitmapSource> {
+                //                ItemBitmapSource,
+                //                fromItem.ItemBitmapSource}));
+                //    break;
+                case MpCopyItemType.RichText:
+                    if (!createComposite) {
+                        toItem.SetData(MpHelpers.Instance.CombineRichText(
+                                fromItem.ItemRichText,
+                                toItem.ItemRichText,
+                                !isInline));
+                        //always remove tag associations from other item if added its in the ctvm
+                        foreach (var tag in MpTag.GetAllTags()) {
+                            if (tag.IsLinkedWithCopyItem(fromItem)) {
+                                tag.LinkWithCopyItem(toItem);
+                            }
+                        }
+                        fromItem.DeleteFromDatabase();
+                        toItem.WriteToDatabase();
+                        return toItem;
+                    }
+                    //this item will become a composite of a clone and the otherItem
+                    var compositeItem = new MpCopyItem(MpCopyItemType.Composite, toItem.Title, null);
+                    compositeItem.WriteToDatabase();
+                    toItem.CompositeParentCopyItemId = compositeItem.CopyItemId;
+                    toItem.CompositeSortOrderIdx = 0;
+                    fromItem.CompositeParentCopyItemId = compositeItem.CopyItemId;
+                    fromItem.CompositeSortOrderIdx = 1;
+                    fromItem.IsInlineWithPreviousCompositeItem = isInline;
+                    compositeItem.CompositeItemList.Add(toItem);
+                    compositeItem.CompositeItemList.Add(fromItem);
+                    //always remove tag associations from other item if added its in the ctvm
+                    foreach (var tag in MpTag.GetAllTags()) {
+                        if (tag.IsLinkedWithCopyItem(fromItem)) {
+                            tag.LinkWithCopyItem(compositeItem);
+                        }
+                        if (tag.IsLinkedWithCopyItem(toItem)) {
+                            tag.LinkWithCopyItem(compositeItem);
+                        }
+                    }
+                    compositeItem.WriteToDatabase();
+                    return compositeItem;
+                case MpCopyItemType.Composite:
+                    switch(fromItem.CopyItemType) {
+                        case MpCopyItemType.RichText:
+                            fromItem.CompositeParentCopyItemId = toItem.CopyItemId;
+                            fromItem.CompositeSortOrderIdx = toItem.CompositeItemList.Count;
+                            fromItem.IsInlineWithPreviousCompositeItem = isInline;
+                            toItem.CompositeItemList.Add(fromItem);
+                            break;
+                        case MpCopyItemType.Composite:
+                            foreach (var occi in fromItem.CompositeItemList) {
+                                occi.CompositeParentCopyItemId = toItem.CopyItemId;
+                                occi.CompositeSortOrderIdx = toItem.CompositeItemList.Count;
+                                if (fromItem.CompositeItemList.IndexOf(occi) == 0) {
+                                    occi.IsInlineWithPreviousCompositeItem = isInline;
+                                }
+                                toItem.CompositeItemList.Add(fromItem);
+                            }
+                            fromItem.CompositeItemList.Clear();
+                            break;
+                    }
+                    //always remove tag associations from other item if added its in the ctvm
+                    foreach (var tag in MpTag.GetAllTags()) {
+                        if (tag.IsLinkedWithCopyItem(fromItem)) {
+                            tag.LinkWithCopyItem(toItem);
+                        }
+                    }
+                    if(fromItem.CopyItemType == MpCopyItemType.Composite) {
+                        fromItem.DeleteFromDatabase();
+                    }
+                    return toItem;
+            }
+            //if can't combine don't alter fromItem and just return toItem;
+            return toItem;
+        }
+
+        public static async Task CombineAsync(MpCopyItem fromItem, MpCopyItem toItem, DispatcherPriority priority = DispatcherPriority.Background) {
+            await Dispatcher.CurrentDispatcher.InvokeAsync(() => MpCopyItem.Merge(fromItem,toItem), priority);
+        }
         #endregion
 
         #region Public Methods
@@ -555,87 +716,6 @@ namespace MpWpfApp {
             }
 
             return fileList;
-        }
-
-        public void Combine(
-            MpCopyItem otherItem, 
-            bool isInline = false, 
-            bool createComposite = false) {
-            switch (CopyItemType) {
-                case MpCopyItemType.FileList:
-                    var fileStr = string.Empty;
-                    foreach (string f in GetFileList()) {
-                        fileStr += f + Environment.NewLine;
-                    }
-                    foreach (string f in otherItem.GetFileList()) {
-                        fileStr += f + Environment.NewLine;
-                    }
-                    SetData(fileStr);
-                    break;
-                case MpCopyItemType.Image:
-                    SetData(
-                        MpHelpers.Instance.CombineBitmap(
-                            new List<BitmapSource> {
-                                ItemBitmapSource,
-                                otherItem.ItemBitmapSource}));
-                    break;
-                case MpCopyItemType.RichText:
-                    if(!createComposite) {
-                        SetData(MpHelpers.Instance.CombineRichText(
-                                ItemRichText,
-                                otherItem.ItemRichText,
-                                !isInline));
-                    } else {
-                        //this item will become a composite of a clone and the otherItem
-                        var origCopyItem = (MpCopyItem)Clone();
-                        origCopyItem.CompositeSortOrderIdx = 0;
-                        otherItem.CompositeSortOrderIdx = 1;
-                        otherItem.IsInlineWithPreviousCompositeItem = isInline;
-                        //always remove tag associations from other item if added its in the ctvm
-                        foreach(var tag in MpTag.GetAllTags()) {
-                            if(tag.IsLinkedWithCopyItem(otherItem)) {
-                                tag.UnlinkWithCopyItem(otherItem);
-                            }
-                        }
-                        CopyItemId = 0;
-                        CopyItemType = MpCopyItemType.Composite;
-                        CompositeItemList.Add(origCopyItem);
-                        CompositeItemList.Add(otherItem);
-                        SetData(null);
-                        WriteToDatabase();
-                    }
-                    break;
-                case MpCopyItemType.Composite:
-                    if(otherItem.CopyItemType == MpCopyItemType.RichText) {
-                        otherItem.CompositeSortOrderIdx = CompositeItemList.Count;
-                        otherItem.IsInlineWithPreviousCompositeItem = isInline;
-                        CompositeItemList.Add(otherItem);
-                    } else if (otherItem.CopyItemType == MpCopyItemType.Composite) {
-                        foreach(var occi in otherItem.CompositeItemList) {
-                            occi.CompositeSortOrderIdx = CompositeItemList.Count;
-                            if(otherItem.CompositeItemList.IndexOf(occi) == 0) {
-                                occi.IsInlineWithPreviousCompositeItem = isInline;
-                            } 
-                            CompositeItemList.Add(otherItem);
-                        }
-                        otherItem.CompositeItemList.Clear();
-                        //otherItem.CopyItemType = MpCopyItemType.None;
-                        otherItem.DeleteFromDatabase();
-                    }
-                    //always remove tag associations from other item if added its in the ctvm
-                    foreach (var tag in MpTag.GetAllTags()) {
-                        if (tag.IsLinkedWithCopyItem(otherItem)) {
-                            tag.UnlinkWithCopyItem(otherItem);
-                        }
-                    }
-                    SetData(null);
-                    WriteToDatabase();
-                    break;
-            }
-        }
-
-        public async Task CombineAsync(MpCopyItem otherItem, DispatcherPriority priority = DispatcherPriority.Background) {
-            await Dispatcher.CurrentDispatcher.InvokeAsync(() => Combine(otherItem), priority);
         }
 
         public BitmapSource InitSwirl(BitmapSource sharedSwirl = null, bool forceUseItemColor = false) {
