@@ -13,7 +13,7 @@ namespace MpWpfApp {
             }
         }
         public MpEventEnabledFlowDocument() : base() {
-            IsOptimalParagraphEnabled = true;
+            //IsOptimalParagraphEnabled = true;
         }
     }
 }

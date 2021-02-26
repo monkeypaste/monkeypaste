@@ -14,7 +14,6 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpClipTileRichTextBoxViewModel : MpUndoableViewModelBase<MpClipTileRichTextBoxViewModel>, ICloneable {
         #region Private Variables
-
         #endregion
 
         #region Properties
@@ -88,6 +87,21 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        private Canvas _Rtbc;
+        public Canvas Rtbc {
+            get {
+                return _Rtbc;
+            }
+            set {
+                if (_Rtbc != value) {
+                    _Rtbc = value;
+                    OnPropertyChanged(nameof(Rtbc));
+                }
+            }
+        }
+
+        public AdornerLayer RtbcAdornerLayer { get; set; }
         #endregion
 
         #region Layout
@@ -166,6 +180,23 @@ namespace MpWpfApp {
             set;
         }
 
+        #endregion
+
+        #region State
+        private bool _isHovering = false;
+        public bool IsHovering {
+            get {
+                return _isHovering;
+            }
+            set {
+                if (_isHovering != value) {
+                    _isHovering = value;
+                    OnPropertyChanged(nameof(IsHovering));
+                    OnPropertyChanged(nameof(RtbCursor));
+                }
+            }
+        }
+
         private bool _isSelected = false;
         public bool IsSelected {
             get {
@@ -179,6 +210,31 @@ namespace MpWpfApp {
                     ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.SelectedRtb));
                     //ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.IsSelected));
                 }
+            }
+        }
+
+        private bool _isDragging = false;
+        public bool IsDragging {
+            get {
+                return _isDragging;
+            }
+            set {
+                if (_isDragging != value) {
+                    _isDragging = value;
+                    OnPropertyChanged(nameof(IsDragging));
+                }
+            }
+        }
+
+        public Cursor RtbCursor {
+            get {
+                if(ClipTileViewModel == null) {
+                    return Cursors.Arrow;
+                }
+                if(IsHovering) {
+                    return Cursors.Pen;
+                }
+                return Cursors.Arrow;
             }
         }
         #endregion
@@ -318,31 +374,42 @@ namespace MpWpfApp {
         public MpClipTileRichTextBoxViewModel(MpClipTileViewModel ctvm, MpCopyItem ci) : base() {
             CopyItem = ci;
             ClipTileViewModel = ctvm;
-
             TemplateHyperlinkCollectionViewModel = new MpTemplateHyperlinkCollectionViewModel(ClipTileViewModel, this);
             RichTextBoxPathOverlayViewModel = new MpRichTextBoxPathOverlayViewModel(this);
         }
 
-        public void ClipTileRichTextBoxListItem_Loaded(object sender, RoutedEventArgs e) {
-            Rtb = (RichTextBox)sender;
-            var rtbc = Rtb.GetVisualAncestor<Canvas>();
+        public void ClipTileRichTextBoxListItemCanvas_Loaded(object sender, RoutedEventArgs e) {
+            Rtbc = (Canvas)sender;
 
+            Rtb = (RichTextBox)Rtbc.FindName("ClipTileRichTextBox");
             Rtb.Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(CopyItemRichText);
+
+            Rtbc.MouseEnter += (s, e2) => {
+                IsHovering = true;
+            };
+
+            Rtbc.MouseLeave += (s, e2) => {
+                IsHovering = false;
+            };
 
             CreateHyperlinks();
 
             UpdateLayout();
 
             #region Drag & Drop
-            rtbc.PreviewMouseMove += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_PreviewMouseMove;
-            rtbc.GiveFeedback += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_GiveFeedback;
-            rtbc.Drop += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_Drop;
+            Rtb.PreviewMouseDown += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_PreviewMouseDown;
+            Rtb.PreviewMouseMove += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_PreviewMouseMove;
+            Rtb.GiveFeedback += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_GiveFeedback;
+            Rtb.Drop += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_Drop;
+
+            Rtbc.PreviewMouseDown += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_PreviewMouseDown;
+            Rtbc.PreviewMouseMove += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_PreviewMouseMove;
+            Rtbc.GiveFeedback += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_GiveFeedback;
+            Rtbc.Drop += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_Drop;
             #endregion
 
             Rtb.GotFocus += (s, e2) => {
-                ClipTileViewModel.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(ClipTileViewModel.RichTextBoxViewModelCollection.IndexOf(this));
-                ClipTileViewModel.EditTemplateToolbarViewModel.InitWithRichTextBox(Rtb);
-                ClipTileViewModel.PasteTemplateToolbarViewModel.InitWithRichTextBox(Rtb);
+                SetSelection(true);
             };
 
             if (ClipTileViewModel.WasAddedAtRuntime) {
@@ -355,6 +422,9 @@ namespace MpWpfApp {
             if(CompositeSortOrderIdx <= 0) {
                 SetSelection(true);
             }
+
+            RtbcAdornerLayer = AdornerLayer.GetAdornerLayer(Rtbc);
+            RtbcAdornerLayer.Add(new MpRichTextBoxOverlayAdorner(Rtbc));            
         }
 
         public void UpdateLayout() {
@@ -367,8 +437,12 @@ namespace MpWpfApp {
         }
 
         public void SetSelection(bool newSelection) {
+            if(IsSelected == newSelection) {
+                return;
+            }
             IsSelected = newSelection;
             if(IsSelected) {
+                ClipTileViewModel.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(ClipTileViewModel.RichTextBoxViewModelCollection.IndexOf(this));
                 ClipTileViewModel.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(Rtb);
                 ClipTileViewModel.EditTemplateToolbarViewModel.InitWithRichTextBox(Rtb);
                 ClipTileViewModel.PasteTemplateToolbarViewModel.InitWithRichTextBox(Rtb);
@@ -618,4 +692,5 @@ namespace MpWpfApp {
         }
         #endregion
     }
+
 }

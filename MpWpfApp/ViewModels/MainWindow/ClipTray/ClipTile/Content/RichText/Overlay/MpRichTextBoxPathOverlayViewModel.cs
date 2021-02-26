@@ -15,7 +15,8 @@ using System.Windows.Shapes;
 namespace MpWpfApp {
     public class MpRichTextBoxPathOverlayViewModel : MpUndoableViewModelBase<MpRichTextBoxPathOverlayViewModel> {
         #region Private Variables
-
+        private Geometry _pathData = null;
+        private Canvas _rtbc = null;
         #endregion
 
         #region Properties
@@ -76,22 +77,72 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region State
+        
+        #endregion
+
+        #region Brushes
+        public Brush OverlayBackgroundBrush {
+            get {
+                //if(ClipTileRichTextBoxViewModel == null || 
+                //   ClipTileRichTextBoxViewModel.ClipTileViewModel == null) {
+                //    return Brushes.Transparent;
+                //}
+                //if(ClipTileRichTextBoxViewModel.IsSelected) {
+                //    return Brushes.Red;
+                //}
+                //if(IsHovering) {
+                //    return Brushes.BlanchedAlmond;
+                //}
+                return Brushes.Transparent;
+            }
+        }
+
+        public Brush OverlayBorderBrush {
+            get {
+                if (ClipTileRichTextBoxViewModel == null ||
+                   ClipTileRichTextBoxViewModel.ClipTileViewModel == null) {
+                    return Brushes.Transparent;
+                }
+                if (ClipTileRichTextBoxViewModel.IsHovering) {
+                    return Brushes.Blue;
+                }
+                return Brushes.Transparent;
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Public Methods
         public MpRichTextBoxPathOverlayViewModel() : this(null) { }
 
-        public MpRichTextBoxPathOverlayViewModel(MpClipTileRichTextBoxViewModel rtbvm) : base() {
+        public MpRichTextBoxPathOverlayViewModel(MpClipTileRichTextBoxViewModel rtbvm) : base() {            
             ClipTileRichTextBoxViewModel = rtbvm;
+            ClipTileRichTextBoxViewModel.PropertyChanged += (s, e) => {
+                switch(e.PropertyName) {
+                    case nameof(ClipTileRichTextBoxViewModel.IsHovering):
+                    case nameof(ClipTileRichTextBoxViewModel.IsDragging):
+                    case nameof(ClipTileRichTextBoxViewModel.IsSelected):
+                        OnPropertyChanged(nameof(OverlayBackgroundBrush));
+                        OnPropertyChanged(nameof(OverlayBorderBrush));
+                        break;
+                }
+            };
         }
 
         public void RichTextBoxPathOverlayPath_Loaded(object sender, RoutedEventArgs args) {
             var overlayPath = (Path)sender;
-            
+            _pathData = overlayPath.Data;
+            _rtbc = overlayPath.GetVisualAncestor<Canvas>();
+
+            #region Drag & Drop
+            overlayPath.PreviewMouseDown += ClipTileRichTextBoxViewModel.RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_PreviewMouseDown;
             overlayPath.PreviewMouseMove += ClipTileRichTextBoxViewModel.RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_PreviewMouseMove;
             overlayPath.GiveFeedback += ClipTileRichTextBoxViewModel.RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_GiveFeedback;
             overlayPath.Drop += ClipTileRichTextBoxViewModel.RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_Drop;
-            
+            #endregion
+
             UpdatePoints(ClipTileRichTextBoxViewModel.Rtb);
         }
 
@@ -115,6 +166,7 @@ namespace MpWpfApp {
 
             var contentStartRect = rtb.Document.ContentStart.GetCharacterRect(LogicalDirection.Forward);
             var contentEndRect = rtb.Document.ContentEnd.GetCharacterRect(LogicalDirection.Forward);
+            bool isSingleLine = ClipTileRichTextBoxViewModel.CopyItem.LineCount == 1;
 
             #region Define Points
             var tlsb = contentStartRect.BottomLeft;
@@ -127,15 +179,23 @@ namespace MpWpfApp {
             var tl = new Point(Canvas.GetLeft(rtb), tlsb.Y);
             StartPoint = tlst;
             Points = new MpObservableCollection<Point>();
-            Points.Add(tlst);
-            Points.Add(tr);
-            Points.Add(br);
-            Points.Add(blet);
-            Points.Add(bleb);
-            Points.Add(bl);
-            Points.Add(tl);
-            Points.Add(tlsb);
-            Points.Add(tlst);
+            if(isSingleLine) {
+                Points.Add(tlst);
+                Points.Add(blet);
+                Points.Add(bleb);
+                Points.Add(tlsb);
+                Points.Add(tlst);
+            } else {
+                Points.Add(tlst);
+                Points.Add(tr);
+                Points.Add(br);
+                Points.Add(blet);
+                Points.Add(bleb);
+                Points.Add(bl);
+                Points.Add(tl);
+                Points.Add(tlsb);
+                Points.Add(tlst);
+            }
 
             //Points.Clear();
             //StartPoint = tlst;
@@ -206,7 +266,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-
         #endregion
 
         #region Commands

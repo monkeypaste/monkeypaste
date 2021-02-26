@@ -1070,5 +1070,17 @@ namespace MpWpfApp.Properties {
                 return ((string)(this["CompositeItemDragDropFormatName"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FFFFFF")]
+        public string ThemeClipTileBackgroundColor {
+            get {
+                return ((string)(this["ThemeClipTileBackgroundColor"]));
+            }
+            set {
+                this["ThemeClipTileBackgroundColor"] = value;
+            }
+        }
     }
 }

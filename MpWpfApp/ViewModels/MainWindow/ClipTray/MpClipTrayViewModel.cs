@@ -143,29 +143,29 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _isLoading = true;
-        public bool IsLoading {
-            get {
-                return _isLoading;
-            }
-            set {
-                if (_isLoading != value) {
-                    _isLoading = value;
-                    OnPropertyChanged(nameof(IsLoading));
-                }
-            }
-        }
+        //private bool _isLoading = true;
+        //public bool IsLoading {
+        //    get {
+        //        return _isLoading;
+        //    }
+        //    set {
+        //        if (_isLoading != value) {
+        //            _isLoading = value;
+        //            OnPropertyChanged(nameof(IsLoading));
+        //        }
+        //    }
+        //}
 
-        public bool IsItemLoading {
-            get {
-                foreach(var ctvm in ClipTileViewModels) {
-                    if(ctvm.IsLoading) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-        }
+        //public bool IsItemLoading {
+        //    get {
+        //        foreach(var ctvm in ClipTileViewModels) {
+        //            if(ctvm.IsLoading) {
+        //                return true;
+        //            }
+        //        }
+        //        return false;
+        //    }
+        //}
 
         private bool _isScrolling = false;
         public bool IsScrolling {
@@ -341,7 +341,7 @@ namespace MpWpfApp {
 
         public MpClipTrayViewModel() : base() {
             //BindingOperations.DisableCollectionSynchronization(this);
-            IsLoading = true;
+            //IsLoading = true;
             ClipTileViewModels.CollectionChanged += (s, e) => {
                 OnPropertyChanged(nameof(EmptyListMessageVisibility));
                 OnPropertyChanged(nameof(ClipTrayVisibility));
@@ -492,12 +492,12 @@ namespace MpWpfApp {
                 Properties.Settings.Default.Save();
             }
 
-            Task.Run(() => {
-                while(ClipTileViewModels.Count < this._totalItemsAtLoad && !IsItemLoading) {
-                    Thread.Sleep(15);
-                }
-                IsLoading = false;
-            });
+            //Task.Run(() => {
+            //    while(ClipTileViewModels.Count < this._totalItemsAtLoad && !IsItemLoading) {
+            //        Thread.Sleep(15);
+            //    }
+            //    IsLoading = false;
+            //});
             
         }       
 
@@ -617,9 +617,9 @@ namespace MpWpfApp {
         }
 
         public void Refresh() {
-            if(MainWindowViewModel == null || MainWindowViewModel.IsLoading) {
-                return;
-            }
+            //if(MainWindowViewModel == null || MainWindowViewModel.IsLoading) {
+            //    return;
+            //}
            _clipTrayRef?.Items.Refresh();
         }
 

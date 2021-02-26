@@ -110,6 +110,7 @@
     <Compile Include="AttachedProperties\MpTextBoxBehavior.cs" />
     <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
     <Compile Include="Behaviors\MpKineticBehavior.cs" />
+    <Compile Include="Controls\Adorners\MpRichTextBoxOverlayAdorner.cs" />
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedListBox.cs" />
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedScrollViewer.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
@@ -119,8 +120,7 @@
     <Compile Include="Controls\MpRichTextBox.cs" />
     <Compile Include="Converters\MpPointCollectionConverter.cs" />
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
-    <Compile Include="Models\Db\MpClipTileViewModelDataSource.cs" />
-    <Compile Include="Models\Db\MpClipTileViewModelPagedSourceProviderAsync.cs" />
+    <Compile Include="Converters\MpStringToBrushConverter.cs" />
     <Compile Include="Models\Db\MpDb.cs" />
     <Compile Include="Models\MpPasteToAppPath.cs" />
     <Compile Include="Models\MpCopyItemTemplate.cs" />
@@ -153,6 +153,8 @@
     <Compile Include="Utils\DragDrop\ListViewDragDropManager.cs" />
     <Compile Include="Utils\DragDrop\MouseUtilities.cs" />
     <Compile Include="Utils\MpImageHistogram.cs" />
+    <Compile Include="Utils\MpSettingsBindingExtension.cs" />
+    <Compile Include="Utils\MpVisualUtility.cs" />
     <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
     <Compile Include="Utils\System\MpRunningApplicationManager.cs" />
     <Compile Include="Utils\UndoRedo\MpIUndoRedo.cs" />

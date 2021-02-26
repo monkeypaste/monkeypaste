@@ -654,12 +654,12 @@
 
         public bool IsLoading {
             get {
-                if(MainWindowViewModel != null && MainWindowViewModel.IsLoading) {
-                    return true;
-                }
-                if(MainWindowViewModel != null && MainWindowViewModel.ClipTrayViewModel != null && MainWindowViewModel.ClipTrayViewModel.IsLoading) {
-                    return true;
-                }
+                //if(MainWindowViewModel != null && MainWindowViewModel.IsLoading) {
+                //    return true;
+                //}
+                //if(MainWindowViewModel != null && MainWindowViewModel.ClipTrayViewModel != null && MainWindowViewModel.ClipTrayViewModel.IsLoading) {
+                //    return true;
+                //}
                 return CopyItem == null || CopyItem.CopyItemId == 0;
             }
         }
@@ -1366,10 +1366,8 @@
                     e5.Handled = true;
                     return;
                 }
-                IsMouseDown = true;
-                StartDragPoint = e5.GetPosition(clipTray);
-                //_dragClipBorderElement = (MpClipBorder)VisualTreeHelper.HitTest(clipTray, StartDragPoint).VisualHit.GetVisualAncestor<MpClipBorder>(); ;
             };
+            
             clipTileBorder.PreviewKeyDown += (s, e6) => {
                 if (CopyItemType != MpCopyItemType.RichText) {
                     return;
@@ -1383,11 +1381,20 @@
                 //    e.Handled = true;
                 //}
             };
+
+            #region Tile Drag & Drop
+            clipTileBorder.PreviewMouseLeftButtonDown += (s, e5) => {
+                return;
+                IsMouseDown = true;
+                StartDragPoint = e5.GetPosition(clipTray);
+                //_dragClipBorderElement = (MpClipBorder)VisualTreeHelper.HitTest(clipTray, StartDragPoint).VisualHit.GetVisualAncestor<MpClipBorder>(); ;
+            };
             //Initiate Selected Clips Drag/Drop, Copy/Paste and Export (to file or csv)
             //Strategy: ALL selected items, regardless of type will have text,rtf,img, and file representations
             //          that are appended as text and filelists but  merged into images (by default)
             // TODO Have option to append items to one long image
             clipTileBorder.PreviewMouseMove += (s, e7) => {
+                return;
                 var curDragPoint = e7.GetPosition(clipTray);
                 //these tests ensure tile is not being dragged INTO another clip tile or outside tray
                 //var testBorder = (MpClipBorder)VisualTreeHelper.HitTest(clipTray, curDragPoint).VisualHit.GetVisualAncestor<MpClipBorder>();
@@ -1414,6 +1421,7 @@
             };
 
             clipTileBorder.PreviewMouseLeftButtonUp += (s, e8) => {
+                return;
                 IsMouseDown = false;
                 IsDragging = false;
                 StartDragPoint = new Point();
@@ -1426,11 +1434,12 @@
             //        MessageBox.Show(hitTestResult.VisualHit.ToString());
             //    }
             //};
+            #endregion
 
             #region Composite Drag & Drop
-            clipTileBorder.PreviewMouseMove += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_PreviewMouseMove;
-            clipTileBorder.GiveFeedback += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_GiveFeedback;
-            clipTileBorder.Drop += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_Drop;
+            //clipTileBorder.PreviewMouseMove += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_PreviewMouseMove;
+            //clipTileBorder.GiveFeedback += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_GiveFeedback;
+            //clipTileBorder.Drop += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_Drop;
             #endregion
 
             HighlightTextRangeViewModelCollection.Init();
@@ -1564,9 +1573,7 @@
             }
             var rtbc = (Canvas)sender;
             var rtblb = (ListBox)rtbc.FindName("ClipTileRichTextBoxListBox");
-            rtblb.MouseLeftButtonUp += (s, e2) => {
-                //IsSelected = true;
-            };
+
             RichTextBoxListBox = rtblb;
 
             //after pasting template rtb's are duplicated so clear them upon refresh
@@ -1579,11 +1586,6 @@
                     }
                 }
             }
-            
-            //RichTextBoxViewModels[0].IsSelected = true;
-
-            var hb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightColorHexString);
-            var hfb = (Brush)new BrushConverter().ConvertFrom(Properties.Settings.Default.HighlightFocusedHexColorString);
 
             #region Search
             PropertyChanged += (s, e2) => {

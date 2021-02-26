@@ -463,6 +463,8 @@
         <s:Int32 x:Key="SettingsTabHelp">4</s:Int32>
         <s:Boolean x:Key="True">True</s:Boolean>
         <s:Boolean x:Key="False">False</s:Boolean>
+        
+        <local:MpStringToBrushConverter x:Key="StringToBrushConverter" />
         <local:MpPointCollectionConverter x:Key="PointCollectionConverter" />
         <local:MpIntToStringConverter x:Key="IntToStringConverter" />
         <local:MpBoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
@@ -1320,7 +1322,7 @@
                                                 Visibility="{Binding TileVisibility}"
                                                 AllowDrop="True"
                                                 Focusable="True"
-                                                Background="White"
+                                                Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                 ToolTipService.ShowDuration="1000"
                                                 CornerRadius="10">
                                 <ii:Interaction.Behaviors>
@@ -1834,6 +1836,7 @@
                                                          BorderThickness="0"
                                                          SelectionMode="Single"
                                                          AllowDrop="True"
+                                                         Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                          ItemsSource="{Binding RichTextBoxViewModelCollection}"
                                                          Focusable="{Binding IsEditingTile}"
                                                          IsEnabled="{Binding IsSelected}"
@@ -1874,84 +1877,78 @@
                                                     </ListBox.ItemContainerStyle>
                                                     <ListBox.ItemTemplate>
                                                         <DataTemplate>
-                                                            <Canvas x:Name="ClipTileRichTextBoxCanvas"
-                                                                    AllowDrop="True"
-                                                                    DataContext="{Binding}"
-                                                                    Width="{Binding ClipTileViewModel.TileContentWidth}"
-                                                                    Height="{Binding RtbListBoxItemHeight}">
-                                                                <RichTextBox x:Name="ClipTileRichTextBox"
-                                                                             Canvas.Left="0"
-                                                                             AllowDrop="True"
-                                                                             Canvas.Top="0"
-                                                                             IsReadOnly="{Binding ClipTileViewModel.IsRtbReadOnly}"
-                                                                             IsEnabled="True"
-                                                                             AutoWordSelection="False"
-                                                                             IsInactiveSelectionHighlightEnabled="True"
-                                                                             IsDocumentEnabled="{Binding IsSelected}"
-                                                                             Focusable="{Binding ClipTileViewModel.IsEditingTile}"
-                                                                             Cursor="{Binding ClipTileViewModel.ContentCursor}"
-                                                                             Width="{Binding ClipTileViewModel.TileContentWidth}"
-                                                                             Height="{Binding RtbListBoxItemHeight}"
-                                                                             IsUndoEnabled="True"
-                                                                             Background="White"
-                                                                             VerticalAlignment="Top"
-                                                                             HorizontalAlignment="Left"
-                                                                             ScrollViewer.HorizontalScrollBarVisibility="{Binding ClipTileViewModel.RtbHorizontalScrollbarVisibility}"
-                                                                             ScrollViewer.VerticalScrollBarVisibility="{Binding ClipTileViewModel.RtbVerticalScrollbarVisibility}"
-                                                                             BorderThickness="1">
-                                                                    <RichTextBox.Document>
-                                                                        <local:MpEventEnabledFlowDocument IsOptimalParagraphEnabled="True" />
-                                                                    </RichTextBox.Document>
-                                                                    <RichTextBox.Resources>
-                                                                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                                                                                         Color="Blue" />
-                                                                    </RichTextBox.Resources>
-                                                                    <SpellCheck.IsEnabled>
-                                                                        <Binding Path="SystemTrayViewModel.SettingsWindowViewModel.PreferencesViewModel.UseSpellCheck"
-                                                                                 Source="{StaticResource MainWindowViewModel}" />
-                                                                    </SpellCheck.IsEnabled>
+                                                            <AdornerDecorator x:Name="ClipTileRichTextBoxCanvasAdornerDecorator">   
+                                                                <Canvas x:Name="ClipTileRichTextBoxCanvas"
+                                                                        AllowDrop="True"
+                                                                        DataContext="{Binding}"
+                                                                        Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
+                                                                        Cursor="{Binding RtbCursor}"
+                                                                        Width="{Binding ClipTileViewModel.TileContentWidth}"
+                                                                        Height="{Binding RtbListBoxItemHeight}">
                                                                     <i:Interaction.Triggers>
                                                                         <i:EventTrigger EventName="Loaded">
                                                                             <i:CallMethodAction TargetObject="{Binding}"
-                                                                                                MethodName="ClipTileRichTextBoxListItem_Loaded" />
+                                                                                                MethodName="ClipTileRichTextBoxListItemCanvas_Loaded" />
                                                                         </i:EventTrigger>
                                                                     </i:Interaction.Triggers>
-                                                                </RichTextBox>
-                                                                <Path x:Name="ClipTileRichTextBoxOverlayPath"
-                                                                      DataContext="{Binding RichTextBoxPathOverlayViewModel}"
-                                                                      AllowDrop="True"
-                                                                      Stroke="Red"
-                                                                      StrokeThickness="1"
-                                                                      Fill="Blue"
-                                                                      Opacity="0.5">
-                                                                    <i:Interaction.Triggers>
-                                                                        <i:EventTrigger EventName="Loaded">
-                                                                            <i:CallMethodAction TargetObject="{Binding}"
-                                                                                                MethodName="RichTextBoxPathOverlayPath_Loaded" />
-                                                                        </i:EventTrigger>
-                                                                    </i:Interaction.Triggers>
-                                                                    <Path.Data>
-                                                                        <PathGeometry x:Name="ClipTileRichTextBoxOverlayPathGeometry">
-                                                                            <PathGeometry.Figures>
-                                                                                <PathFigure StartPoint="{Binding StartPoint}">
-                                                                                    <PathFigure.Segments>
-                                                                                        <PathSegmentCollection>
-                                                                                            <PolyLineSegment Points="{Binding Points, Converter={StaticResource PointCollectionConverter}}" />
-                                                                                        </PathSegmentCollection>
-                                                                                    </PathFigure.Segments>
-                                                                                </PathFigure>
-                                                                            </PathGeometry.Figures>
-                                                                        </PathGeometry>
-                                                                    </Path.Data>
-                                                                    <!--<Path.Data>
-                                                                        <PathGeometry>
-                                                                            <PathFigure StartPoint="0,0">
-                                                                                <LineSegment Point="200,70" />
-                                                                            </PathFigure>
-                                                                        </PathGeometry>
-                                                                    </Path.Data>-->
-                                                                </Path>
-                                                            </Canvas>
+                                                                    <RichTextBox x:Name="ClipTileRichTextBox"
+                                                                                 Canvas.Left="0"
+                                                                                 AllowDrop="True"
+                                                                                 Canvas.Top="0"
+                                                                                 IsReadOnly="{Binding ClipTileViewModel.IsRtbReadOnly}"
+                                                                                 IsEnabled="True"
+                                                                                 AutoWordSelection="False"
+                                                                                 IsInactiveSelectionHighlightEnabled="True"
+                                                                                 IsDocumentEnabled="{Binding IsSelected}"
+                                                                                 Focusable="{Binding ClipTileViewModel.IsEditingTile}"
+                                                                                 Cursor="{Binding ClipTileViewModel.ContentCursor}"
+                                                                                 Width="{Binding ClipTileViewModel.TileContentWidth}"
+                                                                                 Height="{Binding RtbListBoxItemHeight}"
+                                                                                 IsUndoEnabled="True"
+                                                                                 Background="White"
+                                                                                 VerticalAlignment="Top"
+                                                                                 HorizontalAlignment="Left"
+                                                                                 ScrollViewer.HorizontalScrollBarVisibility="{Binding ClipTileViewModel.RtbHorizontalScrollbarVisibility}"
+                                                                                 ScrollViewer.VerticalScrollBarVisibility="{Binding ClipTileViewModel.RtbVerticalScrollbarVisibility}"
+                                                                                 BorderThickness="0">
+                                                                        <RichTextBox.Resources>
+                                                                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                                                                             Color="Blue" />
+                                                                        </RichTextBox.Resources>
+                                                                        <SpellCheck.IsEnabled>
+                                                                            <Binding Path="SystemTrayViewModel.SettingsWindowViewModel.PreferencesViewModel.UseSpellCheck"
+                                                                                     Source="{StaticResource MainWindowViewModel}" />
+                                                                        </SpellCheck.IsEnabled>
+                                                                    </RichTextBox>
+                                                                    <Path x:Name="ClipTileRichTextBoxOverlayPath"
+                                                                          DataContext="{Binding RichTextBoxPathOverlayViewModel}"
+                                                                          AllowDrop="True"
+                                                                          Stroke="{Binding OverlayBorderBrush}"
+                                                                          StrokeThickness="3"
+                                                                          Fill="{Binding OverlayBackgroundBrush}"
+                                                                          Opacity="1">
+                                                                        <i:Interaction.Triggers>
+                                                                            <i:EventTrigger EventName="Loaded">
+                                                                                <i:CallMethodAction TargetObject="{Binding}"
+                                                                                                    MethodName="RichTextBoxPathOverlayPath_Loaded" />
+                                                                            </i:EventTrigger>
+                                                                        </i:Interaction.Triggers>
+                                                                        <Path.Data>
+                                                                            <PathGeometry x:Name="ClipTileRichTextBoxOverlayPathGeometry">
+                                                                                <PathGeometry.Figures>
+                                                                                    <PathFigure StartPoint="{Binding StartPoint}">
+                                                                                        <PathFigure.Segments>
+                                                                                            <PathSegmentCollection>
+                                                                                                <PolyLineSegment Points="{Binding Points, Converter={StaticResource PointCollectionConverter}}" />
+                                                                                            </PathSegmentCollection>
+                                                                                        </PathFigure.Segments>
+                                                                                    </PathFigure>
+                                                                                </PathGeometry.Figures>
+                                                                            </PathGeometry>
+                                                                        </Path.Data>
+                                                                    </Path>
+                                                                </Canvas>
+                                                            </AdornerDecorator>
                                                         </DataTemplate>
                                                     </ListBox.ItemTemplate>
                                                 </ListBox>                                                
