@@ -23,6 +23,8 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+        public bool CanAcceptChildren { get; set; } = false;
+
         private bool _isTrialExpired = Properties.Settings.Default.IsTrialExpired;
         public bool IsTrialExpired {
             get {

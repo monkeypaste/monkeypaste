@@ -201,10 +201,22 @@
                 return translateLanguageMenuItems;
             }
         }
-
         #endregion
 
         #region Controls
+        private TextBox _titleTextBox;
+        public TextBox TitleTextBox {
+            get {
+                return _titleTextBox;
+            }
+            set {
+                if (_titleTextBox != value) {
+                    _titleTextBox = value;
+                    OnPropertyChanged(nameof(TitleTextBox));
+                }
+            }
+        }
+
         private TextBlock _titleTextBlock;
         public TextBlock TitleTextBlock {
             get {
@@ -214,6 +226,19 @@
                 if (_titleTextBlock != value) {
                     _titleTextBlock = value;
                     OnPropertyChanged(nameof(TitleTextBlock));
+                }
+            }
+        }
+
+        private Image _image;
+        public Image Image {
+            get {
+                return _image;
+            }
+            set {
+                if(_image != value) {
+                    _image = value;
+                    OnPropertyChanged(nameof(Image));
                 }
             }
         }
@@ -421,7 +446,14 @@
                 if (_tileContentWidth != value) {
                     _tileContentWidth = value;
                     OnPropertyChanged(nameof(TileContentWidth));
+                    OnPropertyChanged(nameof(TileSubItemOverlayBorderWidth));
                 }
+            }
+        }
+
+        public double TileSubItemOverlayBorderWidth {
+            get {
+                return TileContentWidth - MpMeasurements.Instance.ClipTileSubItemOverlayMargin;
             }
         }
 
@@ -463,6 +495,15 @@
                     return 0;
                 }
                 return Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, RichTextBoxViewModelCollection.RelativeWidthMax);
+            }
+        }
+
+        public double TitleFontSize {
+            get {
+                if(IsSubClipTile) {
+                    return 14;
+                }
+                return 20;
             }
         }
         #endregion
@@ -636,6 +677,15 @@
                 //return IsHovering ? Visibility.Visible : Visibility.Hidden;
             }
         }
+
+        public double SubItemOverlayOpacity {
+            get {
+                if(IsSubClipTile && IsHovering) {
+                    return 1;
+                }
+                return 0;
+            }
+        }
         #endregion
 
         #region Business Logic Properties
@@ -652,6 +702,7 @@
             }
         }
 
+        //private bool _isLoading = true;
         public bool IsLoading {
             get {
                 //if(MainWindowViewModel != null && MainWindowViewModel.IsLoading) {
@@ -660,8 +711,18 @@
                 //if(MainWindowViewModel != null && MainWindowViewModel.ClipTrayViewModel != null && MainWindowViewModel.ClipTrayViewModel.IsLoading) {
                 //    return true;
                 //}
+                //if( CopyItem == null || CopyItem.CopyItemId == 0) {
+                //    return true;
+                //}
+                //return _isLoading;
                 return CopyItem == null || CopyItem.CopyItemId == 0;
             }
+            //set {
+            //    if(_isLoading != value) {
+            //        _isLoading = value;
+            //        OnPropertyChanged(nameof(IsLoading));
+            //    }
+            //}
         }
 
         public string DetailText {
@@ -715,6 +776,9 @@
                     return Brushes.Red;
                 }
                 if (IsHovering) {
+                    if(IsSubClipTile) {
+                        return Brushes.Black;
+                    }
                     return Brushes.Yellow;
                 }
                 return Brushes.Transparent;
@@ -731,7 +795,16 @@
         }
         #endregion
 
-        #region State Properties       
+        #region State Properties    
+        public bool IsSubClipTile {
+            get {
+                if(CopyItem == null) {
+                    return false;
+                }
+                return CopyItem.IsSubCompositeItem;
+            }
+        }
+
         public bool IsDragging { get; set; } = false;
                 
         public Point StartDragPoint;
@@ -759,6 +832,10 @@
                     _isHoveringOnTitleTextGrid = value;
                     OnPropertyChanged(nameof(IsHoveringOnTitleTextGrid));
                     OnPropertyChanged(nameof(TileTitleTextGridBackgroundBrush));
+                    OnPropertyChanged(nameof(TitleTextColor));
+                    if(IsSubClipTile) {
+                        OnPropertyChanged(nameof(DetailText));
+                    }
                 }
             }
         }                
@@ -909,12 +986,13 @@
                 return _isHovering;
             }
             set {
-                if (_isHovering != value) {
+                if (_isHovering != value && !IsEditingTitle) {
                     _isHovering = value;
                     OnPropertyChanged(nameof(IsHovering));
                     OnPropertyChanged(nameof(TileBorderBrush));
                     OnPropertyChanged(nameof(DetailTextColor));
                     OnPropertyChanged(nameof(MenuOverlayVisibility));
+                    OnPropertyChanged(nameof(SubItemOverlayOpacity));
                 }
             }
         }
@@ -1020,10 +1098,15 @@
             }
         }
 
-        public Brush TitleColor {
+        public Brush TitleBackgroundColor {
             get {
                 if (CopyItem == null) {
                     return Brushes.Red;
+                }
+                if (IsSubClipTile) {
+                    var scb = new SolidColorBrush(CopyItem.ItemColor.Color);
+                    scb.Opacity = 0.25;
+                    return scb;
                 }
                 return new SolidColorBrush(CopyItem.ItemColor.Color);
             }
@@ -1031,9 +1114,21 @@
                 if (CopyItem != null && CopyItem.ItemColor.Color != ((SolidColorBrush)value).Color) {
                     CopyItem.ItemColor = new MpColor(((SolidColorBrush)value).Color);
                     //CopyItem.WriteToDatabase();
-                    OnPropertyChanged(nameof(TitleColor));
+                    OnPropertyChanged(nameof(TitleBackgroundColor));
                     OnPropertyChanged(nameof(CopyItem));
                 }
+            }
+        }
+
+        public Brush TitleTextColor {
+            get {
+                if(!IsSubClipTile) {
+                    return Brushes.White;
+                }
+                if (IsHoveringOnTitleTextGrid) {
+                    return Brushes.DarkGray;
+                }
+                return Brushes.Black;
             }
         }
 
@@ -1265,6 +1360,9 @@
                     OnPropertyChanged(nameof(ContentVisibility));
                     OnPropertyChanged(nameof(TrialOverlayVisibility));
                     OnPropertyChanged(nameof(RichTextBoxViewModelCollection));
+                    OnPropertyChanged(nameof(IsSubClipTile));
+                    OnPropertyChanged(nameof(SubItemOverlayOpacity));
+                    OnPropertyChanged(nameof(TitleFontSize));
                     //CopyItem.WriteToDatabase();
                 }
             }
@@ -1382,7 +1480,7 @@
                 //}
             };
 
-            #region Tile Drag & Drop
+            #region Tile Drag & Drop (all unused atm)
             clipTileBorder.PreviewMouseLeftButtonDown += (s, e5) => {
                 return;
                 IsMouseDown = true;
@@ -1458,6 +1556,60 @@
             titleDetailTextBlock.Text = GetCurrentDetail(_detailIdx);
         }
 
+        public void SubClipTileTitle_Loaded(object sender, RoutedEventArgs args) {
+            if(!IsSubClipTile) {
+                return;
+            }
+            ClipBorder = (MpClipBorder)sender;
+            var titleTextGrid = (Grid)ClipBorder.FindName("ClipTileRichTextBoxListItemOverlayBorderGrid");
+            TitleTextBlock = (TextBlock)titleTextGrid.FindName("ClipTileTitleTextBlock");
+            TitleTextBox = (TextBox)titleTextGrid.FindName("ClipTileTitleTextBox");
+
+            ClipBorder.MouseEnter += (s, e1) => {
+                IsHovering = true;
+            };
+            ClipBorder.MouseLeave += (s, e2) => {
+                IsHovering = false;
+            };
+
+            TitleTextBlock.MouseEnter += (s, e1) => {
+                if (++_detailIdx > 2) {
+                    _detailIdx = 0;
+                }
+                //must be set after detailIdx incremented to update
+                //detailtext 
+                IsHoveringOnTitleTextGrid = true;
+            };
+            
+            TitleTextBlock.MouseLeave += (s, e7) => {
+                IsHoveringOnTitleTextGrid = false;
+            };
+            TitleTextBlock.PreviewMouseLeftButtonDown += (s, e7) => {
+                IsEditingTitle = true;
+                e7.Handled = true;
+            };
+
+            TitleTextBox.IsVisibleChanged += (s, e9) => {
+                if (TileTitleTextBoxVisibility == Visibility.Collapsed) {
+                    return;
+                }
+                var tbx = (TextBox)s;
+                tbx.Focus();
+                tbx.SelectAll();
+            };
+            TitleTextBox.LostFocus += (s, e4) => {
+                IsEditingTitle = false;
+            };
+            TitleTextBox.PreviewKeyDown += (s, e5) => {
+                if (e5.Key == Key.Enter || e5.Key == Key.Escape) {
+                    IsEditingTitle = false;
+                }
+            };
+
+            OnPropertyChanged(nameof(SubItemOverlayOpacity));
+            OnPropertyChanged(nameof(TileSubItemOverlayBorderWidth));
+        }
+
         public void ClipTileTitle_Loaded(object sender, RoutedEventArgs e) {
             var titleCanvas = (Canvas)sender;
             var titleTextGrid = (Grid)titleCanvas.FindName("ClipTileTitleTextGrid");
@@ -1469,6 +1621,7 @@
             var titleIconBorderImageScaleTransform = (ScaleTransform)titleCanvas.FindName("ClipTileAppIconBorderImageScaleTransform");
             
             TitleTextBlock = clipTileTitleTextBlock;
+            TitleTextBox = clipTileTitleTextBox;
 
             titleTextGrid.MouseEnter += (s, e1) => {
                 Application.Current.MainWindow.Cursor = Cursors.IBeam;
@@ -1579,10 +1732,10 @@
             //after pasting template rtb's are duplicated so clear them upon refresh
             if (RichTextBoxViewModelCollection.Count == 0) {
                 if (CopyItemType == MpCopyItemType.RichText) {
-                    RichTextBoxViewModelCollection.Add(new MpClipTileRichTextBoxViewModel(this, CopyItem));
+                    RichTextBoxViewModelCollection.Add(new MpClipTileRichTextBoxViewModel(this, this));
                 } else {
                     foreach (var cci in CopyItem.CompositeItemList) {
-                        RichTextBoxViewModelCollection.Add(new MpClipTileRichTextBoxViewModel(this, cci));
+                        RichTextBoxViewModelCollection.Add(new MpClipTileRichTextBoxViewModel(this, new MpClipTileViewModel(cci)));
                     }
                 }
             }
@@ -1656,8 +1809,8 @@
                             sctvm.CopyItem.WriteToDatabase();
                         }
                     },
-                    MpHelpers.Instance.GetColorColumn(TitleColor),
-                    MpHelpers.Instance.GetColorRow(TitleColor)
+                    MpHelpers.Instance.GetColorColumn(TitleBackgroundColor),
+                    MpHelpers.Instance.GetColorRow(TitleBackgroundColor)
                 );
         }
 
@@ -1813,6 +1966,7 @@
                 FileListBox.Items.Refresh();
             }
         }
+
         public void SaveToDatabase() {
             //remove links to update model rich text
             RichTextBoxViewModelCollection.ClearAllHyperlinks();
@@ -1833,7 +1987,7 @@
                 TemplateRichText = string.Empty.ToRichText();
                 foreach(var rtbvm in RichTextBoxViewModelCollection) {
                     var rtbvmrt = await rtbvm.GetPastableRichText();
-                    TemplateRichText = MpHelpers.Instance.CombineRichText(rtbvmrt, TemplateRichText, !rtbvm.IsInlineWithPreviousCompositeItem);
+                    TemplateRichText = MpHelpers.Instance.CombineRichText(rtbvmrt, TemplateRichText, true);
                 }               
 
                 return TemplateRichText;

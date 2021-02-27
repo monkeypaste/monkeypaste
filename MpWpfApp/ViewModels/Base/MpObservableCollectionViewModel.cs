@@ -31,6 +31,10 @@ namespace MpWpfApp {
             }
         }
 
+        #region Properties
+        public bool CanAcceptChildren { get; set; } = true;
+        #endregion
+
         public bool ThrowOnInvalidPropertyName { get; private set; }
 
         public new event PropertyChangedEventHandler PropertyChanged;

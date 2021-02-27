@@ -25,11 +25,12 @@ using AlphaChiTech.VirtualizingCollection;
 using AsyncAwaitBestPractices.MVVM;
 using DataGridAsyncDemoMVVM.filtersort;
 using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop;
 using GongSolutions.Wpf.DragDrop.Utilities;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace MpWpfApp {
-    public class MpClipTrayViewModel : MpUndoableViewModelBase<MpClipTrayViewModel> {
+    public class MpClipTrayViewModel : MpUndoableViewModelBase<MpClipTrayViewModel>, IDropTarget {
         #region Private Variables      
         private MpMultiSelectListView _clipTrayRef = null;
         //private object _dragClipBorderElement = null;
@@ -98,7 +99,7 @@ namespace MpWpfApp {
             }
         }
 
-        public MpClipboardManager ClipboardManager { get; private set; }        
+        public MpClipboardManager ClipboardManager { get; private set; }
 
         public bool IsDragging { get; set; } = false;
 
@@ -186,6 +187,11 @@ namespace MpWpfApp {
                     if(sctvm.IsEditingTitle) {
                         return true;
                     }
+                    foreach(var subctvm in sctvm.RichTextBoxViewModelCollection) {
+                        if(subctvm.ClipTileViewModel.IsEditingTitle) {
+                            return true;
+                        }
+                    }
                 }
                 return false;
             }
@@ -197,6 +203,11 @@ namespace MpWpfApp {
                     if (sctvm.IsEditingTile) {
                         return true;
                     }
+                    foreach (var subctvm in sctvm.RichTextBoxViewModelCollection) {
+                        if (subctvm.ClipTileViewModel.IsEditingTile) {
+                            return true;
+                        }
+                    }
                 }
                 return false;
             }
@@ -207,6 +218,11 @@ namespace MpWpfApp {
                 foreach (var sctvm in SelectedClipTiles) {
                     if (sctvm.IsPastingTemplateTile) { 
                         return true;
+                    }
+                    foreach (var subctvm in sctvm.RichTextBoxViewModelCollection) {
+                        if (subctvm.ClipTileViewModel.IsPastingTemplateTile) {
+                            return true;
+                        }
                     }
                 }
                 return false;
@@ -342,6 +358,7 @@ namespace MpWpfApp {
         public MpClipTrayViewModel() : base() {
             //BindingOperations.DisableCollectionSynchronization(this);
             //IsLoading = true;
+            CanAcceptChildren = true;
             ClipTileViewModels.CollectionChanged += (s, e) => {
                 OnPropertyChanged(nameof(EmptyListMessageVisibility));
                 OnPropertyChanged(nameof(ClipTrayVisibility));
@@ -787,6 +804,55 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Drag & Drop
+        void IDropTarget.DragOver(IDropInfo dropInfo) {
+            var sourceItem = dropInfo.Data as MpClipTileRichTextBoxViewModel;
+            MpClipTileRichTextBoxViewModelCollection targetRtbVmCollection = null;
+            MpClipTileRichTextBoxViewModel targetRtbVm = null;
+            if (dropInfo.TargetItem is MpClipTileRichTextBoxViewModel) {
+                targetRtbVm = dropInfo.TargetItem as MpClipTileRichTextBoxViewModel;
+                targetRtbVmCollection = targetRtbVm.RichTextBoxViewModelCollection;
+            } else if (dropInfo.TargetItem is MpClipTileRichTextBoxViewModelCollection) {
+                targetRtbVmCollection = dropInfo.TargetItem as MpClipTileRichTextBoxViewModelCollection;
+                if (targetRtbVmCollection.Count > 0) {
+                    if (dropInfo.DropPosition.Y < 0) {
+                        targetRtbVm = targetRtbVmCollection[0];
+                    } else {
+                        targetRtbVm = targetRtbVmCollection[targetRtbVmCollection.Count - 1];
+                    }
+                }
+            }
+
+            if (sourceItem != null && targetRtbVm != null) {
+                dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                dropInfo.Effects = DragDropEffects.Copy;
+            }
+        }
+
+        void IDropTarget.Drop(IDropInfo dropInfo) {
+            var sourceItem = dropInfo.Data as MpClipTileRichTextBoxViewModel;
+            MpClipTileRichTextBoxViewModelCollection targetRtbVmCollection = null;
+            MpClipTileRichTextBoxViewModel targetRtbVm = null;
+            if (dropInfo.TargetItem is MpClipTileRichTextBoxViewModel) {
+                targetRtbVm = dropInfo.TargetItem as MpClipTileRichTextBoxViewModel;
+                targetRtbVmCollection = targetRtbVm.RichTextBoxViewModelCollection;
+            } else if (dropInfo.TargetItem is MpClipTileRichTextBoxViewModelCollection) {
+                targetRtbVmCollection = dropInfo.TargetItem as MpClipTileRichTextBoxViewModelCollection;
+                if (targetRtbVmCollection.Count > 0) {
+                    if (dropInfo.DropPosition.Y < 0) {
+                        targetRtbVm = targetRtbVmCollection[0];
+                    } else {
+                        targetRtbVm = targetRtbVmCollection[targetRtbVmCollection.Count - 1];
+                    }
+                }
+            }
+
+            if (targetRtbVmCollection != null) {
+                targetRtbVmCollection.Add(sourceItem);
+            }
+        }
+        #endregion
+
         #region Private Methods
 
         private int GetClipTileFromDrag(Point startLoc,Point curLoc) {
@@ -858,6 +924,9 @@ namespace MpWpfApp {
             }
         }
         private async Task ChangeSelectedClipsColor(Brush brush) {
+            if(brush == null) {
+                return;
+            }
             try {
                 IsBusy = true;
                 await Dispatcher.CurrentDispatcher.BeginInvoke(
@@ -865,7 +934,7 @@ namespace MpWpfApp {
                         (Action)(() => {
                             BitmapSource sharedSwirl = null;
                             foreach (var sctvm in SelectedClipTiles) {
-                                sctvm.TitleColor = brush;
+                                sctvm.TitleBackgroundColor = brush;
                                 if (sharedSwirl == null) {
                                     sctvm.TitleSwirl = sctvm.CopyItem.InitSwirl(null,true);
                                     sharedSwirl = sctvm.TitleSwirl;

@@ -419,7 +419,6 @@ namespace MpWpfApp {
                     , fk_MpCopyItemId INTEGER NOT NULL
                     , fk_ParentMpCopyItemId INTEGER NOT NULL
                     , SortOrderIdx INTEGER NOT NULL DEFAULT 0
-                    , IsInlineWithPreviousItem INTEGER NOT NULL DEFAULT 0
                     , CONSTRAINT FK_MpCompositeCopyItem_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     , CONSTRAINT FK_MpCompositeCopyItem_1_0 FOREIGN KEY (fk_ParentMpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
                     );

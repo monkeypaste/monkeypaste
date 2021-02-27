@@ -220,6 +220,19 @@ namespace MpWpfApp {
                 return ClipTileSize - (ClipTileMargin * 2) - (ClipTileBorderThickness * 2);
             }
         }
+
+        public double ClipTileSubItemOverlayMargin {
+            get {
+                return 5;
+            }
+        }
+
+        public double ClipTileSubItemMinHeight {
+            get {
+                return ClipTileContentHeight / 7;
+            }
+        }
+
         public double ClipTileFileListRowHeight {
             get {
                 return ClipTileContentHeight / 8;

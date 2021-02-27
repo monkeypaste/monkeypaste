@@ -143,7 +143,6 @@ namespace MpWpfApp {
         public int CompositeCopyItemId { get; set; } = 0;
         public int CompositeParentCopyItemId { get; set; } = -1;
         public int CompositeSortOrderIdx { get; set; } = -1;
-        public bool IsInlineWithPreviousCompositeItem { get; set; } = false;
 
         public bool IsCompositeParent {
             get {
@@ -456,7 +455,7 @@ namespace MpWpfApp {
                     toItem.CompositeSortOrderIdx = 0;
                     fromItem.CompositeParentCopyItemId = compositeItem.CopyItemId;
                     fromItem.CompositeSortOrderIdx = 1;
-                    fromItem.IsInlineWithPreviousCompositeItem = isInline;
+                    //fromItem.IsInlineWithPreviousCompositeItem = isInline;
                     compositeItem.CompositeItemList.Add(toItem);
                     compositeItem.CompositeItemList.Add(fromItem);
                     //always remove tag associations from other item if added its in the ctvm
@@ -468,6 +467,7 @@ namespace MpWpfApp {
                             tag.LinkWithCopyItem(compositeItem);
                         }
                     }
+                    compositeItem.SetData(null);
                     compositeItem.WriteToDatabase();
                     return compositeItem;
                 case MpCopyItemType.Composite:
@@ -475,7 +475,7 @@ namespace MpWpfApp {
                         case MpCopyItemType.RichText:
                             fromItem.CompositeParentCopyItemId = toItem.CopyItemId;
                             fromItem.CompositeSortOrderIdx = toItem.CompositeItemList.Count;
-                            fromItem.IsInlineWithPreviousCompositeItem = isInline;
+                            //fromItem.IsInlineWithPreviousCompositeItem = isInline;
                             toItem.CompositeItemList.Add(fromItem);
                             break;
                         case MpCopyItemType.Composite:
@@ -483,7 +483,7 @@ namespace MpWpfApp {
                                 occi.CompositeParentCopyItemId = toItem.CopyItemId;
                                 occi.CompositeSortOrderIdx = toItem.CompositeItemList.Count;
                                 if (fromItem.CompositeItemList.IndexOf(occi) == 0) {
-                                    occi.IsInlineWithPreviousCompositeItem = isInline;
+                                    //occi.IsInlineWithPreviousCompositeItem = isInline;
                                 }
                                 toItem.CompositeItemList.Add(fromItem);
                             }
@@ -499,13 +499,14 @@ namespace MpWpfApp {
                     if(fromItem.CopyItemType == MpCopyItemType.Composite) {
                         fromItem.DeleteFromDatabase();
                     }
+                    toItem.SetData(null);
                     return toItem;
             }
             //if can't combine don't alter fromItem and just return toItem;
             return toItem;
         }
 
-        public static async Task CombineAsync(MpCopyItem fromItem, MpCopyItem toItem, DispatcherPriority priority = DispatcherPriority.Background) {
+        public static async Task MergeAsync(MpCopyItem fromItem, MpCopyItem toItem, DispatcherPriority priority = DispatcherPriority.Background) {
             await Dispatcher.CurrentDispatcher.InvokeAsync(() => MpCopyItem.Merge(fromItem,toItem), priority);
         }
         #endregion
@@ -631,7 +632,7 @@ namespace MpWpfApp {
             }
             var itemRichText = MpHelpers.Instance.ConvertPlainTextToRichText(string.Empty);
             foreach(var cci in CompositeItemList) {
-                itemRichText = MpHelpers.Instance.CombineRichText(cci.ItemRichText, itemRichText, !cci.IsInlineWithPreviousCompositeItem);
+                itemRichText = MpHelpers.Instance.CombineRichText(cci.ItemRichText, itemRichText, false);
             }
             return itemRichText;
         }
@@ -962,7 +963,7 @@ namespace MpWpfApp {
                     DataRow cdr = dt.Rows[0];
                     CompositeCopyItemId = Convert.ToInt32(cdr["pk_MpCompositeCopyItemId"].ToString());
                     CompositeSortOrderIdx = Convert.ToInt32(cdr["SortOrderIdx"].ToString());
-                    IsInlineWithPreviousCompositeItem = Convert.ToInt32(cdr["IsInlineWithPreviousItem"].ToString()) > 0 ? true : false;
+                    //IsInlineWithPreviousCompositeItem = Convert.ToInt32(cdr["IsInlineWithPreviousItem"].ToString()) > 0 ? true : false;
                 }
             }
             PasteCount = GetPasteCount();
@@ -1082,24 +1083,22 @@ namespace MpWpfApp {
                 //for composite children
                 if(CompositeCopyItemId == 0) {
                     MpDb.Instance.ExecuteWrite(
-                    "insert into MpCompositeCopyItem(fk_MpCopyItemId,fk_ParentMpCopyItemId,SortOrderIdx,IsInlineWithPreviousItem) " +
-                    "values (@ciid,@pciid,@soidx,@iiwpi)",
+                    "insert into MpCompositeCopyItem(fk_MpCopyItemId,fk_ParentMpCopyItemId,SortOrderIdx) " +
+                    "values (@ciid,@pciid,@soidx)",
                     new Dictionary<string, object> {
                             { @"ciid",CopyItemId },
                             { "@pciid", CompositeParentCopyItemId },
-                            { "@soidx", CompositeSortOrderIdx },
-                            { "@iiwpi", IsInlineWithPreviousCompositeItem ? 1:0 }
+                            { "@soidx", CompositeSortOrderIdx }
                         });
                     CompositeCopyItemId = MpDb.Instance.GetLastRowId("MpCompositeCopyItem", "pk_MpCompositeCopyItemId");
                 } else {
                     MpDb.Instance.ExecuteWrite(
-                        "update MpCompositeCopyItem set fk_MpCopyItemId=@ciid, fk_ParentMpCopyItemId=@pciid, SortOrderIdx=@soidx, IsInlineWithPreviousItem=@iiwpi where pk_MpCompositeCopyItemId=@cciid",
+                        "update MpCompositeCopyItem set fk_MpCopyItemId=@ciid, fk_ParentMpCopyItemId=@pciid, SortOrderIdx=@soidx where pk_MpCompositeCopyItemId=@cciid",
                         new Dictionary<string, object> {
                             { @"cciid", CompositeCopyItemId },
                             { @"ciid",CopyItemId },
                             { "@pciid", CompositeParentCopyItemId },
-                            { "@soidx", CompositeSortOrderIdx },
-                            { "@iiwpi", IsInlineWithPreviousCompositeItem ? 1:0 }
+                            { "@soidx", CompositeSortOrderIdx }
                         });
                 }
             }

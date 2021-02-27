@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace MpWpfApp {
-    public class MpRichTextBoxPathOverlayViewModel : MpUndoableViewModelBase<MpRichTextBoxPathOverlayViewModel> {
+    public class MpClipTileRichTextBoxOverlayViewModel : MpUndoableViewModelBase<MpClipTileRichTextBoxOverlayViewModel> {
         #region Private Variables
         private Geometry _pathData = null;
         private Canvas _rtbc = null;
@@ -101,10 +101,10 @@ namespace MpWpfApp {
         public Brush OverlayBorderBrush {
             get {
                 if (ClipTileRichTextBoxViewModel == null ||
-                   ClipTileRichTextBoxViewModel.ClipTileViewModel == null) {
+                   ClipTileRichTextBoxViewModel.HostClipTileViewModel == null) {
                     return Brushes.Transparent;
                 }
-                if (ClipTileRichTextBoxViewModel.IsHovering) {
+                if (ClipTileRichTextBoxViewModel.ClipTileViewModel.IsHovering) {
                     return Brushes.Blue;
                 }
                 return Brushes.Transparent;
@@ -115,15 +115,15 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpRichTextBoxPathOverlayViewModel() : this(null) { }
+        public MpClipTileRichTextBoxOverlayViewModel() : this(null) { }
 
-        public MpRichTextBoxPathOverlayViewModel(MpClipTileRichTextBoxViewModel rtbvm) : base() {            
+        public MpClipTileRichTextBoxOverlayViewModel(MpClipTileRichTextBoxViewModel rtbvm) : base() {            
             ClipTileRichTextBoxViewModel = rtbvm;
             ClipTileRichTextBoxViewModel.PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
-                    case nameof(ClipTileRichTextBoxViewModel.IsHovering):
-                    case nameof(ClipTileRichTextBoxViewModel.IsDragging):
-                    case nameof(ClipTileRichTextBoxViewModel.IsSelected):
+                    case nameof(ClipTileRichTextBoxViewModel.ClipTileViewModel.IsHovering):
+                    case nameof(ClipTileRichTextBoxViewModel.ClipTileViewModel.IsDragging):
+                    case nameof(ClipTileRichTextBoxViewModel.ClipTileViewModel.IsSelected):
                         OnPropertyChanged(nameof(OverlayBackgroundBrush));
                         OnPropertyChanged(nameof(OverlayBorderBrush));
                         break;
@@ -137,10 +137,10 @@ namespace MpWpfApp {
             _rtbc = overlayPath.GetVisualAncestor<Canvas>();
 
             #region Drag & Drop
-            overlayPath.PreviewMouseDown += ClipTileRichTextBoxViewModel.RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_PreviewMouseDown;
-            overlayPath.PreviewMouseMove += ClipTileRichTextBoxViewModel.RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_PreviewMouseMove;
-            overlayPath.GiveFeedback += ClipTileRichTextBoxViewModel.RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_GiveFeedback;
-            overlayPath.Drop += ClipTileRichTextBoxViewModel.RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_Drop;
+            //overlayPath.PreviewMouseDown += ClipTileRichTextBoxViewModel.RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_PreviewMouseDown;
+            //overlayPath.PreviewMouseMove += ClipTileRichTextBoxViewModel.RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_PreviewMouseMove;
+            //overlayPath.GiveFeedback += ClipTileRichTextBoxViewModel.RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_GiveFeedback;
+            //overlayPath.Drop += ClipTileRichTextBoxViewModel.RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_Drop;
             #endregion
 
             UpdatePoints(ClipTileRichTextBoxViewModel.Rtb);
