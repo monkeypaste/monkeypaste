@@ -90,7 +90,7 @@ namespace MpWpfApp {
                             MpApp appToReject = dupList[0].App;
                             if (confirmExclusionResult == MessageBoxResult.Yes) {
                                 var clipTilesToRemove = new List<MpClipTileViewModel>();
-                                foreach (MpClipTileViewModel ctvm in ctrvm.ClipTileViewModels) {
+                                foreach (var ctvm in ctrvm) {
                                     if (ctvm.CopyItemAppId == appToReject.AppId) {
                                         clipTilesToRemove.Add(ctvm);
                                     }

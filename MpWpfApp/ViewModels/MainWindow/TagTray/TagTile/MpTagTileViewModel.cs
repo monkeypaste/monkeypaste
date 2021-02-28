@@ -306,7 +306,7 @@ namespace MpWpfApp {
             if (IsNew) {
                 RenameTagCommand.Execute(null);
             } else {
-                foreach (MpClipTileViewModel ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
+                foreach (MpClipTileViewModel ctvm in MainWindowViewModel.ClipTrayViewModel) {
                     if (IsLinkedWithClipTile(ctvm)) {
                         TagClipCount++;
                     }

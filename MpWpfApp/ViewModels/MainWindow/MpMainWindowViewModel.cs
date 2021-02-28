@@ -36,8 +36,8 @@ namespace MpWpfApp {
             }
         }
 
-        private MpClipTrayViewModel _clipTrayViewModel = null;
-        public MpClipTrayViewModel ClipTrayViewModel {
+        private MpClipTrayListBoxViewModel _clipTrayViewModel = null;
+        public MpClipTrayListBoxViewModel ClipTrayViewModel {
             get {
                 return _clipTrayViewModel;
             }
@@ -196,7 +196,7 @@ namespace MpWpfApp {
 
             SystemTrayViewModel = new MpSystemTrayViewModel();
             SearchBoxViewModel = new MpSearchBoxViewModel() { PlaceholderText = Properties.Settings.Default.SearchPlaceHolderText };
-            ClipTrayViewModel = new MpClipTrayViewModel();
+            ClipTrayViewModel = new MpClipTrayListBoxViewModel();
             ClipTileSortViewModel = new MpClipTileSortViewModel();
             AppModeViewModel = new MpAppModeViewModel();
             TagTrayViewModel = new MpTagTrayViewModel();
@@ -232,7 +232,7 @@ namespace MpWpfApp {
 
             MpStandardBalloonViewModel.ShowBalloon(
                 "Monkey Paste",
-                "Successfully loaded w/ " + ClipTrayViewModel.ClipTileViewModels.Count + " items",
+                "Successfully loaded w/ " + ClipTrayViewModel.Count + " items",
                 Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
             MpSoundPlayerGroupCollectionViewModel.Instance.PlayLoadedSoundCommand.Execute(null);
@@ -245,7 +245,7 @@ namespace MpWpfApp {
         }
 
         public void ClearEdits() {
-            foreach (MpClipTileViewModel clip in ClipTrayViewModel.ClipTileViewModels) {
+            foreach (MpClipTileViewModel clip in ClipTrayViewModel) {
                 clip.IsEditingTile = false;
                 clip.IsPastingTemplateTile = false;
                 if (clip.DetectedImageObjectCollectionViewModel != null) {
@@ -335,7 +335,7 @@ namespace MpWpfApp {
 
                 ApplicationHook.MouseWheel += (s, e) => {
                     if (!MainWindowViewModel.IsLoading && ClipTrayViewModel.IsAnyTileExpanded) {
-                        var activeRtb = ClipTrayViewModel.SelectedClipTiles[0].RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel.Rtb;
+                        var activeRtb = ClipTrayViewModel.SelectedClipTiles[0].Rtb;
                         activeRtb.ScrollToVerticalOffset(activeRtb.VerticalOffset - e.Delta);
                     }
                 };
@@ -448,16 +448,15 @@ namespace MpWpfApp {
                     if (pasteSelected) {
                         ClipTrayViewModel.PerformPaste(pasteDataObject);
                         foreach (var sctvm in ClipTrayViewModel.SelectedClipTiles) {
-                            if (sctvm.HasTemplate) {
-                                //cleanup template by recreating hyperlinks
-                                //and reseting tile state
-                                //sctvm.RichTextBoxViewModels.ClearAllHyperlinks();
-                                //sctvm.RichTextBoxViewModels.CreateAllHyperlinks();
-                                sctvm.TileVisibility = Visibility.Visible;
-                                sctvm.IsPastingTemplateTile = false;
-                                sctvm.TemplateRichText = string.Empty;
-                                foreach (var rtbvm in sctvm.RichTextBoxViewModelCollection) {
-                                    rtbvm.TemplateRichText = string.Empty;
+                            foreach(var ssctvm in sctvm) {
+                                if (ssctvm.HasTemplate) {
+                                    //cleanup template by recreating hyperlinks
+                                    //and reseting tile state
+                                    //sctvm.RichTextBoxViewModels.ClearAllHyperlinks();
+                                    //sctvm.RichTextBoxViewModels.CreateAllHyperlinks();
+                                    ssctvm.TileVisibility = Visibility.Visible;
+                                    ssctvm.IsPastingTemplateTile = false;
+                                    ssctvm.TemplateRichText = string.Empty;
                                 }
                             }
                         }

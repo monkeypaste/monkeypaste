@@ -7,6 +7,9 @@ using System.Windows.Interop;
 
 namespace MpWpfApp {
     public class MpClipboardManager : IDisposable {
+        private static readonly Lazy<MpClipboardManager> _Lazy = new Lazy<MpClipboardManager>(() => new MpClipboardManager());
+        public static MpClipboardManager Instance { get { return _Lazy.Value; } }
+
         private const int WM_DRAWCLIPBOARD = 0x0308;
         private const int WM_CHANGECBCHAIN = 0x030D;
         private const int WM_PASTE = 0x0302;
@@ -15,11 +18,15 @@ namespace MpWpfApp {
 
         public bool IgnoreClipboardChangeEvent { get; set; }
 
-        private readonly HwndSourceHook hook;
-        private readonly HwndSource hwndSource;
+        private HwndSourceHook hook;
+        private HwndSource hwndSource;
         private IntPtr _nextClipboardViewer;
 
-        public MpClipboardManager(HwndSource hwnd) {
+        private MpClipboardManager() {
+        }
+
+        public void Init() {
+            HwndSource hwnd = (HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow);
             LastWindowWatcher = new MpLastWindowWatcher(hwnd.Handle);
 
             hwndSource = hwnd;

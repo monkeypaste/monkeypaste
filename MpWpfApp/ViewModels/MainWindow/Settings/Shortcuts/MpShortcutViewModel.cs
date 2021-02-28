@@ -375,7 +375,7 @@ namespace MpWpfApp {
 
         public void PassKeysToForegroundWindow() {
             var mwvm = (MpMainWindowViewModel)System.Windows.Application.Current.MainWindow.DataContext;
-            WinApi.SetForegroundWindow(mwvm.ClipTrayViewModel.ClipboardManager.LastWindowWatcher.LastHandle);
+            WinApi.SetForegroundWindow(MpClipboardManager.Instance.LastWindowWatcher.LastHandle);
             foreach (var str in SendKeysKeyStringList) {
                 System.Windows.Forms.SendKeys.SendWait(str);
             }

@@ -17,7 +17,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace MpWpfApp {
-    public class MpSearchBoxViewModel : MpViewModelBase {
+    public class MpSearchBoxViewModel : MpUndoableViewModelBase<MpSearchBoxViewModel> {
         #region Private Variables
         private TextBox _searchTextBox = null;
         #endregion
@@ -31,6 +31,10 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties     
+
+        #region View Models
+
+        #endregion
 
         #region SearchBy Property Settings
         private bool _searchByIsCaseSensitive = Properties.Settings.Default.SearchByIsCaseSensitive;

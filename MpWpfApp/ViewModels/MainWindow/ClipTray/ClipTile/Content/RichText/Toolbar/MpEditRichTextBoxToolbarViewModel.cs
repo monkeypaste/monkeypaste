@@ -302,13 +302,13 @@ namespace MpWpfApp {
                 Console.WriteLine("(AddTemplate)Selection Text: " + rtbSelection.Text);
                 ClipTileViewModel.SaveToDatabase();
                 
-                if (ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Count == 0) {
+                if (ClipTileViewModel.SubSelectedClipTileViewModel.TemplateHyperlinkCollectionViewModel.Count == 0) {
                     //if templates are NOT in the clip yet add one w/ default name
                     ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);
                     //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
                 } else {
                     var templateContextMenu = new ContextMenu();
-                    foreach (var ttcvm in ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder) {
+                    foreach (var ttcvm in ClipTileViewModel.SubSelectedClipTileViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder) {
                         Border b = new Border();
                         b.Background = ttcvm.TemplateBrush;
                         b.BorderBrush = Brushes.Black;
@@ -447,7 +447,7 @@ namespace MpWpfApp {
                                 ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
                             });
 
-                        ClipTileViewModel.RichTextBoxViewModelCollection.AnimateItems(
+                        ClipTileViewModel.AnimateItems(
                             ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
                             ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
                             0, 0,
@@ -552,10 +552,8 @@ namespace MpWpfApp {
         }
         private void RefreshDocument() {
             ClipTileViewModel.SaveToDatabase();
-            foreach(var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {
-                rtbvm.ClearHyperlinks();
-                rtbvm.CreateHyperlinks();
-            }            
+            ClipTileViewModel.ClearAllHyperlinks();
+            ClipTileViewModel.CreateAllHyperlinks();
         }
         #endregion
     }

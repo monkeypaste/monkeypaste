@@ -9,7 +9,7 @@ using System.Globalization;
 using System.Windows.Controls;
 
 namespace MpWpfApp {
-    public class MpViewModelBase : DependencyObject, INotifyPropertyChanged {
+    public abstract class MpViewModelBase : DependencyObject, INotifyPropertyChanged {
         #region Private Variables
 
         #endregion
@@ -20,10 +20,14 @@ namespace MpWpfApp {
                 return (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
             }
         }
+
+        public object ParentObject { get; set; }
         #endregion
 
         #region Properties
         public bool CanAcceptChildren { get; set; } = false;
+
+        public FrameworkElement ViewElement { get; set; } = null;
 
         private bool _isTrialExpired = Properties.Settings.Default.IsTrialExpired;
         public bool IsTrialExpired {
@@ -53,8 +57,9 @@ namespace MpWpfApp {
                 }
             }            
         }
+
         private static bool _designMode = false;
-        protected bool IsInDesignMode {
+        protected static bool IsInDesignMode {
             get {
                 return _designMode;
             }
