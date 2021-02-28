@@ -21,14 +21,14 @@ namespace MpWpfApp {
         #region Public Methods
         public MpRichTextBoxOverlayAdorner(Canvas rtbc) : base(rtbc) {
             _rtbc = rtbc;
-            _rtb = (RichTextBox)_rtbc.FindName("ClipTileRichTextBox");
+            _rtb = (RichTextBox)_rtbc.FindName("RtbListBoxItemRichTextBox");
             _rtblb = rtbc.GetVisualAncestor<ListBox>();
         }
         #endregion
 
         #region Overrides
         protected override void OnRender(DrawingContext drawingContext) {
-            var rtbvm = (MpClipTileRichTextBoxViewModel)_rtbc.DataContext;  
+            var rtbvm = (MpRtbListBoxItemRichTextBoxViewModel)_rtbc.DataContext;  
             var adornedElementRect = new Rect(this.AdornedElement.DesiredSize);
             var blackPen = new Pen(Brushes.Gray, 1);
             blackPen.DashStyle = DashStyles.Dash;

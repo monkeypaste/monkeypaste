@@ -131,6 +131,18 @@ namespace MpWpfApp {
             }
         }
 
+        public double ClipTileTitleFontSize {
+            get {
+                return 20;
+            }
+        }
+
+        public double RtbCompositeItemTitleFontSize {
+            get {
+                return 14;
+            }
+        }
+
         public double ClipTileTitleTextGridCanvasRight {
             get {
                 return ClipTileTitleIconCanvasLeft - 5;
@@ -227,7 +239,7 @@ namespace MpWpfApp {
             }
         }
 
-        public double ClipTileSubItemMinHeight {
+        public double RtbCompositeItemMinHeight {
             get {
                 return ClipTileContentHeight / 7;
             }

@@ -602,6 +602,37 @@ namespace MpWpfApp {
             return _itemData;
         }
 
+        public string GetDetail(MpCopyItemDetailType detailType) {
+            string info = "I dunno";// string.Empty;
+            switch (detailType) {
+                //created
+                case MpCopyItemDetailType.DateTimeCreated:
+                    // TODO convert to human readable time span like "Copied an hour ago...23 days ago etc
+                    //TimeSpan dur = DateTime.Now - CopyItemCreatedDateTime;
+                    info = "Copied " + CopyDateTime.ToString(); //dur.ToString();
+                    break;
+                //chars/lines
+                case MpCopyItemDetailType.DataSize:
+                    if (CopyItemType == MpCopyItemType.Image) {
+                        info = "(" + (int)ItemBitmapSource.Width + ") x (" + (int)ItemBitmapSource.Height + ")";
+                    } else if (CopyItemType == MpCopyItemType.RichText) {
+                        info = CharCount + " chars | " + LineCount + " lines";
+                    } else if (CopyItemType == MpCopyItemType.FileList) {
+                        info = FileCount + " files | " + DataSizeInMb + " MB";
+                    }
+                    break;
+                //# copies/# pastes
+                case MpCopyItemDetailType.UsageStats:
+                    info = CopyCount + " copies | " + PasteCount + " pastes";
+                    break;
+                default:
+                    info = "Unknown detailId: " + (int)detailType;
+                    break;
+            }
+
+            return info;
+        }
+
         public MpCopyItemTemplate GetTemplateByName(string templateName) {
             foreach(var t in TemplateList) {
                 if(t.TemplateName == templateName) {
@@ -1136,6 +1167,13 @@ namespace MpWpfApp {
         }
 
         #endregion
+    }
+
+    public enum MpCopyItemDetailType {
+        None = 0,
+        DateTimeCreated,
+        DataSize,
+        UsageStats
     }
 
     public enum MpCopyItemType {

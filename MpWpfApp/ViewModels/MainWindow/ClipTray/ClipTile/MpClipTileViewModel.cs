@@ -500,10 +500,7 @@
 
         public double TitleFontSize {
             get {
-                if(IsSubClipTile) {
-                    return 14;
-                }
-                return 20;
+                return MpMeasurements.Instance.ClipTileTitleFontSize;
             }
         }
         #endregion
@@ -678,17 +675,11 @@
             }
         }
 
-        public double SubItemOverlayOpacity {
-            get {
-                if(IsSubClipTile && IsHovering) {
-                    return 1;
-                }
-                return 0;
-            }
-        }
         #endregion
 
         #region Business Logic Properties
+        public string TemplateRichText { get; set; }
+
         private bool _wasAddedAtRuntime = false;
         public bool WasAddedAtRuntime {
             get {
@@ -723,12 +714,6 @@
             //        OnPropertyChanged(nameof(IsLoading));
             //    }
             //}
-        }
-
-        public string DetailText {
-            get {
-                return GetCurrentDetail(_detailIdx);
-            }
         }
 
         private int _sortOrderIdx = -1;
@@ -776,9 +761,6 @@
                     return Brushes.Red;
                 }
                 if (IsHovering) {
-                    if(IsSubClipTile) {
-                        return Brushes.Black;
-                    }
                     return Brushes.Yellow;
                 }
                 return Brushes.Transparent;
@@ -795,15 +777,7 @@
         }
         #endregion
 
-        #region State Properties    
-        public bool IsSubClipTile {
-            get {
-                if(CopyItem == null) {
-                    return false;
-                }
-                return CopyItem.IsSubCompositeItem;
-            }
-        }
+        #region State Properties           
 
         public bool IsDragging { get; set; } = false;
                 
@@ -833,9 +807,6 @@
                     OnPropertyChanged(nameof(IsHoveringOnTitleTextGrid));
                     OnPropertyChanged(nameof(TileTitleTextGridBackgroundBrush));
                     OnPropertyChanged(nameof(TitleTextColor));
-                    if(IsSubClipTile) {
-                        OnPropertyChanged(nameof(DetailText));
-                    }
                 }
             }
         }                
@@ -992,7 +963,6 @@
                     OnPropertyChanged(nameof(TileBorderBrush));
                     OnPropertyChanged(nameof(DetailTextColor));
                     OnPropertyChanged(nameof(MenuOverlayVisibility));
-                    OnPropertyChanged(nameof(SubItemOverlayOpacity));
                 }
             }
         }
@@ -1030,7 +1000,20 @@
         }
         #endregion
 
-        #region Model Properties
+        #region Model
+        public string DetailText {
+            get {
+                if(CopyItem == null) {
+                    return string.Empty;
+                }
+                _detailIdx++;
+                if (_detailIdx >= Enum.GetValues(typeof(MpCopyItemDetailType)).Length) {
+                    _detailIdx = 0;
+                }
+                return CopyItem.GetDetail((MpCopyItemDetailType)_detailIdx);
+            }
+        }
+
         public int CopyCount {
             get {
                 if (CopyItem == null) {
@@ -1101,12 +1084,7 @@
         public Brush TitleBackgroundColor {
             get {
                 if (CopyItem == null) {
-                    return Brushes.Red;
-                }
-                if (IsSubClipTile) {
-                    var scb = new SolidColorBrush(CopyItem.ItemColor.Color);
-                    scb.Opacity = 0.25;
-                    return scb;
+                    return Brushes.Transparent;
                 }
                 return new SolidColorBrush(CopyItem.ItemColor.Color);
             }
@@ -1122,13 +1100,10 @@
 
         public Brush TitleTextColor {
             get {
-                if(!IsSubClipTile) {
-                    return Brushes.White;
-                }
                 if (IsHoveringOnTitleTextGrid) {
                     return Brushes.DarkGray;
                 }
-                return Brushes.Black;
+                return Brushes.White;
             }
         }
 
@@ -1219,11 +1194,6 @@
                 }
                 return CopyItem.GetFileList(string.Empty, MainWindowViewModel.ClipTrayViewModel.GetTargetFileType());
             }
-        }
-
-        public string TemplateRichText {
-            get; 
-            set;
         }
 
         public BitmapSource TitleSwirl {
@@ -1323,12 +1293,29 @@
         private MpCopyItem _copyItem = null;
         public MpCopyItem CopyItem {
             get {
+                if(_copyItem == null) {
+                    //only happens for non-composite richtext types
+                    if(RichTextBoxViewModelCollection != null &&
+                       RichTextBoxViewModelCollection.Count > 0) {
+                        //for non-composite clip tiles use rtblb's first (and only) element
+                        return RichTextBoxViewModelCollection[0].CopyItem;
+                    }
+                }
                 return _copyItem;
             }
             private set {
                 //if (_copyItem != value) 
                 {
-                    _copyItem = value;
+                    if(CopyItem != null && 
+                       CopyItemType == MpCopyItemType.RichText) {
+                        if(value != null && value.CopyItemType == MpCopyItemType.Composite) {
+                            _copyItem = value;
+                        } else {
+                            RichTextBoxViewModelCollection[0].CopyItem = value;
+                        }                            
+                    } else {
+                        _copyItem = value;
+                    }
                     OnPropertyChanged(nameof(CopyItem));
                     OnPropertyChanged(nameof(CopyItemId));
                     OnPropertyChanged(nameof(CopyItemType));
@@ -1360,8 +1347,6 @@
                     OnPropertyChanged(nameof(ContentVisibility));
                     OnPropertyChanged(nameof(TrialOverlayVisibility));
                     OnPropertyChanged(nameof(RichTextBoxViewModelCollection));
-                    OnPropertyChanged(nameof(IsSubClipTile));
-                    OnPropertyChanged(nameof(SubItemOverlayOpacity));
                     OnPropertyChanged(nameof(TitleFontSize));
                     //CopyItem.WriteToDatabase();
                 }
@@ -1426,13 +1411,18 @@
                 ci.WriteToDatabase();
                 _wasAddedAtRuntime = true;
             }
-            VirtualizationManager.Instance.RunOnUi(() => {
-                CopyItem = ci;
-                if (MainWindowViewModel != null) {
-                    //is null during loading and the refresh isn't needed
-                    MainWindowViewModel.ClipTrayViewModel.Refresh();
+            if(ci.CopyItemType == MpCopyItemType.RichText) {
+                if(RichTextBoxViewModelCollection.Count == 0) {
+                    RichTextBoxViewModelCollection.Add(new MpRtbListBoxItemRichTextBoxViewModel(this, ci));
+                    OnPropertyChanged(nameof(CopyItem));
                 }
-            });            
+            }else {
+                CopyItem = ci;
+            }
+            if (MainWindowViewModel != null) {
+                //is null during loading and the refresh isn't needed
+                MainWindowViewModel.ClipTrayViewModel.Refresh();
+            }
         }
 
         public void RefreshCommands() {
@@ -1548,67 +1538,9 @@
             var titleDetailTextBlock = (TextBlock)detailGrid.FindName("ClipTileTitleDetailTextBlock");
 
             titleDetailTextBlock.MouseEnter += (s, e5) => {
-                if (++_detailIdx > 2) {
-                    _detailIdx = 0;
-                }
-                titleDetailTextBlock.Text = GetCurrentDetail(_detailIdx);
+                OnPropertyChanged(nameof(DetailText));
             };
-            titleDetailTextBlock.Text = GetCurrentDetail(_detailIdx);
-        }
-
-        public void SubClipTileTitle_Loaded(object sender, RoutedEventArgs args) {
-            if(!IsSubClipTile) {
-                return;
-            }
-            ClipBorder = (MpClipBorder)sender;
-            var titleTextGrid = (Grid)ClipBorder.FindName("ClipTileRichTextBoxListItemOverlayBorderGrid");
-            TitleTextBlock = (TextBlock)titleTextGrid.FindName("ClipTileTitleTextBlock");
-            TitleTextBox = (TextBox)titleTextGrid.FindName("ClipTileTitleTextBox");
-
-            ClipBorder.MouseEnter += (s, e1) => {
-                IsHovering = true;
-            };
-            ClipBorder.MouseLeave += (s, e2) => {
-                IsHovering = false;
-            };
-
-            TitleTextBlock.MouseEnter += (s, e1) => {
-                if (++_detailIdx > 2) {
-                    _detailIdx = 0;
-                }
-                //must be set after detailIdx incremented to update
-                //detailtext 
-                IsHoveringOnTitleTextGrid = true;
-            };
-            
-            TitleTextBlock.MouseLeave += (s, e7) => {
-                IsHoveringOnTitleTextGrid = false;
-            };
-            TitleTextBlock.PreviewMouseLeftButtonDown += (s, e7) => {
-                IsEditingTitle = true;
-                e7.Handled = true;
-            };
-
-            TitleTextBox.IsVisibleChanged += (s, e9) => {
-                if (TileTitleTextBoxVisibility == Visibility.Collapsed) {
-                    return;
-                }
-                var tbx = (TextBox)s;
-                tbx.Focus();
-                tbx.SelectAll();
-            };
-            TitleTextBox.LostFocus += (s, e4) => {
-                IsEditingTitle = false;
-            };
-            TitleTextBox.PreviewKeyDown += (s, e5) => {
-                if (e5.Key == Key.Enter || e5.Key == Key.Escape) {
-                    IsEditingTitle = false;
-                }
-            };
-
-            OnPropertyChanged(nameof(SubItemOverlayOpacity));
-            OnPropertyChanged(nameof(TileSubItemOverlayBorderWidth));
-        }
+        }        
 
         public void ClipTileTitle_Loaded(object sender, RoutedEventArgs e) {
             var titleCanvas = (Canvas)sender;
@@ -1729,14 +1661,24 @@
 
             RichTextBoxListBox = rtblb;
 
+            RichTextBoxListBox.PreviewMouseLeftButtonDown += (s, e4) => {
+                bool isExtendedSelection = false;
+                if(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
+                    isExtendedSelection = true;
+                }
+                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
+                    isExtendedSelection = true;
+                }
+                if(!isExtendedSelection) {
+                    MainWindowViewModel.ClipTrayViewModel.ClearClipSelection();
+                }
+                IsSelected = true;
+            };
+
             //after pasting template rtb's are duplicated so clear them upon refresh
-            if (RichTextBoxViewModelCollection.Count == 0) {
-                if (CopyItemType == MpCopyItemType.RichText) {
-                    RichTextBoxViewModelCollection.Add(new MpClipTileRichTextBoxViewModel(this, this));
-                } else {
-                    foreach (var cci in CopyItem.CompositeItemList) {
-                        RichTextBoxViewModelCollection.Add(new MpClipTileRichTextBoxViewModel(this, new MpClipTileViewModel(cci)));
-                    }
+            if (CopyItemType == MpCopyItemType.Composite) {
+                foreach (var cci in CopyItem.CompositeItemList) {
+                    RichTextBoxViewModelCollection.Add(new MpRtbListBoxItemRichTextBoxViewModel(this, cci));
                 }
             }
 
@@ -1760,6 +1702,7 @@
                 }
             };
 
+            OnPropertyChanged(nameof(TileSubItemOverlayBorderWidth));
             OnPropertyChanged(nameof(LoadingSpinnerVisibility));
             OnPropertyChanged(nameof(ContentVisibility));
             #endregion
@@ -1820,100 +1763,11 @@
 
         public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
             var cm = (ContextMenu)sender;
-            if(CopyItemType == MpCopyItemType.RichText) {
-                MenuItem ptamir = null;
-                foreach(MenuItem mi in cm.Items) {
-                    if(mi.Name == "PasteToAppPathMenuItem") {
-                        ptamir = mi;
-                    }
-                }
-                if(ptamir == null) {
-                    return;
-                }
-                ptamir.Items.Clear();
-                bool addedSeperator = false;
-                foreach(var ptamivmc in MpPasteToAppPathViewModelCollection.Instance.MenuItemViewModels) {
-                    if(ptamivmc.Count == 0) {
-                        continue;
-                    }
-                    if(ptamivmc[0].IsRuntime) {
-                        bool areAllHidden = true;
-                        foreach(var ptamivm in ptamivmc) {
-                            if(!ptamivm.IsHidden) {
-                                areAllHidden = false;
-                            }
-                        }
-                        if(areAllHidden) {
-                            continue;
-                        }
-                        var ptamip = new MenuItem();
-                        ptamip.Header = MpHelpers.Instance.GetProcessApplicationName(ptamivmc[0].Handle);
-                        ptamip.Icon = new Image() { Source = ptamivmc[0].AppIcon };
-                        foreach(var ptamivm in ptamivmc) {
-                            if(ptamivm.IsHidden) {
-                                continue;
-                            }
-                            var ptami = new MenuItem();
-                            var l = new Label();
-                            l.Content = MpHelpers.Instance.GetProcessMainWindowTitle(ptamivm.Handle) + (ptamivm.IsAdmin ? " (Admin)" : string.Empty);
-                            
-                            var eyeOpenImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye.png")) };
-                            var eyeClosedImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye_closed.png")) };
-                            var btn = new Button() { Cursor = Cursors.Hand, Content = eyeOpenImg, BorderThickness = new Thickness(0), Background = Brushes.Transparent, Width = 20, Height = 20 , HorizontalAlignment = HorizontalAlignment.Right/*, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center*/ };
-                            bool isOverButton = false;
-                            btn.MouseEnter += (s, e2) => {
-                                btn.Content = eyeClosedImg;
-                                isOverButton = true;
-                            };
-                            btn.MouseLeave += (s, e2) => {
-                                btn.Content = eyeOpenImg;
-                                isOverButton = false;
-                            };
-                            btn.Click += (s, e2) => {
-                                ptamivm.IsHidden = true;
-                                ptamip.Items.Remove(ptami);
-                                if(ptamip.Items.Count == 0) {
-                                    ptamir.Items.Remove(ptamip);
-                                }
-                            };
-
-                            var sp = new StackPanel() { Orientation = Orientation.Horizontal};
-                            sp.Children.Add(l);
-                            sp.Children.Add(btn);
-
-                            ptami.Header = sp;   
-                            ptami.Icon = new Image() { Source = ptamivm.AppIcon };
-                            //ptami.Command = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;
-                            //ptami.CommandParameter = ptamivm.Handle;
-                            ptami.Click += (s, e2) => {
-                                if(!isOverButton) {
-                                    MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand.Execute(ptamivm.Handle);
-                                }
-                            };
-                            ptamip.Items.Add(ptami);
-                        }
-                        ptamir.Items.Add(ptamip);
-                    } else {
-                        if(!addedSeperator) {
-                            ptamir.Items.Add(new Separator());
-                            addedSeperator = true;
-                        }
-                        var ptaumi = new MenuItem();
-                        ptaumi.Header = ptamivmc[0].AppName;// + (ptamivmc[0].IsAdmin ? " (Admin)" : string.Empty) + (ptamivmc[0].IsSilent ? " (Silent)" : string.Empty);
-                        ptaumi.Icon = new Image() { Source = ptamivmc[0].AppIcon };
-                        ptaumi.Command = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;
-                        ptaumi.CommandParameter = ptamivmc[0].PasteToAppPathId;
-
-                        ptamir.Items.Add(ptaumi);
-                    }
-                }
-                var addNewMenuItem = new MenuItem();
-                addNewMenuItem.Header = "Add Application...";
-                addNewMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Icons/Silk/icons/add.png")) };
-                addNewMenuItem.Click += (s, e3) => {                    
-                    MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand.Execute(1);
-                };
-                ptamir.Items.Add(addNewMenuItem);
+            if(IsExpanded && CopyItemType == MpCopyItemType.Composite) {
+                //cm.DataContext = RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel;
+            }
+            if(CopyItemType == MpCopyItemType.RichText || CopyItemType == MpCopyItemType.Composite) {
+                cm = MpPasteToAppPathViewModelCollection.Instance.UpdatePasteToMenuItem(cm);
             }
 
             if (CopyItemType == MpCopyItemType.Image && !string.IsNullOrEmpty(CopyItemPlainText)) {
@@ -2039,36 +1893,7 @@
 
         #region Private Methods              
         
-        private string GetCurrentDetail(int detailId) {
-            string info = "I dunno";// string.Empty;
-            switch (detailId) {
-                //created
-                case 0:
-                    // TODO convert to human readable time span like "Copied an hour ago...23 days ago etc
-                    //TimeSpan dur = DateTime.Now - CopyItemCreatedDateTime;
-                    info = "Copied " + CopyItemCreatedDateTime.ToString(); //dur.ToString();
-                    break;
-                //chars/lines
-                case 1:
-                    if (CopyItemType == MpCopyItemType.Image) {
-                        info = "(" + (int)CopyItemBmp.Width + ") x (" + (int)CopyItemBmp.Height + ")";
-                    } else if (CopyItemType == MpCopyItemType.RichText) {
-                        info = CharCount + " chars | " + LineCount + " lines";
-                    } else if (CopyItemType == MpCopyItemType.FileList) {
-                        info = FileCount + " files | " + DataSizeInMb + " MB";
-                    }
-                    break;
-                //# copies/# pastes
-                case 2:
-                    info = CopyItem.CopyCount + " copies | " + CopyItem.PasteCount + " pastes";
-                    break;
-                default:
-                    info = "Unknown detailId: " + detailId;
-                    break;
-            }
-
-            return info;
-        }
+        
         #endregion
 
         #region Commands

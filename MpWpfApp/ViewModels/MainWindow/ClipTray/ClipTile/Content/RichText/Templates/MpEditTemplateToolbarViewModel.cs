@@ -145,7 +145,7 @@ namespace MpWpfApp {
             ClipTileViewModel = ctvm;
         }
 
-        public void EditTemplateToolbarBorder_Loaded(object sender, RoutedEventArgs args) {
+        public void EditTemplateToolbarBorderGrid_Loaded(object sender, RoutedEventArgs args) {
             if (ClipTileViewModel.CopyItemType != MpCopyItemType.RichText && ClipTileViewModel.CopyItemType != MpCopyItemType.Composite) {
                 return;
             }

@@ -12,7 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpClipTileRichTextBoxViewModelCollection : MpObservableCollectionViewModel<MpClipTileRichTextBoxViewModel>, ICloneable, IDropTarget {
+    public class MpClipTileRichTextBoxViewModelCollection : MpObservableCollectionViewModel<MpRtbListBoxItemRichTextBoxViewModel>, ICloneable, IDropTarget {
         #region Private Variables
         private Point _mouseDownPosition = new Point();
         private Point _lastMousePosition = new Point();
@@ -37,13 +37,13 @@ namespace MpWpfApp {
             }
         }
 
-        public MpClipTileRichTextBoxViewModel SelectedClipTileRichTextBoxViewModel {
+        public MpRtbListBoxItemRichTextBoxViewModel SelectedClipTileRichTextBoxViewModel {
             get {
                 if(HostClipTileViewModel == null || this.Count == 0) {
                     return null;
                 }
                 foreach(var rtbvm in this) {
-                    if(rtbvm.ClipTileViewModel.IsSelected) {
+                    if(rtbvm.IsSubSelected) {
                         return rtbvm;
                     }
                 }
@@ -106,10 +106,12 @@ namespace MpWpfApp {
             CanAcceptChildren = true;
             HostClipTileViewModel = ctvm;
             CollectionChanged += (s, e) => {
-                foreach (MpClipTileRichTextBoxViewModel newItem in this) {
-                    newItem.CompositeParentCopyItemId = HostClipTileViewModel.CopyItemId;
-                    newItem.CompositeSortOrderIdx = this.IndexOf(newItem);
-                    newItem.CopyItem.WriteToDatabase();
+                if(HostClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
+                    foreach (MpRtbListBoxItemRichTextBoxViewModel newItem in this) {
+                        newItem.CompositeParentCopyItemId = HostClipTileViewModel.CopyItemId;
+                        newItem.CompositeSortOrderIdx = this.IndexOf(newItem);
+                        newItem.CopyItem.WriteToDatabase();
+                    }
                 }
                 //if(this.Count > 0) {
                 //    SelectRichTextBoxViewModel(0);
@@ -153,8 +155,8 @@ namespace MpWpfApp {
             //    dropInfo.Effects = DragDropEffects.Move;
             //}
 
-            var sourceItem = dropInfo.Data as MpClipTileRichTextBoxViewModel;
-            var targetItem = dropInfo.TargetItem as MpClipTileRichTextBoxViewModel;
+            var sourceItem = dropInfo.Data as MpRtbListBoxItemRichTextBoxViewModel;
+            var targetItem = dropInfo.TargetItem as MpRtbListBoxItemRichTextBoxViewModel;
 
             if (sourceItem != null && targetItem != null) {
                 dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
@@ -163,16 +165,16 @@ namespace MpWpfApp {
         }
 
         void IDropTarget.Drop(IDropInfo dropInfo) {
-            var sourceRtbvm = dropInfo.Data as MpClipTileRichTextBoxViewModel;
+            var sourceRtbvm = dropInfo.Data as MpRtbListBoxItemRichTextBoxViewModel;
             if(sourceRtbvm == null) {
                 return;
             }
             var sourceRtbVmCollection = sourceRtbvm.RichTextBoxViewModelCollection;
 
             MpClipTileRichTextBoxViewModelCollection targetRtbVmCollection = null;
-            MpClipTileRichTextBoxViewModel targetRtbVm = null;
-            if (dropInfo.TargetItem is MpClipTileRichTextBoxViewModel) {
-                targetRtbVm = dropInfo.TargetItem as MpClipTileRichTextBoxViewModel;
+            MpRtbListBoxItemRichTextBoxViewModel targetRtbVm = null;
+            if (dropInfo.TargetItem is MpRtbListBoxItemRichTextBoxViewModel) {
+                targetRtbVm = dropInfo.TargetItem as MpRtbListBoxItemRichTextBoxViewModel;
                 targetRtbVmCollection = targetRtbVm.RichTextBoxViewModelCollection;
             } else if (dropInfo.TargetItem is MpClipTileRichTextBoxViewModelCollection) {
                 targetRtbVmCollection = dropInfo.TargetItem as MpClipTileRichTextBoxViewModelCollection;
@@ -208,11 +210,11 @@ namespace MpWpfApp {
             }
             HostClipTileViewModel.CopyItem.WriteToDatabase();
         }
-        public MpClipTileRichTextBoxViewModel GetItemFromMouseLocation(Point p) {
+        public MpRtbListBoxItemRichTextBoxViewModel GetItemFromMouseLocation(Point p) {
             var result = VisualTreeHelper.HitTest(HostClipTileViewModel.RichTextBoxListBox, p);
             if(result != null && result.VisualHit != null) {
-                if(result.VisualHit.GetType() == typeof(MpClipTileRichTextBoxViewModel)) {
-                    return (MpClipTileRichTextBoxViewModel)result.VisualHit;
+                if(result.VisualHit.GetType() == typeof(MpRtbListBoxItemRichTextBoxViewModel)) {
+                    return (MpRtbListBoxItemRichTextBoxViewModel)result.VisualHit;
                 }
                 for (int i = 0; i < this.Count; i++) {
                     double top = i > 0 ? this[i - 1].RtbListBoxItemHeight : 0;
@@ -232,7 +234,7 @@ namespace MpWpfApp {
         }
         #endregion
 
-        public new void Add(MpClipTileRichTextBoxViewModel rtbvm) {            
+        public new void Add(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {            
             base.Add(rtbvm);
             //ClipTileViewModel.RichTextBoxListBox.Items.Refresh();
         }
@@ -247,7 +249,7 @@ namespace MpWpfApp {
                             new List<FrameworkElement> { rtbvm.Rtb },
                             FrameworkElement.WidthProperty,
                             (s1, e44) => {
-                                rtbvm.UpdateLayout();
+                                //rtbvm.UpdateLayout();
                             });
                 }
             }
@@ -283,7 +285,7 @@ namespace MpWpfApp {
             }
         }
 
-        public void SelectRichTextBoxViewModel(MpClipTileRichTextBoxViewModel rtbvm) {
+        public void SelectRichTextBoxViewModel(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {
             if(!this.Contains(rtbvm)) {
                 return;
             }
@@ -318,7 +320,7 @@ namespace MpWpfApp {
         public object Clone() {
             var nrtbvmc = new MpClipTileRichTextBoxViewModelCollection(HostClipTileViewModel);
             foreach(var rtbvm in this) {
-                nrtbvmc.Add((MpClipTileRichTextBoxViewModel)rtbvm.Clone());
+                nrtbvmc.Add((MpRtbListBoxItemRichTextBoxViewModel)rtbvm.Clone());
             }
             return nrtbvmc;
         }

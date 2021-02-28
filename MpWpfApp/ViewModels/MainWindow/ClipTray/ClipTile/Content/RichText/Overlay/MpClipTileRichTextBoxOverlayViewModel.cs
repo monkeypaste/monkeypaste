@@ -22,8 +22,8 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        private MpClipTileRichTextBoxViewModel _clipTileRichTextBoxViewModel;
-        public MpClipTileRichTextBoxViewModel ClipTileRichTextBoxViewModel {
+        private MpRtbListBoxItemRichTextBoxViewModel _clipTileRichTextBoxViewModel;
+        public MpRtbListBoxItemRichTextBoxViewModel ClipTileRichTextBoxViewModel {
             get {
                 return _clipTileRichTextBoxViewModel;
             }
@@ -104,7 +104,7 @@ namespace MpWpfApp {
                    ClipTileRichTextBoxViewModel.HostClipTileViewModel == null) {
                     return Brushes.Transparent;
                 }
-                if (ClipTileRichTextBoxViewModel.ClipTileViewModel.IsHovering) {
+                if (ClipTileRichTextBoxViewModel.IsHovering) {
                     return Brushes.Blue;
                 }
                 return Brushes.Transparent;
@@ -117,13 +117,12 @@ namespace MpWpfApp {
         #region Public Methods
         public MpClipTileRichTextBoxOverlayViewModel() : this(null) { }
 
-        public MpClipTileRichTextBoxOverlayViewModel(MpClipTileRichTextBoxViewModel rtbvm) : base() {            
+        public MpClipTileRichTextBoxOverlayViewModel(MpRtbListBoxItemRichTextBoxViewModel rtbvm) : base() {            
             ClipTileRichTextBoxViewModel = rtbvm;
             ClipTileRichTextBoxViewModel.PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
-                    case nameof(ClipTileRichTextBoxViewModel.ClipTileViewModel.IsHovering):
-                    case nameof(ClipTileRichTextBoxViewModel.ClipTileViewModel.IsDragging):
-                    case nameof(ClipTileRichTextBoxViewModel.ClipTileViewModel.IsSelected):
+                    case nameof(ClipTileRichTextBoxViewModel.IsHovering):
+                    case nameof(ClipTileRichTextBoxViewModel.IsSubSelected):
                         OnPropertyChanged(nameof(OverlayBackgroundBrush));
                         OnPropertyChanged(nameof(OverlayBorderBrush));
                         break;

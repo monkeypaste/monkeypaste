@@ -16,8 +16,8 @@ namespace MpWpfApp {
 
         #region Properties
         #region View Models
-        private MpClipTileRichTextBoxViewModel _clipTileRichTextBoxViewModel = null;
-        public MpClipTileRichTextBoxViewModel ClipTileRichTextBoxViewModel {
+        private MpRtbListBoxItemRichTextBoxViewModel _clipTileRichTextBoxViewModel = null;
+        public MpRtbListBoxItemRichTextBoxViewModel ClipTileRichTextBoxViewModel {
             get {
                 return _clipTileRichTextBoxViewModel;
             }
@@ -97,7 +97,7 @@ namespace MpWpfApp {
         #region Public Methods
         public MpTemplateHyperlinkCollectionViewModel() : base() { }
 
-        public MpTemplateHyperlinkCollectionViewModel(MpClipTileViewModel parent,MpClipTileRichTextBoxViewModel rtbvm) :base() {
+        public MpTemplateHyperlinkCollectionViewModel(MpClipTileViewModel parent,MpRtbListBoxItemRichTextBoxViewModel rtbvm) :base() {
             CollectionChanged += (s, e) => {
                 OnPropertyChanged(nameof(UniqueTemplateHyperlinkViewModelListByDocOrder));
             };

@@ -188,7 +188,7 @@ namespace MpWpfApp {
                         return true;
                     }
                     foreach(var subctvm in sctvm.RichTextBoxViewModelCollection) {
-                        if(subctvm.ClipTileViewModel.IsEditingTitle) {
+                        if(subctvm.IsEditingSubTitle) {
                             return true;
                         }
                     }
@@ -204,7 +204,7 @@ namespace MpWpfApp {
                         return true;
                     }
                     foreach (var subctvm in sctvm.RichTextBoxViewModelCollection) {
-                        if (subctvm.ClipTileViewModel.IsEditingTile) {
+                        if (subctvm.IsEditingContent) {
                             return true;
                         }
                     }
@@ -220,7 +220,7 @@ namespace MpWpfApp {
                         return true;
                     }
                     foreach (var subctvm in sctvm.RichTextBoxViewModelCollection) {
-                        if (subctvm.ClipTileViewModel.IsPastingTemplateTile) {
+                        if (subctvm.IsPastingTemplate) {
                             return true;
                         }
                     }
@@ -806,11 +806,11 @@ namespace MpWpfApp {
 
         #region Drag & Drop
         void IDropTarget.DragOver(IDropInfo dropInfo) {
-            var sourceItem = dropInfo.Data as MpClipTileRichTextBoxViewModel;
+            var sourceItem = dropInfo.Data as MpRtbListBoxItemRichTextBoxViewModel;
             MpClipTileRichTextBoxViewModelCollection targetRtbVmCollection = null;
-            MpClipTileRichTextBoxViewModel targetRtbVm = null;
-            if (dropInfo.TargetItem is MpClipTileRichTextBoxViewModel) {
-                targetRtbVm = dropInfo.TargetItem as MpClipTileRichTextBoxViewModel;
+            MpRtbListBoxItemRichTextBoxViewModel targetRtbVm = null;
+            if (dropInfo.TargetItem is MpRtbListBoxItemRichTextBoxViewModel) {
+                targetRtbVm = dropInfo.TargetItem as MpRtbListBoxItemRichTextBoxViewModel;
                 targetRtbVmCollection = targetRtbVm.RichTextBoxViewModelCollection;
             } else if (dropInfo.TargetItem is MpClipTileRichTextBoxViewModelCollection) {
                 targetRtbVmCollection = dropInfo.TargetItem as MpClipTileRichTextBoxViewModelCollection;
@@ -830,11 +830,11 @@ namespace MpWpfApp {
         }
 
         void IDropTarget.Drop(IDropInfo dropInfo) {
-            var sourceItem = dropInfo.Data as MpClipTileRichTextBoxViewModel;
+            var sourceItem = dropInfo.Data as MpRtbListBoxItemRichTextBoxViewModel;
             MpClipTileRichTextBoxViewModelCollection targetRtbVmCollection = null;
-            MpClipTileRichTextBoxViewModel targetRtbVm = null;
-            if (dropInfo.TargetItem is MpClipTileRichTextBoxViewModel) {
-                targetRtbVm = dropInfo.TargetItem as MpClipTileRichTextBoxViewModel;
+            MpRtbListBoxItemRichTextBoxViewModel targetRtbVm = null;
+            if (dropInfo.TargetItem is MpRtbListBoxItemRichTextBoxViewModel) {
+                targetRtbVm = dropInfo.TargetItem as MpRtbListBoxItemRichTextBoxViewModel;
                 targetRtbVmCollection = targetRtbVm.RichTextBoxViewModelCollection;
             } else if (dropInfo.TargetItem is MpClipTileRichTextBoxViewModelCollection) {
                 targetRtbVmCollection = dropInfo.TargetItem as MpClipTileRichTextBoxViewModelCollection;

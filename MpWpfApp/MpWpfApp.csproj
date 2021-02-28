@@ -209,7 +209,7 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Base\MpClipTileContentItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModelCollection.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpClipTileRichTextBoxViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpRtbListBoxItemRichTextBoxViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpClipTileRichTextBoxViewModelCollection.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Overlay\MpClipTileRichTextBoxOverlayViewModel.cs" />
