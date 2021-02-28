@@ -444,7 +444,7 @@ namespace MpWpfApp {
             return doc.ToRichText().ToPlainText();
         }
 
-        public static FlowDocument ToFlowDocument(this string str) {
+        public static MpEventEnabledFlowDocument ToFlowDocument(this string str) {
             if(string.IsNullOrEmpty(str)) {
                 return MpHelpers.Instance.ConvertRichTextToFlowDocument(MpHelpers.Instance.ConvertPlainTextToRichText(string.Empty));
             }

@@ -13,7 +13,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace MpWpfApp {
-    public class MpClipTileRichTextBoxOverlayViewModel : MpUndoableViewModelBase<MpClipTileRichTextBoxOverlayViewModel> {
+    public class MpClipTileOverlayViewModel : MpUndoableViewModelBase<MpClipTileOverlayViewModel> {
         #region Private Variables
         private Geometry _pathData = null;
         private Canvas _rtbc = null;
@@ -22,15 +22,15 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        private MpClipTileRichTextBoxViewModel _clipTileRichTextBoxViewModel;
-        public MpClipTileRichTextBoxViewModel ClipTileRichTextBoxViewModel {
+        private MpClipTileViewModel _clipTileViewModel;
+        public MpClipTileViewModel ClipTileViewModel {
             get {
-                return _clipTileRichTextBoxViewModel;
+                return _clipTileViewModel;
             }
             set {
-                if(_clipTileRichTextBoxViewModel != value) {
-                    _clipTileRichTextBoxViewModel = value;
-                    OnPropertyChanged(nameof(ClipTileRichTextBoxViewModel));
+                if(_clipTileViewModel != value) {
+                    _clipTileViewModel = value;
+                    OnPropertyChanged(nameof(ClipTileViewModel));
                 }
             }
         }
@@ -100,11 +100,11 @@ namespace MpWpfApp {
 
         public Brush OverlayBorderBrush {
             get {
-                if (ClipTileRichTextBoxViewModel == null ||
-                   ClipTileRichTextBoxViewModel.HostClipTileViewModel == null) {
+                if (ClipTileViewModel == null ||
+                   ClipTileViewModel.ParentOrSelfClipTileViewModel == null) {
                     return Brushes.Transparent;
                 }
-                if (ClipTileRichTextBoxViewModel.ClipTileViewModel.IsHovering) {
+                if (ClipTileViewModel.IsHovering) {
                     return Brushes.Blue;
                 }
                 return Brushes.Transparent;
@@ -115,15 +115,15 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpClipTileRichTextBoxOverlayViewModel() : this(null) { }
+        public MpClipTileOverlayViewModel() : this(null) { }
 
-        public MpClipTileRichTextBoxOverlayViewModel(MpClipTileRichTextBoxViewModel rtbvm) : base() {            
-            ClipTileRichTextBoxViewModel = rtbvm;
-            ClipTileRichTextBoxViewModel.PropertyChanged += (s, e) => {
+        public MpClipTileOverlayViewModel(MpClipTileViewModel ctvm) : base() {            
+            ClipTileViewModel = ctvm;
+            ClipTileViewModel.PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
-                    case nameof(ClipTileRichTextBoxViewModel.ClipTileViewModel.IsHovering):
-                    case nameof(ClipTileRichTextBoxViewModel.ClipTileViewModel.IsDragging):
-                    case nameof(ClipTileRichTextBoxViewModel.ClipTileViewModel.IsSelected):
+                    case nameof(ClipTileViewModel.IsHovering):
+                    case nameof(ClipTileViewModel.IsDragging):
+                    case nameof(ClipTileViewModel.IsSelected):
                         OnPropertyChanged(nameof(OverlayBackgroundBrush));
                         OnPropertyChanged(nameof(OverlayBorderBrush));
                         break;
@@ -143,7 +143,7 @@ namespace MpWpfApp {
             //overlayPath.Drop += ClipTileRichTextBoxViewModel.RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_Drop;
             #endregion
 
-            UpdatePoints(ClipTileRichTextBoxViewModel.Rtb);
+            //UpdatePoints(ClipTileViewModel.Rtb);
         }
 
         public void UpdatePoints(RichTextBox rtb) {
@@ -166,7 +166,7 @@ namespace MpWpfApp {
 
             var contentStartRect = rtb.Document.ContentStart.GetCharacterRect(LogicalDirection.Forward);
             var contentEndRect = rtb.Document.ContentEnd.GetCharacterRect(LogicalDirection.Forward);
-            bool isSingleLine = ClipTileRichTextBoxViewModel.CopyItem.LineCount == 1;
+            bool isSingleLine = ClipTileViewModel.CopyItem.LineCount == 1;
 
             #region Define Points
             var tlsb = contentStartRect.BottomLeft;

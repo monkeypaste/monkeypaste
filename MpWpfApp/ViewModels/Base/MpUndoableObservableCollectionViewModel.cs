@@ -2,26 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public abstract class MpUndoableViewModelBase<T> : MpViewModelBase {
-        #region Private Variables
+    public abstract class MpUndoableObservableCollectionViewModel<T,I> : MpObservableCollectionViewModel<I> {
         private List<MpUndoableProperty<T>> _undoables;
-        #endregion
 
-        #region Properties
-
-        #endregion
-
-        #region Public Methods
         /// <summary>
         /// Initializes a new instance of <see cref="UndoableViewModelBase"/>
         /// </summary>
-        public MpUndoableViewModelBase() : base() { }
+        //public MpUndoableObservableCollectionViewModel(P parent) : base(parent) { }
 
-        #endregion
-
-        #region Protected Methods
+        
         /// <summary>
         /// Add an item to the undoable list.
         /// </summary>
@@ -59,6 +51,5 @@ namespace MpWpfApp {
                 return _undoables;
             }
         }
-        #endregion
     }
 }

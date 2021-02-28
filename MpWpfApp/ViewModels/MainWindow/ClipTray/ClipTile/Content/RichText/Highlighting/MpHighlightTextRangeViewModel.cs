@@ -103,7 +103,7 @@ namespace MpWpfApp {
                 switch (ClipTileViewModel.CopyItemType) {
                     case MpCopyItemType.Composite:
                     case MpCopyItemType.RichText:
-                        var rtb = ClipTileViewModel.RichTextBoxViewModelCollection[ContentId - 1].Rtb;
+                        var rtb = ClipTileViewModel[ContentId - 1].Rtb;
                         ClipTileViewModel.RichTextBoxListBox.ScrollIntoView(rtb);
                         rtb.ScrollToHorizontalOffset(rtb.HorizontalOffset + characterRect.Left - rtb.ActualWidth / 2d);
                         rtb.ScrollToVerticalOffset(rtb.VerticalOffset + characterRect.Top - rtb.ActualHeight / 2d);

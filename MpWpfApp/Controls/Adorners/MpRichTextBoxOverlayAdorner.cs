@@ -28,7 +28,7 @@ namespace MpWpfApp {
 
         #region Overrides
         protected override void OnRender(DrawingContext drawingContext) {
-            var rtbvm = (MpClipTileRichTextBoxViewModel)_rtbc.DataContext;  
+            var rtbvm = (MpClipTileViewModel)_rtbc.DataContext;  
             var adornedElementRect = new Rect(this.AdornedElement.DesiredSize);
             var blackPen = new Pen(Brushes.Gray, 1);
             blackPen.DashStyle = DashStyles.Dash;

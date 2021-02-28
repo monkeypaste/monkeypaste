@@ -70,7 +70,7 @@ namespace MpWpfApp {
 
         public string ItemRichText { get; set; }
 
-        public FlowDocument ItemFlowDocument { get; set; }
+        public MpEventEnabledFlowDocument ItemFlowDocument { get; set; }
 
         private string _itemCsv = string.Empty;
         public string ItemCsv { 

@@ -202,6 +202,7 @@
     <Compile Include="Utils\UndoRedo\MpUndoManager.cs" />
     <Compile Include="Utils\MpTypeHelper.cs" />
     <Compile Include="ViewModels\Base\MpObservableCollectionViewModel.cs" />
+    <Compile Include="ViewModels\Base\MpUndoableObservableCollectionViewModel.cs" />
     <Compile Include="ViewModels\Base\MpUndoableViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\AppMode\MpAppModeViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListItemViewModel.cs" />
@@ -209,10 +210,8 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Base\MpClipTileContentItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModelCollection.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpClipTileRichTextBoxViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpClipTileRichTextBoxViewModelCollection.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Overlay\MpClipTileRichTextBoxOverlayViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Overlay\MpClipTileOverlayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpEditTemplateToolbarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpPasteTemplateToolbarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateHyperlinkCollectionViewModel.cs" />
@@ -220,7 +219,7 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Toolbar\MpEditRichTextBoxToolbarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\ContextMenu\MpClipTileContextMenuItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\MpClipTileViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\MpClipTrayViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\MpClipTrayListBoxViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MpMainWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\MpSearchBoxViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Account\MpHelpViewModel.cs" />

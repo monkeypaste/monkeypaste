@@ -156,8 +156,8 @@ namespace MpWpfApp {
                     switch (ClipTileViewModel.CopyItemType) {
                         case MpCopyItemType.RichText:
                         case MpCopyItemType.Composite:
-                            for (int i = 0; i < ClipTileViewModel.RichTextBoxViewModelCollection.Count; i++) {
-                                var rtbvm = ClipTileViewModel.RichTextBoxViewModelCollection[i];
+                            for (int i = 0; i < ClipTileViewModel.Count; i++) {
+                                var rtbvm = ClipTileViewModel[i];
                                 var rtbvmtrl = MpHelpers.Instance.FindStringRangesFromPosition(rtbvm.Rtb.Document.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
                                 foreach (var mr in rtbvmtrl) {
                                     this.Add(new MpHighlightTextRangeViewModel(ClipTileViewModel,mr,i+1));
@@ -255,13 +255,13 @@ namespace MpWpfApp {
                     if (curContentId > 0 &&
                        (ClipTileViewModel.CopyItemType == MpCopyItemType.RichText ||
                         ClipTileViewModel.CopyItemType == MpCopyItemType.Composite)) {
-                        ClipTileViewModel.RichTextBoxViewModelCollection[curContentId - 1].Rtb.EndChange();
+                        ClipTileViewModel[curContentId - 1].Rtb.EndChange();
                     }
                     curContentId = hltrvm.ContentId;
                     if(curContentId > 0 && 
                        (ClipTileViewModel.CopyItemType == MpCopyItemType.RichText || 
                         ClipTileViewModel.CopyItemType == MpCopyItemType.Composite)) {
-                        ClipTileViewModel.RichTextBoxViewModelCollection[curContentId - 1].Rtb.BeginChange();
+                        ClipTileViewModel[curContentId - 1].Rtb.BeginChange();
                     }
                 }
                 hltrvm.HighlightRange();
@@ -269,7 +269,7 @@ namespace MpWpfApp {
             if (curContentId > 0 &&
                 (ClipTileViewModel.CopyItemType == MpCopyItemType.RichText ||
                 ClipTileViewModel.CopyItemType == MpCopyItemType.Composite)) {
-                ClipTileViewModel.RichTextBoxViewModelCollection[curContentId - 1].Rtb.EndChange();
+                ClipTileViewModel[curContentId - 1].Rtb.EndChange();
             }
         }
 

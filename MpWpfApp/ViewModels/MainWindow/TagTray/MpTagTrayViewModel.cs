@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpTagTrayViewModel : MpObservableCollectionViewModel<MpTagTileViewModel> {
+    public class MpTagTrayViewModel : MpUndoableObservableCollectionViewModel<MpTagTrayViewModel,MpTagTileViewModel> {
         #region View Models
         public MpTagTileViewModel SelectedTagTile {
             get {
@@ -17,6 +17,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+
         public bool IsEditingTagName {
             get {
                 return SelectedTagTile.IsEditing;
@@ -49,7 +50,7 @@ namespace MpWpfApp {
         public void RefreshAllCounts() {
             foreach(var ttvm in this) {
                 ttvm.TagClipCount = 0;
-                foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
+                foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel) {
                     if(ttvm.IsLinkedWithClipTile(ctvm)) {
                         ttvm.TagClipCount++;
                     }
@@ -77,7 +78,7 @@ namespace MpWpfApp {
                                 GetHistoryTagTileViewModel().IsSelected = true;
                             }
                         } else {
-                            foreach (MpClipTileViewModel clipTile in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
+                            foreach (MpClipTileViewModel clipTile in MainWindowViewModel.ClipTrayViewModel) {
                                 //this ensures when switching between tags the last selected tag in a list reset
                                 clipTile.IsSelected = false;
                                 if (tagChanged.IsLinkedWithClipTile(clipTile)) {
