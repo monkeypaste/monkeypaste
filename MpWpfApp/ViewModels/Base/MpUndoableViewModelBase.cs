@@ -5,23 +5,13 @@ using System.Text;
 
 namespace MpWpfApp {
     public abstract class MpUndoableViewModelBase<T> : MpViewModelBase {
-        #region Private Variables
         private List<MpUndoableProperty<T>> _undoables;
-        #endregion
 
-        #region Properties
-
-        #endregion
-
-        #region Public Methods
         /// <summary>
         /// Initializes a new instance of <see cref="UndoableViewModelBase"/>
         /// </summary>
         public MpUndoableViewModelBase() : base() { }
 
-        #endregion
-
-        #region Protected Methods
         /// <summary>
         /// Add an item to the undoable list.
         /// </summary>
@@ -59,6 +49,6 @@ namespace MpWpfApp {
                 return _undoables;
             }
         }
-        #endregion
     }
+
 }

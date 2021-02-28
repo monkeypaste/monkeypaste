@@ -3,7 +3,7 @@ using System.Linq;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpShortcutCollectionViewModel : MpUndoableObservableCollectionViewModel<MpShortcutCollectionViewModel,MpShortcutViewModel> {
+    public class MpShortcutCollectionViewModel : MpObservableCollectionViewModel<MpShortcutViewModel> {
         private static readonly Lazy<MpShortcutCollectionViewModel> _Lazy = new Lazy<MpShortcutCollectionViewModel>(() => new MpShortcutCollectionViewModel());
         public static MpShortcutCollectionViewModel Instance { get { return _Lazy.Value; } }
 
@@ -11,6 +11,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+
         #endregion
 
         #region Public Methods
@@ -111,7 +112,7 @@ namespace MpWpfApp {
         }
 
         public string RegisterViewModelShortcut(
-            object vm, 
+            MpViewModelBase vm, 
             string title, 
             string keys, 
             ICommand command,

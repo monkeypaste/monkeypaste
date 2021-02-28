@@ -33,7 +33,7 @@ namespace MpWpfApp {
         TemplateSegment,
         CopyItemSegment
     }
-    public class MpTemplateHyperlinkViewModel : MpUndoableViewModelBase<MpTemplateHyperlinkViewModel>, ICloneable {
+    public class MpTemplateHyperlinkViewModel : MpViewModelBase, ICloneable {
         #region Private Variables
         #endregion
 
@@ -407,7 +407,7 @@ namespace MpWpfApp {
                 int uniqueIdx = 1;
                 string namePrefix = "<Template #";
                 while (ClipTileViewModel.CopyItemPlainText.ToLower().Contains(namePrefix.ToLower() + uniqueIdx) || 
-                       ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == namePrefix + uniqueIdx + ">").ToList().Count > 0) {
+                       ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == namePrefix + uniqueIdx + ">").ToList().Count > 0) {
                     uniqueIdx++;
                 }
                 Brush randColor = (Brush)new SolidColorBrush(MpHelpers.Instance.GetRandomColor());
@@ -516,11 +516,11 @@ namespace MpWpfApp {
 
         public void Dispose(bool fromContextMenu) {
             if(fromContextMenu) {
-                ClipTileViewModel.Rtb.Selection.Select(TemplateHyperlinkRange.Start, TemplateHyperlinkRange.End);
-                ClipTileViewModel.Rtb.Selection.Text = string.Empty;
+                ClipTileViewModel.RichTextBoxViewModelCollection.SelectedRtb.Selection.Select(TemplateHyperlinkRange.Start, TemplateHyperlinkRange.End);
+                ClipTileViewModel.RichTextBoxViewModelCollection.SelectedRtb.Selection.Text = string.Empty;
             }
             //remove this individual token reference
-            ClipTileViewModel.TemplateHyperlinkCollectionViewModel.Remove(this);            
+            ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Remove(this);            
         }
 
         public object Clone() {
