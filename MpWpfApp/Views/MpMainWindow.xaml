@@ -1248,7 +1248,7 @@
                                           Data="{Binding}" />
                 </Grid.Resources>
                 <local:MpMultiSelectListView x:Name="ClipTray"
-                                             ItemsSource="{Binding ClipTileViewModels}"
+                                             ItemsSource="{Binding}"
                                              Width="{Binding MainWindowViewModel.ClipTrayWidth}"
                                              ScrollToSelectedItem="True"
                                              Visibility="Visible"
@@ -1869,10 +1869,10 @@
                                                         <DataTemplate>
                                                             <AdornerDecorator>
                                                                 <Canvas x:Name="RtbListBoxItemCanvas"
-                                                                    DataContext="{Binding}"
-                                                                    Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
-                                                                    Width="{Binding HostClipTileViewModel.TileContentWidth}"
-                                                                    Height="{Binding RtbListBoxItemHeight}">
+                                                                        DataContext="{Binding}"
+                                                                        Background="Orange"
+                                                                        Width="{Binding RtbCanvasWidth}"
+                                                                        Height="{Binding RtbCanvasHeight}">
                                                                     <i:Interaction.Triggers>
                                                                         <i:EventTrigger EventName="Loaded">
                                                                             <i:CallMethodAction TargetObject="{Binding}"
@@ -1882,6 +1882,7 @@
                                                                     <RichTextBox x:Name="RtbListBoxItemRichTextBox"
                                                                                  Canvas.Left="0"
                                                                                  Canvas.Top="0"
+                                                                                 Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                                                  IsReadOnly="{Binding HostClipTileViewModel.IsRtbReadOnly}"
                                                                                  IsEnabled="True"                                                                             
                                                                                  AutoWordSelection="False"
@@ -1889,15 +1890,14 @@
                                                                                  IsDocumentEnabled="True"
                                                                                  Focusable="{Binding HostClipTileViewModel.IsEditingTile}"
                                                                                  Cursor="{Binding HostClipTileViewModel.ContentCursor}"
-                                                                                 Width="{Binding RtbListBoxItemWidth}"
-                                                                                 Height="{Binding RtbListBoxItemHeight}"
-                                                                                 Margin="{Binding RtbMargin}"
+                                                                                 Width="{Binding RtbWidth}"
+                                                                                 Height="{Binding RtbHeight}"
+                                                                                 Padding="{Binding RtbMargin}"
                                                                                  IsUndoEnabled="True"
-                                                                                 Background="White"
                                                                                  VerticalAlignment="Top"
                                                                                  HorizontalAlignment="Left"
-                                                                                     ScrollViewer.HorizontalScrollBarVisibility="{Binding HostClipTileViewModel.RtbHorizontalScrollbarVisibility}"
-                                                                                     ScrollViewer.VerticalScrollBarVisibility="{Binding HostClipTileViewModel.RtbVerticalScrollbarVisibility}"
+                                                                                 ScrollViewer.HorizontalScrollBarVisibility="{Binding HostClipTileViewModel.RtbHorizontalScrollbarVisibility}"
+                                                                                 ScrollViewer.VerticalScrollBarVisibility="{Binding HostClipTileViewModel.RtbVerticalScrollbarVisibility}"
                                                                                  BorderThickness="1">
                                                                         <RichTextBox.Document>
                                                                             <local:MpEventEnabledFlowDocument PageWidth="{Binding RtbPageWidth}"
@@ -1914,21 +1914,22 @@
                                                                     </RichTextBox>
                                                                     <local:MpClipBorder x:Name="RtbListBoxItemOverlayBorder"
                                                                                         DataContext="{Binding}"
+                                                                                        Visibility="{Binding SubItemOverlayVisibility}"
                                                                                         Opacity="{Binding SubItemOverlayOpacity}"
-                                                                                        Width="{Binding HostClipTileViewModel.TileSubItemOverlayBorderWidth}"
-                                                                                        Height="{Binding RtbListBoxItemOverlayHeight}"
+                                                                                        Width="{Binding RtbOverlayWidth}"
+                                                                                        Height="{Binding RtbOverlayHeight}"
                                                                                         Background="{Binding RtbListBoxItemBackgroundColor}"
                                                                                         BorderBrush="{Binding RtbListBoxItemBorderBrush}"
                                                                                         CornerRadius="5">                                                                    
                                                                         <i:Interaction.Triggers>
                                                                             <i:EventTrigger EventName="Loaded">
                                                                                 <i:CallMethodAction TargetObject="{Binding}"
-                                                                                                        MethodName="RtbListBoxItemClipBorder_Loaded" />
+                                                                                                    MethodName="RtbListBoxItemOverlayBorder_Loaded" />
                                                                             </i:EventTrigger>
                                                                         </i:Interaction.Triggers>
                                                                         <Grid x:Name="RtbListItemOverlayBorderGrid"
-                                                                              Width="{Binding HostClipTileViewModel.TileContentWidth}"
-                                                                              Height="{Binding RtbListBoxItemOverlayHeight}">
+                                                                              Width="{Binding RtbOverlayWidth}"
+                                                                              Height="{Binding RtbOverlayHeight}">
                                                                                 <!-- Rtb ListBoxItem Clip Title -->
                                                                                 <TextBlock x:Name="RtbListBoxItemTitleTextBlock"
                                                                                            Grid.Column="0"

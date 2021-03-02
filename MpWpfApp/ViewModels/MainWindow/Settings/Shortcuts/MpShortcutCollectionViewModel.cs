@@ -112,7 +112,7 @@ namespace MpWpfApp {
         }
 
         public string RegisterViewModelShortcut(
-            MpViewModelBase vm, 
+            object vm, 
             string title, 
             string keys, 
             ICommand command,

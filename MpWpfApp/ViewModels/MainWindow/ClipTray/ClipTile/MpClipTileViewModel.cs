@@ -44,9 +44,6 @@
         #region Statics
         #endregion
 
-       
-
-
         #region Properties
 
         #region Property Reflection Referencer
@@ -446,14 +443,7 @@
                 if (_tileContentWidth != value) {
                     _tileContentWidth = value;
                     OnPropertyChanged(nameof(TileContentWidth));
-                    OnPropertyChanged(nameof(TileSubItemOverlayBorderWidth));
                 }
-            }
-        }
-
-        public double TileSubItemOverlayBorderWidth {
-            get {
-                return TileContentWidth - MpMeasurements.Instance.ClipTileSubItemOverlayMargin;
             }
         }
 
@@ -1384,6 +1374,12 @@
                             }
                         }
                         break;
+                    case nameof(IsEditingTile):
+                        RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true);
+                        break;
+                    case nameof(IsPastingTemplateTile):
+
+                        break;
                 }
             };
             RichTextBoxViewModelCollection = new MpClipTileRichTextBoxViewModelCollection(this);
@@ -1399,37 +1395,7 @@
 
         public MpClipTileViewModel(MpCopyItem ci) : this(false) {
             SetCopyItem(ci);
-        }
-
-        public void SetCopyItem(MpCopyItem ci) {
-            if (ci == null) {
-                //throw new Exception("MpClipTileViewModel error, cannot set null copyitem");
-                CopyItem = ci;
-                return;
-            }
-            if (ci.CopyItemId == 0 && !MainWindowViewModel.IsLoading) {
-                ci.WriteToDatabase();
-                _wasAddedAtRuntime = true;
-            }
-            if(ci.CopyItemType == MpCopyItemType.RichText) {
-                if(RichTextBoxViewModelCollection.Count == 0) {
-                    RichTextBoxViewModelCollection.Add(new MpRtbListBoxItemRichTextBoxViewModel(this, ci));
-                    OnPropertyChanged(nameof(CopyItem));
-                }
-            }else {
-                CopyItem = ci;
-            }
-            if (MainWindowViewModel != null) {
-                //is null during loading and the refresh isn't needed
-                MainWindowViewModel.ClipTrayViewModel.Refresh();
-            }
-        }
-
-        public void RefreshCommands() {
-            MainWindowViewModel.ClipTrayViewModel.BringSelectedClipTilesToFrontCommand.RaiseCanExecuteChanged();
-            MainWindowViewModel.ClipTrayViewModel.SendSelectedClipTilesToBackCommand.RaiseCanExecuteChanged();
-            MainWindowViewModel.ClipTrayViewModel.SpeakSelectedClipsAsyncCommand.RaiseCanExecuteChanged();
-        }
+        }        
 
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             var clipTileBorder = (MpClipBorder)sender;
@@ -1661,18 +1627,12 @@
 
             RichTextBoxListBox = rtblb;
 
-            RichTextBoxListBox.PreviewMouseLeftButtonDown += (s, e4) => {
-                bool isExtendedSelection = false;
-                if(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
-                    isExtendedSelection = true;
-                }
-                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
-                    isExtendedSelection = true;
-                }
-                if(!isExtendedSelection) {
-                    MainWindowViewModel.ClipTrayViewModel.ClearClipSelection();
-                }
-                IsSelected = true;
+            RichTextBoxListBox.PreviewMouseLeftButtonDown += (s, e4) => {     
+                var newarg = new MouseButtonEventArgs(e4.MouseDevice, e4.Timestamp,
+                                          e4.ChangedButton, e4.StylusDevice);
+                newarg.RoutedEvent = ListViewItem.MouseDownEvent;
+                newarg.Source = sender;
+                ClipBorder.RaiseEvent(newarg);                
             };
 
             //after pasting template rtb's are duplicated so clear them upon refresh
@@ -1702,7 +1662,6 @@
                 }
             };
 
-            OnPropertyChanged(nameof(TileSubItemOverlayBorderWidth));
             OnPropertyChanged(nameof(LoadingSpinnerVisibility));
             OnPropertyChanged(nameof(ContentVisibility));
             #endregion
@@ -1795,6 +1754,36 @@
             }            
         }
 
+        public void SetCopyItem(MpCopyItem ci) {
+            if (ci == null) {
+                //throw new Exception("MpClipTileViewModel error, cannot set null copyitem");
+                CopyItem = ci;
+                return;
+            }
+            if (ci.CopyItemId == 0 && !MainWindowViewModel.IsLoading) {
+                ci.WriteToDatabase();
+                _wasAddedAtRuntime = true;
+            }
+            if (ci.CopyItemType == MpCopyItemType.RichText) {
+                if (RichTextBoxViewModelCollection.Count == 0) {
+                    RichTextBoxViewModelCollection.Add(new MpRtbListBoxItemRichTextBoxViewModel(this, ci));
+                    OnPropertyChanged(nameof(CopyItem));
+                }
+            } else {
+                CopyItem = ci;
+            }
+            if (MainWindowViewModel != null) {
+                //is null during loading and the refresh isn't needed
+                MainWindowViewModel.ClipTrayViewModel.Refresh();
+            }
+        }
+
+        public void RefreshCommands() {
+            MainWindowViewModel.ClipTrayViewModel.BringSelectedClipTilesToFrontCommand.RaiseCanExecuteChanged();
+            MainWindowViewModel.ClipTrayViewModel.SendSelectedClipTilesToBackCommand.RaiseCanExecuteChanged();
+            MainWindowViewModel.ClipTrayViewModel.SpeakSelectedClipsAsyncCommand.RaiseCanExecuteChanged();
+        }
+
         public void MergeClip(MpClipTileViewModel octvm, bool mergeTags = false) {
             CopyItem = MpCopyItem.Merge(octvm.CopyItem,CopyItem,false,true);
 
@@ -1837,9 +1826,16 @@
 
         public async Task<string> GetPastableRichText() {
             if (HasTemplate) {
+                bool hasExpanded = false;
                 IsPastingTemplateTile = true;
                 TemplateRichText = string.Empty.ToRichText();
                 foreach(var rtbvm in RichTextBoxViewModelCollection) {
+                    if(rtbvm.HasTemplate && !hasExpanded) {
+                        PasteTemplateToolbarViewModel.InitWithRichTextBox(rtbvm.Rtb, true);
+                        hasExpanded = true;
+                    } else if(rtbvm.HasTemplate) {
+                        PasteTemplateToolbarViewModel.InitWithRichTextBox(rtbvm.Rtb, false);
+                    }
                     var rtbvmrt = await rtbvm.GetPastableRichText();
                     TemplateRichText = MpHelpers.Instance.CombineRichText(rtbvmrt, TemplateRichText, true);
                 }               

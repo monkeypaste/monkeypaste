@@ -180,11 +180,15 @@ namespace MpWpfApp {
                     colorContextMenu,
                     colorMenuItem,
                     (s1, e1) => {
-                        foreach (var thlvm in ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel) {
-                            if (thlvm.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName) {
-                                thlvm.TemplateBrush = (Brush)((Border)s1).Tag;
+                        if(IsSelectedNewTemplate) {
+                            SelectedTemplateHyperlinkViewModel.TemplateBrush = (Brush)((Border)s1).Tag;
+                        } else {
+                            foreach (var thlvm in ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel) {
+                                if (thlvm.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName) {
+                                    thlvm.TemplateBrush = (Brush)((Border)s1).Tag;
+                                }
                             }
-                        }
+                        }                        
                     },
                     MpHelpers.Instance.GetColorColumn(SelectedTemplateHyperlinkViewModel.TemplateBrush),
                     MpHelpers.Instance.GetColorRow(SelectedTemplateHyperlinkViewModel.TemplateBrush)
@@ -382,9 +386,13 @@ namespace MpWpfApp {
                 var sr = MpHelpers.Instance.FindStringRangeFromPosition(selectionStart, _originalText, true);
                 ClipTileViewModel.RichTextBoxViewModelCollection.SelectedRtb.Selection.Select(sr.Start, sr.End);                
             } else {
-                //restore original name/color to datacontext
-                SelectedTemplateHyperlinkViewModel.TemplateName = _originalTemplateName;
-                SelectedTemplateHyperlinkViewModel.TemplateBrush = _originalTemplateColor;
+                foreach (var thlvm in ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel) {
+                    if (thlvm.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName) {
+                        //restore original name/color to datacontext
+                        thlvm.TemplateName = _originalTemplateName;
+                        thlvm.TemplateBrush = _originalTemplateColor;
+                    }
+                }
             }
             ClipTileViewModel.IsEditingTemplate = false;
         }

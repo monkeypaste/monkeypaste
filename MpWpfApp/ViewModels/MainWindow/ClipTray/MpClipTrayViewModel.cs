@@ -30,7 +30,7 @@ using GongSolutions.Wpf.DragDrop.Utilities;
 using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace MpWpfApp {
-    public class MpClipTrayViewModel : MpUndoableViewModelBase<MpClipTrayViewModel>, IDropTarget {
+    public class MpClipTrayViewModel : MpUndoableObservableCollectionViewModel<MpClipTrayViewModel,MpClipTileViewModel>, IDropTarget {
         #region Private Variables      
         private MpMultiSelectListView _clipTrayRef = null;
         //private object _dragClipBorderElement = null;
@@ -55,30 +55,15 @@ namespace MpWpfApp {
 
         #region Properties
 
-        #region Items Source
-        private MpObservableCollection<MpClipTileViewModel> _clipTileViewModels = new MpObservableCollection<MpClipTileViewModel>();
-        public MpObservableCollection<MpClipTileViewModel> ClipTileViewModels {
-            get {
-                return _clipTileViewModels;
-            }
-            set {
-                if(_clipTileViewModels != value) {
-                    _clipTileViewModels = value;
-                    OnPropertyChanged(nameof(ClipTileViewModels));
-                }
-            }
-        }
-        #endregion
-
         public List<MpClipTileViewModel> SelectedClipTiles {
             get {
-                return ClipTileViewModels.Where(ct => ct.IsSelected).ToList();
+                return this.Where(ct => ct.IsSelected).ToList();
             }
         }
 
         public List<MpClipTileViewModel> VisibileClipTiles {
             get {
-                return ClipTileViewModels.Where(ct => ct.TileVisibility == Visibility.Visible).ToList();
+                return this.Where(ct => ct.TileVisibility == Visibility.Visible).ToList();
             }
         }
 
@@ -98,7 +83,6 @@ namespace MpWpfApp {
                 return null;
             }
         }
-        
 
         public bool IsDragging { get; set; } = false;
 
@@ -108,7 +92,7 @@ namespace MpWpfApp {
 
         public bool IsAnyTileExpanded {
             get {
-                foreach(var ctvm in ClipTileViewModels) {
+                foreach(var ctvm in this) {
                     if(ctvm.IsExpanded) {
                         return true;
                     }
@@ -158,7 +142,7 @@ namespace MpWpfApp {
 
         //public bool IsItemLoading {
         //    get {
-        //        foreach(var ctvm in ClipTileViewModels) {
+        //        foreach(var ctvm in this) {
         //            if(ctvm.IsLoading) {
         //                return true;
         //            }
@@ -358,7 +342,7 @@ namespace MpWpfApp {
             //BindingOperations.DisableCollectionSynchronization(this);
             //IsLoading = true;
             CanAcceptChildren = true;
-            ClipTileViewModels.CollectionChanged += (s, e) => {
+            this.CollectionChanged += (s, e) => {
                 OnPropertyChanged(nameof(EmptyListMessageVisibility));
                 OnPropertyChanged(nameof(ClipTrayVisibility));
             };
@@ -382,7 +366,7 @@ namespace MpWpfApp {
                         //wait till all highlighting is complete then hide non-matching tiles at the same time
                         var newVisibilityDictionary = new Dictionary<MpClipTileViewModel, Visibility>();
                         bool showMatchNav = false;
-                        foreach(MpClipTileViewModel ctvm in ClipTileViewModels) {                            
+                        foreach(MpClipTileViewModel ctvm in this) {                            
                             var newVisibility = ctvm.HighlightTextRangeViewModelCollection.PerformHighlighting(hlt).Result;
                             newVisibilityDictionary.Add(ctvm, newVisibility);
                             if(ctvm.HighlightTextRangeViewModelCollection.Count > 1) {
@@ -439,12 +423,12 @@ namespace MpWpfApp {
                     return;
                 }
                 //var dropClipBorder = (MpClipBorder)ItemsControl.ItemsControlFromItemContainer(clipTray).ItemContainerGenerator.ContainerFromItem(dropVm);
-                int dropIdx = item == null || item == clipTray ? 0 : ClipTileViewModels.IndexOf(dropVm);
+                int dropIdx = item == null || item == clipTray ? 0 : this.IndexOf(dropVm);
                 if (dropIdx >= 0) {
                     ClearClipSelection();
                     for (int i = 0; i < dragClipViewModel.Count; i++) {
-                        int dragIdx = ClipTileViewModels.IndexOf(dragClipViewModel[i]);
-                        ClipTileViewModels.Move(dragIdx, dropIdx);
+                        int dragIdx = this.IndexOf(dragClipViewModel[i]);
+                        this.Move(dragIdx, dropIdx);
                         dragClipViewModel[i].IsSelected = true;
                         if (i == 0) {
                             dragClipViewModel[i].IsClipItemFocused = true;
@@ -460,8 +444,8 @@ namespace MpWpfApp {
                 MergeClipsCommandVisibility = MergeSelectedClipsCommand.CanExecute(null) ? Visibility.Visible : Visibility.Collapsed;
 
                 MainWindowViewModel.TagTrayViewModel.UpdateTagAssociation();
-                
-                if(SelectedClipTiles.Count > 1) {
+
+                if (SelectedClipTiles.Count > 1) {
                     //order selected tiles by ascending datetime 
                     var selectedTileList = SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime).ToList();
                     foreach(var sctvm in selectedTileList) {
@@ -474,10 +458,12 @@ namespace MpWpfApp {
                 } else if(SelectedClipTiles.Count == 1) {
                     SelectedClipTiles[0].IsPrimarySelected = false;
                 }
-                foreach(var osctvm in e8.RemovedItems) {
-                    if(osctvm.GetType() == typeof(MpClipTileViewModel)) {
+
+                foreach (var osctvm in e8.RemovedItems) {
+                    if (osctvm.GetType() == typeof(MpClipTileViewModel)) {
+                        ((MpClipTileViewModel)osctvm).IsSelected = false;
                         ((MpClipTileViewModel)osctvm).IsPrimarySelected = false;
-                    }                    
+                    }
                 }
             };
 
@@ -510,7 +496,7 @@ namespace MpWpfApp {
             }
 
             //Task.Run(() => {
-            //    while(ClipTileViewModels.Count < this._totalItemsAtLoad && !IsItemLoading) {
+            //    while(this.Count < this._totalItemsAtLoad && !IsItemLoading) {
             //        Thread.Sleep(15);
             //    }
             //    IsLoading = false;
@@ -533,7 +519,7 @@ namespace MpWpfApp {
         }
 
         public void ClearClipSelection() {
-            foreach (MpClipTileViewModel clip in ClipTileViewModels) {                
+            foreach (MpClipTileViewModel clip in this) {                
                 clip.IsEditingTile = false;
                 clip.IsEditingTitle = false;
                 clip.IsPastingTemplateTile = false;
@@ -561,7 +547,7 @@ namespace MpWpfApp {
         }
 
         public void RefreshAllCommands() {
-            foreach(MpClipTileViewModel ctvm in ClipTileViewModels) {
+            foreach(MpClipTileViewModel ctvm in this) {
                 ctvm.RefreshCommands();
             }
         }
@@ -598,7 +584,7 @@ namespace MpWpfApp {
                     Console.WriteLine("Ignoring duplicate copy item");
                     existingClipTile.CopyCount++;
                     existingClipTile.CopyDateTime = DateTime.Now;
-                    ClipTileViewModels.Move(ClipTileViewModels.IndexOf(existingClipTile), 0);
+                    this.Move(this.IndexOf(existingClipTile), 0);
                     ClearClipSelection();
                     existingClipTile.IsSelected = true;
                 }
@@ -628,7 +614,7 @@ namespace MpWpfApp {
         }
 
         public void Add(MpClipTileViewModel ctvm) {
-            ClipTileViewModels.Insert(0, ctvm);
+            base.Insert(0, ctvm);
             //MainWindowViewModel.ClipTileSortViewModel.PerformSelectedSortCommand.Execute(null);
             Refresh();
         }
@@ -641,7 +627,7 @@ namespace MpWpfApp {
         }
 
         public void Remove(MpClipTileViewModel clipTileToRemove) {
-            ClipTileViewModels.Remove(clipTileToRemove);
+            base.Remove(clipTileToRemove);
             if (clipTileToRemove.CopyItem == null) {
                 //occurs when duplicate detected on background thread
                 return;
@@ -705,7 +691,7 @@ namespace MpWpfApp {
                 //resort list so pasted items are in front and paste is tracked
                 for (int i = SelectedClipTiles.Count - 1; i >= 0; i--) {
                     var sctvm = SelectedClipTiles[i];
-                    ClipTileViewModels.Move(ClipTileViewModels.IndexOf(sctvm), 0);
+                    this.Move(this.IndexOf(sctvm), 0);
                     new MpPasteHistory(sctvm.CopyItem, MpClipboardManager.Instance.LastWindowWatcher.LastHandle);
                 }
                 Refresh();
@@ -718,7 +704,7 @@ namespace MpWpfApp {
 
         public List<MpClipTileViewModel> GetClipTilesByAppId(int appId) {
             var ctvml = new List<MpClipTileViewModel>();
-            foreach(MpClipTileViewModel ctvm in ClipTileViewModels) {
+            foreach(MpClipTileViewModel ctvm in this) {
                 if(ctvm.CopyItemAppId == appId) {
                     ctvml.Add(ctvm);
                 }
@@ -727,7 +713,7 @@ namespace MpWpfApp {
         }
 
         public MpClipTileViewModel GetClipTileByCopyItemId(int copyItemId) {
-            foreach (MpClipTileViewModel ctvm in ClipTileViewModels) {
+            foreach (MpClipTileViewModel ctvm in this) {
                 if (ctvm.CopyItemId == copyItemId) {
                     return ctvm;
                 }
@@ -1016,7 +1002,7 @@ namespace MpWpfApp {
                             ClearClipSelection();
 
                             foreach (var sctvm in tempSelectedClipTiles) {
-                                ClipTileViewModels.Move(ClipTileViewModels.IndexOf(sctvm), 0);
+                                this.Move(this.IndexOf(sctvm), 0);
                                 sctvm.IsSelected = true;                                
                             }
                             _clipTrayRef.ScrollIntoView(SelectedClipTiles[0]);
@@ -1059,7 +1045,7 @@ namespace MpWpfApp {
                             ClearClipSelection();
 
                             foreach (var sctvm in tempSelectedClipTiles) {
-                                ClipTileViewModels.Move(ClipTileViewModels.IndexOf(sctvm), ClipTileViewModels.Count - 1);
+                                this.Move(this.IndexOf(sctvm), this.Count - 1);
                                 sctvm.IsSelected = true;
                             }
                             _clipTrayRef.ScrollIntoView(SelectedClipTiles[SelectedClipTiles.Count-1]);
@@ -1282,11 +1268,11 @@ namespace MpWpfApp {
                         clipTilesToRemove.Add(selectedClipTile);
                     }
                     foreach (MpClipTileViewModel tileToRemove in clipTilesToRemove) {
-                        ClipTileViewModels.Remove(tileToRemove);
+                        this.Remove(tileToRemove);
                     }
                     var psctvm = PrimarySelectedClipTile;
                     ClearClipSelection();
-                    ClipTileViewModels.Move(ClipTileViewModels.IndexOf(psctvm), 0);
+                    this.Move(this.IndexOf(psctvm), 0);
                     psctvm.IsSelected = true;
                     psctvm.IsClipItemFocused = true;
                     //this breaks mvvm but no way to refresh tokens w/o
@@ -1357,7 +1343,7 @@ namespace MpWpfApp {
                 clonedCopyItem.WriteToDatabase();
                 var ctvm = new MpClipTileViewModel(clonedCopyItem);
                 MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
-                ClipTileViewModels.Add(ctvm);
+                this.Add(ctvm);
                 ctvm.IsSelected = true;
             }
         }

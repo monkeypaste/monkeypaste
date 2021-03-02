@@ -232,7 +232,7 @@ namespace MpWpfApp {
 
             MpStandardBalloonViewModel.ShowBalloon(
                 "Monkey Paste",
-                "Successfully loaded w/ " + ClipTrayViewModel.ClipTileViewModels.Count + " items",
+                "Successfully loaded w/ " + ClipTrayViewModel.Count + " items",
                 Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
             MpSoundPlayerGroupCollectionViewModel.Instance.PlayLoadedSoundCommand.Execute(null);
@@ -245,7 +245,7 @@ namespace MpWpfApp {
         }
 
         public void ClearEdits() {
-            foreach (MpClipTileViewModel clip in ClipTrayViewModel.ClipTileViewModels) {
+            foreach (MpClipTileViewModel clip in ClipTrayViewModel) {
                 clip.IsEditingTile = false;
                 clip.IsPastingTemplateTile = false;
                 if (clip.DetectedImageObjectCollectionViewModel != null) {
@@ -449,6 +449,7 @@ namespace MpWpfApp {
                         ClipTrayViewModel.PerformPaste(pasteDataObject);
                         foreach (var sctvm in ClipTrayViewModel.SelectedClipTiles) {
                             if (sctvm.HasTemplate) {
+                                bool hasShrunk = false;
                                 //cleanup template by recreating hyperlinks
                                 //and reseting tile state
                                 //sctvm.RichTextBoxViewModels.ClearAllHyperlinks();
@@ -457,6 +458,10 @@ namespace MpWpfApp {
                                 sctvm.IsPastingTemplateTile = false;
                                 sctvm.TemplateRichText = string.Empty;
                                 foreach (var rtbvm in sctvm.RichTextBoxViewModelCollection) {
+                                    if(rtbvm.HasTemplate && !hasShrunk) {
+                                        sctvm.PasteTemplateToolbarViewModel.InitWithRichTextBox(rtbvm.Rtb, true);
+                                        hasShrunk = true;
+                                    }
                                     rtbvm.TemplateRichText = string.Empty;
                                 }
                             }

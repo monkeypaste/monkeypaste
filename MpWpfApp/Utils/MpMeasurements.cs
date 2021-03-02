@@ -143,6 +143,12 @@ namespace MpWpfApp {
             }
         }
 
+        public double RtbEditModeMinMargin {
+            get {
+                return 5;
+            }
+        }
+
         public double ClipTileTitleTextGridCanvasRight {
             get {
                 return ClipTileTitleIconCanvasLeft - 5;

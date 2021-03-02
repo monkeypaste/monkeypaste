@@ -145,16 +145,16 @@ namespace MpWpfApp {
             if (a == null) {
                 if (b == null) {
                     return 0;
-                } else {
-                    return -1;
                 }
-            } else {
-                if (b == null) {
-                    return 1;
-                } else {
-                    return a.TemplateHyperlink.ElementStart.CompareTo(b.TemplateHyperlink.ElementStart);
-                }
+                return -1;
+            } 
+            if (b == null) {
+                return 1;
             }
+            if (a.TemplateHyperlink.ElementStart.IsInSameDocument(b.TemplateHyperlink.ElementStart)) {
+                return a.TemplateHyperlink.ElementStart.CompareTo(b.TemplateHyperlink.ElementStart);
+            }
+            return -1;
         }
         #endregion
 

@@ -315,7 +315,7 @@ namespace MpWpfApp {
             set {
                 if (CopyItemTemplate != null &&
                     CopyItemTemplate.TemplateColor != value) {
-                    CopyItemTemplate.TemplateColor = value;
+                    CopyItemTemplate.TemplateColor = value;                    
                     OnPropertyChanged(nameof(TemplateBrush));
                     OnPropertyChanged(nameof(TemplateForegroundBrush));
                     OnPropertyChanged(nameof(TemplateBackgroundBrush));

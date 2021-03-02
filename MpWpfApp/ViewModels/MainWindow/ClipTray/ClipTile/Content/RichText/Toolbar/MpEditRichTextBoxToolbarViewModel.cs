@@ -131,7 +131,7 @@ namespace MpWpfApp {
             _borderStackPanel = (StackPanel)sender;
         }
 
-        public void InitWithRichTextBox(RichTextBox rtb) {
+        public void InitWithRichTextBox(RichTextBox rtb, bool doAnimation) {
             var et = _borderStackPanel.GetVisualAncestor<Border>();
             var cb = (MpClipBorder)et.GetVisualAncestor<MpClipBorder>();
             var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxCanvas");
@@ -145,7 +145,7 @@ namespace MpWpfApp {
             var addTemplateButton = (Button)et.FindName("AddTemplateButton");
             var editTemplateToolbarBorder = (Border)cb.FindName("ClipTileEditTemplateToolbar");
             var pasteTemplateToolbarBorder = (Border)cb.FindName("ClipTilePasteTemplateToolbar");
-            var ds = MpHelpers.Instance.ConvertRichTextToFlowDocument(ClipTileViewModel.CopyItemRichText).GetDocumentSize();
+            var ds = ClipTileViewModel.RichTextBoxViewModelCollection.FullDocument.GetDocumentSize();
 
             #region Editor
             ToggleButton selectedAlignmentButton = null;
@@ -363,110 +363,105 @@ namespace MpWpfApp {
             };
             #endregion
 
-            #region IsEditingTile Property Changed Animation
-            ClipTileViewModel.PropertyChanged += (s, e) => {
-                switch (e.PropertyName) {
-                    case nameof(ClipTileViewModel.IsEditingTile):
+            #region Animation
+            if(doAnimation) {
+                double tileWidthMax = Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
+                double tileWidthMin = ClipTileViewModel.TileBorderWidth;
 
-                        double tileWidthMax = Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
-                        double tileWidthMin = ClipTileViewModel.TileBorderWidth;
+                double contentWidthMax = tileWidthMax - MpMeasurements.Instance.ClipTileEditModeContentMargin;
+                double contentWidthMin = ClipTileViewModel.TileContentWidth;
 
-                        double contentWidthMax = tileWidthMax - MpMeasurements.Instance.ClipTileEditModeContentMargin;
-                        double contentWidthMin = ClipTileViewModel.TileContentWidth;
+                double rtbTopMax = ClipTileViewModel.EditRichTextBoxToolbarHeight;
+                double rtbTopMin = 0;
 
-                        double rtbTopMax = ClipTileViewModel.EditRichTextBoxToolbarHeight;
-                        double rtbTopMin = 0;
+                double editRtbToolbarTopMax = 0;
+                double editRtbToolbarTopMin = -ClipTileViewModel.EditRichTextBoxToolbarHeight;
 
-                        double editRtbToolbarTopMax = 0;
-                        double editRtbToolbarTopMin = -ClipTileViewModel.EditRichTextBoxToolbarHeight;
+                double iconLeftMax = tileWidthMax - 125;// tileWidthMax - ClipTileViewModel.TileTitleIconSize;
+                double iconLeftMin = 204;// tileWidthMin - ClipTileViewModel.TileTitleIconSize;
 
-                        double iconLeftMax = tileWidthMax - 125;// tileWidthMax - ClipTileViewModel.TileTitleIconSize;
-                        double iconLeftMin = 204;// tileWidthMin - ClipTileViewModel.TileTitleIconSize;
+                if (ClipTileViewModel.IsEditingTile) {
+                    //show rtb edit toolbar so its visible during animation
+                    ClipTileViewModel.EditToolbarVisibility = Visibility.Visible;
+                } else if (ClipTileViewModel.IsEditingTemplate) {
+                    //animate edit template toolbar when tile is minimizing
+                    ClipTileViewModel.IsEditingTemplate = false;
+                } else {
+                    //this is to remove scrollbar flicker during animation
+                    ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
+                    ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
+                }
 
-                        if (ClipTileViewModel.IsEditingTile) {
-                            //show rtb edit toolbar so its visible during animation
-                            ClipTileViewModel.EditToolbarVisibility = Visibility.Visible;
-                        } else if (ClipTileViewModel.IsEditingTemplate) {
-                            //animate edit template toolbar when tile is minimizing
-                            ClipTileViewModel.IsEditingTemplate = false;
-                        } else {
-                            //this is to remove scrollbar flicker during animation
-                            ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
-                            ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
+                MpHelpers.Instance.AnimateDoubleProperty(
+                    ClipTileViewModel.IsEditingTile ? rtbTopMin : rtbTopMax,
+                    ClipTileViewModel.IsEditingTile ? rtbTopMax : rtbTopMin,
+                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    new List<FrameworkElement> { rtblb },
+                    Canvas.TopProperty,
+                    (s1, e44) => {
+
+                    });
+
+                MpHelpers.Instance.AnimateDoubleProperty(
+                    ClipTileViewModel.IsEditingTile ? editRtbToolbarTopMin : editRtbToolbarTopMax,
+                    ClipTileViewModel.IsEditingTile ? editRtbToolbarTopMax : editRtbToolbarTopMin,
+                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    et,
+                    Canvas.TopProperty,
+                    (s1, e44) => {
+                        if (!ClipTileViewModel.IsEditingTile) {
+                            ClipTileViewModel.EditToolbarVisibility = Visibility.Collapsed;
                         }
+                    });
 
-                        MpHelpers.Instance.AnimateDoubleProperty(
-                            ClipTileViewModel.IsEditingTile ? rtbTopMin : rtbTopMax,
-                            ClipTileViewModel.IsEditingTile ? rtbTopMax : rtbTopMin,
-                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            new List<FrameworkElement> { rtblb },
-                            Canvas.TopProperty,
-                            (s1, e44) => {
+                MpHelpers.Instance.AnimateDoubleProperty(
+                    ClipTileViewModel.IsEditingTile ? tileWidthMin : tileWidthMax,
+                    ClipTileViewModel.IsEditingTile ? tileWidthMax : tileWidthMin,
+                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    new List<FrameworkElement> { cb, titleSwirl },
+                    FrameworkElement.WidthProperty,
+                    (s1, e44) => {
+                        if (ClipTileViewModel.IsEditingTile) {
+                            clipTray.ScrollIntoView(ClipTileViewModel);
+                        } else {
 
-                            });                        
+                        }
+                    });
 
-                        MpHelpers.Instance.AnimateDoubleProperty(
-                            ClipTileViewModel.IsEditingTile ? editRtbToolbarTopMin : editRtbToolbarTopMax,
-                            ClipTileViewModel.IsEditingTile ? editRtbToolbarTopMax : editRtbToolbarTopMin,
-                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            et,
-                            Canvas.TopProperty,
-                            (s1, e44) => {
-                                if (!ClipTileViewModel.IsEditingTile) {
-                                    ClipTileViewModel.EditToolbarVisibility = Visibility.Collapsed;
-                                }
-                            });
-
-                        MpHelpers.Instance.AnimateDoubleProperty(
-                            ClipTileViewModel.IsEditingTile ? tileWidthMin : tileWidthMax,
-                            ClipTileViewModel.IsEditingTile ? tileWidthMax : tileWidthMin,
-                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            new List<FrameworkElement> { cb, titleSwirl },
-                            FrameworkElement.WidthProperty,
-                            (s1, e44) => {
-                                if (ClipTileViewModel.IsEditingTile) {
-                                    clipTray.ScrollIntoView(ClipTileViewModel);
-                                } else {
-
-                                }
-                            });
-
-                        MpHelpers.Instance.AnimateDoubleProperty(
-                            ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
-                            ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
-                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            new List<FrameworkElement> { rtblb, et, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
-                            FrameworkElement.WidthProperty,
-                            (s1, e44) => {                                
-                                if(ClipTileViewModel.IsEditingTile) {
+                MpHelpers.Instance.AnimateDoubleProperty(
+                    ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
+                    ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
+                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    new List<FrameworkElement> { rtblb, et, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
+                    FrameworkElement.WidthProperty,
+                    (s1, e44) => {
+                        if (ClipTileViewModel.IsEditingTile) {
                                     //rtblb.Width -= MpMeasurements.Instance.ClipTileEditModeContentMargin * 2;
                                     //rtbc.Width = rtblb.Width;
                                 }
                                 //this is to remove scrollbar flicker during animation
                                 ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
-                                ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
-                            });
+                        ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
+                    });
 
-                        ClipTileViewModel.RichTextBoxViewModelCollection.AnimateItems(
-                            ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
-                            ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
-                            0, 0,
-                            0, 0,
-                            0, 0
-                        );
+                ClipTileViewModel.RichTextBoxViewModelCollection.AnimateItems(
+                    ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
+                    ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
+                    0, 0,
+                    0, 0,
+                    0, 0
+                );
 
-                        MpHelpers.Instance.AnimateDoubleProperty(
-                            ClipTileViewModel.IsEditingTile ? iconLeftMin : iconLeftMax,
-                            ClipTileViewModel.IsEditingTile ? iconLeftMax : iconLeftMin,
-                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            titleIconImageButton,
-                            Canvas.LeftProperty,
-                            (s1, e23) => {
+                MpHelpers.Instance.AnimateDoubleProperty(
+                    ClipTileViewModel.IsEditingTile ? iconLeftMin : iconLeftMax,
+                    ClipTileViewModel.IsEditingTile ? iconLeftMax : iconLeftMin,
+                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    titleIconImageButton,
+                    Canvas.LeftProperty,
+                    (s1, e23) => {
 
-                            });
-                        break;
-                }
-            };
+                    });
+            }
             #endregion
 
             rtb.SelectionChanged += (s, e6) => {

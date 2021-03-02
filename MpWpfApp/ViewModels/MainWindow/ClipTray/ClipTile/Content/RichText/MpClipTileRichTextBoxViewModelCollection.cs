@@ -87,7 +87,7 @@ namespace MpWpfApp {
             get {
                 double totalHeight = 0;
                 foreach(var rtbvm in this) {
-                    totalHeight += rtbvm.RtbListBoxItemHeight;
+                    totalHeight += rtbvm.RtbCanvasHeight;
                 }
                 return totalHeight;
             }
@@ -113,9 +113,6 @@ namespace MpWpfApp {
                         newItem.CopyItem.WriteToDatabase();
                     }
                 }
-                //if(this.Count > 0) {
-                //    SelectRichTextBoxViewModel(0);
-                //}
             };
         }
         
@@ -217,8 +214,8 @@ namespace MpWpfApp {
                     return (MpRtbListBoxItemRichTextBoxViewModel)result.VisualHit;
                 }
                 for (int i = 0; i < this.Count; i++) {
-                    double top = i > 0 ? this[i - 1].RtbListBoxItemHeight : 0;
-                    double bottom = this[i].RtbListBoxItemHeight;
+                    double top = i > 0 ? this[i - 1].RtbCanvasHeight : 0;
+                    double bottom = this[i].RtbCanvasHeight;
                     if(p.Y >= top && p.Y <= bottom) {
                         return this[i];
                     }
@@ -246,7 +243,7 @@ namespace MpWpfApp {
                             fromWidth,
                             toWidth,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            new List<FrameworkElement> { rtbvm.Rtb },
+                            new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc },
                             FrameworkElement.WidthProperty,
                             (s1, e44) => {
                                 //rtbvm.UpdateLayout();
@@ -262,13 +259,13 @@ namespace MpWpfApp {
                             fromTop,
                             toTop,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            new List<FrameworkElement> { rtbvm.Rtb },
+                            new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc },
                             Canvas.TopProperty,
                             (s1, e44) => {
 
                             });
-                    fromTop += rtbvm.RtbListBoxItemHeight;
-                    toTop += rtbvm.RtbListBoxItemHeight;
+                    fromTop += rtbvm.RtbCanvasHeight;
+                    toTop += rtbvm.RtbCanvasHeight;
                 }
             }
             if (toBottom > 0) {
@@ -276,32 +273,32 @@ namespace MpWpfApp {
             }
         }
 
-        public void SelectRichTextBoxViewModel(int idx) {
+        public void SelectRichTextBoxViewModel(int idx, bool isInitEdit) {
             if(idx < 0 || idx >= this.Count) {
                 return;
             }
             for (int i = 0; i < this.Count; i++) {
-                this[i].SetSelection(i == idx);
+                this[i].SetSelection(i == idx,isInitEdit);
             }
         }
 
-        public void SelectRichTextBoxViewModel(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {
+        public void SelectRichTextBoxViewModel(MpRtbListBoxItemRichTextBoxViewModel rtbvm, bool isInitEdit) {
             if(!this.Contains(rtbvm)) {
                 return;
             }
-            SelectRichTextBoxViewModel(this.IndexOf(rtbvm));
+            SelectRichTextBoxViewModel(this.IndexOf(rtbvm),isInitEdit);
         }
 
-        public void ClearSelection() {
+        public void ClearSubSelection() {
             foreach(var rtbvm in this) {
-                rtbvm.SetSelection(false);
+                rtbvm.IsSubSelected = false;
             }
         }
 
-        public void ResetSelection() {
-            ClearSelection();
+        public void ResetSubSelection() {
+            ClearSubSelection();
             if(this.Count > 0) {
-                this[0].SetSelection(true);
+                this[0].SetSelection(true,false);
             }
         }
 
