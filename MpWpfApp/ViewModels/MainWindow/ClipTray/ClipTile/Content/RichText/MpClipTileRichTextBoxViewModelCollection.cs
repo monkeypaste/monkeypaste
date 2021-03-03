@@ -243,7 +243,7 @@ namespace MpWpfApp {
                             fromWidth,
                             toWidth,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc },
+                            new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder },
                             FrameworkElement.WidthProperty,
                             (s1, e44) => {
                                 //rtbvm.UpdateLayout();
@@ -259,7 +259,7 @@ namespace MpWpfApp {
                             fromTop,
                             toTop,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc },
+                            new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder },
                             Canvas.TopProperty,
                             (s1, e44) => {
 
@@ -273,20 +273,20 @@ namespace MpWpfApp {
             }
         }
 
-        public void SelectRichTextBoxViewModel(int idx, bool isInitEdit) {
+        public void SelectRichTextBoxViewModel(int idx, bool isInitEdit, bool isInitPaste) {
             if(idx < 0 || idx >= this.Count) {
                 return;
             }
             for (int i = 0; i < this.Count; i++) {
-                this[i].SetSelection(i == idx,isInitEdit);
+                this[i].SetSelection(i == idx,isInitEdit, isInitPaste);
             }
         }
 
-        public void SelectRichTextBoxViewModel(MpRtbListBoxItemRichTextBoxViewModel rtbvm, bool isInitEdit) {
+        public void SelectRichTextBoxViewModel(MpRtbListBoxItemRichTextBoxViewModel rtbvm, bool isInitEdit, bool isInitPaste) {
             if(!this.Contains(rtbvm)) {
                 return;
             }
-            SelectRichTextBoxViewModel(this.IndexOf(rtbvm),isInitEdit);
+            SelectRichTextBoxViewModel(this.IndexOf(rtbvm),isInitEdit, isInitPaste);
         }
 
         public void ClearSubSelection() {
@@ -298,7 +298,7 @@ namespace MpWpfApp {
         public void ResetSubSelection() {
             ClearSubSelection();
             if(this.Count > 0) {
-                this[0].SetSelection(true,false);
+                this[0].SetSelection(true,false, false);
             }
         }
 

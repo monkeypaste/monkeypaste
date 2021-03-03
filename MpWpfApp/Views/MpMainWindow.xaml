@@ -1541,6 +1541,7 @@
                                             <!-- Clip Title Icon Image -->
                                             <Button x:Name="ClipTileAppIconImageButton"
                                                     Style="{StaticResource Transparent_Button}"
+                                                    Visibility="{Binding ClipTileTitleAppIconVisibility}"
                                                     RenderTransformOrigin="0.5,0.5"
                                                     Background="Transparent"
                                                     BorderThickness="0">
@@ -1870,7 +1871,7 @@
                                                             <AdornerDecorator>
                                                                 <Canvas x:Name="RtbListBoxItemCanvas"
                                                                         DataContext="{Binding}"
-                                                                        Background="Orange"
+                                                                        Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                                         Width="{Binding RtbCanvasWidth}"
                                                                         Height="{Binding RtbCanvasHeight}">
                                                                     <i:Interaction.Triggers>
@@ -1898,7 +1899,7 @@
                                                                                  HorizontalAlignment="Left"
                                                                                  ScrollViewer.HorizontalScrollBarVisibility="{Binding HostClipTileViewModel.RtbHorizontalScrollbarVisibility}"
                                                                                  ScrollViewer.VerticalScrollBarVisibility="{Binding HostClipTileViewModel.RtbVerticalScrollbarVisibility}"
-                                                                                 BorderThickness="1">
+                                                                                 BorderThickness="0">
                                                                         <RichTextBox.Document>
                                                                             <local:MpEventEnabledFlowDocument PageWidth="{Binding RtbPageWidth}"
                                                                                                               PageHeight="{Binding RtbPageHeight}"/>
@@ -1918,6 +1919,7 @@
                                                                                         Opacity="{Binding SubItemOverlayOpacity}"
                                                                                         Width="{Binding RtbOverlayWidth}"
                                                                                         Height="{Binding RtbOverlayHeight}"
+                                                                                        ToolTipService.InitialShowDelay="1000"
                                                                                         Background="{Binding RtbListBoxItemBackgroundColor}"
                                                                                         BorderBrush="{Binding RtbListBoxItemBorderBrush}"
                                                                                         CornerRadius="5">                                                                    
@@ -1927,6 +1929,27 @@
                                                                                                     MethodName="RtbListBoxItemOverlayBorder_Loaded" />
                                                                             </i:EventTrigger>
                                                                         </i:Interaction.Triggers>
+                                                                        <local:MpClipBorder.ToolTip>                                                                            
+                                                                            <ToolTip Visibility="{Binding ToolTipVisibility}" 
+                                                                                     Placement="Top">
+                                                                                <ToolTip.Template>
+                                                                                    <ControlTemplate>
+                                                                                        <local:MpClipBorder Background="White"
+                                                                                                            BorderThickness="1"
+                                                                                                            BorderBrush="Black"
+                                                                                                            Padding="5">
+                                                                                            <Image Stretch="Fill"
+                                                                                               HorizontalAlignment="Center"
+                                                                                               VerticalAlignment="Center"
+                                                                                               Source="{Binding Path=DataContext.PreviewBmpSrc,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:MpClipBorder}}}" />
+                                                                                        </local:MpClipBorder>
+                                                                                        <!--<Image Width="300"
+                                                                                               Height="500"
+                                                                                               Source="/Resources/Images/monkey.png" />-->
+                                                                                    </ControlTemplate>
+                                                                                </ToolTip.Template>
+                                                                            </ToolTip>
+                                                                        </local:MpClipBorder.ToolTip>
                                                                         <Grid x:Name="RtbListItemOverlayBorderGrid"
                                                                               Width="{Binding RtbOverlayWidth}"
                                                                               Height="{Binding RtbOverlayHeight}">

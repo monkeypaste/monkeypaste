@@ -1244,7 +1244,32 @@ namespace MpWpfApp {
             cmi.Style = (Style)Application.Current.MainWindow.FindResource("MenuItemStyle");
             cm.Width = 300;
         }
-        
+
+        public BitmapSource ConvertRichTextToBitmapSource(string rt, Size ds) {
+            System.Drawing.Size ts = new System.Drawing.Size((int)ds.Width, (int)ds.Height);
+            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(ts.Width, ts.Height)) {
+                using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(bmp)) {
+                    graphics.Clear(System.Drawing.Color.White);
+                    //graphics.DrawRtfText(rt, new System.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height), 0.75f);
+                    Graphics_DrawRtfText.DrawRtfText(graphics, rt, new System.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height), 1f);
+                    graphics.Flush();
+                    graphics.Dispose();
+                }
+                //Metafile mf = ((System.Drawing.Image)bmp) as Metafile;
+                return ConvertBitmapToBitmapSource(bmp);
+                //int resolution = 200;
+                //int width = (int)(ds.Width * resolution / bmp.HorizontalResolution);
+                //int height = (int)(ds.Height * resolution / bmp.VerticalResolution);
+                //using (System.Drawing.Bitmap nbmp = new System.Drawing.Bitmap(width, height)) {
+                //    nbmp.SetResolution(resolution, resolution);
+                //    using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(nbmp)) {
+                //        g.DrawImage(bmp, System.Drawing.Point.Empty);
+                //    }
+                //    return ConvertBitmapToBitmapSource(nbmp);
+                //}                    
+            }
+        }
+
         public int GetColorColumn(Brush scb) {
             for (int c = 0; c < _ContentColors.Count; c++) {
                 for (int r = 0; r < _ContentColors[0].Count; r++) {                    

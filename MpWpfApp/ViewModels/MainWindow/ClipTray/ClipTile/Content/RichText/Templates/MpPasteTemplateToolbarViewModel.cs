@@ -101,7 +101,7 @@ namespace MpWpfApp {
                 return _selectedTemplate;
             }
             set {
-                //if (_selectedTemplate != value) 
+                if (_selectedTemplate != value) 
                     {
                     _selectedTemplate = value;
                     if (SelectedTemplate != null) {
@@ -212,6 +212,7 @@ namespace MpWpfApp {
                         if (SelectedTemplate == null && UniqueTemplateHyperlinkViewModelListByDocOrder != null && UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 0) {
                             //SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
                             SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
+                            return;
                         } else if (SelectedTemplate == null) {
                             return;
                         }
@@ -260,7 +261,7 @@ namespace MpWpfApp {
             var nextTemplateButton = (Button)pasteTemplateToolbarBorder.FindName("NextTemplateButton");
             var pasteTemplateButton = (Button)pasteTemplateToolbarBorder.FindName("PasteTemplateButton");
             var selectedTemplateComboBox = (ComboBox)pasteTemplateToolbarBorder.FindName("SelectedTemplateComboBox");
-            var ds = MpHelpers.Instance.ConvertRichTextToFlowDocument(ClipTileViewModel.CopyItemRichText).GetDocumentSize();
+            var ds = ClipTileViewModel.RichTextBoxViewModelCollection.FullDocument.GetDocumentSize();
 
             _selectedTemplateComboBox = selectedTemplateComboBox;
             _selectedTemplateTextBox = selectedTemplateTextBox;
@@ -300,17 +301,17 @@ namespace MpWpfApp {
             };
 
             if(doAnimation) {
-                double rtbBottomMax = ClipTileViewModel.TileContentHeight;
-                double rtbBottomMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.PasteTemplateToolbarHeight;
-
-                double pasteTemplateToolbarTopMax = ClipTileViewModel.TileContentHeight;
-                double pasteTemplateToolbarTopMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.PasteTemplateToolbarHeight + 5;
-
                 double tileWidthMax = Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
                 double tileWidthMin = ClipTileViewModel.TileBorderWidth;
 
                 double contentWidthMax = tileWidthMax - MpMeasurements.Instance.ClipTileEditModeContentMargin;
                 double contentWidthMin = ClipTileViewModel.TileContentWidth;
+
+                double rtbBottomMax = ClipTileViewModel.TileContentHeight;
+                double rtbBottomMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.PasteTemplateToolbarHeight;
+
+                double pasteTemplateToolbarTopMax = ClipTileViewModel.TileContentHeight;
+                double pasteTemplateToolbarTopMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.PasteTemplateToolbarHeight + 5;
 
                 double iconLeftMax = tileWidthMax - 125;// tileWidthMax - ClipTileViewModel.TileTitleIconSize;
                 double iconLeftMin = 204;// tileWidthMin - ClipTileViewModel.TileTitleIconSize;
@@ -370,19 +371,18 @@ namespace MpWpfApp {
                     ClipTileViewModel.IsPastingTemplateTile ? contentWidthMin : contentWidthMax,
                     ClipTileViewModel.IsPastingTemplateTile ? contentWidthMax : contentWidthMin,
                     Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    new List<FrameworkElement> { rtb, rtblb, editRichTextToolbarBorder, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
+                    new List<FrameworkElement> {rtblb, editRichTextToolbarBorder, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
                     FrameworkElement.WidthProperty,
                     (s1, e44) => {
-                        rtb.Document.PageWidth = ClipTileViewModel.IsEditingTile ? contentWidthMax - rtb.Padding.Left - rtb.Padding.Right - 20 : contentWidthMin - rtb.Padding.Left - rtb.Padding.Right;// - rtb.Padding.Left - rtb.Padding.Right;
-                                clipTray.ScrollIntoView(ClipTileViewModel);
-                                //this is to remove scrollbar flicker during animation
-                                ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
+                        clipTray.ScrollIntoView(ClipTileViewModel);
+                        //this is to remove scrollbar flicker during animation
+                        ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
                         ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
                     });
 
                 ClipTileViewModel.RichTextBoxViewModelCollection.AnimateItems(
-                    ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
-                    ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
+                    ClipTileViewModel.IsPastingTemplateTile ? contentWidthMin : contentWidthMax,
+                    ClipTileViewModel.IsPastingTemplateTile ? contentWidthMax : contentWidthMin,
                     0, 0,
                     0, 0,
                     0, 0
@@ -548,7 +548,7 @@ namespace MpWpfApp {
             foreach (var uthlvm in UniqueTemplateHyperlinkViewModelListByDocOrder) {
                 uthlvmlc.Add((MpTemplateHyperlinkViewModel)uthlvm.Clone());
             }
-            ClipTileViewModel.TileVisibility = Visibility.Hidden;
+            //ClipTileViewModel.TileVisibility = Visibility.Hidden;
             var srtbvm = ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel;
             srtbvm.ClearHyperlinks();
             var docClone = srtbvm.Rtb.Document.Clone();

@@ -246,6 +246,7 @@ namespace MpWpfApp {
 
         public void ClearEdits() {
             foreach (MpClipTileViewModel clip in ClipTrayViewModel) {
+                clip.IsEditingTitle = false;
                 clip.IsEditingTile = false;
                 clip.IsPastingTemplateTile = false;
                 if (clip.DetectedImageObjectCollectionViewModel != null) {
@@ -433,7 +434,11 @@ namespace MpWpfApp {
         }
         private async void HideWindow(bool pasteSelected) {
             IDataObject pasteDataObject = null;
+
             if (pasteSelected) {
+                if(ClipTrayViewModel.IsPastingTemplate) {
+                    IsMainWindowLocked = true;
+                }
                 pasteDataObject = await ClipTrayViewModel.GetDataObjectFromSelectedClips(pasteSelected);
             }
 
@@ -446,10 +451,12 @@ namespace MpWpfApp {
                 Window.TopProperty,
                 (s, e) => {
                     if (pasteSelected) {
+                        if(ClipTrayViewModel.IsPastingTemplate) {
+                            IsMainWindowLocked = false;
+                        }
                         ClipTrayViewModel.PerformPaste(pasteDataObject);
                         foreach (var sctvm in ClipTrayViewModel.SelectedClipTiles) {
                             if (sctvm.HasTemplate) {
-                                bool hasShrunk = false;
                                 //cleanup template by recreating hyperlinks
                                 //and reseting tile state
                                 //sctvm.RichTextBoxViewModels.ClearAllHyperlinks();
@@ -457,11 +464,8 @@ namespace MpWpfApp {
                                 sctvm.TileVisibility = Visibility.Visible;
                                 sctvm.IsPastingTemplateTile = false;
                                 sctvm.TemplateRichText = string.Empty;
+                                sctvm.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
                                 foreach (var rtbvm in sctvm.RichTextBoxViewModelCollection) {
-                                    if(rtbvm.HasTemplate && !hasShrunk) {
-                                        sctvm.PasteTemplateToolbarViewModel.InitWithRichTextBox(rtbvm.Rtb, true);
-                                        hasShrunk = true;
-                                    }
                                     rtbvm.TemplateRichText = string.Empty;
                                 }
                             }

@@ -86,8 +86,6 @@ namespace MpWpfApp {
 
         public bool IsDragging { get; set; } = false;
 
-        public bool DoPaste { get; set; } = false;
-
         public Point StartDragPoint;
 
         public bool IsAnyTileExpanded {

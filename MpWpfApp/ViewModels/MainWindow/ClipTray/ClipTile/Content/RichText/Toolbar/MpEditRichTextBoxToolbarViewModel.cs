@@ -387,6 +387,7 @@ namespace MpWpfApp {
                     //animate edit template toolbar when tile is minimizing
                     ClipTileViewModel.IsEditingTemplate = false;
                 } else {
+                    clipTray.ScrollIntoView(ClipTileViewModel);
                     //this is to remove scrollbar flicker during animation
                     ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
                     ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
@@ -435,12 +436,8 @@ namespace MpWpfApp {
                     new List<FrameworkElement> { rtblb, et, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
                     FrameworkElement.WidthProperty,
                     (s1, e44) => {
-                        if (ClipTileViewModel.IsEditingTile) {
-                                    //rtblb.Width -= MpMeasurements.Instance.ClipTileEditModeContentMargin * 2;
-                                    //rtbc.Width = rtblb.Width;
-                                }
-                                //this is to remove scrollbar flicker during animation
-                                ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
+                        //this is to remove scrollbar flicker during animation
+                        ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
                         ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
                     });
 

@@ -496,6 +496,12 @@
         #endregion
 
         #region Visibility Properties
+        public Visibility ClipTileTitleAppIconVisibility {
+            get {
+                return IsExpanded ? Visibility.Hidden : Visibility.Visible;
+            }
+        }
+
         private Visibility _editToolbarVisibility = Visibility.Collapsed;
         public Visibility EditToolbarVisibility {
             get {
@@ -834,6 +840,7 @@
                     OnPropertyChanged(nameof(TileContentHeight));
                     OnPropertyChanged(nameof(TileRtbHeight));
                     OnPropertyChanged(nameof(IsExpanded));
+                    OnPropertyChanged(nameof(ClipTileTitleAppIconVisibility));
                 }
             }
         }
@@ -851,6 +858,7 @@
                     OnPropertyChanged(nameof(TileContentHeight));
                     OnPropertyChanged(nameof(TileRtbHeight));
                     OnPropertyChanged(nameof(IsExpanded));
+                    OnPropertyChanged(nameof(ClipTileTitleAppIconVisibility));
                 }
             }
         }
@@ -868,6 +876,7 @@
                     OnPropertyChanged(nameof(TileContentHeight));
                     OnPropertyChanged(nameof(TileRtbHeight));
                     OnPropertyChanged(nameof(IsExpanded));
+                    OnPropertyChanged(nameof(ClipTileTitleAppIconVisibility));
                 }
             }
         }        
@@ -1347,7 +1356,7 @@
         #endregion
 
         #region Public Methods
-        public MpClipTileViewModel(bool isPlaceHolder = true) : base() {
+        public MpClipTileViewModel(bool isPlaceholder) : base() {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
                     case nameof(IsSelected):
@@ -1361,7 +1370,7 @@
                         } else {
                             IsEditingTile = false;
                             IsEditingTemplate = false;
-                            IsPastingTemplateTile = false;
+                            //IsPastingTemplateTile = false;
                         }
                         RefreshCommands();
                         break;
@@ -1375,10 +1384,10 @@
                         }
                         break;
                     case nameof(IsEditingTile):
-                        RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true);
+                        RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
                         break;
                     case nameof(IsPastingTemplateTile):
-
+                        //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
                         break;
                 }
             };
@@ -1388,15 +1397,36 @@
             PasteTemplateToolbarViewModel = new MpPasteTemplateToolbarViewModel(this);
             HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
 
-            if(isPlaceHolder) {
-                SetCopyItem(null);
+            if (isPlaceholder) {
+                CopyItem = null;
             }
         }
 
         public MpClipTileViewModel(MpCopyItem ci) : this(false) {
-            SetCopyItem(ci);
-        }        
+            if (ci == null) {
+                //throw new Exception("MpClipTileViewModel error, cannot set null copyitem");
+                CopyItem = ci;
+                return;
+            }
+            if (ci.CopyItemId == 0 && !MainWindowViewModel.IsLoading) {
+                ci.WriteToDatabase();
+                _wasAddedAtRuntime = true;
+            }
+            if (ci.CopyItemType == MpCopyItemType.RichText) {
+                if (RichTextBoxViewModelCollection.Count == 0) {
+                    RichTextBoxViewModelCollection.Add(new MpRtbListBoxItemRichTextBoxViewModel(this, ci));
+                    OnPropertyChanged(nameof(CopyItem));
+                }
+            } else {
+                CopyItem = ci;
+            }
+            if (MainWindowViewModel != null) {
+                //is null during loading and the refresh isn't needed
+                MainWindowViewModel.ClipTrayViewModel.Refresh();
+            }
+        }
 
+        #region Loading Initializers
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             var clipTileBorder = (MpClipBorder)sender;
             var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
@@ -1691,7 +1721,9 @@
 
             FileListBox = flb;
         }
+        #endregion
 
+        #region Context Menu
         public void ClipTile_ContextMenu_Loaded(object sender, RoutedEventArgs e) {
             var cm = (ContextMenu)sender;
             cm.DataContext = this;
@@ -1753,30 +1785,31 @@
                         tagTile.IsLinkedWithClipTile(this)));
             }            
         }
+        #endregion
 
-        public void SetCopyItem(MpCopyItem ci) {
-            if (ci == null) {
-                //throw new Exception("MpClipTileViewModel error, cannot set null copyitem");
-                CopyItem = ci;
-                return;
-            }
-            if (ci.CopyItemId == 0 && !MainWindowViewModel.IsLoading) {
-                ci.WriteToDatabase();
-                _wasAddedAtRuntime = true;
-            }
-            if (ci.CopyItemType == MpCopyItemType.RichText) {
-                if (RichTextBoxViewModelCollection.Count == 0) {
-                    RichTextBoxViewModelCollection.Add(new MpRtbListBoxItemRichTextBoxViewModel(this, ci));
-                    OnPropertyChanged(nameof(CopyItem));
-                }
-            } else {
-                CopyItem = ci;
-            }
-            if (MainWindowViewModel != null) {
-                //is null during loading and the refresh isn't needed
-                MainWindowViewModel.ClipTrayViewModel.Refresh();
-            }
-        }
+        //public void SetCopyItem(MpCopyItem ci) {
+        //    if (ci == null) {
+        //        //throw new Exception("MpClipTileViewModel error, cannot set null copyitem");
+        //        CopyItem = ci;
+        //        return;
+        //    }
+        //    if (ci.CopyItemId == 0 && !MainWindowViewModel.IsLoading) {
+        //        ci.WriteToDatabase();
+        //        _wasAddedAtRuntime = true;
+        //    }
+        //    if (ci.CopyItemType == MpCopyItemType.RichText) {
+        //        if (RichTextBoxViewModelCollection.Count == 0) {
+        //            RichTextBoxViewModelCollection.Add(new MpRtbListBoxItemRichTextBoxViewModel(this, ci));
+        //            OnPropertyChanged(nameof(CopyItem));
+        //        }
+        //    } else {
+        //        CopyItem = ci;
+        //    }
+        //    if (MainWindowViewModel != null) {
+        //        //is null during loading and the refresh isn't needed
+        //        MainWindowViewModel.ClipTrayViewModel.Refresh();
+        //    }
+        //}
 
         public void RefreshCommands() {
             MainWindowViewModel.ClipTrayViewModel.BringSelectedClipTilesToFrontCommand.RaiseCanExecuteChanged();
@@ -1830,11 +1863,13 @@
                 IsPastingTemplateTile = true;
                 TemplateRichText = string.Empty.ToRichText();
                 foreach(var rtbvm in RichTextBoxViewModelCollection) {
-                    if(rtbvm.HasTemplate && !hasExpanded) {
-                        PasteTemplateToolbarViewModel.InitWithRichTextBox(rtbvm.Rtb, true);
-                        hasExpanded = true;
-                    } else if(rtbvm.HasTemplate) {
-                        PasteTemplateToolbarViewModel.InitWithRichTextBox(rtbvm.Rtb, false);
+                    if(rtbvm.HasTemplate) {
+                        if(!hasExpanded) {
+                            RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(rtbvm, false, true);
+                            hasExpanded = true;
+                        } else {
+                            RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(rtbvm, false, false);
+                        }                        
                     }
                     var rtbvmrt = await rtbvm.GetPastableRichText();
                     TemplateRichText = MpHelpers.Instance.CombineRichText(rtbvmrt, TemplateRichText, true);
