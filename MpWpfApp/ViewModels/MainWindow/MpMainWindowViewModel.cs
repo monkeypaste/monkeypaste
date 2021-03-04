@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 using DataGridAsyncDemoMVVM.filtersort;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -245,12 +246,17 @@ namespace MpWpfApp {
         }
 
         public void ClearEdits() {
-            foreach (MpClipTileViewModel clip in ClipTrayViewModel) {
-                clip.IsEditingTitle = false;
-                clip.IsEditingTile = false;
-                clip.IsPastingTemplateTile = false;
-                if (clip.DetectedImageObjectCollectionViewModel != null) {
-                    foreach (var diovm in clip.DetectedImageObjectCollectionViewModel) {
+            foreach (var ctvm in ClipTrayViewModel) {
+                ctvm.IsEditingTitle = false;
+                ctvm.IsEditingTile = false;
+                ctvm.IsEditingTemplate = false;
+                ctvm.IsPastingTemplateTile = false;
+                foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                    rtbvm.IsEditingContent = false;
+                    rtbvm.IsEditingSubTitle = false;
+                }
+                if (ctvm.DetectedImageObjectCollectionViewModel != null) {
+                    foreach (var diovm in ctvm.DetectedImageObjectCollectionViewModel) {
                         diovm.IsNameReadOnly = true;
                     }
                 }
@@ -304,6 +310,30 @@ namespace MpWpfApp {
                     if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
                         if (ShowWindowCommand.CanExecute(null)) {
                             ShowWindowCommand.Execute(null);
+                        }
+                    }
+                };
+
+                ApplicationHook.MouseClick += (s, e) => {
+                    if (ClipTrayViewModel.IsPastingTemplate) {
+                        return;
+                    }
+                    var p = MpHelpers.Instance.GetMousePosition(ClipTrayViewModel.ClipTrayListView);
+                    var hitTestResult = VisualTreeHelper.HitTest(ClipTrayViewModel.ClipTrayListView, p)?.VisualHit;
+                    if (hitTestResult == null) {
+                        MainWindowViewModel.ClearEdits();
+                    } else {
+                        var hitElement = hitTestResult as FrameworkElement;
+                        if(hitElement == null ||
+                           hitElement.DataContext == null ||
+                           hitElement.DataContext is MpClipTrayViewModel ||
+                           hitElement.DataContext is MpAppModeViewModel ||
+                           hitElement.DataContext is MpSearchBoxViewModel ||
+                           hitElement.DataContext is MpTagTileViewModel ||
+                           hitElement.DataContext is MpTagTrayViewModel || 
+                           hitElement.DataContext is MpClipTileSortViewModel ||
+                           hitElement.DataContext is MpMainWindowViewModel) {
+                            MainWindowViewModel.ClearEdits();
                         }
                     }
                 };

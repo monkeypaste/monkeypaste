@@ -138,7 +138,7 @@ namespace MpWpfApp {
             var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
             var ctttg = (Grid)cb.FindName("ClipTileTitleTextGrid");
             //var rtb = ClipTileViewModel.GetRtb();//rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
-            var clipTray = MainWindowViewModel.ClipTrayViewModel.GetClipTray();
+            var clipTray = MainWindowViewModel.ClipTrayViewModel.ClipTrayListView;
             var clipTrayScrollViewer = clipTray.GetDescendantOfType<ScrollViewer>();
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
             var titleSwirl = (Image)cb.FindName("TitleSwirl");

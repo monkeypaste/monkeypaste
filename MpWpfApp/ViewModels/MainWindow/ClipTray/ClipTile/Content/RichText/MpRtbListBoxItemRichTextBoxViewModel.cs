@@ -344,7 +344,10 @@ namespace MpWpfApp {
                    IsSubSelected) {
                     return Visibility.Collapsed;
                 }
-                return Visibility.Visible;
+                if(IsCompositeChild && (IsHovering || IsEditingSubTitle)) {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
             }
         }
 
@@ -420,31 +423,31 @@ namespace MpWpfApp {
         }
         public string TemplateRichText { get; set; }
 
-        private double _previewWidth = 0;
-        public double PreviewWidth {
-            get {
-                return _previewWidth;
-            }
-            set {
-                if (_previewWidth != value) {
-                    _previewWidth = value;
-                    OnPropertyChanged(nameof(PreviewWidth));
-                }
-            }
-        }
+        //private double _previewWidth = 0;
+        //public double PreviewWidth {
+        //    get {
+        //        return _previewWidth;
+        //    }
+        //    set {
+        //        if (_previewWidth != value) {
+        //            _previewWidth = value;
+        //            OnPropertyChanged(nameof(PreviewWidth));
+        //        }
+        //    }
+        //}
 
-        private double _previewHeight = 0;
-        public double PreviewHeight {
-            get {
-                return _previewHeight;
-            }
-            set {
-                if (_previewHeight != value) {
-                    _previewHeight = value;
-                    OnPropertyChanged(nameof(PreviewHeight));
-                }
-            }
-        }
+        //private double _previewHeight = 0;
+        //public double PreviewHeight {
+        //    get {
+        //        return _previewHeight;
+        //    }
+        //    set {
+        //        if (_previewHeight != value) {
+        //            _previewHeight = value;
+        //            OnPropertyChanged(nameof(PreviewHeight));
+        //        }
+        //    }
+        //}
 
         private BitmapSource _previewBmpSrc;
         public BitmapSource PreviewBmpSrc {
@@ -765,19 +768,80 @@ namespace MpWpfApp {
                 }
             };
         }
-        public void RtbListBoxItemOverlayBorder_Loaded(object sender, RoutedEventArgs args) {
-            
-            RtbListBoxItemClipBorder = (MpClipBorder)sender;
-            var titleTextGrid = (Grid)RtbListBoxItemClipBorder.FindName("RtbListItemOverlayBorderGrid");
-            RtbListBoxItemTitleTextBlock = (TextBlock)titleTextGrid.FindName("RtbListBoxItemTitleTextBlock");
-            RtbListBoxItemTitleTextBox = (TextBox)titleTextGrid.FindName("RtbListBoxItemTitleTextBox");
-            
+
+        public void ClipTileRichTextBoxListItemCanvas_Loaded(object sender, RoutedEventArgs e) {
+            Rtbc = (Canvas)sender;
+            Rtb = (RichTextBox)Rtbc.FindName("RtbListBoxItemRichTextBox");
+            RtbListBoxItemClipBorder = (MpClipBorder)Rtbc.FindName("RtbListBoxItemOverlayBorder");
+            RtbListBoxItemTitleTextBlock = (TextBlock)Rtbc.FindName("RtbListBoxItemTitleTextBlock");
+            RtbListBoxItemTitleTextBox = (TextBox)Rtbc.FindName("RtbListBoxItemTitleTextBox");
+
+            Rtb.Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(CopyItemRichText);
+
+            Rtb.SelectAll();
+            var rtbAlignment = Rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty);
+            if (rtbAlignment == null || 
+                rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}" ||
+                (TextAlignment)rtbAlignment == TextAlignment.Justify) {
+                Rtb.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
+            }
+            Rtb.CaretPosition = Rtb.Document.ContentStart;
+
+            PreviewBmpSrc = FlowDocumentToBitmap(Rtb.Document.Clone(), Rtb.Document.GetDocumentSize());
+            //PreviewWidth = ds.Width + 5;
+            //PreviewHeight = ds.Height + 5;
+
+
+            if (HasTemplate) {
+                ClearHyperlinks();
+            }
+            CreateHyperlinks();
+
+            #region Drag & Drop
+            #endregion
+
+            Rtb.GotFocus += (s, e2) => {
+                if(HostClipTileViewModel.IsExpanded) {
+                    SetSelection(true, false, false);
+                }
+            };
+
+
+            if (HostClipTileViewModel.WasAddedAtRuntime) {
+                //force new items to have left alignment
+                Rtb.SelectAll();
+                Rtb.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
+                Rtb.CaretPosition = Rtb.Document.ContentStart;
+            }
+
+            //if(CompositeSortOrderIdx <= 0) {
+            //    SetSelection(true);
+            //}           
+
+            RtbcAdornerLayer = AdornerLayer.GetAdornerLayer(Rtbc);
+            RtbcAdornerLayer.Add(new MpRichTextBoxOverlayAdorner(Rtbc));
+
             //if (!IsCompositeChild) {
             //    return;
             //}
-
-            RtbListBoxItemClipBorder.MouseLeave += (s, e2) => {
+            Rtbc.MouseEnter += (s, e2) => {
+                IsHovering = true;
+            };
+            Rtbc.MouseLeave += (s, e2) => {
                 IsHovering = false;
+            };
+            Rtbc.LostFocus += (s, e4) => {
+                if (!IsSubSelected) {
+                    IsEditingSubTitle = false;
+                }
+            };
+            Rtbc.PreviewMouseLeftButtonDown += (s, e5) => {
+                if (e5.ClickCount == 2 && !HostClipTileViewModel.IsEditingTile) {
+                    //only for richtext type
+                    HostClipTileViewModel.EditClipCommand.Execute(null);
+                    e5.Handled = true;
+                    return;
+                }
             };
 
             RtbListBoxItemTitleTextBlock.PreviewMouseLeftButtonDown += (s, e7) => {
@@ -808,65 +872,9 @@ namespace MpWpfApp {
                     IsEditingSubTitle = false;
                 }
             };
-            
+
             OnPropertyChanged(nameof(SubItemOverlayOpacity));
             OnPropertyChanged(nameof(SubItemOverlayVisibility));
-        }
-
-        public void ClipTileRichTextBoxListItemCanvas_Loaded(object sender, RoutedEventArgs e) {
-            Rtbc = (Canvas)sender;
-            Rtb = (RichTextBox)Rtbc.FindName("RtbListBoxItemRichTextBox");           
-
-            Rtb.Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(CopyItemRichText);
-
-            Rtb.SelectAll();
-            var rtbAlignment = Rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty);
-            if (rtbAlignment == null || 
-                rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}" ||
-                (TextAlignment)rtbAlignment == TextAlignment.Justify) {
-                Rtb.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
-            }
-            Rtb.CaretPosition = Rtb.Document.ContentStart;
-
-            var document = Rtb.Document.Clone();
-            var ds = Rtb.Document.GetDocumentSize();
-            //ds.Height *= 2;
-            document.ColumnWidth = ds.Width;
-            document.PagePadding = new Thickness(0);
-            document.PageHeight = ds.Height;
-            document.PageWidth = ds.Width;
-            PreviewBmpSrc = FlowDocumentToBitmap(document, ds);
-            PreviewWidth = ds.Width + 5;
-            PreviewHeight = ds.Height + 5;
-
-
-            if (HasTemplate) {
-                ClearHyperlinks();
-            }
-            CreateHyperlinks();
-
-            #region Drag & Drop
-            #endregion
-
-            Rtb.GotFocus += (s, e2) => {
-                if(HostClipTileViewModel.IsExpanded) {
-                    SetSelection(true, false, false);
-                }
-            };
-
-            if (HostClipTileViewModel.WasAddedAtRuntime) {
-                //force new items to have left alignment
-                Rtb.SelectAll();
-                Rtb.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
-                Rtb.CaretPosition = Rtb.Document.ContentStart;
-            }
-
-            //if(CompositeSortOrderIdx <= 0) {
-            //    SetSelection(true);
-            //}           
-
-            RtbcAdornerLayer = AdornerLayer.GetAdornerLayer(Rtbc);
-            RtbcAdornerLayer.Add(new MpRichTextBoxOverlayAdorner(Rtbc));
 
             OnPropertyChanged(nameof(RtbMargin));
             OnPropertyChanged(nameof(RtbHeight));
@@ -874,6 +882,7 @@ namespace MpWpfApp {
         }
 
         public BitmapSource FlowDocumentToBitmap(FlowDocument document, Size size) {
+            document.PagePadding = new Thickness(0);
             document.ColumnWidth = size.Width;
             document.PageWidth = size.Width;
             document.PageHeight = size.Height;

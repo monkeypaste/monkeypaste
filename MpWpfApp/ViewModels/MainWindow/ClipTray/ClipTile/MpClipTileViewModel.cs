@@ -727,7 +727,8 @@
 
         public Cursor ContentCursor {
             get {
-                if (IsEditingTile) {
+                if (CopyItemType == MpCopyItemType.RichText || 
+                    CopyItemType == MpCopyItemType.Composite) {
                     return Cursors.IBeam;
                 }
                 return Cursors.Arrow;
@@ -1428,22 +1429,21 @@
 
         #region Loading Initializers
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            var clipTileBorder = (MpClipBorder)sender;
+            ClipBorder = (MpClipBorder)sender;
             var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
-            ClipBorder = clipTileBorder;//clipTileBorder.GetVisualAncestor<MpClipBorder>();
 
-            clipTileBorder.MouseEnter += (s, e1) => {
+            ClipBorder.MouseEnter += (s, e1) => {
                 IsHovering = true;
             };
-            clipTileBorder.MouseLeave += (s, e2) => {
+            ClipBorder.MouseLeave += (s, e2) => {
                 IsHovering = false;
             };
-            clipTileBorder.LostFocus += (s, e4) => {
+            ClipBorder.LostFocus += (s, e4) => {
                 if (!IsSelected) {
                     IsEditingTitle = false;
                 }
             };
-            clipTileBorder.PreviewMouseLeftButtonDown += (s, e5) => {
+            ClipBorder.PreviewMouseLeftButtonDown += (s, e5) => {
                 if (e5.ClickCount == 2 && !IsEditingTile) {
                     //only for richtext type
                     EditClipCommand.Execute(null);
@@ -1452,7 +1452,7 @@
                 }
             };
             
-            clipTileBorder.PreviewKeyDown += (s, e6) => {
+            ClipBorder.PreviewKeyDown += (s, e6) => {
                 if (CopyItemType != MpCopyItemType.RichText) {
                     return;
                 }
@@ -1467,7 +1467,7 @@
             };
 
             #region Tile Drag & Drop (all unused atm)
-            clipTileBorder.PreviewMouseLeftButtonDown += (s, e5) => {
+            ClipBorder.PreviewMouseLeftButtonDown += (s, e5) => {
                 return;
                 IsMouseDown = true;
                 StartDragPoint = e5.GetPosition(clipTray);
@@ -1477,7 +1477,7 @@
             //Strategy: ALL selected items, regardless of type will have text,rtf,img, and file representations
             //          that are appended as text and filelists but  merged into images (by default)
             // TODO Have option to append items to one long image
-            clipTileBorder.PreviewMouseMove += (s, e7) => {
+            ClipBorder.PreviewMouseMove += (s, e7) => {
                 return;
                 var curDragPoint = e7.GetPosition(clipTray);
                 //these tests ensure tile is not being dragged INTO another clip tile or outside tray
@@ -1504,7 +1504,7 @@
                 }
             };
 
-            clipTileBorder.PreviewMouseLeftButtonUp += (s, e8) => {
+            ClipBorder.PreviewMouseLeftButtonUp += (s, e8) => {
                 return;
                 IsMouseDown = false;
                 IsDragging = false;
@@ -1667,6 +1667,7 @@
 
             //after pasting template rtb's are duplicated so clear them upon refresh
             if (CopyItemType == MpCopyItemType.Composite) {
+                RichTextBoxViewModelCollection.Clear();
                 foreach (var cci in CopyItem.CompositeItemList) {
                     RichTextBoxViewModelCollection.Add(new MpRtbListBoxItemRichTextBoxViewModel(this, cci));
                 }

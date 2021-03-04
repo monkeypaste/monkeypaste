@@ -32,8 +32,7 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 namespace MpWpfApp {
     public class MpClipTrayViewModel : MpUndoableObservableCollectionViewModel<MpClipTrayViewModel,MpClipTileViewModel>, IDropTarget {
         #region Private Variables      
-        private MpMultiSelectListView _clipTrayRef = null;
-        //private object _dragClipBorderElement = null;
+       //private object _dragClipBorderElement = null;
 
         Stopwatch sw = new Stopwatch();
 
@@ -55,6 +54,7 @@ namespace MpWpfApp {
 
         #region Properties
 
+        #region View Models
         public List<MpClipTileViewModel> SelectedClipTiles {
             get {
                 return this.Where(ct => ct.IsSelected).ToList();
@@ -83,7 +83,101 @@ namespace MpWpfApp {
                 return null;
             }
         }
+        #endregion
 
+        #region Controls
+        public MpMultiSelectListView ClipTrayListView { get; set; }
+        #endregion
+
+        #region Selection 
+        public string SelectedClipTilesPlainText {
+            get {
+                string outStr = string.Empty;
+                foreach (var sctvm in SelectedClipTiles) {
+                    if (sctvm.HasTemplate) {
+                        outStr += MpHelpers.Instance.ConvertRichTextToPlainText(sctvm.TemplateRichText) + Environment.NewLine;
+                    } else {
+                        outStr += sctvm.CopyItemPlainText + Environment.NewLine;
+                    }
+                }
+                return outStr.Trim('\r', '\n');
+            }
+        }
+
+        //public string SelectedClipTilesRichText {
+        //    get {
+        //        string outStr = MpHelpers.Instance.ConvertPlainTextToRichText(string.Empty);
+        //        foreach (var sctvm in SelectedClipTiles) {
+        //            outStr = MpHelpers.Instance.CombineRichText2(outStr, sctvm.CopyItemRichText);                    
+        //        }
+        //        return outStr;
+        //    }
+        //}
+
+        public BitmapSource SelectedClipTilesBmp {
+            get {
+                var bmpList = new List<BitmapSource>();
+                foreach (var sctvm in SelectedClipTiles) {
+                    bmpList.Add(sctvm.CopyItemBmp);
+                }
+                return MpHelpers.Instance.CombineBitmap(bmpList, false);
+            }
+        }
+
+        public string SelectedClipTilesCsv {
+            get {
+                string outStr = string.Empty;
+                foreach (var sctvm in SelectedClipTiles) {
+                    outStr = sctvm.CopyItem.ItemPlainText + ",";
+                }
+                return outStr;
+            }
+        }
+
+        public string[] SelectedClipTilesFileList {
+            get {
+                var fl = new List<string>();
+                foreach (var sctvm in SelectedClipTiles) {
+                    foreach (string f in sctvm.CopyItemFileDropList) {
+                        fl.Add(f);
+                    }
+                }
+                return fl.ToArray();
+            }
+        }
+
+        //public IDataObject SelectedClipTilesDropDataObject {
+        //    get {
+        //        IDataObject d = new DataObject();
+        //        d.SetData(DataFormats.Rtf, SelectedClipTilesRichText);
+        //        d.SetData(DataFormats.Text, SelectedClipTilesPlainText);
+        //        d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
+        //        d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
+        //        d.SetData(DataFormats.CommaSeparatedValue, SelectedClipTilesCsv);
+        //        d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
+        //        return d;
+        //    }
+        //}
+
+        //public IDataObject SelectedClipTilesPasteDataObject {
+        //    get {
+        //        IDataObject d = new DataObject();
+        //        //only when pasting into explorer must have file drop
+        //        if(string.IsNullOrEmpty(ClipboardManager.LastWindowWatcher.LastTitle.Trim())) {
+        //            d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
+        //        }                
+        //        d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
+        //        d.SetData(DataFormats.CommaSeparatedValue, SelectedClipTilesCsv);
+        //        d.SetData(DataFormats.Rtf, SelectedClipTilesRichText);
+        //        d.SetData(DataFormats.Text, SelectedClipTilesPlainText);
+        //        d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
+        //        return d;
+        //    }
+        //}
+
+        #endregion
+
+        #region State
         public bool IsDragging { get; set; } = false;
 
         public Point StartDragPoint;
@@ -208,7 +302,10 @@ namespace MpWpfApp {
                 }
                 return false;
             }
-        }        
+        }
+        #endregion
+
+        #region Visibility
 
         public Visibility EmptyListMessageVisibility {
             get {
@@ -241,91 +338,8 @@ namespace MpWpfApp {
             }
         }
 
-        public string SelectedClipTilesPlainText {
-            get {
-                string outStr = string.Empty;
-                foreach (var sctvm in SelectedClipTiles) {
-                    if (sctvm.HasTemplate) {
-                        outStr += MpHelpers.Instance.ConvertRichTextToPlainText(sctvm.TemplateRichText) + Environment.NewLine;
-                    } else {
-                        outStr += sctvm.CopyItemPlainText + Environment.NewLine;
-                    }
-                }
-                return outStr.Trim('\r','\n');
-            }
-        }
-
-        //public string SelectedClipTilesRichText {
-        //    get {
-        //        string outStr = MpHelpers.Instance.ConvertPlainTextToRichText(string.Empty);
-        //        foreach (var sctvm in SelectedClipTiles) {
-        //            outStr = MpHelpers.Instance.CombineRichText2(outStr, sctvm.CopyItemRichText);                    
-        //        }
-        //        return outStr;
-        //    }
-        //}
+        #endregion
         
-        public BitmapSource SelectedClipTilesBmp {
-            get {
-                var bmpList = new List<BitmapSource>();
-                foreach (var sctvm in SelectedClipTiles) {
-                    bmpList.Add(sctvm.CopyItemBmp);
-                }
-                return MpHelpers.Instance.CombineBitmap(bmpList, false);
-            }
-        }
-
-        public string SelectedClipTilesCsv {
-            get {
-                string outStr = string.Empty;
-                foreach (var sctvm in SelectedClipTiles) {
-                    outStr = sctvm.CopyItem.ItemPlainText + ",";
-                }
-                return outStr;
-            }
-        }
-
-        public string[] SelectedClipTilesFileList {
-            get {
-                var fl = new List<string>();
-                foreach (var sctvm in SelectedClipTiles) {
-                    foreach (string f in sctvm.CopyItemFileDropList) {
-                        fl.Add(f);
-                    }
-                }
-                return fl.ToArray();
-            }
-        }
-
-        //public IDataObject SelectedClipTilesDropDataObject {
-        //    get {
-        //        IDataObject d = new DataObject();
-        //        d.SetData(DataFormats.Rtf, SelectedClipTilesRichText);
-        //        d.SetData(DataFormats.Text, SelectedClipTilesPlainText);
-        //        d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
-        //        d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
-        //        d.SetData(DataFormats.CommaSeparatedValue, SelectedClipTilesCsv);
-        //        d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
-        //        return d;
-        //    }
-        //}
-
-        //public IDataObject SelectedClipTilesPasteDataObject {
-        //    get {
-        //        IDataObject d = new DataObject();
-        //        //only when pasting into explorer must have file drop
-        //        if(string.IsNullOrEmpty(ClipboardManager.LastWindowWatcher.LastTitle.Trim())) {
-        //            d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
-        //        }                
-        //        d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
-        //        d.SetData(DataFormats.CommaSeparatedValue, SelectedClipTilesCsv);
-        //        d.SetData(DataFormats.Rtf, SelectedClipTilesRichText);
-        //        d.SetData(DataFormats.Text, SelectedClipTilesPlainText);
-        //        d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
-        //        return d;
-        //    }
-        //}
-
         #endregion
 
         #region Events
@@ -380,9 +394,10 @@ namespace MpWpfApp {
             };
 
             var clipTray = (MpMultiSelectListView)sender;
+            var clipTrayCanvas = clipTray.GetVisualAncestor<Canvas>();
             var scrollViewer = clipTray.GetDescendantOfType<ScrollViewer>();
 
-            _clipTrayRef = clipTray;
+            ClipTrayListView = clipTray;
 
             #region Drag/Drop
             clipTray.DragEnter += (s, e1) => {
@@ -465,15 +480,6 @@ namespace MpWpfApp {
                 }
             };
 
-            clipTray.MouseLeftButtonUp += (s, e4) => {
-                var p = e4.MouseDevice.GetPosition(clipTray);
-                var hitTestResult = VisualTreeHelper.HitTest(clipTray, p);
-                if (!IsPastingTemplate && (hitTestResult == null || hitTestResult.VisualHit.GetVisualAncestor<ListViewItem>() == null)) {
-                    MainWindowViewModel.ClearEdits();
-                    //e4.Handled = true;
-                }
-            };
-
             //ClipboardManager = new MpClipboardManager((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow));
             MpClipboardManager.Instance.Init();
 
@@ -534,12 +540,12 @@ namespace MpWpfApp {
                 VisibileClipTiles[0].IsSelected = true;
                 if(!MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
                     VisibileClipTiles[0].IsClipItemFocused = true;
-                    if(GetClipTray() != null) {
-                        ((ListViewItem)GetClipTray().ItemContainerGenerator.ContainerFromItem(VisibileClipTiles[0]))?.Focus();
+                    if(ClipTrayListView != null) {
+                        ((ListViewItem)ClipTrayListView.ItemContainerGenerator.ContainerFromItem(VisibileClipTiles[0]))?.Focus();
                     }
                 }
-                if(GetClipTray() != null) {
-                    GetClipTray().ScrollViewer.ScrollToHorizontalOffset(0);
+                if(ClipTrayListView != null) {
+                    ClipTrayListView.ScrollViewer.ScrollToHorizontalOffset(0);
                 }
             }
         }
@@ -603,7 +609,7 @@ namespace MpWpfApp {
                     Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
                 }
                 MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(nctvm);
-                //GetClipTray().Items.Refresh();
+                //ClipTrayListView.Items.Refresh();
             }
             ResetClipSelection();
 
@@ -611,7 +617,7 @@ namespace MpWpfApp {
             Console.WriteLine("Time to create new copyitem: " + sw.ElapsedMilliseconds + " ms");
         }
 
-        public void Add(MpClipTileViewModel ctvm) {
+        public new void Add(MpClipTileViewModel ctvm) {
             base.Insert(0, ctvm);
             //MainWindowViewModel.ClipTileSortViewModel.PerformSelectedSortCommand.Execute(null);
             Refresh();
@@ -621,10 +627,10 @@ namespace MpWpfApp {
             //if(MainWindowViewModel == null || MainWindowViewModel.IsLoading) {
             //    return;
             //}
-           _clipTrayRef?.Items.Refresh();
+           ClipTrayListView?.Items.Refresh();
         }
 
-        public void Remove(MpClipTileViewModel clipTileToRemove) {
+        public new void Remove(MpClipTileViewModel clipTileToRemove) {
             base.Remove(clipTileToRemove);
             if (clipTileToRemove.CopyItem == null) {
                 //occurs when duplicate detected on background thread
@@ -783,9 +789,6 @@ namespace MpWpfApp {
             return filePath;
         }
 
-        public MpMultiSelectListView GetClipTray() {
-            return _clipTrayRef;
-        }
         #endregion
 
         #region Drag & Drop
@@ -1003,7 +1006,7 @@ namespace MpWpfApp {
                                 this.Move(this.IndexOf(sctvm), 0);
                                 sctvm.IsSelected = true;                                
                             }
-                            _clipTrayRef.ScrollIntoView(SelectedClipTiles[0]);
+                            ClipTrayListView.ScrollIntoView(SelectedClipTiles[0]);
                         }));
             }
             finally {
@@ -1046,7 +1049,7 @@ namespace MpWpfApp {
                                 this.Move(this.IndexOf(sctvm), this.Count - 1);
                                 sctvm.IsSelected = true;
                             }
-                            _clipTrayRef.ScrollIntoView(SelectedClipTiles[SelectedClipTiles.Count-1]);
+                            ClipTrayListView.ScrollIntoView(SelectedClipTiles[SelectedClipTiles.Count-1]);
                         }));
             } finally {
                 IsBusy = false;
