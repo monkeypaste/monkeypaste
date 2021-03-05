@@ -10,7 +10,7 @@ using System.Windows.Interactivity;
 using System.Windows.Media.Animation;
 
 namespace MpWpfApp {
-    public class MpAnimatedVisibilityFadeBehavior : Behavior<MpClipBorder> {
+    public class MpAnimatedVisibilityFadeBehavior : Behavior<Border> {
         public Duration AnimationDuration { get; set; }
         public Visibility InitialState { get; set; }
 

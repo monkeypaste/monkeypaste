@@ -248,10 +248,14 @@ namespace MpWpfApp {
         public void ClearEdits() {
             foreach (var ctvm in ClipTrayViewModel) {
                 ctvm.IsEditingTitle = false;
-                ctvm.IsEditingTile = false;
+                if(ctvm.IsEditingTile) {
+                    ClipTrayViewModel.ShrinkClipTile(ctvm, false); 
+                }
                 ctvm.IsEditingTemplate = false;
-                ctvm.IsPastingTemplateTile = false;
-                foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                if (ctvm.IsPastingTemplateTile) {
+                    ClipTrayViewModel.ShrinkClipTile(ctvm, true);
+                }
+                foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
                     rtbvm.IsEditingContent = false;
                     rtbvm.IsEditingSubTitle = false;
                 }
@@ -314,29 +318,34 @@ namespace MpWpfApp {
                     }
                 };
 
-                ApplicationHook.MouseClick += (s, e) => {
-                    if (ClipTrayViewModel.IsPastingTemplate) {
-                        return;
-                    }
-                    var p = MpHelpers.Instance.GetMousePosition(ClipTrayViewModel.ClipTrayListView);
-                    var hitTestResult = VisualTreeHelper.HitTest(ClipTrayViewModel.ClipTrayListView, p)?.VisualHit;
-                    if (hitTestResult == null) {
-                        MainWindowViewModel.ClearEdits();
-                    } else {
-                        var hitElement = hitTestResult as FrameworkElement;
-                        if(hitElement == null ||
-                           hitElement.DataContext == null ||
-                           hitElement.DataContext is MpClipTrayViewModel ||
-                           hitElement.DataContext is MpAppModeViewModel ||
-                           hitElement.DataContext is MpSearchBoxViewModel ||
-                           hitElement.DataContext is MpTagTileViewModel ||
-                           hitElement.DataContext is MpTagTrayViewModel || 
-                           hitElement.DataContext is MpClipTileSortViewModel ||
-                           hitElement.DataContext is MpMainWindowViewModel) {
-                            MainWindowViewModel.ClearEdits();
-                        }
-                    }
-                };
+                //ApplicationHook.MouseClick += (s, e) => {
+                //    if (ClipTrayViewModel.IsPastingTemplate || e.Button != System.Windows.Forms.MouseButtons.Left) {
+                //        return;
+                //    }
+                //    var p = MpHelpers.Instance.GetMousePosition(ClipTrayViewModel.ClipTrayContainerGrid);
+                //    var hitTestResult = VisualTreeHelper.HitTest(ClipTrayViewModel.ClipTrayContainerGrid, p)?.VisualHit;
+                //    if (hitTestResult == null) {
+                //        MainWindowViewModel.ClearEdits();
+                //    } else {
+                //        var hitTypeName = hitTestResult.ToString();
+                //        var hitElement = hitTestResult as FrameworkElement;
+                //        if(hitElement == null && hitTypeName != @"MS.Internal.PtsHost.PageVisual") {
+                //            return;
+                //        }
+                //        if(/*hitElement == null ||*/
+                //           hitTypeName == @"MS.Internal.PtsHost.PageVisual" ||
+                //           hitElement.DataContext == null ||
+                //           hitElement.DataContext is MpClipTrayViewModel ||
+                //           hitElement.DataContext is MpAppModeViewModel ||
+                //           hitElement.DataContext is MpSearchBoxViewModel ||
+                //           hitElement.DataContext is MpTagTileViewModel ||
+                //           hitElement.DataContext is MpTagTrayViewModel || 
+                //           hitElement.DataContext is MpClipTileSortViewModel ||
+                //           hitElement.DataContext is MpMainWindowViewModel) {
+                //            MainWindowViewModel.ClearEdits();
+                //        }
+                //    }
+                //};
 
                 ApplicationHook.KeyPress += (s, e) => {
                     if (ClipTrayViewModel != null && ClipTrayViewModel.IsAnyTileExpanded) {
@@ -492,7 +501,9 @@ namespace MpWpfApp {
                                 //sctvm.RichTextBoxViewModels.ClearAllHyperlinks();
                                 //sctvm.RichTextBoxViewModels.CreateAllHyperlinks();
                                 sctvm.TileVisibility = Visibility.Visible;
-                                sctvm.IsPastingTemplateTile = false;
+
+                                ClipTrayViewModel.ShrinkClipTile(sctvm, true);
+                                //sctvm.IsPastingTemplateTile = false;
                                 sctvm.TemplateRichText = string.Empty;
                                 sctvm.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
                                 foreach (var rtbvm in sctvm.RichTextBoxViewModelCollection) {

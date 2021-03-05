@@ -40,8 +40,7 @@ namespace MpWpfApp {
         #region Properties
 
         #region Layout Properties      
-
-        
+        public double ExpandedTileSize { get; private set; }
         #endregion
 
         #region Visibility Properties
@@ -146,6 +145,7 @@ namespace MpWpfApp {
             var editTemplateToolbarBorder = (Border)cb.FindName("ClipTileEditTemplateToolbar");
             var pasteTemplateToolbarBorder = (Border)cb.FindName("ClipTilePasteTemplateToolbar");
             var ds = ClipTileViewModel.RichTextBoxViewModelCollection.FullDocument.GetDocumentSize();
+            ExpandedTileSize = Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
 
             #region Editor
             ToggleButton selectedAlignmentButton = null;

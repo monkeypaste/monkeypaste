@@ -516,7 +516,7 @@ namespace MpWpfApp {
                 return _isHovering;
             }
             set {
-                if (_isHovering != value && !IsEditingSubTitle) {
+                if (_isHovering != value && !MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle) {
                     _isHovering = value;
                     OnPropertyChanged(nameof(IsHovering));
                     OnPropertyChanged(nameof(SubItemOverlayOpacity));
@@ -762,6 +762,16 @@ namespace MpWpfApp {
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(IsSubSelected):
+                        if(!IsSubSelected && IsEditingSubTitle) {
+                            IsEditingSubTitle = false;
+                        }
+                        if(IsSubSelected) {
+                            foreach(var rtbvm in HostClipTileViewModel.RichTextBoxViewModelCollection) {
+                                if(rtbvm != this) {
+                                    rtbvm.IsSubSelected = false;
+                                }
+                            }
+                        }
                         HostClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(HostClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel));
                         HostClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(HostClipTileViewModel.RichTextBoxViewModelCollection.SelectedRtb));
                         break;
@@ -830,21 +840,24 @@ namespace MpWpfApp {
             Rtbc.MouseLeave += (s, e2) => {
                 IsHovering = false;
             };
-            Rtbc.LostFocus += (s, e4) => {
-                if (!IsSubSelected) {
-                    IsEditingSubTitle = false;
-                }
-            };
+            //Rtbc.LostFocus += (s, e4) => {
+            //    if (!IsSubSelected) {
+            //        IsEditingSubTitle = false;
+            //    }
+            //};
+
             Rtbc.PreviewMouseLeftButtonDown += (s, e5) => {
                 if (e5.ClickCount == 2 && !HostClipTileViewModel.IsEditingTile) {
                     //only for richtext type
-                    HostClipTileViewModel.EditClipCommand.Execute(null);
+                    HostClipTileViewModel.ToggleEditClipCommand.Execute(null);
                     e5.Handled = true;
                     return;
                 }
             };
 
             RtbListBoxItemTitleTextBlock.PreviewMouseLeftButtonDown += (s, e7) => {
+                //HostClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
+                IsSubSelected = true;
                 IsEditingSubTitle = true;
                 e7.Handled = true;
             };
@@ -864,9 +877,9 @@ namespace MpWpfApp {
                 tbx.Focus();
                 tbx.SelectAll();
             };
-            RtbListBoxItemTitleTextBox.LostFocus += (s, e4) => {
-                IsEditingSubTitle = false;
-            };
+            //RtbListBoxItemTitleTextBox.LostFocus += (s, e4) => {
+            //    IsEditingSubTitle = false;
+            //};
             RtbListBoxItemTitleTextBox.PreviewKeyDown += (s, e5) => {
                 if (e5.Key == Key.Enter || e5.Key == Key.Escape) {
                     IsEditingSubTitle = false;

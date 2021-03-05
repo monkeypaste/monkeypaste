@@ -1371,6 +1371,9 @@
                         } else {
                             IsEditingTile = false;
                             IsEditingTemplate = false;
+                            foreach(var rtbvm in RichTextBoxViewModelCollection) {
+                                rtbvm.IsEditingSubTitle = false;
+                            }
                             //IsPastingTemplateTile = false;
                         }
                         RefreshCommands();
@@ -1446,7 +1449,7 @@
             ClipBorder.PreviewMouseLeftButtonDown += (s, e5) => {
                 if (e5.ClickCount == 2 && !IsEditingTile) {
                     //only for richtext type
-                    EditClipCommand.Execute(null);
+                    ToggleEditClipCommand.Execute(null);
                     e5.Handled = true;
                     return;
                 }
@@ -1658,6 +1661,9 @@
             RichTextBoxListBox = rtblb;
 
             RichTextBoxListBox.PreviewMouseLeftButtonDown += (s, e4) => {     
+                if(IsSelected) {
+                    return;
+                }
                 var newarg = new MouseButtonEventArgs(e4.MouseDevice, e4.Timestamp,
                                           e4.ChangedButton, e4.StylusDevice);
                 newarg.RoutedEvent = ListViewItem.MouseDownEvent;
@@ -1850,7 +1856,12 @@
 
             //clear any search highlighting when saving the document then restore after save
             HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(null);
-            CopyItemRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(RichTextBoxViewModelCollection.FullDocument);
+            
+            foreach(var rtbvm in RichTextBoxViewModelCollection) {
+                //property change will write the copyitem to the database
+                rtbvm.CopyItemRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(rtbvm.Rtb.Document);
+            }
+            //CopyItemRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(RichTextBoxViewModelCollection.FullDocument);
             HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(null);
 
             RichTextBoxViewModelCollection.CreateAllHyperlinks();
@@ -1866,6 +1877,9 @@
                 foreach(var rtbvm in RichTextBoxViewModelCollection) {
                     if(rtbvm.HasTemplate) {
                         if(!hasExpanded) {
+                            //tile will be shrunk in on completed of hide window
+                            MainWindowViewModel.ClipTrayViewModel.ExpandClipTile(this, true);
+
                             RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(rtbvm, false, true);
                             hasExpanded = true;
                         } else {
@@ -1874,8 +1888,7 @@
                     }
                     var rtbvmrt = await rtbvm.GetPastableRichText();
                     TemplateRichText = MpHelpers.Instance.CombineRichText(rtbvmrt, TemplateRichText, true);
-                }               
-
+                }
                 return TemplateRichText;
             }
             return CopyItemRichText;
@@ -1984,24 +1997,50 @@
             //MpHelpers.Instance.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
         }
 
-        private RelayCommand _editClipCommand;
-        public ICommand EditClipCommand {
+        private RelayCommand _toggleEditTitleCommand;
+        public ICommand ToggleEditTitleCommand {
             get {
-                if (_editClipCommand == null) {
-                    _editClipCommand = new RelayCommand(EditClip, CanEditClip);
+                if (_toggleEditTitleCommand == null) {
+                    _toggleEditTitleCommand = new RelayCommand(ToggleEditTitle, CanToggleEditTitle);
                 }
-                return _editClipCommand;
+                return _toggleEditTitleCommand;
             }
         }
-        private bool CanEditClip() {
+        private bool CanToggleEditTitle() {
+            if (MainWindowViewModel.IsLoading) {
+                return false;
+            }
+            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1;
+        }
+        private void ToggleEditTitle() {
+            IsEditingTitle = !IsEditingTitle;
+        }
+
+        private RelayCommand _toggleEditClipCommand;
+        public ICommand ToggleEditClipCommand {
+            get {
+                if (_toggleEditClipCommand == null) {
+                    _toggleEditClipCommand = new RelayCommand(ToggleEditClip, CanToggleEditClip);
+                }
+                return _toggleEditClipCommand;
+            }
+        }
+        private bool CanToggleEditClip() {
             return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
                   (CopyItemType == MpCopyItemType.RichText || CopyItemType == MpCopyItemType.Composite) && !IsPastingTemplateTile &&
                   !IsEditingTile;
         }
-        private void EditClip() {
-            IsEditingTile = true;
-            //IsPastingTemplateTile = true;
-            IsSelected = true;
+        private void ToggleEditClip() {
+            if(IsEditingTile == false && !IsSelected) {
+                IsSelected = true;
+            }
+            IsEditingTile = !IsEditingTile;
+
+            if(IsEditingTile) {
+                MainWindowViewModel.ClipTrayViewModel.ExpandClipTile(this, false);
+            } else {
+                MainWindowViewModel.ClipTrayViewModel.ShrinkClipTile(this, false);
+            }
         }
 
         private RelayCommand _cancelEditClipTextCommand;

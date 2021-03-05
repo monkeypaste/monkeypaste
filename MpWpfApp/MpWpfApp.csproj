@@ -108,6 +108,7 @@
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
     <Compile Include="AttachedProperties\MpTextBoxBehavior.cs" />
+    <Compile Include="AttachedProperties\MpVisibilityAnimation.cs" />
     <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
     <Compile Include="Behaviors\MpKineticBehavior.cs" />
     <Compile Include="Controls\Adorners\MpRichTextBoxOverlayAdorner.cs" />

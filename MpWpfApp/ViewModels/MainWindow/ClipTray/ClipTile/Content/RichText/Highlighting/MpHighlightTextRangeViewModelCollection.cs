@@ -92,7 +92,7 @@ namespace MpWpfApp {
             MainWindowViewModel.SearchBoxViewModel.NextMatchClicked += SearchBoxViewModel_NextMatchClicked;
         }
 
-        public async Task<Visibility> PerformHighlighting(string hlt) {
+        public async Task<Visibility> PerformHighlightingAsync(string hlt) {
             HighlightTaskCount++;
             if (ClipTileViewModel.MainWindowViewModel.IsLoading || ClipTileViewModel.IsLoading) {
                 HighlightTaskCount--;
@@ -187,6 +187,7 @@ namespace MpWpfApp {
                             break;
                     }
                     Console.WriteLine("Ending highlighting clip with title: " + ClipTileViewModel.CopyItemTitle);
+                    OnPropertyChanged(nameof(SelectedHighlightTextRangeViewModel));
                     result = this.Count > 0 ? Visibility.Visible:Visibility.Collapsed;
                 }),
                 DispatcherPriority.Background);
