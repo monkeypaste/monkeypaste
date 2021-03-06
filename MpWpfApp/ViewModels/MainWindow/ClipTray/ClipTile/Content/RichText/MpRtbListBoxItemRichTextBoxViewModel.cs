@@ -161,18 +161,20 @@ namespace MpWpfApp {
                     return 0;
                 }
                 if (HostClipTileViewModel.IsExpanded) {
-                    if (HostClipTileViewModel.RichTextBoxViewModelCollection.Count == 1) {
-                        return Math.Max(
+                    //if (HostClipTileViewModel.RichTextBoxViewModelCollection.Count == 1) {
+                    //    return Math.Max(
+                    //        RtbPageHeight + RtbMargin.Top + RtbMargin.Bottom,
+                    //        HostClipTileViewModel.TileRtbHeight);
+                    //}
+                    //if(IsSubSelected || !IsHovering) {
+                    //    return RtbPageHeight + RtbMargin.Top + RtbMargin.Bottom;
+                    //}
+                    return Math.Max(
                             RtbPageHeight + RtbMargin.Top + RtbMargin.Bottom,
-                            HostClipTileViewModel.TileRtbHeight);
-                    }
-                    if(IsSubSelected || !IsHovering) {
-                        return CopyItem.ItemFlowDocument.GetDocumentSize().Height;
-                    }
-                    
+                            HostClipTileViewModel.TileContentHeight);
                 }
                 if (HostClipTileViewModel.RichTextBoxViewModelCollection.Count == 1) {
-                    return HostClipTileViewModel.TileRtbHeight - RtbMargin.Left - RtbMargin.Right;
+                    return HostClipTileViewModel.TileContentHeight - RtbMargin.Top - RtbMargin.Bottom;
                 }
                 
                 var doc = CopyItem.ItemFlowDocument;
@@ -225,24 +227,6 @@ namespace MpWpfApp {
                     return 0;
                 }
                 return RtbHeight;
-            }
-        }
-
-        public double RtbOverlayWidth {
-            get {
-                if (HostClipTileViewModel == null) {
-                    return 0;
-                }
-                return RtbCanvasWidth;
-            }
-        }
-
-        public double RtbOverlayHeight {
-            get {
-                if (HostClipTileViewModel == null) {
-                    return 0;
-                }
-                return RtbCanvasHeight;
             }
         }
 
@@ -527,8 +511,6 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(RtbCanvasHeight));
                     OnPropertyChanged(nameof(RtbCanvasWidth));
                     OnPropertyChanged(nameof(RtbCanvasHeight));
-                    OnPropertyChanged(nameof(RtbOverlayWidth));
-                    OnPropertyChanged(nameof(RtbOverlayHeight));
                     OnPropertyChanged(nameof(RtbPageWidth));
                     OnPropertyChanged(nameof(RtbPageHeight));
                     OnPropertyChanged(nameof(ToolTipVisibility));

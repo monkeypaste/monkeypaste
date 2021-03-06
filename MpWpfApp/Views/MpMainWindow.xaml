@@ -1338,15 +1338,11 @@
                                                 Height="{Binding TileBorderHeight}"
                                                 Visibility="{Binding TileVisibility, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                 Focusable="True"
-                                                local:MpVisibilityAnimation.IsActive="True"
+                                                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                                ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                                 Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                 ToolTipService.ShowDuration="1000"
                                                 CornerRadius="10">
-                                <!--<ii:Interaction.Behaviors>
-                                    <local:MpAnimatedVisibilityFadeBehavior  x:Name="ClipTileVisibilityFadeBehavior"
-                                                                            AnimationDuration="0:0:3.3"
-                                                                            InitialState="Visible" />
-                                </ii:Interaction.Behaviors>-->
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Loaded">
                                         <i:CallMethodAction TargetObject="{Binding}"
@@ -1361,7 +1357,8 @@
                                     <DropShadowEffect Color="DarkGray"
                                                       BlurRadius="7" />
                                 </local:MpClipBorder.Effect>-->
-                                <Grid Background="#FF3D3D3D">
+                                <Grid Background="#FF3D3D3D"
+                                      Visibility="{Binding ContainerVisibility}">
                                     <Grid Background="White"
                                           Visibility="{Binding ContentVisibility}">
                                         <Grid.ContextMenu>
@@ -1852,7 +1849,7 @@
                                                     </StackPanel>
                                                 </Border>
                                                 <ListBox x:Name="ClipTileRichTextBoxListBox"
-                                                         BorderThickness="0"
+                                                         BorderThickness="1"
                                                          SelectionMode="Single"
                                                          dd:DragDrop.IsDragSource="True"
                                                          dd:DragDrop.IsDropTarget="True"
@@ -1860,10 +1857,12 @@
                                                          ItemsSource="{Binding RichTextBoxViewModelCollection}"
                                                          Focusable="{Binding IsEditingTile}"
                                                          IsEnabled="True"
-                                                         ScrollViewer.HorizontalScrollBarVisibility="{Binding RtbHorizontalScrollbarVisibility}"
+                                                         Cursor="{Binding ContentCursor}"
+                                                         ScrollViewer.CanContentScroll="False"
+                                                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                                          ScrollViewer.VerticalScrollBarVisibility="{Binding RtbVerticalScrollbarVisibility}"
                                                          Width="{Binding TileContentWidth}"
-                                                         Height="{Binding TileRtbHeight}"
+                                                         Height="{Binding TileContentHeight}"
                                                          Padding="0">
                                                     <i:Interaction.Triggers>
                                                         <i:EventTrigger EventName="Loaded">
@@ -1955,17 +1954,33 @@
                                                                     <local:MpClipBorder x:Name="RtbListBoxItemOverlayBorder"
                                                                                         DataContext="{Binding}"
                                                                                         Visibility="{Binding SubItemOverlayVisibility}"
-                                                                                        Width="{Binding RtbOverlayWidth}"
-                                                                                        Height="{Binding RtbOverlayHeight}"
+                                                                                        Width="{Binding RtbCanvasWidth}"
+                                                                                        Height="{Binding RtbCanvasHeight}"
                                                                                         ToolTipService.InitialShowDelay="1000"
                                                                                         Background="{Binding RtbListBoxItemBackgroundColor}"
                                                                                         BorderBrush="{Binding RtbListBoxItemBorderBrush}"
                                                                                         CornerRadius="5">
-                                                                        <Grid x:Name="RtbListItemOverlayBorderGrid"
-                                                                              Width="{Binding RtbOverlayWidth}"
-                                                                              Height="{Binding RtbOverlayHeight}">
+                                                                        <DockPanel x:Name="RtbListItemOverlayBorderDockPanel"
+                                                                                   Width="{Binding RtbCanvasWidth}"
+                                                                                   Height="{Binding RtbCanvasHeight}">
+                                                                            <Button x:Name="RtbListBoxItemOverlayBorderGridDragButton"
+                                                                                    DockPanel.Dock="Left"
+                                                                                    BorderThickness="0"
+                                                                                    Cursor="SizeAll"
+                                                                                    Margin="5,14,0,0"
+                                                                                    Background="Transparent"
+                                                                                    VerticalAlignment="Top"
+                                                                                    VerticalContentAlignment="Top"
+                                                                                    HorizontalAlignment="Left"
+                                                                                    HorizontalContentAlignment="Left"
+                                                                                    Width="{Binding DragButtonSize}"
+                                                                                    Height="{Binding DragButtonSize}"
+                                                                                    Template="{StaticResource SearchButtonControlTemplate}">
+                                                                                <Image Source="/Resources/Images/burger.png"
+                                                                                       Stretch="Fill" />
+                                                                            </Button>
                                                                             <TextBlock x:Name="RtbListBoxItemTitleTextBlock"
-                                                                                       Grid.Column="0"
+                                                                                       DockPanel.Dock="Right"
                                                                                        Opacity="1"
                                                                                        Margin="0,0,7,0"
                                                                                        TextAlignment="Right"
@@ -1988,7 +2003,7 @@
                                                                                 </TextBlock.Effect>-->
                                                                             </TextBlock>
                                                                             <TextBox x:Name="RtbListBoxItemTitleTextBox"
-                                                                                     Grid.Column="0"
+                                                                                     DockPanel.Dock="Right"
                                                                                      Opacity="1"
                                                                                      Margin="0,0,7,0"
                                                                                      TextAlignment="Right"
@@ -1999,27 +2014,9 @@
                                                                                      FontSize="{Binding RtbListBoxItemTitleFontSize}"
                                                                                      IsReadOnly="False"
                                                                                      Visibility="{Binding RtbListBoxItemTitleTextBoxVisibility}"
-                                                                                     Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=LostFocus}" />
-                                                                            <Button x:Name="RtbListBoxItemOverlayBorderGridDragButton"
-                                                                                    Grid.Column="0"
-                                                                                    BorderThickness="0"
-                                                                                    Cursor="SizeAll"
-                                                                                    Margin="5,14,0,0"
-                                                                                    Background="Transparent"
-                                                                                    VerticalAlignment="Top"
-                                                                                    VerticalContentAlignment="Top"
-                                                                                    HorizontalAlignment="Left"
-                                                                                    HorizontalContentAlignment="Left"
-                                                                                    Width="{Binding DragButtonSize}"
-                                                                                    Height="{Binding DragButtonSize}"
-                                                                                    Template="{StaticResource SearchButtonControlTemplate}">
-                                                                                <Image Source="/Resources/Images/burger.png"
-                                                                                       Stretch="Fill"
-                                                                                       HorizontalAlignment="Center"
-                                                                                       VerticalAlignment="Center" />
-                                                                            </Button>
+                                                                                     Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=LostFocus}" />                                                                            
                                                                             <TextBlock x:Name="RtbListBoxItemShortcutKeyTextBlock"
-                                                                                       Grid.Column="2"
+                                                                                       DockPanel.Dock="Right"
                                                                                        FontSize="10"
                                                                                        HorizontalAlignment="Right"
                                                                                        VerticalAlignment="Bottom"
@@ -2027,7 +2024,7 @@
                                                                                        Background="White"
                                                                                        Foreground="Black"
                                                                                        Text="{Binding ShortcutKeyString}" />
-                                                                        </Grid>
+                                                                        </DockPanel>
                                                                     </local:MpClipBorder>
                                                                 </Canvas>
                                                             </AdornerDecorator>
@@ -2389,8 +2386,7 @@
                                             </ListBox>
                                         </Canvas>
                                         <!-- Tile Detail Grid -->
-                                        <Grid Grid.Row="2"
-                                              Visibility="{Binding TileDetailGridVisibility}">
+                                        <Grid Grid.Row="2">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Loaded">
                                                     <i:CallMethodAction TargetObject="{Binding}"
@@ -2398,20 +2394,28 @@
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
                                             <!-- Clip Title Detail TextBlock -->
+                                            <TextBlock x:Name="ClipTileShortcutKeyTextBlock"
+                                                       FontSize="10"
+                                                       HorizontalAlignment="Left"
+                                                       Margin="5,0,0,0"
+                                                       Background="Transparent"
+                                                       Foreground="{Binding DetailTextColor}"
+                                                       Text="{Binding ShortcutKeyString}" />
                                             <TextBlock x:Name="ClipTileTitleDetailTextBlock"
                                                        Background="Transparent"
                                                        Foreground="{Binding DetailTextColor}"
                                                        FontSize="10"
                                                        HorizontalAlignment="Center"
                                                        Text="{Binding DetailText}" />
-                                            <TextBlock x:Name="ClipTileShortcutKeyTextBlock"
-                                                       DockPanel.Dock="Right"
-                                                       FontSize="10"
-                                                       HorizontalAlignment="Right"
-                                                       Margin="0,0,5,0"
-                                                       Background="Transparent"
-                                                       Foreground="{Binding DetailTextColor}"
-                                                       Text="{Binding ShortcutKeyString}" />
+                                            <ToggleButton x:Name="ClipTileToggleEditButton"
+                                                          HorizontalAlignment="Right"
+                                                          Width="20"
+                                                          Height="20"
+                                                          Margin="0,-5,2,0"
+                                                          IsChecked="{Binding IsEditingTile}"
+                                                          Template="{StaticResource LockToggleButtonControlTemplate}">
+                                                <Image Source="/Resources/Images/edit.png" />
+                                            </ToggleButton>
                                         </Grid>
                                     </Grid>
                                     <Grid x:Name="MenuOverlayGrid"

@@ -133,7 +133,7 @@ namespace MpWpfApp {
         public void InitWithRichTextBox(RichTextBox rtb, bool doAnimation) {
             var et = _borderStackPanel.GetVisualAncestor<Border>();
             var cb = (MpClipBorder)et.GetVisualAncestor<MpClipBorder>();
-            var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxCanvas");
+            var rtblbc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxCanvas");
             var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
             var ctttg = (Grid)cb.FindName("ClipTileTitleTextGrid");
             //var rtb = ClipTileViewModel.GetRtb();//rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
@@ -374,6 +374,9 @@ namespace MpWpfApp {
                 double rtbTopMax = ClipTileViewModel.EditRichTextBoxToolbarHeight;
                 double rtbTopMin = 0;
 
+                double rtbHeightMax = ClipTileViewModel.TileContentHeight;
+                double rtbHeightMin = rtbHeightMax - rtbTopMax;
+
                 double editRtbToolbarTopMax = 0;
                 double editRtbToolbarTopMin = -ClipTileViewModel.EditRichTextBoxToolbarHeight;
 
@@ -383,14 +386,13 @@ namespace MpWpfApp {
                 if (ClipTileViewModel.IsEditingTile) {
                     //show rtb edit toolbar so its visible during animation
                     ClipTileViewModel.EditToolbarVisibility = Visibility.Visible;
+                    //ClipTileViewModel.ContainerVisibility = Visibility.Hidden;
                 } else if (ClipTileViewModel.IsEditingTemplate) {
                     //animate edit template toolbar when tile is minimizing
                     ClipTileViewModel.IsEditingTemplate = false;
                 } else {
                     clipTray.ScrollIntoView(ClipTileViewModel);
                     //this is to remove scrollbar flicker during animation
-                    ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
-                    ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
                 }
 
                 MpHelpers.Instance.AnimateDoubleProperty(
@@ -401,6 +403,16 @@ namespace MpWpfApp {
                     Canvas.TopProperty,
                     (s1, e44) => {
 
+                    });
+
+                MpHelpers.Instance.AnimateDoubleProperty(
+                    ClipTileViewModel.IsEditingTile ? rtbHeightMax : rtbHeightMin,
+                    ClipTileViewModel.IsEditingTile ? rtbHeightMin : rtbHeightMax,
+                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    new List<FrameworkElement> { rtblb },
+                    FrameworkElement.HeightProperty,
+                    (s1, e44) => {
+                        //ClipTileViewModel.ContainerVisibility = Visibility.Visible;
                     });
 
                 MpHelpers.Instance.AnimateDoubleProperty(
@@ -422,6 +434,8 @@ namespace MpWpfApp {
                     new List<FrameworkElement> { cb, titleSwirl },
                     FrameworkElement.WidthProperty,
                     (s1, e44) => {
+                        ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
+                        ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
                         if (ClipTileViewModel.IsEditingTile) {
                             clipTray.ScrollIntoView(ClipTileViewModel);
                         } else {
@@ -433,7 +447,7 @@ namespace MpWpfApp {
                     ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
                     ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
                     Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    new List<FrameworkElement> { rtblb, et, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
+                    new List<FrameworkElement> { rtblb, rtblbc, et, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
                     FrameworkElement.WidthProperty,
                     (s1, e44) => {
                         //this is to remove scrollbar flicker during animation
@@ -444,10 +458,11 @@ namespace MpWpfApp {
                 ClipTileViewModel.RichTextBoxViewModelCollection.AnimateItems(
                     ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
                     ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
-                    0, 0,
+                    ClipTileViewModel.IsEditingTile ? rtbHeightMax : rtbHeightMin,
+                    ClipTileViewModel.IsEditingTile ? rtbHeightMin : rtbHeightMax,
                     0, 0,
                     0, 0
-                );
+                ); ;
 
                 MpHelpers.Instance.AnimateDoubleProperty(
                     ClipTileViewModel.IsEditingTile ? iconLeftMin : iconLeftMax,

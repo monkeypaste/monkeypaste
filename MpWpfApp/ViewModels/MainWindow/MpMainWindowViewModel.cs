@@ -244,31 +244,6 @@ namespace MpWpfApp {
             //}
             IsLoading = false;
         }
-
-        public void ClearEdits() {
-            foreach (var ctvm in ClipTrayViewModel) {
-                ctvm.IsEditingTitle = false;
-                if(ctvm.IsEditingTile) {
-                    ClipTrayViewModel.ShrinkClipTile(ctvm, false); 
-                }
-                ctvm.IsEditingTemplate = false;
-                if (ctvm.IsPastingTemplateTile) {
-                    ClipTrayViewModel.ShrinkClipTile(ctvm, true);
-                }
-                foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
-                    rtbvm.IsEditingContent = false;
-                    rtbvm.IsEditingSubTitle = false;
-                }
-                if (ctvm.DetectedImageObjectCollectionViewModel != null) {
-                    foreach (var diovm in ctvm.DetectedImageObjectCollectionViewModel) {
-                        diovm.IsNameReadOnly = true;
-                    }
-                }
-            }
-            foreach (var tag in TagTrayViewModel) {
-                tag.IsEditing = false;
-            }
-        }
         #endregion
 
         #region Private Methods
@@ -374,9 +349,11 @@ namespace MpWpfApp {
                 };
 
                 ApplicationHook.MouseWheel += (s, e) => {
-                    if (!MainWindowViewModel.IsLoading && ClipTrayViewModel.IsAnyTileExpanded) {
-                        var activeRtb = ClipTrayViewModel.SelectedClipTiles[0].RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel.Rtb;
-                        activeRtb.ScrollToVerticalOffset(activeRtb.VerticalOffset - e.Delta);
+                    if (!MainWindowViewModel.IsLoading && ClipTrayViewModel.IsAnyTileExpanded) {                        
+                        var rtblb = ClipTrayViewModel.SelectedClipTiles[0].RichTextBoxListBox;
+                        var border = (Border)VisualTreeHelper.GetChild(rtblb, 0);
+                        var sv = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
+                        sv.ScrollToVerticalOffset(sv.VerticalOffset - e.Delta);
                     }
                 };
 
@@ -438,11 +415,12 @@ namespace MpWpfApp {
             mw.Visibility = Visibility.Visible;
             mw.Topmost = true;
 
-            if (!IsLoading) {
-                ClipTrayViewModel.ResetClipSelection();
-            } else {
+            if (IsLoading) {
                 IsLoading = false;
                 ClipTileSortViewModel.SelectedSortType = ClipTileSortViewModel.SortTypes[0];
+                //ClipTrayViewModel.HideVisibleTiles(1);
+            } else {
+                ClipTrayViewModel.ResetClipSelection();
             }
 
             MpHelpers.Instance.AnimateDoubleProperty(
@@ -452,7 +430,8 @@ namespace MpWpfApp {
                 mw,
                 Window.TopProperty,
                 (s, e) => {
-
+                    //ClipTrayViewModel.ShowVisibleTiles(500);
+                    //ClipTrayViewModel.ResetClipSelection();
                 });
         }
 
@@ -479,6 +458,8 @@ namespace MpWpfApp {
                     IsMainWindowLocked = true;
                 }
                 pasteDataObject = await ClipTrayViewModel.GetDataObjectFromSelectedClips(pasteSelected);
+            } else {
+                //ClipTrayViewModel.HideVisibleTiles(500);
             }
 
             var mw = (MpMainWindow)Application.Current.MainWindow;
@@ -502,7 +483,7 @@ namespace MpWpfApp {
                                 //sctvm.RichTextBoxViewModels.CreateAllHyperlinks();
                                 sctvm.TileVisibility = Visibility.Visible;
 
-                                ClipTrayViewModel.ShrinkClipTile(sctvm, true);
+                                //ClipTrayViewModel.ShrinkClipTile(sctvm, true);
                                 //sctvm.IsPastingTemplateTile = false;
                                 sctvm.TemplateRichText = string.Empty;
                                 sctvm.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
@@ -511,10 +492,10 @@ namespace MpWpfApp {
                                 }
                             }
                         }
+                        //ClipTrayViewModel.HideVisibleTiles();
                     }
                     TagTrayViewModel.ResetTagSelection();
                     ClipTrayViewModel.ResetClipSelection();
-
                     mw.Visibility = Visibility.Collapsed;
                 });
         }

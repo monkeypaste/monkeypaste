@@ -115,7 +115,7 @@ namespace MpWpfApp {
 
         public double ClipTileTitleIconCanvasLeft {
             get {
-                return ClipTileBorderSize - ClipTileTitleHeight - ClipTileTitleIconRightMargin;
+                return ClipTileBorderMinSize - ClipTileTitleHeight - ClipTileTitleIconRightMargin;
             }
         }
 
@@ -161,9 +161,15 @@ namespace MpWpfApp {
             }
         }
 
-        public double ClipTileBorderSize {
+        public double ClipTileBorderMinSize {
             get {
                 return ClipTileSize - ClipTilePadding;
+            }
+        }
+
+        public double ClipTileBorderMinMaxSize {
+            get {
+                return 650;
             }
         }
 

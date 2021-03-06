@@ -1657,6 +1657,7 @@
     <Resource Include="Resources\Images\image_icon.png" />
     <Resource Include="Resources\Images\drag.png" />
     <Resource Include="Resources\Images\burger.png" />
+    <Resource Include="Resources\Images\edit.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />

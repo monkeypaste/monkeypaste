@@ -119,8 +119,13 @@ namespace MpWpfApp {
                 MpShortcutCollectionViewModel.Instance.Remove(scvmToRemove);
             }
         }
-
+        public void ClearTagEditing() {
+            foreach(var ttvm in this) {
+                ttvm.IsEditing = false;
+            }
+        }
         public void ClearTagSelection() {
+            ClearTagEditing();
             foreach (var tagTile in this) {
                 tagTile.IsSelected = false;
                 //tagTile.IsTextBoxFocused = false;

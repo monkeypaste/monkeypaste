@@ -251,7 +251,18 @@ namespace MpWpfApp {
                 }
             }
             if (toHeight > 0) {
-
+                double heightDiff = fromHeight - toHeight;
+                foreach (var rtbvm in this) {
+                    MpHelpers.Instance.AnimateDoubleProperty(
+                            rtbvm.RtbCanvasHeight,
+                            rtbvm.RtbCanvasHeight + heightDiff,
+                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                            new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder },
+                            FrameworkElement.HeightProperty,
+                            (s1, e44) => {
+                                //rtbvm.UpdateLayout();
+                            });
+                }
             }
             if (toTop > 0) {
                 foreach(var rtbvm in this) {

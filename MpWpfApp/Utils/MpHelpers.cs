@@ -1338,6 +1338,30 @@ namespace MpWpfApp {
             return animation;
         }
 
+        public void AnimateVisibilityChange(FrameworkElement fe, Visibility tv, EventHandler onCompleted, double ms = 1000, double bt = 0) {
+            var da = new DoubleAnimation {
+                Duration = new Duration(TimeSpan.FromMilliseconds(ms))
+            };
+            var easing = new CubicEase();
+            easing.EasingMode = EasingMode.EaseIn;
+            da.EasingFunction = easing;
+
+            da.Completed += (o, e) => {
+                fe.Visibility = tv;
+            };
+            da.Completed += onCompleted;
+            da.From = tv == Visibility.Visible ? 0 : 1;
+            da.To = tv == Visibility.Visible ? 1 : 0;
+            da.BeginTime = TimeSpan.FromMilliseconds(bt);
+
+            if(tv == Visibility.Visible) {
+                fe.Opacity = 0;
+                fe.Visibility = Visibility.Visible;
+            }
+
+            fe.BeginAnimation(UIElement.OpacityProperty, da);
+        }
+
         public Size MeasureText(string text, Typeface typeface, double fontSize) {
             var formattedText = new FormattedText(
                 text,
@@ -2117,7 +2141,7 @@ namespace MpWpfApp {
 
         public string ConvertBitmapSourceToPlainTextAsciiArt(BitmapSource bmpSource) {
             string[] asciiChars = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
-            using (System.Drawing.Bitmap image = ConvertBitmapSourceToBitmap(ResizeBitmapSource(bmpSource, new Size(MpMeasurements.Instance.ClipTileBorderSize, MpMeasurements.Instance.ClipTileContentHeight)))) {
+            using (System.Drawing.Bitmap image = ConvertBitmapSourceToBitmap(ResizeBitmapSource(bmpSource, new Size(MpMeasurements.Instance.ClipTileBorderMinSize, MpMeasurements.Instance.ClipTileContentHeight)))) {
                 string outStr = string.Empty;
                 for (int h = 0; h < image.Height; h++) {
                     for (int w = 0; w < image.Width; w++) {

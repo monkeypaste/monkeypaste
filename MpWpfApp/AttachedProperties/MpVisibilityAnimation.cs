@@ -34,8 +34,12 @@ namespace MpWpfApp {
         }
 
         static MpVisibilityAnimation() {
-            UIElement.VisibilityProperty.AddOwner(typeof(FrameworkElement),
-                                                  new FrameworkPropertyMetadata(Visibility.Visible, new PropertyChangedCallback(VisibilityChanged), CoerceVisibility));
+            UIElement.VisibilityProperty.AddOwner(
+                typeof(FrameworkElement),
+                new FrameworkPropertyMetadata(
+                    Visibility.Visible, 
+                    new PropertyChangedCallback(VisibilityChanged), 
+                    CoerceVisibility));
         }
 
         private static void VisibilityChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
@@ -99,9 +103,12 @@ namespace MpWpfApp {
             } else {
                 da.From = 0.0;
                 da.To = 1.0;
+                fe.Opacity = 0;
+                fe.Visibility = Visibility.Visible;
             }
 
             fe.BeginAnimation(UIElement.OpacityProperty, da);
+
             return Visibility.Visible;
         }
 
