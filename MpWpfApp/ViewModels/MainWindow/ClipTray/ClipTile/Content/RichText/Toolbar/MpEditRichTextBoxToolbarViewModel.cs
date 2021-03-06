@@ -402,18 +402,18 @@ namespace MpWpfApp {
                     new List<FrameworkElement> { rtblb },
                     Canvas.TopProperty,
                     (s1, e44) => {
-
+                        ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbListBoxHeight));
                     });
 
-                MpHelpers.Instance.AnimateDoubleProperty(
-                    ClipTileViewModel.IsEditingTile ? rtbHeightMax : rtbHeightMin,
-                    ClipTileViewModel.IsEditingTile ? rtbHeightMin : rtbHeightMax,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    new List<FrameworkElement> { rtblb },
-                    FrameworkElement.HeightProperty,
-                    (s1, e44) => {
-                        //ClipTileViewModel.ContainerVisibility = Visibility.Visible;
-                    });
+                //MpHelpers.Instance.AnimateDoubleProperty(
+                //    ClipTileViewModel.IsEditingTile ? rtbHeightMax : rtbHeightMin,
+                //    ClipTileViewModel.IsEditingTile ? rtbHeightMin : rtbHeightMax,
+                //    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                //    new List<FrameworkElement> { rtblb },
+                //    FrameworkElement.HeightProperty,
+                //    (s1, e44) => {
+                //        //ClipTileViewModel.ContainerVisibility = Visibility.Visible;
+                //    });
 
                 MpHelpers.Instance.AnimateDoubleProperty(
                     ClipTileViewModel.IsEditingTile ? editRtbToolbarTopMin : editRtbToolbarTopMax,

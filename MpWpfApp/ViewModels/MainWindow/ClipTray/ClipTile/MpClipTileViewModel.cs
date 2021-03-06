@@ -400,20 +400,6 @@
 
         public double TileContentHeight {
             get {
-                //double ch = MpMeasurements.Instance.ClipTileContentHeight;
-                //if (CopyItemType == MpCopyItemType.Composite || CopyItemType == MpCopyItemType.RichText) {
-                //    if (IsEditingTile) {
-                //        ch -= MpMeasurements.Instance.ClipTileEditToolbarHeight;
-                //    }
-                //    if (IsPastingTemplateTile) {
-                //        ch -= MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
-                //    }
-                //    if (IsEditingTemplate) {
-                //        ch -= MpMeasurements.Instance.ClipTileEditTemplateToolbarHeight;
-                //    }
-                //    return ch;
-                //}
-                //return ch;
                 return MpMeasurements.Instance.ClipTileContentHeight;
             }
         }
@@ -430,11 +416,6 @@
             }
         }
 
-        public double TileContentMinWidth {
-            get {
-                return MpMeasurements.Instance.ClipTileContentWidth;
-            }
-        }
 
         private double _tileContentWidth = MpMeasurements.Instance.ClipTileContentWidth;
         public double TileContentWidth {
@@ -558,7 +539,7 @@
             get {
                 if (IsExpanded) {
                     if (RichTextBoxViewModelCollection.TotalItemHeight > RichTextBoxListBox.ActualHeight - EditRichTextBoxToolbarHeight) {
-                        return ScrollBarVisibility.Auto;
+                        return ScrollBarVisibility.Visible;
                     }
                 }
                 return ScrollBarVisibility.Hidden;

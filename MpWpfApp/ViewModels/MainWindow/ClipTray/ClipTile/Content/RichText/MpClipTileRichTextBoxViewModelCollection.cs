@@ -73,6 +73,21 @@ namespace MpWpfApp {
         #endregion
 
         #region Layout
+        public double RtbListBoxHeight {
+            get {
+                double ch = MpMeasurements.Instance.ClipTileContentHeight;
+                if (HostClipTileViewModel.IsEditingTile) {
+                    ch -= MpMeasurements.Instance.ClipTileEditToolbarHeight;
+                }
+                if (HostClipTileViewModel.IsPastingTemplateTile) {
+                    ch -= MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
+                }
+                if (HostClipTileViewModel.IsEditingTemplate) {
+                    ch -= MpMeasurements.Instance.ClipTileEditTemplateToolbarHeight;
+                }
+                return Math.Max(ch,TotalItemHeight);
+            }
+        }
         public double RelativeWidthMax {
             get {
                 double maxWidth = 0;
@@ -243,7 +258,7 @@ namespace MpWpfApp {
                             fromWidth,
                             toWidth,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder },
+                            new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
                             FrameworkElement.WidthProperty,
                             (s1, e44) => {
                                 //rtbvm.UpdateLayout();
@@ -257,7 +272,7 @@ namespace MpWpfApp {
                             rtbvm.RtbCanvasHeight,
                             rtbvm.RtbCanvasHeight + heightDiff,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder },
+                            new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
                             FrameworkElement.HeightProperty,
                             (s1, e44) => {
                                 //rtbvm.UpdateLayout();
@@ -270,7 +285,7 @@ namespace MpWpfApp {
                             fromTop,
                             toTop,
                             Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder },
+                            new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
                             Canvas.TopProperty,
                             (s1, e44) => {
 

@@ -500,7 +500,7 @@ namespace MpWpfApp {
 
         public void ExpandClipTile(MpClipTileViewModel ctvmToExpand, bool isPastingTemplate) {
             //ClearClipSelection(false);
-            //ctvmToExpand.IsSelected = true;
+            ctvmToExpand.IsSelected = true;
             _hiddenTiles = VisibileClipTiles;
             foreach (var ctvm in _hiddenTiles) {
                 ctvm.TileVisibility = ctvm == ctvmToExpand ? Visibility.Visible : Visibility.Collapsed;
