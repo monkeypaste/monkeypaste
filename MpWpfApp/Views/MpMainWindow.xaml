@@ -851,6 +851,7 @@
                     HorizontalAlignment="Left"
                     IsChecked="{Binding IsMainWindowLocked}"
                     Command="{Binding TogglekMainWindowLockCommand}"
+                    CommandParameter="{StaticResource True}"
                     Template="{StaticResource LockToggleButtonControlTemplate}">
                 <Image Source="/Resources/Images/lock.png"
                        HorizontalAlignment="Center"
@@ -1609,9 +1610,9 @@
                                                 ClipToBounds="True"
                                                 Grid.Column="0">
                                             <!-- RichText Content -->
-                                            <Canvas x:Name="ClipTileRichTextBoxListBoxCanvas"
+                                            <Canvas x:Name="ClipTileRichTextBoxListBoxGridContainerCanvas"
                                                     Visibility="{Binding RtbVisibility}"
-                                                    Height="{Binding TileContentHeight}"
+                                                    Height="{Binding RichTextBoxViewModelCollection.TotalItemHeight}"
                                                     Width="{Binding TileContentWidth, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}">
                                                 <i:Interaction.Triggers>
                                                     <i:EventTrigger EventName="Loaded">
@@ -1848,153 +1849,154 @@
                                                         </Button>-->
                                                     </StackPanel>
                                                 </Border>
-                                                <ListBox x:Name="ClipTileRichTextBoxListBox"
-                                                         BorderThickness="0"
-                                                         SelectionMode="Single"
-                                                         dd:DragDrop.IsDragSource="False"
-                                                         dd:DragDrop.IsDropTarget="False"
-                                                         IsSynchronizedWithCurrentItem="True"
-                                                         Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
-                                                         ItemsSource="{Binding RichTextBoxViewModelCollection}"
-                                                         Focusable="{Binding IsEditingTile}"
-                                                         IsEnabled="True"
-                                                         Cursor="{Binding ContentCursor}"
-                                                         ScrollViewer.CanContentScroll="False"
-                                                         ScrollViewer.HorizontalScrollBarVisibility="{Binding RtbHorizontalScrollbarVisibility}"
-                                                         ScrollViewer.VerticalScrollBarVisibility="{Binding RtbVerticalScrollbarVisibility}"
-                                                         Width="{Binding TileContentWidth}"
-                                                         Height="{Binding RichTextBoxViewModelCollection.RtbListBoxHeight}"
-                                                         Padding="0">
-                                                    <i:Interaction.Triggers>
-                                                        <i:EventTrigger EventName="Loaded">
-                                                            <i:CallMethodAction TargetObject="{Binding RichTextBoxViewModelCollection}"
-                                                                                MethodName="ClipTileRichTextBoxViewModelCollection_Loaded" />
-                                                        </i:EventTrigger>
-                                                    </i:Interaction.Triggers>
-                                                    <ListBox.ItemContainerStyle>
-                                                        <Style TargetType="{x:Type ListBoxItem}">
-                                                            <Setter Property="IsSelected"
-                                                                    Value="{Binding IsSubSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
-                                                            <Setter Property="FocusVisualStyle"
-                                                                    Value="{x:Null}" />
-                                                            
-                                                            <Setter Property="Template">
-                                                                <Setter.Value>
-                                                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                                        <ContentPresenter />
-                                                                    </ControlTemplate>
-                                                                </Setter.Value>
-                                                            </Setter>
-                                                        </Style>
-                                                    </ListBox.ItemContainerStyle>
-                                                    <ListBox.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <AdornerDecorator>
-                                                                <Canvas x:Name="RtbListBoxItemCanvas"
-                                                                        DataContext="{Binding}"
-                                                                        Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
-                                                                        Width="{Binding RtbCanvasWidth}"
-                                                                        Height="{Binding RtbCanvasHeight}">
-                                                                    <i:Interaction.Triggers>
-                                                                        <i:EventTrigger EventName="Loaded">
-                                                                            <i:CallMethodAction TargetObject="{Binding}"
-                                                                                                MethodName="ClipTileRichTextBoxListItemCanvas_Loaded" />
-                                                                        </i:EventTrigger>
-                                                                    </i:Interaction.Triggers>
-                                                                    <RichTextBox x:Name="RtbListBoxItemRichTextBox"
-                                                                                 Canvas.Left="0"
-                                                                                 Canvas.Top="0"
-                                                                                 BorderBrush="{Binding RtbBorderBrush}"
-                                                                                 AllowDrop="True"
-                                                                                 Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
-                                                                                 IsReadOnly="{Binding HostClipTileViewModel.IsRtbReadOnly}"
-                                                                                 IsEnabled="True"
-                                                                                 AutoWordSelection="False"
-                                                                                 IsInactiveSelectionHighlightEnabled="True"
-                                                                                 IsDocumentEnabled="True"
-                                                                                 Focusable="{Binding HostClipTileViewModel.IsEditingTile}"
-                                                                                 Cursor="{Binding HostClipTileViewModel.ContentCursor}"
-                                                                                 Width="{Binding RtbWidth}"
-                                                                                 Height="{Binding RtbHeight}"
-                                                                                 Padding="{Binding RtbMargin}"
-                                                                                 IsUndoEnabled="True"
-                                                                                 VerticalAlignment="Top"
-                                                                                 HorizontalAlignment="Left"
-                                                                                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                                                                 ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                                                                 BorderThickness="1">
-                                                                        <RichTextBox.Document>
-                                                                            <local:MpEventEnabledFlowDocument PageWidth="{Binding RtbPageWidth}"
-                                                                                                              PageHeight="{Binding RtbPageHeight}" />
-                                                                        </RichTextBox.Document>
-                                                                        <RichTextBox.Resources>
-                                                                            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                                                                                             Color="Blue" />
-                                                                        </RichTextBox.Resources>
-                                                                        <SpellCheck.IsEnabled>
-                                                                            <Binding Path="SystemTrayViewModel.SettingsWindowViewModel.PreferencesViewModel.UseSpellCheck"
-                                                                                     Source="{StaticResource MainWindowViewModel}" />
-                                                                        </SpellCheck.IsEnabled>
-                                                                        <RichTextBox.ToolTip>
-                                                                            <ToolTip Visibility="{Binding ToolTipVisibility}"
-                                                                                     Placement="Top">
-                                                                                <ToolTip.Template>
-                                                                                    <ControlTemplate>
-                                                                                        <local:MpClipBorder Background="White"
-                                                                                                            BorderThickness="1"
-                                                                                                            BorderBrush="Black"
-                                                                                                            Padding="5">
-                                                                                            <Image Stretch="Fill"
-                                                                                                   HorizontalAlignment="Center"
-                                                                                                   VerticalAlignment="Center"
-                                                                                                   Source="{Binding Path=DataContext.PreviewBmpSrc,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:MpClipBorder}}}" />
-                                                                                        </local:MpClipBorder>
-                                                                                    </ControlTemplate>
-                                                                                </ToolTip.Template>
-                                                                            </ToolTip>
-                                                                        </RichTextBox.ToolTip>
-                                                                    </RichTextBox>
-                                                                    <local:MpClipBorder x:Name="RtbListBoxItemOverlayBorder"
-                                                                                        DataContext="{Binding}"
-                                                                                        Visibility="{Binding SubItemOverlayVisibility}"
-                                                                                        Width="{Binding RtbCanvasWidth}"
-                                                                                        Height="{Binding RtbCanvasHeight}"
-                                                                                        ToolTipService.InitialShowDelay="1000"
-                                                                                        Background="{Binding RtbListBoxItemBackgroundColor}"
+                                                <Grid x:Name="ClipTileRichTextboxListBoxContainerGrid">
+                                                    <ListBox x:Name="ClipTileRichTextBoxListBox"
+                                                             BorderThickness="0"
+                                                             SelectionMode="Single"
+                                                             dd:DragDrop.IsDragSource="False"
+                                                             dd:DragDrop.IsDropTarget="False"
+                                                             IsSynchronizedWithCurrentItem="False"
+                                                             Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
+                                                             ItemsSource="{Binding RichTextBoxViewModelCollection}"
+                                                             Focusable="{Binding IsEditingTile}"
+                                                             IsEnabled="True"
+                                                             Cursor="{Binding ContentCursor}"
+                                                             ScrollViewer.CanContentScroll="False"
+                                                             ScrollViewer.HorizontalScrollBarVisibility="{Binding RtbHorizontalScrollbarVisibility}"
+                                                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                                             Width="{Binding TileContentWidth}"
+                                                             Height="{Binding RichTextBoxViewModelCollection.RtbListBoxHeight}"
+                                                             Padding="0">
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="Loaded">
+                                                                <i:CallMethodAction TargetObject="{Binding RichTextBoxViewModelCollection}"
+                                                                                    MethodName="ClipTileRichTextBoxViewModelCollection_Loaded" />
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                        <ListBox.ItemContainerStyle>
+                                                            <Style TargetType="{x:Type ListBoxItem}">
+                                                                <Setter Property="IsSelected"                                                                        
+                                                                        Value="{Binding IsSubSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
+                                                                <Setter Property="FocusVisualStyle"
+                                                                        Value="{x:Null}" />
+
+                                                                <Setter Property="Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                                            <ContentPresenter />
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </ListBox.ItemContainerStyle>
+                                                        <ListBox.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <AdornerDecorator>
+                                                                    <Canvas x:Name="RtbListBoxItemCanvas"
+                                                                            DataContext="{Binding}"
+                                                                            Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
+                                                                            Width="{Binding RtbCanvasWidth}"
+                                                                            Height="{Binding RtbCanvasHeight}">
+                                                                        <i:Interaction.Triggers>
+                                                                            <i:EventTrigger EventName="Loaded">
+                                                                                <i:CallMethodAction TargetObject="{Binding}"
+                                                                                                    MethodName="ClipTileRichTextBoxListItemCanvas_Loaded" />
+                                                                            </i:EventTrigger>
+                                                                        </i:Interaction.Triggers>
+                                                                        <RichTextBox x:Name="RtbListBoxItemRichTextBox"
+                                                                                     Canvas.Left="0"
+                                                                                     Canvas.Top="0"
+                                                                                     BorderBrush="{Binding RtbBorderBrush}"
+                                                                                     AllowDrop="True"
+                                                                                     Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
+                                                                                     IsReadOnly="{Binding HostClipTileViewModel.IsRtbReadOnly}"
+                                                                                     IsEnabled="True"
+                                                                                     AutoWordSelection="False"
+                                                                                     IsInactiveSelectionHighlightEnabled="True"
+                                                                                     IsDocumentEnabled="True"
+                                                                                     Focusable="{Binding HostClipTileViewModel.IsEditingTile}"
+                                                                                     Cursor="{Binding HostClipTileViewModel.ContentCursor}"
+                                                                                     Width="{Binding RtbWidth}"
+                                                                                     Height="{Binding RtbHeight}"
+                                                                                     Padding="{Binding RtbMargin}"
+                                                                                     IsUndoEnabled="True"
+                                                                                     VerticalAlignment="Top"
+                                                                                     HorizontalAlignment="Left"
+                                                                                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                                                                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                                                                     BorderThickness="1">
+                                                                            <RichTextBox.Document>
+                                                                                <local:MpEventEnabledFlowDocument PageWidth="{Binding RtbPageWidth}"
+                                                                                                                  PageHeight="{Binding RtbPageHeight}" />
+                                                                            </RichTextBox.Document>
+                                                                            <RichTextBox.Resources>
+                                                                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                                                                                 Color="Blue" />
+                                                                            </RichTextBox.Resources>
+                                                                            <SpellCheck.IsEnabled>
+                                                                                <Binding Path="SystemTrayViewModel.SettingsWindowViewModel.PreferencesViewModel.UseSpellCheck"
+                                                                                         Source="{StaticResource MainWindowViewModel}" />
+                                                                            </SpellCheck.IsEnabled>
+                                                                            <RichTextBox.ToolTip>
+                                                                                <ToolTip Visibility="{Binding ToolTipVisibility}"
+                                                                                         Placement="Top">
+                                                                                    <ToolTip.Template>
+                                                                                        <ControlTemplate>
+                                                                                            <local:MpClipBorder Background="White"
+                                                                                                                BorderThickness="1"
+                                                                                                                BorderBrush="Black"
+                                                                                                                Padding="5">
+                                                                                                <Image Stretch="Fill"
+                                                                                                       HorizontalAlignment="Center"
+                                                                                                       VerticalAlignment="Center"
+                                                                                                       Source="{Binding Path=DataContext.PreviewBmpSrc,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:MpClipBorder}}}" />
+                                                                                            </local:MpClipBorder>
+                                                                                        </ControlTemplate>
+                                                                                    </ToolTip.Template>
+                                                                                </ToolTip>
+                                                                            </RichTextBox.ToolTip>
+                                                                        </RichTextBox>
+                                                                        <local:MpClipBorder x:Name="RtbListBoxItemOverlayBorder"
+                                                                                            DataContext="{Binding}"
+                                                                                            Visibility="{Binding SubItemOverlayVisibility}"
+                                                                                            Width="{Binding RtbCanvasWidth}"
+                                                                                            Height="{Binding RtbCanvasHeight}"
+                                                                                            ToolTipService.InitialShowDelay="1000"
+                                                                                            Background="{Binding RtbListBoxItemBackgroundColor}"
+                                                                                            BorderThickness="0"
+                                                                                            CornerRadius="5">
+                                                                            <DockPanel x:Name="RtbListItemOverlayBorderDockPanel"
+                                                                                       Width="{Binding RtbCanvasWidth}"
+                                                                                       Height="{Binding RtbCanvasHeight}">
+                                                                                <Button x:Name="RtbListBoxItemOverlayBorderGridDragButton"
+                                                                                        DockPanel.Dock="Left"
                                                                                         BorderThickness="0"
-                                                                                        CornerRadius="5">
-                                                                        <DockPanel x:Name="RtbListItemOverlayBorderDockPanel"
-                                                                                   Width="{Binding RtbCanvasWidth}"
-                                                                                   Height="{Binding RtbCanvasHeight}">
-                                                                            <Button x:Name="RtbListBoxItemOverlayBorderGridDragButton"
-                                                                                    DockPanel.Dock="Left"
-                                                                                    BorderThickness="0"
-                                                                                    Cursor="SizeAll"
-                                                                                    Margin="5,0,0,0"
-                                                                                    Background="Transparent"
-                                                                                    VerticalAlignment="Top"
-                                                                                    VerticalContentAlignment="Top"
-                                                                                    Width="{Binding DragButtonSize}"
-                                                                                    Height="{Binding DragButtonSize}"
-                                                                                    Template="{StaticResource SearchButtonControlTemplate}">
-                                                                                <Image Source="/Resources/Images/burger.png"
-                                                                                       Stretch="Fill" />
-                                                                            </Button>
-                                                                            <TextBlock x:Name="RtbListBoxItemTitleTextBlock"
-                                                                                       DockPanel.Dock="Right"
-                                                                                       Opacity="1"
-                                                                                       Margin="0,0,7,0"
-                                                                                       TextAlignment="Right"
-                                                                                       VerticalAlignment="Top"
-                                                                                       HorizontalAlignment="Right"
-                                                                                       Cursor="IBeam"
-                                                                                       ToolTip="{Binding DetailText}"
-                                                                                       Text="{Binding CopyItemTitle}"
-                                                                                       FontSize="{Binding RtbListBoxItemTitleFontSize}"
-                                                                                       Foreground="{Binding RtbListBoxItemTitleTextBlockTextColor}"
-                                                                                       FontWeight="Bold"
-                                                                                       Background="Transparent"
-                                                                                       Visibility="{Binding RtbListBoxItemTitleTextBlockVisibility}">
+                                                                                        Cursor="SizeAll"
+                                                                                        Margin="5,0,0,0"
+                                                                                        Background="Transparent"
+                                                                                        VerticalAlignment="Top"
+                                                                                        VerticalContentAlignment="Top"
+                                                                                        Width="{Binding DragButtonSize}"
+                                                                                        Height="{Binding DragButtonSize}"
+                                                                                        Template="{StaticResource SearchButtonControlTemplate}">
+                                                                                    <Image Source="/Resources/Images/burger.png"
+                                                                                           Stretch="Fill" />
+                                                                                </Button>
+                                                                                <TextBlock x:Name="RtbListBoxItemTitleTextBlock"
+                                                                                           DockPanel.Dock="Right"
+                                                                                           Opacity="1"
+                                                                                           Margin="0,0,7,0"
+                                                                                           TextAlignment="Right"
+                                                                                           VerticalAlignment="Top"
+                                                                                           HorizontalAlignment="Right"
+                                                                                           Cursor="IBeam"
+                                                                                           ToolTip="{Binding DetailText}"
+                                                                                           Text="{Binding CopyItemTitle}"
+                                                                                           FontSize="{Binding RtbListBoxItemTitleFontSize}"
+                                                                                           Foreground="{Binding RtbListBoxItemTitleTextBlockTextColor}"
+                                                                                           FontWeight="Bold"
+                                                                                           Background="Transparent"
+                                                                                           Visibility="{Binding RtbListBoxItemTitleTextBlockVisibility}">
                                                                                 <!--<TextBlock.Effect>
                                                                                     <DropShadowEffect ShadowDepth="2"
                                                                                                       Direction="300"
@@ -2002,36 +2004,37 @@
                                                                                                       Opacity="1.0"
                                                                                                       BlurRadius="3" />
                                                                                 </TextBlock.Effect>-->
-                                                                            </TextBlock>
-                                                                            <TextBox x:Name="RtbListBoxItemTitleTextBox"
-                                                                                     DockPanel.Dock="Right"
-                                                                                     Opacity="1"
-                                                                                     Margin="0,0,7,0"
-                                                                                     TextAlignment="Right"
-                                                                                     VerticalAlignment="Top"
-                                                                                     HorizontalAlignment="Right"
-                                                                                     Background="White"
-                                                                                     Foreground="Black"
-                                                                                     FontSize="{Binding RtbListBoxItemTitleFontSize}"
-                                                                                     IsReadOnly="False"
-                                                                                     Visibility="{Binding RtbListBoxItemTitleTextBoxVisibility}"
-                                                                                     Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=LostFocus}" />                                                                            
-                                                                            <TextBlock x:Name="RtbListBoxItemShortcutKeyTextBlock"
-                                                                                       DockPanel.Dock="Right"
-                                                                                       FontSize="10"
-                                                                                       HorizontalAlignment="Right"
-                                                                                       VerticalAlignment="Bottom"
-                                                                                       Margin="0"
-                                                                                       Background="White"
-                                                                                       Foreground="Black"
-                                                                                       Text="{Binding ShortcutKeyString}" />
-                                                                        </DockPanel>
-                                                                    </local:MpClipBorder>
-                                                                </Canvas>
-                                                            </AdornerDecorator>
-                                                        </DataTemplate>
-                                                    </ListBox.ItemTemplate>
-                                                </ListBox>
+                                                                                </TextBlock>
+                                                                                <TextBox x:Name="RtbListBoxItemTitleTextBox"
+                                                                                         DockPanel.Dock="Right"
+                                                                                         Opacity="1"
+                                                                                         Margin="0,0,7,0"
+                                                                                         TextAlignment="Right"
+                                                                                         VerticalAlignment="Top"
+                                                                                         HorizontalAlignment="Right"
+                                                                                         Background="White"
+                                                                                         Foreground="Black"
+                                                                                         FontSize="{Binding RtbListBoxItemTitleFontSize}"
+                                                                                         IsReadOnly="False"
+                                                                                         Visibility="{Binding RtbListBoxItemTitleTextBoxVisibility}"
+                                                                                         Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=LostFocus}" />
+                                                                                <TextBlock x:Name="RtbListBoxItemShortcutKeyTextBlock"
+                                                                                           DockPanel.Dock="Right"
+                                                                                           FontSize="10"
+                                                                                           HorizontalAlignment="Right"
+                                                                                           VerticalAlignment="Bottom"
+                                                                                           Margin="0"
+                                                                                           Background="White"
+                                                                                           Foreground="Black"
+                                                                                           Text="{Binding ShortcutKeyString}" />
+                                                                            </DockPanel>
+                                                                        </local:MpClipBorder>                                                                                                                                          
+                                                                    </Canvas>
+                                                                </AdornerDecorator>
+                                                            </DataTemplate>
+                                                        </ListBox.ItemTemplate>
+                                                    </ListBox>
+                                                </Grid>
                                                 <Border x:Name="ClipTileEditTemplateToolbar"
                                                         Visibility="{Binding EditTemplateToolbarVisibility}"
                                                         Height="{Binding EditTemplateToolbarHeight}"
@@ -2413,7 +2416,9 @@
                                                           Width="20"
                                                           Height="20"
                                                           Margin="0,-5,2,0"
-                                                          IsChecked="{Binding IsEditingTile}"
+                                                          Command="{Binding ToggleEditClipCommand}"
+                                                          CommandParameter="{StaticResource True}"
+                                                          IsChecked="{Binding IsEditingTile}"                                                          
                                                           Template="{StaticResource LockToggleButtonControlTemplate}">
                                                 <Image Source="/Resources/Images/edit.png" />
                                             </ToggleButton>

@@ -300,7 +300,7 @@ namespace MpWpfApp {
         }
 
         public void SelectRichTextBoxViewModel(int idx, bool isInitEdit, bool isInitPaste) {
-            if(idx < 0 || idx >= this.Count) {
+            if(idx < 0 || idx >= this.Count || this[idx].IsSubSelected) {
                 return;
             }
             for (int i = 0; i < this.Count; i++) {
@@ -317,7 +317,7 @@ namespace MpWpfApp {
 
         public void ClearSubSelection() {
             foreach(var rtbvm in this) {
-                rtbvm.IsSubSelected = false;
+                rtbvm.SetSelection(false, false, false);
             }
         }
 

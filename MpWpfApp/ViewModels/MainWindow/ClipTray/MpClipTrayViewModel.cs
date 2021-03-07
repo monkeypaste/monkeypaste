@@ -511,10 +511,11 @@ namespace MpWpfApp {
 
             if (isPastingTemplate) {
                 ctvmToExpand.IsPastingTemplateTile = true;
+                ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false,true);
             } else {
                 ctvmToExpand.IsEditingTile = true;
+                ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
             }
-
         }
 
         public void ShrinkClipTile(MpClipTileViewModel ctvmToExpand, bool isPastingTemplate) {

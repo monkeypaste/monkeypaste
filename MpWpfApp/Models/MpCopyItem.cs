@@ -89,6 +89,7 @@ namespace MpWpfApp {
             }
         }
 
+        private BitmapSource _itemBitmapSource = null;
         public BitmapSource ItemBitmapSource {
             get {
                 switch (CopyItemType) {
@@ -96,10 +97,23 @@ namespace MpWpfApp {
                     //    return MpHelpers.Instance.ConvertRichTextToBitmapSource(MpHelpers.Instance.ConvertPlainTextToRichText((string)_itemData));
                     case MpCopyItemType.Image:
                         return (BitmapSource)_itemData;
-                    //case MpCopyItemType.RichText:
-                    //    return MpHelpers.Instance.ConvertRichTextToBitmapSource((string)_itemData);
+                    //case MpCopyItemType.Composite:
+                    case MpCopyItemType.RichText:
+                        return _itemBitmapSource;
                 }
                 return new BitmapImage();
+            }
+            set {
+                switch (CopyItemType) {
+                    //case MpCopyItemType.FileList:
+                    //    return MpHelpers.Instance.ConvertRichTextToBitmapSource(MpHelpers.Instance.ConvertPlainTextToRichText((string)_itemData));
+                    //case MpCopyItemType.Image:
+                        //return (BitmapSource)_itemData;
+                    //case MpCopyItemType.Composite:
+                    case MpCopyItemType.RichText:
+                        _itemBitmapSource = value;
+                        break;
+                }
             }
         }
 

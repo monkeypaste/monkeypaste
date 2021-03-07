@@ -500,16 +500,20 @@ namespace MpWpfApp {
                 });
         }
 
-        private RelayCommand _togglekMainWindowLockCommand;
-        public ICommand TogglekMainWindowLockCommand {
+        private RelayCommand<object> _toggleMainWindowLockCommand;
+        public ICommand ToggleMainWindowLockCommand {
             get {
-                if(_togglekMainWindowLockCommand == null) {
-                    _togglekMainWindowLockCommand = new RelayCommand(ToggleMainWindowLock);
+                if(_toggleMainWindowLockCommand == null) {
+                    _toggleMainWindowLockCommand = new RelayCommand<object>(ToggleMainWindowLock);
                 }
-                return _togglekMainWindowLockCommand;
+                return _toggleMainWindowLockCommand;
             }
         }
-        private void ToggleMainWindowLock() {
+        private void ToggleMainWindowLock(object args) {
+            if(args == null) {
+                //only occurs if called outside of ui so toggle value
+                IsMainWindowLocked = !IsMainWindowLocked;
+            }
             //Do nothing because two-may binding toggles IsMainWindowLocked
         }
         #endregion

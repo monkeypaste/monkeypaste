@@ -266,6 +266,8 @@
             }
         }
 
+        public Canvas RtbListBoxCanvas { get; set; }
+
         private MpClipBorder _clipBorder;
         public MpClipBorder ClipBorder {
             get {
@@ -1396,12 +1398,12 @@
                         }
                         break;
                     case nameof(IsEditingTile):
-                        RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
-                        if (IsEditingTile) {
-                            MainWindowViewModel.ClipTrayViewModel.ExpandClipTile(this, false);
-                        } else {
-                            MainWindowViewModel.ClipTrayViewModel.ShrinkClipTile(this, false);
-                        }
+                        //if (IsEditingTile) {
+                        //    //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
+                        //    MainWindowViewModel.ClipTrayViewModel.ExpandClipTile(this, false);
+                        //} else {
+                        //    MainWindowViewModel.ClipTrayViewModel.ShrinkClipTile(this, false);
+                        //}
                         break;
                     case nameof(IsPastingTemplateTile):
                         //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
@@ -1459,28 +1461,28 @@
                     IsEditingTitle = false;
                 }
             };
-            ClipBorder.PreviewMouseLeftButtonDown += (s, e5) => {
-                if (e5.ClickCount == 2 && !IsEditingTile) {
-                    //only for richtext type
-                    ToggleEditClipCommand.Execute(null);
-                    e5.Handled = true;
-                    return;
-                }
-            };
+            //ClipBorder.PreviewMouseLeftButtonDown += (s, e5) => {
+            //    if (e5.ClickCount == 2 && !IsEditingTile) {
+            //        //only for richtext type
+            //        ToggleEditClipCommand.Execute(null);
+            //        e5.Handled = true;
+            //        return;
+            //    }
+            //};
             
-            ClipBorder.PreviewKeyDown += (s, e6) => {
-                if (CopyItemType != MpCopyItemType.RichText) {
-                    return;
-                }
-                //var rtb = (RichTextBox)((FrameworkElement)s).FindName("ClipTileRichTextBox");
-                //if (e6.Key == Key.Down) {
-                //    rtb.FontSize -= 1;
-                //    e.Handled = true;
-                //} else if (e6.Key == Key.Up) {
-                //    rtb.FontSize += 1;
-                //    e.Handled = true;
-                //}
-            };
+            //ClipBorder.PreviewKeyDown += (s, e6) => {
+            //    if (CopyItemType != MpCopyItemType.RichText) {
+            //        return;
+            //    }
+            //    //var rtb = (RichTextBox)((FrameworkElement)s).FindName("ClipTileRichTextBox");
+            //    //if (e6.Key == Key.Down) {
+            //    //    rtb.FontSize -= 1;
+            //    //    e.Handled = true;
+            //    //} else if (e6.Key == Key.Up) {
+            //    //    rtb.FontSize += 1;
+            //    //    e.Handled = true;
+            //    //}
+            //};
 
             #region Tile Drag & Drop (all unused atm)
             ClipBorder.PreviewMouseLeftButtonDown += (s, e5) => {
@@ -1563,7 +1565,9 @@
             var titleIconImageButtonRotateTransform = (RotateTransform)titleIconImageButton.FindName("ClipTileAppIconImageButtonRotateTransform");
             var titleIconBorderImage = (Image)titleCanvas.FindName("ClipTileAppIconBorderImage");
             var titleIconBorderImageScaleTransform = (ScaleTransform)titleCanvas.FindName("ClipTileAppIconBorderImageScaleTransform");
-            
+
+            RenderOptions.SetBitmapScalingMode(titleIconBorderImage, BitmapScalingMode.LowQuality);
+
             TitleTextBlock = clipTileTitleTextBlock;
             TitleTextBox = clipTileTitleTextBox;
 
@@ -1668,11 +1672,11 @@
             if (RtbVisibility == Visibility.Collapsed) {
                 return;
             }
-            var rtbc = (Canvas)sender;
-            var rtblb = (ListBox)rtbc.FindName("ClipTileRichTextBoxListBox");
+            RtbListBoxCanvas = (Canvas)sender;
+            var rtblb = (ListBox)RtbListBoxCanvas.FindName("ClipTileRichTextBoxListBox");
 
             RichTextBoxListBox = rtblb;
-
+            RichTextBoxListBox.RequestBringIntoView += (s, e65) => { e65.Handled = true; };
             RichTextBoxListBox.PreviewMouseLeftButtonDown += (s, e4) => {     
                 if(IsSelected) {
                     return;
@@ -2026,26 +2030,30 @@
             IsEditingTitle = !IsEditingTitle;
         }
 
-        private RelayCommand _toggleEditClipCommand;
+        private RelayCommand<object> _toggleEditClipCommand;
         public ICommand ToggleEditClipCommand {
             get {
                 if (_toggleEditClipCommand == null) {
-                    _toggleEditClipCommand = new RelayCommand(ToggleEditClip, CanToggleEditClip);
+                    _toggleEditClipCommand = new RelayCommand<object>(ToggleEditClip, CanToggleEditClip);
                 }
                 return _toggleEditClipCommand;
             }
         }
-        private bool CanToggleEditClip() {
+        private bool CanToggleEditClip(object args) {
             return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
-                  (CopyItemType == MpCopyItemType.RichText || CopyItemType == MpCopyItemType.Composite) && !IsPastingTemplateTile;
+                  (CopyItemType == MpCopyItemType.RichText || CopyItemType == MpCopyItemType.Composite) && 
+                  !IsPastingTemplateTile;
         }
-        private void ToggleEditClip() {
-            if(IsEditingTile == false && !IsSelected) {
-                IsSelected = true;
+        private void ToggleEditClip(object args) {
+            //if(IsEditingTile == false && !IsSelected) {
+            //    IsSelected = true;
+            //}
+            if(args == null) {
+                //happens when toggled from context menu and from code not button in detail grid
+                IsEditingTile = !IsEditingTile;
             }
-            IsEditingTile = !IsEditingTile;
 
-            if(IsEditingTile) {
+            if (IsEditingTile) {
                 MainWindowViewModel.ClipTrayViewModel.ExpandClipTile(this, false);
             } else {
                 MainWindowViewModel.ClipTrayViewModel.ShrinkClipTile(this, false);

@@ -20,6 +20,8 @@ namespace MpWpfApp {
     public class MpEditRichTextBoxToolbarViewModel : MpViewModelBase {
         #region Private Variables
         private StackPanel _borderStackPanel = null;
+        private RichTextBox _lastRtb = null;
+        private RichTextBox _selectedRtb = null;
         #endregion
 
         #region View Models
@@ -131,12 +133,13 @@ namespace MpWpfApp {
         }
 
         public void InitWithRichTextBox(RichTextBox rtb, bool doAnimation) {
+            _selectedRtb = rtb;
             var et = _borderStackPanel.GetVisualAncestor<Border>();
             var cb = (MpClipBorder)et.GetVisualAncestor<MpClipBorder>();
-            var rtblbc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxCanvas");
+            var rtblbgc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxGridContainerCanvas");
+            var rtblbg = (Grid)rtblbgc.FindName("ClipTileRichTextboxListBoxContainerGrid");
             var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
             var ctttg = (Grid)cb.FindName("ClipTileTitleTextGrid");
-            //var rtb = ClipTileViewModel.GetRtb();//rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
             var clipTray = MainWindowViewModel.ClipTrayViewModel.ClipTrayListView;
             var clipTrayScrollViewer = clipTray.GetDescendantOfType<ScrollViewer>();
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
@@ -148,6 +151,8 @@ namespace MpWpfApp {
             ExpandedTileSize = Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
 
             #region Editor
+
+            #region Toolbar
             ToggleButton selectedAlignmentButton = null;
             ToggleButton selectedListButton = null;
 
@@ -186,7 +191,7 @@ namespace MpWpfApp {
             bulletsButton.CommandTarget = rtb;
             numberingButton.CommandTarget = rtb;
 
-            fontFamilyComboBox.SelectionChanged += (s, e1) => {
+            SelectionChangedEventHandler FontFamilyComboBox_SelectionChanged = (s4,e1) => {
                 if (fontFamilyComboBox.SelectedItem == null) {
                     return;
                 }
@@ -195,6 +200,11 @@ namespace MpWpfApp {
                 var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
                 textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
             };
+
+            if(_lastRtb != null) {
+                fontFamilyComboBox.SelectionChanged -= FontFamilyComboBox_SelectionChanged;
+            }
+            fontFamilyComboBox.SelectionChanged += FontFamilyComboBox_SelectionChanged;
 
             fontSizeCombo.SelectionChanged += (s, e1) => {
                 // Exit if no selection
@@ -292,6 +302,54 @@ namespace MpWpfApp {
                 this.SetButtonGroupSelection(clickedButton, selectedListButton, buttonGroup, false);
                 selectedListButton = clickedButton;
             };
+            #endregion
+
+            #region Selection Changed
+            RoutedEventHandler Rtb_SelectionChanged = (s, e6) => {
+                //Console.WriteLine("(SelectionChanged)Selection Text: " + rtb.Selection.Text);
+                // Set font family combo
+                var fontFamily = rtb.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
+                fontFamilyComboBox.SelectedItem = fontFamily;
+
+                // Set font size combo
+                var fontSize = rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
+                if (fontSize == null || fontSize.ToString() == "{DependencyProperty.UnsetValue}") {
+                    fontSize = string.Empty;
+                } else {
+                    fontSize = Math.Round((double)fontSize);
+                }
+                fontSizeCombo.Text = fontSize.ToString();
+
+                // Set Font buttons
+                ((ToggleButton)et.FindName("BoldButton")).IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
+                ((ToggleButton)et.FindName("ItalicButton")).IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
+                ((ToggleButton)et.FindName("UnderlineButton")).IsChecked = rtb.Selection?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
+
+                // Set Alignment buttons
+                leftAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
+                centerAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
+                rightAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
+
+                //disable add template button if current selection intersects with a template
+                //this may not be necessary since templates are inlineuicontainers...
+                MpTemplateHyperlinkViewModel thlvm = null;
+                if (rtb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
+                   rtb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
+                    if (((TextElement)rtb.Selection.Start.Parent).DataContext != null && ((TextElement)rtb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
+                        thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.Start.Parent).DataContext;
+                    } else if (((TextElement)rtb.Selection.End.Parent).DataContext != null && ((TextElement)rtb.Selection.End.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
+                        thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.End.Parent).DataContext;
+                    }
+                }
+                if (thlvm == null) {
+                    IsAddTemplateButtonEnabled = true;
+                } else {
+                    IsAddTemplateButtonEnabled = false;
+                }
+            };
+            rtb.SelectionChanged += Rtb_SelectionChanged;
+            #endregion
+
             #endregion
 
             #region Add Template Button
@@ -399,7 +457,7 @@ namespace MpWpfApp {
                     ClipTileViewModel.IsEditingTile ? rtbTopMin : rtbTopMax,
                     ClipTileViewModel.IsEditingTile ? rtbTopMax : rtbTopMin,
                     Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    new List<FrameworkElement> { rtblb },
+                    new List<FrameworkElement> { rtblbg },
                     Canvas.TopProperty,
                     (s1, e44) => {
                         ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbListBoxHeight));
@@ -422,7 +480,10 @@ namespace MpWpfApp {
                     et,
                     Canvas.TopProperty,
                     (s1, e44) => {
-                        if (!ClipTileViewModel.IsEditingTile) {
+                        if (ClipTileViewModel.IsEditingTile) {
+                           ClipTileViewModel.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, false);
+                            Rtb_SelectionChanged(this, new RoutedEventArgs());
+                        } else {
                             ClipTileViewModel.EditToolbarVisibility = Visibility.Collapsed;
                         }
                     });
@@ -447,7 +508,7 @@ namespace MpWpfApp {
                     ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
                     ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
                     Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                    new List<FrameworkElement> { rtblb, rtblbc, et, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
+                    new List<FrameworkElement> { rtblbg, rtblb, rtblbgc, et, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
                     FrameworkElement.WidthProperty,
                     (s1, e44) => {
                         //this is to remove scrollbar flicker during animation
@@ -462,7 +523,7 @@ namespace MpWpfApp {
                     ClipTileViewModel.IsEditingTile ? rtbHeightMin : rtbHeightMax,
                     0, 0,
                     0, 0
-                ); ;
+                );
 
                 MpHelpers.Instance.AnimateDoubleProperty(
                     ClipTileViewModel.IsEditingTile ? iconLeftMin : iconLeftMax,
@@ -476,49 +537,9 @@ namespace MpWpfApp {
             }
             #endregion
 
-            rtb.SelectionChanged += (s, e6) => {
-                //Console.WriteLine("(SelectionChanged)Selection Text: " + rtb.Selection.Text);
-                // Set font family combo
-                var fontFamily = rtb.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
-                fontFamilyComboBox.SelectedItem = fontFamily;
-
-                // Set font size combo
-                var fontSize = rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
-                if (fontSize == null || fontSize.ToString() == "{DependencyProperty.UnsetValue}") {
-                    fontSize = string.Empty;
-                } else {
-                    fontSize = Math.Round((double)fontSize);
-                }
-                fontSizeCombo.Text = fontSize.ToString();
-
-                // Set Font buttons
-                ((ToggleButton)et.FindName("BoldButton")).IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
-                ((ToggleButton)et.FindName("ItalicButton")).IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
-                ((ToggleButton)et.FindName("UnderlineButton")).IsChecked = rtb.Selection?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
-
-                // Set Alignment buttons
-                leftAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
-                centerAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
-                rightAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
-
-                //disable add template button if current selection intersects with a template
-                //this may not be necessary since templates are inlineuicontainers...
-                MpTemplateHyperlinkViewModel thlvm = null;
-                if (rtb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
-                   rtb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
-                    if (((TextElement)rtb.Selection.Start.Parent).DataContext != null && ((TextElement)rtb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
-                        thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.Start.Parent).DataContext;
-                    } else if (((TextElement)rtb.Selection.End.Parent).DataContext != null && ((TextElement)rtb.Selection.End.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
-                        thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.End.Parent).DataContext;
-                    }
-                }
-                if (thlvm == null) {
-                    IsAddTemplateButtonEnabled = true;
-                } else {
-                    IsAddTemplateButtonEnabled = false;
-                }
-            };
+            _lastRtb = rtb;
         }
+
         #endregion
 
         #region Private Methods 
