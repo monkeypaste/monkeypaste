@@ -479,12 +479,7 @@ namespace MpWpfApp {
                             if (sctvm.HasTemplate) {
                                 //cleanup template by recreating hyperlinks
                                 //and reseting tile state
-                                //sctvm.RichTextBoxViewModels.ClearAllHyperlinks();
-                                //sctvm.RichTextBoxViewModels.CreateAllHyperlinks();
                                 sctvm.TileVisibility = Visibility.Visible;
-
-                                //ClipTrayViewModel.ShrinkClipTile(sctvm, true);
-                                //sctvm.IsPastingTemplateTile = false;
                                 sctvm.TemplateRichText = string.Empty;
                                 sctvm.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
                                 foreach (var rtbvm in sctvm.RichTextBoxViewModelCollection) {
@@ -492,7 +487,6 @@ namespace MpWpfApp {
                                 }
                             }
                         }
-                        //ClipTrayViewModel.HideVisibleTiles();
                     }
                     TagTrayViewModel.ResetTagSelection();
                     ClipTrayViewModel.ResetClipSelection();

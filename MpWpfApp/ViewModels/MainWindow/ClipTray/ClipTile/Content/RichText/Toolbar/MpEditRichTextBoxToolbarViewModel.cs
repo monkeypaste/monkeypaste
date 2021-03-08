@@ -135,7 +135,7 @@ namespace MpWpfApp {
         public void InitWithRichTextBox(RichTextBox rtb, bool doAnimation) {
             _selectedRtb = rtb;
             var et = _borderStackPanel.GetVisualAncestor<Border>();
-            var cb = (MpClipBorder)et.GetVisualAncestor<MpClipBorder>();
+            var cb = ClipTileViewModel.ClipBorder;
             var rtblbgc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxGridContainerCanvas");
             var rtblbg = (Grid)rtblbgc.FindName("ClipTileRichTextboxListBoxContainerGrid");
             var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
@@ -423,6 +423,7 @@ namespace MpWpfApp {
 
             #region Animation
             if(doAnimation) {
+                double animMs = Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
                 double tileWidthMax = Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
                 double tileWidthMin = ClipTileViewModel.TileBorderWidth;
 
@@ -456,7 +457,7 @@ namespace MpWpfApp {
                 MpHelpers.Instance.AnimateDoubleProperty(
                     ClipTileViewModel.IsEditingTile ? rtbTopMin : rtbTopMax,
                     ClipTileViewModel.IsEditingTile ? rtbTopMax : rtbTopMin,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    animMs,
                     new List<FrameworkElement> { rtblbg },
                     Canvas.TopProperty,
                     (s1, e44) => {
@@ -466,7 +467,7 @@ namespace MpWpfApp {
                 //MpHelpers.Instance.AnimateDoubleProperty(
                 //    ClipTileViewModel.IsEditingTile ? rtbHeightMax : rtbHeightMin,
                 //    ClipTileViewModel.IsEditingTile ? rtbHeightMin : rtbHeightMax,
-                //    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                //    animMs,
                 //    new List<FrameworkElement> { rtblb },
                 //    FrameworkElement.HeightProperty,
                 //    (s1, e44) => {
@@ -476,7 +477,7 @@ namespace MpWpfApp {
                 MpHelpers.Instance.AnimateDoubleProperty(
                     ClipTileViewModel.IsEditingTile ? editRtbToolbarTopMin : editRtbToolbarTopMax,
                     ClipTileViewModel.IsEditingTile ? editRtbToolbarTopMax : editRtbToolbarTopMin,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    animMs,
                     et,
                     Canvas.TopProperty,
                     (s1, e44) => {
@@ -491,7 +492,7 @@ namespace MpWpfApp {
                 MpHelpers.Instance.AnimateDoubleProperty(
                     ClipTileViewModel.IsEditingTile ? tileWidthMin : tileWidthMax,
                     ClipTileViewModel.IsEditingTile ? tileWidthMax : tileWidthMin,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    animMs,
                     new List<FrameworkElement> { cb, titleSwirl },
                     FrameworkElement.WidthProperty,
                     (s1, e44) => {
@@ -507,7 +508,7 @@ namespace MpWpfApp {
                 MpHelpers.Instance.AnimateDoubleProperty(
                     ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
                     ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    animMs,
                     new List<FrameworkElement> { rtblbg, rtblb, rtblbgc, et, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
                     FrameworkElement.WidthProperty,
                     (s1, e44) => {
@@ -522,13 +523,14 @@ namespace MpWpfApp {
                     ClipTileViewModel.IsEditingTile ? rtbHeightMax : rtbHeightMin,
                     ClipTileViewModel.IsEditingTile ? rtbHeightMin : rtbHeightMax,
                     0, 0,
-                    0, 0
+                    0, 0, 
+                    animMs
                 );
 
                 MpHelpers.Instance.AnimateDoubleProperty(
                     ClipTileViewModel.IsEditingTile ? iconLeftMin : iconLeftMax,
                     ClipTileViewModel.IsEditingTile ? iconLeftMax : iconLeftMin,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    animMs,
                     titleIconImageButton,
                     Canvas.LeftProperty,
                     (s1, e23) => {

@@ -85,6 +85,9 @@ namespace MpWpfApp {
                 if (HostClipTileViewModel.IsEditingTemplate) {
                     ch -= MpMeasurements.Instance.ClipTileEditTemplateToolbarHeight;
                 }
+                if (this.Count == 1) {
+                    return ch;
+                }
                 return Math.Max(ch,TotalItemHeight);
             }
         }
@@ -251,13 +254,13 @@ namespace MpWpfApp {
             //ClipTileViewModel.RichTextBoxListBox.Items.Refresh();
         }
 
-        public void AnimateItems(double fromWidth,double toWidth, double fromHeight, double toHeight,double fromTop, double toTop,double fromBottom, double toBottom) {
+        public void AnimateItems(double fromWidth,double toWidth, double fromHeight, double toHeight,double fromTop, double toTop,double fromBottom, double toBottom, double animMs) {
             if(toWidth > 0) {
                 foreach (var rtbvm in this) {
                     MpHelpers.Instance.AnimateDoubleProperty(
                             fromWidth,
                             toWidth,
-                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                            animMs,
                             new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
                             FrameworkElement.WidthProperty,
                             (s1, e44) => {
@@ -271,7 +274,7 @@ namespace MpWpfApp {
                     MpHelpers.Instance.AnimateDoubleProperty(
                             rtbvm.RtbCanvasHeight,
                             rtbvm.RtbCanvasHeight + heightDiff,
-                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                            animMs,
                             new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
                             FrameworkElement.HeightProperty,
                             (s1, e44) => {
@@ -284,7 +287,7 @@ namespace MpWpfApp {
                     MpHelpers.Instance.AnimateDoubleProperty(
                             fromTop,
                             toTop,
-                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                            animMs,
                             new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
                             Canvas.TopProperty,
                             (s1, e44) => {
@@ -300,7 +303,7 @@ namespace MpWpfApp {
         }
 
         public void SelectRichTextBoxViewModel(int idx, bool isInitEdit, bool isInitPaste) {
-            if(idx < 0 || idx >= this.Count || this[idx].IsSubSelected) {
+            if(idx < 0 || idx >= this.Count/* || this[idx].IsSubSelected*/) {
                 return;
             }
             for (int i = 0; i < this.Count; i++) {
@@ -317,7 +320,7 @@ namespace MpWpfApp {
 
         public void ClearSubSelection() {
             foreach(var rtbvm in this) {
-                rtbvm.SetSelection(false, false, false);
+                rtbvm.IsSubSelected = false;
             }
         }
 

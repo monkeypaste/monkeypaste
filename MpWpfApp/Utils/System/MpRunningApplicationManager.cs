@@ -141,7 +141,7 @@ namespace MpWpfApp {
                         //no handle found matching admin rights
                         handle = MpHelpers.Instance.StartProcess(args,processPath, isAdmin, isSilent);
                     }
-                }
+                }                
                 WinApi.SetActiveWindow(handle);
                 return handle;
             }

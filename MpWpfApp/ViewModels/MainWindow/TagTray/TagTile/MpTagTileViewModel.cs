@@ -13,10 +13,18 @@ namespace MpWpfApp {
 
         #region Properties
         #region State
-
         public bool IsNew {
             get {
                 return Tag == null || Tag.TagId <= 0;
+            }
+        }
+
+        public bool IsSudoTag {
+            get {
+                if(Tag == null) {
+                    return false;
+                }
+                return Tag.TagId == 1 || Tag.TagId == 2;
             }
         }
 

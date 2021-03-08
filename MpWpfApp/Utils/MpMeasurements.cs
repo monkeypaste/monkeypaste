@@ -66,19 +66,13 @@ namespace MpWpfApp {
             }
         }
 
-        public double ClipTileContentMargin {
-            get {
-                return ClipTileMargin / 5;
-            }
-        }
-
         public double ClipTilePadding {
             get {
                 return 15;
             }
         }
 
-        public double ClipTileSize {
+        public double ClipTileMinSize {
             get {
                 return ClipTrayHeight - (ClipTileMargin * 2) - ClipTilePadding;
             }
@@ -86,7 +80,7 @@ namespace MpWpfApp {
 
         public double ClipTileLoadingSpinnerSize {
             get {
-                return ClipTileSize * 0.333;
+                return ClipTileMinSize * 0.333;
             }
         }
 
@@ -163,7 +157,7 @@ namespace MpWpfApp {
 
         public double ClipTileBorderMinSize {
             get {
-                return ClipTileSize - ClipTilePadding;
+                return ClipTileMinSize - ClipTilePadding;
             }
         }
 
@@ -209,12 +203,6 @@ namespace MpWpfApp {
             }
         }
 
-        public double ClipTileEditModeContentMinWidth {
-            get {
-                return ClipTileEditModeMinWidth - ClipTileEditModeContentMargin;
-            }
-        }
-
         public double ClipTileEditToolbarIconSize {
             get {
                 return 22;
@@ -223,7 +211,7 @@ namespace MpWpfApp {
 
         public double ClipTileTitleHeight {
             get {
-                return ClipTileSize / 5;
+                return ClipTileMinSize / 5;
             }
         }
 
@@ -235,13 +223,25 @@ namespace MpWpfApp {
 
         public double ClipTileContentHeight {
             get {
-                return ClipTileSize - ClipTileTitleHeight - ClipTileMargin - ClipTileBorderThickness - ClipTileDetailHeight;
+                return ClipTileMinSize - ClipTileTitleHeight - ClipTileMargin - ClipTileBorderThickness - ClipTileDetailHeight;
             }
         }
 
-        public double ClipTileContentWidth {
+        public double ClipTileContentMargin {
             get {
-                return ClipTileSize - (ClipTileMargin * 2) - (ClipTileBorderThickness * 2);
+                return (ClipTileMargin * 2) - (ClipTileBorderThickness * 2);
+            }
+        }
+
+        public double ClipTileContentMinWidth {
+            get {
+                return ClipTileMinSize - ClipTileContentMargin;
+            }
+        }
+
+        public double ClipTileContentMinMaxWidth {
+            get {
+                return ClipTileBorderMinMaxSize - ClipTileContentMargin - ClipTileEditModeContentMargin;
             }
         }
 

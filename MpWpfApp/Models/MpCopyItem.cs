@@ -97,7 +97,7 @@ namespace MpWpfApp {
                     //    return MpHelpers.Instance.ConvertRichTextToBitmapSource(MpHelpers.Instance.ConvertPlainTextToRichText((string)_itemData));
                     case MpCopyItemType.Image:
                         return (BitmapSource)_itemData;
-                    //case MpCopyItemType.Composite:
+                    case MpCopyItemType.Composite:
                     case MpCopyItemType.RichText:
                         return _itemBitmapSource;
                 }
@@ -992,7 +992,11 @@ namespace MpWpfApp {
                 SetData(null);
             } else {
                 SetData(dr["ItemText"].ToString());
+                if(dr["ItemImage"] != null && dr["ItemImage"].GetType() != typeof(System.DBNull)) {
+                    ItemBitmapSource = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]);
+                }
             }
+            
             CompositeParentCopyItemId = GetCompositeParentCopyItemId();
             if (CompositeParentCopyItemId <= 0) {
                 //only create title swirl for composite parent and non-composite items
@@ -1085,7 +1089,7 @@ namespace MpWpfApp {
             if(string.IsNullOrEmpty(itemText)) {
                 itemText = string.Empty;
             }
-            byte[] itemImage = CopyItemType == MpCopyItemType.Image ? MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource) : null;
+            byte[] itemImage = MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource);
             //if copyitem already exists
             if (CopyItemId > 0) {
                 MpDb.Instance.ExecuteWrite(

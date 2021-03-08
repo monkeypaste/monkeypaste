@@ -77,20 +77,28 @@ namespace MpWpfApp {
             Application.Current.Shutdown();
         }
 
-        private RelayCommand<int> _showSettingsWindowCommand;
+        private RelayCommand<object> _showSettingsWindowCommand;
         public ICommand ShowSettingsWindowCommand {
             get {
                 if (_showSettingsWindowCommand == null) {
-                    _showSettingsWindowCommand = new RelayCommand<int>(ShowSettingsWindow);
+                    _showSettingsWindowCommand = new RelayCommand<object>(ShowSettingsWindow);
                 }
                 return _showSettingsWindowCommand;
             }
         }
-        private void ShowSettingsWindow(int tabIdx) {
+        private void ShowSettingsWindow(object args) {
+
             MainWindowViewModel.IsShowingDialog = true;
 
-            MainWindowViewModel.HideWindowCommand.Execute(null);       
-            
+            MainWindowViewModel.HideWindowCommand.Execute(null);
+            int tabIdx = 0;
+            if(args is int) {
+                tabIdx = (int)args;
+            } else if (args is MpClipTileViewModel) {
+                // TODO occurs when app icon macro is clicked so need to 
+                // automate paste to app datagrid to auto add item and select
+                tabIdx = 1;
+            }
             SettingsWindowViewModel.ShowSettingsWindow(tabIdx);
 
             MainWindowViewModel.IsShowingDialog = false;

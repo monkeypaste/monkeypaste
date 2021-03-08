@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using AsyncAwaitBestPractices.MVVM;
@@ -499,23 +500,71 @@ namespace MpWpfApp {
         }
 
         public void ExpandClipTile(MpClipTileViewModel ctvmToExpand, bool isPastingTemplate) {
-            //ClearClipSelection(false);
+            double animMs = 0;
+            ClearClipSelection();
             ctvmToExpand.IsSelected = true;
-            _hiddenTiles = VisibileClipTiles;
-            foreach (var ctvm in _hiddenTiles) {
-                ctvm.TileVisibility = ctvm == ctvmToExpand ? Visibility.Visible : Visibility.Collapsed;
-            }
-            _hiddenTiles.Remove(ctvmToExpand);
-
-            ClipTrayVirtualizingStackPanel.HorizontalAlignment = HorizontalAlignment.Center;
-
             if (isPastingTemplate) {
                 ctvmToExpand.IsPastingTemplateTile = true;
-                ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false,true);
+                ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
             } else {
                 ctvmToExpand.IsEditingTile = true;
                 ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
             }
+            //_hiddenTiles = VisibileClipTiles; 
+            //_hiddenTiles.Remove(ctvmToExpand);
+            //var _hiddenTileCanvasList = new List<FrameworkElement>();
+            //foreach (var ctvm in _hiddenTiles) {
+            //    //ctvm.TileVisibility = Visibility.Hidden;
+            //    _hiddenTileCanvasList.Add(ctvm.ClipBorder);
+            //}
+            ////Console.WriteLine("Pre fade ")
+            //EventHandler postFadeEvent = (s, e) => {
+            //    var listBoxItem = (ListBoxItem)ClipTrayListView.ItemContainerGenerator.ContainerFromItem(ctvmToExpand);
+            //    double sx = listBoxItem.TranslatePoint(new Point(0.0, 0.0), ClipTrayListView).X;
+            //    double trayMidX = ClipTrayListView.ActualWidth / 2;
+            //    double ex = trayMidX - (ctvmToExpand.TileBorderMaxWidth / 2);
+
+            //    var T = ctvmToExpand.ClipBorderTranslateTransform;
+            //    var anim = new DoubleAnimation(sx, ex, new Duration(TimeSpan.FromMilliseconds(animMs)));
+            //    anim.Completed += (s1, e1) => {
+            //        //if (isPastingTemplate) {
+            //        //    ctvmToExpand.IsPastingTemplateTile = true;
+            //        //    ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
+            //        //} else {
+            //        //    ctvmToExpand.IsEditingTile = true;
+            //        //    ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
+            //        //}
+            //    };
+            //    if (isPastingTemplate) {
+            //        ctvmToExpand.IsPastingTemplateTile = true;
+            //        ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
+            //    } else {
+            //        ctvmToExpand.IsEditingTile = true;
+            //        ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
+            //    }
+            //    T.BeginAnimation(TranslateTransform.XProperty, anim);
+
+            //};
+            ////var ctg = (Grid)ctvmToExpand.ClipBorder.FindName("ClipTileBorderGrid");
+            ////MpHelpers.Instance.AnimateVisibilityChange(
+            ////        ctg,
+            ////        Visibility.Hidden,
+            ////        postFadeEvent,
+            ////        500);
+
+            //if (_hiddenTileCanvasList.Count > 0) {
+            //    MpHelpers.Instance.AnimateVisibilityChange(
+            //        _hiddenTileCanvasList,
+            //        Visibility.Hidden,
+            //        postFadeEvent,
+            //        animMs);
+            //} else {
+            //    postFadeEvent.Invoke(this, new EventArgs());
+            //}
+
+
+            //ClipTrayVirtualizingStackPanel.HorizontalAlignment = HorizontalAlignment.Center;
+
         }
 
         public void ShrinkClipTile(MpClipTileViewModel ctvmToExpand, bool isPastingTemplate) {
@@ -524,12 +573,30 @@ namespace MpWpfApp {
             } else {
                 ctvmToExpand.IsEditingTile = false;
             }
+            //EventHandler preFadeEvent = (s, e) => {
+            //    if (isPastingTemplate) {
+            //        ctvmToExpand.IsPastingTemplateTile = false;
+            //    } else {
+            //        ctvmToExpand.IsEditingTile = false;
+            //    }
+            //};
 
-            foreach (var ctvm in _hiddenTiles) {
-                ctvm.TileVisibility = Visibility.Visible;
-            }
+            //var _hiddenTileCanvasList = new List<FrameworkElement>();
+            //foreach (var ctvm in _hiddenTiles) {
+            //    _hiddenTileCanvasList.Add(ctvm.ClipBorder);
+            //}
 
-            ClipTrayVirtualizingStackPanel.HorizontalAlignment = HorizontalAlignment.Left;
+            //if (_hiddenTileCanvasList.Count > 0) {
+            //    MpHelpers.Instance.AnimateVisibilityChange(
+            //        _hiddenTileCanvasList,
+            //        Visibility.Collapsed,
+            //        preFadeEvent,
+            //        500);
+            //} else {
+            //    //postFadeEvent.Invoke(this, new EventArgs());
+            //}
+
+            //ClipTrayVirtualizingStackPanel.HorizontalAlignment = HorizontalAlignment.Left;
 
             Refresh();
         }
@@ -759,10 +826,15 @@ namespace MpWpfApp {
             //called in the oncompleted of hide command in mwvm
             if (pasteDataObject != null) {
                 Console.WriteLine("Pasting " + SelectedClipTiles.Count + " items");
-                IntPtr pasteToWindowHandle = MpClipboardManager.Instance.LastWindowWatcher.LastHandle;
+                IntPtr pasteToWindowHandle = IntPtr.Zero;
                 if(_selectedPasteToAppPathViewModel != null) {
                     pasteToWindowHandle = MpRunningApplicationManager.Instance.SetActiveProcess(
                         _selectedPasteToAppPathViewModel.AppPath, _selectedPasteToAppPathViewModel.IsAdmin);
+                } else if(_selectedPasteToAppPathWindowHandle != IntPtr.Zero) {
+                    WinApi.ShowWindowAsync(_selectedPasteToAppPathWindowHandle, WinApi.SW_SHOWMAXIMIZED);
+                    pasteToWindowHandle = _selectedPasteToAppPathWindowHandle;
+                } else {
+                    pasteToWindowHandle = MpClipboardManager.Instance.LastWindowWatcher.LastHandle;
                 }
                 MpClipboardManager.Instance.PasteDataObject(pasteDataObject, pasteToWindowHandle);
 

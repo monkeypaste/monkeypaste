@@ -850,7 +850,7 @@
                     VerticalAlignment="Center"
                     HorizontalAlignment="Left"
                     IsChecked="{Binding IsMainWindowLocked}"
-                    Command="{Binding TogglekMainWindowLockCommand}"
+                    Command="{Binding ToggleMainWindowLockCommand}"
                     CommandParameter="{StaticResource True}"
                     Template="{StaticResource LockToggleButtonControlTemplate}">
                 <Image Source="/Resources/Images/lock.png"
@@ -1332,8 +1332,9 @@
                     <local:MpMultiSelectListView.ItemTemplate>
                         <DataTemplate>
                             <!-- Clip Tile -->
-                            <local:MpClipBorder BorderBrush="{Binding TileBorderBrush}"
+                            <local:MpClipBorder x:Name="ClipTileClipBorder"
                                                 Margin="{Binding TileMargin}"
+                                                BorderBrush="{Binding TileBorderBrush}"
                                                 BorderThickness="{Binding TileBorderThickness}"
                                                 Width="{Binding TileBorderWidth}"
                                                 Height="{Binding TileBorderHeight}"
@@ -1350,6 +1351,9 @@
                                                             MethodName="ClipTile_Loaded" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
+                                <local:MpClipBorder.RenderTransform>
+                                    <TranslateTransform x:Name="ClipTileBorderTranslateTransform" />
+                                </local:MpClipBorder.RenderTransform>
                                 <local:MpClipBorder.Resources>
                                     <local:MpBindingProxy x:Key="ClipTileProxy"
                                                           Data="{Binding}" />
@@ -1358,7 +1362,7 @@
                                     <DropShadowEffect Color="DarkGray"
                                                       BlurRadius="7" />
                                 </local:MpClipBorder.Effect>-->
-                                <Grid Background="#FF3D3D3D"
+                                <Grid x:Name="ClipTileBorderGrid" Background="#FF3D3D3D"
                                       Visibility="{Binding ContainerVisibility}">
                                     <Grid Background="White"
                                           Visibility="{Binding ContentVisibility}">
@@ -1388,9 +1392,7 @@
                                                           Command="{Binding Data.InvertSelectionCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="Assign Hotkey"
                                                           InputGestureText="{Binding ShortcutKeyString}"
-                                                          Command="{Binding Data.AssignHotkeyCommand, Source={StaticResource ClipTrayProxy}}" />
-                                                <MenuItem Header="Exclude Application"
-                                                          Command="{Binding ExcludeApplicationCommand}" />
+                                                          Command="{Binding Data.AssignHotkeyCommand, Source={StaticResource ClipTrayProxy}}" />                                                
                                                 <MenuItem Header="Export To">
                                                     <MenuItem Header="File(s)..."
                                                               Command="{Binding Data.ExportSelectedClipTilesCommand, Source={StaticResource ClipTrayProxy}}"
@@ -1566,6 +1568,15 @@
                                                 <Button.RenderTransform>
                                                     <RotateTransform x:Name="ClipTileAppIconImageButtonRotateTransform" />
                                                 </Button.RenderTransform>
+                                                <Button.ContextMenu>
+                                                    <ContextMenu>
+                                                        <MenuItem Header="Exclude Application"
+                                                                  Command="{Binding ExcludeApplicationCommand}" />
+                                                        <MenuItem Header="Add Paste Macro For Application"
+                                                                  Command="{Binding MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand}"
+                                                                  CommandParameter="{Binding}"/>
+                                                    </ContextMenu>
+                                                </Button.ContextMenu>
                                                 <Grid>
                                                     <Image x:Name="ClipTileAppIconBorderImage"
                                                            Source="{Binding CopyItemAppIconBorder, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
@@ -1583,23 +1594,6 @@
                                                            Stretch="Fill"
                                                            Width="{Binding TileTitleIconSize}"
                                                            Height="{Binding TileTitleIconSize}">
-                                                        <!--<Image.Style>
-                                                            <Style TargetType="{x:Type Image}">
-                                                                <Style.Triggers>
-                                                                    <Trigger Property="IsMouseOver"
-                                                                             Value="True">
-                                                                        <Setter Property="Effect">
-                                                                            <Setter.Value>
-                                                                                <DropShadowEffect ShadowDepth="3"
-                                                                                                  Color="White"
-                                                                                                  Opacity="1"
-                                                                                                  BlurRadius="50" />
-                                                                            </Setter.Value>
-                                                                        </Setter>
-                                                                    </Trigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Image.Style>-->
                                                     </Image>
                                                 </Grid>
                                             </Button>
@@ -1613,7 +1607,7 @@
                                             <Canvas x:Name="ClipTileRichTextBoxListBoxGridContainerCanvas"
                                                     Visibility="{Binding RtbVisibility}"
                                                     Height="{Binding RichTextBoxViewModelCollection.TotalItemHeight}"
-                                                    Width="{Binding TileContentWidth, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}">
+                                                    Width="{Binding TileContentWidth}">
                                                 <i:Interaction.Triggers>
                                                     <i:EventTrigger EventName="Loaded">
                                                         <i:CallMethodAction TargetObject="{Binding}"
@@ -1875,7 +1869,7 @@
                                                         </i:Interaction.Triggers>
                                                         <ListBox.ItemContainerStyle>
                                                             <Style TargetType="{x:Type ListBoxItem}">
-                                                                <Setter Property="IsSelected"                                                                        
+                                                                <Setter Property="IsSelected"
                                                                         Value="{Binding IsSubSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
                                                                 <Setter Property="FocusVisualStyle"
                                                                         Value="{x:Null}" />
@@ -1972,23 +1966,26 @@
                                                                                         DockPanel.Dock="Left"
                                                                                         BorderThickness="0"
                                                                                         Cursor="SizeAll"
-                                                                                        Margin="5,0,0,0"
+                                                                                        Margin="0,0,0,0"
                                                                                         Background="Transparent"
                                                                                         VerticalAlignment="Top"
                                                                                         VerticalContentAlignment="Top"
+                                                                                        HorizontalAlignment="Left"
+                                                                                        HorizontalContentAlignment="Left"
                                                                                         Width="{Binding DragButtonSize}"
                                                                                         Height="{Binding DragButtonSize}"
                                                                                         Template="{StaticResource SearchButtonControlTemplate}">
-                                                                                    <Image Source="/Resources/Images/burger.png"
+                                                                                    <Image HorizontalAlignment="Left"
+                                                                                           Source="/Resources/Images/burger.png"
                                                                                            Stretch="Fill" />
                                                                                 </Button>
                                                                                 <TextBlock x:Name="RtbListBoxItemTitleTextBlock"
                                                                                            DockPanel.Dock="Right"
                                                                                            Opacity="1"
-                                                                                           Margin="0,0,7,0"
+                                                                                           Margin="0,0,30,0"
                                                                                            TextAlignment="Right"
+                                                                                           HorizontalAlignment="Left"
                                                                                            VerticalAlignment="Top"
-                                                                                           HorizontalAlignment="Right"
                                                                                            Cursor="IBeam"
                                                                                            ToolTip="{Binding DetailText}"
                                                                                            Text="{Binding CopyItemTitle}"
@@ -2028,7 +2025,7 @@
                                                                                            Foreground="Black"
                                                                                            Text="{Binding ShortcutKeyString}" />
                                                                             </DockPanel>
-                                                                        </local:MpClipBorder>                                                                                                                                          
+                                                                        </local:MpClipBorder>
                                                                     </Canvas>
                                                                 </AdornerDecorator>
                                                             </DataTemplate>
@@ -2416,9 +2413,10 @@
                                                           Width="20"
                                                           Height="20"
                                                           Margin="0,-5,2,0"
+                                                          Visibility="{Binding ToggleEditModeButtonVisibility}"
                                                           Command="{Binding ToggleEditClipCommand}"
                                                           CommandParameter="{StaticResource True}"
-                                                          IsChecked="{Binding IsEditingTile}"                                                          
+                                                          IsChecked="{Binding IsEditingTile}"
                                                           Template="{StaticResource LockToggleButtonControlTemplate}">
                                                 <Image Source="/Resources/Images/edit.png" />
                                             </ToggleButton>

@@ -301,6 +301,7 @@ namespace MpWpfApp {
             };
 
             if(doAnimation) {
+                double animMs = 0;
                 double tileWidthMax = Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
                 double tileWidthMin = ClipTileViewModel.TileBorderWidth;
 
@@ -337,7 +338,7 @@ namespace MpWpfApp {
                 MpHelpers.Instance.AnimateDoubleProperty(
                     ClipTileViewModel.IsPastingTemplateTile ? pasteTemplateToolbarTopMax : pasteTemplateToolbarTopMin,
                     ClipTileViewModel.IsPastingTemplateTile ? pasteTemplateToolbarTopMin : pasteTemplateToolbarTopMax,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    animMs,
                     pasteTemplateToolbarBorder,
                     Canvas.TopProperty,
                     (s1, e44) => {
@@ -361,7 +362,7 @@ namespace MpWpfApp {
                 MpHelpers.Instance.AnimateDoubleProperty(
                     ClipTileViewModel.IsPastingTemplateTile ? tileWidthMin : tileWidthMax,
                     ClipTileViewModel.IsPastingTemplateTile ? tileWidthMax : tileWidthMin,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    animMs,
                     new List<FrameworkElement> { cb, titleSwirl },
                     FrameworkElement.WidthProperty,
                     (s1, e44) => {
@@ -370,7 +371,7 @@ namespace MpWpfApp {
                 MpHelpers.Instance.AnimateDoubleProperty(
                     ClipTileViewModel.IsPastingTemplateTile ? contentWidthMin : contentWidthMax,
                     ClipTileViewModel.IsPastingTemplateTile ? contentWidthMax : contentWidthMin,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    animMs,
                     new List<FrameworkElement> {rtblb, editRichTextToolbarBorder, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
                     FrameworkElement.WidthProperty,
                     (s1, e44) => {
@@ -385,13 +386,14 @@ namespace MpWpfApp {
                     ClipTileViewModel.IsPastingTemplateTile ? contentWidthMax : contentWidthMin,
                     0, 0,
                     0, 0,
-                    0, 0
+                    0, 0,
+                    animMs
                 );
 
                 MpHelpers.Instance.AnimateDoubleProperty(
                     ClipTileViewModel.IsPastingTemplateTile ? iconLeftMin : iconLeftMax,
                     ClipTileViewModel.IsPastingTemplateTile ? iconLeftMax : iconLeftMin,
-                    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+                    animMs,
                     titleIconImageButton,
                     Canvas.LeftProperty,
                     (s1, e23) => {

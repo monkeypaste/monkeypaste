@@ -52,6 +52,10 @@ namespace MpWpfApp {
         public const int TOKEN_ADJUST_DEFAULT = 0x80;
         public const int TOKEN_ALL_ACCESS = (STANDARD_RIGHTS_REQUIRED | TOKEN_ASSIGN_PRIMARY | TOKEN_DUPLICATE | TOKEN_IMPERSONATE | TOKEN_QUERY | TOKEN_QUERY_SOURCE | TOKEN_ADJUST_PRIVILEGES | TOKEN_ADJUST_GROUPS | TOKEN_ADJUST_SESSIONID | TOKEN_ADJUST_DEFAULT);
 
+        public const int SW_SHOWNORMAL = 1;
+        public const int SW_SHOWMINIMIZED = 2;
+        public const int SW_SHOWMAXIMIZED = 3;
+
         //[DllImport("user32.dll")]
         //public static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
 
@@ -108,10 +112,17 @@ namespace MpWpfApp {
             public static explicit operator Point(PointInter point) => new Point(point.X, point.Y);
         }
 
+        public static class Windows {
+            public const int NORMAL = 1;
+            public const int HIDE = 0;
+            public const int RESTORE = 9;
+            public const int SHOW = 5;
+            public const int MAXIMIXED = 3;
+        }
+
         public const int WM_CLIPBOARDUPDATE = 0x031D;
         public const int EM_SETRECT = 0xB3;
         public const int HWND_BROADCAST = 0xffff;
-        public const int SW_SHOWNORMAL = 1;
 
         [DllImport("msvcrt.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int memcmp(byte[] b1, byte[] b2, long count);
@@ -252,5 +263,9 @@ namespace MpWpfApp {
 
         [DllImport("USER32.DLL")]
         public static extern IntPtr GetShellWindow();
+
+
+        [DllImport("user32.dll")]
+        public static extern bool ShowWindowAsync(IntPtr hWnd, int nCmdShow);
     }
 }

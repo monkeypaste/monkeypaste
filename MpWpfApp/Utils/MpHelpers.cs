@@ -873,14 +873,20 @@ namespace MpWpfApp {
             }
         }
 
-        //exampe RunWithString(@"C:\windows\system32\cmd.exe",
         public IntPtr StartProcess(string args, string processPath, bool asAdministrator, bool isSilent) {
             System.Diagnostics.ProcessStartInfo processInfo = new System.Diagnostics.ProcessStartInfo();
             processInfo.FileName = processPath;//Environment.ExpandEnvironmentVariables("%SystemRoot%") + @"\System32\cmd.exe"; //Sets the FileName property of myProcessInfo to %SystemRoot%\System32\cmd.exe where %SystemRoot% is a system variable which is expanded using Environment.ExpandEnvironmentVariables
-            //processInfo.Arguments = "/K "/* + args*/;
+            if(!string.IsNullOrEmpty(args)) {
+                processInfo.Arguments = args;
+            }
             processInfo.WindowStyle = isSilent ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal; //Sets the WindowStyle of myProcessInfo which indicates the window state to use when the process is started to Hidden
             processInfo.Verb = asAdministrator ? "runas" : string.Empty; //The process should start with elevated permissions
+            
             using (var process = System.Diagnostics.Process.Start(processInfo)) { //Starts the process based on myProcessInfo
+                while (!WinApi.ShowWindow(process.MainWindowHandle, WinApi.Windows.NORMAL)) {
+                    Thread.Sleep(100);
+                    process.Refresh();
+                }
                 return process.Handle;
             }
             // TODO pass args to clipboard (w/ ignore in the manager) then activate window and paste
@@ -971,7 +977,10 @@ namespace MpWpfApp {
 
                 WinApi.GetWindowThreadProcessId(hwnd, out uint pid);
                 using (Process proc = Process.GetProcessById((int)pid)) {
-                    //Process mainProc = Process.GetProcessById(Process.GetProcessById(proc.Handle.ToInt32()).MainWindowHandle.ToInt32());
+                    if(proc.ProcessName == @"csrss") {
+                        //occurs with messageboxes and dialogs
+                        return GetApplicationProcessPath();
+                    }
                     return proc.MainModule.FileName.ToString();
                 }
             }
@@ -980,6 +989,7 @@ namespace MpWpfApp {
                 return GetExecutablePathAboveVista(hwnd);
             }
         }
+
         public string GetProcessMainWindowTitle(IntPtr hWnd) {
             try {
                 if (hWnd == null || hWnd == IntPtr.Zero) {
@@ -1314,7 +1324,13 @@ namespace MpWpfApp {
             return Math.Sqrt(Math.Pow(b.X - a.X, 2) + Math.Pow(b.Y - a.Y, 2));
         }
 
-        public DoubleAnimation AnimateDoubleProperty(double from, double to, double dt, object obj, DependencyProperty property, EventHandler onCompleted) {
+        public DoubleAnimation AnimateDoubleProperty(
+            double from, 
+            double to, 
+            double dt, 
+            object obj, 
+            DependencyProperty property, 
+            EventHandler onCompleted) {
             DoubleAnimation animation = new DoubleAnimation();
             animation.From = from;
             animation.To = to;
@@ -1338,7 +1354,12 @@ namespace MpWpfApp {
             return animation;
         }
 
-        public void AnimateVisibilityChange(FrameworkElement fe, Visibility tv, EventHandler onCompleted, double ms = 1000, double bt = 0) {
+        public void AnimateVisibilityChange(
+            object obj, 
+            Visibility tv, 
+            EventHandler onCompleted, 
+            double ms = 1000, 
+            double bt = 0) {
             var da = new DoubleAnimation {
                 Duration = new Duration(TimeSpan.FromMilliseconds(ms))
             };
@@ -1347,19 +1368,41 @@ namespace MpWpfApp {
             da.EasingFunction = easing;
 
             da.Completed += (o, e) => {
-                fe.Visibility = tv;
+                if (obj.GetType() == typeof(List<FrameworkElement>)) {
+                    foreach (var fe in (List<FrameworkElement>)obj) {
+                        fe.Visibility = tv;
+                    }
+                } else {
+                    ((FrameworkElement)obj).Visibility = tv;
+                }
             };
-            da.Completed += onCompleted;
+            if(onCompleted != null) {
+                da.Completed += onCompleted;
+            }
+            
             da.From = tv == Visibility.Visible ? 0 : 1;
             da.To = tv == Visibility.Visible ? 1 : 0;
             da.BeginTime = TimeSpan.FromMilliseconds(bt);
 
-            if(tv == Visibility.Visible) {
-                fe.Opacity = 0;
-                fe.Visibility = Visibility.Visible;
+            if (tv == Visibility.Visible) {
+                if (obj.GetType() == typeof(List<FrameworkElement>)) {
+                    foreach (var fe in (List<FrameworkElement>)obj) {
+                        fe.Opacity = 0;
+                        fe.Visibility = Visibility.Visible;
+                    }
+                } else {
+                    ((FrameworkElement)obj).Opacity = 0;
+                    ((FrameworkElement)obj).Visibility = Visibility.Visible;
+                }
             }
 
-            fe.BeginAnimation(UIElement.OpacityProperty, da);
+            if (obj.GetType() == typeof(List<FrameworkElement>)) {
+                foreach (var fe in (List<FrameworkElement>)obj) {
+                    fe.BeginAnimation(FrameworkElement.OpacityProperty, da);
+                }
+            } else {
+                ((FrameworkElement)obj).BeginAnimation(FrameworkElement.OpacityProperty, da);
+            }
         }
 
         public Size MeasureText(string text, Typeface typeface, double fontSize) {

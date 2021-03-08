@@ -119,6 +119,7 @@ namespace MpWpfApp {
                 MpShortcutCollectionViewModel.Instance.Remove(scvmToRemove);
             }
         }
+
         public void ClearTagEditing() {
             foreach(var ttvm in this) {
                 ttvm.IsEditing = false;
@@ -158,8 +159,10 @@ namespace MpWpfApp {
         public MpTagTileViewModel GetHistoryTagTileViewModel() {
             return this.Where(tt => tt.Tag.TagName == Properties.Settings.Default.HistoryTagTitle).ToList()[0];
         }
-        
 
+        public MpTagTileViewModel GetRecentTagTileViewModel() {
+            return this.Where(tt => tt.Tag.TagId == 2).ToList()[0];
+        }
         #endregion
 
         #region Commands

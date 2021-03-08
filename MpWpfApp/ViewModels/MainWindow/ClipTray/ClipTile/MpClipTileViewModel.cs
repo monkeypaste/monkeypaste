@@ -201,85 +201,21 @@
         #endregion
 
         #region Controls
-        private TextBox _titleTextBox;
-        public TextBox TitleTextBox {
-            get {
-                return _titleTextBox;
-            }
-            set {
-                if (_titleTextBox != value) {
-                    _titleTextBox = value;
-                    OnPropertyChanged(nameof(TitleTextBox));
-                }
-            }
-        }
+        public TextBox TitleTextBox { get; set; }
 
-        private TextBlock _titleTextBlock;
-        public TextBlock TitleTextBlock {
-            get {
-                return _titleTextBlock;
-            }
-            set {
-                if (_titleTextBlock != value) {
-                    _titleTextBlock = value;
-                    OnPropertyChanged(nameof(TitleTextBlock));
-                }
-            }
-        }
+        public TextBlock TitleTextBlock { get; set; }
 
-        private Image _image;
-        public Image Image {
-            get {
-                return _image;
-            }
-            set {
-                if(_image != value) {
-                    _image = value;
-                    OnPropertyChanged(nameof(Image));
-                }
-            }
-        }
+        public Image Image { get; set; }
 
-        private ListBox _richTextBoxListBox;
-        public ListBox RichTextBoxListBox {
-            get {
-                return _richTextBoxListBox;
-            }
-            set {
-                if(_richTextBoxListBox != value) {
-                    _richTextBoxListBox = value;
-                    OnPropertyChanged(nameof(RichTextBoxListBox));
-                }
-            }
-        }
+        public ListBox RichTextBoxListBox { get; set; }
 
-        private ListBox _fileListBox;
-        public ListBox FileListBox {
-            get {
-                return _fileListBox;
-            }
-            set {
-                if (_fileListBox != value) {
-                    _fileListBox = value;
-                    OnPropertyChanged(nameof(FileListBox));
-                }
-            }
-        }
+        public ListBox FileListBox { get; set; }
 
         public Canvas RtbListBoxCanvas { get; set; }
 
-        private MpClipBorder _clipBorder;
-        public MpClipBorder ClipBorder {
-            get {
-                return _clipBorder;
-            }
-            set {
-                if(_clipBorder != value) {
-                    _clipBorder = value;
-                    OnPropertyChanged(nameof(ClipBorder));
-                }
-            }
-        }
+        public MpClipBorder ClipBorder { get; set; }
+
+        public TranslateTransform ClipBorderTranslateTransform { get; set; }
         #endregion
 
         #region Layout Properties
@@ -348,7 +284,11 @@
 
         public double TileBorderMaxWidth {
             get {
-                return MpMeasurements.Instance.ClipTileBorderMinSize;
+                if (CopyItem == null) {
+                    return MpMeasurements.Instance.ClipTileBorderMinMaxSize;
+                }
+                var ds = RichTextBoxViewModelCollection.FullDocument.GetDocumentSize();
+                return Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
             }
         }
 
@@ -361,7 +301,7 @@
             }
         }
 
-        private double _tileBorderHeight = MpMeasurements.Instance.ClipTileSize;
+        private double _tileBorderHeight = MpMeasurements.Instance.ClipTileMinSize;
         public double TileBorderHeight {
             get {
                 return _tileBorderHeight;
@@ -414,21 +354,20 @@
 
         public double TileContentMinWidth {
             get {
-                return MpMeasurements.Instance.ClipTileContentWidth;
+                return MpMeasurements.Instance.ClipTileContentMinWidth;
+            }
+        }
+
+        public double TileContentMaxWidth {
+            get {
+                return TileBorderMaxWidth - MpMeasurements.Instance.ClipTileContentMargin;
             }
         }
 
 
-        private double _tileContentWidth = MpMeasurements.Instance.ClipTileContentWidth;
         public double TileContentWidth {
             get {
-                return _tileContentWidth;
-            }
-            set {
-                if (_tileContentWidth != value) {
-                    _tileContentWidth = value;
-                    OnPropertyChanged(nameof(TileContentWidth));
-                }
+                return IsExpanded ? TileContentMaxWidth : TileContentMinWidth;
             }
         }
 
@@ -481,6 +420,12 @@
         #endregion
 
         #region Visibility Properties
+        public Visibility ToggleEditModeButtonVisibility {
+            get {
+                return IsHovering ? Visibility.Visible : Visibility.Hidden;
+            }
+        }
+
         public Visibility ClipTileTitleAppIconVisibility {
             get {
                 return IsExpanded ? Visibility.Hidden : Visibility.Visible;
@@ -957,6 +902,7 @@
                     OnPropertyChanged(nameof(DetailTextColor));
                     OnPropertyChanged(nameof(TileDetectedImageItemsVisibility));
                     OnPropertyChanged(nameof(ContentCursor));
+                    OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
                 }                
             }
         }
@@ -973,6 +919,7 @@
                     OnPropertyChanged(nameof(TileBorderBrush));
                     OnPropertyChanged(nameof(DetailTextColor));
                     OnPropertyChanged(nameof(MenuOverlayVisibility));
+                    OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
                 }
             }
         }
@@ -1018,7 +965,7 @@
                 }
                 _detailIdx++;
                 if (_detailIdx >= Enum.GetValues(typeof(MpCopyItemDetailType)).Length) {
-                    _detailIdx = 0;
+                    _detailIdx = 1;
                 }
                 return CopyItem.GetDetail((MpCopyItemDetailType)_detailIdx);
             }
@@ -1448,6 +1395,7 @@
         #region Loading Initializers
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
             ClipBorder = (MpClipBorder)sender;
+            ClipBorderTranslateTransform = (TranslateTransform)ClipBorder.FindName("ClipTileBorderTranslateTransform");
             var clipTray = (ListBox)((MpMainWindow)Application.Current.MainWindow).FindName("ClipTray");
 
             ClipBorder.MouseEnter += (s, e1) => {
@@ -1677,7 +1625,7 @@
 
             RichTextBoxListBox = rtblb;
             RichTextBoxListBox.RequestBringIntoView += (s, e65) => { e65.Handled = true; };
-            RichTextBoxListBox.PreviewMouseLeftButtonDown += (s, e4) => {     
+            RichTextBoxListBox.PreviewMouseDown += (s, e4) => {     
                 if(IsSelected) {
                     return;
                 }
