@@ -430,8 +430,10 @@ namespace MpWpfApp {
                 mw,
                 Window.TopProperty,
                 (s, e) => {
-                    //ClipTrayViewModel.ShowVisibleTiles(500);
-                    //ClipTrayViewModel.ResetClipSelection();
+                    //if(ClipTrayViewModel.WasItemAdded) {
+                    //    ClipTrayViewModel.WasItemAdded = false;
+                    //    ClipTrayViewModel.Refresh();
+                    //}
                 });
         }
 

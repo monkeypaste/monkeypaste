@@ -626,6 +626,7 @@ namespace MpWpfApp {
                 Process.Start(url);
             }
         }
+        
         public string CreateEmail(string fromAddress, string subject, object body, string attachmentPath = "") {
             //this returns the .eml file that will need to be deleted
             var mailMessage = new MailMessage();

@@ -166,6 +166,8 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+        public bool WasItemAdded { get; set; } = false;
+
         public bool IsDragging { get; set; } = false;
 
         public Point StartDragPoint;
@@ -473,26 +475,8 @@ namespace MpWpfApp {
             MpClipboardManager.Instance.ClipboardChanged += (s, e53) => AddItemFromClipboard();
 
             if (Properties.Settings.Default.IsInitialLoad) {
-                var introItem1 = new MpCopyItem(
-                    MpCopyItemType.RichText,
-                    "Welcome to MonkeyPaste!",
-                    MpHelpers.Instance.ConvertPlainTextToRichText("Take a moment to look through the available features in the following tiles, which are always available in the 'Help' pinboard"));
-
-                var introItem2 = new MpCopyItem(
-                    MpCopyItemType.RichText,
-                    "One place for your clipboard",
-                    MpHelpers.Instance.ConvertPlainTextToRichText(""));
-                Properties.Settings.Default.IsInitialLoad = false;
-                Properties.Settings.Default.Save();
+                InitIntroItems();
             }
-
-            //Task.Run(() => {
-            //    while(this.Count < this._totalItemsAtLoad && !IsItemLoading) {
-            //        Thread.Sleep(15);
-            //    }
-            //    IsLoading = false;
-            //});
-
         }
 
         public void ClipTrayVirtualizingStackPanel_Loaded(object sender, RoutedEventArgs args) {
@@ -757,8 +741,11 @@ namespace MpWpfApp {
 
         public new void Add(MpClipTileViewModel ctvm) {
             base.Insert(0, ctvm);
-            //MainWindowViewModel.ClipTileSortViewModel.PerformSelectedSortCommand.Execute(null);
+
+            // NOTE removing this refresh will confuse the tiles flowdocument owner or something
+            // it probably is something I can fix to avoid the refresh but not sure how
             Refresh();
+            //WasItemAdded = true;
         }
 
         public void Refresh() {
@@ -768,11 +755,8 @@ namespace MpWpfApp {
            ClipTrayListView?.Items.Refresh();
         }
 
-        public new void Remove(MpClipTileViewModel clipTileToRemove, bool isTemporary = false) {
+        public void Remove(MpClipTileViewModel clipTileToRemove, bool isMerge = false) {
             base.Remove(clipTileToRemove);
-            if(isTemporary) {
-                return;
-            }
             if (clipTileToRemove.CopyItem == null) {
                 //occurs when duplicate detected on background thread
                 return;
@@ -782,7 +766,9 @@ namespace MpWpfApp {
                     ttvm.TagClipCount--;
                 }
             }
-            clipTileToRemove.CopyItem.DeleteFromDatabase();
+            if(!isMerge) {
+                clipTileToRemove.CopyItem.DeleteFromDatabase();
+            }
 
             //remove any shortcuts associated with clip
             var scvmToRemoveList = new List<MpShortcutViewModel>();
@@ -991,6 +977,20 @@ namespace MpWpfApp {
         private int GetClipTileFromDrag(Point startLoc,Point curLoc) {
             return 0;
         }       
+
+        private void InitIntroItems() {
+            //var introItem1 = new MpCopyItem(
+            //        MpCopyItemType.RichText,
+            //        "Welcome to MonkeyPaste!",
+            //        MpHelpers.Instance.ConvertPlainTextToRichText("Take a moment to look through the available features in the following tiles, which are always available in the 'Help' pinboard"));
+
+            //var introItem2 = new MpCopyItem(
+            //    MpCopyItemType.RichText,
+            //    "One place for your clipboard",
+            //    MpHelpers.Instance.ConvertPlainTextToRichText(""));
+            //Properties.Settings.Default.IsInitialLoad = false;
+            //Properties.Settings.Default.Save();
+        }
 
         #endregion
 
@@ -1395,7 +1395,7 @@ namespace MpWpfApp {
                         clipTilesToRemove.Add(selectedClipTile);
                     }
                     foreach (MpClipTileViewModel tileToRemove in clipTilesToRemove) {
-                        this.Remove(tileToRemove);
+                        this.Remove(tileToRemove,true);
                     }
                     var psctvm = PrimarySelectedClipTile;
                     ClearClipSelection();
@@ -1403,7 +1403,7 @@ namespace MpWpfApp {
                     psctvm.IsSelected = true;
                     psctvm.IsClipItemFocused = true;
                     //this breaks mvvm but no way to refresh tokens w/o
-                    Refresh();
+                    //Refresh();
                 })
             );   
         }

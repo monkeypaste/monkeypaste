@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 namespace MpWpfApp {
     public class MpRtbListBoxItemRichTextBoxViewModel : MpUndoableViewModelBase<MpRtbListBoxItemRichTextBoxViewModel>, ICloneable {
         #region Private Variables
-        private int _detailIdx = 0;
+        private int _detailIdx = 1;
         #endregion
 
         #region Properties
@@ -100,6 +100,7 @@ namespace MpWpfApp {
                 return MpMeasurements.Instance.RtbCompositeDragButtonSize;
             }
         }
+
         public double RtbListBoxItemTitleFontSize {
             get {
                 return MpMeasurements.Instance.RtbCompositeItemTitleFontSize;
@@ -114,7 +115,7 @@ namespace MpWpfApp {
                 var mm = MpMeasurements.Instance.RtbEditModeMinMargin;
                 if (IsCompositeChild && (!IsSubSelected || !HostClipTileViewModel.IsExpanded)) {
                     if(IsHovering) {
-                        return new Thickness(DragButtonSize + mm, RtbListBoxItemTitleFontSize + mm, mm, mm);
+                        return new Thickness(DragButtonSize + mm, RtbListBoxItemTitleFontSize + mm, mm, 0);
                     }
                     return new Thickness(mm);
                 }
@@ -761,6 +762,9 @@ namespace MpWpfApp {
                 //HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.RtbHorizontalScrollbarVisibility));
                 //HostClipTileViewModel.RichTextBoxListBox.UpdateLayout();
                 var rtblb = HostClipTileViewModel.RichTextBoxListBox;
+                if(rtblb == null) {
+                    return;
+                }
                 var border = (Border)VisualTreeHelper.GetChild(rtblb, 0);
                 var sv = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
                 sv.InvalidateScrollInfo();
@@ -842,7 +846,7 @@ namespace MpWpfApp {
                     IsEditingSubTitle = false;
                 }
             };
-
+            
             OnPropertyChanged(nameof(SubItemOverlayVisibility));
             
             OnPropertyChanged(nameof(RtbMargin));
@@ -851,6 +855,12 @@ namespace MpWpfApp {
         }
 
         public BitmapSource FlowDocumentToBitmap(FlowDocument document, Size size) {
+            if(size.Width <= 0) {
+                size.Width = 1;
+            }
+            if(size.Height <= 0) {
+                size.Height = 1;
+            }
             document.PagePadding = new Thickness(0);
             document.ColumnWidth = size.Width;
             document.PageWidth = size.Width;

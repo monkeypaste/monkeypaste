@@ -124,7 +124,7 @@ namespace MpWpfApp {
             CanAcceptChildren = true;
             HostClipTileViewModel = ctvm;
             CollectionChanged += (s, e) => {
-                if(HostClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
+                if (HostClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
                     foreach (MpRtbListBoxItemRichTextBoxViewModel newItem in this) {
                         newItem.CompositeParentCopyItemId = HostClipTileViewModel.CopyItemId;
                         newItem.CompositeSortOrderIdx = this.IndexOf(newItem);

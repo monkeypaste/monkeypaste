@@ -1082,5 +1082,17 @@ namespace MpWpfApp.Properties {
                 this["ThemeClipTileBackgroundColor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IgnoreWhiteSpaceCopyItems {
+            get {
+                return ((bool)(this["IgnoreWhiteSpaceCopyItems"]));
+            }
+            set {
+                this["IgnoreWhiteSpaceCopyItems"] = value;
+            }
+        }
     }
 }

@@ -253,7 +253,7 @@ namespace MpWpfApp {
 
         public double RtbCompositeItemMinHeight {
             get {
-                return ClipTileContentHeight / 20;
+                return ClipTileContentHeight / 5;
             }
         }
 

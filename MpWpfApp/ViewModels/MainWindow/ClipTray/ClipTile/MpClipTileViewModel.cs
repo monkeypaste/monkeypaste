@@ -30,7 +30,7 @@
     public class MpClipTileViewModel : MpUndoableViewModelBase<MpClipTileViewModel>, IDisposable {        
         #region Private Variables
 
-        private int _detailIdx = 0;
+        private int _detailIdx = 1;
 
         private List<string> _tempFileList = new List<string>();
 
@@ -670,8 +670,7 @@
 
         public Cursor ContentCursor {
             get {
-                if (IsSelected && (CopyItemType == MpCopyItemType.RichText || 
-                    CopyItemType == MpCopyItemType.Composite)) {
+                if (IsExpanded) {
                     return Cursors.IBeam;
                 }
                 return Cursors.Arrow;
@@ -1388,7 +1387,7 @@
             }
             if (MainWindowViewModel != null) {
                 //is null during loading and the refresh isn't needed
-                MainWindowViewModel.ClipTrayViewModel.Refresh();
+                //MainWindowViewModel.ClipTrayViewModel.Refresh();
             }
         }
 
@@ -1721,7 +1720,7 @@
         }
 
         public void ClipTile_ContextMenu_Closed(object sender, RoutedEventArgs e) {
-            ((MpClipTileViewModel)((FrameworkElement)sender).DataContext).SaveToDatabase();
+            //((MpClipTileViewModel)((FrameworkElement)sender).DataContext).SaveToDatabase();
         }
 
         public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
