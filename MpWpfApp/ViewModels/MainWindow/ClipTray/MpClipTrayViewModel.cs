@@ -484,9 +484,8 @@ namespace MpWpfApp {
         }
 
         public void ExpandClipTile(MpClipTileViewModel ctvmToExpand, bool isPastingTemplate) {
-            double animMs = 0;
-            ClearClipSelection();
-            ctvmToExpand.IsSelected = true;
+            //double animMs = 0;
+            
             if (isPastingTemplate) {
                 ctvmToExpand.IsPastingTemplateTile = true;
                 ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
@@ -551,12 +550,14 @@ namespace MpWpfApp {
 
         }
 
-        public void ShrinkClipTile(MpClipTileViewModel ctvmToExpand, bool isPastingTemplate) {
+        public void ShrinkClipTile(MpClipTileViewModel ctvmToShrink, bool isPastingTemplate) {
             if (isPastingTemplate) {
-                ctvmToExpand.IsPastingTemplateTile = false;
+                ctvmToShrink.IsPastingTemplateTile = false;
             } else {
-                ctvmToExpand.IsEditingTile = false;
+                ctvmToShrink.IsEditingTile = false;
             }
+            ClearClipSelection(true);
+            ctvmToShrink.IsSelected = true;
             //EventHandler preFadeEvent = (s, e) => {
             //    if (isPastingTemplate) {
             //        ctvmToExpand.IsPastingTemplateTile = false;
@@ -648,6 +649,7 @@ namespace MpWpfApp {
             foreach (var ctvm in this) {    
                 ctvm.IsPastingTemplateTile = false;
                 ctvm.IsEditingTemplate = false;
+                ctvm.IsHovering = false;                
                 ctvm.IsSelected = false;
                 ctvm.IsPrimarySelected = false;
                 ctvm.RichTextBoxViewModelCollection.ClearSubSelection();

@@ -70,7 +70,7 @@ namespace MpWpfApp {
 
         public string ItemRichText { get; set; }
 
-        public FlowDocument ItemFlowDocument { get; set; }
+        public MpEventEnabledFlowDocument ItemFlowDocument { get; set; }
 
         private string _itemCsv = string.Empty;
         public string ItemCsv { 
@@ -655,6 +655,8 @@ namespace MpWpfApp {
                         info = "(" + (int)ItemBitmapSource.Width + ") x (" + (int)ItemBitmapSource.Height + ")";
                     } else if (CopyItemType == MpCopyItemType.RichText) {
                         info = CharCount + " chars | " + LineCount + " lines";
+                    } else if (CopyItemType == MpCopyItemType.Composite) {
+                        info = CompositeItemList.Count + " items | " + CharCount + " chars | " + LineCount + " lines";
                     } else if (CopyItemType == MpCopyItemType.FileList) {
                         info = FileCount + " files | " + DataSizeInMb + " MB";
                     }
@@ -953,6 +955,13 @@ namespace MpWpfApp {
                     DataSizeInMb = MpHelpers.Instance.FileListSize(GetFileList().ToArray());
                     break;
                 case MpCopyItemType.Composite:
+                    LineCount = 0;
+                    CharCount = 0;
+                    foreach (var sci in CompositeItemList) {
+                        LineCount += MpHelpers.Instance.GetRowCount(sci.ItemPlainText);
+                        CharCount += sci.ItemPlainText.Length;
+                    }
+                    break;
                 case MpCopyItemType.RichText:
                     LineCount = MpHelpers.Instance.GetRowCount(ItemPlainText);
                     CharCount = ItemPlainText.Length;

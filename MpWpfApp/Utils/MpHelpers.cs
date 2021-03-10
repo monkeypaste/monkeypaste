@@ -49,7 +49,7 @@ namespace MpWpfApp {
             //yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect());
         }
 
-        #region Documents        
+        #region Documents    
         public void ApplyBackgroundBrushToRangeList(MpObservableCollection<MpObservableCollection<TextRange>> rangeList, Brush bgBrush, CancellationToken ct) {
             if (rangeList == null || rangeList.Count == 0) {
                 return;
@@ -1256,31 +1256,6 @@ namespace MpWpfApp {
             cm.Width = 300;
         }
 
-        public BitmapSource ConvertRichTextToBitmapSource(string rt, Size ds) {
-            System.Drawing.Size ts = new System.Drawing.Size((int)ds.Width, (int)ds.Height);
-            using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(ts.Width, ts.Height)) {
-                using (System.Drawing.Graphics graphics = System.Drawing.Graphics.FromImage(bmp)) {
-                    graphics.Clear(System.Drawing.Color.White);
-                    //graphics.DrawRtfText(rt, new System.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height), 0.75f);
-                    Graphics_DrawRtfText.DrawRtfText(graphics, rt, new System.Drawing.RectangleF(0, 0, bmp.Width, bmp.Height), 1f);
-                    graphics.Flush();
-                    graphics.Dispose();
-                }
-                //Metafile mf = ((System.Drawing.Image)bmp) as Metafile;
-                return ConvertBitmapToBitmapSource(bmp);
-                //int resolution = 200;
-                //int width = (int)(ds.Width * resolution / bmp.HorizontalResolution);
-                //int height = (int)(ds.Height * resolution / bmp.VerticalResolution);
-                //using (System.Drawing.Bitmap nbmp = new System.Drawing.Bitmap(width, height)) {
-                //    nbmp.SetResolution(resolution, resolution);
-                //    using (System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(nbmp)) {
-                //        g.DrawImage(bmp, System.Drawing.Point.Empty);
-                //    }
-                //    return ConvertBitmapToBitmapSource(nbmp);
-                //}                    
-            }
-        }
-
         public int GetColorColumn(Brush scb) {
             for (int c = 0; c < _ContentColors.Count; c++) {
                 for (int r = 0; r < _ContentColors[0].Count; r++) {                    
@@ -1831,6 +1806,35 @@ namespace MpWpfApp {
         #endregion
 
         #region Converters
+        public BitmapSource ConvertFlowDocumentToBitmap(FlowDocument document, Size size) {
+            if (size.Width <= 0) {
+                size.Width = 1;
+            }
+            if (size.Height <= 0) {
+                size.Height = 1;
+            }
+            document.PagePadding = new Thickness(0);
+            document.ColumnWidth = size.Width;
+            document.PageWidth = size.Width;
+            document.PageHeight = size.Height;
+
+            var paginator = ((IDocumentPaginatorSource)document).DocumentPaginator;
+            paginator.PageSize = size;
+
+            var visual = new DrawingVisual();
+            using (var drawingContext = visual.RenderOpen()) {
+                // draw white background
+                drawingContext.DrawRectangle(Brushes.White, null, new Rect(size));
+            }
+            visual.Children.Add(paginator.GetPage(0).Visual);
+
+            var bitmap = new RenderTargetBitmap((int)size.Width, (int)size.Height,
+                                                96, 96, PixelFormats.Pbgra32);
+
+            bitmap.Render(visual);
+            return bitmap;
+        }
+
         public List<List<Key>> ConvertStringToKeySequence(string keyStr) {
             var keyList = new List<List<Key>>();
             var combos = keyStr.Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries).ToList<string>();

@@ -395,19 +395,20 @@ namespace MpWpfApp {
         }
         public string TemplateRichText { get; set; }
 
-        private BitmapSource _previewBmpSrc;
-        public BitmapSource PreviewBmpSrc {
-            get {
-                return _previewBmpSrc;
-            }
-            set {
-                if(_previewBmpSrc != value) {
-                    _previewBmpSrc = value;
-                    CopyItem.ItemBitmapSource = _previewBmpSrc;
-                    OnPropertyChanged(nameof(PreviewBmpSrc));
-                }
-            }
-        }
+        //public BitmapSource PreviewBmpSrc {
+        //    get {
+        //        if (HostClipTileViewModel == null) {
+        //            return null;
+        //        }
+        //        return HostClipTileViewModel.CopyItemBmp;
+        //    }
+        //    set {
+        //        if(HostClipTileViewModel.CopyItemBmp != value) {
+        //            HostClipTileViewModel.CopyItemBmp = value;
+        //            OnPropertyChanged(nameof(PreviewBmpSrc));
+        //        }
+        //    }
+        //}
         #endregion
 
         #region State
@@ -721,10 +722,7 @@ namespace MpWpfApp {
                                     rtbvm.IsEditingSubTitle = false;
                                 }
                             }
-                        } else {
-                            PreviewBmpSrc = FlowDocumentToBitmap(Rtb.Document.Clone(), Rtb.Document.GetDocumentSize());
-                            CopyItem.WriteToDatabase();
-                        }
+                        } 
                         HostClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(HostClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel));
                         HostClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(HostClipTileViewModel.RichTextBoxViewModelCollection.SelectedRtb));
                         break;
@@ -785,11 +783,6 @@ namespace MpWpfApp {
                 Rtb.SelectAll();
                 Rtb.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
                 Rtb.CaretPosition = Rtb.Document.ContentStart;
-
-                PreviewBmpSrc = FlowDocumentToBitmap(Rtb.Document.Clone(), Rtb.Document.GetDocumentSize());
-                CopyItem.WriteToDatabase();
-            } else {
-                PreviewBmpSrc = CopyItem.ItemBitmapSource;
             }
 
             RtbcAdornerLayer = AdornerLayer.GetAdornerLayer(Rtbc);
@@ -810,7 +803,18 @@ namespace MpWpfApp {
             };
 
             RtbListBoxItemClipBorder.MouseLeftButtonDown += (s, e9) => {
+                bool wasSubSelected = IsSubSelected;
                 SelectItemCommand.Execute(null);
+                
+                if(HostClipTileViewModel.IsExpanded && !wasSubSelected) {
+                    var mp = e9.GetPosition(Rtb);
+
+                    var newarg = new MouseButtonEventArgs(e9.MouseDevice, e9.Timestamp,
+                                                  e9.ChangedButton, e9.StylusDevice);
+                    newarg.RoutedEvent = RichTextBox.MouseDownEvent;
+                    newarg.Source = sender;
+                    Rtb.RaiseEvent(newarg);
+                }
             };
 
             RtbListBoxItemTitleTextBlock.PreviewMouseLeftButtonDown += (s, e7) => {

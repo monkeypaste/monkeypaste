@@ -422,7 +422,7 @@
         #region Visibility Properties
         public Visibility ToggleEditModeButtonVisibility {
             get {
-                return IsHovering ? Visibility.Visible : Visibility.Hidden;
+                return IsHovering || IsExpanded ? Visibility.Visible : Visibility.Hidden;
             }
         }
 
@@ -617,6 +617,28 @@
         #endregion
 
         #region Business Logic Properties
+
+        private BitmapSource _contentPreviewToolTipBmpSrc = null;
+        public BitmapSource ContentPreviewToolTipBmpSrc {
+            get {
+                if(CopyItem == null) {
+                    return null;
+                }
+                if(_contentPreviewToolTipBmpSrc == null) {
+                    _contentPreviewToolTipBmpSrc = MpHelpers.Instance.ConvertFlowDocumentToBitmap(
+                                RichTextBoxViewModelCollection.FullDocument.Clone(),
+                                RichTextBoxViewModelCollection.FullDocument.GetDocumentSize());
+                }
+                return _contentPreviewToolTipBmpSrc;
+            }
+            set {
+                if(_contentPreviewToolTipBmpSrc != value) {
+                    _contentPreviewToolTipBmpSrc = value;
+                    OnPropertyChanged(nameof(ContentPreviewToolTipBmpSrc));
+                }
+            }
+        }
+
         public string TemplateRichText { get; set; }
 
         private bool _wasAddedAtRuntime = false;
@@ -783,6 +805,7 @@
                     OnPropertyChanged(nameof(TileContentHeight));
                     OnPropertyChanged(nameof(IsExpanded));
                     OnPropertyChanged(nameof(ClipTileTitleAppIconVisibility));
+                    OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
                 }
             }
         }
@@ -837,6 +860,9 @@
 
         public bool IsExpanded {
             get {
+                if(ClipBorder == null) {
+                    return false;
+                }
                 if(IsPastingTemplateTile || IsEditingTemplate || IsEditingTile) {
                     return true;
                 }
@@ -894,7 +920,7 @@
                 return _isSelected;
             }
             set {
-                if (_isSelected != value) {
+                if (_isSelected != value && (!MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded || IsExpanded)) {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
                     OnPropertyChanged(nameof(TileBorderBrush));
@@ -912,13 +938,14 @@
                 return _isHovering;
             }
             set {
-                if (_isHovering != value && !IsEditingTitle) {
+                if (_isHovering != value && !MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded) {
                     _isHovering = value;
                     OnPropertyChanged(nameof(IsHovering));
                     OnPropertyChanged(nameof(TileBorderBrush));
                     OnPropertyChanged(nameof(DetailTextColor));
                     OnPropertyChanged(nameof(MenuOverlayVisibility));
                     OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
+                    OnPropertyChanged(nameof(ContentPreviewToolTipBmpSrc));
                 }
             }
         }
@@ -1141,6 +1168,13 @@
                 }
                 return CopyItem.ItemBitmapSource;
             }
+            set {
+                if(CopyItem.ItemBitmapSource != value) {
+                    CopyItem.ItemBitmapSource = value;
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyItemBmp));
+                }
+            }
         }
 
         public List<string> CopyItemFileDropList {
@@ -1350,6 +1384,12 @@
                         //} else {
                         //    MainWindowViewModel.ClipTrayViewModel.ShrinkClipTile(this, false);
                         //}
+                        if(!IsEditingTile && 
+                           (CopyItemType == MpCopyItemType.Composite || CopyItemType == MpCopyItemType.RichText)) {
+                            ContentPreviewToolTipBmpSrc = null;
+                            OnPropertyChanged(nameof(ContentPreviewToolTipBmpSrc));
+                            
+                        }
                         break;
                     case nameof(IsPastingTemplateTile):
                         //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
@@ -1992,10 +2032,11 @@
                   !IsPastingTemplateTile;
         }
         private void ToggleEditClip(object args) {
-            //if(IsEditingTile == false && !IsSelected) {
-            //    IsSelected = true;
-            //}
-            if(args == null) {
+            MainWindowViewModel.ClipTrayViewModel.ClearClipSelection(false);
+            if (IsEditingTile == false && !IsSelected) {
+                IsSelected = true;
+            }
+            if (args == null) {
                 //happens when toggled from context menu and from code not button in detail grid
                 IsEditingTile = !IsEditingTile;
             }

@@ -1408,8 +1408,6 @@
                                                           Command="{Binding ToggleEditTitleCommand}" />
                                                 <MenuItem Header="Duplicate"
                                                           Command="{Binding Data.DuplicateSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
-                                                <MenuItem Header="Edit"
-                                                          Command="{Binding ToggleEditClipCommand}" />
                                                 <MenuItem Header="Send as Email"
                                                           Command="{Binding SendClipToEmailCommand}" />
                                                 <MenuItem x:Name="ClipTileColorContextMenuItem"
@@ -1602,7 +1600,26 @@
                                         <Canvas x:Name="ClipTileContentCanvas"
                                                 Grid.Row="1"
                                                 ClipToBounds="True"
+                                                ToolTipService.InitialShowDelay="1000"
                                                 Grid.Column="0">
+                                            <Canvas.ToolTip>
+                                                <ToolTip Visibility="{Binding ToolTipVisibility}"
+                                                         Placement="Top">
+                                                    <ToolTip.Template>
+                                                        <ControlTemplate>
+                                                            <local:MpClipBorder Background="White"
+                                                                                BorderThickness="1"
+                                                                                BorderBrush="Black"
+                                                                                Padding="5">
+                                                                <Image Stretch="Fill" 
+                                                                       HorizontalAlignment="Center"
+                                                                       VerticalAlignment="Center"
+                                                                       Source="{Binding Path=DataContext.ContentPreviewToolTipBmpSrc,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:MpClipBorder}}}" />
+                                                            </local:MpClipBorder>
+                                                        </ControlTemplate>
+                                                    </ToolTip.Template>
+                                                </ToolTip>
+                                            </Canvas.ToolTip>
                                             <!-- RichText Content -->
                                             <Canvas x:Name="ClipTileRichTextBoxListBoxGridContainerCanvas"
                                                     Visibility="{Binding RtbVisibility}"
@@ -1931,31 +1948,12 @@
                                                                                 <Binding Path="SystemTrayViewModel.SettingsWindowViewModel.PreferencesViewModel.UseSpellCheck"
                                                                                          Source="{StaticResource MainWindowViewModel}" />
                                                                             </SpellCheck.IsEnabled>
-                                                                            <RichTextBox.ToolTip>
-                                                                                <ToolTip Visibility="{Binding ToolTipVisibility}"
-                                                                                         Placement="Top">
-                                                                                    <ToolTip.Template>
-                                                                                        <ControlTemplate>
-                                                                                            <local:MpClipBorder Background="White"
-                                                                                                                BorderThickness="1"
-                                                                                                                BorderBrush="Black"
-                                                                                                                Padding="5">
-                                                                                                <Image Stretch="Fill"
-                                                                                                       HorizontalAlignment="Center"
-                                                                                                       VerticalAlignment="Center"
-                                                                                                       Source="{Binding Path=DataContext.PreviewBmpSrc,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type local:MpClipBorder}}}" />
-                                                                                            </local:MpClipBorder>
-                                                                                        </ControlTemplate>
-                                                                                    </ToolTip.Template>
-                                                                                </ToolTip>
-                                                                            </RichTextBox.ToolTip>
                                                                         </RichTextBox>
                                                                         <local:MpClipBorder x:Name="RtbListBoxItemOverlayBorder"
                                                                                             DataContext="{Binding}"
                                                                                             Visibility="{Binding SubItemOverlayVisibility}"
                                                                                             Width="{Binding RtbCanvasWidth}"
                                                                                             Height="{Binding RtbCanvasHeight}"
-                                                                                            ToolTipService.InitialShowDelay="1000"
                                                                                             Background="{Binding RtbListBoxItemBackgroundColor}"
                                                                                             BorderThickness="0"
                                                                                             CornerRadius="5">
@@ -2005,7 +2003,7 @@
                                                                                 <TextBox x:Name="RtbListBoxItemTitleTextBox"
                                                                                          DockPanel.Dock="Right"
                                                                                          Opacity="1"
-                                                                                         Margin="0,0,7,0"
+                                                                                         Margin="0,0,30,0"
                                                                                          TextAlignment="Right"
                                                                                          VerticalAlignment="Top"
                                                                                          HorizontalAlignment="Right"
@@ -2415,8 +2413,6 @@
                                                           Margin="0,-5,2,0"
                                                           Visibility="{Binding ToggleEditModeButtonVisibility}"
                                                           Command="{Binding ToggleEditClipCommand}"
-                                                          CommandParameter="{StaticResource True}"
-                                                          IsChecked="{Binding IsEditingTile}"
                                                           Template="{StaticResource LockToggleButtonControlTemplate}">
                                                 <Image Source="/Resources/Images/edit.png" />
                                             </ToggleButton>

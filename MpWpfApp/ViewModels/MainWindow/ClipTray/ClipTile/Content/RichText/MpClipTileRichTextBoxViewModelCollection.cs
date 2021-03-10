@@ -62,10 +62,19 @@ namespace MpWpfApp {
 
         public MpEventEnabledFlowDocument FullDocument {
             get {
-                var fullDocument = MpHelpers.Instance.ConvertRichTextToFlowDocument(MpHelpers.Instance.ConvertPlainTextToRichText(string.Empty));
+                var fullDocument = string.Empty.ToRichText().ToFlowDocument();
 
                 foreach(var rtbvm in this) {
-                    MpHelpers.Instance.CombineFlowDocuments((MpEventEnabledFlowDocument)rtbvm.Rtb.Document, fullDocument, true);
+                    MpEventEnabledFlowDocument fd = null;
+                    if(rtbvm.Rtb == null) {
+                        fd = rtbvm.CopyItemRichText.ToFlowDocument();
+                    } else {
+                        fd = rtbvm.Rtb.Document.Clone();
+                    }
+                    MpHelpers.Instance.CombineFlowDocuments(
+                        fd, 
+                        fullDocument, 
+                        true);
                 }
                 return fullDocument;
             }
@@ -130,6 +139,8 @@ namespace MpWpfApp {
                         newItem.CompositeSortOrderIdx = this.IndexOf(newItem);
                         newItem.CopyItem.WriteToDatabase();
                     }
+                    HostClipTileViewModel.ContentPreviewToolTipBmpSrc = null;
+                    HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.ContentPreviewToolTipBmpSrc));
                 }
             };
         }
@@ -321,6 +332,8 @@ namespace MpWpfApp {
         public void ClearSubSelection() {
             foreach(var rtbvm in this) {
                 rtbvm.IsSubSelected = false;
+                rtbvm.IsEditingContent = false;
+                rtbvm.IsEditingSubTitle = false;
             }
         }
 
