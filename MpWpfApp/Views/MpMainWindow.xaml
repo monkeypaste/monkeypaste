@@ -1362,7 +1362,8 @@
                                     <DropShadowEffect Color="DarkGray"
                                                       BlurRadius="7" />
                                 </local:MpClipBorder.Effect>-->
-                                <Grid x:Name="ClipTileBorderGrid" Background="#FF3D3D3D"
+                                <Grid x:Name="ClipTileBorderGrid" 
+                                      Background="#FF3D3D3D"
                                       Visibility="{Binding ContainerVisibility}">
                                     <Grid Background="White"
                                           Visibility="{Binding ContentVisibility}">
@@ -1862,7 +1863,8 @@
                                                 </Border>
                                                 <Grid x:Name="ClipTileRichTextboxListBoxContainerGrid">
                                                     <ListBox x:Name="ClipTileRichTextBoxListBox"
-                                                             BorderThickness="0"
+                                                             BorderThickness="1"
+                                                             BorderBrush="Pink"
                                                              SelectionMode="Single"
                                                              dd:DragDrop.IsDragSource="False"
                                                              dd:DragDrop.IsDropTarget="False"

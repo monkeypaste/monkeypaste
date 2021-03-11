@@ -296,14 +296,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Visibility
-        public Visibility ToolTipVisibility {
-            get {
-                if (HostClipTileViewModel == null) {
-                    return Visibility.Collapsed;
-                }
-                return HostClipTileViewModel.IsSelected ? Visibility.Collapsed : Visibility.Visible;
-            }
-        }
 
         public Visibility SubItemOverlayVisibility {
             get {
@@ -456,7 +448,6 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(RtbListBoxItemBorderBrush));
                     OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
                     OnPropertyChanged(nameof(RtbBorderBrush));
-                    OnPropertyChanged(nameof(ToolTipVisibility));
                     OnPropertyChanged(nameof(RtbMargin));
                 }
             }
@@ -480,7 +471,6 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(RtbCanvasHeight));
                     OnPropertyChanged(nameof(RtbPageWidth));
                     OnPropertyChanged(nameof(RtbPageHeight));
-                    OnPropertyChanged(nameof(ToolTipVisibility));
                     OnPropertyChanged(nameof(RtbBorderBrush));
                 }
             }

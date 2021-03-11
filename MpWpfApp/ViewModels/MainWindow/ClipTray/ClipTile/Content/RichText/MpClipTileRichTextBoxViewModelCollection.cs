@@ -62,27 +62,32 @@ namespace MpWpfApp {
 
         public MpEventEnabledFlowDocument FullDocument {
             get {
-                var fullDocument = string.Empty.ToRichText().ToFlowDocument();
+                return GetFullDocument();
+            }
+        }
 
-                foreach(var rtbvm in this) {
-                    MpEventEnabledFlowDocument fd = null;
-                    if(rtbvm.Rtb == null) {
-                        fd = rtbvm.CopyItemRichText.ToFlowDocument();
-                    } else {
-                        fd = rtbvm.Rtb.Document.Clone();
-                    }
-                    MpHelpers.Instance.CombineFlowDocuments(
-                        fd, 
-                        fullDocument, 
-                        true);
-                }
-                return fullDocument;
+        public MpEventEnabledFlowDocument FullSeparatedDocument {
+            get {
+                return GetFullSeperatedDocument();
             }
         }
         #endregion
 
         #region Layout
+        private double _rtbListBoxHeight = MpMeasurements.Instance.ClipTileContentHeight;
         public double RtbListBoxHeight {
+            get {
+                return _rtbListBoxHeight;
+            }
+            set {
+                if(_rtbListBoxHeight != value) {
+                    _rtbListBoxHeight = value;
+                    OnPropertyChanged(nameof(RtbListBoxHeight));
+                }
+            }
+        }
+
+        public double RtbListBoxDesiredHeight {
             get {
                 double ch = MpMeasurements.Instance.ClipTileContentHeight;
                 if (HostClipTileViewModel.IsEditingTile) {
@@ -100,6 +105,7 @@ namespace MpWpfApp {
                 return Math.Max(ch,TotalItemHeight);
             }
         }
+
         public double RelativeWidthMax {
             get {
                 double maxWidth = 0;
@@ -366,7 +372,55 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+        private MpEventEnabledFlowDocument GetFullDocument() {
+            var fullDocument = string.Empty.ToRichText().ToFlowDocument();
+            foreach (var rtbvm in this) {
+                MpEventEnabledFlowDocument fd = null;
+                if (rtbvm.Rtb == null) {
+                    fd = rtbvm.CopyItemRichText.ToFlowDocument();
+                } else {
+                    fd = rtbvm.Rtb.Document.Clone();
+                }
+                MpHelpers.Instance.CombineFlowDocuments(
+                    fd,
+                    fullDocument,
+                    true);
+            }
+            return fullDocument;
+        }
 
+        private MpEventEnabledFlowDocument GetFullSeperatedDocument(string separatorChar = "- ") {
+            int maxCols = int.MinValue;
+            foreach (var rtbvm in this) {
+                maxCols = Math.Max(maxCols, MpHelpers.Instance.GetColCount(rtbvm.CopyItemPlainText));
+            }
+            string separatorLine = string.Empty;
+            for(int i = 0;i < maxCols;i++) {
+                separatorLine += separatorChar;
+            }
+            var separatorDocument = separatorLine.ToRichText().ToFlowDocument();
+            var fullDocument = string.Empty.ToRichText().ToFlowDocument();
+            for (int i = 0; i < this.Count; i++) {
+                var rtbvm = this[i];
+                if(i % 2 == 1) {
+                    MpHelpers.Instance.CombineFlowDocuments(
+                    separatorDocument,
+                    fullDocument,
+                    true);
+                }
+                MpEventEnabledFlowDocument fd = null;
+                if (rtbvm.Rtb == null) {
+                    fd = rtbvm.CopyItemRichText.ToFlowDocument();
+                } else {
+                    fd = rtbvm.Rtb.Document.Clone();
+                }
+                MpHelpers.Instance.CombineFlowDocuments(
+                    fd,
+                    fullDocument,
+                    true);
+            }
+            return fullDocument;
+        }
         #endregion
     }
 }

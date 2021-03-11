@@ -292,14 +292,29 @@
             }
         }
 
+        //public double TileBorderWidth {
+        //    get {
+        //        if(IsExpanded) {
+        //            return TileBorderMaxWidth;
+        //        }
+        //        return TileBorderMinWidth;
+        //    }
+        //}
+
+        private double _tileBorderWidth = MpMeasurements.Instance.ClipTileBorderMinSize;
         public double TileBorderWidth {
             get {
-                if(IsExpanded) {
-                    return TileBorderMaxWidth;
+                return _tileBorderWidth;
+            }
+            set {
+                if (_tileBorderWidth != value) {
+                    _tileBorderWidth = value;
+                    OnPropertyChanged(nameof(TileBorderWidth));
                 }
-                return TileBorderMinWidth;
             }
         }
+
+
 
         private double _tileBorderHeight = MpMeasurements.Instance.ClipTileMinSize;
         public double TileBorderHeight {
@@ -365,9 +380,22 @@
         }
 
 
+        //public double TileContentWidth {
+        //    get {
+        //        return IsExpanded ? TileContentMaxWidth : TileContentMinWidth;
+        //    }
+        //}
+
+        private double _tileContentWidth = MpMeasurements.Instance.ClipTileContentMinWidth;
         public double TileContentWidth {
             get {
-                return IsExpanded ? TileContentMaxWidth : TileContentMinWidth;
+                return _tileContentWidth;
+            }
+            set {
+                if (_tileContentWidth != value) {
+                    _tileContentWidth = value;
+                    OnPropertyChanged(nameof(TileContentWidth));
+                }
             }
         }
 
@@ -420,6 +448,15 @@
         #endregion
 
         #region Visibility Properties
+        public Visibility ToolTipVisibility {
+            get {
+                if (CopyItem == null) {
+                    return Visibility.Collapsed;
+                }
+                return IsSelected ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
+
         public Visibility ToggleEditModeButtonVisibility {
             get {
                 return IsHovering || IsExpanded ? Visibility.Visible : Visibility.Hidden;
@@ -626,8 +663,8 @@
                 }
                 if(_contentPreviewToolTipBmpSrc == null) {
                     _contentPreviewToolTipBmpSrc = MpHelpers.Instance.ConvertFlowDocumentToBitmap(
-                                RichTextBoxViewModelCollection.FullDocument.Clone(),
-                                RichTextBoxViewModelCollection.FullDocument.GetDocumentSize());
+                                RichTextBoxViewModelCollection.FullSeparatedDocument.Clone(),
+                                RichTextBoxViewModelCollection.FullSeparatedDocument.GetDocumentSize());
                 }
                 return _contentPreviewToolTipBmpSrc;
             }
@@ -923,6 +960,7 @@
                 if (_isSelected != value && (!MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded || IsExpanded)) {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
+                    OnPropertyChanged(nameof(ToolTipVisibility));
                     OnPropertyChanged(nameof(TileBorderBrush));
                     OnPropertyChanged(nameof(DetailTextColor));
                     OnPropertyChanged(nameof(TileDetectedImageItemsVisibility));
@@ -1359,11 +1397,11 @@
                                 IsClipItemFocused = true;
                             }
                         } else {
-                            IsEditingTile = false;
-                            IsEditingTemplate = false;
-                            foreach(var rtbvm in RichTextBoxViewModelCollection) {
-                                rtbvm.IsEditingSubTitle = false;
-                            }
+                            //IsEditingTile = false;
+                            //IsEditingTemplate = false;
+                            //foreach(var rtbvm in RichTextBoxViewModelCollection) {
+                            //    rtbvm.IsEditingSubTitle = false;
+                            //}
                             //IsPastingTemplateTile = false;
                         }
                         RefreshCommands();
@@ -2032,9 +2070,10 @@
                   !IsPastingTemplateTile;
         }
         private void ToggleEditClip(object args) {
-            MainWindowViewModel.ClipTrayViewModel.ClearClipSelection(false);
-            if (IsEditingTile == false && !IsSelected) {
+            if (!IsSelected) {
+                MainWindowViewModel.ClipTrayViewModel.ClearClipSelection(false);
                 IsSelected = true;
+            } else {
             }
             if (args == null) {
                 //happens when toggled from context menu and from code not button in detail grid

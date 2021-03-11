@@ -484,8 +484,8 @@ namespace MpWpfApp {
         }
 
         public void ExpandClipTile(MpClipTileViewModel ctvmToExpand, bool isPastingTemplate) {
-            //double animMs = 0;
-            
+            ClearClipSelection(false);
+            ctvmToExpand.IsSelected = true;
             if (isPastingTemplate) {
                 ctvmToExpand.IsPastingTemplateTile = true;
                 ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
@@ -493,71 +493,19 @@ namespace MpWpfApp {
                 ctvmToExpand.IsEditingTile = true;
                 ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
             }
-            //_hiddenTiles = VisibileClipTiles; 
-            //_hiddenTiles.Remove(ctvmToExpand);
-            //var _hiddenTileCanvasList = new List<FrameworkElement>();
-            //foreach (var ctvm in _hiddenTiles) {
-            //    //ctvm.TileVisibility = Visibility.Hidden;
-            //    _hiddenTileCanvasList.Add(ctvm.ClipBorder);
-            //}
-            ////Console.WriteLine("Pre fade ")
-            //EventHandler postFadeEvent = (s, e) => {
-            //    var listBoxItem = (ListBoxItem)ClipTrayListView.ItemContainerGenerator.ContainerFromItem(ctvmToExpand);
-            //    double sx = listBoxItem.TranslatePoint(new Point(0.0, 0.0), ClipTrayListView).X;
-            //    double trayMidX = ClipTrayListView.ActualWidth / 2;
-            //    double ex = trayMidX - (ctvmToExpand.TileBorderMaxWidth / 2);
-
-            //    var T = ctvmToExpand.ClipBorderTranslateTransform;
-            //    var anim = new DoubleAnimation(sx, ex, new Duration(TimeSpan.FromMilliseconds(animMs)));
-            //    anim.Completed += (s1, e1) => {
-            //        //if (isPastingTemplate) {
-            //        //    ctvmToExpand.IsPastingTemplateTile = true;
-            //        //    ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
-            //        //} else {
-            //        //    ctvmToExpand.IsEditingTile = true;
-            //        //    ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
-            //        //}
-            //    };
-            //    if (isPastingTemplate) {
-            //        ctvmToExpand.IsPastingTemplateTile = true;
-            //        ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
-            //    } else {
-            //        ctvmToExpand.IsEditingTile = true;
-            //        ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
-            //    }
-            //    T.BeginAnimation(TranslateTransform.XProperty, anim);
-
-            //};
-            ////var ctg = (Grid)ctvmToExpand.ClipBorder.FindName("ClipTileBorderGrid");
-            ////MpHelpers.Instance.AnimateVisibilityChange(
-            ////        ctg,
-            ////        Visibility.Hidden,
-            ////        postFadeEvent,
-            ////        500);
-
-            //if (_hiddenTileCanvasList.Count > 0) {
-            //    MpHelpers.Instance.AnimateVisibilityChange(
-            //        _hiddenTileCanvasList,
-            //        Visibility.Hidden,
-            //        postFadeEvent,
-            //        animMs);
-            //} else {
-            //    postFadeEvent.Invoke(this, new EventArgs());
-            //}
-
-
-            //ClipTrayVirtualizingStackPanel.HorizontalAlignment = HorizontalAlignment.Center;
-
         }
 
         public void ShrinkClipTile(MpClipTileViewModel ctvmToShrink, bool isPastingTemplate) {
             if (isPastingTemplate) {
                 ctvmToShrink.IsPastingTemplateTile = false;
+                ctvmToShrink.PasteTemplateToolbarViewModel.InitWithRichTextBox(ctvmToShrink.RichTextBoxViewModelCollection[0].Rtb, true);
             } else {
-                ctvmToShrink.IsEditingTile = false;
+                ctvmToShrink.IsEditingTile = false; 
+                ctvmToShrink.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(ctvmToShrink.RichTextBoxViewModelCollection[0].Rtb, true);
             }
-            ClearClipSelection(true);
-            ctvmToShrink.IsSelected = true;
+            //
+            //ClearClipSelection(true);
+            //ctvmToShrink.IsSelected = true;
             //EventHandler preFadeEvent = (s, e) => {
             //    if (isPastingTemplate) {
             //        ctvmToExpand.IsPastingTemplateTile = false;
@@ -583,7 +531,7 @@ namespace MpWpfApp {
 
             //ClipTrayVirtualizingStackPanel.HorizontalAlignment = HorizontalAlignment.Left;
 
-            Refresh();
+            //Refresh();
         }
 
         public void HideVisibleTiles(double ms = 1000) {
