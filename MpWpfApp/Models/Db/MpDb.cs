@@ -314,6 +314,7 @@ namespace MpWpfApp {
                     , Args text
                     , Label text
                     , IconBlob image
+                    , WindowState integer default 1
                     , IsSilent integer NOT NULL default 0
                     , IsAdmin integer NOT NULL default 0
                     );

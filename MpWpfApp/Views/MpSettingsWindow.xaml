@@ -24,6 +24,7 @@
         <local:MpVisibilityToBoolConverter x:Key="VisibilityToBoolConverter" />
         <local:MpImageSourceToBitmapSourceConverter x:Key="ImageSourceToBitmapSourceConverter" />
         <local:MpIntToMpRoutingTypeConverter x:Key="IntToMpRoutingTypeConverter" />
+        <local:MpIntToWindowCommandConverter x:Key="IntToWindowCommandConverter" />
         <ControlTemplate x:Key="ButtonControlTemplate"
                          TargetType="{x:Type Button}">
             <Border x:Name="OuterBorder"
@@ -304,6 +305,21 @@
                                             <CheckBox HorizontalAlignment="Center"
                                                       VerticalAlignment="Center"
                                                       IsChecked="{Binding IsSilent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Window"
+                                                        Width="100">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox SelectedIndex="{Binding SelectedWindowState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
+                                                <ComboBox.Items>                                        
+                                                    <ComboBoxItem Content="Hide" />
+                                                    <ComboBoxItem Content="Normal" />
+                                                    <ComboBoxItem Content="Minimized" />
+                                                    <ComboBoxItem Content="Maximized" />
+                                                </ComboBox.Items>
+                                            </ComboBox>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

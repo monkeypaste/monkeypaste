@@ -484,13 +484,15 @@ namespace MpWpfApp {
         }
 
         public void ExpandClipTile(MpClipTileViewModel ctvmToExpand, bool isPastingTemplate) {
-            ClearClipSelection(false);
-            ctvmToExpand.IsSelected = true;
+            //ClearClipSelection(false);
+            //ctvmToExpand.IsSelected = true;
             if (isPastingTemplate) {
                 ctvmToExpand.IsPastingTemplateTile = true;
                 ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
             } else {
-                ctvmToExpand.IsEditingTile = true;
+                if (!ctvmToExpand.IsEditingTile) {
+                    ctvmToExpand.IsEditingTile = true;
+                }
                 ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
             }
         }
@@ -500,7 +502,9 @@ namespace MpWpfApp {
                 ctvmToShrink.IsPastingTemplateTile = false;
                 ctvmToShrink.PasteTemplateToolbarViewModel.InitWithRichTextBox(ctvmToShrink.RichTextBoxViewModelCollection[0].Rtb, true);
             } else {
-                ctvmToShrink.IsEditingTile = false; 
+                if(ctvmToShrink.IsEditingTile) {
+                    ctvmToShrink.IsEditingTile = false;
+                }
                 ctvmToShrink.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(ctvmToShrink.RichTextBoxViewModelCollection[0].Rtb, true);
             }
             //
@@ -665,12 +669,19 @@ namespace MpWpfApp {
                 }
             } else {
                 var nctvm = new MpClipTileViewModel(newCopyItem);
-                if(IsAnyTileExpanded) {
-                    //this ensures that new tiles are hidden if user is editing one
-                    nctvm.TileVisibility = Visibility.Collapsed;
-                    _hiddenTiles.Add(nctvm);
-                }
+                //if(IsAnyTileExpanded) {
+                //this ensures that new tiles are hidden if user is editing one
+                //nctvm.TileVisibility = Visibility.Collapsed;
+                //_hiddenTiles.Add(nctvm);
+                //}
+                var lsctvml = SelectedClipTiles;
                 this.Add(nctvm);
+                if (MainWindowViewModel.IsMainWindowLocked) {
+                    ClearClipSelection(false);
+                    foreach(var lsctvm in lsctvml) {
+                        lsctvm.IsSelected = true;
+                    }
+                }
                 if (Properties.Settings.Default.NotificationDoCopySound) {
                     MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
                 }
@@ -735,10 +746,17 @@ namespace MpWpfApp {
             IDataObject d = new DataObject();
             //only when pasting into explorer must have file drop
             if (string.IsNullOrEmpty(MpClipboardManager.Instance.LastWindowWatcher.LastTitle.Trim()) && isDragDrop) {
-                d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
+                if(SelectedClipTilesFileList != null) {
+                    d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
+                }
             } 
-            d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
-            d.SetData(DataFormats.CommaSeparatedValue, SelectedClipTilesCsv);
+            if(SelectedClipTilesBmp != null) {
+                d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
+            }
+            if(SelectedClipTilesCsv != null) {
+                d.SetData(DataFormats.CommaSeparatedValue, SelectedClipTilesCsv);
+            }
+            
 
             string rtf =string.Empty;
             foreach (var sctvm in SelectedClipTiles) {
@@ -750,9 +768,15 @@ namespace MpWpfApp {
                     rtf = MpHelpers.Instance.CombineRichText(rtf, rt);
                 }
             }
-            d.SetData(DataFormats.Rtf, rtf);
-            d.SetData(DataFormats.Text, MpHelpers.Instance.ConvertRichTextToPlainText(rtf));
-            d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
+            if(!string.IsNullOrEmpty(rtf)) {
+                d.SetData(DataFormats.Rtf, rtf);
+                d.SetData(DataFormats.Text, rtf.ToPlainText());
+            }
+            
+
+            if(isDragDrop && SelectedClipTiles != null && SelectedClipTiles.Count > 0) {
+                d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
+            }
             return d;
 
             //awaited in MainWindowViewModel.HideWindow
@@ -772,6 +796,7 @@ namespace MpWpfApp {
                 } else {
                     pasteToWindowHandle = MpClipboardManager.Instance.LastWindowWatcher.LastHandle;
                 }
+
                 MpClipboardManager.Instance.PasteDataObject(pasteDataObject, pasteToWindowHandle);
 
                 //resort list so pasted items are in front and paste is tracked

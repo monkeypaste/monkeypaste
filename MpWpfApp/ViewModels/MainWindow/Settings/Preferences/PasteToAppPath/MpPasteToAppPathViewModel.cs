@@ -31,6 +31,26 @@ namespace MpWpfApp {
         #endregion
 
         #region Business Logic
+        private int _selectedWindowState = -1;
+        public int SelectedWindowState {
+            get {
+                if(PasteToAppPath == null) {
+                    return 0;
+                }
+                if(_selectedWindowState < 0) {
+                    _selectedWindowState = (int)PasteToAppPath.WindowState;
+                }
+                return _selectedWindowState;
+            }
+            set {
+                if(_selectedWindowState != value) {
+                    _selectedWindowState = value;
+                    WindowState = (WinApi.ShowWindowCommands)_selectedWindowState;
+                    OnPropertyChanged(nameof(SelectedWindowState));
+                }
+            }
+        }
+
         private bool _isSelected = false;
         public bool IsSelected {
             get {
@@ -106,6 +126,21 @@ namespace MpWpfApp {
         #endregion
 
         #region Model Properties
+        public WinApi.ShowWindowCommands WindowState {
+            get {
+                if(PasteToAppPath == null) {
+                    return WinApi.ShowWindowCommands.Normal;
+                }
+                return PasteToAppPath.WindowState;
+            }
+            set {
+                if (PasteToAppPath.WindowState != value) {
+                    PasteToAppPath.WindowState = value;
+                    PasteToAppPath.WriteToDatabase();
+                    OnPropertyChanged(nameof(WindowState));
+                }
+            }
+        }
         public BitmapSource AppIcon {
             get {
                 if (PasteToAppPath == null) {
@@ -259,7 +294,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(PasteToAppPathId));
                     OnPropertyChanged(nameof(AppPath));
                     OnPropertyChanged(nameof(IsAdmin));
-
+                    OnPropertyChanged(nameof(WindowState));
                     OnPropertyChanged(nameof(IsSilent));
                     OnPropertyChanged(nameof(AppName));
                     OnPropertyChanged(nameof(AppIcon));

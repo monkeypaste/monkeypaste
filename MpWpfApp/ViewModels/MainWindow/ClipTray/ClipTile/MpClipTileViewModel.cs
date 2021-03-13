@@ -662,9 +662,16 @@
                     return null;
                 }
                 if(_contentPreviewToolTipBmpSrc == null) {
-                    _contentPreviewToolTipBmpSrc = MpHelpers.Instance.ConvertFlowDocumentToBitmap(
+                    if(MainWindowViewModel.IsLoading && CopyItemBmp != null) {
+                        _contentPreviewToolTipBmpSrc = CopyItemBmp;
+                    } else {
+                        _contentPreviewToolTipBmpSrc = MpHelpers.Instance.ConvertFlowDocumentToBitmap(
                                 RichTextBoxViewModelCollection.FullSeparatedDocument.Clone(),
                                 RichTextBoxViewModelCollection.FullSeparatedDocument.GetDocumentSize());
+                        if (_contentPreviewToolTipBmpSrc != CopyItemBmp) {
+                            CopyItemBmp = _contentPreviewToolTipBmpSrc;
+                        }
+                    }                    
                 }
                 return _contentPreviewToolTipBmpSrc;
             }
@@ -724,15 +731,6 @@
                     _sortOrderIdx = value;
                     OnPropertyChanged(nameof(SortOrderIdx));
                 }
-            }
-        }
-
-        public Cursor ContentCursor {
-            get {
-                if (IsExpanded) {
-                    return Cursors.IBeam;
-                }
-                return Cursors.Arrow;
             }
         }
         #endregion
@@ -835,7 +833,6 @@
                     _isEditingTile = value;
                     OnPropertyChanged(nameof(IsEditingTile));
                     OnPropertyChanged(nameof(IsRtbReadOnly));
-                    OnPropertyChanged(nameof(ContentCursor));
                     OnPropertyChanged((nameof(CopyItemRichText)));
                     OnPropertyChanged(nameof(CopyItem));
                     OnPropertyChanged(nameof(TileDetailGridVisibility));
@@ -964,7 +961,6 @@
                     OnPropertyChanged(nameof(TileBorderBrush));
                     OnPropertyChanged(nameof(DetailTextColor));
                     OnPropertyChanged(nameof(TileDetectedImageItemsVisibility));
-                    OnPropertyChanged(nameof(ContentCursor));
                     OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
                 }                
             }
@@ -1408,7 +1404,7 @@
                         break;
                     case nameof(IsHovering):
                         if(IsHovering) {
-                            foreach(MpClipTileViewModel ctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
+                            foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
                                 if(ctvm != this) {
                                     ctvm.IsHovering = false;
                                 }
@@ -1416,13 +1412,19 @@
                         }
                         break;
                     case nameof(IsEditingTile):
-                        //if (IsEditingTile) {
-                        //    //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
-                        //    MainWindowViewModel.ClipTrayViewModel.ExpandClipTile(this, false);
-                        //} else {
-                        //    MainWindowViewModel.ClipTrayViewModel.ShrinkClipTile(this, false);
-                        //}
-                        if(!IsEditingTile && 
+                        if (IsEditingTile) {
+                            if(!IsSelected) {
+                                MainWindowViewModel.ClipTrayViewModel.ClearClipSelection(true);
+                                IsSelected = true;
+                            }
+                            
+                            //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
+                            MainWindowViewModel.ClipTrayViewModel.ExpandClipTile(this, false);
+                        } else {
+                            MainWindowViewModel.ClipTrayViewModel.ShrinkClipTile(this, false);
+                        }
+
+                        if (!IsEditingTile && 
                            (CopyItemType == MpCopyItemType.Composite || CopyItemType == MpCopyItemType.RichText)) {
                             ContentPreviewToolTipBmpSrc = null;
                             OnPropertyChanged(nameof(ContentPreviewToolTipBmpSrc));

@@ -176,15 +176,16 @@ namespace MpWpfApp {
             if(remainingRetryCount < 0) {
                 Console.WriteLine("Retry count exceeded ignoring copy item");
                 return null;
-            }
-            IDataObject iData = Clipboard.GetDataObject();
-            if (iData == null) {
-                return null;
-            }
-            Color itemColor = MpHelpers.Instance.GetRandomColor();
-            object itemData = null;
-            MpCopyItemType itemType = MpCopyItemType.None;
+            }            
             try {
+                IDataObject iData = Clipboard.GetDataObject();
+                if (iData == null) {
+                    return null;
+                }
+                Color itemColor = MpHelpers.Instance.GetRandomColor();
+                object itemData = null;
+                MpCopyItemType itemType = MpCopyItemType.None;
+
                 if (iData.GetDataPresent(DataFormats.FileDrop)) {
                     itemType = MpCopyItemType.FileList;
                     itemData = (string[])iData.GetData(DataFormats.FileDrop, true);

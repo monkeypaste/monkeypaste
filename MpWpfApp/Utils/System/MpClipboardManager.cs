@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     public class MpClipboardManager : IDisposable {
@@ -21,6 +24,8 @@ namespace MpWpfApp {
         private HwndSourceHook hook;
         private HwndSource hwndSource;
         private IntPtr _nextClipboardViewer;
+        private bool _wasLastDataCsv = false;
+        private object _lastDataObject = null;
 
         private MpClipboardManager() {
         }
@@ -44,16 +49,55 @@ namespace MpWpfApp {
         public void PasteDataObject(IDataObject dataObject, IntPtr handle) {
             IgnoreClipboardChangeEvent = true;
             try {
+                if(!string.IsNullOrEmpty(Clipboard.GetText())) {
+                    _lastDataObject = Clipboard.GetText();
+                }
                 Clipboard.Clear();
                 Clipboard.SetDataObject(dataObject);
                 WinApi.SetForegroundWindow(handle);
                 WinApi.SetActiveWindow(handle);
                 System.Windows.Forms.SendKeys.SendWait("^v");
+                if(_lastDataObject != null) {
+                    Thread.Sleep(500);
+                    // from https://stackoverflow.com/a/52438404/105028
+                    _remainingTryCount = 100;
+                    var clipboardThread = new Thread(new ThreadStart(GetClipboard));
+                    clipboardThread.SetApartmentState(ApartmentState.STA);
+                    clipboardThread.Start();
+                    Thread.Sleep(500);
+                    IgnoreClipboardChangeEvent = false;
+                }
             }
             catch (Exception e) {
                 Console.WriteLine("ClipboardMonitor error during paste: " + e.ToString());
             }
-            IgnoreClipboardChangeEvent = false;
+        }
+
+        private int _remainingTryCount = 0;
+
+        private void GetClipboard() {
+            if(_remainingTryCount < 0) {
+                return;
+            }
+            try {
+                if (_lastDataObject is string) {
+                    Clipboard.SetText(_lastDataObject.ToString());
+                } else if(_lastDataObject is StringCollection) {
+                    Clipboard.SetFileDropList((StringCollection)_lastDataObject);
+                } else if(_lastDataObject is BitmapSource) {
+                    Clipboard.SetImage((BitmapSource)_lastDataObject);
+                } else if (_lastDataObject is InteropBitmap) {
+                    Clipboard.SetImage((InteropBitmap)_lastDataObject);
+                 } else {
+                    Console.WriteLine("Warning could reset clipboard data object with data: " + _lastDataObject.ToString());
+                }
+            }
+            catch(Exception ex) {
+                Console.WriteLine("Error reseting clipboard " + _remainingTryCount);
+                Console.WriteLine(ex.ToString());
+                _remainingTryCount--;
+                GetClipboard();
+            }
         }
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {

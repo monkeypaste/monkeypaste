@@ -107,6 +107,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
+    <Compile Include="AttachedProperties\MpDocumentRtf.cs" />
     <Compile Include="AttachedProperties\MpTextBoxBehavior.cs" />
     <Compile Include="AttachedProperties\MpVisibilityAnimation.cs" />
     <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpMultiSelectListView.cs" />
     <Compile Include="Controls\MpRichTextBox.cs" />
+    <Compile Include="Converters\MpIntToWindowCommandConverter.cs" />
     <Compile Include="Converters\MpPointCollectionConverter.cs" />
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
     <Compile Include="Converters\MpStringToBrushConverter.cs" />

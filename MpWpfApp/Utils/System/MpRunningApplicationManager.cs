@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Text;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using System.Threading;
 
 namespace MpWpfApp {
     public class MpRunningApplicationManager : INotifyPropertyChanged {
@@ -27,6 +28,8 @@ namespace MpWpfApp {
                 return _currentProcessWindowHandleStackDictionary;
             }
         }
+
+        public Dictionary<IntPtr,WinApi.ShowWindowCommands> LastWindowStateHandleDictionary = new Dictionary<IntPtr, WinApi.ShowWindowCommands>();
         #endregion
 
         #region Public Methods
@@ -46,6 +49,16 @@ namespace MpWpfApp {
                     if (WinApi.IsWindow(handle)) {
                         //verify that the processes window handle is still running
                         isProcessTerminated = false;
+
+                        var placement = WinApi.GetPlacement(handle);
+                        if (placement.showCmd == WinApi.ShowWindowCommands.Minimized || placement.showCmd == WinApi.ShowWindowCommands.Hide) {
+                            return;
+                        }
+                        if (LastWindowStateHandleDictionary.ContainsKey(handle)) {
+                            LastWindowStateHandleDictionary.Remove(handle);
+                        }
+                        LastWindowStateHandleDictionary.Add(handle, placement.showCmd);
+                        //Console.WriteLine(@"Last Window State for " + processStack.Key + " was " + Enum.GetName(typeof(WinApi.ShowWindowCommands), placement.showCmd));
                     } else {
                         //if handle gone mark it to be removed from its handle stack
                         toRemoveHandleKeyValueList.Add(new KeyValuePair<string, IntPtr>(processStack.Key, handle));
@@ -69,6 +82,9 @@ namespace MpWpfApp {
                     CurrentProcessWindowHandleStackDictionary[handleToRemove.Key].Remove(handleToRemove.Value);
                     wasStackChanged = true;
                     Console.WriteLine(string.Format(@"Process: {0} Handle: {1} REMOVED", handleToRemove.Key, handleToRemove.Value));
+                }
+                if(LastWindowStateHandleDictionary.ContainsKey(handleToRemove.Value)) {
+                    LastWindowStateHandleDictionary.Remove(handleToRemove.Value);
                 }
             }
             if(wasStackChanged) {
@@ -108,10 +124,20 @@ namespace MpWpfApp {
             }
             if (wasStackChanged) {
                 OnPropertyChanged(nameof(CurrentProcessWindowHandleStackDictionary));
+
+                var placement = WinApi.GetPlacement(fgHandle);
+                if (placement.showCmd == WinApi.ShowWindowCommands.Minimized || placement.showCmd == WinApi.ShowWindowCommands.Hide) {
+                    return;
+                }
+                if (LastWindowStateHandleDictionary.ContainsKey(fgHandle)) {
+                    LastWindowStateHandleDictionary.Remove(fgHandle);
+                }
+                LastWindowStateHandleDictionary.Add(fgHandle, placement.showCmd);
+                //Console.WriteLine(@"Last Window State for " + processName + " was " + Enum.GetName(typeof(WinApi.ShowWindowCommands), placement.showCmd));
             }
         }
 
-        public IntPtr SetActiveProcess(string processPath, bool isAdmin, bool isSilent = false, string args = "", object forceHandle = null) {
+        public IntPtr SetActiveProcess(string processPath, bool isAdmin, bool isSilent = false, string args = "", object forceHandle = null, WinApi.ShowWindowCommands forceWindowState = WinApi.ShowWindowCommands.Maximized) {
             try {
                 if (string.IsNullOrEmpty(processPath)) {
                     return IntPtr.Zero;
@@ -127,7 +153,7 @@ namespace MpWpfApp {
                 IntPtr handle = IntPtr.Zero;
                 if (!CurrentProcessWindowHandleStackDictionary.ContainsKey(processPath)) {
                     //if process is not running start it 
-                    handle = MpHelpers.Instance.StartProcess(args, processPath, isAdmin, isSilent);
+                    handle = MpHelpers.Instance.StartProcess(args, processPath, isAdmin, isSilent, forceWindowState);
                 } else {
                     //ensure the process has a handle matching isAdmin, if not it needs to be created
                     var handleList = CurrentProcessWindowHandleStackDictionary[processPath];
@@ -139,10 +165,20 @@ namespace MpWpfApp {
                     }
                     if (handle == IntPtr.Zero) {
                         //no handle found matching admin rights
-                        handle = MpHelpers.Instance.StartProcess(args,processPath, isAdmin, isSilent);
+                        handle = MpHelpers.Instance.StartProcess(args,processPath, isAdmin, isSilent, forceWindowState);
                     }
                 }                
-                WinApi.SetActiveWindow(handle);
+                if(LastWindowStateHandleDictionary.ContainsKey(handle) && 
+                    forceWindowState != WinApi.ShowWindowCommands.Maximized) {
+                    forceWindowState = LastWindowStateHandleDictionary[handle];
+                }
+                WinApi.GetWindowThreadProcessId(handle, out uint pid);
+                var process = Process.GetProcessById((int)pid);
+                while (!WinApi.ShowWindow(handle, MpHelpers.Instance.GetShowWindowValue(forceWindowState))) {
+                    Thread.Sleep(100);
+                    process.Refresh();
+                }
+                //WinApi.SetActiveWindow(handle);
                 return handle;
             }
             catch (Exception ex) {

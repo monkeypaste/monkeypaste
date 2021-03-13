@@ -94,6 +94,22 @@ namespace MpWpfApp {
         public AdornerLayer RtbcAdornerLayer { get; set; }
         #endregion
 
+        #region Appearance
+
+        public Cursor RtbListBoxItemCursor {
+            get {
+                if(HostClipTileViewModel == null) {
+                    return Cursors.Arrow;
+                }
+                if (HostClipTileViewModel.IsExpanded &&
+                    IsSubSelected) {
+                    return Cursors.IBeam;
+                }
+                return Cursors.Arrow;
+            }
+        }
+        #endregion
+
         #region Layout
         public double DragButtonSize {
             get {
@@ -107,7 +123,7 @@ namespace MpWpfApp {
             }
         }
 
-        public Thickness RtbMargin {
+        public Thickness RtbPadding {
             get {
                 if (HostClipTileViewModel == null) {
                     return new Thickness(0);
@@ -130,7 +146,7 @@ namespace MpWpfApp {
                 }
                 if (HostClipTileViewModel.IsExpanded) {
                     return Math.Max(
-                        RtbPageWidth + RtbMargin.Left + RtbMargin.Right,
+                        RtbPageWidth + RtbPadding.Left + RtbPadding.Right,
                         HostClipTileViewModel.TileContentWidth);
                 }
                 return RtbCanvasWidth - 23;
@@ -145,18 +161,18 @@ namespace MpWpfApp {
                 if (HostClipTileViewModel.IsExpanded) {
                     if (HostClipTileViewModel.RichTextBoxViewModelCollection.Count == 1) {
                         return Math.Max(
-                            RtbPageHeight + RtbMargin.Top + RtbMargin.Bottom,
+                            RtbPageHeight + RtbPadding.Top + RtbPadding.Bottom,
                             HostClipTileViewModel.RichTextBoxViewModelCollection.RtbListBoxHeight);
                     }
                     return RtbPageHeight;// + RtbMargin.Top + RtbMargin.Bottom;
                 }
                 if (HostClipTileViewModel.RichTextBoxViewModelCollection.Count == 1) {
-                    return HostClipTileViewModel.TileContentHeight - RtbMargin.Top - RtbMargin.Bottom;
+                    return HostClipTileViewModel.TileContentHeight - RtbPadding.Top - RtbPadding.Bottom;
                 }
                 var doc = Rtb == null ? CopyItem.ItemFlowDocument: Rtb.Document;
                 doc.PageWidth = HostClipTileViewModel.TileContentWidth;
                 double itemHeight = Math.Max(MpMeasurements.Instance.RtbCompositeItemMinHeight, doc.GetDocumentSize().Height);
-                return itemHeight + RtbMargin.Top + RtbMargin.Bottom;
+                return itemHeight + RtbPadding.Top + RtbPadding.Bottom;
             }
         }      
 
@@ -166,12 +182,14 @@ namespace MpWpfApp {
                     return 0;
                 }
                 if (HostClipTileViewModel.IsExpanded) {
+                    double curFontSize = (double)Rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
                     var width = Math.Max(
-                        Rtb.Document.GetDocumentSize().Width,
-                        HostClipTileViewModel.TileContentWidth);
-                    return width - (MpMeasurements.Instance.ClipTileEditModeContentMargin * 2) + 5;
+                        Rtb.Document.GetDocumentSize().Width + (curFontSize * 3),
+                        Rtbc.ActualWidth + (curFontSize * 3));
+
+                    return width;// - (MpMeasurements.Instance.ClipTileEditModeContentMargin * 2) + 5;
                 }
-                return RtbWidth - RtbMargin.Left - RtbMargin.Right;
+                return RtbWidth - RtbPadding.Left - RtbPadding.Right;
             }
         }
 
@@ -183,7 +201,7 @@ namespace MpWpfApp {
                 if (HostClipTileViewModel.IsExpanded) {
                     return Rtb.Document.GetDocumentSize().Height;
                 }
-                return RtbHeight - RtbMargin.Top - RtbMargin.Bottom;
+                return RtbHeight - RtbPadding.Top - RtbPadding.Bottom;
             }
         }
 
@@ -296,7 +314,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Visibility
-
         public Visibility SubItemOverlayVisibility {
             get {
                 if(HostClipTileViewModel == null) {
@@ -441,14 +458,19 @@ namespace MpWpfApp {
                 return _isSubSelected;
             }
             set {
-                if (_isSubSelected != value) {
+                if (_isSubSelected != value && 
+                    (HostClipTileViewModel.IsExpanded || (IsSubSelected && value == false))) {
                     _isSubSelected = value;
-                    OnPropertyChanged(nameof(IsSubSelected)); 
+                    OnPropertyChanged(nameof(IsSubSelected));
+                    OnPropertyChanged(nameof(IsEditingContent));
                     OnPropertyChanged(nameof(SubItemOverlayVisibility));
                     OnPropertyChanged(nameof(RtbListBoxItemBorderBrush));
                     OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
                     OnPropertyChanged(nameof(RtbBorderBrush));
-                    OnPropertyChanged(nameof(RtbMargin));
+                    OnPropertyChanged(nameof(RtbPadding));
+                    OnPropertyChanged(nameof(RtbListBoxItemCursor));
+                    OnPropertyChanged(nameof(RtbPageWidth));
+                    OnPropertyChanged(nameof(RtbPageHeight));
                 }
             }
         }
@@ -465,7 +487,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(SubItemOverlayVisibility));
                     OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
                     OnPropertyChanged(nameof(RtbListBoxItemBorderBrush));
-                    OnPropertyChanged(nameof(RtbMargin));
+                    OnPropertyChanged(nameof(RtbPadding));
                     OnPropertyChanged(nameof(RtbCanvasHeight));
                     OnPropertyChanged(nameof(RtbCanvasWidth));
                     OnPropertyChanged(nameof(RtbCanvasHeight));
@@ -500,6 +522,7 @@ namespace MpWpfApp {
                 if (_isEditingContent != value) {
                     _isEditingContent = value;
                     OnPropertyChanged(nameof(IsEditingContent));
+                    OnPropertyChanged(nameof(SubItemOverlayVisibility));
                 }
             }
         }
@@ -716,6 +739,15 @@ namespace MpWpfApp {
                         HostClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(HostClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel));
                         HostClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(HostClipTileViewModel.RichTextBoxViewModelCollection.SelectedRtb));
                         break;
+                    case nameof(IsHovering):
+                        if(IsHovering) {
+                            foreach (var rtbvm in HostClipTileViewModel.RichTextBoxViewModelCollection) {
+                                if (rtbvm != this) {
+                                    rtbvm.IsHovering = false;
+                                }
+                            }
+                        }
+                        break;
                 }
             };
         }
@@ -728,7 +760,7 @@ namespace MpWpfApp {
             RtbListBoxItemTitleTextBlock = (TextBlock)Rtbc.FindName("RtbListBoxItemTitleTextBlock");
             RtbListBoxItemTitleTextBox = (TextBox)Rtbc.FindName("RtbListBoxItemTitleTextBox");
 
-            Rtb.Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(CopyItemRichText);
+            //Rtb.Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(CopyItemRichText);
 
             Rtb.SelectAll();
             var rtbAlignment = Rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty);
@@ -740,23 +772,7 @@ namespace MpWpfApp {
             Rtb.CaretPosition = Rtb.Document.ContentStart;
 
             Rtb.TextChanged += (s, e44) => {
-                //RtbcAdornerLayer.Update();
-                OnPropertyChanged(nameof(RtbPageWidth));
-                OnPropertyChanged(nameof(RtbPageHeight));
-                OnPropertyChanged(nameof(RtbHeight));
-                OnPropertyChanged(nameof(RtbCanvasHeight));
-                //HostClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(HostClipTileViewModel.RichTextBoxViewModelCollection.RtbListBoxHeight));
-                //HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.RtbVerticalScrollbarVisibility));
-                //HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.RtbHorizontalScrollbarVisibility));
-                //HostClipTileViewModel.RichTextBoxListBox.UpdateLayout();
-                var rtblb = HostClipTileViewModel.RichTextBoxListBox;
-                if(rtblb == null) {
-                    return;
-                }
-                var border = (Border)VisualTreeHelper.GetChild(rtblb, 0);
-                var sv = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
-                sv.InvalidateScrollInfo();
-                Console.WriteLine("Total Item Height: " + HostClipTileViewModel.RichTextBoxViewModelCollection.TotalItemHeight);
+                UpdateLayout();
             };
 
             if (HasTemplate) {
@@ -793,18 +809,7 @@ namespace MpWpfApp {
             };
 
             RtbListBoxItemClipBorder.MouseLeftButtonDown += (s, e9) => {
-                bool wasSubSelected = IsSubSelected;
                 SelectItemCommand.Execute(null);
-                
-                if(HostClipTileViewModel.IsExpanded && !wasSubSelected) {
-                    var mp = e9.GetPosition(Rtb);
-
-                    var newarg = new MouseButtonEventArgs(e9.MouseDevice, e9.Timestamp,
-                                                  e9.ChangedButton, e9.StylusDevice);
-                    newarg.RoutedEvent = RichTextBox.MouseDownEvent;
-                    newarg.Source = sender;
-                    Rtb.RaiseEvent(newarg);
-                }
             };
 
             RtbListBoxItemTitleTextBlock.PreviewMouseLeftButtonDown += (s, e7) => {
@@ -843,38 +848,28 @@ namespace MpWpfApp {
             
             OnPropertyChanged(nameof(SubItemOverlayVisibility));
             
-            OnPropertyChanged(nameof(RtbMargin));
+            OnPropertyChanged(nameof(RtbPadding));
             OnPropertyChanged(nameof(RtbHeight));
             OnPropertyChanged(nameof(RtbCanvasHeight));
         }
+        public void UpdateLayout() {
+            Rtb.Document.PageWidth = RtbPageWidth;
+            Rtb.Document.PageHeight = RtbPageHeight;
 
-        public BitmapSource FlowDocumentToBitmap(FlowDocument document, Size size) {
-            if(size.Width <= 0) {
-                size.Width = 1;
+            OnPropertyChanged(nameof(RtbCanvasHeight));
+            OnPropertyChanged(nameof(SubItemOverlayVisibility));
+            //HostClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(HostClipTileViewModel.RichTextBoxViewModelCollection.RtbListBoxHeight));
+            //HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.RtbVerticalScrollbarVisibility));
+            //HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.RtbHorizontalScrollbarVisibility));
+            //HostClipTileViewModel.RichTextBoxListBox.UpdateLayout();
+            var rtblb = HostClipTileViewModel.RichTextBoxListBox;
+            if (rtblb == null) {
+                return;
             }
-            if(size.Height <= 0) {
-                size.Height = 1;
-            }
-            document.PagePadding = new Thickness(0);
-            document.ColumnWidth = size.Width;
-            document.PageWidth = size.Width;
-            document.PageHeight = size.Height;
-
-            var paginator = ((IDocumentPaginatorSource)document).DocumentPaginator;
-            paginator.PageSize = size;
-            
-            var visual = new DrawingVisual(); 
-            using (var drawingContext = visual.RenderOpen()) {
-                // draw white background
-                drawingContext.DrawRectangle(Brushes.White, null, new Rect(size));
-            }
-            visual.Children.Add(paginator.GetPage(0).Visual);
-
-            var bitmap = new RenderTargetBitmap((int)size.Width, (int)size.Height,
-                                                96, 96, PixelFormats.Pbgra32);
-            
-            bitmap.Render(visual);
-            return bitmap;
+            var border = (Border)VisualTreeHelper.GetChild(rtblb, 0);
+            var sv = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
+            sv.InvalidateScrollInfo();
+            //Console.WriteLine("Total Item Height: " + HostClipTileViewModel.RichTextBoxViewModelCollection.TotalItemHeight);
         }
 
         public void SetSelection(bool newSelection, bool isInitEdit, bool isInitPaste) {

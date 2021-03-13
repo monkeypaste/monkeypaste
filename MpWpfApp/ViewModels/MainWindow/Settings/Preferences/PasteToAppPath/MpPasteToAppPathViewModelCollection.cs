@@ -233,23 +233,25 @@ namespace MpWpfApp {
 
         #region Private Methods
         private bool Validate() {
-            foreach (var ptapvm in this) {
-                //clear validation before checking
-                ptapvm.IsValid = true;
-            }
-            bool foundInvalid = false;
-            foreach (var ptapvm in this) {
-                foreach (var optapvm in this) {
-                    if (optapvm != ptapvm && optapvm.AppPath == ptapvm.AppPath && optapvm.IsAdmin == ptapvm.IsAdmin) {
-                        optapvm.IsValid = false;
-                        ptapvm.IsValid = false;
-                        foundInvalid = true;
-                    }
-                }
-            }
-            ValidationText = foundInvalid ? "Duplicate entries exist!" : string.Empty;
+            ValidationText = string.Empty;
+            return true;
+            //foreach (var ptapvm in this) {
+            //    //clear validation before checking
+            //    ptapvm.IsValid = true;
+            //}
+            //bool foundInvalid = false;
+            //foreach (var ptapvm in this) {
+            //    foreach (var optapvm in this) {
+            //        if (optapvm != ptapvm && optapvm.AppPath == ptapvm.AppPath && optapvm.IsAdmin == ptapvm.IsAdmin) {
+            //            optapvm.IsValid = false;
+            //            ptapvm.IsValid = false;
+            //            foundInvalid = true;
+            //        }
+            //    }
+            //}
+            //ValidationText = foundInvalid ? "Duplicate entries exist!" : string.Empty;
 
-            return string.IsNullOrEmpty(ValidationText);
+            //return string.IsNullOrEmpty(ValidationText);
         }
         #endregion
 

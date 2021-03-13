@@ -14,7 +14,8 @@ namespace MpWpfApp {
         public string Args { get; set; }
         public string Label { get; set; }
         public BitmapSource Icon { get; set; }
-        
+        public WinApi.ShowWindowCommands WindowState { get; set; }
+
         public static List<MpPasteToAppPath> GetAllPasteToAppPaths() {
             var pasteToAppPathList = new List<MpPasteToAppPath>();
             DataTable dt = MpDb.Instance.Execute("select * from MpPasteToAppPath", null);
@@ -37,7 +38,7 @@ namespace MpWpfApp {
             }
         }
 
-        public MpPasteToAppPath(string appPath, string appName, bool isAdmin, bool isSilent = false, string label = "",string args = "",BitmapSource icon = null) {
+        public MpPasteToAppPath(string appPath, string appName, bool isAdmin, bool isSilent = false, string label = "", string args = "", BitmapSource icon = null, WinApi.ShowWindowCommands windowState = WinApi.ShowWindowCommands.Normal) {
             AppPath = appPath;
             AppName = appName;
             IsAdmin = isAdmin;
@@ -45,6 +46,7 @@ namespace MpWpfApp {
             Label = label;
             Args = args;
             Icon = icon;
+            WindowState = windowState;
         }
         public MpPasteToAppPath() : this(string.Empty,string.Empty,false) { }
 
@@ -57,6 +59,7 @@ namespace MpWpfApp {
             AppName = dr["AppName"].ToString();
             IsAdmin = Convert.ToInt32(dr["IsAdmin"].ToString()) > 0 ? true : false;
             IsSilent = Convert.ToInt32(dr["IsSilent"].ToString()) > 0 ? true : false;
+            WindowState = (WinApi.ShowWindowCommands)Convert.ToInt32(dr["WindowState"].ToString());
             if (dr["IconBlob"] != null && dr["IconBlob"].GetType() != typeof(System.DBNull)) {
                 Icon = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
             } else {
@@ -92,7 +95,7 @@ namespace MpWpfApp {
                     PasteToAppPathId = Convert.ToInt32(dt.Rows[0]["pk_MpPasteToAppPathId"].ToString());
                 } else {
                     MpDb.Instance.ExecuteWrite(
-                        "insert into MpPasteToAppPath(AppPath,AppName,IsAdmin,Label,Args,IconBlob,IsSilent) values(@ap,@an,@ia,@l,@a,@ib,@is)",
+                        "insert into MpPasteToAppPath(AppPath,AppName,IsAdmin,Label,Args,IconBlob,IsSilent,WindowState) values(@ap,@an,@ia,@l,@a,@ib,@is,@ws)",
                         new System.Collections.Generic.Dictionary<string, object> {
                         { "@ap", AppPath },
                         { "@an",AppName },
@@ -100,13 +103,14 @@ namespace MpWpfApp {
                         { "@l", Label },
                         { "@a", Args },
                         { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
-                        { "@is", IsSilent ? 1:0 }
+                        { "@is", IsSilent ? 1:0 },
+                        { "@ws", (int)WindowState }
                     });
                     PasteToAppPathId = MpDb.Instance.GetLastRowId("MpPasteToAppPath", "pk_MpPasteToAppPathId");
                 }
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpPasteToAppPath set AppPath=@ap, AppName=@an, IsAdmin=@ia, IsSilent=@is, Label=@l, Args=@a, IconBlob=@ib where pk_MpPasteToAppPathId=@cid",
+                    "update MpPasteToAppPath set AppPath=@ap, AppName=@an, IsAdmin=@ia, IsSilent=@is, Label=@l, Args=@a, IconBlob=@ib, WindowState=@ws where pk_MpPasteToAppPathId=@cid",
                     new System.Collections.Generic.Dictionary<string, object> {
                         { "@ap", AppPath },
                         { "@an",AppName },
@@ -115,7 +119,8 @@ namespace MpWpfApp {
                         { "@l", Label },
                         { "@a", Args },
                         { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
-                        { "@is", IsSilent ? 1:0 }
+                        { "@is", IsSilent ? 1:0 },
+                        { "@ws", (int)WindowState }
                     });
             }
         }

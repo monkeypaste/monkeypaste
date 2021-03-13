@@ -271,7 +271,12 @@ namespace MpWpfApp {
             //ClipTileViewModel.RichTextBoxListBox.Items.Refresh();
         }
 
-        public void AnimateItems(double fromWidth,double toWidth, double fromHeight, double toHeight,double fromTop, double toTop,double fromBottom, double toBottom, double animMs) {
+        public void AnimateItems(
+            double fromWidth,double toWidth, 
+            double fromHeight, double toHeight,
+            double fromTop, double toTop,
+            double fromBottom, double toBottom, 
+            double animMs) {
             if(toWidth > 0) {
                 foreach (var rtbvm in this) {
                     MpHelpers.Instance.AnimateDoubleProperty(
@@ -281,21 +286,27 @@ namespace MpWpfApp {
                             new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
                             FrameworkElement.WidthProperty,
                             (s1, e44) => {
-                                //rtbvm.UpdateLayout();
+                                rtbvm.UpdateLayout();
                             });
                 }
             }
             if (toHeight > 0) {
-                double heightDiff = fromHeight - toHeight;
+                double heightDiff = toHeight - fromHeight;
                 foreach (var rtbvm in this) {
                     MpHelpers.Instance.AnimateDoubleProperty(
-                            rtbvm.RtbCanvasHeight,
-                            rtbvm.RtbCanvasHeight + heightDiff,
+                            rtbvm.Rtbc.ActualHeight,
+                            rtbvm.Rtbc.ActualHeight - heightDiff,
                             animMs,
                             new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
                             FrameworkElement.HeightProperty,
                             (s1, e44) => {
-                                //rtbvm.UpdateLayout();
+                                rtbvm.UpdateLayout();
+                                if(!HostClipTileViewModel.IsExpanded) {
+                                    rtbvm.IsEditingContent = false;
+                                    rtbvm.IsSubSelected = false;
+                                    rtbvm.IsHovering = false;
+                                    rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemOverlayVisibility));
+                                }
                             });
                 }
             }
@@ -337,6 +348,8 @@ namespace MpWpfApp {
 
         public void ClearSubSelection() {
             foreach(var rtbvm in this) {
+                rtbvm.IsPrimarySelected = false;
+                rtbvm.IsHovering = false;
                 rtbvm.IsSubSelected = false;
                 rtbvm.IsEditingContent = false;
                 rtbvm.IsEditingSubTitle = false;

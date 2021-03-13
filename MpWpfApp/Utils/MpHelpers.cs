@@ -580,6 +580,7 @@ namespace MpWpfApp {
         #endregion
 
         #region System
+        
         public double ConvertBytesToMegabytes(long bytes, int precision = 2) {
             return Math.Round((bytes / 1024f) / 1024f,precision);
         }
@@ -874,7 +875,7 @@ namespace MpWpfApp {
             }
         }
 
-        public IntPtr StartProcess(string args, string processPath, bool asAdministrator, bool isSilent) {
+        public IntPtr StartProcess(string args, string processPath, bool asAdministrator, bool isSilent, WinApi.ShowWindowCommands windowState = WinApi.ShowWindowCommands.Normal) {
             System.Diagnostics.ProcessStartInfo processInfo = new System.Diagnostics.ProcessStartInfo();
             processInfo.FileName = processPath;//Environment.ExpandEnvironmentVariables("%SystemRoot%") + @"\System32\cmd.exe"; //Sets the FileName property of myProcessInfo to %SystemRoot%\System32\cmd.exe where %SystemRoot% is a system variable which is expanded using Environment.ExpandEnvironmentVariables
             if(!string.IsNullOrEmpty(args)) {
@@ -884,13 +885,37 @@ namespace MpWpfApp {
             processInfo.Verb = asAdministrator ? "runas" : string.Empty; //The process should start with elevated permissions
             
             using (var process = System.Diagnostics.Process.Start(processInfo)) { //Starts the process based on myProcessInfo
-                while (!WinApi.ShowWindow(process.MainWindowHandle, WinApi.Windows.NORMAL)) {
+                if(isSilent) {
+                    windowState = WinApi.ShowWindowCommands.Hide;
+                }
+                int winType = GetShowWindowValue(windowState);
+                while (!WinApi.ShowWindow(process.MainWindowHandle, winType)) {
                     Thread.Sleep(100);
                     process.Refresh();
                 }
                 return process.Handle;
             }
             // TODO pass args to clipboard (w/ ignore in the manager) then activate window and paste
+        }
+
+        public int GetShowWindowValue(WinApi.ShowWindowCommands cmd) {
+            int winType = 0;
+            switch (cmd) {
+                case WinApi.ShowWindowCommands.Normal:
+                    winType = WinApi.Windows.NORMAL;
+                    break;
+                case WinApi.ShowWindowCommands.Maximized:
+                    winType = WinApi.Windows.MAXIMIXED;
+                    break;
+                case WinApi.ShowWindowCommands.Minimized:
+                case WinApi.ShowWindowCommands.Hide:
+                    winType = WinApi.Windows.HIDE;
+                    break;
+                default:
+                    winType = WinApi.Windows.NORMAL;
+                    break;
+            }
+            return winType;
         }
 
         public bool IsProcessAdmin(IntPtr handle) {

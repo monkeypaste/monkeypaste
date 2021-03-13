@@ -1624,7 +1624,7 @@
                                             <!-- RichText Content -->
                                             <Canvas x:Name="ClipTileRichTextBoxListBoxGridContainerCanvas"
                                                     Visibility="{Binding RtbVisibility}"
-                                                    Height="{Binding RichTextBoxViewModelCollection.TotalItemHeight}"
+                                                    Height="{Binding RichTextBoxViewModelCollection.RtbListBoxHeight}"
                                                     Width="{Binding TileContentWidth}">
                                                 <i:Interaction.Triggers>
                                                     <i:EventTrigger EventName="Loaded">
@@ -1873,7 +1873,6 @@
                                                              ItemsSource="{Binding RichTextBoxViewModelCollection}"
                                                              Focusable="{Binding IsEditingTile}"
                                                              IsEnabled="True"
-                                                             Cursor="{Binding ContentCursor}"
                                                              ScrollViewer.CanContentScroll="False"
                                                              ScrollViewer.HorizontalScrollBarVisibility="{Binding RtbHorizontalScrollbarVisibility}"
                                                              ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -1928,20 +1927,17 @@
                                                                                      IsInactiveSelectionHighlightEnabled="True"
                                                                                      IsDocumentEnabled="True"
                                                                                      Focusable="{Binding HostClipTileViewModel.IsEditingTile}"
-                                                                                     Cursor="{Binding HostClipTileViewModel.ContentCursor}"
+                                                                                     Cursor="{Binding RtbListBoxItemCursor}"
                                                                                      Width="{Binding RtbWidth}"
                                                                                      Height="{Binding RtbHeight}"
-                                                                                     Padding="{Binding RtbMargin}"
+                                                                                     Padding="{Binding RtbPadding}"
+                                                                                     local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText, UpdateSourceTrigger=LostFocus}"
                                                                                      IsUndoEnabled="True"
                                                                                      VerticalAlignment="Top"
                                                                                      HorizontalAlignment="Left"
                                                                                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                                                                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                                                                      BorderThickness="1">
-                                                                            <RichTextBox.Document>
-                                                                                <local:MpEventEnabledFlowDocument PageWidth="{Binding RtbPageWidth}"
-                                                                                                                  PageHeight="{Binding RtbPageHeight}" />
-                                                                            </RichTextBox.Document>
                                                                             <RichTextBox.Resources>
                                                                                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                                                                                                  Color="Blue" />
@@ -2414,7 +2410,7 @@
                                                           Height="20"
                                                           Margin="0,-5,2,0"
                                                           Visibility="{Binding ToggleEditModeButtonVisibility}"
-                                                          Command="{Binding ToggleEditClipCommand}"
+                                                          IsChecked="{Binding IsEditingTile}"
                                                           Template="{StaticResource LockToggleButtonControlTemplate}">
                                                 <Image Source="/Resources/Images/edit.png" />
                                             </ToggleButton>

@@ -64,6 +64,7 @@ namespace MpWpfApp {
                     LastTitle = MpHelpers.Instance.GetProcessMainWindowTitle(LastHandle);
 
                     MpRunningApplicationManager.Instance.UpdateHandleStack(LastHandle);
+
                     Console.WriteLine("Last Window: " + MpHelpers.Instance.GetProcessMainWindowTitle(_lastHandle));
                 }
             };

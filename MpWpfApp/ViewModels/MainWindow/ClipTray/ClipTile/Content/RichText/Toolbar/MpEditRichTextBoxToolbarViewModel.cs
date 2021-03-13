@@ -123,6 +123,7 @@ namespace MpWpfApp {
         public MpEditRichTextBoxToolbarViewModel() :base() { }
         public MpEditRichTextBoxToolbarViewModel(MpClipTileViewModel ctvm) : base() {
             ClipTileViewModel = ctvm;
+            
         }
 
         public void ClipTileEditorToolbarBorder_Loaded(object sender, RoutedEventArgs args) {
@@ -423,21 +424,45 @@ namespace MpWpfApp {
 
             #region Animation
             if(doAnimation) {
-                if(true) {
-                    double fromWidth = ClipTileViewModel.TileBorderMinWidth;
-                    double toWidth = ClipTileViewModel.TileBorderMaxWidth;
+                if(false) {
+                    //double fromWidth = ClipTileViewModel.TileBorderMinWidth;
+                    //double toWidth = ClipTileViewModel.TileBorderMaxWidth;
 
-                    DispatcherTimer timer = new DispatcherTimer(DispatcherPriority.Render);
-                    timer.Interval = TimeSpan.FromSeconds(1/30);
-                    timer.Tick += (s, e32) => {
-                        if(ClipTileViewModel.TileBorderWidth < toWidth) {
-                            ClipTileViewModel.TileBorderWidth += 3;
-                            ClipTileViewModel.TileContentWidth += 3;
-                        } else {
-                            timer.Stop();
-                        }
-                    };
-                    timer.Start();
+                    //DispatcherTimer timer = new DispatcherTimer(DispatcherPriority.Render);
+                    //timer.Interval = TimeSpan.FromSeconds(1/30);
+                    //timer.Tick += (s, e32) => {
+                    //    bool isWidthDone = false;
+                    //    bool isHeightDone = false;
+
+                    //    if(ClipTileViewModel.TileBorderWidth < toWidth) {
+                    //        ClipTileViewModel.TileBorderWidth += 3;
+                    //        ClipTileViewModel.TileContentWidth += 3;
+                    //    } else {
+                    //        isWidthDone = true;
+                    //    }
+                        
+                    //    if(Canvas.GetTop(rtblbg) < ClipTileViewModel.EditRichTextBoxToolbarHeight) {
+                    //        Canvas.SetTop(et, Canvas.GetTop(et) + 3);
+                    //        Canvas.SetTop(rtblbg, Canvas.GetTop(rtblbg) + 3);
+                    //        if(ClipTileViewModel.RichTextBoxViewModelCollection.RtbListBoxHeight > ClipTileViewModel.RichTextBoxViewModelCollection.RtbListBoxDesiredHeight) {
+                    //            ClipTileViewModel.RichTextBoxViewModelCollection.RtbListBoxHeight -= 3;
+                    //        }
+                    //        foreach(var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {
+                    //            rtbvm.OnPropertyChanged(nameof(rtbvm.RtbCanvasHeight));
+                    //            rtbvm.OnPropertyChanged(nameof(rtbvm.RtbHeight));
+                    //            rtbvm.OnPropertyChanged(nameof(rtbvm.RtbPageHeight));
+                    //            rtbvm.OnPropertyChanged(nameof(rtbvm.RtbCanvasWidth));
+                    //            rtbvm.OnPropertyChanged(nameof(rtbvm.RtbWidth));
+                    //            rtbvm.OnPropertyChanged(nameof(rtbvm.RtbPageWidth));
+                    //        }
+                    //    } else {
+                    //        isHeightDone = true;
+                    //    }
+                    //    if(isWidthDone && isHeightDone) {
+                    //        timer.Stop();
+                    //    }
+                    //};
+                    //timer.Start();
                 } else {
                     double animMs = Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
                     double tileWidthMax = ClipTileViewModel.TileBorderMaxWidth;//Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
@@ -466,8 +491,7 @@ namespace MpWpfApp {
                         //animate edit template toolbar when tile is minimizing
                         ClipTileViewModel.IsEditingTemplate = false;
                     } else {
-                        clipTray.ScrollIntoView(ClipTileViewModel);
-                        //this is to remove scrollbar flicker during animation
+                        ClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
                     }
 
                     MpHelpers.Instance.AnimateDoubleProperty(
@@ -502,6 +526,10 @@ namespace MpWpfApp {
                                 Rtb_SelectionChanged(this, new RoutedEventArgs());
                             } else {
                                 ClipTileViewModel.EditToolbarVisibility = Visibility.Collapsed;
+
+                                ClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
+
+                                ClipTileViewModel.RichTextBoxListBox.Items.Refresh();
                             }
                         });
 
@@ -517,7 +545,7 @@ namespace MpWpfApp {
                             if (ClipTileViewModel.IsEditingTile) {
                                 clipTray.ScrollIntoView(ClipTileViewModel);
                             } else {
-
+                                
                             }
                         });
 
