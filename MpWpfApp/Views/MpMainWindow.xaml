@@ -837,26 +837,40 @@
               Focusable="True"
               Background="DarkViolet">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="0.3*" />
-                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="0.5*" />
+                <ColumnDefinition Width="1.15*" />
                 <ColumnDefinition Width="5*" />
                 <ColumnDefinition Width="1.5*" />
             </Grid.ColumnDefinitions>
-            <ToggleButton x:Name="TogglekMainWindowLockButton"
-                    Grid.Column="0"
-                    Width="35"
-                    Height="35"
-                    Margin="5,0,0,0"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Left"
-                    IsChecked="{Binding IsMainWindowLocked}"
-                    Command="{Binding ToggleMainWindowLockCommand}"
-                    CommandParameter="{StaticResource True}"
-                    Template="{StaticResource LockToggleButtonControlTemplate}">
-                <Image Source="/Resources/Images/lock.png"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center" />
-            </ToggleButton>
+            <StackPanel Orientation="Horizontal"
+                        Grid.Column="0">
+                <Button x:Name="SettingsWindowButton"
+                              Width="35"
+                              Height="35"
+                              Margin="5,0,0,0"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Center"
+                              Command="{Binding SystemTrayViewModel.ShowSettingsWindowCommand}"
+                              Template="{StaticResource SearchButtonControlTemplate}">
+                    <Image Source="/Resources/Images/cog.png"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+                </Button>
+                <ToggleButton x:Name="TogglekMainWindowLockButton"
+                              Width="35"
+                              Height="35"
+                              Margin="5,0,0,0"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Center"
+                              IsChecked="{Binding IsMainWindowLocked}"
+                              Command="{Binding ToggleMainWindowLockCommand}"
+                              CommandParameter="{StaticResource True}"
+                              Template="{StaticResource LockToggleButtonControlTemplate}">
+                    <Image Source="/Resources/Images/lock.png"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center" />
+                </ToggleButton>
+            </StackPanel>            
             <!-- Sort Combobox -->
             <Grid Grid.Column="1"
                   DataContext="{Binding ClipTileSortViewModel}"
@@ -898,7 +912,7 @@
                 <Button Grid.Column="2"
                         Margin="0,0,0,0"
                         Background="Transparent"
-                        Style="{StaticResource Transparent_Button}"
+                        Template="{StaticResource SearchButtonControlTemplate}"
                         BorderThickness="0"
                         Height="30"
                         Width="30"
@@ -1052,7 +1066,7 @@
                         Height="30"
                         Width="30"
                         BorderThickness="0"
-                        Style="{StaticResource Transparent_Button}"
+                        Template="{StaticResource SearchButtonControlTemplate}"
                         Background="Transparent"
                         Command="{Binding CreateTagCommand}">
                     <Image Stretch="Fill"
@@ -1352,7 +1366,7 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                                 <local:MpClipBorder.RenderTransform>
-                                    <TranslateTransform x:Name="ClipTileBorderTranslateTransform" />
+                                    <TranslateTransform X="0" Y="0" x:Name="ClipTileBorderTranslateTransform" />
                                 </local:MpClipBorder.RenderTransform>
                                 <local:MpClipBorder.Resources>
                                     <local:MpBindingProxy x:Key="ClipTileProxy"
@@ -1623,16 +1637,18 @@
                                             </Canvas.ToolTip>
                                             <!-- RichText Content -->
                                             <Canvas x:Name="ClipTileRichTextBoxListBoxGridContainerCanvas"
-                                                    Visibility="{Binding RtbVisibility}"
-                                                    Height="{Binding RichTextBoxViewModelCollection.RtbListBoxHeight}"
-                                                    Width="{Binding TileContentWidth}">
-                                                <i:Interaction.Triggers>
+                                                    DataContext="{Binding RichTextBoxViewModelCollection}"
+                                                    Visibility="{Binding HostClipTileViewModel.RtbVisibility}"
+                                                    Height="{Binding RtbListBoxHeight}"
+                                                    Width="{Binding HostClipTileViewModel.TileContentWidth}">
+                                                <!--<i:Interaction.Triggers>
                                                     <i:EventTrigger EventName="Loaded">
                                                         <i:CallMethodAction TargetObject="{Binding}"
                                                                             MethodName="ClipTileRichTextStackPanel_Loaded" />
                                                     </i:EventTrigger>
-                                                </i:Interaction.Triggers>
+                                                </i:Interaction.Triggers>-->
                                                 <Border x:Name="ClipTileEditorToolbar"
+                                                        DataContext="{Binding HostClipTileViewModel}"
                                                         Visibility="{Binding EditToolbarVisibility}"
                                                         Height="{Binding EditRichTextBoxToolbarHeight}"
                                                         BorderThickness="0,0,0,1"
@@ -1870,18 +1886,18 @@
                                                              dd:DragDrop.IsDropTarget="False"
                                                              IsSynchronizedWithCurrentItem="False"
                                                              Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
-                                                             ItemsSource="{Binding RichTextBoxViewModelCollection}"
-                                                             Focusable="{Binding IsEditingTile}"
+                                                             ItemsSource="{Binding}"
+                                                             Focusable="{Binding HostClipTileViewModel.IsEditingTile}"
                                                              IsEnabled="True"
                                                              ScrollViewer.CanContentScroll="False"
-                                                             ScrollViewer.HorizontalScrollBarVisibility="{Binding RtbHorizontalScrollbarVisibility}"
+                                                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                                              ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                                             Width="{Binding TileContentWidth}"
-                                                             Height="{Binding RichTextBoxViewModelCollection.RtbListBoxHeight}"
+                                                             Width="{Binding HostClipTileViewModel.TileContentWidth}"
+                                                             Height="{Binding RtbListBoxHeight}"
                                                              Padding="0">
                                                         <i:Interaction.Triggers>
                                                             <i:EventTrigger EventName="Loaded">
-                                                                <i:CallMethodAction TargetObject="{Binding RichTextBoxViewModelCollection}"
+                                                                <i:CallMethodAction TargetObject="{Binding}"
                                                                                     MethodName="ClipTileRichTextBoxViewModelCollection_Loaded" />
                                                             </i:EventTrigger>
                                                         </i:Interaction.Triggers>
@@ -2029,6 +2045,7 @@
                                                     </ListBox>
                                                 </Grid>
                                                 <Border x:Name="ClipTileEditTemplateToolbar"
+                                                        DataContext="{Binding HostClipTileViewModel}"
                                                         Visibility="{Binding EditTemplateToolbarVisibility}"
                                                         Height="{Binding EditTemplateToolbarHeight}"
                                                         CornerRadius="10,0,0,10"
@@ -2108,6 +2125,7 @@
                                                     </Grid>
                                                 </Border>
                                                 <Border x:Name="ClipTilePasteTemplateToolbar"
+                                                        DataContext="{Binding HostClipTileViewModel}"
                                                         Height="{Binding PasteTemplateToolbarHeight}"
                                                         CornerRadius="5"
                                                         BorderThickness="0"

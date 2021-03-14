@@ -116,7 +116,6 @@
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedListBox.cs" />
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedScrollViewer.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
-    <Compile Include="Controls\MpCollectionView.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpMultiSelectListView.cs" />
     <Compile Include="Controls\MpRichTextBox.cs" />
@@ -1660,6 +1659,7 @@
     <Resource Include="Resources\Images\drag.png" />
     <Resource Include="Resources\Images\burger.png" />
     <Resource Include="Resources\Images\edit.png" />
+    <Resource Include="Resources\Images\cog.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />
@@ -1668,12 +1668,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\VirtualizingCollection\VirtualizingCollection.csproj">
-      <Project>{235981d9-9426-41b4-b876-13a519f9db27}</Project>
-      <Name>VirtualizingCollection</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

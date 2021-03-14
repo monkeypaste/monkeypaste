@@ -329,7 +329,7 @@ namespace MpWpfApp {
                 }
 
                 IsTextBoxFocused = true;
-                MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();
+                //MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();
                 OnPropertyChanged(nameof(TextBoxFontStyle));
                 OnPropertyChanged(nameof(TextBoxTextBrush));
             };
@@ -446,6 +446,7 @@ namespace MpWpfApp {
             Text = string.Empty;
             SearchText = Text;
             _searchTextBox.Focus();
+            //MainWindowViewModel.ClipTrayViewModel.Refresh();
             //IsSearching = true;
         }
 
@@ -460,6 +461,9 @@ namespace MpWpfApp {
         }
         private void PerformSearch() {
             SearchText = Text;
+            if(!HasText) {
+                IsTextValid = true;
+            }
             //IsSearching = true;
         }
         

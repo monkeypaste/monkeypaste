@@ -21,8 +21,6 @@
     using System.Windows.Media.Imaging;
     using System.Windows.Shapes;
     using System.Windows.Threading;
-    using AlphaChiTech.Virtualization;
-    using AlphaChiTech.VirtualizingCollection;
     using AsyncAwaitBestPractices.MVVM;
     using GalaSoft.MvvmLight.CommandWpf;
     using GongSolutions.Wpf.DragDrop.Utilities;
@@ -34,10 +32,10 @@
 
         private List<string> _tempFileList = new List<string>();
 
-        private string _origClipRichText = string.Empty;
+        //private string _origClipRichText = string.Empty;
 
 
-        private bool _wasEditConfirmed = true;
+        //private bool _wasEditConfirmed = true;
 
         #endregion
 
@@ -207,11 +205,9 @@
 
         public Image Image { get; set; }
 
-        public ListBox RichTextBoxListBox { get; set; }
 
         public ListBox FileListBox { get; set; }
 
-        public Canvas RtbListBoxCanvas { get; set; }
 
         public MpClipBorder ClipBorder { get; set; }
 
@@ -505,28 +501,6 @@
                     _pasteTemplateToolbarVisibility = value;
                     OnPropertyChanged(nameof(PasteTemplateToolbarVisibility));
                 }
-            }
-        }
-
-        public ScrollBarVisibility RtbHorizontalScrollbarVisibility {
-            get {
-                if(IsExpanded) {
-                    if(RichTextBoxViewModelCollection.RelativeWidthMax > ClipBorder.ActualWidth) {
-                        return ScrollBarVisibility.Visible;
-                    }
-                }
-                return ScrollBarVisibility.Hidden;
-            }
-        }
-
-        public ScrollBarVisibility RtbVerticalScrollbarVisibility {
-            get {
-                if (IsExpanded) {
-                    if (RichTextBoxViewModelCollection.TotalItemHeight > RichTextBoxListBox.ActualHeight - EditRichTextBoxToolbarHeight) {
-                        return ScrollBarVisibility.Visible;
-                    }
-                }
-                return ScrollBarVisibility.Hidden;
             }
         }
 
@@ -972,7 +946,7 @@
                 return _isHovering;
             }
             set {
-                if (_isHovering != value && !MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded) {
+                if (_isHovering != value && (!MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded || IsExpanded)) {
                     _isHovering = value;
                     OnPropertyChanged(nameof(IsHovering));
                     OnPropertyChanged(nameof(TileBorderBrush));
@@ -1381,6 +1355,8 @@
         #endregion
 
         #region Public Methods
+        public MpClipTileViewModel() : base() { }
+
         public MpClipTileViewModel(bool isPlaceholder) : base() {
             PropertyChanged += (s, e1) => {
                 switch (e1.PropertyName) {
@@ -1414,21 +1390,25 @@
                     case nameof(IsEditingTile):
                         if (IsEditingTile) {
                             if(!IsSelected) {
-                                MainWindowViewModel.ClipTrayViewModel.ClearClipSelection(true);
+                                MainWindowViewModel.ClipTrayViewModel.ClearClipSelection(false);
                                 IsSelected = true;
-                            }
-                            
-                            //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
+                                foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel) {
+                                    ctvm.IsPrimarySelected = false;
+                                }
+                            }                            
                             MainWindowViewModel.ClipTrayViewModel.ExpandClipTile(this, false);
                         } else {
-                            MainWindowViewModel.ClipTrayViewModel.ShrinkClipTile(this, false);
-                        }
-
-                        if (!IsEditingTile && 
-                           (CopyItemType == MpCopyItemType.Composite || CopyItemType == MpCopyItemType.RichText)) {
+                            SaveToDatabase(); 
                             ContentPreviewToolTipBmpSrc = null;
                             OnPropertyChanged(nameof(ContentPreviewToolTipBmpSrc));
-                            
+                            MainWindowViewModel.ClipTrayViewModel.ShrinkClipTile(this, false);                            
+                        }
+
+                        foreach (var rtbvm in RichTextBoxViewModelCollection) {
+                            var rtb = rtbvm.Rtb;
+                            rtb.ScrollToHome();
+                            rtb.CaretPosition = rtb.Document.ContentStart;
+                            rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
                         }
                         break;
                     case nameof(IsPastingTemplateTile):
@@ -1695,59 +1675,6 @@
             };
         }
 
-        public void ClipTileRichTextStackPanel_Loaded(object sender, RoutedEventArgs e) {
-            if (RtbVisibility == Visibility.Collapsed) {
-                return;
-            }
-            RtbListBoxCanvas = (Canvas)sender;
-            var rtblb = (ListBox)RtbListBoxCanvas.FindName("ClipTileRichTextBoxListBox");
-
-            RichTextBoxListBox = rtblb;
-            RichTextBoxListBox.RequestBringIntoView += (s, e65) => { e65.Handled = true; };
-            RichTextBoxListBox.PreviewMouseDown += (s, e4) => {     
-                if(IsSelected) {
-                    return;
-                }
-                var newarg = new MouseButtonEventArgs(e4.MouseDevice, e4.Timestamp,
-                                          e4.ChangedButton, e4.StylusDevice);
-                newarg.RoutedEvent = ListViewItem.MouseDownEvent;
-                newarg.Source = sender;
-                ClipBorder.RaiseEvent(newarg);                
-            };
-
-            //after pasting template rtb's are duplicated so clear them upon refresh
-            if (CopyItemType == MpCopyItemType.Composite) {
-                RichTextBoxViewModelCollection.Clear();
-                foreach (var cci in CopyItem.CompositeItemList) {
-                    RichTextBoxViewModelCollection.Add(new MpRtbListBoxItemRichTextBoxViewModel(this, cci));
-                }
-            }
-
-            #region Search
-            PropertyChanged += (s, e2) => {
-                switch (e2.PropertyName) {
-                    case nameof(IsEditingTile):
-                        if (!IsEditingTile) {
-                            //IsPastingTemplateTile = false;
-
-                            SaveToDatabase();
-                        }
-                        foreach(var rtbvm in RichTextBoxViewModelCollection) {
-                            var rtb = rtbvm.Rtb;
-                            rtb.ScrollToHome();
-                            rtb.CaretPosition = rtb.Document.ContentStart;
-                            rtb.Selection.Select(rtb.Document.ContentStart, rtb.Document.ContentStart);
-                        }
-                        
-                        break;
-                }
-            };
-
-            OnPropertyChanged(nameof(LoadingSpinnerVisibility));
-            OnPropertyChanged(nameof(ContentVisibility));
-            #endregion
-        }
-
         public void ClipTileImageCanvas_Loaded(object sender, RoutedEventArgs e) {
             if (ImgVisibility == Visibility.Collapsed) {
                 return;
@@ -1883,8 +1810,8 @@
 
 
         public void Refresh() {
-            if(RichTextBoxListBox != null) {
-                RichTextBoxListBox.Items.Refresh();
+            if(RichTextBoxViewModelCollection.RichTextBoxListBox != null) {
+                RichTextBoxViewModelCollection.Refresh();
             }
             if (FileListBox != null) {
                 FileListBox.Items.Refresh();
@@ -1965,7 +1892,12 @@
             switch(CopyItemType) {
                 case MpCopyItemType.Composite:
                 case MpCopyItemType.RichText:
-                    RichTextBoxListBox.ScrollIntoView(RichTextBoxViewModelCollection[0]);
+                    if(RichTextBoxViewModelCollection.RichTextBoxListBox == null) {
+                        //no idea why this happens but the rtblb is null upon
+                        //searchbox focus
+                        break;
+                    }
+                    RichTextBoxViewModelCollection.RichTextBoxListBox.ScrollIntoView(RichTextBoxViewModelCollection[0]);
                     foreach(var rtbvm in RichTextBoxViewModelCollection) {
                         rtbvm.Rtb.ScrollToHome();
                     }
@@ -2087,42 +2019,6 @@
             } else {
                 MainWindowViewModel.ClipTrayViewModel.ShrinkClipTile(this, false);
             }
-        }
-
-        private RelayCommand _cancelEditClipTextCommand;
-        public ICommand CancelEditClipTextCommand {
-            get {
-                if (_cancelEditClipTextCommand == null) {
-                    _cancelEditClipTextCommand = new RelayCommand(CancelEditClipText, CanCancelEditClipText);
-                }
-                return _cancelEditClipTextCommand;
-            }
-        }
-        private bool CanCancelEditClipText() {
-            return IsEditingTile;
-        }
-        private void CancelEditClipText() {
-            _wasEditConfirmed = false;
-            IsEditingTile = false;
-            //all other action is handled in the ertb visibility changed handler in ertb_loaded
-        }
-
-        private RelayCommand _commitEditClipTextCommand;
-        public ICommand CommitEditClipTextCommand {
-            get {
-                if (_commitEditClipTextCommand == null) {
-                    _commitEditClipTextCommand = new RelayCommand(CommitEditClipText, CanCommitEditClipText);
-                }
-                return _commitEditClipTextCommand;
-            }
-        }
-        private bool CanCommitEditClipText() {
-            return IsEditingTile;// !IsEditingTitle;
-        }
-        private void CommitEditClipText() {
-            _wasEditConfirmed = true;
-            IsEditingTile = false;
-            //all other action is handled in the ertb visibility changed handler in ertb_loaded
         }
 
         private RelayCommand _excludeApplicationCommand;

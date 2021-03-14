@@ -16,7 +16,7 @@ using System.Windows.Threading;
 namespace MpWpfApp {
     public class MpCopyItem : MpDbObject, ICloneable {
         #region Private Variables
-        private static int _CopyItemCount = 0;
+        //private static int _CopyItemCount = 0;
         private object _itemData = null;
 
         private static List<MpApp> _AppList = null;
@@ -943,7 +943,7 @@ namespace MpWpfApp {
             }
         }
         private async Task UpdateItemDataAsync(DispatcherPriority priority = DispatcherPriority.Background) {
-                  
+            await Dispatcher.CurrentDispatcher.InvokeAsync(UpdateItemData,priority);          
         }
 
         private void UpdateDetails() {

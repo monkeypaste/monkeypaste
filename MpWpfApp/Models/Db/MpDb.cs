@@ -22,7 +22,7 @@ namespace MpWpfApp {
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
 
-        private int _passwordAttempts = 0;
+        //private int _passwordAttempts = 0;
 
         private bool _isLoaded = false;
         public bool IsLoaded {

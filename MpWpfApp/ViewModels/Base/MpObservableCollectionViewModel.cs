@@ -71,7 +71,7 @@ namespace MpWpfApp {
             }
         }
 
-        private static bool _osBinding = false;
+        //private static bool _osBinding = false;
 
         private string _name = string.Empty;
         public string Name {

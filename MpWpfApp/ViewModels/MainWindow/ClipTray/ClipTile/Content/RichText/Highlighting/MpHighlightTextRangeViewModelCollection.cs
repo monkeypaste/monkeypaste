@@ -37,20 +37,27 @@ namespace MpWpfApp {
         #region Properties
         public MpHighlightTextRangeViewModel SelectedHighlightTextRangeViewModel {
             get {
-                var selectedItem = this.Where(x => x.IsSelected).FirstOrDefault();
-                if(selectedItem == null && this.Count > 0) {
-                    selectedItem = this[0];
-                    selectedItem.IsSelected = true;
+                //var selectedItem = this.Where(x => x.IsSelected).FirstOrDefault();
+                //if(selectedItem == null && this.Count > 0) {
+                //    selectedItem = this[0];
+                //    selectedItem.IsSelected = true;
+                //}
+                //return selectedItem;
+                foreach(var hltrvm in this) {
+                    if(hltrvm.IsSelected) {
+                        return hltrvm;
+                    }
                 }
-                return selectedItem;
+                return null;
             }
-            set {
-                if(SelectedHighlightTextRangeViewModel != value && this.Contains(value)) {
-                    ClearSelection();
-                    this[this.IndexOf(value)].IsSelected = true;
-                    OnPropertyChanged(nameof(SelectedHighlightTextRangeViewModel));
-                }
-            }
+            //set {
+            //    if(SelectedHighlightTextRangeViewModel != value && this.Contains(value)) 
+            //        {
+            //        ClearSelection();
+            //        this[this.IndexOf(value)].IsSelected = true;
+            //        OnPropertyChanged(nameof(SelectedHighlightTextRangeViewModel));
+            //    }
+            //}
         }
 
         private int _highlightTaskCount = 0;
@@ -84,10 +91,15 @@ namespace MpWpfApp {
                         break;
                 }
             };
+
+            CollectionChanged += (s, e) => {
+                //this.Sort(x => x);
+            };
             ClipTileViewModel = ctvm;            
         }
 
         public void Init() {
+            //flipping event handlers because they go backwards and don't why
             MainWindowViewModel.SearchBoxViewModel.PrevMatchClicked += SearchBoxViewModel_PrevMatchClicked;
             MainWindowViewModel.SearchBoxViewModel.NextMatchClicked += SearchBoxViewModel_NextMatchClicked;
         }
@@ -97,6 +109,11 @@ namespace MpWpfApp {
             if (ClipTileViewModel.MainWindowViewModel.IsLoading || ClipTileViewModel.IsLoading) {
                 HighlightTaskCount--;
                 return Visibility.Visible;
+            }
+            
+            if(MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded && !ClipTileViewModel.IsExpanded) {
+                HighlightTaskCount--;
+                return Visibility.Collapsed;
             }
 
             var sttvm = MainWindowViewModel.TagTrayViewModel.SelectedTagTile;
@@ -117,6 +134,12 @@ namespace MpWpfApp {
 
             var result = await PerformHighlightAsync(hlt);
             HighlightTaskCount--;
+            //var thisAsList = this.ToList();
+            //thisAsList.Sort(CompareHighlightRanges);
+            //this.Clear();
+            //foreach(var hltrvm in thisAsList) {
+            //    this.Insert(this.Count - 1, hltrvm);
+            //}
             return result;
         }
         
@@ -124,7 +147,7 @@ namespace MpWpfApp {
             var result = Visibility.Visible;
             await Dispatcher.CurrentDispatcher.InvokeAsync(
                 (Action)(() => {
-                    var cb = ClipTileViewModel.ClipBorder;
+                    //var cb = ClipTileViewModel.ClipBorder;
                     var ttb = ClipTileViewModel.TitleTextBlock;
 
                     RegexOptions rot = RegexOptions.None;
@@ -147,7 +170,7 @@ namespace MpWpfApp {
                     Console.WriteLine("Beginning highlight clip with title: " + ClipTileViewModel.CopyItemTitle + " with highlight text: " + hlt);
 
                     //highlight title 
-                    if (mct.Count > 0) {
+                    if (ttb != null && mct.Count > 0) {
                         var trl = MpHelpers.Instance.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
                         foreach (var mr in trl) {
                             this.Add(new MpHighlightTextRangeViewModel(ClipTileViewModel, mr, 0));
@@ -187,7 +210,8 @@ namespace MpWpfApp {
                             break;
                     }
                     Console.WriteLine("Ending highlighting clip with title: " + ClipTileViewModel.CopyItemTitle);
-                    OnPropertyChanged(nameof(SelectedHighlightTextRangeViewModel));
+                    ResetSelection();
+                    //OnPropertyChanged(nameof(SelectedHighlightTextRangeViewModel));
                     result = this.Count > 0 ? Visibility.Visible:Visibility.Collapsed;
                 }),
                 DispatcherPriority.Background);
@@ -205,6 +229,7 @@ namespace MpWpfApp {
             ClearSelection();
             if(this.Count > 0) {
                 this[0].IsSelected = true;
+                OnPropertyChanged(nameof(SelectedHighlightTextRangeViewModel));
             }
         }
 
@@ -216,6 +241,35 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+        public int CompareHighlightRanges(MpHighlightTextRangeViewModel a,MpHighlightTextRangeViewModel b) {
+            // return -1 if this instance precedes obj
+            // return 0 if this instance is obj
+            // return 1 if this instance is after obj
+            if (a == null) {
+                if(b == null) {
+                    return 0;
+                }
+                return 1;
+            }
+            if(b == null) {
+                return -1;
+            }
+            //if (Range.Start == ohltrvm.Range.Start && Range.End == ohltrvm.Range.End) {
+            //    return 0;
+            //}
+            if (a.ContentId < b.ContentId) {
+                return -1;
+            }
+            if (a.ContentId > b.ContentId) {
+                return 1;
+            }
+            if (!a.Range.Start.IsInSameDocument(b.Range.Start)) {
+                return -1;
+            }
+            return a.Range.Start.CompareTo(b.Range.Start);
+            //return ohltrvm.Range.Start.CompareTo(Range.Start);
+        }
+
         private void SearchBoxViewModel_PrevMatchClicked(object sender, EventArgs e) {
             if(this.Count == 0) {
                 return;
@@ -224,7 +278,9 @@ namespace MpWpfApp {
             if(prevIdx < 0) {
                 prevIdx = this.Count - 1;
             }
-            SelectedHighlightTextRangeViewModel = this[prevIdx];
+            ClearSelection();
+            this[prevIdx].IsSelected = true;
+            OnPropertyChanged(nameof(SelectedHighlightTextRangeViewModel));
         }
 
         private void SearchBoxViewModel_NextMatchClicked(object sender, EventArgs e) {
@@ -235,7 +291,9 @@ namespace MpWpfApp {
             if (nextIdx >= this.Count) {
                 nextIdx = 0;
             }
-            SelectedHighlightTextRangeViewModel = this[nextIdx];
+            ClearSelection();
+            this[nextIdx].IsSelected = true;
+            OnPropertyChanged(nameof(SelectedHighlightTextRangeViewModel));
         }
         #endregion
 
@@ -252,26 +310,27 @@ namespace MpWpfApp {
         private void ApplyHighlighting() {
             int curContentId = -1;
             foreach(var hltrvm in this) {
-                if(hltrvm.ContentId != curContentId) {
-                    if (curContentId > 0 &&
-                       (ClipTileViewModel.CopyItemType == MpCopyItemType.RichText ||
-                        ClipTileViewModel.CopyItemType == MpCopyItemType.Composite)) {
-                        ClipTileViewModel.RichTextBoxViewModelCollection[curContentId - 1].Rtb.EndChange();
-                    }
-                    curContentId = hltrvm.ContentId;
-                    if(curContentId > 0 && 
-                       (ClipTileViewModel.CopyItemType == MpCopyItemType.RichText || 
-                        ClipTileViewModel.CopyItemType == MpCopyItemType.Composite)) {
-                        ClipTileViewModel.RichTextBoxViewModelCollection[curContentId - 1].Rtb.BeginChange();
-                    }
-                }
+                //if(hltrvm.ContentId != curContentId) {
+                //    if (curContentId > 0 &&
+                //       (ClipTileViewModel.CopyItemType == MpCopyItemType.RichText ||
+                //        ClipTileViewModel.CopyItemType == MpCopyItemType.Composite)) {
+                //        ClipTileViewModel.RichTextBoxViewModelCollection[curContentId - 1].Rtb.EndChange();
+                //    }
+                //    curContentId = hltrvm.ContentId;
+                //    if(curContentId > 0 && 
+                //       (ClipTileViewModel.CopyItemType == MpCopyItemType.RichText || 
+                //        ClipTileViewModel.CopyItemType == MpCopyItemType.Composite)) {
+                //        ClipTileViewModel.RichTextBoxViewModelCollection[curContentId - 1].Rtb.BeginChange();
+                //    }
+                //}
                 hltrvm.HighlightRange();
             }
-            if (curContentId > 0 &&
-                (ClipTileViewModel.CopyItemType == MpCopyItemType.RichText ||
-                ClipTileViewModel.CopyItemType == MpCopyItemType.Composite)) {
-                ClipTileViewModel.RichTextBoxViewModelCollection[curContentId - 1].Rtb.EndChange();
-            }
+            //if (curContentId > 0 &&
+            //    (ClipTileViewModel.CopyItemType == MpCopyItemType.RichText ||
+            //    ClipTileViewModel.CopyItemType == MpCopyItemType.Composite)) {
+            //    ClipTileViewModel.RichTextBoxViewModelCollection[curContentId - 1].Rtb.EndChange();
+            //}
+            //ResetSelection();
         }
 
         private RelayCommand _hideHighlightingCommand;

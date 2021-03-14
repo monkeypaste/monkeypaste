@@ -464,7 +464,7 @@ namespace MpWpfApp {
                     //};
                     //timer.Start();
                 } else {
-                    double animMs = Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
+                    double animMs = 0;// Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
                     double tileWidthMax = ClipTileViewModel.TileBorderMaxWidth;//Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
                     double tileWidthMin = ClipTileViewModel.TileBorderMinWidth;//MpMeasurements.Instance.ClipTileBorderMinSize;
 
@@ -529,7 +529,7 @@ namespace MpWpfApp {
 
                                 ClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
 
-                                ClipTileViewModel.RichTextBoxListBox.Items.Refresh();
+                                ClipTileViewModel.RichTextBoxViewModelCollection.Refresh();
                             }
                         });
 
@@ -540,13 +540,14 @@ namespace MpWpfApp {
                         new List<FrameworkElement> { cb, titleSwirl },
                         FrameworkElement.WidthProperty,
                         (s1, e44) => {
-                            ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
-                            ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
+                            //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbHorizontalScrollbarVisibility));
+                            //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbVerticalScrollbarVisibility));
                             if (ClipTileViewModel.IsEditingTile) {
                                 clipTray.ScrollIntoView(ClipTileViewModel);
                             } else {
                                 
                             }
+                            //ClipTileViewModel.TileBorderWidth = ClipTileViewModel.IsEditingTile ? tileWidthMax : tileWidthMin;
                         });
 
                     MpHelpers.Instance.AnimateDoubleProperty(
@@ -556,9 +557,10 @@ namespace MpWpfApp {
                         new List<FrameworkElement> { rtblbg, rtblb, rtblbgc, et, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
                         FrameworkElement.WidthProperty,
                         (s1, e44) => {
-                        //this is to remove scrollbar flicker during animation
-                        ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
-                            ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
+                            //this is to remove scrollbar flicker during animation
+                            //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbHorizontalScrollbarVisibility));
+                            //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbVerticalScrollbarVisibility));
+                            //ClipTileViewModel.TileContentWidth = ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin;
                         });
 
                     ClipTileViewModel.RichTextBoxViewModelCollection.AnimateItems(

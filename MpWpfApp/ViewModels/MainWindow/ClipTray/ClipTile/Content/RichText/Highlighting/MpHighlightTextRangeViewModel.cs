@@ -46,7 +46,8 @@ namespace MpWpfApp {
                 return _isSelected;
             }
             set {
-                if(_isSelected != value) {
+                //if(_isSelected != value)
+                    {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
                     OnPropertyChanged(nameof(HighlightBrush));
@@ -104,7 +105,7 @@ namespace MpWpfApp {
                     case MpCopyItemType.Composite:
                     case MpCopyItemType.RichText:
                         var rtb = ClipTileViewModel.RichTextBoxViewModelCollection[ContentId - 1].Rtb;
-                        ClipTileViewModel.RichTextBoxListBox.ScrollIntoView(rtb);
+                        ClipTileViewModel.RichTextBoxViewModelCollection.RichTextBoxListBox.ScrollIntoView(rtb);
                         rtb.ScrollToHorizontalOffset(rtb.HorizontalOffset + characterRect.Left - rtb.ActualWidth / 2d);
                         rtb.ScrollToVerticalOffset(rtb.VerticalOffset + characterRect.Top - rtb.ActualHeight / 2d);
                         break;
@@ -127,9 +128,9 @@ namespace MpWpfApp {
             if(ohltrvm == null) {
                 return -1;
             }
-            if (this == ohltrvm) {
-                return 0;
-            }
+            //if (Range.Start == ohltrvm.Range.Start && Range.End == ohltrvm.Range.End) {
+            //    return 0;
+            //}
             if (ContentId < ohltrvm.ContentId) {
                 return -1;
             }
@@ -140,6 +141,7 @@ namespace MpWpfApp {
                 return -1;
             }
             return Range.Start.CompareTo(ohltrvm.Range.Start);
+            //return ohltrvm.Range.Start.CompareTo(Range.Start);
         }
         #endregion
 

@@ -30,6 +30,15 @@ namespace MpWpfApp {
         public List<string> LanguageList { get; private set; } = new List<string>();
 
         public MpLanguageTranslator() : base("Language Translation") {
+            try {
+                if (!MpHelpers.Instance.CheckForInternetConnection()) {
+                    Console.WriteLine("Client offline. Language Translation is inactive");
+                    return;
+                }
+            }
+            catch (Exception ex) {
+                Console.WriteLine("Error trying to connect to internet: " + ex.ToString());
+            }
             // at least show an error dialog if there's an unexpected error
             AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(HandleExceptions);
 

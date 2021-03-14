@@ -396,7 +396,9 @@ namespace MpWpfApp {
                 return Math.Round(Convert.ToDouble(moneyStr), 2);
             }
             catch (Exception ex) {
-                Console.WriteLine("MpHelper exception cannot convert moneyStr '" + moneyStr + "' to a value, returning 0");
+                Console.WriteLine(
+                    "MpHelper exception cannot convert moneyStr '" + moneyStr + "' to a value, returning 0");
+                Console.WriteLine("Exception Details: " + ex);
                 return 0;
             }
         }
@@ -1371,6 +1373,9 @@ namespace MpWpfApp {
             da.Completed += (o, e) => {
                 if (obj.GetType() == typeof(List<FrameworkElement>)) {
                     foreach (var fe in (List<FrameworkElement>)obj) {
+                        if(fe == null) {
+                            continue;
+                        }
                         fe.Visibility = tv;
                     }
                 } else {
@@ -1388,6 +1393,9 @@ namespace MpWpfApp {
             if (tv == Visibility.Visible) {
                 if (obj.GetType() == typeof(List<FrameworkElement>)) {
                     foreach (var fe in (List<FrameworkElement>)obj) {
+                        if (fe == null) {
+                            continue;
+                        }
                         fe.Opacity = 0;
                         fe.Visibility = Visibility.Visible;
                     }
@@ -1399,7 +1407,15 @@ namespace MpWpfApp {
 
             if (obj.GetType() == typeof(List<FrameworkElement>)) {
                 foreach (var fe in (List<FrameworkElement>)obj) {
+                    if(fe == null) {
+                        continue;
+                    }
                     fe.BeginAnimation(FrameworkElement.OpacityProperty, da);
+                    if(onCompleted != null) {
+                        // this ensures the oncompleted is only called ONCE for the items
+                        da = da.Clone();
+                        da.Completed -= onCompleted;
+                    }
                 }
             } else {
                 ((FrameworkElement)obj).BeginAnimation(FrameworkElement.OpacityProperty, da);
@@ -1857,6 +1873,7 @@ namespace MpWpfApp {
                                                 96, 96, PixelFormats.Pbgra32);
 
             bitmap.Render(visual);
+            //RenderOptions.SetBitmapScalingMode(bitmap, BitmapScalingMode.HighQuality);
             return bitmap;
         }
 
@@ -2088,6 +2105,8 @@ namespace MpWpfApp {
                     return pt;
                 }
                 catch(Exception ex) {
+                    Console.WriteLine("ConvertRichTextToPlainText Exception, fallingt back to WinForms Rtb...");
+                    Console.WriteLine("Exception was: " + ex.ToString());
                     //rtb.SetRtf throws an exception when richText is from excel (contains cell information?)
                     //so falling back winforms richtextbox
                     using (System.Windows.Forms.RichTextBox wf_rtb = new System.Windows.Forms.RichTextBox()) {

@@ -13,7 +13,7 @@ namespace MpWpfApp {
         public DateTime PasteDateTime { get; set; }
 
         private IntPtr _destHandle;
-        private MpApp _destApp;
+        //private MpApp _destApp;
 
         public MpPasteHistory(DataRow dr) {
             LoadDataRow(dr);

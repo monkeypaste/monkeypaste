@@ -27,11 +27,12 @@ namespace MpWpfApp {
 
         private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
 
-        private int _filterWaitingCount;
-
-        private int _totalItemsAtLoad = 0;
+        //private int _totalItemsAtLoad = 0;
 
         private List<MpClipTileViewModel> _hiddenTiles = new List<MpClipTileViewModel>();
+
+        private double _originalExpandedTileX = 0;
+        private int _expandedTileVisibleIdx = 0;
         #endregion
 
         #region Properties
@@ -39,13 +40,13 @@ namespace MpWpfApp {
         #region View Models
         public List<MpClipTileViewModel> SelectedClipTiles {
             get {
-                return this.Where(ct => ct.IsSelected).ToList();
+                return this.Where(ct => ct.IsSelected && ct.GetType() != typeof(MpRtbListBoxItemRichTextBoxViewModel)).ToList();
             }
         }
 
         public List<MpClipTileViewModel> VisibileClipTiles {
             get {
-                return this.Where(ct => ct.TileVisibility == Visibility.Visible).ToList();
+                return this.Where(ct => ct.TileVisibility == Visibility.Visible && ct.GetType() != typeof(MpRtbListBoxItemRichTextBoxViewModel)).ToList();
             }
         }
 
@@ -350,7 +351,7 @@ namespace MpWpfApp {
                 OnPropertyChanged(nameof(EmptyListMessageVisibility));
                 OnPropertyChanged(nameof(ClipTrayVisibility));
             };
-            var allItems = MpCopyItem.GetAllCopyItems(out _totalItemsAtLoad);
+            var allItems = MpCopyItem.GetAllCopyItems(out int totalItemsAtLoad);
             foreach (var ci in allItems) {
                 if (ci.IsSubCompositeItem) {
                     continue;
@@ -373,10 +374,20 @@ namespace MpWpfApp {
                             newVisibilityDictionary.Add(ctvm, newVisibility);
                             if (ctvm.HighlightTextRangeViewModelCollection.Count > 1) {
                                 showMatchNav = true;
-                            }
+                            }  
                         }
-                        foreach (var kvp in newVisibilityDictionary) {
-                            kvp.Key.TileVisibility = kvp.Value;
+                        if (IsAnyTileExpanded) {
+                            if(MainWindowViewModel.SearchBoxViewModel.HasText) {
+                                OnPropertyChanged(nameof(SelectedClipTiles));
+                                MainWindowViewModel.SearchBoxViewModel.IsTextValid = SelectedClipTiles[0].HighlightTextRangeViewModelCollection.Count > 0;
+                            } else {
+                                MainWindowViewModel.SearchBoxViewModel.IsTextValid = true;
+                            }
+                            
+                        } else {
+                            foreach (var kvp in newVisibilityDictionary) {
+                                kvp.Key.TileVisibility = kvp.Value;
+                            }
                         }
                         MainWindowViewModel.SearchBoxViewModel.SearchNavigationButtonPanelVisibility = showMatchNav ? Visibility.Visible : Visibility.Collapsed;
                         break;
@@ -469,9 +480,16 @@ namespace MpWpfApp {
                 }
             };
 
-            //ClipboardManager = new MpClipboardManager((HwndSource)PresentationSource.FromVisual(Application.Current.MainWindow));
+            ClipTrayListView.MouseLeftButtonDown += (s, e9) => {
+                if (!IsAnyTileExpanded) {
+                    return;
+                }
+                if(!SelectedClipTiles[0].IsHovering && !MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
+                    ClearClipEditing();
+                }
+            };
+            
             MpClipboardManager.Instance.Init();
-
             MpClipboardManager.Instance.ClipboardChanged += (s, e53) => AddItemFromClipboard();
 
             if (Properties.Settings.Default.IsInitialLoad) {
@@ -484,8 +502,20 @@ namespace MpWpfApp {
         }
 
         public void ExpandClipTile(MpClipTileViewModel ctvmToExpand, bool isPastingTemplate) {
-            //ClearClipSelection(false);
-            //ctvmToExpand.IsSelected = true;
+            ClearClipSelection(false);
+            ctvmToExpand.IsSelected = true;
+            _expandedTileVisibleIdx = VisibileClipTiles.IndexOf(ctvmToExpand);
+            double animMs = 0;// Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
+            _hiddenTiles = VisibileClipTiles; 
+            _hiddenTiles.Remove(ctvmToExpand);
+            var _hiddenTileCanvasList = new List<FrameworkElement>();
+            foreach (var ctvm in _hiddenTiles) {
+                //_hiddenTileCanvasList.Add(ctvm.ClipBorder);
+                ctvm.IsSelected = false;
+                ctvm.IsPrimarySelected = false;
+                ctvm.TileVisibility = Visibility.Collapsed;
+            }
+            ClipTrayVirtualizingStackPanel.HorizontalAlignment = HorizontalAlignment.Center;
             if (isPastingTemplate) {
                 ctvmToExpand.IsPastingTemplateTile = true;
                 ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
@@ -495,47 +525,109 @@ namespace MpWpfApp {
                 }
                 ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
             }
-        }
 
-        public void ShrinkClipTile(MpClipTileViewModel ctvmToShrink, bool isPastingTemplate) {
-            if (isPastingTemplate) {
-                ctvmToShrink.IsPastingTemplateTile = false;
-                ctvmToShrink.PasteTemplateToolbarViewModel.InitWithRichTextBox(ctvmToShrink.RichTextBoxViewModelCollection[0].Rtb, true);
-            } else {
-                if(ctvmToShrink.IsEditingTile) {
-                    ctvmToShrink.IsEditingTile = false;
-                }
-                ctvmToShrink.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(ctvmToShrink.RichTextBoxViewModelCollection[0].Rtb, true);
-            }
-            //
-            //ClearClipSelection(true);
-            //ctvmToShrink.IsSelected = true;
-            //EventHandler preFadeEvent = (s, e) => {
+            //EventHandler postFadeEvent = (s, e) => {
+            //    //Console.WriteLine("Expanding tile post fade event");
+            //    ClipTrayVirtualizingStackPanel.HorizontalAlignment = HorizontalAlignment.Center;
+
+            //    //var listBoxItem = (ListBoxItem)ClipTrayListView.ItemContainerGenerator.ContainerFromItem(ctvmToExpand);
+            //    //double sx = listBoxItem.TranslatePoint(new Point(0.0, 0.0), ClipTrayListView).X;
+            //    //_originalExpandedTileX = sx;
+            //    //double trayMidX = MainWindowViewModel.ClipTrayWidth / 2;
+            //    //double ex = trayMidX - (ctvmToExpand.TileBorderMaxWidth / 2);
+            //    ////if (sx > ex) {
+            //    ////    ex += sx;
+            //    ////}
+            //    //var T = ctvmToExpand.ClipBorderTranslateTransform;
+            //    //var anim = new DoubleAnimation(sx, ex, new Duration(TimeSpan.FromMilliseconds(animMs)));
+            //    ////anim.BeginTime = TimeSpan.FromMilliseconds(animMs);
+            //    //anim.Completed += (s1, e1) => {
+                    
+            //    //};
+                
+            //    //T.BeginAnimation(TranslateTransform.XProperty, anim);
+
             //    if (isPastingTemplate) {
-            //        ctvmToExpand.IsPastingTemplateTile = false;
+            //        ctvmToExpand.IsPastingTemplateTile = true;
+            //        ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
             //    } else {
-            //        ctvmToExpand.IsEditingTile = false;
+            //        if (!ctvmToExpand.IsEditingTile) {
+            //            ctvmToExpand.IsEditingTile = true;
+            //        }
+            //        ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
             //    }
             //};
-
-            //var _hiddenTileCanvasList = new List<FrameworkElement>();
-            //foreach (var ctvm in _hiddenTiles) {
-            //    _hiddenTileCanvasList.Add(ctvm.ClipBorder);
-            //}
 
             //if (_hiddenTileCanvasList.Count > 0) {
             //    MpHelpers.Instance.AnimateVisibilityChange(
             //        _hiddenTileCanvasList,
             //        Visibility.Collapsed,
-            //        preFadeEvent,
-            //        500);
+            //        postFadeEvent,
+            //        animMs);
             //} else {
-            //    //postFadeEvent.Invoke(this, new EventArgs());
+            //    postFadeEvent.Invoke(this, new EventArgs());
+            //}
+        }
+
+        public void ShrinkClipTile(MpClipTileViewModel ctvmToShrink, bool isPastingTemplate) {
+            double animMs = 0;// Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
+            ClearClipSelection(false);
+            ctvmToShrink.IsSelected = true;
+            if (isPastingTemplate) {
+                ctvmToShrink.IsPastingTemplateTile = false;
+                ctvmToShrink.PasteTemplateToolbarViewModel.InitWithRichTextBox(ctvmToShrink.RichTextBoxViewModelCollection[0].Rtb, true);
+            } else {
+                if (ctvmToShrink.IsEditingTile) {
+                    ctvmToShrink.IsEditingTile = false;
+                }
+                ctvmToShrink.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(ctvmToShrink.RichTextBoxViewModelCollection[0].Rtb, true);
+            }
+            //var _hiddenTileCanvasList = new List<FrameworkElement>();
+            foreach (var ctvm in _hiddenTiles) {
+                //_hiddenTileCanvasList.Add(ctvm.ClipBorder);
+                ctvm.IsSelected = false;
+                ctvm.IsPrimarySelected = false;
+                ctvm.TileVisibility = Visibility.Visible;
+            }
+
+            ClipTrayVirtualizingStackPanel.HorizontalAlignment = HorizontalAlignment.Left;
+
+            //if (_hiddenTileCanvasList.Count > 0) {
+            //    MpHelpers.Instance.AnimateVisibilityChange(
+            //        _hiddenTileCanvasList,
+            //        Visibility.Visible,
+            //        (s, e) => Refresh(),
+            //        animMs,
+            //        animMs);
             //}
 
-            //ClipTrayVirtualizingStackPanel.HorizontalAlignment = HorizontalAlignment.Left;
 
-            //Refresh();
+            //var listBoxItem = (ListBoxItem)ClipTrayListView.ItemContainerGenerator.ContainerFromItem(ctvmToShrink);
+            //double sx = listBoxItem.TranslatePoint(new Point(0.0, 0.0), ClipTrayListView).X;
+            ////double trayMidX = ClipTrayListView.ActualWidth / 2;
+            //double tw = ctvmToShrink.TileBorderMinWidth;
+            //double ex = Math.Max(((_expandedTileVisibleIdx-1) * tw),0);
+
+            //var T = ctvmToShrink.ClipBorderTranslateTransform;
+
+            //var anim = new DoubleAnimation(sx, ex, new Duration(TimeSpan.FromMilliseconds(animMs)));
+            ////anim.BeginTime = TimeSpan.FromMilliseconds(animMs);
+            //anim.Completed += (s1, e1) => {                
+            //    var _hiddenTileCanvasList = new List<FrameworkElement>();
+            //    foreach (var ctvm in _hiddenTiles) {
+            //        _hiddenTileCanvasList.Add(ctvm.ClipBorder);
+            //    }
+
+            //    if (_hiddenTileCanvasList.Count > 0) {
+            //        MpHelpers.Instance.AnimateVisibilityChange(
+            //            _hiddenTileCanvasList,
+            //            Visibility.Visible,
+            //            (s,e)=>Refresh(),
+            //            animMs,
+            //            animMs);
+            //    }
+            //};
+            //T.BeginAnimation(TranslateTransform.XProperty, anim);
         }
 
         public void HideVisibleTiles(double ms = 1000) {
@@ -676,12 +768,7 @@ namespace MpWpfApp {
                 //}
                 var lsctvml = SelectedClipTiles;
                 this.Add(nctvm);
-                if (MainWindowViewModel.IsMainWindowLocked) {
-                    ClearClipSelection(false);
-                    foreach(var lsctvm in lsctvml) {
-                        lsctvm.IsSelected = true;
-                    }
-                }
+                
                 if (Properties.Settings.Default.NotificationDoCopySound) {
                     MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
                 }
@@ -701,11 +788,20 @@ namespace MpWpfApp {
         }
 
         public new void Add(MpClipTileViewModel ctvm) {
+            if (MainWindowViewModel != null && MainWindowViewModel.IsMainWindowLocked) {
+                ctvm.TileVisibility = Visibility.Collapsed;
+            }
             base.Insert(0, ctvm);
 
             // NOTE removing this refresh will confuse the tiles flowdocument owner or something
             // it probably is something I can fix to avoid the refresh but not sure how
-            Refresh();
+            if (MainWindowViewModel == null || !MainWindowViewModel.IsMainWindowLocked) {
+                Refresh();
+            } else {
+                ctvm.IsSelected = false;
+            }
+
+            
             //WasItemAdded = true;
         }
 
@@ -1343,13 +1439,14 @@ namespace MpWpfApp {
             }
         }
         private bool CanMergeSelectedClips() {
-            return true;
+            //return true;
             if (SelectedClipTiles.Count <= 1) {
                 return false;
             }
             bool areAllSameType = true;
             foreach (var sctvm in SelectedClipTiles) {
-                if (sctvm.CopyItemType != SelectedClipTiles[0].CopyItemType) {
+                if (sctvm.CopyItemType != MpCopyItemType.Composite && 
+                    sctvm.CopyItemType != MpCopyItemType.RichText) {
                     areAllSameType = false;
                 }
             }

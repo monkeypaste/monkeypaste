@@ -53,15 +53,15 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpNotificationViewModel(MpNotificationType type, object notificationProperty) : base() {
-            PropertyChanged += (s, e) => {
-                switch (e.PropertyName) {
+            //PropertyChanged += (s, e) => {
+                //switch (e.PropertyName) {
                     //case nameof(NotificationType):
                     //    string ntstr = Enum.GetName(typeof(MpNotificationType), type);
                     //    IsAudible = ntstr.ToLower().Contains("Sound");
                     //    IsVisual = ntstr.ToLower().Contains("Show");
                     //    break;
-                }
-            };
+                //}
+            //};
             NotificationType = type;
             _property = notificationProperty;
         }

@@ -14,9 +14,9 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpClipTileRichTextBoxViewModelCollection : MpObservableCollectionViewModel<MpRtbListBoxItemRichTextBoxViewModel>, ICloneable, IDropTarget {
         #region Private Variables
-        private Point _mouseDownPosition = new Point();
-        private Point _lastMousePosition = new Point();
-        private bool _isMouseDown = false;
+        //private Point _mouseDownPosition = new Point();
+        //private Point _lastMousePosition = new Point();
+        //private bool _isMouseDown = false;
         #endregion        
 
         #region Properties
@@ -73,6 +73,12 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Controls
+        public Canvas RtbListBoxCanvas { get; set; }
+
+        public ListBox RichTextBoxListBox { get; set; }
+        #endregion
+
         #region Layout
         private double _rtbListBoxHeight = MpMeasurements.Instance.ClipTileContentHeight;
         public double RtbListBoxHeight {
@@ -127,13 +133,40 @@ namespace MpWpfApp {
         }
         #endregion
 
+        #region Visibility
+        //public ScrollBarVisibility RtbHorizontalScrollbarVisibility {
+        //    get {
+        //        if(HostClipTileViewModel == null) {
+        //            return ScrollBarVisibility.Hidden;
+        //        }
+        //        if (HostClipTileViewModel.IsExpanded) {
+        //            if (RelativeWidthMax > RichTextBoxListBox.ActualWidth) {
+        //                return ScrollBarVisibility.Visible;
+        //            }
+        //        }
+        //        return ScrollBarVisibility.Hidden;
+        //    }
+        //}
+
+        //public ScrollBarVisibility RtbVerticalScrollbarVisibility {
+        //    get {
+        //        if (HostClipTileViewModel.IsExpanded) {
+        //            if (TotalItemHeight > RichTextBoxListBox.ActualHeight - HostClipTileViewModel.EditRichTextBoxToolbarHeight) {
+        //                return ScrollBarVisibility.Visible;
+        //            }
+        //        }
+        //        return ScrollBarVisibility.Hidden;
+        //    }
+        //}
+        #endregion
+
         #region Business Logic
         #endregion
 
         #endregion
 
         #region Public Methods
-        public MpClipTileRichTextBoxViewModelCollection() { }
+        public MpClipTileRichTextBoxViewModelCollection() : base() { }
 
         public MpClipTileRichTextBoxViewModelCollection(MpClipTileViewModel ctvm) : base() {
             CanAcceptChildren = true;
@@ -152,16 +185,28 @@ namespace MpWpfApp {
         }
         
         public void ClipTileRichTextBoxViewModelCollection_Loaded(object sender, RoutedEventArgs args) {
-            var richTextListBox = (ListBox)sender;
+            RichTextBoxListBox = (ListBox)sender;
+            RtbListBoxCanvas = RichTextBoxListBox.GetVisualAncestor<Canvas>();
 
-            #region Drag & Drop
-            //richTextListBox.PreviewMouseDown += ClipTileRichTextBoxViewModel_PreviewMouseDown;
-            //richTextListBox.PreviewMouseUp += (s, e) => {
-            //    _isMouseDown = false;
-            //};
-            //richTextListBox.Drop += ClipTileRichTextBoxViewModel_Drop;
-            #endregion
+            RichTextBoxListBox.RequestBringIntoView += (s, e65) => { e65.Handled = true; };
+            RichTextBoxListBox.PreviewMouseDown += (s, e4) => {
+                if (HostClipTileViewModel.IsSelected) {
+                    return;
+                }
+                var newarg = new MouseButtonEventArgs(e4.MouseDevice, e4.Timestamp,
+                                          e4.ChangedButton, e4.StylusDevice);
+                newarg.RoutedEvent = ListViewItem.MouseDownEvent;
+                newarg.Source = sender;
+                HostClipTileViewModel.ClipBorder.RaiseEvent(newarg);
+            };
 
+            //after pasting template rtb's are duplicated so clear them upon refresh
+            if (HostClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
+                this.Clear();
+                foreach (var cci in HostClipTileViewModel.CopyItem.CompositeItemList) {
+                    this.Add(new MpRtbListBoxItemRichTextBoxViewModel(HostClipTileViewModel, cci));
+                }
+            }
         }
 
         #region Drag & Drop
@@ -242,8 +287,9 @@ namespace MpWpfApp {
             }
             HostClipTileViewModel.CopyItem.WriteToDatabase();
         }
+
         public MpRtbListBoxItemRichTextBoxViewModel GetItemFromMouseLocation(Point p) {
-            var result = VisualTreeHelper.HitTest(HostClipTileViewModel.RichTextBoxListBox, p);
+            var result = VisualTreeHelper.HitTest(RichTextBoxListBox, p);
             if(result != null && result.VisualHit != null) {
                 if(result.VisualHit.GetType() == typeof(MpRtbListBoxItemRichTextBoxViewModel)) {
                     return (MpRtbListBoxItemRichTextBoxViewModel)result.VisualHit;
@@ -265,6 +311,50 @@ namespace MpWpfApp {
             return null;
         }
         #endregion
+
+        public void Refresh() {
+            RichTextBoxListBox?.Items.Refresh();
+        }
+        public void UpdateLayout() {
+            //RichTextBoxViewModelCollection.RichTextBoxListBox.Width += widthDiff;   
+
+            foreach (var rtbvm in this) {
+                rtbvm.OnPropertyChanged(nameof(rtbvm.RtbCanvasHeight));
+                rtbvm.OnPropertyChanged(nameof(rtbvm.RtbCanvasWidth));
+                rtbvm.OnPropertyChanged(nameof(rtbvm.RtbHeight));
+                rtbvm.OnPropertyChanged(nameof(rtbvm.RtbWidth));
+                rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemOverlayVisibility));
+            }
+
+            //HostClipTileViewModel.RichTextBoxListBox.UpdateLayout();
+            var rtblb = RichTextBoxListBox;
+            if (rtblb == null || VisualTreeHelper.GetChildrenCount(rtblb) <= 0) {
+                return;
+            }
+            var border = (Border)VisualTreeHelper.GetChild(rtblb, 0);
+            var sv = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
+
+            if(HostClipTileViewModel.IsExpanded) {
+                if (RelativeWidthMax > RichTextBoxListBox.ActualWidth) {
+                    sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                } else {
+                    sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                }
+
+                if (TotalItemHeight > RichTextBoxListBox.ActualHeight - HostClipTileViewModel.EditRichTextBoxToolbarHeight) {
+                    sv.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+                }
+            } else {
+                sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            }
+            sv.InvalidateScrollInfo();
+
+
+            //OnPropertyChanged(nameof(RtbVerticalScrollbarVisibility));
+            //OnPropertyChanged(nameof(RtbHorizontalScrollbarVisibility));
+            //Console.WriteLine("Total Item Height: " + RichTextBoxViewModelCollection.TotalItemHeight);
+        }
 
         public new void Add(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {            
             base.Add(rtbvm);
@@ -304,7 +394,7 @@ namespace MpWpfApp {
                                 if(!HostClipTileViewModel.IsExpanded) {
                                     rtbvm.IsEditingContent = false;
                                     rtbvm.IsSubSelected = false;
-                                    rtbvm.IsHovering = false;
+                                    rtbvm.IsSubHovering = false;
                                     rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemOverlayVisibility));
                                 }
                             });
@@ -349,7 +439,7 @@ namespace MpWpfApp {
         public void ClearSubSelection() {
             foreach(var rtbvm in this) {
                 rtbvm.IsPrimarySelected = false;
-                rtbvm.IsHovering = false;
+                rtbvm.IsSubHovering = false;
                 rtbvm.IsSubSelected = false;
                 rtbvm.IsEditingContent = false;
                 rtbvm.IsEditingSubTitle = false;

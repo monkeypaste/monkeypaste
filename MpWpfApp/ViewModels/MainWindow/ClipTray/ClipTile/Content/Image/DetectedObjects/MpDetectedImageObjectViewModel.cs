@@ -13,7 +13,7 @@ namespace MpWpfApp {
     public class MpDetectedImageObjectViewModel : MpViewModelBase {
         #region Private Variables       
         private double _l = 0, _r = 0, _t = 0, _b = 0;
-        private double _xr = 1, _yr = 1;
+        //private double _xr = 1, _yr = 1;
         private bool _isMouseDown = false;
         private bool _isDragging = false;
         private bool _isDrawing = false;

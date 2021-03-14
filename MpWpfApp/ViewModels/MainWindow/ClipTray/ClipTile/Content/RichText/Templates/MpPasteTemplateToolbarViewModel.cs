@@ -18,7 +18,6 @@ namespace MpWpfApp {
         #region Private Variables
         private TextBox _selectedTemplateTextBox = null;
         private ComboBox _selectedTemplateComboBox = null;
-        private bool _isLoading = false;
 
         private Grid _borderGrid = null;
         #endregion
@@ -377,8 +376,8 @@ namespace MpWpfApp {
                     (s1, e44) => {
                         clipTray.ScrollIntoView(ClipTileViewModel);
                         //this is to remove scrollbar flicker during animation
-                        ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbHorizontalScrollbarVisibility));
-                        ClipTileViewModel.OnPropertyChanged(nameof(ClipTileViewModel.RtbVerticalScrollbarVisibility));
+                        //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbHorizontalScrollbarVisibility));
+                        //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbVerticalScrollbarVisibility));
                     });
 
                 ClipTileViewModel.RichTextBoxViewModelCollection.AnimateItems(

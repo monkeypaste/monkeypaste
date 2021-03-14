@@ -104,7 +104,7 @@ namespace MpWpfApp {
                    ClipTileRichTextBoxViewModel.HostClipTileViewModel == null) {
                     return Brushes.Transparent;
                 }
-                if (ClipTileRichTextBoxViewModel.IsHovering) {
+                if (ClipTileRichTextBoxViewModel.IsSubHovering) {
                     return Brushes.Blue;
                 }
                 return Brushes.Transparent;
@@ -121,7 +121,7 @@ namespace MpWpfApp {
             ClipTileRichTextBoxViewModel = rtbvm;
             ClipTileRichTextBoxViewModel.PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
-                    case nameof(ClipTileRichTextBoxViewModel.IsHovering):
+                    case nameof(ClipTileRichTextBoxViewModel.IsSubHovering):
                     case nameof(ClipTileRichTextBoxViewModel.IsSubSelected):
                         OnPropertyChanged(nameof(OverlayBackgroundBrush));
                         OnPropertyChanged(nameof(OverlayBorderBrush));

@@ -209,7 +209,8 @@ namespace MpWpfApp {
                 HideWindowCommand.Execute(null);
             };
             ClipTrayViewModel.ItemsVisibilityChanged += (s1, e7) => {
-                if (ClipTrayViewModel.VisibileClipTiles.Count == 0 && SearchBoxViewModel.HasText) {
+                if (ClipTrayViewModel.VisibileClipTiles.Count == 0 && 
+                    SearchBoxViewModel.HasText) {
                     SearchBoxViewModel.IsTextValid = false;
                 } else {
                     SearchBoxViewModel.IsTextValid = true;
@@ -243,6 +244,11 @@ namespace MpWpfApp {
             //    ClipTrayViewModel.Add(new MpClipTileViewModel(MpCopyItem.CreateRandomItem(MpCopyItemType.RichText)));
             //}
             IsLoading = false;
+        }
+
+        public void ClearEdits() {
+            TagTrayViewModel.ClearTagEditing();
+            ClipTrayViewModel.ClearClipEditing();
         }
         #endregion
 
@@ -350,7 +356,7 @@ namespace MpWpfApp {
 
                 ApplicationHook.MouseWheel += (s, e) => {
                     if (!MainWindowViewModel.IsLoading && ClipTrayViewModel.IsAnyTileExpanded) {                        
-                        var rtblb = ClipTrayViewModel.SelectedClipTiles[0].RichTextBoxListBox;
+                        var rtblb = ClipTrayViewModel.SelectedClipTiles[0].RichTextBoxViewModelCollection.RichTextBoxListBox;
                         var border = (Border)VisualTreeHelper.GetChild(rtblb, 0);
                         var sv = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
                         sv.ScrollToVerticalOffset(sv.VerticalOffset - e.Delta);

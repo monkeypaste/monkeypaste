@@ -51,6 +51,7 @@ namespace MpWpfApp {
             try {
                 if(!string.IsNullOrEmpty(Clipboard.GetText())) {
                     _lastDataObject = Clipboard.GetText();
+                    _wasLastDataCsv = MpHelpers.Instance.IsStringCsv(_lastDataObject.ToString());
                 }
                 Clipboard.Clear();
                 Clipboard.SetDataObject(dataObject);

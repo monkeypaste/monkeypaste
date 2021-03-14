@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using System.Text;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 using System.Threading;

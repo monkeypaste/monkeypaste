@@ -56,7 +56,6 @@ namespace MpWpfApp {
             IconBorderImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBorderBlob"]);
         }
         public override void WriteToDatabase() {
-            bool isNew = false;
             if (IconImage == null) {
                 throw new Exception("Error creating MpIcon Image cannot be null");
             }
@@ -74,7 +73,6 @@ namespace MpWpfApp {
                             { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray((BitmapSource)IconImage) },
                             { "@iid" , IconId}
                         });
-                    isNew = false;
                 } else {
                     MpDb.Instance.ExecuteWrite(
                         "insert into MpIcon(IconBlob) values(@ib)",
@@ -82,7 +80,6 @@ namespace MpWpfApp {
                             { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray((BitmapSource)IconImage) }
                         });
                     IconId = MpDb.Instance.GetLastRowId("MpIcon", "pk_MpIconId");
-                    isNew = true;
                 }
             } else {
                 MpDb.Instance.ExecuteWrite(

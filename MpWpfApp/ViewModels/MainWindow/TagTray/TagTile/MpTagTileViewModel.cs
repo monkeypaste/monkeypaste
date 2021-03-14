@@ -270,10 +270,10 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpTagTileViewModel(MpTag tag) : base() {
-            PropertyChanged += (s, e1) => {
-                switch (e1.PropertyName) {
-                }
-            };
+            //PropertyChanged += (s, e1) => {
+            //    switch (e1.PropertyName) {
+            //    }
+            //};
 
             Tag = tag;
         }
