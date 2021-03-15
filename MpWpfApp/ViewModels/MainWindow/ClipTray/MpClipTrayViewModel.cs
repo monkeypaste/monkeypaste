@@ -40,7 +40,7 @@ namespace MpWpfApp {
         #region View Models
         public List<MpClipTileViewModel> SelectedClipTiles {
             get {
-                return this.Where(ct => ct.IsSelected && ct.GetType() != typeof(MpRtbListBoxItemRichTextBoxViewModel)).ToList();
+                return this.Where(ct => ct.IsSelected/* && ct.GetType() != typeof(MpRtbListBoxItemRichTextBoxViewModel)*/).ToList();
             }
         }
 
@@ -50,6 +50,19 @@ namespace MpWpfApp {
             }
         }
 
+        public MpClipTileViewModel LastSelectedClipTile {
+            get {
+                if (SelectedClipTiles.Count == 0) {
+                    return null;
+                }
+                if (SelectedClipTiles.Count == 1) {
+                    return SelectedClipTiles[0];
+                }
+                var selectedByTime = SelectedClipTiles;
+                selectedByTime.Sort(x => x.LastSelectedDateTime, true);
+                return selectedByTime[0];
+            }
+        }
 
         public MpClipTileViewModel PrimarySelectedClipTile {
             get {
@@ -59,10 +72,14 @@ namespace MpWpfApp {
                 if (SelectedClipTiles.Count == 1) {
                     return SelectedClipTiles[0];
                 }
-                foreach (var sctvm in SelectedClipTiles) {
-                    if (sctvm.IsPrimarySelected) {
-                        return sctvm;
-                    }
+                var pctvml = SelectedClipTiles.Where(x => x.IsPrimarySelected).ToList();
+                if (pctvml.Count == 1) {
+                    return pctvml[0];
+                }
+                if(SelectedClipTiles.Count > 0) {
+                    var selectedByTime = SelectedClipTiles;
+                    selectedByTime.Sort(x => x.LastSelectedDateTime);
+                    return selectedByTime[0];
                 }
                 return null;
             }
@@ -481,10 +498,13 @@ namespace MpWpfApp {
             };
 
             ClipTrayListView.MouseLeftButtonDown += (s, e9) => {
+                var ht = VisualTreeHelper.HitTest(ClipTrayListView, e9.GetPosition(ClipTrayListView));
                 if (!IsAnyTileExpanded) {
                     return;
                 }
-                if(!SelectedClipTiles[0].IsHovering && !MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
+                var selectedClipTilesHoveringOnMouseDown = SelectedClipTiles.Where(x => x.IsHovering).ToList();
+                if(selectedClipTilesHoveringOnMouseDown.Count == 0 && 
+                   !MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
                     ClearClipEditing();
                 }
             };
@@ -504,6 +524,7 @@ namespace MpWpfApp {
         public void ExpandClipTile(MpClipTileViewModel ctvmToExpand, bool isPastingTemplate) {
             ClearClipSelection(false);
             ctvmToExpand.IsSelected = true;
+            
             _expandedTileVisibleIdx = VisibileClipTiles.IndexOf(ctvmToExpand);
             double animMs = 0;// Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
             _hiddenTiles = VisibileClipTiles; 
@@ -582,6 +603,7 @@ namespace MpWpfApp {
                 }
                 ctvmToShrink.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(ctvmToShrink.RichTextBoxViewModelCollection[0].Rtb, true);
             }
+            ctvmToShrink.RichTextBoxViewModelCollection.UpdateLayout();
             //var _hiddenTileCanvasList = new List<FrameworkElement>();
             foreach (var ctvm in _hiddenTiles) {
                 //_hiddenTileCanvasList.Add(ctvm.ClipBorder);
@@ -698,6 +720,7 @@ namespace MpWpfApp {
                 ctvm.IsPrimarySelected = false;
                 ctvm.RichTextBoxViewModelCollection.ClearSubSelection();
             }
+            ///OnPropertyChanged(nameof(SelectedClipTiles));
         }
 
         public void ResetClipSelection() {
@@ -715,6 +738,7 @@ namespace MpWpfApp {
                     ClipTrayListView.ScrollViewer.ScrollToHorizontalOffset(0);
                 }
             }
+           // OnPropertyChanged(nameof(SelectedClipTiles));
         }
 
         public void RefreshAllCommands() {
@@ -735,7 +759,12 @@ namespace MpWpfApp {
             }
             if (MainWindowViewModel.AppModeViewModel.IsInAppendMode && SelectedClipTiles.Count > 0) {
                 //when in append mode just append the new items text to selecteditem
-                PrimarySelectedClipTile.MergeClip(new MpClipTileViewModel(newCopyItem));
+                var primarySelectedClipTile = PrimarySelectedClipTile;
+                if(SelectedClipTiles.Count > 1) {
+                    ClearClipSelection();
+                    primarySelectedClipTile.IsSelected = true;
+                }
+                primarySelectedClipTile.MergeClip(new MpClipTileViewModel(newCopyItem));
                  
                 if (Properties.Settings.Default.NotificationShowAppendBufferToast) {
                     MpStandardBalloonViewModel.ShowBalloon(

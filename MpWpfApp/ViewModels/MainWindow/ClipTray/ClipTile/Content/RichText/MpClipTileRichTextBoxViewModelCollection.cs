@@ -39,13 +39,22 @@ namespace MpWpfApp {
 
         public MpRtbListBoxItemRichTextBoxViewModel SelectedClipTileRichTextBoxViewModel {
             get {
-                if(HostClipTileViewModel == null || this.Count == 0) {
-                    return null;
+                //if(HostClipTileViewModel == null || this.Count == 0) {
+                //    return null;
+                //}
+                //foreach(var rtbvm in this) {
+                //    if(rtbvm.IsSubSelected) {
+                //        return rtbvm;
+                //    }
+                //}
+                //return null;
+                var srtbvml = this.Where(x => x.IsSubSelected).ToList();
+                if(srtbvml.Count > 0) {
+                    return srtbvml[0];
                 }
-                foreach(var rtbvm in this) {
-                    if(rtbvm.IsSubSelected) {
-                        return rtbvm;
-                    }
+                if(this.Count > 0) {
+                    this[0].IsSubSelected = true;
+                    return this[0];
                 }
                 return null;
             }
@@ -66,11 +75,6 @@ namespace MpWpfApp {
             }
         }
 
-        public MpEventEnabledFlowDocument FullSeparatedDocument {
-            get {
-                return GetFullSeperatedDocument();
-            }
-        }
         #endregion
 
         #region Controls
@@ -178,8 +182,8 @@ namespace MpWpfApp {
                         newItem.CompositeSortOrderIdx = this.IndexOf(newItem);
                         newItem.CopyItem.WriteToDatabase();
                     }
-                    HostClipTileViewModel.ContentPreviewToolTipBmpSrc = null;
-                    HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.ContentPreviewToolTipBmpSrc));
+                    //HostClipTileViewModel.ContentPreviewToolTipBmpSrc = null;
+                    //HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.ContentPreviewToolTipBmpSrc));
                 }
             };
         }
@@ -189,16 +193,16 @@ namespace MpWpfApp {
             RtbListBoxCanvas = RichTextBoxListBox.GetVisualAncestor<Canvas>();
 
             RichTextBoxListBox.RequestBringIntoView += (s, e65) => { e65.Handled = true; };
-            RichTextBoxListBox.PreviewMouseDown += (s, e4) => {
-                if (HostClipTileViewModel.IsSelected) {
-                    return;
-                }
-                var newarg = new MouseButtonEventArgs(e4.MouseDevice, e4.Timestamp,
-                                          e4.ChangedButton, e4.StylusDevice);
-                newarg.RoutedEvent = ListViewItem.MouseDownEvent;
-                newarg.Source = sender;
-                HostClipTileViewModel.ClipBorder.RaiseEvent(newarg);
-            };
+            //RichTextBoxListBox.MouseLeftButtonUp += (s, e4) => {
+            //    if(HostClipTileViewModel.IsExpanded) {
+            //        return;
+            //    }
+            //    var newarg = new MouseButtonEventArgs(e4.MouseDevice, e4.Timestamp,
+            //                              e4.ChangedButton, e4.StylusDevice);
+            //    newarg.RoutedEvent = MpClipBorder.MouseLeftButtonUpEvent;
+            //    newarg.Source = HostClipTileViewModel.ClipBorder;
+            //    HostClipTileViewModel.ClipBorder.RaiseEvent(newarg);
+            //};
 
             //after pasting template rtb's are duplicated so clear them upon refresh
             if (HostClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
@@ -317,7 +321,7 @@ namespace MpWpfApp {
         }
         public void UpdateLayout() {
             //RichTextBoxViewModelCollection.RichTextBoxListBox.Width += widthDiff;   
-
+            Console.WriteLine("TotalItemHeight: " + TotalItemHeight);
             foreach (var rtbvm in this) {
                 rtbvm.OnPropertyChanged(nameof(rtbvm.RtbCanvasHeight));
                 rtbvm.OnPropertyChanged(nameof(rtbvm.RtbCanvasWidth));
@@ -334,21 +338,24 @@ namespace MpWpfApp {
             var border = (Border)VisualTreeHelper.GetChild(rtblb, 0);
             var sv = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
 
-            if(HostClipTileViewModel.IsExpanded) {
-                if (RelativeWidthMax > RichTextBoxListBox.ActualWidth) {
-                    sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-                } else {
-                    sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                }
+            //if(HostClipTileViewModel.IsExpanded) {
+            //    if (RelativeWidthMax > RichTextBoxListBox.ActualWidth) {
+            //        sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+            //    } else {
+            //        sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            //    }
 
-                if (TotalItemHeight > RichTextBoxListBox.ActualHeight - HostClipTileViewModel.EditRichTextBoxToolbarHeight) {
-                    sv.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-                }
-            } else {
-                sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-                sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            }
-            sv.InvalidateScrollInfo();
+            //    if (TotalItemHeight > RichTextBoxListBox.ActualHeight - HostClipTileViewModel.EditRichTextBoxToolbarHeight) {
+            //        sv.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+            //    }
+            //} else {
+            //    sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            //    sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            //}
+
+            //sv.Height = TotalItemHeight;
+            //sv.UpdateLayout();
+            //sv.InvalidateScrollInfo();
 
 
             //OnPropertyChanged(nameof(RtbVerticalScrollbarVisibility));
@@ -381,11 +388,11 @@ namespace MpWpfApp {
                 }
             }
             if (toHeight > 0) {
-                double heightDiff = toHeight - fromHeight;
+                //double heightDiff = toHeight - fromHeight;
                 foreach (var rtbvm in this) {
                     MpHelpers.Instance.AnimateDoubleProperty(
                             rtbvm.Rtbc.ActualHeight,
-                            rtbvm.Rtbc.ActualHeight - heightDiff,
+                            rtbvm.RtbCanvasHeight + rtbvm.RtbPadding.Top + rtbvm.RtbPadding.Bottom,
                             animMs,
                             new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
                             FrameworkElement.HeightProperty,
@@ -478,39 +485,6 @@ namespace MpWpfApp {
         private MpEventEnabledFlowDocument GetFullDocument() {
             var fullDocument = string.Empty.ToRichText().ToFlowDocument();
             foreach (var rtbvm in this) {
-                MpEventEnabledFlowDocument fd = null;
-                if (rtbvm.Rtb == null) {
-                    fd = rtbvm.CopyItemRichText.ToFlowDocument();
-                } else {
-                    fd = rtbvm.Rtb.Document.Clone();
-                }
-                MpHelpers.Instance.CombineFlowDocuments(
-                    fd,
-                    fullDocument,
-                    true);
-            }
-            return fullDocument;
-        }
-
-        private MpEventEnabledFlowDocument GetFullSeperatedDocument(string separatorChar = "- ") {
-            int maxCols = int.MinValue;
-            foreach (var rtbvm in this) {
-                maxCols = Math.Max(maxCols, MpHelpers.Instance.GetColCount(rtbvm.CopyItemPlainText));
-            }
-            string separatorLine = string.Empty;
-            for(int i = 0;i < maxCols;i++) {
-                separatorLine += separatorChar;
-            }
-            var separatorDocument = separatorLine.ToRichText().ToFlowDocument();
-            var fullDocument = string.Empty.ToRichText().ToFlowDocument();
-            for (int i = 0; i < this.Count; i++) {
-                var rtbvm = this[i];
-                if(i % 2 == 1) {
-                    MpHelpers.Instance.CombineFlowDocuments(
-                    separatorDocument,
-                    fullDocument,
-                    true);
-                }
                 MpEventEnabledFlowDocument fd = null;
                 if (rtbvm.Rtb == null) {
                     fd = rtbvm.CopyItemRichText.ToFlowDocument();

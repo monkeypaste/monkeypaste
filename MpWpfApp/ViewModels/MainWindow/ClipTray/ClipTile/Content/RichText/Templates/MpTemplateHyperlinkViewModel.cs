@@ -520,7 +520,10 @@ namespace MpWpfApp {
                 ClipTileViewModel.RichTextBoxViewModelCollection.SelectedRtb.Selection.Text = string.Empty;
             }
             //remove this individual token reference
-            ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Remove(this);            
+            if(ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel != null) {
+                ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Remove(this);
+            }
+            
         }
 
         public object Clone() {

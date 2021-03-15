@@ -291,7 +291,28 @@ namespace MpWpfApp {
                 tbx.Focus();
                 //tbx.SelectAll();
             };
-
+            selectedTemplateTextBox.PreviewKeyDown += (s, e8) => {
+                if(e8.Key == Key.Tab) {
+                    if(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
+                        PreviousTemplateTokenCommand.Execute(null);
+                    } else {
+                        NextTemplateTokenCommand.Execute(null);
+                    }
+                    e8.Handled = true;
+                }
+                if (e8.Key == Key.Enter) {
+                    if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
+                        PreviousTemplateTokenCommand.Execute(null);
+                    } else {
+                        if(IsTemplateReadyToPaste) {
+                            PasteTemplateCommand.Execute(null);
+                        } else {
+                            NextTemplateTokenCommand.Execute(null);
+                        }
+                    }
+                    e8.Handled = true;
+                }
+            };
             clearAllTemplatesButton.MouseLeftButtonUp += (s, e2) => {
                 //when clear all is clicked it performs the ClearAllTemplate Command and this switches focus to 
                 //first template tbx

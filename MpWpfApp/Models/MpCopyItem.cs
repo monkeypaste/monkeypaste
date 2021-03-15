@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -104,16 +105,7 @@ namespace MpWpfApp {
                 return new BitmapImage();
             }
             set {
-                switch (CopyItemType) {
-                    //case MpCopyItemType.FileList:
-                    //    return MpHelpers.Instance.ConvertRichTextToBitmapSource(MpHelpers.Instance.ConvertPlainTextToRichText((string)_itemData));
-                    //case MpCopyItemType.Image:
-                        //return (BitmapSource)_itemData;
-                    //case MpCopyItemType.Composite:
-                    case MpCopyItemType.RichText:
-                        _itemBitmapSource = value;
-                        break;
-                }
+                _itemBitmapSource = value;
             }
         }
 
@@ -254,8 +246,11 @@ namespace MpWpfApp {
                 } else {
                     newItem.ItemColor = color[0];
                 }
-
+                var sw = new Stopwatch();
+                sw.Start();
                 newItem.ItemTitleSwirl = newItem.InitSwirl(null, false);
+                sw.Stop();
+                Console.WriteLine("Time to create swirl: " + sw.ElapsedMilliseconds + " ms");
                 newItem.ImageItemObjectList = new List<MpDetectedImageObject>();
                 switch (itemType) {
                     case MpCopyItemType.Csv:
@@ -392,19 +387,21 @@ namespace MpWpfApp {
             bool createComposite = false,
             bool useFileData = false,
             bool isFileDataMerged = false) {
-            //cases:
-            //(from)->(to) = (Output Types)
-            //RichText->RichText = RichText | Composite
-            //RichText->FileList = FileList (with RichText as file w/ title at eol)
-            //RichText->Composite = Composite     
+            /*cases:
+                (from)->(to) = (Output Types)
+                RichText->RichText = RichText | Composite
+                RichText->FileList = FileList(with RichText as file w / title at eol)
+                RichText->Composite = Composite
 
-            //FileList->FileList = FileList
-            //FileList->RichText = RichText (of file path's or data) | Composite (with File Path's (or file data if supported and flagged) as rich text sub-composites (or single if flagged))
-            //FileList->Composite = Composite (each file path or data as sub-composite or merged based on flags)
-            
-            //Composite->Composite = Composite
-            //Composite->FileList = FileList(each sub-composite is file path stored in a userdata folder or is ONE file in userdata folder if merge is flagged)
-            //Composite->RichText = RichText
+                FileList->FileList = FileList
+                FileList->RichText = RichText(of file path's or data) | Composite (with File Path's(or file data if supported and flagged) as rich text sub-composites(or single if flagged))
+                FileList->Composite = Composite(each file path or data as sub - composite or merged based on flags)
+
+
+                Composite->Composite = Composite
+                Composite->FileList = FileList(each sub - composite is file path stored in a userdata folder or is ONE file in userdata folder if merge is flagged)
+                Composite->RichText = RichText
+            */
             if (fromItem.CopyItemType == MpCopyItemType.Image || toItem.CopyItemType == MpCopyItemType.Image) {
                 // for now, do not allow combining with image types
                 return null;
@@ -510,7 +507,7 @@ namespace MpWpfApp {
                             foreach(var sci in fromItem.CompositeItemList) {
                                 sci.CompositeParentCopyItemId = compositeItem.CopyItemId;
                                 sci.CompositeSortOrderIdx = compositeItem.CompositeItemList.Count;
-                                compositeItem.CompositeItemList.Add(fromItem);
+                                compositeItem.CompositeItemList.Add(sci);
                             }                            
                             break;
                         case MpCopyItemType.Composite:
@@ -518,7 +515,7 @@ namespace MpWpfApp {
                             foreach (var occi in fromItem.CompositeItemList) {
                                 occi.CompositeParentCopyItemId = compositeItem.CopyItemId;
                                 occi.CompositeSortOrderIdx = compositeItem.CompositeItemList.Count;
-                                compositeItem.CompositeItemList.Add(fromItem);
+                                compositeItem.CompositeItemList.Add(occi);
                             }
                             break;
                     }
@@ -696,6 +693,36 @@ namespace MpWpfApp {
                 return 0;
             }
             return dt.Rows.Count;
+        }
+
+        public MpEventEnabledFlowDocument GetSeparatedCompositeFlowDocument(string separatorChar = "- ") {
+            if (CopyItemType != MpCopyItemType.Composite) {
+                return ItemFlowDocument;
+            }
+            int maxCols = int.MinValue;
+            foreach (var cci in CompositeItemList) {
+                maxCols = Math.Max(maxCols, MpHelpers.Instance.GetColCount(cci.ItemPlainText));
+            }
+            string separatorLine = string.Empty;
+            for (int i = 0; i < maxCols; i++) {
+                separatorLine += separatorChar;
+            }
+            var separatorDocument = separatorLine.ToRichText().ToFlowDocument();
+            var fullDocument = string.Empty.ToRichText().ToFlowDocument();
+            for (int i = 0; i < CompositeItemList.Count; i++) {
+                var cci = CompositeItemList[i];
+                if (i % 2 == 1) {
+                    MpHelpers.Instance.CombineFlowDocuments(
+                    separatorDocument,
+                    fullDocument,
+                    true);
+                }
+                MpHelpers.Instance.CombineFlowDocuments(
+                    cci.ItemFlowDocument,
+                    fullDocument,
+                    true);
+            }
+            return fullDocument;
         }
 
         public string GetCompositeItemRichText() {
@@ -927,7 +954,8 @@ namespace MpWpfApp {
                 case MpCopyItemType.RichText:
                     ItemRichText = (string)_itemData;
                     ItemFlowDocument = ItemRichText.ToFlowDocument();
-                    ItemPlainText = MpHelpers.Instance.ConvertRichTextToPlainText(ItemRichText);
+                    ItemPlainText = ItemRichText.ToPlainText();
+                    ItemBitmapSource = ItemFlowDocument.ToBitmapSource();
                     if (!string.IsNullOrEmpty(ItemCsv) && MpHelpers.Instance.IsStringCsv(ItemPlainText)) {
                         //this is when copying from excel or DataObject type supports csv
                         ItemCsv = ItemPlainText;
@@ -938,7 +966,8 @@ namespace MpWpfApp {
                     _itemData = GetCompositeItemRichText();
                     ItemRichText = (string)_itemData;
                     ItemFlowDocument = ItemRichText.ToFlowDocument();
-                    ItemPlainText = ItemRichText.ToPlainText();
+                    ItemPlainText = ItemRichText.ToPlainText();                     
+                    ItemBitmapSource = GetSeparatedCompositeFlowDocument().ToBitmapSource();
                     break;
             }
         }
@@ -1022,16 +1051,18 @@ namespace MpWpfApp {
                 var compositeItemIdList = GetCompsiteCopyItemIdBySortOrderList();
                 foreach (int ciid in compositeItemIdList) {
                     CompositeItemList.Add(MpCopyItem.GetCopyItemById(ciid));
-                }
+                }                
                 //itemData gathered in UpdateItemData
                 SetData(null);
             } else {
                 SetData(dr["ItemText"].ToString());
-                if(dr["ItemImage"] != null && dr["ItemImage"].GetType() != typeof(System.DBNull)) {
-                    ItemBitmapSource = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]);
-                }
+                
             }
-            
+
+            if (dr["ItemImage"] != null && dr["ItemImage"].GetType() != typeof(System.DBNull)) {
+                ItemBitmapSource = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]);
+            }
+
             CompositeParentCopyItemId = GetCompositeParentCopyItemId();
             if (CompositeParentCopyItemId <= 0) {
                 //only create title swirl for composite parent and non-composite items
@@ -1200,9 +1231,6 @@ namespace MpWpfApp {
                 cit.CopyItemId = CopyItemId;
                 cit.WriteToDatabase();
             }
-
-            var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
-            //mwvm.ClipTrayViewModel.GetDataSource().CopyItemDataProvider.OnCopyItemChanged(this, new MpCopyItemChangeEventArgs(changeType));
         }
 
         public object Clone() {

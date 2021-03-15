@@ -28,7 +28,10 @@ namespace MpWpfApp {
             collection.Insert(newIdx, item);
         }
 
-        public static void Sort<TSource, TKey>(this IList<TSource> source, Func<TSource, TKey> keySelector, bool desc = false) where TSource : class {
+        public static void Sort<TSource, TKey>(
+            this IList<TSource> source, 
+            Func<TSource, TKey> keySelector, 
+            bool desc = false) where TSource : class {
             if (source == null) {
                 return;
             }
@@ -93,6 +96,13 @@ namespace MpWpfApp {
         #endregion
 
         #region Documents
+        public static BitmapSource ToBitmapSource(this FlowDocument fd, Brush bgBrush = null) {
+            return MpHelpers.Instance.ConvertFlowDocumentToBitmap(
+                                fd.Clone(),
+                                fd.GetDocumentSize(),
+                                bgBrush);
+        }
+
         public static bool Equals(this TextRange tra, TextRange trb) {
             if(!tra.Start.IsInSameDocument(trb.Start)) {
                 return false;
@@ -486,17 +496,18 @@ namespace MpWpfApp {
               new Typeface(doc.FontFamily, doc.FontStyle, doc.FontWeight, doc.FontStretch),
               doc.FontSize,
               doc.Foreground,
-                new NumberSubstitution(),
-                VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip);
+              new NumberSubstitution(),
+              VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip);
 
             int offset = 0;
-
-            foreach (TextElement el in GetRunsAndParagraphs(doc)) {
+            var runsAndParagraphsList = GetRunsAndParagraphs(doc).ToList();
+            for (int i = 0; i < runsAndParagraphsList.Count; i++) {
+                TextElement el = runsAndParagraphsList[i];
                 Run run = el as Run;
 
                 if (run != null) {
                     int count = run.Text.Length;
-
+                    
                     output.SetFontFamily(run.FontFamily, offset, count);
                     output.SetFontStyle(run.FontStyle, offset, count);
                     output.SetFontWeight(run.FontWeight, offset, count);
@@ -506,7 +517,7 @@ namespace MpWpfApp {
                     output.SetTextDecorations(run.TextDecorations, offset, count);
 
                     offset += count;
-                } else {
+                } else {                    
                     offset += Environment.NewLine.Length;
                 }
             }

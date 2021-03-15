@@ -582,7 +582,34 @@ namespace MpWpfApp {
         #endregion
 
         #region System
-        
+        public List<Key> GetModKeyDownList() {
+            var downModKeyList = new List<Key>();
+            if(Keyboard.IsKeyDown(Key.LeftCtrl)) {
+                downModKeyList.Add(Key.LeftCtrl);
+            }
+            if (Keyboard.IsKeyDown(Key.RightCtrl)) {
+                downModKeyList.Add(Key.RightCtrl);
+            }
+            if (Keyboard.IsKeyDown(Key.LeftShift)) {
+                downModKeyList.Add(Key.LeftShift);
+            }
+            if (Keyboard.IsKeyDown(Key.RightShift)) {
+                downModKeyList.Add(Key.RightShift);
+            }
+            if (Keyboard.IsKeyDown(Key.LeftAlt)) {
+                downModKeyList.Add(Key.LeftAlt);
+            }
+            if (Keyboard.IsKeyDown(Key.RightAlt)) {
+                downModKeyList.Add(Key.RightAlt);
+            }
+
+            return downModKeyList;
+        }
+
+        public bool IsMultiSelectKeyDown() {
+            var downModKeyList = GetModKeyDownList().Where(x => x == Key.LeftCtrl || x == Key.RightCtrl || x == Key.LeftShift || x == Key.RightShift).ToList();
+            return downModKeyList.Count > 0;
+        }
         public double ConvertBytesToMegabytes(long bytes, int precision = 2) {
             return Math.Round((bytes / 1024f) / 1024f,precision);
         }
@@ -1847,13 +1874,17 @@ namespace MpWpfApp {
         #endregion
 
         #region Converters
-        public BitmapSource ConvertFlowDocumentToBitmap(FlowDocument document, Size size) {
+        public BitmapSource ConvertFlowDocumentToBitmap(FlowDocument document, Size size, Brush bgBrush = null) {
             if (size.Width <= 0) {
                 size.Width = 1;
             }
             if (size.Height <= 0) {
                 size.Height = 1;
             }
+            var dpi = VisualTreeHelper.GetDpi(Application.Current.MainWindow);
+            size.Width *= dpi.DpiScaleX;
+            size.Height *= dpi.DpiScaleY;
+
             document.PagePadding = new Thickness(0);
             document.ColumnWidth = size.Width;
             document.PageWidth = size.Width;
@@ -1865,12 +1896,15 @@ namespace MpWpfApp {
             var visual = new DrawingVisual();
             using (var drawingContext = visual.RenderOpen()) {
                 // draw white background
-                drawingContext.DrawRectangle(Brushes.White, null, new Rect(size));
+                drawingContext.DrawRectangle(bgBrush ?? Brushes.White, null, new Rect(size));
             }
             visual.Children.Add(paginator.GetPage(0).Visual);
-
-            var bitmap = new RenderTargetBitmap((int)size.Width, (int)size.Height,
-                                                96, 96, PixelFormats.Pbgra32);
+            var bitmap = new RenderTargetBitmap(
+                (int)size.Width, 
+                (int)size.Height,
+                dpi.PixelsPerInchX, 
+                dpi.PixelsPerInchY, 
+                PixelFormats.Pbgra32);
 
             bitmap.Render(visual);
             //RenderOptions.SetBitmapScalingMode(bitmap, BitmapScalingMode.HighQuality);
@@ -2172,10 +2206,17 @@ namespace MpWpfApp {
             if(IsStringRichText(rtf)) {
                 //using (var stream = new MemoryStream(Encoding.Default.GetBytes(rtf))) {
                 using (var stream = new MemoryStream(UTF8Encoding.Default.GetBytes(rtf))) {
-                    var flowDocument = new MpEventEnabledFlowDocument();
-                    var range = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
-                    range.Load(stream, System.Windows.DataFormats.Rtf);
-                    return flowDocument;
+                    try {
+                        var flowDocument = new MpEventEnabledFlowDocument();
+                        var range = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
+                        range.Load(stream, System.Windows.DataFormats.Rtf);
+                        return flowDocument;
+                    }
+                    catch(Exception ex) {
+                        Console.WriteLine("Exception converting richtext to flowdocument, attempting to fall back to plaintext...");
+                        Console.WriteLine("Exception Details: " + ex);
+                        return rtf.ToPlainText().ToFlowDocument();
+                    }
                 }
             }
             return ConvertXamlToFlowDocument(rtf);
