@@ -352,8 +352,8 @@ namespace MpWpfApp {
 
             //if the range for the template contains a sub-selection of a hyperlink the hyperlink(s)
             //needs to be broken into their text before the template hyperlink can be created
-            var trSHl = (Hyperlink)MpHelpers.Instance.FindParentOfType(tr.Start.Parent, typeof(Hyperlink));
-            var trEHl = (Hyperlink)MpHelpers.Instance.FindParentOfType(tr.End.Parent, typeof(Hyperlink));
+            var trSHl = tr.Start.Parent.FindParentOfType<Hyperlink>();
+            var trEHl = tr.End.Parent.FindParentOfType<Hyperlink>();
             var trText = tr.Text;
 
             if (trSHl != null) {
@@ -384,14 +384,18 @@ namespace MpWpfApp {
             iuic.DataContext = thlvm;
             iuic.Child = b;
 
-            //var matchRun = new Run(tr.Text);
-            //tr.Text = "";
-            // DO NOT REMOVE this extra link ensures selection is retained!
-            //var hlink = new Hyperlink(matchRun, tr.Start);
             var hl = new Hyperlink(tr.Start,tr.End);
             hl.DataContext = thlvm;
             hl.Inlines.Clear();
             hl.Inlines.Add(iuic);
+
+            //add trailing run of one space to allow clicking after iuic
+            var tailStartPointer = hl.ElementEnd.GetInsertionPosition(LogicalDirection.Forward);
+            if(tailStartPointer != null) {
+                new Run(@" ", tailStartPointer);
+            }
+            
+
             thlvm.TemplateHyperlink = hl;
 
             return hl;

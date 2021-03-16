@@ -20,6 +20,8 @@ namespace MpWpfApp {
         public bool IsAppRejected { get; set; } = false;
         public BitmapSource IconImage { get; set; } = new BitmapImage();
         public BitmapSource IconBorderImage { get; set; } = new BitmapImage();
+        public BitmapSource IconHighlightBorderImage { get; set; } = new BitmapImage();
+        public BitmapSource IconSelectedHighlightBorderImage { get; set; } = new BitmapImage();
 
         public int[] ColorId = new int[5];
 
@@ -55,7 +57,9 @@ namespace MpWpfApp {
             AppName = MpHelpers.Instance.GetProcessApplicationName(hwnd);
             IsAppRejected = isAppRejected;
             IconImage = MpHelpers.Instance.GetIconImage(AppPath);
-            IconBorderImage = CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio);
+            IconBorderImage = CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio,Colors.White);
+            IconHighlightBorderImage = CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Yellow);
+            IconSelectedHighlightBorderImage = CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Pink);
             PrimaryIconColorList = CreatePrimaryColorList(IconImage);
         }
         public MpApp(string appPath) {
@@ -64,7 +68,9 @@ namespace MpWpfApp {
             AppName = appPath;
             IsAppRejected = true;
             IconImage = MpHelpers.Instance.GetIconImage(AppPath);
-            IconBorderImage = CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio);
+            IconBorderImage = CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.White);
+            IconHighlightBorderImage = CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Yellow);
+            IconSelectedHighlightBorderImage = CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Pink);
             PrimaryIconColorList = CreatePrimaryColorList(IconImage);
         }
 
@@ -80,6 +86,8 @@ namespace MpWpfApp {
             AppName = dr["AppName"].ToString();
             IconImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
             IconBorderImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBorderBlob"]);
+            IconSelectedHighlightBorderImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconSelectedHighlightBorderBlob"]);
+            IconHighlightBorderImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconHighlightBorderBlob"]);
 
             PrimaryIconColorList.Clear();
             for (int i = 0; i < 5; i++) {
@@ -104,10 +112,12 @@ namespace MpWpfApp {
             }
             if (AppId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "insert into MpApp(IconBlob,IconBorderBlob,SourcePath,IsAppRejected,AppName,fk_MpColorId1,fk_MpColorId2,fk_MpColorId3,fk_MpColorId4,fk_MpColorId5) values (@ib,@ibb,@sp,@iar,@an,@c1,@c2,@c3,@c4,@c5)",
+                        "insert into MpApp(IconBlob,IconBorderBlob,IconSelectedHighlightBorderBlob,IconHighlightBorderBlob,SourcePath,IsAppRejected,AppName,fk_MpColorId1,fk_MpColorId2,fk_MpColorId3,fk_MpColorId4,fk_MpColorId5) values (@ib,@ibb,@ishbb,@ihbb,@sp,@iar,@an,@c1,@c2,@c3,@c4,@c5)",
                         new Dictionary<string, object> {
                             { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconImage) },
                             { "@ibb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconBorderImage) },
+                            { "@ishbb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconSelectedHighlightBorderImage) },
+                            { "@ihbb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconHighlightBorderImage) },
                             { "@sp", AppPath },
                             { "@iar", Convert.ToInt32(IsAppRejected) },
                             { "@an", AppName },
@@ -120,19 +130,21 @@ namespace MpWpfApp {
                 AppId = MpDb.Instance.GetLastRowId("MpApp", "pk_MpAppId");                
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpApp set IconBlob=@ib, IconBorderBlob=@ibb, IsAppRejected=@iar, SourcePath=@sp, AppName=@an, fk_MpColorId1=@c1,fk_MpColorId2=@c2,fk_MpColorId3=@c3,fk_MpColorId4=@c4,fk_MpColorId5=@c5 where pk_MpAppId=@aid",
+                    "update MpApp set IconBlob=@ib, IconBorderBlob=@ibb,IconSelectedHighlightBorderBlob=@ishbb,IconHighlightBorderBlob=@ihbb, IsAppRejected=@iar, SourcePath=@sp, AppName=@an, fk_MpColorId1=@c1,fk_MpColorId2=@c2,fk_MpColorId3=@c3,fk_MpColorId4=@c4,fk_MpColorId5=@c5 where pk_MpAppId=@aid",
                     new Dictionary<string, object> {
                         { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconImage) },
                         { "@ibb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconBorderImage) },
+                        { "@ishbb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconSelectedHighlightBorderImage) },
+                        { "@ihbb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconHighlightBorderImage) },
                         { "@iar", Convert.ToInt32(IsAppRejected) },
                         { "@sp", AppPath },
                         { "@an", AppName },
                         { "@aid", AppId },
-                            { "@c1", ColorId[0] },
-                            { "@c2", ColorId[1] },
-                            { "@c3", ColorId[2] },
-                            { "@c4", ColorId[3] },
-                            { "@c5", ColorId[4] }
+                        { "@c1", ColorId[0] },
+                        { "@c2", ColorId[1] },
+                        { "@c3", ColorId[2] },
+                        { "@c4", ColorId[3] },
+                        { "@c5", ColorId[4] }
                     });
             }
             MpAppCollectionViewModel.Instance.Refresh();
@@ -186,10 +198,8 @@ namespace MpWpfApp {
             //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
             return PrimaryIconColorList;
         }
-        private BitmapSource CreateBorder(BitmapSource img, double scale) {
-            return MpHelpers.Instance.TintBitmapSource(img, Colors.White,true);
-            //var borderSize = new Size(img.Width * scale, img.Height * scale);
-            //return MpHelpers.Instance.ResizeBitmapSource(border, new Size(scale,scale));
+        private BitmapSource CreateBorder(BitmapSource img, double scale, Color bgColor) {
+            return MpHelpers.Instance.TintBitmapSource(img, bgColor,true);
         }
 
         public string GetAppName() {

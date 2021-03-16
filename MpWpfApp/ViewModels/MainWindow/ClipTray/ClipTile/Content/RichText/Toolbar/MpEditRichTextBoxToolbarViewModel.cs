@@ -250,7 +250,8 @@ namespace MpWpfApp {
                     colorContextMenu,
                     colorMenuItem,
                     (s1, e1) => {
-                        rtb.Selection.ApplyPropertyValue(FlowDocument.BackgroundProperty, (Brush)((Border)s1).Tag);
+                        rtb.Selection.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)((Border)s1).Tag);
+                        ClipTileViewModel.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList();
                     }
                 );
 

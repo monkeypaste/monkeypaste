@@ -391,7 +391,7 @@ namespace MpWpfApp {
                             newVisibilityDictionary.Add(ctvm, newVisibility);
                             if (ctvm.HighlightTextRangeViewModelCollection.Count > 1) {
                                 showMatchNav = true;
-                            }  
+                            } 
                         }
                         if (IsAnyTileExpanded) {
                             if(MainWindowViewModel.SearchBoxViewModel.HasText) {

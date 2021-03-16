@@ -205,7 +205,6 @@
 
         public Image Image { get; set; }
 
-
         public ListBox FileListBox { get; set; }
 
         public Grid ClipTileSelectionOverlayGrid { get; set; }
@@ -445,6 +444,12 @@
         #endregion
 
         #region Visibility Properties
+
+        public Visibility AppIconHighlightBorderVisibility {
+            get {
+                return HighlightTextRangeViewModelCollection.HasAppMatch ? Visibility.Visible : Visibility.Hidden;
+            }
+        }
         public Visibility ToolTipVisibility {
             get {
                 if (CopyItem == null) {
@@ -963,6 +968,8 @@
                 }
             }
         }
+
+        
         #endregion
 
         #region Focus Properties
@@ -1227,6 +1234,23 @@
             }
         }
 
+        public BitmapSource CopyItemAppIconHighlightBorder {
+            get {
+                if (CopyItem == null) {
+                    return new BitmapImage();
+                }
+                OnPropertyChanged(nameof(AppIconHighlightBorderVisibility));
+                if (HighlightTextRangeViewModelCollection.HasAppMatch) {
+                    if (HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel != null &&
+                       HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.IsAppRange) {
+                        return CopyItem.App.IconSelectedHighlightBorderImage;
+                    }
+                    return CopyItem.App.IconHighlightBorderImage;
+                }
+                return CopyItem.App.IconHighlightBorderImage;
+            }
+        }
+
         public BitmapSource CopyItemAppIconBorder {
             get {
                 if (CopyItem == null) {
@@ -1242,6 +1266,15 @@
                     return string.Empty;
                 }
                 return CopyItem.App.AppName;
+            }
+        }
+
+        public string CopyItemAppPath {
+            get {
+                if (CopyItem == null) {
+                    return string.Empty;
+                }
+                return CopyItem.App.AppPath;
             }
         }
 
@@ -1335,6 +1368,7 @@
                     OnPropertyChanged(nameof(CopyItemFileDropList));
                     OnPropertyChanged(nameof(CopyItemAppIcon));
                     OnPropertyChanged(nameof(CopyItemAppName));
+                    OnPropertyChanged(nameof(CopyItemAppPath));
                     OnPropertyChanged(nameof(CopyItemUsageScore));
                     OnPropertyChanged(nameof(CopyItemAppId));
                     OnPropertyChanged(nameof(TitleSwirl));
@@ -1537,7 +1571,6 @@
             //clipTileBorder.Drop += RichTextBoxViewModelCollection.ClipTileRichTextBoxViewModel_Drop;
             #endregion
 
-            HighlightTextRangeViewModelCollection.Init();
         }
 
         public void ClipTileDetailGrid_Loaded(object sender, RoutedEventArgs e) {
@@ -1558,6 +1591,7 @@
             var titleIconImageButtonRotateTransform = (RotateTransform)titleIconImageButton.FindName("ClipTileAppIconImageButtonRotateTransform");
             var titleIconBorderImage = (Image)titleCanvas.FindName("ClipTileAppIconBorderImage");
             var titleIconBorderImageScaleTransform = (ScaleTransform)titleCanvas.FindName("ClipTileAppIconBorderImageScaleTransform");
+            var titleIconHighlightBorderImage = (Image)titleCanvas.FindName("ClipTileAppIconHighlightedBorderImage");
 
             RenderOptions.SetBitmapScalingMode(titleIconBorderImage, BitmapScalingMode.LowQuality);
 
@@ -1599,7 +1633,11 @@
             
             Canvas.SetLeft(titleIconImageButton, MpMeasurements.Instance.ClipTileTitleIconCanvasLeft);
             Canvas.SetTop(titleIconImageButton, 2);
-            
+
+            var diff = (TileTitleIconBorderSize - TileTitleIconSize) / 2;
+            Canvas.SetLeft(titleIconHighlightBorderImage, MpMeasurements.Instance.ClipTileTitleIconCanvasLeft-diff);
+            Canvas.SetTop(titleIconHighlightBorderImage, 2-diff);
+
             titleIconImageButton.MouseEnter += (s, e3) => {
                 if(IsEditingTemplate || IsPastingTemplateTile) {
                     return;

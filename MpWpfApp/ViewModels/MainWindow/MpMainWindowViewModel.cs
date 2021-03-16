@@ -250,6 +250,13 @@ namespace MpWpfApp {
             TagTrayViewModel.ClearTagEditing();
             ClipTrayViewModel.ClearClipEditing();
         }
+
+        public void ResetTraySelection() {
+            if (!SearchBoxViewModel.HasText) {
+                TagTrayViewModel.ResetTagSelection();
+                ClipTrayViewModel.ResetClipSelection();
+            }
+        }
         #endregion
 
         #region Private Methods
@@ -426,7 +433,7 @@ namespace MpWpfApp {
                 ClipTileSortViewModel.SelectedSortType = ClipTileSortViewModel.SortTypes[0];
                 //ClipTrayViewModel.HideVisibleTiles(1);
             } else {
-                ClipTrayViewModel.ResetClipSelection();
+                ResetTraySelection();
             }
 
             MpHelpers.Instance.AnimateDoubleProperty(
@@ -496,8 +503,9 @@ namespace MpWpfApp {
                             }
                         }
                     }
-                    TagTrayViewModel.ResetTagSelection();
-                    ClipTrayViewModel.ResetClipSelection();
+
+                    ResetTraySelection();
+                    
                     mw.Visibility = Visibility.Collapsed;
                 });
         }

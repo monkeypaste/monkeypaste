@@ -382,6 +382,8 @@ namespace MpWpfApp {
                     , IsAppRejected integer NOT NULL                    
                     , IconBlob image NOT NULL
                     , IconBorderBlob image NOT NULL
+                    , IconSelectedHighlightBorderBlob image NOT NULL
+                    , IconHighlightBorderBlob image NOT NULL
                     , fk_MpColorId1 integer default 0
                     , fk_MpColorId2 integer default 0
                     , fk_MpColorId3 integer default 0

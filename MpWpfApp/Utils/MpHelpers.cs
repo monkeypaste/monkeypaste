@@ -88,7 +88,8 @@ namespace MpWpfApp {
                 return null;
             }
         }
-
+        
+        
         public List<TextRange> FindStringRangesFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
             if (string.IsNullOrEmpty(matchStr)) {
                 return null;

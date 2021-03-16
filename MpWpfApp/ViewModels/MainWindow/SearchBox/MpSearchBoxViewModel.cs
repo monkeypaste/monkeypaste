@@ -23,11 +23,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Events
-        public event EventHandler NextMatchClicked;
-        protected virtual void OnNextMatchClicked() => NextMatchClicked?.Invoke(this, EventArgs.Empty);
+        //public event EventHandler NextMatchClicked;
+        //protected virtual void OnNextMatchClicked() => NextMatchClicked?.Invoke(this, EventArgs.Empty);
 
-        public event EventHandler PrevMatchClicked;
-        protected virtual void OnPrevMatchClicked() => PrevMatchClicked?.Invoke(this, EventArgs.Empty);
+        //public event EventHandler PrevMatchClicked;
+        //protected virtual void OnPrevMatchClicked() => PrevMatchClicked?.Invoke(this, EventArgs.Empty);
         #endregion
 
         #region Properties     
@@ -127,6 +127,21 @@ namespace MpWpfApp {
                     _searchByTag = value;
                     Properties.Settings.Default.SearchByTag = _searchByTitle;
                     OnPropertyChanged(nameof(SearchByTag));
+                }
+            }
+        }
+
+
+        private bool _searchByProcessName = Properties.Settings.Default.SearchByProcessName;
+        public bool SearchByProcessName {
+            get {
+                return _searchByProcessName;
+            }
+            set {
+                if (_searchByProcessName != value) {
+                    _searchByProcessName = value;
+                    Properties.Settings.Default.SearchByProcessName = _searchByProcessName;
+                    OnPropertyChanged(nameof(SearchByProcessName));
                 }
             }
         }
@@ -359,6 +374,13 @@ namespace MpWpfApp {
                     CreateSearchByMenuItem("File List", SearchByFileList));
                 searchByContextMenu.Items.Add(
                     CreateSearchByMenuItem("Image", SearchByImage));
+                searchByContextMenu.Items.Add(
+                    CreateSearchByMenuItem("Application Name", SearchByApplicationName));
+                searchByContextMenu.Items.Add(
+                    CreateSearchByMenuItem("Process Name", SearchByProcessName));
+
+
+                ((MenuItem)searchByContextMenu.Items[1]).Visibility = Visibility.Collapsed;
 
                 searchByContextMenu.Closed += (s1, e) => {
                     for (int i = 0; i < searchByContextMenu.Items.Count; i++) {
@@ -381,6 +403,12 @@ namespace MpWpfApp {
                                 break;
                             case 5:
                                 SearchByImage = isChecked;
+                                break;
+                            case 6:
+                                SearchByApplicationName = isChecked;
+                                break;
+                            case 7:
+                                SearchByProcessName = isChecked;
                                 break;
                         }
                     }
@@ -477,7 +505,9 @@ namespace MpWpfApp {
             }
         }
         private void NextMatch() {
-            OnNextMatchClicked();
+            foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
+                ctvm.HighlightTextRangeViewModelCollection.SelectNextMatchCommand.Execute(null);
+            }
         }
 
         private RelayCommand _prevMatchCommand;
@@ -490,7 +520,9 @@ namespace MpWpfApp {
             }
         }
         private void PrevMatch() {
-            OnPrevMatchClicked();
+            foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
+                ctvm.HighlightTextRangeViewModelCollection.SelectPreviousMatchCommand.Execute(null);
+            }
         }
         #endregion
     }

@@ -39,15 +39,6 @@ namespace MpWpfApp {
 
         public MpRtbListBoxItemRichTextBoxViewModel SelectedClipTileRichTextBoxViewModel {
             get {
-                //if(HostClipTileViewModel == null || this.Count == 0) {
-                //    return null;
-                //}
-                //foreach(var rtbvm in this) {
-                //    if(rtbvm.IsSubSelected) {
-                //        return rtbvm;
-                //    }
-                //}
-                //return null;
                 var srtbvml = this.Where(x => x.IsSubSelected).ToList();
                 if(srtbvml.Count > 0) {
                     return srtbvml[0];
@@ -81,6 +72,22 @@ namespace MpWpfApp {
         public Canvas RtbListBoxCanvas { get; set; }
 
         public ListBox RichTextBoxListBox { get; set; }
+
+        public AdornerLayer RtbLbAdornerLayer { get; set; }
+        #endregion
+
+        #region Appearance
+        public Cursor RtbListBoxCursor {
+            get {
+                if (HostClipTileViewModel == null) {
+                    return Cursors.Arrow;
+                }
+                if (IsCursorOnItemInnerEdge) {
+                    return Cursors.SizeNS;
+                }
+                return Cursors.Arrow;
+            }
+        }
         #endregion
 
         #region Layout
@@ -165,6 +172,34 @@ namespace MpWpfApp {
         #endregion
 
         #region Business Logic
+        private int _loadCount = 0;
+        public int LoadCount {
+            get {
+                return _loadCount;
+            }
+            set {
+                if(_loadCount != value) {
+                    _loadCount = value;
+                    OnPropertyChanged(nameof(LoadCount));
+                }
+            }
+        }
+        #endregion
+
+        #region State
+        private bool _isCursorOnItemInnerEdge = false;
+        public bool IsCursorOnItemInnerEdge {
+            get {
+                return _isCursorOnItemInnerEdge;
+            }
+            set {
+                if (_isCursorOnItemInnerEdge != value) {
+                    _isCursorOnItemInnerEdge = value;
+                    OnPropertyChanged(nameof(IsCursorOnItemInnerEdge));
+                    OnPropertyChanged(nameof(RtbListBoxCursor));
+                }
+            }
+        }
         #endregion
 
         #endregion
@@ -186,6 +221,16 @@ namespace MpWpfApp {
                     //HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.ContentPreviewToolTipBmpSrc));
                 }
             };
+
+            PropertyChanged += (s, e) => {
+                switch (e.PropertyName) {
+                    case nameof(LoadCount):
+                        if (LoadCount == this.Count) {                            
+                            HostClipTileViewModel.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList();
+                        }
+                        break;
+                }
+            };
         }
         
         public void ClipTileRichTextBoxViewModelCollection_Loaded(object sender, RoutedEventArgs args) {
@@ -193,16 +238,9 @@ namespace MpWpfApp {
             RtbListBoxCanvas = RichTextBoxListBox.GetVisualAncestor<Canvas>();
 
             RichTextBoxListBox.RequestBringIntoView += (s, e65) => { e65.Handled = true; };
-            //RichTextBoxListBox.MouseLeftButtonUp += (s, e4) => {
-            //    if(HostClipTileViewModel.IsExpanded) {
-            //        return;
-            //    }
-            //    var newarg = new MouseButtonEventArgs(e4.MouseDevice, e4.Timestamp,
-            //                              e4.ChangedButton, e4.StylusDevice);
-            //    newarg.RoutedEvent = MpClipBorder.MouseLeftButtonUpEvent;
-            //    newarg.Source = HostClipTileViewModel.ClipBorder;
-            //    HostClipTileViewModel.ClipBorder.RaiseEvent(newarg);
-            //};
+            RichTextBoxListBox.MouseMove += (s, e3) => {
+                RtbLbAdornerLayer.Update();
+            };
 
             //after pasting template rtb's are duplicated so clear them upon refresh
             if (HostClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
@@ -211,6 +249,9 @@ namespace MpWpfApp {
                     this.Add(new MpRtbListBoxItemRichTextBoxViewModel(HostClipTileViewModel, cci));
                 }
             }
+
+            RtbLbAdornerLayer = AdornerLayer.GetAdornerLayer(RichTextBoxListBox);
+            RtbLbAdornerLayer.Add(new MpRichTextBoxListBoxOverlayAdorner(RichTextBoxListBox));
         }
 
         #region Drag & Drop
@@ -321,7 +362,7 @@ namespace MpWpfApp {
         }
         public void UpdateLayout() {
             //RichTextBoxViewModelCollection.RichTextBoxListBox.Width += widthDiff;   
-            Console.WriteLine("TotalItemHeight: " + TotalItemHeight);
+            //Console.WriteLine("TotalItemHeight: " + TotalItemHeight);
             foreach (var rtbvm in this) {
                 rtbvm.OnPropertyChanged(nameof(rtbvm.RtbCanvasHeight));
                 rtbvm.OnPropertyChanged(nameof(rtbvm.RtbCanvasWidth));

@@ -62,6 +62,22 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual Tree
+        public static T FindParentOfType<T>(this DependencyObject dpo) where T : class {
+            if (dpo == null) {
+                return default;
+            }
+            if (dpo.GetType() == typeof(T)) {
+                return (dpo as T);
+            }
+            if (dpo.GetType().IsSubclassOf(typeof(FrameworkContentElement))) {
+                return FindParentOfType<T>(((FrameworkContentElement)dpo).Parent);
+            } else if (dpo.GetType().IsSubclassOf(typeof(FrameworkElement))) {
+                return FindParentOfType<T>(((FrameworkElement)dpo).Parent);
+            } else {
+                return null;
+            }
+        }
+
         public static T GetDescendantOfType<T>(this DependencyObject depObj) where T : DependencyObject {
             if (depObj == null) {
                 return null;
@@ -405,7 +421,7 @@ namespace MpWpfApp {
             }
         }
 
-        public static IEnumerable<TextElement> GetRunsAndParagraphs(FlowDocument doc) {
+        public static IEnumerable<TextElement> GetRunsAndParagraphs(this FlowDocument doc) {
             for (TextPointer position = doc.ContentStart;
               position != null && position.CompareTo(doc.ContentEnd) <= 0;
               position = position.GetNextContextPosition(LogicalDirection.Forward)) {
@@ -484,6 +500,44 @@ namespace MpWpfApp {
             //return new Size(w, h);
         }
 
+        public static List<KeyValuePair<TextRange, Brush>> FindNonTransparentRangeList(this RichTextBox rtb) {
+            var matchRangeList = new List<KeyValuePair<TextRange, Brush>>();
+            TextSelection rtbSelection = rtb.Selection;
+            var doc = rtb.Document;
+            for (TextPointer position = doc.ContentStart;
+              position != null && position.CompareTo(doc.ContentEnd) <= 0;
+              position = position.GetNextContextPosition(LogicalDirection.Forward)) {
+                if (position.GetPointerContext(LogicalDirection.Forward) == TextPointerContext.ElementEnd) {
+                    Run run = position.Parent as Run;
+
+                    if (run != null) {
+                        if (run.Background != null && run.Background != Brushes.Transparent) {
+                            matchRangeList.Add(new KeyValuePair<TextRange, Brush>(new TextRange(run.ContentStart, run.ContentEnd), run.Background));
+                        }
+                    } else {
+                        Paragraph para = position.Parent as Paragraph;
+
+                        if (para != null) {
+                            if (para.Background != null && para.Background != Brushes.Transparent) {
+                                matchRangeList.Add(new KeyValuePair<TextRange, Brush>(new TextRange(para.ContentStart, para.ContentEnd), para.Background));
+                            }
+                        } else {
+                            var span = position.Parent as Span;
+                            if(span != null) {
+                                if (span.Background != null && span.Background != Brushes.Transparent) {
+                                    matchRangeList.Add(new KeyValuePair<TextRange, Brush>(new TextRange(span.ContentStart, span.ContentEnd), span.Background));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (rtbSelection != null) {
+                rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+            }
+            return matchRangeList;
+        }
+
         public static FormattedText GetFormattedText(this FlowDocument doc) {
             if (doc == null) {
                 throw new ArgumentNullException("doc");
@@ -500,7 +554,7 @@ namespace MpWpfApp {
               VisualTreeHelper.GetDpi(Application.Current.MainWindow).PixelsPerDip);
 
             int offset = 0;
-            var runsAndParagraphsList = GetRunsAndParagraphs(doc).ToList();
+            var runsAndParagraphsList = doc.GetRunsAndParagraphs().ToList();
             for (int i = 0; i < runsAndParagraphsList.Count; i++) {
                 TextElement el = runsAndParagraphsList[i];
                 Run run = el as Run;

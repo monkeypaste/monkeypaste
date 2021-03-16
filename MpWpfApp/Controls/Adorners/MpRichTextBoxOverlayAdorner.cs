@@ -18,6 +18,10 @@ namespace MpWpfApp {
         private ListBox _rtblb;
         #endregion
 
+        #region Statics
+        
+        #endregion
+
         #region Public Methods
         public MpRichTextBoxOverlayAdorner(Canvas rtbc) : base(rtbc) {
             _rtbc = rtbc;
@@ -27,17 +31,13 @@ namespace MpWpfApp {
         #endregion
 
         #region Overrides
-        protected override void OnRender(DrawingContext drawingContext) {
-            var rtbvm = (MpRtbListBoxItemRichTextBoxViewModel)_rtbc.DataContext;  
+        protected override void OnRender(DrawingContext drawingContext) {            
+            var rtbvm = (MpRtbListBoxItemRichTextBoxViewModel)_rtbc.DataContext;
             var adornedElementRect = new Rect(this.AdornedElement.DesiredSize);
             var blackPen = new Pen(Brushes.Gray, 1);
             blackPen.DashStyle = DashStyles.Dash;
-            var redPen = new Pen(Brushes.Red, 2);
-            
-            if (rtbvm.Previous != null) {
-                drawingContext.DrawLine(blackPen, adornedElementRect.TopLeft, adornedElementRect.TopRight);
-            }
-            if (rtbvm.Next != null) {
+
+            if (rtbvm.Next != null) {                
                 drawingContext.DrawLine(blackPen, adornedElementRect.BottomLeft, adornedElementRect.BottomRight);
             }
         }
