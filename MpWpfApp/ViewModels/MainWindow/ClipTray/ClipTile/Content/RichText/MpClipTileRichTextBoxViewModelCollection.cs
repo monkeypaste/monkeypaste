@@ -2,8 +2,10 @@
 using GongSolutions.Wpf.DragDrop.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpClipTileRichTextBoxViewModelCollection : MpObservableCollectionViewModel<MpRtbListBoxItemRichTextBoxViewModel>, ICloneable, IDropTarget {
+    public class MpClipTileRichTextBoxViewModelCollection : MpObservableCollectionViewModel<MpRtbListBoxItemRichTextBoxViewModel>, ICloneable,/* IDropTarget, */IDisposable {
         #region Private Variables
         //private Point _mouseDownPosition = new Point();
         //private Point _lastMousePosition = new Point();
@@ -172,18 +174,18 @@ namespace MpWpfApp {
         #endregion
 
         #region Business Logic
-        private int _loadCount = 0;
-        public int LoadCount {
-            get {
-                return _loadCount;
-            }
-            set {
-                if(_loadCount != value) {
-                    _loadCount = value;
-                    OnPropertyChanged(nameof(LoadCount));
-                }
-            }
-        }
+        //private int _loadCount = 0;
+        //public int LoadCount {
+        //    get {
+        //        return _loadCount;
+        //    }
+        //    set {
+        //        if(_loadCount != value) {
+        //            _loadCount = value;
+        //            OnPropertyChanged(nameof(LoadCount));
+        //        }
+        //    }
+        //}
         #endregion
 
         #region State
@@ -201,7 +203,11 @@ namespace MpWpfApp {
             }
         }
         #endregion
-
+        public ObservableCollection<MpRtbListBoxItemRichTextBoxViewModel> Children { 
+            get {
+                return this;
+            }            
+        }
         #endregion
 
         #region Public Methods
@@ -212,25 +218,29 @@ namespace MpWpfApp {
             HostClipTileViewModel = ctvm;
             CollectionChanged += (s, e) => {
                 if (HostClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
-                    foreach (MpRtbListBoxItemRichTextBoxViewModel newItem in this) {
-                        newItem.CompositeParentCopyItemId = HostClipTileViewModel.CopyItemId;
-                        newItem.CompositeSortOrderIdx = this.IndexOf(newItem);
-                        newItem.CopyItem.WriteToDatabase();
-                    }
+                    UpdateSortOrder();
                     //HostClipTileViewModel.ContentPreviewToolTipBmpSrc = null;
                     //HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.ContentPreviewToolTipBmpSrc));
                 }
             };
 
-            PropertyChanged += (s, e) => {
-                switch (e.PropertyName) {
-                    case nameof(LoadCount):
-                        if (LoadCount == this.Count) {                            
-                            HostClipTileViewModel.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList();
-                        }
-                        break;
-                }
-            };
+            //PropertyChanged += (s, e) => {
+            //    switch (e.PropertyName) {
+            //        case nameof(LoadCount):
+            //            if (LoadCount == this.Count) {
+            //                //int loadedRtbCount = 0;
+            //                //while(loadedRtbCount < this.Count) {
+            //                //    if(this[loadedRtbCount].Rtb != null) {
+            //                //        loadedRtbCount++;
+            //                //    } else {
+            //                //        Thread.Sleep(75);
+            //                //    }
+            //                //}
+            //                //HostClipTileViewModel.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList();
+            //            }
+            //            break;
+            //    }
+            //};
         }
         
         public void ClipTileRichTextBoxViewModelCollection_Loaded(object sender, RoutedEventArgs args) {
@@ -255,111 +265,88 @@ namespace MpWpfApp {
         }
 
         #region Drag & Drop
-        void IDropTarget.DragOver(IDropInfo dropInfo) {
-            //var sourceItem = dropInfo.Data as MpClipTileRichTextBoxViewModel;
+        //void IDropTarget.DragOver(IDropInfo dropInfo) {
+            //var sourceItem = dropInfo.Data as MpRtbListBoxItemRichTextBoxViewModel;
             //MpClipTileRichTextBoxViewModelCollection targetRtbVmCollection = null;
-            //MpClipTileRichTextBoxViewModel targetRtbVm = null;
-            //if(dropInfo.TargetItem is MpClipTileRichTextBoxViewModel) {
+            //MpRtbListBoxItemRichTextBoxViewModel targetRtbVm = null;
+            //if (dropInfo.TargetItem is MpClipTileRichTextBoxViewModel) {
             //    targetRtbVm = dropInfo.TargetItem as MpClipTileRichTextBoxViewModel;
             //    targetRtbVmCollection = targetRtbVm.RichTextBoxViewModelCollection;
-            //} else if (dropInfo.TargetItem is MpClipTileRichTextBoxViewModelCollection) {                
+            //} else if (dropInfo.TargetItem is MpClipTileRichTextBoxViewModelCollection) {
             //    targetRtbVmCollection = dropInfo.TargetItem as MpClipTileRichTextBoxViewModelCollection;
-            //    if(targetRtbVmCollection.Count > 0) {
+            //    if (targetRtbVmCollection.Count > 0) {
             //        if (dropInfo.DropPosition.Y < 0) {
             //            targetRtbVm = targetRtbVmCollection[0];
             //        } else {
             //            targetRtbVm = targetRtbVmCollection[targetRtbVmCollection.Count - 1];
             //        }
-            //    }                
+            //    }
             //}
             //if (sourceItem != null && targetRtbVm != null) {
             //    dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
             //    dropInfo.Effects = DragDropEffects.Move;
             //}
 
-            var sourceItem = dropInfo.Data as MpRtbListBoxItemRichTextBoxViewModel;
-            var targetItem = dropInfo.TargetItem as MpRtbListBoxItemRichTextBoxViewModel;
+        //    var sourceItem = dropInfo.Data as MpRtbListBoxItemRichTextBoxViewModel;
+        //    var targetItem = dropInfo.TargetItem as MpRtbListBoxItemRichTextBoxViewModel;
 
-            if (sourceItem != null && targetItem != null) {
-                dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-                dropInfo.Effects = DragDropEffects.Copy;
-            }
-        }
+        //    if (sourceItem != null && targetItem != null) {
+        //        dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+        //        dropInfo.Effects = DragDropEffects.Move;
+        //    }
+        //}
 
-        void IDropTarget.Drop(IDropInfo dropInfo) {
-            var sourceRtbvm = dropInfo.Data as MpRtbListBoxItemRichTextBoxViewModel;
-            if(sourceRtbvm == null) {
-                return;
-            }
-            var sourceRtbVmCollection = sourceRtbvm.RichTextBoxViewModelCollection;
+        //void IDropTarget.Drop(IDropInfo dropInfo) {
+        //    var sourceRtbvm = dropInfo.Data as MpRtbListBoxItemRichTextBoxViewModel;
+        //    if (sourceRtbvm == null) {
+        //        return;
+        //    }
+        //    var sourceRtbVmCollection = sourceRtbvm.RichTextBoxViewModelCollection;
 
-            MpClipTileRichTextBoxViewModelCollection targetRtbVmCollection = null;
-            MpRtbListBoxItemRichTextBoxViewModel targetRtbVm = null;
-            if (dropInfo.TargetItem is MpRtbListBoxItemRichTextBoxViewModel) {
-                targetRtbVm = dropInfo.TargetItem as MpRtbListBoxItemRichTextBoxViewModel;
-                targetRtbVmCollection = targetRtbVm.RichTextBoxViewModelCollection;
-            } else if (dropInfo.TargetItem is MpClipTileRichTextBoxViewModelCollection) {
-                targetRtbVmCollection = dropInfo.TargetItem as MpClipTileRichTextBoxViewModelCollection;
-                if (targetRtbVmCollection.Count > 0) {
-                    if (dropInfo.DropPosition.Y < 0) {
-                        targetRtbVm = targetRtbVmCollection[0];
-                    } else {
-                        targetRtbVm = targetRtbVmCollection[targetRtbVmCollection.Count - 1];
-                    }
-                }
-            }
-            
-            if(targetRtbVmCollection != null) {
-                sourceRtbVmCollection.Remove(sourceRtbvm);
+        //    MpClipTileRichTextBoxViewModelCollection targetRtbVmCollection = null;
+        //    MpRtbListBoxItemRichTextBoxViewModel targetRtbVm = null;
+        //    if (dropInfo.TargetItem is MpRtbListBoxItemRichTextBoxViewModel) {
+        //        targetRtbVm = dropInfo.TargetItem as MpRtbListBoxItemRichTextBoxViewModel;
+        //        targetRtbVmCollection = targetRtbVm.RichTextBoxViewModelCollection;
+        //    } else if (dropInfo.TargetItem is MpClipTileRichTextBoxViewModelCollection) {
+        //        targetRtbVmCollection = dropInfo.TargetItem as MpClipTileRichTextBoxViewModelCollection;
+        //        if (targetRtbVmCollection.Count > 0) {
+        //            if (dropInfo.DropPosition.Y < 0) {
+        //                targetRtbVm = targetRtbVmCollection[0];
+        //            } else {
+        //                targetRtbVm = targetRtbVmCollection[targetRtbVmCollection.Count - 1];
+        //            }
+        //        }
+        //    }
 
-                if (sourceRtbVmCollection != targetRtbVmCollection) {
-                    sourceRtbVmCollection.UpdateSortOrder();
-                }
-                int targetIdx = targetRtbVmCollection.IndexOf(targetRtbVm);
+        //    if (targetRtbVmCollection != null) {
+        //        sourceRtbVmCollection.Remove(sourceRtbvm);
 
-                targetRtbVmCollection.Insert(targetIdx, sourceRtbvm);
+        //        if (sourceRtbVmCollection != targetRtbVmCollection) {
+        //            sourceRtbVmCollection.UpdateSortOrder();
+        //        }
+        //        int targetIdx = targetRtbVmCollection.IndexOf(targetRtbVm);
 
-                targetRtbVmCollection.UpdateSortOrder();               
-            }
-        }
+        //        targetRtbVmCollection.Insert(targetIdx, sourceRtbvm);
 
-        public void UpdateSortOrder() {
-            HostClipTileViewModel.CopyItem.CompositeItemList.Clear();
-            foreach(var rtbvm in this) {
-                rtbvm.CompositeSortOrderIdx = this.IndexOf(rtbvm);
-                rtbvm.CompositeParentCopyItemId = this.HostClipTileViewModel.CopyItemId;
-                HostClipTileViewModel.CopyItem.CompositeItemList.Add(rtbvm.CopyItem);
-            }
-            HostClipTileViewModel.CopyItem.WriteToDatabase();
-        }
-
-        public MpRtbListBoxItemRichTextBoxViewModel GetItemFromMouseLocation(Point p) {
-            var result = VisualTreeHelper.HitTest(RichTextBoxListBox, p);
-            if(result != null && result.VisualHit != null) {
-                if(result.VisualHit.GetType() == typeof(MpRtbListBoxItemRichTextBoxViewModel)) {
-                    return (MpRtbListBoxItemRichTextBoxViewModel)result.VisualHit;
-                }
-                for (int i = 0; i < this.Count; i++) {
-                    double top = i > 0 ? this[i - 1].RtbCanvasHeight : 0;
-                    double bottom = this[i].RtbCanvasHeight;
-                    if(p.Y >= top && p.Y <= bottom) {
-                        return this[i];
-                    }
-                }
-                if(this.Count > 0) {
-                    if (p.Y <= 0) {
-                        return this[0];
-                    }
-                    return this[this.Count - 1];
-                }
-            }
-            return null;
-        }
+        //        targetRtbVmCollection.UpdateSortOrder();
+        //    }
+        //}
         #endregion
 
         public void Refresh() {
             RichTextBoxListBox?.Items.Refresh();
         }
+
+        public void UpdateSortOrder() {
+            foreach (var rtbvm in this) {
+                rtbvm.CompositeParentCopyItemId = HostClipTileViewModel.CopyItemId;
+                rtbvm.CompositeSortOrderIdx = this.IndexOf(rtbvm);
+                rtbvm.CopyItem.WriteToDatabase();
+                rtbvm.RtbcAdornerLayer?.Update();
+            }
+        }
+
         public void UpdateLayout() {
             //RichTextBoxViewModelCollection.RichTextBoxListBox.Width += widthDiff;   
             //Console.WriteLine("TotalItemHeight: " + TotalItemHeight);
@@ -408,7 +395,6 @@ namespace MpWpfApp {
             base.Add(rtbvm);
             //ClipTileViewModel.RichTextBoxListBox.Items.Refresh();
         }
-
         public void AnimateItems(
             double fromWidth,double toWidth, 
             double fromHeight, double toHeight,
@@ -538,6 +524,11 @@ namespace MpWpfApp {
                     true);
             }
             return fullDocument;
+        }
+
+        public void Dispose() {
+            //LoadCount = 0;
+            
         }
         #endregion
     }

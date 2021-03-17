@@ -946,7 +946,6 @@
                          BorderBrush="Transparent"
                          dd:DragDrop.IsDragSource="True"
                          dd:DragDrop.IsDropTarget="True"
-                         dd:DragDrop.DropHandler="{Binding}"
                          HorizontalAlignment="Center"
                          SelectionMode="Single"
                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
@@ -1277,6 +1276,10 @@
                                              ItemsSource="{Binding}"
                                              Visibility="{Binding ClipTrayVisibility}"
                                              Width="{Binding MainWindowViewModel.ClipTrayWidth}"
+                                             dd:DragDrop.IsDragSource="True"
+                                             dd:DragDrop.IsDropTarget="True"
+                                             dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                                             dd:DragDrop.DropTargetAdornerBrush="Coral"
                                              ScrollToSelectedItem="True"
                                              IsSynchronizedWithCurrentItem="True"
                                              Margin="5,0,0,0"
@@ -1873,8 +1876,11 @@
                                                                  BorderThickness="1"
                                                                  BorderBrush="Pink"
                                                                  SelectionMode="Single"
-                                                                 dd:DragDrop.IsDragSource="False"
-                                                                 dd:DragDrop.IsDropTarget="False"
+                                                                 dd:DragDrop.IsDragSource="True"
+                                                                 dd:DragDrop.IsDropTarget="True"
+                                                                 dd:DragDrop.UseDefaultEffectDataTemplate="True"
+                                                                 dd:DragDrop.DropTargetAdornerBrush="Coral"
+                                                                 dd:DragDrop.ShowAlwaysDropTargetAdorner="True"
                                                                  IsSynchronizedWithCurrentItem="False"
                                                                  Cursor="{Binding RtbListBoxCursor}"
                                                                  Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
@@ -1927,7 +1933,6 @@
                                                                                          Canvas.Left="0"
                                                                                          Canvas.Top="0"
                                                                                          BorderBrush="{Binding RtbBorderBrush}"
-                                                                                         AllowDrop="True"
                                                                                          Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                                                          IsReadOnly="{Binding HostClipTileViewModel.IsRtbReadOnly}"
                                                                                          IsEnabled="True"
@@ -1946,12 +1951,6 @@
                                                                                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                                                                          ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                                                                          BorderThickness="1">
-                                                                                <i:Interaction.Triggers>
-                                                                                    <i:EventTrigger EventName="Loaded">
-                                                                                        <i:CallMethodAction TargetObject="{Binding}"
-                                                                                                            MethodName="ClipTileRichTextBoxListItemRichTextBox_Loaded" />
-                                                                                    </i:EventTrigger>
-                                                                                </i:Interaction.Triggers>
                                                                                 <RichTextBox.Resources>
                                                                                     <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                                                                                                      Color="Blue" />

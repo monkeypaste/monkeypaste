@@ -23,6 +23,7 @@
     using System.Windows.Threading;
     using AsyncAwaitBestPractices.MVVM;
     using GalaSoft.MvvmLight.CommandWpf;
+    using GongSolutions.Wpf.DragDrop;
     using GongSolutions.Wpf.DragDrop.Utilities;
 
     public class MpClipTileViewModel : MpUndoableViewModelBase<MpClipTileViewModel>, IDisposable {        
@@ -1397,7 +1398,9 @@
         #endregion
 
         #region Public Methods
-        public MpClipTileViewModel() : base() { }
+        public MpClipTileViewModel() : base() {
+            Console.WriteLine("I'm called");
+        }
 
         public MpClipTileViewModel(bool isPlaceholder) : base() {
             PropertyChanged += (s, e1) => {
@@ -1512,50 +1515,50 @@
                 }
             };
             #region Tile Drag & Drop (all unused atm)
-            ClipBorder.PreviewMouseLeftButtonDown += (s, e5) => {
-                return;
-                IsMouseDown = true;
-                StartDragPoint = e5.GetPosition(clipTray);
-                //_dragClipBorderElement = (MpClipBorder)VisualTreeHelper.HitTest(clipTray, StartDragPoint).VisualHit.GetVisualAncestor<MpClipBorder>(); ;
-            };
+            //ClipBorder.PreviewMouseLeftButtonDown += (s, e5) => {
+            //    return;
+            //    IsMouseDown = true;
+            //    StartDragPoint = e5.GetPosition(clipTray);
+            //    //_dragClipBorderElement = (MpClipBorder)VisualTreeHelper.HitTest(clipTray, StartDragPoint).VisualHit.GetVisualAncestor<MpClipBorder>(); ;
+            //};
             //Initiate Selected Clips Drag/Drop, Copy/Paste and Export (to file or csv)
             //Strategy: ALL selected items, regardless of type will have text,rtf,img, and file representations
             //          that are appended as text and filelists but  merged into images (by default)
             // TODO Have option to append items to one long image
-            ClipBorder.PreviewMouseMove += (s, e7) => {
-                return;
-                var curDragPoint = e7.GetPosition(clipTray);
-                //these tests ensure tile is not being dragged INTO another clip tile or outside tray
-                //var testBorder = (MpClipBorder)VisualTreeHelper.HitTest(clipTray, curDragPoint).VisualHit.GetVisualAncestor<MpClipBorder>();
-                //var testTray = (ListBox)VisualTreeHelper.HitTest(clipTray, curDragPoint).VisualHit.GetVisualAncestor<ListBox>();
-                if (IsMouseDown &&
-                    !IsDragging &&
-                    (MainWindowViewModel != null && 
-                     MainWindowViewModel.ClipTrayViewModel != null && 
-                     !MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded) &&
-                    e7.MouseDevice.LeftButton == MouseButtonState.Pressed &&
-                    (Math.Abs(curDragPoint.Y - StartDragPoint.Y) > 5 || Math.Abs(curDragPoint.X - StartDragPoint.X) > 5) /*&&
-                   // s.GetType() == typeof(MpClipBorder) &&
-                    //_dragClipBorderElement != testBorder &&
-                    testBorder == null &&
-                    testTray != null*/) {
-                    DragDrop.DoDragDrop(clipTray, MainWindowViewModel.ClipTrayViewModel.GetDataObjectFromSelectedClips(true), DragDropEffects.Copy | DragDropEffects.Move);
-                    IsDragging = true;
-                } else if (IsDragging) {
-                    IsMouseDown = false;
-                    IsDragging = false;
-                    StartDragPoint = new Point();
-                    //_dragClipBorderElement = null;
-                }
-            };
+            //ClipBorder.PreviewMouseMove += (s, e7) => {
+            //    return;
+            //    var curDragPoint = e7.GetPosition(clipTray);
+            //    //these tests ensure tile is not being dragged INTO another clip tile or outside tray
+            //    //var testBorder = (MpClipBorder)VisualTreeHelper.HitTest(clipTray, curDragPoint).VisualHit.GetVisualAncestor<MpClipBorder>();
+            //    //var testTray = (ListBox)VisualTreeHelper.HitTest(clipTray, curDragPoint).VisualHit.GetVisualAncestor<ListBox>();
+            //    if (IsMouseDown &&
+            //        !IsDragging &&
+            //        (MainWindowViewModel != null && 
+            //         MainWindowViewModel.ClipTrayViewModel != null && 
+            //         !MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded) &&
+            //        e7.MouseDevice.LeftButton == MouseButtonState.Pressed &&
+            //        (Math.Abs(curDragPoint.Y - StartDragPoint.Y) > 5 || Math.Abs(curDragPoint.X - StartDragPoint.X) > 5) /*&&
+            //       // s.GetType() == typeof(MpClipBorder) &&
+            //        //_dragClipBorderElement != testBorder &&
+            //        testBorder == null &&
+            //        testTray != null*/) {
+            //        //DragDrop.DoDragDrop(clipTray, MainWindowViewModel.ClipTrayViewModel.GetDataObjectFromSelectedClips(true), DragDropEffects.Copy | DragDropEffects.Move);
+            //        IsDragging = true;
+            //    } else if (IsDragging) {
+            //        IsMouseDown = false;
+            //        IsDragging = false;
+            //        StartDragPoint = new Point();
+            //        //_dragClipBorderElement = null;
+            //    }
+            //};
 
-            ClipBorder.PreviewMouseLeftButtonUp += (s, e8) => {
-                return;
-                IsMouseDown = false;
-                IsDragging = false;
-                StartDragPoint = new Point();
-                //_dragClipBorderElement = null;
-            };
+            //ClipBorder.PreviewMouseLeftButtonUp += (s, e8) => {
+            //    return;
+            //    IsMouseDown = false;
+            //    IsDragging = false;
+            //    StartDragPoint = new Point();
+            //    //_dragClipBorderElement = null;
+            //};
             //clipTileBorder.PreviewMouseRightButtonUp += (s, e4) => {
             //    var p = e4.MouseDevice.GetPosition(clipTileBorder);
             //    var hitTestResult = VisualTreeHelper.HitTest(clipTileBorder, p);
@@ -1723,7 +1726,7 @@
 
             FileListBox = flb;
         }
-        #endregion
+        #endregion        
 
         #region Context Menu
         public void ClipTile_ContextMenu_Loaded(object sender, RoutedEventArgs e) {

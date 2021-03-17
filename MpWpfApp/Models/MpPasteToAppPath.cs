@@ -11,6 +11,7 @@ namespace MpWpfApp {
         public string AppName { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsSilent { get; set; }
+        public bool PressEnter { get; set; }
         public string Args { get; set; }
         public string Label { get; set; }
         public BitmapSource Icon { get; set; }
@@ -38,7 +39,7 @@ namespace MpWpfApp {
             }
         }
 
-        public MpPasteToAppPath(string appPath, string appName, bool isAdmin, bool isSilent = false, string label = "", string args = "", BitmapSource icon = null, WinApi.ShowWindowCommands windowState = WinApi.ShowWindowCommands.Normal) {
+        public MpPasteToAppPath(string appPath, string appName, bool isAdmin, bool isSilent = false, string label = "", string args = "", BitmapSource icon = null, WinApi.ShowWindowCommands windowState = WinApi.ShowWindowCommands.Normal, bool pressEnter = false) {
             AppPath = appPath;
             AppName = appName;
             IsAdmin = isAdmin;
@@ -47,6 +48,7 @@ namespace MpWpfApp {
             Args = args;
             Icon = icon;
             WindowState = windowState;
+            PressEnter = pressEnter;
         }
         public MpPasteToAppPath() : this(string.Empty,string.Empty,false) { }
 
@@ -59,6 +61,7 @@ namespace MpWpfApp {
             AppName = dr["AppName"].ToString();
             IsAdmin = Convert.ToInt32(dr["IsAdmin"].ToString()) > 0 ? true : false;
             IsSilent = Convert.ToInt32(dr["IsSilent"].ToString()) > 0 ? true : false;
+            PressEnter = Convert.ToInt32(dr["PressEnter"].ToString()) > 0 ? true : false;
             WindowState = (WinApi.ShowWindowCommands)Convert.ToInt32(dr["WindowState"].ToString());
             if (dr["IconBlob"] != null && dr["IconBlob"].GetType() != typeof(System.DBNull)) {
                 Icon = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
@@ -95,7 +98,7 @@ namespace MpWpfApp {
                     PasteToAppPathId = Convert.ToInt32(dt.Rows[0]["pk_MpPasteToAppPathId"].ToString());
                 } else {
                     MpDb.Instance.ExecuteWrite(
-                        "insert into MpPasteToAppPath(AppPath,AppName,IsAdmin,Label,Args,IconBlob,IsSilent,WindowState) values(@ap,@an,@ia,@l,@a,@ib,@is,@ws)",
+                        "insert into MpPasteToAppPath(AppPath,AppName,IsAdmin,Label,Args,IconBlob,IsSilent,WindowState,PressEnter) values(@ap,@an,@ia,@l,@a,@ib,@is,@ws,@pe)",
                         new System.Collections.Generic.Dictionary<string, object> {
                         { "@ap", AppPath },
                         { "@an",AppName },
@@ -104,13 +107,14 @@ namespace MpWpfApp {
                         { "@a", Args },
                         { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
                         { "@is", IsSilent ? 1:0 },
-                        { "@ws", (int)WindowState }
+                        { "@ws", (int)WindowState },
+                        {"@pe", PressEnter ? 1:0 }
                     });
                     PasteToAppPathId = MpDb.Instance.GetLastRowId("MpPasteToAppPath", "pk_MpPasteToAppPathId");
                 }
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpPasteToAppPath set AppPath=@ap, AppName=@an, IsAdmin=@ia, IsSilent=@is, Label=@l, Args=@a, IconBlob=@ib, WindowState=@ws where pk_MpPasteToAppPathId=@cid",
+                    "update MpPasteToAppPath set AppPath=@ap, AppName=@an, IsAdmin=@ia, IsSilent=@is, Label=@l, Args=@a, IconBlob=@ib, WindowState=@ws, PressEnter=@pe where pk_MpPasteToAppPathId=@cid",
                     new System.Collections.Generic.Dictionary<string, object> {
                         { "@ap", AppPath },
                         { "@an",AppName },
@@ -120,7 +124,8 @@ namespace MpWpfApp {
                         { "@a", Args },
                         { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
                         { "@is", IsSilent ? 1:0 },
-                        { "@ws", (int)WindowState }
+                        { "@ws", (int)WindowState },
+                        { "@pe", PressEnter ? 1:0 }
                     });
             }
         }

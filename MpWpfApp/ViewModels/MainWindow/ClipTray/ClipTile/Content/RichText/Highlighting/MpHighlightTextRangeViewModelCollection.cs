@@ -99,11 +99,18 @@ namespace MpWpfApp {
             ClipTileViewModel = ctvm;            
         }
 
-        public void UpdateInDocumentsBgColorList() {
-            NonTransparentDocumentBackgroundRangeList.Clear();
-            foreach (var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {
-                NonTransparentDocumentBackgroundRangeList.AddRange(rtbvm.Rtb.FindNonTransparentRangeList());
-            }                
+        public void UpdateInDocumentsBgColorList(RichTextBox rtb) {
+            var colorRangesToRemove = new List<KeyValuePair<TextRange, Brush>>();
+            foreach(var kvp in NonTransparentDocumentBackgroundRangeList) {
+                if(kvp.Key.Start.IsInSameDocument(rtb.Document.ContentStart)) {
+                    colorRangesToRemove.Add(kvp);
+                }
+            }
+            foreach(var kvpToRemove in colorRangesToRemove) {
+                NonTransparentDocumentBackgroundRangeList.Remove(kvpToRemove);
+            }
+
+            NonTransparentDocumentBackgroundRangeList.AddRange(rtb.FindNonTransparentRangeList());
         }
 
         public async Task<Visibility> PerformHighlightingAsync(string hlt) {

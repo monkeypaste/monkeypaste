@@ -136,7 +136,13 @@ namespace MpWpfApp {
             }
         }
 
-        public IntPtr SetActiveProcess(string processPath, bool isAdmin, bool isSilent = false, string args = "", object forceHandle = null, WinApi.ShowWindowCommands forceWindowState = WinApi.ShowWindowCommands.Maximized) {
+        public IntPtr SetActiveProcess(
+            string processPath, 
+            bool isAdmin, 
+            bool isSilent = false, 
+            string args = "", 
+            object forceHandle = null, 
+            WinApi.ShowWindowCommands forceWindowState = WinApi.ShowWindowCommands.Maximized) {
             try {
                 if (string.IsNullOrEmpty(processPath)) {
                     return IntPtr.Zero;
@@ -149,9 +155,11 @@ namespace MpWpfApp {
                 }
                 processPath = processPath.Replace(@"\\", @"\").ToLower();
                 Console.WriteLine(processPath);
-                IntPtr handle = IntPtr.Zero;
-                if (!CurrentProcessWindowHandleStackDictionary.ContainsKey(processPath)) {
-                    //if process is not running start it 
+
+                //forceHandle is only passed when its a running application
+                IntPtr handle = forceHandle == null ? IntPtr.Zero : (IntPtr)forceHandle;
+                if (handle != IntPtr.Zero || !CurrentProcessWindowHandleStackDictionary.ContainsKey(processPath)) {
+                    //if process is not running anymore or needs to be started (custom pastetoapppath)
                     handle = MpHelpers.Instance.StartProcess(args, processPath, isAdmin, isSilent, forceWindowState);
                 } else {
                     //ensure the process has a handle matching isAdmin, if not it needs to be created
@@ -159,25 +167,21 @@ namespace MpWpfApp {
                     foreach (var h in handleList) {
                         if (isAdmin == MpHelpers.Instance.IsProcessAdmin(h)) {
                             handle = h;
+                            if (LastWindowStateHandleDictionary.ContainsKey(handle)) {
+                                forceWindowState = LastWindowStateHandleDictionary[handle];
+                            }
                             break;
                         }
                     }
                     if (handle == IntPtr.Zero) {
                         //no handle found matching admin rights
                         handle = MpHelpers.Instance.StartProcess(args,processPath, isAdmin, isSilent, forceWindowState);
+                    } else {
+                        //show running window with last known window state
+                        WinApi.ShowWindowAsync(handle, MpHelpers.Instance.GetShowWindowValue(forceWindowState));
                     }
-                }                
-                if(LastWindowStateHandleDictionary.ContainsKey(handle) && 
-                    forceWindowState != WinApi.ShowWindowCommands.Maximized) {
-                    forceWindowState = LastWindowStateHandleDictionary[handle];
                 }
-                WinApi.GetWindowThreadProcessId(handle, out uint pid);
-                var process = Process.GetProcessById((int)pid);
-                while (!WinApi.ShowWindow(handle, MpHelpers.Instance.GetShowWindowValue(forceWindowState))) {
-                    Thread.Sleep(100);
-                    process.Refresh();
-                }
-                //WinApi.SetActiveWindow(handle);
+
                 return handle;
             }
             catch (Exception ex) {

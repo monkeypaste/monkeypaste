@@ -1106,5 +1106,14 @@ namespace MpWpfApp.Properties {
                 this["SearchByProcessName"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1024")]
+        public int MaxCommandLineArgumentLength {
+            get {
+                return ((int)(this["MaxCommandLineArgumentLength"]));
+            }
+        }
     }
 }

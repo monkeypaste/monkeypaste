@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpRtbListBoxItemRichTextBoxViewModel : MpClipTileViewModel, ICloneable {
+    public class MpRtbListBoxItemRichTextBoxViewModel : MpClipTileViewModel, ICloneable, IDisposable {
         #region Private Variables
         private int _detailIdx = 1;
         #endregion
@@ -567,11 +567,11 @@ namespace MpWpfApp {
             }
         }
 
-        public new bool IsSelected {
-            get {
-                return false;
-            }
-        }
+        //public new bool IsSelected {
+        //    get {
+        //        return false;
+        //    }
+        //}
 
         private bool _isSubHovering = false;
         public bool IsSubHovering {
@@ -830,7 +830,9 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpRtbListBoxItemRichTextBoxViewModel() : this(null,null) { }
+        public MpRtbListBoxItemRichTextBoxViewModel() : this(null,null) {
+            Console.WriteLine("I'm an rtbvm called");
+        }
 
         public MpRtbListBoxItemRichTextBoxViewModel(MpClipTileViewModel ctvm, MpCopyItem ci) : base() {
             CopyItem = ci;
@@ -879,8 +881,6 @@ namespace MpWpfApp {
             RtbListBoxItemTitleTextBlock = (TextBlock)Rtbc.FindName("RtbListBoxItemTitleTextBlock");
             RtbListBoxItemTitleTextBox = (TextBox)Rtbc.FindName("RtbListBoxItemTitleTextBox");
 
-            //Rtb.Document = MpHelpers.Instance.ConvertRichTextToFlowDocument(CopyItemRichText);
-
             Rtb.SelectAll();
             var rtbAlignment = Rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty);
             if (rtbAlignment == null || 
@@ -889,6 +889,8 @@ namespace MpWpfApp {
                 Rtb.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
             }
             Rtb.CaretPosition = Rtb.Document.ContentStart;
+
+            HostClipTileViewModel.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
 
             Rtb.TextChanged += (s, e44) => {
                 UpdateLayout();
@@ -971,10 +973,6 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(RtbPadding));
             OnPropertyChanged(nameof(RtbHeight));
             OnPropertyChanged(nameof(RtbCanvasHeight));
-        }
-
-        public void ClipTileRichTextBoxListItemRichTextBox_Loaded(object sender, RoutedEventArgs args) {
-            RichTextBoxViewModelCollection.LoadCount++;
         }
 
         public void UpdateLayout() {
@@ -1275,6 +1273,12 @@ namespace MpWpfApp {
         }
         private void SelectItem() {
             SetSelection(true, false, false);
+        }
+        #endregion
+
+        #region Overrides
+        public new void Dispose() {
+            //RichTextBoxViewModelCollection.LoadCount--;
         }
         #endregion
     }

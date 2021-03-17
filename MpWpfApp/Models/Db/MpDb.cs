@@ -317,6 +317,7 @@ namespace MpWpfApp {
                     , WindowState integer default 1
                     , IsSilent integer NOT NULL default 0
                     , IsAdmin integer NOT NULL default 0
+                    , PressEnter integer NOT NULL default 0
                     );
                     INSERT INTO MpPasteToAppPath(AppPath,IsAdmin,IconBlob) VALUES ('%windir%\System32\cmd.exe',0,null);
                     ---------------------------------------------------------------------------------------------------------------------

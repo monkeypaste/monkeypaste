@@ -251,7 +251,7 @@ namespace MpWpfApp {
                     colorMenuItem,
                     (s1, e1) => {
                         rtb.Selection.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)((Border)s1).Tag);
-                        ClipTileViewModel.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList();
+                        ClipTileViewModel.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(rtb);
                     }
                 );
 

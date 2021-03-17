@@ -905,27 +905,150 @@ namespace MpWpfApp {
             }
         }
 
-        public IntPtr StartProcess(string args, string processPath, bool asAdministrator, bool isSilent, WinApi.ShowWindowCommands windowState = WinApi.ShowWindowCommands.Normal) {
-            System.Diagnostics.ProcessStartInfo processInfo = new System.Diagnostics.ProcessStartInfo();
-            processInfo.FileName = processPath;//Environment.ExpandEnvironmentVariables("%SystemRoot%") + @"\System32\cmd.exe"; //Sets the FileName property of myProcessInfo to %SystemRoot%\System32\cmd.exe where %SystemRoot% is a system variable which is expanded using Environment.ExpandEnvironmentVariables
-            if(!string.IsNullOrEmpty(args)) {
-                processInfo.Arguments = args;
-            }
-            processInfo.WindowStyle = isSilent ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal; //Sets the WindowStyle of myProcessInfo which indicates the window state to use when the process is started to Hidden
-            processInfo.Verb = asAdministrator ? "runas" : string.Empty; //The process should start with elevated permissions
-            
-            using (var process = System.Diagnostics.Process.Start(processInfo)) { //Starts the process based on myProcessInfo
-                if(isSilent) {
+        public IntPtr StartProcess(
+            string args, 
+            string processPath, 
+            bool asAdministrator, 
+            bool isSilent, 
+            WinApi.ShowWindowCommands windowState = WinApi.ShowWindowCommands.Normal) {
+            try {
+                IntPtr outHandle = IntPtr.Zero;
+                if (isSilent) {
                     windowState = WinApi.ShowWindowCommands.Hide;
                 }
-                int winType = GetShowWindowValue(windowState);
-                while (!WinApi.ShowWindow(process.MainWindowHandle, winType)) {
-                    Thread.Sleep(100);
-                    process.Refresh();
+                ProcessStartInfo processInfo = new System.Diagnostics.ProcessStartInfo();
+                processInfo.FileName = processPath;//Environment.ExpandEnvironmentVariables("%SystemRoot%") + @"\System32\cmd.exe"; //Sets the FileName property of myProcessInfo to %SystemRoot%\System32\cmd.exe where %SystemRoot% is a system variable which is expanded using Environment.ExpandEnvironmentVariables
+                if (!string.IsNullOrEmpty(args)) {
+                    processInfo.Arguments = args;
                 }
-                return process.Handle;
+                processInfo.WindowStyle = isSilent ? ProcessWindowStyle.Hidden : ProcessWindowStyle.Normal; //Sets the WindowStyle of myProcessInfo which indicates the window state to use when the process is started to Hidden
+                processInfo.Verb = asAdministrator ? "runas" : string.Empty; //The process should start with elevated permissions
+
+                if (asAdministrator) {
+                    using (var process = Process.Start(processInfo)) {
+                        while (!process.WaitForInputIdle(100)) {
+                            Thread.Sleep(100);
+                            process.Refresh();
+                        }
+                        outHandle = process.Handle;
+                    }
+                } else {
+                    using (var process = UACHelper.UACHelper.StartLimited(processInfo)) {
+                        while (!process.WaitForInputIdle(100)) {
+                            Thread.Sleep(100);
+                            process.Refresh();
+                        }
+                        outHandle = process.Handle;
+                    }
+                }
+                if (outHandle == IntPtr.Zero) {
+                    Console.WriteLine("Error starting process: " + processPath);
+                    return outHandle;
+                }
+
+                WinApi.ShowWindowAsync(outHandle, GetShowWindowValue(windowState));
+                return outHandle;
+            }
+            catch (Exception ex) {
+                Console.WriteLine("Start Process error (Admin to Normal mode): " + ex);
+                return IntPtr.Zero;
             }
             // TODO pass args to clipboard (w/ ignore in the manager) then activate window and paste
+        }
+
+        public IntPtr RunAsDesktopUser(string fileName, string args = "") {            
+            if (string.IsNullOrWhiteSpace(fileName)) {
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(fileName));
+            }
+
+            // To start process as shell user you will need to carry out these steps:
+            // 1. Enable the SeIncreaseQuotaPrivilege in your current token
+            // 2. Get an HWND representing the desktop shell (GetShellWindow)
+            // 3. Get the Process ID(PID) of the process associated with that window(GetWindowThreadProcessId)
+            // 4. Open that process(OpenProcess)
+            // 5. Get the access token from that process (OpenProcessToken)
+            // 6. Make a primary token with that token(DuplicateTokenEx)
+            // 7. Start the new process with that primary token(CreateProcessWithTokenW)
+
+            var hProcessToken = IntPtr.Zero;
+            // Enable SeIncreaseQuotaPrivilege in this process.  (This won't work if current process is not elevated.)
+            try {
+                var process = WinApi.GetCurrentProcess();
+                if (!WinApi.OpenProcessToken(process, 0x0020, ref hProcessToken)) {
+                    return IntPtr.Zero;
+                }
+
+                var tkp = new WinApi.TOKEN_PRIVILEGES {
+                    PrivilegeCount = 1,
+                    Privileges = new WinApi.LUID_AND_ATTRIBUTES[1]
+                };
+
+                if (!WinApi.LookupPrivilegeValue(null, "SeIncreaseQuotaPrivilege", ref tkp.Privileges[0].Luid)) {
+                    return IntPtr.Zero;
+                }
+
+                tkp.Privileges[0].Attributes = 0x00000002;
+
+                if (!WinApi.AdjustTokenPrivileges(hProcessToken, false, ref tkp, 0, IntPtr.Zero, IntPtr.Zero)) {
+                    return IntPtr.Zero;
+                }
+            } finally {
+                WinApi.CloseHandle(hProcessToken);
+            }
+
+            // Get an HWND representing the desktop shell.
+            // CAVEATS:  This will fail if the shell is not running (crashed or terminated), or the default shell has been
+            // replaced with a custom shell.  This also won't return what you probably want if Explorer has been terminated and
+            // restarted elevated.
+            var hwnd = WinApi.GetShellWindow();
+            if (hwnd == IntPtr.Zero) {
+                return IntPtr.Zero;
+            }
+
+            var hShellProcess = IntPtr.Zero;
+            var hShellProcessToken = IntPtr.Zero;
+            var hPrimaryToken = IntPtr.Zero;
+            try {
+                // Get the PID of the desktop shell process.
+                uint dwPID;
+                if (WinApi.GetWindowThreadProcessId(hwnd, out dwPID) == 0) {
+                    return IntPtr.Zero;
+                }
+                // Open the desktop shell process in order to query it (get the token)
+                hShellProcess = WinApi.OpenProcess(WinApi.ProcessAccessFlags.QueryInformation, false, dwPID);
+                if (hShellProcess == IntPtr.Zero) {
+                    return IntPtr.Zero;
+                }
+
+                // Get the process token of the desktop shell.
+                if (!WinApi.OpenProcessToken(hShellProcess, 0x0002, ref hShellProcessToken)) {
+                    return IntPtr.Zero;
+                }
+
+                var dwTokenRights = 395U;
+
+                // Duplicate the shell's process token to get a primary token.
+                // Based on experimentation, this is the minimal set of rights required for CreateProcessWithTokenW (contrary to current documentation).
+                if (!WinApi.DuplicateTokenEx(hShellProcessToken, dwTokenRights, IntPtr.Zero, WinApi.SECURITY_IMPERSONATION_LEVEL.SecurityImpersonation, WinApi.TOKEN_TYPE.TokenPrimary, out hPrimaryToken)) {
+                    return IntPtr.Zero;
+                }
+
+                // Start the target process with the new token.
+                var si = new WinApi.STARTUPINFO();
+                var pi = new WinApi.PROCESS_INFORMATION();
+                if(string.IsNullOrEmpty(args)) {
+                    args = "";
+                }
+                if (!WinApi.CreateProcessWithTokenW(hPrimaryToken, 0, fileName, args, 0, IntPtr.Zero, Path.GetDirectoryName(fileName), ref si, out pi)) {
+                    return IntPtr.Zero;
+                }
+
+                return pi.hProcess;
+            } finally {
+                WinApi.CloseHandle(hShellProcessToken);
+                WinApi.CloseHandle(hPrimaryToken);
+                WinApi.CloseHandle(hShellProcess);
+            }            
         }
 
         public int GetShowWindowValue(WinApi.ShowWindowCommands cmd) {
@@ -1376,10 +1499,13 @@ namespace MpWpfApp {
             }
             if(obj.GetType() == typeof(List<FrameworkElement>)) {
                 foreach(var fe in (List<FrameworkElement>)obj) {
+                    if(fe == null) {
+                        continue;
+                    }
                     fe.BeginAnimation(property, animation);
                 }
             } else {
-                ((FrameworkElement)obj).BeginAnimation(property, animation);
+                ((FrameworkElement)obj)?.BeginAnimation(property, animation);
             }
 
             return animation;
@@ -1406,7 +1532,7 @@ namespace MpWpfApp {
                         }
                         fe.Visibility = tv;
                     }
-                } else {
+                } else if(obj != null) {
                     ((FrameworkElement)obj).Visibility = tv;
                 }
             };
@@ -1427,7 +1553,7 @@ namespace MpWpfApp {
                         fe.Opacity = 0;
                         fe.Visibility = Visibility.Visible;
                     }
-                } else {
+                } else if(obj != null) {
                     ((FrameworkElement)obj).Opacity = 0;
                     ((FrameworkElement)obj).Visibility = Visibility.Visible;
                 }
@@ -1445,7 +1571,7 @@ namespace MpWpfApp {
                         da.Completed -= onCompleted;
                     }
                 }
-            } else {
+            } else if(obj != null) {
                 ((FrameworkElement)obj).BeginAnimation(FrameworkElement.OpacityProperty, da);
             }
         }

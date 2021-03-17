@@ -126,6 +126,22 @@ namespace MpWpfApp {
         #endregion
 
         #region Model Properties
+        public bool PressEnter {
+            get {
+                if(PasteToAppPath == null) {
+                    return false;
+                }
+                return PasteToAppPath.PressEnter;
+            }
+            set {
+                if(PasteToAppPath != null && PasteToAppPath.PressEnter != value) {
+                    PasteToAppPath.PressEnter = value;
+                    PasteToAppPath.WriteToDatabase();
+                    OnPropertyChanged(nameof(PressEnter));
+                }
+            }
+        }
+
         public WinApi.ShowWindowCommands WindowState {
             get {
                 if(PasteToAppPath == null) {
@@ -300,7 +316,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(AppIcon));
                     OnPropertyChanged(nameof(Args));
                     OnPropertyChanged(nameof(Label));
-
+                    OnPropertyChanged(nameof(PressEnter));
                 }
             }
         }
@@ -324,8 +340,16 @@ namespace MpWpfApp {
             //constructor used for user defined paste to applications
             PasteToAppPath = pasteToAppPath;
         }
-        
 
+        public string Validate() {
+            if (string.IsNullOrEmpty(Args)) {
+                return string.Empty;
+            }
+            if(Args.Length > Properties.Settings.Default.MaxCommandLineArgumentLength) {
+                return @"Max length of Commandline args is " + Properties.Settings.Default.MaxCommandLineArgumentLength + " this is " + Args.Length;
+            }
+            return string.Empty;
+        }
         public void Dispose() {
             PasteToAppPath.DeleteFromDatabase();
         }
