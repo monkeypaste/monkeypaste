@@ -94,7 +94,7 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("MonkeyPasteDragDropFormat")]
+        [global::System.Configuration.DefaultSettingValueAttribute("MpClipDragDropFormat")]
         public string ClipTileDragDropFormatName {
             get {
                 return ((string)(this["ClipTileDragDropFormatName"]));
@@ -1113,6 +1113,15 @@ namespace MpWpfApp.Properties {
         public int MaxCommandLineArgumentLength {
             get {
                 return ((int)(this["MaxCommandLineArgumentLength"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("MpClipSubItemDragDropFormat")]
+        public string ClipTileSubItemDragDropFormat {
+            get {
+                return ((string)(this["ClipTileSubItemDragDropFormat"]));
             }
         }
     }

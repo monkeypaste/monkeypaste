@@ -386,7 +386,8 @@ namespace MpWpfApp {
             bool isInline = false,
             bool createComposite = false,
             bool useFileData = false,
-            bool isFileDataMerged = false) {
+            bool isFileDataMerged = false,
+            int forceIdx = -1) {
             /*cases:
                 (from)->(to) = (Output Types)
                 RichText->RichText = RichText | Composite
@@ -482,6 +483,12 @@ namespace MpWpfApp {
                     fromItem.CompositeParentCopyItemId = compositeItem.CopyItemId;
                     fromItem.CompositeSortOrderIdx = compositeItem.CompositeItemList.Count;
                     compositeItem.CompositeItemList.Add(fromItem);
+                    if(forceIdx >= 0) {
+                        compositeItem.CompositeItemList.Move(fromItem.CompositeSortOrderIdx, forceIdx);
+                        foreach(var cci in compositeItem.CompositeItemList) {
+                            cci.CompositeSortOrderIdx = compositeItem.CompositeItemList.IndexOf(cci);
+                        }
+                    }
                     //always remove tag associations from other item if added its in the ctvm
                     //foreach (var tag in MpTag.GetAllTags()) {
                     //    if (tag.IsLinkedWithCopyItem(fromItem)) {
@@ -515,7 +522,16 @@ namespace MpWpfApp {
                             foreach (var occi in fromItem.CompositeItemList) {
                                 occi.CompositeParentCopyItemId = compositeItem.CopyItemId;
                                 occi.CompositeSortOrderIdx = compositeItem.CompositeItemList.Count;
-                                compositeItem.CompositeItemList.Add(occi);
+                                if(forceIdx < 0) {
+                                    compositeItem.CompositeItemList.Add(occi);
+                                } else {
+                                    compositeItem.CompositeItemList.Insert(forceIdx, occi);
+                                }
+                            }
+                            if (forceIdx >= 0) {
+                                foreach (var cci in compositeItem.CompositeItemList) {
+                                    cci.CompositeSortOrderIdx = compositeItem.CompositeItemList.IndexOf(cci);
+                                }
                             }
                             break;
                     }
@@ -638,6 +654,20 @@ namespace MpWpfApp {
             return _itemData;
         }
 
+        public void UnlinkFromCompositeParent() {
+            if(!IsSubCompositeItem) {
+                return;
+            }
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpCompositeCopyItem where fk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
+            CompositeCopyItemId = 0;
+            CompositeParentCopyItemId = -1;
+            CompositeSortOrderIdx = -1;
+            WriteToDatabase();
+    }
         public string GetDetail(MpCopyItemDetailType detailType) {
             string info = "I dunno";// string.Empty;
             switch (detailType) {

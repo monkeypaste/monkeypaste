@@ -8,13 +8,14 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpRtbListBoxItemRichTextBoxViewModel : MpClipTileViewModel, ICloneable, IDisposable {
+    public class MpRtbListBoxItemRichTextBoxViewModel : MpUndoableViewModelBase<MpRtbListBoxItemRichTextBoxViewModel>, ICloneable, IDisposable {
         #region Private Variables
         private int _detailIdx = 1;
         #endregion
@@ -41,7 +42,7 @@ namespace MpWpfApp {
             }
         }
 
-        public new MpClipTileRichTextBoxViewModelCollection RichTextBoxViewModelCollection {
+        public MpClipTileRichTextBoxViewModelCollection RichTextBoxViewModelCollection {
             get {
                 if (HostClipTileViewModel == null) {
                     return null;
@@ -112,6 +113,18 @@ namespace MpWpfApp {
         #endregion
 
         #region Layout
+        public Rect ItemRect {
+            get {
+                if (RichTextBoxViewModelCollection != null && 
+                    RichTextBoxViewModelCollection.RichTextBoxListBox != null &&
+                    Rtbc != null) {
+                    var rtblb = RichTextBoxViewModelCollection.RichTextBoxListBox;
+                    return Rtbc.TransformToVisual(rtblb).TransformBounds(LayoutInformation.GetLayoutSlot(Rtbc));
+                }
+                return new Rect();
+            }
+        }
+
         public double DragButtonSize {
             get {
                 return MpMeasurements.Instance.RtbCompositeDragButtonSize;
@@ -249,7 +262,7 @@ namespace MpWpfApp {
                 if (!IsCompositeChild) {
                     return Brushes.Transparent;
                 }
-                if (IsPrimarySelected) {
+                if (IsPrimarySubSelected) {
                     return Brushes.Blue;
                 }
                 if (IsSubSelected) {
@@ -435,7 +448,7 @@ namespace MpWpfApp {
         }
 
         private string _shortcutKeyString = string.Empty;
-        public new string ShortcutKeyString {
+        public string ShortcutKeyString {
             get {
                 return _shortcutKeyString;
             }
@@ -447,15 +460,19 @@ namespace MpWpfApp {
             }
         }
 
-        public new bool HasTemplate {
+        public bool HasTemplate {
             get {
                 return TemplateHyperlinkCollectionViewModel.Count > 0;
             }
         }
-        public new string TemplateRichText { get; set; }
+        public string TemplateRichText { get; set; }
         #endregion
 
         #region State
+        public bool IsOverDragButton { get; set; } = false;
+
+        public bool IsDragging { get; set; } = false;
+
         private bool _isResizingTop = false;
         public bool IsResizingTop {
             get {
@@ -529,15 +546,15 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _isPrimarySelected = false;
-        public new bool IsPrimarySelected {
+        private bool _isPrimarySubSelected = false;
+        public bool IsPrimarySubSelected {
             get {
-                return _isPrimarySelected;
+                return _isPrimarySubSelected;
             }
             set {
-                if (_isPrimarySelected != value) {
-                    _isPrimarySelected = value;
-                    OnPropertyChanged(nameof(IsPrimarySelected));
+                if (_isPrimarySubSelected != value) {
+                    _isPrimarySubSelected = value;
+                    OnPropertyChanged(nameof(IsPrimarySubSelected));
                     OnPropertyChanged(nameof(RtbListBoxItemBorderBrush));
                 }
             }
@@ -550,7 +567,7 @@ namespace MpWpfApp {
             }
             set {
                 if (_isSubSelected != value && 
-                    (HostClipTileViewModel.IsExpanded || (IsSubSelected && value == false))) {
+                    (HostClipTileViewModel.IsExpanded || (IsSubSelected && value == false) || IsDragging)) {
                     _isSubSelected = value;
                     OnPropertyChanged(nameof(IsSubSelected));
                     OnPropertyChanged(nameof(IsEditingContent));
@@ -566,12 +583,6 @@ namespace MpWpfApp {
                 }
             }
         }
-
-        //public new bool IsSelected {
-        //    get {
-        //        return false;
-        //    }
-        //}
 
         private bool _isSubHovering = false;
         public bool IsSubHovering {
@@ -650,7 +661,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
-        public new BitmapSource CopyItemBmp {
+        public BitmapSource CopyItemBmp {
             get {
                 if (CopyItem == null) {
                     return new BitmapImage();
@@ -666,7 +677,7 @@ namespace MpWpfApp {
             }
         }
 
-        public new string DetailText {
+        public string DetailText {
             get {
                 if(CopyItem == null) {
                     return string.Empty;
@@ -713,7 +724,7 @@ namespace MpWpfApp {
             }
         }
 
-        public new int CopyItemId {
+        public int CopyItemId {
             get {
                 if (CopyItem == null) {
                     return 0;
@@ -722,7 +733,7 @@ namespace MpWpfApp {
             }
         }
 
-        public new string CopyItemPlainText {
+        public string CopyItemPlainText {
             get {
                 if (CopyItem == null || CopyItem.ItemPlainText == null) {
                     return string.Empty;
@@ -731,7 +742,7 @@ namespace MpWpfApp {
             }
         }
 
-        public new string CopyItemRichText {
+        public string CopyItemRichText {
             get {
                 if (CopyItem == null) {
                     return string.Empty;
@@ -770,7 +781,7 @@ namespace MpWpfApp {
             }
         }
 
-        public new string CopyItemTitle {
+        public string CopyItemTitle {
             get {
                 if (CopyItem == null) {
                     return string.Empty;
@@ -784,6 +795,15 @@ namespace MpWpfApp {
                     CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItem));
                 }
+            }
+        }
+
+        public List<string> CopyItemFileDropList {
+            get {
+                if (CopyItem == null || MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null) {
+                    return new List<string>();
+                }
+                return CopyItem.GetFileList(string.Empty, MainWindowViewModel.ClipTrayViewModel.GetTargetFileType());
             }
         }
 
@@ -805,7 +825,7 @@ namespace MpWpfApp {
         }
 
         private MpCopyItem _copyItem = null;
-        public new MpCopyItem CopyItem {
+        public MpCopyItem CopyItem {
             get {
                 return _copyItem;
             }
@@ -830,9 +850,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpRtbListBoxItemRichTextBoxViewModel() : this(null,null) {
-            Console.WriteLine("I'm an rtbvm called");
-        }
+        public MpRtbListBoxItemRichTextBoxViewModel() : this(null,null) { }
 
         public MpRtbListBoxItemRichTextBoxViewModel(MpClipTileViewModel ctvm, MpCopyItem ci) : base() {
             CopyItem = ci;
@@ -846,7 +864,7 @@ namespace MpWpfApp {
                         //if(!IsSubSelected && IsEditingSubTitle) {
                         //    IsEditingSubTitle = false;
                         //}
-                        if(IsSubSelected) {
+                        if(IsSubSelected && HostClipTileViewModel.IsExpanded) {
                             foreach(var rtbvm in RichTextBoxViewModelCollection) {
                                 if(rtbvm != this) {
                                     rtbvm.IsSubSelected = false;
@@ -857,8 +875,7 @@ namespace MpWpfApp {
                             // triggers set data in model which updates the preview
                             CopyItemRichText = Rtb.Document.ToRichText();
                         }
-                        RichTextBoxViewModelCollection.OnPropertyChanged(nameof(RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel));
-                        RichTextBoxViewModelCollection.OnPropertyChanged(nameof(RichTextBoxViewModelCollection.SelectedRtb));
+                        RichTextBoxViewModelCollection.OnPropertyChanged(nameof(RichTextBoxViewModelCollection.SubSelectedRtbvmList));                        
                         break;
                     case nameof(IsSubHovering):
                         if(IsSubHovering) {
@@ -880,10 +897,11 @@ namespace MpWpfApp {
             RtbListBoxItemOverlayDockPanel = (DockPanel)Rtbc.FindName("RtbListItemOverlayBorderDockPanel");
             RtbListBoxItemTitleTextBlock = (TextBlock)Rtbc.FindName("RtbListBoxItemTitleTextBlock");
             RtbListBoxItemTitleTextBox = (TextBox)Rtbc.FindName("RtbListBoxItemTitleTextBox");
+            var dragButton = (Button)Rtbc.FindName("RtbListBoxItemOverlayBorderGridDragButton");
 
             Rtb.SelectAll();
             var rtbAlignment = Rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty);
-            if (rtbAlignment == null || 
+            if (rtbAlignment == null ||
                 rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}" ||
                 (TextAlignment)rtbAlignment == TextAlignment.Justify) {
                 Rtb.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
@@ -902,6 +920,76 @@ namespace MpWpfApp {
             CreateHyperlinks();
 
             #region Drag & Drop
+            var mouseDownPosition = new Point();
+            int minDragDist = 10;
+            Rtbc.PreviewMouseLeftButtonDown += (s, e9) => {
+                mouseDownPosition = e9.GetPosition(Rtbc);
+                IsSubSelected = true;
+            };
+            Rtbc.PreviewMouseMove += (s, e7) => {
+                //if (!IsCompositeChild) {
+                //    return;
+                //}
+                //IsDragging = false;
+                //if (MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded || !IsOverDragButton) {
+                //    return;
+                //}
+                if (e7.MouseDevice.LeftButton == MouseButtonState.Pressed) {
+                    //if(!IsCompositeChild) {
+                    //    return;
+                    //}
+                    if (MpHelpers.Instance.DistanceBetweenPoints(mouseDownPosition, e7.GetPosition(Rtbc)) < minDragDist) {
+                        return;
+                    }
+                    IsDragging = true;
+                    IsSubSelected = true;
+                    DragDrop.DoDragDrop(
+                                Rtbc,
+                                RichTextBoxViewModelCollection.GetDataObjectFromSubSelectedItems(true).Result,
+                                DragDropEffects.Copy | DragDropEffects.Move);
+                }
+            };
+            //dragButton.PreviewMouseLeftButtonDown += (s, e8) => {
+            //    mouseDownPosition = e8.GetPosition(Rtbc);
+            //    IsSubSelected = true;
+            //};
+
+            //dragButton.PreviewMouseMove += (s, e7) => {
+            //    if(!IsCompositeChild) {
+            //        return;
+            //    }
+            //    IsDragging = false;
+            //    if (MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded || !IsOverDragButton) {
+            //        return;
+            //    }
+            //    if (e7.MouseDevice.LeftButton == MouseButtonState.Pressed) {
+            //        //if(!IsCompositeChild) {
+            //        //    return;
+            //        //}
+            //        if (MpHelpers.Instance.DistanceBetweenPoints(mouseDownPosition, e7.GetPosition(Rtbc)) < minDragDist) {
+            //            return;
+            //        }
+            //        IsDragging = true;
+            //        IsSubSelected = true;
+            //        DragDrop.DoDragDrop(
+            //                    Rtbc,
+            //                    RichTextBoxViewModelCollection.GetDataObjectFromSubSelectedItems(true).Result,
+            //                    DragDropEffects.Copy | DragDropEffects.Move);
+            //    }
+            //};
+            dragButton.MouseEnter += (s, e2) => {
+                if (!MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle &&
+                   !IsSubSelected) {
+                    IsOverDragButton = true;
+                }
+
+            };
+            dragButton.MouseLeave += (s, e2) => {
+                if (!MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle &&
+                    !IsSubSelected && e2.LeftButton != MouseButtonState.Pressed) {
+                    IsOverDragButton = false;
+                }
+            };
             #endregion
 
 
@@ -1012,7 +1100,7 @@ namespace MpWpfApp {
             }
         }
 
-        public new async Task<string> GetPastableRichText() {
+        public async Task<string> GetPastableRichText() {
             if (HasTemplate) {
                 TemplateRichText = string.Empty;
                 //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(RichTextBoxViewModelCollection.IndexOf(this),false);
@@ -1277,7 +1365,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Overrides
-        public new void Dispose() {
+        public void Dispose() {
             //RichTextBoxViewModelCollection.LoadCount--;
         }
         #endregion

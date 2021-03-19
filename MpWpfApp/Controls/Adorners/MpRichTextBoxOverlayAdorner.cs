@@ -13,9 +13,6 @@ using System.Windows.Shapes;
 namespace MpWpfApp {
     public class MpRichTextBoxOverlayAdorner : Adorner {
         #region Private Variables
-        private Canvas _rtbc;
-        private RichTextBox _rtb;
-        private ListBox _rtblb;
         #endregion
 
         #region Statics
@@ -24,15 +21,12 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpRichTextBoxOverlayAdorner(Canvas rtbc) : base(rtbc) {
-            _rtbc = rtbc;
-            _rtb = (RichTextBox)_rtbc.FindName("RtbListBoxItemRichTextBox");
-            _rtblb = rtbc.GetVisualAncestor<ListBox>();
         }
         #endregion
 
         #region Overrides
         protected override void OnRender(DrawingContext drawingContext) {            
-            var rtbvm = (MpRtbListBoxItemRichTextBoxViewModel)_rtbc.DataContext;
+            var rtbvm = (MpRtbListBoxItemRichTextBoxViewModel)(this.AdornedElement as FrameworkElement).DataContext;
             var adornedElementRect = new Rect(this.AdornedElement.DesiredSize);
             var blackPen = new Pen(Brushes.Gray, 1);
             blackPen.DashStyle = DashStyles.Dash;

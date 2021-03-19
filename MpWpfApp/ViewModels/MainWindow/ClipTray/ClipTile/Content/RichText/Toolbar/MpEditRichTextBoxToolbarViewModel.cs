@@ -362,13 +362,13 @@ namespace MpWpfApp {
                 Console.WriteLine("(AddTemplate)Selection Text: " + rtbSelection.Text);
                 ClipTileViewModel.SaveToDatabase();
                 
-                if (ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Count == 0) {
+                if (ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.Count == 0) {
                     //if templates are NOT in the clip yet add one w/ default name
                     ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);
                     //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
                 } else {
                     var templateContextMenu = new ContextMenu();
-                    foreach (var ttcvm in ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder) {
+                    foreach (var ttcvm in ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder) {
                         Border b = new Border();
                         b.Background = ttcvm.TemplateBrush;
                         b.BorderBrush = Brushes.Black;

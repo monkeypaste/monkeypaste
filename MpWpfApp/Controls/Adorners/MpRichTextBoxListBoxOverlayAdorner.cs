@@ -13,43 +13,29 @@ using System.Windows.Shapes;
 namespace MpWpfApp {
     public class MpRichTextBoxListBoxOverlayAdorner : Adorner {
         #region Private Variables
-        private ListBox _rtblb;
         #endregion
 
         #region Public Methods
         public MpRichTextBoxListBoxOverlayAdorner(ListBox rtblb) : base(rtblb) {
-            _rtblb = rtblb;
         }
         #endregion
 
         #region Overrides
-        protected override void OnRender(DrawingContext drawingContext) {            
-            var rtbvmc = (MpClipTileRichTextBoxViewModelCollection)_rtblb.DataContext;
-            var adornedElementRect = new Rect(this.AdornedElement.DesiredSize);
-            var blackPen = new Pen(Brushes.Gray, 1);
-            blackPen.DashStyle = DashStyles.Dash;            
+        protected override void OnRender(DrawingContext drawingContext) {    
+            var rtbvmc = ((FrameworkElement)this.AdornedElement).DataContext as MpClipTileRichTextBoxViewModelCollection;
+            var redPen = new Pen(Brushes.Red, 1.5);
+            redPen.DashStyle = DashStyles.Dash;
 
-            double h = 2.5;
-            bool wasFound = false;
-            foreach(var rtbvm in rtbvmc) {
-                if(rtbvm.Next == null || rtbvm.Rtbc == null) {
-                    continue;
-                }
-                var lbi = (ListBoxItem)_rtblb.ItemContainerGenerator.ContainerFromItem(rtbvm);
-                //var p = lbi.TranslatePoint(new Point(0.0, 0.0), _rtblb);
-                var mp = MpHelpers.Instance.GetMousePosition(rtbvm.Rtbc);
-                var rect = new Rect(rtbvm.Rtbc.DesiredSize);
-                var bl = rect.BottomLeft;
-                var br = rect.BottomRight;
+            var l = rtbvmc.DropLeftPoint;
+            var r = rtbvmc.DropRightPoint;
+            double offset = 0;
+            l.X -= offset;
+            r.X -= offset;
 
-                var lineRect = new Rect(bl.X, bl.Y - h, br.X - bl.X, h * 2);
-                if (lineRect.Contains(mp)) {
-                    rtbvmc.IsCursorOnItemInnerEdge = true;
-                    wasFound = true;
-                } 
-            }
-            if(!wasFound) {
-                //rtbvmc.IsCursorOnItemInnerEdge = false;
+            l.Y += 0;
+            r.Y -= 0;
+            if (rtbvmc.IsDropping) {
+                drawingContext.DrawLine(redPen, l, r);
             }
         }
         #endregion

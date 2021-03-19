@@ -411,7 +411,7 @@ namespace MpWpfApp {
                 int uniqueIdx = 1;
                 string namePrefix = "<Template #";
                 while (ClipTileViewModel.CopyItemPlainText.ToLower().Contains(namePrefix.ToLower() + uniqueIdx) || 
-                       ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == namePrefix + uniqueIdx + ">").ToList().Count > 0) {
+                       ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == namePrefix + uniqueIdx + ">").ToList().Count > 0) {
                     uniqueIdx++;
                 }
                 Brush randColor = (Brush)new SolidColorBrush(MpHelpers.Instance.GetRandomColor());
@@ -520,12 +520,12 @@ namespace MpWpfApp {
 
         public void Dispose(bool fromContextMenu) {
             if(fromContextMenu) {
-                ClipTileViewModel.RichTextBoxViewModelCollection.SelectedRtb.Selection.Select(TemplateHyperlinkRange.Start, TemplateHyperlinkRange.End);
-                ClipTileViewModel.RichTextBoxViewModelCollection.SelectedRtb.Selection.Text = string.Empty;
+                ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb.Selection.Select(TemplateHyperlinkRange.Start, TemplateHyperlinkRange.End);
+                ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb.Selection.Text = string.Empty;
             }
             //remove this individual token reference
-            if(ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel != null) {
-                ClipTileViewModel.RichTextBoxViewModelCollection.SelectedClipTileRichTextBoxViewModel.TemplateHyperlinkCollectionViewModel.Remove(this);
+            if(ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm != null) {
+                ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.Remove(this);
             }
             
         }

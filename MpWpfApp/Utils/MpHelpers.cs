@@ -1941,6 +1941,9 @@ namespace MpWpfApp {
         }
 
         public BitmapSource CombineBitmap(IList<BitmapSource> bmpSrcList, bool tileHorizontally = true) {
+            if(bmpSrcList.Count == 0) {
+                return new BitmapImage();
+            }
             if (bmpSrcList.Count == 1) {
                 return bmpSrcList[0];
             }

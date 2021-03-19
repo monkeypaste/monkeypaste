@@ -70,14 +70,58 @@ namespace MpWpfApp {
                 return (dpo as T);
             }
             if (dpo.GetType().IsSubclassOf(typeof(FrameworkContentElement))) {
-                return FindParentOfType<T>(((FrameworkContentElement)dpo).Parent);
+                if(((FrameworkContentElement)dpo).Parent != null) {
+                    return FindParentOfType<T>(((FrameworkContentElement)dpo).Parent);
+                } 
+                if(((FrameworkContentElement)dpo).TemplatedParent != null) {
+                    return FindParentOfType<T>(((FrameworkContentElement)dpo).TemplatedParent);
+                }
+                
             } else if (dpo.GetType().IsSubclassOf(typeof(FrameworkElement))) {
-                return FindParentOfType<T>(((FrameworkElement)dpo).Parent);
-            } else {
-                return null;
+                if (((FrameworkElement)dpo).Parent != null) {
+                    return FindParentOfType<T>(((FrameworkElement)dpo).Parent);
+                } 
+                if (((FrameworkElement)dpo).TemplatedParent != null) {
+                    return FindParentOfType<T>(((FrameworkElement)dpo).TemplatedParent);
+                }
             }
-        }
 
+            return null;
+        }
+        public static T FindParentDataContextWithType<T>(this DependencyObject dpo) where T : class {
+            if (dpo == null) {
+                return default;
+            }
+            if (dpo.GetType().IsSubclassOf(typeof(FrameworkContentElement)) &&
+                ((FrameworkContentElement)dpo).DataContext != null &&
+                ((FrameworkContentElement)dpo).DataContext.GetType() == typeof(T)) {
+                return (((FrameworkContentElement)dpo).DataContext as T);
+            }
+
+            if (dpo.GetType().IsSubclassOf(typeof(FrameworkElement)) && 
+                ((FrameworkElement)dpo).DataContext != null  &&
+                ((FrameworkElement)dpo).DataContext.GetType() == typeof(T)) {
+                return (((FrameworkElement)dpo).DataContext as T);
+            }
+
+            if (dpo.GetType().IsSubclassOf(typeof(FrameworkContentElement))) {
+                if (((FrameworkContentElement)dpo).Parent != null) {
+                    return FindParentOfType<T>(((FrameworkContentElement)dpo).Parent);
+                } 
+                if (((FrameworkContentElement)dpo).TemplatedParent != null) {
+                    return FindParentOfType<T>(((FrameworkContentElement)dpo).TemplatedParent);
+                }
+
+            } else if (dpo.GetType().IsSubclassOf(typeof(FrameworkElement))) {
+                if (((FrameworkElement)dpo).Parent != null) {
+                    return FindParentOfType<T>(((FrameworkElement)dpo).Parent);
+                } 
+                if (((FrameworkElement)dpo).TemplatedParent != null) {
+                    return FindParentOfType<T>(((FrameworkElement)dpo).TemplatedParent);
+                }
+            }
+            return null;
+        }
         public static T GetDescendantOfType<T>(this DependencyObject depObj) where T : DependencyObject {
             if (depObj == null) {
                 return null;
