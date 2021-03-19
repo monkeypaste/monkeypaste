@@ -41,12 +41,26 @@ namespace MpWpfApp {
 
         #region Properties
 
+        #region Controls
+        public Border EditToolbarBorder { get; set; }
+        #endregion
         #region Layout Properties      
-        public double ExpandedTileSize { get; private set; }
+        private double _editBorderCanvasTop = -MpMeasurements.Instance.ClipTileEditToolbarHeight;
+        public double EditBorderCanvasTop {
+            get {
+                return _editBorderCanvasTop;
+            }
+            set {
+                if (_editBorderCanvasTop != value) {
+                    _editBorderCanvasTop = value;
+                    OnPropertyChanged(nameof(EditBorderCanvasTop));
+                }
+            }
+        }
         #endregion
 
         #region Visibility Properties
-        
+
         #endregion
 
         #region Brush Properties
@@ -131,11 +145,12 @@ namespace MpWpfApp {
                 return;
             }
             _borderStackPanel = (StackPanel)sender;
+            EditToolbarBorder = _borderStackPanel.GetVisualAncestor<Border>();
         }
 
         public void InitWithRichTextBox(RichTextBox rtb, bool doAnimation) {
             _selectedRtb = rtb;
-            var et = _borderStackPanel.GetVisualAncestor<Border>();
+            EditToolbarBorder = _borderStackPanel.GetVisualAncestor<Border>();
             var cb = ClipTileViewModel.ClipBorder;
             var rtblbgc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxGridContainerCanvas");
             var rtblbg = (Grid)rtblbgc.FindName("ClipTileRichTextboxListBoxContainerGrid");
@@ -145,37 +160,37 @@ namespace MpWpfApp {
             var clipTrayScrollViewer = clipTray.GetDescendantOfType<ScrollViewer>();
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
             var titleSwirl = (Image)cb.FindName("TitleSwirl");
-            var addTemplateButton = (Button)et.FindName("AddTemplateButton");
+            var addTemplateButton = (Button)EditToolbarBorder.FindName("AddTemplateButton");
             var editTemplateToolbarBorder = (Border)cb.FindName("ClipTileEditTemplateToolbar");
             var pasteTemplateToolbarBorder = (Border)cb.FindName("ClipTilePasteTemplateToolbar");
             var ds = ClipTileViewModel.RichTextBoxViewModelCollection.FullDocument.GetDocumentSize();
-            ExpandedTileSize = Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
 
+            Canvas.SetTop(EditToolbarBorder, EditBorderCanvasTop);
             #region Editor
 
             #region Toolbar
             ToggleButton selectedAlignmentButton = null;
             ToggleButton selectedListButton = null;
 
-            var fontFamilyComboBox = (ComboBox)et.FindName("FontFamilyCombo");
-            var fontSizeCombo = (ComboBox)et.FindName("FontSizeCombo");
-            var foregroundColorButton = (Button)et.FindName("ForegroundColorButton");
-            var backgroundColorButton = (Button)et.FindName("BackgroundColorButton");
-            var leftAlignmentButton = (ToggleButton)et.FindName("LeftButton");
-            var centerAlignmentButton = (ToggleButton)et.FindName("CenterButton");
-            var rightAlignmentButton = (ToggleButton)et.FindName("RightButton");
-            var printButton = (Button)et.FindName("PrintButton");
-            var bulletsButton = (ToggleButton)et.FindName("BulletsButton");
-            var numberingButton = (ToggleButton)et.FindName("NumberingButton");
-            var italicButton = (ToggleButton)et.FindName("ItalicButton");
-            var boldButton = (ToggleButton)et.FindName("BoldButton");
-            var underlineButton = (ToggleButton)et.FindName("UnderlineButton");
+            var fontFamilyComboBox = (ComboBox)EditToolbarBorder.FindName("FontFamilyCombo");
+            var fontSizeCombo = (ComboBox)EditToolbarBorder.FindName("FontSizeCombo");
+            var foregroundColorButton = (Button)EditToolbarBorder.FindName("ForegroundColorButton");
+            var backgroundColorButton = (Button)EditToolbarBorder.FindName("BackgroundColorButton");
+            var leftAlignmentButton = (ToggleButton)EditToolbarBorder.FindName("LeftButton");
+            var centerAlignmentButton = (ToggleButton)EditToolbarBorder.FindName("CenterButton");
+            var rightAlignmentButton = (ToggleButton)EditToolbarBorder.FindName("RightButton");
+            var printButton = (Button)EditToolbarBorder.FindName("PrintButton");
+            var bulletsButton = (ToggleButton)EditToolbarBorder.FindName("BulletsButton");
+            var numberingButton = (ToggleButton)EditToolbarBorder.FindName("NumberingButton");
+            var italicButton = (ToggleButton)EditToolbarBorder.FindName("ItalicButton");
+            var boldButton = (ToggleButton)EditToolbarBorder.FindName("BoldButton");
+            var underlineButton = (ToggleButton)EditToolbarBorder.FindName("UnderlineButton");
 
-            var cutButton = (Button)et.FindName("CutButton");
-            var copyButton = (Button)et.FindName("CopyButton");
-            var pasteButton = (Button)et.FindName("PasteButton");
-            var undoButton = (Button)et.FindName("UndoButton");
-            var redoButton = (Button)et.FindName("RedoButton");
+            var cutButton = (Button)EditToolbarBorder.FindName("CutButton");
+            var copyButton = (Button)EditToolbarBorder.FindName("CopyButton");
+            var pasteButton = (Button)EditToolbarBorder.FindName("PasteButton");
+            var undoButton = (Button)EditToolbarBorder.FindName("UndoButton");
+            var redoButton = (Button)EditToolbarBorder.FindName("RedoButton");
 
             cutButton.CommandTarget = rtb;
             copyButton.CommandTarget = rtb;
@@ -323,9 +338,9 @@ namespace MpWpfApp {
                 fontSizeCombo.Text = fontSize.ToString();
 
                 // Set Font buttons
-                ((ToggleButton)et.FindName("BoldButton")).IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
-                ((ToggleButton)et.FindName("ItalicButton")).IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
-                ((ToggleButton)et.FindName("UnderlineButton")).IsChecked = rtb.Selection?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
+                ((ToggleButton)EditToolbarBorder.FindName("BoldButton")).IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
+                ((ToggleButton)EditToolbarBorder.FindName("ItalicButton")).IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
+                ((ToggleButton)EditToolbarBorder.FindName("UnderlineButton")).IsChecked = rtb.Selection?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
 
                 // Set Alignment buttons
                 leftAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
@@ -465,131 +480,175 @@ namespace MpWpfApp {
                     //};
                     //timer.Start();
                 } else {
-                    double animMs = 0;// Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
-                    double tileWidthMax = ClipTileViewModel.TileBorderMaxWidth;//Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
-                    double tileWidthMin = ClipTileViewModel.TileBorderMinWidth;//MpMeasurements.Instance.ClipTileBorderMinSize;
+                    //double animMs = 0;// Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
+                    //double tileWidthMax = ClipTileViewModel.TileBorderMaxWidth;//Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
+                    //double tileWidthMin = ClipTileViewModel.TileBorderMinWidth;//MpMeasurements.Instance.ClipTileBorderMinSize;
 
-                    double contentWidthMax = ClipTileViewModel.TileContentMaxWidth;//tileWidthMax - MpMeasurements.Instance.ClipTileEditModeContentMargin;
-                    double contentWidthMin = ClipTileViewModel.TileContentMinWidth;//ClipTileViewModel.TileContentWidth;
+                    //double contentWidthMax = ClipTileViewModel.TileContentMaxWidth;//tileWidthMax - MpMeasurements.Instance.ClipTileEditModeContentMargin;
+                    //double contentWidthMin = ClipTileViewModel.TileContentMinWidth;//ClipTileViewModel.TileContentWidth;
 
-                    double rtbTopMax = ClipTileViewModel.EditRichTextBoxToolbarHeight;
-                    double rtbTopMin = 0;
+                    //double rtbTopMax = ClipTileViewModel.EditRichTextBoxToolbarHeight;
+                    //double rtbTopMin = 0;
 
-                    double rtbHeightMax = ClipTileViewModel.TileContentHeight;
-                    double rtbHeightMin = rtbHeightMax - rtbTopMax;
+                    //double rtbHeightMax = ClipTileViewModel.TileContentHeight;
+                    //double rtbHeightMin = rtbHeightMax - rtbTopMax;
 
-                    double editRtbToolbarTopMax = 0;
-                    double editRtbToolbarTopMin = -ClipTileViewModel.EditRichTextBoxToolbarHeight;
+                    //double editRtbToolbarTopMax = 0;
+                    //double editRtbToolbarTopMin = -ClipTileViewModel.EditRichTextBoxToolbarHeight;
 
-                    double iconLeftMax = tileWidthMax - 125;// tileWidthMax - ClipTileViewModel.TileTitleIconSize;
-                    double iconLeftMin = 204;// tileWidthMin - ClipTileViewModel.TileTitleIconSize;
+                    //double iconLeftMax = tileWidthMax - 125;// tileWidthMax - ClipTileViewModel.TileTitleIconSize;
+                    //double iconLeftMin = 204;// tileWidthMin - ClipTileViewModel.TileTitleIconSize;
 
-                    if (ClipTileViewModel.IsEditingTile) {
-                        //show rtb edit toolbar so its visible during animation
-                        ClipTileViewModel.EditToolbarVisibility = Visibility.Visible;
-                        //ClipTileViewModel.ContainerVisibility = Visibility.Hidden;
-                    } else if (ClipTileViewModel.IsEditingTemplate) {
-                        //animate edit template toolbar when tile is minimizing
-                        ClipTileViewModel.IsEditingTemplate = false;
-                    } else {
-                        ClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
-                    }
+                    //if (ClipTileViewModel.IsEditingTile) {
+                    //    //show rtb edit toolbar so its visible during animation
+                    //    ClipTileViewModel.EditToolbarVisibility = Visibility.Visible;
+                    //    //ClipTileViewModel.ContainerVisibility = Visibility.Hidden;
+                    //} else if (ClipTileViewModel.IsEditingTemplate) {
+                    //    //animate edit template toolbar when tile is minimizing
+                    //    ClipTileViewModel.IsEditingTemplate = false;
+                    //} else {
+                    //    ClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
+                    //}
 
-                    MpHelpers.Instance.AnimateDoubleProperty(
-                        ClipTileViewModel.IsEditingTile ? rtbTopMin : rtbTopMax,
-                        ClipTileViewModel.IsEditingTile ? rtbTopMax : rtbTopMin,
-                        animMs,
-                        new List<FrameworkElement> { rtblbg },
-                        Canvas.TopProperty,
-                        (s1, e44) => {
-                            ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbListBoxHeight));
-                        });
+                    //MpHelpers.Instance.AnimateDoubleProperty(
+                    //    ClipTileViewModel.IsEditingTile ? rtbTopMin : rtbTopMax,
+                    //    ClipTileViewModel.IsEditingTile ? rtbTopMax : rtbTopMin,
+                    //    animMs,
+                    //    new List<FrameworkElement> { rtblbg },
+                    //    Canvas.TopProperty,
+                    //    (s1, e44) => {
+                    //        ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbListBoxHeight));
+                    //    });
 
-                    MpHelpers.Instance.AnimateDoubleProperty(
-                        ClipTileViewModel.IsEditingTile ? rtbHeightMax : rtbHeightMin,
-                        ClipTileViewModel.IsEditingTile ? rtbHeightMin : rtbHeightMax,
-                        animMs,
-                        new List<FrameworkElement> { rtblbg, rtblb },
-                        FrameworkElement.HeightProperty,
-                        (s1, e44) => {
-                        //ClipTileViewModel.ContainerVisibility = Visibility.Visible;
-                    });
+                    //MpHelpers.Instance.AnimateDoubleProperty(
+                    //    ClipTileViewModel.IsEditingTile ? rtbHeightMax : rtbHeightMin,
+                    //    ClipTileViewModel.IsEditingTile ? rtbHeightMin : rtbHeightMax,
+                    //    animMs,
+                    //    new List<FrameworkElement> { rtblbg, rtblb },
+                    //    FrameworkElement.HeightProperty,
+                    //    (s1, e44) => {
+                    //    //ClipTileViewModel.ContainerVisibility = Visibility.Visible;
+                    //});
 
-                    MpHelpers.Instance.AnimateDoubleProperty(
-                        ClipTileViewModel.IsEditingTile ? editRtbToolbarTopMin : editRtbToolbarTopMax,
-                        ClipTileViewModel.IsEditingTile ? editRtbToolbarTopMax : editRtbToolbarTopMin,
-                        animMs,
-                        et,
-                        Canvas.TopProperty,
-                        (s1, e44) => {
-                            if (ClipTileViewModel.IsEditingTile) {
-                                ClipTileViewModel.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, false);
-                                Rtb_SelectionChanged(this, new RoutedEventArgs());
-                            } else {
-                                ClipTileViewModel.EditToolbarVisibility = Visibility.Collapsed;
+                    //MpHelpers.Instance.AnimateDoubleProperty(
+                    //    ClipTileViewModel.IsEditingTile ? editRtbToolbarTopMin : editRtbToolbarTopMax,
+                    //    ClipTileViewModel.IsEditingTile ? editRtbToolbarTopMax : editRtbToolbarTopMin,
+                    //    animMs,
+                    //    et,
+                    //    Canvas.TopProperty,
+                    //    (s1, e44) => {
+                    //        if (ClipTileViewModel.IsEditingTile) {
+                    //            ClipTileViewModel.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, false);
+                    //            Rtb_SelectionChanged(this, new RoutedEventArgs());
+                    //        } else {
+                    //            ClipTileViewModel.EditToolbarVisibility = Visibility.Collapsed;
 
-                                ClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
+                    //            ClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
 
-                                ClipTileViewModel.RichTextBoxViewModelCollection.Refresh();
-                            }
-                        });
+                    //            ClipTileViewModel.RichTextBoxViewModelCollection.Refresh();
+                    //        }
+                    //    });
 
-                    MpHelpers.Instance.AnimateDoubleProperty(
-                        ClipTileViewModel.IsEditingTile ? tileWidthMin : tileWidthMax,
-                        ClipTileViewModel.IsEditingTile ? tileWidthMax : tileWidthMin,
-                        animMs,
-                        new List<FrameworkElement> { cb, titleSwirl },
-                        FrameworkElement.WidthProperty,
-                        (s1, e44) => {
-                            //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbHorizontalScrollbarVisibility));
-                            //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbVerticalScrollbarVisibility));
-                            if (ClipTileViewModel.IsEditingTile) {
-                                clipTray.ScrollIntoView(ClipTileViewModel);
-                            } else {
+                    //MpHelpers.Instance.AnimateDoubleProperty(
+                    //    ClipTileViewModel.IsEditingTile ? tileWidthMin : tileWidthMax,
+                    //    ClipTileViewModel.IsEditingTile ? tileWidthMax : tileWidthMin,
+                    //    animMs,
+                    //    new List<FrameworkElement> { cb, titleSwirl },
+                    //    FrameworkElement.WidthProperty,
+                    //    (s1, e44) => {
+                    //        //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbHorizontalScrollbarVisibility));
+                    //        //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbVerticalScrollbarVisibility));
+                    //        if (ClipTileViewModel.IsEditingTile) {
+                    //            clipTray.ScrollIntoView(ClipTileViewModel);
+                    //        } else {
                                 
-                            }
-                            //ClipTileViewModel.TileBorderWidth = ClipTileViewModel.IsEditingTile ? tileWidthMax : tileWidthMin;
-                        });
+                    //        }
+                    //        //ClipTileViewModel.TileBorderWidth = ClipTileViewModel.IsEditingTile ? tileWidthMax : tileWidthMin;
+                    //    });
 
-                    MpHelpers.Instance.AnimateDoubleProperty(
-                        ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
-                        ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
-                        animMs,
-                        new List<FrameworkElement> { rtblbg, rtblb, rtblbgc, et, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
-                        FrameworkElement.WidthProperty,
-                        (s1, e44) => {
-                            //this is to remove scrollbar flicker during animation
-                            //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbHorizontalScrollbarVisibility));
-                            //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbVerticalScrollbarVisibility));
-                            //ClipTileViewModel.TileContentWidth = ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin;
-                        });
+                    //MpHelpers.Instance.AnimateDoubleProperty(
+                    //    ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
+                    //    ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
+                    //    animMs,
+                    //    new List<FrameworkElement> { rtblbg, rtblb, rtblbgc, et, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
+                    //    FrameworkElement.WidthProperty,
+                    //    (s1, e44) => {
+                    //        //this is to remove scrollbar flicker during animation
+                    //        //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbHorizontalScrollbarVisibility));
+                    //        //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbVerticalScrollbarVisibility));
+                    //        //ClipTileViewModel.TileContentWidth = ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin;
+                    //    });
 
-                    ClipTileViewModel.RichTextBoxViewModelCollection.AnimateItems(
-                        ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
-                        ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
-                        ClipTileViewModel.IsEditingTile ? rtbHeightMax : rtbHeightMin,
-                        ClipTileViewModel.IsEditingTile ? rtbHeightMin : rtbHeightMax,
-                        0, 0,
-                        0, 0,
-                        animMs
-                    );
+                    //ClipTileViewModel.RichTextBoxViewModelCollection.AnimateItems(
+                    //    ClipTileViewModel.IsEditingTile ? contentWidthMin : contentWidthMax,
+                    //    ClipTileViewModel.IsEditingTile ? contentWidthMax : contentWidthMin,
+                    //    ClipTileViewModel.IsEditingTile ? rtbHeightMax : rtbHeightMin,
+                    //    ClipTileViewModel.IsEditingTile ? rtbHeightMin : rtbHeightMax,
+                    //    0, 0,
+                    //    0, 0,
+                    //    animMs
+                    //);
 
-                    MpHelpers.Instance.AnimateDoubleProperty(
-                        ClipTileViewModel.IsEditingTile ? iconLeftMin : iconLeftMax,
-                        ClipTileViewModel.IsEditingTile ? iconLeftMax : iconLeftMin,
-                        animMs,
-                        titleIconImageButton,
-                        Canvas.LeftProperty,
-                        (s1, e23) => {
+                    //MpHelpers.Instance.AnimateDoubleProperty(
+                    //    ClipTileViewModel.IsEditingTile ? iconLeftMin : iconLeftMax,
+                    //    ClipTileViewModel.IsEditingTile ? iconLeftMax : iconLeftMin,
+                    //    animMs,
+                    //    titleIconImageButton,
+                    //    Canvas.LeftProperty,
+                    //    (s1, e23) => {
 
-                        });
+                    //    });
                 }
             }
             #endregion
 
             _lastRtb = rtb;
         }
+        public void Resize(double deltaEditToolbarTop) {
+            EditBorderCanvasTop += deltaEditToolbarTop;
+            Canvas.SetTop(EditToolbarBorder, EditBorderCanvasTop);
+            if (ClipTileViewModel.IsEditingTile) {
+                MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.ScrollIntoView(ClipTileViewModel);
+                ClipTileViewModel.RichTextBoxViewModelCollection.ResetSubSelection();
+                //Rtb_SelectionChanged(this, new RoutedEventArgs());
+            } else {
+                ClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
+                ClipTileViewModel.RichTextBoxViewModelCollection.Refresh();
+            }
+        }
+        public void Animate(
+            double deltaTop, 
+            double tt, 
+            EventHandler onCompleted, 
+            double fps = 30,
+            DispatcherPriority priority = DispatcherPriority.Render) {
+            double fromTop = EditBorderCanvasTop;
+            double toTop = fromTop + deltaTop;
+            double dt = (deltaTop / tt) / fps;
 
+            var timer = new DispatcherTimer(priority);
+            timer.Interval = TimeSpan.FromMilliseconds(fps);
+            timer.Tick += (s, e32) => {
+                if (MpHelpers.Instance.DistanceBetweenValues(EditBorderCanvasTop, toTop) > 0.5) {
+                    EditBorderCanvasTop += dt;
+                    Canvas.SetTop(EditToolbarBorder, EditBorderCanvasTop);
+                } else {
+                    timer.Stop();
+                    if (ClipTileViewModel.IsEditingTile) {
+                        MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.ScrollIntoView(ClipTileViewModel);
+                        ClipTileViewModel.RichTextBoxViewModelCollection.ResetSubSelection();
+                        //Rtb_SelectionChanged(this, new RoutedEventArgs());
+                    } else {
+                        ClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
+                        ClipTileViewModel.RichTextBoxViewModelCollection.Refresh();
+                    }
+                    if (onCompleted != null) {
+                        onCompleted.BeginInvoke(this, new EventArgs(), null, null);
+                    }
+                }
+            };
+            timer.Start();
+        }
         #endregion
 
         #region Private Methods 

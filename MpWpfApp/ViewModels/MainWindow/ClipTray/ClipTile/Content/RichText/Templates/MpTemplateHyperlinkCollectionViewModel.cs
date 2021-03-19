@@ -107,7 +107,7 @@ namespace MpWpfApp {
 
             ClipTileViewModel.PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
-                    case nameof(ClipTileViewModel.IsPastingTemplateTile):
+                    case nameof(ClipTileViewModel.IsPastingTemplate):
                         Reset();
                         break;
                 }
@@ -164,6 +164,9 @@ namespace MpWpfApp {
 
         #region Overrides
         public new void Add(MpTemplateHyperlinkViewModel thlvm) {
+            if(thlvm == null) {
+                return;
+            }
             base.Add(thlvm);
             thlvm.CopyItemTemplate.WriteToDatabase();
         }

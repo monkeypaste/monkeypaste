@@ -103,7 +103,7 @@ namespace MpWpfApp {
                 if(ClipTileViewModel != null && 
                   !ClipTileViewModel.IsEditingTile && 
                   !ClipTileViewModel.IsEditingTemplate && 
-                  !ClipTileViewModel.IsPastingTemplateTile) {
+                  !ClipTileViewModel.IsPastingTemplate) {
                     return Brushes.Transparent;
                 }
                 if(IsSelected) {
@@ -128,7 +128,7 @@ namespace MpWpfApp {
         public Brush TemplateBackgroundBrush {
             get {
                 if(ClipTileViewModel != null &&
-                    (ClipTileViewModel.IsEditingTile || ClipTileViewModel.IsPastingTemplateTile)) {
+                    (ClipTileViewModel.IsEditingTile || ClipTileViewModel.IsPastingTemplate)) {
                     if (IsHovering) {
                         return MpHelpers.Instance.GetDarkerBrush(TemplateBrush);
                     }
@@ -182,7 +182,7 @@ namespace MpWpfApp {
         #region Business Logic Properties
         public string TemplateDisplayValue {
             get {
-                if (ClipTileViewModel.IsPastingTemplateTile && 
+                if (ClipTileViewModel.IsPastingTemplate && 
                     !string.IsNullOrEmpty(TemplateText)) {
                     return TemplateText;
                 }
@@ -459,14 +459,14 @@ namespace MpWpfApp {
                 if (!ClipTileViewModel.IsSelected) {
                     return;
                 }
-                if (ClipTileViewModel.IsEditingTile || ClipTileViewModel.IsPastingTemplateTile) {
+                if (ClipTileViewModel.IsEditingTile || ClipTileViewModel.IsPastingTemplate) {
                     IsSelected = true;
                 }
                 if (ClipTileViewModel.IsEditingTile) {
                     e.Handled = true;
                     ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(this, true);
                 }
-                if(ClipTileViewModel.IsPastingTemplateTile) {
+                if(ClipTileViewModel.IsPastingTemplate) {
                     e.Handled = true;
                     ClipTileViewModel.PasteTemplateToolbarViewModel.SetTemplate(TemplateName);
                 }
@@ -479,7 +479,7 @@ namespace MpWpfApp {
                 if (!ClipTileViewModel.IsSelected) {
                     return;
                 }
-                if (ClipTileViewModel.IsEditingTile || ClipTileViewModel.IsPastingTemplateTile) {
+                if (ClipTileViewModel.IsEditingTile || ClipTileViewModel.IsPastingTemplate) {
                     IsSelected = true;
                 }
                 if (ClipTileViewModel.IsEditingTile) {

@@ -12,6 +12,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace MpWpfApp {
     public class MpPasteTemplateToolbarViewModel : MpViewModelBase {
@@ -60,6 +61,30 @@ namespace MpWpfApp {
 
         #region Properties
 
+        #region Controls
+        public TextBox SelectedTemplateTextBox { get; set; }
+
+        public Button NextTemplateButton { get; set; }
+
+        public Button PreviousTemplateButton { get; set; }
+        #endregion
+
+        #region Layout
+        private double _pasteTemplateBorderCanvasTop = MpMeasurements.Instance.ClipTileContentHeight;
+        public double PasteTemplateBorderCanvasTop {
+            get {
+                return _pasteTemplateBorderCanvasTop;
+            }
+            set {
+                if (_pasteTemplateBorderCanvasTop != value) {
+                    _pasteTemplateBorderCanvasTop = value;
+                    OnPropertyChanged(nameof(PasteTemplateBorderCanvasTop));
+                }
+            }
+        }
+        #endregion
+
+        #region Visibility
         public Visibility ClearAllTemplateToolbarButtonVisibility {
             get {
                 foreach (var uthlvm in UniqueTemplateHyperlinkViewModelListByDocOrder) {
@@ -93,6 +118,7 @@ namespace MpWpfApp {
                 return Visibility.Collapsed;
             }
         }
+        #endregion
 
         private MpTemplateHyperlinkViewModel _selectedTemplate = null;
         public MpTemplateHyperlinkViewModel SelectedTemplate {
@@ -255,17 +281,17 @@ namespace MpWpfApp {
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
             var titleSwirl = (Image)cb.FindName("TitleSwirl");
             var clearAllTemplatesButton = (Button)pasteTemplateToolbarBorder.FindName("ClearAllTemplatesButton");
-            var selectedTemplateTextBox = (TextBox)pasteTemplateToolbarBorder.FindName("SelectedTemplateTextBox");
-            var previousTemplateButton = (Button)pasteTemplateToolbarBorder.FindName("PreviousTemplateButton");
-            var nextTemplateButton = (Button)pasteTemplateToolbarBorder.FindName("NextTemplateButton");
+            SelectedTemplateTextBox = (TextBox)pasteTemplateToolbarBorder.FindName("SelectedTemplateTextBox");
+            PreviousTemplateButton = (Button)pasteTemplateToolbarBorder.FindName("PreviousTemplateButton");
+            NextTemplateButton = (Button)pasteTemplateToolbarBorder.FindName("NextTemplateButton");
             var pasteTemplateButton = (Button)pasteTemplateToolbarBorder.FindName("PasteTemplateButton");
             var selectedTemplateComboBox = (ComboBox)pasteTemplateToolbarBorder.FindName("SelectedTemplateComboBox");
             var ds = ClipTileViewModel.RichTextBoxViewModelCollection.FullDocument.GetDocumentSize();
 
             _selectedTemplateComboBox = selectedTemplateComboBox;
-            _selectedTemplateTextBox = selectedTemplateTextBox;
+            _selectedTemplateTextBox = SelectedTemplateTextBox;
 
-            selectedTemplateTextBox.GotFocus += (s, e4) => {
+            SelectedTemplateTextBox.GotFocus += (s, e4) => {
                 if (string.IsNullOrEmpty(SelectedTemplateText) ||
                     SelectedTemplateText == SelectedTemplateTextBoxPlaceHolderText) {
                     SelectedTemplateText = string.Empty;
@@ -273,7 +299,7 @@ namespace MpWpfApp {
 
                 //IsSelectedTemplateTextBoxFocused = true;
             };
-            selectedTemplateTextBox.LostFocus += (s, e5) => {
+            SelectedTemplateTextBox.LostFocus += (s, e5) => {
                 //ensures current template textbox show the template name as a placeholder when input is empty
                 //IsSelectedTemplateTextBoxFocused = false;
                 if (string.IsNullOrEmpty(SelectedTemplateText) ||
@@ -281,7 +307,7 @@ namespace MpWpfApp {
                     SelectedTemplateText = SelectedTemplateTextBoxPlaceHolderText;
                 }
             };
-            selectedTemplateTextBox.IsVisibleChanged += (s, e9) => {
+            SelectedTemplateTextBox.IsVisibleChanged += (s, e9) => {
                 //this is used to capture the current template text box when the paste toolbar is shown
                 //to
                 if (ClipTileViewModel.PasteTemplateToolbarVisibility == Visibility.Collapsed) {
@@ -291,13 +317,14 @@ namespace MpWpfApp {
                 tbx.Focus();
                 //tbx.SelectAll();
             };
-            selectedTemplateTextBox.PreviewKeyDown += (s, e8) => {
+            SelectedTemplateTextBox.PreviewKeyDown += (s, e8) => {
                 if(e8.Key == Key.Tab) {
                     if(Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
                         PreviousTemplateTokenCommand.Execute(null);
                     } else {
                         NextTemplateTokenCommand.Execute(null);
                     }
+                    SelectedTemplateTextBox.Focus();
                     e8.Handled = true;
                 }
                 if (e8.Key == Key.Enter) {
@@ -310,118 +337,183 @@ namespace MpWpfApp {
                             NextTemplateTokenCommand.Execute(null);
                         }
                     }
+                    SelectedTemplateTextBox.Focus();
                     e8.Handled = true;
                 }
             };
+
             clearAllTemplatesButton.MouseLeftButtonUp += (s, e2) => {
                 //when clear all is clicked it performs the ClearAllTemplate Command and this switches focus to 
                 //first template tbx
-                selectedTemplateTextBox.Focus();
+                SelectedTemplateTextBox.Focus();
                 //e2.Handled = false;
             };
 
-            if(doAnimation) {
-                double animMs = 0;
-                double tileWidthMax = Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
-                double tileWidthMin = ClipTileViewModel.TileBorderWidth;
+            //if(doAnimation) {
+            //    double animMs = 0;
+            //    double tileWidthMax = Math.Max(MpMeasurements.Instance.ClipTileEditModeMinWidth, ds.Width);
+            //    double tileWidthMin = ClipTileViewModel.TileBorderWidth;
 
-                double contentWidthMax = tileWidthMax - MpMeasurements.Instance.ClipTileEditModeContentMargin;
-                double contentWidthMin = ClipTileViewModel.TileContentWidth;
+            //    double contentWidthMax = tileWidthMax - MpMeasurements.Instance.ClipTileEditModeContentMargin;
+            //    double contentWidthMin = ClipTileViewModel.TileContentWidth;
 
-                double rtbBottomMax = ClipTileViewModel.TileContentHeight;
-                double rtbBottomMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.PasteTemplateToolbarHeight;
+            //    double rtbBottomMax = ClipTileViewModel.TileContentHeight;
+            //    double rtbBottomMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.PasteTemplateToolbarHeight;
 
-                double pasteTemplateToolbarTopMax = ClipTileViewModel.TileContentHeight;
-                double pasteTemplateToolbarTopMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.PasteTemplateToolbarHeight + 5;
+            //    double pasteTemplateToolbarTopMax = ClipTileViewModel.TileContentHeight;
+            //    double pasteTemplateToolbarTopMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.PasteTemplateToolbarHeight + 5;
 
-                double iconLeftMax = tileWidthMax - 125;// tileWidthMax - ClipTileViewModel.TileTitleIconSize;
-                double iconLeftMin = 204;// tileWidthMin - ClipTileViewModel.TileTitleIconSize;
+            //    double iconLeftMax = tileWidthMax - 125;// tileWidthMax - ClipTileViewModel.TileTitleIconSize;
+            //    double iconLeftMin = 204;// tileWidthMin - ClipTileViewModel.TileTitleIconSize;
 
-                if (ClipTileViewModel.IsPastingTemplateTile) {
-                    OnPropertyChanged(nameof(UniqueTemplateHyperlinkViewModelListByDocOrder));
-                    OnPropertyChanged(nameof(PasteTemplateNavigationButtonStackVisibility));
-                    OnPropertyChanged(nameof(ClearAllTemplateToolbarButtonVisibility));
+            //    if (ClipTileViewModel.IsPastingTemplate) {
+            //        OnPropertyChanged(nameof(UniqueTemplateHyperlinkViewModelListByDocOrder));
+            //        OnPropertyChanged(nameof(PasteTemplateNavigationButtonStackVisibility));
+            //        OnPropertyChanged(nameof(ClearAllTemplateToolbarButtonVisibility));
 
-                    ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Visible;
-                    if (UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 0) {
-                        //selectedTemplateComboBox.SelectedItem = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
-                        SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
-                    }
-                } else {
-                    ClearAllTemplates();
-                    //SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
-                    //SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
-                    ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Collapsed;
-                    clipTray.ScrollViewer.ScrollToHome();
+            //        ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Visible;
+            //        if (UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 0) {
+            //            //selectedTemplateComboBox.SelectedItem = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
+            //            SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
+            //        }
+            //    } else {
+            //        ClearAllTemplates();
+            //        //SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
+            //        //SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
+            //        ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Collapsed;
+            //        clipTray.ScrollViewer.ScrollToHome();
+            //    }
+
+            //    MpHelpers.Instance.AnimateDoubleProperty(
+            //        ClipTileViewModel.IsPastingTemplate ? pasteTemplateToolbarTopMax : pasteTemplateToolbarTopMin,
+            //        ClipTileViewModel.IsPastingTemplate ? pasteTemplateToolbarTopMin : pasteTemplateToolbarTopMax,
+            //        animMs,
+            //        pasteTemplateToolbarBorder,
+            //        Canvas.TopProperty,
+            //        (s1, e44) => {
+            //            if (!ClipTileViewModel.IsPastingTemplate) {
+            //                ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Collapsed;
+            //            } else {
+            //                selectedTemplateTextBox.PreviewKeyDown += (s6, e8) => {
+            //                    if (e8.Key == Key.Enter) {
+            //                        if (IsTemplateReadyToPaste) {
+            //                            PasteTemplateCommand.Execute(null);
+            //                        } else {
+            //                            NextTemplateTokenCommand.Execute(null);
+            //                        }
+            //                    }
+            //                };
+            //                selectedTemplateTextBox.Focus();
+
+            //            }
+            //        });
+
+            //    MpHelpers.Instance.AnimateDoubleProperty(
+            //        ClipTileViewModel.IsPastingTemplate ? tileWidthMin : tileWidthMax,
+            //        ClipTileViewModel.IsPastingTemplate ? tileWidthMax : tileWidthMin,
+            //        animMs,
+            //        new List<FrameworkElement> { cb, titleSwirl },
+            //        FrameworkElement.WidthProperty,
+            //        (s1, e44) => {
+            //        });
+
+            //    MpHelpers.Instance.AnimateDoubleProperty(
+            //        ClipTileViewModel.IsPastingTemplate ? contentWidthMin : contentWidthMax,
+            //        ClipTileViewModel.IsPastingTemplate ? contentWidthMax : contentWidthMin,
+            //        animMs,
+            //        new List<FrameworkElement> {rtblb, editRichTextToolbarBorder, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
+            //        FrameworkElement.WidthProperty,
+            //        (s1, e44) => {
+            //            clipTray.ScrollIntoView(ClipTileViewModel);
+            //            //this is to remove scrollbar flicker during animation
+            //            //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbHorizontalScrollbarVisibility));
+            //            //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbVerticalScrollbarVisibility));
+            //        });
+
+            //    ClipTileViewModel.RichTextBoxViewModelCollection.AnimateItems(
+            //        ClipTileViewModel.IsPastingTemplate ? contentWidthMin : contentWidthMax,
+            //        ClipTileViewModel.IsPastingTemplate ? contentWidthMax : contentWidthMin,
+            //        0, 0,
+            //        0, 0,
+            //        0, 0,
+            //        animMs
+            //    );
+
+            //    MpHelpers.Instance.AnimateDoubleProperty(
+            //        ClipTileViewModel.IsPastingTemplate ? iconLeftMin : iconLeftMax,
+            //        ClipTileViewModel.IsPastingTemplate ? iconLeftMax : iconLeftMin,
+            //        animMs,
+            //        titleIconImageButton,
+            //        Canvas.LeftProperty,
+            //        (s1, e23) => {
+
+            //        });
+            //}
+        }
+        public void Resize(double deltaTemplateTop) {
+            PasteTemplateBorderCanvasTop += deltaTemplateTop;
+
+            MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.ScrollIntoView(ClipTileViewModel);
+            if (ClipTileViewModel.IsPastingTemplate) {
+                OnPropertyChanged(nameof(UniqueTemplateHyperlinkViewModelListByDocOrder));
+                OnPropertyChanged(nameof(PasteTemplateNavigationButtonStackVisibility));
+                OnPropertyChanged(nameof(ClearAllTemplateToolbarButtonVisibility));
+                if (UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 0) {
+                    //selectedTemplateComboBox.SelectedItem = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
+                    SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
                 }
-
-                MpHelpers.Instance.AnimateDoubleProperty(
-                    ClipTileViewModel.IsPastingTemplateTile ? pasteTemplateToolbarTopMax : pasteTemplateToolbarTopMin,
-                    ClipTileViewModel.IsPastingTemplateTile ? pasteTemplateToolbarTopMin : pasteTemplateToolbarTopMax,
-                    animMs,
-                    pasteTemplateToolbarBorder,
-                    Canvas.TopProperty,
-                    (s1, e44) => {
-                        if (!ClipTileViewModel.IsPastingTemplateTile) {
-                            ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Collapsed;
-                        } else {
-                            selectedTemplateTextBox.PreviewKeyDown += (s6, e8) => {
-                                if (e8.Key == Key.Enter) {
-                                    if (IsTemplateReadyToPaste) {
-                                        PasteTemplateCommand.Execute(null);
-                                    } else {
-                                        NextTemplateTokenCommand.Execute(null);
-                                    }
-                                }
-                            };
-                            selectedTemplateTextBox.Focus();
-
-                        }
-                    });
-
-                MpHelpers.Instance.AnimateDoubleProperty(
-                    ClipTileViewModel.IsPastingTemplateTile ? tileWidthMin : tileWidthMax,
-                    ClipTileViewModel.IsPastingTemplateTile ? tileWidthMax : tileWidthMin,
-                    animMs,
-                    new List<FrameworkElement> { cb, titleSwirl },
-                    FrameworkElement.WidthProperty,
-                    (s1, e44) => {
-                    });
-
-                MpHelpers.Instance.AnimateDoubleProperty(
-                    ClipTileViewModel.IsPastingTemplateTile ? contentWidthMin : contentWidthMax,
-                    ClipTileViewModel.IsPastingTemplateTile ? contentWidthMax : contentWidthMin,
-                    animMs,
-                    new List<FrameworkElement> {rtblb, editRichTextToolbarBorder, rtbc, editTemplateToolbarBorder, pasteTemplateToolbarBorder },
-                    FrameworkElement.WidthProperty,
-                    (s1, e44) => {
-                        clipTray.ScrollIntoView(ClipTileViewModel);
-                        //this is to remove scrollbar flicker during animation
-                        //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbHorizontalScrollbarVisibility));
-                        //ClipTileViewModel.RichTextBoxViewModelCollection.OnPropertyChanged(nameof(ClipTileViewModel.RichTextBoxViewModelCollection.RtbVerticalScrollbarVisibility));
-                    });
-
-                ClipTileViewModel.RichTextBoxViewModelCollection.AnimateItems(
-                    ClipTileViewModel.IsPastingTemplateTile ? contentWidthMin : contentWidthMax,
-                    ClipTileViewModel.IsPastingTemplateTile ? contentWidthMax : contentWidthMin,
-                    0, 0,
-                    0, 0,
-                    0, 0,
-                    animMs
-                );
-
-                MpHelpers.Instance.AnimateDoubleProperty(
-                    ClipTileViewModel.IsPastingTemplateTile ? iconLeftMin : iconLeftMax,
-                    ClipTileViewModel.IsPastingTemplateTile ? iconLeftMax : iconLeftMin,
-                    animMs,
-                    titleIconImageButton,
-                    Canvas.LeftProperty,
-                    (s1, e23) => {
-
-                    });
+                SelectedTemplateTextBox.Focus();
+            } else {
+                ClearAllTemplates();
+                //SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
+                //SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
+                ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Collapsed;
+                MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.ScrollViewer.ScrollToHome();
             }
         }
-        
+            public void Animate(
+            double deltaTop,
+            double tt,
+            EventHandler onCompleted,
+            double fps = 30,
+            DispatcherPriority priority = DispatcherPriority.Render) {
+            double fromTop = PasteTemplateBorderCanvasTop;
+            double toTop = fromTop + deltaTop;
+            double dt = (deltaTop / tt) / fps;
+
+            var timer = new DispatcherTimer(priority);
+            timer.Interval = TimeSpan.FromMilliseconds(fps);
+            timer.Tick += (s, e32) => {
+                if (PasteTemplateBorderCanvasTop < toTop) {
+                    PasteTemplateBorderCanvasTop += dt;
+                } else {
+                    timer.Stop();
+                    MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.ScrollIntoView(ClipTileViewModel);
+                    if (ClipTileViewModel.IsPastingTemplate) {
+                        OnPropertyChanged(nameof(UniqueTemplateHyperlinkViewModelListByDocOrder));
+                        OnPropertyChanged(nameof(PasteTemplateNavigationButtonStackVisibility));
+                        OnPropertyChanged(nameof(ClearAllTemplateToolbarButtonVisibility));
+                        if (UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 0) {
+                            //selectedTemplateComboBox.SelectedItem = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
+                            SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
+                        }
+                        SelectedTemplateTextBox.Focus();
+                    } else {
+                        ClearAllTemplates();
+                        //SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
+                        //SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
+                        ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Collapsed;
+                        MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.ScrollViewer.ScrollToHome();
+                    }
+
+                    if (onCompleted != null) {
+                        onCompleted.BeginInvoke(this, new EventArgs(), null, null);
+                    }
+                }
+            };
+            timer.Start();
+        }
+
         public void SetTemplate(string templateName) {
             if(string.IsNullOrEmpty(templateName)) {
                 return;
@@ -463,7 +555,7 @@ namespace MpWpfApp {
         }
         private bool CanClearAllTemplates() {
             return ClipTileViewModel != null &&
-                ClipTileViewModel.IsPastingTemplateTile &&
+                ClipTileViewModel.IsPastingTemplate &&
                 ClearAllTemplateToolbarButtonVisibility == Visibility.Visible;
         }
         private void ClearAllTemplates() {
@@ -493,7 +585,7 @@ namespace MpWpfApp {
         }
         private bool CanClearCurrentTemplates() {
             return ClipTileViewModel != null && 
-                ClipTileViewModel.IsPastingTemplateTile && 
+                ClipTileViewModel.IsPastingTemplate && 
                 ClearSelectedTemplateTextboxButtonVisibility == Visibility.Visible;
         }
         private void ClearCurrentTemplates() {
@@ -511,7 +603,7 @@ namespace MpWpfApp {
         }
         private bool CanNextTemplateToken() {
             return ClipTileViewModel != null && 
-                ClipTileViewModel.IsPastingTemplateTile && 
+                ClipTileViewModel.IsPastingTemplate && 
                 UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 1;
         }
         private void NextTemplateToken() {
@@ -534,7 +626,7 @@ namespace MpWpfApp {
         }
         private bool CanPreviousTemplateToken() {
             return ClipTileViewModel != null && 
-                ClipTileViewModel.IsPastingTemplateTile && 
+                ClipTileViewModel.IsPastingTemplate && 
                 UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 1;
         }
         private void PreviousTemplateToken() {
@@ -559,7 +651,7 @@ namespace MpWpfApp {
         private bool CanPasteTemplate() {
             //only allow template to be pasted once all template types have been viewed
             return ClipTileViewModel != null && 
-                ClipTileViewModel.IsPastingTemplateTile && 
+                ClipTileViewModel.IsPastingTemplate && 
                 IsTemplateReadyToPaste;
         }
         private void PasteTemplate() {

@@ -79,7 +79,10 @@ namespace MpWpfApp {
         #endregion
 
         #region Controls 
-        public RichTextBox Rtb { get; set; }
+        public RichTextBox Rtb { 
+            get; 
+            set; 
+        }
 
         public DockPanel RtbListBoxItemOverlayDockPanel { get; set; }
 
@@ -100,9 +103,6 @@ namespace MpWpfApp {
                 if (HostClipTileViewModel == null) {
                     return Cursors.Arrow;
                 }
-                if(RichTextBoxViewModelCollection.IsCursorOnItemInnerEdge) {
-                    return RichTextBoxViewModelCollection.RtbListBoxCursor;
-                }
                 if (HostClipTileViewModel.IsExpanded &&
                     IsSubSelected) {
                     return Cursors.IBeam;
@@ -113,11 +113,16 @@ namespace MpWpfApp {
         #endregion
 
         #region Layout
+        
+
         public Rect ItemRect {
             get {
                 if (RichTextBoxViewModelCollection != null && 
-                    RichTextBoxViewModelCollection.RichTextBoxListBox != null &&
-                    Rtbc != null) {
+                    RichTextBoxViewModelCollection.RichTextBoxListBox != null) {
+                    if (Rtbc == null || !RichTextBoxViewModelCollection.Contains(this)) {
+                        //occurs when dropping a composite child and this ensures it doesn't get picked up as insert index
+                        return new Rect(new Point(double.MinValue, double.MinValue), new Size(0, 0));
+                    }
                     var rtblb = RichTextBoxViewModelCollection.RichTextBoxListBox;
                     return Rtbc.TransformToVisual(rtblb).TransformBounds(LayoutInformation.GetLayoutSlot(Rtbc));
                 }
@@ -185,15 +190,31 @@ namespace MpWpfApp {
                             RtbPageHeight + RtbPadding.Top + RtbPadding.Bottom,
                             RichTextBoxViewModelCollection.RtbListBoxHeight);
                     }
-                    if (SubItemOverlayVisibility == Visibility.Visible) {
-                        return RtbPageHeight + RtbPadding.Top + RtbPadding.Bottom;
+                    if(IsSubSelected) {
+                        return Math.Max(RtbPageHeight, MpMeasurements.Instance.RtbCompositeItemMinHeight);
                     }
-                    return RtbPageHeight;
+                    if (IsSubHovering) {
+                        return MpMeasurements.Instance.RtbCompositeItemMinHeight + RtbPadding.Top + RtbPadding.Bottom;
+                    }
+                    return MpMeasurements.Instance.RtbCompositeItemMinHeight;
                 }
                 if (RichTextBoxViewModelCollection.Count == 1) {
                     return HostClipTileViewModel.TileContentHeight - RtbPadding.Top - RtbPadding.Bottom;
                 }
                 return MpMeasurements.Instance.RtbCompositeItemMinHeight;
+            }
+        }
+
+        private Size _rtbDocumentSize = new Size();
+        public Size RtbDocumentSize {
+            get {
+                return _rtbDocumentSize;
+            }
+            set {
+                if(_rtbDocumentSize != value) {
+                    _rtbDocumentSize = value;
+                    OnPropertyChanged(nameof(RtbDocumentSize));
+                }
             }
         }
 
@@ -203,12 +224,23 @@ namespace MpWpfApp {
                     return 0;
                 }
                 if (HostClipTileViewModel.IsExpanded) {
-                    double curFontSize = (double)Rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
-                    var width = Math.Max(
-                        Rtb.Document.GetDocumentSize().Width + (curFontSize * 3),
-                        Rtbc.ActualWidth + (curFontSize * 3));
+                    
+                    if (Rtb == null) {
+                        double curFontSize = 16;
+                        var width = Math.Max(
+                        CopyItemRichText.ToFlowDocument().GetDocumentSize().Width + (curFontSize * 3),
+                        RtbCanvasWidth + (curFontSize * 3));
 
-                    return width;// - (MpMeasurements.Instance.ClipTileEditModeContentMargin * 2) + 5;
+                        return width;// - (MpMeasurements.Instance.ClipTileEditModeContentMargin * 2) + 5;
+                    } else {
+                        double curFontSize = (double)Rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
+                        var width = Math.Max(
+                        Rtb.Document.GetDocumentSize().Width + (curFontSize * 3),
+                        Rtbc.ActualWidth /*RtbCanvasWidth*/ + (curFontSize * 3));
+
+                        return width;// - (MpMeasurements.Instance.ClipTileEditModeContentMargin * 2) + 5;
+                    }
+                    
                 }
                 return RtbWidth - RtbPadding.Left - RtbPadding.Right;
             }
@@ -220,7 +252,11 @@ namespace MpWpfApp {
                     return 0;
                 }
                 if (HostClipTileViewModel.IsExpanded) {
-                    return Rtb.Document.GetDocumentSize().Height;
+                    if(Rtb == null) {
+                        return CopyItemRichText.ToFlowDocument().GetDocumentSize().Height;
+                    } else {
+                        return Rtb.Document.GetDocumentSize().Height;
+                    }
                 }
                 return RtbHeight - RtbPadding.Top - RtbPadding.Bottom;
             }
@@ -315,7 +351,7 @@ namespace MpWpfApp {
             }
         }
 
-        public Brush RtbBorderBrush {
+        public Brush RtbOverlayBorderBrush {
             get {
                 if (HostClipTileViewModel == null) {
                     return Brushes.Transparent;
@@ -352,16 +388,15 @@ namespace MpWpfApp {
                 if (IsEditingSubTitle) {
                     return Visibility.Visible;
                 }
-                if (!HostClipTileViewModel.IsExpanded &&
-                    IsSubHovering &&
-                    IsCompositeChild) {
+                if(!IsCompositeChild) {
+                    return Visibility.Collapsed;
+                }
+                if (IsSubHovering && !IsSubSelected) {
                     return Visibility.Visible;
                 }
-                if (HostClipTileViewModel.IsExpanded &&
-                    IsCompositeChild &&
-                    !IsSubSelected) {
+                if (IsSubSelected && RichTextBoxViewModelCollection.SubSelectedRtbvmList.Count > 1) {
                     return Visibility.Visible;
-                }
+                }                
                 return Visibility.Collapsed;
             }
         }
@@ -418,31 +453,15 @@ namespace MpWpfApp {
         #endregion 
 
         #region Business Logic 
-        private BitmapSource _contentPreviewToolTipBmpSrc = null;
-        public BitmapSource SubItemContentPreviewToolTipBmpSrc {
+        private DateTime _lastSubSelectedDateTime;
+        public DateTime LastSubSelectedDateTime {
             get {
-                if (CopyItem == null) {
-                    return null;
-                }
-                if (_contentPreviewToolTipBmpSrc == null) {
-                    if (MainWindowViewModel.IsLoading && CopyItemBmp != null) {
-                        _contentPreviewToolTipBmpSrc = CopyItemBmp;
-                    } else {
-                        //_contentPreviewToolTipBmpSrc = MpHelpers.Instance.ConvertFlowDocumentToBitmap(
-                        //        RichTextBoxViewModelCollection.FullSeparatedDocument.Clone(),
-                        //        RichTextBoxViewModelCollection.FullSeparatedDocument.GetDocumentSize());
-                        _contentPreviewToolTipBmpSrc = CopyItemRichText.ToFlowDocument().ToBitmapSource();
-                        if (_contentPreviewToolTipBmpSrc != CopyItemBmp) {
-                            CopyItemBmp = _contentPreviewToolTipBmpSrc;
-                        }
-                    }
-                }
-                return _contentPreviewToolTipBmpSrc;
+                return _lastSubSelectedDateTime;
             }
             set {
-                if (_contentPreviewToolTipBmpSrc != value) {
-                    _contentPreviewToolTipBmpSrc = value;
-                    OnPropertyChanged(nameof(SubItemContentPreviewToolTipBmpSrc));
+                if (_lastSubSelectedDateTime != value) {
+                    _lastSubSelectedDateTime = value;
+                    OnPropertyChanged(nameof(LastSubSelectedDateTime));
                 }
             }
         }
@@ -568,13 +587,14 @@ namespace MpWpfApp {
             set {
                 if (_isSubSelected != value && 
                     (HostClipTileViewModel.IsExpanded || (IsSubSelected && value == false) || IsDragging)) {
+                //if (_isSubSelected != value) { 
                     _isSubSelected = value;
                     OnPropertyChanged(nameof(IsSubSelected));
                     OnPropertyChanged(nameof(IsEditingContent));
                     OnPropertyChanged(nameof(SubItemOverlayVisibility));
                     OnPropertyChanged(nameof(RtbListBoxItemBorderBrush));
                     OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
-                    OnPropertyChanged(nameof(RtbBorderBrush));
+                    OnPropertyChanged(nameof(RtbOverlayBorderBrush));
                     OnPropertyChanged(nameof(RtbPadding));
                     OnPropertyChanged(nameof(RtbListBoxItemCursor));
                     OnPropertyChanged(nameof(RtbPageWidth));
@@ -602,7 +622,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(RtbCanvasHeight));
                     OnPropertyChanged(nameof(RtbPageWidth));
                     OnPropertyChanged(nameof(RtbPageHeight));
-                    OnPropertyChanged(nameof(RtbBorderBrush));
+                    OnPropertyChanged(nameof(RtbOverlayBorderBrush));
                 }
             }
         }
@@ -841,7 +861,7 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(CopyItemRichText));
                     OnPropertyChanged(nameof(CopyItemPlainText));
                     OnPropertyChanged(nameof(CopyItemTitle));
-                    OnPropertyChanged(nameof(SubItemContentPreviewToolTipBmpSrc));
+                    OnPropertyChanged(nameof(CopyItemBmp));
                 }
             }
         }
@@ -864,13 +884,24 @@ namespace MpWpfApp {
                         //if(!IsSubSelected && IsEditingSubTitle) {
                         //    IsEditingSubTitle = false;
                         //}
-                        if(IsSubSelected && HostClipTileViewModel.IsExpanded) {
-                            foreach(var rtbvm in RichTextBoxViewModelCollection) {
-                                if(rtbvm != this) {
-                                    rtbvm.IsSubSelected = false;
-                                    rtbvm.IsEditingSubTitle = false;
+                        if(IsSubSelected) {
+                            if (HostClipTileViewModel.IsExpanded) {
+                                foreach (var rtbvm in RichTextBoxViewModelCollection) {
+                                    if (rtbvm != this) {
+                                        rtbvm.IsSubSelected = false;
+                                        rtbvm.IsEditingSubTitle = false;
+                                    }
                                 }
                             }
+                            if (HostClipTileViewModel.IsEditingTile) {
+                                HostClipTileViewModel.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(Rtb, false);
+                            }
+                            if (HostClipTileViewModel.IsPastingTemplate) {
+                                HostClipTileViewModel.PasteTemplateToolbarViewModel.InitWithRichTextBox(Rtb, false);
+                            }
+                            ResetRtb();
+
+                            LastSubSelectedDateTime = DateTime.Now;                            
                         } else if(HostClipTileViewModel.IsExpanded) {
                             // triggers set data in model which updates the preview
                             CopyItemRichText = Rtb.Document.ToRichText();
@@ -884,7 +915,9 @@ namespace MpWpfApp {
                                     rtbvm.IsSubHovering = false;
                                 }
                             }
+                            UpdateLayout();
                         }
+                        RichTextBoxViewModelCollection.OnPropertyChanged(nameof(RichTextBoxViewModelCollection.RtbListBoxHeight));
                         break;
                 }
             };
@@ -921,10 +954,21 @@ namespace MpWpfApp {
 
             #region Drag & Drop
             var mouseDownPosition = new Point();
-            int minDragDist = 10;
+            int minDragDist = 20;
+            Rtbc.PreviewMouseUp += (s, e9) => {
+                mouseDownPosition = new Point();
+                IsDragging = false;
+            };
             Rtbc.PreviewMouseLeftButtonDown += (s, e9) => {
-                mouseDownPosition = e9.GetPosition(Rtbc);
-                IsSubSelected = true;
+               // mouseDownPosition = e9.GetPosition(Rtbc);
+                //if(!MpHelpers.Instance.IsMultiSelectKeyDown()) {
+                //    RichTextBoxViewModelCollection.ClearSubSelection();
+                //} else if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
+
+                //} else if(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
+
+                //}
+                //IsSubSelected = true;
             };
             Rtbc.PreviewMouseMove += (s, e7) => {
                 //if (!IsCompositeChild) {
@@ -938,6 +982,9 @@ namespace MpWpfApp {
                     //if(!IsCompositeChild) {
                     //    return;
                     //}
+                    if(mouseDownPosition == new Point()) {
+                        mouseDownPosition = e7.GetPosition(Rtbc);
+                    }
                     if (MpHelpers.Instance.DistanceBetweenPoints(mouseDownPosition, e7.GetPosition(Rtbc)) < minDragDist) {
                         return;
                     }
@@ -1004,22 +1051,23 @@ namespace MpWpfApp {
             RtbcAdornerLayer.Add(new MpRichTextBoxOverlayAdorner(Rtbc));
 
             Rtbc.MouseEnter += (s, e2) => {
-                if(!MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle &&
-                   !IsSubSelected) {
-                    IsSubHovering = true;
-                }
-                
+                //if(!MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle &&
+                //   !IsSubSelected) {
+                //IsSubHovering = true;
+                //}
+                IsSubHovering = true;
             };
             Rtbc.MouseLeave += (s, e2) => {
-                if (!MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle &&
-                    !IsSubSelected) {
-                    IsSubHovering = false;
-                }
+                //if (!MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle &&
+                //    !IsSubSelected) {
+                //    IsSubHovering = false;
+                //}
+                IsSubHovering = false;
             };            
 
-            RtbListBoxItemClipBorder.MouseLeftButtonUp += (s, e4) => {
-                SelectItemCommand.Execute(null);
-            };
+            //RtbListBoxItemClipBorder.MouseLeftButtonUp += (s, e4) => {
+            //    SelectItemCommand.Execute(null);
+            //};
 
             RtbListBoxItemTitleTextBlock.PreviewMouseLeftButtonDown += (s, e7) => {
                 //RichTextBoxViewModelCollection.ClearSubSelection();
@@ -1081,31 +1129,38 @@ namespace MpWpfApp {
             //HostClipTileViewModel.ClipBorder.Width += widthDiff;            
         }
 
-        public void SetSelection(bool newSelection, bool isInitEdit, bool isInitPaste) {
-            //if(IsSubSelected == newSelection) {
-            //    return;
-            //}
-            //RichTextBoxViewModelCollection.ClearSubSelection();
-            IsSubSelected = newSelection;
-            if(IsSubSelected) {
-                if (isInitEdit) {
-                    HostClipTileViewModel.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(Rtb, isInitEdit);
-                    HostClipTileViewModel.EditTemplateToolbarViewModel.InitWithRichTextBox(Rtb);
-                } else if (isInitPaste) {
-                    HostClipTileViewModel.PasteTemplateToolbarViewModel.InitWithRichTextBox(Rtb, isInitPaste);
-                }
-
-                //Rtb.Focus();
-                //Rtb.ScrollToEnd();                
+        public void ResetRtb() {
+            if(Rtb == null) {
+                return;
             }
+            Rtb.ScrollToHome();
+            Rtb.CaretPosition = Rtb.Document.ContentStart;
+            Rtb.Selection.Select(Rtb.Document.ContentStart, Rtb.Document.ContentStart);
         }
+        //public void SetSelection(bool newSelection, bool isInitEdit, bool isInitPaste) {
+        //    //if(IsSubSelected == newSelection) {
+        //    //    return;
+        //    //}
+        //    //RichTextBoxViewModelCollection.ClearSubSelection();
+        //    IsSubSelected = newSelection;
+        //    if(IsSubSelected) {
+        //        if (isInitEdit) {
+        //            HostClipTileViewModel.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(Rtb, isInitEdit);
+        //            HostClipTileViewModel.EditTemplateToolbarViewModel.InitWithRichTextBox(Rtb);
+        //        } else if (isInitPaste) {
+        //            HostClipTileViewModel.PasteTemplateToolbarViewModel.InitWithRichTextBox(Rtb, isInitPaste);
+        //        }
+
+        //        //Rtb.Focus();
+        //        //Rtb.ScrollToEnd();                
+        //    }
+        //}
 
         public async Task<string> GetPastableRichText() {
             if (HasTemplate) {
                 TemplateRichText = string.Empty;
                 //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(RichTextBoxViewModelCollection.IndexOf(this),false);
                 
-
                 await Task.Run(() => {
                     while (string.IsNullOrEmpty(TemplateRichText)) {
                         System.Threading.Thread.Sleep(500);
@@ -1122,7 +1177,7 @@ namespace MpWpfApp {
 
         #region Hyperlinks
         public void ClearHyperlinks() {
-            var rtbSelection = Rtb.Selection;
+            var rtbSelection = Rtb?.Selection;
             var hlList = GetHyperlinkList();
             foreach (var hl in hlList) {
                 string linkText = string.Empty;
@@ -1142,6 +1197,9 @@ namespace MpWpfApp {
         }
 
         public void CreateHyperlinks() {
+            if(Rtb == null) {
+                return;
+            }
             var regExGroupList = new List<string> {
                 //WebLink
                 @"(?:https?://|www\.)\S+", 
@@ -1162,7 +1220,7 @@ namespace MpWpfApp {
             };
             //var docPlainText = new TextRange(Rtb.Document.ContentStart, Rtb.Document.ContentEnd).Text;
 
-            var rtbSelection = Rtb.Selection.Clone();
+            var rtbSelection = Rtb?.Selection.Clone();
             for (int i = 0; i < regExGroupList.Count; i++) {
                 var linkType = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);                
                 if (linkType == MpSubTextTokenType.StreetAddress) {
@@ -1316,7 +1374,10 @@ namespace MpWpfApp {
         }
 
         private List<Hyperlink> GetHyperlinkList() {
-            var rtbSelection = Rtb.Selection;
+            if(Rtb == null) {
+                return new List<Hyperlink>();
+            }
+            var rtbSelection = Rtb?.Selection;
             var hlList = new List<Hyperlink>();
             for (TextPointer position = Rtb.Document.ContentStart;
                 position != null && position.CompareTo(Rtb.Document.ContentEnd) <= 0;
@@ -1347,21 +1408,21 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        private RelayCommand _selectItemCommand;
-        public ICommand SelectItemCommand {
-            get {
-                if (_selectItemCommand == null) {
-                    _selectItemCommand = new RelayCommand(SelectItem, CanSelectItem);
-                }
-                return _selectItemCommand;
-            }
-        }
-        private bool CanSelectItem() {
-            return HostClipTileViewModel.IsExpanded && !MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle;
-        }
-        private void SelectItem() {
-            SetSelection(true, false, false);
-        }
+        //private RelayCommand _selectItemCommand;
+        //public ICommand SelectItemCommand {
+        //    get {
+        //        if (_selectItemCommand == null) {
+        //            _selectItemCommand = new RelayCommand(SelectItem, CanSelectItem);
+        //        }
+        //        return _selectItemCommand;
+        //    }
+        //}
+        //private bool CanSelectItem() {
+        //    return HostClipTileViewModel.IsExpanded && !MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle;
+        //}
+        //private void SelectItem() {
+        //    SetSelection(true, false, false);
+        //}
         #endregion
 
         #region Overrides

@@ -12,6 +12,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace MpWpfApp {
     public class MpEditTemplateToolbarViewModel : MpViewModelBase {
@@ -23,6 +24,8 @@ namespace MpWpfApp {
         private Brush _originalTemplateColor = Brushes.Pink;
 
         private Grid _borderGrid = null;
+
+        private bool _wasEdited = false;
         #endregion
 
         #region View Models        
@@ -72,7 +75,22 @@ namespace MpWpfApp {
 
         #region Properties       
 
-        #region Layout Properties
+        #region Controls
+        public TextBox SelectedTemplateNameTextBox { get; set; }
+        #endregion
+        #region Layout 
+        private double _editTemplateBorderCanvasTop = MpMeasurements.Instance.ClipTileContentHeight;
+        public double EditTemplateBorderCanvasTop {
+            get {
+                return _editTemplateBorderCanvasTop;
+            }
+            set {
+                if (_editTemplateBorderCanvasTop != value) {
+                    _editTemplateBorderCanvasTop = value;
+                    OnPropertyChanged(nameof(EditTemplateBorderCanvasTop));
+                }
+            }
+        }
 
         public double SelectedTemplateNameTextBoxBorderBrushThickness {
             get {
@@ -170,7 +188,8 @@ namespace MpWpfApp {
             //var rtb = rtbc.FindName("ClipTileRichTextBox") as RichTextBox;
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
             var titleSwirl = (Image)cb.FindName("TitleSwirl");
-            var tb = (TextBox)editTemplateToolbarBorder.FindName("TemplateNameEditorTextBox");
+
+            SelectedTemplateNameTextBox = (TextBox)editTemplateToolbarBorder.FindName("TemplateNameEditorTextBox");
 
             templateColorButton.Click += (s, e) => {
                 var colorMenuItem = new MenuItem();
@@ -198,63 +217,64 @@ namespace MpWpfApp {
                 colorContextMenu.IsOpen = true;
             };
 
-            tb.TextChanged += (s, e) => {
+            SelectedTemplateNameTextBox.TextChanged += (s, e) => {
+                _wasEdited = true;
                 if (SelectedTemplateHyperlinkViewModel != null) {
                     foreach (var thlvm in ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel) {
                         if (thlvm.CopyItemTemplateId == SelectedTemplateHyperlinkViewModel.CopyItemTemplateId) {
-                            thlvm.TemplateName = tb.Text;
+                            thlvm.TemplateName = SelectedTemplateNameTextBox.Text;
                         }
                     }
                     Validate();
                 }
             };
 
-            ClipTileViewModel.PropertyChanged += (s, e) => {
-                switch (e.PropertyName) {
-                    case nameof(ClipTileViewModel.IsEditingTemplate):
-                        double rtbBottomMax = ClipTileViewModel.TileContentHeight;
-                        double rtbBottomMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight;
+            //ClipTileViewModel.PropertyChanged += (s, e) => {
+            //    switch (e.PropertyName) {
+            //        case nameof(ClipTileViewModel.IsEditingTemplate):
+            //            double rtbBottomMax = ClipTileViewModel.TileContentHeight;
+            //            double rtbBottomMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight;
 
-                        double editTemplateToolbarTopMax = ClipTileViewModel.TileContentHeight;
-                        double editTemplateToolbarTopMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight + 5;
+            //            double editTemplateToolbarTopMax = ClipTileViewModel.TileContentHeight;
+            //            double editTemplateToolbarTopMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight + 5;
 
-                        if (ClipTileViewModel.IsEditingTemplate) {
-                            ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Visible;
-                        } else if (!Validate()) {
-                            //occurs if template name is invalid and user clicks away from app or tile
-                            CancelCommand.Execute(null);
-                        } else {
-                            OkCommand.Execute(null);
-                        }
+            //            if (ClipTileViewModel.IsEditingTemplate) {
+            //                ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Visible;
+            //            } else if (!Validate()) {
+            //                //occurs if template name is invalid and user clicks away from app or tile
+            //                CancelCommand.Execute(null);
+            //            } else {
+            //                OkCommand.Execute(null);
+            //            }
 
-                        MpHelpers.Instance.AnimateDoubleProperty(
-                            ClipTileViewModel.IsEditingTemplate ? rtbBottomMax : rtbBottomMin,
-                            ClipTileViewModel.IsEditingTemplate ? rtbBottomMin : rtbBottomMax,
-                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            new List<FrameworkElement> { rtb, rtblb },
-                            Canvas.BottomProperty,
-                            (s1, e44) => {
+            //            MpHelpers.Instance.AnimateDoubleProperty(
+            //                ClipTileViewModel.IsEditingTemplate ? rtbBottomMax : rtbBottomMin,
+            //                ClipTileViewModel.IsEditingTemplate ? rtbBottomMin : rtbBottomMax,
+            //                Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+            //                new List<FrameworkElement> { rtb, rtblb },
+            //                Canvas.BottomProperty,
+            //                (s1, e44) => {
 
-                            });
+            //                });
 
-                        MpHelpers.Instance.AnimateDoubleProperty(
-                            ClipTileViewModel.IsEditingTemplate ? editTemplateToolbarTopMax : editTemplateToolbarTopMin,
-                            ClipTileViewModel.IsEditingTemplate ? editTemplateToolbarTopMin : editTemplateToolbarTopMax,
-                            Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                            editTemplateToolbarBorder,
-                            Canvas.TopProperty,
-                            (s1, e44) => {
-                                if (!ClipTileViewModel.IsEditingTemplate) {
-                                    ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Collapsed;
-                                    ResetState();
-                                } else {
-                                    tb.Focus();
-                                    tb.SelectAll();
-                                }
-                            });
-                        break;
-                }
-            };
+            //            MpHelpers.Instance.AnimateDoubleProperty(
+            //                ClipTileViewModel.IsEditingTemplate ? editTemplateToolbarTopMax : editTemplateToolbarTopMin,
+            //                ClipTileViewModel.IsEditingTemplate ? editTemplateToolbarTopMin : editTemplateToolbarTopMax,
+            //                Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+            //                editTemplateToolbarBorder,
+            //                Canvas.TopProperty,
+            //                (s1, e44) => {
+            //                    if (!ClipTileViewModel.IsEditingTemplate) {
+            //                        ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Collapsed;
+            //                        ResetState();
+            //                    } else {
+            //                        tb.Focus();
+            //                        tb.SelectAll();
+            //                    }
+            //                });
+            //            break;
+            //    }
+            //};
 
             rtb.PreviewMouseLeftButtonDown += (s1, e1) => {
                 if (ClipTileViewModel.IsEditingTemplate) {
@@ -262,6 +282,57 @@ namespace MpWpfApp {
                     OkCommand.Execute(null);
                 }
             };
+        }
+        public void Resize(double deltaTemplateTop) {
+            EditTemplateBorderCanvasTop += deltaTemplateTop;
+
+            if (ClipTileViewModel.IsEditingTemplate) {
+                SelectedTemplateNameTextBox.Focus();
+                SelectedTemplateNameTextBox.SelectAll();
+            } else if (_wasEdited) {
+                ResetState();
+                if (!Validate()) {
+                    CancelCommand.Execute(null);
+                } else {
+                    OkCommand.Execute(null);
+                }
+            }
+        }
+
+        public void Animate(
+            double deltaTop,
+            double tt,
+            EventHandler onCompleted,
+            double fps = 30,
+            DispatcherPriority priority = DispatcherPriority.Render) {
+            double fromTop = EditTemplateBorderCanvasTop;
+            double toTop = fromTop + deltaTop;
+            double dt = (deltaTop / tt) / fps;
+
+            var timer = new DispatcherTimer(priority);
+            timer.Interval = TimeSpan.FromMilliseconds(fps);
+            timer.Tick += (s, e32) => {
+                if (MpHelpers.Instance.DistanceBetweenValues(EditTemplateBorderCanvasTop, toTop) > 0.5) {
+                    EditTemplateBorderCanvasTop += dt;
+                } else {
+                    timer.Stop();
+                    if (ClipTileViewModel.IsEditingTemplate) {
+                        SelectedTemplateNameTextBox.Focus();
+                        SelectedTemplateNameTextBox.SelectAll();
+                    } else if(_wasEdited) {
+                        ResetState();
+                        if (!Validate()) {
+                            CancelCommand.Execute(null);
+                        } else {
+                            OkCommand.Execute(null);
+                        }
+                    }
+                    if (onCompleted != null) {
+                        onCompleted.BeginInvoke(this, new EventArgs(), null, null);
+                    }
+                }
+            };
+            timer.Start();
         }
 
         public void SetTemplate(MpTemplateHyperlinkViewModel ttcvm, bool isEditMode) {
@@ -410,6 +481,9 @@ namespace MpWpfApp {
             return Validate();
         }
         private void Ok() {
+            if (SelectedTemplateHyperlinkViewModel == null) {
+                return;
+            }
             if(IsSelectedNewTemplate) {
                 ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.Add(SelectedTemplateHyperlinkViewModel);
             } else {

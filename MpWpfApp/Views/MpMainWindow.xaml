@@ -1355,6 +1355,7 @@
                                                     Height="{Binding TileBorderHeight}"
                                                     Visibility="{Binding TileVisibility, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
                                                     Focusable="True"
+                                                    AllowDrop="True"
                                                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                                     Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
@@ -1625,17 +1626,16 @@
                                             <!-- Content Container Canvas -->
                                             <Canvas x:Name="ClipTileContentCanvas"
                                                     Grid.Row="1"
-                                                    Grid.Column="0"
+                                                    Grid.Column="0"                                                    
                                                     ClipToBounds="True"
                                                     ToolTipService.InitialShowDelay="1000">
                                                 <!-- RichText Content -->
-                                                <Canvas x:Name="ClipTileRichTextBoxListBoxGridContainerCanvas"
-                                                        DataContext="{Binding RichTextBoxViewModelCollection}"
-                                                        Visibility="{Binding HostClipTileViewModel.RtbVisibility}"
-                                                        Height="{Binding RtbListBoxHeight}"
-                                                        Width="{Binding HostClipTileViewModel.TileContentWidth}">
+                                                <Canvas x:Name="ClipTileRichTextBoxListBoxGridContainerCanvas"   
+                                                        Visibility="{Binding RtbVisibility}"
+                                                        Height="{Binding RichTextBoxViewModelCollection.RtbListBoxHeight}"
+                                                        Width="{Binding TileContentWidth}">
                                                     <Border x:Name="ClipTileEditorToolbar"
-                                                            DataContext="{Binding HostClipTileViewModel}"
+                                                            Canvas.Top="{Binding EditRichTextBoxToolbarViewModel.EditBorderCanvasTop, Mode=TwoWay}"
                                                             Visibility="{Binding EditToolbarVisibility}"
                                                             Height="{Binding EditRichTextBoxToolbarHeight}"
                                                             BorderThickness="0,0,0,1"
@@ -1864,25 +1864,26 @@
                                                         </Button>-->
                                                         </StackPanel>
                                                     </Border>
-                                                    <Grid x:Name="ClipTileRichTextboxListBoxContainerGrid">
+                                                    <Grid x:Name="ClipTileRichTextboxListBoxContainerGrid"
+                                                          Height="{Binding RichTextBoxViewModelCollection.RtbListBoxHeight, Mode=TwoWay}"
+                                                          Canvas.Top="{Binding RichTextBoxViewModelCollection.RtblbCanvasTop, Mode=TwoWay}">
                                                         <AdornerDecorator>
                                                             <local:MpMultiSelectListBox x:Name="ClipTileRichTextBoxListBox"
-                                                                     BorderThickness="1"
-                                                                     BorderBrush="Pink"
-                                                                     SelectionMode="Extended"
-                                                                     AllowDrop="True"
-                                                                     IsSynchronizedWithCurrentItem="True"
-                                                                     Cursor="{Binding RtbListBoxCursor}"
-                                                                     Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
-                                                                     ItemsSource="{Binding}"
-                                                                     Focusable="True"
-                                                                     IsEnabled="True"
-                                                                     ScrollViewer.CanContentScroll="True"
-                                                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                                                     Width="{Binding HostClipTileViewModel.TileContentWidth}"
-                                                                     Height="{Binding RtbListBoxHeight}"
-                                                                     Padding="0">
+                                                                                        DataContext="{Binding RichTextBoxViewModelCollection}"
+                                                                                        BorderThickness="1"
+                                                                                        BorderBrush="Pink"
+                                                                                        SelectionMode="Extended"
+                                                                                        IsSynchronizedWithCurrentItem="True"
+                                                                                        Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
+                                                                                        ItemsSource="{Binding}"
+                                                                                        Focusable="True"
+                                                                                        IsEnabled="True"
+                                                                                        ScrollViewer.CanContentScroll="True"
+                                                                                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                                                                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                                                                        Width="{Binding HostClipTileViewModel.TileContentWidth}"
+                                                                                        Height="{Binding RtbListBoxHeight, Mode=TwoWay}"
+                                                                                        Padding="0">
                                                                 <i:Interaction.Triggers>
                                                                     <i:EventTrigger EventName="Loaded">
                                                                         <i:CallMethodAction TargetObject="{Binding}"
@@ -1909,7 +1910,7 @@
                                                                     <DataTemplate>
                                                                         <AdornerDecorator>
                                                                             <Canvas x:Name="RtbListBoxItemCanvas"
-                                                                                    DataContext="{Binding}"
+                                                                                    DataContext="{Binding}"                                                                                    
                                                                                     Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                                                     Width="{Binding RtbCanvasWidth}"
                                                                                     Height="{Binding RtbCanvasHeight}">
@@ -1920,9 +1921,6 @@
                                                                                     </i:EventTrigger>
                                                                                 </i:Interaction.Triggers>
                                                                                 <RichTextBox x:Name="RtbListBoxItemRichTextBox"
-                                                                                             Canvas.Left="0"
-                                                                                             Canvas.Top="0"
-                                                                                             BorderBrush="{Binding RtbBorderBrush}"
                                                                                              Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                                                              IsReadOnly="{Binding HostClipTileViewModel.IsRtbReadOnly}"
                                                                                              IsEnabled="True"
@@ -1940,7 +1938,7 @@
                                                                                              HorizontalAlignment="Left"
                                                                                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
                                                                                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                                                                             BorderThickness="1">
+                                                                                             BorderThickness="0">
                                                                                     <RichTextBox.Resources>
                                                                                         <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
                                                                                                          Color="Blue" />
@@ -1957,7 +1955,8 @@
                                                                                                     Height="{Binding RtbCanvasHeight}"
                                                                                                     Background="{Binding RtbListBoxItemBackgroundColor}"
                                                                                                     ToolTipService.InitialShowDelay="750"
-                                                                                                    BorderThickness="0"
+                                                                                                    BorderBrush="{Binding RtbOverlayBorderBrush}"
+                                                                                                    BorderThickness="1"
                                                                                                     CornerRadius="5">
                                                                                     <local:MpClipBorder.ToolTip>
                                                                                         <ToolTip Visibility="{Binding SubItemToolTipVisibility}"
@@ -2053,8 +2052,8 @@
                                                         </AdornerDecorator>
                                                     </Grid>
                                                     <Border x:Name="ClipTileEditTemplateToolbar"
-                                                            DataContext="{Binding HostClipTileViewModel}"
                                                             Visibility="{Binding EditTemplateToolbarVisibility}"
+                                                            Canvas.Top="{Binding EditTemplateToolbarViewModel.EditTemplateBorderCanvasTop, Mode=TwoWay}"                                                            
                                                             Height="{Binding EditTemplateToolbarHeight}"
                                                             CornerRadius="10,0,0,10"
                                                             BorderThickness="0"
@@ -2133,7 +2132,7 @@
                                                         </Grid>
                                                     </Border>
                                                     <Border x:Name="ClipTilePasteTemplateToolbar"
-                                                            DataContext="{Binding HostClipTileViewModel}"
+                                                            Canvas.Top="{Binding PasteTemplateToolbarViewModel.PasteTemplateBorderCanvasTop, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged,NotifyOnTargetUpdated=True}"
                                                             Height="{Binding PasteTemplateToolbarHeight}"
                                                             CornerRadius="5"
                                                             BorderThickness="0"

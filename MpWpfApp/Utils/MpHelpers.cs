@@ -1478,6 +1478,9 @@ namespace MpWpfApp {
             return Math.Sqrt(Math.Pow(b.X - a.X, 2) + Math.Pow(b.Y - a.Y, 2));
         }
 
+        public double DistanceBetweenValues(double a,double b) {
+            return Math.Abs(Math.Abs(b) - Math.Abs(a));
+        }
         public DoubleAnimation AnimateDoubleProperty(
             double from, 
             double to, 

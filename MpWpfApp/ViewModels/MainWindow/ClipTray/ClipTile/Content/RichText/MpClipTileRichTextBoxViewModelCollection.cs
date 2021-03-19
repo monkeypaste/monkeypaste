@@ -13,6 +13,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace MpWpfApp {
     public class MpClipTileRichTextBoxViewModelCollection : MpObservableCollectionViewModel<MpRtbListBoxItemRichTextBoxViewModel>, ICloneable,/* IDropTarget, */IDisposable {
@@ -137,6 +138,8 @@ namespace MpWpfApp {
         #region Controls
         public Canvas RtbListBoxCanvas { get; set; }
 
+        public Grid RtbContainerGrid { get; set; }
+
         public ListBox RichTextBoxListBox { get; set; }
 
         public AdornerLayer RtbLbAdornerLayer { get; set; }
@@ -147,20 +150,22 @@ namespace MpWpfApp {
 
         public Point DropRightPoint { get; set; }
 
-        public Cursor RtbListBoxCursor {
-            get {
-                if (HostClipTileViewModel == null) {
-                    return Cursors.Arrow;
-                }
-                if (IsCursorOnItemInnerEdge) {
-                    return Cursors.SizeNS;
-                }
-                return Cursors.Arrow;
-            }
-        }
         #endregion
 
         #region Layout
+        private double _rtblbCanvasTop = 0;
+        public double RtblbCanvasTop {
+            get {
+                return _rtblbCanvasTop;
+            }
+            set {
+                if(_rtblbCanvasTop != value) {
+                    _rtblbCanvasTop = value;
+                    OnPropertyChanged(nameof(RtblbCanvasTop));
+                }
+            }
+        }
+
         private double _rtbListBoxHeight = MpMeasurements.Instance.ClipTileContentHeight;
         public double RtbListBoxHeight {
             get {
@@ -180,7 +185,7 @@ namespace MpWpfApp {
                 if (HostClipTileViewModel.IsEditingTile) {
                     ch -= MpMeasurements.Instance.ClipTileEditToolbarHeight;
                 }
-                if (HostClipTileViewModel.IsPastingTemplateTile) {
+                if (HostClipTileViewModel.IsPastingTemplate) {
                     ch -= MpMeasurements.Instance.ClipTilePasteTemplateToolbarHeight;
                 }
                 if (HostClipTileViewModel.IsEditingTemplate) {
@@ -242,48 +247,10 @@ namespace MpWpfApp {
         #endregion
 
         #region Business Logic
-        //private int _loadCount = 0;
-        //public int LoadCount {
-        //    get {
-        //        return _loadCount;
-        //    }
-        //    set {
-        //        if(_loadCount != value) {
-        //            _loadCount = value;
-        //            OnPropertyChanged(nameof(LoadCount));
-        //        }
-        //    }
-        //}
         #endregion
 
         #region State
-        public bool IsDropping { get; set; } = false;
-
-        public bool IsAnyDragging {
-            get {
-                return this.Any(x => x.IsDragging);
-            }
-        }
-
-        public bool IsAnyOverDragButton {
-            get {
-                return this.Any(x => x.IsOverDragButton);
-            }
-        }
-
-        private bool _isCursorOnItemInnerEdge = false;
-        public bool IsCursorOnItemInnerEdge {
-            get {
-                return _isCursorOnItemInnerEdge;
-            }
-            set {
-                if (_isCursorOnItemInnerEdge != value) {
-                    _isCursorOnItemInnerEdge = value;
-                    OnPropertyChanged(nameof(IsCursorOnItemInnerEdge));
-                    OnPropertyChanged(nameof(RtbListBoxCursor));
-                }
-            }
-        }
+        
         #endregion
 
         #endregion
@@ -302,15 +269,16 @@ namespace MpWpfApp {
         
         public void ClipTileRichTextBoxViewModelCollection_Loaded(object sender, RoutedEventArgs args) {
             RichTextBoxListBox = (ListBox)sender;
+            RtbContainerGrid = RichTextBoxListBox.GetVisualAncestor<Grid>();
             RtbListBoxCanvas = RichTextBoxListBox.GetVisualAncestor<Canvas>();
 
             RichTextBoxListBox.RequestBringIntoView += (s, e65) => { e65.Handled = true; };
             
-            RichTextBoxListBox.SelectionChanged += (s, e4) => {
-                OnPropertyChanged(nameof(SubSelectedRtbvmList));
-                OnPropertyChanged(nameof(SubSelectedRtbvm));
-                OnPropertyChanged(nameof(SubSelectedRtb));
-            };
+            //RichTextBoxListBox.SelectionChanged += (s, e4) => {
+            //    OnPropertyChanged(nameof(SubSelectedRtbvmList));
+            //    OnPropertyChanged(nameof(SubSelectedRtbvm));
+            //    OnPropertyChanged(nameof(SubSelectedRtb));
+            //};
 
             //after pasting template rtb's are duplicated so clear them upon refresh
             if (HostClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
@@ -321,110 +289,30 @@ namespace MpWpfApp {
                 }
                 this.Sort(x => x.CompositeSortOrderIdx);
             }
+            
 
-            #region Drag/Drop
-            RichTextBoxListBox.MouseEnter += (s3, e5) => {
-                if(MainWindowViewModel.ClipTrayViewModel.IsAnyDragging) {
-                    Console.WriteLine("Yo");
-                }
-            };
-            HostClipTileViewModel.ClipBorder.DragLeave += (s2, e1) => {
-                //IsDropping = false;
-                IsDropping = false;
-                RtbLbAdornerLayer.Update();
-            };
-            HostClipTileViewModel.ClipBorder.PreviewDragOver += (s2, e1) => {
-                //e1.Effects = DragDropEffects.None;
-                IsDropping = false;
-                RtbLbAdornerLayer.Update();
-                if (HostClipTileViewModel.IsDragging || IsAnyDragging) {
-                    return;
-                }
-                if (e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName)) {
-                    var dctvml = (List<MpClipTileViewModel>)e1.Data.GetData(Properties.Settings.Default.ClipTileDragDropFormatName);
-                    if (dctvml != null) {
-                        //foreach (var dctvm in dctvml) {
-                        //    if(dctvm.RichTextBoxViewModelCollection == this) {
-                        //        return;
-                        //    }
-                        //}
-                    } else {
-                        return;
-                    }
-                } else if (e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileSubItemDragDropFormat)) {
-                    var drtbvml = (List<MpRtbListBoxItemRichTextBoxViewModel>)e1.Data.GetData(Properties.Settings.Default.ClipTileSubItemDragDropFormat);
-                    if (drtbvml == null) {
-                        return;
-                    }
-                } else {
-                    return;
-                }
-                
-                int overIdx = GetClosestItemIdx(e1.GetPosition(RichTextBoxListBox));
-                if (overIdx >= 0) {
-                    var overRect = this[overIdx].ItemRect;
-                    double overMidY = overRect.Top + (overRect.Height / 2);
-                    if (e1.GetPosition(RichTextBoxListBox).Y > overMidY) {
-                        DropLeftPoint = overRect.BottomLeft;
-                        DropRightPoint = overRect.BottomRight;
-
-                    } else {
-                        DropLeftPoint = overRect.TopLeft;
-                        DropRightPoint = overRect.TopRight;
-                    }
-                    IsDropping = true;
-                    e1.Effects = DragDropEffects.Move;
-                    e1.Handled = true;
-                }
-
-                RtbLbAdornerLayer.Update();
-            };
-
-            HostClipTileViewModel.ClipBorder.PreviewDrop += (s3, e2) => {
-                bool wasDropped = false;
-                List<MpCopyItem> dcil = new List<MpCopyItem>();
-                if (e2.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName)) {
-                    var dctvml = (List<MpClipTileViewModel>)e2.Data.GetData(Properties.Settings.Default.ClipTileDragDropFormatName);
-                    if (dctvml != null) {
-                        foreach(var dctvm in dctvml) {
-                            dcil.Add(dctvm.CopyItem);
-                        }
-                    }
-                } else if (e2.Data.GetDataPresent(Properties.Settings.Default.ClipTileSubItemDragDropFormat)) {
-                    var drtbvml = (List<MpRtbListBoxItemRichTextBoxViewModel>)e2.Data.GetData(Properties.Settings.Default.ClipTileSubItemDragDropFormat);
-                    if (drtbvml != null) {
-                        foreach (var drtbvm in drtbvml) {
-                            dcil.Add(drtbvm.CopyItem);
-                        }
-                    }
-                }
-                if (dcil != null && dcil.Count > 0) {
-                    int dropIdx = GetClosestItemIdx(e2.GetPosition(RichTextBoxListBox));
-                    if (dropIdx >= 0) {
-                        var overRect = this[dropIdx].ItemRect;
-                        double overMidY = overRect.Top + (overRect.Height / 2);
-                        if (e2.GetPosition(RichTextBoxListBox).Y > overMidY) {
-                            dropIdx++;
+            RichTextBoxListBox.SelectionChanged += (s, e8) => {
+                if (SubSelectedRtbvmList.Count > 1) {
+                    //order selected tiles by ascending datetime 
+                    var subSelectedRtbvmListBySelectionTime = SubSelectedRtbvmList.OrderBy(x => x.LastSubSelectedDateTime).ToList();
+                    foreach (var srtbvm in subSelectedRtbvmListBySelectionTime) {
+                        if (srtbvm == subSelectedRtbvmListBySelectionTime[0]) {
+                            srtbvm.IsPrimarySubSelected = true;
                         } else {
-                            
+                            srtbvm.IsPrimarySubSelected = false;
                         }
-                        for (int i = 0; i < dcil.Count; i++) {
-                            HostClipTileViewModel.MergeClip(dcil[i],dropIdx);                            
-                        }
-                        UpdateSortOrder(true);
-                        wasDropped = true;
+                    }
+                } else if (SubSelectedRtbvmList.Count == 1) {
+                    SubSelectedRtbvmList[0].IsPrimarySubSelected = false;
+                }
+
+                foreach (var osctvm in e8.RemovedItems) {
+                    if (osctvm.GetType() == typeof(MpRtbListBoxItemRichTextBoxViewModel)) {
+                        ((MpRtbListBoxItemRichTextBoxViewModel)osctvm).IsSubSelected = false;
+                        ((MpRtbListBoxItemRichTextBoxViewModel)osctvm).IsPrimarySubSelected = false;
                     }
                 }
-                if (!wasDropped) {
-                    e2.Effects = DragDropEffects.None;
-                    e2.Handled = true;
-                } else {
-                    e2.Handled = true;
-                }
-                IsDropping = false;
-                RtbLbAdornerLayer.Update();
             };
-            #endregion
 
             RtbLbAdornerLayer = AdornerLayer.GetAdornerLayer(RichTextBoxListBox);
             RtbLbAdornerLayer.Add(new MpRichTextBoxListBoxOverlayAdorner(RichTextBoxListBox));
@@ -511,20 +399,20 @@ namespace MpWpfApp {
             var border = (Border)VisualTreeHelper.GetChild(rtblb, 0);
             var sv = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
 
-            //if(HostClipTileViewModel.IsExpanded) {
-            //    if (RelativeWidthMax > RichTextBoxListBox.ActualWidth) {
-            //        sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
-            //    } else {
-            //        sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //    }
+            if (HostClipTileViewModel.IsExpanded) {
+                if (RelativeWidthMax > RichTextBoxListBox.ActualWidth) {
+                    sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Visible;
+                } else {
+                    sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                }
 
-            //    if (TotalItemHeight > RichTextBoxListBox.ActualHeight - HostClipTileViewModel.EditRichTextBoxToolbarHeight) {
-            //        sv.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-            //    }
-            //} else {
-            //    sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //    sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //}
+                if (TotalItemHeight > RichTextBoxListBox.ActualHeight - HostClipTileViewModel.EditRichTextBoxToolbarHeight) {
+                    sv.VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+                }
+            } else {
+                sv.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                sv.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            }
 
             //sv.Height = TotalItemHeight;
             //sv.UpdateLayout();
@@ -580,80 +468,146 @@ namespace MpWpfApp {
             }
             
         }
-        public void AnimateItems(
-            double fromWidth,double toWidth, 
-            double fromHeight, double toHeight,
-            double fromTop, double toTop,
-            double fromBottom, double toBottom, 
-            double animMs) {
-            if(toWidth > 0) {
-                foreach (var rtbvm in this) {
-                    MpHelpers.Instance.AnimateDoubleProperty(
-                            fromWidth,
-                            toWidth,
-                            animMs,
-                            new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
-                            FrameworkElement.WidthProperty,
-                            (s1, e44) => {
-                                rtbvm.UpdateLayout();
-                            });
-                }
-            }
-            if (toHeight > 0) {
-                //double heightDiff = toHeight - fromHeight;
-                foreach (var rtbvm in this) {
-                    MpHelpers.Instance.AnimateDoubleProperty(
-                            rtbvm.Rtbc.ActualHeight,
-                            rtbvm.RtbCanvasHeight + rtbvm.RtbPadding.Top + rtbvm.RtbPadding.Bottom,
-                            animMs,
-                            new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
-                            FrameworkElement.HeightProperty,
-                            (s1, e44) => {
-                                rtbvm.UpdateLayout();
-                                if(!HostClipTileViewModel.IsExpanded) {
-                                    rtbvm.IsEditingContent = false;
-                                    rtbvm.IsSubSelected = false;
-                                    rtbvm.IsSubHovering = false;
-                                    rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemOverlayVisibility));
-                                }
-                            });
-                }
-            }
-            if (toTop > 0) {
-                foreach(var rtbvm in this) {
-                    MpHelpers.Instance.AnimateDoubleProperty(
-                            fromTop,
-                            toTop,
-                            animMs,
-                            new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
-                            Canvas.TopProperty,
-                            (s1, e44) => {
+        public void Resize(double deltaTop,double deltaContentHeight) {
+            RtblbCanvasTop += deltaTop;
+            Canvas.SetTop(RtbContainerGrid, RtblbCanvasTop);
+            RtbListBoxHeight += deltaContentHeight;
+            UpdateLayout();
+        }
+        public void Animate(
+            double deltaTop, 
+            double deltaHeight, 
+            double tt, 
+            EventHandler onCompleted, 
+            double fps = 30,
+            DispatcherPriority priority = DispatcherPriority.Render) {
+            double fromTop = RtblbCanvasTop;
+            double toTop = fromTop + deltaTop;
+            double dt = (deltaTop / tt) / fps;
 
-                            });
-                    fromTop += rtbvm.RtbCanvasHeight;
-                    toTop += rtbvm.RtbCanvasHeight;
-                }
-            }
-            if (toBottom > 0) {
+            double fromHeight = RtbListBoxHeight;
+            double toHeight = fromHeight + deltaHeight;
+            double dh = (deltaHeight / tt) / fps;
 
-            }
+            var timer = new DispatcherTimer(priority);
+            timer.Interval = TimeSpan.FromMilliseconds(fps);
+            timer.Tick += (s, e32) => {
+                bool isTopDone = false;
+                bool isHeightDone = false;
+                if (MpHelpers.Instance.DistanceBetweenValues(RtblbCanvasTop, toTop) > 0.5) {
+                    RtblbCanvasTop += dt;
+                    Canvas.SetTop(RtbContainerGrid, RtblbCanvasTop);
+                } else {
+                    isTopDone = true;
+                }
+
+                if (MpHelpers.Instance.DistanceBetweenValues(RtbListBoxHeight, toHeight) > 0.5) {
+                    RtbListBoxHeight += dh;
+                    //foreach (var rtbvm in this) {
+                    //    rtbvm.OnPropertyChanged(nameof(rtbvm.RtbCanvasHeight));
+                    //    rtbvm.OnPropertyChanged(nameof(rtbvm.RtbHeight));
+                    //    rtbvm.OnPropertyChanged(nameof(rtbvm.RtbPageHeight));
+                    //}
+                } else {
+                    isHeightDone = true;
+                }
+                if (isTopDone && isHeightDone) {
+                    timer.Stop();
+                    UpdateLayout();
+                    if(onCompleted != null) {
+                        onCompleted.BeginInvoke(this, new EventArgs(), null, null);
+                    }
+                }
+            };
+            timer.Start();
         }
 
-        public void SelectRichTextBoxViewModel(int idx, bool isInitEdit, bool isInitPaste) {
-            if(idx < 0 || idx >= this.Count/* || this[idx].IsSubSelected*/) {
-                return;
-            }
-            for (int i = 0; i < this.Count; i++) {
-                this[i].SetSelection(i == idx,isInitEdit, isInitPaste);
-            }
-        }
+        //public void AnimateItems(
+        //    double fromWidth,double toWidth, 
+        //    double fromHeight, double toHeight,
+        //    double fromTop, double toTop,
+        //    double fromBottom, double toBottom, 
+        //    double animMs) {
+        //    if(toWidth > 0) {
+        //        foreach (var rtbvm in this) {
+        //            if(rtbvm.Rtbc == null) {
+        //                //not sure why theres nulls here, maybe happens when there's more items than can be visible
+        //                continue;
+        //            }
+        //            MpHelpers.Instance.AnimateDoubleProperty(
+        //                    fromWidth,
+        //                    toWidth,
+        //                    animMs,
+        //                    new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
+        //                    FrameworkElement.WidthProperty,
+        //                    (s1, e44) => {
+        //                        rtbvm.UpdateLayout();
+        //                    });
+        //        }
+        //    }
+        //    if (toHeight > 0) {
+        //        //double heightDiff = toHeight - fromHeight;
+        //        foreach (var rtbvm in this) {
+        //            if (rtbvm.Rtbc == null) {
+        //                //not sure why theres nulls here, maybe happens when there's more items than can be visible
+        //                continue;
+        //            }
+        //            MpHelpers.Instance.AnimateDoubleProperty(
+        //                    rtbvm.Rtbc.ActualHeight,
+        //                    rtbvm.RtbCanvasHeight + rtbvm.RtbPadding.Top + rtbvm.RtbPadding.Bottom,
+        //                    animMs,
+        //                    new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
+        //                    FrameworkElement.HeightProperty,
+        //                    (s1, e44) => {
+        //                        rtbvm.UpdateLayout();
+        //                        if(!HostClipTileViewModel.IsExpanded) {
+        //                            rtbvm.IsEditingContent = false;
+        //                            rtbvm.IsSubSelected = false;
+        //                            rtbvm.IsSubHovering = false;
+        //                            rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemOverlayVisibility));
+        //                        }
+        //                    });
+        //        }
+        //    }
+        //    if (toTop > 0) {
+        //        foreach(var rtbvm in this) {
+        //            if (rtbvm.Rtbc == null) {
+        //                //not sure why theres nulls here, maybe happens when there's more items than can be visible
+        //                continue;
+        //            }
+        //            MpHelpers.Instance.AnimateDoubleProperty(
+        //                    fromTop,
+        //                    toTop,
+        //                    animMs,
+        //                    new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
+        //                    Canvas.TopProperty,
+        //                    (s1, e44) => {
 
-        public void SelectRichTextBoxViewModel(MpRtbListBoxItemRichTextBoxViewModel rtbvm, bool isInitEdit, bool isInitPaste) {
-            if(!this.Contains(rtbvm)) {
-                return;
-            }
-            SelectRichTextBoxViewModel(this.IndexOf(rtbvm),isInitEdit, isInitPaste);
-        }
+        //                    });
+        //            fromTop += rtbvm.RtbCanvasHeight;
+        //            toTop += rtbvm.RtbCanvasHeight;
+        //        }
+        //    }
+        //    if (toBottom > 0) {
+
+        //    }
+        //}
+
+        //public void SelectRichTextBoxViewModel(int idx, bool isInitEdit, bool isInitPaste) {
+        //    if(idx < 0 || idx >= this.Count/* || this[idx].IsSubSelected*/) {
+        //        return;
+        //    }
+        //    for (int i = 0; i < this.Count; i++) {
+        //        this[i].SetSelection(i == idx,isInitEdit, isInitPaste);
+        //    }
+        //}
+
+        //public void SelectRichTextBoxViewModel(MpRtbListBoxItemRichTextBoxViewModel rtbvm, bool isInitEdit, bool isInitPaste) {
+        //    if(!this.Contains(rtbvm)) {
+        //        return;
+        //    }
+        //    SelectRichTextBoxViewModel(this.IndexOf(rtbvm),isInitEdit, isInitPaste);
+        //}
 
         public void ClearSubSelection() {
             foreach(var rtbvm in this) {
@@ -668,7 +622,10 @@ namespace MpWpfApp {
         public void ResetSubSelection() {
             ClearSubSelection();
             if(this.Count > 0) {
-                this[0].SetSelection(true,false, false);
+                this[0].IsSubSelected = true;
+                if(RichTextBoxListBox != null) {
+                    ((ListBoxItem)RichTextBoxListBox.ItemContainerGenerator.ContainerFromItem(this[0]))?.Focus();
+                }
             }
         }
 
@@ -699,25 +656,7 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Private Methods
-        private int GetClosestItemIdx(Point mp) {
-            double mdy = mp.Y;
-            double minDist = double.MaxValue;
-            int dropIdx = 0;
-            foreach (var rtbvm in this) {
-                //var lbi = (ListBoxItem)RichTextBoxListBox.ItemContainerGenerator.ContainerFromItem(rtbvm);
-                double lbity = rtbvm.ItemRect.Top;//lbi.TranslatePoint(new Point(0.0, 0.0), RichTextBoxListBox).Y;
-                double lbiby = rtbvm.ItemRect.Bottom;//lbi.TranslatePoint(new Point(rtbvm.Rtbc.ActualHeight, 0), RichTextBoxListBox).Y;
-                double tDist = Math.Abs(mdy - lbity);
-                double bDist = Math.Abs(mdy - lbiby);
-                double dist = Math.Min(tDist, bDist);
-                if (dist < minDist) {
-                    minDist = dist;
-                    dropIdx = this.IndexOf(rtbvm);
-                }
-            }
-            return dropIdx;
-        }
+        #region Private Methods       
 
         private MpEventEnabledFlowDocument GetFullDocument() {
             var fullDocument = string.Empty.ToRichText().ToFlowDocument();

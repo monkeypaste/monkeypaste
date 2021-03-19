@@ -496,7 +496,7 @@ namespace MpWpfApp {
                                 //and reseting tile state
                                 sctvm.TileVisibility = Visibility.Visible;
                                 sctvm.TemplateRichText = string.Empty;
-                                sctvm.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
+                                //sctvm.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
                                 foreach (var rtbvm in sctvm.RichTextBoxViewModelCollection) {
                                     rtbvm.TemplateRichText = string.Empty;
                                 }

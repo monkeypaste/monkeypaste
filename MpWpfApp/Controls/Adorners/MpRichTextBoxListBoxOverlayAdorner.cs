@@ -34,7 +34,7 @@ namespace MpWpfApp {
 
             l.Y += 0;
             r.Y -= 0;
-            if (rtbvmc.IsDropping) {
+            if (rtbvmc.HostClipTileViewModel.IsDropping) {
                 drawingContext.DrawLine(redPen, l, r);
             }
         }
