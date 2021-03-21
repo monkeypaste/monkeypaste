@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +13,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+
         #region State
         public bool IsNew {
             get {
@@ -25,6 +27,15 @@ namespace MpWpfApp {
                     return false;
                 }
                 return Tag.TagId == 1 || Tag.TagId == 2;
+            }
+        }
+
+        public bool IsRecentTag {
+            get {
+                if(Tag == null) {
+                    return false;
+                }
+                return Tag.TagId == 2;
             }
         }
 
@@ -346,6 +357,20 @@ namespace MpWpfApp {
             bool isNewLink = Tag.LinkWithCopyItem(ctvm.CopyItem);
             if(isNewLink || forceCountUpdate) {
                 TagClipCount++;
+            }
+            if(IsRecentTag && TagClipCount > Properties.Settings.Default.MaxRecentClipItems) {
+                var rctvml = new List<MpClipTileViewModel>();
+                foreach(var ctvml in MainWindowViewModel.ClipTrayViewModel) {
+                    if(IsLinkedWithClipTile(ctvm)) {
+                        rctvml.Add(ctvml);
+                    }
+                }
+                rctvml.OrderBy(x => x.CopyItemCreatedDateTime);
+                int itemsToRemoveCount = TagClipCount - Properties.Settings.Default.MaxRecentClipItems;
+                for (int i = 0; i < itemsToRemoveCount; i++) {
+                    Tag.UnlinkWithCopyItem(rctvml[i].CopyItem);
+                    TagClipCount--;
+                }
             }
         }
 

@@ -313,5 +313,8 @@
     <Setting Name="ClipTileSubItemDragDropFormat" Type="System.String" Scope="Application">
       <Value Profile="(Default)">MpClipSubItemDragDropFormat</Value>
     </Setting>
+    <Setting Name="MaxRecentClipItems" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">25</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

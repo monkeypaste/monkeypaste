@@ -1932,7 +1932,7 @@
                                                                                              Width="{Binding RtbWidth}"
                                                                                              Height="{Binding RtbHeight}"
                                                                                              Padding="{Binding RtbPadding}"
-                                                                                             local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText, UpdateSourceTrigger=LostFocus}"
+                                                                                             local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText, UpdateSourceTrigger=LostFocus,NotifyOnSourceUpdated=True}"
                                                                                              IsUndoEnabled="True"
                                                                                              VerticalAlignment="Top"
                                                                                              HorizontalAlignment="Left"

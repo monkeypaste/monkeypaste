@@ -46,6 +46,11 @@ namespace MpWpfApp {
             GetHistoryTagTileViewModel().IsSelected = true;
         }
 
+        public void AddClipToSudoTags(MpClipTileViewModel ctvm) {
+            GetHistoryTagTileViewModel().AddClip(ctvm);
+            GetRecentTagTileViewModel().AddClip(ctvm);
+        }
+
         public void RefreshAllCounts() {
             foreach(var ttvm in this) {
                 ttvm.TagClipCount = 0;

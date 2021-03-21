@@ -10,8 +10,38 @@ using System.Windows.Data;
 using System.Windows.Input;
 
 namespace MpWpfApp {
-    public class MpObservableCollection<T> : ObservableCollection<T> {
+    
+public class MpObservableCollection<T> : ObservableCollection<T> {
         private object _ItemsLock = new object();
+        public override event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        public new void Add(T element) {
+            base.Add(element);
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add,element,0));
+        }
+        public new void Insert(int idx, T element) {
+            base.Insert(idx,element);
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add,element,idx));
+        }
+        public new void Clear() {
+            base.Clear();
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
+        public new void Remove(T element) {
+            int removedIdx = this.IndexOf(element);
+            base.Remove(element);
+            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,element,removedIdx));
+        }
+
+        public new void Move(int oldIdx,int newIdx) {
+            //var changedItems = new List<T> { this[oldIdx], this[newIdx] };
+            //base.Move(oldIdx, newIdx);
+            //CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move,changedItems,newIdx,oldIdx));
+            var movedItem = this[oldIdx];
+            this.Remove(movedItem);
+            this.Insert(newIdx, movedItem);
+        }
 
         public MpObservableCollection() : base() {
             BindingOperations.EnableCollectionSynchronization(this, _ItemsLock);
@@ -22,9 +52,10 @@ namespace MpWpfApp {
         public MpObservableCollection(IEnumerable<T> collection) : base(collection) {
             BindingOperations.EnableCollectionSynchronization(this, _ItemsLock);
         }
-        public void OnCollectionChanged() {
-            base.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-        }
+
+        //public override void OnCollectionChanged(NotifyCollectionChangedEventArgs args) {
+        //    base.OnCollectionChanged(args);
+        //}
     }
     public class MpObservableCollectionViewModel<T> : MpObservableCollection<T> {
         public MpMainWindowViewModel MainWindowViewModel {
@@ -144,6 +175,4 @@ namespace MpWpfApp {
         }
         #endregion
     }
-
-
 }

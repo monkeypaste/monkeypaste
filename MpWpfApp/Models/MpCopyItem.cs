@@ -520,15 +520,20 @@ namespace MpWpfApp {
                         case MpCopyItemType.Composite:
                             compositeItem = toItem;
                             foreach (var occi in fromItem.CompositeItemList) {
+                                //take composite items from fromItem 
                                 occi.CompositeParentCopyItemId = compositeItem.CopyItemId;
                                 occi.CompositeSortOrderIdx = compositeItem.CompositeItemList.Count;
                                 if(forceIdx < 0) {
+                                    //and add them to the end of the toItem ny default
                                     compositeItem.CompositeItemList.Add(occi);
                                 } else {
+                                    //otherwise insert them at the forcedidx
                                     compositeItem.CompositeItemList.Insert(forceIdx, occi);
                                 }
                             }
                             if (forceIdx >= 0) {
+                                //if inserted and not added reloop through items and
+                                //ensure their sort order matches their index
                                 foreach (var cci in compositeItem.CompositeItemList) {
                                     cci.CompositeSortOrderIdx = compositeItem.CompositeItemList.IndexOf(cci);
                                 }
@@ -652,22 +657,17 @@ namespace MpWpfApp {
         }
         public object GetData() {
             return _itemData;
-        }
+        }        
 
-        public void UnlinkFromCompositeParent() {
-            if(!IsSubCompositeItem) {
+        public void UnlinkCompositeChild(MpCopyItem cci) {
+            if (!IsCompositeParent || !CompositeItemList.Contains(cci)) {
                 return;
             }
-            MpDb.Instance.ExecuteWrite(
-                "delete from MpCompositeCopyItem where fk_MpCopyItemId=@ciid",
-                new System.Collections.Generic.Dictionary<string, object> {
-                        { "@ciid", CopyItemId }
-                    });
-            CompositeCopyItemId = 0;
-            CompositeParentCopyItemId = -1;
-            CompositeSortOrderIdx = -1;
+            cci.UnlinkFromCompositeParent();
+            CompositeItemList.Remove(cci);
             WriteToDatabase();
-    }
+        }
+
         public string GetDetail(MpCopyItemDetailType detailType) {
             string info = "I dunno";// string.Empty;
             switch (detailType) {
@@ -940,7 +940,21 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-        
+        private void UnlinkFromCompositeParent() {
+            if (!IsSubCompositeItem) {
+                return;
+            }
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpCompositeCopyItem where fk_MpCopyItemId=@ciid",
+                new System.Collections.Generic.Dictionary<string, object> {
+                        { "@ciid", CopyItemId }
+                    });
+            CompositeCopyItemId = 0;
+            CompositeParentCopyItemId = -1;
+            CompositeSortOrderIdx = -1;
+            WriteToDatabase();
+        }
+
         private void UpdateItemData() {
             switch (CopyItemType) {
                 case MpCopyItemType.FileList:

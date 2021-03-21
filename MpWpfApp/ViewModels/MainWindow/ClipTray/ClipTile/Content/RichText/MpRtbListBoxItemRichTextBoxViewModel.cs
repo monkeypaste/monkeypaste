@@ -113,8 +113,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Layout
-        
-
         public Rect ItemRect {
             get {
                 if (RichTextBoxViewModelCollection != null && 
@@ -672,10 +670,11 @@ namespace MpWpfApp {
 
         public bool IsCompositeChild {
             get {
-                if(HostClipTileViewModel == null) {
+                if(CopyItem == null) {
                     return false;
                 }
-                return RichTextBoxViewModelCollection.Count > 1;
+                //return RichTextBoxViewModelCollection.Count > 1;
+                return CopyItem.IsSubCompositeItem;
             }
         }
         #endregion
@@ -959,29 +958,8 @@ namespace MpWpfApp {
                 mouseDownPosition = new Point();
                 IsDragging = false;
             };
-            Rtbc.PreviewMouseLeftButtonDown += (s, e9) => {
-               // mouseDownPosition = e9.GetPosition(Rtbc);
-                //if(!MpHelpers.Instance.IsMultiSelectKeyDown()) {
-                //    RichTextBoxViewModelCollection.ClearSubSelection();
-                //} else if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) {
-
-                //} else if(Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
-
-                //}
-                //IsSubSelected = true;
-            };
             Rtbc.PreviewMouseMove += (s, e7) => {
-                //if (!IsCompositeChild) {
-                //    return;
-                //}
-                //IsDragging = false;
-                //if (MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded || !IsOverDragButton) {
-                //    return;
-                //}
                 if (e7.MouseDevice.LeftButton == MouseButtonState.Pressed) {
-                    //if(!IsCompositeChild) {
-                    //    return;
-                    //}
                     if(mouseDownPosition == new Point()) {
                         mouseDownPosition = e7.GetPosition(Rtbc);
                     }
@@ -1102,18 +1080,16 @@ namespace MpWpfApp {
                 if (e5.Key == Key.Enter || e5.Key == Key.Escape) {
                     IsEditingSubTitle = false;
                 }
-            };            
-            
-            OnPropertyChanged(nameof(SubItemOverlayVisibility));
-            
-            OnPropertyChanged(nameof(RtbPadding));
-            OnPropertyChanged(nameof(RtbHeight));
-            OnPropertyChanged(nameof(RtbCanvasHeight));
+            };
+
+            UpdateLayout();
         }
 
         public void UpdateLayout() {
+            OnPropertyChanged(nameof(SubItemOverlayVisibility));
             OnPropertyChanged(nameof(RtbPadding));
-            OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
+            OnPropertyChanged(nameof(RtbHeight));
+            OnPropertyChanged(nameof(RtbCanvasHeight));
             Rtb.Document.PageWidth = RtbPageWidth;
             Rtb.Document.PageHeight = RtbPageHeight;
 
@@ -1427,7 +1403,9 @@ namespace MpWpfApp {
 
         #region Overrides
         public void Dispose() {
-            //RichTextBoxViewModelCollection.LoadCount--;
+            if(RichTextBoxViewModelCollection.Contains(this)) {
+                RichTextBoxViewModelCollection.Remove(this);
+            }
         }
         #endregion
     }

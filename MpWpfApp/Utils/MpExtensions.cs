@@ -29,7 +29,7 @@ namespace MpWpfApp {
         }
 
         public static void Sort<TSource, TKey>(
-            this IList<TSource> source, 
+            this MpObservableCollection<TSource> source, 
             Func<TSource, TKey> keySelector, 
             bool desc = false) where TSource : class {
             if (source == null) {
@@ -42,20 +42,11 @@ namespace MpWpfApp {
                     TSource o1 = source[j - 1];
                     TSource o2 = source[j];
                     int comparison = comparer.Compare(keySelector(o1), keySelector(o2));
-                    //(source as IEditableCollectionView).EditItem(o1);
-                    //(source as IEditableCollectionView).EditItem(o2);
                     if (desc && comparison < 0) {
-                        //var temp = source[j];
-                        //source.RemoveAt(j);
-                        //source.Insert(j - 1, temp);
                         source.Move(j, j - 1);
                     } else if (!desc && comparison > 0) {
-                        //var temp = source[j-1];
-                        //source.RemoveAt(j-1);
-                        //source.Insert(j, temp);
                         source.Move(j - 1, j);
                     }
-                    //(source as IEditableCollectionView).CommitEdit();
                 }
             }
         }

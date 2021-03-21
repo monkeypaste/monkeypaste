@@ -3,6 +3,7 @@ using GongSolutions.Wpf.DragDrop.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -265,6 +266,7 @@ namespace MpWpfApp {
                     UpdateSortOrder();                    
                 }
             };
+            SyncItemsWithModel();
         }
         
         public void ClipTileRichTextBoxViewModelCollection_Loaded(object sender, RoutedEventArgs args) {
@@ -273,7 +275,7 @@ namespace MpWpfApp {
             RtbListBoxCanvas = RichTextBoxListBox.GetVisualAncestor<Canvas>();
 
             RichTextBoxListBox.RequestBringIntoView += (s, e65) => { e65.Handled = true; };
-            
+
             //RichTextBoxListBox.SelectionChanged += (s, e4) => {
             //    OnPropertyChanged(nameof(SubSelectedRtbvmList));
             //    OnPropertyChanged(nameof(SubSelectedRtbvm));
@@ -281,14 +283,7 @@ namespace MpWpfApp {
             //};
 
             //after pasting template rtb's are duplicated so clear them upon refresh
-            if (HostClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
-                this.Clear();
-                //HostClipTileViewModel.CopyItem.CompositeItemList.Sort(x => x.CompositeSortOrderIdx);
-                foreach (var cci in HostClipTileViewModel.CopyItem.CompositeItemList) {
-                    this.Add(new MpRtbListBoxItemRichTextBoxViewModel(HostClipTileViewModel, cci));
-                }
-                this.Sort(x => x.CompositeSortOrderIdx);
-            }
+            SyncItemsWithModel();
             
 
             RichTextBoxListBox.SelectionChanged += (s, e8) => {
@@ -323,21 +318,44 @@ namespace MpWpfApp {
             RichTextBoxListBox?.Items.Refresh();
         }
 
+        public MpRtbListBoxItemRichTextBoxViewModel GetRtbItemByCopyItemId(int copyItemId) {
+            foreach(var rtbvm in this) {
+                if(rtbvm.CopyItemId == copyItemId) {
+                    return rtbvm;
+                }
+            }
+            return null;
+        }
+
+        public void SyncItemsWithModel() {
+            var hci = HostClipTileViewModel.CopyItem;
+            if (HostClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
+                //this.Clear();
+                foreach (var cci in hci.CompositeItemList) {
+                    var rtbvm = this.Where(x => x.CopyItemId == cci.CopyItemId).FirstOrDefault();
+                    if(rtbvm == null) {
+                        this.Add(new MpRtbListBoxItemRichTextBoxViewModel(HostClipTileViewModel, cci));
+                    }
+                }
+                UpdateSortOrder(true);
+            } else if(HostClipTileViewModel.CopyItemType == MpCopyItemType.RichText) {
+                var rtbvm = this.Where(x => x.CopyItemId == hci.CopyItemId).FirstOrDefault();
+                if(rtbvm == null) {
+                    this.Add(new MpRtbListBoxItemRichTextBoxViewModel(HostClipTileViewModel, hci));                    
+                } 
+            }
+        }
+
         public void UpdateSortOrder(bool fromModel = false) {
             if(fromModel) {
-                //foreach(var cci in HostClipTileViewModel.CopyItem.CompositeItemList) {
-                //    var rtbvm = this.Where(x => x.CopyItemId == cci.CopyItemId).First();
-                //    if(rtbvm != null) {
-                //        this.Move(this.IndexOf(rtbvm), cci.CompositeSortOrderIdx);
-                //    }
-                //}
+                this.Sort(x => x.CompositeSortOrderIdx);
             } else {
-                //foreach (var rtbvm in this) {
-                //    rtbvm.CompositeParentCopyItemId = HostClipTileViewModel.CopyItemId;
-                //    rtbvm.CompositeSortOrderIdx = this.IndexOf(rtbvm);
-                //    rtbvm.CopyItem.WriteToDatabase();
-                //    rtbvm.RtbcAdornerLayer?.Update();
-                //}
+                foreach (var rtbvm in this) {
+                    rtbvm.CompositeParentCopyItemId = HostClipTileViewModel.CopyItemId;
+                    rtbvm.CompositeSortOrderIdx = this.IndexOf(rtbvm);
+                    rtbvm.CopyItem.WriteToDatabase();
+                    rtbvm.RtbcAdornerLayer?.Update();
+                }
             }
         }
 
@@ -425,48 +443,35 @@ namespace MpWpfApp {
         }
 
         public new void Add(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {            
-            base.Add(rtbvm);
+            base.Insert(0,rtbvm);           
             //ClipTileViewModel.RichTextBoxListBox.Items.Refresh();
         }
 
-        public void Remove(MpRtbListBoxItemRichTextBoxViewModel rtbvm, bool isMerge = false) {
+        public void Remove(MpRtbListBoxItemRichTextBoxViewModel rtbvm, bool isMergeToTray = false, bool isMergeToTile = false) {
             base.Remove(rtbvm);
             if (rtbvm.CopyItem == null) {
                 //occurs when duplicate detected on background thread
                 return;
             }
 
-            if(isMerge) {
-                if(rtbvm.IsCompositeChild) {
-                    rtbvm.CopyItem.ItemTitleSwirl = HostClipTileViewModel.TitleSwirl;
-                    if (HostClipTileViewModel.CopyItem.CompositeItemList.Contains(rtbvm.CopyItem)) {
-                        rtbvm.CopyItem.UnlinkFromCompositeParent();
-                        HostClipTileViewModel.CopyItem.CompositeItemList.Remove(rtbvm.CopyItem);
-                    }
-                }
-            } else {
-                //foreach (var ttvm in MainWindowViewModel.TagTrayViewModel) {
-                //    if (ttvm.Tag.IsLinkedWithCopyItem(rtbvm.CopyItem)) {
-                //        ttvm.Tag.UnlinkWithCopyItem(HostClipTileViewModel.CopyItem);
-                //        ttvm.TagClipCount--;
-                //    }
-                //}
-                //if (!isMerge) {
-                //    rtbvm.CopyItem.DeleteFromDatabase();
-                //}
+            if(isMergeToTray && rtbvm.IsCompositeChild) {
+                rtbvm.CopyItem.ItemTitleSwirl = HostClipTileViewModel.TitleSwirl.Clone();
+            } 
 
-                ////remove any shortcuts associated with clip
-                //var scvmToRemoveList = new List<MpShortcutViewModel>();
-                //foreach (var scvmToRemove in MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == rtbvm.CopyItem.CopyItemId).ToList()) {
-                //    scvmToRemoveList.Add(scvmToRemove);
-                //}
-                //foreach (var scvmToRemove in scvmToRemoveList) {
-                //    MpShortcutCollectionViewModel.Instance.Remove(scvmToRemove);
-                //}
-                rtbvm.Dispose();
-                rtbvm = null;
+            HostClipTileViewModel.CopyItem.UnlinkCompositeChild(rtbvm.CopyItem);
+
+            if(this.Count == 0) {
+                HostClipTileViewModel.Dispose();
+            } else if(this.Count == 1) {
+                var loneCompositeCopyItem = this[0].CopyItem;
+                HostClipTileViewModel.CopyItem.UnlinkCompositeChild(loneCompositeCopyItem);
+                HostClipTileViewModel.CopyItem.DeleteFromDatabase();
+                HostClipTileViewModel.CopyItem = loneCompositeCopyItem;
             }
-            
+
+            if(!isMergeToTile && !isMergeToTray) {
+                rtbvm.CopyItem.DeleteFromDatabase();
+            }           
         }
         public void Resize(double deltaTop,double deltaContentHeight) {
             RtblbCanvasTop += deltaTop;

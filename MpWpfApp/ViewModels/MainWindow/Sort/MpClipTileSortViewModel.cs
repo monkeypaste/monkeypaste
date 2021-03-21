@@ -165,7 +165,7 @@ namespace MpWpfApp {
             //cvs.SortDescriptions.Clear();
             //cvs.SortDescriptions.Add(new SortDescription(sortBy, sortDir));
             ct.Sort(x => x[GetSortTypeAsMemberPath()], sortDir == ListSortDirection.Descending);
-            ct.Refresh();
+            //ct.Refresh();
             sw.Stop();
             Console.WriteLine("Sort for " + ct.VisibileClipTiles.Count + " items: " + sw.ElapsedMilliseconds + " ms");
             ct.ResetClipSelection();
