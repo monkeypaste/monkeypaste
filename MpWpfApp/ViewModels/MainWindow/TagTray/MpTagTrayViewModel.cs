@@ -63,6 +63,7 @@ namespace MpWpfApp {
             GetRecentTagTileViewModel().AddClip(ctvm);
 
             RefreshRecentTag();
+            RefreshAllCounts();
         }
 
         public void RefreshAllCounts() {
@@ -89,7 +90,7 @@ namespace MpWpfApp {
                 int itemsToRemoveCount = rtvm.TagClipCount - Properties.Settings.Default.MaxRecentClipItems;
                 for (int i = 0; i < itemsToRemoveCount; i++) {
                     rtvm.Tag.UnlinkWithCopyItem(rctvml[i].CopyItem);
-                    rtvm.TagClipCount--;
+                    //rtvm.TagClipCount--;
                 }
             }
         }

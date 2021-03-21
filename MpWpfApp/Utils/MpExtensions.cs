@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GongSolutions.Wpf.DragDrop.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -29,8 +30,8 @@ namespace MpWpfApp {
         }
 
         public static void Sort<TSource, TKey>(
-            this MpObservableCollection<TSource> source, 
-            Func<TSource, TKey> keySelector, 
+            this MpObservableCollection<TSource> source,
+            Func<TSource, TKey> keySelector,
             bool desc = false) where TSource : class {
             if (source == null) {
                 return;
@@ -53,6 +54,64 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual Tree
+        public static bool IsVisualDescendant(this DependencyObject parent, DependencyObject child) {
+            if(parent == null || child == null) {
+                return false;
+            }
+            foreach(var descendant in parent.FindChildren<UIElement>()) {
+                if(descendant == child) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static IEnumerable<T> FindChildren<T>(this DependencyObject source)
+                                             where T : DependencyObject {
+            if (source != null) {
+                var childs = GetChildObjects(source);
+                foreach (DependencyObject child in childs) {
+                    //analyze if children match the requested type
+                    if (child != null && child is T) {
+                        yield return (T)child;
+                    }
+
+                    //recurse tree
+                    foreach (T descendant in FindChildren<T>(child)) {
+                        yield return descendant;
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// This method is an alternative to WPF's
+        /// <see cref="VisualTreeHelper.GetChild"/> method, which also
+        /// supports content elements. Do note, that for content elements,
+        /// this method falls back to the logical tree of the element.
+        /// </summary>
+        /// <param name="parent">The item to be processed.</param>
+        /// <returns>The submitted item's child elements, if available.</returns>
+        public static IEnumerable<DependencyObject> GetChildObjects(
+                                                    this DependencyObject parent) {
+            if (parent == null) yield break;
+
+
+            if (parent is ContentElement || parent is FrameworkElement) {
+                //use the logical tree for content / framework elements
+                foreach (object obj in LogicalTreeHelper.GetChildren(parent)) {
+                    var depObj = obj as DependencyObject;
+                    if (depObj != null) yield return (DependencyObject)obj;
+                }
+            } else {
+                //use the visual tree per default
+                int count = VisualTreeHelper.GetChildrenCount(parent);
+                for (int i = 0; i < count; i++) {
+                    yield return VisualTreeHelper.GetChild(parent, i);
+                }
+            }
+        }
         public static T FindParentOfType<T>(this DependencyObject dpo) where T : class {
             if (dpo == null) {
                 return default;

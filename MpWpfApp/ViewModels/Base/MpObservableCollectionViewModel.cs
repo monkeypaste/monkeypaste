@@ -34,10 +34,15 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
             CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,element,removedIdx));
         }
 
-        public new void Move(int oldIdx,int newIdx) {
+        public new void Move(int oldIdx, int newIdx) {
+            //var movingItem = this[oldIdx];
+            //var movedItem = this[newIdx];
             //var changedItems = new List<T> { this[oldIdx], this[newIdx] };
             //base.Move(oldIdx, newIdx);
-            //CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move,changedItems,newIdx,oldIdx));
+            //CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            //CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, movingItem, newIdx, oldIdx));
+            //CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Move, changedItems));
+            //var changedItems = new List<T> { this[oldIdx], this[newIdx] };
             var movedItem = this[oldIdx];
             this.Remove(movedItem);
             this.Insert(newIdx, movedItem);
@@ -116,24 +121,30 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
         }
         #endregion
 
+        #region Public Methods
+        public MpObservableCollectionViewModel() : base() { }
+        public MpObservableCollectionViewModel(List<T> list) : base(list) { }
+        public MpObservableCollectionViewModel(IEnumerable<T> collection) : base(collection) { }
+        #endregion
+
         #region Protected Methods
-        protected MpObservableCollectionViewModel() {
-            OnInitialize();
-        }
+        //protected MpObservableCollectionViewModel() : base() {
+        //    OnInitialize();
+        //}
 
-        protected virtual void OnInitialize() {
-            _designMode = DesignerProperties.GetIsInDesignMode(new Button())
-                || Application.Current == null || Application.Current.GetType() == typeof(Application);
+        //protected virtual void OnInitialize() {
+        //    _designMode = DesignerProperties.GetIsInDesignMode(new Button())
+        //        || Application.Current == null || Application.Current.GetType() == typeof(Application);
 
-            if (!_designMode) {
-                var designMode = DesignerProperties.IsInDesignModeProperty;
-                _designMode = (bool)DependencyPropertyDescriptor.FromProperty(designMode, typeof(FrameworkElement)).Metadata.DefaultValue;
-            }
+        //    if (!_designMode) {
+        //        var designMode = DesignerProperties.IsInDesignModeProperty;
+        //        _designMode = (bool)DependencyPropertyDescriptor.FromProperty(designMode, typeof(FrameworkElement)).Metadata.DefaultValue;
+        //    }
 
-            if (_designMode) {
-                DesignData();
-            }
-        }
+        //    if (_designMode) {
+        //        DesignData();
+        //    }
+        //}
 
         /// <summary>
         /// With this method, we can inject design time data into the view so that we can

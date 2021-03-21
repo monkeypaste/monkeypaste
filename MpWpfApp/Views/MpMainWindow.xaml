@@ -1274,6 +1274,7 @@
                 </Grid.Resources>
                 <AdornerDecorator>
                     <local:MpMultiSelectListView x:Name="ClipTray"
+                                                 DataContext="{Binding}"
                                                  ItemsSource="{Binding}"
                                                  Visibility="{Binding ClipTrayVisibility}"
                                                  Width="{Binding MainWindowViewModel.ClipTrayWidth}"
@@ -1348,6 +1349,7 @@
                             <DataTemplate>
                                 <!-- Clip Tile -->
                                 <local:MpClipBorder x:Name="ClipTileClipBorder"
+                                                    DataContext="{Binding}"
                                                     Margin="{Binding TileMargin}"
                                                     BorderBrush="{Binding TileBorderBrush}"
                                                     BorderThickness="{Binding TileBorderThickness}"

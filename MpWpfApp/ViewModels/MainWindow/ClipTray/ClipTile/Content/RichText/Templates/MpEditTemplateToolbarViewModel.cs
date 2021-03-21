@@ -76,7 +76,7 @@ namespace MpWpfApp {
         #region Properties       
 
         #region Controls
-        public TextBox SelectedTemplateNameTextBox { get; set; }
+        public TextBox SelectedTemplateNameTextBox;
         #endregion
         #region Layout 
         private double _editTemplateBorderCanvasTop = MpMeasurements.Instance.ClipTileContentHeight;

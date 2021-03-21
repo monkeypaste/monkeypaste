@@ -62,11 +62,11 @@ namespace MpWpfApp {
         #region Properties
 
         #region Controls
-        public TextBox SelectedTemplateTextBox { get; set; }
+        public TextBox SelectedTemplateTextBox;
 
-        public Button NextTemplateButton { get; set; }
+        public Button NextTemplateButton;
 
-        public Button PreviousTemplateButton { get; set; }
+        public Button PreviousTemplateButton;
         #endregion
 
         #region Layout

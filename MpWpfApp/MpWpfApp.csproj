@@ -216,7 +216,6 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpRtbListBoxItemRichTextBoxViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpClipTileRichTextBoxViewModelCollection.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Overlay\MpClipTileRichTextBoxOverlayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpEditTemplateToolbarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpPasteTemplateToolbarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateHyperlinkCollectionViewModel.cs" />

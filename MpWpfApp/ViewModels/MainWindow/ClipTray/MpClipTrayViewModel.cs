@@ -40,15 +40,15 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
-        public List<MpClipTileViewModel> SelectedClipTiles {
+        public MpObservableCollection<MpClipTileViewModel> SelectedClipTiles {
             get {
-                return this.Where(ct => ct.IsSelected/* && ct.GetType() != typeof(MpRtbListBoxItemRichTextBoxViewModel)*/).ToList();
+                return new MpObservableCollection<MpClipTileViewModel>(this.Where(ct => ct.IsSelected/* && ct.GetType() != typeof(MpRtbListBoxItemRichTextBoxViewModel)*/).ToList());
             }
         }
 
-        public List<MpClipTileViewModel> VisibileClipTiles {
+        public MpObservableCollection<MpClipTileViewModel> VisibileClipTiles {
             get {
-                return this.Where(ct => ct.TileVisibility == Visibility.Visible && ct.GetType() != typeof(MpRtbListBoxItemRichTextBoxViewModel)).ToList();
+                return new MpObservableCollection<MpClipTileViewModel>(this.Where(ct => ct.TileVisibility == Visibility.Visible && ct.GetType() != typeof(MpRtbListBoxItemRichTextBoxViewModel)).ToList());
             }
         }
 
@@ -89,13 +89,13 @@ namespace MpWpfApp {
         #endregion
 
         #region Controls
-        public MpMultiSelectListView ClipTrayListView { get; set; }
+        public MpMultiSelectListView ClipTrayListView;
 
-        public Grid ClipTrayContainerGrid { get; set; }
+        public Grid ClipTrayContainerGrid;
 
-        public VirtualizingStackPanel ClipTrayVirtualizingStackPanel { get; set; }
+        public VirtualizingStackPanel ClipTrayVirtualizingStackPanel;
 
-        public AdornerLayer ClipTrayAdornerLayer { get; set; }
+        public AdornerLayer ClipTrayAdornerLayer;
         #endregion
 
         #region Layout
@@ -590,7 +590,7 @@ namespace MpWpfApp {
                 tileToIsolate.TileVisibility = Visibility.Visible;
             }
             ClearClipSelection(false);
-            _hiddenTiles = VisibileClipTiles;
+            _hiddenTiles = VisibileClipTiles.ToList();
             _hiddenTiles.Remove(tileToIsolate);
             foreach (var ctvm in _hiddenTiles) {
                 ctvm.IsSelected = false;
@@ -907,7 +907,8 @@ namespace MpWpfApp {
             } else {
                 ctvm.IsSelected = false;
             }
-
+            //not calling this doesn't associate the items clipborder to this listbox I don't know why
+            Refresh();
 
             //WasItemAdded = true;
         }
@@ -1217,15 +1218,16 @@ namespace MpWpfApp {
                 await Dispatcher.CurrentDispatcher.BeginInvoke(
                         DispatcherPriority.Normal,
                         (Action)(() => {
-                            BitmapSource sharedSwirl = null;
+                            //BitmapSource sharedSwirl = null;
                             foreach (var sctvm in SelectedClipTiles) {
                                 sctvm.TitleBackgroundColor = brush;
-                                if (sharedSwirl == null) {
-                                    sctvm.TitleSwirl = sctvm.CopyItem.InitSwirl(null,true);
-                                    sharedSwirl = sctvm.TitleSwirl;
-                                } else {
-                                    sctvm.TitleSwirl = sctvm.CopyItem.InitSwirl(sharedSwirl);
-                                }
+                                sctvm.TitleSwirlViewModel.ForceBrush(brush);
+                                //if (sharedSwirl == null) {
+                                //    sctvm.TitleSwirl = sctvm.CopyItem.InitSwirl(null,true);
+                                //    sharedSwirl = sctvm.TitleSwirl;
+                                //} else {
+                                //    sctvm.TitleSwirl = sctvm.CopyItem.InitSwirl(sharedSwirl);
+                                //}
                                 //sctvm.CopyItem.WriteToDatabase();
                             }
                         }));
@@ -1418,12 +1420,13 @@ namespace MpWpfApp {
             foreach (var selectedClipTile in SelectedClipTiles) {
                 if (isUnlink) {
                     tagToLink.Tag.UnlinkWithCopyItem(selectedClipTile.CopyItem);
-                    tagToLink.TagClipCount--;
+                    //tagToLink.TagClipCount--;
                 } else {
                     tagToLink.Tag.LinkWithCopyItem(selectedClipTile.CopyItem);
-                    tagToLink.TagClipCount++;
+                    //tagToLink.TagClipCount++;
                 }
             }
+            MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
             MainWindowViewModel.TagTrayViewModel.UpdateTagAssociation();
         }
 

@@ -109,7 +109,7 @@ namespace MpWpfApp {
             }
         }
 
-        public BitmapSource ItemTitleSwirl { get; set; }
+        //public BitmapSource ItemTitleSwirl { get; set; }
 
         public List<MpDetectedImageObject> ImageItemObjectList = new List<MpDetectedImageObject>();
 
@@ -248,7 +248,7 @@ namespace MpWpfApp {
                 }
                 var sw = new Stopwatch();
                 sw.Start();
-                newItem.ItemTitleSwirl = newItem.InitSwirl(null, false);
+                //newItem.ItemTitleSwirl = newItem.InitSwirl(null, false);
                 sw.Stop();
                 Console.WriteLine("Time to create swirl: " + sw.ElapsedMilliseconds + " ms");
                 newItem.ImageItemObjectList = new List<MpDetectedImageObject>();
@@ -569,7 +569,7 @@ namespace MpWpfApp {
             ItemColor = new MpColor(MpHelpers.Instance.GetRandomColor());
             Client = new MpClient(0, 0, MpHelpers.Instance.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
             Title = "Loading";
-            ItemTitleSwirl = new BitmapImage();
+            //ItemTitleSwirl = new BitmapImage();
             CopyDateTime = DateTime.Now;
             App = new MpApp();
             _itemData = "Default";
@@ -621,7 +621,7 @@ namespace MpWpfApp {
                 ItemColor = color[0];
             }
 
-            ItemTitleSwirl = InitSwirl();
+            //ItemTitleSwirl = InitSwirl();
             ImageItemObjectList = new List<MpDetectedImageObject>();
 
             switch (itemType) {
@@ -938,11 +938,11 @@ namespace MpWpfApp {
                         //when loading from database
                         ImageItemObjectList = MpDetectedImageObject.GetAllObjectsForItem(CopyItemId);
                     } else {
-                        var ibsba = MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource);
+                        //var ibsba = MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource);
 
-                        var ia = MpImageAnalyzer.Instance.AnalyzeImage(ibsba).Result;
+                        //var ia = MpImageAnalyzer.Instance.AnalyzeImage(ibsba).Result;
 
-                        var iocr = MpImageOcr.Instance.OcrImage(ibsba).Result;
+                        //var iocr = MpImageOcr.Instance.OcrImage(ibsba).Result;
 
                         //if (string.IsNullOrEmpty(ItemPlainText)) {
                         //    if(ImageItemObjectList.Count > 0) {
@@ -1072,7 +1072,7 @@ namespace MpWpfApp {
             CompositeParentCopyItemId = GetCompositeParentCopyItemId();
             if (CompositeParentCopyItemId <= 0) {
                 //only create title swirl for composite parent and non-composite items
-                ItemTitleSwirl = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["TitleSwirl"]);
+                //ItemTitleSwirl = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["TitleSwirl"]);
             } else {
                 //since this is a child of a composite element load all of its composite data
                 var dt = MpDb.Instance.Execute(
@@ -1165,10 +1165,10 @@ namespace MpWpfApp {
             //if copyitem already exists
             if (CopyItemId > 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "update MpCopyItem set ItemCsv=@icsv, TitleSwirl=@ts, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemImage=@ii where pk_MpCopyItemId=@ciid",
+                        "update MpCopyItem set ItemCsv=@icsv, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemImage=@ii where pk_MpCopyItemId=@ciid",
                         new Dictionary<string, object> {
                             { @"icsv",ItemCsv },
-                            { "@ts", MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemTitleSwirl) },
+                            //{ "@ts", MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemTitleSwirl) },
                             { "@citd", (int)CopyItemType },
                             { "@cid", Client.ClientId },
                             { "@aid", App.AppId },
@@ -1181,11 +1181,11 @@ namespace MpWpfApp {
                         });
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpCopyItem(ItemCsv,TitleSwirl,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) " + 
-                    "values (@icsv,@ts,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
+                    "insert into MpCopyItem(ItemCsv,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) " + 
+                    "values (@icsv,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
                     new Dictionary<string, object> {
                             { @"icsv",ItemCsv },
-                            { "@ts", MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemTitleSwirl) },
+                            //{ "@ts", MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemTitleSwirl) },
                             { "@citd", (int)CopyItemType },
                             { "@cid", Client.ClientId },
                             { "@aid", App.AppId },
@@ -1250,7 +1250,7 @@ namespace MpWpfApp {
             newItem.CopyCount = CopyCount;
             newItem.CopyDateTime = CopyDateTime;
             newItem.CopyItemId = CopyItemId;
-            newItem.ItemTitleSwirl = ItemTitleSwirl;
+            //newItem.ItemTitleSwirl = ItemTitleSwirl;
             return newItem;
         }
 

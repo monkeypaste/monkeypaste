@@ -12,9 +12,8 @@ namespace MpWpfApp {
         #region Private Variables
         #endregion
 
-
-
         #region Properties
+
         #region View Models
         private MpRtbListBoxItemRichTextBoxViewModel _clipTileRichTextBoxViewModel = null;
         public MpRtbListBoxItemRichTextBoxViewModel ClipTileRichTextBoxViewModel {
@@ -92,6 +91,7 @@ namespace MpWpfApp {
             }
         }
         #endregion        
+
         #endregion
 
         #region Public Methods

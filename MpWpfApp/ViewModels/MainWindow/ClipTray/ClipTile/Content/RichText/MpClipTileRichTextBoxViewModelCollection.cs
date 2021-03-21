@@ -137,13 +137,24 @@ namespace MpWpfApp {
         #endregion
 
         #region Controls
-        public Canvas RtbListBoxCanvas { get; set; }
+        public Canvas RtbListBoxCanvas;
 
-        public Grid RtbContainerGrid { get; set; }
+        public Grid RtbContainerGrid;
 
-        public ListBox RichTextBoxListBox { get; set; }
+        private ListBox _richTextListBox;
+        public ListBox RichTextBoxListBox {
+            get {
+                return _richTextListBox;
+            }
+            set {
+                if(_richTextListBox != value) {
+                    _richTextListBox = value;
+                    OnPropertyChanged(nameof(RichTextBoxListBox));
+                }
+            }
+        }
 
-        public AdornerLayer RtbLbAdornerLayer { get; set; }
+        public AdornerLayer RtbLbAdornerLayer;
         #endregion
 
         #region Appearance
@@ -261,11 +272,6 @@ namespace MpWpfApp {
 
         public MpClipTileRichTextBoxViewModelCollection(MpClipTileViewModel ctvm) : base() {
             HostClipTileViewModel = ctvm;
-            CollectionChanged += (s, e) => {
-                if (HostClipTileViewModel.CopyItemType == MpCopyItemType.Composite && e.NewItems != null && e.NewItems.Count > 0) {
-                    UpdateSortOrder();                    
-                }
-            };
             SyncItemsWithModel();
         }
         
@@ -455,7 +461,7 @@ namespace MpWpfApp {
             }
 
             if(isMergeToTray && rtbvm.IsCompositeChild) {
-                rtbvm.CopyItem.ItemTitleSwirl = HostClipTileViewModel.TitleSwirl.Clone();
+                //rtbvm.CopyItem.ItemTitleSwirl = HostClipTileViewModel.TitleSwirl.Clone();
             } 
 
             HostClipTileViewModel.CopyItem.UnlinkCompositeChild(rtbvm.CopyItem);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace MpWpfApp {
     public class MpClipTileTitleSwirlViewModel : MpUndoableObservableCollectionViewModel<MpClipTileTitleSwirlViewModel,MpSwirlLayerViewModel> {
@@ -122,14 +123,25 @@ namespace MpWpfApp {
                 var c = AppViewModel.PrimaryIconColorList[i];
                 this.Add(
                     new MpSwirlLayerViewModel(
-                        i, 
-                        c.ColorBrush, 
+                        i,
+                        c.ColorBrush,
                         (double)MpHelpers.Instance.Rand.Next(40, 120) / 255));
             }
         }
 
         public void TitleSwirlCanvas_Loaded(object sender, RoutedEventArgs args) {
+            
+        }
 
+        public void ForceBrush(Brush forcedBrush, int forceLayerIdx=-1) {
+            foreach(var slvm in this) {
+                if(forceLayerIdx >= 0 && this.IndexOf(slvm) == forceLayerIdx) {
+
+                } else if(forceLayerIdx < 0) {
+                    slvm.LayerBrush = forcedBrush;
+                    slvm.LayerOpacity = (double)MpHelpers.Instance.Rand.Next(40, 120) / 255;
+                }
+            }
         }
         #endregion
 

@@ -63,38 +63,33 @@ namespace MpWpfApp {
                 }
             }
         }
-
-        private MpClipTileRichTextBoxOverlayViewModel _clipTileRichTextBoxOverlayViewModel;
-        public MpClipTileRichTextBoxOverlayViewModel ClipTileRichTextBoxOverlayViewModel {
-            get {
-                return _clipTileRichTextBoxOverlayViewModel;
-            }
-            set {
-                if (_clipTileRichTextBoxOverlayViewModel != value) {
-                    _clipTileRichTextBoxOverlayViewModel = value;
-                    OnPropertyChanged(nameof(ClipTileRichTextBoxOverlayViewModel));
-                }
-            }
-        }
         #endregion
 
         #region Controls 
-        public RichTextBox Rtb { 
-            get; 
-            set; 
+        public RichTextBox Rtb;
+
+        public DockPanel RtbListBoxItemOverlayDockPanel;
+
+        public MpClipBorder RtbListBoxItemClipBorder;
+
+        public TextBlock RtbListBoxItemTitleTextBlock;
+
+        public TextBox RtbListBoxItemTitleTextBox;
+
+        private Canvas _rtbc;
+        public Canvas Rtbc {
+            get {
+                return _rtbc;
+            }
+            set {
+                if(_rtbc != value) {
+                    _rtbc = value;
+                    OnPropertyChanged(nameof(Rtbc));
+                }
+            }
         }
 
-        public DockPanel RtbListBoxItemOverlayDockPanel { get; set; }
-
-        public MpClipBorder RtbListBoxItemClipBorder { get; set; }
-
-        public TextBlock RtbListBoxItemTitleTextBlock { get; set; }
-
-        public TextBox RtbListBoxItemTitleTextBox { get; set; }
-
-        public Canvas Rtbc { get; set; }
-
-        public AdornerLayer RtbcAdornerLayer { get; set; }
+        public AdornerLayer RtbcAdornerLayer;
         #endregion
 
         #region Appearance
@@ -115,14 +110,8 @@ namespace MpWpfApp {
         #region Layout
         public Rect ItemRect {
             get {
-                if (RichTextBoxViewModelCollection != null && 
-                    RichTextBoxViewModelCollection.RichTextBoxListBox != null) {
-                    if (Rtbc == null || !RichTextBoxViewModelCollection.Contains(this)) {
-                        //occurs when dropping a composite child and this ensures it doesn't get picked up as insert index
-                        return new Rect(new Point(double.MinValue, double.MinValue), new Size(0, 0));
-                    }
-                    var rtblb = RichTextBoxViewModelCollection.RichTextBoxListBox;
-                    return Rtbc.TransformToVisual(rtblb).TransformBounds(LayoutInformation.GetLayoutSlot(Rtbc));
+                if (Rtbc != null || RichTextBoxViewModelCollection.RichTextBoxListBox != null) {
+                    return Rtbc.TransformToVisual(RichTextBoxViewModelCollection.RichTextBoxListBox).TransformBounds(LayoutInformation.GetLayoutSlot(Rtbc));
                 }
                 return new Rect();
             }
@@ -486,9 +475,9 @@ namespace MpWpfApp {
         #endregion
 
         #region State
-        public bool IsOverDragButton { get; set; } = false;
+        public bool IsOverDragButton = false;
 
-        public bool IsDragging { get; set; } = false;
+        public bool IsDragging = false;
 
         private bool _isResizingTop = false;
         public bool IsResizingTop {
@@ -874,8 +863,7 @@ namespace MpWpfApp {
         public MpRtbListBoxItemRichTextBoxViewModel(MpClipTileViewModel ctvm, MpCopyItem ci) : base() {
             CopyItem = ci;
             HostClipTileViewModel = ctvm;
-            TemplateHyperlinkCollectionViewModel = new MpTemplateHyperlinkCollectionViewModel(HostClipTileViewModel, this);
-            ClipTileRichTextBoxOverlayViewModel = new MpClipTileRichTextBoxOverlayViewModel(this);
+            TemplateHyperlinkCollectionViewModel = new MpTemplateHyperlinkCollectionViewModel(HostClipTileViewModel, this);            
 
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
@@ -923,6 +911,9 @@ namespace MpWpfApp {
         }
 
         public void ClipTileRichTextBoxListItemCanvas_Loaded(object sender, RoutedEventArgs e) {
+            //if (Rtbc != null || ((Canvas)sender).DataContext.GetType().ToString() == "MS.Internal.NamedObject") {
+            //    return;
+            //}
             Rtbc = (Canvas)sender;
             Rtb = (RichTextBox)Rtbc.FindName("RtbListBoxItemRichTextBox");
             RtbListBoxItemClipBorder = (MpClipBorder)Rtbc.FindName("RtbListBoxItemOverlayBorder");
@@ -972,6 +963,7 @@ namespace MpWpfApp {
                                 Rtbc,
                                 RichTextBoxViewModelCollection.GetDataObjectFromSubSelectedItems(true).Result,
                                 DragDropEffects.Copy | DragDropEffects.Move);
+                    e.Handled = true;
                 }
             };
             //dragButton.PreviewMouseLeftButtonDown += (s, e8) => {

@@ -42,7 +42,7 @@ namespace MpWpfApp {
         #region Properties
 
         #region Controls
-        public Border EditToolbarBorder { get; set; }
+        public Border EditToolbarBorder;
         #endregion
         #region Layout Properties      
         private double _editBorderCanvasTop = -MpMeasurements.Instance.ClipTileEditToolbarHeight;
