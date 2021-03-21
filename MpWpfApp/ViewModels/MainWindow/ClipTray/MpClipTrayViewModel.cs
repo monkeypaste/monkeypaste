@@ -504,7 +504,7 @@ namespace MpWpfApp {
                                     var nctvm = new MpClipTileViewModel(drtbvm.CopyItem);
                                     this.Insert(dropIdx, nctvm);
                                     nctvm.IsSelected = true;
-                                    MainWindowViewModel.TagTrayViewModel.AddClipToSudoTags(nctvm);
+                                    //MainWindowViewModel.TagTrayViewModel.AddClipToSudoTags(nctvm);
                                 } else {
                                     dropIdx = dropIdx >= this.Count ? dropIdx - 1 : dropIdx;
                                     int dragIdx = this.IndexOf(drtbvm.HostClipTileViewModel);
@@ -919,12 +919,9 @@ namespace MpWpfApp {
                 //occurs when duplicate detected on background thread
                 return;
             }
-            foreach (var ttvm in MainWindowViewModel.TagTrayViewModel) {
-                if (ttvm.IsLinkedWithClipTile(clipTileToRemove)) {
-                    ttvm.TagClipCount--;
-                }
-            }
-            if(!isMerge) {
+            MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
+
+            if (!isMerge) {
                 clipTileToRemove.CopyItem.DeleteFromDatabase();
 
                 //remove any shortcuts associated with clip
@@ -1607,7 +1604,7 @@ namespace MpWpfApp {
                 var clonedCopyItem = (MpCopyItem)sctvm.CopyItem.Clone();
                 clonedCopyItem.WriteToDatabase();
                 var ctvm = new MpClipTileViewModel(clonedCopyItem);
-                MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
+                //MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(ctvm);
                 this.Add(ctvm);
                 ctvm.IsSelected = true;
             }

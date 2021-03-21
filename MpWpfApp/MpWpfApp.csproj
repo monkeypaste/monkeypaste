@@ -224,6 +224,8 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Toolbar\MpEditRichTextBoxToolbarViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\ContextMenu\MpClipTileContextMenuItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\MpClipTileViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Title\MpClipTileTitleSwirlViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Title\MpSwirlLayerViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\MpClipTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MpMainWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\MpSearchBoxViewModel.cs" />
@@ -273,6 +275,9 @@
     </Compile>
     <Compile Include="Views\Spinners\ucTail.xaml.cs">
       <DependentUpon>ucTail.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SwirlTest.xaml.cs">
+      <DependentUpon>SwirlTest.xaml</DependentUpon>
     </Compile>
     <Page Include="Styles\ResourceDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -326,6 +331,10 @@
     <Page Include="Views\Spinners\ucTail.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SwirlTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

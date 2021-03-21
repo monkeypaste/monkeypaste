@@ -32,6 +32,18 @@ namespace MpWpfApp {
                 this.Add(new MpTagTileViewModel(t));
             }
         }
+        public MpTagTrayViewModel(MpClipTrayViewModel ctrvm) : this() {
+            ctrvm.CollectionChanged += (s, e) => {
+                if (e.NewItems != null) {
+                    foreach (MpClipTileViewModel ctvm in ctrvm) {
+                        AddClipToSudoTags(ctvm);
+                    }
+                }
+                if (e.OldItems != null) {
+                    RefreshAllCounts();
+                }
+            };
+        }
 
         public void TagTray_Loaded(object sender, RoutedEventArgs e) {
             var tagTrayStackPanel = (StackPanel)sender;
@@ -43,12 +55,14 @@ namespace MpWpfApp {
                 return;
             };
             //select history tag by default
-            GetHistoryTagTileViewModel().IsSelected = true;
+            GetRecentTagTileViewModel().IsSelected = true;
         }
 
         public void AddClipToSudoTags(MpClipTileViewModel ctvm) {
             GetHistoryTagTileViewModel().AddClip(ctvm);
             GetRecentTagTileViewModel().AddClip(ctvm);
+
+            RefreshRecentTag();
         }
 
         public void RefreshAllCounts() {
@@ -62,6 +76,23 @@ namespace MpWpfApp {
             }
         }
 
+        public void RefreshRecentTag() {
+            if (GetRecentTagTileViewModel().TagClipCount > Properties.Settings.Default.MaxRecentClipItems) {
+                var rtvm = GetRecentTagTileViewModel();
+                var rctvml = new List<MpClipTileViewModel>();
+                foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel) {
+                    if (rtvm.IsLinkedWithClipTile(ctvm)) {
+                        rctvml.Add(ctvm);
+                    }
+                }
+                rctvml.OrderBy(x => x.CopyItemCreatedDateTime);
+                int itemsToRemoveCount = rtvm.TagClipCount - Properties.Settings.Default.MaxRecentClipItems;
+                for (int i = 0; i < itemsToRemoveCount; i++) {
+                    rtvm.Tag.UnlinkWithCopyItem(rctvml[i].CopyItem);
+                    rtvm.TagClipCount--;
+                }
+            }
+        }
         public new void Add(MpTagTileViewModel newTagTile) {
             base.Add(newTagTile);
 

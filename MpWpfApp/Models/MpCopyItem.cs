@@ -894,45 +894,7 @@ namespace MpWpfApp {
         public async Task<BitmapSource> InitSwirlAsync(BitmapSource sharedSwirl = null, bool forceUseItemColor = false, bool retainAlpha = true, DispatcherPriority priority = DispatcherPriority.Background) {
             BitmapSource swirl = null;
             await Dispatcher.CurrentDispatcher.InvokeAsync(async () => {
-                if (sharedSwirl == null) {
-                    var path = @"pack://application:,,,/Resources/Images/";
-                    var swirlList = new List<BitmapSource>();
-                    if (forceUseItemColor) {
-                        var itemBrush = new SolidColorBrush() { Color = ItemColor.Color };
-                        SolidColorBrush lighterColor = MpHelpers.Instance.ChangeBrushAlpha(
-                                        MpHelpers.Instance.ChangeBrushBrightness(itemBrush, -0.5f), 100);
-                        SolidColorBrush darkerColor = MpHelpers.Instance.ChangeBrushAlpha(
-                                        MpHelpers.Instance.ChangeBrushBrightness(itemBrush, -0.4f), 50);
-                        SolidColorBrush accentColor = MpHelpers.Instance.ChangeBrushAlpha(
-                                        MpHelpers.Instance.ChangeBrushBrightness(itemBrush, -0.0f), 100);
-
-                        var swirl1 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0001.png"));
-                        swirlList.Add(await MpHelpers.Instance.TintBitmapSourceAsync(swirl1, (itemBrush).Color, retainAlpha, priority));
-
-                        var swirl2 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0002.png"));
-                        swirlList.Add(await MpHelpers.Instance.TintBitmapSourceAsync(swirl2, lighterColor.Color, retainAlpha, priority));
-
-                        var swirl3 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0003.png"));
-                        swirlList.Add(await MpHelpers.Instance.TintBitmapSourceAsync(swirl3, darkerColor.Color, retainAlpha, priority));
-
-                        var swirl4 = (BitmapSource)new BitmapImage(new Uri(path + "title_swirl0004.png"));
-                        swirlList.Add(await MpHelpers.Instance.TintBitmapSourceAsync(swirl4, accentColor.Color, retainAlpha, priority));
-                    } else {
-                        var randomColorList = MpHelpers.Instance.GetRandomizedList<MpColor>(App.PrimaryIconColorList);
-                        for (int i = 0; i < 4; i++) {
-                            var c = randomColorList[i].Color;
-                            c.A = (byte)MpHelpers.Instance.Rand.Next(40, 120);
-                            var s = (BitmapSource)new BitmapImage(new Uri(path + string.Format(@"title_swirl000{0}.png", i + 1)));
-                            s = await MpHelpers.Instance.TintBitmapSourceAsync(s, c, retainAlpha, priority);
-                            swirlList.Add(s);
-                        }
-                    }
-                    //randomize order of layers
-                    var rsl = MpHelpers.Instance.GetRandomizedList<BitmapSource>(swirlList);
-                    swirl = await MpHelpers.Instance.MergeImagesAsync(new List<BitmapSource>() { rsl[0], rsl[1], rsl[2], rsl[3] },priority);
-                } else {
-                    swirl = sharedSwirl;
-                }
+                swirl = InitSwirl(sharedSwirl, forceUseItemColor);
             }, priority);
 
             return swirl;

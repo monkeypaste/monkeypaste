@@ -1534,21 +1534,113 @@
                                             <Canvas Grid.Row="0"
                                                     Grid.Column="0"
                                                     VerticalAlignment="Top"
-                                                    HorizontalAlignment="Left">
+                                                    HorizontalAlignment="Left"
+                                                    Width="{Binding TileBorderWidth}"
+                                                    Height="{Binding TileTitleHeight}">
                                                 <i:Interaction.Triggers>
                                                     <i:EventTrigger EventName="Loaded">
                                                         <i:CallMethodAction TargetObject="{Binding}"
                                                                             MethodName="ClipTileTitle_Loaded" />
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
-                                                <Image x:Name="TitleSwirl"
+                                                <!--<Image x:Name="TitleSwirl"
                                                        Canvas.Top="-1"
                                                        Canvas.Left="-1"
+                                                       Visibility="Hidden"
                                                        RenderOptions.BitmapScalingMode="HighQuality"
                                                        Stretch="Fill"
                                                        Width="{Binding TileBorderWidth}"
                                                        Height="{Binding TileTitleHeight}"
-                                                       Source="{Binding TitleSwirl}" />
+                                                       Source="{Binding TitleSwirl}" />-->
+                                                <Viewbox VerticalAlignment="Top"
+                                                         HorizontalAlignment="Left"
+                                                         Stretch="Fill"
+                                                         Width="{Binding TileBorderWidth,Mode=TwoWay}"
+                                                         Height="{Binding TileTitleHeight,Mode=TwoWay}">
+                                                    <Canvas x:Name="TitleSwirlCanvas"
+                                                            Visibility="Visible"
+                                                            Width="{Binding ClipTileViewModel.TileBorderMinWidth}"
+                                                            Height="{Binding ClipTileViewModel.TileTitleHeight}"
+                                                            DataContext="{Binding TitleSwirlViewModel}">
+                                                        <i:Interaction.Triggers>
+                                                            <i:EventTrigger EventName="Loaded">
+                                                                <i:CallMethodAction TargetObject="{Binding}"
+                                                                                    MethodName="TitleSwirlCanvas_Loaded" />
+                                                            </i:EventTrigger>
+                                                        </i:Interaction.Triggers>
+                                                        <Path x:Name="Layer0"
+                                                              StrokeThickness="0"
+                                                              DataContext="{Binding SwirlLayer0}"
+                                                              Fill="{Binding LayerBrush}"
+                                                              Opacity="{Binding LayerOpacity}">
+                                                            <Path.Data>
+                                                                <PathGeometry>
+                                                                    <PathGeometry.Figures>
+                                                                        <PathFigure StartPoint="0,22"
+                                                                                    IsClosed="True">
+                                                                            <BezierSegment Point1="150,-10"
+                                                                                           Point2="180,110"
+                                                                                           Point3="270,40" />
+                                                                            <LineSegment Point="270,0" />
+                                                                            <LineSegment Point="0,0" />
+                                                                        </PathFigure>
+                                                                    </PathGeometry.Figures>
+                                                                </PathGeometry>
+                                                            </Path.Data>
+                                                        </Path>
+                                                        <Path x:Name="Layer1"
+                                                              StrokeThickness="0"
+                                                              DataContext="{Binding SwirlLayer1}"
+                                                              Fill="{Binding LayerBrush}"
+                                                              Opacity="{Binding LayerOpacity}">
+                                                            <Path.Data>
+                                                                <PathGeometry>
+                                                                    <PathGeometry.Figures>
+                                                                        <PathFigure StartPoint="0,40"
+                                                                                    IsClosed="True">
+                                                                            <BezierSegment Point1="90,65"
+                                                                                           Point2="65,20"
+                                                                                           Point3="135,20" />
+                                                                            <BezierSegment Point1="205,20"
+                                                                                           Point2="180,65"
+                                                                                           Point3="270,40" />
+                                                                            <LineSegment Point="270,0" />
+                                                                            <LineSegment Point="0,0" />
+                                                                        </PathFigure>
+                                                                    </PathGeometry.Figures>
+                                                                </PathGeometry>
+                                                            </Path.Data>
+                                                        </Path>
+                                                        <Ellipse x:Name="Layer2"
+                                                                 StrokeThickness="0"
+                                                                 DataContext="{Binding SwirlLayer2}"
+                                                                 Fill="{Binding LayerBrush}"
+                                                                 Opacity="{Binding LayerOpacity}"
+                                                                 Width="84"
+                                                                 Height="28"
+                                                                 Canvas.Left="171"
+                                                                 Canvas.Top="34" />
+                                                        <Path x:Name="Layer3"
+                                                              StrokeThickness="0"
+                                                              DataContext="{Binding SwirlLayer3}"
+                                                              Fill="{Binding LayerBrush}"
+                                                              Opacity="{Binding LayerOpacity}">
+                                                            <Path.Data>
+                                                                <PathGeometry>
+                                                                    <PathGeometry.Figures>
+                                                                        <PathFigure StartPoint="0,55"
+                                                                                    IsClosed="True">
+                                                                            <QuadraticBezierSegment Point1="30,10"
+                                                                                                    Point2="270,0" />
+                                                                            <LineSegment Point="0,0" />
+                                                                        </PathFigure>
+                                                                    </PathGeometry.Figures>
+                                                                </PathGeometry>
+                                                            </Path.Data>
+                                                        </Path>
+                                                    </Canvas>
+                                                </Viewbox>
+                                                
                                                 <Grid x:Name="ClipTileTitleTextGrid"
                                                       Background="{Binding TileTitleTextGridBackgroundBrush}">
                                                     <!-- Clip Title TextBlock -->

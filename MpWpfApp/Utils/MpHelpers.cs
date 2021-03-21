@@ -1246,7 +1246,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual
-        public List<T> GetRandomizedList<T>(List<T> orderedList) where T : class {
+        public IList<T> GetRandomizedList<T>(IList<T> orderedList) where T : class {
             var preRandomList = new List<T>();
             foreach (var c in orderedList) {
                 preRandomList.Add(c);

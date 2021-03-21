@@ -14,6 +14,17 @@ namespace MpWpfApp {
 
         #region Properties
 
+        #region View Models
+        public List<MpClipTileViewModel> LinkedClipTiles {
+            get {
+                if(MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null || Tag == null) {
+                    return new List<MpClipTileViewModel>();
+                }
+                return MainWindowViewModel.ClipTrayViewModel.Where(x => IsLinkedWithClipTile(x)).ToList();
+            }
+        }
+        #endregion
+
         #region State
         public bool IsNew {
             get {
@@ -355,23 +366,15 @@ namespace MpWpfApp {
 
         public void AddClip(MpClipTileViewModel ctvm, bool forceCountUpdate = true) {
             bool isNewLink = Tag.LinkWithCopyItem(ctvm.CopyItem);
-            if(isNewLink || forceCountUpdate) {
-                TagClipCount++;
-            }
-            if(IsRecentTag && TagClipCount > Properties.Settings.Default.MaxRecentClipItems) {
-                var rctvml = new List<MpClipTileViewModel>();
-                foreach(var ctvml in MainWindowViewModel.ClipTrayViewModel) {
-                    if(IsLinkedWithClipTile(ctvm)) {
-                        rctvml.Add(ctvml);
-                    }
-                }
-                rctvml.OrderBy(x => x.CopyItemCreatedDateTime);
-                int itemsToRemoveCount = TagClipCount - Properties.Settings.Default.MaxRecentClipItems;
-                for (int i = 0; i < itemsToRemoveCount; i++) {
-                    Tag.UnlinkWithCopyItem(rctvml[i].CopyItem);
-                    TagClipCount--;
-                }
-            }
+            MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
+            //if(isNewLink || forceCountUpdate) {
+            //    TagClipCount++;
+            //}            
+        }
+
+        public void RemoveClip(MpClipTileViewModel ctvm, bool forceCountUpdate = true) {
+            Tag.UnlinkWithCopyItem(ctvm.CopyItem);
+            MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
         }
 
         public bool IsLinkedWithClipTile(MpClipTileViewModel ctvm) {

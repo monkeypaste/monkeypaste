@@ -9,6 +9,8 @@ using System.Windows.Media.Imaging;
 namespace MpWpfApp {
     public class MpAppViewModel : MpViewModelBase {
         #region Properties
+
+        #region State
         private bool _isSelected = false;
         public bool IsSelected {
             get {
@@ -22,6 +24,28 @@ namespace MpWpfApp {
             }
         }
 
+        public bool IsNew {
+            get {
+                return App != null && AppId == 0;
+            }
+        }
+        #endregion
+
+        #region Visibility
+        public Visibility RejectAppVisibility {
+            get {
+                return App == null ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
+
+        public Visibility AddButtonVisibility {
+            get {
+                return App == null ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+        #endregion
+
+        #region Model
         public int AppId {
             get {
                 if(App == null) {
@@ -66,12 +90,6 @@ namespace MpWpfApp {
             }
         }
 
-        public bool IsNew {
-            get {
-                return App != null && AppId == 0;
-            }
-        }
-
         public BitmapSource IconImage {
             get {
                 if (App == null) {
@@ -81,15 +99,18 @@ namespace MpWpfApp {
             }
         }
 
-        public Visibility RejectAppVisibility {
+        public MpObservableCollection<MpColor> PrimaryIconColorList {
             get {
-                return App == null ? Visibility.Collapsed:Visibility.Visible;
+                if(App == null) {
+                    return new MpObservableCollection<MpColor>();
+                }
+                return App.PrimaryIconColorList;
             }
-        }
-
-        public Visibility AddButtonVisibility {
-            get {
-                return App == null ? Visibility.Visible : Visibility.Collapsed;
+            set {
+                if(App != null && App.PrimaryIconColorList != value) {
+                    App.PrimaryIconColorList = value;
+                    OnPropertyChanged(nameof(PrimaryIconColorList));
+                }
             }
         }
 
@@ -110,11 +131,14 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(IconImage));
                     OnPropertyChanged(nameof(RejectAppVisibility));
                     OnPropertyChanged(nameof(AddButtonVisibility));
+                    OnPropertyChanged(nameof(PrimaryIconColorList));
                 }
 
                 
             }
         }
+        #endregion
+
         #endregion
 
         #region Public Methods

@@ -200,7 +200,7 @@ namespace MpWpfApp {
             ClipTrayViewModel = new MpClipTrayViewModel();
             ClipTileSortViewModel = new MpClipTileSortViewModel();
             AppModeViewModel = new MpAppModeViewModel();
-            TagTrayViewModel = new MpTagTrayViewModel();
+            TagTrayViewModel = new MpTagTrayViewModel(ClipTrayViewModel);
         }
 
         public void MainWindow_Loaded(object sender, RoutedEventArgs e) {

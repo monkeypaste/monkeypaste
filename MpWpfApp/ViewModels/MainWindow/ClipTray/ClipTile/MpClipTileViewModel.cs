@@ -64,6 +64,19 @@
         #endregion
 
         #region View Models
+        private MpClipTileTitleSwirlViewModel _clipTileTitleSwirlViewModel = null;
+        public MpClipTileTitleSwirlViewModel TitleSwirlViewModel {
+            get {
+                return _clipTileTitleSwirlViewModel;
+            }
+            set {
+                if(_clipTileTitleSwirlViewModel != value) {
+                    _clipTileTitleSwirlViewModel = value;
+                    OnPropertyChanged(nameof(TitleSwirlViewModel));
+                }
+            }
+        }
+
         private MpHighlightTextRangeViewModelCollection _highlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection();
         public MpHighlightTextRangeViewModelCollection HighlightTextRangeViewModelCollection {
             get {
@@ -1403,7 +1416,7 @@
                     OnPropertyChanged(nameof(TrialOverlayVisibility));
                     OnPropertyChanged(nameof(RichTextBoxViewModelCollection));
                     OnPropertyChanged(nameof(TitleFontSize));
-                    //CopyItem.WriteToDatabase();
+                    CopyItem.WriteToDatabase();
                 }
             }
         }
@@ -1500,6 +1513,7 @@
             //}
             CopyItem = ci;
 
+            TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
             RichTextBoxViewModelCollection = new MpClipTileRichTextBoxViewModelCollection(this);
             EditRichTextBoxToolbarViewModel = new MpEditRichTextBoxToolbarViewModel(this);
             EditTemplateToolbarViewModel = new MpEditTemplateToolbarViewModel(this);
@@ -1978,16 +1992,9 @@
             }
             CopyItem = MpCopyItem.Merge(oci, CopyItem, false, true,false,false,forceIdx);
 
-
             MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
-            //clear rtbvms so when item is reloading it adds the merged ci
-            //RichTextBoxViewModelCollection.Clear();
-            RichTextBoxViewModelCollection.SyncItemsWithModel();
 
-            //when initially converting richtext item into composite it needs to be relinked to history
-            //MainWindowViewModel.TagTrayViewModel.GetHistoryTagTileViewModel().AddClip(this, false);
-            //MainWindowViewModel.ClipTrayViewModel.Refresh();
-            //Refresh();
+            RichTextBoxViewModelCollection.SyncItemsWithModel();
 
             MainWindowViewModel.ClipTrayViewModel.ClearClipSelection();
             IsSelected = true;

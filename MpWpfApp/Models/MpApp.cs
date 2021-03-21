@@ -25,7 +25,7 @@ namespace MpWpfApp {
 
         public int[] ColorId = new int[5];
 
-        public List<MpColor> PrimaryIconColorList = new List<MpColor>();
+        public MpObservableCollection<MpColor> PrimaryIconColorList = new MpObservableCollection<MpColor>();
 
         #region Static Methods
         public static List<MpApp> GetAllApps() {            
@@ -164,7 +164,7 @@ namespace MpWpfApp {
                 });
         }
 
-        private List<MpColor> CreatePrimaryColorList(BitmapSource bmpSource) {
+        private MpObservableCollection<MpColor> CreatePrimaryColorList(BitmapSource bmpSource) {
             //var sw = new Stopwatch();
             //sw.Start();
             PrimaryIconColorList.Clear();
