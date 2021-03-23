@@ -164,7 +164,17 @@ namespace MpWpfApp {
         #endregion
 
         #region Factory Methods
-        public static MpCopyItem CreateFromClipboard(IntPtr processHandle, int remainingRetryCount = 5) {
+            public static async Task<MpCopyItem> CreateFromClipboardAsync(IntPtr processHandle, int remainingRetryCount = 5, DispatcherPriority priority = DispatcherPriority.Background) {
+                MpCopyItem newCopyItem = null;
+                await Application.Current.Dispatcher.BeginInvoke(
+                        (Action)(() => {
+                            newCopyItem = CreateFromClipboard(processHandle, remainingRetryCount);
+                        }), priority);
+
+                return newCopyItem;
+            }
+
+            public static MpCopyItem CreateFromClipboard(IntPtr processHandle, int remainingRetryCount = 5) {
             if(remainingRetryCount < 0) {
                 Console.WriteLine("Retry count exceeded ignoring copy item");
                 return null;
@@ -408,6 +418,9 @@ namespace MpWpfApp {
                 return null;
             }
 
+            if(fromItem == toItem) {
+                return toItem;
+            }
             MpCopyItem compositeItem = null;
             switch (fromItem.CopyItemType) {
                 case MpCopyItemType.FileList:

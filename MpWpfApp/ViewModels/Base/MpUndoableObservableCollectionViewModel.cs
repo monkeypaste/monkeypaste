@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public abstract class MpUndoableObservableCollectionViewModel<T,I> : MpObservableCollectionViewModel<I> {
+    public abstract class MpUndoableObservableCollectionViewModel<T,I> : MpObservableCollectionViewModel<I> where I : class {
         private List<MpUndoableProperty<T>> _undoables;
 
         /// <summary>

@@ -53,10 +53,10 @@ namespace MpWpfApp {
                 if (srtbvml.Count > 0) {
                     return srtbvml[0];
                 }
-                if (this.Count > 0) {
-                    this[0].IsSubSelected = true;
-                    return this[0];
-                }
+                //if (this.Count > 0) {
+                //    this[0].IsSubSelected = true;
+                //    return this[0];
+                //}
                 return null;
             }
         }
@@ -277,6 +277,8 @@ namespace MpWpfApp {
         
         public void ClipTileRichTextBoxViewModelCollection_Loaded(object sender, RoutedEventArgs args) {
             RichTextBoxListBox = (ListBox)sender;
+            ListBox = RichTextBoxListBox;
+            IsHorizontal = false;
             RtbContainerGrid = RichTextBoxListBox.GetVisualAncestor<Grid>();
             RtbListBoxCanvas = RichTextBoxListBox.GetVisualAncestor<Canvas>();
 

@@ -26,7 +26,7 @@ namespace MpWpfApp {
     public class MpClipTrayViewModel : MpUndoableObservableCollectionViewModel<MpClipTrayViewModel, MpClipTileViewModel>/*, IDropTarget*/ {
         #region Private Variables      
         private IntPtr _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
-
+        
         private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
 
         //private int _totalItemsAtLoad = 0;
@@ -429,6 +429,9 @@ namespace MpWpfApp {
             };
 
             ClipTrayListView = (MpMultiSelectListView)sender;
+            ListBox = ClipTrayListView;
+            IsHorizontal = true;
+
             var scrollViewer = ClipTrayListView.GetDescendantOfType<ScrollViewer>();
 
             ClipTrayContainerGrid = ClipTrayListView.GetVisualAncestor<Grid>();
@@ -445,33 +448,46 @@ namespace MpWpfApp {
                 IsDropping = false;
                 e1.Effects = DragDropEffects.None;
                 if (e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName) ||
-                    e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileSubItemDragDropFormat)) {                    
+                    e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileSubItemDragDropFormat)) {
                     int overIdx = GetDropIdx(e1.GetPosition(ClipTrayListView));
-                    if (overIdx >= 0) {
-                        overIdx = overIdx >= this.Count ? overIdx - 1 : overIdx;
-                        if(!VisibileClipTiles[overIdx].IsDragging) {
-                            var overRect = VisibileClipTiles[overIdx].TileRect;
-                            double overMidX = overRect.Left + (overRect.Width / 2);
-                            if (e1.GetPosition(ClipTrayListView).X > overMidX) {
-                                //to the right of overIdx
-                                if (overIdx + 1 < this.Count && VisibileClipTiles[overIdx + 1].IsDragging) {
-                                    //reject drop since its at same position
-                                } else {
-                                    DropTopPoint = overRect.TopRight;
-                                    DropBottomPoint = overRect.BottomRight;
-                                }
-                            } else {
-                                //to the left of overIdx
-                                if (overIdx > 0 && VisibileClipTiles[overIdx - 1].IsDragging) {
-                                    //reject drop since its at same position
-                                } else {
-                                    DropTopPoint = overRect.TopLeft;
-                                    DropBottomPoint = overRect.BottomLeft;
-                                }
-                            }
-                            IsDropping = true;
-                            e1.Effects = DragDropEffects.Move;
-                        }                                              
+                    //int overIdx = IndexUnderDragCursor;
+                    if (overIdx >= 0 && 
+                        (overIdx == VisibileClipTiles.Count || !VisibileClipTiles[overIdx].IsDragging)) {
+                        //overIdx = overIdx >= this.Count ? overIdx - 1 : overIdx;
+                        Console.WriteLine("Tray Drag  over Tile Idx:" + overIdx);
+                        Rect overRect = new Rect();
+                        if (overIdx < VisibileClipTiles.Count) {
+                            overRect = VisibileClipTiles[overIdx].TileRect;
+                            //overRect = this.GetListBoxItemRect(this.IndexOf(VisibileClipTiles[overIdx]));
+                            DropTopPoint = overRect.TopLeft;
+                            DropBottomPoint = overRect.BottomLeft;
+                        } else {
+                            //only can be Count + 1
+                            //overRect = this.GetListBoxItemRect(this.IndexOf(VisibileClipTiles[VisibileClipTiles.Count - 1]));
+                            overRect = VisibileClipTiles[VisibileClipTiles.Count - 1].TileRect;
+                            DropTopPoint = overRect.TopRight;
+                            DropBottomPoint = overRect.BottomRight;
+                        }
+                        //double overMidX = overRect.Left + (overRect.Width / 2);
+                        //if (e1.GetPosition(ClipTrayListView).X > overMidX) {
+                        //    //to the right of overIdx
+                        //    if (overIdx + 1 < this.Count && VisibileClipTiles[overIdx + 1].IsDragging) {
+                        //        //reject drop since its at same position
+                        //    } else {
+                        //        DropTopPoint = overRect.TopRight;
+                        //        DropBottomPoint = overRect.BottomRight;
+                        //    }
+                        //} else {
+                        //    //to the left of overIdx
+                        //    if (overIdx > 0 && VisibileClipTiles[overIdx - 1].IsDragging) {
+                        //        //reject drop since its at same position
+                        //    } else {
+                        //        DropTopPoint = overRect.TopLeft;
+                        //        DropBottomPoint = overRect.BottomLeft;
+                        //    }
+                        //}
+                        IsDropping = true;
+                        e1.Effects = DragDropEffects.Move;
                     }
                 }
                 ClipTrayAdornerLayer.Update();
@@ -479,7 +495,7 @@ namespace MpWpfApp {
 
             ClipTrayListView.Drop += (s3, e2) => {
                 bool wasDropped = false;
-                List<MpRtbListBoxItemRichTextBoxViewModel> drtbvml = null;
+                List<MpRtbListBoxItemRichTextBoxViewModel> drtbvml = new List<MpRtbListBoxItemRichTextBoxViewModel>();
                 List<MpClipTileViewModel> dctvml = null;
                 int itemCount = 0;
                 if (e2.Data.GetDataPresent(Properties.Settings.Default.ClipTileSubItemDragDropFormat)) {
@@ -490,11 +506,39 @@ namespace MpWpfApp {
                     itemCount = dctvml.Count;
                 }
                 if (itemCount > 0) {
+                    //drtbvml = drtbvml.OrderBy(x => x.CompositeSortOrderIdx).ToList();
+                    //int dropIdx = GetDropIdx(e2.GetPosition(ClipTrayListView));
+                    //if (dropIdx >= 0) {
+                    //    ClearClipSelection();
+                    //    MpClipTileViewModel dctvm = null;
+                    //    if(drtbvml.Count == 1) {
+                    //        //when dragging a non-composite rtf tile
+                    //        dctvm = drtbvml[0].HostClipTileViewModel;
+                    //        this.Remove(dctvm, true);
+                    //    } else {
+                    //        foreach (var drtbvm in drtbvml) {
+                    //            //remove them from parent and if parent only has 1 child convert to richtext or dispose if none
+                    //            //are left (via rtbvmc.Remove)
+                    //            drtbvm.RichTextBoxViewModelCollection.Remove(drtbvm, true);
+                    //            if(dctvm == null) {
+                    //                dctvm = new MpClipTileViewModel(drtbvm.CopyItem);
+                    //            } else {
+                    //                dctvm.MergeClip(drtbvm.CopyItem);
+                    //            }
+                    //        }
+                    //    }
+                    //    this.Add(dctvm, dropIdx);
+                    //    dctvm.SaveToDatabase();
+                    //}
+
                     int dropIdx = GetDropIdx(e2.GetPosition(ClipTrayListView));
+                    //int dropIdx = IndexUnderDragCursor;
                     if (dropIdx >= 0) {
+                        //dropIdx = dropIdx >= this.Count ? this.Count - 1 : dropIdx;
+                        Console.WriteLine("Tray Drop over Tile Idx:" + dropIdx);
                         ClearClipSelection();
                         for (int i = 0; i < itemCount; i++) {
-                            if(drtbvml != null) {
+                            if (drtbvml != null) {
                                 //when dropping composite children onto tray  
                                 var drtbvm = drtbvml[i];
                                 if (drtbvm.IsCompositeChild) {
@@ -502,11 +546,10 @@ namespace MpWpfApp {
                                     //are left (via rtbvmc.Remove)
                                     drtbvm.RichTextBoxViewModelCollection.Remove(drtbvm, true);
                                     var nctvm = new MpClipTileViewModel(drtbvm.CopyItem);
-                                    this.Insert(dropIdx, nctvm);
+                                    this.Add(nctvm, dropIdx);
                                     nctvm.IsSelected = true;
-                                    //MainWindowViewModel.TagTrayViewModel.AddClipToSudoTags(nctvm);
-                                } else {
-                                    dropIdx = dropIdx >= this.Count ? dropIdx - 1 : dropIdx;
+                                    MainWindowViewModel.TagTrayViewModel.AddClipToSudoTags(nctvm);
+                                } else {                                    
                                     int dragIdx = this.IndexOf(drtbvm.HostClipTileViewModel);
                                     this.Move(dragIdx, dropIdx);
                                     drtbvm.HostClipTileViewModel.IsSelected = true;
@@ -516,7 +559,6 @@ namespace MpWpfApp {
                             } else {
                                 //when reordering tiles
                                 var dctvm = dctvml[i];
-                                dropIdx = dropIdx >= this.Count ? dropIdx - 1 : dropIdx;
                                 int dragIdx = this.IndexOf(dctvm);
                                 this.Move(dragIdx, dropIdx);
                                 dctvm.IsSelected = true;
@@ -578,6 +620,48 @@ namespace MpWpfApp {
             if (Properties.Settings.Default.IsInitialLoad) {
                 InitIntroItems();
             }
+        }
+
+        private DragDropEffects DropClips(List<MpClipTileViewModel> dctvml) {
+
+            return DragDropEffects.None;
+        }
+
+        private DragDropEffects DropRtbItems(List<MpRtbListBoxItemRichTextBoxViewModel> drtbvml) {
+
+            return DragDropEffects.None;
+        }
+        private int GetDropIdx(Point mp) {
+            double mdx = mp.X;
+            double minDist = double.MaxValue;
+            int dropIdx = -1;
+            foreach (var vctvm in VisibileClipTiles) {
+                if (vctvm.ClipBorder == null) {
+                    //not sure why this happens but during a composite->tray
+                    //drop the new tile is already added but not loaded
+                    continue;
+                }
+                double lbilx = vctvm.TileRect.Left;
+                double lbirx = vctvm.TileRect.Right;
+                double lDist = Math.Abs(mdx - lbilx);
+                double rDist = Math.Abs(mdx - lbirx);
+                double dist = Math.Min(lDist, rDist);
+                if (dist < minDist) {
+                    minDist = dist;
+                    if(minDist == lDist) {
+                        dropIdx = VisibileClipTiles.IndexOf(vctvm);
+                    } else {
+                        dropIdx = VisibileClipTiles.IndexOf(vctvm) + 1;
+                    }
+                    
+                }
+            }
+            //var overRect = this[dropIdx].TileRect;
+            //double overMidX = overRect.Left + (overRect.Right / 2);
+            //if (mp.X > overMidX) {
+            //    dropIdx++;
+            //}
+            return dropIdx;
         }
 
         public void ClipTrayVirtualizingStackPanel_Loaded(object sender, RoutedEventArgs args) {
@@ -822,12 +906,12 @@ namespace MpWpfApp {
                 ctvm.RefreshCommands();
             }
         }
-        public void AddItemFromClipboard() {
+        public async Task AddItemFromClipboard() {
             var sw = new Stopwatch();
             sw.Start();
 
             //var priority = DispatcherPriority.Background;
-            var newCopyItem = MpCopyItem.CreateFromClipboard(MpClipboardManager.Instance.LastWindowWatcher.LastHandle);
+            var newCopyItem = await MpCopyItem.CreateFromClipboardAsync(MpClipboardManager.Instance.LastWindowWatcher.LastHandle);
 
             if (newCopyItem == null) {
                 //this occurs if the copy item is not a known format
@@ -885,8 +969,7 @@ namespace MpWpfApp {
             sw.Stop();
             Console.WriteLine("Time to create new copyitem: " + sw.ElapsedMilliseconds + " ms");
         }
-
-        
+               
 
         public void Refresh() {
             //if(MainWindowViewModel == null || MainWindowViewModel.IsLoading) {
@@ -894,23 +977,30 @@ namespace MpWpfApp {
             //}
            ClipTrayListView?.Items.Refresh();
         }
-        public new void Add(MpClipTileViewModel ctvm) {
-            if (MainWindowViewModel != null && MainWindowViewModel.IsMainWindowLocked) {
-                ctvm.TileVisibility = Visibility.Collapsed;
+        public void Add(MpClipTileViewModel ctvm, int forceIdx = 0) {
+            //if (MainWindowViewModel != null && MainWindowViewModel.IsMainWindowLocked) {
+            //    ctvm.TileVisibility = Visibility.Collapsed;
+            //}
+            if(forceIdx >= 0 && forceIdx < this.Count) {
+                base.Insert(forceIdx, ctvm);
+            } else {
+                base.Add(ctvm);
             }
-            base.Insert(0, ctvm);
+            
 
             // NOTE removing this refresh will confuse the tiles flowdocument owner or something
             // it probably is something I can fix to avoid the refresh but not sure how
             if (MainWindowViewModel == null || !MainWindowViewModel.IsMainWindowLocked) {
                 //Refresh();
             } else {
-                ctvm.IsSelected = false;
+               // ctvm.IsSelected = false;
             }
             //not calling this doesn't associate the items clipborder to this listbox I don't know why
-            Refresh();
-
-            //WasItemAdded = true;
+            if (Application.Current.MainWindow.Visibility == Visibility.Visible) {
+                Refresh();
+            } else {
+                WasItemAdded = true;
+            }
         }
 
         public void Remove(MpClipTileViewModel clipTileToRemove, bool isMerge = false) {
@@ -1108,28 +1198,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-        private int GetDropIdx(Point mp) {
-            double mdx = mp.X;
-            double minDist = double.MaxValue;
-            int dropIdx = 0;
-            foreach (var vctvm in VisibileClipTiles) {
-                double lbilx = vctvm.TileRect.Left;
-                double lbirx = vctvm.TileRect.Right;
-                double lDist = Math.Abs(mdx - lbilx);
-                double rDist = Math.Abs(mdx - lbirx);
-                double dist = Math.Min(lDist, rDist);
-                if (dist < minDist) {
-                    minDist = dist;
-                    dropIdx = VisibileClipTiles.IndexOf(vctvm);
-                }
-            }
-            var overRect = this[dropIdx].TileRect;
-            double overMidX = overRect.Left + (overRect.Right / 2);
-            if (mp.X > overMidX) {
-                dropIdx++;
-            }
-            return dropIdx;
-        }       
+              
 
         private void InitIntroItems() {
             //var introItem1 = new MpCopyItem(

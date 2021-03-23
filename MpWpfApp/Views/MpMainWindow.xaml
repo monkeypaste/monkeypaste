@@ -1351,7 +1351,6 @@
                                 <local:MpClipBorder x:Name="ClipTileClipBorder"
                                                     DataContext="{Binding}"
                                                     Margin="{Binding TileMargin}"
-                                                    BorderBrush="{Binding TileBorderBrush}"
                                                     BorderThickness="{Binding TileBorderThickness}"
                                                     Width="{Binding TileBorderWidth}"
                                                     Height="{Binding TileBorderHeight}"
@@ -1369,6 +1368,24 @@
                                                                 MethodName="ClipTile_Loaded" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
+                                    <local:MpClipBorder.BorderBrush>
+                                        <DrawingBrush Viewport="0,0,8,8"
+                                                      ViewportUnits="Absolute"
+                                                      TileMode="Tile">
+                                            <DrawingBrush.Drawing>
+                                                <DrawingGroup>
+                                                    <GeometryDrawing Brush="{Binding TileBorderBrush}">
+                                                        <GeometryDrawing.Geometry>
+                                                            <GeometryGroup>
+                                                                <RectangleGeometry Rect="{Binding TileBorderBrushRect}" />
+                                                                <RectangleGeometry Rect="50,50,50,50" />
+                                                            </GeometryGroup>
+                                                        </GeometryDrawing.Geometry>
+                                                    </GeometryDrawing>
+                                                </DrawingGroup>
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </local:MpClipBorder.BorderBrush>
                                     <local:MpClipBorder.RenderTransform>
                                         <TranslateTransform X="0"
                                                             Y="0"
@@ -1379,7 +1396,8 @@
                                                               Data="{Binding}" />
                                     </local:MpClipBorder.Resources>
                                     <local:MpClipBorder.ContextMenu>
-                                        <ContextMenu x:Name="ClipTile_ContextMenu">
+                                        <ContextMenu x:Name="ClipTile_ContextMenu"
+                                                     DataContext="{Binding Data, Source={StaticResource ClipTileProxy}}">
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Loaded">
                                                     <i:CallMethodAction TargetObject="{Binding}"
@@ -1417,11 +1435,11 @@
                                                           CommandParameter="{StaticResource Zip}" />
                                             </MenuItem>
                                             <MenuItem Header="Rename"
-                                                      Command="{Binding ToggleEditTitleCommand}" />
+                                                      Command="{Binding Data.ToggleEditTitleCommand, Source={StaticResource ClipTileProxy}}" />
                                             <MenuItem Header="Duplicate"
                                                       Command="{Binding Data.DuplicateSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
                                             <MenuItem Header="Send as Email"
-                                                      Command="{Binding SendClipToEmailCommand}" />
+                                                      Command="{Binding Data.SendClipToEmailCommand, Source={StaticResource ClipTileProxy}}" />
                                             <MenuItem x:Name="ClipTileColorContextMenuItem"
                                                       Style="{StaticResource MenuItemStyle}" />
                                             <MenuItem Header="Delete"
@@ -1962,7 +1980,7 @@
                                                           Height="{Binding RichTextBoxViewModelCollection.RtbListBoxHeight, Mode=TwoWay}"
                                                           Canvas.Top="{Binding RichTextBoxViewModelCollection.RtblbCanvasTop, Mode=TwoWay}">
                                                         <AdornerDecorator>
-                                                            <local:MpMultiSelectListBox x:Name="ClipTileRichTextBoxListBox"
+                                                            <ListBox x:Name="ClipTileRichTextBoxListBox"
                                                                                         DataContext="{Binding RichTextBoxViewModelCollection}"
                                                                                         BorderThickness="1"
                                                                                         BorderBrush="Pink"
@@ -1972,6 +1990,7 @@
                                                                                         ItemsSource="{Binding}"
                                                                                         Focusable="True"
                                                                                         IsEnabled="True"
+                                                                                        VirtualizingPanel.IsVirtualizing="False"
                                                                                         ScrollViewer.CanContentScroll="True"
                                                                                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                                                                         ScrollViewer.VerticalScrollBarVisibility="Auto"
@@ -2142,7 +2161,7 @@
                                                                         </AdornerDecorator>
                                                                     </DataTemplate>
                                                                 </ListBox.ItemTemplate>
-                                                            </local:MpMultiSelectListBox>
+                                                            </ListBox>
                                                         </AdornerDecorator>
                                                     </Grid>
                                                     <Border x:Name="ClipTileEditTemplateToolbar"

@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -62,14 +63,35 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
         //    base.OnCollectionChanged(args);
         //}
     }
-    public class MpObservableCollectionViewModel<T> : MpObservableCollection<T> {
+    public class MpObservableCollectionViewModel<T> : MpObservableCollection<T> where T : class {
+        #region Private Variables
+        
+        #endregion
+
+        #region View Models
         public MpMainWindowViewModel MainWindowViewModel {
             get {
                 return (MpMainWindowViewModel)((MpMainWindow)Application.Current.MainWindow).DataContext;
             }
         }
+        #endregion
 
         #region Properties
+        public bool IsHorizontal { get; set; } = false;
+
+        private ListBox _listBox = null;
+        public ListBox ListBox {
+            get {
+                return _listBox;
+            }
+            set {
+                if (_listBox != value) {
+                    _listBox = value;
+                    OnPropertyChanged(nameof(ListBox));
+                }
+            }
+        }
+
         private bool _isTrialExpired = Properties.Settings.Default.IsTrialExpired;
         public bool IsTrialExpired {
             get {
@@ -119,12 +141,98 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
                 }
             }
         }
+
+        public int IndexUnderDragCursor {
+            get {
+                if(this.ListBox == null) {
+                    return -1;
+                }
+                int index = -1;
+                for (int i = 0; i < this.ListBox.Items.Count; ++i) {
+                    ListBoxItem item = this.GetListBoxItem(i);
+                    if (MpHelpers.Instance.IsMouseOver(item)) {
+                        var mp = MpHelpers.Instance.GetMousePosition(item);
+                        var itemRect = GetListBoxItemRect(i);
+                        if(IsHorizontal) {
+                            if (mp.X > itemRect.Width / 2) {
+                                return i + 1;
+                            }
+                            return i;
+                        } else {
+                            if(mp.Y > itemRect.Height / 2) {
+                                return i + 1;
+                            }
+                            return i;
+                        }
+                    }
+                }
+                return index;
+            }
+        }
+
+        private T _itemUnderDragCursor;
+        public T ItemUnderDragCursor {
+            get { 
+                return _itemUnderDragCursor; 
+            }
+            set {
+                if (_itemUnderDragCursor == value) {
+                    return;
+                }
+
+                // The first pass handles the previous item under the cursor.
+                // The second pass handles the new one.
+                for (int i = 0; i < 2; ++i) {
+                    if (i == 1) {
+                        _itemUnderDragCursor = value;
+                    }
+                    if (_itemUnderDragCursor != null) {
+                        ListBoxItem listBoxItem = this.GetListBoxItem(_itemUnderDragCursor);
+                        if (listBoxItem != null) {
+                            MpListBoxItemDragState.SetIsUnderDragCursor(listBoxItem, i == 1);
+                        }
+                    }
+                }
+            }
+        }
         #endregion
 
         #region Public Methods
         public MpObservableCollectionViewModel() : base() { }
         public MpObservableCollectionViewModel(List<T> list) : base(list) { }
         public MpObservableCollectionViewModel(IEnumerable<T> collection) : base(collection) { }
+
+        public ListBoxItem GetListBoxItem(int index) {
+            if (this.ListBox == null) {
+                return null;
+            }
+            if (this.ListBox.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
+                return null;
+            if (index < 0 || index >= this.ListBox.Items.Count) {
+                return null;
+            }
+            return this.ListBox.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
+        }
+
+        public ListBoxItem GetListBoxItem(T dataItem) {
+            if (this.ListBox == null) {
+                return null;
+            }
+            if (this.ListBox.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
+                return null;
+
+            return this.ListBox.ItemContainerGenerator.ContainerFromItem(dataItem) as ListBoxItem;
+        }
+
+        public Rect GetListBoxItemRect(int index) {
+            var lbi = GetListBoxItem(index);
+            if (lbi == null || lbi.Visibility != Visibility.Visible) {
+                return new Rect();
+            }
+            var origin = lbi.TranslatePoint(new Point(0, 0), ListBox);
+
+            return new Rect(origin, new Size(lbi.ActualWidth,lbi.ActualHeight));
+        }
         #endregion
 
         #region Protected Methods
@@ -186,4 +294,80 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
         }
         #endregion
     }
+
+    #region MpListBoxItemDragState
+
+    /// <summary>
+    /// Exposes attached properties used in conjunction with the ListBoxDragDropManager class.
+    /// Those properties can be used to allow triggers to modify the appearance of ListBoxItems
+    /// in a ListBox during a drag-drop operation.
+    /// </summary>
+    public static class MpListBoxItemDragState {
+        #region IsBeingDragged
+
+        /// <summary>
+        /// Identifies the MpListBoxItemDragState's IsBeingDragged attached property.  
+        /// This field is read-only.
+        /// </summary>
+        public static readonly DependencyProperty IsBeingDraggedProperty =
+            DependencyProperty.RegisterAttached(
+                "IsBeingDragged",
+                typeof(bool),
+                typeof(MpListBoxItemDragState),
+                new UIPropertyMetadata(false));
+
+        /// <summary>
+        /// Returns true if the specified ListBoxItem is being dragged, else false.
+        /// </summary>
+        /// <param name="item">The ListBoxItem to check.</param>
+        public static bool GetIsBeingDragged(ListBoxItem item) {
+            return (bool)item.GetValue(IsBeingDraggedProperty);
+        }
+
+        /// <summary>
+        /// Sets the IsBeingDragged attached property for the specified ListBoxItem.
+        /// </summary>
+        /// <param name="item">The ListBoxItem to set the property on.</param>
+        /// <param name="value">Pass true if the element is being dragged, else false.</param>
+        internal static void SetIsBeingDragged(ListBoxItem item, bool value) {
+            item.SetValue(IsBeingDraggedProperty, value);
+        }
+
+        #endregion // IsBeingDragged
+
+        #region IsUnderDragCursor
+
+        /// <summary>
+        /// Identifies the MpListBoxItemDragState's IsUnderDragCursor attached property.  
+        /// This field is read-only.
+        /// </summary>
+        public static readonly DependencyProperty IsUnderDragCursorProperty =
+            DependencyProperty.RegisterAttached(
+                "IsUnderDragCursor",
+                typeof(bool),
+                typeof(MpListBoxItemDragState),
+                new UIPropertyMetadata(false));
+
+        /// <summary>
+        /// Returns true if the specified ListBoxItem is currently underneath the cursor 
+        /// during a drag-drop operation, else false.
+        /// </summary>
+        /// <param name="item">The ListBoxItem to check.</param>
+        public static bool GetIsUnderDragCursor(ListBoxItem item) {
+            return (bool)item.GetValue(IsUnderDragCursorProperty);
+        }
+
+        /// <summary>
+        /// Sets the IsUnderDragCursor attached property for the specified ListBoxItem.
+        /// </summary>
+        /// <param name="item">The ListBoxItem to set the property on.</param>
+        /// <param name="value">Pass true if the element is underneath the drag cursor, else false.</param>
+        internal static void SetIsUnderDragCursor(ListBoxItem item, bool value) {
+            item.SetValue(IsUnderDragCursorProperty, value);
+        }
+
+        #endregion // IsUnderDragCursor
+    }
+
+    #endregion // MpListBoxItemDragState
 }

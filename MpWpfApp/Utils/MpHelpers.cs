@@ -1246,6 +1246,16 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual
+        public bool IsMouseOver(Visual target) {
+            // We need to use MouseUtilities to figure out the cursor
+            // coordinates because, during a drag-drop operation, the WPF
+            // mechanisms for getting the coordinates behave strangely.
+
+            Rect bounds = VisualTreeHelper.GetDescendantBounds(target);
+            Point mousePos = GetMousePosition(target);
+            return bounds.Contains(mousePos);
+        }
+
         public IList<T> GetRandomizedList<T>(IList<T> orderedList) where T : class {
             var preRandomList = new List<T>();
             foreach (var c in orderedList) {

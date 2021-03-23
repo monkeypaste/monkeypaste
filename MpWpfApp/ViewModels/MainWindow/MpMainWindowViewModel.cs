@@ -432,7 +432,7 @@ namespace MpWpfApp {
                 IsLoading = false;
                 ClipTileSortViewModel.SelectedSortType = ClipTileSortViewModel.SortTypes[0];
                 //ClipTrayViewModel.HideVisibleTiles(1);
-            } else {
+            } else {                
                 ResetTraySelection();
             }
 
@@ -443,10 +443,10 @@ namespace MpWpfApp {
                 mw,
                 Window.TopProperty,
                 (s, e) => {
-                    //if(ClipTrayViewModel.WasItemAdded) {
-                    //    ClipTrayViewModel.WasItemAdded = false;
-                    //    ClipTrayViewModel.Refresh();
-                    //}
+                    if (ClipTrayViewModel.WasItemAdded) {
+                        ClipTrayViewModel.Refresh();
+                        ClipTrayViewModel.WasItemAdded = false;
+                    }
                 });
         }
 

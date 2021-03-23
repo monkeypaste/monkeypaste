@@ -178,6 +178,9 @@ namespace MpWpfApp {
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool GetCursorPos(ref Win32Point pt);
 
+        [DllImport("user32.dll")]
+        public static extern bool ScreenToClient(IntPtr hwnd, ref Win32Point pt);
+
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int GetWindowThreadProcessId(IntPtr handle, out uint processId);
 
