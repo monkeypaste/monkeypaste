@@ -18,6 +18,7 @@
         Title="MpMainWindow"
         WindowStyle="None" 
         Top="10000"
+        Visibility="Visible"
         ShowInTaskbar="false"
         ResizeMode="NoResize"
         Background="Transparent"
@@ -1981,22 +1982,22 @@
                                                           Canvas.Top="{Binding RichTextBoxViewModelCollection.RtblbCanvasTop, Mode=TwoWay}">
                                                         <AdornerDecorator>
                                                             <ListBox x:Name="ClipTileRichTextBoxListBox"
-                                                                                        DataContext="{Binding RichTextBoxViewModelCollection}"
-                                                                                        BorderThickness="1"
-                                                                                        BorderBrush="Pink"
-                                                                                        SelectionMode="Extended"
-                                                                                        IsSynchronizedWithCurrentItem="True"
-                                                                                        Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
-                                                                                        ItemsSource="{Binding}"
-                                                                                        Focusable="True"
-                                                                                        IsEnabled="True"
-                                                                                        VirtualizingPanel.IsVirtualizing="False"
-                                                                                        ScrollViewer.CanContentScroll="True"
-                                                                                        ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                                                                        ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                                                                        Width="{Binding HostClipTileViewModel.TileContentWidth}"
-                                                                                        Height="{Binding RtbListBoxHeight, Mode=TwoWay}"
-                                                                                        Padding="0">
+                                                                    DataContext="{Binding RichTextBoxViewModelCollection}"
+                                                                    BorderThickness="1"
+                                                                    BorderBrush="Pink"
+                                                                    SelectionMode="Extended"
+                                                                    IsSynchronizedWithCurrentItem="True"
+                                                                    Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
+                                                                    ItemsSource="{Binding}"
+                                                                    Focusable="True"
+                                                                    IsEnabled="True"
+                                                                    VirtualizingPanel.IsVirtualizing="False"
+                                                                    ScrollViewer.CanContentScroll="True"                                                                    
+                                                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                                                    ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                                                    Width="{Binding HostClipTileViewModel.TileContentWidth}"
+                                                                    Height="{Binding RtbListBoxHeight, Mode=TwoWay}"
+                                                                    Padding="0">
                                                                 <i:Interaction.Triggers>
                                                                     <i:EventTrigger EventName="Loaded">
                                                                         <i:CallMethodAction TargetObject="{Binding}"
@@ -2013,7 +2014,7 @@
                                                                         <Setter Property="Template">
                                                                             <Setter.Value>
                                                                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                                                    <ContentPresenter />
+                                                                                    <ContentPresenter/>
                                                                                 </ControlTemplate>
                                                                             </Setter.Value>
                                                                         </Setter>
@@ -2023,6 +2024,8 @@
                                                                     <DataTemplate>
                                                                         <AdornerDecorator>
                                                                             <Canvas x:Name="RtbListBoxItemCanvas"
+                                                                                    HorizontalAlignment="Left"
+                                                                                    VerticalAlignment="Top"
                                                                                     DataContext="{Binding}"                                                                                    
                                                                                     Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                                                     Width="{Binding RtbCanvasWidth}"

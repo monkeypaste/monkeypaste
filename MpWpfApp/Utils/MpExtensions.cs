@@ -54,6 +54,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual Tree
+
         public static bool IsVisualDescendant(this DependencyObject parent, DependencyObject child) {
             if(parent == null || child == null) {
                 return false;

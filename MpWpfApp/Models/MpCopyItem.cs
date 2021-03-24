@@ -1165,8 +1165,8 @@ namespace MpWpfApp {
 
         // still req'd if NoDb=true
         public override void WriteToDatabase() {
-            //var changeType = MpCopyItemChangeType.None;
-
+            var sw = new Stopwatch();
+            sw.Start();
             App.WriteToDatabase();
             ItemColor.WriteToDatabase();
             Title = string.IsNullOrEmpty(Title) ? string.Empty : Title;
@@ -1250,6 +1250,9 @@ namespace MpWpfApp {
                 cit.CopyItemId = CopyItemId;
                 cit.WriteToDatabase();
             }
+            
+            sw.Stop();
+            Console.WriteLine("CopyItem(Id:" + CopyItemId + ") WriteToDatabase time: " + sw.ElapsedMilliseconds + "ms");
         }
 
         public object Clone() {

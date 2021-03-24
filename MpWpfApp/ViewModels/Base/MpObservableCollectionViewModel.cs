@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MpWpfApp {
     
@@ -147,9 +148,8 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
                 if(this.ListBox == null) {
                     return -1;
                 }
-                int index = -1;
                 for (int i = 0; i < this.ListBox.Items.Count; ++i) {
-                    ListBoxItem item = this.GetListBoxItem(i);
+                    var item = this.GetListBoxItem(i);
                     if (MpHelpers.Instance.IsMouseOver(item)) {
                         var mp = MpHelpers.Instance.GetMousePosition(item);
                         var itemRect = GetListBoxItemRect(i);
@@ -164,35 +164,52 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
                             }
                             return i;
                         }
+                    } 
+                }
+                if (MpHelpers.Instance.IsMouseOver(ListBox)) {
+                    var mp = MpHelpers.Instance.GetMousePosition(ListBox);
+                    double minDist = double.MaxValue;
+                    int minIdx = -1;
+                    for (int i = 0; i < this.ListBox.Items.Count; ++i) {
+                        var itemRect = GetListBoxItemRect(i);
+                        double curDist = double.MaxValue;
+                        if (IsHorizontal) {
+                            if(i == 0 && mp.X <= itemRect.Left) {
+                                return i;
+                            }
+                            if(i == this.ListBox.Items.Count - 1 && mp.X >= itemRect.Right) {
+                                return i;
+                            }
+                            if(i < this.ListBox.Items.Count - 1) {
+                                var nextRect = GetListBoxItemRect(i + 1);
+                                if(mp.X >= itemRect.Left && mp.X <= nextRect.Right) {
+                                    return i + 1;
+                                }
+                            }                           
+                        } else {
+                            curDist = MpHelpers.Instance.DistanceBetweenValues(itemRect.Bottom, mp.Y);
+                        }
+                        if (curDist < minDist) {
+                            minDist = curDist;
+                            minIdx = i;
+                        }
+                    }
+                    if(minIdx >= 0) {
+                        return minIdx;
                     }
                 }
-                return index;
+                return -1;
             }
         }
 
-        private T _itemUnderDragCursor;
-        public T ItemUnderDragCursor {
-            get { 
-                return _itemUnderDragCursor; 
-            }
-            set {
-                if (_itemUnderDragCursor == value) {
-                    return;
+        public ScrollViewer ScrollViewer {
+            get {
+                if(ListBox == null) {
+                    return null;
                 }
+                Border border = (Border)VisualTreeHelper.GetChild(ListBox, 0);
 
-                // The first pass handles the previous item under the cursor.
-                // The second pass handles the new one.
-                for (int i = 0; i < 2; ++i) {
-                    if (i == 1) {
-                        _itemUnderDragCursor = value;
-                    }
-                    if (_itemUnderDragCursor != null) {
-                        ListBoxItem listBoxItem = this.GetListBoxItem(_itemUnderDragCursor);
-                        if (listBoxItem != null) {
-                            MpListBoxItemDragState.SetIsUnderDragCursor(listBoxItem, i == 1);
-                        }
-                    }
-                }
+                return (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
             }
         }
         #endregion
@@ -202,26 +219,33 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
         public MpObservableCollectionViewModel(List<T> list) : base(list) { }
         public MpObservableCollectionViewModel(IEnumerable<T> collection) : base(collection) { }
 
+        public bool IsListBoxItemVisible(int index) {
+            var lbiRect = GetListBoxItemRect(index);
+            var lbRect = new Rect(new Point(), new Size(ListBox.ActualWidth,ListBox.ActualHeight));
+            return lbRect.Contains(lbiRect);
+        }
+
         public ListBoxItem GetListBoxItem(int index) {
             if (this.ListBox == null) {
                 return null;
             }
-            if (this.ListBox.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
+            if (this.ListBox.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
                 return null;
+            }
             if (index < 0 || index >= this.ListBox.Items.Count) {
                 return null;
             }
-            return this.ListBox.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
-        }
-
-        public ListBoxItem GetListBoxItem(T dataItem) {
-            if (this.ListBox == null) {
-                return null;
+            int visibleIdx = -1;
+            for (int i = 0; i < this.ListBox.Items.Count; i++) {
+                var lbi = this.ListBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
+                if (lbi.Visibility == Visibility.Visible) {
+                    visibleIdx++;
+                }
+                if(visibleIdx == index) {
+                    return lbi;
+                }
             }
-            if (this.ListBox.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated)
-                return null;
-
-            return this.ListBox.ItemContainerGenerator.ContainerFromItem(dataItem) as ListBoxItem;
+            return null;
         }
 
         public Rect GetListBoxItemRect(int index) {
@@ -232,6 +256,33 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
             var origin = lbi.TranslatePoint(new Point(0, 0), ListBox);
 
             return new Rect(origin, new Size(lbi.ActualWidth,lbi.ActualHeight));
+        }
+
+        public Point[] GetAdornerPoints(int index) {
+            var points = new Point[2];
+            var itemRect = GetListBoxItemRect(index);
+            if(index >= this.Count) {
+                itemRect = GetListBoxItemRect(this.Count - 1);
+            }
+            if(IsHorizontal) {
+                if(index != this.Count - 1) {
+                    points[0] = itemRect.TopLeft;
+                    points[1] = itemRect.BottomLeft;
+                } else {
+                    points[0] = itemRect.TopRight;
+                    points[1] = itemRect.BottomRight;
+                }
+            }  else {
+                if (index < this.Count) {
+                    points[0] = itemRect.TopLeft;
+                    points[1] = itemRect.TopRight;
+                } else {
+                    points[0] = itemRect.BottomLeft;
+                    points[1] = itemRect.BottomRight;
+                }
+            }
+            
+            return points;
         }
         #endregion
 

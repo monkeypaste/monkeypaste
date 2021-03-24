@@ -130,6 +130,7 @@ namespace MpWpfApp {
                 }
             }
         }
+
         private bool _isLoading = true;
         public bool IsLoading {
             get {

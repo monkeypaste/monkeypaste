@@ -96,13 +96,13 @@ namespace MpWpfApp {
         public Cursor RtbListBoxItemCursor {
             get {
                 if (HostClipTileViewModel == null) {
-                    return Cursors.Arrow;
+                    return Application.Current.MainWindow.Cursor;
                 }
                 if (HostClipTileViewModel.IsExpanded &&
                     IsSubSelected) {
-                    return Cursors.IBeam;
+                    Application.Current.MainWindow.Cursor = Cursors.IBeam;                    
                 }
-                return Cursors.Arrow;
+                return Application.Current.MainWindow.Cursor;
             }
         }
         #endregion
@@ -197,8 +197,12 @@ namespace MpWpfApp {
                     }
                     return MpMeasurements.Instance.RtbCompositeItemMinHeight;
                 }
-                if (RichTextBoxViewModelCollection.Count == 1) {
-                    return HostClipTileViewModel.TileContentHeight - RtbPadding.Top - RtbPadding.Bottom;
+                if (RichTextBoxViewModelCollection.Count == 1 && SubItemOverlayVisibility != Visibility.Visible) {
+                    if(Rtb == null) {
+                        return CopyItemRichText.ToFlowDocument().GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;//HostClipTileViewModel.TileContentHeight - RtbPadding.Top - RtbPadding.Bottom;
+                    } else {
+                        return Rtb.Document.GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;//HostClipTileViewModel.TileContentHeight - RtbPadding.Top - RtbPadding.Bottom;
+                    }
                 }
                 return MpMeasurements.Instance.RtbCompositeItemMinHeight;
             }
@@ -312,18 +316,24 @@ namespace MpWpfApp {
 
         public Brush RtbListBoxItemBackgroundColor {
             get {
-                if (CopyItem == null || HostClipTileViewModel == null) {
-                    return Brushes.Transparent;
-                }
-                if (!IsCompositeChild) {
-                    return Brushes.Transparent;
-                }
-                if (IsSubSelected && HostClipTileViewModel.IsExpanded) {
-                    return Brushes.Transparent;
-                }
-                if (IsSubHovering || 
-                    (HostClipTileViewModel.IsExpanded && !IsSubSelected && IsSubHovering) ||
-                    (!HostClipTileViewModel.IsExpanded && IsSubSelected)) {
+                //if (CopyItem == null || HostClipTileViewModel == null) {
+                //    return Brushes.Transparent;
+                //}
+                //if (!IsCompositeChild) {
+                //    return Brushes.Transparent;
+                //}
+                //if (IsSubSelected && HostClipTileViewModel.IsExpanded) {
+                //    return Brushes.Transparent;
+                //}
+                //if (IsSubHovering || 
+                //    (HostClipTileViewModel.IsExpanded && !IsSubSelected && IsSubHovering) ||
+                //    (!HostClipTileViewModel.IsExpanded && IsSubSelected)) {
+                //    var scb = CopyItemColorBrush;
+                //    scb.Opacity = 0.25;
+                //    return scb;
+                //}
+                //return Brushes.Transparent;
+                if(SubItemOverlayVisibility == Visibility.Visible) {
                     var scb = CopyItemColorBrush;
                     scb.Opacity = 0.25;
                     return scb;
@@ -387,6 +397,9 @@ namespace MpWpfApp {
                     return Visibility.Collapsed;
                 }
                 if (IsEditingSubTitle) {
+                    return Visibility.Visible;
+                }
+                if(HostClipTileViewModel.IsDropping && (!HostClipTileViewModel.IsAnyDragging || IsDragging)) {
                     return Visibility.Visible;
                 }
                 if(!IsCompositeChild) {
@@ -1124,8 +1137,11 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(RtbPadding));
             OnPropertyChanged(nameof(RtbHeight));
             OnPropertyChanged(nameof(RtbCanvasHeight));
-            Rtb.Document.PageWidth = RtbPageWidth;
-            Rtb.Document.PageHeight = RtbPageHeight;
+            OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
+            if(Rtb != null) {
+                Rtb.Document.PageWidth = RtbPageWidth;
+                Rtb.Document.PageHeight = RtbPageHeight;
+            }
 
             RichTextBoxViewModelCollection.UpdateLayout();
 

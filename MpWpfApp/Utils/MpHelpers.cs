@@ -1198,9 +1198,9 @@ namespace MpWpfApp {
             WinApi.Win32Point w32Mouse = new WinApi.Win32Point();
             WinApi.GetCursorPos(ref w32Mouse);
             if (relativeTo == null) {
-                return new Point(w32Mouse.X, w32Mouse.Y);
+                return new Point((double)w32Mouse.X, (double)w32Mouse.Y);
             }
-            return relativeTo.PointFromScreen(new Point(w32Mouse.X, w32Mouse.Y));
+            return relativeTo.PointFromScreen(new Point((double)w32Mouse.X, (double)w32Mouse.Y));
         }
 
         public string GetMainModuleFilepath(int processId) {
@@ -1247,9 +1247,9 @@ namespace MpWpfApp {
 
         #region Visual
         public bool IsMouseOver(Visual target) {
-            // We need to use MouseUtilities to figure out the cursor
-            // coordinates because, during a drag-drop operation, the WPF
-            // mechanisms for getting the coordinates behave strangely.
+            if(target == null) {
+                return false;
+            }
 
             Rect bounds = VisualTreeHelper.GetDescendantBounds(target);
             Point mousePos = GetMousePosition(target);
