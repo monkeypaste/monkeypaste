@@ -17,7 +17,7 @@ using System.Windows.Threading;
 
 namespace MpWpfApp {
 
-    public class MpEditRichTextBoxToolbarViewModel : MpViewModelBase {
+    public class MpEditRichTextBoxToolbarViewModel : MpUndoableViewModelBase<MpEditRichTextBoxToolbarViewModel>, IDisposable {
         #region Private Variables
         private StackPanel _borderStackPanel = null;
         private RichTextBox _lastRtb = null;
@@ -44,6 +44,7 @@ namespace MpWpfApp {
         #region Controls
         public Border EditToolbarBorder;
         #endregion
+
         #region Layout Properties      
         private double _editBorderCanvasTop = -MpMeasurements.Instance.ClipTileEditToolbarHeight;
         public double EditBorderCanvasTop {
@@ -693,6 +694,12 @@ namespace MpWpfApp {
                 rtbvm.ClearHyperlinks();
                 rtbvm.CreateHyperlinks();
             }            
+        }
+        #endregion
+
+        #region IDisposable
+        public void Dispose() {
+            EditToolbarBorder = null;
         }
         #endregion
     }

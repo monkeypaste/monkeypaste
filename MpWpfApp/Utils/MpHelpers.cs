@@ -38,6 +38,7 @@ using static QRCoder.PayloadGenerator;
 using CsvHelper;
 using System.Windows.Threading;
 using System.Security.Principal;
+using System.Windows.Controls.Primitives;
 
 namespace MpWpfApp {
     public class MpHelpers {
@@ -1197,9 +1198,11 @@ namespace MpWpfApp {
         public Point GetMousePosition(Visual relativeTo = null) {
             WinApi.Win32Point w32Mouse = new WinApi.Win32Point();
             WinApi.GetCursorPos(ref w32Mouse);
-            if (relativeTo == null) {
+            if (relativeTo == null || PresentationSource.FromVisual(relativeTo) == null) {
+                //return new Point((double)w32Mouse.X, (double)w32Mouse.Y);
                 return new Point((double)w32Mouse.X, (double)w32Mouse.Y);
             }
+            //return Mouse.GetPosition((UIElement)relativeTo);
             return relativeTo.PointFromScreen(new Point((double)w32Mouse.X, (double)w32Mouse.Y));
         }
 
@@ -1250,8 +1253,9 @@ namespace MpWpfApp {
             if(target == null) {
                 return false;
             }
-
-            Rect bounds = VisualTreeHelper.GetDescendantBounds(target);
+             
+            //Rect bounds = VisualTreeHelper.GetDescendantBounds(target);
+            var bounds = target.TransformToAncestor((Visual)((FrameworkElement)target).Parent).TransformBounds(LayoutInformation.GetLayoutSlot((FrameworkElement)target));
             Point mousePos = GetMousePosition(target);
             return bounds.Contains(mousePos);
         }

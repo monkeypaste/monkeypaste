@@ -364,17 +364,17 @@ namespace MpWpfApp {
             );
         }
 
-        public void AddClip(MpClipTileViewModel ctvm, bool forceCountUpdate = true) {
-            bool isNewLink = Tag.LinkWithCopyItem(ctvm.CopyItem);
-            MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
+        public void AddClip(MpClipTileViewModel ctvm) {
+            Tag.LinkWithCopyItem(ctvm.CopyItem);
+            //MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
             //if(isNewLink || forceCountUpdate) {
             //    TagClipCount++;
             //}            
         }
 
-        public void RemoveClip(MpClipTileViewModel ctvm, bool forceCountUpdate = true) {
+        public void RemoveClip(MpClipTileViewModel ctvm) {
             Tag.UnlinkWithCopyItem(ctvm.CopyItem);
-            MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
+            //MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
         }
 
         public bool IsLinkedWithClipTile(MpClipTileViewModel ctvm) {

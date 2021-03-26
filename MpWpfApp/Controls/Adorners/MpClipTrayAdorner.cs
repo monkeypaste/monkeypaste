@@ -39,7 +39,7 @@ namespace MpWpfApp {
             double trayMidY = clipTrayVm.ClipTrayListView.ActualHeight / 2;
             //t.Y += 7;
             //b.Y -= 30;
-            if (clipTrayVm.IsDropping) {
+            if (clipTrayVm.IsTrayDropping) {
                 drawingContext.DrawLine(redPen, t, b);
             }
         }

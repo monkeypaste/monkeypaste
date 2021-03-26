@@ -15,7 +15,7 @@ using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace MpWpfApp {
-    public class MpEditTemplateToolbarViewModel : MpViewModelBase {
+    public class MpEditTemplateToolbarViewModel : MpUndoableViewModelBase<MpEditTemplateToolbarViewModel>, IDisposable {
         #region Private Variables
         private Hyperlink _selectedTemplateHyperlink = null;
         private string _originalText = string.Empty;
@@ -78,6 +78,7 @@ namespace MpWpfApp {
         #region Controls
         public TextBox SelectedTemplateNameTextBox;
         #endregion
+
         #region Layout 
         private double _editTemplateBorderCanvasTop = MpMeasurements.Instance.ClipTileContentHeight;
         public double EditTemplateBorderCanvasTop {
@@ -498,6 +499,10 @@ namespace MpWpfApp {
             ClipTileViewModel.IsEditingTemplate = false;
 
             ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb.Focus();
+        }
+
+        public void Dispose() {
+            SelectedTemplateNameTextBox = null;
         }
         #endregion
 

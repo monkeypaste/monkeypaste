@@ -46,6 +46,19 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+        private bool _isSorting = false;
+        public bool IsSorting {
+            get {
+                return _isSorting;
+            }
+            set {
+                if(_isSorting != value) {
+                    _isSorting = value;
+                    OnPropertyChanged(nameof(IsSorting));
+                }
+            }
+        }
+
         public bool IsSortDescending {
             get {
                 return DescSortOrderButtonImageVisibility == Visibility.Visible;
@@ -93,7 +106,7 @@ namespace MpWpfApp {
             };
         }
         public void ClipTileSort_Loaded(object sender, RoutedEventArgs e) {
-            PerformSelectedSortCommand.Execute(null);
+            //PerformSelectedSortCommand.Execute(null);
         }
         public string GetSortTypeAsMemberPath() {
             return ConvertSortTypeToMemberPath(SelectedSortType.Name);
@@ -155,6 +168,7 @@ namespace MpWpfApp {
             if (MainWindowViewModel.IsLoading) {
                 return;
             }
+            IsSorting = true;
             var ct = MainWindowViewModel.ClipTrayViewModel;
             var sw = new Stopwatch();
             sw.Start();
@@ -169,6 +183,7 @@ namespace MpWpfApp {
             sw.Stop();
             Console.WriteLine("Sort for " + ct.VisibileClipTiles.Count + " items: " + sw.ElapsedMilliseconds + " ms");
             ct.ResetClipSelection();
+            IsSorting = false;
         }
         #endregion
     }

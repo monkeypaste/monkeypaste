@@ -33,9 +33,11 @@ namespace MpWpfApp {
         TemplateSegment,
         CopyItemSegment
     }
-    public class MpTemplateHyperlinkViewModel : MpViewModelBase, ICloneable {
+    public class MpTemplateHyperlinkViewModel : MpUndoableViewModelBase<MpTemplateHyperlinkViewModel>, ICloneable {
         #region Private Variables
         #endregion
+
+        #region Properties
 
         #region View Models
         private MpClipTileViewModel _clipTileViewModel = null;
@@ -76,8 +78,6 @@ namespace MpWpfApp {
             }
         }
         #endregion
-
-        #region Properties
 
         #region Layout Properties        
         #endregion

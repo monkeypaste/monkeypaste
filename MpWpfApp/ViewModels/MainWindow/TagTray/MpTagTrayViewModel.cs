@@ -34,6 +34,9 @@ namespace MpWpfApp {
         }
         public MpTagTrayViewModel(MpClipTrayViewModel ctrvm) : this() {
             ctrvm.CollectionChanged += (s, e) => {
+                if(MainWindowViewModel.ClipTileSortViewModel.IsSorting) {
+                    return;
+                }
                 if (e.NewItems != null) {
                     foreach (MpClipTileViewModel ctvm in ctrvm) {
                         AddClipToSudoTags(ctvm);

@@ -33,16 +33,13 @@ namespace MpWpfApp {
                         break;
                     case 3:
                         shortcutCommand = MainWindowViewModel.AppModeViewModel.ToggleAppendModeCommand;
-                        commandParameter = true;
                         break;
                     case 4:
                         shortcutCommand = MainWindowViewModel.AppModeViewModel.ToggleAutoCopyModeCommand;
-                        commandParameter = true;
                         break;
                     case 5:
                         //right click paste mode
                         shortcutCommand = MainWindowViewModel.AppModeViewModel.ToggleRightClickPasteCommand;
-                        commandParameter = true;
                         break;
                     case 6:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;

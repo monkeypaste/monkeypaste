@@ -19,7 +19,7 @@ namespace MpWpfApp
     public class AnimatedListBox : ListBox
     {
         #region PART holders
-        AnimatedScrollViewer _scrollViewer;
+        public AnimatedScrollViewer AnimatedScrollViewer;
         #endregion
         
         static AnimatedListBox()
@@ -34,7 +34,7 @@ namespace MpWpfApp
             AnimatedScrollViewer scrollViewerHolder = base.GetTemplateChild("PART_AnimatedScrollViewer") as AnimatedScrollViewer;
             if (scrollViewerHolder != null)
             {
-                _scrollViewer = scrollViewerHolder;
+                AnimatedScrollViewer = scrollViewerHolder;
             }
 
             this.SelectionChanged += new SelectionChangedEventHandler(AnimatedListBox_SelectionChanged);
@@ -76,7 +76,7 @@ namespace MpWpfApp
                         }
                     }
 
-                    _scrollViewer.TargetVerticalOffset = scrollTo;
+                    AnimatedScrollViewer.TargetVerticalOffset = scrollTo;
                 }
             }
         }

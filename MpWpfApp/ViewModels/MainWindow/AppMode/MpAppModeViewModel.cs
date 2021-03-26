@@ -68,6 +68,22 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpAppModeViewModel() : base() {
+            PropertyChanged += (s, e) => {
+                switch(e.PropertyName) {
+                    case nameof(IsAppPaused):
+                        ShowNotifcation("App", IsAppPaused ? "PAUSED" : "ACTIVE", IsAppPaused);
+                        break;
+                    case nameof(IsRightClickPasteMode):
+                        ShowNotifcation("Right-Click Paste Mode", IsRightClickPasteMode ? "ON" : "OFF", IsRightClickPasteMode);
+                        break;
+                    case nameof(IsInAppendMode):
+                        ShowNotifcation("Append Mode", IsInAppendMode ? "ON" : "OFF", IsInAppendMode);
+                        break;
+                    case nameof(IsAutoCopyMode):
+                        ShowNotifcation("Auto-Copy Mode", IsAutoCopyMode ? "ON" : "OFF", IsAutoCopyMode);
+                        break;
+                }
+            };
         }
 
         public void AppMode_Loaded(object sender, RoutedEventArgs args) {
@@ -87,94 +103,78 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
-        private void ShowNotifcation(bool fromHotkey, string modeType, string status, bool isOn) {
-            //if(fromHotkey) 
-            {
-                if(Properties.Settings.Default.NotificationShowModeChangeToast) {
-                    MpStandardBalloonViewModel.ShowBalloon("Monkey Paste", modeType + " is " + status);
-                }
-                if(Properties.Settings.Default.NotificationDoModeChangeSound) {
-                    MpSoundPlayerGroupCollectionViewModel.Instance.PlayModeChangeCommand.Execute(isOn);
-                }
-                
+        private void ShowNotifcation(string modeType, string status, bool isOn) {
+            if (Properties.Settings.Default.NotificationShowModeChangeToast) {
+                MpStandardBalloonViewModel.ShowBalloon("Monkey Paste", modeType + " is " + status);
+            }
+            if (Properties.Settings.Default.NotificationDoModeChangeSound) {
+                MpSoundPlayerGroupCollectionViewModel.Instance.PlayModeChangeCommand.Execute(isOn);
             }
         }
         #endregion
 
         #region Commands
-        private RelayCommand<bool> _toggleIsAppPausedCommand;
+        private RelayCommand _toggleIsAppPausedCommand;
         public ICommand ToggleIsAppPausedCommand {
             get {
                 if (_toggleIsAppPausedCommand == null) {
-                    _toggleIsAppPausedCommand = new RelayCommand<bool>(ToggleIsAppPaused);
+                    _toggleIsAppPausedCommand = new RelayCommand(ToggleIsAppPaused);
                 }
                 return _toggleIsAppPausedCommand;
             }
         }
-        private void ToggleIsAppPaused(bool fromHotkey) {
-            if(fromHotkey) {
-                IsAppPaused = !IsAppPaused;
-            }
-            ShowNotifcation(fromHotkey, "App", IsAppPaused ? "PAUSED":"ACTIVE", IsAppPaused);
+        private void ToggleIsAppPaused() {
+            IsAppPaused = !IsAppPaused;
         }
 
-        private RelayCommand<bool> _toggleRightClickPasteCommand;
+        private RelayCommand _toggleRightClickPasteCommand;
         public ICommand ToggleRightClickPasteCommand {
             get {
                 if (_toggleRightClickPasteCommand == null) {
-                    _toggleRightClickPasteCommand = new RelayCommand<bool>(ToggleRightClickPaste, CanToggleRightClickPaste);
+                    _toggleRightClickPasteCommand = new RelayCommand(ToggleRightClickPaste, CanToggleRightClickPaste);
                 }
                 return _toggleRightClickPasteCommand;
             }
         }
-        private bool CanToggleRightClickPaste(bool fromHotkey) {
+        private bool CanToggleRightClickPaste() {
             //only allow append mode to activate if app is not paused and only ONE clip is selected
             return !IsAppPaused;
         }
-        private void ToggleRightClickPaste(bool fromHotkey) {
-            if (fromHotkey) {
-                IsRightClickPasteMode = !IsRightClickPasteMode; 
-            }
-            ShowNotifcation(fromHotkey, "Right-Click Paste Mode", IsRightClickPasteMode ? "ON":"OFF", IsRightClickPasteMode);
+        private void ToggleRightClickPaste() {
+            IsRightClickPasteMode = !IsRightClickPasteMode;
         }
 
-        private RelayCommand<bool> _toggleAppendModeCommand;
+        private RelayCommand _toggleAppendModeCommand;
         public ICommand ToggleAppendModeCommand {
             get {
                 if (_toggleAppendModeCommand == null) {
-                    _toggleAppendModeCommand = new RelayCommand<bool>(ToggleAppendMode, CanToggleAppendMode);
+                    _toggleAppendModeCommand = new RelayCommand(ToggleAppendMode, CanToggleAppendMode);
                 }
                 return _toggleAppendModeCommand;
             }
         }
-        private bool CanToggleAppendMode(bool fromHotkey) {
+        private bool CanToggleAppendMode() {
             //only allow append mode to activate if app is not paused and only ONE clip is selected
             return !IsAppPaused;
         }
-        private void ToggleAppendMode(bool fromHotkey) {
-            if (fromHotkey) {
-                IsInAppendMode = !IsInAppendMode;
-            }
-            ShowNotifcation(fromHotkey, "Append Mode", IsInAppendMode ? "ON" : "OFF",IsInAppendMode);
+        private void ToggleAppendMode() {
+            IsInAppendMode = !IsInAppendMode;
         }
 
-        private RelayCommand<bool> _toggleAutoCopyModeCommand;
+        private RelayCommand _toggleAutoCopyModeCommand;
         public ICommand ToggleAutoCopyModeCommand {
             get {
                 if (_toggleAutoCopyModeCommand == null) {
-                    _toggleAutoCopyModeCommand = new RelayCommand<bool>(ToggleAutoCopyMode, CanToggleAutoCopyMode);
+                    _toggleAutoCopyModeCommand = new RelayCommand(ToggleAutoCopyMode, CanToggleAutoCopyMode);
                 }
                 return _toggleAutoCopyModeCommand;
             }
         }
-        private bool CanToggleAutoCopyMode(bool fromHotkey) {
+        private bool CanToggleAutoCopyMode() {
             return !IsAppPaused;
         }
-        private void ToggleAutoCopyMode(bool fromHotkey) {
-            if (fromHotkey) {
-                IsAutoCopyMode = !IsAutoCopyMode;
-            }
-            ShowNotifcation(fromHotkey, "Auto-Copy Mode", IsAutoCopyMode ? "ON" : "OFF",IsAutoCopyMode);
+        private void ToggleAutoCopyMode() {
+            IsAutoCopyMode = !IsAutoCopyMode;
         }
         #endregion
     }

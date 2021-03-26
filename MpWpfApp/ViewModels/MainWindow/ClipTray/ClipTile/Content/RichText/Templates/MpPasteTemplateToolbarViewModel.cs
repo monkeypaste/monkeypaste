@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace MpWpfApp {
-    public class MpPasteTemplateToolbarViewModel : MpViewModelBase {
+    public class MpPasteTemplateToolbarViewModel : MpUndoableViewModelBase<MpPasteTemplateToolbarViewModel>, IDisposable {
         #region Private Variables
         private TextBox _selectedTemplateTextBox = null;
         private ComboBox _selectedTemplateComboBox = null;
@@ -468,7 +468,7 @@ namespace MpWpfApp {
                 //SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
                 //SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
                 ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Collapsed;
-                MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.ScrollViewer.ScrollToHome();
+                MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.AnimatedScrollViewer.ScrollToHome();
             }
         }
             public void Animate(
@@ -503,7 +503,7 @@ namespace MpWpfApp {
                         //SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
                         //SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
                         ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Collapsed;
-                        MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.ScrollViewer.ScrollToHome();
+                        MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.AnimatedScrollViewer.ScrollToHome();
                     }
 
                     if (onCompleted != null) {
@@ -569,8 +569,10 @@ namespace MpWpfApp {
                 SelectedTemplate = null;
             }
 
-            foreach(var thlvm in ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel) {
-                thlvm.IsSelected = false;
+            foreach(var srtbvm in ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvmList) {
+                foreach(var thlvm in srtbvm.TemplateHyperlinkCollectionViewModel) {
+                    thlvm.IsSelected = false;
+                }                
             }
         }
 
@@ -680,6 +682,15 @@ namespace MpWpfApp {
             srtbvm.TemplateRichText = MpHelpers.Instance.ConvertFlowDocumentToRichText(docClone);
             //Returned to GetPastableRichText
         }
+
+        #endregion
+
+        #region IDisposable
+        public void Dispose() {
+            SelectedTemplateTextBox = null;
+            NextTemplateButton = null;
+            PreviousTemplateButton = null;
+    }
         #endregion
     }
 }

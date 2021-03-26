@@ -1220,16 +1220,13 @@
                 <ToggleButton Grid.Row="0"
                               Grid.Column="0"
                               Padding="0,5,0,5"
-                              Command="{Binding ToggleIsAppPausedCommand}"
-                              CommandParameter="{StaticResource False}">
+                              IsChecked="{Binding IsAppPaused}">
                     <TextBlock Text="Pause System"
                                HorizontalAlignment="Center"
                                TextWrapping="Wrap" />
                 </ToggleButton>
                 <ToggleButton Grid.Row="1"
                               Grid.Column="0"
-                              Command="{Binding ToggleAutoCopyModeCommand}"
-                              CommandParameter="{StaticResource False}"
                               IsChecked="{Binding IsAutoCopyMode}"
                               Padding="0,5,0,5">
                     <TextBlock Text="Auto Copy"
@@ -1238,8 +1235,6 @@
                 </ToggleButton>
                 <ToggleButton Grid.Row="2"
                               Grid.Column="0"
-                              Command="{Binding ToggleRightClickPasteCommand}"
-                              CommandParameter="{StaticResource False}"
                               IsChecked="{Binding IsRightClickPasteMode}"
                               Padding="0,5,0,5">
                     <TextBlock Text="Auto Paste"
@@ -1249,8 +1244,6 @@
                 <ToggleButton Grid.Row="3"
                               Grid.Column="0"
                               Padding="0,5,0,5"
-                              Command="{Binding ToggleAppendModeCommand}"
-                              CommandParameter="{StaticResource False}"
                               IsChecked="{Binding IsInAppendMode}">
                     <TextBlock Text="Auto Append"
                                FontSize="11"
@@ -1282,7 +1275,7 @@
                                                  AllowDrop="True"
                                                  ScrollToSelectedItem="True"
                                                  IsSynchronizedWithCurrentItem="True"
-                                                 Margin="5,0,0,0"
+                                                 Margin="0,0,0,0"
                                                  Focusable="True"
                                                  BorderThickness="0"
                                                  VerticalAlignment="Stretch"
@@ -1989,7 +1982,7 @@
                                                                     IsSynchronizedWithCurrentItem="True"
                                                                     Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                                     ItemsSource="{Binding}"
-                                                                    Focusable="True"
+                                                                     Focusable="{Binding HostClipTileViewModel.IsExpanded}"
                                                                     IsEnabled="True"
                                                                     VirtualizingPanel.IsVirtualizing="False"
                                                                     ScrollViewer.CanContentScroll="True"                                                                    
@@ -2026,7 +2019,8 @@
                                                                             <Canvas x:Name="RtbListBoxItemCanvas"
                                                                                     HorizontalAlignment="Left"
                                                                                     VerticalAlignment="Top"
-                                                                                    DataContext="{Binding}"                                                                                    
+                                                                                    DataContext="{Binding}"        
+                                                                                    Focusable="{Binding HostClipTileViewModel.IsExpanded}"
                                                                                     Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                                                     Width="{Binding RtbCanvasWidth}"
                                                                                     Height="{Binding RtbCanvasHeight}">

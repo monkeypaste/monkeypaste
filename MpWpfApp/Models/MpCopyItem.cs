@@ -571,8 +571,21 @@ namespace MpWpfApp {
             return toItem;
         }
 
-        public static async Task MergeAsync(MpCopyItem fromItem, MpCopyItem toItem, DispatcherPriority priority = DispatcherPriority.Background) {
-            await Dispatcher.CurrentDispatcher.InvokeAsync(() => MpCopyItem.Merge(fromItem,toItem), priority);
+        public static async Task<MpCopyItem> MergeAsync(
+            MpCopyItem fromItem, 
+            MpCopyItem toItem,
+            bool isInline = false,
+            bool createComposite = false,
+            bool useFileData = false,
+            bool isFileDataMerged = false,
+            int forceIdx = -1,
+            DispatcherPriority priority = DispatcherPriority.Background) {
+            MpCopyItem mergedItem = null;
+            await Application.Current.Dispatcher.BeginInvoke((Action)(
+                () => {
+                    mergedItem = MpCopyItem.Merge(fromItem, toItem, isInline, createComposite, useFileData, isFileDataMerged, forceIdx);
+                    }), priority);
+            return mergedItem;
         }
         #endregion
 
