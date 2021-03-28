@@ -6,16 +6,22 @@ namespace MpWpfApp {
         private static readonly Lazy<MpMeasurements> _Lazy = new Lazy<MpMeasurements>(() => new MpMeasurements());
         public static MpMeasurements Instance { get { return _Lazy.Value; } }
 
-        private double _mainWindowToScreenHeightRatio = 0.35;
+        public double MainWindowToScreenHeightRatio = 0.35;
 
         private MpMeasurements() { }
 
         private double _screenWidth = SystemParameters.PrimaryScreenWidth;
         private double _screenHeight = SystemParameters.PrimaryScreenHeight;
 
-        private double _mainWindowHeight {
+        public double MainWindowMinHeight {
             get {
-                return SystemParameters.PrimaryScreenHeight * _mainWindowToScreenHeightRatio;
+                return SystemParameters.PrimaryScreenHeight * MainWindowToScreenHeightRatio;
+            }
+        }
+
+        public double MainWindowMaxHeight {
+            get {
+                return SystemParameters.WorkArea.Height;
             }
         }
 
@@ -25,27 +31,27 @@ namespace MpWpfApp {
             get {
                 return new Rect(
                     0,
-                    SystemParameters.WorkArea.Height - _mainWindowHeight,
+                    SystemParameters.WorkArea.Height - MainWindowMinHeight,
                     _screenWidth,
-                    _mainWindowHeight);
+                    MainWindowMinHeight);
             }
         }
 
         public double TitleMenuHeight {
             get {
-                return _mainWindowHeight / 20;
+                return MainWindowMinHeight / 20;
             }
         }
 
         public double FilterMenuHeight {
             get {
-                return _mainWindowHeight / 8;
+                return MainWindowMinHeight / 8;
             }
         }
 
         public double AppStateButtonPanelWidth {
             get {
-                return _mainWindowHeight / 7;
+                return MainWindowMinHeight / 7;
             }
         }
 
@@ -54,15 +60,16 @@ namespace MpWpfApp {
                 return _screenWidth - AppStateButtonPanelWidth;
             }
         }
-        public double ClipTrayHeight {
+        public double ClipTrayMinHeight {
             get {
                 return MainWindowRect.Height - TitleMenuHeight - FilterMenuHeight;
             }
         }
 
+
         public double ClipTileMargin {
             get {
-                return ClipTrayHeight / 50;
+                return ClipTrayMinHeight / 50;
             }
         }
 
@@ -80,7 +87,7 @@ namespace MpWpfApp {
 
         public double ClipTileMinSize {
             get {
-                return ClipTrayHeight - (ClipTileMargin * 2) - ClipTilePadding;
+                return ClipTrayMinHeight - (ClipTileMargin * 2) - ClipTilePadding;
             }
         }
 
@@ -113,9 +120,15 @@ namespace MpWpfApp {
             }
         }
 
+        public double ScrollbarWidth {
+            get {
+                return 20;
+            }
+        }
+
         public double ClipTileScrollViewerWidth {
             get {
-                return ClipTileContentMinWidth - 20;
+                return ClipTileContentMinWidth - ScrollbarWidth;
             }
         }
 

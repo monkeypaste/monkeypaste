@@ -35,26 +35,27 @@ namespace MpWpfApp {
                     Console.WriteLine("Client offline. Language Translation is inactive");
                     return;
                 }
+                // at least show an error dialog if there's an unexpected error
+                //AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(HandleExceptions);
+
+                if (COGNITIVE_SERVICES_KEY.Length != 32) {
+                    MessageBox.Show("One or more invalid API subscription keys.\n\n" +
+                        "Put your keys in the *_API_SUBSCRIPTION_KEY variables in MainWindow.xaml.cs.",
+                        "Invalid Subscription Key(s)", MessageBoxButton.OK, MessageBoxImage.Error);
+                    System.Windows.Application.Current.Shutdown();
+                } else {
+                    // Get languages for drop-downs
+                    GetLanguagesForTranslate();
+                    // Populate drop-downs with values from GetLanguagesForTranslate
+                    foreach (string menuItem in languageCodesAndTitles.Keys) {
+                        LanguageList.Add(menuItem);
+                    }
+                }
             }
             catch (Exception ex) {
                 Console.WriteLine("Error trying to connect to internet: " + ex.ToString());
             }
-            // at least show an error dialog if there's an unexpected error
-            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(HandleExceptions);
-
-            if (COGNITIVE_SERVICES_KEY.Length != 32) {
-                MessageBox.Show("One or more invalid API subscription keys.\n\n" +
-                    "Put your keys in the *_API_SUBSCRIPTION_KEY variables in MainWindow.xaml.cs.",
-                    "Invalid Subscription Key(s)", MessageBoxButton.OK, MessageBoxImage.Error);
-                System.Windows.Application.Current.Shutdown();
-            } else {
-                // Get languages for drop-downs
-                GetLanguagesForTranslate();
-                // Populate drop-downs with values from GetLanguagesForTranslate
-                foreach (string menuItem in languageCodesAndTitles.Keys) {
-                    LanguageList.Add(menuItem);
-                }
-            }
+            
         }
 
         // Global exception handler to display error message and exit

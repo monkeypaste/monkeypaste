@@ -222,7 +222,8 @@
         public TranslateTransform ClipBorderTranslateTransform;
         #endregion
 
-        #region Layout Properties
+        #region Layout
+
         public Rect TileRect {
             get {
                 return MainWindowViewModel.ClipTrayViewModel.GetListBoxItemRect(MainWindowViewModel.ClipTrayViewModel.IndexOf(this));
@@ -393,9 +394,16 @@
             }
         }
 
+        private double _tileContentHeight = MpMeasurements.Instance.ClipTileContentHeight;
         public double TileContentHeight {
             get {
-                return MpMeasurements.Instance.ClipTileContentHeight;
+                return _tileContentHeight;
+            }
+            set {
+                if(_tileContentHeight != value) {
+                    _tileContentHeight = value;
+                    OnPropertyChanged(nameof(TileContentHeight));
+                }
             }
         }
 
@@ -1486,12 +1494,12 @@
                             //    }
                             //}
                             //
-                            MainWindowViewModel.ClipTrayViewModel.ExpandClipTile(this);
+                            MainWindowViewModel.ExpandClipTile(this);
                         } else {
                             SaveToDatabase(); 
                             //ContentPreviewToolTipBmpSrc = null;
                             //OnPropertyChanged(nameof(ContentPreviewToolTipBmpSrc));
-                            MainWindowViewModel.ClipTrayViewModel.ShrinkClipTile(this);                            
+                            MainWindowViewModel.ShrinkClipTile(this);                            
                         }
                         RichTextBoxViewModelCollection.Refresh();
                         break;
@@ -2024,24 +2032,21 @@
 
         public void Resize(
             double deltaWidth,
-            double deltaEditToolbarTop,
-            double deltaTemplateTop) {
+            double deltaHeight,
+            double deltaEditToolbarTop) {
             TileBorderWidth += deltaWidth;
             TileContentWidth += deltaWidth;
 
-            EditRichTextBoxToolbarViewModel.Resize(deltaEditToolbarTop);
+            TileBorderHeight += deltaHeight;
+            TileContentHeight += deltaHeight;
 
-            RichTextBoxViewModelCollection.Resize(deltaEditToolbarTop, deltaWidth);
+            EditRichTextBoxToolbarViewModel.Resize(deltaEditToolbarTop, deltaWidth);
 
-            //EditTemplateToolbarViewModel.Resize(
-            //    deltaTemplateTop,
-            //    tt,
-            //    null,
-            //    fps,
-            //    priority);
+            RichTextBoxViewModelCollection.Resize(deltaEditToolbarTop, deltaWidth, deltaHeight);
 
-            PasteTemplateToolbarViewModel.Resize(
-                deltaTemplateTop);
+            EditTemplateToolbarViewModel.Resize(deltaHeight);
+
+            PasteTemplateToolbarViewModel.Resize(deltaHeight);
         }
 
         public void Animate(
@@ -2263,7 +2268,7 @@
                     if(rtbvm.HasTemplate) {
                         if(!hasExpanded) {
                             //tile will be shrunk in on completed of hide window
-                            MainWindowViewModel.ClipTrayViewModel.ExpandClipTile(this);
+                            MainWindowViewModel.ExpandClipTile(this);
 
                             //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(rtbvm, false, true);
                             hasExpanded = true;

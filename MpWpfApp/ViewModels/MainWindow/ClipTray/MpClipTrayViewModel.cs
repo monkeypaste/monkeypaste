@@ -40,6 +40,17 @@ namespace MpWpfApp {
         #region Properties
 
         #region View Models
+        public MpClipTileViewModel ExpandedClipTile {
+            get {
+                foreach(var ctvm in VisibileClipTiles) {
+                    if(ctvm.IsExpanded) {
+                        return ctvm;
+                    }
+                }
+                return null;
+            }
+        }
+
         public MpObservableCollection<MpClipTileViewModel> SelectedClipTiles {
             get {
                 return new MpObservableCollection<MpClipTileViewModel>(this.Where(ct => ct.IsSelected/* && ct.GetType() != typeof(MpRtbListBoxItemRichTextBoxViewModel)*/).ToList());
@@ -712,105 +723,19 @@ namespace MpWpfApp {
             //}
         }
 
-        public void ExpandClipTile(MpClipTileViewModel ctvmToExpand) {
-            IsolateClipTile(ctvmToExpand);
+        public void Resize(
+            MpClipTileViewModel tileToResize,
+            double deltaWidth,
+            double deltaHeight,
+            double deltaEditToolbarTop) {
+            MainWindowViewModel.ClipTrayHeight += deltaHeight;
+            ListBox.Height = MainWindowViewModel.ClipTrayHeight;
+            ListBox.UpdateLayout();
 
-            ctvmToExpand.Resize(
-                    MainWindowViewModel.ClipTrayWidth - ctvmToExpand.TileBorderMinWidth - MpMeasurements.Instance.ClipTileExpandedMargin,
-                    ctvmToExpand.EditRichTextBoxToolbarHeight,
-                    ctvmToExpand.IsPastingTemplate ? ctvmToExpand.PasteTemplateToolbarHeight : 0);
-
-            //EventHandler postFadeEvent = (s, e) => {
-            //    //Console.WriteLine("Expanding tile post fade event");
-            //    ClipTrayVirtualizingStackPanel.HorizontalAlignment = HorizontalAlignment.Center;
-
-            //    //var listBoxItem = (ListBoxItem)ClipTrayListView.ItemContainerGenerator.ContainerFromItem(ctvmToExpand);
-            //    //double sx = listBoxItem.TranslatePoint(new Point(0.0, 0.0), ClipTrayListView).X;
-            //    //_originalExpandedTileX = sx;
-            //    //double trayMidX = MainWindowViewModel.ClipTrayWidth / 2;
-            //    //double ex = trayMidX - (ctvmToExpand.TileBorderMaxWidth / 2);
-            //    ////if (sx > ex) {
-            //    ////    ex += sx;
-            //    ////}
-            //    //var T = ctvmToExpand.ClipBorderTranslateTransform;
-            //    //var anim = new DoubleAnimation(sx, ex, new Duration(TimeSpan.FromMilliseconds(animMs)));
-            //    ////anim.BeginTime = TimeSpan.FromMilliseconds(animMs);
-            //    //anim.Completed += (s1, e1) => {
-
-            //    //};
-
-            //    //T.BeginAnimation(TranslateTransform.XProperty, anim);
-
-            //    if (isPastingTemplate) {
-            //        ctvmToExpand.IsPastingTemplateTile = true;
-            //        ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
-            //    } else {
-            //        if (!ctvmToExpand.IsEditingTile) {
-            //            ctvmToExpand.IsEditingTile = true;
-            //        }
-            //        ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
-            //    }
-            //};
-
-            //if (_hiddenTileCanvasList.Count > 0) {
-            //    MpHelpers.Instance.AnimateVisibilityChange(
-            //        _hiddenTileCanvasList,
-            //        Visibility.Collapsed,
-            //        postFadeEvent,
-            //        animMs);
-            //} else {
-            //    postFadeEvent.Invoke(this, new EventArgs());
-            //}
-        }
-
-        public void ShrinkClipTile(MpClipTileViewModel ctvmToShrink) {
-            ctvmToShrink.Resize(
-                -(MainWindowViewModel.ClipTrayWidth - ctvmToShrink.TileBorderMinWidth - MpMeasurements.Instance.ClipTileExpandedMargin),
-                -ctvmToShrink.EditRichTextBoxToolbarHeight,
-                ctvmToShrink.IsPastingTemplate ? -ctvmToShrink.PasteTemplateToolbarHeight : 0);
-            RestoreVisibleTiles();
-            //double animMs = 0;// Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
-            //ClearClipSelection(false);
-            //ctvmToShrink.IsSelected = true;
-            //if (isPastingTemplate) {
-            //    ctvmToShrink.IsPastingTemplate = false;
-            //    ctvmToShrink.PasteTemplateToolbarViewModel.InitWithRichTextBox(ctvmToShrink.RichTextBoxViewModelCollection[0].Rtb, true);
-            //} else {
-            //    if (ctvmToShrink.IsEditingTile) {
-            //        ctvmToShrink.IsEditingTile = false;
-            //    }
-            //    ctvmToShrink.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(ctvmToShrink.RichTextBoxViewModelCollection[0].Rtb, true);
-            //}
-            //ctvmToShrink.RichTextBoxViewModelCollection.UpdateLayout();
-            
-
-
-            //var listBoxItem = (ListBoxItem)ClipTrayListView.ItemContainerGenerator.ContainerFromItem(ctvmToShrink);
-            //double sx = listBoxItem.TranslatePoint(new Point(0.0, 0.0), ClipTrayListView).X;
-            ////double trayMidX = ClipTrayListView.ActualWidth / 2;
-            //double tw = ctvmToShrink.TileBorderMinWidth;
-            //double ex = Math.Max(((_expandedTileVisibleIdx-1) * tw),0);
-
-            //var T = ctvmToShrink.ClipBorderTranslateTransform;
-
-            //var anim = new DoubleAnimation(sx, ex, new Duration(TimeSpan.FromMilliseconds(animMs)));
-            ////anim.BeginTime = TimeSpan.FromMilliseconds(animMs);
-            //anim.Completed += (s1, e1) => {                
-            //    var _hiddenTileCanvasList = new List<FrameworkElement>();
-            //    foreach (var ctvm in _hiddenTiles) {
-            //        _hiddenTileCanvasList.Add(ctvm.ClipBorder);
-            //    }
-
-            //    if (_hiddenTileCanvasList.Count > 0) {
-            //        MpHelpers.Instance.AnimateVisibilityChange(
-            //            _hiddenTileCanvasList,
-            //            Visibility.Visible,
-            //            (s,e)=>Refresh(),
-            //            animMs,
-            //            animMs);
-            //    }
-            //};
-            //T.BeginAnimation(TranslateTransform.XProperty, anim);
+            tileToResize.Resize(
+                deltaWidth,
+                deltaHeight, 
+                deltaEditToolbarTop);
         }
 
         public void HideVisibleTiles(double ms = 1000) {
@@ -855,7 +780,7 @@ namespace MpWpfApp {
                 }
                 ctvm.IsEditingTemplate = false;
                 if (ctvm.IsPastingTemplate) {
-                    ShrinkClipTile(ctvm);
+                    MainWindowViewModel.ShrinkClipTile(ctvm);
                     ctvm.IsPastingTemplate = false;
                 }
                 foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
@@ -982,7 +907,7 @@ namespace MpWpfApp {
         public void Refresh() {
             var sw = new Stopwatch();
             sw.Start();
-           ClipTrayListView?.Items.Refresh();
+           //ClipTrayListView?.Items.Refresh();
             sw.Stop();
             Console.WriteLine("ClipTray Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
@@ -1006,7 +931,7 @@ namespace MpWpfApp {
                // ctvm.IsSelected = false;
             }
             //not calling this doesn't associate the items clipborder to this listbox I don't know why
-            if (MpMainWindowViewModel.IsOpen) {
+            if (MpMainWindowViewModel.IsMainWindowOpen) {
                 Refresh();
             } else {
                 WasItemAdded = true;

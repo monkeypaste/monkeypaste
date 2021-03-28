@@ -605,9 +605,11 @@ namespace MpWpfApp {
 
             _lastRtb = rtb;
         }
-        public void Resize(double deltaEditToolbarTop) {
+        public void Resize(double deltaEditToolbarTop, double deltaWidth) {
             EditBorderCanvasTop += deltaEditToolbarTop;
             Canvas.SetTop(EditToolbarBorder, EditBorderCanvasTop);
+            EditToolbarBorder.Width += deltaWidth;
+
             if (ClipTileViewModel.IsEditingTile) {
                 MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.ScrollIntoView(ClipTileViewModel);
                 ClipTileViewModel.RichTextBoxViewModelCollection.ResetSubSelection();

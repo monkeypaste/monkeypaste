@@ -433,23 +433,28 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
 
         #endregion
 
-        #region INotifyPropertyChanged Implementation
-
+        #region INotifyPropertyChanged 
         public bool ThrowOnInvalidPropertyName { get; private set; }
 
-        private event PropertyChangedEventHandler _propertyChanged;
+        //private event PropertyChangedEventHandler _vmPropertyChanged;
+        //public event PropertyChangedEventHandler VmPropertyChanged {
+        //    add { _vmPropertyChanged += value; }
+        //    remove { _vmPropertyChanged -= value; }
+        //} 
+
         public new event PropertyChangedEventHandler PropertyChanged {
-            add { _propertyChanged += value; }
-            remove { _propertyChanged -= value; }
+            add { base.PropertyChanged += value; }
+            remove { base.PropertyChanged -= value; }
         }
 
         public virtual void OnPropertyChanged(string propertyName) {
             this.VerifyPropertyName(propertyName);
-            PropertyChangedEventHandler handler = _propertyChanged;
-            if (handler != null) {
-                var e = new PropertyChangedEventArgs(propertyName);
-                handler(this, e);
-            }
+            base.OnPropertyChanged(new PropertyChangedEventArgs(propertyName));
+            //PropertyChangedEventHandler handler = _vmPropertyChanged;
+            //if (handler != null) {
+            //    var e = new PropertyChangedEventArgs(propertyName);
+            //    handler(this, e);
+            //}
         }
 
         [Conditional("DEBUG")]

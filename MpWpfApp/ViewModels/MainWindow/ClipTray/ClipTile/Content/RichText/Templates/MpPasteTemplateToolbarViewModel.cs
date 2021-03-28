@@ -67,6 +67,8 @@ namespace MpWpfApp {
         public Button NextTemplateButton;
 
         public Button PreviousTemplateButton;
+
+        public Border PasteTemplateBorder { get; set; }
         #endregion
 
         #region Layout
@@ -452,6 +454,8 @@ namespace MpWpfApp {
         }
         public void Resize(double deltaTemplateTop) {
             PasteTemplateBorderCanvasTop += deltaTemplateTop;
+            //Canvas.SetTop(_borderGrid.GetVisualAncestor<Border>(), PasteTemplateBorderCanvasTop);
+           // _borderGrid.UpdateLayout();
 
             MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.ScrollIntoView(ClipTileViewModel);
             if (ClipTileViewModel.IsPastingTemplate) {

@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 using DataGridAsyncDemoMVVM.filtersort;
 using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
@@ -15,13 +16,31 @@ using Hardcodet.Wpf.TaskbarNotification;
 namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase {
         #region Statics
-        public static bool IsOpen {
-            get {
-                return Application.Current.MainWindow.Visibility == Visibility.Visible &&
-                    Application.Current.MainWindow.Top < Properties.Settings.Default.MainWindowStartHeight;
-            }
-        }
+        //public static bool IsOpen {
+        //    get {
+        //        return Application.Current.MainWindow.Visibility == Visibility.Visible &&
+        //            Application.Current.MainWindow.Top < Properties.Settings.Default.MainWindowStartHeight;
+        //    }
+        //}
+
+        public static bool IsMainWindowOpen { get; private set; } = false;
         #endregion
+
+        #region Private Variables
+        private double _startMainWindowTop;
+        private double _endMainWindowTop;
+        private double _deltaHeight = 0;
+        #endregion
+
+        #region Public Variables
+
+        public bool IsShowingDialog = false;
+
+        public IKeyboardMouseEvents GlobalHook { get; set; }
+        public IKeyboardMouseEvents ApplicationHook { get; set; }
+        #endregion
+
+        #region Properties       
 
         #region View Models
         private MpSystemTrayViewModel _systemTrayViewModel = null;
@@ -104,20 +123,14 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Private Variables
-        private double _startMainWindowTop;
-        private double _endMainWindowTop;
+        #region Controls
+        public Canvas MainWindowCanvas { get; set; }
+
+        public Grid MainWindowGrid { get; set; }
         #endregion
 
-        #region Public Variables
+        #region State
 
-        public bool IsShowingDialog = false;
-
-        public IKeyboardMouseEvents GlobalHook { get; set; }
-        public IKeyboardMouseEvents ApplicationHook { get; set; }
-        #endregion
-
-        #region Properties       
         private bool _isMainWindowLocked = false;
         public bool IsMainWindowLocked {
             get {
@@ -143,14 +156,70 @@ namespace MpWpfApp {
                 }
             }
         }
+        #endregion
 
+        #region Layout
         public double AppStateButtonGridWidth {
             get {
-                return MpMeasurements.Instance.AppStateButtonPanelWidth;
+                if(ClipTrayViewModel == null || !ClipTrayViewModel.IsAnyTileExpanded) {
+                    return MpMeasurements.Instance.AppStateButtonPanelWidth;
+                }
+                return 0;
             }
         }
 
-        private double _clipTrayHeight = MpMeasurements.Instance.ClipTrayHeight;
+        public double MainWindowWidth {
+            get {
+                return SystemParameters.WorkArea.Width;
+            }
+        }
+
+        public double MainWindowHeight {
+            get {
+                return SystemParameters.WorkArea.Height;
+            }
+        }
+
+        public double MainWindowTop {
+            get {
+                return 0;
+            }
+        }
+
+        public double MainWindowBottom {
+            get {
+                return SystemParameters.WorkArea.Height;
+            }
+        }
+
+        private double _mainWindowGridTop = SystemParameters.WorkArea.Height;
+        public double MainWindowGridTop {
+            get {
+                return _mainWindowGridTop;
+            }
+            set {
+                if(_mainWindowGridTop != value) {
+                    _mainWindowGridTop = value;
+                    OnPropertyChanged(nameof(MainWindowGridTop));
+                }
+            }
+        }
+
+        private double _mainWindowGridHeight = MpMeasurements.Instance.MainWindowMinHeight;
+        public double MainWindowGridHeight {
+            get {
+                return _mainWindowGridHeight;
+            }
+            set {
+                if (_mainWindowGridHeight != value) {
+                    _mainWindowGridHeight = value;
+                    OnPropertyChanged(nameof(MainWindowGridHeight));
+                }
+            }
+        }
+
+
+        private double _clipTrayHeight = MpMeasurements.Instance.ClipTrayMinHeight;
         public double ClipTrayHeight {
             get {
                 return _clipTrayHeight;
@@ -187,6 +256,7 @@ namespace MpWpfApp {
                 return MpMeasurements.Instance.FilterMenuHeight;
             }
         }
+        #endregion
 
         #endregion
 
@@ -206,6 +276,9 @@ namespace MpWpfApp {
 
         public void MainWindow_Loaded(object sender, RoutedEventArgs e) {
             var mw = (MpMainWindow)Application.Current.MainWindow;
+            MainWindowCanvas = (Canvas)mw.FindName("MainWindowCanvas");
+            MainWindowGrid = (Grid)mw.FindName("MainWindowGrid");
+
             mw.Deactivated += (s, e2) => {
                 HideWindowCommand.Execute(null);
             };
@@ -216,6 +289,16 @@ namespace MpWpfApp {
                 } else {
                     SearchBoxViewModel.IsTextValid = true;
                 }
+            };
+
+            MainWindowCanvas.MouseLeftButtonDown += (s, e3) => {
+                var hitTest = VisualTreeHelper.HitTest(MainWindowCanvas, e3.GetPosition(MainWindowCanvas));
+                if(hitTest != null && hitTest.VisualHit != null) {
+                    if(hitTest.VisualHit == MainWindowCanvas) {
+                        HideWindowCommand.Execute(null);
+                    }
+                }
+                
             };
 
             SetupMainWindowRect();
@@ -258,20 +341,166 @@ namespace MpWpfApp {
                 ClipTrayViewModel.ResetClipSelection();
             }
         }
+
+        public void ExpandClipTile(MpClipTileViewModel ctvmToExpand) {
+            AppModeViewModel.OnPropertyChanged(nameof(AppModeViewModel.AppModeColumnVisibility));
+            OnPropertyChanged(nameof(AppStateButtonGridWidth));
+            ClipTrayViewModel.IsolateClipTile(ctvmToExpand);
+
+            
+            _deltaHeight = Math.Min(
+                                        MpMeasurements.Instance.MainWindowMaxHeight - MpMeasurements.Instance.MainWindowMinHeight,
+                                        ctvmToExpand.RichTextBoxViewModelCollection.TotalItemMaxHeight - MpMeasurements.Instance.MainWindowMinHeight);
+            Resize(_deltaHeight);
+            ClipTrayViewModel.Resize(ctvmToExpand,
+                                    ClipTrayWidth - ctvmToExpand.TileBorderMinWidth - MpMeasurements.Instance.ClipTileExpandedMargin,
+                                    _deltaHeight,
+                                    ctvmToExpand.EditRichTextBoxToolbarHeight);
+
+            //EventHandler postFadeEvent = (s, e) => {
+            //    //Console.WriteLine("Expanding tile post fade event");
+            //    ClipTrayVirtualizingStackPanel.HorizontalAlignment = HorizontalAlignment.Center;
+
+            //    //var listBoxItem = (ListBoxItem)ClipTrayListView.ItemContainerGenerator.ContainerFromItem(ctvmToExpand);
+            //    //double sx = listBoxItem.TranslatePoint(new Point(0.0, 0.0), ClipTrayListView).X;
+            //    //_originalExpandedTileX = sx;
+            //    //double trayMidX = MainWindowViewModel.ClipTrayWidth / 2;
+            //    //double ex = trayMidX - (ctvmToExpand.TileBorderMaxWidth / 2);
+            //    ////if (sx > ex) {
+            //    ////    ex += sx;
+            //    ////}
+            //    //var T = ctvmToExpand.ClipBorderTranslateTransform;
+            //    //var anim = new DoubleAnimation(sx, ex, new Duration(TimeSpan.FromMilliseconds(animMs)));
+            //    ////anim.BeginTime = TimeSpan.FromMilliseconds(animMs);
+            //    //anim.Completed += (s1, e1) => {
+
+            //    //};
+
+            //    //T.BeginAnimation(TranslateTransform.XProperty, anim);
+
+            //    if (isPastingTemplate) {
+            //        ctvmToExpand.IsPastingTemplateTile = true;
+            //        ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
+            //    } else {
+            //        if (!ctvmToExpand.IsEditingTile) {
+            //            ctvmToExpand.IsEditingTile = true;
+            //        }
+            //        ctvmToExpand.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, true, false);
+            //    }
+            //};
+
+            //if (_hiddenTileCanvasList.Count > 0) {
+            //    MpHelpers.Instance.AnimateVisibilityChange(
+            //        _hiddenTileCanvasList,
+            //        Visibility.Collapsed,
+            //        postFadeEvent,
+            //        animMs);
+            //} else {
+            //    postFadeEvent.Invoke(this, new EventArgs());
+            //}
+        }
+
+        public void ShrinkClipTile(MpClipTileViewModel ctvmToShrink) {
+            Resize(-_deltaHeight);
+            ClipTrayViewModel.Resize(ctvmToShrink,
+                -(MainWindowViewModel.ClipTrayWidth - ctvmToShrink.TileBorderMinWidth - MpMeasurements.Instance.ClipTileExpandedMargin),
+                -_deltaHeight,
+                -ctvmToShrink.EditRichTextBoxToolbarHeight);
+
+            ClipTrayViewModel.RestoreVisibleTiles();
+
+            OnPropertyChanged(nameof(AppStateButtonGridWidth));
+            AppModeViewModel.OnPropertyChanged(nameof(AppModeViewModel.AppModeColumnVisibility));
+            
+            //double animMs = 0;// Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
+            //ClearClipSelection(false);
+            //ctvmToShrink.IsSelected = true;
+            //if (isPastingTemplate) {
+            //    ctvmToShrink.IsPastingTemplate = false;
+            //    ctvmToShrink.PasteTemplateToolbarViewModel.InitWithRichTextBox(ctvmToShrink.RichTextBoxViewModelCollection[0].Rtb, true);
+            //} else {
+            //    if (ctvmToShrink.IsEditingTile) {
+            //        ctvmToShrink.IsEditingTile = false;
+            //    }
+            //    ctvmToShrink.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(ctvmToShrink.RichTextBoxViewModelCollection[0].Rtb, true);
+            //}
+            //ctvmToShrink.RichTextBoxViewModelCollection.UpdateLayout();
+
+
+
+            //var listBoxItem = (ListBoxItem)ClipTrayListView.ItemContainerGenerator.ContainerFromItem(ctvmToShrink);
+            //double sx = listBoxItem.TranslatePoint(new Point(0.0, 0.0), ClipTrayListView).X;
+            ////double trayMidX = ClipTrayListView.ActualWidth / 2;
+            //double tw = ctvmToShrink.TileBorderMinWidth;
+            //double ex = Math.Max(((_expandedTileVisibleIdx-1) * tw),0);
+
+            //var T = ctvmToShrink.ClipBorderTranslateTransform;
+
+            //var anim = new DoubleAnimation(sx, ex, new Duration(TimeSpan.FromMilliseconds(animMs)));
+            ////anim.BeginTime = TimeSpan.FromMilliseconds(animMs);
+            //anim.Completed += (s1, e1) => {                
+            //    var _hiddenTileCanvasList = new List<FrameworkElement>();
+            //    foreach (var ctvm in _hiddenTiles) {
+            //        _hiddenTileCanvasList.Add(ctvm.ClipBorder);
+            //    }
+
+            //    if (_hiddenTileCanvasList.Count > 0) {
+            //        MpHelpers.Instance.AnimateVisibilityChange(
+            //            _hiddenTileCanvasList,
+            //            Visibility.Visible,
+            //            (s,e)=>Refresh(),
+            //            animMs,
+            //            animMs);
+            //    }
+            //};
+            //T.BeginAnimation(TranslateTransform.XProperty, anim);
+        }
         #endregion
 
         #region Private Methods
+        private void Resize(double deltaHeight) {
+            var mw = (MpMainWindow)Application.Current.MainWindow;
+            MainWindowGridTop -= deltaHeight;
+            MainWindowGridHeight += deltaHeight;
+            mw.UpdateLayout();
+            //mw.ResizeMode = ResizeMode.CanResize;
+
+            //mw.Height += deltaHeight;
+            //mw.Top -= deltaHeight;
+            //mw.UpdateLayout();
+            //mw.ResizeMode = ResizeMode.NoResize;
+            //MpHelpers.Instance.AnimateDoubleProperty(
+            //    mw.Top,
+            //    mw.Top - deltaHeight,
+            //    0.1,
+            //    mw,
+            //    Window.TopProperty,
+            //    (s, e) => {
+
+            //    });
+
+            //MpHelpers.Instance.AnimateDoubleProperty(
+            //    mw.Height,
+            //    mw.Height + deltaHeight,
+            //    0.1,
+            //    mw,
+            //    Window.TopProperty,
+            //    (s, e) => {
+            //        ClipTrayViewModel.Refresh();
+            //    });
+        }
 
         private void SetupMainWindowRect() {
             var mw = (MpMainWindow)Application.Current.MainWindow;
 
             mw.Left = SystemParameters.WorkArea.Left;
-            mw.Height = SystemParameters.PrimaryScreenHeight * 0.35;
-            _startMainWindowTop = SystemParameters.PrimaryScreenHeight;
+            //mw.Height = MpMeasurements.Instance.MainWindowMinHeight;
+            
+            _startMainWindowTop = SystemParameters.WorkArea.Bottom;
             if (SystemParameters.WorkArea.Top == 0) {
                 //if taskbar is at the bottom
                 mw.Width = SystemParameters.PrimaryScreenWidth;
-                _endMainWindowTop = SystemParameters.WorkArea.Height - mw.Height;
+                _endMainWindowTop = SystemParameters.WorkArea.Height - MpMeasurements.Instance.MainWindowMinHeight;
             } else if (SystemParameters.WorkArea.Left != 0) {
                 //if taskbar is on the right
                 mw.Width = SystemParameters.WorkArea.Width;
@@ -285,6 +514,9 @@ namespace MpWpfApp {
                 mw.Width = SystemParameters.PrimaryScreenWidth;
                 _endMainWindowTop = SystemParameters.PrimaryScreenHeight - mw.Height;
             }
+
+            MainWindowGridTop = _startMainWindowTop;
+            //Canvas.SetTop(MainWindowGrid, MainWindowGridTop);
         }
 
         private void InitWindowStyle() {
@@ -381,6 +613,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+
         private RelayCommand _undoCommand;
         public ICommand UndoCommand {
             get {
@@ -413,7 +646,7 @@ namespace MpWpfApp {
             return (Application.Current.MainWindow == null ||
                 Application.Current.MainWindow.Visibility != Visibility.Visible ||
                 IsLoading ||
-                !MpSettingsWindowViewModel.IsOpen) && !IsOpen;
+                !MpSettingsWindowViewModel.IsOpen) && !IsMainWindowOpen;
         }
         private void ShowWindow() {
             if (Application.Current.MainWindow == null) {
@@ -426,7 +659,7 @@ namespace MpWpfApp {
             mw.Show();
             mw.Activate();
             mw.Visibility = Visibility.Visible;
-            mw.Topmost = true;
+            //mw.Topmost = true;
 
             if (IsLoading) {
                 IsLoading = false;
@@ -436,18 +669,37 @@ namespace MpWpfApp {
                 ResetTraySelection();
             }
 
-            MpHelpers.Instance.AnimateDoubleProperty(
-                _startMainWindowTop,
-                _endMainWindowTop,
-                Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                mw,
-                Window.TopProperty,
-                (s, e) => {
-                    if (ClipTrayViewModel.WasItemAdded) {
-                        ClipTrayViewModel.Refresh();
-                        ClipTrayViewModel.WasItemAdded = false;
-                    }
-                });
+            //MpHelpers.Instance.AnimateDoubleProperty(
+            //    _startMainWindowTop,
+            //    _endMainWindowTop,
+            //    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+            //    mw,
+            //    Window.TopProperty,
+            //    (s, e) => {
+            //        if (ClipTrayViewModel.WasItemAdded) {
+            //            ClipTrayViewModel.Refresh();
+            //            ClipTrayViewModel.WasItemAdded = false;
+            //        }
+            //    });
+
+            double tt = Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
+            double fps = 30;
+            double dt = ((_endMainWindowTop - _startMainWindowTop) / tt) / (fps / 1000);
+
+            var timer = new DispatcherTimer(DispatcherPriority.Render);
+            timer.Interval = TimeSpan.FromMilliseconds(fps);
+            
+            timer.Tick += (s, e32) => {
+                if (MpHelpers.Instance.DistanceBetweenValues(MainWindowGridTop, _endMainWindowTop) > 0.5) {
+                    MainWindowGridTop += dt;
+                    
+                    //Canvas.SetTop(MainWindowGrid, MainWindowGridTop);
+                } else {
+                    timer.Stop();
+                    IsMainWindowOpen = true;
+                }
+            };
+            timer.Start();
         }
 
         private RelayCommand<bool> _hideWindowCommand;
@@ -478,15 +730,54 @@ namespace MpWpfApp {
             }
 
             var mw = (MpMainWindow)Application.Current.MainWindow;
-            MpHelpers.Instance.AnimateDoubleProperty(
-                _endMainWindowTop,
-                _startMainWindowTop,
-                Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-                mw,
-                Window.TopProperty,
-                (s, e) => {
+            //MpHelpers.Instance.AnimateDoubleProperty(
+            //    _endMainWindowTop,
+            //    _startMainWindowTop,
+            //    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
+            //    mw,
+            //    Window.TopProperty,
+            //    (s, e) => {
+            //        if (pasteSelected) {
+            //            if(ClipTrayViewModel.IsPastingTemplate) {
+            //                IsMainWindowLocked = false;
+            //            }
+            //            ClipTrayViewModel.PerformPaste(pasteDataObject);
+            //            foreach (var sctvm in ClipTrayViewModel.SelectedClipTiles) {
+            //                if (sctvm.HasTemplate) {
+            //                    //cleanup template by recreating hyperlinks
+            //                    //and reseting tile state
+            //                    sctvm.TileVisibility = Visibility.Visible;
+            //                    sctvm.TemplateRichText = string.Empty;
+            //                    //sctvm.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
+            //                    foreach (var rtbvm in sctvm.RichTextBoxViewModelCollection) {
+            //                        rtbvm.TemplateRichText = string.Empty;
+            //                    }
+            //                }
+            //            }
+            //        }
+
+            //        ResetTraySelection();
+                    
+            //        mw.Visibility = Visibility.Collapsed;
+            //    });
+
+
+            double tt = Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
+            double fps = 30;
+            double dt = ((_endMainWindowTop - _startMainWindowTop) / tt) / (fps / 1000);
+
+            var timer = new DispatcherTimer(DispatcherPriority.Render);
+            timer.Interval = TimeSpan.FromMilliseconds(fps);
+
+            timer.Tick += (s, e32) => {
+                if (MpHelpers.Instance.DistanceBetweenValues(MainWindowGridTop, _startMainWindowTop) > 0.1) {
+                    MainWindowGridTop -= dt;
+                    //Canvas.SetTop(MainWindowGrid, MainWindowGridTop);
+                } else {
+                    timer.Stop();
+                    IsMainWindowOpen = false;
                     if (pasteSelected) {
-                        if(ClipTrayViewModel.IsPastingTemplate) {
+                        if (ClipTrayViewModel.IsPastingTemplate) {
                             IsMainWindowLocked = false;
                         }
                         ClipTrayViewModel.PerformPaste(pasteDataObject);
@@ -505,9 +796,12 @@ namespace MpWpfApp {
                     }
 
                     ResetTraySelection();
-                    
+
                     mw.Visibility = Visibility.Collapsed;
-                });
+                    //mw.WindowState = WindowState.Minimized;
+                }
+            };
+            timer.Start();
         }
 
         private RelayCommand<object> _toggleMainWindowLockCommand;

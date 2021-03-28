@@ -11,6 +11,16 @@ namespace MpWpfApp {
 
         #region Properties
 
+        public Visibility AppModeColumnVisibility {
+            get {
+                if(MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null) {
+                    return Visibility.Visible;
+                }
+
+                return MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
+
         private bool _isRightClickPasteMode = false;
         public bool IsRightClickPasteMode {
             get {

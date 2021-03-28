@@ -256,21 +256,52 @@ namespace MpWpfApp {
 
         public double TotalItemHeight {
             get {
+                if (HostClipTileViewModel == null) {
+                    return 0;
+                }
                 double totalHeight = 0;
                 foreach(var rtbvm in this) {
-                    totalHeight += rtbvm.RtbCanvasHeight;
+                    totalHeight += HostClipTileViewModel.IsExpanded ? rtbvm.RtbPageHeight: rtbvm.RtbCanvasHeight;
                 }
                 return totalHeight;
             }
         }
 
+        public double TotalItemMaxHeight {
+            get {
+                if(HostClipTileViewModel == null) {
+                    return 0;
+                }                
+                double totalHeight = 0;
+                foreach (var rtbvm in this) {
+                    totalHeight += rtbvm.RtbPageHeight;
+                }
+                return totalHeight;
+            }
+        }
+
+        public double RtbLbWidth {
+            get {
+                if(VerticalScrollbarVisibility == ScrollBarVisibility.Visible) {
+                    return RtbLbScrollViewerWidth - MpMeasurements.Instance.ScrollbarWidth;
+                }
+                return RtbLbScrollViewerWidth - 20;
+            }
+        }
+
+        private double _rtbLbScrollViewerHeight = MpMeasurements.Instance.ClipTileContentHeight;
         public double RtbLbScrollViewerHeight {
             get {
                 if(HostClipTileViewModel == null) {
                     return 0;
                 }
                 
-                return RtbListBoxHeight;
+                return _rtbLbScrollViewerHeight;
+            }
+            set {
+                if(_rtbLbScrollViewerHeight != value) {
+                    _rtbLbScrollViewerHeight = value;
+                    OnPropertyChanged(nameof(RtbLbScrollViewerHeight));                }
             }
         }
 
@@ -308,7 +339,7 @@ namespace MpWpfApp {
                 if (HostClipTileViewModel == null) {
                     return ScrollBarVisibility.Hidden;
                 }
-                if (HostClipTileViewModel.IsHovering || HostClipTileViewModel.IsExpanded) {
+                if (HostClipTileViewModel.IsHovering && HostClipTileViewModel.IsExpanded) {
                     if (TotalItemHeight > RtbListBoxHeight) {
                         return ScrollBarVisibility.Visible;
                     }
@@ -501,63 +532,7 @@ namespace MpWpfApp {
             //awaited in MainWindowViewModel.HideWindow
         }
 
-        public void UpdateLayout() {
-            UpdateAdorners();
-
-            
-
-            OnPropertyChanged(nameof(RtbListBoxHeight));
-            OnPropertyChanged(nameof(TotalItemHeight));
-            OnPropertyChanged(nameof(RtblbCanvasTop));
-            OnPropertyChanged(nameof(RtbLbScrollViewerWidth));
-            OnPropertyChanged(nameof(RtbLbScrollViewerHeight));
-            OnPropertyChanged(nameof(HorizontalScrollbarVisibility));
-            OnPropertyChanged(nameof(VerticalScrollbarVisibility));
-
-            if (ListBox != null) {
-                ListBox.Height = TotalItemHeight;
-                ListBox.UpdateLayout();
-            }
-            if (ScrollViewer != null) {
-                ScrollViewer.Height = RtbLbScrollViewerHeight;
-                ScrollViewer.UpdateLayout();
-            }
-            //if (RichTextBoxListBox == null || ScrollViewer == null) {
-            //    return;
-            //}
-            //Refresh();
-
-
-            //ScrollViewer.Width = RelativeWidthMax;
-            //ScrollViewer.Height = TotalItemHeight;
-            //ScrollViewer.ScrollToVerticalOffset(0);
-            //ScrollViewer.ScrollToHorizontalOffset(0);
-            //ScrollViewer.UpdateLayout();
-
-            //if (HostClipTileViewModel.IsExpanded) {
-            //    if (RelativeWidthMax > HostClipTileViewModel.TileContentWidth) {
-            //        HorizontalScrollbarVisibility = ScrollBarVisibility.Visible;
-            //    } else {
-            //        HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //    }
-
-            //    if (TotalItemHeight > RtbListBoxHeight) {
-            //        VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-            //    }
-            //} else {
-            //    HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //    VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //}
-
-            //sv.Height = TotalItemHeight;
-            //ScrollViewer.UpdateLayout();
-            //sv.InvalidateScrollInfo();
-
-
-            //OnPropertyChanged(nameof(RtbVerticalScrollbarVisibility));
-            //OnPropertyChanged(nameof(RtbHorizontalScrollbarVisibility));
-            //Console.WriteLine("Total Item Height: " + TotalItemHeight);
-        }
+        
 
         public new void Add(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {            
             base.Insert(0,rtbvm);
@@ -618,18 +593,86 @@ namespace MpWpfApp {
             }
         }
 
-        public void Resize(double deltaTop, double deltaWidth) {
+        public void Resize(double deltaTop, double deltaWidth, double deltaHeight) {
             RtblbCanvasTop += deltaTop;
-            //Canvas.SetTop(RtbContainerGrid, RtblbCanvasTop);
-            RtbListBoxHeight -= deltaTop;
+            RtbListBoxHeight += (-deltaTop + deltaHeight);
             RtbLbScrollViewerWidth += deltaWidth;
-
+            RtbLbScrollViewerHeight += deltaHeight;
+            if (RtbListBoxHeight > RtbLbScrollViewerHeight) {
+                RtbLbScrollViewerWidth -= MpMeasurements.Instance.ScrollbarWidth;
+            }
             UpdateLayout();
 
-            Refresh();
+            //Refresh();
 
-            MainWindowViewModel.ClipTrayViewModel.Refresh();
+           // MainWindowViewModel.ClipTrayViewModel.Refresh();
         }
+
+        public void UpdateLayout() {
+            UpdateAdorners();
+
+            OnPropertyChanged(nameof(RtbListBoxHeight));
+            OnPropertyChanged(nameof(TotalItemHeight));
+            OnPropertyChanged(nameof(RtblbCanvasTop));
+            OnPropertyChanged(nameof(RtbLbScrollViewerWidth));
+            OnPropertyChanged(nameof(RtbLbScrollViewerHeight));
+            OnPropertyChanged(nameof(HorizontalScrollbarVisibility));
+            OnPropertyChanged(nameof(VerticalScrollbarVisibility));
+            OnPropertyChanged(nameof(RtbLbWidth));
+
+            if (ListBox != null) {
+                ListBox.Height = HostClipTileViewModel.IsExpanded ? TotalItemMaxHeight:TotalItemHeight;
+                ListBox.Width = RtbLbWidth;
+                ListBox.UpdateLayout();
+            }
+            if (ScrollViewer != null) {
+                ScrollViewer.Width = RtbLbScrollViewerWidth;
+                ScrollViewer.Height = RtbLbScrollViewerHeight;
+                ScrollViewer.UpdateLayout();
+            }
+
+            
+
+            foreach(var rtbvm in this) {
+                rtbvm.UpdateLayout();
+            }
+            //if (RichTextBoxListBox == null || ScrollViewer == null) {
+            //    return;
+            //}
+            //Refresh();
+
+
+            //ScrollViewer.Width = RelativeWidthMax;
+            //ScrollViewer.Height = TotalItemHeight;
+            //ScrollViewer.ScrollToVerticalOffset(0);
+            //ScrollViewer.ScrollToHorizontalOffset(0);
+            //ScrollViewer.UpdateLayout();
+
+            //if (HostClipTileViewModel.IsExpanded) {
+            //    if (RelativeWidthMax > HostClipTileViewModel.TileContentWidth) {
+            //        HorizontalScrollbarVisibility = ScrollBarVisibility.Visible;
+            //    } else {
+            //        HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            //    }
+
+            //    if (TotalItemHeight > RtbListBoxHeight) {
+            //        VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
+            //    }
+            //} else {
+            //    HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            //    VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            //}
+
+            //sv.Height = TotalItemHeight;
+            //ScrollViewer.UpdateLayout();
+            //sv.InvalidateScrollInfo();
+
+
+            //OnPropertyChanged(nameof(RtbVerticalScrollbarVisibility));
+            //OnPropertyChanged(nameof(RtbHorizontalScrollbarVisibility));
+            //Console.WriteLine("Total Item Height: " + TotalItemHeight);
+        }
+
         public void Animate(
             double deltaTop, 
             double deltaHeight, 

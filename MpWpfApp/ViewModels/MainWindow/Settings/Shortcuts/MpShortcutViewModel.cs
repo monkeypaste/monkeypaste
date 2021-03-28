@@ -419,9 +419,9 @@ namespace MpWpfApp {
             }
             //otherwise check basic type routing for validity
             if(RoutingType == MpRoutingType.Internal) {
-                return MpMainWindowViewModel.IsOpen;
+                return MpMainWindowViewModel.IsMainWindowOpen;
             } else {
-                return !MpMainWindowViewModel.IsOpen;
+                return !MpMainWindowViewModel.IsMainWindowOpen;
             }
         }
         private void PeformShortcut() {
