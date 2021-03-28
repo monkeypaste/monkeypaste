@@ -363,10 +363,9 @@ namespace MpWpfApp {
                 };
 
                 ApplicationHook.MouseWheel += (s, e) => {
-                    if (!MainWindowViewModel.IsLoading && ClipTrayViewModel.IsAnyTileExpanded) {                        
-                        var rtblb = ClipTrayViewModel.SelectedClipTiles[0].RichTextBoxViewModelCollection.RichTextBoxListBox;
-                        var border = (Border)VisualTreeHelper.GetChild(rtblb, 0);
-                        var sv = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
+                    if (!MainWindowViewModel.IsLoading && ClipTrayViewModel.IsAnyTileExpanded) {
+                        var rtbvm = ClipTrayViewModel.SelectedClipTiles[0].RichTextBoxViewModelCollection;
+                        var sv = (ScrollViewer)rtbvm.HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();
                         sv.ScrollToVerticalOffset(sv.VerticalOffset - e.Delta);
                     }
                 };

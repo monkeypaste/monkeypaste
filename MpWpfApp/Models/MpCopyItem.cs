@@ -492,7 +492,8 @@ namespace MpWpfApp {
                         toItem.CompositeSortOrderIdx = 0;
                         compositeItem.CompositeItemList.Add(toItem);
                     }
-                    
+
+                    fromItem.ItemColor = new MpColor(MpHelpers.Instance.GetRandomColor());
                     fromItem.CompositeParentCopyItemId = compositeItem.CopyItemId;
                     fromItem.CompositeSortOrderIdx = compositeItem.CompositeItemList.Count;
                     compositeItem.CompositeItemList.Add(fromItem);
@@ -767,17 +768,21 @@ namespace MpWpfApp {
             var fullDocument = string.Empty.ToRichText().ToFlowDocument();
             for (int i = 0; i < CompositeItemList.Count; i++) {
                 var cci = CompositeItemList[i];
-                if (i % 2 == 1) {
+                if (i != 0) {
                     MpHelpers.Instance.CombineFlowDocuments(
                     separatorDocument,
                     fullDocument,
-                    true);
+                    false);
                 }
                 MpHelpers.Instance.CombineFlowDocuments(
                     cci.ItemFlowDocument,
                     fullDocument,
-                    true);
+                    false);
             }
+
+            var ps = fullDocument.GetDocumentSize();
+            fullDocument.PageWidth = ps.Width;
+            fullDocument.PageHeight = ps.Height;
             return fullDocument;
         }
 
@@ -1039,15 +1044,15 @@ namespace MpWpfApp {
                     "select fk_MpCopyItemId from MpCompositeCopyItem where fk_ParentMpCopyItemId=@ciid order by SortOrderIdx ASC",
                     new System.Collections.Generic.Dictionary<string, object> {
                             { "@ciid", CopyItemId }
-                        }); ;
+                        });
+
+            var copyItemIdList = new List<int>();
             if (dt != null && dt.Rows.Count > 0) {
-                var copyItemIdList = new List<int>();
                 foreach(DataRow dr in dt.Rows) {
                     copyItemIdList.Add(Convert.ToInt32(dr["fk_MpCopyItemId"].ToString()));
                 }
-                return copyItemIdList;
             }
-            return null;
+            return copyItemIdList;
         }
         #endregion
 

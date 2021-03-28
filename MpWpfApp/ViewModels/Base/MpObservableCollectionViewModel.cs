@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GongSolutions.Wpf.DragDrop.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -101,38 +102,80 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
             }
         }
 
+        private ScrollViewer _scrollViewer = null;
         public ScrollViewer ScrollViewer {
             get {
-                if (ListBox == null || VisualTreeHelper.GetChildrenCount(ListBox) == 0) {
-                    return null;
+                return _scrollViewer;
+                //var border = (Border)VisualTreeHelper.GetChild(ListBox, 0);
+                //return (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
+                //return ListBox.GetVisualAncestor<ScrollViewer>();
+               // return (ScrollViewer)ListBox.GetVisualAncestor<MpClipBorder>().FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>()
+            }
+            set {
+                if(_scrollViewer != value) {
+                    _scrollViewer = value;
+                    OnPropertyChanged(nameof(ScrollViewer));
                 }
-                if(ListBox is MpMultiSelectListView) {
-                    return (ListBox as MpMultiSelectListView).AnimatedScrollViewer;
-                }
-                var border = (Border)VisualTreeHelper.GetChild(ListBox, 0);
-                return (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
             }
         }
 
-        public List<ListBoxItem> VisibleListBoxItems {
-            get {
-                var visibileItems = new List<ListBoxItem>();
-                if (this.ListBox == null) {
-                    return visibileItems;
-                }
-                for (int i = 0; i < this.ListBox.Items.Count; i++) {
-                    var lbi = GetListBoxItem(i);
-                    if (lbi.Visibility == Visibility.Visible) {
-                        visibileItems.Add(lbi);
-                    }
-                }
-                return visibileItems;
-            }
-        }
+        //public List<ListBoxItem> VisibleListBoxItems {
+        //    get {
+        //        var visibileItems = new List<ListBoxItem>();
+        //        if (this.ListBox == null) {
+        //            return visibileItems;
+        //        }
+        //        for (int i = 0; i < this.ListBox.Items.Count; i++) {
+        //            var lbi = GetListBoxItem(i);
+        //            if (lbi.Visibility == Visibility.Visible) {
+        //                visibileItems.Add(lbi);
+        //            }
+        //        }
+        //        return visibileItems;
+        //    }
+        //}
+        #endregion
+
+        #region Visibility
+        
         #endregion
 
         #region State
         public bool IsHorizontal { get; set; } = false;
+
+        private bool _isMouseOverVerticalScrollBar = false;
+        public bool IsMouseOverVerticalScrollBar {
+            get {
+                return _isMouseOverVerticalScrollBar;
+            }
+            set {
+                if (_isMouseOverVerticalScrollBar != value) {
+                    _isMouseOverVerticalScrollBar = value;
+                    OnPropertyChanged(nameof(IsMouseOverVerticalScrollBar));
+                    OnPropertyChanged(nameof(IsMouseOverScrollBar));
+                }
+            }
+        }
+
+        private bool _isMouseOverHorizontalScrollBar = false;
+        public bool IsMouseOverHorizontalScrollBar {
+            get {
+                return _isMouseOverHorizontalScrollBar;
+            }
+            set {
+                if (_isMouseOverHorizontalScrollBar != value) {
+                    _isMouseOverHorizontalScrollBar = value;
+                    OnPropertyChanged(nameof(IsMouseOverHorizontalScrollBar));
+                    OnPropertyChanged(nameof(IsMouseOverScrollBar));
+                }
+            }
+        }
+
+        public bool IsMouseOverScrollBar {
+            get {
+                return IsMouseOverHorizontalScrollBar || IsMouseOverVerticalScrollBar;
+            }
+        }
 
         private bool _isTrialExpired = Properties.Settings.Default.IsTrialExpired;
         public bool IsTrialExpired {
@@ -394,11 +437,15 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
 
         public bool ThrowOnInvalidPropertyName { get; private set; }
 
-        public new event PropertyChangedEventHandler PropertyChanged;
+        private event PropertyChangedEventHandler _propertyChanged;
+        public new event PropertyChangedEventHandler PropertyChanged {
+            add { _propertyChanged += value; }
+            remove { _propertyChanged -= value; }
+        }
 
         public virtual void OnPropertyChanged(string propertyName) {
             this.VerifyPropertyName(propertyName);
-            PropertyChangedEventHandler handler = this.PropertyChanged;
+            PropertyChangedEventHandler handler = _propertyChanged;
             if (handler != null) {
                 var e = new PropertyChangedEventArgs(propertyName);
                 handler(this, e);

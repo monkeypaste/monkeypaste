@@ -76,6 +76,8 @@ namespace MpWpfApp {
 
         public TextBox RtbListBoxItemTitleTextBox;
 
+        public Button DragButton { get; set; }
+
         private Canvas _rtbc;
         public Canvas Rtbc {
             get {
@@ -147,6 +149,9 @@ namespace MpWpfApp {
                 if(SubItemOverlayVisibility == Visibility.Visible) {
                     return new Thickness(DragButtonSize + mm, RtbListBoxItemTitleFontSize + mm, mm, 0);
                 }
+                if(IsEditingContent) {
+                    return new Thickness(0);
+                }
                 return new Thickness(mm);
                 //if (!IsCompositeChild) {
                 //    return new Thickness(mm);
@@ -189,13 +194,14 @@ namespace MpWpfApp {
                             RtbPageHeight + RtbPadding.Top + RtbPadding.Bottom,
                             RichTextBoxViewModelCollection.RtbListBoxHeight);
                     }
-                    if(IsSubSelected) {
-                        return Math.Max(RtbPageHeight, MpMeasurements.Instance.RtbCompositeItemMinHeight);
-                    }
-                    if (IsSubHovering) {
-                        return MpMeasurements.Instance.RtbCompositeItemMinHeight + RtbPadding.Top + RtbPadding.Bottom;
-                    }
-                    return MpMeasurements.Instance.RtbCompositeItemMinHeight;
+                    //if(IsSubSelected) {
+                    //    return Math.Max(RtbPageHeight+20, MpMeasurements.Instance.RtbCompositeItemMinHeight);
+                    //}
+                    //if (IsSubHovering) {
+                    //    return MpMeasurements.Instance.RtbCompositeItemMinHeight + RtbPadding.Top + RtbPadding.Bottom;
+                    //}
+                    //return MpMeasurements.Instance.RtbCompositeItemMinHeight;
+                    return Math.Max(RtbPageHeight + 20, MpMeasurements.Instance.RtbCompositeItemMinHeight);
                 }
                 if (RichTextBoxViewModelCollection.Count == 1 && SubItemOverlayVisibility != Visibility.Visible) {
                     if(Rtb == null) {
@@ -447,10 +453,10 @@ namespace MpWpfApp {
                     return null;
                 }
                 int nextIdx = CompositeSortOrderIdx + 1;
-                if (nextIdx >= RichTextBoxViewModelCollection.Count) {
+                if (nextIdx > RichTextBoxViewModelCollection.Count) {
                     return null;
                 }
-                return RichTextBoxViewModelCollection[nextIdx];
+                return RichTextBoxViewModelCollection[nextIdx-1];
             }
         }
 
@@ -462,10 +468,10 @@ namespace MpWpfApp {
                     return null;
                 }
                 int prevIdx = CompositeSortOrderIdx - 1;
-                if (prevIdx < 0) {
+                if (prevIdx < 1) {
                     return null;
                 }
-                return RichTextBoxViewModelCollection[prevIdx];
+                return RichTextBoxViewModelCollection[prevIdx-1];
             }
         }
         #endregion 
@@ -828,7 +834,7 @@ namespace MpWpfApp {
                     //value should be raw rtf where templates are encoded into #name#color# groups
                     CopyItem.SetData(value);
                     CopyItem.WriteToDatabase();                    
-                    OnPropertyChanged(nameof(CopyItem));
+                    OnPropertyChanged(nameof(CopyItemRichText));
                 }
             }
         }
@@ -942,6 +948,8 @@ namespace MpWpfApp {
                                         rtbvm.IsEditingSubTitle = false;
                                     }
                                 }
+                                ResetRtb();
+                                //RichTextBoxViewModelCollection.Refresh();
                             } else if(!MpHelpers.Instance.IsMultiSelectKeyDown() && !IsSubDragging && !HostClipTileViewModel.IsContextMenuOpened) {
                                 IsSubSelected = false;
                             }
@@ -951,14 +959,17 @@ namespace MpWpfApp {
                             if (HostClipTileViewModel.IsPastingTemplate) {
                                 HostClipTileViewModel.PasteTemplateToolbarViewModel.InitWithRichTextBox(Rtb, false);
                             }
-                            ResetRtb();
+                            
 
                             LastSubSelectedDateTime = DateTime.Now;                            
                         } else if(HostClipTileViewModel.IsExpanded) {
                             // triggers set data in model which updates the preview
                             CopyItemRichText = Rtb.Document.ToRichText();
                         }
-                        RichTextBoxViewModelCollection.OnPropertyChanged(nameof(RichTextBoxViewModelCollection.SubSelectedRtbvmList));                        
+                        if(HostClipTileViewModel.IsExpanded) {
+                            UpdateLayout();
+                        }
+                        //RichTextBoxViewModelCollection.OnPropertyChanged(nameof(RichTextBoxViewModelCollection.SubSelectedRtbvmList));                        
                         break;
                     case nameof(IsSubHovering):
                         if(IsSubHovering) {
@@ -973,7 +984,7 @@ namespace MpWpfApp {
                             }
                             UpdateLayout();
                         }
-                        RichTextBoxViewModelCollection.OnPropertyChanged(nameof(RichTextBoxViewModelCollection.RtbListBoxHeight));
+                        //RichTextBoxViewModelCollection.OnPropertyChanged(nameof(RichTextBoxViewModelCollection.RtbListBoxHeight));
                         break;
                 }
             };
@@ -989,7 +1000,7 @@ namespace MpWpfApp {
             RtbListBoxItemOverlayDockPanel = (DockPanel)Rtbc.FindName("RtbListItemOverlayBorderDockPanel");
             RtbListBoxItemTitleTextBlock = (TextBlock)Rtbc.FindName("RtbListBoxItemTitleTextBlock");
             RtbListBoxItemTitleTextBox = (TextBox)Rtbc.FindName("RtbListBoxItemTitleTextBox");
-            var dragButton = (Button)Rtbc.FindName("RtbListBoxItemOverlayBorderGridDragButton");
+            DragButton = (Button)Rtbc.FindName("RtbListBoxItemOverlayBorderGridDragButton");
 
             HostClipTileViewModel.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
 
@@ -1005,16 +1016,36 @@ namespace MpWpfApp {
             #region Drag & Drop
             var mouseDownPosition = new Point();
             int minDragDist = 20;
-            Rtbc.PreviewMouseUp += (s, e9) => {
+            DragButton.PreviewMouseUp += (s, e9) => {
                 mouseDownPosition = new Point();
                 IsSubDragging = false;
+                foreach (var srtbvm in RichTextBoxViewModelCollection.SubSelectedRtbvmList) {
+                    if (srtbvm != this && srtbvm.IsSubSelected) {
+                        var outerBorder = (Border)srtbvm.DragButton.Template.FindName("OuterBorder", srtbvm.DragButton);
+                        outerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFromString("#FF7CA0CC");
+
+                        var innerBorder = (Border)srtbvm.DragButton.Template.FindName("InnerBorder", srtbvm.DragButton);
+                        innerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFromString("#FFE4EFFD");
+                        innerBorder.Background = (Brush)new BrushConverter().ConvertFromString("#FFDAE7F5");
+                    }
+                }
             };
-            Rtbc.PreviewMouseMove += (s, e7) => {
+            DragButton.PreviewMouseMove += (s, e7) => {
                 if (e7.MouseDevice.LeftButton == MouseButtonState.Pressed) {
                     if(HostClipTileViewModel.IsExpanded && RichTextBoxViewModelCollection.Count == 1) {
                         //cannot resort w/ only 1 item and its relative location is not clear
                         //since its isolated
                         return;
+                    }
+                    foreach(var srtbvm in RichTextBoxViewModelCollection.SubSelectedRtbvmList) {
+                        if(srtbvm.IsSubSelected && srtbvm != this) {
+                            var outerBorder = (Border)srtbvm.DragButton.Template.FindName("OuterBorder", srtbvm.DragButton);
+                            outerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFromString("#FF2E4E76");
+
+                            var innerBorder = (Border)srtbvm.DragButton.Template.FindName("InnerBorder", srtbvm.DragButton);
+                            innerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFromString("#FF116EE4");
+                            innerBorder.Background = (Brush)new BrushConverter().ConvertFromString("#FF3272B8");
+                        }
                     }
                     if(mouseDownPosition == new Point()) {
                         mouseDownPosition = e7.GetPosition(Rtbc);
@@ -1025,25 +1056,43 @@ namespace MpWpfApp {
                     IsSubDragging = true;
                     IsSubSelected = true;
                     DragDrop.DoDragDrop(
-                                ((FrameworkElement)s),
+                                Rtbc,
                                 RichTextBoxViewModelCollection.GetDataObjectFromSubSelectedItems(true).Result,
                                 DragDropEffects.Copy | DragDropEffects.Move);
                     e.Handled = true;
                 }
             };
-            dragButton.MouseEnter += (s, e2) => {
-                if (!MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle &&
-                   !IsSubSelected) {
-                    IsOverDragButton = true;
-                }
+            DragButton.MouseEnter += (s, e2) => {
+                IsOverDragButton = true;
+                if(IsSubSelected) {
+                    foreach (var srtbvm in RichTextBoxViewModelCollection.SubSelectedRtbvmList) {
+                        if (srtbvm != this && srtbvm.IsSubSelected) {
+                            var outerBorder = (Border)srtbvm.DragButton.Template.FindName("OuterBorder", srtbvm.DragButton);
+                            outerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFromString("#FF7CA0CC");
 
-            };
-            dragButton.MouseLeave += (s, e2) => {
-                if (!MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle &&
-                    !IsSubSelected && e2.LeftButton != MouseButtonState.Pressed) {
-                    IsOverDragButton = false;
+                            var innerBorder = (Border)srtbvm.DragButton.Template.FindName("InnerBorder", srtbvm.DragButton);
+                            innerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFromString("#FFE4EFFD");
+                            innerBorder.Background = (Brush)new BrushConverter().ConvertFromString("#FFDAE7F5");
+                        }
+                    }
                 }
             };
+            DragButton.MouseLeave += (s, e2) => {
+                IsOverDragButton = false;
+                if (IsSubSelected) {
+                    foreach (var srtbvm in RichTextBoxViewModelCollection.SubSelectedRtbvmList) {
+                        if (srtbvm != this && srtbvm.IsSubSelected) {
+                            var outerBorder = (Border)srtbvm.DragButton.Template.FindName("OuterBorder", srtbvm.DragButton);
+                            outerBorder.BorderBrush = Brushes.Transparent;
+
+                            var innerBorder = (Border)srtbvm.DragButton.Template.FindName("InnerBorder", srtbvm.DragButton);
+                            innerBorder.BorderBrush = Brushes.Transparent;
+                            innerBorder.Background = Brushes.Transparent;
+                        }
+                    }
+                }
+            };
+
             #endregion
 
 
@@ -1058,26 +1107,12 @@ namespace MpWpfApp {
             RtbcAdornerLayer.Add(new MpRichTextBoxOverlayAdorner(Rtbc));
 
             Rtbc.MouseEnter += (s, e2) => {
-                //if(!MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle &&
-                //   !IsSubSelected) {
-                //IsSubHovering = true;
-                //}
                 IsSubHovering = true;
             };
             Rtbc.MouseLeave += (s, e2) => {
-                //if (!MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle &&
-                //    !IsSubSelected) {
-                //    IsSubHovering = false;
-                //}
                 IsSubHovering = false;
             };
 
-            //RtbListBoxItemClipBorder.MouseLeftButtonUp += (s, e4) => {
-            //    SelectItemCommand.Execute(null);
-            //};
-
-            //Rtbc.ContextMenu = HostClipTileViewModel.ClipBorder.ContextMenu;
-            //Rtbc.ContextMenu.Loaded += HostClipTileViewModel.ClipTile_ContextMenu_Loaded;
             Rtbc.PreviewMouseRightButtonDown += (s, e6) => {
                 e6.Handled = true;
                 HostClipTileViewModel.IsContextMenuOpened = true;
@@ -1088,8 +1123,7 @@ namespace MpWpfApp {
                 //var rightClickEvent = new MouseButtonEventArgs(Mouse.PrimaryDevice, (int)DateTime.Now.Ticks, MouseButton.Right);
                 HostClipTileViewModel.ClipTile_ContextMenu_Opened(HostClipTileViewModel.ClipBorder.FindName("ClipTile_ContextMenu"), contextEvent);
             };
-            //Rtbc.ContextMenu.Closed += HostClipTileViewModel.ClipTile_ContextMenu_Closed;
-
+           
             RtbListBoxItemTitleTextBlock.PreviewMouseLeftButtonDown += (s, e7) => {
                 //RichTextBoxViewModelCollection.ClearSubSelection();
                 if(!HostClipTileViewModel.IsExpanded) {
@@ -1125,7 +1159,7 @@ namespace MpWpfApp {
                 }
             };
 
-            UpdateLayout();
+            //UpdateLayout();
         }
 
         public void UpdateLayout() {
@@ -1135,9 +1169,14 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(RtbCanvasHeight));
             OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
 
+            if(Rtb != null) {
+                Rtb.Document.PageWidth = RtbPageWidth;
+                Rtb.Document.PageHeight = RtbPageHeight;
+            }
             //ResetRtb();
-
+            
             RichTextBoxViewModelCollection.UpdateLayout();
+
 
             //double widthDiff = RtbPageWidth - RichTextBoxViewModelCollection.RichTextBoxListBox.ActualWidth;
 
@@ -1161,32 +1200,14 @@ namespace MpWpfApp {
                 (TextAlignment)rtbAlignment == TextAlignment.Justify) {
                 Rtb.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
             }
-            Rtb.Document.PageWidth = RtbPageWidth;
-            Rtb.Document.PageHeight = RtbPageHeight;
 
 
             Rtb.ScrollToHome();
             Rtb.CaretPosition = Rtb.Document.ContentStart;
             Rtb.Selection.Select(Rtb.Document.ContentStart, Rtb.Document.ContentStart);
-        }
-        //public void SetSelection(bool newSelection, bool isInitEdit, bool isInitPaste) {
-        //    //if(IsSubSelected == newSelection) {
-        //    //    return;
-        //    //}
-        //    //RichTextBoxViewModelCollection.ClearSubSelection();
-        //    IsSubSelected = newSelection;
-        //    if(IsSubSelected) {
-        //        if (isInitEdit) {
-        //            HostClipTileViewModel.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(Rtb, isInitEdit);
-        //            HostClipTileViewModel.EditTemplateToolbarViewModel.InitWithRichTextBox(Rtb);
-        //        } else if (isInitPaste) {
-        //            HostClipTileViewModel.PasteTemplateToolbarViewModel.InitWithRichTextBox(Rtb, isInitPaste);
-        //        }
 
-        //        //Rtb.Focus();
-        //        //Rtb.ScrollToEnd();                
-        //    }
-        //}
+            UpdateLayout();
+        }
 
         public new async Task<string> GetPastableRichText() {
             if (HasTemplate) {
@@ -1274,7 +1295,7 @@ namespace MpWpfApp {
                         foreach (Capture c in mg.Captures) {
                             Hyperlink hl = null;
                             var matchRange = MpHelpers.Instance.FindStringRangeFromPosition(lastRangeEnd, c.Value, true);
-                            if (matchRange == null) {
+                            if (matchRange == null || string.IsNullOrEmpty(matchRange.Text)) {
                                 continue;
                             }
                             lastRangeEnd = matchRange.End;
@@ -1346,35 +1367,40 @@ namespace MpWpfApp {
                                         hl.NavigateUri = new Uri("tel:" + linkText);
                                         break;
                                     case MpSubTextTokenType.Currency:
-                                        //"https://www.google.com/search?q=%24500.80+to+yen"
-                                        MenuItem convertCurrencyMenuItem = new MenuItem();
-                                        convertCurrencyMenuItem.Header = "Convert Currency To";
-                                        var fromCurrencyType = MpHelpers.Instance.GetCurrencyTypeFromString(linkText);
-                                        foreach (MpCurrency currency in MpCurrencyConverter.Instance.CurrencyList) {
-                                            if (currency.Id == Enum.GetName(typeof(CurrencyType), fromCurrencyType)) {
-                                                continue;
-                                            }
-                                            MenuItem subItem = new MenuItem();
-                                            subItem.Header = currency.CurrencyName + "(" + currency.CurrencySymbol + ")";
-                                            subItem.Click += async (s2, e2) => {
-                                                Enum.TryParse(currency.Id, out CurrencyType toCurrencyType);
-                                                var convertedValue = await MpCurrencyConverter.Instance.ConvertAsync(
-                                                    MpHelpers.Instance.GetCurrencyValueFromString(linkText),
-                                                    fromCurrencyType,
-                                                    toCurrencyType);
-                                                convertedValue = Math.Round(convertedValue, 2);
-                                                if (Rtb.Tag != null && ((List<Hyperlink>)Rtb.Tag).Contains(hl)) {
-                                                    ((List<Hyperlink>)Rtb.Tag).Remove(hl);
+                                        try {
+                                            //"https://www.google.com/search?q=%24500.80+to+yen"
+                                            MenuItem convertCurrencyMenuItem = new MenuItem();
+                                            convertCurrencyMenuItem.Header = "Convert Currency To";
+                                            var fromCurrencyType = MpHelpers.Instance.GetCurrencyTypeFromString(linkText);
+                                            foreach (MpCurrency currency in MpCurrencyConverter.Instance.CurrencyList) {
+                                                if (currency.Id == Enum.GetName(typeof(CurrencyType), fromCurrencyType)) {
+                                                    continue;
                                                 }
-                                                Run run = new Run(currency.CurrencySymbol + convertedValue);
-                                                hl.Inlines.Clear();
-                                                hl.Inlines.Add(run);
-                                            };
+                                                MenuItem subItem = new MenuItem();
+                                                subItem.Header = currency.CurrencyName + "(" + currency.CurrencySymbol + ")";
+                                                subItem.Click += async (s2, e2) => {
+                                                    Enum.TryParse(currency.Id, out CurrencyType toCurrencyType);
+                                                    var convertedValue = await MpCurrencyConverter.Instance.ConvertAsync(
+                                                        MpHelpers.Instance.GetCurrencyValueFromString(linkText),
+                                                        fromCurrencyType,
+                                                        toCurrencyType);
+                                                    convertedValue = Math.Round(convertedValue, 2);
+                                                    if (Rtb.Tag != null && ((List<Hyperlink>)Rtb.Tag).Contains(hl)) {
+                                                        ((List<Hyperlink>)Rtb.Tag).Remove(hl);
+                                                    }
+                                                    Run run = new Run(currency.CurrencySymbol + convertedValue);
+                                                    hl.Inlines.Clear();
+                                                    hl.Inlines.Add(run);
+                                                };
 
-                                            convertCurrencyMenuItem.Items.Add(subItem);
+                                                convertCurrencyMenuItem.Items.Add(subItem);
+                                            }
+
+                                            hl.ContextMenu.Items.Add(convertCurrencyMenuItem);
                                         }
-
-                                        hl.ContextMenu.Items.Add(convertCurrencyMenuItem);
+                                        catch (Exception ex) {
+                                            Console.WriteLine("Create Hyperlinks warning, cannot connect to currency converter: " + ex);
+                                        }
                                         break;
                                     case MpSubTextTokenType.HexColor:
                                         var rgbColorStr = linkText;

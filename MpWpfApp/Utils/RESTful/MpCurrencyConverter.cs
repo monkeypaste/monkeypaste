@@ -134,19 +134,27 @@ namespace MpWpfApp {
         private string ApiKey { get; }
 
         private MpCurrencyConverter() : base("Currency Conversion") {
-            ApiKey = Properties.Settings.Default.CurrencyConverterFreeApiKey;
-            CurrencyList = GetAllCurrencies();
-
-            CurrencyList = CurrencyList.OrderBy(x => x.CurrencyName).ToList();
-
-            CurrencySymbols = string.Empty;
-            foreach(var currency in CurrencyList) {
-                if(string.IsNullOrEmpty(currency.CurrencySymbol) || CurrencySymbols.Contains(currency.CurrencySymbol)) {
-                    continue;
+            try {
+                if (!MpHelpers.Instance.CheckForInternetConnection()) {
+                    return;
                 }
-                CurrencySymbols += currency.CurrencySymbol + "|";
+                ApiKey = Properties.Settings.Default.CurrencyConverterFreeApiKey;
+                CurrencyList = GetAllCurrencies();
+
+                CurrencyList = CurrencyList.OrderBy(x => x.CurrencyName).ToList();
+
+                CurrencySymbols = string.Empty;
+                foreach (var currency in CurrencyList) {
+                    if (string.IsNullOrEmpty(currency.CurrencySymbol) || CurrencySymbols.Contains(currency.CurrencySymbol)) {
+                        continue;
+                    }
+                    CurrencySymbols += currency.CurrencySymbol + "|";
+                }
+                CurrencySymbols = CurrencySymbols.Substring(0, CurrencySymbols.Length - 2);
             }
-            CurrencySymbols = CurrencySymbols.Substring(0, CurrencySymbols.Length - 2);
+            catch(Exception ex) {
+                Console.WriteLine("Currency Converter error: " + ex);
+            }
         }
 
         public void Init() {

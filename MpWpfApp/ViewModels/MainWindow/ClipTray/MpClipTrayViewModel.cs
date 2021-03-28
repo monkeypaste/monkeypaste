@@ -450,8 +450,8 @@ namespace MpWpfApp {
             ListBox = ClipTrayListView;
             IsHorizontal = true;
 
-            var scrollViewer = ClipTrayListView.GetDescendantOfType<ScrollViewer>();
-            scrollViewer.Margin = new Thickness(5, 0, 5, 0);
+            ScrollViewer = ClipTrayListView.GetDescendantOfType<ScrollViewer>();
+            ScrollViewer.Margin = new Thickness(5, 0, 5, 0);
             ClipTrayContainerGrid = ClipTrayListView.GetVisualAncestor<Grid>();
 
             ClipTrayAdornerLayer = AdornerLayer.GetAdornerLayer(ClipTrayListView);
@@ -716,10 +716,9 @@ namespace MpWpfApp {
             IsolateClipTile(ctvmToExpand);
 
             ctvmToExpand.Resize(
-                    ctvmToExpand.TileBorderMaxWidth - ctvmToExpand.TileBorderWidth,
+                    MainWindowViewModel.ClipTrayWidth - ctvmToExpand.TileBorderMinWidth - MpMeasurements.Instance.ClipTileExpandedMargin,
                     ctvmToExpand.EditRichTextBoxToolbarHeight,
-                    ctvmToExpand.IsPastingTemplate ? ctvmToExpand.PasteTemplateToolbarHeight : 0,
-                    ctvmToExpand.TileContentHeight - ctvmToExpand.EditRichTextBoxToolbarHeight);
+                    ctvmToExpand.IsPastingTemplate ? ctvmToExpand.PasteTemplateToolbarHeight : 0);
 
             //EventHandler postFadeEvent = (s, e) => {
             //    //Console.WriteLine("Expanding tile post fade event");
@@ -766,10 +765,9 @@ namespace MpWpfApp {
 
         public void ShrinkClipTile(MpClipTileViewModel ctvmToShrink) {
             ctvmToShrink.Resize(
-                -(ctvmToShrink.TileBorderWidth - ctvmToShrink.TileBorderMinWidth),
+                -(MainWindowViewModel.ClipTrayWidth - ctvmToShrink.TileBorderMinWidth - MpMeasurements.Instance.ClipTileExpandedMargin),
                 -ctvmToShrink.EditRichTextBoxToolbarHeight,
-                ctvmToShrink.IsPastingTemplate ? -ctvmToShrink.PasteTemplateToolbarHeight : 0,
-                ctvmToShrink.TileContentHeight + ctvmToShrink.EditRichTextBoxToolbarHeight);
+                ctvmToShrink.IsPastingTemplate ? -ctvmToShrink.PasteTemplateToolbarHeight : 0);
             RestoreVisibleTiles();
             //double animMs = 0;// Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
             //ClearClipSelection(false);
@@ -853,7 +851,6 @@ namespace MpWpfApp {
             foreach (var ctvm in this) {
                 ctvm.IsEditingTitle = false;
                 if (ctvm.IsEditingTile) {
-                    ShrinkClipTile(ctvm);
                     ctvm.IsEditingTile = false;
                 }
                 ctvm.IsEditingTemplate = false;
@@ -935,7 +932,7 @@ namespace MpWpfApp {
                     ClearClipSelection();
                     primarySelectedClipTile.IsSelected = true;
                 }
-                await primarySelectedClipTile.MergeClipAsync(newCopyItem);
+                await primarySelectedClipTile.MergeClipAsync(new List<MpCopyItem>() { newCopyItem });
                  
                 if (Properties.Settings.Default.NotificationShowAppendBufferToast) {
                     MpStandardBalloonViewModel.ShowBalloon(
@@ -1638,12 +1635,15 @@ namespace MpWpfApp {
         }
         private async Task MergeSelectedClips() {
             var sctvml = SelectedClipTiles;
+            var ocil = new List<MpCopyItem>();
             foreach (var sctvm in sctvml) {
                 if (sctvm == PrimarySelectedClipTile) {
                     continue;
                 }
-                await PrimarySelectedClipTile.MergeClipAsync(sctvm.CopyItem);
+                ocil.Add(sctvm.CopyItem);
             }
+
+            await PrimarySelectedClipTile.MergeClipAsync(ocil);
         }
 
         private AsyncCommand _speakSelectedClipsAsyncCommand;

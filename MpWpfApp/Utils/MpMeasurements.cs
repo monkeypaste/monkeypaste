@@ -72,6 +72,12 @@ namespace MpWpfApp {
             }
         }
 
+        public double ClipTileExpandedMargin {
+            get {
+                return ClipTilePadding * 2;
+            }
+        }
+
         public double ClipTileMinSize {
             get {
                 return ClipTrayHeight - (ClipTileMargin * 2) - ClipTilePadding;
@@ -104,6 +110,12 @@ namespace MpWpfApp {
         public double ClipTileTitleIconRightMargin {
             get {
                 return 10;
+            }
+        }
+
+        public double ClipTileScrollViewerWidth {
+            get {
+                return ClipTileContentMinWidth - 20;
             }
         }
 

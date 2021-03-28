@@ -517,6 +517,18 @@ namespace MpWpfApp {
                 if (toRtb != null && toSelection != null) {
                     toRtb.Selection.Select(toSelection.Start, toSelection.End);
                 }
+
+                var tr = new TextRange(to.ContentStart, to.ContentEnd);
+                var rtbAlignment = tr.GetPropertyValue(FlowDocument.TextAlignmentProperty);
+                if (rtbAlignment == null ||
+                    rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}" ||
+                    (TextAlignment)rtbAlignment == TextAlignment.Justify) {
+                    tr.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
+                }
+
+                var ps = to.GetDocumentSize();
+                to.PageWidth = ps.Width;
+                to.PageHeight = ps.Height;
                 return to;
             }            
         }
@@ -2052,7 +2064,7 @@ namespace MpWpfApp {
                 dpi.PixelsPerInchX, 
                 dpi.PixelsPerInchY, 
                 PixelFormats.Pbgra32);
-
+            
             bitmap.Render(visual);
             //RenderOptions.SetBitmapScalingMode(bitmap, BitmapScalingMode.HighQuality);
             return bitmap;
@@ -2357,6 +2369,17 @@ namespace MpWpfApp {
                         var flowDocument = new MpEventEnabledFlowDocument();
                         var range = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
                         range.Load(stream, System.Windows.DataFormats.Rtf);
+
+                        var tr = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
+                        var rtbAlignment = tr.GetPropertyValue(FlowDocument.TextAlignmentProperty);
+                        if (rtbAlignment == null ||
+                            rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}" ||
+                            (TextAlignment)rtbAlignment == TextAlignment.Justify) {
+                            tr.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
+                        }
+                        var ps = flowDocument.GetDocumentSize();
+                        flowDocument.PageWidth = ps.Width;
+                        flowDocument.PageHeight = ps.Height;
                         return flowDocument;
                     }
                     catch(Exception ex) {
