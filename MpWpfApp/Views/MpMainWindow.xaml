@@ -21,7 +21,7 @@
         Background="Transparent"
         Top="0"        
         Visibility="Visible"
-        ShowInTaskbar="True"
+        ShowInTaskbar="False"
         ResizeMode="CanResize"
         WindowState="Normal"
         Height="{Binding MainWindowHeight}"
@@ -2092,7 +2092,8 @@
                                                                                                             BorderThickness="1"
                                                                                                             CornerRadius="5">
                                                                                             <local:MpClipBorder.ToolTip>
-                                                                                                <ToolTip Visibility="{Binding SubItemToolTipVisibility}"
+                                                                                                <ToolTip x:Name="ClipTileTooltip" 
+                                                                                                         Visibility="{Binding SubItemToolTipVisibility}"
                                                                                                          Placement="Top"
                                                                                                          HorizontalOffset="{Binding HostClipTileViewModel.TileBorderWidth}">
                                                                                                     <ToolTip.Template>
@@ -2492,6 +2493,8 @@
                                                     </Grid>
                                                     <!--File List Content -->
                                                     <ListBox x:Name="ClipTileFileListBox"
+                                                             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                                             ScrollViewer.VerticalScrollBarVisibility="Hidden"
                                                              Width="{Binding TileBorderWidth}"
                                                              Height="{Binding TileContentHeight}"
                                                              ItemsSource="{Binding FileListViewModels}"
@@ -2509,36 +2512,52 @@
                                                             <DataTemplate>
                                                                 <Border Height="22"
                                                                         BorderThickness="0">
-                                                                    <StackPanel VerticalAlignment="Center"
-                                                                                HorizontalAlignment="Left"
-                                                                                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                                                                ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                                                                Orientation="Horizontal">
-                                                                        <Image Source="{Binding Icon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
-                                                                               Height="22"
-                                                                               Stretch="Fill" />
-                                                                        <TextBlock x:Name="FileListItemTextBlock"
-                                                                                   Margin="3,0,0,0"
-                                                                                   VerticalAlignment="Center"
-                                                                                   HorizontalAlignment="Left"
-                                                                                   ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                                                                   ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                                                                   FontSize="16"
-                                                                                   Foreground="Black"
-                                                                                   Background="Transparent">
-                                                                            <TextBlock.ToolTip>
-                                                                                <ToolTip>
-                                                                                    <TextBlock Text="{Binding ItemPath}" />
-                                                                                </ToolTip>
-                                                                            </TextBlock.ToolTip>
-                                                                <i:Interaction.Triggers>
-                                                                        <i:EventTrigger EventName="Loaded">
-                                                                            <i:CallMethodAction TargetObject="{Binding}"
-                                                                                                MethodName="FileListItemTextBlock_Loaded" />
-                                                                        </i:EventTrigger>
-                                                                    </i:Interaction.Triggers>
-                                                            </TextBlock>
-                                                                    </StackPanel>
+                                                                    <Grid>
+                                                                        <StackPanel Visibility="{Binding Data.FileListStackPanelVisibility, Source={StaticResource ClipTileProxy}}"
+                                                                                    VerticalAlignment="Center"
+                                                                                    HorizontalAlignment="Left"
+                                                                                    ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                                                                    ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                                                                    Orientation="Horizontal">
+                                                                            <Image Source="{Binding Icon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
+                                                                                   Height="22"
+                                                                                   Stretch="Fill" />
+                                                                            <TextBlock x:Name="FileListItemTextBlock"
+                                                                                       Margin="3,0,0,0"
+                                                                                       VerticalAlignment="Center"
+                                                                                       HorizontalAlignment="Left"
+                                                                                       ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                                                                       ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                                                                       FontSize="16"
+                                                                                       Foreground="Black"
+                                                                                       Background="Transparent">
+                                                                                <TextBlock.ToolTip>
+                                                                                    <ToolTip>
+                                                                                        <TextBlock Text="{Binding ItemPath}" />
+                                                                                    </ToolTip>
+                                                                                </TextBlock.ToolTip>
+                                                                                <i:Interaction.Triggers>
+                                                                                    <i:EventTrigger EventName="Loaded">
+                                                                                        <i:CallMethodAction TargetObject="{Binding}"
+                                                                                                            MethodName="FileListItemTextBlock_Loaded" />
+                                                                                    </i:EventTrigger>
+                                                                                </i:Interaction.Triggers>
+                                                                        </TextBlock>
+                                                                        </StackPanel>
+                                                                        <WebBrowser x:Name="FileItemMoonPdfPanel"
+                                                                                          Visibility="{Binding Data.WebBrowserFileViewerVisibility, Source={StaticResource ClipTileProxy}}"
+                                                                                          VerticalAlignment="Center"
+                                                                                          HorizontalAlignment="Center"
+                                                                                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                                                                          ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                                                                            <i:Interaction.Triggers>
+                                                                                <i:EventTrigger EventName="Loaded">
+                                                                                    <i:CallMethodAction TargetObject="{Binding}"
+                                                                                                        MethodName="FileItemWebBrowser_Loaded" />
+                                                                                </i:EventTrigger>
+                                                                            </i:Interaction.Triggers>
+                                                                        </WebBrowser>
+                                                                    </Grid>
                                                                 </Border>
                                                             </DataTemplate>
                                                         </ListBox.ItemTemplate>

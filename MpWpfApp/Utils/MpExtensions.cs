@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -54,7 +55,27 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual Tree
+        public static ListBoxItem GetListBoxItem(this ListBox lb, int index) {
+            if (lb == null) {
+                return null;
+            }
+            if (lb.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
+                return null;
+            }
+            if (index < 0 || index >= lb.Items.Count) {
+                return null;
+            }
+            return lb.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
+        }
 
+        public static Rect GetListBoxItemRect(this ListBox lb, int index) {
+            var lbi = lb.GetListBoxItem(index);
+            if (lbi == null || lbi.Visibility != Visibility.Visible) {
+                return new Rect();
+            }
+            Point origin = new Point();
+            return new Rect(origin, new Size(lbi.ActualWidth, lbi.ActualHeight));
+        }
         public static bool IsVisualDescendant(this DependencyObject parent, DependencyObject child) {
             if(parent == null || child == null) {
                 return false;

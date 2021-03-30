@@ -106,7 +106,7 @@ namespace MpWpfApp {
             };
         }
         public void ClipTileSort_Loaded(object sender, RoutedEventArgs e) {
-            //PerformSelectedSortCommand.Execute(null);
+            PerformSelectedSortCommand.Execute(null);
         }
         public string GetSortTypeAsMemberPath() {
             return ConvertSortTypeToMemberPath(SelectedSortType.Name);

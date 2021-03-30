@@ -7,15 +7,18 @@ using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     public class MpFileListItemViewModel : MpViewModelBase {
-        #region View Models
 
+
+        #region Properties
+
+        #region View Models
         private MpClipTileViewModel _clipTileViewModel = null;
         public MpClipTileViewModel ClipTileViewModel {
             get {
                 return _clipTileViewModel;
             }
             set {
-                if(_clipTileViewModel != value) {
+                if (_clipTileViewModel != value) {
                     _clipTileViewModel = value;
                     OnPropertyChanged(nameof(ClipTileViewModel));
                 }
@@ -24,7 +27,13 @@ namespace MpWpfApp {
 
         #endregion
 
-        #region Properties
+        #region Controls
+
+        public WebBrowser FileWebBrowser;
+        #endregion
+
+
+
         private Uri _itemUri = null;
         public Uri ItemUri {
             get {
@@ -114,6 +123,14 @@ namespace MpWpfApp {
                 MpHelpers.Instance.OpenUrl(e1.Uri.ToString());
             };
             tb.Inlines.Add(hyperLink);
+        }
+
+        public void FileItemWebBrowser_Loaded(object sender, RoutedEventArgs e) {
+            if (ClipTileViewModel.WebBrowserFileViewerVisibility == Visibility.Collapsed) {
+                return;
+            }
+            FileWebBrowser = (WebBrowser)sender;
+            //FileWebBrowser.OpenFile(ItemPath);
         }
 
         #endregion

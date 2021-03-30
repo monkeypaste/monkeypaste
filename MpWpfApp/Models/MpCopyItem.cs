@@ -59,7 +59,7 @@ namespace MpWpfApp {
 
         public int FileCount { get; set; } = 0;
 
-        public long DataSizeInMb { get; set; } = 0;
+        public double DataSizeInMb { get; set; } = 0;
 
         public int RelevanceScore {
             get {
@@ -98,6 +98,7 @@ namespace MpWpfApp {
                     //    return MpHelpers.Instance.ConvertRichTextToBitmapSource(MpHelpers.Instance.ConvertPlainTextToRichText((string)_itemData));
                     case MpCopyItemType.Image:
                         return (BitmapSource)_itemData;
+                    case MpCopyItemType.FileList:
                     case MpCopyItemType.Composite:
                     case MpCopyItemType.RichText:
                         return _itemBitmapSource;
@@ -924,7 +925,7 @@ namespace MpWpfApp {
 
         public async Task<BitmapSource> InitSwirlAsync(BitmapSource sharedSwirl = null, bool forceUseItemColor = false, bool retainAlpha = true, DispatcherPriority priority = DispatcherPriority.Background) {
             BitmapSource swirl = null;
-            await Dispatcher.CurrentDispatcher.InvokeAsync(async () => {
+            await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
                 swirl = InitSwirl(sharedSwirl, forceUseItemColor);
             }, priority);
 
@@ -962,6 +963,7 @@ namespace MpWpfApp {
                         csvText = csvText.Remove(csvText.Length - 2, 2);
                     }
                     ItemCsv = csvText;
+                    ItemBitmapSource = ItemFlowDocument.ToBitmapSource();
                     break;
                 case MpCopyItemType.Image:
                     if (Application.Current.MainWindow.DataContext == null ||

@@ -16,14 +16,15 @@ using Hardcodet.Wpf.TaskbarNotification;
 namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase {
         #region Statics
-        //public static bool IsOpen {
-        //    get {
-        //        return Application.Current.MainWindow.Visibility == Visibility.Visible &&
-        //            Application.Current.MainWindow.Top < Properties.Settings.Default.MainWindowStartHeight;
-        //    }
-        //}
+        public static bool IsMainWindowOpen {
+            get {
+                return Application.Current.MainWindow.DataContext != null && 
+                    Application.Current.MainWindow.Visibility == Visibility.Visible &&
+                    ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).MainWindowGridTop < SystemParameters.WorkArea.Bottom; //Properties.Settings.Default.MainWindowStartHeight;
+            }
+        }
 
-        public static bool IsMainWindowOpen { get; private set; } = false;
+        //public static bool IsMainWindowOpen { get; private set; } = false;
         #endregion
 
         #region Private Variables
@@ -328,6 +329,8 @@ namespace MpWpfApp {
             //    ClipTrayViewModel.Add(new MpClipTileViewModel(MpCopyItem.CreateRandomItem(MpCopyItemType.RichText)));
             //}
             IsLoading = false;
+
+            //ClipTrayViewModel.Refresh();
         }
 
         public void ClearEdits() {
@@ -663,7 +666,7 @@ namespace MpWpfApp {
             mw.Show();
             mw.Activate();
             mw.Visibility = Visibility.Visible;
-            //mw.Topmost = true;
+            mw.Topmost = true;
 
             if (IsLoading) {
                 IsLoading = false;
@@ -672,19 +675,6 @@ namespace MpWpfApp {
             } else {                
                 ResetTraySelection();
             }
-
-            //MpHelpers.Instance.AnimateDoubleProperty(
-            //    _startMainWindowTop,
-            //    _endMainWindowTop,
-            //    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-            //    mw,
-            //    Window.TopProperty,
-            //    (s, e) => {
-            //        if (ClipTrayViewModel.WasItemAdded) {
-            //            ClipTrayViewModel.Refresh();
-            //            ClipTrayViewModel.WasItemAdded = false;
-            //        }
-            //    });
 
             double tt = Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
             double fps = 30;
@@ -696,11 +686,9 @@ namespace MpWpfApp {
             timer.Tick += (s, e32) => {
                 if (MpHelpers.Instance.DistanceBetweenValues(MainWindowGridTop, _endMainWindowTop) > 0.5) {
                     MainWindowGridTop += dt;
-                    
-                    //Canvas.SetTop(MainWindowGrid, MainWindowGridTop);
                 } else {
                     timer.Stop();
-                    IsMainWindowOpen = true;
+                    //IsMainWindowOpen = true;
                 }
             };
             timer.Start();
@@ -779,7 +767,7 @@ namespace MpWpfApp {
                     //Canvas.SetTop(MainWindowGrid, MainWindowGridTop);
                 } else {
                     timer.Stop();
-                    IsMainWindowOpen = false;
+                    //IsMainWindowOpen = false;
                     if (pasteSelected) {
                         if (ClipTrayViewModel.IsPastingTemplate) {
                             IsMainWindowLocked = false;

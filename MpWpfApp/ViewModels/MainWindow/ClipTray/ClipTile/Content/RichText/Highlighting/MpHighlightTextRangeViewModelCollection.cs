@@ -274,7 +274,8 @@ namespace MpWpfApp {
             }
         }
 
-        public void Dispose() {
+        public new void Dispose() {
+            base.Dispose();
             this.Clear();
         }
         #endregion

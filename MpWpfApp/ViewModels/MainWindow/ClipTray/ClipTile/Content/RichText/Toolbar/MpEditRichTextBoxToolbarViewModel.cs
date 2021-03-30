@@ -332,48 +332,6 @@ namespace MpWpfApp {
 
             #region Selection Changed
             rtb.SelectionChanged += Rtb_SelectionChanged;
-            //rtb.SelectionChanged += (s, e6) => {
-            //    //Console.WriteLine("(SelectionChanged)Selection Text: " + rtb.Selection.Text);
-            //    // Set font family combo
-            //    var fontFamily = rtb.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
-            //    fontFamilyComboBox.SelectedItem = fontFamily;
-
-            //    // Set font size combo
-            //    var fontSize = rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
-            //    if (fontSize == null || fontSize.ToString() == "{DependencyProperty.UnsetValue}") {
-            //        fontSize = string.Empty;
-            //    } else {
-            //        fontSize = Math.Round((double)fontSize);
-            //    }
-            //    fontSizeCombo.Text = fontSize.ToString();
-
-            //    // Set Font buttons
-            //    ((ToggleButton)EditToolbarBorder.FindName("BoldButton")).IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
-            //    ((ToggleButton)EditToolbarBorder.FindName("ItalicButton")).IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
-            //    ((ToggleButton)EditToolbarBorder.FindName("UnderlineButton")).IsChecked = rtb.Selection?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
-
-            //    // Set Alignment buttons
-            //    leftAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
-            //    centerAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
-            //    rightAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
-
-            //    //disable add template button if current selection intersects with a template
-            //    //this may not be necessary since templates are inlineuicontainers...
-            //    MpTemplateHyperlinkViewModel thlvm = null;
-            //    if (rtb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
-            //       rtb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
-            //        if (((TextElement)rtb.Selection.Start.Parent).DataContext != null && ((TextElement)rtb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
-            //            thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.Start.Parent).DataContext;
-            //        } else if (((TextElement)rtb.Selection.End.Parent).DataContext != null && ((TextElement)rtb.Selection.End.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
-            //            thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.End.Parent).DataContext;
-            //        }
-            //    }
-            //    if (thlvm == null) {
-            //        IsAddTemplateButtonEnabled = true;
-            //    } else {
-            //        IsAddTemplateButtonEnabled = false;
-            //    }
-            //};
             #endregion
 
             #endregion
@@ -617,8 +575,8 @@ namespace MpWpfApp {
         public void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
             var rtb = sender as RichTextBox;
 
-            ToggleButton selectedAlignmentButton = null;
-            ToggleButton selectedListButton = null;
+            //ToggleButton selectedAlignmentButton = null;
+            //ToggleButton selectedListButton = null;
 
             var fontFamilyComboBox = (ComboBox)EditToolbarBorder.FindName("FontFamilyCombo");
             var fontSizeCombo = (ComboBox)EditToolbarBorder.FindName("FontSizeCombo");

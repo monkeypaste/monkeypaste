@@ -33,6 +33,9 @@ namespace MpWpfApp {
             }
         }
         public MpTagTrayViewModel(MpClipTrayViewModel ctrvm) : this() {
+            CollectionChanged += (s, e) => {
+                UpdateSortOrder();
+            };
             ctrvm.CollectionChanged += (s, e) => {
                 if(MainWindowViewModel.ClipTileSortViewModel.IsSorting) {
                     return;
@@ -46,6 +49,7 @@ namespace MpWpfApp {
                     RefreshAllCounts();
                 }
             };
+
         }
 
         public void TagTray_Loaded(object sender, RoutedEventArgs e) {
@@ -57,7 +61,8 @@ namespace MpWpfApp {
             tagTray.Drop += (s, e2) => {
                 return;
             };
-            //select history tag by default
+            RefreshAllCounts();
+            UpdateSortOrder(true);
             GetRecentTagTileViewModel().IsSelected = true;
         }
 
@@ -67,6 +72,16 @@ namespace MpWpfApp {
 
             RefreshRecentTag();
             RefreshAllCounts();
+        }
+
+        public void UpdateSortOrder(bool fromModel = false) {
+            if (fromModel) {
+                this.Sort(x => x.TagSortIdx);
+            } else {
+                foreach (var ttvm in this) {
+                    ttvm.TagSortIdx = this.IndexOf(ttvm);
+                }
+            }
         }
 
         public void RefreshAllCounts() {
@@ -81,7 +96,7 @@ namespace MpWpfApp {
         }
 
         public void RefreshRecentTag() {
-            if (GetRecentTagTileViewModel().TagClipCount > Properties.Settings.Default.MaxRecentClipItems) {
+            if (GetRecentTagTileViewModel().TagClipCount >= Properties.Settings.Default.MaxRecentClipItems) {
                 var rtvm = GetRecentTagTileViewModel();
                 var rctvml = new List<MpClipTileViewModel>();
                 foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel) {
@@ -114,7 +129,8 @@ namespace MpWpfApp {
                             var selectedTagTiles = this.Where(tt => tt.IsSelected == true).ToList();
                             //if none selected select history tag
                             if (selectedTagTiles == null || selectedTagTiles.Count == 0) {
-                                GetHistoryTagTileViewModel().IsSelected = true;
+                                //GetHistoryTagTileViewModel().IsSelected = true;
+                                GetRecentTagTileViewModel().IsSelected = true;
                             }
                         } else {
                             foreach (MpClipTileViewModel clipTile in MainWindowViewModel.ClipTrayViewModel) {
@@ -175,8 +191,8 @@ namespace MpWpfApp {
 
         public void ResetTagSelection() {
             ClearTagSelection();
-            GetHistoryTagTileViewModel().IsSelected = true;
-           // GetHistoryTagTileViewModel().IsTextBoxFocused = true;
+            //GetHistoryTagTileViewModel().IsSelected = true;
+            GetRecentTagTileViewModel().IsSelected = true;
         }
 
         public void UpdateTagAssociation() {

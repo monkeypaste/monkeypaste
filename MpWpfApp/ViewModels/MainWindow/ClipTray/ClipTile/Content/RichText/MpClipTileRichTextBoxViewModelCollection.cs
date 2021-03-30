@@ -340,11 +340,6 @@ namespace MpWpfApp {
         #endregion
 
         #region State
-        public bool IsAnySubItemTextDragging {
-            get {
-                return this.Any(x => x.IsSubTextDragging);
-            }
-        }
         #endregion
 
         #endregion
@@ -353,11 +348,6 @@ namespace MpWpfApp {
         public MpClipTileRichTextBoxViewModelCollection() : base() { }
 
         public MpClipTileRichTextBoxViewModelCollection(MpClipTileViewModel ctvm) : base() {
-            PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
-
-                }
-            };
             HostClipTileViewModel = ctvm;
             HostClipTileViewModel.PropertyChanged += (s, e) => {
                 switch(e.PropertyName) {
@@ -539,16 +529,6 @@ namespace MpWpfApp {
             base.Insert(0,rtbvm);
             UpdateAdorners();
             //ClipTileViewModel.RichTextBoxListBox.Items.Refresh();
-
-            rtbvm.PropertyChanged += (s, e) => {
-                switch(e.PropertyName) {
-                    case nameof(rtbvm.IsSubTextDragging):
-                        foreach (var ortbvm in this) {
-                            ortbvm.CanSubTextDrop = rtbvm.IsSubTextDragging;
-                        }
-                        break;
-                }
-            };
         }
         public async Task AddAsync(MpRtbListBoxItemRichTextBoxViewModel rtbvm,DispatcherPriority priority) {
             await Application.Current.Dispatcher.BeginInvoke((Action)(() => {
@@ -701,8 +681,7 @@ namespace MpWpfApp {
             double toHeight = fromHeight + deltaHeight;
             double dh = (deltaHeight / tt) / fps;
 
-            var timer = new DispatcherTimer(priority);
-            timer.Interval = TimeSpan.FromMilliseconds(fps);
+            var timer = new DispatcherTimer(priority) { Interval = TimeSpan.FromMilliseconds(fps) };
             timer.Tick += (s, e32) => {
                 bool isTopDone = false;
                 bool isHeightDone = false;
@@ -874,7 +853,7 @@ namespace MpWpfApp {
         private MpEventEnabledFlowDocument GetFullDocument() {
             var fullDocument = string.Empty.ToRichText().ToFlowDocument();
             foreach (var rtbvm in this) {
-                MpEventEnabledFlowDocument fd = null;
+                MpEventEnabledFlowDocument fd;
                 if (rtbvm.Rtb == null) {
                     fd = rtbvm.CopyItemRichText.ToFlowDocument();
                 } else {
@@ -888,7 +867,8 @@ namespace MpWpfApp {
             return fullDocument;
         }
 
-        public void Dispose() {
+        public new void Dispose() {
+            base.Dispose();
             RtbListBoxCanvas = null;
             RtbContainerGrid = null;
             RichTextBoxListBox = null;

@@ -697,7 +697,7 @@ namespace MpWpfApp {
             return filename;
         }
         
-        public long FileListSize(string[] paths) {
+        public double FileListSize(string[] paths) {
             long total = 0;
             foreach (string path in paths) {
                 if (Directory.Exists(path)) {
@@ -706,7 +706,7 @@ namespace MpWpfApp {
                     total += new FileInfo(path).Length;
                 }
             }
-            return total;
+            return ConvertBytesToMegabytes(total);
         }
 
         public string GetUniqueFileName(MpCopyItemType fileType,string baseName = "", string baseDir = "") {
@@ -1619,13 +1619,13 @@ namespace MpWpfApp {
             return new Size(formattedText.Width, formattedText.Height);
         }
 
-        public Brush ShowColorDialog(Brush currentBrush) {
+        public Brush ShowColorDialog(Brush currentBrush,bool showFullOpen = false) {
             System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
             cd.AllowFullOpen = true;
             cd.ShowHelp = true;
             cd.Color = MpHelpers.Instance.ConvertSolidColorBrushToWinFormsColor((SolidColorBrush)currentBrush);
             cd.CustomColors = Properties.Settings.Default.UserCustomColorIdxArray;
-
+            cd.FullOpen = showFullOpen;
             var mw = (MpMainWindow)Application.Current.MainWindow;
             ((MpMainWindowViewModel)mw.DataContext).IsShowingDialog = true;
             // Update the text box color if the user clicks OK 

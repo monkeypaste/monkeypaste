@@ -32,13 +32,7 @@ namespace MpWpfApp {
 
             var t = clipTrayVm.DropTopPoint;
             var b = clipTrayVm.DropBottomPoint;
-            double offset = 5;
-           // t.X -= offset;
-            //b.X -= offset;
 
-            double trayMidY = clipTrayVm.ClipTrayListView.ActualHeight / 2;
-            //t.Y += 7;
-            //b.Y -= 30;
             if (clipTrayVm.IsTrayDropping) {
                 drawingContext.DrawLine(redPen, t, b);
             }

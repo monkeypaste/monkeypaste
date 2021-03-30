@@ -2,6 +2,8 @@
 using GongSolutions.Wpf.DragDrop.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -11,17 +13,17 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 namespace MpWpfApp {
     [Serializable]
-    public class MpRtbListBoxItemRichTextBoxViewModel : /*MpUndoableViewModelBase<MpRtbListBoxItemRichTextBoxViewModel>*/ MpClipTileViewModel, ICloneable, IDisposable {
+    public class MpRtbListBoxItemRichTextBoxViewModel : MpClipTileViewModel , ICloneable, IDisposable {
         #region Private Variables
         private int _detailIdx = 1;
         private IDataObject _dragDataObject = null;
-        private DragEventArgs _dragEventArgs = null;
         #endregion
 
         #region Properties
@@ -72,13 +74,13 @@ namespace MpWpfApp {
         #region Controls 
         public RichTextBox Rtb { get; set; }
 
-        public DockPanel RtbListBoxItemOverlayDockPanel;
+        public DockPanel RtbListBoxItemOverlayDockPanel { get; set; }
 
         public MpClipBorder RtbListBoxItemClipBorder { get; set; }
 
-        public TextBlock RtbListBoxItemTitleTextBlock;
+        public TextBlock RtbListBoxItemTitleTextBlock { get; set; }
 
-        public TextBox RtbListBoxItemTitleTextBox;
+        public TextBox RtbListBoxItemTitleTextBox { get; set; }
 
         public Button DragButton { get; set; }
 
@@ -97,7 +99,6 @@ namespace MpWpfApp {
 
         public AdornerLayer RtbListBoxItemAdornerLayer { get; set; }
 
-        public AdornerLayer RtbAdornerLayer { get; set; }
         #endregion
 
         #region Appearance
@@ -113,10 +114,6 @@ namespace MpWpfApp {
                 return Cursors.Arrow;
             }
         }
-
-        public Point DropTopPoint { get; set; }
-
-        public Point DropBottomPoint { get; set; }
         #endregion
 
         #region Layout
@@ -242,7 +239,8 @@ namespace MpWpfApp {
                     }
                     
                 }
-                return RtbWidth - RtbPadding.Left - RtbPadding.Right;
+                return RtbWidth - RtbPadding.Left - RtbPadding.Right - 23;
+                
             }
         }
 
@@ -400,9 +398,6 @@ namespace MpWpfApp {
                 if (HostClipTileViewModel == null) {
                     return Visibility.Collapsed;
                 }
-                if(CanSubTextDrop) {
-                    return Visibility.Hidden;
-                }
 
                 if (IsEditingSubTitle) {
                     return Visibility.Visible;
@@ -544,49 +539,6 @@ namespace MpWpfApp {
             }
         }
 
-        public bool CanSubTextDrag { get; set; } = false;
-
-        private bool _canSubTextDrop = false;
-        public bool CanSubTextDrop { 
-            get {
-                return _canSubTextDrop;
-            }
-            set {
-                if(_canSubTextDrop != value) {
-                    _canSubTextDrop = value;
-                    OnPropertyChanged(nameof(CanSubTextDrop));
-                    OnPropertyChanged(nameof(SubItemOverlayVisibility));
-                }
-            }
-        }
-
-        private bool _isSubTextDragging = false;
-        public bool IsSubTextDragging {
-            get {
-                return _isSubTextDragging;
-            }
-            set {
-                if (_isSubTextDragging != value) {
-                    _isSubTextDragging = value;
-                    OnPropertyChanged(nameof(IsSubTextDragging));
-                }
-            }
-        }
-
-        private bool _isSubTextDropping = false;
-        public bool IsSubTextDropping {
-            get {
-                return _isSubTextDropping;
-            }
-            set {
-                if (_isSubTextDropping != value) {
-                    _isSubTextDropping = value;
-                    OnPropertyChanged(nameof(IsSubTextDropping));
-                    OnPropertyChanged(nameof(SubItemOverlayVisibility));
-                }
-            }
-        }
-
         private bool _isResizingTop = false;
         public bool IsResizingTop {
             get {
@@ -673,7 +625,7 @@ namespace MpWpfApp {
                 }
             }
         }
-
+        
         private bool _isSubSelected = false;
         public bool IsSubSelected {
             get {
@@ -1018,7 +970,6 @@ namespace MpWpfApp {
                         if(HostClipTileViewModel.IsExpanded) {
                             RichTextBoxViewModelCollection.UpdateLayout();
                         }
-                        //RichTextBoxViewModelCollection.OnPropertyChanged(nameof(RichTextBoxViewModelCollection.SubSelectedRtbvmList));                        
                         break;
                     case nameof(IsSubHovering):
                         if(IsSubHovering) {
@@ -1108,163 +1059,6 @@ namespace MpWpfApp {
                 IsOverDragButton = false;
                 RichTextBoxViewModelCollection.SyncMultiSelectDragButton(false, false);
             };
-
-            Rtbc.PreviewMouseUp += (s, e9) => {
-                if (RichTextBoxViewModelCollection.IsAnySubItemTextDragging) {
-                    Console.WriteLine("Drop Here");
-                }
-                mouseDownPosition = new Point();
-                _dragDataObject = null;
-                IsSubTextDragging = false;
-                CanSubTextDrag = !Rtb.Selection.IsEmpty;
-
-                //RichTextBoxViewModelCollection.SyncMultiSelectDragButton(true, false);
-            };
-            
-            Rtbc.PreviewMouseDown += (s, e8) => {
-                Rect selectionRect = new Rect();
-                selectionRect.Union(Rtb.Selection.Start.GetCharacterRect(LogicalDirection.Forward));
-                selectionRect.Union(Rtb.Selection.End.GetCharacterRect(LogicalDirection.Backward));
-                //CanSubTextDrag = !Rtb.Selection.IsEmpty || selectionRect.Contains(e8.GetPosition(Rtb));
-                mouseDownPosition = e8.GetPosition(Rtbc);
-            };
-            Rtbc.PreviewMouseMove += async (s, e7) => {
-                if(e7.MouseDevice.LeftButton == MouseButtonState.Pressed && RichTextBoxViewModelCollection.IsAnySubItemTextDragging) {
-                    //Console.WriteLine("Drop Here");
-                    var mp = e7.GetPosition(RichTextBoxViewModelCollection.RichTextBoxListBox);
-                    Console.WriteLine(mp);
-                    MpRtbListBoxItemRichTextBoxViewModel drtbvm = null;
-                    foreach (var rtbvm in RichTextBoxViewModelCollection) {
-                        if (rtbvm.IsSubHovering && rtbvm != this) {
-                            drtbvm = rtbvm;
-                        }
-                    }
-                    var dropPointer = GetRtbPointerUnderPosition(mp);
-                    if (dropPointer != null) {
-                        var dropRect = dropPointer.GetCharacterRect(LogicalDirection.Forward);
-                        //var drtbvm = dropPointer.Parent.FindParentOfType<RichTextBox>().DataContext as MpRtbListBoxItemRichTextBoxViewModel;
-                        DropTopPoint = dropRect.TopRight;
-                        DropBottomPoint = dropRect.BottomRight;
-                    }
-                    RtbAdornerLayer.Update();
-                }
-                if (e7.MouseDevice.LeftButton == MouseButtonState.Pressed && CanSubTextDrag && !IsSubTextDragging) {
-                    if ((HostClipTileViewModel.IsExpanded && RichTextBoxViewModelCollection.Count == 1) ||
-                        IsSubDragging) {
-                        //cannot resort w/ only 1 item and its relative location is not clear
-                        //since its isolated
-                        return;
-                    }
-                    //RichTextBoxViewModelCollection.SyncMultiSelectDragButton(false, true);
-                    
-                    //if (Rtb.Selection.IsEmpty || MpHelpers.Instance.DistanceBetweenPoints(mouseDownPosition, e7.GetPosition(Rtb)) < minDragDist) {
-                    //    return;
-                    //}
-                    IsSubTextDragging = true;
-
-                    //IsSubSelected = true;
-
-                    if (_dragDataObject == null) {
-                        if (SubItemOverlayVisibility == Visibility.Visible) {
-                            _dragDataObject = RichTextBoxViewModelCollection.GetDataObjectFromSubSelectedItems(true).Result;
-                        } else {
-                            _dragDataObject = GetTextDataObject();
-                        }
-                    }
-                    //Mouse.Capture(Rtbc);
-                    try {
-                        Console.WriteLine("DragDrop Start Begin");
-                        await Application.Current.Dispatcher.BeginInvoke(
-                            DispatcherPriority.Normal,
-                            new System.Threading.ParameterizedThreadStart(DoDragDrop),
-                            _dragDataObject);
-                        Console.WriteLine("DragDrop Start End");
-                    }
-                    catch (Exception ex) {
-                        // don't do anything in that case
-                        Console.WriteLine("DragDrop Exception: " + ex);
-                    } finally {
-                        IsSubTextDragging = false;
-                    }
-
-                    //Console.WriteLine("DragDrop Start Begin");
-                    //Application.Current.Dispatcher.Invoke(
-                    //    (Action)(() => {
-                    //        DragDrop.DoDragDrop(
-                    //           Rtbc,
-                    //           _dragDataObject,
-                    //           DragDropEffects.Copy | DragDropEffects.Move);
-                    //    }),
-                    //    DispatcherPriority.Normal);
-
-
-                    //Console.WriteLine("DragDrop Start End");
-                    e.Handled = true;
-                }
-            };
-            //Rtb.DragLeave += (s2, e1) => {
-            //    //_dragDataObject = null;
-            //    //IsSubTextDropping = false;
-            //    RtbAdornerLayer?.Update();
-            //};
-
-            Rtb.PreviewDragOver += (s2, e1) => {
-                var sourceRtb = ((DependencyObject)e1.Source).FindParentOfType<RichTextBox>();
-                if (sourceRtb == Rtb) {
-                    IsSubTextDropping = false;
-                    e1.Effects = DragDropEffects.None;
-                    RtbAdornerLayer?.Update();
-                    e1.Handled = true;
-                    return;
-                }
-                if (e1.Data.GetDataPresent(DataFormats.Text)) {
-                    var dropPointer = GetRtbPointerUnderPosition(e1.GetPosition(Rtb));
-                    if (dropPointer != null) {
-                        var dropRect = dropPointer.GetCharacterRect(LogicalDirection.Forward);
-                        DropTopPoint = dropRect.TopRight;
-                        DropBottomPoint = dropRect.BottomRight;
-                        IsSubTextDropping = true;
-                        e1.Effects = DragDropEffects.Move;
-                        e1.Handled = true;
-                    }
-                }
-                RtbAdornerLayer?.Update();
-            };
-
-            Rtb.MouseEnter += (s, e5) => {
-
-            };
-            Rtb.PreviewDragEnter += (s, e34) => {
-                if(!IsSubTextDragging) {
-                    Console.WriteLine("Hello");
-                    e34.Effects = DragDropEffects.Move;
-                    e34.Handled = true;
-                }
-
-            };
-            Rtb.PreviewDrop += (s3, e2) => {
-                bool wasDropped = false;
-                if (e2.Data.GetDataPresent(DataFormats.Text)) {
-                    string dropText = (string)e2.Data.GetData(DataFormats.Text);
-                    var dropPointer = GetRtbPointerUnderPosition(e2.GetPosition(Rtb));
-                    if (dropPointer != null) {
-                        var dropRect = dropPointer.GetCharacterRect(LogicalDirection.Forward);
-                        dropPointer.GetInsertionPosition(LogicalDirection.Forward).InsertTextInRun(dropText);
-                        wasDropped = true;
-                    }
-                }
-                if (!wasDropped) {
-                    e2.Effects = DragDropEffects.None;
-                    e2.Handled = true;
-                } else {
-                    var dragRtbvm = ((FrameworkElement)e2.Source).DataContext as MpRtbListBoxItemRichTextBoxViewModel;
-                    if (dragRtbvm != null) {
-                        dragRtbvm.IsSubTextDragging = false;
-                    }
-                }
-                IsSubTextDropping = false;
-                RtbAdornerLayer?.Update();
-            };
             #endregion
 
             if (HostClipTileViewModel.WasAddedAtRuntime) {
@@ -1276,9 +1070,6 @@ namespace MpWpfApp {
 
             RtbListBoxItemAdornerLayer = AdornerLayer.GetAdornerLayer(Rtbc);
             RtbListBoxItemAdornerLayer?.Add(new MpRtbListBoxItemAdorner(Rtbc));
-
-            RtbAdornerLayer = AdornerLayer.GetAdornerLayer(Rtb);
-            RtbAdornerLayer?.Add(new MpRtbAdorner(Rtb));
 
             Rtbc.MouseEnter += (s, e2) => {
                 IsSubHovering = true;
@@ -1513,9 +1304,10 @@ namespace MpWpfApp {
                                 // DO NOT REMOVE this extra link ensures selection is retained!
                                 var hlink = new Hyperlink(matchRun, matchRange.Start);
                                 hl = new Hyperlink(matchRange.Start, matchRange.End);
+                                hl = hlink;
                                 var linkText = c.Value;
                                 hl.Tag = linkType;
-                                MpHelpers.Instance.CreateBinding(HostClipTileViewModel, new PropertyPath(nameof(HostClipTileViewModel.IsSelected)), hl, Hyperlink.IsEnabledProperty);
+                                MpHelpers.Instance.CreateBinding(this, new PropertyPath(nameof(IsSubSelected)), hl, Hyperlink.IsEnabledProperty);
                                 hl.MouseEnter += (s3, e3) => {
                                     hl.Cursor = HostClipTileViewModel.IsSelected ? Cursors.Hand : Cursors.Arrow;
                                 };
@@ -1616,9 +1408,22 @@ namespace MpWpfApp {
                                         MenuItem changeColorItem = new MenuItem();
                                         changeColorItem.Header = "Change Color";
                                         changeColorItem.Click += (s, e) => {
-                                            var result = MpHelpers.Instance.ShowColorDialog((Brush)new BrushConverter().ConvertFrom(linkText));
+                                            var result = MpHelpers.Instance.ShowColorDialog((Brush)new BrushConverter().ConvertFrom(linkText),true);
+                                            if(result != null) {
+                                                var run = new Run(result.ToString());
+                                                hl.Inlines.Clear();
+                                                hl.Inlines.Add(run);
+                                                var bgBrush = result;
+                                                var fgBrush = MpHelpers.Instance.IsBright(((SolidColorBrush)bgBrush).Color) ? Brushes.Black : Brushes.White;
+                                                var tr = new TextRange(run.ElementStart, run.ElementEnd);
+                                                tr.ApplyPropertyValue(TextElement.BackgroundProperty, bgBrush);
+                                                tr.ApplyPropertyValue(TextElement.ForegroundProperty, fgBrush);
+                                            }
                                         };
                                         hl.ContextMenu.Items.Add(changeColorItem);
+
+                                        hl.Background = (Brush)new BrushConverter().ConvertFromString(linkText);
+                                        hl.Foreground = MpHelpers.Instance.IsBright(((SolidColorBrush)hl.Background).Color) ? Brushes.Black : Brushes.White;
                                         break;
                                     default:
                                         Console.WriteLine("Unhandled token type: " + Enum.GetName(typeof(MpSubTextTokenType), (MpSubTextTokenType)hl.Tag) + " with value: " + linkText);

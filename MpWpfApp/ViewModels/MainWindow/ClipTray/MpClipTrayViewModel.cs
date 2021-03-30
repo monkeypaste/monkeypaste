@@ -33,8 +33,8 @@ namespace MpWpfApp {
 
         private List<MpClipTileViewModel> _hiddenTiles = new List<MpClipTileViewModel>();
 
-        private double _originalExpandedTileX = 0;
-        private int _expandedTileVisibleIdx = 0;
+        //private double _originalExpandedTileX = 0;
+        //private int _expandedTileVisibleIdx = 0;
         #endregion
 
         #region Properties

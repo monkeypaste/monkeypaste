@@ -221,6 +221,10 @@
         public TranslateTransform ClipBorderTranslateTransform;
         #endregion
 
+        #region Appearance
+        
+        #endregion
+
         #region Layout
 
         public Rect TileRect {
@@ -492,9 +496,7 @@
         }
         #endregion
 
-        #region Visibility Properties
-
-        
+        #region Visibility        
         public Visibility AppIconHighlightBorderVisibility {
             get {
                 return HighlightTextRangeViewModelCollection.HasAppMatch ? Visibility.Visible : Visibility.Hidden;
@@ -577,6 +579,25 @@
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
+            }
+        }
+
+        public Visibility WebBrowserFileViewerVisibility { 
+            get {
+                if(CopyItemType != MpCopyItemType.FileList) {
+                    return Visibility.Collapsed;
+                }
+                if(FileListViewModels.Count == 1 && 
+                   System.IO.Path.GetExtension(FileListViewModels[0].ItemPath).ToLower() == @".pdf") {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+
+        public Visibility FileListStackPanelVisibility {
+            get {
+                return WebBrowserFileViewerVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
             }
         }
 
@@ -685,8 +706,7 @@
         }
         #endregion
 
-        #region Business Logic Properties
-
+        #region Business Logic
         private IDataObject _dragDataObject = null;
         public IDataObject DragDataObject {
             get {
@@ -754,7 +774,7 @@
                    !IsContextMenuOpened) {
                     return new Rect(50,0,50,50);
                 }
-                if(IsContextMenuOpened) {
+                if(IsContextMenuOpened && RichTextBoxViewModelCollection.Count > 1) {
                     return new Rect(0, 0, 50, 50);
                 }
                 return new Rect(50, 0, 50, 50);
@@ -1423,6 +1443,8 @@
                     OnPropertyChanged(nameof(ImgVisibility));
                     OnPropertyChanged(nameof(RtbVisibility));
                     OnPropertyChanged(nameof(FileListVisibility));
+                    OnPropertyChanged(nameof(WebBrowserFileViewerVisibility));
+                    OnPropertyChanged(nameof(FileListStackPanelVisibility));
                     OnPropertyChanged(nameof(CopyItemTitle));
                     OnPropertyChanged(nameof(CopyItemPlainText));
                     OnPropertyChanged(nameof(CopyItemRichText));
@@ -1465,6 +1487,9 @@
                 switch (e1.PropertyName) {
                     case nameof(IsSelected):
                         if (IsSelected) {
+                            if(RichTextBoxViewModelCollection.Count > 0) {
+                                RichTextBoxViewModelCollection.ResetSubSelection();
+                            }
                             LastSelectedDateTime = DateTime.Now;
                             //this check ensures that as user types in search that 
                             //resetselection doesn't take the focus from the search box
@@ -1526,6 +1551,7 @@
                             rtbvm.UpdateLayout();
                         }
                         break;
+                    
                 }
             };
 
@@ -1687,14 +1713,14 @@
                     if (dropIdx >= 0 && dropIdx <= ctvm.RichTextBoxViewModelCollection.Count) {
                         if (dropIdx < ctvm.RichTextBoxViewModelCollection.Count) {
                             if(!ctvm.RichTextBoxViewModelCollection.IsListBoxItemVisible(dropIdx)) {
-                                ctvm.RichTextBoxViewModelCollection.RichTextBoxListBox.ScrollIntoView(ctvm.RichTextBoxViewModelCollection[dropIdx]);
+                                ctvm.RichTextBoxViewModelCollection.RichTextBoxListBox?.ScrollIntoView(ctvm.RichTextBoxViewModelCollection[dropIdx]);
                             } else if(dropIdx > 0 && dropIdx - 1 < ctvm.RichTextBoxViewModelCollection.Count) {
-                                ctvm.RichTextBoxViewModelCollection.RichTextBoxListBox.ScrollIntoView(ctvm.RichTextBoxViewModelCollection[dropIdx-1]);
+                                ctvm.RichTextBoxViewModelCollection.RichTextBoxListBox?.ScrollIntoView(ctvm.RichTextBoxViewModelCollection[dropIdx-1]);
                             }
                         } else {
                             //only can be count + 1
                             if (!ctvm.RichTextBoxViewModelCollection.IsListBoxItemVisible(dropIdx-1)) {
-                                ctvm.RichTextBoxViewModelCollection.RichTextBoxListBox.ScrollIntoView(ctvm.RichTextBoxViewModelCollection[dropIdx-1]);
+                                ctvm.RichTextBoxViewModelCollection.RichTextBoxListBox?.ScrollIntoView(ctvm.RichTextBoxViewModelCollection[dropIdx-1]);
                             }
                         }
                         ctvm.RichTextBoxViewModelCollection.DropLeftPoint = ctvm.RichTextBoxViewModelCollection.GetAdornerPoints(dropIdx)[0];
@@ -1704,7 +1730,7 @@
                         e1.Handled = true;
 
                         MainWindowViewModel.ClipTrayViewModel.IsTrayDropping = false;
-                        MainWindowViewModel.ClipTrayViewModel.ClipTrayAdornerLayer.Update();
+                        MainWindowViewModel.ClipTrayViewModel.ClipTrayAdornerLayer?.Update();
                     }                    
                 }
                 ctvm.RichTextBoxViewModelCollection.RtbLbAdornerLayer?.Update();
@@ -1770,7 +1796,8 @@
             var titleDetailTextBlock = (TextBlock)detailGrid.FindName("ClipTileTitleDetailTextBlock");
 
             titleDetailTextBlock.MouseEnter += (s, e5) => {
-                OnPropertyChanged(nameof(DetailText));
+                var ctvm = ((FrameworkElement)s).DataContext as MpClipTileViewModel;
+                ctvm.OnPropertyChanged(nameof(ctvm.DetailText));
             };
         }        
 
@@ -1909,8 +1936,8 @@
         }
 
         public void ClipTileImageCanvas_Loaded(object sender, RoutedEventArgs e) {
-            var lctvm = ((FrameworkElement)sender).DataContext as MpClipTileViewModel;
-            if (ImgVisibility == Visibility.Collapsed) {
+            var ctvm = ((FrameworkElement)sender).DataContext as MpClipTileViewModel;
+            if (ctvm.ImgVisibility == Visibility.Collapsed) {
                 return;
             }
             
@@ -1920,21 +1947,19 @@
 
             //vb.ContextMenu = ctcc.ContextMenu = ic.ContextMenu = (ContextMenu)((FrameworkElement)sender).GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
 
-            DetectedImageObjectCollectionViewModel = new MpDetectedImageObjectCollectionViewModel(CopyItem);
+            ctvm.DetectedImageObjectCollectionViewModel = new MpDetectedImageObjectCollectionViewModel(CopyItem);
         }
 
         public void ClipTileFileListBox_Loaded(object sender, RoutedEventArgs e) {
-            var lctvm = ((FrameworkElement)sender).DataContext as MpClipTileViewModel;
-            if (FileListVisibility == Visibility.Collapsed) {
+            var ctvm = ((FrameworkElement)sender).DataContext as MpClipTileViewModel;
+            if (ctvm.FileListVisibility == Visibility.Collapsed) {
                 return;
             }
-            OnPropertyChanged(nameof(FileListViewModels));
+            ctvm.OnPropertyChanged(nameof(ctvm.FileListViewModels));
 
-            var flb = (ListBox)sender;
-            flb.ContextMenu = (ContextMenu)flb.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
-
-            FileListBox = flb;
-        }
+            ctvm.FileListBox = (ListBox)sender;
+            ctvm.FileListBox.ContextMenu = (ContextMenu)ctvm.FileListBox.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");            
+        }        
         #endregion        
 
         #region Context Menu
