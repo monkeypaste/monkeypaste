@@ -112,9 +112,10 @@
     <Compile Include="AttachedProperties\MpVisibilityAnimation.cs" />
     <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
     <Compile Include="Behaviors\MpKineticBehavior.cs" />
-    <Compile Include="Controls\Adorners\MpRichTextBoxListBoxOverlayAdorner.cs" />
+    <Compile Include="Controls\Adorners\MpRtbListBoxAdorner.cs" />
     <Compile Include="Controls\Adorners\MpClipTrayAdorner.cs" />
-    <Compile Include="Controls\Adorners\MpRichTextBoxOverlayAdorner.cs" />
+    <Compile Include="Controls\Adorners\MpRtbAdorner.cs" />
+    <Compile Include="Controls\Adorners\MpRtbListBoxItemAdorner.cs" />
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedListBox.cs" />
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedScrollViewer.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />

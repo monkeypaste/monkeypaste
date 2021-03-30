@@ -784,7 +784,7 @@ namespace MpWpfApp {
                     ctvm.IsPastingTemplate = false;
                 }
                 foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
-                    rtbvm.IsEditingContent = false;
+                    //rtbvm.IsEditingContent = false;
                     rtbvm.IsEditingSubTitle = false;
                 }
                 if (ctvm.DetectedImageObjectCollectionViewModel != null) {

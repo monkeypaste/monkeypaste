@@ -260,22 +260,9 @@ namespace MpWpfApp {
                     return 0;
                 }
                 double totalHeight = 0;
-                foreach(var rtbvm in this) {
-                    totalHeight += HostClipTileViewModel.IsExpanded ? rtbvm.RtbPageHeight: rtbvm.RtbCanvasHeight;
-                }
-                return totalHeight;
-            }
-        }
-
-        public double TotalItemMaxHeight {
-            get {
-                if(HostClipTileViewModel == null) {
-                    return 0;
-                }                
-                double totalHeight = 0;
                 foreach (var rtbvm in this) {
-                    totalHeight += rtbvm.RtbPageHeight;
-                }
+                    totalHeight += rtbvm.RtbCanvasHeight + rtbvm.RtbPadding.Top + rtbvm.RtbPadding.Bottom; ;
+                }                
                 return totalHeight;
             }
         }
@@ -285,7 +272,7 @@ namespace MpWpfApp {
                 if(VerticalScrollbarVisibility == ScrollBarVisibility.Visible) {
                     return RtbLbScrollViewerWidth - MpMeasurements.Instance.ScrollbarWidth;
                 }
-                return RtbLbScrollViewerWidth - 20;
+                return RtbLbScrollViewerWidth;
             }
         }
 
@@ -339,7 +326,7 @@ namespace MpWpfApp {
                 if (HostClipTileViewModel == null) {
                     return ScrollBarVisibility.Hidden;
                 }
-                if (HostClipTileViewModel.IsHovering && HostClipTileViewModel.IsExpanded) {
+                if (HostClipTileViewModel.IsExpanded) {
                     if (TotalItemHeight > RtbListBoxHeight) {
                         return ScrollBarVisibility.Visible;
                     }
@@ -353,7 +340,11 @@ namespace MpWpfApp {
         #endregion
 
         #region State
-
+        public bool IsAnySubItemTextDragging {
+            get {
+                return this.Any(x => x.IsSubTextDragging);
+            }
+        }
         #endregion
 
         #endregion
@@ -387,20 +378,18 @@ namespace MpWpfApp {
             IsHorizontal = false;
             RtbContainerGrid = RichTextBoxListBox.GetVisualAncestor<Grid>();
             RtbListBoxCanvas = RichTextBoxListBox.GetVisualAncestor<Canvas>();
-            ScrollViewer = (ScrollViewer)HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();
+            ScrollViewer = RichTextBoxListBox.GetVisualAncestor<ScrollViewer>();//(ScrollViewer)HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();
             RichTextBoxListBox.RequestBringIntoView += (s, e65) => { 
                 //if(!MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded) {
                 //    return;
                 //}
-                //e65.Handled = true; 
+                e65.Handled = true; 
             };            
 
             
 
             //after pasting template rtb's are duplicated so clear them upon refresh
-            SyncItemsWithModel();
-
-            
+            SyncItemsWithModel();            
 
             RichTextBoxListBox.SelectionChanged += (s, e8) => {
                 if (SubSelectedRtbvmList.Count > 1) {
@@ -427,14 +416,7 @@ namespace MpWpfApp {
             };
 
             RtbLbAdornerLayer = AdornerLayer.GetAdornerLayer(RichTextBoxListBox);
-            RtbLbAdornerLayer.Add(new MpRichTextBoxListBoxOverlayAdorner(RichTextBoxListBox));
-
-            //var 
-            //scrollViewer.PreviewMouseWheel += (s, e) => {
-            //    var scv = (ScrollViewer)sender;
-            //    scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta);
-            //    e.Handled = true;
-            //};
+            RtbLbAdornerLayer.Add(new MpRtbListBoxAdorner(RichTextBoxListBox));
         }
 
         
@@ -453,6 +435,25 @@ namespace MpWpfApp {
                 }
             }
             return null;
+        }
+
+        public void SyncMultiSelectDragButton(bool isOver, bool isDown) {
+            string transBrush = Brushes.Transparent.ToString();
+            string outerBrush = isOver ? "#FF7CA0CC" : isDown ? "#FF2E4E76" : transBrush;
+            string innerBrush = isOver ? "#FFE4EFFD" : isDown ? "#FF116EE4" : transBrush;
+            string innerBg = isOver ? "#FFDAE7F5" : isDown ? "#FF3272B8" : transBrush;
+            foreach (var srtbvm in SubSelectedRtbvmList) {
+                var outerBorder = (Border)srtbvm.DragButton.Template.FindName("OuterBorder", srtbvm.DragButton);
+                if(outerBorder != null) {
+                    outerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFromString(outerBrush);
+                }
+
+                var innerBorder = (Border)srtbvm.DragButton.Template.FindName("InnerBorder", srtbvm.DragButton);
+                if(innerBorder != null) {
+                    innerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFromString(innerBrush);
+                    innerBorder.Background = (Brush)new BrushConverter().ConvertFromString(innerBg);
+                }
+            }
         }
 
         public void SyncItemsWithModel() {
@@ -488,7 +489,7 @@ namespace MpWpfApp {
                     rtbvm.CompositeParentCopyItemId = HostClipTileViewModel.CopyItemId;
                     rtbvm.CompositeSortOrderIdx = this.IndexOf(rtbvm);
                     rtbvm.CopyItem.WriteToDatabase();
-                    rtbvm.RtbcAdornerLayer?.Update();
+                    rtbvm.RtbListBoxItemAdornerLayer?.Update();
                 }
             }
         }
@@ -538,6 +539,16 @@ namespace MpWpfApp {
             base.Insert(0,rtbvm);
             UpdateAdorners();
             //ClipTileViewModel.RichTextBoxListBox.Items.Refresh();
+
+            rtbvm.PropertyChanged += (s, e) => {
+                switch(e.PropertyName) {
+                    case nameof(rtbvm.IsSubTextDragging):
+                        foreach (var ortbvm in this) {
+                            ortbvm.CanSubTextDrop = rtbvm.IsSubTextDragging;
+                        }
+                        break;
+                }
+            };
         }
         public async Task AddAsync(MpRtbListBoxItemRichTextBoxViewModel rtbvm,DispatcherPriority priority) {
             await Application.Current.Dispatcher.BeginInvoke((Action)(() => {
@@ -589,7 +600,7 @@ namespace MpWpfApp {
         public void UpdateAdorners() {
             RtbLbAdornerLayer?.Update();
             foreach (var rtbvm in this) {
-                rtbvm.RtbcAdornerLayer?.Update();
+                rtbvm.RtbListBoxItemAdornerLayer?.Update();
             }
         }
 
@@ -609,6 +620,10 @@ namespace MpWpfApp {
         }
 
         public void UpdateLayout() {
+            foreach (var rtbvm in this) {
+                rtbvm.UpdateLayout();
+            }
+
             UpdateAdorners();
 
             OnPropertyChanged(nameof(RtbListBoxHeight));
@@ -621,7 +636,7 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(RtbLbWidth));
 
             if (ListBox != null) {
-                ListBox.Height = HostClipTileViewModel.IsExpanded ? TotalItemMaxHeight:TotalItemHeight;
+                ListBox.Height = TotalItemHeight;
                 ListBox.Width = RtbLbWidth;
                 ListBox.UpdateLayout();
             }
@@ -633,9 +648,7 @@ namespace MpWpfApp {
 
             
 
-            foreach(var rtbvm in this) {
-                rtbvm.UpdateLayout();
-            }
+            
             //if (RichTextBoxListBox == null || ScrollViewer == null) {
             //    return;
             //}
@@ -814,7 +827,7 @@ namespace MpWpfApp {
                 rtbvm.IsPrimarySubSelected = false;
                 rtbvm.IsSubHovering = false;
                 rtbvm.IsSubSelected = false;
-                rtbvm.IsEditingContent = false;
+                //rtbvm.IsEditingContent = false;
                 rtbvm.IsEditingSubTitle = false;
             }
         }

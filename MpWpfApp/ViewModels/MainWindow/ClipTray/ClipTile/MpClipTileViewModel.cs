@@ -30,8 +30,7 @@
         #region Private Variables
 
         private int _detailIdx = 1;
-        private List<string> _tempFileList = new List<string>();        
-
+        private List<string> _tempFileList = new List<string>();
         #endregion
 
         #region Statics
@@ -687,6 +686,19 @@
         #endregion
 
         #region Business Logic Properties
+
+        private IDataObject _dragDataObject = null;
+        public IDataObject DragDataObject {
+            get {
+                return _dragDataObject;
+            }
+            set {
+                if(_dragDataObject != value) {
+                    _dragDataObject = value;
+                    OnPropertyChanged(nameof(DragDataObject));
+                }
+            }
+        }
 
         public string TemplateRichText { get; set; }
 
@@ -1589,6 +1601,7 @@
                 var ctvm = ((FrameworkElement)s).DataContext as MpClipTileViewModel;
                 ctvm.MouseDownPosition = new Point();
                 ctvm.IsClipDragging = false;
+                ctvm.DragDataObject = null;
                 if(e9.MouseDevice.DirectlyOver.GetType().IsSubclassOf(typeof(UIElement))) {
                     if (((UIElement)e9.MouseDevice.DirectlyOver).GetType() == typeof(Thumb)) {
                         var sb = (ScrollBar)((Thumb)e9.MouseDevice.DirectlyOver).TemplatedParent;
@@ -1631,15 +1644,18 @@
                     }
                     ctvm.IsClipDragging = true;
                     ctvm.IsSelected = true;
+                    if(ctvm.DragDataObject == null) {
+                        ctvm.DragDataObject = MainWindowViewModel.ClipTrayViewModel.GetDataObjectFromSelectedClips(true).Result;
+                    }
                     DragDrop.DoDragDrop(
                                 ((FrameworkElement)s),
-                                MainWindowViewModel.ClipTrayViewModel.GetDataObjectFromSelectedClips(true).Result,
+                                ctvm.DragDataObject,
                                 DragDropEffects.Copy | DragDropEffects.Move);
                 }
             };            
             ClipBorder.DragLeave += (s2, e1) => {
                 var ctvm = ((FrameworkElement)s2).DataContext as MpClipTileViewModel;
-                //IsDropping = false;
+                ctvm.DragDataObject = null;
                 ctvm.IsClipDropping = false;
                 ctvm.RichTextBoxViewModelCollection.RtbLbAdornerLayer?.Update();
                 ctvm.RichTextBoxViewModelCollection.ScrollViewer?.ScrollToHome();

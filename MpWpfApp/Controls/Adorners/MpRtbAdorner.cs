@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace MpWpfApp {
-    public class MpRichTextBoxOverlayAdorner : Adorner {
+    public class MpRtbAdorner : Adorner {
         #region Private Variables
         #endregion
 
@@ -20,7 +20,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpRichTextBoxOverlayAdorner(Canvas rtbc) : base(rtbc) {
+        public MpRtbAdorner(RichTextBox rtb) : base(rtb) {
         }
         #endregion
 
@@ -28,11 +28,10 @@ namespace MpWpfApp {
         protected override void OnRender(DrawingContext drawingContext) {            
             var rtbvm = (MpRtbListBoxItemRichTextBoxViewModel)(this.AdornedElement as FrameworkElement).DataContext;
             var adornedElementRect = new Rect(this.AdornedElement.DesiredSize);
-            var blackPen = new Pen(Brushes.Gray, 1);
-            blackPen.DashStyle = DashStyles.Dash;
+            var redPen = new Pen(Brushes.Red, 1);
 
-            if (rtbvm.Next != null) {                
-                drawingContext.DrawLine(blackPen, adornedElementRect.BottomLeft, adornedElementRect.BottomRight);
+            if (rtbvm.IsSubTextDropping) {                
+                drawingContext.DrawLine(redPen, rtbvm.DropTopPoint, rtbvm.DropBottomPoint);
             }
         }
         #endregion

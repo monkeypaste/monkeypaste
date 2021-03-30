@@ -208,7 +208,20 @@ namespace MpWpfApp {
             bulletsButton.CommandTarget = rtb;
             numberingButton.CommandTarget = rtb;
 
-            SelectionChangedEventHandler FontFamilyComboBox_SelectionChanged = (s4,e1) => {
+            //SelectionChangedEventHandler FontFamilyComboBox_SelectionChanged = (s4,e1) => {
+            //    if (fontFamilyComboBox.SelectedItem == null) {
+            //        return;
+            //    }
+            //    var fontFamily = fontFamilyComboBox.SelectedItem.ToString();
+            //    rtb.Focus();
+            //    var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
+            //    textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
+            //};
+
+            //if(_lastRtb != null) {
+            //    fontFamilyComboBox.SelectionChanged -= FontFamilyComboBox_SelectionChanged;
+            //}
+            fontFamilyComboBox.SelectionChanged += (s4, e1) => {
                 if (fontFamilyComboBox.SelectedItem == null) {
                     return;
                 }
@@ -217,11 +230,6 @@ namespace MpWpfApp {
                 var textRange = new TextRange(rtb.Selection.Start, rtb.Selection.End);
                 textRange.ApplyPropertyValue(TextElement.FontFamilyProperty, fontFamily);
             };
-
-            if(_lastRtb != null) {
-                fontFamilyComboBox.SelectionChanged -= FontFamilyComboBox_SelectionChanged;
-            }
-            fontFamilyComboBox.SelectionChanged += FontFamilyComboBox_SelectionChanged;
 
             fontSizeCombo.SelectionChanged += (s, e1) => {
                 // Exit if no selection
@@ -323,49 +331,49 @@ namespace MpWpfApp {
             #endregion
 
             #region Selection Changed
-            RoutedEventHandler Rtb_SelectionChanged = (s, e6) => {
-                //Console.WriteLine("(SelectionChanged)Selection Text: " + rtb.Selection.Text);
-                // Set font family combo
-                var fontFamily = rtb.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
-                fontFamilyComboBox.SelectedItem = fontFamily;
-
-                // Set font size combo
-                var fontSize = rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
-                if (fontSize == null || fontSize.ToString() == "{DependencyProperty.UnsetValue}") {
-                    fontSize = string.Empty;
-                } else {
-                    fontSize = Math.Round((double)fontSize);
-                }
-                fontSizeCombo.Text = fontSize.ToString();
-
-                // Set Font buttons
-                ((ToggleButton)EditToolbarBorder.FindName("BoldButton")).IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
-                ((ToggleButton)EditToolbarBorder.FindName("ItalicButton")).IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
-                ((ToggleButton)EditToolbarBorder.FindName("UnderlineButton")).IsChecked = rtb.Selection?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
-
-                // Set Alignment buttons
-                leftAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
-                centerAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
-                rightAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
-
-                //disable add template button if current selection intersects with a template
-                //this may not be necessary since templates are inlineuicontainers...
-                MpTemplateHyperlinkViewModel thlvm = null;
-                if (rtb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
-                   rtb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
-                    if (((TextElement)rtb.Selection.Start.Parent).DataContext != null && ((TextElement)rtb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
-                        thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.Start.Parent).DataContext;
-                    } else if (((TextElement)rtb.Selection.End.Parent).DataContext != null && ((TextElement)rtb.Selection.End.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
-                        thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.End.Parent).DataContext;
-                    }
-                }
-                if (thlvm == null) {
-                    IsAddTemplateButtonEnabled = true;
-                } else {
-                    IsAddTemplateButtonEnabled = false;
-                }
-            };
             rtb.SelectionChanged += Rtb_SelectionChanged;
+            //rtb.SelectionChanged += (s, e6) => {
+            //    //Console.WriteLine("(SelectionChanged)Selection Text: " + rtb.Selection.Text);
+            //    // Set font family combo
+            //    var fontFamily = rtb.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
+            //    fontFamilyComboBox.SelectedItem = fontFamily;
+
+            //    // Set font size combo
+            //    var fontSize = rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
+            //    if (fontSize == null || fontSize.ToString() == "{DependencyProperty.UnsetValue}") {
+            //        fontSize = string.Empty;
+            //    } else {
+            //        fontSize = Math.Round((double)fontSize);
+            //    }
+            //    fontSizeCombo.Text = fontSize.ToString();
+
+            //    // Set Font buttons
+            //    ((ToggleButton)EditToolbarBorder.FindName("BoldButton")).IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
+            //    ((ToggleButton)EditToolbarBorder.FindName("ItalicButton")).IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
+            //    ((ToggleButton)EditToolbarBorder.FindName("UnderlineButton")).IsChecked = rtb.Selection?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
+
+            //    // Set Alignment buttons
+            //    leftAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
+            //    centerAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
+            //    rightAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
+
+            //    //disable add template button if current selection intersects with a template
+            //    //this may not be necessary since templates are inlineuicontainers...
+            //    MpTemplateHyperlinkViewModel thlvm = null;
+            //    if (rtb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
+            //       rtb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
+            //        if (((TextElement)rtb.Selection.Start.Parent).DataContext != null && ((TextElement)rtb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
+            //            thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.Start.Parent).DataContext;
+            //        } else if (((TextElement)rtb.Selection.End.Parent).DataContext != null && ((TextElement)rtb.Selection.End.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
+            //            thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.End.Parent).DataContext;
+            //        }
+            //    }
+            //    if (thlvm == null) {
+            //        IsAddTemplateButtonEnabled = true;
+            //    } else {
+            //        IsAddTemplateButtonEnabled = false;
+            //    }
+            //};
             #endregion
 
             #endregion
@@ -605,6 +613,74 @@ namespace MpWpfApp {
 
             _lastRtb = rtb;
         }
+
+        public void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
+            var rtb = sender as RichTextBox;
+
+            ToggleButton selectedAlignmentButton = null;
+            ToggleButton selectedListButton = null;
+
+            var fontFamilyComboBox = (ComboBox)EditToolbarBorder.FindName("FontFamilyCombo");
+            var fontSizeCombo = (ComboBox)EditToolbarBorder.FindName("FontSizeCombo");
+            var foregroundColorButton = (Button)EditToolbarBorder.FindName("ForegroundColorButton");
+            var backgroundColorButton = (Button)EditToolbarBorder.FindName("BackgroundColorButton");
+            var leftAlignmentButton = (ToggleButton)EditToolbarBorder.FindName("LeftButton");
+            var centerAlignmentButton = (ToggleButton)EditToolbarBorder.FindName("CenterButton");
+            var rightAlignmentButton = (ToggleButton)EditToolbarBorder.FindName("RightButton");
+            var printButton = (Button)EditToolbarBorder.FindName("PrintButton");
+            var bulletsButton = (ToggleButton)EditToolbarBorder.FindName("BulletsButton");
+            var numberingButton = (ToggleButton)EditToolbarBorder.FindName("NumberingButton");
+            var italicButton = (ToggleButton)EditToolbarBorder.FindName("ItalicButton");
+            var boldButton = (ToggleButton)EditToolbarBorder.FindName("BoldButton");
+            var underlineButton = (ToggleButton)EditToolbarBorder.FindName("UnderlineButton");
+
+            var cutButton = (Button)EditToolbarBorder.FindName("CutButton");
+            var copyButton = (Button)EditToolbarBorder.FindName("CopyButton");
+            var pasteButton = (Button)EditToolbarBorder.FindName("PasteButton");
+            var undoButton = (Button)EditToolbarBorder.FindName("UndoButton");
+            var redoButton = (Button)EditToolbarBorder.FindName("RedoButton");
+            //Console.WriteLine("(SelectionChanged)Selection Text: " + rtb.Selection.Text);
+            // Set font family combo
+            var fontFamily = rtb.Selection.GetPropertyValue(TextElement.FontFamilyProperty);
+            fontFamilyComboBox.SelectedItem = fontFamily;
+
+            // Set font size combo
+            var fontSize = rtb.Selection.GetPropertyValue(TextElement.FontSizeProperty);
+            if (fontSize == null || fontSize.ToString() == "{DependencyProperty.UnsetValue}") {
+                fontSize = string.Empty;
+            } else {
+                fontSize = Math.Round((double)fontSize);
+            }
+            fontSizeCombo.Text = fontSize.ToString();
+
+            // Set Font buttons
+            ((ToggleButton)EditToolbarBorder.FindName("BoldButton")).IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontWeightProperty).Equals(FontWeights.Bold);
+            ((ToggleButton)EditToolbarBorder.FindName("ItalicButton")).IsChecked = rtb.Selection.GetPropertyValue(TextElement.FontStyleProperty).Equals(FontStyles.Italic);
+            ((ToggleButton)EditToolbarBorder.FindName("UnderlineButton")).IsChecked = rtb.Selection?.GetPropertyValue(Inline.TextDecorationsProperty)?.Equals(TextDecorations.Underline);
+
+            // Set Alignment buttons
+            leftAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Left);
+            centerAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Center);
+            rightAlignmentButton.IsChecked = rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty).Equals(TextAlignment.Right);
+
+            //disable add template button if current selection intersects with a template
+            //this may not be necessary since templates are inlineuicontainers...
+            MpTemplateHyperlinkViewModel thlvm = null;
+            if (rtb.Selection.Start.Parent.GetType().IsSubclassOf(typeof(TextElement)) &&
+               rtb.Selection.End.Parent.GetType().IsSubclassOf(typeof(TextElement))) {
+                if (((TextElement)rtb.Selection.Start.Parent).DataContext != null && ((TextElement)rtb.Selection.Start.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
+                    thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.Start.Parent).DataContext;
+                } else if (((TextElement)rtb.Selection.End.Parent).DataContext != null && ((TextElement)rtb.Selection.End.Parent).DataContext.GetType() == typeof(MpTemplateHyperlinkViewModel)) {
+                    thlvm = (MpTemplateHyperlinkViewModel)((TextElement)rtb.Selection.End.Parent).DataContext;
+                }
+            }
+            if (thlvm == null) {
+                IsAddTemplateButtonEnabled = true;
+            } else {
+                IsAddTemplateButtonEnabled = false;
+            }
+        }
+
         public void Resize(double deltaEditToolbarTop, double deltaWidth) {
             EditBorderCanvasTop += deltaEditToolbarTop;
             Canvas.SetTop(EditToolbarBorder, EditBorderCanvasTop);

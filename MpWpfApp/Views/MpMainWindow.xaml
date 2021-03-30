@@ -21,7 +21,7 @@
         Background="Transparent"
         Top="0"        
         Visibility="Visible"
-        ShowInTaskbar="False"
+        ShowInTaskbar="True"
         ResizeMode="CanResize"
         WindowState="Normal"
         Height="{Binding MainWindowHeight}"
@@ -1985,8 +1985,8 @@
                                                                           HorizontalAlignment="Left"
                                                                           Width="{Binding RtbLbScrollViewerWidth}"
                                                                           Height="{Binding RtbLbScrollViewerHeight}"
-                                                                          HorizontalScrollBarVisibility="Auto"
-                                                                          VerticalScrollBarVisibility="Auto">
+                                                                          HorizontalScrollBarVisibility="{Binding HorizontalScrollbarVisibility}"
+                                                                          VerticalScrollBarVisibility="{Binding VerticalScrollbarVisibility}">
                                                                 <AdornerDecorator>
                                                                     <local:AnimatedListBox x:Name="ClipTilRichTextBoxListBox"
                                                                                            VerticalAlignment="Top"
@@ -1994,6 +1994,7 @@
                                                                                            BorderThickness="1"
                                                                                            BorderBrush="Pink"
                                                                                            SelectionMode="Extended" 
+                                                                                           ScrollToSelectedItem="True"
                                                                                            IsSynchronizedWithCurrentItem="False"
                                                                                            Width="{Binding RtbLbWidth}"
                                                                                            Height="{Binding TotalItemHeight, NotifyOnSourceUpdated=True}"
@@ -2049,38 +2050,41 @@
                                                                                                                     MethodName="ClipTileRichTextBoxListItemCanvas_Loaded" />
                                                                                             </i:EventTrigger>
                                                                                         </i:Interaction.Triggers>
-                                                                                        <RichTextBox x:Name="RtbListBoxItemRichTextBox"
-                                                                                                     Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
-                                                                                                     IsReadOnly="{Binding HostClipTileViewModel.IsRtbReadOnly}"
-                                                                                                     IsEnabled="True"
-                                                                                                     AutoWordSelection="False"
-                                                                                                     IsInactiveSelectionHighlightEnabled="True"
-                                                                                                     IsDocumentEnabled="True"
-                                                                                                     Focusable="{Binding HostClipTileViewModel.IsEditingTile}"
-                                                                                                     Cursor="{Binding RtbListBoxItemCursor}"
-                                                                                                     Width="{Binding RtbWidth}"
-                                                                                                     Height="{Binding RtbHeight}"
-                                                                                                     Padding="{Binding RtbPadding}"
-                                                                                                     local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText, UpdateSourceTrigger=LostFocus,NotifyOnSourceUpdated=True}"
-                                                                                                     IsUndoEnabled="True"
-                                                                                                     VerticalAlignment="Top"
-                                                                                                     HorizontalAlignment="Left"
-                                                                                                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                                                                                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                                                                                     BorderThickness="0">
-                                                                                            <RichTextBox.Resources>
-                                                                                                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
-                                                                                                                 Color="Blue" />
-                                                                                            </RichTextBox.Resources>
-                                                                                            <SpellCheck.IsEnabled>
-                                                                                                <Binding Path="SystemTrayViewModel.SettingsWindowViewModel.PreferencesViewModel.UseSpellCheck"
-                                                                                                         Source="{StaticResource MainWindowViewModel}" />
-                                                                                            </SpellCheck.IsEnabled>
-                                                                                        </RichTextBox>
+                                                                                        <AdornerDecorator DataContext="{Binding}">
+                                                                                            <RichTextBox x:Name="RtbListBoxItemRichTextBox"
+                                                                                                         Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
+                                                                                                         IsReadOnly="{Binding HostClipTileViewModel.IsRtbReadOnly}"
+                                                                                                         IsEnabled="True"
+                                                                                                         AllowDrop="True"
+                                                                                                         AutoWordSelection="False"
+                                                                                                         IsInactiveSelectionHighlightEnabled="True"
+                                                                                                         IsDocumentEnabled="True"
+                                                                                                         Focusable="{Binding HostClipTileViewModel.IsEditingTile}"
+                                                                                                         Cursor="{Binding RtbListBoxItemCursor}"
+                                                                                                         Width="{Binding RtbWidth}"
+                                                                                                         Height="{Binding RtbHeight}"
+                                                                                                         Padding="{Binding RtbPadding}"
+                                                                                                         local:MpDocumentRtfExtension.DocumentRtf="{Binding CopyItemRichText, UpdateSourceTrigger=LostFocus,NotifyOnSourceUpdated=True}"
+                                                                                                         IsUndoEnabled="True"
+                                                                                                         VerticalAlignment="Top"
+                                                                                                         HorizontalAlignment="Left"
+                                                                                                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                                                                                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                                                                                         BorderThickness="0">
+                                                                                                <RichTextBox.Resources>
+                                                                                                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                                                                                                     Color="Blue" />
+                                                                                                </RichTextBox.Resources>
+                                                                                                <SpellCheck.IsEnabled>
+                                                                                                    <Binding Path="SystemTrayViewModel.SettingsWindowViewModel.PreferencesViewModel.UseSpellCheck"
+                                                                                                             Source="{StaticResource MainWindowViewModel}" />
+                                                                                                </SpellCheck.IsEnabled>
+                                                                                            </RichTextBox>
+                                                                                        </AdornerDecorator>
                                                                                         <local:MpClipBorder x:Name="RtbListBoxItemOverlayBorder"
                                                                                                             DataContext="{Binding}"
                                                                                                             Visibility="{Binding SubItemOverlayVisibility}"
-                                                                                                            Width="{Binding RtbOverlayWidth}"
+                                                                                                            Width="{Binding RtbCanvasWidth}"
                                                                                                             Height="{Binding RtbCanvasHeight}"
                                                                                                             Background="{Binding RtbListBoxItemBackgroundColor}"
                                                                                                             ToolTipService.InitialShowDelay="750"

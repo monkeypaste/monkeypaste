@@ -347,10 +347,14 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(AppStateButtonGridWidth));
             ClipTrayViewModel.IsolateClipTile(ctvmToExpand);
 
-            
-            _deltaHeight = Math.Min(
-                                        MpMeasurements.Instance.MainWindowMaxHeight - MpMeasurements.Instance.MainWindowMinHeight,
-                                        ctvmToExpand.RichTextBoxViewModelCollection.TotalItemMaxHeight - MpMeasurements.Instance.MainWindowMinHeight);
+            double maxDelta = MpMeasurements.Instance.MainWindowMaxHeight - MpMeasurements.Instance.MainWindowMinHeight;
+            double ctvmDelta = ctvmToExpand.RichTextBoxViewModelCollection.TotalItemHeight - ctvmToExpand.RichTextBoxViewModelCollection.RtbLbScrollViewerHeight;
+            if(ctvmToExpand.IsPastingTemplate) {
+                ctvmDelta += ctvmToExpand.PasteTemplateToolbarHeight;
+            } else if(ctvmToExpand.IsEditingTile) {
+                ctvmDelta += ctvmToExpand.EditRichTextBoxToolbarHeight;
+            }
+            _deltaHeight = Math.Min(maxDelta,ctvmDelta);//MpMeasurements.Instance.MainWindowMinHeight);
             Resize(_deltaHeight);
             ClipTrayViewModel.Resize(ctvmToExpand,
                                     ClipTrayWidth - ctvmToExpand.TileBorderMinWidth - MpMeasurements.Instance.ClipTileExpandedMargin,

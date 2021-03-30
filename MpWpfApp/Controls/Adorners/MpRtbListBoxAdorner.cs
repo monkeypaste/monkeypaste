@@ -11,12 +11,12 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace MpWpfApp {
-    public class MpRichTextBoxListBoxOverlayAdorner : Adorner {
+    public class MpRtbListBoxAdorner : Adorner {
         #region Private Variables
         #endregion
 
         #region Public Methods
-        public MpRichTextBoxListBoxOverlayAdorner(ListBox rtblb) : base(rtblb) {
+        public MpRtbListBoxAdorner(ListBox rtblb) : base(rtblb) {
         }
         #endregion
 
