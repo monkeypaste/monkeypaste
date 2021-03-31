@@ -233,8 +233,8 @@ namespace MpWpfApp {
                         case MpCopyItemType.FileList:
                             if(Properties.Settings.Default.SearchByFileList) {
                                 var flb = ClipTileViewModel.FileListBox;
-                                for (int i = 0; i < ClipTileViewModel.FileListViewModels.Count; i++) {
-                                    var fivm = ClipTileViewModel.FileListViewModels[i];
+                                for (int i = 0; i < ClipTileViewModel.FileListCollectionViewModel.Count; i++) {
+                                    var fivm = ClipTileViewModel.FileListCollectionViewModel[i];
                                     if (fivm.ItemPath.ContainsByCaseSetting(hlt)) {
                                         var container = flb.ItemContainerGenerator.ContainerFromItem(fivm) as FrameworkElement;
                                         if (container != null) {

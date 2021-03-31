@@ -596,6 +596,54 @@ namespace MpWpfApp {
         #endregion
 
         #region System
+        public bool IsProcessLikeNotepad(string processPath) {
+            if (string.IsNullOrEmpty(processPath) || !File.Exists(processPath)) {
+                return false;
+            }
+
+            try {
+                string processName = Path.GetFileNameWithoutExtension(processPath).ToLower();
+                if (processName == null) {
+                    return false;
+                }
+                switch (processName) {
+                    case "notepad":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+            catch (Exception ex) {
+                Console.WriteLine("IsProcessLikeNotepad GetFileName exception: " + ex);
+                return false;
+            }
+        }
+
+        public bool IsProcessNeedFileDrop(string processPath) {
+            if(string.IsNullOrEmpty(processPath) || !File.Exists(processPath)) {
+                return false;
+            }
+
+            try {
+                string processName = Path.GetFileNameWithoutExtension(processPath).ToLower();
+                if (processName == null) {
+                    return false;
+                }
+                switch (processName) {
+                    case "explorer":
+                    case "mspaint":
+                    case "notepad":
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+            catch(Exception ex) {
+                Console.WriteLine("IsProcessNeedFileDrop GetFileName exception: " + ex);
+                return false;
+            }
+        }
+
         public List<Key> GetModKeyDownList() {
             var downModKeyList = new List<Key>();
             if(Keyboard.IsKeyDown(Key.LeftCtrl)) {
@@ -748,16 +796,36 @@ namespace MpWpfApp {
         }
 
         public string WriteTextToFile(string filePath, string text, bool isTemporary = false) {
+            if (filePath.ToLower().Contains(@".tmp")) {
+                string extension = string.Empty;
+                if(MpHelpers.Instance.IsStringRichText(text)) {
+                    extension = @".rtf";
+                } else if(MpHelpers.Instance.IsStringCsv(text)) {
+                    extension = @".csv";
+                } else {
+                    extension = @".txt";
+                }
+                filePath = filePath.ToLower().Replace(@".tmp", extension);
+            }
             using (StreamWriter of = new StreamWriter(filePath)) {
                 of.Write(text);
                 of.Close();
+                if(isTemporary) {
+                    ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AddTempFile(filePath);
+                }
                 return filePath;
             }
         }
 
         public string WriteBitmapSourceToFile(string filePath, BitmapSource bmpSrc, bool isTemporary = false) {
             using (System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(MpHelpers.Instance.ConvertBitmapSourceToBitmap(bmpSrc))) {
+                if(filePath.ToLower().Contains(@".tmp")) {
+                    filePath = filePath.ToLower().Replace(@".tmp", @".png");
+                }
                 bmp.Save(filePath, ImageFormat.Png);
+                if (isTemporary) {
+                    ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AddTempFile(filePath);
+                }
                 return filePath;
             }
         }
@@ -769,10 +837,16 @@ namespace MpWpfApp {
                     textList.Add(str);
                 }
             }
+            if (filePath.ToLower().Contains(@".tmp")) {
+                filePath = filePath.ToLower().Replace(@".tmp", @".csv");
+            }
             using (var writer = new StreamWriter(filePath)) {
                 using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) {
                     csv.WriteRecords(textList);
                 }
+            }
+            if (isTemporary) {
+                ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AddTempFile(filePath);
             }
             return filePath;
             //using (var stream = File.OpenRead(filePath)) {
@@ -1734,9 +1808,10 @@ namespace MpWpfApp {
 
         public BitmapSource GetIconImage(string sourcePath) {
             if (!File.Exists(sourcePath)) {
-                if (!Directory.Exists(sourcePath)) {                    
-                    return (BitmapSource)new BitmapImage(new Uri(@"pack://application:,,,/Resources/Images/monkey (2).png"));
+                if (!Directory.Exists(sourcePath)) {
+                    //return (BitmapSource)new BitmapImage(new Uri(@"pack://application:,,,/Resources/Images/monkey (2).png"));
                     //return ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Question.ToBitmap());
+                    return ConvertBitmapToBitmapSource(System.Drawing.SystemIcons.Exclamation.ToBitmap());
                 } else {
                     return GetBitmapFromFolderPath(sourcePath, IconSizeEnum.MediumIcon32);
                 }

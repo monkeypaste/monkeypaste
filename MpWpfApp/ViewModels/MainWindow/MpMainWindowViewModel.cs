@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,7 +15,7 @@ using Gma.System.MouseKeyHook;
 using Hardcodet.Wpf.TaskbarNotification;
 
 namespace MpWpfApp {
-    public class MpMainWindowViewModel : MpViewModelBase {
+    public class MpMainWindowViewModel : MpViewModelBase, IDisposable {
         #region Statics
         public static bool IsMainWindowOpen {
             get {
@@ -31,6 +32,8 @@ namespace MpWpfApp {
         private double _startMainWindowTop;
         private double _endMainWindowTop;
         private double _deltaHeight = 0;
+
+        private List<string> _tempFilePathList { get; set; } = new List<string>();
         #endregion
 
         #region Public Variables
@@ -39,6 +42,7 @@ namespace MpWpfApp {
 
         public IKeyboardMouseEvents GlobalHook { get; set; }
         public IKeyboardMouseEvents ApplicationHook { get; set; }
+
         #endregion
 
         #region Properties       
@@ -131,7 +135,6 @@ namespace MpWpfApp {
         #endregion
 
         #region State
-
         private bool _isMainWindowLocked = false;
         public bool IsMainWindowLocked {
             get {
@@ -617,6 +620,29 @@ namespace MpWpfApp {
             }
             return true;
         }
+
+        public void AddTempFile(string fp) {
+            if(_tempFilePathList.Contains(fp.ToLower())) {
+                return;
+            }
+            _tempFilePathList.Add(fp.ToLower());
+        }
+        #endregion
+
+        #region Disposable
+        public void Dispose() {
+           foreach(string tfp in _tempFilePathList) {
+                if(File.Exists(tfp)) {
+                    try {
+                        File.Delete(tfp);
+                    }
+                    catch(Exception ex) {
+                        Console.WriteLine("MainwindowViewModel Dispose error deleteing temp file '" + tfp + "' with exception:");
+                        Console.WriteLine(ex);
+                    }
+                }
+            }
+        }
         #endregion
 
         #region Commands
@@ -811,7 +837,7 @@ namespace MpWpfApp {
                 IsMainWindowLocked = !IsMainWindowLocked;
             }
             //Do nothing because two-may binding toggles IsMainWindowLocked
-        }
+        }        
         #endregion
     }
 }

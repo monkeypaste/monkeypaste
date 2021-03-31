@@ -28,11 +28,8 @@ namespace MpWpfApp {
         #endregion
 
         #region Controls
-
         public WebBrowser FileWebBrowser;
         #endregion
-
-
 
         private Uri _itemUri = null;
         public Uri ItemUri {
@@ -98,6 +95,18 @@ namespace MpWpfApp {
             }
         }
 
+        private bool _isSubSelected = false;
+        public bool IsSubSelected {
+            get {
+                return _isSubSelected;
+            }
+            set {
+                if (_isSubSelected != value) {
+                    _isSubSelected = value;
+                    OnPropertyChanged(nameof(IsSubSelected));
+                }
+            }
+        }
         #endregion
 
         #region Public Methods

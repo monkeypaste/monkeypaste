@@ -835,7 +835,7 @@ namespace MpWpfApp {
                 } else if (forceType == MpCopyItemType.RichText) {
                     fileList.Add(MpHelpers.Instance.WriteTextToFile(Path.GetTempFileName(), ItemPlainText));
                 } else {
-                    var splitArray = ItemPlainText.Split(Environment.NewLine.ToCharArray());
+                    var splitArray = ItemPlainText.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
                     if (splitArray == null || splitArray.Length == 0) {
                         throw new Exception("CopyItem GetFileList error, file list should not be empty");
                     } else {
@@ -846,15 +846,15 @@ namespace MpWpfApp {
                         }
                     }
                 }
-            } else {                
-                string op = MpHelpers.Instance.GetUniqueFileName((forceType == MpCopyItemType.None ? CopyItemType:forceType),Title,baseDir);
+            } else {
+                string op = Path.GetTempFileName();// MpHelpers.Instance.GetUniqueFileName((forceType == MpCopyItemType.None ? CopyItemType:forceType),Title,baseDir);
                 //file extension
                 switch (CopyItemType) {
                     case MpCopyItemType.RichText:
                         if(forceType == MpCopyItemType.Image) {
                             fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, ItemBitmapSource));
                         } else {
-                            fileList.Add(MpHelpers.Instance.WriteTextToFile(op, ItemPlainText));
+                            fileList.Add(MpHelpers.Instance.WriteTextToFile(op, ItemRichText));
                         }
                         break;
                     case MpCopyItemType.Composite:
@@ -862,9 +862,9 @@ namespace MpWpfApp {
                             if (forceType == MpCopyItemType.Image) {
                                 fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, cci.ItemBitmapSource));
                             } else {
-                                fileList.Add(MpHelpers.Instance.WriteTextToFile(op, cci.ItemPlainText));
+                                fileList.Add(MpHelpers.Instance.WriteTextToFile(op, cci.ItemRichText));
                             }
-                            op = MpHelpers.Instance.GetUniqueFileName((forceType == MpCopyItemType.None ? CopyItemType : forceType), Title, baseDir);
+                            op = Path.GetTempFileName(); //MpHelpers.Instance.GetUniqueFileName((forceType == MpCopyItemType.None ? CopyItemType : forceType), Title, baseDir);
                         }
                         break;
                     case MpCopyItemType.Image:
@@ -877,6 +877,13 @@ namespace MpWpfApp {
                 }
             }
 
+            if(string.IsNullOrEmpty(baseDir) && Application.Current.MainWindow.DataContext != null) {
+                //for temporary files add to mwvm list for shutdown cleanup
+                foreach(var fp in fileList) {
+                    ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AddTempFile(fp);
+                }
+            }
+            // add temp files to 
             return fileList;
         }
 

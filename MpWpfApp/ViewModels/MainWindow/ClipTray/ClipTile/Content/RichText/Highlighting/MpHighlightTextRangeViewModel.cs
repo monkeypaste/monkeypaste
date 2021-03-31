@@ -129,7 +129,7 @@ namespace MpWpfApp {
                                     rtb.ScrollToVerticalOffset(rtb.VerticalOffset + characterRect.Top - rtb.ActualHeight / 2d);
                                     break;
                                 case MpCopyItemType.FileList:
-                                    var flivm = ClipTileViewModel.FileListViewModels[ContentId];
+                                    var flivm = ClipTileViewModel.FileListCollectionViewModel[ContentId];
                                     ClipTileViewModel.FileListBox.ScrollIntoView(flivm);
                                     break;
                             }

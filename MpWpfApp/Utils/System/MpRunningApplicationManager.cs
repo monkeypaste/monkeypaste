@@ -29,6 +29,9 @@ namespace MpWpfApp {
         }
 
         public Dictionary<IntPtr,WinApi.ShowWindowCommands> LastWindowStateHandleDictionary = new Dictionary<IntPtr, WinApi.ShowWindowCommands>();
+
+
+        public string ActiveProcessPath { get; set; } = string.Empty;
         #endregion
 
         #region Public Methods
@@ -112,13 +115,13 @@ namespace MpWpfApp {
                 //set fg handle to the top of its process list
                 CurrentProcessWindowHandleStackDictionary[processName].Insert(0, fgHandle);
                 wasStackChanged = true;
-
+                ActiveProcessPath = processName;
                 Console.WriteLine(string.Format(@"(Known) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
             } else {
                 //if its a new process create a new list with this handle as its element
                 CurrentProcessWindowHandleStackDictionary.Add(processName, new List<IntPtr> { fgHandle });
                 wasStackChanged = true;
-
+                ActiveProcessPath = processName;
                 Console.WriteLine(string.Format(@"(New) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
             }
             if (wasStackChanged) {
@@ -181,7 +184,7 @@ namespace MpWpfApp {
                         WinApi.ShowWindowAsync(handle, MpHelpers.Instance.GetShowWindowValue(forceWindowState));
                     }
                 }
-
+                
                 return handle;
             }
             catch (Exception ex) {

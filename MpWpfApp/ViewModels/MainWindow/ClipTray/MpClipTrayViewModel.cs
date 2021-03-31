@@ -6,6 +6,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Speech.Synthesis;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -115,34 +116,10 @@ namespace MpWpfApp {
         #endregion
 
         #region Selection 
-        public string SelectedClipTilesPlainText {
-            get {
-                string outStr = string.Empty;
-                foreach (var sctvm in SelectedClipTiles) {
-                    if (sctvm.HasTemplate) {
-                        outStr += MpHelpers.Instance.ConvertRichTextToPlainText(sctvm.TemplateRichText) + Environment.NewLine;
-                    } else {
-                        outStr += sctvm.CopyItemPlainText + Environment.NewLine;
-                    }
-                }
-                return outStr.Trim('\r', '\n');
-            }
-        }
-
-        //public string SelectedClipTilesRichText {
-        //    get {
-        //        string outStr = MpHelpers.Instance.ConvertPlainTextToRichText(string.Empty);
-        //        foreach (var sctvm in SelectedClipTiles) {
-        //            outStr = MpHelpers.Instance.CombineRichText2(outStr, sctvm.CopyItemRichText);                    
-        //        }
-        //        return outStr;
-        //    }
-        //}
-
         public BitmapSource SelectedClipTilesBmp {
             get {
                 var bmpList = new List<BitmapSource>();
-                foreach (var sctvm in SelectedClipTiles) {
+                foreach (var sctvm in SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime)) {
                     bmpList.Add(sctvm.CopyItemBmp);
                 }
                 return MpHelpers.Instance.CombineBitmap(bmpList, false);
@@ -152,7 +129,7 @@ namespace MpWpfApp {
         public string SelectedClipTilesCsv {
             get {
                 string outStr = string.Empty;
-                foreach (var sctvm in SelectedClipTiles) {
+                foreach (var sctvm in SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime)) {
                     outStr = sctvm.CopyItem.ItemPlainText + ",";
                 }
                 return outStr;
@@ -162,7 +139,7 @@ namespace MpWpfApp {
         public string[] SelectedClipTilesFileList {
             get {
                 var fl = new List<string>();
-                foreach (var sctvm in SelectedClipTiles) {
+                foreach (var sctvm in SelectedClipTiles.OrderBy(x=>x.LastSelectedDateTime)) {
                     foreach (string f in sctvm.CopyItemFileDropList) {
                         fl.Add(f);
                     }
@@ -171,35 +148,22 @@ namespace MpWpfApp {
             }
         }
 
-        //public IDataObject SelectedClipTilesDropDataObject {
-        //    get {
-        //        IDataObject d = new DataObject();
-        //        d.SetData(DataFormats.Rtf, SelectedClipTilesRichText);
-        //        d.SetData(DataFormats.Text, SelectedClipTilesPlainText);
-        //        d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
-        //        d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
-        //        d.SetData(DataFormats.CommaSeparatedValue, SelectedClipTilesCsv);
-        //        d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
-        //        return d;
-        //    }
-        //}
+        public string[] SelectedClipTilesMergedPlainTextFileList {
+            get {
+                var sb = new StringBuilder();
+                foreach(var sctvm in SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime)) {
+                    if (sctvm.HasTemplate) {
+                        sb.Append(MpHelpers.Instance.ConvertRichTextToPlainText(sctvm.TemplateRichText) + Environment.NewLine);
+                    } else {
+                        sb.Append(sctvm.CopyItemPlainText + Environment.NewLine);
+                    }
+                }
+                string mergedPlainText = sb.ToString().Trim('\r', '\n');
+                string mergedPlainTextFilePath = MpHelpers.Instance.WriteTextToFile(System.IO.Path.GetTempFileName(), mergedPlainText, true);
 
-        //public IDataObject SelectedClipTilesPasteDataObject {
-        //    get {
-        //        IDataObject d = new DataObject();
-        //        //only when pasting into explorer must have file drop
-        //        if(string.IsNullOrEmpty(ClipboardManager.LastWindowWatcher.LastTitle.Trim())) {
-        //            d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
-        //        }                
-        //        d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
-        //        d.SetData(DataFormats.CommaSeparatedValue, SelectedClipTilesCsv);
-        //        d.SetData(DataFormats.Rtf, SelectedClipTilesRichText);
-        //        d.SetData(DataFormats.Text, SelectedClipTilesPlainText);
-        //        d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
-        //        return d;
-        //    }
-        //}
-
+                return new string[] { mergedPlainTextFilePath };
+            }
+        }
         #endregion
 
         #region State
@@ -441,7 +405,6 @@ namespace MpWpfApp {
                         }
                         if (IsAnyTileExpanded) {
                             if(MainWindowViewModel.SearchBoxViewModel.HasText) {
-                                OnPropertyChanged(nameof(SelectedClipTiles));
                                 MainWindowViewModel.SearchBoxViewModel.IsTextValid = SelectedClipTiles[0].HighlightTextRangeViewModelCollection.Count > 0;
                             } else {
                                 MainWindowViewModel.SearchBoxViewModel.IsTextValid = true;
@@ -806,6 +769,7 @@ namespace MpWpfApp {
                 ctvm.IsSelected = false;
                 ctvm.IsPrimarySelected = false;
                 ctvm.RichTextBoxViewModelCollection.ClearSubSelection();
+                ctvm.FileListCollectionViewModel.ClearSubSelection();
             }
             ///OnPropertyChanged(nameof(SelectedClipTiles));
         }
@@ -907,7 +871,7 @@ namespace MpWpfApp {
         public void Refresh() {
             var sw = new Stopwatch();
             sw.Start();
-           //ClipTrayListView?.Items.Refresh();
+            ClipTrayListView?.Items.Refresh();
             sw.Stop();
             Console.WriteLine("ClipTray Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
@@ -987,12 +951,16 @@ namespace MpWpfApp {
 
         public async Task<IDataObject> GetDataObjectFromSelectedClips(bool isDragDrop = false) {
             IDataObject d = new DataObject();
-            //only when pasting into explorer must have file drop
-            if (string.IsNullOrEmpty(MpClipboardManager.Instance.LastWindowWatcher.LastTitle.Trim()) && 
+            //only when pasting into explorer or notepad must have file drop
+            if (MpHelpers.Instance.IsProcessNeedFileDrop(MpRunningApplicationManager.Instance.ActiveProcessPath) &&
                 isDragDrop) {
-                if(SelectedClipTilesFileList != null) {
-                    d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
-                }
+                if (SelectedClipTilesFileList != null) {
+                    if(MpHelpers.Instance.IsProcessLikeNotepad(MpRunningApplicationManager.Instance.ActiveProcessPath)) {
+                        d.SetData(DataFormats.FileDrop, SelectedClipTilesMergedPlainTextFileList);
+                    } else {
+                        d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
+                    }                    
+                }    
             } 
             if(SelectedClipTilesBmp != null) {
                 d.SetData(DataFormats.Bitmap, SelectedClipTilesBmp);
@@ -1002,7 +970,7 @@ namespace MpWpfApp {
             }            
 
             string rtf =string.Empty;
-            foreach (var sctvm in SelectedClipTiles) {
+            foreach (var sctvm in SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime)) {
                 var task = sctvm.GetPastableRichText();
                 string rt = await task;
                 if(string.IsNullOrEmpty(rtf)) {
@@ -1013,9 +981,8 @@ namespace MpWpfApp {
             }
             if(!string.IsNullOrEmpty(rtf)) {
                 d.SetData(DataFormats.Rtf, rtf);
-                d.SetData(DataFormats.Text, rtf.ToPlainText());
-            }
-            
+                d.SetData(DataFormats.Text, rtf.ToPlainText());           
+            }            
 
             if(isDragDrop && SelectedClipTiles != null && SelectedClipTiles.Count > 0) {
                 d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
@@ -1087,29 +1054,29 @@ namespace MpWpfApp {
         }
 
         public MpCopyItemType GetTargetFileType() {
-            string targetTitle = MpClipboardManager.Instance?.LastWindowWatcher.LastTitle.ToLower();
-
+            //string targetTitle = MpClipboardManager.Instance?.LastWindowWatcher.LastTitle.ToLower();
+            string activeProcessPath = MpRunningApplicationManager.Instance.ActiveProcessPath;
             //when targetTitle is empty assume it is explorer and paste as filedrop
-            if (string.IsNullOrEmpty(targetTitle)) {
+            if (string.IsNullOrEmpty(activeProcessPath)) {
                 return MpCopyItemType.FileList;
             }
-            foreach (var imgApp in Properties.Settings.Default.PasteAsImageDefaultAppTitleCollection) {
-                if (targetTitle.ToLower().Contains(imgApp.ToLower())) {
+            foreach (var imgApp in Properties.Settings.Default.PasteAsImageDefaultProcessNameCollection) {
+                if (activeProcessPath.ToLower().Contains(imgApp.ToLower())) {
                     return MpCopyItemType.Image;
                 }
             }
-            foreach (var fileApp in Properties.Settings.Default.PasteAsFileDropDefaultAppTitleCollection) {
-                if (targetTitle.ToLower().Contains(fileApp.ToLower())) {
+            foreach (var fileApp in Properties.Settings.Default.PasteAsFileDropDefaultProcessNameCollection) {
+                if (activeProcessPath.ToLower().Contains(fileApp.ToLower())) {
                     return MpCopyItemType.FileList;
                 }
             }
-            foreach (var csvApp in Properties.Settings.Default.PasteAsCsvDefaultAppTitleCollection) {
-                if (targetTitle.ToLower().Contains(csvApp.ToLower())) {
+            foreach (var csvApp in Properties.Settings.Default.PasteAsCsvDefaultProcessNameCollection) {
+                if (activeProcessPath.ToLower().Contains(csvApp.ToLower())) {
                     return MpCopyItemType.Csv;
                 }
             }
-            foreach (var textApp in Properties.Settings.Default.PasteAsTextFileDefaultAppTitleCollection) {
-                if (targetTitle.ToLower().Contains(textApp.ToLower())) {
+            foreach (var textApp in Properties.Settings.Default.PasteAsTextFileDefaultProcessNameCollection) {
+                if (activeProcessPath.ToLower().Contains(textApp.ToLower())) {
                     return MpCopyItemType.RichText;
                 }
             }

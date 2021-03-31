@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 namespace MpWpfApp {
     public class MpDetectedImageObjectCollectionViewModel : MpObservableCollectionViewModel<MpDetectedImageObjectViewModel> {
         #region Private Variables
-
+        private bool _isEnabled = false;
         #endregion
 
         #region Properties
@@ -64,7 +64,8 @@ namespace MpWpfApp {
         #region Public Methods
         public MpDetectedImageObjectCollectionViewModel() : base() {
         }
-        public MpDetectedImageObjectCollectionViewModel(MpCopyItem ci) : base() {
+        public MpDetectedImageObjectCollectionViewModel(MpCopyItem ci, bool isEnabled = false) : base() {
+            _isEnabled = isEnabled;
             if(ci.CopyItemType != MpCopyItemType.Image) {
                 //not sure why this is getting called on non-images this shouldn't have to happen
                 return;
@@ -77,6 +78,9 @@ namespace MpWpfApp {
         }
 
         public void ClipTileImageDetectedObjectItemscontrol_Loaded(object sender, RoutedEventArgs args) {
+            if(!_isEnabled) {
+                return;
+            }
             var itemsControl = (ItemsControl)sender;
             var itemsControlCanvas = (Canvas)itemsControl.FindName("ClipTileImageDetectedObjectsCanvas");
             var vbGrid = itemsControl.GetVisualAncestor<Grid>();

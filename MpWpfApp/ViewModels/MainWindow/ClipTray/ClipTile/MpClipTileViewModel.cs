@@ -125,20 +125,19 @@
             }
         }
 
-        private ObservableCollection<MpFileListItemViewModel> _fileListViewModels = null;
-        public ObservableCollection<MpFileListItemViewModel> FileListViewModels {
+        private MpFileListItemCollectionViewModel _fileListCollectionViewModel = null;
+        public MpFileListItemCollectionViewModel FileListCollectionViewModel {
             get {
                 if (CopyItem == null || CopyItemType != MpCopyItemType.FileList) {
-                    return new ObservableCollection<MpFileListItemViewModel>();
+                    return new MpFileListItemCollectionViewModel();
                 }
-                if (_fileListViewModels == null) {
-                    _fileListViewModels = new ObservableCollection<MpFileListItemViewModel>();
+                if (_fileListCollectionViewModel == null) {
+                    _fileListCollectionViewModel = new MpFileListItemCollectionViewModel();
                     foreach (var path in CopyItem.GetFileList()) {
-                        _fileListViewModels.Add(new MpFileListItemViewModel(this, path));
+                        _fileListCollectionViewModel.Add(new MpFileListItemViewModel(this, path));
                     }
                 }
-
-                return _fileListViewModels;
+                return _fileListCollectionViewModel;
             }
         }
 
@@ -587,8 +586,8 @@
                 if(CopyItemType != MpCopyItemType.FileList) {
                     return Visibility.Collapsed;
                 }
-                if(FileListViewModels.Count == 1 && 
-                   System.IO.Path.GetExtension(FileListViewModels[0].ItemPath).ToLower() == @".pdf") {
+                if(FileListCollectionViewModel.Count == 1 && 
+                   System.IO.Path.GetExtension(FileListCollectionViewModel[0].ItemPath).ToLower() == @".pdf") {
                     return Visibility.Visible;
                 }
                 return Visibility.Collapsed;
@@ -807,6 +806,8 @@
         #endregion
 
         #region State Properties 
+        public bool IsDroppingOntoNotepad { get; set; } = false;
+
         public Point MouseDownPosition = new Point();
 
         private bool _isClipDragging = false;
@@ -1302,7 +1303,25 @@
                 if (CopyItem == null || MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null) {
                     return new List<string>();
                 }
-                return CopyItem.GetFileList(string.Empty, MainWindowViewModel.ClipTrayViewModel.GetTargetFileType());
+                if(CopyItemType == MpCopyItemType.FileList && FileListCollectionViewModel.Any(x=>x.IsSubSelected)) {
+                    var subSelectedFileList = new List<string>();
+                    foreach(var flvm in FileListCollectionViewModel) {
+                        if(flvm.IsSubSelected) {
+                            subSelectedFileList.Add(flvm.ItemPath);
+                        }
+                    }
+                    return subSelectedFileList;
+                }
+                if (CopyItemType == MpCopyItemType.Composite && RichTextBoxViewModelCollection.Any(x => x.IsSubSelected)) {
+                    var subSelectedCompositeItemList = new List<string>();
+                    foreach (var rtbvm in RichTextBoxViewModelCollection) {
+                        if (rtbvm.IsSubSelected) {
+                            subSelectedCompositeItemList.Add(rtbvm.CopyItemFileDropList[0]);
+                        }
+                    }
+                    return subSelectedCompositeItemList;
+                }
+                return CopyItem.GetFileList();// string.Empty, MainWindowViewModel.ClipTrayViewModel.GetTargetFileType());
             }
         }
 
@@ -1457,7 +1476,7 @@
                     OnPropertyChanged(nameof(CopyItemAppId));
                     OnPropertyChanged(nameof(CopyItemCreatedDateTime));
                     OnPropertyChanged(nameof(DetailText));
-                    OnPropertyChanged(nameof(FileListViewModels));
+                    OnPropertyChanged(nameof(FileListCollectionViewModel));
                     OnPropertyChanged(nameof(CopyCount));
                     OnPropertyChanged(nameof(PasteCount));
                     OnPropertyChanged(nameof(CharCount));
@@ -1623,13 +1642,24 @@
             #region Drag/Drop
             
             int minDragDist = 5;
+            //ClipBorder.PreviewGiveFeedback += (s, e3) => {
+
+            //};
+            //ClipBorder.PreviewQueryContinueDrag += (s, e3) => {
+                
+            //};
             ClipBorder.PreviewMouseUp += (s, e9) => {
                 var ctvm = ((FrameworkElement)s).DataContext as MpClipTileViewModel;
+                if(ctvm.IsDroppingOntoNotepad) {
+                                     
+                }
+
                 ctvm.MouseDownPosition = new Point();
                 ctvm.IsClipDragging = false;
                 ctvm.DragDataObject = null;
-                if(e9.MouseDevice.DirectlyOver.GetType().IsSubclassOf(typeof(UIElement))) {
+                if (e9.MouseDevice.DirectlyOver != null && e9.MouseDevice.DirectlyOver.GetType().IsSubclassOf(typeof(UIElement))) {
                     if (((UIElement)e9.MouseDevice.DirectlyOver).GetType() == typeof(Thumb)) {
+                        //ensures scrollbar interaction isn't treated as drag and drop
                         var sb = (ScrollBar)((Thumb)e9.MouseDevice.DirectlyOver).TemplatedParent;
                         if (sb.Orientation == Orientation.Vertical) {
                             ctvm.RichTextBoxViewModelCollection.IsMouseOverVerticalScrollBar = false;
@@ -1642,8 +1672,9 @@
             };
             ClipBorder.MouseDown += (s, e7) => {
                 var ctvm = ((FrameworkElement)s).DataContext as MpClipTileViewModel;
-                if (e7.MouseDevice.DirectlyOver.GetType().IsSubclassOf(typeof(UIElement))) {
+                if (e7.MouseDevice.DirectlyOver != null && e7.MouseDevice.DirectlyOver.GetType().IsSubclassOf(typeof(UIElement))) {
                     if (((UIElement)e7.MouseDevice.DirectlyOver).GetType() == typeof(Thumb)) {
+                        //ensures scrollbar interaction isn't treated as drag and drop
                         var sb = (ScrollBar)((Thumb)e7.MouseDevice.DirectlyOver).TemplatedParent;
                         if (sb.Orientation == Orientation.Vertical) {
                             ctvm.RichTextBoxViewModelCollection.IsMouseOverVerticalScrollBar = true;
@@ -1656,9 +1687,8 @@
                 
             };
             ClipBorder.MouseMove += (s, e7) => {
-                if (e7.MouseDevice.LeftButton == MouseButtonState.Pressed) {
-                    var ctvm = ((FrameworkElement)s).DataContext as MpClipTileViewModel;
-                    
+                var ctvm = ((FrameworkElement)s).DataContext as MpClipTileViewModel;
+                if (e7.MouseDevice.LeftButton == MouseButtonState.Pressed) {                    
                     if(ctvm.IsExpanded || ctvm.RichTextBoxViewModelCollection.IsMouseOverScrollBar) {
                         return;
                     }
@@ -1673,11 +1703,12 @@
                     if(ctvm.DragDataObject == null) {
                         ctvm.DragDataObject = MainWindowViewModel.ClipTrayViewModel.GetDataObjectFromSelectedClips(true).Result;
                     }
+
                     DragDrop.DoDragDrop(
-                                ((FrameworkElement)s),
-                                ctvm.DragDataObject,
-                                DragDropEffects.Copy | DragDropEffects.Move);
-                }
+                               ((FrameworkElement)s),
+                               ctvm.DragDataObject,
+                               DragDropEffects.Copy | DragDropEffects.Move);         
+                } 
             };            
             ClipBorder.DragLeave += (s2, e1) => {
                 var ctvm = ((FrameworkElement)s2).DataContext as MpClipTileViewModel;
@@ -1686,10 +1717,19 @@
                 ctvm.RichTextBoxViewModelCollection.RtbLbAdornerLayer?.Update();
                 ctvm.RichTextBoxViewModelCollection.ScrollViewer?.ScrollToHome();
             };
-            ClipBorder.DragEnter += (s2, e1) => {
-                var ctvm = ((FrameworkElement)s2).DataContext as MpClipTileViewModel;
-                if (e1.Source == ctvm.ClipBorder) {
-                    e1.Effects = DragDropEffects.None;
+            ClipBorder.PreviewDragEnter += (s, e3) => {
+                var ctvm = ((FrameworkElement)s).DataContext as MpClipTileViewModel;
+                var dctvm = ((FrameworkElement)e3.Source).DataContext as MpClipTileViewModel;
+                if (dctvm != null && ctvm != dctvm &&
+                    (ctvm.CopyItemType == MpCopyItemType.Image ||
+                    ctvm.CopyItemType == MpCopyItemType.FileList ||
+                    dctvm.CopyItemType == MpCopyItemType.Image ||
+                    dctvm.CopyItemType == MpCopyItemType.FileList)) {
+                    e3.Effects = DragDropEffects.None;
+                    ctvm.IsClipDropping = false;
+                    ctvm.RichTextBoxViewModelCollection.RtbLbAdornerLayer?.Update();
+                    e3.Handled = true;
+                    return;
                 }
             };
             ClipBorder.PreviewDragOver += (s2, e1) => {
@@ -1697,6 +1737,7 @@
                 MainWindowViewModel.ClipTrayViewModel.ClipTrayAdornerLayer.Update();
 
                 var ctvm = ((FrameworkElement)s2).DataContext as MpClipTileViewModel;
+                
                 ctvm.IsClipDropping = false;
                 e1.Effects = DragDropEffects.None;
                 ctvm.RichTextBoxViewModelCollection.RtbLbAdornerLayer?.Update();
@@ -1955,7 +1996,7 @@
             if (ctvm.FileListVisibility == Visibility.Collapsed) {
                 return;
             }
-            ctvm.OnPropertyChanged(nameof(ctvm.FileListViewModels));
+            ctvm.OnPropertyChanged(nameof(ctvm.FileListCollectionViewModel));
 
             ctvm.FileListBox = (ListBox)sender;
             ctvm.FileListBox.ContextMenu = (ContextMenu)ctvm.FileListBox.GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");            
@@ -2366,7 +2407,7 @@
                     }
                     break;
                 case MpCopyItemType.FileList:
-                    FileListBox.ScrollIntoView(FileListViewModels[0]);
+                    FileListBox.ScrollIntoView(FileListCollectionViewModel[0]);
                     break;
             }
         }

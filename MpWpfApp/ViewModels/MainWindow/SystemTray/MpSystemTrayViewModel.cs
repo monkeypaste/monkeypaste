@@ -74,6 +74,7 @@ namespace MpWpfApp {
             }
         }
         private void ExitApplication() {
+            MainWindowViewModel.Dispose();
             Application.Current.Shutdown();
         }
 

@@ -881,7 +881,7 @@ namespace MpWpfApp {
                 if (CopyItem == null || MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null) {
                     return new List<string>();
                 }
-                return CopyItem.GetFileList(string.Empty, MainWindowViewModel.ClipTrayViewModel.GetTargetFileType());
+                return CopyItem.GetFileList();// string.Empty, MainWindowViewModel.ClipTrayViewModel.GetTargetFileType());
             }
         }
 
@@ -1473,14 +1473,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Private methods
-        private void DoDragDrop(object parameter) {
-            try {
-                DragDrop.DoDragDrop(Rtb, parameter, DragDropEffects.Copy | DragDropEffects.Move);
-            }
-            catch(Exception ex) {
-                Console.WriteLine("SubText DragDrop Exception: " + ex);
-            }
-        }
         #endregion
 
         #endregion

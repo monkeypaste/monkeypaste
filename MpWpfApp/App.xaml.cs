@@ -23,5 +23,11 @@ namespace MpWpfApp {
                 Console.WriteLine("Mp Handled com exception: " + comException.ToString());
             }
         }
+
+        private void Application_Exit(object sender, ExitEventArgs e) {
+            if (Application.Current.MainWindow != null) {
+                ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).Dispose();
+            }
+        }
     }
 }

@@ -35,14 +35,14 @@
     <Setting Name="SearchByIsCaseSensitive" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="PasteAsImageDefaultAppTitleCollection" Type="System.String[]" Scope="User">
+    <Setting Name="PasteAsImageDefaultProcessNameCollection" Type="System.String[]" Scope="User">
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
   &lt;string&gt;paint&lt;/string&gt;
   &lt;string&gt;photoshop&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
-    <Setting Name="PasteAsFileDropDefaultAppTitleCollection" Type="System.String[]" Scope="User">
+    <Setting Name="PasteAsFileDropDefaultProcessNameCollection" Type="System.String[]" Scope="User">
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
   &lt;string&gt;explorer&lt;/string&gt;
@@ -58,13 +58,13 @@
     <Setting Name="UserCustomColorIdxArray" Type="System.Int32[]" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="PasteAsCsvDefaultAppTitleCollection" Type="System.String[]" Scope="User">
+    <Setting Name="PasteAsCsvDefaultProcessNameCollection" Type="System.String[]" Scope="User">
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
   &lt;string&gt;excel&lt;/string&gt;
 &lt;/ArrayOfString&gt;</Value>
     </Setting>
-    <Setting Name="PasteAsTextFileDefaultAppTitleCollection" Type="System.String[]" Scope="User">
+    <Setting Name="PasteAsTextFileDefaultProcessNameCollection" Type="System.String[]" Scope="User">
       <Value Profile="(Default)">&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
   &lt;string&gt;notepad&lt;/string&gt;

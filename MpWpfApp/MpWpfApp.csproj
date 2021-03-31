@@ -209,6 +209,7 @@
     <Compile Include="ViewModels\Base\MpUndoableObservableCollectionViewModel.cs" />
     <Compile Include="ViewModels\Base\MpUndoableViewModelBase.cs" />
     <Compile Include="ViewModels\MainWindow\AppMode\MpAppModeViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectViewModel.cs" />

@@ -136,12 +136,12 @@ namespace MpWpfApp.Properties {
         [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
             "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
             "tring>paint</string>\r\n  <string>photoshop</string>\r\n</ArrayOfString>")]
-        public string[] PasteAsImageDefaultAppTitleCollection {
+        public string[] PasteAsImageDefaultProcessNameCollection {
             get {
-                return ((string[])(this["PasteAsImageDefaultAppTitleCollection"]));
+                return ((string[])(this["PasteAsImageDefaultProcessNameCollection"]));
             }
             set {
-                this["PasteAsImageDefaultAppTitleCollection"] = value;
+                this["PasteAsImageDefaultProcessNameCollection"] = value;
             }
         }
         
@@ -150,12 +150,12 @@ namespace MpWpfApp.Properties {
         [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
             "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
             "tring>explorer</string>\r\n</ArrayOfString>")]
-        public string[] PasteAsFileDropDefaultAppTitleCollection {
+        public string[] PasteAsFileDropDefaultProcessNameCollection {
             get {
-                return ((string[])(this["PasteAsFileDropDefaultAppTitleCollection"]));
+                return ((string[])(this["PasteAsFileDropDefaultProcessNameCollection"]));
             }
             set {
-                this["PasteAsFileDropDefaultAppTitleCollection"] = value;
+                this["PasteAsFileDropDefaultProcessNameCollection"] = value;
             }
         }
         
@@ -189,12 +189,12 @@ namespace MpWpfApp.Properties {
         [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
             "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
             "tring>excel</string>\r\n</ArrayOfString>")]
-        public string[] PasteAsCsvDefaultAppTitleCollection {
+        public string[] PasteAsCsvDefaultProcessNameCollection {
             get {
-                return ((string[])(this["PasteAsCsvDefaultAppTitleCollection"]));
+                return ((string[])(this["PasteAsCsvDefaultProcessNameCollection"]));
             }
             set {
-                this["PasteAsCsvDefaultAppTitleCollection"] = value;
+                this["PasteAsCsvDefaultProcessNameCollection"] = value;
             }
         }
         
@@ -203,12 +203,12 @@ namespace MpWpfApp.Properties {
         [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<ArrayOfString xmlns:xsi=\"http://www.w3." +
             "org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <s" +
             "tring>notepad</string>\r\n</ArrayOfString>")]
-        public string[] PasteAsTextFileDefaultAppTitleCollection {
+        public string[] PasteAsTextFileDefaultProcessNameCollection {
             get {
-                return ((string[])(this["PasteAsTextFileDefaultAppTitleCollection"]));
+                return ((string[])(this["PasteAsTextFileDefaultProcessNameCollection"]));
             }
             set {
-                this["PasteAsTextFileDefaultAppTitleCollection"] = value;
+                this["PasteAsTextFileDefaultProcessNameCollection"] = value;
             }
         }
         
