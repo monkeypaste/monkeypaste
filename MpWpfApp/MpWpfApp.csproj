@@ -252,6 +252,12 @@
     <Compile Include="ViewModels\MainWindow\SystemTray\MpSystemTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\MpTagTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\TagTray\TagTile\MpTagTileViewModel.cs" />
+    <Compile Include="Views\Analytics\MpTextAnalysisDocument.xaml.cs">
+      <DependentUpon>MpTextAnalysisDocument.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Analytics\MpImageAnalysisDocument.xaml.cs">
+      <DependentUpon>MpImageAnalysisDocument.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MpStandardBalloonControl.xaml.cs">
       <DependentUpon>MpStandardBalloonControl.xaml</DependentUpon>
     </Compile>
@@ -286,6 +292,14 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Analytics\MpTextAnalysisDocument.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Analytics\MpImageAnalysisDocument.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MpAssignHotkeyModalWindow.xaml">
       <SubType>Designer</SubType>

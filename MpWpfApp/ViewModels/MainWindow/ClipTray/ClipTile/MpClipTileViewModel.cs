@@ -234,15 +234,15 @@
                 //}
                 //return ClipBorder.TransformToAncestor((Visual)ClipBorder.Parent).TransformBounds(LayoutInformation.GetLayoutSlot(ClipBorder));
 
-                //return ClipBorder.TransformToVisual(MainWindowViewModel.ClipTrayViewModel.ClipTrayListView).TransformBounds(LayoutInformation.GetLayoutSlot(ClipBorder));
+                //return ClipBorder.TransformToVisual(MainWindowViewModel.ClipTrayViewModel.ListBox).TransformBounds(LayoutInformation.GetLayoutSlot(ClipBorder));
                 
                 //if (ClipBorder == null ||
-                //    MainWindowViewModel.ClipTrayViewModel.ClipTrayListView == null ||
-                //    !ClipBorder.IsVisualDescendant(MainWindowViewModel.ClipTrayViewModel.ClipTrayListView)) {
+                //    MainWindowViewModel.ClipTrayViewModel.ListBox == null ||
+                //    !ClipBorder.IsVisualDescendant(MainWindowViewModel.ClipTrayViewModel.ListBox)) {
                 //    return new Rect(new Point(double.MinValue, double.MinValue), new Size(0, 0));
                 //}
                 //try {
-                //    return ClipBorder.TransformToVisual(MainWindowViewModel.ClipTrayViewModel.ClipTrayListView).TransformBounds(LayoutInformation.GetLayoutSlot(ClipBorder));
+                //    return ClipBorder.TransformToVisual(MainWindowViewModel.ClipTrayViewModel.ListBox).TransformBounds(LayoutInformation.GetLayoutSlot(ClipBorder));
 
                 //}
                 //catch (Exception ex) {
@@ -1070,38 +1070,6 @@
         
         #endregion
 
-        #region Focus Properties
-        private bool _isClipRichTextBoxFocused = false;
-        public bool IsClipRichTextBoxFocused {
-            get {
-                return _isClipRichTextBoxFocused;
-            }
-            set {
-                //omitting duplicate check to enforce change in ui
-                //if (_isClipItemFocused != value) 
-                {
-                    _isClipRichTextBoxFocused = value;
-                    OnPropertyChanged(nameof(IsClipRichTextBoxFocused));
-                }
-            }
-        }
-
-        private bool _isClipItemFocused = false;
-        public bool IsClipItemFocused {
-            get {
-                return _isClipItemFocused;
-            }
-            set {
-                //omitting duplicate check to enforce change in ui
-                //if (_isClipItemFocused != value) 
-                {
-                    _isClipItemFocused = value;
-                    OnPropertyChanged(nameof(IsClipItemFocused));
-                }
-            }
-        }
-        #endregion
-
         #region Model
         public string DetailText {
             get {
@@ -1507,22 +1475,10 @@
                     case nameof(IsSelected):
                         if (IsSelected) {
                             if(RichTextBoxViewModelCollection.Count > 0) {
-                                RichTextBoxViewModelCollection.ResetSubSelection();
+                                RichTextBoxViewModelCollection.ClearSubSelection();
                             }
                             LastSelectedDateTime = DateTime.Now;
-                            //this check ensures that as user types in search that 
-                            //resetselection doesn't take the focus from the search box
-                            if (!MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
-                                IsClipItemFocused = true;
-                            }
-                        } else {
-                            //IsEditingTile = false;
-                            //IsEditingTemplate = false;
-                            //foreach(var rtbvm in RichTextBoxViewModelCollection) {
-                            //    rtbvm.IsEditingSubTitle = false;
-                            //}
-                            //IsPastingTemplateTile = false;
-                        }
+                        } 
                         RefreshCommands();
                         break;
                     case nameof(IsHovering):                        
@@ -1650,10 +1606,6 @@
             //};
             ClipBorder.PreviewMouseUp += (s, e9) => {
                 var ctvm = ((FrameworkElement)s).DataContext as MpClipTileViewModel;
-                if(ctvm.IsDroppingOntoNotepad) {
-                                     
-                }
-
                 ctvm.MouseDownPosition = new Point();
                 ctvm.IsClipDragging = false;
                 ctvm.DragDataObject = null;
@@ -1744,7 +1696,7 @@
 
                 MainWindowViewModel.ClipTrayViewModel.AutoScrollByMouse();
 
-                if(ctvm.IsDragDataThisTile(e1.Data)) { 
+                if(ctvm.IsDragDataInvalid(e1.Data)) { 
                     e1.Handled = true;
                     return;
                 }
@@ -2093,18 +2045,25 @@
         }
         #endregion       
 
-        public bool IsDragDataThisTile(IDataObject data) {
+        public bool IsDragDataInvalid(IDataObject data) {
+            if(CopyItemType == MpCopyItemType.Image || CopyItemType == MpCopyItemType.FileList) {
+                return true;
+            }
             if(data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName)) {
-                var drtbvml = (List<MpClipTileViewModel>)data.GetData(Properties.Settings.Default.ClipTileDragDropFormatName);
-                if(drtbvml.Count == 1 && drtbvml[0] == this) {
-                    return true;
+                var dctvml = (List<MpClipTileViewModel>)data.GetData(Properties.Settings.Default.ClipTileDragDropFormatName);
+                foreach(var dctvm in dctvml) {
+                    if(dctvm == this || 
+                       dctvm.CopyItemType == MpCopyItemType.Image || 
+                       dctvm.CopyItemType == MpCopyItemType.FileList) {
+                        return true;
+                    }
                 }
                 return false;
             } else if(data.GetDataPresent(Properties.Settings.Default.ClipTileSubItemDragDropFormat)) {
-                var dctvml = (List<MpRtbListBoxItemRichTextBoxViewModel>)data.GetData(Properties.Settings.Default.ClipTileSubItemDragDropFormat);
+                var drtbvml = (List<MpRtbListBoxItemRichTextBoxViewModel>)data.GetData(Properties.Settings.Default.ClipTileSubItemDragDropFormat);
                 if(RichTextBoxViewModelCollection.Count == 1 && 
-                   dctvml.Count == 1 && 
-                   RichTextBoxViewModelCollection[0] == dctvml[0]) {
+                   drtbvml.Count == 1 && 
+                   RichTextBoxViewModelCollection[0] == drtbvml[0]) {
                     return true;
                 }
                 return false;
@@ -2234,9 +2193,9 @@
                             forceIdx = Math.Min(this.RichTextBoxViewModelCollection.Count - 1, forceIdx);
                             this.RichTextBoxViewModelCollection.Move(this.RichTextBoxViewModelCollection.IndexOf(ortbvm), forceIdx);
                             this.RichTextBoxViewModelCollection.UpdateSortOrder();
-                            MainWindowViewModel.ClipTrayViewModel.ClearClipSelection();
-                            IsSelected = true;
-                            this.RichTextBoxViewModelCollection.ClearSubSelection();
+                            //MainWindowViewModel.ClipTrayViewModel.ClearClipSelection();
+                            //IsSelected = true;
+                            //this.RichTextBoxViewModelCollection.ClearSubSelection();
                             //ortbvm.IsSubSelected = true;
                             return;
                         } else {
@@ -2245,7 +2204,7 @@
                         }
                     }
                 }
-                CopyItem = await MpCopyItem.MergeAsync(oci, CopyItem, false, true, false, false, forceIdx, priority);                
+                CopyItem = await MpCopyItem.MergeAsync(oci, CopyItem, false, false, forceIdx, priority);                
                 //IsBusy = false;
             }
             MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();

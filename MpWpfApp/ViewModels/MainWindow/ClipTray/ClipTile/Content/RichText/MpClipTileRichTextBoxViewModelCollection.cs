@@ -406,7 +406,7 @@ namespace MpWpfApp {
         public void Refresh() {
             var sw = new Stopwatch();
             sw.Start();            
-            RichTextBoxListBox?.Items.Refresh();
+            //RichTextBoxListBox?.Items.Refresh();
             sw.Stop();
             //Console.WriteLine("Rtblb(HVIdx:"+MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles.IndexOf(HostClipTileViewModel)+") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }

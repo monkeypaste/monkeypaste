@@ -895,7 +895,6 @@ namespace MpWpfApp {
             set {
                 if(CopyItem.ItemColor.ColorBrush != value) {
                     CopyItem.ItemColor = new MpColor(((SolidColorBrush)value).Color);
-                    CopyItem.InitSwirl(null, true);
                     CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItem));
                 }
@@ -1063,9 +1062,9 @@ namespace MpWpfApp {
 
             if (HostClipTileViewModel.WasAddedAtRuntime) {
                 //force new items to have left alignment
-                Rtb.SelectAll();
-                Rtb.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
                 Rtb.CaretPosition = Rtb.Document.ContentStart;
+                Rtb.Document.TextAlignment = TextAlignment.Left;
+                Rtb.UpdateLayout();
             }
 
             RtbListBoxItemAdornerLayer = AdornerLayer.GetAdornerLayer(Rtbc);
@@ -1187,21 +1186,14 @@ namespace MpWpfApp {
             if (Rtb == null) {
                 return;
             }
-            Rtb.Focus();
-            Rtb.SelectAll();
-            var rtbAlignment = Rtb.Selection.GetPropertyValue(FlowDocument.TextAlignmentProperty);
-            if (rtbAlignment == null ||
-                rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}" ||
-                (TextAlignment)rtbAlignment == TextAlignment.Justify) {
-                Rtb.Selection.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
-            }
-
-
             Rtb.ScrollToHome();
             Rtb.CaretPosition = Rtb.Document.ContentStart;
             Rtb.Selection.Select(Rtb.Document.ContentStart, Rtb.Document.ContentStart);
 
             RichTextBoxViewModelCollection.UpdateLayout();
+            if(IsSubSelected) {
+                Rtb.Focus();
+            }
         }
 
         public new async Task<string> GetPastableRichText() {
@@ -1284,7 +1276,7 @@ namespace MpWpfApp {
                 if(linkType == MpSubTextTokenType.HexColor) {
                     linkType = MpSubTextTokenType.HexColor;
                 }
-                var mc = Regex.Matches(CopyItem.ItemPlainText, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+                var mc = Regex.Matches(Regex.Escape(CopyItem.ItemPlainText), regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
                 foreach (Match m in mc) {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {

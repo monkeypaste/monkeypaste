@@ -1133,5 +1133,14 @@ namespace MpWpfApp.Properties {
                 return ((int)(this["MaxRecentClipItems"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public int SearchBoxTypingDelayInMilliseconds {
+            get {
+                return ((int)(this["SearchBoxTypingDelayInMilliseconds"]));
+            }
+        }
     }
 }

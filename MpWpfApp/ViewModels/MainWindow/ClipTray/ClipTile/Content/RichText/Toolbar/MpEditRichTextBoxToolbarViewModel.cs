@@ -157,7 +157,7 @@ namespace MpWpfApp {
             var rtblbg = (Grid)rtblbgc.FindName("ClipTileRichTextboxListBoxContainerGrid");
             var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
             var ctttg = (Grid)cb.FindName("ClipTileTitleTextGrid");
-            var clipTray = MainWindowViewModel.ClipTrayViewModel.ClipTrayListView;
+            var clipTray = MainWindowViewModel.ClipTrayViewModel.ListBox;
             var clipTrayScrollViewer = clipTray.GetDescendantOfType<ScrollViewer>();
             var titleIconImageButton = (Button)cb.FindName("ClipTileAppIconImageButton");
             var titleSwirl = (Image)cb.FindName("TitleSwirl");
@@ -645,7 +645,7 @@ namespace MpWpfApp {
             EditToolbarBorder.Width += deltaWidth;
 
             if (ClipTileViewModel.IsEditingTile) {
-                MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.ScrollIntoView(ClipTileViewModel);
+                MainWindowViewModel.ClipTrayViewModel.ListBox.ScrollIntoView(ClipTileViewModel);
                 ClipTileViewModel.RichTextBoxViewModelCollection.ResetSubSelection();
                 //Rtb_SelectionChanged(this, new RoutedEventArgs());
             } else {
@@ -672,7 +672,7 @@ namespace MpWpfApp {
                 } else {
                     timer.Stop();
                     if (ClipTileViewModel.IsEditingTile) {
-                        MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.ScrollIntoView(ClipTileViewModel);
+                        MainWindowViewModel.ClipTrayViewModel.ListBox.ScrollIntoView(ClipTileViewModel);
                         ClipTileViewModel.RichTextBoxViewModelCollection.ResetSubSelection();
                         //Rtb_SelectionChanged(this, new RoutedEventArgs());
                     } else {

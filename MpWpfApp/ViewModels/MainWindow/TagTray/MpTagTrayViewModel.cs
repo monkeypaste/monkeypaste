@@ -142,7 +142,7 @@ namespace MpWpfApp {
                                     clipTile.TileVisibility = Visibility.Collapsed;
                                 }
                             }
-                            if (MainWindowViewModel.ClipTrayViewModel.ClipTrayListView != null) {
+                            if (MainWindowViewModel.ClipTrayViewModel.ListBox != null) {
                                 //this ensures visibility takes affect if filtering by app
                                 //MainWindowViewModel.ClipTrayViewModel.GetTray().Items.Refresh();
                             }

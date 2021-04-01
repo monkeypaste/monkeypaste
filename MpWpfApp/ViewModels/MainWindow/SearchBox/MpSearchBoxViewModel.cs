@@ -19,7 +19,6 @@ using System.Windows.Threading;
 namespace MpWpfApp {
     public class MpSearchBoxViewModel : MpViewModelBase {
         #region Private Variables
-        private TextBox _searchTextBox = null;
         #endregion
 
         #region Events
@@ -31,6 +30,10 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties     
+
+        #region Controls
+        public TextBox SearchTextBox { get; set; } = null;
+        #endregion
 
         #region SearchBy Property Settings
         private bool _searchByIsCaseSensitive = Properties.Settings.Default.SearchByIsCaseSensitive;
@@ -330,34 +333,45 @@ namespace MpWpfApp {
         #endregion
 
         #region Public Methods
-        public MpSearchBoxViewModel() : base() { }
+        public MpSearchBoxViewModel() : base() {
+            var timer = new DispatcherTimer();
+            timer.Interval = new TimeSpan(0, 0, 0, 0, Properties.Settings.Default.SearchBoxTypingDelayInMilliseconds);
+            timer.Tick += (s, e) => {
+                PerformSearchCommand.Execute(null);
+                timer.Stop();
+            };
+            PropertyChanged += (s, e7) => {
+                switch (e7.PropertyName) {
+                    case nameof(Text):
+                        timer.Stop();
+                        timer.Start();
+                        break;
+                }
+            };
+        }
 
         public void SearchBoxBorder_Loaded(object sender, RoutedEventArgs args) {
             var searchBorder = (MpClipBorder)sender;
-            var searchBox = (TextBox)searchBorder.FindName("SearchBox");
+            SearchTextBox = (TextBox)searchBorder.FindName("SearchBox");
             var searchByButton = (Button)searchBorder.FindName("SearchDropDownButton");
             var clearSearchBoxButton = (Button)searchBorder.FindName("ClearTextBoxButton");
-            _searchTextBox = searchBox;
-            searchBox.GotFocus += (s, e4) => {
+            SearchTextBox.GotFocus += (s, e4) => {
                 if (!HasText) {
                     Text = string.Empty;
                 }
 
                 IsTextBoxFocused = true;
-                //MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();
+                MainWindowViewModel.ClipTrayViewModel.ResetClipSelection(false);
                 OnPropertyChanged(nameof(TextBoxFontStyle));
                 OnPropertyChanged(nameof(TextBoxTextBrush));
             };
 
-            searchBox.LostFocus += (s, e5) => {
+            SearchTextBox.LostFocus += (s, e5) => {
                 IsTextBoxFocused = false;
                 if (!HasText) {
                     Text = Properties.Settings.Default.SearchPlaceHolderText;
                 }
             };
-            //if (string.IsNullOrEmpty(Text)) {
-            //    Text = Properties.Settings.Default.SearchPlaceHolderText;
-            //}
 
             searchByButton.PreviewMouseDown += (s, e3) => {
                 var searchByContextMenu = new ContextMenu();
@@ -418,26 +432,7 @@ namespace MpWpfApp {
                 searchByButton.ContextMenu = searchByContextMenu;
                 searchByContextMenu.PlacementTarget = searchBorder;
                 searchByContextMenu.IsOpen = true;
-            };
-
-            var timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0,0,0,0,500);
-            timer.Tick += (s, e) => {
-                PerformSearchCommand.Execute(null);
-                timer.Stop();
-            };
-            PropertyChanged += (s, e7) => {
-                switch (e7.PropertyName) {
-                    case nameof(Text):
-                        timer.Stop();
-                        timer.Start();
-                        break;
-                }
-            };
-        }
-
-        public TextBox GetSearchTextBox() {
-            return _searchTextBox;
+            };       
         }
         #endregion
 
@@ -473,26 +468,48 @@ namespace MpWpfApp {
         private void ClearText() {
             Text = string.Empty;
             SearchText = Text;
-            _searchTextBox.Focus();
+            SearchTextBox.Focus();
             //MainWindowViewModel.ClipTrayViewModel.Refresh();
             //IsSearching = true;
         }
 
-        private RelayCommand _performSearchCommand;
-        public ICommand PerformSearchCommand {
+        private AsyncCommand _performSearchCommand;
+        public IAsyncCommand PerformSearchCommand {
             get {
                 if(_performSearchCommand == null) {
-                    _performSearchCommand = new RelayCommand(PerformSearch);
+                    _performSearchCommand = new AsyncCommand(PerformSearch);
                 }
                 return _performSearchCommand;
             }
         }
-        private void PerformSearch() {
+        private async Task PerformSearch() {
             SearchText = Text;
             if(!HasText) {
                 IsTextValid = true;
             }
-            //IsSearching = true;
+            var ct = MainWindowViewModel.ClipTrayViewModel;
+            //wait till all highlighting is complete then hide non-matching tiles at the same time
+            var newVisibilityDictionary = new Dictionary<MpClipTileViewModel, Visibility>();
+            bool showMatchNav = false;
+            foreach (var ctvm in ct) {
+                var newVisibility = await ctvm.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(SearchText);
+                newVisibilityDictionary.Add(ctvm, newVisibility);
+                if (ctvm.HighlightTextRangeViewModelCollection.Count > 1) {
+                    showMatchNav = true;
+                }
+            }
+            if (ct.IsAnyTileExpanded) {
+                if (HasText) {
+                    IsTextValid = ct.SelectedClipTiles[0].HighlightTextRangeViewModelCollection.Count > 0;
+                } else {
+                    IsTextValid = true;
+                }
+            } else {
+                foreach (var kvp in newVisibilityDictionary) {
+                    kvp.Key.TileVisibility = kvp.Value;
+                }
+            }
+            SearchNavigationButtonPanelVisibility = showMatchNav ? Visibility.Visible : Visibility.Collapsed;
         }
         
         private RelayCommand _nextMatchCommand;

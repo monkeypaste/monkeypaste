@@ -134,6 +134,9 @@ namespace MpWpfApp {
                                     break;
                             }
                         }
+                        if(IsSelected && IsTitleRange && ctvm is MpRtbListBoxItemRichTextBoxViewModel) {
+                            ((MpRtbListBoxItemRichTextBoxViewModel)ctvm).IsSubSelected = false;
+                        }
                         break;
                 }
             };

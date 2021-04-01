@@ -335,13 +335,7 @@ namespace MpWpfApp {
             //if tag is created at runtime show tbox w/ all selected
             if (IsNew) {
                 RenameTagCommand.Execute(null);
-            } else {
-                foreach (MpClipTileViewModel ctvm in MainWindowViewModel.ClipTrayViewModel) {
-                    if (IsLinkedWithClipTile(ctvm)) {
-                        TagClipCount++;
-                    }
-                }
-            }
+            } 
         }
 
         public void TagTile_ContextMenu_Loaded(object sender, RoutedEventArgs e) {

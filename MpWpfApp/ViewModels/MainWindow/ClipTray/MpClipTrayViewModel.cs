@@ -101,8 +101,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Controls
-        public MpMultiSelectListView ClipTrayListView;
-
         public Grid ClipTrayContainerGrid;
 
         public VirtualizingStackPanel ClipTrayVirtualizingStackPanel;
@@ -388,55 +386,23 @@ namespace MpWpfApp {
         }
 
         public void ClipTray_Loaded(object sender, RoutedEventArgs e) {
-            MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.PropertyChanged += async (s, e8) => {
-                switch (e8.PropertyName) {
-                    case nameof(MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.SearchText):
-                        var hlt = MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.SearchBoxViewModel.SearchText;
-
-                        //wait till all highlighting is complete then hide non-matching tiles at the same time
-                        var newVisibilityDictionary = new Dictionary<MpClipTileViewModel, Visibility>();
-                        bool showMatchNav = false;
-                        foreach (MpClipTileViewModel ctvm in this) {
-                            var newVisibility = await ctvm.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(hlt);
-                            newVisibilityDictionary.Add(ctvm, newVisibility);
-                            if (ctvm.HighlightTextRangeViewModelCollection.Count > 1) {
-                                showMatchNav = true;
-                            } 
-                        }
-                        if (IsAnyTileExpanded) {
-                            if(MainWindowViewModel.SearchBoxViewModel.HasText) {
-                                MainWindowViewModel.SearchBoxViewModel.IsTextValid = SelectedClipTiles[0].HighlightTextRangeViewModelCollection.Count > 0;
-                            } else {
-                                MainWindowViewModel.SearchBoxViewModel.IsTextValid = true;
-                            }
-                            
-                        } else {
-                            foreach (var kvp in newVisibilityDictionary) {
-                                kvp.Key.TileVisibility = kvp.Value;
-                            }
-                        }
-                        MainWindowViewModel.SearchBoxViewModel.SearchNavigationButtonPanelVisibility = showMatchNav ? Visibility.Visible : Visibility.Collapsed;
-                        break;
-                }
-            };
-
-            ClipTrayListView = (MpMultiSelectListView)sender;
-            ListBox = ClipTrayListView;
+            ListBox = (MpMultiSelectListView)sender;
+            ListBox = ListBox;
             IsHorizontal = true;
 
-            ScrollViewer = ClipTrayListView.GetDescendantOfType<ScrollViewer>();
+            ScrollViewer = ListBox.GetDescendantOfType<ScrollViewer>();
             ScrollViewer.Margin = new Thickness(5, 0, 5, 0);
-            ClipTrayContainerGrid = ClipTrayListView.GetVisualAncestor<Grid>();
+            ClipTrayContainerGrid = ListBox.GetVisualAncestor<Grid>();
 
-            ClipTrayAdornerLayer = AdornerLayer.GetAdornerLayer(ClipTrayListView);
-            ClipTrayAdornerLayer.Add(new MpClipTrayAdorner(ClipTrayListView));
+            ClipTrayAdornerLayer = AdornerLayer.GetAdornerLayer(ListBox);
+            ClipTrayAdornerLayer.Add(new MpClipTrayAdorner(ListBox));
 
             #region Drag/Drop            
-            ClipTrayListView.DragLeave += (s2, e1) => {
+            ListBox.DragLeave += (s2, e1) => {
                 IsTrayDropping = false;
                 ClipTrayAdornerLayer.Update();
             };
-            ClipTrayListView.DragOver += (s2, e1) => {
+            ListBox.DragOver += (s2, e1) => {
                 IsTrayDropping = false;
                 e1.Effects = DragDropEffects.None;
                 ClipTrayAdornerLayer.Update();
@@ -446,7 +412,7 @@ namespace MpWpfApp {
                 AutoScrollByMouse();
                 if (e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName) ||
                     e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileSubItemDragDropFormat)) {
-                    //int overIdx = GetDropIdx(e1.GetPosition(ClipTrayListView));
+                    //int overIdx = GetDropIdx(e1.GetPosition(ListBox));
                     //int dropIdx = this.GetIndexUnderDragCursor(e1.GetPosition(ListBox));
                     int dropIdx = GetDropIdx(MpHelpers.Instance.GetMousePosition(ListBox));
                     if (dropIdx >= 0/* && (dropIdx >= this.Count || (dropIdx < this.Count && !this[dropIdx].IsClipOrAnySubItemDragging))*/) {
@@ -459,7 +425,7 @@ namespace MpWpfApp {
                 ClipTrayAdornerLayer.Update();
             };
 
-            ClipTrayListView.Drop += (s3, e2) => {
+            ListBox.Drop += (s3, e2) => {
                 if(!IsTrayDropping) {
                     return;
                 }
@@ -539,7 +505,7 @@ namespace MpWpfApp {
             };
             #endregion
 
-            ClipTrayListView.SelectionChanged += (s, e8) => {
+            ListBox.SelectionChanged += (s, e8) => {
                 MergeClipsCommandVisibility = MergeSelectedClipsCommand.CanExecute(null) ? Visibility.Visible : Visibility.Collapsed;
 
                 MainWindowViewModel.TagTrayViewModel.UpdateTagAssociation();
@@ -566,8 +532,8 @@ namespace MpWpfApp {
                 }
             };
 
-            ClipTrayListView.MouseLeftButtonDown += (s, e9) => {
-                var ht = VisualTreeHelper.HitTest(ClipTrayListView, e9.GetPosition(ClipTrayListView));
+            ListBox.MouseLeftButtonDown += (s, e9) => {
+                var ht = VisualTreeHelper.HitTest(ListBox, e9.GetPosition(ListBox));
                 if (!IsAnyTileExpanded) {
                     return;
                 }
@@ -635,7 +601,7 @@ namespace MpWpfApp {
         public void AutoScrollByMouse() {
             double minScrollDist = 20;
             double autoScrollOffset = 15;
-            var mp = MpHelpers.Instance.GetMousePosition(ClipTrayListView);
+            var mp = MpHelpers.Instance.GetMousePosition(ListBox);
             double leftDiff = MpHelpers.Instance.DistanceBetweenValues(mp.X, 0);
             double rightDiff = MpHelpers.Instance.DistanceBetweenValues(mp.X, MainWindowViewModel.ClipTrayWidth);
             if (leftDiff < minScrollDist) {
@@ -774,21 +740,20 @@ namespace MpWpfApp {
             ///OnPropertyChanged(nameof(SelectedClipTiles));
         }
 
-        public void ResetClipSelection() {
-            ClearClipSelection();
+        public void ResetClipSelection(bool clearEditing = true) {
+            ClearClipSelection(clearEditing);
 
             if (VisibileClipTiles.Count > 0) {
                 VisibileClipTiles[0].IsSelected = true;
                 if(!MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
-                    VisibileClipTiles[0].IsClipItemFocused = true;
-                    if(ClipTrayListView != null) {
-                        //ClipTrayListView.ScrollIntoView(VisibileClipTiles[0]);
+                    if(ListBox != null) {
+                        //ListBox.ScrollIntoView(VisibileClipTiles[0]);
                         //ScrollViewer.ScrollToHorizontalOffset(0);
                         //ScrollViewer.InvalidateArrange();
                         //ScrollViewer.InvalidateScrollInfo();
 
-                        //ClipTrayListView.AnimatedScrollViewer.ScrollToHorizontalOffset(0);
-                        ((ListViewItem)ClipTrayListView.ItemContainerGenerator.ContainerFromItem(VisibileClipTiles[0]))?.Focus();
+                        //ListBox.AnimatedScrollViewer.ScrollToHorizontalOffset(0);
+                        ((ListViewItem)ListBox.ItemContainerGenerator.ContainerFromItem(VisibileClipTiles[0]))?.Focus();
                     }
                 }
             }
@@ -859,7 +824,7 @@ namespace MpWpfApp {
                     Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
                 }
                 //MainWindowViewModel.TagTrayViewModel.AddClipToSudoTags(nctvm);
-                //ClipTrayListView.Items.Refresh();
+                //ListBox.Items.Refresh();
             }
             ResetClipSelection();
 
@@ -871,7 +836,7 @@ namespace MpWpfApp {
         public void Refresh() {
             var sw = new Stopwatch();
             sw.Start();
-            ClipTrayListView?.Items.Refresh();
+            //ListBox?.Items.Refresh();
             sw.Stop();
             Console.WriteLine("ClipTray Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
@@ -1297,7 +1262,7 @@ namespace MpWpfApp {
                                 this.Move(this.IndexOf(sctvm), 0);
                                 sctvm.IsSelected = true;                                
                             }
-                            ClipTrayListView.ScrollIntoView(SelectedClipTiles[0]);
+                            ListBox.ScrollIntoView(SelectedClipTiles[0]);
                         }));
             }
             finally {
@@ -1340,7 +1305,7 @@ namespace MpWpfApp {
                                 this.Move(this.IndexOf(sctvm), this.Count - 1);
                                 sctvm.IsSelected = true;
                             }
-                            ClipTrayListView.ScrollIntoView(SelectedClipTiles[SelectedClipTiles.Count-1]);
+                            ListBox.ScrollIntoView(SelectedClipTiles[SelectedClipTiles.Count-1]);
                         }));
             } finally {
                 IsBusy = false;

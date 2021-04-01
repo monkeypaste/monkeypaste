@@ -146,12 +146,7 @@ namespace MpWpfApp {
 
             var result = await PerformHighlightAsync(hlt);
             HighlightTaskCount--;
-            //var thisAsList = this.ToList();
-            //thisAsList.Sort(CompareHighlightRanges);
-            //this.Clear();
-            //foreach(var hltrvm in thisAsList) {
-            //    this.Insert(this.Count - 1, hltrvm);
-            //}
+
             return result;
         }
         
@@ -159,7 +154,6 @@ namespace MpWpfApp {
             var result = Visibility.Visible;
             await Dispatcher.CurrentDispatcher.InvokeAsync(
                 (Action)(() => {
-                    //var cb = ClipTileViewModel.ClipBorder;
                     var ttb = ClipTileViewModel.TitleTextBlock;
 
                     RegexOptions rot = RegexOptions.None;
@@ -171,12 +165,17 @@ namespace MpWpfApp {
                         rot = RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture;
                         roc = RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.Multiline;
                     }
-                    var mct = Regex.Matches(ClipTileViewModel.CopyItemTitle, hlt, rot);
-                    var mcc = Regex.Matches(ClipTileViewModel.CopyItemPlainText, hlt, roc);
-                    var mcan = Regex.Matches(ClipTileViewModel.CopyItemAppName, hlt, roc);
-                    var mcap = Regex.Matches(ClipTileViewModel.CopyItemAppPath, hlt, roc);
+                    int tc = Regex.Matches(Regex.Escape(ClipTileViewModel.CopyItemTitle), hlt, rot).Count;
+                    if (ClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
+                        foreach (var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {
+                            tc += Regex.Matches(Regex.Escape(rtbvm.CopyItemTitle), hlt, rot).Count;
+                        }
+                    }
+                    int cc = Regex.Matches(Regex.Escape(ClipTileViewModel.CopyItemPlainText), hlt, roc).Count;
+                    int anc = Regex.Matches(Regex.Escape(ClipTileViewModel.CopyItemAppName), hlt, roc).Count;
+                    int apc = Regex.Matches(Regex.Escape(ClipTileViewModel.CopyItemAppPath), hlt, roc).Count;
 
-                    if (mct.Count == 0 && mcc.Count == 0 && mcan.Count == 0 && mcap.Count == 0) {                        
+                    if (tc == 0 && cc == 0 && anc == 0 && apc == 0) {                        
                         result = Visibility.Collapsed;
                         return;
                     }
@@ -184,15 +183,21 @@ namespace MpWpfApp {
                     Console.WriteLine("Beginning highlight clip with title: " + ClipTileViewModel.CopyItemTitle + " with highlight text: " + hlt);
 
                     //highlight title 
-                    if(Properties.Settings.Default.SearchByTitle) {
-                        if (ttb != null && mct.Count > 0) {
+                    if(Properties.Settings.Default.SearchByTitle && tc > 0) {
+                        if (ttb != null) {
                             var trl = MpHelpers.Instance.FindStringRangesFromPosition(ttb.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
                             foreach (var mr in trl) {
                                 this.Add(new MpHighlightTextRangeViewModel(ClipTileViewModel, mr, (int)MpHighlightType.Title));
                             }
-                        } else if (ttb == null) {
-                            //
-                        }
+                            if(ClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
+                                foreach(var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {
+                                    var strl = MpHelpers.Instance.FindStringRangesFromPosition(rtbvm.RtbListBoxItemTitleTextBlock.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
+                                    foreach (var mr in strl) {
+                                        this.Add(new MpHighlightTextRangeViewModel(ClipTileViewModel, mr, (int)MpHighlightType.Title));
+                                    }
+                                }
+                            }
+                        } 
                     }
                     bool wasAppNameHighlighted = false;
                     if(Properties.Settings.Default.SearchByApplicationName) {
@@ -219,7 +224,7 @@ namespace MpWpfApp {
                                     var rtbvm = ClipTileViewModel.RichTextBoxViewModelCollection[i];
                                     var rtbvmtrl = MpHelpers.Instance.FindStringRangesFromPosition(rtbvm.Rtb.Document.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
                                     foreach (var mr in rtbvmtrl) {
-                                        this.Add(new MpHighlightTextRangeViewModel(ClipTileViewModel, mr, i));
+                                        this.Add(new MpHighlightTextRangeViewModel(rtbvm, mr, i));
                                     }
                                 }
                             }
@@ -348,7 +353,7 @@ namespace MpWpfApp {
                 if (_selectPreviousMatchCommand == null) {
                     _selectPreviousMatchCommand = new RelayCommand(SelectPreviousMatch, CanSelectPreviousMatch);
                 }
-                return _selectNextMatchCommand;
+                return _selectPreviousMatchCommand;
             }
         }
         private bool CanSelectPreviousMatch() {

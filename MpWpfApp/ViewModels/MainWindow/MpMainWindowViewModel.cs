@@ -371,8 +371,8 @@ namespace MpWpfApp {
             //    //Console.WriteLine("Expanding tile post fade event");
             //    ClipTrayVirtualizingStackPanel.HorizontalAlignment = HorizontalAlignment.Center;
 
-            //    //var listBoxItem = (ListBoxItem)ClipTrayListView.ItemContainerGenerator.ContainerFromItem(ctvmToExpand);
-            //    //double sx = listBoxItem.TranslatePoint(new Point(0.0, 0.0), ClipTrayListView).X;
+            //    //var listBoxItem = (ListBoxItem)ListBox.ItemContainerGenerator.ContainerFromItem(ctvmToExpand);
+            //    //double sx = listBoxItem.TranslatePoint(new Point(0.0, 0.0), ListBox).X;
             //    //_originalExpandedTileX = sx;
             //    //double trayMidX = MainWindowViewModel.ClipTrayWidth / 2;
             //    //double ex = trayMidX - (ctvmToExpand.TileBorderMaxWidth / 2);
@@ -438,9 +438,9 @@ namespace MpWpfApp {
 
 
 
-            //var listBoxItem = (ListBoxItem)ClipTrayListView.ItemContainerGenerator.ContainerFromItem(ctvmToShrink);
-            //double sx = listBoxItem.TranslatePoint(new Point(0.0, 0.0), ClipTrayListView).X;
-            ////double trayMidX = ClipTrayListView.ActualWidth / 2;
+            //var listBoxItem = (ListBoxItem)ListBox.ItemContainerGenerator.ContainerFromItem(ctvmToShrink);
+            //double sx = listBoxItem.TranslatePoint(new Point(0.0, 0.0), ListBox).X;
+            ////double trayMidX = ListBox.ActualWidth / 2;
             //double tw = ctvmToShrink.TileBorderMinWidth;
             //double ex = Math.Max(((_expandedTileVisibleIdx-1) * tw),0);
 
@@ -597,9 +597,9 @@ namespace MpWpfApp {
                     if (!char.IsControl(e.KeyChar)) {
                         foreach (var scvm in MpShortcutCollectionViewModel.Instance) {
                         }
-                        if (!SearchBoxViewModel.GetSearchTextBox().IsFocused) {
-                            SearchBoxViewModel.GetSearchTextBox().Text = e.KeyChar.ToString();
-                            SearchBoxViewModel.GetSearchTextBox().Focus();
+                        if (!SearchBoxViewModel.SearchTextBox.IsFocused) {
+                            SearchBoxViewModel.SearchTextBox.Text = e.KeyChar.ToString();
+                            SearchBoxViewModel.SearchTextBox.Focus();
                         }
                     }
                 };

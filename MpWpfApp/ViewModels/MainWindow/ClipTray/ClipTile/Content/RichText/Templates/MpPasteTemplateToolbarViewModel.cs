@@ -275,7 +275,7 @@ namespace MpWpfApp {
             var cb = (MpClipBorder)pasteTemplateToolbarBorder.GetVisualAncestor<MpClipBorder>();
             var editRichTextToolbarBorder = (Border)cb.FindName("ClipTileEditorToolbar");
             var editTemplateToolbarBorder = (Border)cb.FindName("ClipTileEditTemplateToolbar");
-            var clipTray = MainWindowViewModel.ClipTrayViewModel.ClipTrayListView;
+            var clipTray = MainWindowViewModel.ClipTrayViewModel.ListBox;
             var rtbc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxGridContainerCanvas");
             var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
             var ctttg = (Grid)cb.FindName("ClipTileTitleTextGrid");
@@ -457,7 +457,7 @@ namespace MpWpfApp {
             //Canvas.SetTop(_borderGrid.GetVisualAncestor<Border>(), PasteTemplateBorderCanvasTop);
            // _borderGrid.UpdateLayout();
 
-            MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.ScrollIntoView(ClipTileViewModel);
+            MainWindowViewModel.ClipTrayViewModel.ListBox.ScrollIntoView(ClipTileViewModel);
             if (ClipTileViewModel.IsPastingTemplate) {
                 OnPropertyChanged(nameof(UniqueTemplateHyperlinkViewModelListByDocOrder));
                 OnPropertyChanged(nameof(PasteTemplateNavigationButtonStackVisibility));
@@ -472,7 +472,7 @@ namespace MpWpfApp {
                 //SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
                 //SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
                 ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Collapsed;
-                MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.AnimatedScrollViewer.ScrollToHome();
+                MainWindowViewModel.ClipTrayViewModel.ScrollViewer.ScrollToHome();
             }
         }
             public void Animate(
@@ -492,7 +492,7 @@ namespace MpWpfApp {
                     PasteTemplateBorderCanvasTop += dt;
                 } else {
                     timer.Stop();
-                    MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.ScrollIntoView(ClipTileViewModel);
+                    MainWindowViewModel.ClipTrayViewModel.ListBox.ScrollIntoView(ClipTileViewModel);
                     if (ClipTileViewModel.IsPastingTemplate) {
                         OnPropertyChanged(nameof(UniqueTemplateHyperlinkViewModelListByDocOrder));
                         OnPropertyChanged(nameof(PasteTemplateNavigationButtonStackVisibility));
@@ -507,7 +507,7 @@ namespace MpWpfApp {
                         //SelectedTemplate = UniqueTemplateHyperlinkViewModelListByDocOrder[0];
                         //SetTemplate(UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
                         ClipTileViewModel.PasteTemplateToolbarVisibility = Visibility.Collapsed;
-                        MainWindowViewModel.ClipTrayViewModel.ClipTrayListView.AnimatedScrollViewer.ScrollToHome();
+                        MainWindowViewModel.ClipTrayViewModel.ScrollViewer.ScrollToHome();
                     }
 
                     if (onCompleted != null) {
