@@ -1263,7 +1263,7 @@ namespace MpWpfApp {
             var rtbSelection = Rtb?.Selection.Clone();
             for (int i = 0; i < regExGroupList.Count; i++) {
                 var linkType = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);                
-                if (linkType == MpSubTextTokenType.StreetAddress) {
+                if (linkType == MpSubTextTokenType.StreetAddress) {//sup
                     //doesn't consistently work and presents bugs so disabling for now
                     continue;
                 }
