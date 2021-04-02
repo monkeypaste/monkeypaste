@@ -1271,7 +1271,7 @@
                                               Data="{Binding}" />
                     </Grid.Resources>
                     <AdornerDecorator>
-                        <local:MpMultiSelectListView x:Name="ClipTray"
+                        <local:MpMultiSelectListBox x:Name="ClipTray"
                                                      DataContext="{Binding}"
                                                      ItemsSource="{Binding}"
                                                      Visibility="{Binding ClipTrayVisibility}"
@@ -1298,11 +1298,11 @@
                                                         TargetObject="{Binding}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
-                            <local:MpMultiSelectListView.InputBindings>
+                            <local:MpMultiSelectListBox.InputBindings>
                                 <KeyBinding Gesture="Ctrl+A"
                                             Command="{Binding SelectAllCommand}" />
-                            </local:MpMultiSelectListView.InputBindings>
-                            <local:MpMultiSelectListView.ItemContainerStyle>
+                            </local:MpMultiSelectListBox.InputBindings>
+                            <local:MpMultiSelectListBox.ItemContainerStyle>
                                 <Style TargetType="{x:Type ListBoxItem}">
                                     <Setter Property="IsSelected"
                                             Value="{Binding IsSelected}" />
@@ -1325,8 +1325,8 @@
                                         </Setter.Value>
                                     </Setter>
                                 </Style>
-                            </local:MpMultiSelectListView.ItemContainerStyle>
-                            <local:MpMultiSelectListView.ItemsPanel>
+                            </local:MpMultiSelectListBox.ItemContainerStyle>
+                            <local:MpMultiSelectListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <VirtualizingStackPanel x:Name="ClipTrayVirtualizingStackPanel"
                                                             IsItemsHost="True"
@@ -1342,8 +1342,8 @@
                                         </i:Interaction.Triggers>
                                     </VirtualizingStackPanel>
                                 </ItemsPanelTemplate>
-                            </local:MpMultiSelectListView.ItemsPanel>
-                            <local:MpMultiSelectListView.ItemTemplate>
+                            </local:MpMultiSelectListBox.ItemsPanel>
+                            <local:MpMultiSelectListBox.ItemTemplate>
                                 <DataTemplate>
                                     <!-- Clip Tile -->
                                     <local:MpClipBorder x:Name="ClipTileClipBorder"
@@ -2663,8 +2663,8 @@
                                         </Grid>
                                     </local:MpClipBorder>
                                 </DataTemplate>
-                            </local:MpMultiSelectListView.ItemTemplate>
-                        </local:MpMultiSelectListView>
+                            </local:MpMultiSelectListBox.ItemTemplate>
+                        </local:MpMultiSelectListBox>
                     </AdornerDecorator>
                     <TextBlock x:Name="EmptyListTextBlock"
                                Text="This list has no items"

@@ -697,9 +697,7 @@ namespace MpWpfApp {
             if (IsLoading) {
                 IsLoading = false;
                 ClipTileSortViewModel.SelectedSortType = ClipTileSortViewModel.SortTypes[0];
-                //ClipTrayViewModel.HideVisibleTiles(1);
-            } else {                
-                ResetTraySelection();
+            } else {
             }
 
             double tt = Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
@@ -714,7 +712,6 @@ namespace MpWpfApp {
                     MainWindowGridTop += dt;
                 } else {
                     timer.Stop();
-                    //IsMainWindowOpen = true;
                 }
             };
             timer.Start();

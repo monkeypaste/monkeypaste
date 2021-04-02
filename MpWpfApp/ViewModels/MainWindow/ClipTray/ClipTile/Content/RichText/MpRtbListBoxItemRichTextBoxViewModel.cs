@@ -513,6 +513,7 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+
         private bool _isOverDragButton = false;
         public bool IsOverDragButton {
             get {
@@ -940,6 +941,9 @@ namespace MpWpfApp {
                         //if(!IsSubSelected && IsEditingSubTitle) {
                         //    IsEditingSubTitle = false;
                         //}
+                        if(HostClipTileViewModel.IsClipDragging) {
+                            return;
+                        }
                         if(IsSubSelected) {
                             if (HostClipTileViewModel.IsExpanded) {
                                 foreach (var rtbvm in RichTextBoxViewModelCollection) {
@@ -1018,7 +1022,14 @@ namespace MpWpfApp {
             #region Drag & Drop
             var mouseDownPosition = new Point();
             int minDragDist = 10;
+            DragButton.PreviewGiveFeedback += (s, e3) => {
+                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
+                    Application.Current.MainWindow.Cursor = Cursors.Cross;
+                    Application.Current.MainWindow.ForceCursor = true;
+                } 
+            };
             DragButton.PreviewMouseUp += (s, e9) => {
+                Application.Current.MainWindow.ForceCursor = false;
                 mouseDownPosition = new Point();
                 _dragDataObject = null;
                 IsSubDragging = false;

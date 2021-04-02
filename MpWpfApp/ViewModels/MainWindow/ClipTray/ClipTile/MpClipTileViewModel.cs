@@ -34,6 +34,7 @@
         #endregion
 
         #region Statics
+
         #endregion
 
         #region Properties
@@ -782,7 +783,8 @@
 
         public Brush TileBorderBrush {
             get {
-                if (IsPrimarySelected) {
+                if (MainWindowViewModel.ClipTrayViewModel.PrimarySelectedClipTile == this &&
+                    MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count > 1) {
                     return Brushes.Blue;
                 }
                 if (IsSelected) {
@@ -1013,20 +1015,20 @@
             }
         }
 
-        private bool _isPrimarySelected = false;
-        public bool IsPrimarySelected {
-            get {
-                return _isPrimarySelected;
-            }
-            set {
-                if (_isPrimarySelected != value) {
-                    _isPrimarySelected = value;
-                    OnPropertyChanged(nameof(IsPrimarySelected));
-                    OnPropertyChanged(nameof(TileBorderBrush));
-                    OnPropertyChanged(nameof(TileBorderBrushRect));
-                }
-            }
-        }
+        //private bool _isPrimarySelected = false;
+        //public bool IsPrimarySelected {
+        //    get {
+        //        return _isPrimarySelected;
+        //    }
+        //    set {
+        //        if (_isPrimarySelected != value) {
+        //            _isPrimarySelected = value;
+        //            OnPropertyChanged(nameof(IsPrimarySelected));
+        //            OnPropertyChanged(nameof(TileBorderBrush));
+        //            OnPropertyChanged(nameof(TileBorderBrushRect));
+        //        }
+        //    }
+        //}
 
         private bool _isSelected = false;
         public bool IsSelected {
@@ -1034,10 +1036,12 @@
                 return _isSelected;
             }
             set {
-                if (_isSelected != value && (!MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded || IsExpanded || (!IsExpanded && value == false))) {
+                if (_isSelected != value) 
+                    {
+                    // && (!MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded || IsExpanded || (!IsExpanded && value == false))) {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
-                    MainWindowViewModel.ClipTrayViewModel.OnPropertyChanged(nameof(MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles));
+                    //MainWindowViewModel.ClipTrayViewModel.OnPropertyChanged(nameof(MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles));
                     OnPropertyChanged(nameof(ToolTipVisibility));
                     OnPropertyChanged(nameof(TileBorderBrush));
                     OnPropertyChanged(nameof(DetailTextColor));
@@ -1310,7 +1314,7 @@
                 OnPropertyChanged(nameof(AppIconHighlightBorderVisibility));
                 if (HighlightTextRangeViewModelCollection.HasAppMatch) {
                     if (HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel != null &&
-                       HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.IsAppRange) {
+                       HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.HighlightType == MpHighlightType.App) {
                         return CopyItem.App.IconSelectedHighlightBorderImage;
                     }
                     return CopyItem.App.IconHighlightBorderImage;
@@ -1477,8 +1481,11 @@
                             if(RichTextBoxViewModelCollection.Count > 0) {
                                 RichTextBoxViewModelCollection.ClearSubSelection();
                             }
-                            LastSelectedDateTime = DateTime.Now;
-                        } 
+                            //LastSelectedDateTime = DateTime.Now;
+                        } else {
+                            //LastSelectedDateTime = DateTime.MaxValue;
+                        }
+                        
                         RefreshCommands();
                         break;
                     case nameof(IsHovering):                        
@@ -1545,14 +1552,7 @@
                 ci.WriteToDatabase();
                 _wasAddedAtRuntime = true;
             }
-            //if (ci.CopyItemType == MpCopyItemType.RichText) {
-            //    if (RichTextBoxViewModelCollection.Count == 0) {
-            //        RichTextBoxViewModelCollection.Add(new MpRtbListBoxItemRichTextBoxViewModel(this, ci));
-            //        OnPropertyChanged(nameof(CopyItem));
-            //    }
-            //} else {
-            //    CopyItem = ci;
-            //}
+
             CopyItem = ci;
 
             TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
@@ -1562,17 +1562,10 @@
             PasteTemplateToolbarViewModel = new MpPasteTemplateToolbarViewModel(this);
             HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
 
-            if (MainWindowViewModel != null) {
-                //is null during loading and the refresh isn't needed
-                //MainWindowViewModel.ClipTrayViewModel.Refresh();
-            }
         }
 
         #region Loading Initializers
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
-            //if (ClipBorder != null || ((MpClipBorder)sender).DataContext.GetType().ToString() == "MS.Internal.NamedObject") {
-            //    return;
-            //}
             ClipBorder = (MpClipBorder)sender;
             ClipBorderTranslateTransform = (TranslateTransform)ClipBorder.FindName("ClipTileBorderTranslateTransform");
             ClipTileSelectionOverlayGrid = (Grid)ClipBorder.FindName("ClipTileSelectionOverlayGrid");
@@ -1599,12 +1592,17 @@
             
             int minDragDist = 5;
             //ClipBorder.PreviewGiveFeedback += (s, e3) => {
-
+            //    var ctvm = ((FrameworkElement)s).DataContext as MpClipTileViewModel;
+            //    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
+            //        Application.Current.MainWindow.Cursor = Cursors.Cross; 
+            //        Application.Current.MainWindow.ForceCursor = true;
+            //    }
             //};
             //ClipBorder.PreviewQueryContinueDrag += (s, e3) => {
-                
+
             //};
             ClipBorder.PreviewMouseUp += (s, e9) => {
+                Application.Current.MainWindow.ForceCursor = false;
                 var ctvm = ((FrameworkElement)s).DataContext as MpClipTileViewModel;
                 ctvm.MouseDownPosition = new Point();
                 ctvm.IsClipDragging = false;
@@ -1622,6 +1620,14 @@
                     }
                 }                
             };
+            //ClipBorder.PreviewMouseDown += (s, e9) => {
+            //    var ctvm = ((FrameworkElement)s).DataContext as MpClipTileViewModel;
+            //    if (MpHelpers.Instance.IsMultiSelectKeyDown() && !ctvm.IsSelected) {
+            //        ctvm.IsSelected = true;
+            //        e9.Handled = true;
+            //    }
+            //};
+            
             ClipBorder.MouseDown += (s, e7) => {
                 var ctvm = ((FrameworkElement)s).DataContext as MpClipTileViewModel;
                 if (e7.MouseDevice.DirectlyOver != null && e7.MouseDevice.DirectlyOver.GetType().IsSubclassOf(typeof(UIElement))) {
@@ -1652,6 +1658,7 @@
                     }
                     ctvm.IsClipDragging = true;
                     ctvm.IsSelected = true;
+                    ctvm.RichTextBoxViewModelCollection.SubSelectAll();
                     if(ctvm.DragDataObject == null) {
                         ctvm.DragDataObject = MainWindowViewModel.ClipTrayViewModel.GetDataObjectFromSelectedClips(true).Result;
                     }
@@ -1671,15 +1678,13 @@
             };
             ClipBorder.PreviewDragEnter += (s, e3) => {
                 var ctvm = ((FrameworkElement)s).DataContext as MpClipTileViewModel;
-                var dctvm = ((FrameworkElement)e3.Source).DataContext as MpClipTileViewModel;
-                if (dctvm != null && ctvm != dctvm &&
-                    (ctvm.CopyItemType == MpCopyItemType.Image ||
-                    ctvm.CopyItemType == MpCopyItemType.FileList ||
-                    dctvm.CopyItemType == MpCopyItemType.Image ||
-                    dctvm.CopyItemType == MpCopyItemType.FileList)) {
-                    e3.Effects = DragDropEffects.None;
-                    ctvm.IsClipDropping = false;
-                    ctvm.RichTextBoxViewModelCollection.RtbLbAdornerLayer?.Update();
+                ctvm.IsClipDropping = false;
+                e3.Effects = DragDropEffects.None;
+                ctvm.RichTextBoxViewModelCollection.RtbLbAdornerLayer?.Update();
+
+                MainWindowViewModel.ClipTrayViewModel.AutoScrollByMouse();
+
+                if (ctvm.IsDragDataInvalid(e3.Data)) {
                     e3.Handled = true;
                     return;
                 }

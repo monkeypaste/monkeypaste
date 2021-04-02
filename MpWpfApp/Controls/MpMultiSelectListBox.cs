@@ -1,10 +1,12 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpMultiSelectListBox : ListBox {
+    public class MpMultiSelectListBox : AnimatedListBox {
+
         protected override DependencyObject GetContainerForItemOverride() {
             return new MpMultiSelectListBoxItem();
         }

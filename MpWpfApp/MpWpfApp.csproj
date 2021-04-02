@@ -119,7 +119,6 @@
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedScrollViewer.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
-    <Compile Include="Controls\MpMultiSelectListView.cs" />
     <Compile Include="Controls\MpRichTextBox.cs" />
     <Compile Include="Converters\MpIntToWindowCommandConverter.cs" />
     <Compile Include="Converters\MpPointCollectionConverter.cs" />

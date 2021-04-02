@@ -86,10 +86,10 @@ namespace MpWpfApp {
                 if (SelectedClipTiles.Count == 1) {
                     return SelectedClipTiles[0];
                 }
-                var pctvml = SelectedClipTiles.Where(x => x.IsPrimarySelected).ToList();
-                if (pctvml.Count == 1) {
-                    return pctvml[0];
-                }
+                //var pctvml = SelectedClipTiles.Where(x => x.IsPrimarySelected).ToList();
+                //if (pctvml.Count == 1) {
+                //    return pctvml[0];
+                //}
                 if(SelectedClipTiles.Count > 0) {
                     var selectedByTime = SelectedClipTiles;
                     selectedByTime.OrderBy(x => x.LastSelectedDateTime);
@@ -146,20 +146,52 @@ namespace MpWpfApp {
             }
         }
 
-        public string[] SelectedClipTilesMergedPlainTextFileList {
+        public string SelectedClipTilesMergedPlainText {
             get {
                 var sb = new StringBuilder();
-                foreach(var sctvm in SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime)) {
-                    if (sctvm.HasTemplate) {
-                        sb.Append(MpHelpers.Instance.ConvertRichTextToPlainText(sctvm.TemplateRichText) + Environment.NewLine);
+                foreach (var sctvm in SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime)) {
+                    if (sctvm.CopyItemType == MpCopyItemType.Composite ||
+                       sctvm.CopyItemType == MpCopyItemType.RichText) {
+                        sb.Append(sctvm.RichTextBoxViewModelCollection.SubSelectedClipTilesMergedPlainText + Environment.NewLine);
                     } else {
                         sb.Append(sctvm.CopyItemPlainText + Environment.NewLine);
                     }
                 }
-                string mergedPlainText = sb.ToString().Trim('\r', '\n');
-                string mergedPlainTextFilePath = MpHelpers.Instance.WriteTextToFile(System.IO.Path.GetTempFileName(), mergedPlainText, true);
+                return sb.ToString().Trim('\r', '\n');
+            }
+        }
+
+        public string[] SelectedClipTilesMergedPlainTextFileList {
+            get {
+                string mergedPlainTextFilePath = MpHelpers.Instance.WriteTextToFile(System.IO.Path.GetTempFileName(), SelectedClipTilesMergedPlainText, true);
 
                 return new string[] { mergedPlainTextFilePath };
+            }
+        }
+
+        public string SelectedClipTilesMergedRtf {
+            get {
+                MpEventEnabledFlowDocument fd = string.Empty.ToRichText().ToFlowDocument();
+                foreach (var sctvm in SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime)) {
+                    if (sctvm.CopyItemType == MpCopyItemType.Composite ||
+                       sctvm.CopyItemType == MpCopyItemType.RichText) {
+                        fd = MpHelpers.Instance.CombineFlowDocuments(
+                            sctvm.RichTextBoxViewModelCollection.SubSelectedClipTilesMergedRtf.ToFlowDocument(),
+                            fd);
+                    } else {
+                        fd = MpHelpers.Instance.CombineFlowDocuments(sctvm.CopyItemRichText.ToFlowDocument(), fd);
+                    }
+                }
+                return fd.ToRichText();
+            }
+        }
+
+
+        public string[] SelectedClipTilesMergedRtfFileList {
+            get {
+                string mergedRichTextFilePath = MpHelpers.Instance.WriteTextToFile(System.IO.Path.GetTempFileName(), SelectedClipTilesMergedRtf, true);
+
+                return new string[] { mergedRichTextFilePath };
             }
         }
         #endregion
@@ -386,8 +418,7 @@ namespace MpWpfApp {
         }
 
         public void ClipTray_Loaded(object sender, RoutedEventArgs e) {
-            ListBox = (MpMultiSelectListView)sender;
-            ListBox = ListBox;
+            ListBox = (ListBox)sender;
             IsHorizontal = true;
 
             ScrollViewer = ListBox.GetDescendantOfType<ScrollViewer>();
@@ -510,25 +541,38 @@ namespace MpWpfApp {
 
                 MainWindowViewModel.TagTrayViewModel.UpdateTagAssociation();
 
-                if (SelectedClipTiles.Count > 1) {
-                    //order selected tiles by ascending datetime 
-                    var selectedTileList = SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime).ToList();
-                    foreach (var sctvm in selectedTileList) {
-                        if (sctvm == selectedTileList[0]) {
-                            sctvm.IsPrimarySelected = true;
-                        } else {
-                            sctvm.IsPrimarySelected = false;
-                        }
+                
+                //if (SelectedClipTiles.Count > 1) {
+                //    //order selected tiles by ascending datetime 
+                //    var selectedTileList = SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime).ToList();
+                //    foreach (var sctvm in selectedTileList) {
+                //        if (sctvm == selectedTileList[0]) {
+                //            sctvm.IsPrimarySelected = true;
+                //        } else {
+                //            sctvm.IsPrimarySelected = false;
+                //        }
+                //    }
+                //} else if (SelectedClipTiles.Count == 1) {
+                //    SelectedClipTiles[0].IsPrimarySelected = false;
+                //}
+                foreach (var osctvm in e8.AddedItems) {
+                    if (osctvm.GetType() == typeof(MpClipTileViewModel)) {
+                        //((MpClipTileViewModel)osctvm).IsSelected = false;
+                        ((MpClipTileViewModel)osctvm).LastSelectedDateTime = DateTime.Now;
+                    } else {
+                        Console.WriteLine("Unknown deselected type: " + osctvm.GetType().ToString());
                     }
-                } else if (SelectedClipTiles.Count == 1) {
-                    SelectedClipTiles[0].IsPrimarySelected = false;
                 }
-
                 foreach (var osctvm in e8.RemovedItems) {
                     if (osctvm.GetType() == typeof(MpClipTileViewModel)) {
-                        ((MpClipTileViewModel)osctvm).IsSelected = false;
-                        ((MpClipTileViewModel)osctvm).IsPrimarySelected = false;
+                        //((MpClipTileViewModel)osctvm).IsSelected = false;
+                        ((MpClipTileViewModel)osctvm).LastSelectedDateTime = DateTime.MaxValue;
+                    } else {
+                        Console.WriteLine("Unknown deselected type: " + osctvm.GetType().ToString());
                     }
+                }
+                if (PrimarySelectedClipTile != null) {
+                    PrimarySelectedClipTile.OnPropertyChanged(nameof(PrimarySelectedClipTile.TileBorderBrush));
                 }
             };
 
@@ -623,7 +667,7 @@ namespace MpWpfApp {
             _hiddenTiles.Remove(tileToIsolate);
             foreach (var ctvm in _hiddenTiles) {
                 ctvm.IsSelected = false;
-                ctvm.IsPrimarySelected = false;
+                //ctvm.IsPrimarySelected = false;
                 ctvm.TileVisibility = Visibility.Collapsed;
             }
             if(!tileToIsolate.IsSelected) {
@@ -636,7 +680,7 @@ namespace MpWpfApp {
             foreach (var ctvm in _hiddenTiles) {
                 //_hiddenTileCanvasList.Add(ctvm.ClipBorder);
                 ctvm.IsSelected = false;
-                ctvm.IsPrimarySelected = false;
+                //ctvm.IsPrimarySelected = false;
                 ctvm.TileVisibility = Visibility.Visible;
             }
 
@@ -733,7 +777,8 @@ namespace MpWpfApp {
                 ctvm.IsEditingTemplate = false;
                 ctvm.IsHovering = false;                
                 ctvm.IsSelected = false;
-                ctvm.IsPrimarySelected = false;
+                ctvm.LastSelectedDateTime = DateTime.MaxValue;
+                //ctvm.IsPrimarySelected = false;
                 ctvm.RichTextBoxViewModelCollection.ClearSubSelection();
                 ctvm.FileListCollectionViewModel.ClearSubSelection();
             }
@@ -751,9 +796,8 @@ namespace MpWpfApp {
                         //ScrollViewer.ScrollToHorizontalOffset(0);
                         //ScrollViewer.InvalidateArrange();
                         //ScrollViewer.InvalidateScrollInfo();
-
                         //ListBox.AnimatedScrollViewer.ScrollToHorizontalOffset(0);
-                        ((ListViewItem)ListBox.ItemContainerGenerator.ContainerFromItem(VisibileClipTiles[0]))?.Focus();
+                        ((ListBoxItem)ListBox.ItemContainerGenerator.ContainerFromItem(VisibileClipTiles[0]))?.Focus();
                     }
                 }
             }
@@ -916,12 +960,27 @@ namespace MpWpfApp {
 
         public async Task<IDataObject> GetDataObjectFromSelectedClips(bool isDragDrop = false) {
             IDataObject d = new DataObject();
+
+            string rtf = string.Empty;
+            foreach (var sctvm in SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime)) {
+                var task = sctvm.GetPastableRichText();
+                string rt = await task;
+                if (string.IsNullOrEmpty(rtf)) {
+                    rtf = rt;
+                } else {
+                    rtf = MpHelpers.Instance.CombineRichText(rtf, rt);
+                }
+            }
+            
+
             //only when pasting into explorer or notepad must have file drop
             if (MpHelpers.Instance.IsProcessNeedFileDrop(MpRunningApplicationManager.Instance.ActiveProcessPath) &&
                 isDragDrop) {
                 if (SelectedClipTilesFileList != null) {
-                    if(MpHelpers.Instance.IsProcessLikeNotepad(MpRunningApplicationManager.Instance.ActiveProcessPath)) {
+                    if (MpHelpers.Instance.IsProcessLikeNotepad(MpRunningApplicationManager.Instance.ActiveProcessPath)) {
                         d.SetData(DataFormats.FileDrop, SelectedClipTilesMergedPlainTextFileList);
+                    } else if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
+                        d.SetData(DataFormats.FileDrop, SelectedClipTilesMergedRtfFileList);
                     } else {
                         d.SetData(DataFormats.FileDrop, SelectedClipTilesFileList);
                     }                    
@@ -932,24 +991,14 @@ namespace MpWpfApp {
             }
             if(SelectedClipTilesCsv != null) {
                 d.SetData(DataFormats.CommaSeparatedValue, SelectedClipTilesCsv);
-            }            
-
-            string rtf =string.Empty;
-            foreach (var sctvm in SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime)) {
-                var task = sctvm.GetPastableRichText();
-                string rt = await task;
-                if(string.IsNullOrEmpty(rtf)) {
-                    rtf = rt;
-                } else {
-                    rtf = MpHelpers.Instance.CombineRichText(rtf, rt);
-                }
             }
-            if(!string.IsNullOrEmpty(rtf)) {
-                d.SetData(DataFormats.Rtf, rtf);
-                d.SetData(DataFormats.Text, rtf.ToPlainText());           
-            }            
 
-            if(isDragDrop && SelectedClipTiles != null && SelectedClipTiles.Count > 0) {
+            if (!string.IsNullOrEmpty(rtf)) {
+                d.SetData(DataFormats.Rtf, rtf);
+                d.SetData(DataFormats.Text, rtf.ToPlainText());
+            }
+
+            if (isDragDrop && SelectedClipTiles != null && SelectedClipTiles.Count > 0) {
                 d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
             }
             return d;
