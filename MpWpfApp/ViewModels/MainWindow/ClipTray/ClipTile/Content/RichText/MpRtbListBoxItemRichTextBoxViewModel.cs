@@ -369,11 +369,8 @@ namespace MpWpfApp {
                 if (HostClipTileViewModel == null) {
                     return Brushes.Transparent;
                 }
-                if (!HostClipTileViewModel.IsExpanded) {
-                    return Brushes.Transparent;
-                }
                 if (IsSubSelected) {
-                    return Brushes.Red;
+                    return Brushes.Pink;
                 }
                 if (IsSubHovering) {
                     return Brushes.Yellow;
@@ -944,7 +941,10 @@ namespace MpWpfApp {
                         if(HostClipTileViewModel.IsClipDragging) {
                             return;
                         }
-                        if(IsSubSelected) {
+
+                        LastSubSelectedDateTime = IsSubSelected ? DateTime.Now : DateTime.MaxValue;
+
+                        if (IsSubSelected) {
                             if (HostClipTileViewModel.IsExpanded) {
                                 foreach (var rtbvm in RichTextBoxViewModelCollection) {
                                     if (rtbvm != this) {
@@ -954,7 +954,7 @@ namespace MpWpfApp {
                                 }
                                 ResetRtb();
                                 //RichTextBoxViewModelCollection.Refresh();
-                            } else if(!MpHelpers.Instance.IsMultiSelectKeyDown() && !IsSubDragging && !HostClipTileViewModel.IsContextMenuOpened) {
+                            } else if (!MpHelpers.Instance.IsMultiSelectKeyDown() && !IsSubDragging && !HostClipTileViewModel.IsContextMenuOpened) {
                                 IsSubSelected = false;
                             }
                             if (HostClipTileViewModel.IsEditingTile) {
@@ -962,13 +962,12 @@ namespace MpWpfApp {
                             }
                             if (HostClipTileViewModel.IsPastingTemplate) {
                                 HostClipTileViewModel.PasteTemplateToolbarViewModel.InitWithRichTextBox(Rtb, false);
-                            }
-                            
-
-                            LastSubSelectedDateTime = DateTime.Now;                            
+                            }                      
                         } else if(HostClipTileViewModel.IsExpanded) {
                             // triggers set data in model which updates the preview
                             CopyItemRichText = Rtb.Document.ToRichText();
+                        } else {
+                            
                         }
                         if(HostClipTileViewModel.IsExpanded) {
                             RichTextBoxViewModelCollection.UpdateLayout();
@@ -1087,6 +1086,20 @@ namespace MpWpfApp {
             Rtbc.MouseLeave += (s, e2) => {
                 IsSubHovering = false;
             };
+            //Rtbc.PreviewMouseDown += (s, e4) => {
+            //    IsSubSelected = true;
+            //    e4.Handled = true;
+            //};
+            //Rtb.MouseEnter += (s, e2) => {
+            //    if(MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count > 1) {
+            //        IsSubHovering = true;
+            //    }
+            //};
+            //Rtb.MouseLeave += (s, e2) => {
+            //    if (MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count > 1) {
+            //        IsSubHovering = false;
+            //    }
+            //};
 
             Rtbc.PreviewMouseRightButtonDown += (s, e6) => {
                 e6.Handled = true;

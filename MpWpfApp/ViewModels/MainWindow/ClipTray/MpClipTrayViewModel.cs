@@ -54,7 +54,26 @@ namespace MpWpfApp {
 
         public MpObservableCollection<MpClipTileViewModel> SelectedClipTiles {
             get {
-                return new MpObservableCollection<MpClipTileViewModel>(this.Where(ct => ct.IsSelected/* && ct.GetType() != typeof(MpRtbListBoxItemRichTextBoxViewModel)*/).ToList());
+                return new MpObservableCollection<MpClipTileViewModel>(this.Where(ct => ct.IsSelected).ToList().OrderBy(x => x.LastSelectedDateTime));
+            }
+        }
+
+        public MpObservableCollection<MpClipTileViewModel> SelectedClipTilesByLastSelectedAscending {
+            get {
+                //selection logic:
+                //1. A tile is selected
+                //2. All subitems are also selected
+                //3. If SubSelected item is clicked all other subitems loose selection (unless ctrl/shift pressed)
+                //4. A new tile is selected
+                //5. Deselected tile looses selection and LastSelectionDateTime is set to max value
+                var sctvml = new MpObservableCollection<MpClipTileViewModel>(this.Where(ct => ct.IsSelected).ToList());
+                var srtbvml = new List<MpRtbListBoxItemRichTextBoxViewModel>();
+                foreach(var sctvm in sctvml) {
+                    if (sctvm.RichTextBoxViewModelCollection.SubSelectedRtbvmList.Count == 0) {
+                        
+                    }
+                }
+                return sctvml;
             }
         }
 
@@ -69,12 +88,13 @@ namespace MpWpfApp {
                 if (SelectedClipTiles.Count == 0) {
                     return null;
                 }
-                if (SelectedClipTiles.Count == 1) {
-                    return SelectedClipTiles[0];
-                }
-                var selectedByTime = SelectedClipTiles;
-                selectedByTime.OrderBy(x => x.LastSelectedDateTime).ThenByDescending(x=>x.LastSelectedDateTime);
-                return selectedByTime[0];
+                return SelectedClipTiles[SelectedClipTiles.Count - 1];
+                //if (SelectedClipTiles.Count == 1) {
+                //    return SelectedClipTiles[0];
+                //}
+                //var selectedByTime = SelectedClipTiles;
+                //selectedByTime.ThenByDescending(x=>x.LastSelectedDateTime);
+                //return selectedByTime[0];
             }
         }
 
@@ -83,19 +103,20 @@ namespace MpWpfApp {
                 if (SelectedClipTiles.Count == 0) {
                     return null;
                 }
-                if (SelectedClipTiles.Count == 1) {
-                    return SelectedClipTiles[0];
-                }
-                //var pctvml = SelectedClipTiles.Where(x => x.IsPrimarySelected).ToList();
-                //if (pctvml.Count == 1) {
-                //    return pctvml[0];
+                return SelectedClipTiles[0];
+                //if (SelectedClipTiles.Count == 1) {
+                //    return SelectedClipTiles[0];
                 //}
-                if(SelectedClipTiles.Count > 0) {
-                    var selectedByTime = SelectedClipTiles;
-                    selectedByTime.OrderBy(x => x.LastSelectedDateTime);
-                    return selectedByTime[0];
-                }
-                return null;
+                ////var pctvml = SelectedClipTiles.Where(x => x.IsPrimarySelected).ToList();
+                ////if (pctvml.Count == 1) {
+                ////    return pctvml[0];
+                ////}
+                //if(SelectedClipTiles.Count > 0) {
+                //    var selectedByTime = SelectedClipTiles;
+                //    selectedByTime;
+                //    return selectedByTime[0];
+                //}
+                //return null;
             }
         }
         #endregion
@@ -117,7 +138,7 @@ namespace MpWpfApp {
         public BitmapSource SelectedClipTilesBmp {
             get {
                 var bmpList = new List<BitmapSource>();
-                foreach (var sctvm in SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime)) {
+                foreach (var sctvm in SelectedClipTiles) {
                     bmpList.Add(sctvm.CopyItemBmp);
                 }
                 return MpHelpers.Instance.CombineBitmap(bmpList, false);
@@ -127,7 +148,7 @@ namespace MpWpfApp {
         public string SelectedClipTilesCsv {
             get {
                 string outStr = string.Empty;
-                foreach (var sctvm in SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime)) {
+                foreach (var sctvm in SelectedClipTiles) {
                     outStr = sctvm.CopyItem.ItemPlainText + ",";
                 }
                 return outStr;
@@ -149,7 +170,7 @@ namespace MpWpfApp {
         public string SelectedClipTilesMergedPlainText {
             get {
                 var sb = new StringBuilder();
-                foreach (var sctvm in SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime)) {
+                foreach (var sctvm in SelectedClipTiles) {
                     if (sctvm.CopyItemType == MpCopyItemType.Composite ||
                        sctvm.CopyItemType == MpCopyItemType.RichText) {
                         sb.Append(sctvm.RichTextBoxViewModelCollection.SubSelectedClipTilesMergedPlainText + Environment.NewLine);
@@ -172,7 +193,7 @@ namespace MpWpfApp {
         public string SelectedClipTilesMergedRtf {
             get {
                 MpEventEnabledFlowDocument fd = string.Empty.ToRichText().ToFlowDocument();
-                foreach (var sctvm in SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime)) {
+                foreach (var sctvm in SelectedClipTiles) {
                     if (sctvm.CopyItemType == MpCopyItemType.Composite ||
                        sctvm.CopyItemType == MpCopyItemType.RichText) {
                         fd = MpHelpers.Instance.CombineFlowDocuments(
@@ -544,7 +565,7 @@ namespace MpWpfApp {
                 
                 //if (SelectedClipTiles.Count > 1) {
                 //    //order selected tiles by ascending datetime 
-                //    var selectedTileList = SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime).ToList();
+                //    var selectedTileList = SelectedClipTiles.ToList();
                 //    foreach (var sctvm in selectedTileList) {
                 //        if (sctvm == selectedTileList[0]) {
                 //            sctvm.IsPrimarySelected = true;
@@ -555,22 +576,22 @@ namespace MpWpfApp {
                 //} else if (SelectedClipTiles.Count == 1) {
                 //    SelectedClipTiles[0].IsPrimarySelected = false;
                 //}
-                foreach (var osctvm in e8.AddedItems) {
-                    if (osctvm.GetType() == typeof(MpClipTileViewModel)) {
-                        //((MpClipTileViewModel)osctvm).IsSelected = false;
-                        ((MpClipTileViewModel)osctvm).LastSelectedDateTime = DateTime.Now;
-                    } else {
-                        Console.WriteLine("Unknown deselected type: " + osctvm.GetType().ToString());
-                    }
-                }
-                foreach (var osctvm in e8.RemovedItems) {
-                    if (osctvm.GetType() == typeof(MpClipTileViewModel)) {
-                        //((MpClipTileViewModel)osctvm).IsSelected = false;
-                        ((MpClipTileViewModel)osctvm).LastSelectedDateTime = DateTime.MaxValue;
-                    } else {
-                        Console.WriteLine("Unknown deselected type: " + osctvm.GetType().ToString());
-                    }
-                }
+                //foreach (var osctvm in e8.AddedItems) {
+                //    if (osctvm.GetType() == typeof(MpClipTileViewModel)) {
+                //        //((MpClipTileViewModel)osctvm).IsSelected = false;
+                //        ((MpClipTileViewModel)osctvm).LastSelectedDateTime = DateTime.Now;
+                //    } else {
+                //        Console.WriteLine("Unknown deselected type: " + osctvm.GetType().ToString());
+                //    }
+                //}
+                //foreach (var osctvm in e8.RemovedItems) {
+                //    if (osctvm.GetType() == typeof(MpClipTileViewModel)) {
+                //        //((MpClipTileViewModel)osctvm).IsSelected = false;
+                //        ((MpClipTileViewModel)osctvm).LastSelectedDateTime = DateTime.MaxValue;
+                //    } else {
+                //        Console.WriteLine("Unknown deselected type: " + osctvm.GetType().ToString());
+                //    }
+                //}
                 if (PrimarySelectedClipTile != null) {
                     PrimarySelectedClipTile.OnPropertyChanged(nameof(PrimarySelectedClipTile.TileBorderBrush));
                 }
@@ -962,7 +983,7 @@ namespace MpWpfApp {
             IDataObject d = new DataObject();
 
             string rtf = string.Empty;
-            foreach (var sctvm in SelectedClipTiles.OrderBy(x => x.LastSelectedDateTime)) {
+            foreach (var sctvm in SelectedClipTiles) {
                 var task = sctvm.GetPastableRichText();
                 string rt = await task;
                 if (string.IsNullOrEmpty(rtf)) {

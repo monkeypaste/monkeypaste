@@ -1478,12 +1478,11 @@
                 switch (e1.PropertyName) {
                     case nameof(IsSelected):
                         if (IsSelected) {
-                            if(RichTextBoxViewModelCollection.Count > 0) {
-                                RichTextBoxViewModelCollection.ClearSubSelection();
-                            }
-                            //LastSelectedDateTime = DateTime.Now;
+                            LastSelectedDateTime = DateTime.Now;
+                            //RichTextBoxViewModelCollection.SubSelectAll();
                         } else {
-                            //LastSelectedDateTime = DateTime.MaxValue;
+                            RichTextBoxViewModelCollection.ClearSubSelection();
+                            LastSelectedDateTime = DateTime.MaxValue;
                         }
                         
                         RefreshCommands();
@@ -1496,11 +1495,11 @@
                                     rtbvm.IsSubHovering = false;
                                 }
                             }
-                            foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
-                                if(ctvm != this) {
-                                    ctvm.IsHovering = false;
-                                }
-                            }                            
+                            //foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
+                            //    if(ctvm != this) {
+                            //        ctvm.IsHovering = false;
+                            //    }
+                            //}                            
                         }
                         break;
                     case nameof(IsEditingTile):
@@ -1787,6 +1786,11 @@
                 ctvm.RichTextBoxViewModelCollection.RtbLbAdornerLayer?.Update();
             };
             #endregion
+
+            //ClipBorder.PreviewMouseDown += (s, e4) => {
+            //    IsSelected = true;
+            //    e4.Handled = true;
+            //};
         }
 
         public void ClipTileDetailGrid_Loaded(object sender, RoutedEventArgs e) {
@@ -2264,6 +2268,11 @@
             Console.WriteLine("ClipTile(VIdx:"+MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles.IndexOf(this)+") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
 
+        public void ClearClipSelection() {
+            IsSelected = false;
+            LastSelectedDateTime = DateTime.MaxValue;
+            RichTextBoxViewModelCollection.ClearSubSelection();
+        }
         public void SaveToDatabase() {
             var sw = new Stopwatch();
             sw.Start();

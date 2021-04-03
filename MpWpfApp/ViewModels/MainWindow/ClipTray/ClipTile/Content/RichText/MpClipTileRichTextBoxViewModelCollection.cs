@@ -833,12 +833,11 @@ namespace MpWpfApp {
                 rtbvm.IsSubSelected = true;
             }
         }
-        public void ClearSubSelection() {
+        public void ClearSubSelection(bool clearEditing = true) {
             foreach(var rtbvm in this) {
                 rtbvm.IsPrimarySubSelected = false;
                 rtbvm.IsSubHovering = false;
                 rtbvm.IsSubSelected = false;
-                //rtbvm.IsEditingContent = false;
                 rtbvm.IsEditingSubTitle = false;
             }
         }
@@ -850,12 +849,6 @@ namespace MpWpfApp {
                 if(RichTextBoxListBox != null) {
                     ((ListBoxItem)RichTextBoxListBox.ItemContainerGenerator.ContainerFromItem(this[0]))?.Focus();
                 }
-            }
-        }
-
-        public void SelectAll() {
-            foreach(var rtbvm in this) {
-                rtbvm.IsSubSelected = true;
             }
         }
 
