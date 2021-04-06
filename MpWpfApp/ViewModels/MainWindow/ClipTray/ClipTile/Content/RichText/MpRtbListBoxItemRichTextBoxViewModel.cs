@@ -134,6 +134,15 @@ namespace MpWpfApp {
             }
         }
 
+        public Rect DragButtonRect {
+            get {
+                if(DragButton == null || Rtbc == null) {
+                    return new Rect();
+                }
+                return DragButton.TransformToAncestor((Visual)Rtbc).TransformBounds(LayoutInformation.GetLayoutSlot(DragButton));
+            }
+        }
+
         public double DragButtonSize {
             get {
                 return MpMeasurements.Instance.RtbCompositeDragButtonSize;
@@ -204,7 +213,7 @@ namespace MpWpfApp {
                     return Math.Max(RtbPageHeight + RtbPadding.Top + RtbPadding.Bottom, MpMeasurements.Instance.RtbCompositeItemMinHeight);
                 }
                 if (RichTextBoxViewModelCollection.Count == 1 && SubItemOverlayVisibility != Visibility.Visible) {
-                    if(Rtb == null) {
+                    if (Rtb == null) {
                         return CopyItemRichText.ToFlowDocument().GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;//HostClipTileViewModel.TileContentHeight - RtbPadding.Top - RtbPadding.Bottom;
                     } else {
                         return Rtb.Document.GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;//HostClipTileViewModel.TileContentHeight - RtbPadding.Top - RtbPadding.Bottom;
@@ -285,6 +294,19 @@ namespace MpWpfApp {
         public double RtbOverlayWidth {
             get {
                 if(RichTextBoxViewModelCollection == null) {
+                    return 0;
+                }
+                var w = RichTextBoxViewModelCollection.RtbLbScrollViewerWidth;
+                if (RichTextBoxViewModelCollection.VerticalScrollbarVisibility == ScrollBarVisibility.Visible) {
+                    w -= MpMeasurements.Instance.ScrollbarWidth;
+                }
+                return w;
+            }
+        }
+
+        public double RtbOverlayHeight {
+            get {
+                if (RichTextBoxViewModelCollection == null) {
                     return 0;
                 }
                 var w = RichTextBoxViewModelCollection.RtbLbScrollViewerWidth;
@@ -447,6 +469,7 @@ namespace MpWpfApp {
             get {
                 if (HostClipTileViewModel == null ||
                    RichTextBoxViewModelCollection == null ||
+                   CompositeSortOrderIdx < 0 ||
                    RichTextBoxViewModelCollection.Count <= 1) {
                     return null;
                 }
@@ -461,7 +484,8 @@ namespace MpWpfApp {
         public MpRtbListBoxItemRichTextBoxViewModel Previous {
             get {
                 if (HostClipTileViewModel == null ||
-                   RichTextBoxViewModelCollection == null ||
+                   RichTextBoxViewModelCollection == null || 
+                   CompositeSortOrderIdx < 0 ||
                    RichTextBoxViewModelCollection.Count <= 1) {
                     return null;
                 }
@@ -944,6 +968,11 @@ namespace MpWpfApp {
 
                         LastSubSelectedDateTime = IsSubSelected ? DateTime.Now : DateTime.MaxValue;
 
+                        if(IsSubSelected && !HostClipTileViewModel.IsSelected) {
+                            HostClipTileViewModel.IsSelected = true;
+                        } else if(!IsSubSelected && HostClipTileViewModel.IsSelected && RichTextBoxViewModelCollection.Count == 1) {
+                            //HostClipTileViewModel.IsSelected = false;
+                        }
                         if (IsSubSelected) {
                             if (HostClipTileViewModel.IsExpanded) {
                                 foreach (var rtbvm in RichTextBoxViewModelCollection) {
@@ -1051,7 +1080,7 @@ namespace MpWpfApp {
                     IsSubDragging = true;
                     IsSubSelected = true;
                     if(_dragDataObject == null) {
-                        _dragDataObject = RichTextBoxViewModelCollection.GetDataObjectFromSubSelectedItems(true).Result;
+                        _dragDataObject = MainWindowViewModel.ClipTrayViewModel.GetDataObjectFromSelectedClips(true).Result;//RichTextBoxViewModelCollection.GetDataObjectFromSubSelectedItems(true).Result;
                     }
                     DragDrop.DoDragDrop(
                                 Rtbc,
@@ -1080,12 +1109,14 @@ namespace MpWpfApp {
             RtbListBoxItemAdornerLayer = AdornerLayer.GetAdornerLayer(Rtbc);
             RtbListBoxItemAdornerLayer?.Add(new MpRtbListBoxItemAdorner(Rtbc));
 
+            
             Rtbc.MouseEnter += (s, e2) => {
                 IsSubHovering = true;
             };
             Rtbc.MouseLeave += (s, e2) => {
                 IsSubHovering = false;
             };
+
             //Rtbc.PreviewMouseDown += (s, e4) => {
             //    IsSubSelected = true;
             //    e4.Handled = true;
@@ -1173,6 +1204,7 @@ namespace MpWpfApp {
             Rtbc?.UpdateLayout();
             RtbListBoxItemClipBorder?.UpdateLayout();  
         }
+
 
         public IDataObject GetTextDataObject() {
             if(Rtb == null) {

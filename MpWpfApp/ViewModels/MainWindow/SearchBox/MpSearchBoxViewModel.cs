@@ -17,20 +17,12 @@ using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace MpWpfApp {
-    public class MpSearchBoxViewModel : MpViewModelBase {
+    public class MpSearchBoxViewModel : MpUndoableObservableCollectionViewModel<MpSearchBoxViewModel,MpSearchElementViewModel> {
         #region Private Variables
-        #endregion
-
-        #region Events
-        //public event EventHandler NextMatchClicked;
-        //protected virtual void OnNextMatchClicked() => NextMatchClicked?.Invoke(this, EventArgs.Empty);
-
-        //public event EventHandler PrevMatchClicked;
-        //protected virtual void OnPrevMatchClicked() => PrevMatchClicked?.Invoke(this, EventArgs.Empty);
-        #endregion
+        #endregion        
 
         #region Properties     
-
+        
         #region Controls
         public TextBox SearchTextBox { get; set; } = null;
         #endregion

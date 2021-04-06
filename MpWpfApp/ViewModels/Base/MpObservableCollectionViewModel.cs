@@ -351,6 +351,19 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
             return this.ListBox.ItemContainerGenerator.ContainerFromIndex(index) as ListBoxItem;
         }
 
+        public ListBoxItem GetListBoxItem(T item) {
+            if (this.ListBox == null) {
+                return null;
+            }
+            if (this.ListBox.ItemContainerGenerator.Status != GeneratorStatus.ContainersGenerated) {
+                return null;
+            }
+            if(!ListBox.Items.Contains(item)) {
+                return null;
+            }
+            return GetListBoxItem(ListBox.Items.IndexOf(item));
+        }
+
         public Rect GetListBoxRect() {
             if(ListBox == null) {
                 return new Rect();
@@ -377,8 +390,10 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
         public Point[] GetAdornerPoints(int index) {
             var points = new Point[2];
             var itemRect = index >= this.Count ? GetListBoxItemRect(this.Count - 1) : GetListBoxItemRect(index);
-            
-            if(IsHorizontal) {
+            if(!IsHorizontal) {
+                itemRect.Height = MpMeasurements.Instance.RtbCompositeItemMinHeight;
+            }
+            if (IsHorizontal) {
                 if(index < this.Count) {
                     points[0] = itemRect.TopLeft;
                     points[1] = itemRect.BottomLeft;
@@ -395,13 +410,112 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
                     points[1] = itemRect.BottomRight;
                 }
             }
-            if (ScrollViewer.HorizontalOffset > 0 || ScrollViewer.VerticalOffset > 0) {
+            if (ScrollViewer != null && 
+                (ScrollViewer.HorizontalOffset > 0 || ScrollViewer.VerticalOffset > 0)) {
                 points[0].X += ScrollViewer.Margin.Right;
                 //points[0].Y += ScrollViewer.VerticalOffset;
                 points[1].X += ScrollViewer.Margin.Right;
                 //points[1].Y += ScrollViewer.VerticalOffset;
             } 
             return points;
+        }
+
+        public void UpdateExtendedSelection(int index) {
+            /*
+            1    if the target item is not selected, select it
+            2    if Ctrl key is down, add target item to selection 
+            3    if Shift key is down
+            4    if there is a previously selected item, add all items between target item and most recently selected item to selection, clearing any others
+            5    else add item and all previous items
+            6    if the target item is selected de-select only if Ctrl key is down         
+            7    if neither ctrl nor shift are pressed clear any other selection
+            8    if the target item is selected
+            9    if Ctrl key is down, remove item from selection
+            10   if Shift key is down
+            11   if there is a previously selected item, clear selection and then add between target item and first previously selected item
+            12   else remove any other item from selection
+            */
+            //if (ListBox.DataContext is MpClipTileRichTextBoxViewModelCollection) {
+            //    var hctvm = (ListBox.DataContext as MpClipTileRichTextBoxViewModelCollection).HostClipTileViewModel;
+            //    MainWindowViewModel.ClipTrayViewModel.UpdateExtendedSelection(MainWindowViewModel.ClipTrayViewModel.IndexOf(hctvm));
+            //}
+            bool isCtrlDown = MpHelpers.Instance.GetModKeyDownList().Contains(Key.LeftCtrl);
+            bool isShiftDown = MpHelpers.Instance.GetModKeyDownList().Contains(Key.LeftShift);
+            var lbi = GetListBoxItem(index);
+            if (!lbi.IsSelected) {
+                ListBoxItem lastSelectedItem = null;
+                if (ListBox.SelectedItems.Count > 0) {
+                    // NOTE this maybe the wrong item
+                    lastSelectedItem = (ListBoxItem)GetListBoxItem((T)ListBox.SelectedItems[ListBox.SelectedItems.Count - 1]);
+                }
+                if (isShiftDown) {
+                    if (lastSelectedItem == null) {
+                        //5 else add item and all previous items
+                        for (int i = 0; i <= index; i++) {
+                            GetListBoxItem(i).IsSelected = true;
+                        }
+                        return;
+                    } else {
+                        //4 if there is a previously selected item, add all items between target
+                        //  item and most recently selected item to selection, clearing any others
+                        ListBox.SelectedItems.Clear();
+
+                        int lastIdx = ListBox.Items.IndexOf(lastSelectedItem.DataContext);
+                        if (lastIdx < index) {
+                            for (int i = lastIdx; i <= index; i++) {
+                                GetListBoxItem(i).IsSelected = true;
+                            }
+                        } else {
+                            for (int i = index; i <= lastIdx; i++) {
+                                GetListBoxItem(i).IsSelected = true;
+                            }
+                        }
+                    }
+                } else if (isCtrlDown) {
+                    //2    if Ctrl key is down, add target item to selection 
+                    //6    if the target item is selected de-select only if Ctrl key is down
+
+                    lbi.IsSelected = !lbi.IsSelected;
+                } else {
+                    //7    if neither ctrl nor shift are pressed clear any other selection
+                    // MainWindowViewModel.ClipTrayViewModel.ClearClipSelection(false);
+                    //HostClipTileViewModel.IsSelected = true;
+                    ListBox.SelectedItems.Clear();
+                    lbi.IsSelected = true;
+                }
+            } else if (lbi.IsSelected) {
+                if (isShiftDown) {
+                    //10   if Shift key is down
+                    if (ListBox.SelectedItems.Count > 0) {
+                        //11   if there is a previously selected item, remove all items between target item and previous item from selection
+                        var firstSelectedItem = GetListBoxItem((T)ListBox.SelectedItems[0]);
+                        int firstIdx = ListBox.Items.IndexOf(firstSelectedItem.DataContext);
+                        ListBox.SelectedItems.Clear();
+                        if (firstIdx < index) {
+                            for (int i = firstIdx; i <= index; i++) {
+                                GetListBoxItem(i).IsSelected = true;
+                            }
+                            return;
+                        } else {
+                            for (int i = index; i <= firstIdx; i++) {
+                                GetListBoxItem(i).IsSelected = true;
+                            }
+                            return;
+                        }
+                    }
+
+                } else if (isCtrlDown) {
+                    //9    if Ctrl key is down, remove item from selection
+                    lbi.IsSelected = false;
+                } else {
+                    //12   else remove any other item from selection
+
+                    //MainWindowViewModel.ClipTrayViewModel.ClearClipSelection(false);
+                    //HostClipTileViewModel.IsSelected = true;
+                    ListBox.SelectedItems.Clear();
+                    lbi.IsSelected = true;
+                }
+            }
         }
         #endregion
 

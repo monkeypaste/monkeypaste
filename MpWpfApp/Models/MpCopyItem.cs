@@ -327,7 +327,7 @@ namespace MpWpfApp {
                     return new MpCopyItem(dt.Rows[0]);
                 }
                 return null;
-            } else {
+            } else if(data is BitmapSource) {
                 DataTable dt = MpDb.Instance.Execute(
                     "select * from MpCopyItem where ItemImage=@ii",
                     new System.Collections.Generic.Dictionary<string, object> {
@@ -346,6 +346,9 @@ namespace MpWpfApp {
             bool useFileData = false,
             bool isFileDataMerged = false,
             int forceIdx = -1) {
+            if(toItem == null) {
+                return fromItem;
+            }
             if (fromItem.CopyItemType == MpCopyItemType.Image || toItem.CopyItemType == MpCopyItemType.Image) {
                 // for now, do not allow combining with image types
                 return null;
@@ -400,6 +403,8 @@ namespace MpWpfApp {
                 //    break;
                 case MpCopyItemType.RichText:
                     switch(toItem.CopyItemType) {
+                        case MpCopyItemType.None:
+                            return fromItem;
                         case MpCopyItemType.FileList:
                             //RichText->FileList = FileList(with RichText as file w / title at eol)
 
@@ -535,7 +540,7 @@ namespace MpWpfApp {
             IntPtr.Zero,
             new MpApp()) { }
 
-        private MpCopyItem(
+        public MpCopyItem(
             MpCopyItemType itemType,
             object itemData,
             IntPtr processHandle) : this(
@@ -546,7 +551,7 @@ namespace MpWpfApp {
                 processHandle,
                 null) { }            
 
-        private MpCopyItem(
+        public MpCopyItem(
             MpCopyItemType itemType,
             string title,
             object data,

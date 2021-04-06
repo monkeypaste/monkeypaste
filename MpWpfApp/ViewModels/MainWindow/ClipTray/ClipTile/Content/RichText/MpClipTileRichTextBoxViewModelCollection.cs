@@ -41,23 +41,27 @@ namespace MpWpfApp {
                 }
             }
         }
+        
+        public MpEventEnabledFlowDocument FullDocument {
+            get {
+                return GetFullDocument();
+            }
+        }
 
+        #endregion
+
+        #region Selection
         public List<MpRtbListBoxItemRichTextBoxViewModel> SubSelectedRtbvmList {
             get {
-                return this.Where(x => x.IsSubSelected).ToList();
+                return this.Where(x => x.IsSubSelected).OrderBy(x => x.LastSelectedDateTime).ToList();
             }
         }
 
         public MpRtbListBoxItemRichTextBoxViewModel SubSelectedRtbvm {
             get {
-                var srtbvml = this.Where(x => x.IsSubSelected).ToList();
-                if (srtbvml.Count > 0) {
-                    return srtbvml[0];
+                if (SubSelectedRtbvmList.Count > 0) {
+                    return SubSelectedRtbvmList[0];
                 }
-                //if (this.Count > 0) {
-                //    this[0].IsSubSelected = true;
-                //    return this[0];
-                //}
                 return null;
             }
         }
@@ -71,42 +75,54 @@ namespace MpWpfApp {
             }
         }
 
-        public MpEventEnabledFlowDocument FullDocument {
-            get {
-                return GetFullDocument();
-            }
-        }
-
-        #endregion
-
-        #region Selection
-        public BitmapSource SubSelectedClipTilesBmp {
-            get {
-                var bmpList = new List<BitmapSource>();
-                foreach (var srtbvm in SubSelectedRtbvmList.OrderBy(x => x.LastSubSelectedDateTime)) {
-                    bmpList.Add(srtbvm.CopyItemBmp);
-                }
-                return MpHelpers.Instance.CombineBitmap(bmpList, false);
-            }
-        }
+        //public BitmapSource SubSelectedClipTilesBmp {
+        //    get {
+        //        bool wasEmptySelection = SubSelectedRtbvmList.Count == 0;
+        //        if (wasEmptySelection) {
+        //            SubSelectAll();
+        //        }
+        //        var bmpList = new List<BitmapSource>();
+        //        foreach (var srtbvm in SubSelectedRtbvmList.OrderBy(x => x.LastSubSelectedDateTime)) {
+        //            bmpList.Add(srtbvm.CopyItemBmp);
+        //        }
+        //        if (wasEmptySelection) {
+        //            ClearSubSelection();
+        //        }
+        //        return MpHelpers.Instance.CombineBitmap(bmpList, false);
+        //    }
+        //}
 
         public string SubSelectedClipTilesCsv {
             get {
-                string outStr = string.Empty;
-                foreach (var srtbvm in SubSelectedRtbvmList.OrderBy(x => x.LastSubSelectedDateTime)) {
-                    outStr = srtbvm.CopyItem.ItemPlainText + ",";
+                bool wasEmptySelection = SubSelectedRtbvmList.Count == 0;
+                if (wasEmptySelection) {
+                    SubSelectAll();
                 }
-                return outStr;
+                var sb = new StringBuilder();
+                foreach (var srtbvm in SubSelectedRtbvmList) {
+                    sb.Append(srtbvm.CopyItem.ItemPlainText + ",");
+                }
+                if (wasEmptySelection) {
+                    ClearSubSelection();
+                }
+                return sb.ToString();
             }
         }
 
         public string[] SubSelectedClipTilesFileList {
             get {
+                bool wasEmptySelection = SubSelectedRtbvmList.Count == 0;
+                if (wasEmptySelection) {
+                    SubSelectAll();
+                }
                 var fl = new List<string>();
-                foreach (var srtbvm in SubSelectedRtbvmList.OrderBy(x => x.LastSubSelectedDateTime)) {
+                foreach (var srtbvm in SubSelectedRtbvmList) {
                     foreach (string f in srtbvm.CopyItemFileDropList) {
                         fl.Add(f);
                     }
+                }
+                if (wasEmptySelection) {
+                    ClearSubSelection();
                 }
                 return fl.ToArray();
             }
@@ -114,13 +130,21 @@ namespace MpWpfApp {
 
         public string SubSelectedClipTilesMergedPlainText {
             get {
+                bool wasEmptySelection = SubSelectedRtbvmList.Count == 0;
+                if (wasEmptySelection) {
+                    SubSelectAll();
+                }
                 var sb = new StringBuilder();
-                foreach (var sctvm in SubSelectedRtbvmList.OrderBy(x => x.LastSubSelectedDateTime)) {
+                foreach (var sctvm in SubSelectedRtbvmList) {
                     if (sctvm.HasTemplate) {
-                        sb.Append(MpHelpers.Instance.ConvertRichTextToPlainText(sctvm.TemplateRichText) + Environment.NewLine);
+                        sb.Append(
+                            MpHelpers.Instance.ConvertRichTextToPlainText(sctvm.TemplateRichText) + Environment.NewLine);
                     } else {
                         sb.Append(sctvm.CopyItemPlainText + Environment.NewLine);
                     }
+                }
+                if (wasEmptySelection) {
+                    ClearSubSelection();
                 }
                 return sb.ToString().Trim('\r', '\n');
             }
@@ -129,7 +153,8 @@ namespace MpWpfApp {
         public string[] SubSelectedClipTilesMergedPlainTextFileList {
             get {
                 
-                string mergedPlainTextFilePath = MpHelpers.Instance.WriteTextToFile(System.IO.Path.GetTempFileName(), SubSelectedClipTilesMergedPlainText, true);
+                string mergedPlainTextFilePath = MpHelpers.Instance.WriteTextToFile(
+                    System.IO.Path.GetTempFileName(), SubSelectedClipTilesMergedPlainText, true);
 
                 return new string[] { mergedPlainTextFilePath };
             }
@@ -137,6 +162,10 @@ namespace MpWpfApp {
 
         public string SubSelectedClipTilesMergedRtf {
             get {
+                bool wasEmptySelection = SubSelectedRtbvmList.Count == 0;
+                if(wasEmptySelection) {
+                    SubSelectAll();
+                }
                 MpEventEnabledFlowDocument fd = string.Empty.ToRichText().ToFlowDocument();
                 foreach (var sctvm in SubSelectedRtbvmList.OrderBy(x => x.LastSubSelectedDateTime)) {
                     if (sctvm.HasTemplate) {
@@ -145,13 +174,17 @@ namespace MpWpfApp {
                         fd = MpHelpers.Instance.CombineFlowDocuments(sctvm.CopyItemRichText.ToFlowDocument(), fd);
                     }
                 }
+                if(wasEmptySelection) {
+                    ClearSubSelection();
+                }
                 return fd.ToRichText();
             }
         }
 
         public string[] SubSelectedClipTilesMergedRtfFileList {
             get {
-                string mergedRichTextFilePath = MpHelpers.Instance.WriteTextToFile(System.IO.Path.GetTempFileName(), SubSelectedClipTilesMergedRtf, true);
+                string mergedRichTextFilePath = MpHelpers.Instance.WriteTextToFile(
+                    System.IO.Path.GetTempFileName(), SubSelectedClipTilesMergedRtf, true);
 
                 return new string[] { mergedRichTextFilePath };
             }
@@ -434,7 +467,7 @@ namespace MpWpfApp {
         public void Refresh() {
             var sw = new Stopwatch();
             sw.Start();            
-            //RichTextBoxListBox?.Items.Refresh();
+            RichTextBoxListBox?.Items.Refresh();
             sw.Stop();
             //Console.WriteLine("Rtblb(HVIdx:"+MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles.IndexOf(HostClipTileViewModel)+") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
@@ -536,8 +569,8 @@ namespace MpWpfApp {
                     }
                 }
             }
-            if (SubSelectedClipTilesBmp != null) {
-                d.SetData(DataFormats.Bitmap, SubSelectedClipTilesBmp);
+            if (SubSelectedRtbvmList.Count == 1 && SubSelectedRtbvmList[0].CopyItemBmp != null) {
+                d.SetData(DataFormats.Bitmap, SubSelectedRtbvmList[0].CopyItemBmp);
             }
             if (SubSelectedClipTilesCsv != null) {
                 d.SetData(DataFormats.CommaSeparatedValue, SubSelectedClipTilesCsv);
@@ -563,14 +596,14 @@ namespace MpWpfApp {
             }), priority);
         }
         
-        public void Remove(MpRtbListBoxItemRichTextBoxViewModel rtbvm, bool isMergeToTray = false, bool isMergeToTile = false) {
+        public void Remove(MpRtbListBoxItemRichTextBoxViewModel rtbvm, bool isMerge = false) {
             base.Remove(rtbvm);
             if (rtbvm.CopyItem == null) {
                 //occurs when duplicate detected on background thread
                 return;
             }
 
-            if(isMergeToTray || isMergeToTile) {
+            if(isMerge) {
                 rtbvm.HostClipTileViewModel.IsClipDragging = false;
                 rtbvm.IsSubDragging = false;
                 UpdateAdorners();
@@ -585,22 +618,24 @@ namespace MpWpfApp {
                 HostClipTileViewModel.CopyItem.UnlinkCompositeChild(loneCompositeCopyItem);
                 HostClipTileViewModel.CopyItem.DeleteFromDatabase();
                 HostClipTileViewModel.CopyItem = loneCompositeCopyItem;
+            } else {
+                UpdateSortOrder();
             }
+            
 
-            if(!isMergeToTile && !isMergeToTray) {
+            if(!isMerge) {
                 rtbvm.CopyItem.DeleteFromDatabase();
             }
-
+            //Refresh();
             UpdateAdorners();
         }
 
         public async Task RemoveAsync(
             MpRtbListBoxItemRichTextBoxViewModel rtbvm, 
-            bool isMergeToTray = false, 
-            bool isMergeToTile = false, 
+            bool isMerge = false, 
             DispatcherPriority priority = DispatcherPriority.Background) {
             await Application.Current.Dispatcher.BeginInvoke((Action)(() => {
-                this.Remove(rtbvm, isMergeToTray, isMergeToTile);
+                this.Remove(rtbvm, isMerge);
             }), priority);
         }
 
@@ -812,21 +847,8 @@ namespace MpWpfApp {
         //    }
         //}
 
-        //public void SelectRichTextBoxViewModel(int idx, bool isInitEdit, bool isInitPaste) {
-        //    if(idx < 0 || idx >= this.Count/* || this[idx].IsSubSelected*/) {
-        //        return;
-        //    }
-        //    for (int i = 0; i < this.Count; i++) {
-        //        this[i].SetSelection(i == idx,isInitEdit, isInitPaste);
-        //    }
-        //}
 
-        //public void SelectRichTextBoxViewModel(MpRtbListBoxItemRichTextBoxViewModel rtbvm, bool isInitEdit, bool isInitPaste) {
-        //    if(!this.Contains(rtbvm)) {
-        //        return;
-        //    }
-        //    SelectRichTextBoxViewModel(this.IndexOf(rtbvm),isInitEdit, isInitPaste);
-        //}
+        
 
         public void SubSelectAll() {
             foreach(var rtbvm in this) {

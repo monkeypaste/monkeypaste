@@ -228,6 +228,7 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\MpClipTrayViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\MpMainWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\SearchBox\MpSearchBoxViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\SearchBox\MpSearchElementViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Account\MpHelpViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Apps\MpAppCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Apps\MpAppViewModel.cs" />

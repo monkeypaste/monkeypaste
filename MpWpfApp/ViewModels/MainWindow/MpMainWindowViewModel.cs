@@ -25,6 +25,8 @@ namespace MpWpfApp {
             }
         }
 
+        public static bool IsShowingMainWindow { get; set; } = false;
+
         //public static bool IsMainWindowOpen { get; private set; } = false;
         #endregion
 
@@ -536,6 +538,25 @@ namespace MpWpfApp {
             WinApi.SetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
         }
 
+        private void PasteDataObject(IDataObject pasteDataObject) {
+            if (ClipTrayViewModel.IsPastingTemplate) {
+                IsMainWindowLocked = false;
+            }
+            ClipTrayViewModel.PerformPaste(pasteDataObject);
+            foreach (var sctvm in ClipTrayViewModel.SelectedClipTiles) {
+                if (sctvm.HasTemplate) {
+                    //cleanup template by recreating hyperlinks
+                    //and reseting tile state
+                    sctvm.TileVisibility = Visibility.Visible;
+                    sctvm.TemplateRichText = string.Empty;
+                    //sctvm.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
+                    foreach (var rtbvm in sctvm.RichTextBoxViewModelCollection) {
+                        rtbvm.TemplateRichText = string.Empty;
+                    }
+                }
+            }
+        }
+
         public bool InitHotkeys() {
             try {
                 GlobalHook = Hook.GlobalEvents();
@@ -679,9 +700,10 @@ namespace MpWpfApp {
             return (Application.Current.MainWindow == null ||
                 Application.Current.MainWindow.Visibility != Visibility.Visible ||
                 IsLoading ||
-                !MpSettingsWindowViewModel.IsOpen) && !IsMainWindowOpen;
+                !MpSettingsWindowViewModel.IsOpen) && !IsMainWindowOpen && !IsShowingMainWindow;
         }
         private void ShowWindow() {
+            IsShowingMainWindow = true;
             if (Application.Current.MainWindow == null) {
                 Application.Current.MainWindow = new MpMainWindow();
             }
@@ -708,10 +730,12 @@ namespace MpWpfApp {
             timer.Interval = TimeSpan.FromMilliseconds(fps);
             
             timer.Tick += (s, e32) => {
-                if (MpHelpers.Instance.DistanceBetweenValues(MainWindowGridTop, _endMainWindowTop) > 0.5) {
+                if (MainWindowGridTop > _endMainWindowTop) {
                     MainWindowGridTop += dt;
                 } else {
+                    MainWindowGridTop = _endMainWindowTop;
                     timer.Stop();
+                    IsShowingMainWindow = false;
                 }
             };
             timer.Start();
@@ -728,13 +752,14 @@ namespace MpWpfApp {
         }
         private bool CanHideWindow(bool pasteSelected) {
             ///return false;
-            return (Application.Current.MainWindow != null &&
+            return ((Application.Current.MainWindow != null &&
                    Application.Current.MainWindow.Visibility == Visibility.Visible &&
-                   IsShowingDialog == false && !IsMainWindowLocked) || pasteSelected;
+                   IsShowingDialog == false && !IsMainWindowLocked) || pasteSelected) && IsMainWindowOpen;
         }
         private async void HideWindow(bool pasteSelected) {
             IDataObject pasteDataObject = null;
 
+            bool wasMainWindowLocked = IsMainWindowLocked;
             if (pasteSelected) {
                 if(ClipTrayViewModel.IsPastingTemplate) {
                     IsMainWindowLocked = true;
@@ -775,48 +800,41 @@ namespace MpWpfApp {
                     
             //        mw.Visibility = Visibility.Collapsed;
             //    });
+            if(IsMainWindowOpen) {
+                double tt = Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
+                double fps = 30;
+                double dt = ((_endMainWindowTop - _startMainWindowTop) / tt) / (fps / 1000);
 
+                var timer = new DispatcherTimer(DispatcherPriority.Render);
+                timer.Interval = TimeSpan.FromMilliseconds(fps);
 
-            double tt = Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
-            double fps = 30;
-            double dt = ((_endMainWindowTop - _startMainWindowTop) / tt) / (fps / 1000);
-
-            var timer = new DispatcherTimer(DispatcherPriority.Render);
-            timer.Interval = TimeSpan.FromMilliseconds(fps);
-
-            timer.Tick += (s, e32) => {
-                if (MpHelpers.Instance.DistanceBetweenValues(MainWindowGridTop, _startMainWindowTop) > 0.1) {
-                    MainWindowGridTop -= dt;
-                    //Canvas.SetTop(MainWindowGrid, MainWindowGridTop);
-                } else {
-                    timer.Stop();
-                    //IsMainWindowOpen = false;
-                    if (pasteSelected) {
-                        if (ClipTrayViewModel.IsPastingTemplate) {
-                            IsMainWindowLocked = false;
+                timer.Tick += (s, e32) => {
+                    if (MainWindowGridTop < _startMainWindowTop) {
+                        MainWindowGridTop -= dt;
+                        //Canvas.SetTop(MainWindowGrid, MainWindowGridTop);
+                    } else {
+                        MainWindowGridTop = _startMainWindowTop;
+                        timer.Stop();
+                        //IsMainWindowOpen = false;
+                        if (pasteSelected) {
+                            PasteDataObject(pasteDataObject);
                         }
-                        ClipTrayViewModel.PerformPaste(pasteDataObject);
-                        foreach (var sctvm in ClipTrayViewModel.SelectedClipTiles) {
-                            if (sctvm.HasTemplate) {
-                                //cleanup template by recreating hyperlinks
-                                //and reseting tile state
-                                sctvm.TileVisibility = Visibility.Visible;
-                                sctvm.TemplateRichText = string.Empty;
-                                //sctvm.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
-                                foreach (var rtbvm in sctvm.RichTextBoxViewModelCollection) {
-                                    rtbvm.TemplateRichText = string.Empty;
-                                }
-                            }
+
+                        ResetTraySelection();
+
+                        mw.Visibility = Visibility.Collapsed;
+                        IsMainWindowLocked = false;
+                        if(wasMainWindowLocked) {
+                            ShowWindowCommand.Execute(null);
+                            IsMainWindowLocked = true;
                         }
+                        //mw.WindowState = WindowState.Minimized;
                     }
-
-                    ResetTraySelection();
-
-                    mw.Visibility = Visibility.Collapsed;
-                    //mw.WindowState = WindowState.Minimized;
-                }
-            };
-            timer.Start();
+                };
+                timer.Start();
+            } else if(pasteDataObject != null) {
+                PasteDataObject(pasteDataObject);
+            }
         }
 
         private RelayCommand<object> _toggleMainWindowLockCommand;

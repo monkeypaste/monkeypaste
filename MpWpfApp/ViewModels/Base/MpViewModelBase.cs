@@ -12,7 +12,9 @@ namespace MpWpfApp {
     public class MpViewModelBase : DependencyObject, INotifyPropertyChanged {
         #region Private Variables
 
-        #endregion
+        #endregion        
+
+        #region Properties
 
         #region View Models
         public MpMainWindowViewModel MainWindowViewModel {
@@ -22,7 +24,6 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Properties
         public bool CanAcceptChildren { get; set; } = true;
 
         private bool _isTrialExpired = Properties.Settings.Default.IsTrialExpired;
@@ -40,7 +41,7 @@ namespace MpWpfApp {
             }
         }
 
-        private bool _isBusy;
+        private bool _isBusy = false;
         public bool IsBusy {
             get {
                 return _isBusy;
@@ -50,9 +51,25 @@ namespace MpWpfApp {
                     _isBusy = value;
                     Application.Current.MainWindow.Cursor = IsBusy ? Cursors.Wait : Cursors.Arrow;
                     OnPropertyChanged(nameof(IsBusy));
+                    OnPropertyChanged(nameof(IsLoading));
                 }
             }            
         }
+
+        private bool _isLoading;
+        public bool IsLoading {
+            get {
+                return _isLoading;
+            }
+            protected set {
+                if (_isLoading != value) {
+                    _isLoading = value;
+                    OnPropertyChanged(nameof(IsLoading));
+                }
+            }
+        }
+
+
         private static bool _designMode = false;
         protected bool IsInDesignMode {
             get {
@@ -74,6 +91,11 @@ namespace MpWpfApp {
                 }
             }
         }
+        #endregion
+
+        #region Events
+        public event EventHandler ViewModelLoaded;
+        protected virtual void OnViewModelLoaded() => ViewModelLoaded?.Invoke(this, EventArgs.Empty);
         #endregion
 
         #region Protected Methods

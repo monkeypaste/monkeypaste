@@ -650,19 +650,19 @@ namespace MpWpfApp {
                 downModKeyList.Add(Key.LeftCtrl);
             }
             if (Keyboard.IsKeyDown(Key.RightCtrl)) {
-                downModKeyList.Add(Key.RightCtrl);
+                downModKeyList.Add(Key.LeftCtrl);
             }
             if (Keyboard.IsKeyDown(Key.LeftShift)) {
                 downModKeyList.Add(Key.LeftShift);
             }
             if (Keyboard.IsKeyDown(Key.RightShift)) {
-                downModKeyList.Add(Key.RightShift);
+                downModKeyList.Add(Key.LeftShift);
             }
             if (Keyboard.IsKeyDown(Key.LeftAlt)) {
                 downModKeyList.Add(Key.LeftAlt);
             }
             if (Keyboard.IsKeyDown(Key.RightAlt)) {
-                downModKeyList.Add(Key.RightAlt);
+                downModKeyList.Add(Key.LeftAlt);
             }
 
             return downModKeyList;
@@ -2538,18 +2538,26 @@ namespace MpWpfApp {
             }
         }
 
-        public byte[] ConvertBitmapSourceToByteArray(BitmapSource bs) {            
-            if(bs == null) {
+        public byte[] ConvertBitmapSourceToByteArray(BitmapSource bs) {
+            if (bs == null) {
                 return null;
             }
             PngBitmapEncoder encoder = new PngBitmapEncoder();
             using (MemoryStream stream = new MemoryStream()) {
-                encoder.Frames.Add(System.Windows.Media.Imaging.BitmapFrame.Create(bs));
-                encoder.Save(stream);
-                byte[] bit = stream.ToArray();
-                stream.Close();
-                return bit;
+                try {
+                    var bf = System.Windows.Media.Imaging.BitmapFrame.Create(bs);                    
+                    encoder.Frames.Add(bf);
+                    encoder.Save(stream);
+                    byte[] bit = stream.ToArray();
+                    stream.Close();
+                    return bit;
+                }
+                catch (Exception ex) {
+                    return null;
+                }
+                
             }
+            
         }
 
         public async Task<byte[]> ConvertBitmapSourceToByteArrayAsync(BitmapSource bs, DispatcherPriority priority) {
