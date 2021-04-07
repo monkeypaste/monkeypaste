@@ -140,44 +140,46 @@ namespace MpWpfApp {
             return shortcutKeyString;
         }
         public void Add(object vm, string keys, ICommand command, object commandParameter) {
+            MpShortcutViewModel nscvm = null;
             if (vm.GetType() == typeof(MpClipTileViewModel)) {
                 var ctvm = (MpClipTileViewModel)vm;
-                base.Add(
-                    new MpShortcutViewModel(
+                nscvm = new MpShortcutViewModel(
                         new MpShortcut(
                             ctvm.CopyItem.CopyItemId,
                             0,
                             keys,
                             "Paste " + ctvm.CopyItemTitle),
-                            command,commandParameter));
+                            command, commandParameter);
             } else if (vm.GetType() == typeof(MpTagTileViewModel)) {
                 var ttvm = (MpTagTileViewModel)vm;
-                base.Add(
-                    new MpShortcutViewModel(
+                nscvm = new MpShortcutViewModel(
                         new MpShortcut(
                             0,
                             ttvm.TagId,
                             keys,
                             "Select " + ttvm.TagName),
-                            command,commandParameter));
+                            command, commandParameter);
             } else if (vm.GetType() == typeof(MpShortcutViewModel)) {
-                var scvm = (MpShortcutViewModel)vm;
-                scvm.KeyString = keys;
-                scvm.Command = command;
-                scvm.CommandParameter = commandParameter;
-                scvm.Shortcut.WriteToDatabase();
+                nscvm = (MpShortcutViewModel)vm;
+                nscvm.KeyString = keys;
+                nscvm.Command = command;
+                nscvm.CommandParameter = commandParameter;
+            }
 
+            if(nscvm != null) {
                 //check by command if shortcut exists if it does swap it with scvm otherwise add and always register
-                var curScvml = this.Where(x => x.Command == scvm.Command).ToList();
+                var curScvml = this.Where(x => x.Command == nscvm.Command).ToList();
                 if (curScvml != null && curScvml.Count > 0) {
                     foreach (var curscvm in curScvml) {
-                        this[this.IndexOf(curscvm)] = scvm;
+                        this[this.IndexOf(curscvm)] = nscvm;
                     }
                 } else {
-                    this.Insert(this.Count, scvm);
+                    this.Insert(this.Count, nscvm);
                 }
 
-                scvm.Register();
+                nscvm.Register();
+
+                nscvm.Shortcut.WriteToDatabase();
             }
         }
 

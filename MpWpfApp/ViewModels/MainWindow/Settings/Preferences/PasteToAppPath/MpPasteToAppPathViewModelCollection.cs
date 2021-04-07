@@ -241,7 +241,7 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Commands
+        #region Commands    
         private RelayCommand _deletePasteToAppPathCommand;
         public ICommand DeletePasteToAppPathCommand {
             get {

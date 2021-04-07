@@ -428,9 +428,7 @@ namespace MpWpfApp {
                 //    return;
                 //}
                 e65.Handled = true; 
-            };            
-
-            
+            };                                    
 
             //after pasting template rtb's are duplicated so clear them upon refresh
             SyncItemsWithModel();            
@@ -537,54 +535,6 @@ namespace MpWpfApp {
                 }
             }
         }
-
-        public async Task<IDataObject> GetDataObjectFromSubSelectedItems(bool isDragDrop = false) {
-            IDataObject d = new DataObject();
-
-            string rtf = string.Empty;
-            foreach (var srtbvm in SubSelectedRtbvmList) {
-                var task = srtbvm.GetPastableRichText();
-                string rt = await task;
-                if (string.IsNullOrEmpty(rtf)) {
-                    rtf = rt;
-                } else {
-                    rtf = MpHelpers.Instance.CombineRichText(rtf, rt);
-                }
-            }
-            if (!string.IsNullOrEmpty(rtf)) {
-                d.SetData(DataFormats.Rtf, rtf);
-                d.SetData(DataFormats.Text, rtf.ToPlainText());
-            }
-
-            //only when pasting into explorer must have file drop
-            if (MpHelpers.Instance.IsProcessNeedFileDrop(MpRunningApplicationManager.Instance.ActiveProcessPath) &&
-                isDragDrop) {
-                if (SubSelectedClipTilesFileList != null) {
-                    if (MpHelpers.Instance.IsProcessLikeNotepad(MpRunningApplicationManager.Instance.ActiveProcessPath)) {
-                        d.SetData(DataFormats.FileDrop, SubSelectedClipTilesMergedPlainTextFileList);
-                    } else if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
-                        d.SetData(DataFormats.FileDrop, SubSelectedClipTilesMergedRtfFileList);
-                    } else {
-                        d.SetData(DataFormats.FileDrop, SubSelectedClipTilesFileList);
-                    }
-                }
-            }
-            if (SubSelectedRtbvmList.Count == 1 && SubSelectedRtbvmList[0].CopyItemBmp != null) {
-                d.SetData(DataFormats.Bitmap, SubSelectedRtbvmList[0].CopyItemBmp);
-            }
-            if (SubSelectedClipTilesCsv != null) {
-                d.SetData(DataFormats.CommaSeparatedValue, SubSelectedClipTilesCsv);
-            }
-
-            if (isDragDrop && SubSelectedRtbvmList != null && SubSelectedRtbvmList.Count > 0) {
-                d.SetData(Properties.Settings.Default.ClipTileSubItemDragDropFormat, SubSelectedRtbvmList.ToList());
-            }
-            return d;
-            //awaited in MainWindowViewModel.HideWindow
-        }
-
-        
-
         public new void Add(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {            
             base.Insert(0,rtbvm);
             UpdateAdorners();

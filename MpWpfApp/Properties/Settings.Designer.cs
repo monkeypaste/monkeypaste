@@ -1118,15 +1118,6 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("MpClipSubItemDragDropFormat")]
-        public string ClipTileSubItemDragDropFormat {
-            get {
-                return ((string)(this["ClipTileSubItemDragDropFormat"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("25")]
         public int MaxRecentClipItems {
             get {

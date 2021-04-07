@@ -768,12 +768,11 @@
 
         public Rect TileBorderBrushRect {
             get {
-                if (RichTextBoxViewModelCollection == null || /*
-                   RichTextBoxViewModelCollection.SubSelectedRtbvmList.Count == 0 ||*/
-                   !IsContextMenuOpened) {
+                if (RichTextBoxViewModelCollection == null ||
+                   !IsSubContextMenuOpened) {
                     return new Rect(50,0,50,50);
                 }
-                if(IsContextMenuOpened && RichTextBoxViewModelCollection.Count > 1) {
+                if(IsSubContextMenuOpened) {
                     return new Rect(0, 0, 50, 50);
                 }
                 return new Rect(50, 0, 50, 50);
@@ -999,15 +998,15 @@
             }
         }
 
-        private bool _isContextMenuOpened = false;
-        public bool IsContextMenuOpened {
+        private bool _isSubContextMenuOpened = false;
+        public bool IsSubContextMenuOpened {
             get {
-                return _isContextMenuOpened;
+                return _isSubContextMenuOpened;
             }
             set {
-                if (_isContextMenuOpened != value) {
-                    _isContextMenuOpened = value;
-                    OnPropertyChanged(nameof(IsContextMenuOpened));
+                if (_isSubContextMenuOpened != value) {
+                    _isSubContextMenuOpened = value;
+                    OnPropertyChanged(nameof(IsSubContextMenuOpened));
                     OnPropertyChanged(nameof(TileBorderBrush));
                     OnPropertyChanged(nameof(TileBorderBrushRect));
                 }
@@ -1837,6 +1836,7 @@
                                 }
                             }
                         }
+                        dcil.Reverse();
                         ctvm.MergeClip(dcil, dropIdx);
                         wasDropped = true;
                     }
@@ -2058,45 +2058,34 @@
             if (ctvm is MpRtbListBoxItemRichTextBoxViewModel) {
                 ctvm = (ctvm as MpRtbListBoxItemRichTextBoxViewModel).HostClipTileViewModel;
             }
-            ctvm.IsContextMenuOpened = false;
+            ctvm.IsSubContextMenuOpened = false;
 
             ctvm.RichTextBoxViewModelCollection.ClearSubSelection();
         }
 
-        public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {            
-            var cm = (ContextMenu)sender;
-            var ctvm = cm.DataContext as MpClipTileViewModel;
-
-            if(ctvm is MpRtbListBoxItemRichTextBoxViewModel) {
-                //only allow context menu for ONE subitem
-                (ctvm as MpRtbListBoxItemRichTextBoxViewModel).HostClipTileViewModel.IsContextMenuOpened = true;
-                //(ctvm as MpRtbListBoxItemRichTextBoxViewModel).RichTextBoxViewModelCollection.ClearSubSelection();
-                //(ctvm as MpRtbListBoxItemRichTextBoxViewModel).IsSubSelected = true;
+        public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
+            ContextMenu cm = null;
+            MpClipTileViewModel ctvm = null;
+            MpRtbListBoxItemRichTextBoxViewModel rtbvm = null;
+            if(sender is ContextMenu) {
+                //means right clicking actual tile not sub item
+                cm = sender as ContextMenu;
+                ctvm = this;
+                ctvm.IsSubContextMenuOpened = false;
+            } else if(sender is Canvas) {
+                //means right clicking sub item
+                cm = (ContextMenu)ClipBorder.FindName("ClipTile_ContextMenu");
+                rtbvm = (MpRtbListBoxItemRichTextBoxViewModel)(sender as Canvas).DataContext;
+                rtbvm.HostClipTileViewModel.IsSubContextMenuOpened = true;
+                cm.DataContext = rtbvm;
+            } else {
+                IsSubContextMenuOpened = false;
+                return;
             }
 
-            if(ctvm.CopyItemType == MpCopyItemType.RichText || 
+            if (ctvm.CopyItemType == MpCopyItemType.RichText ||
                ctvm.CopyItemType == MpCopyItemType.Composite) {
                 cm = MpPasteToAppPathViewModelCollection.Instance.UpdatePasteToMenuItem(cm);
-            }
-            if (ctvm.CopyItemType == MpCopyItemType.Composite) {
-                //MpRtbListBoxItemRichTextBoxViewModel rtbvmUnderMouse = null;
-                //for (int i = 0; i < ctvm.RichTextBoxViewModelCollection.Count; i++) {
-                //    if (MpHelpers.Instance.IsMouseOver(ctvm.RichTextBoxViewModelCollection.GetListBoxItem(i))) {
-                //        rtbvmUnderMouse = ctvm.RichTextBoxViewModelCollection[i];
-                //        break;
-                //    }
-                //}
-                //if (rtbvmUnderMouse != null) {
-                //    //only allow context menu for ONE subitem
-                //    ctvm.RichTextBoxViewModelCollection.ClearSubSelection();
-                //    rtbvmUnderMouse.IsSubSelected = true;
-                //    cm.DataContext = rtbvmUnderMouse;
-                //}
-            } else if (ctvm.CopyItemType == MpCopyItemType.Image && !string.IsNullOrEmpty(ctvm.CopyItemPlainText)) {
-                var cmi = new MenuItem();
-                cmi.Header = "Convert to Text";
-                cmi.Click += (s, e1) => System.Windows.Clipboard.SetText(ctvm.CopyItemPlainText);
-                cm.Items.Add(cmi);
             }
 
             RefreshCommands();
@@ -2113,7 +2102,6 @@
                         tagTile,
                         tagTile.IsLinkedWithClipTile(ctvm)));
             }
-            ctvm.IsContextMenuOpened = true;
         }
         #endregion       
 
@@ -2124,23 +2112,15 @@
             if(data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName)) {
                 var dctvml = (List<MpClipTileViewModel>)data.GetData(Properties.Settings.Default.ClipTileDragDropFormatName);
                 foreach(var dctvm in dctvml) {
-                    if(dctvm == this || 
+                    if((dctvm == this && !IsAnySubItemDragging) || 
                        dctvm.CopyItemType == MpCopyItemType.Image || 
                        dctvm.CopyItemType == MpCopyItemType.FileList) {
                         return true;
                     }
                 }
                 return false;
-            } else if(data.GetDataPresent(Properties.Settings.Default.ClipTileSubItemDragDropFormat)) {
-                var drtbvml = (List<MpRtbListBoxItemRichTextBoxViewModel>)data.GetData(Properties.Settings.Default.ClipTileSubItemDragDropFormat);
-                if(RichTextBoxViewModelCollection.Count == 1 && 
-                   drtbvml.Count == 1 && 
-                   RichTextBoxViewModelCollection[0] == drtbvml[0]) {
-                    return true;
-                }
-                return false;
-            }
-            return false;
+            } 
+            return true;
         }
 
         public void Resize(
@@ -2262,11 +2242,6 @@
                             forceIdx = Math.Min(this.RichTextBoxViewModelCollection.Count - 1, forceIdx);
                             this.RichTextBoxViewModelCollection.Move(this.RichTextBoxViewModelCollection.IndexOf(ortbvm), forceIdx);
                             this.RichTextBoxViewModelCollection.UpdateSortOrder();
-                            //MainWindowViewModel.ClipTrayViewModel.ClearClipSelection();
-                            //IsSelected = true;
-                            //this.RichTextBoxViewModelCollection.ClearSubSelection();
-                            //ortbvm.IsSubSelected = true;
-                            return;
                         } else {
                             //if copyitem is part of composite remove it 
                             ortbvm.RichTextBoxViewModelCollection.Remove(ortbvm, true);
@@ -2589,6 +2564,22 @@
             MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand.Execute(null);
         }
 
+        private RelayCommand _assignHotkeyCommand;
+        public ICommand AssignHotkeyCommand {
+            get {
+                if (_assignHotkeyCommand == null) {
+                    _assignHotkeyCommand = new RelayCommand(AssignHotkey);
+                }
+                return _assignHotkeyCommand;
+            }
+        }
+        private void AssignHotkey() {
+            ShortcutKeyString = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(
+                this,
+                "Paste " + CopyItemTitle,
+                ShortcutKeyString,
+                PasteClipCommand, null);
+        }
         #endregion
 
         #region Overrides

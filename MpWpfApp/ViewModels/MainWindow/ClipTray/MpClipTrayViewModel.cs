@@ -443,8 +443,7 @@ namespace MpWpfApp {
                     return;
                 }
                 AutoScrollByMouse();
-                if (e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName) ||
-                    e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileSubItemDragDropFormat)) {
+                if (e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName)) {
                     int dropIdx = GetDropIdx(MpHelpers.Instance.GetMousePosition(ListBox));
                     if (dropIdx >= 0/* && (dropIdx >= this.Count || (dropIdx < this.Count && !this[dropIdx].IsClipOrAnySubItemDragging))*/) {
                         DropTopPoint = this.GetAdornerPoints(dropIdx)[0];
@@ -974,7 +973,7 @@ namespace MpWpfApp {
             
             if (!string.IsNullOrEmpty(rtf)) {
                 d.SetData(DataFormats.Rtf, rtf);
-                d.SetData(DataFormats.Text, rtf.ToString());
+                d.SetData(DataFormats.Text, rtf.ToPlainText());
             }
 
             //only when pasting into explorer or notepad must have file drop
@@ -1456,11 +1455,7 @@ namespace MpWpfApp {
             return SelectedClipTiles.Count == 1;
         }
         private void AssignHotkey() {
-            SelectedClipTiles[0].ShortcutKeyString = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(
-                this, 
-                "Paste " + SelectedClipTiles[0].CopyItemTitle, 
-                SelectedClipTiles[0].ShortcutKeyString, 
-                SelectedClipTiles[0].PasteClipCommand,null);
+            SelectedClipTiles[0].AssignHotkeyCommand.Execute(null);
         }
 
         private RelayCommand _invertSelectionCommand;

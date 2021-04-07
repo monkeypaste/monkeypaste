@@ -1181,8 +1181,17 @@ namespace MpWpfApp {
                 App);
             newItem.CopyCount = CopyCount;
             newItem.CopyDateTime = CopyDateTime;
-            newItem.CopyItemId = CopyItemId;
-            //newItem.ItemTitleSwirl = ItemTitleSwirl;
+            newItem.CopyItemId = 0;
+            newItem.WriteToDatabase();
+
+            foreach(var tag in MpTag.GetAllTags()) {
+                if(tag.IsLinkedWithCopyItem(this)) {
+                    tag.LinkWithCopyItem(newItem);
+                }
+            }
+            foreach(var cci in CompositeItemList) {
+                newItem = MpCopyItem.Merge((MpCopyItem)cci.Clone(), newItem);
+            }
             return newItem;
         }
         #endregion
