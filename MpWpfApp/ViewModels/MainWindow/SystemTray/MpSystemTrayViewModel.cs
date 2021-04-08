@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using Hardcodet.Wpf.TaskbarNotification;
+using System;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
@@ -38,6 +39,33 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public string AppStatus {
+            get {
+                if(MainWindowViewModel == null) {
+                    return string.Empty;
+                }
+                return @"Monkey Paste [" + (MainWindowViewModel.AppModeViewModel.IsAppPaused ? "PAUSED" : "ACTIVE") + "]";
+            }
+        }
+
+        public string AccountStatus {
+            get {
+                return "<email address> <online?>";
+            }
+        }
+
+        public string TotalItemCount {
+            get {
+                return MpCopyItem.GetTotalItemCount().ToString() + " total entries";
+            }
+        }
+
+        public string DbSizeInMbs {
+            get {
+                return Math.Round(MpHelpers.Instance.FileListSize(new string[] { Properties.Settings.Default.DbPath }),2).ToString() + " megabytes";
+            }
+        }
         #endregion
 
         #region Public Methods
@@ -50,7 +78,12 @@ namespace MpWpfApp {
             _taskbarIcon.TrayLeftMouseUp += (s, e1) => {
                 MainWindowViewModel.ShowWindowCommand.Execute(null);
             };
-
+            _taskbarIcon.MouseEnter += (s, e3) => {
+                OnPropertyChanged(nameof(AppStatus));
+                OnPropertyChanged(nameof(AccountStatus));
+                OnPropertyChanged(nameof(TotalItemCount));
+                OnPropertyChanged(nameof(DbSizeInMbs));
+            };
             //ShowStandardBalloon("Monkey Paste", "Successfully loaded", BalloonIcon.Info);
             //ShowStandardBalloon("Test title", "Test balloon text", BalloonIcon.Info);
         }

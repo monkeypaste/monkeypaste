@@ -347,6 +347,17 @@ namespace MpWpfApp {
             SearchTextBox = (TextBox)searchBorder.FindName("SearchBox");
             var searchByButton = (Button)searchBorder.FindName("SearchDropDownButton");
             var clearSearchBoxButton = (Button)searchBorder.FindName("ClearTextBoxButton");
+            //SearchTextBox.AllowDrop = true;
+            //SearchTextBox.DragEnter += (s, e) => {
+            //    if (!HasText) {
+            //        Text = string.Empty;
+            //    }
+            //};
+            //SearchTextBox.DragLeave += (s, e) => {
+            //    if (!HasText) {
+            //        Text = Properties.Settings.Default.SearchPlaceHolderText;
+            //    }
+            //};
             SearchTextBox.GotFocus += (s, e4) => {
                 if (!HasText) {
                     Text = string.Empty;

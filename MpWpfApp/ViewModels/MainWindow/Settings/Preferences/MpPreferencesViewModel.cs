@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Speech.Synthesis;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -32,6 +33,43 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+        private ObservableCollection<string> _voiceNames = null;
+        public ObservableCollection<string> VoiceNames {
+            get {
+                if(_voiceNames == null) {
+                    _voiceNames = new ObservableCollection<string>();
+                    var speechSynthesizer = new SpeechSynthesizer();
+                    foreach (var voice in speechSynthesizer.GetInstalledVoices()) {
+                        var name = voice.VoiceInfo.Name;
+                        
+                        _voiceNames.Add(voice.VoiceInfo.Name.Replace(@"Microsoft ",string.Empty).Replace(@" Desktop",string.Empty));
+                    }
+                }
+                return _voiceNames;
+            }
+            set {
+                if(_voiceNames != value) {
+                    _voiceNames = value;
+                    OnPropertyChanged(nameof(VoiceNames));
+                }
+            }
+        }
+
+        private string _selectedVoiceName = Properties.Settings.Default.SpeechSynthVoiceName;
+        public string SelectedVoiceName {
+            get {
+                return _selectedVoiceName;
+            }
+            set {
+                if(_selectedVoiceName != value) {
+                    _selectedVoiceName = value;
+                    Properties.Settings.Default.SpeechSynthVoiceName = _selectedVoiceName;
+                    Properties.Settings.Default.Save();
+                    OnPropertyChanged(nameof(SelectedVoiceName));
+                }
+            }
+        }
+
         private int _maxRtfCharCount = Properties.Settings.Default.MaxRtfCharCount;
         public int MaxRtfCharCount {
             get {
@@ -134,6 +172,9 @@ namespace MpWpfApp {
 
             IsLoadOnLoginChecked = Properties.Settings.Default.LoadOnLogin;
             UseSpellCheck = Properties.Settings.Default.UseSpellCheck;
+            if(string.IsNullOrEmpty(Properties.Settings.Default.SpeechSynthVoiceName) && VoiceNames != null && VoiceNames.Count > 0) {
+                SelectedVoiceName = VoiceNames[0];
+            }
         }
         #endregion
 

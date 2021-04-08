@@ -813,17 +813,21 @@
                             CornerRadius="4"
                             Opacity="0.8">
                         <StackPanel>
-                            <TextBlock Text="Monkey Paste Info 1"
+                            <TextBlock Text="{Binding AppStatus}"
                                        Foreground="White"
-                                       HorizontalAlignment="Center"
+                                       HorizontalAlignment="Left"
                                        VerticalAlignment="Center" />
-                            <TextBlock Text="Monkey Paste Info 2"
+                            <TextBlock Text="{Binding AccountStatus}"
                                        Foreground="White"
-                                       HorizontalAlignment="Center"
+                                       HorizontalAlignment="Left"
                                        VerticalAlignment="Center" />
-                            <TextBlock Text="Monkey Paste Info 3"
+                            <TextBlock Text="{Binding TotalItemCount}"
                                        Foreground="White"
-                                       HorizontalAlignment="Center"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding DbSizeInMbs}"
+                                       Foreground="White"
+                                       HorizontalAlignment="Left"
                                        VerticalAlignment="Center" />
                         </StackPanel>
                     </Border>
@@ -1117,6 +1121,7 @@
                             </Button>
                             <TextBox x:Name="SearchBox"
                                      Grid.Column="1"
+                                     AllowDrop="False"
                                      FontSize="16"
                                      Background="Transparent"
                                      Foreground="{Binding TextBoxTextBrush}"
@@ -1989,7 +1994,7 @@
                                                                           HorizontalScrollBarVisibility="{Binding HorizontalScrollbarVisibility}"
                                                                           VerticalScrollBarVisibility="{Binding VerticalScrollbarVisibility}">
                                                                 <AdornerDecorator>
-                                                                    <local:AnimatedListBox x:Name="ClipTilRichTextBoxListBox"
+                                                                    <local:MpMultiSelectListBox x:Name="ClipTilRichTextBoxListBox"
                                                                                            VerticalAlignment="Top"
                                                                                            HorizontalAlignment="Left"
                                                                                            BorderThickness="1"
@@ -2037,8 +2042,10 @@
                                                                         </ListBox.ItemContainerStyle>
                                                                         <ListBox.ItemTemplate>
                                                                             <DataTemplate>
-                                                                                <AdornerDecorator DataContext="{Binding}">
+                                                                                <AdornerDecorator Visibility="{Binding SubItemVisibility}"
+                                                                                                  DataContext="{Binding}">
                                                                                     <Canvas x:Name="RtbListBoxItemCanvas"
+                                                                                            DataContext="{Binding}"
                                                                                             HorizontalAlignment="Left"
                                                                                             VerticalAlignment="Top"
                                                                                             Focusable="{Binding HostClipTileViewModel.IsExpanded}"
@@ -2051,6 +2058,49 @@
                                                                                                                     MethodName="ClipTileRichTextBoxListItemCanvas_Loaded" />
                                                                                             </i:EventTrigger>
                                                                                         </i:Interaction.Triggers>
+                                                                                        <Canvas.Resources>
+                                                                                            <local:MpBindingProxy x:Key="RtbListBoxItemProxy"
+                                                                                                                  Data="{Binding}" />
+                                                                                        </Canvas.Resources>
+                                                                                        <Canvas.ContextMenu>
+                                                                                            <ContextMenu ItemsSource="{Binding Data.ContextMenuItemCollectionViewModel, Source={StaticResource RtbListBoxItemProxy}}">
+                                                                                                <ContextMenu.Resources>
+                                                                                                    <ControlTemplate x:Key="MenuSeparatorTemplate">
+                                                                                                        <Separator>
+                                                                                                            <Separator.Style>
+                                                                                                                <Style TargetType="{x:Type Separator}"
+                                                                                                                       BasedOn="{StaticResource ResourceKey={x:Static MenuItem.SeparatorStyleKey}}" />
+                                                                                                            </Separator.Style>
+                                                                                                        </Separator>
+                                                                                                    </ControlTemplate>
+                                                                                                </ContextMenu.Resources>
+                                                                                                <ContextMenu.ItemContainerStyle>
+                                                                                                    <Style TargetType="{x:Type MenuItem}">
+                                                                                                        <Setter Property="Command"
+                                                                                                                Value="{Binding Command}" />
+                                                                                                        <Setter Property="CommandParameter"
+                                                                                                                Value="{Binding CommandParameter}" />
+                                                                                                        <Setter Property="Header"
+                                                                                                                Value="{Binding Header}" />
+                                                                                                        <Setter Property="IsChecked"
+                                                                                                                Value="{Binding IsChecked, Mode=TwoWay}" />
+                                                                                                        <Setter Property="Icon"
+                                                                                                                Value="{Binding Icon}" />
+                                                                                                        <Setter Property="Visibility"
+                                                                                                                Value="{Binding MenuItemVisibility}" />
+                                                                                                        <Setter Property="ItemsSource"
+                                                                                                                Value="{Binding SubItems}" />
+                                                                                                        <Style.Triggers>
+                                                                                                            <DataTrigger Binding="{Binding}"
+                                                                                                                         Value="{x:Null}">
+                                                                                                                <Setter Property="Template"
+                                                                                                                        Value="{StaticResource MenuSeparatorTemplate}" />
+                                                                                                            </DataTrigger>
+                                                                                                        </Style.Triggers>
+                                                                                                    </Style>
+                                                                                                </ContextMenu.ItemContainerStyle>
+                                                                                            </ContextMenu>
+                                                                                        </Canvas.ContextMenu>
                                                                                         <AdornerDecorator DataContext="{Binding}">
                                                                                             <RichTextBox x:Name="RtbListBoxItemRichTextBox"
                                                                                                          Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
@@ -2184,7 +2234,7 @@
                                                                                 </AdornerDecorator>
                                                                             </DataTemplate>
                                                                         </ListBox.ItemTemplate>
-                                                                    </local:AnimatedListBox>
+                                                                    </local:MpMultiSelectListBox>
                                                                 </AdornerDecorator>
                                                             </ScrollViewer>
                                                         </Grid>

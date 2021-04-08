@@ -101,8 +101,8 @@
             }
         }
 
-        private ObservableCollection<MpClipTileContextMenuItemViewModel> _convertClipTypes = new ObservableCollection<MpClipTileContextMenuItemViewModel>();
-        public ObservableCollection<MpClipTileContextMenuItemViewModel> ConvertClipTypes {
+        private ObservableCollection<MpContextMenuItemViewModel> _convertClipTypes = new ObservableCollection<MpContextMenuItemViewModel>();
+        public ObservableCollection<MpContextMenuItemViewModel> ConvertClipTypes {
             get {
                 return _convertClipTypes;
             }
@@ -114,8 +114,8 @@
             }
         }
 
-        private ObservableCollection<MpClipTileContextMenuItemViewModel> _tagMenuItems = new ObservableCollection<MpClipTileContextMenuItemViewModel>();
-        public ObservableCollection<MpClipTileContextMenuItemViewModel> TagMenuItems {
+        private ObservableCollection<MpContextMenuItemViewModel> _tagMenuItems = new ObservableCollection<MpContextMenuItemViewModel>();
+        public ObservableCollection<MpContextMenuItemViewModel> TagMenuItems {
             get {
                 return _tagMenuItems;
             }
@@ -195,11 +195,11 @@
             }
         }
 
-        public ObservableCollection<MpClipTileContextMenuItemViewModel> TranslateLanguageMenuItems {
+        public ObservableCollection<MpContextMenuItemViewModel> TranslateLanguageMenuItems {
             get {
-                var translateLanguageMenuItems = new ObservableCollection<MpClipTileContextMenuItemViewModel>();
+                var translateLanguageMenuItems = new ObservableCollection<MpContextMenuItemViewModel>();
                 foreach (var languageName in MpLanguageTranslator.Instance.LanguageList) {
-                    translateLanguageMenuItems.Add(new MpClipTileContextMenuItemViewModel(languageName, TranslateClipTextAsyncCommand, languageName, false));
+                    translateLanguageMenuItems.Add(new MpContextMenuItemViewModel(languageName, TranslateClipTextAsyncCommand, languageName, false));
                 }
                 return translateLanguageMenuItems;
             }
@@ -2076,6 +2076,7 @@
                 //means right clicking sub item
                 cm = (ContextMenu)ClipBorder.FindName("ClipTile_ContextMenu");
                 rtbvm = (MpRtbListBoxItemRichTextBoxViewModel)(sender as Canvas).DataContext;
+                ctvm = rtbvm.HostClipTileViewModel;
                 rtbvm.HostClipTileViewModel.IsSubContextMenuOpened = true;
                 cm.DataContext = rtbvm;
             } else {
@@ -2096,7 +2097,7 @@
                     continue;
                 }
                 ctvm.TagMenuItems.Add(
-                    new MpClipTileContextMenuItemViewModel(
+                    new MpContextMenuItemViewModel(
                         tagTile.TagName,
                         MainWindowViewModel.ClipTrayViewModel.LinkTagToCopyItemCommand,
                         tagTile,
@@ -2218,7 +2219,7 @@
         public void MergeClip(
             List<MpCopyItem> ocil,
             int forceIdx = -1) {
-            IsBusy = true;
+            //IsBusy = true;
             foreach (var oci in ocil) {
                 if (oci.CopyItemId == CopyItemId) {
                     return;
@@ -2261,7 +2262,7 @@
 
             SaveToDatabase();
 
-            IsBusy = false;
+            //IsBusy = false;
 
             RichTextBoxViewModelCollection.UpdateLayout();
 
@@ -2514,22 +2515,22 @@
             //MpHelpers.Instance.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
         }
 
-        private RelayCommand _toggleEditTitleCommand;
+        private RelayCommand<object> _toggleEditTitleCommand;
         public ICommand ToggleEditTitleCommand {
             get {
                 if (_toggleEditTitleCommand == null) {
-                    _toggleEditTitleCommand = new RelayCommand(ToggleEditTitle, CanToggleEditTitle);
+                    _toggleEditTitleCommand = new RelayCommand<object>(ToggleEditTitle, CanToggleEditTitle);
                 }
                 return _toggleEditTitleCommand;
             }
         }
-        private bool CanToggleEditTitle() {
+        private bool CanToggleEditTitle(object args) {
             if (MainWindowViewModel.IsLoading) {
                 return false;
             }
             return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1;
         }
-        private void ToggleEditTitle() {
+        private void ToggleEditTitle(object args) {
             IsEditingTitle = !IsEditingTitle;
         }        
 

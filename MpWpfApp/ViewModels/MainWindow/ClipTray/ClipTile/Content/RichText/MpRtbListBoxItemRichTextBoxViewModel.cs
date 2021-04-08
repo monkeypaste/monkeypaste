@@ -69,6 +69,19 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        private MpContextMenuItemCollectionViewModel _contextMenuItemCollectionViewModel = null;
+        public MpContextMenuItemCollectionViewModel ContextMenuItemCollectionViewModel {
+            get {
+                return _contextMenuItemCollectionViewModel;
+            }
+            set {
+                if(_contextMenuItemCollectionViewModel != value) {
+                    _contextMenuItemCollectionViewModel = value;
+                    OnPropertyChanged(nameof(ContextMenuItemCollectionViewModel));
+                }
+            }
+        }
         #endregion
 
         #region Controls 
@@ -405,6 +418,18 @@ namespace MpWpfApp {
         #endregion
 
         #region Visibility
+        private Visibility _subItemVisibility = Visibility.Visible;
+        public Visibility SubItemVisibility {
+            get {
+                return _subItemVisibility;
+            }
+            set {
+                if(_subItemVisibility != value) {
+                    _subItemVisibility = value;
+                    OnPropertyChanged(nameof(SubItemVisibility));
+                }
+            }
+        }
         public Visibility SubItemToolTipVisibility {
             get {
                 if (CopyItem == null) {
@@ -955,7 +980,8 @@ namespace MpWpfApp {
         public MpRtbListBoxItemRichTextBoxViewModel(MpClipTileViewModel ctvm, MpCopyItem ci) : base() {
             CopyItem = ci;
             HostClipTileViewModel = ctvm;
-            TemplateHyperlinkCollectionViewModel = new MpTemplateHyperlinkCollectionViewModel(HostClipTileViewModel, this);            
+            TemplateHyperlinkCollectionViewModel = new MpTemplateHyperlinkCollectionViewModel(HostClipTileViewModel, this);
+            ContextMenuItemCollectionViewModel = new MpContextMenuItemCollectionViewModel(this);
 
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
@@ -1142,16 +1168,16 @@ namespace MpWpfApp {
             //    }
             //};
 
-            Rtbc.PreviewMouseRightButtonDown += (s, e6) => {
-                e6.Handled = true;
-                HostClipTileViewModel.IsSubContextMenuOpened = true;
-                IsSubSelected = true;
-                var contextEvent = new RoutedEventArgs(
-                    MpClipBorder.ContextMenuOpeningEvent,
-                    Rtbc);
-                //var rightClickEvent = new MouseButtonEventArgs(Mouse.PrimaryDevice, (int)DateTime.Now.Ticks, MouseButton.Right);
-                HostClipTileViewModel.ClipTile_ContextMenu_Opened(Rtbc, contextEvent);
-            };
+            //Rtbc.PreviewMouseRightButtonDown += (s, e6) => {
+            //    e6.Handled = true;
+            //    HostClipTileViewModel.IsSubContextMenuOpened = true;
+            //    IsSubSelected = true;
+            //    var contextEvent = new RoutedEventArgs(
+            //        MpClipBorder.ContextMenuOpeningEvent,
+            //        Rtbc);
+            //    //var rightClickEvent = new MouseButtonEventArgs(Mouse.PrimaryDevice, (int)DateTime.Now.Ticks, MouseButton.Right);
+            //    HostClipTileViewModel.ClipTile_ContextMenu_Opened(Rtbc, contextEvent);
+            //};
 
             #region Title
             RtbListBoxItemTitleTextBlock.PreviewMouseLeftButtonDown += (s, e7) => {
@@ -1192,6 +1218,7 @@ namespace MpWpfApp {
 
             UpdateLayout();
         }
+
 
         public void UpdateLayout() {
             if(Rtb != null) {

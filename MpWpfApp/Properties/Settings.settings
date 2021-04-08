@@ -316,5 +316,8 @@
     <Setting Name="SearchBoxTypingDelayInMilliseconds" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">500</Value>
     </Setting>
+    <Setting Name="SpeechSynthVoiceName" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Zira</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -30,7 +30,7 @@ namespace MpWpfApp {
         
         private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
 
-        //private int _totalItemsAtLoad = 0;
+        
 
         private List<MpClipTileViewModel> _hiddenTiles = new List<MpClipTileViewModel>();
 
@@ -408,9 +408,9 @@ namespace MpWpfApp {
         public MpClipTrayViewModel() : base() {
             this.CollectionChanged += (s, e) => {
                 OnPropertyChanged(nameof(EmptyListMessageVisibility));
-                OnPropertyChanged(nameof(ClipTrayVisibility));
+                OnPropertyChanged(nameof(ClipTrayVisibility));                
             };
-            var allItems = MpCopyItem.GetAllCopyItems(out int totalItemsAtLoad);
+            var allItems = MpCopyItem.GetAllCopyItems(out int _totalEntryCount);
             foreach (var ci in allItems) {
                 if (ci.IsSubCompositeItem) {
                     continue;
@@ -833,7 +833,7 @@ namespace MpWpfApp {
                     primarySelectedClipTile.IsSelected = true;
                 }
                 primarySelectedClipTile.MergeClip(new List<MpCopyItem>() { newCopyItem });
-                 
+                
                 if (Properties.Settings.Default.NotificationShowAppendBufferToast) {
                     MpStandardBalloonViewModel.ShowBalloon(
                     "Append Buffer",
@@ -1172,7 +1172,8 @@ namespace MpWpfApp {
             }
         }
         private bool CanSelectNextItem() {
-            return SelectedClipTiles.Count > 0 && SelectedClipTiles.Any(x => VisibileClipTiles.IndexOf(x) != VisibileClipTiles.Count - 1);
+            return SelectedClipTiles.Count > 0 && 
+                   SelectedClipTiles.Any(x => VisibileClipTiles.IndexOf(x) != VisibileClipTiles.Count - 1);
         }
         private void SelectNextItem() {
             var maxItem = SelectedClipTiles.Max(x => VisibileClipTiles.IndexOf(x));
@@ -1576,14 +1577,13 @@ namespace MpWpfApp {
         }
         private async Task SpeakSelectedClipsAsync() {
             await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
-                SpeechSynthesizer speechSynthesizer = new SpeechSynthesizer(); 
+                var speechSynthesizer = new SpeechSynthesizer();
                 speechSynthesizer.SetOutputToDefaultAudioDevice();
-                var installedVoices = new List<InstalledVoice>();
-                foreach (InstalledVoice voice in speechSynthesizer.GetInstalledVoices()) {
-                    installedVoices.Add(voice);
-                    Console.WriteLine(voice.VoiceInfo.Name);
+                if (string.IsNullOrEmpty(Properties.Settings.Default.SpeechSynthVoiceName)) {
+                    speechSynthesizer.SelectVoice(speechSynthesizer.GetInstalledVoices()[0].VoiceInfo.Name);
+                } else {
+                    speechSynthesizer.SelectVoice(Properties.Settings.Default.SpeechSynthVoiceName);
                 }
-                speechSynthesizer.SelectVoice(installedVoices[0].VoiceInfo.Name);
                 speechSynthesizer.Rate = 0;
                 speechSynthesizer.SpeakCompleted += (s, e) => {
                     speechSynthesizer.Dispose();

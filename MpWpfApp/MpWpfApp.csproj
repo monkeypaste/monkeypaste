@@ -221,7 +221,8 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateHyperlinkCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateHyperlinkViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Toolbar\MpEditRichTextBoxToolbarViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\ContextMenu\MpClipTileContextMenuItemViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\ContextMenu\MpContextMenuItemCollectionViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\ContextMenu\MpContextMenuItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\MpClipTileViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Title\MpClipTileTitleSwirlViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Title\MpSwirlLayerViewModel.cs" />
@@ -1688,6 +1689,9 @@
     <Resource Include="Resources\Images\burger.png" />
     <Resource Include="Resources\Images\edit.png" />
     <Resource Include="Resources\Images\cog.png" />
+    <Resource Include="Resources\Images\paste.png" />
+    <Resource Include="Resources\Images\bringToFront.png" />
+    <Resource Include="Resources\Images\sendToBack.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />

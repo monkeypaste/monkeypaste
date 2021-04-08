@@ -1133,5 +1133,17 @@ namespace MpWpfApp.Properties {
                 return ((int)(this["SearchBoxTypingDelayInMilliseconds"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Zira")]
+        public string SpeechSynthVoiceName {
+            get {
+                return ((string)(this["SpeechSynthVoiceName"]));
+            }
+            set {
+                this["SpeechSynthVoiceName"] = value;
+            }
+        }
     }
 }

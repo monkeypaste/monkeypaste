@@ -268,6 +268,15 @@ namespace MpWpfApp {
             return null;
         }
 
+        public static int GetTotalItemCount() {
+            var dt = MpDb.Instance.Execute(
+                   "select pk_MpCopyItemId from MpCopyItem where fk_MpCopyItemTypeId is not 4", null);
+            if (dt != null) {
+                return dt.Rows.Count;
+            }
+            return 0;
+        }
+
         public static List<MpCopyItem> GetAllCopyItems(out int count) {
             _AppList = MpApp.GetAllApps();
             _ColorList = MpColor.GetAllColors();

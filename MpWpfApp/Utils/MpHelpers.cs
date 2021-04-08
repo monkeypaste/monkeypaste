@@ -39,6 +39,7 @@ using CsvHelper;
 using System.Windows.Threading;
 using System.Security.Principal;
 using System.Windows.Controls.Primitives;
+using System.Speech.Synthesis;
 
 namespace MpWpfApp {
     public class MpHelpers {
@@ -596,6 +597,16 @@ namespace MpWpfApp {
         #endregion
 
         #region System
+        public InstalledVoice GetInstalledVoiceByName(string voiceName) {
+            var speechSynthesizer = new SpeechSynthesizer();
+            foreach (var voice in speechSynthesizer.GetInstalledVoices()) {
+                if(voice.VoiceInfo.Name.Contains(voiceName)) {
+                    return voice;
+                }
+            }
+            return null;
+        }
+
         public bool IsProcessLikeNotepad(string processPath) {
             if (string.IsNullOrEmpty(processPath) || !File.Exists(processPath)) {
                 return false;

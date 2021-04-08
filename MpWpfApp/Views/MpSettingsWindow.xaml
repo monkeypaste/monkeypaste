@@ -215,6 +215,12 @@
                     <Label Content="Ignore Duplicates" />
                     <CheckBox IsChecked="{Binding IgnoreNewDuplicates, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                 </StackPanel>
+                <StackPanel Grid.Column="0"
+                            Orientation="Horizontal">
+                    <Label Content="Speaking Voice" />
+                    <ComboBox ItemsSource="{Binding VoiceNames}"
+                              SelectedItem="{Binding SelectedVoiceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                </StackPanel>
                 <Grid>
                     <StackPanel Orientation="Vertical"
                                 DataContext="{Binding PasteToAppPathViewModelCollection}">
