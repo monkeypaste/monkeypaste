@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -68,6 +69,7 @@ namespace MpWpfApp {
                 return _menuItemViewModels;
             }
         }
+
         #endregion
 
         #region Properties
@@ -123,16 +125,29 @@ namespace MpWpfApp {
         }
 
         public ContextMenu UpdatePasteToMenuItem(ContextMenu cm) {
-            MenuItem ptamir = null;
-            foreach (MenuItem mi in cm.Items) {
-                if (mi.Name == "PasteToAppPathMenuItem") {
-                    ptamir = mi;
+            MpContextMenuItemViewModel ptacmivm = null;
+            for (int i = 0; i < cm.Items.Count; i++) {
+                if (cm.Items[i] == null) {
+                    continue;
+                }
+                var mi = (MpContextMenuItemViewModel)cm.Items[i];
+                //var mi = cm.ItemContainerGenerator.ContainerFromIndex(i);
+                if ((mi as MpContextMenuItemViewModel).Header.ToString() == "Paste To Application") {
+                    ptacmivm = mi;
+                    break;
                 }
             }
-            if (ptamir == null) {
+
+            if (ptacmivm == null) {
                 return cm;
             }
-            ptamir.Items.Clear();
+            ICommand pasteCommand = null;
+            if(cm.DataContext is MpRtbListBoxItemRichTextBoxViewModel) {
+                pasteCommand = (cm.DataContext as MpRtbListBoxItemRichTextBoxViewModel).RichTextBoxViewModelCollection.PasteSelectedClipsCommand;
+            } else {
+                pasteCommand = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;
+            }
+            ptacmivm.SubItems.Clear();
             bool addedSeperator = false;
             foreach (var ptamivmc in MpPasteToAppPathViewModelCollection.Instance.MenuItemViewModels) {
                 if (ptamivmc.Count == 0) {
@@ -148,74 +163,74 @@ namespace MpWpfApp {
                     if (areAllHidden) {
                         continue;
                     }
-                    var ptamip = new MenuItem();
+                    var ptamip = new MpContextMenuItemViewModel();
                     ptamip.Header = MpHelpers.Instance.GetProcessApplicationName(ptamivmc[0].Handle);
                     ptamip.Icon = new Image() { Source = ptamivmc[0].AppIcon };
                     foreach (var ptamivm in ptamivmc) {
                         if (ptamivm.IsHidden) {
                             continue;
                         }
-                        var ptami = new MenuItem();
-                        var l = new Label();
-                        l.Content = MpHelpers.Instance.GetProcessMainWindowTitle(ptamivm.Handle) + (ptamivm.IsAdmin ? " (Admin)" : string.Empty);
+                        var ptami = new MpContextMenuItemViewModel();
+                        ptami.Header = MpHelpers.Instance.GetProcessMainWindowTitle(ptamivm.Handle) + (ptamivm.IsAdmin ? " (Admin)" : string.Empty);
 
-                        var eyeOpenImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye.png")) };
-                        var eyeClosedImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye_closed.png")) };
-                        var btn = new Button() { Cursor = Cursors.Hand, Content = eyeOpenImg, BorderThickness = new Thickness(0), Background = Brushes.Transparent, Width = 20, Height = 20, HorizontalAlignment = HorizontalAlignment.Right/*, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center*/ };
-                        bool isOverButton = false;
-                        btn.MouseEnter += (s, e2) => {
-                            btn.Content = eyeClosedImg;
-                            isOverButton = true;
-                        };
-                        btn.MouseLeave += (s, e2) => {
-                            btn.Content = eyeOpenImg;
-                            isOverButton = false;
-                        };
-                        btn.Click += (s, e2) => {
-                            ptamivm.IsHidden = true;
-                            ptamip.Items.Remove(ptami);
-                            if (ptamip.Items.Count == 0) {
-                                ptamir.Items.Remove(ptamip);
-                            }
-                        };
+                        //var eyeOpenImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye.png")) };
+                        //var eyeClosedImg = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/eye_closed.png")) };
+                        //var btn = new Button() { Cursor = Cursors.Hand, Content = eyeOpenImg, BorderThickness = new Thickness(0), Background = Brushes.Transparent, Width = 20, Height = 20, HorizontalAlignment = HorizontalAlignment.Right/*, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalAlignment = VerticalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center*/ };
+                        //bool isOverButton = false;
+                        //btn.MouseEnter += (s, e2) => {
+                        //    btn.Content = eyeClosedImg;
+                        //    isOverButton = true;
+                        //};
+                        //btn.MouseLeave += (s, e2) => {
+                        //    btn.Content = eyeOpenImg;
+                        //    isOverButton = false;
+                        //};
+                        //btn.Click += (s, e2) => {
+                        //    ptamivm.IsHidden = true;
+                        //    ptamip.Items.Remove(ptami);
+                        //    if (ptamip.Items.Count == 0) {
+                        //        ptamir.Items.Remove(ptamip);
+                        //    }
+                        //};
 
-                        var sp = new StackPanel() { Orientation = Orientation.Horizontal };
-                        sp.Children.Add(l);
-                        sp.Children.Add(btn);
+                        //var sp = new StackPanel() { Orientation = Orientation.Horizontal };
+                        //sp.Children.Add(l);
+                        //sp.Children.Add(btn);
 
-                        ptami.Header = sp;
+                        //ptami.Header = sp;
                         ptami.Icon = new Image() { Source = ptamivm.AppIcon };
                         //ptami.Command = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;
                         //ptami.CommandParameter = ptamivm.Handle;
-                        ptami.Click += (s, e2) => {
-                            if (!isOverButton) {
-                                MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand.Execute(ptamivm.Handle);
-                            }
-                        };
-                        ptamip.Items.Add(ptami);
+                        //ptami.Click += (s, e2) => {
+                        //    if (!isOverButton) {
+                        //        pasteCommand.Execute(ptamivm.Handle);
+                        //    }
+                        //};
+                        ptami.Command = pasteCommand;
+                        ptami.CommandParameter = ptamivm.Handle;
+                        ptamip.SubItems.Add(ptami);
                     }
-                    ptamir.Items.Add(ptamip);
+                    ptacmivm.SubItems.Add(ptamip);
                 } else {
                     if (!addedSeperator) {
-                        ptamir.Items.Add(new Separator());
+                        ptacmivm.SubItems.Add(null);
                         addedSeperator = true;
                     }
-                    var ptaumi = new MenuItem();
+                    var ptaumi = new MpContextMenuItemViewModel();
                     ptaumi.Header = ptamivmc[0].AppName;// + (ptamivmc[0].IsAdmin ? " (Admin)" : string.Empty) + (ptamivmc[0].IsSilent ? " (Silent)" : string.Empty);
                     ptaumi.Icon = new Image() { Source = ptamivmc[0].AppIcon };
-                    ptaumi.Command = MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand;
+                    ptaumi.Command = pasteCommand;
                     ptaumi.CommandParameter = ptamivmc[0].PasteToAppPathId;
 
-                    ptamir.Items.Add(ptaumi);
+                    ptacmivm.SubItems.Add(ptaumi);
                 }
             }
-            var addNewMenuItem = new MenuItem();
+            var addNewMenuItem = new MpContextMenuItemViewModel();
             addNewMenuItem.Header = "Add Application...";
             addNewMenuItem.Icon = new Image() { Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Icons/Silk/icons/add.png")) };
-            addNewMenuItem.Click += (s, e3) => {
-                MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand.Execute(1);
-            };
-            ptamir.Items.Add(addNewMenuItem);
+            addNewMenuItem.Command = MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand;
+            addNewMenuItem.CommandParameter = 1;
+            ptacmivm.SubItems.Add(addNewMenuItem);
 
             return cm;
         }

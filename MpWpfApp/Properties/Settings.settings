@@ -319,5 +319,14 @@
     <Setting Name="SpeechSynthVoiceName" Type="System.String" Scope="User">
       <Value Profile="(Default)">Zira</Value>
     </Setting>
+    <Setting Name="KnownFileExtensionsPsv" Type="System.String" Scope="User">
+      <Value Profile="(Default)">rtf|txt|jpg|jpeg|png|svg|zip|csv|gif|pdf|doc|docx|xls|xlsx</Value>
+    </Setting>
+    <Setting Name="AzureTextAnalyticsEndpoint" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://mp-azure-text-analytics-services-resource-instance.cognitiveservices.azure.com/</Value>
+    </Setting>
+    <Setting Name="AzureTextAnalyticsKey" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ec769ed641ac48ed86b38363e67e824b</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -88,6 +88,19 @@ namespace MpWpfApp {
             }
         }
 
+        private string _inputGestureText;
+        public string InputGestureText {
+            get {
+                return _inputGestureText;
+            }
+            set {
+                if (_inputGestureText != value) {
+                    _inputGestureText = value;
+                    OnPropertyChanged(nameof(InputGestureText));
+                }
+            }
+        }
+
         private string _iconSource;
         public string IconSource {
             get {
@@ -97,23 +110,24 @@ namespace MpWpfApp {
                 if(_iconSource != value) {
                     _iconSource = value;
                     OnPropertyChanged(nameof(IconSource));
-                    OnPropertyChanged(nameof(Icon));
                 }
             } 
         }
 
+        private Image _icon = null;
         public Image Icon {
             get {
-                if(IsSeparator || string.IsNullOrEmpty(IconSource)) {
-                    return null;
+                return _icon;
+            }
+            set {
+                if(_icon != value) {
+                    _icon = value;
+                    OnPropertyChanged(nameof(Icon));
                 }
-                var icon = new Image();
-                icon.Source = (BitmapSource)new BitmapImage(new Uri(IconSource));
-                return icon;
             }
         }
 
-        private ObservableCollection<MpContextMenuItemViewModel> _subItems = null;
+        private ObservableCollection<MpContextMenuItemViewModel> _subItems = new ObservableCollection<MpContextMenuItemViewModel>();
         public ObservableCollection<MpContextMenuItemViewModel> SubItems {
             get {
                 return _subItems;
@@ -129,6 +143,17 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpContextMenuItemViewModel() : base() {
+            PropertyChanged += (s, e) => {
+                switch(e.PropertyName) {
+                    case nameof(IconSource):
+                        if(!string.IsNullOrEmpty(IconSource)) {
+                            var icon = new Image();
+                            icon.Source = (BitmapSource)new BitmapImage(new Uri(IconSource));
+                            Icon = icon;
+                        }
+                        break;
+                }
+            };
             IsSeparator = true;
         }
 
@@ -138,13 +163,16 @@ namespace MpWpfApp {
             object commandParameter,
             bool isChecked,
             string iconSource = "",
-            ObservableCollection<MpContextMenuItemViewModel> subItems = null) : base() {
+            ObservableCollection<MpContextMenuItemViewModel> subItems = null,
+            string inputGestureText = "") : this() {
+            IsSeparator = false;
             Header = header;
             Command = command;
             CommandParameter = commandParameter;
             IsChecked = isChecked;
             IconSource = iconSource;
-            SubItems = subItems;
+            SubItems = subItems ?? new ObservableCollection<MpContextMenuItemViewModel>();
+            InputGestureText = inputGestureText;
         }
         #endregion
     }

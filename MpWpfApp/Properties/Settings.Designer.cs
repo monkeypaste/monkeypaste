@@ -1145,5 +1145,36 @@ namespace MpWpfApp.Properties {
                 this["SpeechSynthVoiceName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("rtf|txt|jpg|jpeg|png|svg|zip|csv|gif|pdf|doc|docx|xls|xlsx")]
+        public string KnownFileExtensionsPsv {
+            get {
+                return ((string)(this["KnownFileExtensionsPsv"]));
+            }
+            set {
+                this["KnownFileExtensionsPsv"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://mp-azure-text-analytics-services-resource-instance.cognitiveservices.azur" +
+            "e.com/")]
+        public string AzureTextAnalyticsEndpoint {
+            get {
+                return ((string)(this["AzureTextAnalyticsEndpoint"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("ec769ed641ac48ed86b38363e67e824b")]
+        public string AzureTextAnalyticsKey {
+            get {
+                return ((string)(this["AzureTextAnalyticsKey"]));
+            }
+        }
     }
 }

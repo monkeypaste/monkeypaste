@@ -916,6 +916,31 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+
+        private RelayCommand<object> _toggleEditSubSelectedItemCommand;
+        public ICommand ToggleEditSubSelectedItemCommand {
+            get {
+                if (_toggleEditSubSelectedItemCommand == null) {
+                    _toggleEditSubSelectedItemCommand = new RelayCommand<object>(ToggleEditSubSelectedItem, CanToggleEditSubSelectedItem);
+                }
+                return _toggleEditSubSelectedItemCommand;
+            }
+        }
+        private bool CanToggleEditSubSelectedItem(object args) {
+            if (MainWindowViewModel.IsLoading) {
+                return false;
+            }
+            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
+                   this.SubSelectedRtbvmList.Count == 1;
+        }
+        private void ToggleEditSubSelectedItem(object args) {
+            var selectedRtbvm = this.SubSelectedRtbvmList[0];
+            if (!HostClipTileViewModel.IsEditingTile) {
+                HostClipTileViewModel.IsEditingTile = true;
+            }
+            selectedRtbvm.IsSubSelected = true;
+        }
+
         private RelayCommand _selectNextItemCommand;
         public ICommand SelectNextItemCommand {
             get {
@@ -1121,6 +1146,22 @@ namespace MpWpfApp {
             } finally {
                 IsBusy = false;
             }
+        }
+
+        private RelayCommand<object> _searchWebCommand;
+        public ICommand SearchWebCommand {
+            get {
+                if(_searchWebCommand == null) {
+                    _searchWebCommand = new RelayCommand<object>(SearchWeb);
+                }
+                return _searchWebCommand;
+            }
+        }
+        private void SearchWeb(object args) {
+            if(args == null || args.GetType() != typeof(string)) {
+                return;
+            }
+            MpHelpers.Instance.OpenUrl(args.ToString() + System.Uri.EscapeDataString(SubSelectedClipTilesMergedPlainText));
         }
 
         private RelayCommand _deleteSelectedClipsCommand;

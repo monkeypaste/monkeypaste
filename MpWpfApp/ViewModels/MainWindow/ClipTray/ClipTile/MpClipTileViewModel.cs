@@ -117,13 +117,19 @@
         private ObservableCollection<MpContextMenuItemViewModel> _tagMenuItems = new ObservableCollection<MpContextMenuItemViewModel>();
         public ObservableCollection<MpContextMenuItemViewModel> TagMenuItems {
             get {
-                return _tagMenuItems;
-            }
-            set {
-                if (_tagMenuItems != value) {
-                    _tagMenuItems = value;
-                    OnPropertyChanged(nameof(TagMenuItems));
+                _tagMenuItems.Clear();
+                foreach (var tagTile in MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel) {
+                    if (tagTile.IsSudoTag) {
+                        continue;
+                    }
+                    _tagMenuItems.Add(
+                        new MpContextMenuItemViewModel(
+                            tagTile.TagName,
+                            MainWindowViewModel.ClipTrayViewModel.LinkTagToCopyItemCommand,
+                            tagTile,
+                            tagTile.IsLinkedWithClipTile(this)));
                 }
+                return _tagMenuItems;
             }
         }
 
@@ -1850,10 +1856,7 @@
             };
             #endregion
 
-            //ClipBorder.PreviewMouseDown += (s, e4) => {
-            //    IsSelected = true;
-            //    e4.Handled = true;
-            //};
+            OnViewModelLoaded();
         }
 
         public void ClipTileDetailGrid_Loaded(object sender, RoutedEventArgs e) {
@@ -2071,6 +2074,7 @@
                 //means right clicking actual tile not sub item
                 cm = sender as ContextMenu;
                 ctvm = this;
+                cm.Tag = ctvm;
                 ctvm.IsSubContextMenuOpened = false;
             } else if(sender is Canvas) {
                 //means right clicking sub item
@@ -2078,6 +2082,7 @@
                 rtbvm = (MpRtbListBoxItemRichTextBoxViewModel)(sender as Canvas).DataContext;
                 ctvm = rtbvm.HostClipTileViewModel;
                 rtbvm.HostClipTileViewModel.IsSubContextMenuOpened = true;
+                cm.DataContext = rtbvm;
                 cm.DataContext = rtbvm;
             } else {
                 IsSubContextMenuOpened = false;
@@ -2091,18 +2096,7 @@
 
             RefreshCommands();
 
-            ctvm.TagMenuItems.Clear();
-            foreach (var tagTile in MainWindowViewModel.ClipTrayViewModel.MainWindowViewModel.TagTrayViewModel) {
-                if (tagTile.IsSudoTag) {
-                    continue;
-                }
-                ctvm.TagMenuItems.Add(
-                    new MpContextMenuItemViewModel(
-                        tagTile.TagName,
-                        MainWindowViewModel.ClipTrayViewModel.LinkTagToCopyItemCommand,
-                        tagTile,
-                        tagTile.IsLinkedWithClipTile(ctvm)));
-            }
+            OnPropertyChanged(nameof(TagMenuItems));
         }
         #endregion       
 
@@ -2532,7 +2526,8 @@
         }
         private void ToggleEditTitle(object args) {
             IsEditingTitle = !IsEditingTitle;
-        }        
+        }
+
 
         private RelayCommand _excludeApplicationCommand;
         public ICommand ExcludeApplicationCommand {

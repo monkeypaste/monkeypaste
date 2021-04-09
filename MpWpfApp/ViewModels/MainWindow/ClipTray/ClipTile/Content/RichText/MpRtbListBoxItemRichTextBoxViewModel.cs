@@ -2,6 +2,7 @@
 using GongSolutions.Wpf.DragDrop.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -80,6 +81,28 @@ namespace MpWpfApp {
                     _contextMenuItemCollectionViewModel = value;
                     OnPropertyChanged(nameof(ContextMenuItemCollectionViewModel));
                 }
+            }
+        }
+
+        private ObservableCollection<MpContextMenuItemViewModel> _tagMenuItems = new ObservableCollection<MpContextMenuItemViewModel>();
+        public new ObservableCollection<MpContextMenuItemViewModel> TagMenuItems {
+            get {
+                if (MainWindowViewModel == null || MainWindowViewModel.TagTrayViewModel == null) {
+                    return _tagMenuItems;
+                }
+                _tagMenuItems.Clear();
+                foreach (var tagTile in MainWindowViewModel.TagTrayViewModel) {
+                    if (tagTile.IsSudoTag) {
+                        continue;
+                    }
+                    _tagMenuItems.Add(
+                        new MpContextMenuItemViewModel(
+                            tagTile.TagName,
+                            MainWindowViewModel.ClipTrayViewModel.LinkTagToCopyItemCommand,
+                            tagTile,
+                            tagTile.IsLinkedWithClipTile(this)));
+                }
+                return _tagMenuItems;
             }
         }
         #endregion
@@ -1217,6 +1240,8 @@ namespace MpWpfApp {
             #endregion
 
             UpdateLayout();
+
+            OnViewModelLoaded();
         }
 
 
@@ -1333,7 +1358,10 @@ namespace MpWpfApp {
             if(Rtb == null) {
                 return;
             }
+            
             var regExGroupList = new List<string> {
+                //File or folder path
+                @"^(?:[\w]\:|\\)(\\[a-zA-Z_\-\s0-9\.()~!@#$%^&=+';,{}\[\]]+)+(\.("+Properties.Settings.Default.KnownFileExtensionsPsv+@")|(\\|\w))$",
                 //WebLink
                 @"(?:https?://|www\.)\S+", 
                 //Email
@@ -1356,7 +1384,7 @@ namespace MpWpfApp {
             var rtbSelection = Rtb?.Selection.Clone();
             for (int i = 0; i < regExGroupList.Count; i++) {
                 var linkType = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);                
-                if (linkType == MpSubTextTokenType.StreetAddress) {//sup
+                if (linkType == MpSubTextTokenType.StreetAddress) {
                     //doesn't consistently work and presents bugs so disabling for now
                     continue;
                 }

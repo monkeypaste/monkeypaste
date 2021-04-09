@@ -1426,17 +1426,6 @@
                                                 <MenuItem Header="Assign Hotkey"
                                                           InputGestureText="{Binding ShortcutKeyString}"
                                                           Command="{Binding Data.AssignHotkeyCommand, Source={StaticResource ClipTrayProxy}}" />
-                                                <MenuItem Header="Export To">
-                                                    <MenuItem Header="File(s)..."
-                                                              Command="{Binding Data.ExportSelectedClipTilesCommand, Source={StaticResource ClipTrayProxy}}"
-                                                              CommandParameter="{StaticResource Files}" />
-                                                    <MenuItem Header="CSV"
-                                                              Command="{Binding Data.ExportSelectedClipTilesCommand, Source={StaticResource ClipTrayProxy}}"
-                                                              CommandParameter="{StaticResource Csv}" />
-                                                    <MenuItem Header="Zip"
-                                                              Command="{Binding Data.ExportSelectedClipTilesCommand, Source={StaticResource ClipTrayProxy}}"
-                                                              CommandParameter="{StaticResource Zip}" />
-                                                </MenuItem>
                                                 <MenuItem Header="Rename"
                                                           Command="{Binding Data.ToggleEditTitleCommand, Source={StaticResource ClipTileProxy}}" />
                                                 <MenuItem Header="Duplicate"
@@ -1484,23 +1473,6 @@
                                                             </i:EventTrigger>
                                                         </i:Interaction.Triggers>
                                                     </MenuItem>
-                                                </MenuItem>
-                                                <MenuItem Header="Convert To"
-                                                          ItemsSource="{Binding Data.ConvertClipTypes, Source={StaticResource ClipTileProxy}}">
-                                                    <MenuItem.ItemContainerStyle>
-                                                        <Style TargetType="{x:Type MenuItem}">
-                                                            <Setter Property="Header"
-                                                                    Value="{Binding Header}" />
-                                                            <Setter Property="Command"
-                                                                    Value="{Binding Command}" />
-                                                            <Setter Property="CommandParameter"
-                                                                    Value="{Binding CommandParameter}" />
-                                                            <Setter Property="IsCheckable"
-                                                                    Value="True" />
-                                                            <Setter Property="IsChecked"
-                                                                    Value="{Binding IsChecked}" />
-                                                        </Style>
-                                                    </MenuItem.ItemContainerStyle>
                                                 </MenuItem>
                                                 <MenuItem Header="Duplicate As Qr Code"
                                                           Command="{Binding Data.CreateQrCodeFromClipCommand, Source={StaticResource ClipTileProxy}}" />
@@ -2084,6 +2056,8 @@
                                                                                                                 Value="{Binding Header}" />
                                                                                                         <Setter Property="IsChecked"
                                                                                                                 Value="{Binding IsChecked, Mode=TwoWay}" />
+                                                                                                        <Setter Property="InputGestureText"
+                                                                                                                Value="{Binding InputGestureText}" />
                                                                                                         <Setter Property="Icon"
                                                                                                                 Value="{Binding Icon}" />
                                                                                                         <Setter Property="Visibility"

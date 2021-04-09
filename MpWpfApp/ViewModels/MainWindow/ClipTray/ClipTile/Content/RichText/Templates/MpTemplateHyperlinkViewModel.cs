@@ -24,6 +24,7 @@ namespace MpWpfApp {
 
     public enum MpSubTextTokenType {
         None = 0,
+        FileOrFolder,
         Uri = 1,
         Email,
         PhoneNumber,
