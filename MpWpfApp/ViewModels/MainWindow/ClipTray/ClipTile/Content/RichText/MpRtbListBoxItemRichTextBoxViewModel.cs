@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.CommandWpf;
+﻿using AsyncAwaitBestPractices.MVVM;
+using GalaSoft.MvvmLight.CommandWpf;
 using GongSolutions.Wpf.DragDrop.Utilities;
 using System;
 using System.Collections.Generic;
@@ -71,19 +72,7 @@ namespace MpWpfApp {
             }
         }
 
-        private MpContextMenuItemCollectionViewModel _contextMenuItemCollectionViewModel = null;
-        public MpContextMenuItemCollectionViewModel ContextMenuItemCollectionViewModel {
-            get {
-                return _contextMenuItemCollectionViewModel;
-            }
-            set {
-                if(_contextMenuItemCollectionViewModel != value) {
-                    _contextMenuItemCollectionViewModel = value;
-                    OnPropertyChanged(nameof(ContextMenuItemCollectionViewModel));
-                }
-            }
-        }
-
+        
         private ObservableCollection<MpContextMenuItemViewModel> _tagMenuItems = new ObservableCollection<MpContextMenuItemViewModel>();
         public new ObservableCollection<MpContextMenuItemViewModel> TagMenuItems {
             get {
@@ -624,6 +613,19 @@ namespace MpWpfApp {
             }
         }
 
+        private bool _isSubContextMenuOpened = false;
+        public bool IsSubContextMenuOpened {
+            get {
+                return _isSubContextMenuOpened;
+            }
+            set {
+                if (_isSubContextMenuOpened != value) {
+                    _isSubContextMenuOpened = value;
+                    OnPropertyChanged(nameof(IsSubContextMenuOpened));
+                }
+            }
+        }
+
         private bool _isResizingBottom = false;
         public bool IsResizingBottom {
             get {
@@ -1004,8 +1006,7 @@ namespace MpWpfApp {
             CopyItem = ci;
             HostClipTileViewModel = ctvm;
             TemplateHyperlinkCollectionViewModel = new MpTemplateHyperlinkCollectionViewModel(HostClipTileViewModel, this);
-            ContextMenuItemCollectionViewModel = new MpContextMenuItemCollectionViewModel(this);
-
+            
             PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
                     case nameof(IsSubSelected):
@@ -1020,7 +1021,9 @@ namespace MpWpfApp {
 
                         if(IsSubSelected && !HostClipTileViewModel.IsSelected) {
                             HostClipTileViewModel.IsSelected = true;
-                        } else if(!IsSubSelected && HostClipTileViewModel.IsSelected && RichTextBoxViewModelCollection.Count == 1) {
+                        } else if(!IsSubSelected && 
+                                  HostClipTileViewModel.IsSelected && 
+                                  RichTextBoxViewModelCollection.Count == 1) {
                             //HostClipTileViewModel.IsSelected = false;
                         }
                         if (IsSubSelected) {
@@ -1033,7 +1036,10 @@ namespace MpWpfApp {
                                 }
                                 ResetRtb();
                                 //RichTextBoxViewModelCollection.Refresh();
-                            } else if (!MpHelpers.Instance.IsMultiSelectKeyDown() && !IsSubDragging && !HostClipTileViewModel.IsSubContextMenuOpened) {
+                            } else if (!MpHelpers.Instance.IsMultiSelectKeyDown() && 
+                                       !IsSubDragging && 
+                                       !HostClipTileViewModel.IsContextMenuOpened && 
+                                       !IsSubContextMenuOpened) {
                                 IsSubSelected = false;
                             }
                             if (HostClipTileViewModel.IsEditingTile) {
@@ -1075,6 +1081,13 @@ namespace MpWpfApp {
                             }
                             DetailText = CopyItem.GetDetail((MpCopyItemDetailType)_detailIdx);
                         }
+                        break;
+                    case nameof(IsSubContextMenuOpened):
+                        if(IsSubContextMenuOpened) {
+                            IsSubSelected = true;
+                        }
+                        HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.TileBorderBrush));
+                        HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.TileBorderBrushRect));
                         break;
                 }
             };
@@ -1244,6 +1257,55 @@ namespace MpWpfApp {
             OnViewModelLoaded();
         }
 
+        #region Context Menu
+        public void RtbItem_ContextMenu_Loaded(object sender, RoutedEventArgs e) {
+            var cm = (ContextMenu)sender;
+            cm.DataContext = this;
+            MenuItem cmi = null;
+            foreach (var mi in cm.Items) {
+                if (mi == null || mi is Separator) {
+                    continue;
+                }
+                if ((mi as MenuItem).Name == "ClipTileColorContextMenuItem") {
+                    cmi = (MenuItem)mi;
+                    break;
+                }
+            }
+            MpHelpers.Instance.SetColorChooserMenuItem(
+                    cm,
+                    cmi,
+                    (s, e1) => {
+                        RichTextBoxViewModelCollection.ChangeSubSelectedClipsColorCommand.Execute((Brush)((Border)s).Tag);
+                        foreach (var sctvm in RichTextBoxViewModelCollection.SubSelectedRtbvmList) {
+                            sctvm.CopyItem.WriteToDatabase();
+                        }
+                    },
+                    MpHelpers.Instance.GetColorColumn(TitleBackgroundColor),
+                    MpHelpers.Instance.GetColorRow(TitleBackgroundColor)
+                );
+        }
+
+        public void RtbItem_ContextMenu_Closed(object sender, RoutedEventArgs e) {
+            var cm = (ContextMenu)sender;
+            var rtbvm = cm.DataContext as MpRtbListBoxItemRichTextBoxViewModel;
+
+            rtbvm.IsSubContextMenuOpened = false;
+
+            rtbvm.RichTextBoxViewModelCollection.ClearSubSelection();
+        }
+
+        public void RtbItem_ContextMenu_Opened(object sender, RoutedEventArgs e) {
+            var cm = sender as ContextMenu;
+            var rtbvm = (MpRtbListBoxItemRichTextBoxViewModel)cm.DataContext;
+            cm.Tag = rtbvm;
+            rtbvm.IsSubContextMenuOpened = true;
+            cm = MpPasteToAppPathViewModelCollection.Instance.UpdatePasteToMenuItem(cm);
+
+            RefreshCommands();
+
+            OnPropertyChanged(nameof(TagMenuItems));
+        }
+        #endregion      
 
         public void UpdateLayout() {
             if(Rtb != null) {
@@ -1591,21 +1653,127 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        //private RelayCommand _selectItemCommand;
-        //public ICommand SelectItemCommand {
-        //    get {
-        //        if (_selectItemCommand == null) {
-        //            _selectItemCommand = new RelayCommand(SelectItem, CanSelectItem);
-        //        }
-        //        return _selectItemCommand;
-        //    }
-        //}
-        //private bool CanSelectItem() {
-        //    return HostClipTileViewModel.IsExpanded && !MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle;
-        //}
-        //private void SelectItem() {
-        //    SetSelection(true, false, false);
-        //}
+        private RelayCommand<object> _toggleEditSubTitleCommand;
+        public ICommand ToggleEditSubTitleCommand {
+            get {
+                if (_toggleEditSubTitleCommand == null) {
+                    _toggleEditSubTitleCommand = new RelayCommand<object>(ToggleEditSubTitle, CanToggleEditSubTitle);
+                }
+                return _toggleEditSubTitleCommand;
+            }
+        }
+        private bool CanToggleEditSubTitle(object args) {
+            if (MainWindowViewModel.IsLoading) {
+                return false;
+            }
+            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1;
+        }
+        private void ToggleEditSubTitle(object args) {
+            IsEditingSubTitle = !IsEditingSubTitle;
+        }
+
+        private RelayCommand _sendSubSelectedToEmailCommand;
+        public ICommand SendSubSelectedToEmailCommand {
+            get {
+                if (_sendSubSelectedToEmailCommand == null) {
+                    _sendSubSelectedToEmailCommand = new RelayCommand(SendSubSelectedToEmail, CanSendSubSelectedToEmail);
+                }
+                return _sendSubSelectedToEmailCommand;
+            }
+        }
+        private bool CanSendSubSelectedToEmail() {
+            return !IsEditingTile;
+        }
+        private void SendSubSelectedToEmail() {
+            MpHelpers.Instance.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, CopyItemTitle, CopyItemPlainText));
+            //MainWindowViewModel.ClipTrayViewModel.ClearClipSelection();
+            //IsSelected = true;
+            //MpHelpers.Instance.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
+        }
+
+        private RelayCommand _createQrCodeFromSubSelectedItemCommand;
+        public ICommand CreateQrCodeFromSubSelectedItemCommand {
+            get {
+                if (_createQrCodeFromSubSelectedItemCommand == null) {
+                    _createQrCodeFromSubSelectedItemCommand = new RelayCommand(CreateQrCodeFromSubSelectedItem, CanCreateQrCodeFromSubSelectedItem);
+                }
+                return _createQrCodeFromSubSelectedItemCommand;
+            }
+        }
+        private bool CanCreateQrCodeFromSubSelectedItem() {
+            return CopyItemType == MpCopyItemType.RichText && CopyItemPlainText.Length <= Properties.Settings.Default.MaxQrCodeCharLength;
+        }
+        private void CreateQrCodeFromSubSelectedItem() {
+            var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(CopyItemPlainText);
+            System.Windows.Clipboard.SetImage(bmpSrc);
+        }
+
+        private AsyncCommand<string> _translateSubSelectedItemTextAsyncCommand;
+        public IAsyncCommand<string> TranslateSubSelectedItemTextAsyncCommand {
+            get {
+                if (_translateSubSelectedItemTextAsyncCommand == null) {
+                    _translateSubSelectedItemTextAsyncCommand = new AsyncCommand<string>(TranslateSubSelectedItemTextAsync, CanTranslateSubSelectedItemText);
+                }
+                return _translateSubSelectedItemTextAsyncCommand;
+            }
+        }
+        private bool CanTranslateSubSelectedItemText(object args) {
+            return CopyItemType == MpCopyItemType.RichText;
+        }
+        private async Task TranslateSubSelectedItemTextAsync(string toLanguage) {
+            var translatedText = await MpLanguageTranslator.Instance.Translate(CopyItemPlainText, toLanguage, false);
+            if (!string.IsNullOrEmpty(translatedText)) {
+                CopyItemRichText = MpHelpers.Instance.ConvertPlainTextToRichText(translatedText);
+            }
+        }
+
+        private RelayCommand _excludeSubSelectedItemApplicationCommand;
+        public ICommand ExcludeSubSelectedItemApplicationCommand {
+            get {
+                if (_excludeSubSelectedItemApplicationCommand == null) {
+                    _excludeSubSelectedItemApplicationCommand = new RelayCommand(ExcludeSubSelectedItemApplication, CanExcludeSubSelectedItemApplication);
+                }
+                return _excludeSubSelectedItemApplicationCommand;
+            }
+        }
+        private bool CanExcludeSubSelectedItemApplication() {
+            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1;
+        }
+        private void ExcludeSubSelectedItemApplication() {
+            MpAppCollectionViewModel.Instance.UpdateRejection(MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(CopyItemAppId), true);
+        }
+
+        private RelayCommand _pasteSubSelectedItemCommand;
+        public ICommand PasteSubSelectedItemCommand {
+            get {
+                if (_pasteSubSelectedItemCommand == null) {
+                    _pasteSubSelectedItemCommand = new RelayCommand(PasteSubSelectedItem);
+                }
+                return _pasteSubSelectedItemCommand;
+            }
+        }
+        private void PasteSubSelectedItem() {
+            MainWindowViewModel.ClipTrayViewModel.ClearClipSelection();
+            IsSelected = true;
+            MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand.Execute(null);
+        }
+
+        private RelayCommand _assignHotkeyToSubSelectedItemCommand;
+        public ICommand AssignHotkeyToSubSelectedItemCommand {
+            get {
+                if (_assignHotkeyToSubSelectedItemCommand == null) {
+                    _assignHotkeyToSubSelectedItemCommand = new RelayCommand(AssignHotkeyToSubSelectedItem);
+                }
+                return _assignHotkeyToSubSelectedItemCommand;
+            }
+        }
+        private void AssignHotkeyToSubSelectedItem() {
+            ShortcutKeyString = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(
+                this,
+                "Paste " + CopyItemTitle,
+                ShortcutKeyString,
+                PasteSubSelectedItemCommand, null);
+        }
         #endregion
 
         #region Overrides

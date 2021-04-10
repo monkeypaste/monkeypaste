@@ -775,10 +775,10 @@
         public Rect TileBorderBrushRect {
             get {
                 if (RichTextBoxViewModelCollection == null ||
-                   !IsSubContextMenuOpened) {
+                   !IsAnySubContextMenuOpened) {
                     return new Rect(50,0,50,50);
                 }
-                if(IsSubContextMenuOpened) {
+                if(IsAnySubContextMenuOpened) {
                     return new Rect(0, 0, 50, 50);
                 }
                 return new Rect(50, 0, 50, 50);
@@ -1004,15 +1004,21 @@
             }
         }
 
-        private bool _isSubContextMenuOpened = false;
-        public bool IsSubContextMenuOpened {
+        public bool IsAnySubContextMenuOpened {
             get {
-                return _isSubContextMenuOpened;
+                return RichTextBoxViewModelCollection.Any(x => x.IsSubContextMenuOpened);
+            }
+        }
+
+        private bool _isContextMenuOpened = false;
+        public bool IsContextMenuOpened {
+            get {
+                return _isContextMenuOpened;
             }
             set {
-                if (_isSubContextMenuOpened != value) {
-                    _isSubContextMenuOpened = value;
-                    OnPropertyChanged(nameof(IsSubContextMenuOpened));
+                if (_isContextMenuOpened != value) {
+                    _isContextMenuOpened = value;
+                    OnPropertyChanged(nameof(IsContextMenuOpened));
                     OnPropertyChanged(nameof(TileBorderBrush));
                     OnPropertyChanged(nameof(TileBorderBrushRect));
                 }
@@ -2035,9 +2041,12 @@
             var cm = (ContextMenu)sender;
             cm.DataContext = this;
             MenuItem cmi = null;
-            foreach (MenuItem mi in cm.Items) {
-                if (mi.Name == "ClipTileColorContextMenuItem") {
-                    cmi = mi;
+            foreach (var mi in cm.Items) {
+                if(mi == null || mi is Separator) {
+                    continue;
+                }
+                if ((mi as MenuItem).Name == "ClipTileColorContextMenuItem") {
+                    cmi = (MenuItem)mi;
                     break;
                 }
             }
@@ -2061,33 +2070,16 @@
             if (ctvm is MpRtbListBoxItemRichTextBoxViewModel) {
                 ctvm = (ctvm as MpRtbListBoxItemRichTextBoxViewModel).HostClipTileViewModel;
             }
-            ctvm.IsSubContextMenuOpened = false;
+            ctvm.IsContextMenuOpened = false;
 
             ctvm.RichTextBoxViewModelCollection.ClearSubSelection();
         }
 
         public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
-            ContextMenu cm = null;
-            MpClipTileViewModel ctvm = null;
-            MpRtbListBoxItemRichTextBoxViewModel rtbvm = null;
-            if(sender is ContextMenu) {
-                //means right clicking actual tile not sub item
-                cm = sender as ContextMenu;
-                ctvm = this;
-                cm.Tag = ctvm;
-                ctvm.IsSubContextMenuOpened = false;
-            } else if(sender is Canvas) {
-                //means right clicking sub item
-                cm = (ContextMenu)ClipBorder.FindName("ClipTile_ContextMenu");
-                rtbvm = (MpRtbListBoxItemRichTextBoxViewModel)(sender as Canvas).DataContext;
-                ctvm = rtbvm.HostClipTileViewModel;
-                rtbvm.HostClipTileViewModel.IsSubContextMenuOpened = true;
-                cm.DataContext = rtbvm;
-                cm.DataContext = rtbvm;
-            } else {
-                IsSubContextMenuOpened = false;
-                return;
-            }
+            ContextMenu cm = sender as ContextMenu;
+            MpClipTileViewModel ctvm = cm.DataContext as MpClipTileViewModel;
+            cm.Tag = ctvm;
+            ctvm.IsContextMenuOpened = false;
 
             if (ctvm.CopyItemType == MpCopyItemType.RichText ||
                ctvm.CopyItemType == MpCopyItemType.Composite) {

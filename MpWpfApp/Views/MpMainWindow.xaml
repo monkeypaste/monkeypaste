@@ -470,7 +470,34 @@
         <s:Int32 x:Key="SettingsTabHelp">4</s:Int32>
         <s:Boolean x:Key="True">True</s:Boolean>
         <s:Boolean x:Key="False">False</s:Boolean>
+
+        <s:String x:Key="PasteIcon">/Images/paste.png</s:String>
+        <s:String x:Key="DeleteIcon">/Images/Delete.png</s:String>
+        <s:String x:Key="EditIcon">/Images/edit.png</s:String>
+        <s:String x:Key="EditContentIcon">/Images/caret.png</s:String>
+        <s:String x:Key="ToolsIcon">/Images/tools.png</s:String>
+        <s:String x:Key="RenameIcon">/Images/rename.png</s:String>
+        <s:String x:Key="DuplicateIcon">/Images/duplicate.png</s:String>
+        <s:String x:Key="MergeIcon">/Images/merge.png</s:String>
+        <s:String x:Key="EmailIcon">/Images/email.png</s:String>
+        <s:String x:Key="QrIcon">/Images/qr.png</s:String>
+        <s:String x:Key="SpeakIcon">/Images/speak.png</s:String>
+        <s:String x:Key="SearchIcon">/Images/web.png</s:String>
+        <s:String x:Key="GoogleIcon">/Images/googleIcon.png</s:String>
+        <s:String x:Key="BingIcon">/Images/bingIcon.png</s:String>
+        <s:String x:Key="DuckIcon">/Images/duckduckgoIcon.png</s:String>
+        <s:String x:Key="YandexIcon">/Images/yandexIcon.png</s:String>
+        <s:String x:Key="SelectionIcon">/Images/selection.png</s:String>
+        <s:String x:Key="BringToFrontIcon">/Images/bringToFront.png</s:String>
+        <s:String x:Key="SendToBackIcon">/Images/sendToBack.png</s:String>
+        <s:String x:Key="SelectAllIcon">/Images/selectall.png</s:String>
+        <s:String x:Key="InvertSelectionIcon">/Images/invertSelection.png</s:String>
+        <s:String x:Key="HotkeyIcon">/Images/hotkey.png</s:String>
+        <s:String x:Key="PasteToAppIcon">/Images/bullseye.png</s:String>
+        <s:String x:Key="PinToCollectionIcon">/Images/tag.png</s:String>
+        <s:String x:Key="TranslateIcon">/Images/translate.png</s:String>
         
+        <local:MpStringToImageConverter x:Key="StringToImageConverter" />
         <local:MpStringToBrushConverter x:Key="StringToBrushConverter" />
         <local:MpPointCollectionConverter x:Key="PointCollectionConverter" />
         <local:MpIntToStringConverter x:Key="IntToStringConverter" />
@@ -1991,13 +2018,17 @@
                                                                                                     MethodName="ClipTileRichTextBoxViewModelCollection_Loaded" />
                                                                             </i:EventTrigger>
                                                                         </i:Interaction.Triggers>
-                                                                        <ListBox.ItemsPanel>
+                                                                        <local:MpMultiSelectListBox.Resources>
+                                                                            <local:MpBindingProxy x:Key="ClipTileRichTextBoxListBox_Proxy"
+                                                                                                  Data="{Binding}" />
+                                                                        </local:MpMultiSelectListBox.Resources>
+                                                                        <local:MpMultiSelectListBox.ItemsPanel>
                                                                             <ItemsPanelTemplate>
                                                                                 <StackPanel IsItemsHost="True"
                                                                                             Orientation="Vertical" />
                                                                             </ItemsPanelTemplate>
-                                                                        </ListBox.ItemsPanel>
-                                                                        <ListBox.ItemContainerStyle>
+                                                                        </local:MpMultiSelectListBox.ItemsPanel>
+                                                                        <local:MpMultiSelectListBox.ItemContainerStyle>
                                                                             <Style TargetType="{x:Type ListBoxItem}">
                                                                                 <Setter Property="IsSelected"
                                                                                         Value="{Binding IsSubSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" />
@@ -2011,8 +2042,8 @@
                                                                                     </Setter.Value>
                                                                                 </Setter>
                                                                             </Style>
-                                                                        </ListBox.ItemContainerStyle>
-                                                                        <ListBox.ItemTemplate>
+                                                                        </local:MpMultiSelectListBox.ItemContainerStyle>
+                                                                        <local:MpMultiSelectListBox.ItemTemplate>
                                                                             <DataTemplate>
                                                                                 <AdornerDecorator Visibility="{Binding SubItemVisibility}"
                                                                                                   DataContext="{Binding}">
@@ -2035,44 +2066,140 @@
                                                                                                                   Data="{Binding}" />
                                                                                         </Canvas.Resources>
                                                                                         <Canvas.ContextMenu>
-                                                                                            <ContextMenu ItemsSource="{Binding Data.ContextMenuItemCollectionViewModel, Source={StaticResource RtbListBoxItemProxy}}">
-                                                                                                <ContextMenu.Resources>
-                                                                                                    <ControlTemplate x:Key="MenuSeparatorTemplate">
-                                                                                                        <Separator>
-                                                                                                            <Separator.Style>
-                                                                                                                <Style TargetType="{x:Type Separator}"
-                                                                                                                       BasedOn="{StaticResource ResourceKey={x:Static MenuItem.SeparatorStyleKey}}" />
-                                                                                                            </Separator.Style>
-                                                                                                        </Separator>
-                                                                                                    </ControlTemplate>
-                                                                                                </ContextMenu.Resources>
-                                                                                                <ContextMenu.ItemContainerStyle>
-                                                                                                    <Style TargetType="{x:Type MenuItem}">
-                                                                                                        <Setter Property="Command"
-                                                                                                                Value="{Binding Command}" />
-                                                                                                        <Setter Property="CommandParameter"
-                                                                                                                Value="{Binding CommandParameter}" />
-                                                                                                        <Setter Property="Header"
-                                                                                                                Value="{Binding Header}" />
-                                                                                                        <Setter Property="IsChecked"
-                                                                                                                Value="{Binding IsChecked, Mode=TwoWay}" />
-                                                                                                        <Setter Property="InputGestureText"
-                                                                                                                Value="{Binding InputGestureText}" />
-                                                                                                        <Setter Property="Icon"
-                                                                                                                Value="{Binding Icon}" />
-                                                                                                        <Setter Property="Visibility"
-                                                                                                                Value="{Binding MenuItemVisibility}" />
-                                                                                                        <Setter Property="ItemsSource"
-                                                                                                                Value="{Binding SubItems}" />
-                                                                                                        <Style.Triggers>
-                                                                                                            <DataTrigger Binding="{Binding}"
-                                                                                                                         Value="{x:Null}">
-                                                                                                                <Setter Property="Template"
-                                                                                                                        Value="{StaticResource MenuSeparatorTemplate}" />
-                                                                                                            </DataTrigger>
-                                                                                                        </Style.Triggers>
-                                                                                                    </Style>
-                                                                                                </ContextMenu.ItemContainerStyle>
+                                                                                            <ContextMenu x:Name="RtbItem_ContextMenu"
+                                                                                                         DataContext="{Binding Data, Source={StaticResource RtbListBoxItemProxy}}">
+                                                                                                <i:Interaction.Triggers>
+                                                                                                    <i:EventTrigger EventName="Loaded">
+                                                                                                        <i:CallMethodAction TargetObject="{Binding}"
+                                                                                                                            MethodName="RtbItem_ContextMenu_Loaded" />
+                                                                                                    </i:EventTrigger>
+                                                                                                    <i:EventTrigger EventName="Opened">
+                                                                                                        <i:CallMethodAction TargetObject="{Binding}"
+                                                                                                                            MethodName="RtbItem_ContextMenu_Opened" />
+                                                                                                    </i:EventTrigger>
+                                                                                                    <i:EventTrigger EventName="Closed">
+                                                                                                        <i:CallMethodAction TargetObject="{Binding}"
+                                                                                                                            MethodName="RtbItem_ContextMenu_Closed" />
+                                                                                                    </i:EventTrigger>
+                                                                                                </i:Interaction.Triggers>
+                                                                                                <MenuItem Header="_Paste"
+                                                                                                          Icon="{Binding Source={StaticResource PasteIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                          Command="{Binding Data.PasteSubSelectedItemCommand, Source={StaticResource RtbListBoxItemProxy}}" />
+                                                                                                <MenuItem Header="Delete"
+                                                                                                          Icon="{Binding Source={StaticResource DeleteIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                          Command="{Binding Data.DeleteSubSelectedClipsCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
+                                                                                                <Separator />
+                                                                                                <MenuItem Header="_Edit"
+                                                                                                          Icon="{Binding Source={StaticResource EditIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}">
+                                                                                                    <MenuItem Header="_Edit Content"
+                                                                                                              Icon="{Binding Source={StaticResource EditContentIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                              Command="{Binding Data.ToggleEditSubSelectedItemCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
+                                                                                                    <MenuItem Header="_Rename"
+                                                                                                              Icon="{Binding Source={StaticResource RenameIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                              Command="{Binding Data.ToggleEditSubTitleCommand, Source={StaticResource RtbListBoxItemProxy}}" />
+                                                                                                    <Separator />
+                                                                                                    <MenuItem x:Name="TranslateMenuItem"
+                                                                                                              Header="Translate"
+                                                                                                              Icon="{Binding Source={StaticResource TranslateIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                              ItemsSource="{Binding Data.TranslateLanguageMenuItems, Source={StaticResource ClipTileProxy}}">
+                                                                                                        <MenuItem.ItemContainerStyle>
+                                                                                                            <Style TargetType="{x:Type MenuItem}">
+                                                                                                                <Setter Property="Header"
+                                                                                                                        Value="{Binding Header}" />
+                                                                                                                <Setter Property="Command"
+                                                                                                                        Value="{Binding Command}" />
+                                                                                                                <Setter Property="CommandParameter"
+                                                                                                                        Value="{Binding CommandParameter}" />
+                                                                                                            </Style>
+                                                                                                        </MenuItem.ItemContainerStyle>
+                                                                                                    </MenuItem>
+                                                                                                </MenuItem>
+                                                                                                <MenuItem Header="_Tools"
+                                                                                                          Icon="{Binding Source={StaticResource ToolsIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}">
+                                                                                                    <MenuItem Header="Duplicate"
+                                                                                                              Icon="{Binding Source={StaticResource DuplicateIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                              Command="{Binding Data.DuplicateSubSelectedClipsCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
+                                                                                                    <MenuItem Header="_Merge"
+                                                                                                              Icon="{Binding Source={StaticResource MergeIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                              Command="{Binding Data.MergeSubSelectedClipsCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
+                                                                                                    <Separator />
+                                                                                                    <MenuItem Header="Send as Email"
+                                                                                                              Icon="{Binding Source={StaticResource EmailIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                              Command="{Binding Data.SendSubSelectedToEmailCommand, Source={StaticResource RtbListBoxItemProxy}}" />
+                                                                                                    <MenuItem Header="Duplicate As _Qr Code"
+                                                                                                              Icon="{Binding Source={StaticResource QrIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                              Command="{Binding Data.CreateQrCodeFromSubSelectedItemCommand, Source={StaticResource RtbListBoxItemProxy}}" />
+                                                                                                    <Separator />
+                                                                                                    <MenuItem Header="Say"
+                                                                                                              Icon="{Binding Source={StaticResource SpeakIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                              Command="{Binding Data.SpeakSubSelectedClipsAsyncCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
+                                                                                                    <Separator />
+                                                                                                    <MenuItem Header="Search"
+                                                                                                              Icon="{Binding Source={StaticResource SearchIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}">
+                                                                                                        <MenuItem Header="_Google"
+                                                                                                                  Icon="{Binding Source={StaticResource GoogleIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                                  Command="{Binding Data.SearchWebCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}"
+                                                                                                                  CommandParameter="https://www.google.com/search?q=" />
+                                                                                                        <MenuItem Header="_Bing"
+                                                                                                                  Icon="{Binding Source={StaticResource BingIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                                  Command="{Binding Data.SearchWebCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}"
+                                                                                                                  CommandParameter="https://www.bing.com/search?q=" />
+                                                                                                        <MenuItem Header="_DuckDuckGo"
+                                                                                                                  Icon="{Binding Source={StaticResource DuckIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                                  Command="{Binding Data.SearchWebCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}"
+                                                                                                                  CommandParameter="https://duckduckgo.com/?q=" />
+                                                                                                        <MenuItem Header="_Yandex"
+                                                                                                                  Icon="{Binding Source={StaticResource YandexIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                                  Command="{Binding Data.SearchWebCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}"
+                                                                                                                  CommandParameter="https://yandex.com/search/?text=" />
+                                                                                                    </MenuItem>
+                                                                                                </MenuItem>
+                                                                                                <MenuItem Header="_Selection"
+                                                                                                          Icon="{Binding Source={StaticResource SelectionIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}">
+                                                                                                    <MenuItem Header="_Bring to Front"
+                                                                                                              Icon="{Binding Source={StaticResource BringToFrontIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                              Command="{Binding Data.BringSubSelectedClipTilesToFrontCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
+                                                                                                    <MenuItem Header="_Send to Back"
+                                                                                                              Icon="{Binding Source={StaticResource SendToBackIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                              Command="{Binding Data.SendSubSelectedClipTilesToBackCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
+                                                                                                    <Separator />
+                                                                                                    <MenuItem Header="Select _All"
+                                                                                                              Icon="{Binding Source={StaticResource SelectAllIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                              Command="{Binding Data.InvertSubSelectionCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
+                                                                                                    <MenuItem Header="_Invert Selection"
+                                                                                                              Icon="{Binding Source={StaticResource InvertSelectionIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                              Command="{Binding Data.InvertSubSelectionCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
+                                                                                                </MenuItem>                                                                                                
+                                                                                                <MenuItem Header="_Hotkey"
+                                                                                                          Icon="{Binding Source={StaticResource HotkeyIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                          InputGestureText="{Binding ShortcutKeyString}"
+                                                                                                          Command="{Binding Data.AssignHotkeyCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
+                                                                                                <Separator />
+                                                                                                <MenuItem x:Name="ClipTileColorContextMenuItem"
+                                                                                                          Style="{StaticResource MenuItemStyle}" />
+                                                                                                <Separator />
+                                                                                                <MenuItem x:Name="PasteToAppPathMenuItem"
+                                                                                                          Header="Paste To Application"
+                                                                                                          Icon="{Binding Source={StaticResource PasteToAppIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"/>
+                                                                                                <Separator />
+                                                                                                <MenuItem Header="Pin To _Collection"
+                                                                                                          Icon="{Binding Source={StaticResource PinToCollectionIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                                                                                          ItemsSource="{Binding Data.TagMenuItems, Source={StaticResource RtbListBoxItemProxy}}">
+                                                                                                    <MenuItem.ItemContainerStyle>
+                                                                                                        <Style TargetType="{x:Type MenuItem}">
+                                                                                                            <Setter Property="Header"
+                                                                                                                    Value="{Binding Header}" />
+                                                                                                            <Setter Property="Command"
+                                                                                                                    Value="{Binding Command}" />
+                                                                                                            <Setter Property="CommandParameter"
+                                                                                                                    Value="{Binding CommandParameter}" />
+                                                                                                            <Setter Property="IsCheckable"
+                                                                                                                    Value="True" />
+                                                                                                            <Setter Property="IsChecked"
+                                                                                                                    Value="{Binding IsChecked}" />
+                                                                                                        </Style>
+                                                                                                    </MenuItem.ItemContainerStyle>
+                                                                                                </MenuItem>
                                                                                             </ContextMenu>
                                                                                         </Canvas.ContextMenu>
                                                                                         <AdornerDecorator DataContext="{Binding}">
@@ -2207,7 +2334,7 @@
                                                                                     </Canvas>
                                                                                 </AdornerDecorator>
                                                                             </DataTemplate>
-                                                                        </ListBox.ItemTemplate>
+                                                                        </local:MpMultiSelectListBox.ItemTemplate>
                                                                     </local:MpMultiSelectListBox>
                                                                 </AdornerDecorator>
                                                             </ScrollViewer>

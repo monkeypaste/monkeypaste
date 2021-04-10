@@ -994,16 +994,16 @@ namespace MpWpfApp {
             }
         }
 
-        private AsyncCommand<Brush> _changeSelectedClipsColorCommand;
-        public IAsyncCommand<Brush> ChangeSelectedClipsColorCommand {
+        private AsyncCommand<Brush> _changeSubSelectedClipsColorCommand;
+        public IAsyncCommand<Brush> ChangeSubSelectedClipsColorCommand {
             get {
-                if (_changeSelectedClipsColorCommand == null) {
-                    _changeSelectedClipsColorCommand = new AsyncCommand<Brush>(ChangeSelectedClipsColor);
+                if (_changeSubSelectedClipsColorCommand == null) {
+                    _changeSubSelectedClipsColorCommand = new AsyncCommand<Brush>(ChangeSubSelectedClipsColor);
                 }
-                return _changeSelectedClipsColorCommand;
+                return _changeSubSelectedClipsColorCommand;
             }
         }
-        private async Task ChangeSelectedClipsColor(Brush brush) {
+        private async Task ChangeSubSelectedClipsColor(Brush brush) {
             if (brush == null) {
                 return;
             }
@@ -1030,23 +1030,23 @@ namespace MpWpfApp {
             }
         }
 
-        private RelayCommand<object> _pasteSelectedClipsCommand;
-        public ICommand PasteSelectedClipsCommand {
+        private RelayCommand<object> _pasteSubSelectedClipsCommand;
+        public ICommand PasteSubSelectedClipsCommand {
             get {
-                if (_pasteSelectedClipsCommand == null) {
-                    _pasteSelectedClipsCommand = new RelayCommand<object>(PasteSelectedClips, CanPasteSelectedClips);
+                if (_pasteSubSelectedClipsCommand == null) {
+                    _pasteSubSelectedClipsCommand = new RelayCommand<object>(PasteSubSelectedClips, CanPasteSubSelectedClips);
                 }
-                return _pasteSelectedClipsCommand;
+                return _pasteSubSelectedClipsCommand;
             }
         }
-        private bool CanPasteSelectedClips(object ptapId) {
+        private bool CanPasteSubSelectedClips(object ptapId) {
             return MpAssignShortcutModalWindowViewModel.IsOpen == false &&
                 !IsAnyEditingContent &&
                 !IsAnyEditingTitle &&
                 !IsAnyPastingTemplate &&
                 !IsTrialExpired;
         }
-        private void PasteSelectedClips(object ptapId) {
+        private void PasteSubSelectedClips(object ptapId) {
             if (ptapId != null && ptapId.GetType() == typeof(int) && (int)ptapId > 0) {
                 //when pasting to a user defined application
                 _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
@@ -1064,16 +1064,16 @@ namespace MpWpfApp {
             MainWindowViewModel.HideWindowCommand.Execute(true);
         }
 
-        private AsyncCommand _bringSelectedClipTilesToFrontCommand;
-        public IAsyncCommand BringSelectedClipTilesToFrontCommand {
+        private AsyncCommand _bringSubSelectedClipTilesToFrontCommand;
+        public IAsyncCommand BringSubSelectedClipTilesToFrontCommand {
             get {
-                if (_bringSelectedClipTilesToFrontCommand == null) {
-                    _bringSelectedClipTilesToFrontCommand = new AsyncCommand(BringSelectedClipTilesToFront, CanBringSelectedClipTilesToFront);
+                if (_bringSubSelectedClipTilesToFrontCommand == null) {
+                    _bringSubSelectedClipTilesToFrontCommand = new AsyncCommand(BringSubSelectedClipTilesToFront, CanBringSubSelectedClipTilesToFront);
                 }
-                return _bringSelectedClipTilesToFrontCommand;
+                return _bringSubSelectedClipTilesToFrontCommand;
             }
         }
-        private bool CanBringSelectedClipTilesToFront(object arg) {
+        private bool CanBringSubSelectedClipTilesToFront(object arg) {
             if (IsBusy || MainWindowViewModel.IsLoading || VisibleSubRtbViewModels.Count == 0) {
                 return false;
             }
@@ -1086,7 +1086,7 @@ namespace MpWpfApp {
             }
             return canBringForward;
         }
-        private async Task BringSelectedClipTilesToFront() {
+        private async Task BringSubSelectedClipTilesToFront() {
             try {
                 IsBusy = true;
                 await Dispatcher.CurrentDispatcher.BeginInvoke(
@@ -1106,16 +1106,16 @@ namespace MpWpfApp {
             }
         }
 
-        private AsyncCommand _sendSelectedClipTilesToBackCommand;
-        public IAsyncCommand SendSelectedClipTilesToBackCommand {
+        private AsyncCommand _sendSubSelectedClipTilesToBackCommand;
+        public IAsyncCommand SendSubSelectedClipTilesToBackCommand {
             get {
-                if (_sendSelectedClipTilesToBackCommand == null) {
-                    _sendSelectedClipTilesToBackCommand = new AsyncCommand(SendSelectedClipTilesToBack, CanSendSelectedClipTilesToBack);
+                if (_sendSubSelectedClipTilesToBackCommand == null) {
+                    _sendSubSelectedClipTilesToBackCommand = new AsyncCommand(SendSubSelectedClipTilesToBack, CanSendSubSelectedClipTilesToBack);
                 }
-                return _sendSelectedClipTilesToBackCommand;
+                return _sendSubSelectedClipTilesToBackCommand;
             }
         }
-        private bool CanSendSelectedClipTilesToBack(object args) {
+        private bool CanSendSubSelectedClipTilesToBack(object args) {
             if (IsBusy || MainWindowViewModel.IsLoading || VisibleSubRtbViewModels.Count == 0) {
                 return false;
             }
@@ -1128,7 +1128,7 @@ namespace MpWpfApp {
             }
             return canSendBack;
         }
-        private async Task SendSelectedClipTilesToBack() {
+        private async Task SendSubSelectedClipTilesToBack() {
             try {
                 IsBusy = true;
                 await Dispatcher.CurrentDispatcher.BeginInvoke(
@@ -1164,22 +1164,22 @@ namespace MpWpfApp {
             MpHelpers.Instance.OpenUrl(args.ToString() + System.Uri.EscapeDataString(SubSelectedClipTilesMergedPlainText));
         }
 
-        private RelayCommand _deleteSelectedClipsCommand;
-        public ICommand DeleteSelectedClipsCommand {
+        private RelayCommand _deleteSubSelectedClipsCommand;
+        public ICommand DeleteSubSelectedClipsCommand {
             get {
-                if (_deleteSelectedClipsCommand == null) {
-                    _deleteSelectedClipsCommand = new RelayCommand(DeleteSelectedClips, CanDeleteSelectedClips);
+                if (_deleteSubSelectedClipsCommand == null) {
+                    _deleteSubSelectedClipsCommand = new RelayCommand(DeleteSubSelectedClips, CanDeleteSubSelectedClips);
                 }
-                return _deleteSelectedClipsCommand;
+                return _deleteSubSelectedClipsCommand;
             }
         }
-        private bool CanDeleteSelectedClips() {
+        private bool CanDeleteSubSelectedClips() {
             return MpAssignShortcutModalWindowViewModel.IsOpen == false &&
                 !IsAnyEditingContent &&
                 !IsAnyEditingTitle &&
                 !IsAnyPastingTemplate; 
         }
-        private void DeleteSelectedClips() {
+        private void DeleteSubSelectedClips() {
             int lastSelectedClipTileIdx = -1;
             foreach (var ct in SubSelectedRtbvmList) {
                 lastSelectedClipTileIdx = VisibleSubRtbViewModels.IndexOf(ct);
@@ -1197,16 +1197,16 @@ namespace MpWpfApp {
             }
         }
 
-        private RelayCommand<MpTagTileViewModel> _linkTagToCopyItemCommand;
-        public ICommand LinkTagToCopyItemCommand {
+        private RelayCommand<MpTagTileViewModel> _linkTagToSubSelectedClipsCommand;
+        public ICommand LinkTagToSubSelectedClipsCommand {
             get {
-                if (_linkTagToCopyItemCommand == null) {
-                    _linkTagToCopyItemCommand = new RelayCommand<MpTagTileViewModel>(LinkTagToCopyItem, CanLinkTagToCopyItem);
+                if (_linkTagToSubSelectedClipsCommand == null) {
+                    _linkTagToSubSelectedClipsCommand = new RelayCommand<MpTagTileViewModel>(LinkTagToSubSelectedClips, CanLinkTagToSubSelectedClips);
                 }
-                return _linkTagToCopyItemCommand;
+                return _linkTagToSubSelectedClipsCommand;
             }
         }
-        private bool CanLinkTagToCopyItem(MpTagTileViewModel tagToLink) {
+        private bool CanLinkTagToSubSelectedClips(MpTagTileViewModel tagToLink) {
             //this checks the selected clips association with tagToLink
             //and only returns if ALL selecteds clips are linked or unlinked 
             if (tagToLink == null || SubSelectedRtbvmList == null || SubSelectedRtbvmList.Count == 0) {
@@ -1223,7 +1223,7 @@ namespace MpWpfApp {
             }
             return true;
         }
-        private void LinkTagToCopyItem(MpTagTileViewModel tagToLink) {
+        private void LinkTagToSubSelectedClips(MpTagTileViewModel tagToLink) {
             bool isUnlink = tagToLink.IsLinkedWithClipTile(SubSelectedRtbvmList[0]);
             foreach (var selectedClipTile in SubSelectedRtbvmList) {
                 if (isUnlink) {
@@ -1249,22 +1249,22 @@ namespace MpWpfApp {
             return SubSelectedRtbvmList.Count == 1;
         }
         private void AssignHotkey() {
-            SubSelectedRtbvmList[0].AssignHotkeyCommand.Execute(null);
+            SubSelectedRtbvmList[0].AssignHotkeyToSubSelectedItemCommand.Execute(null);
         }
 
-        private RelayCommand _invertSelectionCommand;
-        public ICommand InvertSelectionCommand {
+        private RelayCommand _invertSubSelectionCommand;
+        public ICommand InvertSubSelectionCommand {
             get {
-                if (_invertSelectionCommand == null) {
-                    _invertSelectionCommand = new RelayCommand(InvertSelection, CanInvertSelection);
+                if (_invertSubSelectionCommand == null) {
+                    _invertSubSelectionCommand = new RelayCommand(InvertSubSelection, CanSubInvertSelection);
                 }
-                return _invertSelectionCommand;
+                return _invertSubSelectionCommand;
             }
         }
-        private bool CanInvertSelection() {
+        private bool CanSubInvertSelection() {
             return SubSelectedRtbvmList.Count != VisibleSubRtbViewModels.Count;
         }
-        private void InvertSelection() {
+        private void InvertSubSelection() {
             var sctvml = SubSelectedRtbvmList;
             ClearSubSelection();
             foreach (var vctvm in VisibleSubRtbViewModels) {
@@ -1274,16 +1274,16 @@ namespace MpWpfApp {
             }
         }
 
-        private RelayCommand _mergeSelectedClipsCommand;
-        public ICommand MergeSelectedClipsCommand {
+        private RelayCommand _mergeSubSelectedClipsCommand;
+        public ICommand MergeSubSelectedClipsCommand {
             get {
-                if (_mergeSelectedClipsCommand == null) {
-                    _mergeSelectedClipsCommand = new RelayCommand(MergeSelectedClips, CanMergeSelectedClips);
+                if (_mergeSubSelectedClipsCommand == null) {
+                    _mergeSubSelectedClipsCommand = new RelayCommand(MergeSubSelectedClips, CanMergeSubSelectedClips);
                 }
-                return _mergeSelectedClipsCommand;
+                return _mergeSubSelectedClipsCommand;
             }
         }
-        private bool CanMergeSelectedClips() {
+        private bool CanMergeSubSelectedClips() {
             //return true;
             if (SubSelectedRtbvmList.Count <= 1) {
                 return false;
@@ -1297,7 +1297,7 @@ namespace MpWpfApp {
             }
             return areAllSameType;
         }
-        private void MergeSelectedClips() {
+        private void MergeSubSelectedClips() {
             var sctvml = SubSelectedRtbvmList;
             var ocil = new List<MpCopyItem>();
             foreach (var sctvm in sctvml) {
@@ -1310,16 +1310,16 @@ namespace MpWpfApp {
             PrimarySubSelectedRtbvm.MergeClip(ocil);
         }
 
-        private AsyncCommand _speakSelectedClipsAsyncCommand;
-        public IAsyncCommand SpeakSelectedClipsAsyncCommand {
+        private AsyncCommand _speakSubSelectedClipsAsyncCommand;
+        public IAsyncCommand SpeakSubSelectedClipsAsyncCommand {
             get {
-                if (_speakSelectedClipsAsyncCommand == null) {
-                    _speakSelectedClipsAsyncCommand = new AsyncCommand(SpeakSelectedClipsAsync, CanSpeakSelectedClipsAsync);
+                if (_speakSubSelectedClipsAsyncCommand == null) {
+                    _speakSubSelectedClipsAsyncCommand = new AsyncCommand(SpeakSubSelectedClipsAsync, CanSpeakSubSelectedClipsAsync);
                 }
-                return _speakSelectedClipsAsyncCommand;
+                return _speakSubSelectedClipsAsyncCommand;
             }
         }
-        private bool CanSpeakSelectedClipsAsync(object args) {
+        private bool CanSpeakSubSelectedClipsAsync(object args) {
             foreach (var sctvm in SubSelectedRtbvmList) {
                 if (!string.IsNullOrEmpty(sctvm.CopyItemPlainText)) {
                     return true;
@@ -1327,7 +1327,7 @@ namespace MpWpfApp {
             }
             return false;
         }
-        private async Task SpeakSelectedClipsAsync() {
+        private async Task SpeakSubSelectedClipsAsync() {
             await Dispatcher.CurrentDispatcher.InvokeAsync(() => {
                 var speechSynthesizer = new SpeechSynthesizer();
                 speechSynthesizer.SetOutputToDefaultAudioDevice();
@@ -1355,16 +1355,16 @@ namespace MpWpfApp {
             }, DispatcherPriority.Background);
         }
 
-        private RelayCommand _duplicateSelectedClipsCommand;
-        public ICommand DuplicateSelectedClipsCommand {
+        private RelayCommand _duplicateSubSelectedClipsCommand;
+        public ICommand DuplicateSubSelectedClipsCommand {
             get {
-                if (_duplicateSelectedClipsCommand == null) {
-                    _duplicateSelectedClipsCommand = new RelayCommand(DuplicateSelectedClips);
+                if (_duplicateSubSelectedClipsCommand == null) {
+                    _duplicateSubSelectedClipsCommand = new RelayCommand(DuplicateSubSelectedClips);
                 }
-                return _duplicateSelectedClipsCommand;
+                return _duplicateSubSelectedClipsCommand;
             }
         }
-        private void DuplicateSelectedClips() {
+        private void DuplicateSubSelectedClips() {
             var tempSubSelectedRtbvml = SubSelectedRtbvmList;
             ClearSubSelection();
             foreach (var srtbvm in tempSubSelectedRtbvml) {

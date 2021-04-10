@@ -75,7 +75,7 @@ namespace MpWpfApp {
             }
             new MpContextMenuItemViewModel(
                 "_Paste",
-                Rtbvm.RichTextBoxViewModelCollection.PasteSelectedClipsCommand,
+                Rtbvm.RichTextBoxViewModelCollection.PasteSubSelectedClipsCommand,
                 null,
                 false,
                  Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/paste.png");
@@ -83,7 +83,7 @@ namespace MpWpfApp {
 
             this.Add(new MpContextMenuItemViewModel(
                "Delete",
-               Rtbvm.RichTextBoxViewModelCollection.DeleteSelectedClipsCommand,
+               Rtbvm.RichTextBoxViewModelCollection.DeleteSubSelectedClipsCommand,
                null,
                false,
                Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/Delete.png",
@@ -107,7 +107,7 @@ namespace MpWpfApp {
                         Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/caret.png"),
                     new MpContextMenuItemViewModel(
                         "_Rename",
-                        Rtbvm.ToggleEditTitleCommand,
+                        Rtbvm.ToggleEditSubTitleCommand,
                         null,
                         false,
                         Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/rename.png"),
@@ -131,33 +131,33 @@ namespace MpWpfApp {
                     null,
                     new MpContextMenuItemViewModel(
                         "_Duplicate",
-                        Rtbvm.RichTextBoxViewModelCollection.DuplicateSelectedClipsCommand,
+                        Rtbvm.RichTextBoxViewModelCollection.DuplicateSubSelectedClipsCommand,
                         null,
                         false,
                         Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/duplicate.png"),
                     new MpContextMenuItemViewModel(
                         "_Merge",
-                        Rtbvm.RichTextBoxViewModelCollection.MergeSelectedClipsCommand,
+                        Rtbvm.RichTextBoxViewModelCollection.MergeSubSelectedClipsCommand,
                         null,
                         false,
                         Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/merge.png"), 
                     null,
                     new MpContextMenuItemViewModel(
                         "Send As Email",
-                        Rtbvm.RichTextBoxViewModelCollection.DuplicateSelectedClipsCommand,
+                        Rtbvm.RichTextBoxViewModelCollection.DuplicateSubSelectedClipsCommand,
                         null,
                         false,
                         Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/email.png"),
                     new MpContextMenuItemViewModel(
                         "Duplicate As _Qr Code",
-                        Rtbvm.CreateQrCodeFromClipCommand,
+                        Rtbvm.CreateQrCodeFromSubSelectedItemCommand,
                         null,
                         false,
                         Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/qr.png"),
                     null,
                     new MpContextMenuItemViewModel(
                         "_Speak",
-                        Rtbvm.RichTextBoxViewModelCollection.SpeakSelectedClipsAsyncCommand,
+                        Rtbvm.RichTextBoxViewModelCollection.SpeakSubSelectedClipsAsyncCommand,
                         null,
                         false,
                         Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/speak.png"),
@@ -190,7 +190,7 @@ namespace MpWpfApp {
                             new MpContextMenuItemViewModel(
                                 "_Yandex",
                                 Rtbvm.RichTextBoxViewModelCollection.SearchWebCommand,
-                                @"https://yandex.com/search/?text=",
+                                @"ho",
                                 false,
                                 Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/yandexIcon.png")
                         })
@@ -205,26 +205,26 @@ namespace MpWpfApp {
                  new ObservableCollection<MpContextMenuItemViewModel>{
                      new MpContextMenuItemViewModel(
                         "_Bring To Front",
-                        Rtbvm.RichTextBoxViewModelCollection.BringSelectedClipTilesToFrontCommand,
+                        Rtbvm.RichTextBoxViewModelCollection.BringSubSelectedClipTilesToFrontCommand,
                         null,
                         false,
                         Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/bringToFront.png"),
                      new MpContextMenuItemViewModel(
                         "_Send To Back",
-                        Rtbvm.RichTextBoxViewModelCollection.SendSelectedClipTilesToBackCommand,
+                        Rtbvm.RichTextBoxViewModelCollection.SendSubSelectedClipTilesToBackCommand,
                         null,
                         false,
                         Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/sendToBack.png"),
                      null,
                      new MpContextMenuItemViewModel(
                         "Select _All",
-                        Rtbvm.RichTextBoxViewModelCollection.BringSelectedClipTilesToFrontCommand,
+                        Rtbvm.RichTextBoxViewModelCollection.BringSubSelectedClipTilesToFrontCommand,
                         null,
                         false,
                         Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/selectall.png"),
                      new MpContextMenuItemViewModel(
                         "_Invert Selection",
-                        Rtbvm.RichTextBoxViewModelCollection.InvertSelectionCommand,
+                        Rtbvm.RichTextBoxViewModelCollection.InvertSubSelectionCommand,
                         null,
                         false,
                         Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/invertSelection.png")
