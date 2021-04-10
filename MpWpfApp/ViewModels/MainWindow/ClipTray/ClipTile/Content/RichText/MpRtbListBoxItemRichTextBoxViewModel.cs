@@ -1359,7 +1359,9 @@ namespace MpWpfApp {
         }
 
         public void Resize(double deltaWidth) {
+            if(IsSubSelected && HostClipTileViewModel.IsExpanded) {
 
+            }
         }
 
         public void ResetRtb() {

@@ -402,10 +402,20 @@ namespace MpWpfApp {
             return hl;
         }
         #endregion
+
         #region Public Methods
         //public MpTemplateHyperlinkViewModel() :this(new MpClipTileViewModel(new MpCopyItem()),new MpCopyItemTemplate()) { }
 
         public MpTemplateHyperlinkViewModel(MpClipTileViewModel ctvm, MpCopyItemTemplate cit) : base() {
+            PropertyChanged += (s, e) => {
+                switch(e.PropertyName) {
+                    case nameof(IsSelected):
+                        if(IsSelected && ClipTileViewModel.IsEditingTile) {
+                            ClipTileViewModel.EditTemplateToolbarViewModel.InitWithRichTextBox(ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb);
+                        }
+                        break;
+                }
+            };
             ClipTileViewModel = ctvm;
             if (cit == null) {
                 //case of a new template create new w/ unique name & color

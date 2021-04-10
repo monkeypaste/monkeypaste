@@ -1162,6 +1162,22 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
+        private RelayCommand<object> _searchWebCommand;
+        public ICommand SearchWebCommand {
+            get {
+                if (_searchWebCommand == null) {
+                    _searchWebCommand = new RelayCommand<object>(SearchWeb);
+                }
+                return _searchWebCommand;
+            }
+        }
+        private void SearchWeb(object args) {
+            if (args == null || args.GetType() != typeof(string)) {
+                return;
+            }
+            MpHelpers.Instance.OpenUrl(args.ToString() + System.Uri.EscapeDataString(SelectedClipTilesMergedPlainText));
+        }
+
         private RelayCommand _selectNextItemCommand;
         public ICommand SelectNextItemCommand {
             get {

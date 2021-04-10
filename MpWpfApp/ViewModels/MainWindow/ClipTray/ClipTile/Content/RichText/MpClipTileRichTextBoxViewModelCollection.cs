@@ -1012,17 +1012,9 @@ namespace MpWpfApp {
                 await Dispatcher.CurrentDispatcher.BeginInvoke(
                         DispatcherPriority.Normal,
                         (Action)(() => {
-                            //BitmapSource sharedSwirl = null;
                             foreach (var sctvm in SubSelectedRtbvmList) {
                                 sctvm.TitleBackgroundColor = brush;
-                                sctvm.TitleSwirlViewModel.ForceBrush(brush);
-                                //if (sharedSwirl == null) {
-                                //    sctvm.TitleSwirl = sctvm.CopyItem.InitSwirl(null,true);
-                                //    sharedSwirl = sctvm.TitleSwirl;
-                                //} else {
-                                //    sctvm.TitleSwirl = sctvm.CopyItem.InitSwirl(sharedSwirl);
-                                //}
-                                //sctvm.CopyItem.WriteToDatabase();
+                                sctvm.TitleSwirlViewModel?.ForceBrush(brush);
                             }
                         }));
             } finally {
@@ -1147,6 +1139,7 @@ namespace MpWpfApp {
                 IsBusy = false;
             }
         }
+
 
         private RelayCommand<object> _searchWebCommand;
         public ICommand SearchWebCommand {

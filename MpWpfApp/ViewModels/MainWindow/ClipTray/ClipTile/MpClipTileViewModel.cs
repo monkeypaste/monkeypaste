@@ -2520,6 +2520,26 @@
             IsEditingTitle = !IsEditingTitle;
         }
 
+        private RelayCommand<object> _toggleEditContentCommand;
+        public ICommand ToggleEditContentCommand {
+            get {
+                if (_toggleEditContentCommand == null) {
+                    _toggleEditContentCommand = new RelayCommand<object>(ToggleEditContent, CanToggleEditContent);
+                }
+                return _toggleEditContentCommand;
+            }
+        }
+        private bool CanToggleEditContent(object args) {
+            if (MainWindowViewModel.IsLoading) {
+                return false;
+            }
+            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 && 
+                (CopyItemType == MpCopyItemType.Composite || CopyItemType == MpCopyItemType.RichText);
+        }
+        private void ToggleEditContent(object args) {
+            IsEditingTile = true;
+        }
+
 
         private RelayCommand _excludeApplicationCommand;
         public ICommand ExcludeApplicationCommand {

@@ -287,7 +287,7 @@ namespace MpWpfApp {
         public void Resize(double deltaTemplateTop) {
             EditTemplateBorderCanvasTop += deltaTemplateTop;
 
-            if (ClipTileViewModel.IsEditingTemplate) {
+            if (ClipTileViewModel.IsEditingTemplate && ClipTileViewModel.IsEditingTile) {
                 SelectedTemplateNameTextBox.Focus();
                 SelectedTemplateNameTextBox.SelectAll();
             } else if (_wasEdited) {
@@ -392,7 +392,7 @@ namespace MpWpfApp {
         }
 
         private bool Validate() {
-            if (SelectedTemplateHyperlinkViewModel == null) {
+            if (SelectedTemplateHyperlinkViewModel == null || ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm == null) {
                 return true;
             }
             if (string.IsNullOrEmpty(SelectedTemplateHyperlinkViewModel.TemplateName)) {
