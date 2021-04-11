@@ -19,9 +19,6 @@ namespace MpWpfApp {
 
     public class MpEditRichTextBoxToolbarViewModel : MpUndoableViewModelBase<MpEditRichTextBoxToolbarViewModel>, IDisposable {
         #region Private Variables
-        private StackPanel _borderStackPanel = null;
-        private RichTextBox _lastRtb = null;
-        private RichTextBox _selectedRtb = null;
         #endregion
 
         #region View Models
@@ -42,7 +39,11 @@ namespace MpWpfApp {
         #region Properties
 
         #region Controls
-        public Border EditToolbarBorder;
+        public Border EditToolbarBorder { get; set; }
+
+        public StackPanel BorderStackPanel { get; set; }
+        public RichTextBox LastRtb { get; set; }
+        public RichTextBox SelectedRtb { get; set; }
         #endregion
 
         #region Layout Properties      
@@ -145,13 +146,13 @@ namespace MpWpfApp {
             if (ClipTileViewModel.CopyItemType != MpCopyItemType.RichText && ClipTileViewModel.CopyItemType != MpCopyItemType.Composite) {
                 return;
             }
-            _borderStackPanel = (StackPanel)sender;
-            EditToolbarBorder = _borderStackPanel.GetVisualAncestor<Border>();
+            BorderStackPanel = (StackPanel)sender;
+            EditToolbarBorder = BorderStackPanel.GetVisualAncestor<Border>();
         }
 
         public void InitWithRichTextBox(RichTextBox rtb, bool doAnimation) {
-            _selectedRtb = rtb;
-            EditToolbarBorder = _borderStackPanel.GetVisualAncestor<Border>();
+            SelectedRtb = rtb;
+            EditToolbarBorder = BorderStackPanel.GetVisualAncestor<Border>();
             var cb = ClipTileViewModel.ClipBorder;
             var rtblbgc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxGridContainerCanvas");
             var rtblbg = (Grid)rtblbgc.FindName("ClipTileRichTextboxListBoxContainerGrid");
@@ -164,7 +165,7 @@ namespace MpWpfApp {
             var addTemplateButton = (Button)EditToolbarBorder.FindName("AddTemplateButton");
             var editTemplateToolbarBorder = (Border)cb.FindName("ClipTileEditTemplateToolbar");
             var pasteTemplateToolbarBorder = (Border)cb.FindName("ClipTilePasteTemplateToolbar");
-            var ds = ClipTileViewModel.RichTextBoxViewModelCollection.FullDocument.GetDocumentSize();
+            //var ds = ClipTileViewModel.RichTextBoxViewModelCollection.FullDocument.GetDocumentSize();
 
             Canvas.SetTop(EditToolbarBorder, EditBorderCanvasTop);
             #region Editor
@@ -569,7 +570,7 @@ namespace MpWpfApp {
             }
             #endregion
 
-            _lastRtb = rtb;
+            LastRtb = rtb;
         }
 
         public void Rtb_SelectionChanged(object sender, RoutedEventArgs e) {
@@ -650,7 +651,7 @@ namespace MpWpfApp {
                 //Rtb_SelectionChanged(this, new RoutedEventArgs());
             } else {
                 ClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
-                ClipTileViewModel.RichTextBoxViewModelCollection.Refresh();
+                //ClipTileViewModel.RichTextBoxViewModelCollection.Refresh();
             }
         }
         public void Animate(

@@ -1543,7 +1543,7 @@
                             //OnPropertyChanged(nameof(ContentPreviewToolTipBmpSrc));
                             MainWindowViewModel.ShrinkClipTile(this);                            
                         }
-                        ctvm.RichTextBoxViewModelCollection.Refresh();
+                        //ctvm.RichTextBoxViewModelCollection.Refresh();
                         break;
                     case nameof(ctvm.IsEditingTemplate):
 

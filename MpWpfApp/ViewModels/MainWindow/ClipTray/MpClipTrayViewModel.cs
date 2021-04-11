@@ -579,7 +579,6 @@ namespace MpWpfApp {
             };
 
             ListBox.MouseLeftButtonDown += (s, e9) => {
-                var ht = VisualTreeHelper.HitTest(ListBox, e9.GetPosition(ListBox));
                 if (!IsAnyTileExpanded) {
                     return;
                 }
@@ -598,15 +597,6 @@ namespace MpWpfApp {
             }
         }
 
-        private DragDropEffects DropClips(List<MpClipTileViewModel> dctvml) {
-
-            return DragDropEffects.None;
-        }
-
-        private DragDropEffects DropRtbItems(List<MpRtbListBoxItemRichTextBoxViewModel> drtbvml) {
-
-            return DragDropEffects.None;
-        }
         private int GetDropIdx(Point mp) {
             double mdx = mp.X;
             double minDist = double.MaxValue;

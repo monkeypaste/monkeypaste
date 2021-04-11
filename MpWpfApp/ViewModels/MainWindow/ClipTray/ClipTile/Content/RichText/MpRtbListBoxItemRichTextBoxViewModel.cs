@@ -1114,7 +1114,8 @@ namespace MpWpfApp {
                 }
             };
 
-            if (HasTemplate) {
+            //if (HasTemplate) 
+            {
                 ClearHyperlinks();
             }
             CreateHyperlinks();
@@ -1447,7 +1448,7 @@ namespace MpWpfApp {
 
             var rtbSelection = Rtb?.Selection.Clone();
             for (int i = 0; i < regExGroupList.Count; i++) {
-                var linkType = i + 1 > (int)MpSubTextTokenType.TemplateSegment ? MpSubTextTokenType.HexColor : (MpSubTextTokenType)(i + 1);                
+                var linkType = (MpSubTextTokenType)(i + 1);                
                 if (linkType == MpSubTextTokenType.StreetAddress) {
                     //doesn't consistently work and presents bugs so disabling for now
                     continue;
@@ -1458,10 +1459,10 @@ namespace MpWpfApp {
                     //this occurs for templates when copyitem has no templates
                     continue;
                 }
-                if(linkType == MpSubTextTokenType.HexColor) {
-                    linkType = MpSubTextTokenType.HexColor;
+                if(linkType == MpSubTextTokenType.TemplateSegment) {
+                    linkType = MpSubTextTokenType.TemplateSegment;
                 }
-                var mc = Regex.Matches(Regex.Escape(CopyItem.ItemPlainText), regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
+                var mc = Regex.Matches(CopyItem.ItemPlainText, regExStr, RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture | RegexOptions.Multiline);
                 foreach (Match m in mc) {
                     foreach (Group mg in m.Groups) {
                         foreach (Capture c in mg.Captures) {
@@ -1474,6 +1475,7 @@ namespace MpWpfApp {
                             if (linkType == MpSubTextTokenType.TemplateSegment) {
                                 var copyItemTemplate = CopyItem.GetTemplateByName(matchRange.Text);
                                 hl = MpTemplateHyperlinkViewModel.CreateTemplateHyperlink(HostClipTileViewModel, copyItemTemplate, matchRange);
+                                hl.Tag = linkType;
                                 TemplateHyperlinkCollectionViewModel.Add((MpTemplateHyperlinkViewModel)hl.DataContext);
                             } else {
                                 var matchRun = new Run(matchRange.Text);
@@ -1575,7 +1577,8 @@ namespace MpWpfApp {
                                             Console.WriteLine("Create Hyperlinks warning, cannot connect to currency converter: " + ex);
                                         }
                                         break;
-                                    case MpSubTextTokenType.HexColor:
+                                    case MpSubTextTokenType.HexColor8:
+                                    case MpSubTextTokenType.HexColor6:
                                         var rgbColorStr = linkText;
                                         if (rgbColorStr.Length > 7) {
                                             rgbColorStr = rgbColorStr.Substring(0, 7);

@@ -48,7 +48,7 @@ namespace MpWpfApp {
                 return _selectedTemplateHyperlinkViewModel;
             }
             set {
-                if(_selectedTemplateHyperlinkViewModel != value) {
+                if (_selectedTemplateHyperlinkViewModel != value) {
                     _selectedTemplateHyperlinkViewModel = value;
                     OnPropertyChanged(nameof(SelectedTemplateHyperlinkViewModel));
                 }
@@ -76,7 +76,7 @@ namespace MpWpfApp {
         #region Properties       
 
         #region Controls
-        public TextBox SelectedTemplateNameTextBox;
+        public TextBox SelectedTemplateNameTextBox {get; set;}
         #endregion
 
         #region Layout 
@@ -215,6 +215,8 @@ namespace MpWpfApp {
                 );
                 templateColorButton.ContextMenu = colorContextMenu;
                 colorContextMenu.PlacementTarget = templateColorButton;
+                colorContextMenu.Width = 200;
+                colorContextMenu.Height = 100;
                 colorContextMenu.IsOpen = true;
             };
 
@@ -230,62 +232,13 @@ namespace MpWpfApp {
                 }
             };
 
-            //ClipTileViewModel.PropertyChanged += (s, e) => {
-            //    switch (e.PropertyName) {
-            //        case nameof(ClipTileViewModel.IsEditingTemplate):
-            //            double rtbBottomMax = ClipTileViewModel.TileContentHeight;
-            //            double rtbBottomMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight;
-
-            //            double editTemplateToolbarTopMax = ClipTileViewModel.TileContentHeight;
-            //            double editTemplateToolbarTopMin = ClipTileViewModel.TileContentHeight - ClipTileViewModel.EditTemplateToolbarHeight + 5;
-
-            //            if (ClipTileViewModel.IsEditingTemplate) {
-            //                ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Visible;
-            //            } else if (!Validate()) {
-            //                //occurs if template name is invalid and user clicks away from app or tile
-            //                CancelCommand.Execute(null);
-            //            } else {
-            //                OkCommand.Execute(null);
-            //            }
-
-            //            MpHelpers.Instance.AnimateDoubleProperty(
-            //                ClipTileViewModel.IsEditingTemplate ? rtbBottomMax : rtbBottomMin,
-            //                ClipTileViewModel.IsEditingTemplate ? rtbBottomMin : rtbBottomMax,
-            //                Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-            //                new List<FrameworkElement> { rtb, rtblb },
-            //                Canvas.BottomProperty,
-            //                (s1, e44) => {
-
-            //                });
-
-            //            MpHelpers.Instance.AnimateDoubleProperty(
-            //                ClipTileViewModel.IsEditingTemplate ? editTemplateToolbarTopMax : editTemplateToolbarTopMin,
-            //                ClipTileViewModel.IsEditingTemplate ? editTemplateToolbarTopMin : editTemplateToolbarTopMax,
-            //                Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-            //                editTemplateToolbarBorder,
-            //                Canvas.TopProperty,
-            //                (s1, e44) => {
-            //                    if (!ClipTileViewModel.IsEditingTemplate) {
-            //                        ClipTileViewModel.EditTemplateToolbarVisibility = Visibility.Collapsed;
-            //                        ResetState();
-            //                    } else {
-            //                        tb.Focus();
-            //                        tb.SelectAll();
-            //                    }
-            //                });
-            //            break;
-            //    }
-            //};
-
             rtb.PreviewMouseLeftButtonDown += (s1, e1) => {
                 if (ClipTileViewModel.IsEditingTemplate) {
                     //clicking out of edit template toolbar performs Ok Command (save template & hide toolbar)
                     OkCommand.Execute(null);
                 }
             };
-        }
-        public void Resize(double deltaTemplateTop) {
-            EditTemplateBorderCanvasTop += deltaTemplateTop;
+
 
             if (ClipTileViewModel.IsEditingTemplate && ClipTileViewModel.IsEditingTile) {
                 SelectedTemplateNameTextBox.Focus();
@@ -298,6 +251,9 @@ namespace MpWpfApp {
                     OkCommand.Execute(null);
                 }
             }
+        }
+        public void Resize(double deltaTemplateTop) {
+            EditTemplateBorderCanvasTop += deltaTemplateTop;
         }
 
         public void Animate(
@@ -376,6 +332,8 @@ namespace MpWpfApp {
                 //MpHelpers.Instance.CreateTemplateHyperlink(SelectedTemplateHyperlinkViewModel, ClipTileViewModel.GetRtb().Selection);
                 MpTemplateHyperlinkViewModel.CreateTemplateHyperlink(ClipTileViewModel, SelectedTemplateHyperlinkViewModel.CopyItemTemplate, ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb.Selection);
                 OkCommand.Execute(null);
+            } else {
+                Resize(-ClipTileViewModel.EditTemplateToolbarHeight);
             }
         }
         #endregion
@@ -467,6 +425,7 @@ namespace MpWpfApp {
                 }
             }
             ClipTileViewModel.IsEditingTemplate = false;
+            Resize(ClipTileViewModel.EditTemplateToolbarHeight);
         }
 
         private RelayCommand _okCommand;
@@ -497,7 +456,7 @@ namespace MpWpfApp {
 
             SelectedTemplateHyperlinkViewModel.IsSelected = true;
             ClipTileViewModel.IsEditingTemplate = false;
-
+            Resize(ClipTileViewModel.EditTemplateToolbarHeight);
             ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb.Focus();
         }
 

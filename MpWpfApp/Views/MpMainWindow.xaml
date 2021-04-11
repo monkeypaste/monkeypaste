@@ -2235,7 +2235,7 @@
                                                                                                          Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                                                                          IsReadOnly="{Binding HostClipTileViewModel.IsRtbReadOnly}"
                                                                                                          IsEnabled="True"
-                                                                                                         AllowDrop="True"
+                                                                                                         AllowDrop="False"
                                                                                                          AutoWordSelection="False"
                                                                                                          IsInactiveSelectionHighlightEnabled="True"
                                                                                                          IsDocumentEnabled="True"

@@ -19,7 +19,7 @@ namespace MpWpfApp {
         #region Private Variables
         //private static int _CopyItemCount = 0;
         private object _itemData = null;
-
+        private byte[] _itemBmpByteArray = null;
         private static List<MpApp> _AppList = null;
         private static List<MpColor> _ColorList = null;
 
@@ -107,6 +107,7 @@ namespace MpWpfApp {
             }
             set {
                 _itemBitmapSource = value;
+                _itemBmpByteArray = _itemBitmapSource.ToByteArray();
             }
         }
 
@@ -869,6 +870,7 @@ namespace MpWpfApp {
                     }
                     ItemCsv = csvText;
                     ItemBitmapSource = ItemFlowDocument.ToBitmapSource();
+                    
                     break;
                 case MpCopyItemType.Image:
                     if (Application.Current.MainWindow.DataContext == null ||
@@ -915,6 +917,7 @@ namespace MpWpfApp {
                     break;
             }
         }
+
         private async Task UpdateItemDataAsync(DispatcherPriority priority = DispatcherPriority.Background) {
             await Dispatcher.CurrentDispatcher.InvokeAsync(UpdateItemData,priority);          
         }
@@ -1004,7 +1007,8 @@ namespace MpWpfApp {
             }
 
             if (dr["ItemImage"] != null && dr["ItemImage"].GetType() != typeof(System.DBNull)) {
-                ItemBitmapSource = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]);
+                _itemBmpByteArray = (byte[])dr["ItemImage"];
+                ItemBitmapSource = MpHelpers.Instance.ConvertByteArrayToBitmapSource(_itemBmpByteArray);
             }
 
             CompositeParentCopyItemId = GetCompositeParentCopyItemId();
@@ -1099,7 +1103,7 @@ namespace MpWpfApp {
             if(string.IsNullOrEmpty(itemText)) {
                 itemText = string.Empty;
             }
-            byte[] itemImage = MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource);
+            //byte[] itemImage = MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource);
             //if copyitem already exists
             if (CopyItemId > 0) {
                 MpDb.Instance.ExecuteWrite(
@@ -1114,7 +1118,7 @@ namespace MpWpfApp {
                             { "@t", Title },
                             { "@cc", CopyCount },
                             { "@it", itemText },
-                            { "@ii", itemImage},
+                            { "@ii", _itemBmpByteArray},
                             { "@ciid", CopyItemId},
                         });
             } else {
@@ -1132,7 +1136,7 @@ namespace MpWpfApp {
                             { "@cdt", CopyDateTime.ToString("yyyy-MM-dd HH:mm:ss") },
                             { "@cc", CopyCount },
                             { "@it", itemText },
-                            { "@ii", itemImage},
+                            { "@ii", _itemBmpByteArray},
                             { "@ciid", CopyItemId},
                         });
                 CopyItemId = MpDb.Instance.GetLastRowId("MpCopyItem", "pk_MpCopyItemId");  

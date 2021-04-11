@@ -25,14 +25,14 @@ namespace MpWpfApp {
     public enum MpSubTextTokenType {
         None = 0,
         FileOrFolder,
-        Uri = 1,
+        Uri,
         Email,
         PhoneNumber,
         Currency,
-        HexColor,
+        HexColor6,
         StreetAddress,
         TemplateSegment,
-        CopyItemSegment
+        HexColor8
     }
     public class MpTemplateHyperlinkViewModel : MpUndoableViewModelBase<MpTemplateHyperlinkViewModel>, ICloneable {
         #region Private Variables
@@ -420,7 +420,7 @@ namespace MpWpfApp {
             if (cit == null) {
                 //case of a new template create new w/ unique name & color
                 int uniqueIdx = 1;
-                string namePrefix = "<Template #";
+                string namePrefix = "<Template";
                 while (ClipTileViewModel.CopyItemPlainText.ToLower().Contains(namePrefix.ToLower() + uniqueIdx) || 
                        ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == namePrefix + uniqueIdx + ">").ToList().Count > 0) {
                     uniqueIdx++;
@@ -458,7 +458,8 @@ namespace MpWpfApp {
             hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
             hl.Unloaded += (s, e) => {
                 //occurs when template is deleted in edit tile mode
-                Dispose(false);
+                
+                //Dispose(false);
             };
             hl.MouseEnter += (s, e) => {
                 IsHovering = true;

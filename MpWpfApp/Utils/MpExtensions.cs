@@ -718,7 +718,7 @@ namespace MpWpfApp {
 
         #region Images
         //faster version but needs unsafe thing
-        //public unsafe static void CopyPixels(this BitmapSource source, PixelColor[,] pixels, int stride, int offset) {
+        //public static void CopyPixels(this BitmapSource source, PixelColor[,] pixels, int stride, int offset) {
         //    fixed (PixelColor* buffer = &pixels[0, 0])
         //        source.CopyPixels(
         //          new Int32Rect(0, 0, source.PixelWidth, source.PixelHeight),
@@ -726,6 +726,12 @@ namespace MpWpfApp {
         //          pixels.GetLength(0) * pixels.GetLength(1) * sizeof(PixelColor),
         //          stride);
         //}
+        public static byte[] ToByteArray(this BitmapSource source) {
+            return MpHelpers.Instance.ConvertBitmapSourceToByteArray(source);
+        }
+        public static BitmapSource ToBitmapSource(this byte[] byteArray) {
+            return MpHelpers.Instance.ConvertByteArrayToBitmapSource(byteArray);
+        }
         public static void CopyPixels(this BitmapSource source, PixelColor[,] pixels, int stride, int offset, bool dummy) {
             var height = source.PixelHeight;
             var width = source.PixelWidth;

@@ -130,12 +130,13 @@ namespace MpWpfApp {
                 AppId = MpDb.Instance.GetLastRowId("MpApp", "pk_MpAppId");                
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpApp set IconBlob=@ib, IconBorderBlob=@ibb,IconSelectedHighlightBorderBlob=@ishbb,IconHighlightBorderBlob=@ihbb, IsAppRejected=@iar, SourcePath=@sp, AppName=@an, fk_MpColorId1=@c1,fk_MpColorId2=@c2,fk_MpColorId3=@c3,fk_MpColorId4=@c4,fk_MpColorId5=@c5 where pk_MpAppId=@aid",
+                    //"update MpApp set IconBlob=@ib, IconBorderBlob=@ibb,IconSelectedHighlightBorderBlob=@ishbb,IconHighlightBorderBlob=@ihbb, IsAppRejected=@iar, SourcePath=@sp, AppName=@an, fk_MpColorId1=@c1,fk_MpColorId2=@c2,fk_MpColorId3=@c3,fk_MpColorId4=@c4,fk_MpColorId5=@c5 where pk_MpAppId=@aid",
+                    "update MpApp set IsAppRejected=@iar, SourcePath=@sp, AppName=@an, fk_MpColorId1=@c1,fk_MpColorId2=@c2,fk_MpColorId3=@c3,fk_MpColorId4=@c4,fk_MpColorId5=@c5 where pk_MpAppId=@aid",
                     new Dictionary<string, object> {
-                        { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconImage) },
-                        { "@ibb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconBorderImage) },
-                        { "@ishbb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconSelectedHighlightBorderImage) },
-                        { "@ihbb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconHighlightBorderImage) },
+                        //{ "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconImage) },
+                        //{ "@ibb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconBorderImage) },
+                        //{ "@ishbb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconSelectedHighlightBorderImage) },
+                        //{ "@ihbb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconHighlightBorderImage) },
                         { "@iar", Convert.ToInt32(IsAppRejected) },
                         { "@sp", AppPath },
                         { "@an", AppName },
