@@ -2149,7 +2149,7 @@
                                                                                                               Command="{Binding Data.DuplicateSubSelectedClipsCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
                                                                                                     <MenuItem Header="_Merge"
                                                                                                               Icon="{Binding Source={StaticResource MergeIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
-                                                                                                              Command="{Binding Data.MergeSubSelectedClipsCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
+                                                                                                              Command="{Binding Data.MergeSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
                                                                                                     <Separator />
                                                                                                     <MenuItem Header="Send as Email"
                                                                                                               Icon="{Binding Source={StaticResource EmailIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"

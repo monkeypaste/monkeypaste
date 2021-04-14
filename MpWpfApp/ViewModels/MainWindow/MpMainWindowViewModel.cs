@@ -367,7 +367,7 @@ namespace MpWpfApp {
             ClipTrayViewModel.Resize(ctvmToExpand,
                                     ClipTrayWidth - ctvmToExpand.TileBorderMinWidth - MpMeasurements.Instance.ClipTileExpandedMargin,
                                     _deltaHeight,
-                                    ctvmToExpand.EditRichTextBoxToolbarHeight);
+                                    ctvmToExpand.IsPastingTemplate ? 0:ctvmToExpand.EditRichTextBoxToolbarHeight);
 
             //EventHandler postFadeEvent = (s, e) => {
             //    //Console.WriteLine("Expanding tile post fade event");

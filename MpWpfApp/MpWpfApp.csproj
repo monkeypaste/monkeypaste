@@ -223,7 +223,6 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateHyperlinkCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Templates\MpTemplateHyperlinkViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Toolbar\MpEditRichTextBoxToolbarViewModel.cs" />
-    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\ContextMenu\MpContextMenuItemCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\ContextMenu\MpContextMenuItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\MpClipTileViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Title\MpClipTileTitleSwirlViewModel.cs" />

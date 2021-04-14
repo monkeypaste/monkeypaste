@@ -369,33 +369,37 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(SelectedHighlightTextRangeViewModel));
         }
 
-        private RelayCommand _applyHighlightingCommand;
+        private RelayCommand<object> _applyHighlightingCommand;
         public ICommand ApplyHighlightingCommand {
             get {
                 if(_applyHighlightingCommand == null) {
-                    _applyHighlightingCommand = new RelayCommand(ApplyHighlighting);
+                    _applyHighlightingCommand = new RelayCommand<object>(ApplyHighlighting);
                 }
                 return _applyHighlightingCommand;
             }
         }
-        private void ApplyHighlighting() {
+        private void ApplyHighlighting(object args) {
             foreach(var hltrvm in this) {
-                hltrvm.HighlightRange();
+                if (args == null || hltrvm == args) {
+                    hltrvm.HighlightRange();
+                }
             }
         }
 
-        private RelayCommand _hideHighlightingCommand;
+        private RelayCommand<object> _hideHighlightingCommand;
         public ICommand HideHighlightingCommand {
             get {
                 if (_hideHighlightingCommand == null) {
-                    _hideHighlightingCommand = new RelayCommand(HideHighlighting);
+                    _hideHighlightingCommand = new RelayCommand<object>(HideHighlighting);
                 }
                 return _hideHighlightingCommand;
             }
         }
-        private void HideHighlighting() {
+        private void HideHighlighting(object args) {
             foreach (var hltrvm in this) {
-                hltrvm.ClearHighlighting();
+                if (args == null || hltrvm == args) {
+                    hltrvm.ClearHighlighting();
+                }                
             }
             ReplaceDocumentsBgColors();
         }

@@ -28,17 +28,32 @@ namespace MpWpfApp {
         private bool _wasEdited = false;
         #endregion
 
+        #region Properties       
+
         #region View Models        
-        private MpClipTileViewModel _clipTileViewModel = null;
-        public MpClipTileViewModel ClipTileViewModel {
+        private MpClipTileViewModel _hostClipTileViewModel = null;
+        public MpClipTileViewModel HostClipTileViewModel {
             get {
-                return _clipTileViewModel;
+                return _hostClipTileViewModel;
             }
             set {
-                if (_clipTileViewModel != value) {
-                    _clipTileViewModel = value;
-                    OnPropertyChanged(nameof(ClipTileViewModel));
+                if (_hostClipTileViewModel != value) {
+                    _hostClipTileViewModel = value;
+                    OnPropertyChanged(nameof(HostClipTileViewModel));
                 }
+            }
+        }
+
+        public MpRtbListBoxItemRichTextBoxViewModel SubSelectedRtbViewModel {
+            get {
+                if (HostClipTileViewModel == null) {
+                    return null;
+                }
+                if (HostClipTileViewModel.RichTextBoxViewModelCollection.Count == 0 ||
+                   HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems.Count != 1) {
+                    return null;
+                }
+                return HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems[0];
             }
         }
 
@@ -53,27 +68,8 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(SelectedTemplateHyperlinkViewModel));
                 }
             }
-            //get {
-            //    if(ClipTileViewModel == null ||
-            //        ClipTileViewModel.RichTextBoxViewModels.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel == null || 
-            //        ClipTileViewModel.RichTextBoxViewModels.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.Count == 0) {
-            //        return null;
-            //    }
-            //    return ClipTileViewModel.RichTextBoxViewModels.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel;
-            //}
-            //set {
-            //    if (ClipTileViewModel != null && 
-            //        ClipTileViewModel.RichTextBoxViewModels.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel != null && 
-            //        SelectedTemplateHyperlinkViewModel != value) {
-            //        ClipTileViewModel.RichTextBoxViewModels.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel = value;
-
-            //        OnPropertyChanged(nameof(SelectedTemplateHyperlinkViewModel));
-            //    }
-            //}
         }
         #endregion
-
-        #region Properties       
 
         #region Controls
         public TextBox SelectedTemplateNameTextBox {get; set;}
@@ -161,22 +157,22 @@ namespace MpWpfApp {
         #region Public Methods
 
         public MpEditTemplateToolbarViewModel(MpClipTileViewModel ctvm) : base() {
-            ClipTileViewModel = ctvm;
+            HostClipTileViewModel = ctvm;
         }
 
         public void EditTemplateToolbarBorderGrid_Loaded(object sender, RoutedEventArgs args) {
-            if (ClipTileViewModel.CopyItemType != MpCopyItemType.RichText && ClipTileViewModel.CopyItemType != MpCopyItemType.Composite) {
+            if (HostClipTileViewModel.CopyItemType != MpCopyItemType.RichText && HostClipTileViewModel.CopyItemType != MpCopyItemType.Composite) {
                 return;
             }
             _borderGrid = (Grid)sender;                 
         }
 
         public void InitWithRichTextBox(RichTextBox rtb) {
-            ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.PropertyChanged += (s, e) => {
+            SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
-                    case nameof(ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel):
+                    case nameof(SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel):
                         //thlvm.IsSelected is triggered on mouse click, this brings up edit toolbar
-                        SetTemplate(ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel, true);
+                        SetTemplate(SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.SelectedTemplateHyperlinkViewModel, true);
                         break;
                 }
             };
@@ -203,7 +199,7 @@ namespace MpWpfApp {
                         if(IsSelectedNewTemplate) {
                             SelectedTemplateHyperlinkViewModel.TemplateBrush = (Brush)((Border)s1).Tag;
                         } else {
-                            foreach (var thlvm in ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel) {
+                            foreach (var thlvm in SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel) {
                                 if (thlvm.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName) {
                                     thlvm.TemplateBrush = (Brush)((Border)s1).Tag;
                                 }
@@ -223,7 +219,7 @@ namespace MpWpfApp {
             SelectedTemplateNameTextBox.TextChanged += (s, e) => {
                 _wasEdited = true;
                 if (SelectedTemplateHyperlinkViewModel != null) {
-                    foreach (var thlvm in ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel) {
+                    foreach (var thlvm in SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel) {
                         if (thlvm.CopyItemTemplateId == SelectedTemplateHyperlinkViewModel.CopyItemTemplateId) {
                             thlvm.TemplateName = SelectedTemplateNameTextBox.Text;
                         }
@@ -233,14 +229,14 @@ namespace MpWpfApp {
             };
 
             rtb.PreviewMouseLeftButtonDown += (s1, e1) => {
-                if (ClipTileViewModel.IsEditingTemplate) {
+                if (HostClipTileViewModel.IsEditingTemplate) {
                     //clicking out of edit template toolbar performs Ok Command (save template & hide toolbar)
                     OkCommand.Execute(null);
                 }
             };
 
 
-            if (ClipTileViewModel.IsEditingTemplate && ClipTileViewModel.IsEditingTile) {
+            if (HostClipTileViewModel.IsEditingTemplate && HostClipTileViewModel.IsEditingTile) {
                 SelectedTemplateNameTextBox.Focus();
                 SelectedTemplateNameTextBox.SelectAll();
             } else if (_wasEdited) {
@@ -273,7 +269,7 @@ namespace MpWpfApp {
                     EditTemplateBorderCanvasTop += dt;
                 } else {
                     timer.Stop();
-                    if (ClipTileViewModel.IsEditingTemplate) {
+                    if (HostClipTileViewModel.IsEditingTemplate) {
                         SelectedTemplateNameTextBox.Focus();
                         SelectedTemplateNameTextBox.SelectAll();
                     } else if(_wasEdited) {
@@ -300,17 +296,17 @@ namespace MpWpfApp {
             _originalText = _originalTemplateName = string.Empty;
             _originalTemplateColor = null;
             _selectedTemplateHyperlink = null;
-            _originalSelection = ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb.Selection;
+            _originalSelection = SubSelectedRtbViewModel.Rtb.Selection;
             SelectedTemplateHyperlinkViewModel = null;
             if (ttcvm == null) {
                 //for new template create the vm but wait to add it in OkCommand
                 //SelectedTemplateHyperlinkViewModel = new MpTemplateHyperlinkViewModel(ClipTileViewModel, null);
-                _originalText = ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb.Selection.Text;
+                _originalText = SubSelectedRtbViewModel.Rtb.Selection.Text;
                 //_selectedTemplateHyperlink = MpHelpers.Instance.CreateTemplateHyperlink(SelectedTemplateHyperlinkViewModel, ClipTileViewModel.GetRtb().Selection);
                 
-                _selectedTemplateHyperlink = MpTemplateHyperlinkViewModel.CreateTemplateHyperlink(ClipTileViewModel, null, ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb.Selection);
+                _selectedTemplateHyperlink = MpTemplateHyperlinkViewModel.CreateTemplateHyperlink(SubSelectedRtbViewModel, null, SubSelectedRtbViewModel.Rtb.Selection);
                 SelectedTemplateHyperlinkViewModel = (MpTemplateHyperlinkViewModel)_selectedTemplateHyperlink.DataContext;
-                ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb.Selection.Select(_selectedTemplateHyperlink.ElementStart, _selectedTemplateHyperlink.ElementEnd);
+                SubSelectedRtbViewModel.Rtb.Selection.Select(_selectedTemplateHyperlink.ElementStart, _selectedTemplateHyperlink.ElementEnd);
 
             } else {
                 _originalTemplateName = ttcvm.TemplateName;
@@ -320,20 +316,20 @@ namespace MpWpfApp {
                 } else {
                     //SelectedTemplateHyperlinkViewModel = new MpTemplateHyperlinkViewModel(ClipTileViewModel, ttcvm.CopyItemTemplate);
                     //_selectedTemplateHyperlink = MpHelpers.Instance.CreateTemplateHyperlink(SelectedTemplateHyperlinkViewModel, ClipTileViewModel.GetRtb().Selection);
-                    _selectedTemplateHyperlink = MpTemplateHyperlinkViewModel.CreateTemplateHyperlink(ClipTileViewModel, ttcvm.CopyItemTemplate, ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb.Selection);
+                    _selectedTemplateHyperlink = MpTemplateHyperlinkViewModel.CreateTemplateHyperlink(SubSelectedRtbViewModel, ttcvm.CopyItemTemplate, SubSelectedRtbViewModel.Rtb.Selection);
                     SelectedTemplateHyperlinkViewModel = (MpTemplateHyperlinkViewModel)_selectedTemplateHyperlink.DataContext;
-                    ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb.Selection.Select(_selectedTemplateHyperlink.ElementStart, _selectedTemplateHyperlink.ElementEnd);
+                    SubSelectedRtbViewModel.Rtb.Selection.Select(_selectedTemplateHyperlink.ElementStart, _selectedTemplateHyperlink.ElementEnd);
                 }
                 
             }
-            ClipTileViewModel.IsEditingTemplate = isEditMode;
+            HostClipTileViewModel.IsEditingTemplate = isEditMode;
 
-            if (!ClipTileViewModel.IsEditingTemplate) {
+            if (!HostClipTileViewModel.IsEditingTemplate) {
                 //MpHelpers.Instance.CreateTemplateHyperlink(SelectedTemplateHyperlinkViewModel, ClipTileViewModel.GetRtb().Selection);
-                MpTemplateHyperlinkViewModel.CreateTemplateHyperlink(ClipTileViewModel, SelectedTemplateHyperlinkViewModel.CopyItemTemplate, ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb.Selection);
+                MpTemplateHyperlinkViewModel.CreateTemplateHyperlink(SubSelectedRtbViewModel, SelectedTemplateHyperlinkViewModel.CopyItemTemplate, SubSelectedRtbViewModel.Rtb.Selection);
                 OkCommand.Execute(null);
             } else {
-                Resize(-ClipTileViewModel.EditTemplateToolbarHeight);
+                Resize(-HostClipTileViewModel.EditTemplateToolbarHeight);
             }
         }
         #endregion
@@ -350,7 +346,7 @@ namespace MpWpfApp {
         }
 
         private bool Validate() {
-            if (SelectedTemplateHyperlinkViewModel == null || ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm == null) {
+            if (SelectedTemplateHyperlinkViewModel == null || SubSelectedRtbViewModel == null) {
                 return true;
             }
             if (string.IsNullOrEmpty(SelectedTemplateHyperlinkViewModel.TemplateName)) {
@@ -360,7 +356,7 @@ namespace MpWpfApp {
             //if new name is a duplicate of another just delete this one and set it to the duplicate
             //var dupTokenHyperlink = ClipTileViewModel.RichTextBoxViewModels.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.Where(x => x.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName && x.CopyItemTemplateId != SelectedTemplateHyperlinkViewModel.CopyItemTemplateId).ToList();
             MpTemplateHyperlinkViewModel dthlvm = null;
-            foreach(var thlvm in ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder) {
+            foreach(var thlvm in SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder) {
                 //check if another template has this name
                 if(thlvm != SelectedTemplateHyperlinkViewModel &&
                    thlvm.CopyItemTemplateId != SelectedTemplateHyperlinkViewModel.CopyItemTemplateId &&
@@ -372,7 +368,7 @@ namespace MpWpfApp {
                 ValidationText = SelectedTemplateHyperlinkViewModel.TemplateDisplayName + " already exists";
                 return false;
             }
-            var templateNameRanges = MpHelpers.Instance.FindStringRangesFromPosition(ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb.Document.ContentStart, SelectedTemplateHyperlinkViewModel.TemplateName, true);
+            var templateNameRanges = MpHelpers.Instance.FindStringRangesFromPosition(SubSelectedRtbViewModel.Rtb.Document.ContentStart, SelectedTemplateHyperlinkViewModel.TemplateName, true);
             foreach (var tnr in templateNameRanges) {
                 //check if templatename exists in the document
                 var thlr = (Hyperlink)MpHelpers.Instance.FindParentOfType(tnr.Start.Parent, typeof(Hyperlink));
@@ -408,15 +404,15 @@ namespace MpWpfApp {
             }
         }
         private void Cancel() {
-            ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb.Focus();
+            SubSelectedRtbViewModel.Rtb.Focus();
             if (IsSelectedNewTemplate) {
                 var selectionStart = SelectedTemplateHyperlinkViewModel.TemplateHyperlinkRange.Start;
                 SelectedTemplateHyperlinkViewModel.Dispose(false);
                 _originalSelection.Text = _originalText;
                 var sr = MpHelpers.Instance.FindStringRangeFromPosition(selectionStart, _originalText, true);
-                ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb.Selection.Select(sr.Start, sr.End);                
+                SubSelectedRtbViewModel.Rtb.Selection.Select(sr.Start, sr.End);                
             } else {
-                foreach (var thlvm in ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel) {
+                foreach (var thlvm in SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel) {
                     if (thlvm.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName) {
                         //restore original name/color to datacontext
                         thlvm.TemplateName = _originalTemplateName;
@@ -424,8 +420,8 @@ namespace MpWpfApp {
                     }
                 }
             }
-            ClipTileViewModel.IsEditingTemplate = false;
-            Resize(ClipTileViewModel.EditTemplateToolbarHeight);
+            HostClipTileViewModel.IsEditingTemplate = false;
+            Resize(HostClipTileViewModel.EditTemplateToolbarHeight);
         }
 
         private RelayCommand _okCommand;
@@ -438,6 +434,9 @@ namespace MpWpfApp {
             }
         }
         private bool CanOk() {
+            if(HostClipTileViewModel == null || !HostClipTileViewModel.IsEditingTemplate) {
+                return true;
+            }
             return Validate();
         }
         private void Ok() {
@@ -445,9 +444,9 @@ namespace MpWpfApp {
                 return;
             }
             if(IsSelectedNewTemplate) {
-                ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.Add(SelectedTemplateHyperlinkViewModel);
+                SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.Add(SelectedTemplateHyperlinkViewModel);
             } else {
-                foreach(var thlvm in ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel) {
+                foreach(var thlvm in SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel) {
                     if(thlvm.TemplateName == SelectedTemplateHyperlinkViewModel.TemplateName) {
                         thlvm.CopyItemTemplate.WriteToDatabase();
                     }
@@ -455,9 +454,9 @@ namespace MpWpfApp {
             }
 
             SelectedTemplateHyperlinkViewModel.IsSelected = true;
-            ClipTileViewModel.IsEditingTemplate = false;
-            Resize(ClipTileViewModel.EditTemplateToolbarHeight);
-            ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtb.Focus();
+            HostClipTileViewModel.IsEditingTemplate = false;
+            Resize(HostClipTileViewModel.EditTemplateToolbarHeight);
+            SubSelectedRtbViewModel.Rtb.Focus();
         }
 
         public void Dispose() {

@@ -359,16 +359,19 @@ namespace MpWpfApp {
         }
 
         public void AddClip(MpClipTileViewModel ctvm) {
-            Tag.LinkWithCopyItem(ctvm.CopyItem);
-            //MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
-            //if(isNewLink || forceCountUpdate) {
-            //    TagClipCount++;
-            //}            
+            Tag.LinkWithCopyItem(ctvm.CopyItem);    
+        }
+
+        public void AddClip(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {
+            Tag.LinkWithCopyItem(rtbvm.CopyItem);
         }
 
         public void RemoveClip(MpClipTileViewModel ctvm) {
             Tag.UnlinkWithCopyItem(ctvm.CopyItem);
-            //MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
+        }
+
+        public void RemoveClip(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {
+            Tag.UnlinkWithCopyItem(rtbvm.CopyItem);
         }
 
         public bool IsLinkedWithClipTile(MpClipTileViewModel ctvm) {
@@ -380,6 +383,17 @@ namespace MpWpfApp {
                 return false;
             }
             return Tag.IsLinkedWithCopyItem(ctvm.CopyItem);
+        }
+
+        public bool IsLinkedWithRtbItem(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {
+            if (rtbvm == null ||
+                rtbvm.CopyItem == null ||
+                rtbvm.CopyItemId == 0 ||
+                Tag == null ||
+                Tag.TagId == 0) {
+                return false;
+            }
+            return Tag.IsLinkedWithCopyItem(rtbvm.CopyItem);
         }
         #endregion
 

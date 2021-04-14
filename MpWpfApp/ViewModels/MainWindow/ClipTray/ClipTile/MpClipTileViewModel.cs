@@ -1836,14 +1836,14 @@
                         */
                         var dcil = new List<MpCopyItem>();
                         foreach(var dctvm in dctvml) {
-                            bool wasEmptySelection = dctvm.RichTextBoxViewModelCollection.SubSelectedRtbvmList.Count == 0;
+                            bool wasEmptySelection = dctvm.RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 0;
                             if (wasEmptySelection) {
                                 dctvm.RichTextBoxViewModelCollection.SubSelectAll();
                             }
                             if (dctvm.RichTextBoxViewModelCollection.Count == 0) {
                                 dcil.Add(dctvm.CopyItem);
                             } else {
-                                foreach (var ssrtbvm in dctvm.RichTextBoxViewModelCollection.SubSelectedRtbvmList) {
+                                foreach (var ssrtbvm in dctvm.RichTextBoxViewModelCollection.SubSelectedClipItems) {
                                     dcil.Add(ssrtbvm.CopyItem);
                                 }
                             }
@@ -2067,12 +2067,12 @@
         public void ClipTile_ContextMenu_Closed(object sender, RoutedEventArgs e) {
             var cm = (ContextMenu)sender;
             var ctvm = cm.DataContext as MpClipTileViewModel;
-            if (ctvm is MpRtbListBoxItemRichTextBoxViewModel) {
-                ctvm = (ctvm as MpRtbListBoxItemRichTextBoxViewModel).HostClipTileViewModel;
-            }
+            //if (ctvm is MpRtbListBoxItemRichTextBoxViewModel) {
+            //    ctvm = (ctvm as MpRtbListBoxItemRichTextBoxViewModel).HostClipTileViewModel;
+            //}
             ctvm.IsContextMenuOpened = false;
 
-            ctvm.RichTextBoxViewModelCollection.ClearSubSelection();
+            //ctvm.RichTextBoxViewModelCollection.ClearSubSelection();
         }
 
         public void ClipTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
@@ -2119,6 +2119,7 @@
 
             TileBorderHeight += deltaHeight;
             TileContentHeight += deltaHeight;
+
 
             EditRichTextBoxToolbarViewModel.Resize(deltaEditToolbarTop, deltaWidth);
 
@@ -2300,9 +2301,17 @@
             LastSelectedDateTime = DateTime.MaxValue;
             RichTextBoxViewModelCollection.ClearSubSelection();
         }
+
         public void SaveToDatabase() {
             var sw = new Stopwatch();
             sw.Start();
+
+            TextSelection rtbSelection = null;
+            if (RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 1 && IsEditingTile) {
+                rtbSelection = RichTextBoxViewModelCollection.SubSelectedClipItems[0].Rtb.Selection;
+                Console.WriteLine("(AddTemplate)Selection Text: " + rtbSelection.Text);
+            }
+            
             //remove links to update model rich text
             RichTextBoxViewModelCollection.ClearAllHyperlinks();
 
@@ -2311,8 +2320,8 @@
 
             var rtsw = new Stopwatch();
             rtsw.Start();
-            foreach(var rtbvm in RichTextBoxViewModelCollection) {
-                if(rtbvm.Rtb == null) {
+            foreach (var rtbvm in RichTextBoxViewModelCollection) {
+                if (rtbvm.Rtb == null) {
                     continue;
                 }
                 //property change will write the copyitem to the database
@@ -2321,7 +2330,7 @@
             rtsw.Stop();
             Console.WriteLine("Saving rich text from rtb's time: " + rtsw.ElapsedMilliseconds + "ms");
 
-            CopyItemRichText = RichTextBoxViewModelCollection.FullDocument.ToRichText();
+            //CopyItemRichText = RichTextBoxViewModelCollection.FullDocument.ToRichText();
             HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(null);
             RichTextBoxViewModelCollection.CreateAllHyperlinks();
             //CopyItem.WriteToDatabase();
@@ -2338,7 +2347,11 @@
             Console.WriteLine("Saving cliptile copyitem propertychanged time: " + cipcsw.ElapsedMilliseconds + "ms");
 
             sw.Stop();
-            Console.WriteLine("Saving(VIdx:"+MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles.IndexOf(this)+"): " + sw.ElapsedMilliseconds + "ms");
+            Console.WriteLine("Saving(VIdx:" + MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles.IndexOf(this) + "): " + sw.ElapsedMilliseconds + "ms");
+
+            if (rtbSelection != null && RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 1) {
+                RichTextBoxViewModelCollection.SubSelectedClipItems[0].Rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
+            }
         }
 
         public async Task<string> GetPastableRichText() {
@@ -2348,15 +2361,12 @@
                 TemplateRichText = string.Empty.ToRichText();
                 foreach(var rtbvm in RichTextBoxViewModelCollection) {
                     if(rtbvm.HasTemplate) {
-                        if(!hasExpanded) {
+                        rtbvm.IsSubSelected = true;
+                        if (!hasExpanded) {
                             //tile will be shrunk in on completed of hide window
                             MainWindowViewModel.ExpandClipTile(this);
-
-                            //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(rtbvm, false, true);
                             hasExpanded = true;
-                        } else {
-                            //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(rtbvm, false, false);
-                        }                        
+                        }
                     }
                     var rtbvmrt = await rtbvm.GetPastableRichText();
                     TemplateRichText = MpHelpers.Instance.CombineRichText(rtbvmrt, TemplateRichText, true);

@@ -19,24 +19,37 @@ namespace MpWpfApp {
 
     public class MpEditRichTextBoxToolbarViewModel : MpUndoableViewModelBase<MpEditRichTextBoxToolbarViewModel>, IDisposable {
         #region Private Variables
-        #endregion
+        #endregion        
+
+        #region Properties
 
         #region View Models
-        private MpClipTileViewModel _clipTileViewModel = null;
-        public MpClipTileViewModel ClipTileViewModel {
+        private MpClipTileViewModel _hostClipTileViewModel = null;
+        public MpClipTileViewModel HostClipTileViewModel {
             get {
-                return _clipTileViewModel;
+                return _hostClipTileViewModel;
             }
             set {
-                if (_clipTileViewModel != value) {
-                    _clipTileViewModel = value;
-                    OnPropertyChanged(nameof(ClipTileViewModel));
+                if (_hostClipTileViewModel != value) {
+                    _hostClipTileViewModel = value;
+                    OnPropertyChanged(nameof(HostClipTileViewModel));
                 }
             }
         }
-        #endregion
 
-        #region Properties
+        public MpRtbListBoxItemRichTextBoxViewModel SubSelectedRtbViewModel {
+            get {
+                if (HostClipTileViewModel == null) {
+                    return null;
+                }
+                if (HostClipTileViewModel.RichTextBoxViewModelCollection.Count == 0 ||
+                   HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems.Count != 1) {
+                    return null;
+                }
+                return HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems[0];
+            }
+        }
+        #endregion
 
         #region Controls
         public Border EditToolbarBorder { get; set; }
@@ -77,6 +90,20 @@ namespace MpWpfApp {
         #endregion
 
         #region State Properties
+
+        private bool _hasTextChanged = false;
+        public bool HasTextChanged {
+            get {
+                return _hasTextChanged;
+            }
+            set {
+                if(_hasTextChanged != value) {
+                    _hasTextChanged = value;
+                    OnPropertyChanged(nameof(HasTextChanged));
+                }
+            }
+        }
+
         private bool _isAddTemplateButtonEnabled = true;
         public bool IsAddTemplateButtonEnabled {
             get {
@@ -138,12 +165,13 @@ namespace MpWpfApp {
         #region Public Methods
         public MpEditRichTextBoxToolbarViewModel() :base() { }
         public MpEditRichTextBoxToolbarViewModel(MpClipTileViewModel ctvm) : base() {
-            ClipTileViewModel = ctvm;
+            HostClipTileViewModel = ctvm;
             
         }
 
         public void ClipTileEditorToolbarBorder_Loaded(object sender, RoutedEventArgs args) {
-            if (ClipTileViewModel.CopyItemType != MpCopyItemType.RichText && ClipTileViewModel.CopyItemType != MpCopyItemType.Composite) {
+            if (HostClipTileViewModel.CopyItemType != MpCopyItemType.RichText && 
+                HostClipTileViewModel.CopyItemType != MpCopyItemType.Composite) {
                 return;
             }
             BorderStackPanel = (StackPanel)sender;
@@ -151,9 +179,10 @@ namespace MpWpfApp {
         }
 
         public void InitWithRichTextBox(RichTextBox rtb, bool doAnimation) {
+            HasTextChanged = false;
             SelectedRtb = rtb;
             EditToolbarBorder = BorderStackPanel.GetVisualAncestor<Border>();
-            var cb = ClipTileViewModel.ClipBorder;
+            var cb = HostClipTileViewModel.ClipBorder;
             var rtblbgc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxGridContainerCanvas");
             var rtblbg = (Grid)rtblbgc.FindName("ClipTileRichTextboxListBoxContainerGrid");
             var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
@@ -276,7 +305,7 @@ namespace MpWpfApp {
                     colorMenuItem,
                     (s1, e1) => {
                         rtb.Selection.ApplyPropertyValue(TextElement.BackgroundProperty, (Brush)((Border)s1).Tag);
-                        ClipTileViewModel.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(rtb);
+                        HostClipTileViewModel.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(rtb);
                     }
                 );
 
@@ -337,21 +366,23 @@ namespace MpWpfApp {
 
             #endregion
 
+            rtb.TextChanged += (s1, e3) => {
+                HasTextChanged = true;                
+            };
+
             #region Add Template Button
             addTemplateButton.PreviewMouseDown += (s, e3) => {
                 e3.Handled = true;
 
-                var rtbSelection = rtb.Selection;
-                Console.WriteLine("(AddTemplate)Selection Text: " + rtbSelection.Text);
-                ClipTileViewModel.SaveToDatabase();
+                //SubSelectedRtbViewModel.SaveSubItemToDatabase();
                 
-                if (ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.Count == 0) {
+                if (SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.Count == 0) {
                     //if templates are NOT in the clip yet add one w/ default name
-                    ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);
+                    HostClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);
                     //rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
                 } else {
                     var templateContextMenu = new ContextMenu();
-                    foreach (var ttcvm in ClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedRtbvm.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder) {
+                    foreach (var ttcvm in SubSelectedRtbViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder) {
                         Border b = new Border();
                         b.Background = ttcvm.TemplateBrush;
                         b.BorderBrush = Brushes.Black;
@@ -379,7 +410,7 @@ namespace MpWpfApp {
                         tmi.Icon = b;
                         tmi.Header = tb;
                         tmi.Click += (s1, e5) => {
-                            ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(ttcvm, false);
+                            HostClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(ttcvm, false);
                             //ClipTileViewModel.EditTemplateToolbarViewModel.IsEditingTemplate = true;
                         };
                         templateContextMenu.Items.Add(tmi);
@@ -396,7 +427,7 @@ namespace MpWpfApp {
                     addNewMenuItem.Icon = img;
                     addNewMenuItem.Header = tb2;
                     addNewMenuItem.Click += (s1, e5) => {
-                        ClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);
+                        HostClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(null, true);
                     };
                     templateContextMenu.Items.Add(addNewMenuItem);
                     addTemplateButton.ContextMenu = templateContextMenu;
@@ -645,12 +676,12 @@ namespace MpWpfApp {
             Canvas.SetTop(EditToolbarBorder, EditBorderCanvasTop);
             EditToolbarBorder.Width += deltaWidth;
 
-            if (ClipTileViewModel.IsEditingTile) {
-                MainWindowViewModel.ClipTrayViewModel.ListBox.ScrollIntoView(ClipTileViewModel);
-                ClipTileViewModel.RichTextBoxViewModelCollection.ResetSubSelection();
+            if (HostClipTileViewModel.IsEditingTile) {
+                MainWindowViewModel.ClipTrayViewModel.ListBox.ScrollIntoView(HostClipTileViewModel);
+                HostClipTileViewModel.RichTextBoxViewModelCollection.ResetSubSelection();
                 //Rtb_SelectionChanged(this, new RoutedEventArgs());
-            } else {
-                ClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
+            } else if(!HostClipTileViewModel.IsPastingTemplate) {
+                HostClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
                 //ClipTileViewModel.RichTextBoxViewModelCollection.Refresh();
             }
         }
@@ -672,13 +703,13 @@ namespace MpWpfApp {
                     Canvas.SetTop(EditToolbarBorder, EditBorderCanvasTop);
                 } else {
                     timer.Stop();
-                    if (ClipTileViewModel.IsEditingTile) {
-                        MainWindowViewModel.ClipTrayViewModel.ListBox.ScrollIntoView(ClipTileViewModel);
-                        ClipTileViewModel.RichTextBoxViewModelCollection.ResetSubSelection();
+                    if (HostClipTileViewModel.IsEditingTile) {
+                        MainWindowViewModel.ClipTrayViewModel.ListBox.ScrollIntoView(HostClipTileViewModel);
+                        HostClipTileViewModel.RichTextBoxViewModelCollection.ResetSubSelection();
                         //Rtb_SelectionChanged(this, new RoutedEventArgs());
                     } else {
-                        ClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
-                        ClipTileViewModel.RichTextBoxViewModelCollection.Refresh();
+                        HostClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
+                        HostClipTileViewModel.RichTextBoxViewModelCollection.Refresh();
                     }
                     if (onCompleted != null) {
                         onCompleted.BeginInvoke(this, new EventArgs(), null, null);
@@ -720,17 +751,21 @@ namespace MpWpfApp {
         public ICommand RefreshDocumentCommand {
             get {
                 if(_refreshDocumentCommand == null) {
-                    _refreshDocumentCommand = new RelayCommand(RefreshDocument);
+                    _refreshDocumentCommand = new RelayCommand(RefreshDocument,CanRefreshDocument);
                 }
                 return _refreshDocumentCommand;
             }
         }
+        private bool CanRefreshDocument() {
+            return HasTextChanged && 
+                   HostClipTileViewModel != null && 
+                   HostClipTileViewModel.IsEditingTile &&
+                   HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 1;
+        }
         private void RefreshDocument() {
-            ClipTileViewModel.SaveToDatabase();
-            foreach(var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {
-                rtbvm.ClearHyperlinks();
-                rtbvm.CreateHyperlinks();
-            }            
+            HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems[0].SaveSubItemToDatabase();
+            HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems[0].ClearHyperlinks();
+            HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems[0].CreateHyperlinks();
         }
         #endregion
 
