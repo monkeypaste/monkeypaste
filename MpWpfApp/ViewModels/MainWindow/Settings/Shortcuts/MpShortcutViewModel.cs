@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -40,6 +42,19 @@ namespace MpWpfApp {
         #endregion
 
         #region Business Logic
+        private string _menuItemTag = string.Empty;
+        public string MenuItemTag {
+            get {
+                return _menuItemTag;
+            }
+            set {
+                if(_menuItemTag != value) {
+                    _menuItemTag = value;
+                    OnPropertyChanged(nameof(MenuItemTag));
+                }
+            }
+        }
+
         private ICommand _command = null;
         public ICommand Command {
             get {
@@ -72,13 +87,29 @@ namespace MpWpfApp {
                                 break;
                             case "Alt":
                                 outStr += "%";
-                                break;
+                                break; 
                             case "Enter":
                             case "Tab":
+                            case "Left":
+                            case "Right":
+                            case "Up":
+                            case "Down":
                                 outStr += "{" + key.ToUpper() + "}";
                                 break;
                             default:
-                                outStr += key.ToUpper();
+                                if(key.ToUpper().StartsWith(@"F") && key.Length > 1) {
+                                    string fVal = key.Substring(1, key.Length - 1);
+                                    try {
+                                        int val = Convert.ToInt32(fVal);
+                                        outStr += "{F" + val + "}";
+                                    }
+                                    catch(Exception ex) {
+                                        outStr += key.ToUpper();
+                                        break;
+                                    }
+                                } else {
+                                    outStr += key.ToUpper();
+                                }
                                 break;
                         }
                     }
@@ -154,6 +185,21 @@ namespace MpWpfApp {
         public object CommandParameter { get; set; } = null;
         #endregion
 
+        #region State
+        private bool _isPerformingShortcut = false;
+        public bool IsPerformingShortcut {
+            get {
+                return _isPerformingShortcut;
+            }
+            set {
+                if(_isPerformingShortcut != value) {
+                    _isPerformingShortcut = value;
+                    OnPropertyChanged(nameof(IsPerformingShortcut));
+                }
+            }
+        }
+        #endregion
+
         #region Model
         public string DefaultKeyString {
             get {
@@ -165,6 +211,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.DefaultKeyString != value) {
                     Shortcut.DefaultKeyString = value;
+                    Shortcut.WriteToDatabase();
                     OnPropertyChanged(nameof(DefaultKeyString));
                 }
             }
@@ -180,6 +227,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.CopyItemId != value) {
                     Shortcut.CopyItemId = value;
+                    Shortcut.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItemId));
                 }
             }
@@ -195,6 +243,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.TagId != value) {
                     Shortcut.TagId = value;
+                    Shortcut.WriteToDatabase();
                     OnPropertyChanged(nameof(TagId));
                 }
             }
@@ -210,6 +259,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.ShortcutId != value) {
                     Shortcut.ShortcutId = value;
+                    Shortcut.WriteToDatabase();
                     OnPropertyChanged(nameof(ShortcutId));
                 }
             }
@@ -234,6 +284,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.KeyString != value) {
                     Shortcut.KeyString = value;
+                    Shortcut.WriteToDatabase();
                     OnPropertyChanged(nameof(KeyString));
                     OnPropertyChanged(nameof(KeyList));
                 }
@@ -250,6 +301,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.ShortcutName != value) {
                     Shortcut.ShortcutName = value;
+                    Shortcut.WriteToDatabase();
                     OnPropertyChanged(nameof(ShortcutDisplayName));
                 }
             }
@@ -265,6 +317,7 @@ namespace MpWpfApp {
             set {
                 if (Shortcut != null && Shortcut.RoutingType != value) {
                     Shortcut.RoutingType = value;
+                    Shortcut.WriteToDatabase();
                     OnPropertyChanged(nameof(RoutingType));
                     OnPropertyChanged(nameof(SelectedRoutingType));
                 }
@@ -295,6 +348,7 @@ namespace MpWpfApp {
             }
         }
         #endregion
+
         #endregion
 
         #region Public Methods
@@ -334,7 +388,7 @@ namespace MpWpfApp {
                         throw new Exception("ShortcutViewModel error, routing type cannot be none");
                     }
                     var hook = RoutingType == MpRoutingType.Internal ? MainWindowViewModel.ApplicationHook : MainWindowViewModel.GlobalHook;
-
+                    
                     if (IsSequence()) {
                         if(MainWindowViewModel.IsLoading) {
                             //only register sequences at startup
@@ -374,10 +428,31 @@ namespace MpWpfApp {
         }
 
         public void PassKeysToForegroundWindow() {
+            
             var mwvm = (MpMainWindowViewModel)System.Windows.Application.Current.MainWindow.DataContext;
-            WinApi.SetForegroundWindow(MpClipboardManager.Instance.LastWindowWatcher.LastHandle);
+            var handle = MpClipboardManager.Instance.LastWindowWatcher.LastHandle;
+            WinApi.SetForegroundWindow(handle);
+            WinApi.SetActiveWindow(handle);
+            WinApi.GetWindowThreadProcessId(handle, out uint pid);
+            var process = Process.GetProcessById((int)pid);
+            
             foreach (var str in SendKeysKeyStringList) {
-                System.Windows.Forms.SendKeys.SendWait(str);
+                try {
+                    //System.Windows.Forms.SendKeys.Flush();
+                    while (!process.WaitForInputIdle(10)) {
+                        Thread.Sleep(100);
+                        process.Refresh();
+                    }
+
+                    System.Windows.Forms.SendKeys.SendWait(str);
+                    //System.Windows.Forms.SendKeys.Flush();
+                }
+                catch(Exception ex) {
+                    Console.WriteLine("PassKeysToForegroundWindow Exception for keystring: " + str);
+                    Console.WriteLine("With exception: " + ex);
+                    // TODO this exception will mess up key/mouse events and should trigger
+                    // kill/start of explorer.exe
+                }
             }
         }
 
@@ -414,7 +489,8 @@ namespace MpWpfApp {
                MainWindowViewModel.ClipTrayViewModel.IsEditingClipTile ||
                MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle ||
                MainWindowViewModel.TagTrayViewModel.IsEditingTagName ||
-               MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
+               MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused ||
+               IsPerformingShortcut) {
                 return false;
             }
             //otherwise check basic type routing for validity
@@ -425,15 +501,19 @@ namespace MpWpfApp {
             }
         }
         private void PeformShortcut() {
+            IsPerformingShortcut = true;
+
             if (RoutingType == MpRoutingType.Bubble) {
-                PassKeysToForegroundWindow();
+                //PassKeysToForegroundWindow();
             }
                         
             Command?.Execute(CommandParameter);
 
             if (RoutingType == MpRoutingType.Tunnel) {
-                PassKeysToForegroundWindow();
+                //PassKeysToForegroundWindow();
             }
+
+            IsPerformingShortcut = false;
         }
         #endregion
     }

@@ -334,6 +334,11 @@ namespace MpWpfApp {
             };
             PropertyChanged += (s, e7) => {
                 switch (e7.PropertyName) {
+                    case nameof(IsTextBoxFocused):
+                        if(IsTextBoxFocused) {
+                            SearchTextBox.Focus();
+                        }
+                        break;
                     case nameof(Text):
                         timer.Stop();
                         timer.Start();

@@ -305,7 +305,12 @@ namespace MpWpfApp {
                     ,('Say',1,'S','S')
                     ,('Merge',1,'M','M')
                     ,('Undo',1,'Control+Z','Control+Z')
-                    ,('Redo',1,'Control+Y','Control+Y');
+                    ,('Redo',1,'Control+Y','Control+Y')
+                    ,('Edit',1,'Control+E','Control+E')
+                    ,('Rename',1,'F2','F2')
+                    ,('Duplicate',1,'Control+D','Control+D')
+                    ,('Email',1,'Control+E','Control+E')
+                    ,('Qr Code',1,'Control+Shift+Q','Control+Shift+Q');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPasteToAppPath (
                       pk_MpPasteToAppPathId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

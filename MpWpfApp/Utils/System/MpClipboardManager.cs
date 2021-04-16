@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -60,13 +61,14 @@ namespace MpWpfApp {
                 System.Windows.Forms.SendKeys.SendWait("^v");
                 //WinApi.SendMessage(LastWindowWatcher.ThisAppHandle, WM_PASTE, IntPtr.Zero, IntPtr.Zero);
                 if (_lastDataObject != null) {
+
+                    //Thread.Sleep(8000);
+                    //from https://stackoverflow.com/a/52438404/105028
+                    //_remainingTryCount = 100;
+                    //var clipboardThread = new Thread(new ThreadStart(GetClipboard));
+                    //clipboardThread.SetApartmentState(ApartmentState.STA);
+                    //clipboardThread.Start();
                     //Thread.Sleep(500);
-                    // from https://stackoverflow.com/a/52438404/105028
-                    _remainingTryCount = 100;
-                    var clipboardThread = new Thread(new ThreadStart(GetClipboard));
-                    clipboardThread.SetApartmentState(ApartmentState.STA);
-                    clipboardThread.Start();
-                    Thread.Sleep(500);
                 }
                 IgnoreClipboardChangeEvent = false;
             }

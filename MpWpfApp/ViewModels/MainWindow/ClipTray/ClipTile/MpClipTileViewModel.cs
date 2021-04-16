@@ -724,6 +724,12 @@
         #endregion
 
         #region Business Logic
+        public bool IsTextItem {
+            get {
+                return CopyItemType == MpCopyItemType.RichText || CopyItemType == MpCopyItemType.Composite;
+            }
+        }
+
         private IDataObject _dragDataObject = null;
         public IDataObject DragDataObject {
             get {
@@ -2111,6 +2117,8 @@
             RefreshCommands();
 
             OnPropertyChanged(nameof(TagMenuItems));
+
+            MpShortcutCollectionViewModel.Instance.UpdateInputGestures(cm);
         }
         #endregion       
 
@@ -2535,43 +2543,54 @@
             //MpHelpers.Instance.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
         }
 
-        private RelayCommand<object> _toggleEditTitleCommand;
-        public ICommand ToggleEditTitleCommand {
+        private RelayCommand _editTitleCommand;
+        public ICommand EditTitleCommand {
             get {
-                if (_toggleEditTitleCommand == null) {
-                    _toggleEditTitleCommand = new RelayCommand<object>(ToggleEditTitle, CanToggleEditTitle);
+                if (_editTitleCommand == null) {
+                    _editTitleCommand = new RelayCommand(EditTitle, CanEditTitle);
                 }
-                return _toggleEditTitleCommand;
+                return _editTitleCommand;
             }
         }
-        private bool CanToggleEditTitle(object args) {
+        private bool CanEditTitle() {
             if (MainWindowViewModel.IsLoading) {
                 return false;
             }
-            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1;
+            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
+                   RichTextBoxViewModelCollection.SubSelectedClipItems.Count <= 1;
         }
-        private void ToggleEditTitle(object args) {
-            IsEditingTitle = !IsEditingTitle;
+        private void EditTitle() {
+            if(RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 0) {
+                IsEditingTitle = !IsEditingTitle;
+            } else {
+                RichTextBoxViewModelCollection.SubSelectedClipItems[0].EditSubTitleCommand.Execute(null);
+            }            
         }
 
-        private RelayCommand<object> _toggleEditContentCommand;
-        public ICommand ToggleEditContentCommand {
+        private RelayCommand _editContentCommand;
+        public ICommand EditContentCommand {
             get {
-                if (_toggleEditContentCommand == null) {
-                    _toggleEditContentCommand = new RelayCommand<object>(ToggleEditContent, CanToggleEditContent);
+                if (_editContentCommand == null) {
+                    _editContentCommand = new RelayCommand(EditContent, CanEditContent);
                 }
-                return _toggleEditContentCommand;
+                return _editContentCommand;
             }
         }
-        private bool CanToggleEditContent(object args) {
+        private bool CanEditContent() {
             if (MainWindowViewModel.IsLoading) {
                 return false;
             }
-            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 && 
-                (CopyItemType == MpCopyItemType.Composite || CopyItemType == MpCopyItemType.RichText);
+            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
+                   MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles[0].IsTextItem;
         }
-        private void ToggleEditContent(object args) {
-            IsEditingTile = true;
+        private void EditContent() {
+            if(!IsEditingTile) {
+                IsEditingTile = true;
+            }
+            if(RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 0) {
+                RichTextBoxViewModelCollection[0].IsSubSelected = true;
+            }
+            RichTextBoxViewModelCollection.SubSelectedClipItems[0].EditSubContentCommand.Execute(null);
         }
 
 

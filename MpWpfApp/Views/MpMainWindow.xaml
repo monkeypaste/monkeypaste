@@ -504,6 +504,7 @@
         <local:MpBoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <local:MpSolidColorBrushToBrushConverter x:Key="SolidColorBrushToBrushConverter" />
         <local:MpImageSourceToBitmapSourceConverter x:Key="ImageSourceToBitmapSourceConverter" />
+        
         <!--Color Pallete Menu Item-->
         <Style x:Key="MenuItemStyle"
                TargetType="{x:Type MenuItem}">
@@ -1442,21 +1443,25 @@
                                                                             MethodName="ClipTile_ContextMenu_Closed" />
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
-                                                <MenuItem Header="_Paste"
+                                                <MenuItem Header="_Paste" 
+                                                          Tag="6"
                                                           Icon="{Binding Source={StaticResource PasteIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                           Command="{Binding Data.PasteSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="Delete"
+                                                          Tag="7"
                                                           Icon="{Binding Source={StaticResource DeleteIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                           Command="{Binding Data.DeleteSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <Separator />
                                                 <MenuItem Header="_Edit"
                                                           Icon="{Binding Source={StaticResource EditIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}">
                                                     <MenuItem Header="_Edit Content"
+                                                              Tag="20"
                                                               Icon="{Binding Source={StaticResource EditContentIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
-                                                              Command="{Binding Data.ToggleEditContentCommand, Source={StaticResource ClipTileProxy}}" />
+                                                              Command="{Binding Data.EditSelectedContentCommand, Source={StaticResource ClipTrayProxy}}" />
                                                     <MenuItem Header="_Rename"
+                                                              Tag="21"
                                                               Icon="{Binding Source={StaticResource RenameIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
-                                                              Command="{Binding Data.ToggleEditTitleCommand, Source={StaticResource ClipTileProxy}}"  />
+                                                              Command="{Binding Data.EditSelectedTitleCommand, Source={StaticResource ClipTrayProxy}}"  />
                                                     <Separator />
                                                     <MenuItem x:Name="TranslateMenuItem"
                                                               Header="Translate"
@@ -1477,20 +1482,25 @@
                                                 <MenuItem Header="_Tools"
                                                           Icon="{Binding Source={StaticResource ToolsIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}">
                                                     <MenuItem Header="Duplicate"
+                                                              Tag="22"
                                                               Icon="{Binding Source={StaticResource DuplicateIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                               Command="{Binding Data.DuplicateSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}"/>
                                                     <MenuItem Header="_Merge"
+                                                              Tag="17"
                                                               Icon="{Binding Source={StaticResource MergeIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                               Command="{Binding Data.MergeSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
                                                     <Separator />
                                                     <MenuItem Header="Send as Email"
+                                                              Tag="23"
                                                               Icon="{Binding Source={StaticResource EmailIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                               Command="{Binding Data.SendClipToEmailCommand, Source={StaticResource ClipTileProxy}}" />
                                                     <MenuItem Header="Duplicate As _Qr Code"
+                                                              Tag="24"
                                                               Icon="{Binding Source={StaticResource QrIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                               Command="{Binding Data.CreateQrCodeFromClipCommand, Source={StaticResource ClipTileProxy}}" />
                                                     <Separator />
                                                     <MenuItem Header="Say"
+                                                              Tag="16"
                                                               Icon="{Binding Source={StaticResource SpeakIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                               Command="{Binding Data.SpeakSelectedClipsAsyncCommand, Source={StaticResource ClipTrayProxy}}" />
                                                     <Separator />
@@ -1517,20 +1527,25 @@
                                                 <MenuItem Header="_Selection"
                                                           Icon="{Binding Source={StaticResource SelectionIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}">
                                                     <MenuItem Header="_Bring to Front"
+                                                              Tag="12"
                                                               Icon="{Binding Source={StaticResource BringToFrontIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                               Command="{Binding Data.BringSelectedClipTilesToFrontCommand, Source={StaticResource ClipTrayProxy}}" />
                                                     <MenuItem Header="_Send to Back"
+                                                              Tag="13"
                                                               Icon="{Binding Source={StaticResource SendToBackIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                               Command="{Binding Data.SendSelectedClipTilesToBackCommand, Source={StaticResource ClipTrayProxy}}" />
                                                     <Separator />
                                                     <MenuItem Header="Select _All"
+                                                              Tag="10"
                                                               Icon="{Binding Source={StaticResource SelectAllIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                               Command="{Binding Data.SelectAllCommand, Source={StaticResource ClipTrayProxy}}" />
                                                     <MenuItem Header="_Invert Selection"
+                                                              Tag="11"
                                                               Icon="{Binding Source={StaticResource InvertSelectionIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                               Command="{Binding Data.InvertSelectionCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 </MenuItem>
                                                 <MenuItem Header="_Hotkey"
+                                                          Tag="14"
                                                           Icon="{Binding Source={StaticResource HotkeyIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                           InputGestureText="{Binding ShortcutKeyString}"
                                                           Command="{Binding Data.AssignHotkeyCommand, Source={StaticResource ClipTrayProxy}}" />
@@ -2112,7 +2127,7 @@
                                                                                                 </i:Interaction.Triggers>
                                                                                                 <MenuItem Header="_Paste"
                                                                                                           Icon="{Binding Source={StaticResource PasteIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
-                                                                                                          Command="{Binding Data.PasteSubSelectedItemCommand, Source={StaticResource RtbListBoxItemProxy}}" />
+                                                                                                          Command="{Binding Data.PasteSubItemCommand, Source={StaticResource RtbListBoxItemProxy}}" />
                                                                                                 <MenuItem Header="Delete"
                                                                                                           Icon="{Binding Source={StaticResource DeleteIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                                                                           Command="{Binding Data.DeleteSubSelectedClipsCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
@@ -2124,7 +2139,7 @@
                                                                                                               Command="{Binding Data.ToggleEditSubSelectedItemCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
                                                                                                     <MenuItem Header="_Rename"
                                                                                                               Icon="{Binding Source={StaticResource RenameIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
-                                                                                                              Command="{Binding Data.ToggleEditSubTitleCommand, Source={StaticResource RtbListBoxItemProxy}}" />
+                                                                                                              Command="{Binding Data.EditSubTitleCommand, Source={StaticResource RtbListBoxItemProxy}}" />
                                                                                                     <Separator />
                                                                                                     <MenuItem x:Name="TranslateMenuItem"
                                                                                                               Header="Translate"
@@ -2201,7 +2216,7 @@
                                                                                                 <MenuItem Header="_Hotkey"
                                                                                                           Icon="{Binding Source={StaticResource HotkeyIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                                                                           InputGestureText="{Binding ShortcutKeyString}"
-                                                                                                          Command="{Binding Data.AssignHotkeyCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
+                                                                                                          Command="{Binding Data.AssignHotkeyToSubSelectedItemCommand, Source={StaticResource RtbListBoxItemProxy}}" />
                                                                                                 <Separator />
                                                                                                 <MenuItem x:Name="ClipTileColorContextMenuItem"
                                                                                                           Style="{StaticResource MenuItemStyle}" />

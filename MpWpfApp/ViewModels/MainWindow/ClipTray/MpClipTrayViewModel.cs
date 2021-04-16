@@ -1497,6 +1497,66 @@ namespace MpWpfApp {
             }
         }
 
+        private RelayCommand _editSelectedTitleCommand;
+        public ICommand EditSelectedTitleCommand {
+            get {
+                if (_editSelectedTitleCommand == null) {
+                    _editSelectedTitleCommand = new RelayCommand(EditSelectedTitle, CanEditSelectedTitle);
+                }
+                return _editSelectedTitleCommand;
+            }
+        }
+        private bool CanEditSelectedTitle() {
+            if (MainWindowViewModel.IsLoading) {
+                return false;
+            }
+            return SelectedClipTiles.Count == 1 && 
+                  SelectedClipTiles[0].RichTextBoxViewModelCollection.SubSelectedClipItems.Count <= 1;
+        }
+        private void EditSelectedTitle() {
+            SelectedClipTiles[0].EditTitleCommand.Execute(null);
+        }
+
+        private RelayCommand _editSelectedContentCommand;
+        public ICommand EditSelectedContentCommand {
+            get {
+                if (_editSelectedContentCommand == null) {
+                    _editSelectedContentCommand = new RelayCommand(EditSelectedContent, CanEditSelectedContent);
+                }
+                return _editSelectedContentCommand;
+            }
+        }
+        private bool CanEditSelectedContent() {
+            if (MainWindowViewModel.IsLoading) {
+                return false;
+            }
+            return SelectedClipTiles.Count == 1 &&
+                  SelectedClipTiles[0].RichTextBoxViewModelCollection.SubSelectedClipItems.Count <= 1 &&
+                  SelectedClipTiles[0].IsTextItem;
+        }
+        private void EditSelectedContent() {
+            SelectedClipTiles[0].EditContentCommand.Execute(null);
+        }
+
+        private RelayCommand _sendSelectedClipsToEmailCommand;
+        public ICommand SendSelectedClipsToEmailCommand {
+            get {
+                if (_sendSelectedClipsToEmailCommand == null) {
+                    _sendSelectedClipsToEmailCommand = new RelayCommand(SendSelectedClipsToEmail, CanSendSelectedClipsToEmail);
+                }
+                return _sendSelectedClipsToEmailCommand;
+            }
+        }
+        private bool CanSendSelectedClipsToEmail() {
+            return !IsEditingClipTile && SelectedClipTiles.Count > 0;
+        }
+        private void SendSelectedClipsToEmail() {
+            MpHelpers.Instance.OpenUrl(string.Format("mailto:{0}?subject={1}&body={2}", string.Empty, SelectedClipTiles[0].CopyItemTitle, SelectedClipTilesMergedPlainText));
+            //MainWindowViewModel.ClipTrayViewModel.ClearClipSelection();
+            //IsSelected = true;
+            //MpHelpers.Instance.CreateEmail(Properties.Settings.Default.UserEmail,CopyItemTitle, CopyItemPlainText, CopyItemFileDropList[0]);
+        }
+
         private RelayCommand<int> _exportSelectedClipTilesCommand;
         public ICommand ExportSelectedClipTilesCommand {
             get {
@@ -1572,6 +1632,24 @@ namespace MpWpfApp {
             }
 
             PrimarySelectedClipTile.MergeClip(ocil);
+        }
+
+        private RelayCommand _createQrCodeFromSelectedClipsCommand;
+        public ICommand CreateQrCodeFromSelectedClipsCommand {
+            get {
+                if (_createQrCodeFromSelectedClipsCommand == null) {
+                    _createQrCodeFromSelectedClipsCommand = new RelayCommand(CreateQrCodeFromSelectedClips, CanCreateQrCodeFromSelectedClips);
+                }
+                return _createQrCodeFromSelectedClipsCommand;
+            }
+        }
+        private bool CanCreateQrCodeFromSelectedClips() {
+            return (GetSelectedClipsType() == MpCopyItemType.Composite || GetSelectedClipsType() == MpCopyItemType.RichText) &&
+                    SelectedClipTilesMergedPlainText.Length <= Properties.Settings.Default.MaxQrCodeCharLength;
+        }
+        private void CreateQrCodeFromSelectedClips() {
+            var bmpSrc = MpHelpers.Instance.ConvertUrlToQrCode(SelectedClipTilesMergedPlainText);
+            System.Windows.Clipboard.SetImage(bmpSrc);
         }
 
         private AsyncCommand _speakSelectedClipsAsyncCommand;

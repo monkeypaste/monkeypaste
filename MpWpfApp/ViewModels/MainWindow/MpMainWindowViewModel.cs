@@ -569,33 +569,36 @@ namespace MpWpfApp {
                     }
                 };
 
-                //ApplicationHook.MouseClick += (s, e) => {
-                //    if (ClipTrayViewModel.IsPastingTemplate || e.Button != System.Windows.Forms.MouseButtons.Left) {
-                //        return;
+                //GlobalHook.KeyPress += (s, e) => {
+                //    if(MpShortcutCollectionViewModel.Instance.IsAnyPerformingShortcut) {
+                //        foreach(var scvm in MpShortcutCollectionViewModel.Instance) {
+                //            if(scvm.IsPerformingShortcut && scvm.RoutingType != MpRoutingType.Direct) {
+                //                e.Handled = true;
+                //                return;
+                //            }
+                //        }                        
                 //    }
-                //    var p = MpHelpers.Instance.GetMousePosition(ClipTrayViewModel.ClipTrayContainerGrid);
-                //    var hitTestResult = VisualTreeHelper.HitTest(ClipTrayViewModel.ClipTrayContainerGrid, p)?.VisualHit;
-                //    if (hitTestResult == null) {
-                //        MainWindowViewModel.ClearEdits();
-                //    } else {
-                //        var hitTypeName = hitTestResult.ToString();
-                //        var hitElement = hitTestResult as FrameworkElement;
-                //        if(hitElement == null && hitTypeName != @"MS.Internal.PtsHost.PageVisual") {
-                //            return;
-                //        }
-                //        if(/*hitElement == null ||*/
-                //           hitTypeName == @"MS.Internal.PtsHost.PageVisual" ||
-                //           hitElement.DataContext == null ||
-                //           hitElement.DataContext is MpClipTrayViewModel ||
-                //           hitElement.DataContext is MpAppModeViewModel ||
-                //           hitElement.DataContext is MpSearchBoxViewModel ||
-                //           hitElement.DataContext is MpTagTileViewModel ||
-                //           hitElement.DataContext is MpTagTrayViewModel || 
-                //           hitElement.DataContext is MpClipTileSortViewModel ||
-                //           hitElement.DataContext is MpMainWindowViewModel) {
-                //            MainWindowViewModel.ClearEdits();
+                //    e.Handled = false;
+                //};
+
+                //GlobalHook.KeyDown += (s, e) => {
+                //    if (MpShortcutCollectionViewModel.Instance.IsAnyPerformingShortcut) {
+                //        //e.Handled = true;
+                //    }
+                //};
+
+                //GlobalHook.KeyUp += (s, e) => {
+                //    if (MpShortcutCollectionViewModel.Instance.IsAnyPerformingShortcut) {
+                //        foreach (var scvm in MpShortcutCollectionViewModel.Instance) {
+                //            if (scvm.IsPerformingShortcut && scvm.RoutingType != MpRoutingType.Direct) {
+                //                e.Handled = true;
+
+                //                System.Windows.Forms.SendKeys.SendWait("^");
+                //                return;
+                //            }
                 //        }
                 //    }
+                //    e.Handled = false;
                 //};
 
                 ApplicationHook.KeyPress += (s, e) => {
@@ -611,17 +614,22 @@ namespace MpWpfApp {
                     if (ClipTrayViewModel != null && ClipTrayViewModel.IsEditingClipTitle) {
                         return;
                     }
-                    if (MpSettingsWindowViewModel.IsOpen) {
+                    if (MpSettingsWindowViewModel.IsOpen || MpAssignShortcutModalWindowViewModel.IsOpen) {
                         return;
                     }
                     if (!char.IsControl(e.KeyChar)) {
                         foreach (var scvm in MpShortcutCollectionViewModel.Instance) {
                         }
-                        if (!SearchBoxViewModel.SearchTextBox.IsFocused) {
-                            SearchBoxViewModel.SearchTextBox.Text = e.KeyChar.ToString();
-                            SearchBoxViewModel.SearchTextBox.Focus();
+                        if (!SearchBoxViewModel.IsTextBoxFocused) {
+                            SearchBoxViewModel.IsTextBoxFocused = true;
+                            if (SearchBoxViewModel.HasText) {
+                                SearchBoxViewModel.SearchTextBox.Text += e.KeyChar.ToString();
+                            } else {
+                                SearchBoxViewModel.SearchTextBox.Text = e.KeyChar.ToString();
+                            }
+                            SearchBoxViewModel.SearchTextBox.Select(SearchBoxViewModel.SearchTextBox.Text.Length, 0);
                         }
-                    }
+                    } 
                 };
 
                 ApplicationHook.MouseWheel += (s, e) => {
@@ -697,7 +705,7 @@ namespace MpWpfApp {
         }
         private bool CanShowWindow() {
             return (Application.Current.MainWindow == null ||
-                Application.Current.MainWindow.Visibility != Visibility.Visible ||
+                //Application.Current.MainWindow.Visibility != Visibility.Visible ||
                 IsLoading ||
                 !MpSettingsWindowViewModel.IsOpen) && !IsMainWindowOpen && !IsShowingMainWindow;
         }
@@ -735,6 +743,7 @@ namespace MpWpfApp {
                     MainWindowGridTop = _endMainWindowTop;
                     timer.Stop();
                     IsShowingMainWindow = false;
+                    //SearchBoxViewModel.IsTextBoxFocused = true;
                 }
             };
             timer.Start();
@@ -810,11 +819,9 @@ namespace MpWpfApp {
                 timer.Tick += (s, e32) => {
                     if (MainWindowGridTop < _startMainWindowTop) {
                         MainWindowGridTop -= dt;
-                        //Canvas.SetTop(MainWindowGrid, MainWindowGridTop);
                     } else {
                         MainWindowGridTop = _startMainWindowTop;
                         timer.Stop();
-                        //IsMainWindowOpen = false;
                         if (pasteSelected) {
                             PasteDataObject(pasteDataObject);
                         }
@@ -826,8 +833,9 @@ namespace MpWpfApp {
                         if(wasMainWindowLocked) {
                             ShowWindowCommand.Execute(null);
                             IsMainWindowLocked = true;
+                        } else {
+                            SearchBoxViewModel.IsTextBoxFocused = false;
                         }
-                        //mw.WindowState = WindowState.Minimized;
                     }
                 };
                 timer.Start();

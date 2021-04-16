@@ -40,7 +40,78 @@
                HorizontalAlignment="Center"
                HorizontalContentAlignment="Center"
                Content="{Binding ShortcutDisplayName}" />
+            <ListBox Grid.Row="2"
+                     IsEnabled="False"
+                     BorderThickness="0" 
+                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                     ItemsSource="{Binding KeyItems}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Horizontal"
+                                    IsItemsHost="True"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                    <Border BorderBrush="Black"
+                            BorderThickness="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="20" />
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Column="0"
+                                    Background="LightGray"
+                                    BorderBrush="DarkGray"
+                                    Margin="0"
+                                    BorderThickness="2"
+                                    CornerRadius="5">
+                                <TextBlock HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Padding="10,5,10,5"
+                                           FontSize="14"
+                                           Foreground="Black"
+                                           Text="{Binding KeyStr}"
+                                           FontWeight="Bold" />
+                            </Border>
+                            <Label x:Name="ComboLabel"  
+                                   Visibility="{Binding PlusVisibility}"
+                                   Content="+"
+                                   Grid.Column="1"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" />
+                            <Label x:Name="SequenceLabel"
+                                   Visibility="{Binding CommaVisibility}"
+                                   Content=","
+                                   Grid.Column="1"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Bottom" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        
         <TextBlock Grid.Row="2"
+                   Visibility="Collapsed"
                FontSize="14"
                FontStyle="Oblique"
                HorizontalAlignment="Center"

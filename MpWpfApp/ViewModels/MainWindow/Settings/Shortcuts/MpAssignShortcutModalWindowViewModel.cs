@@ -1,12 +1,15 @@
 ﻿using GalaSoft.MvvmLight.Command;
 using Gma.System.MouseKeyHook;
+using GongSolutions.Wpf.DragDrop.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 
@@ -32,6 +35,24 @@ namespace MpWpfApp {
         #endregion
 
         #region Properties
+
+        #region Controls
+        public Canvas KeyCanvas { get; set; }
+        #endregion
+
+        private ObservableCollection<MpShortcutKeyViewModel> _keyItems = new ObservableCollection<MpShortcutKeyViewModel>();
+        public ObservableCollection<MpShortcutKeyViewModel> KeyItems {
+            get {
+                return _keyItems;
+            }
+            set {
+                if(_keyItems != value) {
+                    _keyItems = value;
+                    OnPropertyChanged(nameof(KeyItems));
+                }
+            }
+        }
+
         private MpShortcutViewModel _duplicatedShortcutViewModel;
         public MpShortcutViewModel DuplicatedShortcutViewModel {
             get {
@@ -60,6 +81,25 @@ namespace MpWpfApp {
 
         public string KeyString {
             get {
+                KeyItems.Clear();
+                foreach(var kl in _keyList) {
+                    foreach(var k in kl) {
+                        if(kl.Count > 1 && kl.IndexOf(k) < kl.Count - 1) {
+                            KeyItems.Add(new MpShortcutKeyViewModel(
+                                            MpHelpers.Instance.GetKeyLiteral(k),
+                                            true,false));
+                        } else if (kl.IndexOf(k) == kl.Count - 1 && _keyList.IndexOf(kl) < _keyList.Count -1) {
+                            KeyItems.Add(new MpShortcutKeyViewModel(
+                                            MpHelpers.Instance.GetKeyLiteral(k),
+                                            false, true));
+                        } else {
+                            KeyItems.Add(new MpShortcutKeyViewModel(
+                                            MpHelpers.Instance.GetKeyLiteral(k),
+                                            false, false));
+                        }
+
+                    }
+                }
                 return MpHelpers.Instance.ConvertKeySequenceToString(_keyList);
             }
         }
@@ -101,6 +141,7 @@ namespace MpWpfApp {
             IsOpen = true;
 
             _windowRef = (Window)sender;
+            KeyCanvas = _windowRef.FindName("KeyCanvas") as Canvas;
 
             //the following hides close button
             var hwnd = new WindowInteropHelper(_windowRef).Handle;
@@ -172,6 +213,7 @@ namespace MpWpfApp {
 
             _windowRef.Focus();
         }
+
         #endregion
 
         #region Private Methods

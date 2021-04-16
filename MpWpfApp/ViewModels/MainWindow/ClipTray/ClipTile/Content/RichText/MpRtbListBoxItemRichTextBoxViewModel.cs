@@ -1322,6 +1322,8 @@ namespace MpWpfApp {
             RefreshCommands();
 
             OnPropertyChanged(nameof(TagMenuItems));
+
+            MpShortcutCollectionViewModel.Instance.UpdateInputGestures(cm);
         }
         #endregion      
 
@@ -1719,23 +1721,48 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        private RelayCommand<object> _toggleEditSubTitleCommand;
-        public ICommand ToggleEditSubTitleCommand {
+        private RelayCommand _editSubTitleCommand;
+        public ICommand EditSubTitleCommand {
             get {
-                if (_toggleEditSubTitleCommand == null) {
-                    _toggleEditSubTitleCommand = new RelayCommand<object>(ToggleEditSubTitle, CanToggleEditSubTitle);
+                if (_editSubTitleCommand == null) {
+                    _editSubTitleCommand = new RelayCommand(EditSubTitle, CanEditSubTitle);
                 }
-                return _toggleEditSubTitleCommand;
+                return _editSubTitleCommand;
             }
         }
-        private bool CanToggleEditSubTitle(object args) {
+        private bool CanEditSubTitle() {
             if (MainWindowViewModel.IsLoading) {
                 return false;
             }
-            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1;
+            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
+                   RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 1;
         }
-        private void ToggleEditSubTitle(object args) {
+        private void EditSubTitle() {
             IsEditingSubTitle = !IsEditingSubTitle;
+        }
+
+        private RelayCommand _editSubContentCommand;
+        public ICommand EditSubContentCommand {
+            get {
+                if (_editSubContentCommand == null) {
+                    _editSubContentCommand = new RelayCommand(EditSubContent, CanEditSubContent);
+                }
+                return _editSubContentCommand;
+            }
+        }
+        private bool CanEditSubContent() {
+            if (MainWindowViewModel.IsLoading) {
+                return false;
+            }
+            return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
+                   RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 1;
+        }
+        private void EditSubContent() {
+            if(!HostClipTileViewModel.IsEditingTile) {
+                HostClipTileViewModel.IsEditingTile = true;
+                RichTextBoxViewModelCollection.ClearSubSelection();
+                IsSubSelected = true;
+            }            
         }
 
         private RelayCommand _sendSubSelectedToEmailCommand;
@@ -1809,18 +1836,20 @@ namespace MpWpfApp {
             MpAppCollectionViewModel.Instance.UpdateRejection(MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(CopyItemAppId), true);
         }
 
-        private RelayCommand _pasteSubSelectedItemCommand;
-        public ICommand PasteSubSelectedItemCommand {
+        private RelayCommand _pasteSubItemCommand;
+        public ICommand PasteSubItemCommand {
             get {
-                if (_pasteSubSelectedItemCommand == null) {
-                    _pasteSubSelectedItemCommand = new RelayCommand(PasteSubSelectedItem);
+                if (_pasteSubItemCommand == null) {
+                    _pasteSubItemCommand = new RelayCommand(PasteSubItem);
                 }
-                return _pasteSubSelectedItemCommand;
+                return _pasteSubItemCommand;
             }
         }
-        private void PasteSubSelectedItem() {
+        private void PasteSubItem() {
             MainWindowViewModel.ClipTrayViewModel.ClearClipSelection();
-            IsSelected = true;
+            HostClipTileViewModel.IsSelected = true;
+            HostClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
+            IsSubSelected = true;
             MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand.Execute(null);
         }
 
@@ -1838,7 +1867,7 @@ namespace MpWpfApp {
                 this,
                 "Paste " + CopyItemTitle,
                 ShortcutKeyString,
-                PasteSubSelectedItemCommand, null);
+                PasteSubItemCommand, null);
         }
         #endregion
 

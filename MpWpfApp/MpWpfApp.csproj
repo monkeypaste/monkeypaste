@@ -246,6 +246,7 @@
     <Compile Include="ViewModels\MainWindow\Settings\Preferences\PasteToAppPath\MpPasteToAppPathViewModelCollection.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Security\MpSecurityViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpAssignShortcutModalWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpShortcutKeyViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpShortcutPanelViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpShortcutCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\Settings\Shortcuts\MpShortcutViewModel.cs" />

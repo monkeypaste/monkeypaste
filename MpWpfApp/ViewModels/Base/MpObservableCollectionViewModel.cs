@@ -314,9 +314,14 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
         #endregion
 
         #region Layout
-        
+
         #endregion
 
+        #endregion
+
+        #region Events
+        public event EventHandler ViewModelLoaded;
+        protected virtual void OnViewModelLoaded() => ViewModelLoaded?.Invoke(this, EventArgs.Empty);
         #endregion
 
         #region Public Methods
