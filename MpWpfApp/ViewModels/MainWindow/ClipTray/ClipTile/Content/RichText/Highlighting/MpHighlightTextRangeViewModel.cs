@@ -140,7 +140,7 @@ namespace MpWpfApp {
                                 case MpCopyItemType.Composite:
                                 case MpCopyItemType.RichText:
                                     var rtb = RtbItemViewModel.Rtb;
-                                    HostClipTileViewModel.RichTextBoxViewModelCollection.RichTextBoxListBox.ScrollIntoView(rtb);
+                                    HostClipTileViewModel.RichTextBoxViewModelCollection.ListBox.ScrollIntoView(rtb);
                                     rtb.ScrollToHorizontalOffset(rtb.HorizontalOffset + characterRect.Left - rtb.ActualWidth / 2d);
                                     rtb.ScrollToVerticalOffset(rtb.VerticalOffset + characterRect.Top - rtb.ActualHeight / 2d);
                                     break;

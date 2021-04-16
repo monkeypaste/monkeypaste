@@ -237,19 +237,6 @@ namespace MpWpfApp {
             }
         }
 
-        private ListBox _richTextListBox;
-        public ListBox RichTextBoxListBox {
-            get {
-                return _richTextListBox;
-            }
-            set {
-                if(_richTextListBox != value) {
-                    _richTextListBox = value;
-                    OnPropertyChanged(nameof(RichTextBoxListBox));
-                }
-            }
-        }
-
         private AdornerLayer _rtbAdornerLayer;
         public AdornerLayer RtbLbAdornerLayer {
             get {
@@ -285,20 +272,7 @@ namespace MpWpfApp {
             }
         }
 
-        private double _rtbListBoxHeight = MpMeasurements.Instance.ClipTileContentHeight;
         public double RtbListBoxHeight {
-            get {
-                return _rtbListBoxHeight;
-            }
-            set {
-                if (_rtbListBoxHeight != value) {
-                    _rtbListBoxHeight = value;
-                    OnPropertyChanged(nameof(RtbListBoxHeight));
-                }
-            }
-        }
-
-        public double RtbListBoxDesiredHeight {
             get {
                 double ch = MpMeasurements.Instance.ClipTileContentHeight;
                 if (HostClipTileViewModel.IsEditingTile) {
@@ -310,10 +284,13 @@ namespace MpWpfApp {
                 if (HostClipTileViewModel.IsEditingTemplate) {
                     ch -= MpMeasurements.Instance.ClipTileEditTemplateToolbarHeight;
                 }
+                if(HostClipTileViewModel.DetailGridVisibility != Visibility.Visible) {
+                    ch += HostClipTileViewModel.TileDetailHeight;
+                }
                 if (this.Count == 1) {
                     return ch;
                 }
-                return Math.Max(ch,TotalItemHeight);
+                return Math.Max(RtbLbScrollViewerHeight, Math.Max(ch,TotalItemHeight));
             }
         }
 
@@ -459,13 +436,12 @@ namespace MpWpfApp {
         }
         
         public void ClipTileRichTextBoxViewModelCollection_Loaded(object sender, RoutedEventArgs args) {
-            RichTextBoxListBox = (ListBox)sender;
-            ListBox = RichTextBoxListBox;
+            ListBox = (ListBox)sender;
             IsHorizontal = false;
-            RtbContainerGrid = RichTextBoxListBox.GetVisualAncestor<Grid>();
-            RtbListBoxCanvas = RichTextBoxListBox.GetVisualAncestor<Canvas>();
-            ScrollViewer = RichTextBoxListBox.GetVisualAncestor<ScrollViewer>();//(ScrollViewer)HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();
-            RichTextBoxListBox.RequestBringIntoView += (s, e65) => { 
+            RtbContainerGrid = ListBox.GetVisualAncestor<Grid>();
+            RtbListBoxCanvas = ListBox.GetVisualAncestor<Canvas>();
+            ScrollViewer = ListBox.GetVisualAncestor<ScrollViewer>();//(ScrollViewer)HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();
+            ListBox.RequestBringIntoView += (s, e65) => { 
                 //if(!MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded) {
                 //    return;
                 //}
@@ -475,7 +451,7 @@ namespace MpWpfApp {
             //after pasting template rtb's are duplicated so clear them upon refresh
             SyncItemsWithModel();            
 
-            RichTextBoxListBox.SelectionChanged += (s, e8) => {
+            ListBox.SelectionChanged += (s, e8) => {
                 if (SubSelectedClipItems.Count > 1) {
                     //order selected tiles by ascending datetime 
                     var subSelectedRtbvmListBySelectionTime = SubSelectedClipItems.OrderBy(x => x.LastSubSelectedDateTime).ToList();
@@ -499,17 +475,41 @@ namespace MpWpfApp {
 
             };
 
-            RtbLbAdornerLayer = AdornerLayer.GetAdornerLayer(RichTextBoxListBox);
-            RtbLbAdornerLayer.Add(new MpRtbListBoxAdorner(RichTextBoxListBox));
+            RtbLbAdornerLayer = AdornerLayer.GetAdornerLayer(ListBox);
+            RtbLbAdornerLayer.Add(new MpRtbListBoxAdorner(ListBox));
         }
 
         
         public void Refresh() {
             var sw = new Stopwatch();
             sw.Start();            
-            RichTextBoxListBox?.Items.Refresh();
+            ListBox?.Items.Refresh();
             sw.Stop();
             //Console.WriteLine("Rtblb(HVIdx:"+MainWindowViewModel.ClipTrayViewModel.VisibleSubRtbViewModels.IndexOf(HostClipTileViewModel)+") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
+        }
+
+        public async Task FillAllTemplates() {
+            bool hasExpanded = false;
+            foreach (var rtbvm in this) {
+                if (rtbvm.HasTemplate) {
+                    rtbvm.IsSubSelected = true;
+                    rtbvm.IsPastingTemplate = true;
+                    if (!hasExpanded) {
+                        //tile will be shrunk in on completed of hide window
+                        MainWindowViewModel.ExpandClipTile(HostClipTileViewModel);
+                        hasExpanded = true;
+                    } else {
+                        HostClipTileViewModel.PasteTemplateToolbarViewModel.SetTemplate(rtbvm.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
+                    }
+                    await Task.Run(() => {
+                        while (!HostClipTileViewModel.PasteTemplateToolbarViewModel.IsTemplateReadyToPaste) {
+                            System.Threading.Thread.Sleep(100);
+                        }
+                        //TemplateRichText is set in PasteTemplateCommand
+                    });
+                }
+                
+            }
         }
 
         public MpRtbListBoxItemRichTextBoxViewModel GetRtbItemByCopyItemId(int copyItemId) {
@@ -640,12 +640,12 @@ namespace MpWpfApp {
 
         public void Resize(double deltaTop, double deltaWidth, double deltaHeight) {
             RtblbCanvasTop += deltaTop;
-            RtbListBoxHeight += (-deltaTop + deltaHeight);
+            //RtbListBoxHeight += (-deltaTop + deltaHeight);
             RtbLbScrollViewerWidth += deltaWidth;
             RtbLbScrollViewerHeight += deltaHeight;
-            if (RtbListBoxHeight > RtbLbScrollViewerHeight) {
-                RtbLbScrollViewerWidth -= MpMeasurements.Instance.ScrollbarWidth;
-            }
+            //if (RtbListBoxHeight > RtbLbScrollViewerHeight) {
+            //    RtbLbScrollViewerWidth -= MpMeasurements.Instance.ScrollbarWidth;
+            //}
             UpdateLayout();
 
             //Refresh();
@@ -669,10 +669,10 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(VerticalScrollbarVisibility));
             OnPropertyChanged(nameof(RtbLbWidth));
 
-            if (ListBox != null) {
-                ListBox.Height = TotalItemHeight;
-                ListBox.Width = RtbLbWidth;
-                ListBox.UpdateLayout();
+            if (base.ListBox != null) {
+                base.ListBox.Height = RtbListBoxHeight;
+                base.ListBox.Width = RtbLbWidth;
+                base.ListBox.UpdateLayout();
             }
             if (ScrollViewer != null) {
                 ScrollViewer.Width = RtbLbScrollViewerWidth;
@@ -747,13 +747,7 @@ namespace MpWpfApp {
                 }
 
                 if (MpHelpers.Instance.DistanceBetweenValues(RtbListBoxHeight, toHeight) > 0.5) {
-                    RtbListBoxHeight += dh;
-
-                    //foreach (var rtbvm in this) {
-                    //    rtbvm.OnPropertyChanged(nameof(rtbvm.RtbCanvasHeight));
-                    //    rtbvm.OnPropertyChanged(nameof(rtbvm.RtbHeight));
-                    //    rtbvm.OnPropertyChanged(nameof(rtbvm.RtbPageHeight));
-                    //}
+                    //RtbListBoxHeight += dh;
                 } else {
                     isHeightDone = true;
                 }
@@ -860,8 +854,8 @@ namespace MpWpfApp {
             ClearSubSelection();
             if(this.Count > 0) {
                 this[0].IsSubSelected = true;
-                if(RichTextBoxListBox != null) {
-                    ((ListBoxItem)RichTextBoxListBox.ItemContainerGenerator.ContainerFromItem(this[0]))?.Focus();
+                if(ListBox != null) {
+                    ((ListBoxItem)ListBox.ItemContainerGenerator.ContainerFromItem(this[0]))?.Focus();
                 }
             }
         }
@@ -910,7 +904,7 @@ namespace MpWpfApp {
             base.Dispose();
             RtbListBoxCanvas = null;
             RtbContainerGrid = null;
-            RichTextBoxListBox = null;
+            ListBox = null;
             RtbLbAdornerLayer = null;
     }
         #endregion
@@ -1090,7 +1084,7 @@ namespace MpWpfApp {
                                 this.Move(this.IndexOf(sctvm), 0);
                                 sctvm.IsSelected = true;
                             }
-                            ListBox.ScrollIntoView(SubSelectedClipItems[0]);
+                            base.ListBox.ScrollIntoView(SubSelectedClipItems[0]);
                         }));
             } finally {
                 IsBusy = false;
@@ -1132,7 +1126,7 @@ namespace MpWpfApp {
                                 this.Move(this.IndexOf(sctvm), this.Count - 1);
                                 sctvm.IsSelected = true;
                             }
-                            ListBox.ScrollIntoView(SubSelectedClipItems[SubSelectedClipItems.Count - 1]);
+                            base.ListBox.ScrollIntoView(SubSelectedClipItems[SubSelectedClipItems.Count - 1]);
                         }));
             } finally {
                 IsBusy = false;

@@ -1066,9 +1066,8 @@ namespace MpWpfApp {
                             if (HostClipTileViewModel.IsPastingTemplate) {
                                 HostClipTileViewModel.PasteTemplateToolbarViewModel.InitWithRichTextBox(Rtb, false);
                             }                      
-                        } else if(HostClipTileViewModel.IsExpanded) {
-                            // triggers set data in model which updates the preview
-                            CopyItemRichText = Rtb.Document.ToRichText();
+                        } else if(HostClipTileViewModel.IsEditingTile) {
+                            SaveSubItemToDatabase();
                         } else {
                             
                         }
@@ -1441,24 +1440,24 @@ namespace MpWpfApp {
             //Rtb.Selection.Select(stp, etp);
         }
 
-        public async Task<string> GetPastableRichText() {
-            if (HasTemplate) {
-                TemplateRichText = string.Empty;
-                //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(RichTextBoxViewModelCollection.IndexOf(this),false);
+        //public async Task<string> GetPastableRichText() {
+        //    if (HasTemplate) {
+        //        TemplateRichText = string.Empty;
+        //        //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(RichTextBoxViewModelCollection.IndexOf(this),false);
                 
-                await Task.Run(() => {
-                    while (string.IsNullOrEmpty(TemplateRichText)) {
-                        System.Threading.Thread.Sleep(500);
-                    }
-                    //TemplateRichText is set in PasteTemplateCommand
-                });
+        //        await Task.Run(() => {
+        //            while (string.IsNullOrEmpty(TemplateRichText)) {
+        //                System.Threading.Thread.Sleep(500);
+        //            }
+        //            //TemplateRichText is set in PasteTemplateCommand
+        //        });
 
-                return TemplateRichText;
-            }
-            return CopyItemRichText;
+        //        return TemplateRichText;
+        //    }
+        //    return CopyItemRichText;
 
-            //both return to ClipTray.GetDataObjectFromSelectedClips
-        }
+        //    //both return to ClipTray.GetDataObjectFromSelectedClips
+        //}
 
         #region Hyperlinks
         public void ClearHyperlinks() {

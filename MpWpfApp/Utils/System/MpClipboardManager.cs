@@ -58,16 +58,17 @@ namespace MpWpfApp {
                 WinApi.SetForegroundWindow(handle);
                 WinApi.SetActiveWindow(handle);
                 System.Windows.Forms.SendKeys.SendWait("^v");
-                if(_lastDataObject != null) {
-                    Thread.Sleep(500);
+                //WinApi.SendMessage(LastWindowWatcher.ThisAppHandle, WM_PASTE, IntPtr.Zero, IntPtr.Zero);
+                if (_lastDataObject != null) {
+                    //Thread.Sleep(500);
                     // from https://stackoverflow.com/a/52438404/105028
                     _remainingTryCount = 100;
                     var clipboardThread = new Thread(new ThreadStart(GetClipboard));
                     clipboardThread.SetApartmentState(ApartmentState.STA);
                     clipboardThread.Start();
                     Thread.Sleep(500);
-                    IgnoreClipboardChangeEvent = false;
                 }
+                IgnoreClipboardChangeEvent = false;
             }
             catch (Exception e) {
                 Console.WriteLine("ClipboardMonitor error during paste: " + e.ToString());
@@ -125,9 +126,10 @@ namespace MpWpfApp {
                         WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);
                     }
                     break;
-                    //case WM_PASTE:
-                    //    Console.WriteLine("Pasted");
-                    //    break;
+                //case WM_PASTE:
+                //    Console.WriteLine("Pasted");
+                    
+                //    break;
             }
             return IntPtr.Zero;
         }

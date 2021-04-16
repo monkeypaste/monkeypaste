@@ -753,10 +753,12 @@ namespace MpWpfApp {
                 if (ctvm.IsPastingTemplate) {
                     MainWindowViewModel.ShrinkClipTile(ctvm);
                     ctvm.IsPastingTemplate = false;
+                    
                 }
                 foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
                     //rtbvm.IsEditingContent = false;
                     rtbvm.IsEditingSubTitle = false;
+                    rtbvm.IsPastingTemplate = false;
                 }
                 if (ctvm.DetectedImageObjectCollectionViewModel != null) {
                     foreach (var diovm in ctvm.DetectedImageObjectCollectionViewModel) {
@@ -764,6 +766,8 @@ namespace MpWpfApp {
                     }
                 }
             }
+            MainWindowViewModel.OnPropertyChanged(nameof(MainWindowViewModel.AppStateButtonGridWidth));
+            MainWindowViewModel.AppModeViewModel.OnPropertyChanged(nameof(MainWindowViewModel.AppModeViewModel.AppModeColumnVisibility));
         }
 
         public void ClearClipSelection(bool clearEditing = true) {

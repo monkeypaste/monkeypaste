@@ -329,7 +329,8 @@ namespace MpWpfApp {
                 MpTemplateHyperlinkViewModel.CreateTemplateHyperlink(SubSelectedRtbViewModel, SelectedTemplateHyperlinkViewModel.CopyItemTemplate, SubSelectedRtbViewModel.Rtb.Selection);
                 OkCommand.Execute(null);
             } else {
-                Resize(-HostClipTileViewModel.EditTemplateToolbarHeight);
+                //Console.WriteLine("SetTemplate Resize edit template toolbar deltaHeight: " + HostClipTileViewModel.EditTemplateToolbarHeight);
+                Resize(-HostClipTileViewModel.EditTemplateToolbarHeight* 0.5);
             }
         }
         #endregion
@@ -421,7 +422,7 @@ namespace MpWpfApp {
                 }
             }
             HostClipTileViewModel.IsEditingTemplate = false;
-            Resize(HostClipTileViewModel.EditTemplateToolbarHeight);
+            Resize(HostClipTileViewModel.EditTemplateToolbarHeight*0.5);
         }
 
         private RelayCommand _okCommand;
@@ -455,7 +456,7 @@ namespace MpWpfApp {
 
             SelectedTemplateHyperlinkViewModel.IsSelected = true;
             HostClipTileViewModel.IsEditingTemplate = false;
-            Resize(HostClipTileViewModel.EditTemplateToolbarHeight);
+            Resize(HostClipTileViewModel.EditTemplateToolbarHeight*0.5);
             SubSelectedRtbViewModel.Rtb.Focus();
         }
 

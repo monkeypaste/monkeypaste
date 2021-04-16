@@ -188,7 +188,7 @@ namespace MpWpfApp {
                 }                
                 object itemData = null;
                 MpCopyItemType itemType = MpCopyItemType.None;
-
+                
                 if (iData.GetDataPresent(DataFormats.FileDrop)) {
                     itemType = MpCopyItemType.FileList;
                     itemData = (string[])iData.GetData(DataFormats.FileDrop, true);

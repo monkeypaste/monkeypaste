@@ -1771,7 +1771,7 @@
                                                     <!-- RichText Content -->
                                                     <Canvas x:Name="ClipTileRichTextBoxListBoxGridContainerCanvas"
                                                             Visibility="{Binding RtbVisibility}"
-                                                            ClipToBounds="True"
+                                                            ClipToBounds="True" 
                                                             Height="{Binding TileContentHeight}"
                                                             Width="{Binding TileContentWidth}">
                                                         <Border x:Name="ClipTileEditorToolbar"
@@ -2026,7 +2026,7 @@
                                                                                            ScrollToSelectedItem="True"
                                                                                            IsSynchronizedWithCurrentItem="False"
                                                                                            Width="{Binding RtbLbWidth}"
-                                                                                           Height="{Binding TotalItemHeight, NotifyOnSourceUpdated=True}"
+                                                                                           Height="{Binding RtbListBoxHeight}"
                                                                                            Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                                                            ItemsSource="{Binding}"
                                                                                            Focusable="True"
@@ -2781,6 +2781,7 @@
                                                 </Grid>
                                                 <!-- Tile Detail Grid -->
                                                 <Border Grid.Row="2"
+                                                        Visibility="{Binding DetailGridVisibility}"
                                                         Background="Transparent"
                                                         BorderThickness="0,1,0,0"
                                                         BorderBrush="LightGray">

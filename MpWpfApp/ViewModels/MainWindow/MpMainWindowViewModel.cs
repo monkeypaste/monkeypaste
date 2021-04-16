@@ -417,12 +417,11 @@ namespace MpWpfApp {
             ClipTrayViewModel.Resize(ctvmToShrink,
                 -(MainWindowViewModel.ClipTrayWidth - ctvmToShrink.TileBorderMinWidth - MpMeasurements.Instance.ClipTileExpandedMargin),
                 -_deltaHeight,
-                -ctvmToShrink.EditRichTextBoxToolbarHeight);
+                ctvmToShrink.IsPastingTemplate ? 0:-ctvmToShrink.EditRichTextBoxToolbarHeight);
 
             ClipTrayViewModel.RestoreVisibleTiles();
 
-            OnPropertyChanged(nameof(AppStateButtonGridWidth));
-            AppModeViewModel.OnPropertyChanged(nameof(AppModeViewModel.AppModeColumnVisibility));
+            
             
             //double animMs = 0;// Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
             //ClearClipSelection(false);

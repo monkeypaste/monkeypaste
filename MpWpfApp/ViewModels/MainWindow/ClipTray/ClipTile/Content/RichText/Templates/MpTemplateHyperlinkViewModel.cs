@@ -179,6 +179,20 @@ namespace MpWpfApp {
                
             }
         }
+
+        private bool _wasVisited = false;
+        public bool WasVisited {
+            get {
+                return _wasVisited;
+            }
+            set {
+                if (_wasVisited != value) {
+                    _wasVisited = value;
+                    OnPropertyChanged(nameof(WasVisited));
+                }
+
+            }
+        }
         #endregion
 
         #region Business Logic Properties
@@ -381,20 +395,21 @@ namespace MpWpfApp {
             b.BorderThickness = new Thickness(1.5);
             b.DataContext = thlvm;
             b.Child = tb;
-
+            
             var iuic = new InlineUIContainer();
             iuic.DataContext = thlvm;
             iuic.Child = b;
-
+            
             var hl = new Hyperlink(tr.Start,tr.End);
             hl.DataContext = thlvm;
             hl.Inlines.Clear();
             hl.Inlines.Add(iuic);
 
+            b.RenderTransform = new TranslateTransform(0, 4);
             //add trailing run of one space to allow clicking after iuic
             var tailStartPointer = hl.ElementEnd.GetInsertionPosition(LogicalDirection.Forward);
-            if(tailStartPointer != null) {
-                new Run(@" ", tailStartPointer);
+            if(new TextRange(tr.End,rtbvm.Rtb.Document.ContentEnd).IsEmpty) {
+                new Run(@" ", rtbvm.Rtb.Document.ContentEnd);
             }
             
 
@@ -413,6 +428,16 @@ namespace MpWpfApp {
                     case nameof(IsSelected):
                         if(IsSelected && HostRtbItemViewModel.IsEditingContent) {
                             HostRtbItemViewModel.HostClipTileViewModel.EditTemplateToolbarViewModel.InitWithRichTextBox(HostRtbItemViewModel.Rtb);
+                        }
+                        if(!IsSelected && HostRtbItemViewModel.IsPastingTemplate && !string.IsNullOrEmpty(TemplateText)) {
+                            //occurs during template paste after a template has been navigated away from it and 
+                            //user provided text
+                            foreach(var thlvm in HostRtbItemViewModel.TemplateHyperlinkCollectionViewModel) {
+                                if(thlvm.TemplateName == TemplateName) {
+                                    WasVisited = true;
+                                }
+                            }
+                            
                         }
                         break;
                 }
@@ -460,7 +485,7 @@ namespace MpWpfApp {
             hl.Unloaded += (s, e) => {
                 //occurs when template is deleted in edit tile mode
                 
-                //Dispose(false);
+                Dispose(false);
             };
             hl.MouseEnter += (s, e) => {
                 IsHovering = true;

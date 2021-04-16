@@ -420,6 +420,9 @@
 
         public double TileDetailHeight {
             get {
+                //if(DetailGridVisibility != Visibility.Visible) {
+                //    return 0;
+                //}
                 return MpMeasurements.Instance.ClipTileDetailHeight;
             }
         }
@@ -505,6 +508,12 @@
         #endregion
 
         #region Visibility        
+        public Visibility DetailGridVisibility {
+            get {
+                return IsEditingTemplate || IsPastingTemplate ? Visibility.Collapsed : Visibility.Visible;
+            }
+        }
+
         public Visibility AppIconHighlightBorderVisibility {
             get {
                 return HighlightTextRangeViewModelCollection.HasAppMatch ? Visibility.Visible : Visibility.Hidden;
@@ -926,6 +935,8 @@
                     OnPropertyChanged(nameof(TileContentHeight));
                     OnPropertyChanged(nameof(IsExpanded));
                     OnPropertyChanged(nameof(ClipTileTitleAppIconVisibility));
+                    OnPropertyChanged(nameof(DetailGridVisibility));
+                    OnPropertyChanged(nameof(TileDetailHeight));
                 }
             }
         }
@@ -944,6 +955,8 @@
                     OnPropertyChanged(nameof(IsExpanded));
                     OnPropertyChanged(nameof(ClipTileTitleAppIconVisibility));
                     OnPropertyChanged(nameof(SelectionOverlayGridVisibility));
+                    OnPropertyChanged(nameof(DetailGridVisibility));
+                    OnPropertyChanged(nameof(TileDetailHeight));
                 }
             }
         }
@@ -1546,9 +1559,18 @@
                         //ctvm.RichTextBoxViewModelCollection.Refresh();
                         break;
                     case nameof(ctvm.IsEditingTemplate):
-
+                        if(ctvm.IsEditingTemplate) {
+                            ctvm.TileContentHeight += ctvm.TileDetailHeight;
+                        } else {
+                            ctvm.TileContentHeight -= ctvm.TileDetailHeight;
+                        }
                         break;
                     case nameof(ctvm.IsPastingTemplate):
+                        if (ctvm.IsPastingTemplate) {
+                            ctvm.TileContentHeight += ctvm.TileDetailHeight;
+                        } else {
+                            ctvm.TileContentHeight -= ctvm.TileDetailHeight;
+                        }
                         //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
                         break;
                     case nameof(ctvm.IsClipDropping):
@@ -1793,18 +1815,18 @@
                     return;
                 }
                 if (e1.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName)) {
-                    int dropIdx = ctvm.GetDropIdx(MpHelpers.Instance.GetMousePosition(ctvm.RichTextBoxViewModelCollection.RichTextBoxListBox));
+                    int dropIdx = ctvm.GetDropIdx(MpHelpers.Instance.GetMousePosition(ctvm.RichTextBoxViewModelCollection.ListBox));
                     if (dropIdx >= 0 && dropIdx <= ctvm.RichTextBoxViewModelCollection.Count) {
                         if (dropIdx < ctvm.RichTextBoxViewModelCollection.Count) {
                             if(!ctvm.RichTextBoxViewModelCollection.IsListBoxItemVisible(dropIdx)) {
-                                ctvm.RichTextBoxViewModelCollection.RichTextBoxListBox?.ScrollIntoView(ctvm.RichTextBoxViewModelCollection[dropIdx]);
+                                ctvm.RichTextBoxViewModelCollection.ListBox?.ScrollIntoView(ctvm.RichTextBoxViewModelCollection[dropIdx]);
                             } else if(dropIdx > 0 && dropIdx - 1 < ctvm.RichTextBoxViewModelCollection.Count) {
-                                ctvm.RichTextBoxViewModelCollection.RichTextBoxListBox?.ScrollIntoView(ctvm.RichTextBoxViewModelCollection[dropIdx-1]);
+                                ctvm.RichTextBoxViewModelCollection.ListBox?.ScrollIntoView(ctvm.RichTextBoxViewModelCollection[dropIdx-1]);
                             }
                         } else {
                             //only can be count + 1
                             if (!ctvm.RichTextBoxViewModelCollection.IsListBoxItemVisible(dropIdx-1)) {
-                                ctvm.RichTextBoxViewModelCollection.RichTextBoxListBox?.ScrollIntoView(ctvm.RichTextBoxViewModelCollection[dropIdx-1]);
+                                ctvm.RichTextBoxViewModelCollection.ListBox?.ScrollIntoView(ctvm.RichTextBoxViewModelCollection[dropIdx-1]);
                             }
                         }
                         ctvm.RichTextBoxViewModelCollection.DropLeftPoint = ctvm.RichTextBoxViewModelCollection.GetAdornerPoints(dropIdx)[0];
@@ -1826,7 +1848,7 @@
                 var dctvml = new List<MpClipTileViewModel>();
                 if (e2.Data.GetDataPresent(Properties.Settings.Default.ClipTileDragDropFormatName)) {
                     dctvml = (List<MpClipTileViewModel>)e2.Data.GetData(Properties.Settings.Default.ClipTileDragDropFormatName);
-                    int dropIdx = ctvm.GetDropIdx(MpHelpers.Instance.GetMousePosition(ctvm.RichTextBoxViewModelCollection.RichTextBoxListBox));
+                    int dropIdx = ctvm.GetDropIdx(MpHelpers.Instance.GetMousePosition(ctvm.RichTextBoxViewModelCollection.ListBox));
                     if (dropIdx >= 0) {
                         /*
                          On tile drop: 
@@ -2286,7 +2308,7 @@
         public void Refresh() {
             var sw = new Stopwatch();
             sw.Start();
-            if(RichTextBoxViewModelCollection.RichTextBoxListBox != null) {
+            if(RichTextBoxViewModelCollection.ListBox != null) {
                 RichTextBoxViewModelCollection.Refresh();
             }
             if (FileListBox != null) {
@@ -2356,20 +2378,22 @@
 
         public async Task<string> GetPastableRichText() {
             if (HasTemplate) {
-                bool hasExpanded = false;
+                //bool hasExpanded = false;
                 IsPastingTemplate = true;
                 TemplateRichText = string.Empty.ToRichText();
-                foreach(var rtbvm in RichTextBoxViewModelCollection) {
-                    if(rtbvm.HasTemplate) {
+                await RichTextBoxViewModelCollection.FillAllTemplates();
+
+                foreach (var rtbvm in RichTextBoxViewModelCollection) {
+                    if (rtbvm.HasTemplate) {
                         rtbvm.IsSubSelected = true;
-                        if (!hasExpanded) {
-                            //tile will be shrunk in on completed of hide window
-                            MainWindowViewModel.ExpandClipTile(this);
-                            hasExpanded = true;
-                        }
+                        PasteTemplateToolbarViewModel.SetTemplate(rtbvm.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
+                        PasteTemplateToolbarViewModel.PasteTemplateCommand.Execute(null);
+                        TemplateRichText = MpHelpers.Instance.CombineRichText(rtbvm.TemplateRichText, TemplateRichText, true);
+                        rtbvm.TemplateRichText = string.Empty;
+                    } else {
+                        TemplateRichText = MpHelpers.Instance.CombineRichText(rtbvm.CopyItemRichText, TemplateRichText, true);
                     }
-                    var rtbvmrt = await rtbvm.GetPastableRichText();
-                    TemplateRichText = MpHelpers.Instance.CombineRichText(rtbvmrt, TemplateRichText, true);
+                    
                 }
                 return TemplateRichText;
             }
@@ -2406,12 +2430,12 @@
             switch(CopyItemType) {
                 case MpCopyItemType.Composite:
                 case MpCopyItemType.RichText:
-                    if(RichTextBoxViewModelCollection.RichTextBoxListBox == null) {
+                    if(RichTextBoxViewModelCollection.ListBox == null) {
                         //no idea why this happens but the rtblb is null upon
                         //searchbox focus
                         break;
                     }
-                    RichTextBoxViewModelCollection.RichTextBoxListBox.ScrollIntoView(RichTextBoxViewModelCollection[0]);
+                    RichTextBoxViewModelCollection.ListBox.ScrollIntoView(RichTextBoxViewModelCollection[0]);
                     foreach(var rtbvm in RichTextBoxViewModelCollection) {
                         rtbvm.ResetRtb();
                     }
