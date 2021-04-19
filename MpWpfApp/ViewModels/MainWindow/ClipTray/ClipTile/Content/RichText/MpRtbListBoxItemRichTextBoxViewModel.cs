@@ -239,9 +239,9 @@ namespace MpWpfApp {
                 }
                 if (RichTextBoxViewModelCollection.Count == 1 && SubItemOverlayVisibility != Visibility.Visible) {
                     if (Rtb == null) {
-                        return CopyItemRichText.ToFlowDocument().GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;//HostClipTileViewModel.TileContentHeight - RtbPadding.Top - RtbPadding.Bottom;
+                        return CopyItemRichText.ToFlowDocument().GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;
                     } else {
-                        return Rtb.Document.GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;//HostClipTileViewModel.TileContentHeight - RtbPadding.Top - RtbPadding.Bottom;
+                        return Rtb.Document.GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;
                     }
                 }
                 return MpMeasurements.Instance.RtbCompositeItemMinHeight;
@@ -1087,6 +1087,8 @@ namespace MpWpfApp {
                                 }
                             }
                             //RichTextBoxViewModelCollection.UpdateLayout();
+                        } else {
+                            _detailIdx = 0;
                         }
                         //RichTextBoxViewModelCollection.OnPropertyChanged(nameof(RichTextBoxViewModelCollection.RtbListBoxHeight));
                         break;
@@ -1095,6 +1097,14 @@ namespace MpWpfApp {
                             _detailIdx++;
                             if (_detailIdx >= Enum.GetValues(typeof(MpCopyItemDetailType)).Length) {
                                 _detailIdx = 1;
+                            }
+                            if ((MpCopyItemDetailType)_detailIdx == MpCopyItemDetailType.Shortcut) {
+                                if (string.IsNullOrEmpty(ShortcutKeyString)) {
+                                    _detailIdx++;
+                                } else {
+                                    DetailText = ShortcutKeyString;
+                                    break;
+                                }
                             }
                             DetailText = CopyItem.GetDetail((MpCopyItemDetailType)_detailIdx);
                         }
@@ -1271,6 +1281,7 @@ namespace MpWpfApp {
             #endregion
 
             UpdateLayout();
+            
 
             OnViewModelLoaded();
         }
@@ -1334,7 +1345,7 @@ namespace MpWpfApp {
         }
 
         public void UpdateLayout() {
-            if(Rtb != null) {
+            if (Rtb != null) {
                 Rtb.Document.PageWidth = RtbPageWidth;
                 Rtb.Document.PageHeight = RtbPageHeight;
             }
@@ -1351,8 +1362,11 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
             OnPropertyChanged(nameof(RtbOverlayWidth));
 
+            
             Rtbc?.UpdateLayout();
+            Rtb?.UpdateLayout();
             RtbListBoxItemClipBorder?.UpdateLayout();  
+
         }
 
 

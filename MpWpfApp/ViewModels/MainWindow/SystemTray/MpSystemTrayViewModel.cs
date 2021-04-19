@@ -66,6 +66,30 @@ namespace MpWpfApp {
                 return Math.Round(MpHelpers.Instance.FileListSize(new string[] { Properties.Settings.Default.DbPath }),2).ToString() + " megabytes";
             }
         }
+
+        public string PauseOrPlayIconSource {
+            get {
+                if(MainWindowViewModel == null || MainWindowViewModel.AppModeViewModel == null) {
+                    return string.Empty;
+                }
+                if(MainWindowViewModel.AppModeViewModel.IsAppPaused) {
+                    return @"/Images/play.png";
+                }
+                return @"/Images/pause.png";
+            }
+        }
+
+        public string PauseOrPlayHeader {
+            get {
+                if (MainWindowViewModel == null || MainWindowViewModel.AppModeViewModel == null) {
+                    return string.Empty;
+                }
+                if (MainWindowViewModel.AppModeViewModel.IsAppPaused) {
+                    return @"Resume";
+                }
+                return @"Pause";
+            }
+        }
         #endregion
 
         #region Public Methods

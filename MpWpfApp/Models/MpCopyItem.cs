@@ -1212,6 +1212,7 @@ namespace MpWpfApp {
 
     public enum MpCopyItemDetailType {
         None = 0,
+        Shortcut,
         DateTimeCreated,
         DataSize,
         UsageStats

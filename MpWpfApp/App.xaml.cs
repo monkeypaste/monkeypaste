@@ -25,6 +25,7 @@ namespace MpWpfApp {
         }
 
         private void Application_Exit(object sender, ExitEventArgs e) {
+            MpWpfApp.Properties.Settings.Default.Save();
             if (Application.Current.MainWindow != null) {
                 ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).Dispose();
             }

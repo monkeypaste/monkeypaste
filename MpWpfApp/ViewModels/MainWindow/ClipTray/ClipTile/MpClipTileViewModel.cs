@@ -1113,6 +1113,13 @@
                 if (_detailIdx >= Enum.GetValues(typeof(MpCopyItemDetailType)).Length) {
                     _detailIdx = 1;
                 }
+                if((MpCopyItemDetailType)_detailIdx == MpCopyItemDetailType.Shortcut) {
+                    if(string.IsNullOrEmpty(ShortcutKeyString)) {
+                        _detailIdx++;
+                    } else {
+                        return ShortcutKeyString;
+                    }
+                }
                 return CopyItem.GetDetail((MpCopyItemDetailType)_detailIdx);
             }
         }
@@ -1543,6 +1550,8 @@
                                     }
                                 }
                             }
+                        } else {
+                            _detailIdx = 0;
                         }
                         break;
                     case nameof(ctvm.IsEditingTile):

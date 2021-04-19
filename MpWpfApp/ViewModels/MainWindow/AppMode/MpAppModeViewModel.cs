@@ -35,6 +35,20 @@ namespace MpWpfApp {
             }
         }
 
+        private bool _isInAutoAnalyzeMode = false;
+        public bool IsInAutoAnalyzeMode {
+            get {
+                return _isInAutoAnalyzeMode;
+            }
+            set {
+                if (_isInAutoAnalyzeMode != value) {
+                    _isInAutoAnalyzeMode = value;
+                    Console.WriteLine("IsInAutoAnalyzeMode changed to: " + _isInAutoAnalyzeMode);
+                    OnPropertyChanged(nameof(IsInAutoAnalyzeMode));
+                }
+            }
+        }
+
         private bool _isInAppendMode = false;
         public bool IsInAppendMode {
             get {
@@ -82,6 +96,8 @@ namespace MpWpfApp {
                 switch(e.PropertyName) {
                     case nameof(IsAppPaused):
                         ShowNotifcation("App", IsAppPaused ? "PAUSED" : "ACTIVE", IsAppPaused);
+                        MainWindowViewModel.SystemTrayViewModel.OnPropertyChanged(nameof(MainWindowViewModel.SystemTrayViewModel.PauseOrPlayHeader));
+                        MainWindowViewModel.SystemTrayViewModel.OnPropertyChanged(nameof(MainWindowViewModel.SystemTrayViewModel.PauseOrPlayIconSource));
                         break;
                     case nameof(IsRightClickPasteMode):
                         ShowNotifcation("Right-Click Paste Mode", IsRightClickPasteMode ? "ON" : "OFF", IsRightClickPasteMode);
@@ -91,6 +107,9 @@ namespace MpWpfApp {
                         break;
                     case nameof(IsAutoCopyMode):
                         ShowNotifcation("Auto-Copy Mode", IsAutoCopyMode ? "ON" : "OFF", IsAutoCopyMode);
+                        break;
+                    case nameof(IsInAutoAnalyzeMode):
+                        ShowNotifcation("Auto-Analyze Mode", IsInAutoAnalyzeMode ? "ON" : "OFF", IsAutoCopyMode);
                         break;
                 }
             };

@@ -9,6 +9,19 @@ namespace MpWpfApp {
     public class MpShortcutKeyViewModel : MpViewModelBase {
 
         #region Properties
+        private int _seqIdx = 0;
+        public int SeqIdx {
+            get {
+                return _seqIdx;
+            }
+            set {
+                if (_seqIdx != value) {
+                    _seqIdx = value;
+                    OnPropertyChanged(nameof(SeqIdx));
+                }
+            }
+        }
+
         private string _keyStr = string.Empty;
         public string KeyStr {
             get {
@@ -66,10 +79,11 @@ namespace MpWpfApp {
         #region Public Methods
         public MpShortcutKeyViewModel() : base() { }
 
-        public MpShortcutKeyViewModel(string keyStr,bool showPlus,bool showComma) : this() {
+        public MpShortcutKeyViewModel(string keyStr,bool showPlus,bool showComma, int seqIdx) : this() {
             KeyStr = keyStr;
             ShowPlus = showPlus;
             ShowComma = showComma;
+            SeqIdx = seqIdx;
         }
         #endregion
     }

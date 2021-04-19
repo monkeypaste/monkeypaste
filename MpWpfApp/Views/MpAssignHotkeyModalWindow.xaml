@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Assign Hotkey"
         Height="250"
-        Width="250"
+        Width="400"
         Topmost="True"
         ShowInTaskbar="False"
         ResizeMode="NoResize"
@@ -16,6 +16,14 @@
     <Window.DataContext>
         <local:MpAssignShortcutModalWindowViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <CollectionViewSource x:Key="ListBoxItems"
+                              Source="{Binding KeyItems}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="SeqIdx"  />
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+    </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
             <i:CallMethodAction MethodName="AssignHotkeyModalWindow_Loaded"
@@ -24,11 +32,11 @@
     </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="0.7*" />
+            <RowDefinition Height="0.7*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0"
                FontSize="16"
@@ -40,12 +48,14 @@
                HorizontalAlignment="Center"
                HorizontalContentAlignment="Center"
                Content="{Binding ShortcutDisplayName}" />
-            <ListBox Grid.Row="2"
+        <ListBox x:Name="ShortcutListBox" 
+                     Grid.Row="2"
                      IsEnabled="False"
                      BorderThickness="0" 
+                     HorizontalAlignment="Center"
                      ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                     ItemsSource="{Binding KeyItems}">
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                     ItemsSource="{Binding Source={StaticResource ListBoxItems}}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel Orientation="Horizontal"
@@ -67,55 +77,84 @@
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                    <Border BorderBrush="Black"
-                            BorderThickness="0">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="20" />
-                            </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0"
-                                    Background="LightGray"
-                                    BorderBrush="DarkGray"
-                                    Margin="0"
-                                    BorderThickness="2"
-                                    CornerRadius="5">
-                                <TextBlock HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           Padding="10,5,10,5"
-                                           FontSize="14"
-                                           Foreground="Black"
-                                           Text="{Binding KeyStr}"
-                                           FontWeight="Bold" />
-                            </Border>
-                            <Label x:Name="ComboLabel"  
-                                   Visibility="{Binding PlusVisibility}"
-                                   Content="+"
-                                   Grid.Column="1"
-                                   FontSize="14"
-                                   FontWeight="Bold"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center" />
-                            <Label x:Name="SequenceLabel"
-                                   Visibility="{Binding CommaVisibility}"
-                                   Content=","
-                                   Grid.Column="1"
-                                   FontSize="20"
-                                   FontWeight="Bold"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Bottom" />
-                        </Grid>
-                    </Border>
-                </DataTemplate>
+                        <Border BorderBrush="Black"
+                                BorderThickness="0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="auto" />
+                                </Grid.ColumnDefinitions>
+                                <Border Grid.Column="0"
+                                        HorizontalAlignment="Left"
+                                        Background="LightGray"                                        
+                                        BorderBrush="DarkGray"
+                                        Margin="0"
+                                        BorderThickness="2"
+                                        CornerRadius="5">
+                                    <TextBlock HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Padding="10,5,10,5"
+                                               FontSize="14"
+                                               Foreground="Black"
+                                               Text="{Binding KeyStr}"
+                                               FontWeight="Bold" />
+                                </Border>
+                                <Label x:Name="ComboLabel"  
+                                       Visibility="{Binding PlusVisibility}"
+                                       Content="+"
+                                       Grid.Column="1"
+                                       FontSize="14"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center" />
+                                <!--<Label x:Name="SequenceLabel"
+                                       Visibility="{Binding CommaVisibility}"
+                                       Content=","
+                                       Grid.Column="1"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Bottom" />-->
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
                 </ListBox.ItemTemplate>
-            </ListBox>
-        
-        <TextBlock Grid.Row="2"
+                <ListBox.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.Panel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </GroupStyle.Panel>
+                    <GroupStyle.ContainerStyle>
+                            <Style TargetType="{x:Type GroupItem}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate>
+                                            <Border CornerRadius="5" 
+                                                    Margin="5,0,5,0" 
+                                                    Padding="3"
+                                                    BorderBrush="LimeGreen"
+                                                    BorderThickness="1"
+                                                    Background="Aquamarine">
+                                                <ItemsPresenter />
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </ListBox.GroupStyle>
+        </ListBox>
+        <TextBlock Grid.Row="3"
+                   FontSize="10"
                    Visibility="Collapsed"
-               FontSize="14"
-               FontStyle="Oblique"
-               HorizontalAlignment="Center"
-               Text="{Binding KeyString}" />
+                   FontStyle="Oblique"
+                   TextWrapping="Wrap"
+                   HorizontalAlignment="Center"
+                   Foreground="Red"
+                   Text="{Binding KeyString}" />
         <TextBlock Grid.Row="3"
                    FontSize="10"
                    FontStyle="Oblique"
@@ -136,7 +175,7 @@
                     HorizontalAlignment="Stretch" 
                     Command="{Binding CancelCommand}"/>
             <Button Margin="10" 
-                    Grid.Column="1" 
+                    Grid.Column="1"
                     Content="Clear" 
                     HorizontalAlignment="Stretch" 
                     Command="{Binding ClearCommand}"/>

@@ -23,7 +23,6 @@ namespace MpWpfApp {
                 try {
                     WinApi.GetWindowThreadProcessId(hWnd, out uint pid);
                     var process = Process.GetProcessById((int)pid);
-                    process.WaitForInputIdle(100);
                     if (process.MainWindowHandle == IntPtr.Zero) {
                         return true;
                     }
@@ -31,6 +30,7 @@ namespace MpWpfApp {
                     int length = WinApi.GetWindowTextLength(hWnd);
                     if (length == 0) return true;
 
+                    process.WaitForInputIdle(100);
                     StringBuilder builder = new StringBuilder(length);
                     WinApi.GetWindowText(hWnd, builder, length + 1);
 

@@ -162,7 +162,6 @@
     <Compile Include="Utils\RESTful\MpTextAnalyzer.cs" />
     <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
     <Compile Include="Utils\System\MpRunningApplicationManager.cs" />
-    <Compile Include="Utils\System\MpShortcutInputMonitor.cs" />
     <Compile Include="Utils\UndoRedo\MpIUndoRedo.cs" />
     <Compile Include="Utils\MpSolidColorBrushComparer.cs" />
     <Compile Include="Utils\RESTful\Base\MpRestfulApi.cs" />
@@ -1722,6 +1721,15 @@
     <Resource Include="Resources\Images\duckduckgoIcon.png" />
     <Resource Include="Resources\Images\googleIcon.png" />
     <Resource Include="Resources\Images\yandexIcon.png" />
+    <Resource Include="Resources\Images\delete2.png" />
+    <Resource Include="Resources\Images\play.png" />
+    <Resource Include="Resources\Images\pause.png" />
+    <Resource Include="Resources\Images\help.png" />
+    <Resource Include="Resources\Images\brain.png" />
+    <Resource Include="Resources\Images\leftclick.png" />
+    <Resource Include="Resources\Images\rightclick.png" />
+    <Resource Include="Resources\Images\append.png" />
+    <Resource Include="Resources\Images\spellcheck.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />

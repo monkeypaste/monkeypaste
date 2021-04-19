@@ -501,11 +501,6 @@
                       IsReadOnly="True"
                       Margin="15"
                       AutoGenerateColumns="False">
-                <!--<ii:Interaction.Triggers>
-                    <ii:EventTrigger EventName="MouseDoubleClick">
-                        <MVVVMLightCommand:EventToCommand Command="{Binding ReassignShortcutCommand}"/>
-                    </ii:EventTrigger>
-                </ii:Interaction.Triggers>-->
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Type"
                                         Width="85"
@@ -530,27 +525,6 @@
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Routing"
-                                            Width="75">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <ComboBox IsEnabled="{Binding IsRoutable}"
-                                          ItemsSource="{Binding RoutingTypes}"
-                                          SelectedItem="{Binding SelectedRoutingType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
-                                    <!--<ComboBox.Items>                                        
-                                        <ComboBoxItem Content="Internal"
-                                                      Visibility="{Binding InternalRoutingTypeComboItemVisibility}"/>
-                                        <ComboBoxItem Content="Direct"
-                                                      Visibility="{Binding GlobalRoutingTypeComboItemVisibility}" />
-                                        <ComboBoxItem Content="Bubble"
-                                                      Visibility="{Binding GlobalRoutingTypeComboItemVisibility}" />
-                                        <ComboBoxItem Content="Tunnel"
-                                                      Visibility="{Binding GlobalRoutingTypeComboItemVisibility}" />
-                                    </ComboBox.Items>-->
-                                </ComboBox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
                     <DataGridTemplateColumn Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -558,20 +532,23 @@
                                     <Button Background="White"
                                             BorderThickness="0"
                                             ToolTip="Delete"
+                                            Template="{StaticResource ButtonControlTemplate}"
                                             Visibility="{Binding DeleteButtonVisibility}"
                                             Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.DeleteShortcutCommand}">
                                         <Image Width="20"
                                                Height="20"
-                                               Source="/MpWpfApp;component/Resources/Icons/Silk/icons/delete.png" />
+                                               Source="/MpWpfApp;component/Resources/Images/delete.png" />
                                     </Button>
                                     <Button Background="White"
+                                            Template="{StaticResource ButtonControlTemplate}"
                                             BorderThickness="0"
                                             ToolTip="Reset"
                                             Visibility="{Binding ResetButtonVisibility}"
                                             Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.ResetShortcutCommand}">
                                         <Image Width="20"
                                                Height="20"
-                                               Source="/MpWpfApp;component/Resources/Icons/Silk/icons/arrow_refresh.png" />
+                                               Source="/MpWpfApp;component/Resources/Icons/Silk/icons/arrow_refresh.png">
+                                        </Image>
                                     </Button>
                                 </StackPanel>
                             </DataTemplate>

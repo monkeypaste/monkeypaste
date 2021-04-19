@@ -471,6 +471,14 @@
         <s:Boolean x:Key="True">True</s:Boolean>
         <s:Boolean x:Key="False">False</s:Boolean>
 
+        <s:String x:Key="BrainIcon">/Images/brain.png</s:String>
+        <s:String x:Key="LeftClickIcon">/Images/leftclick.png</s:String>
+        <s:String x:Key="RightClickIcon">/Images/rightclick.png</s:String>
+        <s:String x:Key="AppendIcon">/Images/append.png</s:String>
+        <s:String x:Key="HelpIcon">/Images/help.png</s:String>
+        <s:String x:Key="PlayIcon">/Images/play.png</s:String>
+        <s:String x:Key="PauseIcon">/Images/pause.png</s:String>
+        <s:String x:Key="CogIcon">/Images/cog.png</s:String>
         <s:String x:Key="PasteIcon">/Images/paste.png</s:String>
         <s:String x:Key="DeleteIcon">/Images/Delete.png</s:String>
         <s:String x:Key="EditIcon">/Images/edit.png</s:String>
@@ -825,11 +833,18 @@
                 <tb:TaskbarIcon.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Settings"
+                                  Icon="{Binding Source={StaticResource CogIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                   Command="{Binding ShowSettingsWindowCommand}"
                                   CommandParameter="{StaticResource SettingsTabAccount}" />
-                        <MenuItem Header="Pause" />
-                        <MenuItem Header="Help" />
+                        <MenuItem Header="{Binding PauseOrPlayHeader}"
+                                  Icon="{Binding PauseOrPlayIconSource, Converter={StaticResource StringToImageConverter}}"
+                                  Command="{Binding MainWindowViewModel.AppModeViewModel.ToggleIsAppPausedCommand}"/>
+                        <MenuItem Header="Help"
+                                  Icon="{Binding Source={StaticResource HelpIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
+                                  Command="{Binding ShowSettingsWindowCommand}"
+                                  CommandParameter="{StaticResource SettingsTabHelp}" />
                         <MenuItem Header="Exit"
+                                  Icon="{Binding Source={StaticResource DeleteIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                   Command="{Binding ExitApplicationCommand}" />
                     </ContextMenu>
                 </tb:TaskbarIcon.ContextMenu>
@@ -1231,16 +1246,15 @@
                   Focusable="True"
                   Background="MediumPurple">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{Binding AppStateButtonGridWidth}" />
+                    <ColumnDefinition Width="{Binding AppModeButtonGridWidth}" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <!-- clip tile tray -->
                 <!-- Side bar AppState Buttons -->
                 <Grid Grid.Row="0"
                       Grid.Column="0"
+                      Background="DimGray"
                       DataContext="{Binding AppModeViewModel}"
-                      Visibility="{Binding AppModeColumnVisibility}"
-                      Background="Orange">
+                      Visibility="{Binding AppModeColumnVisibility}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Loaded">
                             <i:CallMethodAction MethodName="AppMode_Loaded"
@@ -1256,43 +1270,63 @@
                     </Grid.RowDefinitions>
                     <ToggleButton Grid.Row="0"
                                   Grid.Column="0"
-                                  Padding="0,5,0,5"
+                                  Width="{Binding MainWindowViewModel.AppStateButtonGridWidth}"
+                                  Height="{Binding MainWindowViewModel.AppStateButtonGridWidth}"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"
+                                  ToolTipService.InitialShowDelay="0"
+                                  ToolTip="{Binding MainWindowViewModel.SystemTrayViewModel.PauseOrPlayHeader}"                                  
+                                  Padding="10"
+                                  Content="{Binding MainWindowViewModel.SystemTrayViewModel.PauseOrPlayIconSource, Converter={StaticResource StringToImageConverter}}"
                                   IsChecked="{Binding IsAppPaused}">
-                        <TextBlock Text="Pause System"
-                                   HorizontalAlignment="Center"
-                                   TextWrapping="Wrap" />
                     </ToggleButton>
                     <ToggleButton Grid.Row="1"
                                   Grid.Column="0"
+                                  ToolTipService.InitialShowDelay="0"
+                                  ToolTip="Auto Copy Selection"
+                                  Width="{Binding MainWindowViewModel.AppStateButtonGridWidth}"
+                                  Height="{Binding MainWindowViewModel.AppStateButtonGridWidth}"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"
+                                  Content="{Binding Source={StaticResource LeftClickIcon}, Converter={StaticResource StringToImageConverter}}"
                                   IsChecked="{Binding IsAutoCopyMode}"
-                                  Padding="0,5,0,5">
-                        <TextBlock Text="Auto Copy"
-                                   HorizontalAlignment="Center"
-                                   TextWrapping="Wrap" />
+                                  Padding="10">
                     </ToggleButton>
                     <ToggleButton Grid.Row="2"
                                   Grid.Column="0"
+                                  ToolTipService.InitialShowDelay="0"
+                                  Width="{Binding MainWindowViewModel.AppStateButtonGridWidth}"
+                                  Height="{Binding MainWindowViewModel.AppStateButtonGridWidth}"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"
+                                  ToolTip="Right-Click Paste"
+                                  Content="{Binding Source={StaticResource RightClickIcon}, Converter={StaticResource StringToImageConverter}}"
                                   IsChecked="{Binding IsRightClickPasteMode}"
-                                  Padding="0,5,0,5">
-                        <TextBlock Text="Auto Paste"
-                                   HorizontalAlignment="Center"
-                                   TextWrapping="Wrap" />
+                                  Padding="10">
                     </ToggleButton>
                     <ToggleButton Grid.Row="3"
                                   Grid.Column="0"
-                                  Padding="0,5,0,5"
+                                  Padding="10"
+                                  ToolTipService.InitialShowDelay="0"
+                                  Width="{Binding MainWindowViewModel.AppStateButtonGridWidth}"
+                                  Height="{Binding MainWindowViewModel.AppStateButtonGridWidth}"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"
+                                  ToolTip="Append Copy"
+                                  Content="{Binding Source={StaticResource AppendIcon}, Converter={StaticResource StringToImageConverter}}"
                                   IsChecked="{Binding IsInAppendMode}">
-                        <TextBlock Text="Auto Append"
-                                   FontSize="11"
-                                   HorizontalAlignment="Center"
-                                   TextWrapping="Wrap" />
                     </ToggleButton>
                     <ToggleButton Grid.Row="4"
                                   Grid.Column="0"
-                                  Padding="0,10,10,10">
-                        <TextBlock Text="Smart Copy"
-                                   HorizontalAlignment="Center"
-                                   TextWrapping="Wrap" />
+                                  ToolTipService.InitialShowDelay="0"
+                                  Width="{Binding MainWindowViewModel.AppStateButtonGridWidth}"
+                                  Height="{Binding MainWindowViewModel.AppStateButtonGridWidth}"
+                                  VerticalAlignment="Center"
+                                  HorizontalAlignment="Center"
+                                  ToolTip="Auto Analyze"
+                                  Content="{Binding Source={StaticResource BrainIcon}, Converter={StaticResource StringToImageConverter}}"
+                                  IsChecked="{Binding IsInAutoAnalyzeMode}"
+                                  Padding="10">
                     </ToggleButton>
                 </Grid>
                 <Grid x:Name="ClipTrayGrid"
@@ -1991,6 +2025,17 @@
                                                                 <Image Source="/Resources/Images/MpRichTextBox/separator.png"
                                                                        Stretch="None"
                                                                        SnapsToDevicePixels="True" />
+                                                                <ToggleButton x:Name="SpellCheck"
+                                                                              IsChecked="{Binding UseSpellCheck}"
+                                                                              ToolTip="Spell Check?"
+                                                                              Template="{StaticResource FlatToggleButtonControlTemplate}">
+                                                                    <Image Source="/Resources/Images/spellcheck.png"
+                                                                           Stretch="Fill"
+                                                                           SnapsToDevicePixels="True" />
+                                                                </ToggleButton>
+                                                                <Image Source="/Resources/Images/MpRichTextBox/separator.png"
+                                                                       Stretch="None"
+                                                                       SnapsToDevicePixels="True" />
                                                                 <Button x:Name="RefreshDocumentButton"
                                                                         Command="{Binding RefreshDocumentCommand}"
                                                                         ToolTip="Refresh"
@@ -2035,7 +2080,7 @@
                                                                     <local:MpMultiSelectListBox x:Name="ClipTilRichTextBoxListBox"
                                                                                            VerticalAlignment="Top"
                                                                                            HorizontalAlignment="Left"
-                                                                                           BorderThickness="1"
+                                                                                           BorderThickness="0"
                                                                                            BorderBrush="Pink"
                                                                                            SelectionMode="Multiple" 
                                                                                            ScrollToSelectedItem="True"
@@ -2126,18 +2171,22 @@
                                                                                                     </i:EventTrigger>
                                                                                                 </i:Interaction.Triggers>
                                                                                                 <MenuItem Header="_Paste"
+                                                                                                          Tag="6"
                                                                                                           Icon="{Binding Source={StaticResource PasteIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                                                                           Command="{Binding Data.PasteSubItemCommand, Source={StaticResource RtbListBoxItemProxy}}" />
                                                                                                 <MenuItem Header="Delete"
+                                                                                                          Tag="7"
                                                                                                           Icon="{Binding Source={StaticResource DeleteIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                                                                           Command="{Binding Data.DeleteSubSelectedClipsCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
                                                                                                 <Separator />
                                                                                                 <MenuItem Header="_Edit"
                                                                                                           Icon="{Binding Source={StaticResource EditIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}">
                                                                                                     <MenuItem Header="_Edit Content"
+                                                                                                              Tag="20"
                                                                                                               Icon="{Binding Source={StaticResource EditContentIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                                                                               Command="{Binding Data.ToggleEditSubSelectedItemCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
                                                                                                     <MenuItem Header="_Rename"
+                                                                                                              Tag="21"
                                                                                                               Icon="{Binding Source={StaticResource RenameIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                                                                               Command="{Binding Data.EditSubTitleCommand, Source={StaticResource RtbListBoxItemProxy}}" />
                                                                                                     <Separator />
@@ -2160,20 +2209,25 @@
                                                                                                 <MenuItem Header="_Tools"
                                                                                                           Icon="{Binding Source={StaticResource ToolsIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}">
                                                                                                     <MenuItem Header="Duplicate"
+                                                                                                              Tag="22"
                                                                                                               Icon="{Binding Source={StaticResource DuplicateIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                                                                               Command="{Binding Data.DuplicateSubSelectedClipsCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
                                                                                                     <MenuItem Header="_Merge"
+                                                                                                              Tag="17"
                                                                                                               Icon="{Binding Source={StaticResource MergeIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                                                                               Command="{Binding Data.MergeSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
                                                                                                     <Separator />
                                                                                                     <MenuItem Header="Send as Email"
+                                                                                                              Tag="23"
                                                                                                               Icon="{Binding Source={StaticResource EmailIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                                                                               Command="{Binding Data.SendSubSelectedToEmailCommand, Source={StaticResource RtbListBoxItemProxy}}" />
                                                                                                     <MenuItem Header="Duplicate As _Qr Code"
+                                                                                                              Tag="24"
                                                                                                               Icon="{Binding Source={StaticResource QrIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                                                                               Command="{Binding Data.CreateQrCodeFromSubSelectedItemCommand, Source={StaticResource RtbListBoxItemProxy}}" />
                                                                                                     <Separator />
                                                                                                     <MenuItem Header="Say"
+                                                                                                              Tag="16"
                                                                                                               Icon="{Binding Source={StaticResource SpeakIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                                                                               Command="{Binding Data.SpeakSubSelectedClipsAsyncCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
                                                                                                     <Separator />
@@ -2200,20 +2254,25 @@
                                                                                                 <MenuItem Header="_Selection"
                                                                                                           Icon="{Binding Source={StaticResource SelectionIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}">
                                                                                                     <MenuItem Header="_Bring to Front"
+                                                                                                              Tag="12"
                                                                                                               Icon="{Binding Source={StaticResource BringToFrontIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                                                                               Command="{Binding Data.BringSubSelectedClipTilesToFrontCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
                                                                                                     <MenuItem Header="_Send to Back"
+                                                                                                              Tag="13"
                                                                                                               Icon="{Binding Source={StaticResource SendToBackIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                                                                               Command="{Binding Data.SendSubSelectedClipTilesToBackCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
                                                                                                     <Separator />
                                                                                                     <MenuItem Header="Select _All"
+                                                                                                              Tag="10"
                                                                                                               Icon="{Binding Source={StaticResource SelectAllIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                                                                               Command="{Binding Data.SelectAllCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
                                                                                                     <MenuItem Header="_Invert Selection"
+                                                                                                              Tag="11"
                                                                                                               Icon="{Binding Source={StaticResource InvertSelectionIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                                                                               Command="{Binding Data.InvertSubSelectionCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
-                                                                                                </MenuItem>                                                                                                
+                                                                                                </MenuItem>
                                                                                                 <MenuItem Header="_Hotkey"
+                                                                                                          Tag="14"
                                                                                                           Icon="{Binding Source={StaticResource HotkeyIcon}, Converter={StaticResource StringToImageConverter}, Mode=OneWay}"
                                                                                                           InputGestureText="{Binding ShortcutKeyString}"
                                                                                                           Command="{Binding Data.AssignHotkeyToSubSelectedItemCommand, Source={StaticResource RtbListBoxItemProxy}}" />
@@ -2249,7 +2308,7 @@
                                                                                             <RichTextBox x:Name="RtbListBoxItemRichTextBox"
                                                                                                          Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                                                                          IsReadOnly="{Binding HostClipTileViewModel.IsRtbReadOnly}"
-                                                                                                         IsEnabled="True"
+                                                                                                         IsEnabled="True" 
                                                                                                          AllowDrop="False"
                                                                                                          AutoWordSelection="False"
                                                                                                          IsInactiveSelectionHighlightEnabled="True"
@@ -2271,8 +2330,8 @@
                                                                                                                      Color="Blue" />
                                                                                                 </RichTextBox.Resources>
                                                                                                 <SpellCheck.IsEnabled>
-                                                                                                    <Binding Path="SystemTrayViewModel.SettingsWindowViewModel.PreferencesViewModel.UseSpellCheck"
-                                                                                                             Source="{StaticResource MainWindowViewModel}" />
+                                                                                                    <Binding Path="Data.EditRichTextBoxToolbarViewModel.UseSpellCheck"
+                                                                                                             Source="{StaticResource ClipTileProxy}" />
                                                                                                 </SpellCheck.IsEnabled>
                                                                                             </RichTextBox>
                                                                                         </AdornerDecorator>
@@ -2798,7 +2857,7 @@
                                                 <Border Grid.Row="2"
                                                         Visibility="{Binding DetailGridVisibility}"
                                                         Background="Transparent"
-                                                        BorderThickness="0,1,0,0"
+                                                        BorderThickness="0,0,0,0"
                                                         BorderBrush="LightGray">
                                                     <Grid>
                                                         <i:Interaction.Triggers>
@@ -2808,13 +2867,6 @@
                                                             </i:EventTrigger>
                                                         </i:Interaction.Triggers>
                                                         <!-- Clip Title Detail TextBlock -->
-                                                        <TextBlock x:Name="ClipTileShortcutKeyTextBlock"
-                                                                   FontSize="10"
-                                                                   HorizontalAlignment="Left"
-                                                                   Margin="5,0,0,0"
-                                                                   Background="Transparent"
-                                                                   Foreground="{Binding DetailTextColor}"
-                                                                   Text="{Binding ShortcutKeyString}" />
                                                         <TextBlock x:Name="ClipTileTitleDetailTextBlock"
                                                                    Background="Transparent"
                                                                    Foreground="{Binding DetailTextColor}"

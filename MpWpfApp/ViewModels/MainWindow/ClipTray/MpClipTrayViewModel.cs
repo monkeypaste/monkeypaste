@@ -527,6 +527,11 @@ namespace MpWpfApp {
                             rtbvm.IsSubDragging = false;
                         }
                     }
+                    var dropCtvml = this.Where(x => x.IsClipDropping).ToList();
+                    if(dropCtvml != null && dropCtvml.Count > 0) {
+                        ClearClipSelection();
+                        dropCtvml[0].IsSelected = true;
+                    }
                     e2.Effects = DragDropEffects.Move;
                     //Refresh();
                 } else {
@@ -766,7 +771,7 @@ namespace MpWpfApp {
                     }
                 }
             }
-            MainWindowViewModel.OnPropertyChanged(nameof(MainWindowViewModel.AppStateButtonGridWidth));
+            MainWindowViewModel.OnPropertyChanged(nameof(MainWindowViewModel.AppModeButtonGridWidth));
             MainWindowViewModel.AppModeViewModel.OnPropertyChanged(nameof(MainWindowViewModel.AppModeViewModel.AppModeColumnVisibility));
         }
 

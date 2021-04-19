@@ -162,7 +162,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Layout
-        public double AppStateButtonGridWidth {
+        public double AppModeButtonGridWidth {
             get {
                 if(ClipTrayViewModel == null || !ClipTrayViewModel.IsAnyTileExpanded) {
                     return MpMeasurements.Instance.AppStateButtonPanelWidth;
@@ -349,7 +349,7 @@ namespace MpWpfApp {
 
         public void ExpandClipTile(MpClipTileViewModel ctvmToExpand) {
             AppModeViewModel.OnPropertyChanged(nameof(AppModeViewModel.AppModeColumnVisibility));
-            OnPropertyChanged(nameof(AppStateButtonGridWidth));
+            OnPropertyChanged(nameof(AppModeButtonGridWidth));
             ClipTrayViewModel.IsolateClipTile(ctvmToExpand);
 
             double maxDelta = MpMeasurements.Instance.MainWindowMaxHeight - MpMeasurements.Instance.MainWindowMinHeight;
@@ -418,8 +418,9 @@ namespace MpWpfApp {
 
             ClipTrayViewModel.RestoreVisibleTiles();
 
-            
-            
+            AppModeViewModel.OnPropertyChanged(nameof(AppModeViewModel.AppModeColumnVisibility));
+            OnPropertyChanged(nameof(AppModeButtonGridWidth));
+
             //double animMs = 0;// Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
             //ClearClipSelection(false);
             //ctvmToShrink.IsSelected = true;
@@ -666,7 +667,7 @@ namespace MpWpfApp {
             ///return false;
             return (Application.Current.MainWindow != null &&
                    Application.Current.MainWindow.Visibility == Visibility.Visible &&
-                   IsShowingDialog == false && !IsMainWindowLocked && IsMainWindowOpen)  || pasteSelected;
+                   IsShowingDialog == false && !IsMainWindowLocked && IsMainWindowOpen && !IsShowingMainWindow)  || pasteSelected;
         }
         private async void HideWindow(bool pasteSelected) {
             IDataObject pasteDataObject = null;

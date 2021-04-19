@@ -90,6 +90,18 @@ namespace MpWpfApp {
         #endregion
 
         #region State Properties
+        private bool _useSpellCheck = Properties.Settings.Default.UseSpellCheck;
+        public bool UseSpellCheck {
+            get {
+                return _useSpellCheck;
+            }
+            set {
+                if (_useSpellCheck != value) {
+                    _useSpellCheck = value;
+                    OnPropertyChanged(nameof(UseSpellCheck));
+                }
+            }
+        }
 
         private bool _hasTextChanged = false;
         public bool HasTextChanged {

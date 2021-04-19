@@ -187,18 +187,6 @@ namespace MpWpfApp {
         #endregion
 
         #region State
-        private bool _wasShortcutTriggered = false;
-        public bool WasShortcutTriggered {
-            get {
-                return _wasShortcutTriggered;
-            }
-            set {
-                if(_wasShortcutTriggered != value) {
-                    _wasShortcutTriggered = value;
-                    OnPropertyChanged(nameof(WasShortcutTriggered));
-                }
-            }
-        }
         #endregion
 
         #region Model
@@ -356,16 +344,26 @@ namespace MpWpfApp {
         public MpShortcutViewModel(MpShortcut s, ICommand command, object commandParameter) {
             PropertyChanged += (s1, e) => {
                 switch (e.PropertyName) {
-                    case nameof(WasShortcutTriggered):
-                        if(!IsRoutable && WasShortcutTriggered) {
-                            PerformShortcutCommand.Execute(null);
-                        }
-                        break;
                     case nameof(KeyString):
                         if (IsCustom()) {
                             if (Shortcut.CopyItemId > 0) {
                                 var ctvm = MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(Shortcut.CopyItemId);
-                                ctvm.ShortcutKeyString = Shortcut.KeyString;
+                                if (ctvm == null) {
+                                    var ci = MpCopyItem.GetCopyItemById(Shortcut.CopyItemId);
+                                    if (ci == null) {
+                                        Console.WriteLine("SHortcut init error cannot find copy item w/ id: " + Shortcut.CopyItemId);
+                                        break;
+                                    }
+                                    ctvm = MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(ci.CompositeParentCopyItemId);
+                                    if (ctvm == null) {
+                                        Console.WriteLine("SHortcut init error cannot find hostclip w/ id: " + ci.CompositeParentCopyItemId);
+                                        break;
+                                    }
+                                    var rtbvm = ctvm.RichTextBoxViewModelCollection.GetRtbItemByCopyItemId(ci.CopyItemId);
+                                    rtbvm.ShortcutKeyString = Shortcut.KeyString;
+                                } else {
+                                    ctvm.ShortcutKeyString = Shortcut.KeyString;
+                                }
                             } else {
                                 var ttvm = MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.TagId == Shortcut.TagId).Single();
                                 ttvm.ShortcutKeyString = Shortcut.KeyString;
@@ -401,8 +399,7 @@ namespace MpWpfApp {
                             hook.OnSequence(new Dictionary<Sequence, Action> {
                                 {
                                     Sequence.FromString(KeyString),
-                                    () => { WasShortcutTriggered = true; }
-                                    //() => PerformShortcutCommand.Execute(null)
+                                    () => PerformShortcutCommand.Execute(null)
                                 }
                             });
                         }
@@ -411,8 +408,7 @@ namespace MpWpfApp {
                         Unregister();
                         var t = new MouseKeyHook.Rx.Trigger[] { MouseKeyHook.Rx.Trigger.FromString(KeyString) };
                         KeysObservable = hook.KeyDownObservable().Matching(t).Subscribe(
-                            //(trigger) => PerformShortcutCommand.Execute(null)
-                            (trigger) => { WasShortcutTriggered = true; }
+                            (trigger) => PerformShortcutCommand.Execute(null)
                         );
                     }
                 }
@@ -481,19 +477,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        private RelayCommand _triggerShortcutCommand = null;
-        public ICommand TriggerShortcutCommand {
-            get {
-                if(_triggerShortcutCommand == null) {
-                    _triggerShortcutCommand = new RelayCommand(TriggerShortcut);
-                }
-                return _triggerShortcutCommand;
-            }
-        }
-        private void TriggerShortcut() {
-            WasShortcutTriggered = true;
-        }
-
         private RelayCommand _performShortcutCommand = null;
         public ICommand PerformShortcutCommand {
             get {
@@ -522,19 +505,7 @@ namespace MpWpfApp {
             }
         }
         private void PeformShortcut() {
-            //WasShortcutTriggered = true;
-
-            if (RoutingType == MpRoutingType.Bubble) {
-                PassKeysToForegroundWindow();
-            }
-                        
             Command?.Execute(CommandParameter);
-
-            if (RoutingType == MpRoutingType.Tunnel) {
-                PassKeysToForegroundWindow();
-            }
-
-            WasShortcutTriggered = false;
         }
         #endregion
     }

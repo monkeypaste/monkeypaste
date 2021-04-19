@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Interop;
 
@@ -20,6 +21,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Variables
+        private ListBox _shortCutListBox = null;
         private bool _isSeqComplete = false;
         private bool _isNewCombination = true;
 
@@ -83,23 +85,31 @@ namespace MpWpfApp {
             get {
                 KeyItems.Clear();
                 foreach(var kl in _keyList) {
+                    int seqIdx = _keyList.IndexOf(kl);
                     foreach(var k in kl) {
                         if(kl.Count > 1 && kl.IndexOf(k) < kl.Count - 1) {
                             KeyItems.Add(new MpShortcutKeyViewModel(
                                             MpHelpers.Instance.GetKeyLiteral(k),
-                                            true,false));
+                                            true,false,seqIdx));
                         } else if (kl.IndexOf(k) == kl.Count - 1 && _keyList.IndexOf(kl) < _keyList.Count -1) {
                             KeyItems.Add(new MpShortcutKeyViewModel(
                                             MpHelpers.Instance.GetKeyLiteral(k),
-                                            false, true));
+                                            false, true, seqIdx));
                         } else {
                             KeyItems.Add(new MpShortcutKeyViewModel(
                                             MpHelpers.Instance.GetKeyLiteral(k),
-                                            false, false));
+                                            false, false, seqIdx));
                         }
 
                     }
                 }
+                //if(KeyItems.Count > 0) {
+                //    var ki = KeyItems[0];
+                //    var view = (CollectionView)CollectionViewSource.GetDefaultView(_shortCutListBox);
+                //    var groupDescription = new PropertyGroupDescription(nameof(ki.SeqIdx));
+                //    view.GroupDescriptions.Add(groupDescription);
+                //}
+                
                 return MpHelpers.Instance.ConvertKeySequenceToString(_keyList);
             }
         }        
@@ -139,6 +149,7 @@ namespace MpWpfApp {
             IsOpen = true;
 
             _windowRef = (Window)sender;
+            _shortCutListBox = _windowRef.FindName("ShortcutListBox") as ListBox;
             KeyCanvas = _windowRef.FindName("KeyCanvas") as Canvas;
 
             //the following hides close button
@@ -324,7 +335,7 @@ namespace MpWpfApp {
             _isSeqComplete = false;
             _isNewCombination = true;
             _keyList.Clear();
-
+            KeyItems.Clear();
             Validate();
             OnPropertyChanged(nameof(KeyString));
         }
