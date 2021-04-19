@@ -328,5 +328,17 @@
     <Setting Name="AzureTextAnalyticsKey" Type="System.String" Scope="Application">
       <Value Profile="(Default)">ec769ed641ac48ed86b38363e67e824b</Value>
     </Setting>
+    <Setting Name="DoShowMainWindowWithMouseEdge" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="DoShowMainWindowWithMouseEdgeAndScrollDelta" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="DoShowMainWIndowWithMouseEdgeIndex" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="MainWindowMonitorIdx" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

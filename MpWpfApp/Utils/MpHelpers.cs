@@ -40,12 +40,13 @@ using System.Windows.Threading;
 using System.Security.Principal;
 using System.Windows.Controls.Primitives;
 using System.Speech.Synthesis;
+using WindowsInput;
 
 namespace MpWpfApp {
     public class MpHelpers {
         private static readonly Lazy<MpHelpers> _Lazy = new Lazy<MpHelpers>(() => new MpHelpers());
         public static MpHelpers Instance { get { return _Lazy.Value; } }
-        
+        private InputSimulator sim = new InputSimulator();
         //private YoloWrapper yoloWrapper = null;
         public void Init() {
             //yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect());
@@ -597,6 +598,24 @@ namespace MpWpfApp {
         #endregion
 
         #region System
+        public void PassKeysListToWindow(IntPtr handle,List<List<Key>> keyList) {     
+            try {
+                WinApi.SetForegroundWindow(handle);
+                WinApi.SetActiveWindow(handle);
+                for (int i = 0; i < keyList.Count; i++) {
+                    var combo = keyList[i];
+                    var vkCombo = new List<WindowsInput.Native.VirtualKeyCode>();
+                    foreach (var key in combo) {
+                        WindowsInput.Native.VirtualKeyCode vk = (WindowsInput.Native.VirtualKeyCode)KeyInterop.VirtualKeyFromKey(key);
+                        vkCombo.Add(vk);
+                    }
+                    sim.Keyboard.KeyPress(vkCombo.ToArray());
+                }
+            }
+            catch(Exception ex) {
+                Console.WriteLine("MpHelpers.PassKeysListToWindow exception: " + ex);
+            }
+        }
         public InstalledVoice GetInstalledVoiceByName(string voiceName) {
             var speechSynthesizer = new SpeechSynthesizer();
             foreach (var voice in speechSynthesizer.GetInstalledVoices()) {
@@ -2213,6 +2232,19 @@ namespace MpWpfApp {
                 return "Shift";
             }
             return key.ToString();
+        }
+
+        public System.Windows.Input.Key WinformsToWPFKey(System.Windows.Forms.Keys formsKey) {
+            
+            // Put special case logic here if there's a key you need but doesn't map...  
+            try {
+                //return (System.Windows.Input.Key)Enum.Parse(typeof(System.Windows.Input.Key), inputKey.ToString());
+                return KeyInterop.KeyFromVirtualKey((int)formsKey);
+            }
+            catch {
+                // There wasn't a direct mapping...    
+                return System.Windows.Input.Key.None;
+            }
         }
 
         public string GetKeyLiteral(Key key) {

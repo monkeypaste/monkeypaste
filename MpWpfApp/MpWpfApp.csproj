@@ -162,6 +162,7 @@
     <Compile Include="Utils\RESTful\MpTextAnalyzer.cs" />
     <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
     <Compile Include="Utils\System\MpRunningApplicationManager.cs" />
+    <Compile Include="Utils\System\MpShortcutInputMonitor.cs" />
     <Compile Include="Utils\UndoRedo\MpIUndoRedo.cs" />
     <Compile Include="Utils\MpSolidColorBrushComparer.cs" />
     <Compile Include="Utils\RESTful\Base\MpRestfulApi.cs" />
@@ -534,6 +535,9 @@
     </PackageReference>
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf">
       <Version>1.0.8</Version>
+    </PackageReference>
+    <PackageReference Include="InputSimulatorPlus">
+      <Version>1.0.7</Version>
     </PackageReference>
     <PackageReference Include="Json.Net">
       <Version>1.0.23</Version>

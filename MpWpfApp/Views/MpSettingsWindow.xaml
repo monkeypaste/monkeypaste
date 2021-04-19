@@ -188,6 +188,15 @@
             <StackPanel Orientation="Vertical"
                         DataContext="{Binding PreferencesViewModel}">
                 <StackPanel Orientation="Horizontal">
+                    <Label Content="Monitor" />
+                    <ComboBox SelectedIndex="{local:MpSettingBinding MainWindowMonitorIdx}">
+                        <ComboBoxItem Content="Primary" />
+                        <ComboBoxItem Content="Focused" />
+                        <ComboBoxItem Content="Mouse" />
+                        <ComboBoxItem Content="Other..." />
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <Label Content="Sound Notifications" />
                     <ComboBox DataContext="{Binding SoundPlayerGroupCollectionViewModel}"
                               ItemsSource="{Binding SoundGroupNames}"
@@ -452,6 +461,8 @@
               Visibility="{Binding SettingsPanel4Visibility}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="0.1*"/>
+                <RowDefinition Height="0.1*" />
+                <RowDefinition Height="0.3*" />
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0"
@@ -461,9 +472,25 @@
                        Source="/MpWpfApp;component/Resources/Images/info.png" />
                 <Label HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       Content="Changes will take affect upon application restart" />
+                       Content="Sequence changes will take affect upon application restart" />
             </StackPanel>
-            <DataGrid Grid.Row="1" 
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal">
+                <Label Content="Show Window With Mouse" />
+                <ComboBox SelectedIndex="{local:MpSettingBinding DoShowMainWIndowWithMouseEdgeIndex}">
+                    <ComboBoxItem Content="Left" />
+                    <ComboBoxItem Content="Top" />
+                    <ComboBoxItem Content="Right" />
+                    <ComboBoxItem Content="Bottom" />
+                    <ComboBoxItem Content="None" />
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Row="2"
+                        Orientation="Horizontal">
+                <Label Content="Only with Scrollwheel" />
+                <CheckBox IsChecked="{local:MpSettingBinding DoShowMainWindowWithMouseEdgeAndScrollDelta}" />
+            </StackPanel>
+            <DataGrid Grid.Row="3" 
                       x:Name="ShortcutDatagrid"
                       DataContext="{Binding}"
                       ItemsSource="{Binding ShortcutCollectionViewModel}"

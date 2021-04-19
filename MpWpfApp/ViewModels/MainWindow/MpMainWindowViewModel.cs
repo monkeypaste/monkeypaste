@@ -40,10 +40,7 @@ namespace MpWpfApp {
 
         #region Public Variables
 
-        public bool IsShowingDialog = false;
-
-        public IKeyboardMouseEvents GlobalHook { get; set; }
-        public IKeyboardMouseEvents ApplicationHook { get; set; }
+        public bool IsShowingDialog = false;        
 
         #endregion
 
@@ -311,7 +308,7 @@ namespace MpWpfApp {
 
             InitWindowStyle();
 
-            InitHotkeys();
+            MpShortcutCollectionViewModel.Instance.Init();
 
 #if DEBUG
             //ShowWindowCommand.Execute(null);
@@ -554,99 +551,6 @@ namespace MpWpfApp {
                     }
                 }
             }
-        }
-
-        public bool InitHotkeys() {
-            try {
-                GlobalHook = Hook.GlobalEvents();
-                ApplicationHook = Hook.AppEvents();
-
-                GlobalHook.MouseMove += (s, e) => {
-                    if (e.Y <= Properties.Settings.Default.ShowMainWindowMouseHitZoneHeight) {
-                        if (ShowWindowCommand.CanExecute(null)) {
-                            ShowWindowCommand.Execute(null);
-                        }
-                    }
-                };
-
-                //GlobalHook.KeyPress += (s, e) => {
-                //    if(MpShortcutCollectionViewModel.Instance.IsAnyPerformingShortcut) {
-                //        foreach(var scvm in MpShortcutCollectionViewModel.Instance) {
-                //            if(scvm.IsPerformingShortcut && scvm.RoutingType != MpRoutingType.Direct) {
-                //                e.Handled = true;
-                //                return;
-                //            }
-                //        }                        
-                //    }
-                //    e.Handled = false;
-                //};
-
-                //GlobalHook.KeyDown += (s, e) => {
-                //    if (MpShortcutCollectionViewModel.Instance.IsAnyPerformingShortcut) {
-                //        //e.Handled = true;
-                //    }
-                //};
-
-                //GlobalHook.KeyUp += (s, e) => {
-                //    if (MpShortcutCollectionViewModel.Instance.IsAnyPerformingShortcut) {
-                //        foreach (var scvm in MpShortcutCollectionViewModel.Instance) {
-                //            if (scvm.IsPerformingShortcut && scvm.RoutingType != MpRoutingType.Direct) {
-                //                e.Handled = true;
-
-                //                System.Windows.Forms.SendKeys.SendWait("^");
-                //                return;
-                //            }
-                //        }
-                //    }
-                //    e.Handled = false;
-                //};
-
-                ApplicationHook.KeyPress += (s, e) => {
-                    if (ClipTrayViewModel != null && ClipTrayViewModel.IsAnyTileExpanded) {
-                        return;
-                    }
-                    if (SearchBoxViewModel != null && SearchBoxViewModel.IsTextBoxFocused) {
-                        return;
-                    }
-                    if (TagTrayViewModel != null && TagTrayViewModel.IsEditingTagName) {
-                        return;
-                    }
-                    if (ClipTrayViewModel != null && ClipTrayViewModel.IsEditingClipTitle) {
-                        return;
-                    }
-                    if (MpSettingsWindowViewModel.IsOpen || MpAssignShortcutModalWindowViewModel.IsOpen) {
-                        return;
-                    }
-                    if (!char.IsControl(e.KeyChar)) {
-                        foreach (var scvm in MpShortcutCollectionViewModel.Instance) {
-                        }
-                        if (!SearchBoxViewModel.IsTextBoxFocused) {
-                            SearchBoxViewModel.IsTextBoxFocused = true;
-                            if (SearchBoxViewModel.HasText) {
-                                SearchBoxViewModel.SearchTextBox.Text += e.KeyChar.ToString();
-                            } else {
-                                SearchBoxViewModel.SearchTextBox.Text = e.KeyChar.ToString();
-                            }
-                            SearchBoxViewModel.SearchTextBox.Select(SearchBoxViewModel.SearchTextBox.Text.Length, 0);
-                        }
-                    } 
-                };
-
-                ApplicationHook.MouseWheel += (s, e) => {
-                    if (!MainWindowViewModel.IsLoading && ClipTrayViewModel.IsAnyTileExpanded) {
-                        var rtbvm = ClipTrayViewModel.SelectedClipTiles[0].RichTextBoxViewModelCollection;
-                        var sv = (ScrollViewer)rtbvm.HostClipTileViewModel.ClipBorder.FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>();
-                        sv.ScrollToVerticalOffset(sv.VerticalOffset - e.Delta);
-                    }
-                };
-
-                MpShortcutCollectionViewModel.Instance.Init();
-            }
-            catch (Exception ex) {
-                Console.WriteLine("Error creating mainwindow hotkeys: " + ex.ToString());
-                return false;
-            }
-            return true;
         }
 
         public void AddTempFile(string fp) {

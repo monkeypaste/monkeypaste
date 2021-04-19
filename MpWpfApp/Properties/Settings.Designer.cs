@@ -1176,5 +1176,53 @@ namespace MpWpfApp.Properties {
                 return ((string)(this["AzureTextAnalyticsKey"]));
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DoShowMainWindowWithMouseEdge {
+            get {
+                return ((bool)(this["DoShowMainWindowWithMouseEdge"]));
+            }
+            set {
+                this["DoShowMainWindowWithMouseEdge"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DoShowMainWindowWithMouseEdgeAndScrollDelta {
+            get {
+                return ((bool)(this["DoShowMainWindowWithMouseEdgeAndScrollDelta"]));
+            }
+            set {
+                this["DoShowMainWindowWithMouseEdgeAndScrollDelta"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int DoShowMainWIndowWithMouseEdgeIndex {
+            get {
+                return ((int)(this["DoShowMainWIndowWithMouseEdgeIndex"]));
+            }
+            set {
+                this["DoShowMainWIndowWithMouseEdgeIndex"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int MainWindowMonitorIdx {
+            get {
+                return ((int)(this["MainWindowMonitorIdx"]));
+            }
+            set {
+                this["MainWindowMonitorIdx"] = value;
+            }
+        }
     }
 }

@@ -10,6 +10,7 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
 using MouseKeyHook.Rx;
+using WindowsInput;
 
 namespace MpWpfApp {
     public class MpShortcutViewModel : MpViewModelBase {
@@ -186,15 +187,15 @@ namespace MpWpfApp {
         #endregion
 
         #region State
-        private bool _isPerformingShortcut = false;
-        public bool IsPerformingShortcut {
+        private bool _wasShortcutTriggered = false;
+        public bool WasShortcutTriggered {
             get {
-                return _isPerformingShortcut;
+                return _wasShortcutTriggered;
             }
             set {
-                if(_isPerformingShortcut != value) {
-                    _isPerformingShortcut = value;
-                    OnPropertyChanged(nameof(IsPerformingShortcut));
+                if(_wasShortcutTriggered != value) {
+                    _wasShortcutTriggered = value;
+                    OnPropertyChanged(nameof(WasShortcutTriggered));
                 }
             }
         }
@@ -355,6 +356,11 @@ namespace MpWpfApp {
         public MpShortcutViewModel(MpShortcut s, ICommand command, object commandParameter) {
             PropertyChanged += (s1, e) => {
                 switch (e.PropertyName) {
+                    case nameof(WasShortcutTriggered):
+                        if(!IsRoutable && WasShortcutTriggered) {
+                            PerformShortcutCommand.Execute(null);
+                        }
+                        break;
                     case nameof(KeyString):
                         if (IsCustom()) {
                             if (Shortcut.CopyItemId > 0) {
@@ -387,7 +393,7 @@ namespace MpWpfApp {
                     if (RoutingType == MpRoutingType.None) {
                         throw new Exception("ShortcutViewModel error, routing type cannot be none");
                     }
-                    var hook = RoutingType == MpRoutingType.Internal ? MainWindowViewModel.ApplicationHook : MainWindowViewModel.GlobalHook;
+                    var hook = RoutingType == MpRoutingType.Internal ? MpShortcutCollectionViewModel.Instance.ApplicationHook : MpShortcutCollectionViewModel.Instance.GlobalHook;
                     
                     if (IsSequence()) {
                         if(MainWindowViewModel.IsLoading) {
@@ -395,7 +401,8 @@ namespace MpWpfApp {
                             hook.OnSequence(new Dictionary<Sequence, Action> {
                                 {
                                     Sequence.FromString(KeyString),
-                                    () => PerformShortcutCommand.Execute(null)
+                                    () => { WasShortcutTriggered = true; }
+                                    //() => PerformShortcutCommand.Execute(null)
                                 }
                             });
                         }
@@ -404,7 +411,8 @@ namespace MpWpfApp {
                         Unregister();
                         var t = new MouseKeyHook.Rx.Trigger[] { MouseKeyHook.Rx.Trigger.FromString(KeyString) };
                         KeysObservable = hook.KeyDownObservable().Matching(t).Subscribe(
-                            (trigger) => PerformShortcutCommand.Execute(null)
+                            //(trigger) => PerformShortcutCommand.Execute(null)
+                            (trigger) => { WasShortcutTriggered = true; }
                         );
                     }
                 }
@@ -427,33 +435,30 @@ namespace MpWpfApp {
             }
         }
 
-        public void PassKeysToForegroundWindow() {
-            
-            var mwvm = (MpMainWindowViewModel)System.Windows.Application.Current.MainWindow.DataContext;
-            var handle = MpClipboardManager.Instance.LastWindowWatcher.LastHandle;
-            WinApi.SetForegroundWindow(handle);
-            WinApi.SetActiveWindow(handle);
-            WinApi.GetWindowThreadProcessId(handle, out uint pid);
-            var process = Process.GetProcessById((int)pid);
-            
-            foreach (var str in SendKeysKeyStringList) {
-                try {
-                    //System.Windows.Forms.SendKeys.Flush();
-                    while (!process.WaitForInputIdle(10)) {
-                        Thread.Sleep(100);
-                        process.Refresh();
-                    }
-
-                    System.Windows.Forms.SendKeys.SendWait(str);
-                    //System.Windows.Forms.SendKeys.Flush();
+        public bool StartsWith(List<List<Key>> otherKeyList) {
+            if(otherKeyList == null || 
+               otherKeyList.Count == 0 || 
+               otherKeyList[0].Count == 0) {
+                return false;
+            }
+            for (int i = 0; i < otherKeyList.Count; i++) {
+                if(KeyList.Count <=i) {
+                    return false;
                 }
-                catch(Exception ex) {
-                    Console.WriteLine("PassKeysToForegroundWindow Exception for keystring: " + str);
-                    Console.WriteLine("With exception: " + ex);
-                    // TODO this exception will mess up key/mouse events and should trigger
-                    // kill/start of explorer.exe
+                for (int j = 0; j < otherKeyList[i].Count; j++) {
+                    if(KeyList[i].Count <= j) {
+                        return false;
+                    }
+                    if(KeyList[i][j] != otherKeyList[i][j]) {
+                        return false;
+                    }
                 }
             }
+            return true;
+        }
+
+        public void PassKeysToForegroundWindow() {
+            MpHelpers.Instance.PassKeysListToWindow(MpClipboardManager.Instance.LastWindowWatcher.LastHandle,KeyList);
         }
 
         public bool IsSequence() {
@@ -472,6 +477,23 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+        
+        #endregion
+
+        #region Commands
+        private RelayCommand _triggerShortcutCommand = null;
+        public ICommand TriggerShortcutCommand {
+            get {
+                if(_triggerShortcutCommand == null) {
+                    _triggerShortcutCommand = new RelayCommand(TriggerShortcut);
+                }
+                return _triggerShortcutCommand;
+            }
+        }
+        private void TriggerShortcut() {
+            WasShortcutTriggered = true;
+        }
+
         private RelayCommand _performShortcutCommand = null;
         public ICommand PerformShortcutCommand {
             get {
@@ -489,8 +511,7 @@ namespace MpWpfApp {
                MainWindowViewModel.ClipTrayViewModel.IsEditingClipTile ||
                MainWindowViewModel.ClipTrayViewModel.IsEditingClipTitle ||
                MainWindowViewModel.TagTrayViewModel.IsEditingTagName ||
-               MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused ||
-               IsPerformingShortcut) {
+               MainWindowViewModel.SearchBoxViewModel.IsTextBoxFocused) {
                 return false;
             }
             //otherwise check basic type routing for validity
@@ -501,19 +522,19 @@ namespace MpWpfApp {
             }
         }
         private void PeformShortcut() {
-            IsPerformingShortcut = true;
+            //WasShortcutTriggered = true;
 
             if (RoutingType == MpRoutingType.Bubble) {
-                //PassKeysToForegroundWindow();
+                PassKeysToForegroundWindow();
             }
                         
             Command?.Execute(CommandParameter);
 
             if (RoutingType == MpRoutingType.Tunnel) {
-                //PassKeysToForegroundWindow();
+                PassKeysToForegroundWindow();
             }
 
-            IsPerformingShortcut = false;
+            WasShortcutTriggered = false;
         }
         #endregion
     }

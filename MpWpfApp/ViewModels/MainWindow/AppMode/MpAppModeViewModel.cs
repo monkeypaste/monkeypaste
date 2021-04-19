@@ -96,19 +96,7 @@ namespace MpWpfApp {
             };
         }
 
-        public void AppMode_Loaded(object sender, RoutedEventArgs args) {
-            MainWindowViewModel.GlobalHook.MouseUp += (s, e) => {
-                if (IsAutoCopyMode) {
-                    if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.Instance.ApplicationIsActivated()) {
-                        System.Windows.Forms.SendKeys.SendWait("^c");
-                    }
-                }
-                if (IsRightClickPasteMode) {
-                    if (e.Button == System.Windows.Forms.MouseButtons.Right && !MpHelpers.Instance.ApplicationIsActivated()) {
-                        System.Windows.Forms.SendKeys.SendWait("^v");
-                    }
-                }
-            };
+        public void AppMode_Loaded(object sender, RoutedEventArgs args) {            
         }
         #endregion
 

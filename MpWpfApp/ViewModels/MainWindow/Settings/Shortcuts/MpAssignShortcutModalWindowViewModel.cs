@@ -102,9 +102,7 @@ namespace MpWpfApp {
                 }
                 return MpHelpers.Instance.ConvertKeySequenceToString(_keyList);
             }
-        }
-
-        
+        }        
 
         private string _warningString = string.Empty;
         public string WarningString {
