@@ -577,8 +577,20 @@ namespace MpWpfApp {
                 }
             }
         }
-        public new void Add(MpRtbListBoxItemRichTextBoxViewModel rtbvm) {            
-            base.Insert(0,rtbvm);
+        public void Add(MpRtbListBoxItemRichTextBoxViewModel rtbvm, int forceIdx = 0, bool isMerge = false) {    
+            if(isMerge) {
+                rtbvm.CopyItem = HostClipTileViewModel.CopyItem.LinkCompositeChild(rtbvm.CopyItem);
+            }
+            if (forceIdx >= 0) {
+                if (forceIdx >= this.Count) {
+                    base.Add(rtbvm);
+                } else {
+                    base.Insert(forceIdx, rtbvm);
+                }
+            } else {
+                base.Add(rtbvm);
+            }
+            
             UpdateAdorners();
             //ClipTileViewModel.RichTextBoxListBox.Items.Refresh();
         }

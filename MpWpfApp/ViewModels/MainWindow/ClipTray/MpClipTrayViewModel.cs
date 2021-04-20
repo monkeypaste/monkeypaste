@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
@@ -78,6 +79,19 @@ namespace MpWpfApp {
                     return null;
                 }
                 return SelectedClipTiles[0];
+            }
+        }
+
+        private ObservableCollection<MpContextMenuItemViewModel> _translateLanguageMenuItems = null;
+        public ObservableCollection<MpContextMenuItemViewModel> TranslateLanguageMenuItems {
+            get {
+                if (_translateLanguageMenuItems == null) {
+                    _translateLanguageMenuItems = new ObservableCollection<MpContextMenuItemViewModel>();
+                    foreach (var languageName in MpLanguageTranslator.Instance.LanguageList) {
+                        _translateLanguageMenuItems.Add(new MpContextMenuItemViewModel(languageName, TranslateSelectedClipTextAsyncCommand, languageName, false));
+                    }
+                }
+                return _translateLanguageMenuItems;
             }
         }
         #endregion
@@ -199,6 +213,19 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+        private BitmapSource _filterByAppIcon = null;
+        public BitmapSource FilterByAppIcon {
+            get {
+                return _filterByAppIcon;
+            }
+            set {
+                if(_filterByAppIcon != value) {
+                    _filterByAppIcon = value;
+                    OnPropertyChanged(nameof(FilterByAppIcon));
+                }
+            }
+        }
+
         public bool WasItemAdded { get; set; } = false;
 
         public bool IsTrayDropping { get; set; } = false;
@@ -409,6 +436,15 @@ namespace MpWpfApp {
             this.CollectionChanged += (s, e) => {
                 OnPropertyChanged(nameof(EmptyListMessageVisibility));
                 OnPropertyChanged(nameof(ClipTrayVisibility));                
+            };
+            PropertyChanged += (s, e) => {
+                switch(e.PropertyName) {
+                    case nameof(IsFilteringByApp):
+                        foreach (var ctvm in VisibileClipTiles) {
+                            ctvm.OnPropertyChanged(nameof(ctvm.AppIcon));
+                        }
+                        break;
+                }
             };
             var allItems = MpCopyItem.GetAllCopyItems(out int _totalEntryCount);
             foreach (var ci in allItems) {
@@ -1317,7 +1353,10 @@ namespace MpWpfApp {
             }
         }
         private bool CanBringSelectedClipTilesToFront(object arg) {
-            if(IsBusy || MainWindowViewModel.IsLoading || VisibileClipTiles.Count == 0) {
+            if(IsBusy || 
+                MainWindowViewModel.IsLoading || 
+                VisibileClipTiles.Count == 0 || 
+                SelectedClipTiles.Count == 0) {
                 return false;
             }
             bool canBringForward = false;
@@ -1360,7 +1399,10 @@ namespace MpWpfApp {
             }
         }
         private bool CanSendSelectedClipTilesToBack(object args) {
-            if (IsBusy || MainWindowViewModel.IsLoading || VisibileClipTiles.Count == 0) {
+            if (IsBusy || 
+                MainWindowViewModel.IsLoading || 
+                VisibileClipTiles.Count == 0 || 
+                SelectedClipTiles.Count == 0) {
                 return false;
             }
             bool canSendBack = false;
@@ -1637,6 +1679,25 @@ namespace MpWpfApp {
             }
 
             PrimarySelectedClipTile.MergeClip(ocil);
+        }
+
+        private AsyncCommand<string> _translateSelectedClipTextAsyncCommand;
+        public IAsyncCommand<string> TranslateSelectedClipTextAsyncCommand {
+            get {
+                if (_translateSelectedClipTextAsyncCommand == null) {
+                    _translateSelectedClipTextAsyncCommand = new AsyncCommand<string>(TranslateSelectedClipTextAsync, CanTranslateSelectedClipText);
+                }
+                return _translateSelectedClipTextAsyncCommand;
+            }
+        }
+        private bool CanTranslateSelectedClipText(object args) {
+            return SelectedClipTiles.Count == 1 && SelectedClipTiles[0].IsTextItem;
+        }
+        private async Task TranslateSelectedClipTextAsync(string toLanguage) {
+            var translatedText = await MpLanguageTranslator.Instance.Translate(SelectedClipTiles[0].CopyItemPlainText, toLanguage, false);
+            if (!string.IsNullOrEmpty(translatedText)) {
+                SelectedClipTiles[0].CopyItemRichText = MpHelpers.Instance.ConvertPlainTextToRichText(translatedText);
+            }
         }
 
         private RelayCommand _createQrCodeFromSelectedClipsCommand;

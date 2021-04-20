@@ -26,8 +26,9 @@ namespace MpWpfApp {
                         return;
                     }
                     var rtb = (RichTextBox)obj;
-                    //rtb.SetRtf((string)e.NewValue);
-                    rtb.Document = ((string)e.NewValue).ToFlowDocument();
+                    var fd = ((string)e.NewValue).ToFlowDocument();
+                    var ds = fd.GetDocumentSize();
+                    rtb.Document = fd;
                 }
             });
     }

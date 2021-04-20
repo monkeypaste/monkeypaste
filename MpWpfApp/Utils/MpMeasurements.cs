@@ -8,7 +8,10 @@ namespace MpWpfApp {
 
         public double MainWindowToScreenHeightRatio = 0.35;
 
-        private MpMeasurements() { }
+        private MpMeasurements() {
+            Properties.Settings.Default.MaxRecentClipItems = 3;// TotalVisibleClipTiles * 2;
+            Properties.Settings.Default.Save();
+        }
 
         private double _screenWidth = SystemParameters.PrimaryScreenWidth;
         private double _screenHeight = SystemParameters.PrimaryScreenHeight;
@@ -82,6 +85,12 @@ namespace MpWpfApp {
         public double ClipTileExpandedMargin {
             get {
                 return ClipTilePadding * 2;
+            }
+        }
+
+        public int TotalVisibleClipTiles {
+            get {
+                return (int)(ClipTrayWidth / ClipTileMinSize);
             }
         }
 
@@ -279,6 +288,12 @@ namespace MpWpfApp {
         public double RtbCompositeItemMinHeight {
             get {
                 return ClipTileContentHeight / 5;
+            }
+        }
+
+        public double RtbCompositeAppIconSize {
+            get {
+                return ClipTileContentHeight / 14;
             }
         }
 

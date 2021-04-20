@@ -55,6 +55,7 @@ namespace MpWpfApp {
         #region Private Variables
         private Window _windowRef;
         private int _tabToShow = 0;
+        private object _args = null;
         //private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsBackup = new ObservableCollection<MpShortcutViewModel>();
         //private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsToDelete = new ObservableCollection<MpShortcutViewModel>();
         //private ObservableCollection<MpShortcutViewModel> _shortcutViewModelsToRegister = new ObservableCollection<MpShortcutViewModel>();
@@ -64,6 +65,7 @@ namespace MpWpfApp {
         public static bool IsOpen = false;
         #endregion
 
+        #region Properties
         #region View Models
         public MpShortcutCollectionViewModel ShortcutCollectionViewModel {
             get {
@@ -77,7 +79,7 @@ namespace MpWpfApp {
                 return _preferencesViewModel;
             }
             set {
-                if(_preferencesViewModel != value) {
+                if (_preferencesViewModel != value) {
                     _preferencesViewModel = value;
                     OnPropertyChanged(nameof(PreferencesViewModel));
                 }
@@ -98,9 +100,7 @@ namespace MpWpfApp {
         }
         #endregion
 
-            #region Properties
-
-            #region Panel Visibility
+        #region Panel Visibility
         private Visibility _settingsPanel1Visibility = Visibility.Collapsed;
         public Visibility SettingsPanel1Visibility {
             get { 
@@ -193,8 +193,9 @@ namespace MpWpfApp {
             SecurityViewModel = new MpSecurityViewModel();
         }
 
-        public MpSettingsWindowViewModel(int tabToShow) : this() {
+        public MpSettingsWindowViewModel(int tabToShow,object args = null) : this() {
             _tabToShow = tabToShow;
+            _args = args;
         }
 
         public void SettingsWindow_Loaded(object sender, RoutedEventArgs e) {
@@ -204,14 +205,22 @@ namespace MpWpfApp {
             };
             IsOpen = true;
             ClickSettingsPanelCommand.Execute(_tabToShow);
+
+            if(_args != null) {
+                if(_tabToShow == 1) {
+                    if(_args is MpApp app) {
+                        PreferencesViewModel.PasteToAppPathViewModelCollection.AddPasteToAppPathCommand.Execute(app);
+                    } 
+                }
+            }
             //var clonedList = MpShortcutCollectionViewModel.Instance.Select(x => (MpShortcutViewModel)x.Clone()).ToList();
             //_shortcutViewModelsBackup = new ObservableCollection<MpShortcutViewModel>(clonedList);
 
             
         }
 
-        public bool ShowSettingsWindow(int tabToShow = 0) {
-            var sw = new MpSettingsWindow(tabToShow);
+        public bool ShowSettingsWindow(int tabToShow = 0, object args = null) {
+            var sw = new MpSettingsWindow(tabToShow,args);
             return sw.ShowDialog() ?? false;
         }
         #endregion

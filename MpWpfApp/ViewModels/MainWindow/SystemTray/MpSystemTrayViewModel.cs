@@ -145,19 +145,19 @@ namespace MpWpfApp {
             }
         }
         private void ShowSettingsWindow(object args) {
-
             MainWindowViewModel.IsShowingDialog = true;
-
             MainWindowViewModel.HideWindowCommand.Execute(null);
             int tabIdx = 0;
             if(args is int) {
                 tabIdx = (int)args;
             } else if (args is MpClipTileViewModel) {
-                // TODO occurs when app icon macro is clicked so need to 
-                // automate paste to app datagrid to auto add item and select
+                args = (args as MpClipTileViewModel).CopyItem.App;
+                tabIdx = 1;
+            } else if (args is MpRtbListBoxItemRichTextBoxViewModel) {
+                args = (args as MpRtbListBoxItemRichTextBoxViewModel).CopyItem.App;
                 tabIdx = 1;
             }
-            SettingsWindowViewModel.ShowSettingsWindow(tabIdx);
+            SettingsWindowViewModel.ShowSettingsWindow(tabIdx, args);
 
             MainWindowViewModel.IsShowingDialog = false;
         }

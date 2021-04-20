@@ -21,9 +21,9 @@ namespace MpWpfApp {
             InitializeComponent();
             DataContext = new MpSettingsWindowViewModel();
         }
-        public MpSettingsWindow(int tabToShow) {
+        public MpSettingsWindow(int tabToShow, object args = null) {
             InitializeComponent();
-            DataContext = new MpSettingsWindowViewModel(tabToShow);
+            DataContext = new MpSettingsWindowViewModel(tabToShow,args);
         }
     }
 }

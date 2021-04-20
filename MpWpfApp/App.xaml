@@ -1,5 +1,7 @@
 <Application xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
+             xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
              xmlns:local="clr-namespace:MpWpfApp" 
              x:Class="MpWpfApp.App" 
              StartupUri="Views\MpMainWindow.xaml"           
@@ -10,6 +12,785 @@
              d1p1:Ignorable="d" 
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
     <Application.Resources>
+        <!-- Button Templates Start -->
+        <ControlTemplate x:Key="ButtonControlTemplate"
+                         TargetType="{x:Type Button}">
+            <Border x:Name="OuterBorder"
+                    BorderBrush="Transparent"
+                    BorderThickness="1"
+                    CornerRadius="2">
+                <Border x:Name="InnerBorder"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        CornerRadius="2">
+                    <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      RecognizesAccessKey="True"
+                                      Margin="{TemplateBinding Padding}" />
+                </Border>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FF7CA0CC" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FFE4EFFD" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FFDAE7F5" />
+                </Trigger>
+                <Trigger Property="IsPressed"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FF2E4E76" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FF116EE4" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FF3272B8" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <!-- Button Styles -->
+        <Style x:Key="Transparent_Button"
+               TargetType="{x:Type Button}">
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                BorderThickness="0"
+                                BorderBrush="Black"
+                                Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+                                <Setter Property="Background"
+                                        Value="Transparent" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ControlTemplate x:Key="LockToggleButtonControlTemplate"
+                         TargetType="{x:Type ToggleButton}">
+            <Border x:Name="OuterBorder"
+                    BorderBrush="Transparent"
+                    BorderThickness="1"
+                    CornerRadius="2">
+                <Border x:Name="InnerBorder"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        CornerRadius="2">
+                    <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      RecognizesAccessKey="True"
+                                      Margin="{TemplateBinding Padding}" />
+                </Border>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FF7CA0CC" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FFE4EFFD" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FFDAE7F5" />
+                </Trigger>
+                <Trigger Property="IsPressed"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FF2E4E76" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FF116EE4" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FF3272B8" />
+                </Trigger>
+                <Trigger Property="IsChecked"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FFFFC00A" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FFFFDE7F" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FFFFD458" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <ControlTemplate x:Key="SearchButtonControlTemplate"
+                         TargetType="{x:Type Button}">
+            <Border x:Name="OuterBorder"
+                    BorderBrush="Transparent"
+                    BorderThickness="1"
+                    CornerRadius="2">
+                <Border x:Name="InnerBorder"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        CornerRadius="2">
+                    <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      RecognizesAccessKey="True"
+                                      Margin="{TemplateBinding Padding}" />
+                </Border>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FF7CA0CC" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FFE4EFFD" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FFDAE7F5" />
+                </Trigger>
+                <Trigger Property="IsPressed"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FF2E4E76" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FF116EE4" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FF3272B8" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <!-- Flat Button -->
+        <ControlTemplate x:Key="FlatButtonControlTemplate"
+                         TargetType="{x:Type Button}">
+            <Border x:Name="OuterBorder"
+                    BorderBrush="Transparent"
+                    Margin="0,8,0,8"
+                    BorderThickness="1"
+                    CornerRadius="2">
+                <Border x:Name="InnerBorder"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        CornerRadius="2">
+                    <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      RecognizesAccessKey="True"
+                                      Margin="{TemplateBinding Padding}" />
+                </Border>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FF7CA0CC" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FFE4EFFD" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FFDAE7F5" />
+                </Trigger>
+                <Trigger Property="IsPressed"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FF2E4E76" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FF116EE4" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FF3272B8" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <!-- Flat Toggle Button -->
+        <ControlTemplate x:Key="FlatToggleButtonControlTemplate"
+                         TargetType="{x:Type ToggleButton}">
+            <Border x:Name="OuterBorder"
+                    BorderBrush="Transparent"
+                    Margin="0,8,0,8"
+                    BorderThickness="1"
+                    CornerRadius="2">
+                <Border x:Name="InnerBorder"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="1"
+                        CornerRadius="2">
+                    <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      RecognizesAccessKey="True"
+                                      Margin="{TemplateBinding Padding}" />
+                </Border>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsMouseOver"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FF7CA0CC" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FFE4EFFD" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FFDAE7F5" />
+                </Trigger>
+                <Trigger Property="IsPressed"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FF2E4E76" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FF116EE4" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FF3272B8" />
+                </Trigger>
+                <Trigger Property="IsChecked"
+                         Value="True">
+                    <Setter TargetName="OuterBorder"
+                            Property="BorderBrush"
+                            Value="#FFFFC00A" />
+                    <Setter TargetName="InnerBorder"
+                            Property="BorderBrush"
+                            Value="#FFFFDE7F" />
+                    <Setter TargetName="InnerBorder"
+                            Property="Background"
+                            Value="#FFFFD458" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>        
+        <!-- Button Templates End-->
+
+        <!-- Animated Listbox-->
+        <SolidColorBrush x:Key="ListBorder"
+                         Color="#828790" />
+        <Style x:Key="AnimatedListBoxStyle"
+               TargetType="{x:Type ListBox}">
+            <Setter Property="Background"
+                    Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource ListBorder}" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+                    Value="Auto" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
+                    Value="Auto" />
+            <Setter Property="ScrollViewer.CanContentScroll"
+                    Value="true" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBox}">
+                        <Border x:Name="Bd"
+                                SnapsToDevicePixels="true"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="1">
+                            <local:AnimatedScrollViewer Padding="{TemplateBinding Padding}"
+                                                        Focusable="false"
+                                                        Style="{DynamicResource TestingAnimateScrollViewer}"
+                                                        CanContentScroll="False">
+                                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                            </local:AnimatedScrollViewer>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled"
+                                     Value="false">
+                                <Setter Property="Background"
+                                        TargetName="Bd"
+                                        Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                            </Trigger>
+                            <Trigger Property="IsGrouping"
+                                     Value="true">
+                                <Setter Property="ScrollViewer.CanContentScroll"
+                                        Value="false" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="TestingAnimateScrollViewer"
+               TargetType="{x:Type local:AnimatedScrollViewer}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type local:AnimatedScrollViewer}">
+                        <Grid x:Name="Grid"
+                              Background="{TemplateBinding Background}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Rectangle Fill="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+                                       x:Name="Corner"
+                                       Grid.Column="1"
+                                       Grid.Row="1" />
+                            <ScrollContentPresenter Margin="{TemplateBinding Padding}"
+                                                    x:Name="PART_ScrollContentPresenter"
+                                                    Grid.Column="0"
+                                                    Grid.Row="0"
+                                                    CanContentScroll="{TemplateBinding CanContentScroll}"
+                                                    CanHorizontallyScroll="False"
+                                                    CanVerticallyScroll="False"
+                                                    Content="{TemplateBinding Content}"
+                                                    ContentTemplate="{TemplateBinding ContentTemplate}" />
+                            <ScrollBar Cursor="Arrow"
+                                       x:Name="PART_AniVerticalScrollBar"
+                                       Style="{DynamicResource localBar}"
+                                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                       Grid.Column="1"
+                                       Grid.Row="0"
+                                       ViewportSize="{TemplateBinding ViewportHeight}"
+                                       Maximum="{TemplateBinding ScrollableHeight}"
+                                       Minimum="0"
+                                       Value="{Binding Path=TargetVerticalOffset, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                       AutomationProperties.AutomationId="VerticalScrollBar" />
+                            <ScrollBar Cursor="Arrow"
+                                       x:Name="PART_VerticalScrollBar"
+                                       Visibility="Collapsed"
+                                       Grid.Column="1"
+                                       Grid.Row="0"
+                                       ViewportSize="{TemplateBinding ViewportHeight}"
+                                       Maximum="{TemplateBinding ScrollableHeight}"
+                                       Minimum="0"
+                                       Value="{Binding Path=VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <ScrollBar Cursor="Arrow"
+                                       x:Name="PART_AniHorizontalScrollBar"
+                                       Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+                                       Grid.Row="1"
+                                       Orientation="Horizontal"
+                                       ViewportSize="{TemplateBinding ViewportWidth}"
+                                       Maximum="{TemplateBinding ScrollableWidth}"
+                                       Minimum="0"
+                                       Value="{Binding Path=TargetHorizontalOffset, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                       AutomationProperties.AutomationId="HorizontalScrollBar" />
+                            <ScrollBar Cursor="Arrow"
+                                       x:Name="PART_HorizontalScrollBar"
+                                       Visibility="Collapsed"
+                                       Grid.Column="0"
+                                       Grid.Row="1"
+                                       Orientation="Horizontal"
+                                       ViewportSize="{TemplateBinding ViewportWidth}"
+                                       Maximum="{TemplateBinding ScrollableWidth}"
+                                       Minimum="0"
+                                       Value="{Binding Path=HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <LinearGradientBrush x:Key="VerticalScrollBarBackground"
+                             EndPoint="1,0"
+                             StartPoint="0,0">
+            <GradientStop Color="#E1E1E1"
+                          Offset="0" />
+            <GradientStop Color="#EDEDED"
+                          Offset="0.20" />
+            <GradientStop Color="#EDEDED"
+                          Offset="0.80" />
+            <GradientStop Color="#E3E3E3"
+                          Offset="1" />
+        </LinearGradientBrush>
+        <SolidColorBrush x:Key="ScrollBarDisabledBackground"
+                         Color="#F4F4F4" />
+        <Style x:Key="ScrollBarButton"
+               TargetType="{x:Type RepeatButton}">
+            <Setter Property="OverridesDefaultStyle"
+                    Value="true" />
+            <Setter Property="Focusable"
+                    Value="false" />
+            <Setter Property="IsTabStop"
+                    Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Microsoft_Windows_Themes:ScrollChrome x:Name="Chrome"
+                                                               SnapsToDevicePixels="true"
+                                                               RenderMouseOver="{TemplateBinding IsMouseOver}"
+                                                               RenderPressed="{TemplateBinding IsPressed}"
+                                                               Microsoft_Windows_Themes:ScrollChrome.ScrollGlyph="{TemplateBinding Microsoft_Windows_Themes:ScrollChrome.ScrollGlyph}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="VerticalScrollBarPageButton"
+               TargetType="{x:Type RepeatButton}">
+            <Setter Property="OverridesDefaultStyle"
+                    Value="true" />
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Focusable"
+                    Value="false" />
+            <Setter Property="IsTabStop"
+                    Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Rectangle Fill="{TemplateBinding Background}"
+                                   Width="{TemplateBinding Width}"
+                                   Height="{TemplateBinding Height}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ScrollBarThumb"
+               TargetType="{x:Type Thumb}">
+            <Setter Property="OverridesDefaultStyle"
+                    Value="true" />
+            <Setter Property="IsTabStop"
+                    Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Microsoft_Windows_Themes:ScrollChrome x:Name="Chrome"
+                                                               SnapsToDevicePixels="true"
+                                                               RenderMouseOver="{TemplateBinding IsMouseOver}"
+                                                               RenderPressed="{TemplateBinding IsDragging}"
+                                                               Microsoft_Windows_Themes:ScrollChrome.ScrollGlyph="{TemplateBinding Microsoft_Windows_Themes:ScrollChrome.ScrollGlyph}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <LinearGradientBrush x:Key="HorizontalScrollBarBackground"
+                             EndPoint="0,1"
+                             StartPoint="0,0">
+            <GradientStop Color="#E1E1E1"
+                          Offset="0" />
+            <GradientStop Color="#EDEDED"
+                          Offset="0.20" />
+            <GradientStop Color="#EDEDED"
+                          Offset="0.80" />
+            <GradientStop Color="#E3E3E3"
+                          Offset="1" />
+        </LinearGradientBrush>
+        <Style x:Key="HorizontalScrollBarPageButton"
+               TargetType="{x:Type RepeatButton}">
+            <Setter Property="OverridesDefaultStyle"
+                    Value="true" />
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Focusable"
+                    Value="false" />
+            <Setter Property="IsTabStop"
+                    Value="false" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type RepeatButton}">
+                        <Rectangle Fill="{TemplateBinding Background}"
+                                   Width="{TemplateBinding Width}"
+                                   Height="{TemplateBinding Height}" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="localBar"
+               TargetType="{x:Type ScrollBar}">
+            <Setter Property="Background"
+                    Value="{StaticResource VerticalScrollBarBackground}" />
+            <Setter Property="Stylus.IsPressAndHoldEnabled"
+                    Value="false" />
+            <Setter Property="Stylus.IsFlicksEnabled"
+                    Value="false" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+            <Setter Property="Width"
+                    Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" />
+            <Setter Property="MinWidth"
+                    Value="{DynamicResource {x:Static SystemParameters.VerticalScrollBarWidthKey}}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                        <Grid x:Name="Bg"
+                              SnapsToDevicePixels="true"
+                              Background="{TemplateBinding Background}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}" />
+                                <RowDefinition Height="0.00001*" />
+                                <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}" />
+                            </Grid.RowDefinitions>
+                            <RepeatButton Style="{StaticResource ScrollBarButton}"
+                                          IsEnabled="{TemplateBinding IsMouseOver}"
+                                          Microsoft_Windows_Themes:ScrollChrome.ScrollGlyph="UpArrow"
+                                          Command="{x:Static ScrollBar.LineUpCommand}" />
+                            <Track x:Name="PART_Track"
+                                   IsEnabled="{TemplateBinding IsMouseOver}"
+                                   Grid.Row="1"
+                                   IsDirectionReversed="true">
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Style="{StaticResource VerticalScrollBarPageButton}"
+                                                  Command="{x:Static ScrollBar.PageUpCommand}" />
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Style="{StaticResource VerticalScrollBarPageButton}"
+                                                  Command="{x:Static ScrollBar.PageDownCommand}" />
+                                </Track.IncreaseRepeatButton>
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource ScrollBarThumb}"
+                                           Microsoft_Windows_Themes:ScrollChrome.ScrollGlyph="VerticalGripper" />
+                                </Track.Thumb>
+                            </Track>
+                            <RepeatButton Style="{StaticResource ScrollBarButton}"
+                                          IsEnabled="{TemplateBinding IsMouseOver}"
+                                          Grid.Row="2"
+                                          Microsoft_Windows_Themes:ScrollChrome.ScrollGlyph="DownArrow"
+                                          Command="{x:Static ScrollBar.LineDownCommand}" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled"
+                                     Value="false">
+                                <Setter Property="Background"
+                                        TargetName="Bg"
+                                        Value="{StaticResource ScrollBarDisabledBackground}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Orientation"
+                         Value="Horizontal">
+                    <Setter Property="Width"
+                            Value="Auto" />
+                    <Setter Property="MinWidth"
+                            Value="0" />
+                    <Setter Property="Height"
+                            Value="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarHeightKey}}" />
+                    <Setter Property="MinHeight"
+                            Value="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarHeightKey}}" />
+                    <Setter Property="Background"
+                            Value="{StaticResource HorizontalScrollBarBackground}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ScrollBar}">
+                                <Grid x:Name="Bg"
+                                      SnapsToDevicePixels="true"
+                                      Background="{TemplateBinding Background}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition MaxWidth="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarButtonWidthKey}}" />
+                                        <ColumnDefinition Width="0.00001*" />
+                                        <ColumnDefinition MaxWidth="{DynamicResource {x:Static SystemParameters.HorizontalScrollBarButtonWidthKey}}" />
+                                    </Grid.ColumnDefinitions>
+                                    <RepeatButton Style="{StaticResource ScrollBarButton}"
+                                                  IsEnabled="{TemplateBinding IsMouseOver}"
+                                                  Microsoft_Windows_Themes:ScrollChrome.ScrollGlyph="LeftArrow"
+                                                  Command="{x:Static ScrollBar.LineLeftCommand}" />
+                                    <Track x:Name="PART_Track"
+                                           IsEnabled="{TemplateBinding IsMouseOver}"
+                                           Grid.Column="1">
+                                        <Track.DecreaseRepeatButton>
+                                            <RepeatButton Style="{StaticResource HorizontalScrollBarPageButton}"
+                                                          Command="{x:Static ScrollBar.PageLeftCommand}" />
+                                        </Track.DecreaseRepeatButton>
+                                        <Track.IncreaseRepeatButton>
+                                            <RepeatButton Style="{StaticResource HorizontalScrollBarPageButton}"
+                                                          Command="{x:Static ScrollBar.PageRightCommand}" />
+                                        </Track.IncreaseRepeatButton>
+                                        <Track.Thumb>
+                                            <Thumb Style="{StaticResource ScrollBarThumb}"
+                                                   Microsoft_Windows_Themes:ScrollChrome.ScrollGlyph="HorizontalGripper" />
+                                        </Track.Thumb>
+                                    </Track>
+                                    <RepeatButton Style="{StaticResource ScrollBarButton}"
+                                                  IsEnabled="{TemplateBinding IsMouseOver}"
+                                                  Grid.Column="2"
+                                                  Microsoft_Windows_Themes:ScrollChrome.ScrollGlyph="RightArrow"
+                                                  Command="{x:Static ScrollBar.LineRightCommand}" />
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsEnabled"
+                                             Value="false">
+                                        <Setter Property="Background"
+                                                TargetName="Bg"
+                                                Value="{StaticResource ScrollBarDisabledBackground}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <ControlTemplate x:Key="ScrollViewerControlTemplate1"
+                         TargetType="{x:Type ScrollViewer}">
+            <Grid x:Name="Grid"
+                  Background="{TemplateBinding Background}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Rectangle Fill="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+                           x:Name="Corner"
+                           Grid.Column="1"
+                           Grid.Row="1" />
+                <ScrollContentPresenter Margin="{TemplateBinding Padding}"
+                                        x:Name="PART_ScrollContentPresenter"
+                                        Grid.Column="0"
+                                        Grid.Row="0"
+                                        CanContentScroll="{TemplateBinding CanContentScroll}"
+                                        CanHorizontallyScroll="False"
+                                        CanVerticallyScroll="False"
+                                        Content="{TemplateBinding Content}"
+                                        ContentTemplate="{TemplateBinding ContentTemplate}" />
+                <ScrollBar Cursor="Arrow"
+                           x:Name="PART_VerticalScrollBar"
+                           Visibility="Collapsed"
+                           Grid.Column="1"
+                           Grid.Row="0"
+                           ViewportSize="{TemplateBinding ViewportHeight}"
+                           Maximum="{TemplateBinding ScrollableHeight}"
+                           Minimum="0"
+                           Value="{Binding Path=VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                           AutomationProperties.AutomationId="VerticalScrollBar" />
+                <ScrollBar Cursor="Arrow"
+                           x:Name="PART_HorizontalScrollBar"
+                           Visibility="Collapsed"
+                           Grid.Column="0"
+                           Grid.Row="1"
+                           Orientation="Horizontal"
+                           ViewportSize="{TemplateBinding ViewportWidth}"
+                           Maximum="{TemplateBinding ScrollableWidth}"
+                           Minimum="0"
+                           Value="{Binding Path=HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                           AutomationProperties.AutomationId="HorizontalScrollBar" />
+                <ScrollBar Cursor="Arrow"
+                           x:Name="PART_AniVerticalScrollBar"
+                           Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                           ViewportSize="{TemplateBinding ViewportHeight}"
+                           Maximum="{TemplateBinding ScrollableHeight}"
+                           Minimum="0"
+                           Value="{Binding Path=VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                           AutomationProperties.AutomationId="VerticalScrollBar"
+                           Grid.Column="1" />
+                <ScrollBar Cursor="Arrow"
+                           x:Name="PART_AniHorizontalScrollBar"
+                           Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+                           Orientation="Horizontal"
+                           ViewportSize="{TemplateBinding ViewportWidth}"
+                           Maximum="{TemplateBinding ScrollableWidth}"
+                           Minimum="0"
+                           Value="{Binding Path=HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}"
+                           AutomationProperties.AutomationId="HorizontalScrollBar"
+                           Grid.Row="1" />
+            </Grid>
+        </ControlTemplate>
+        <!-- End Animated Listbox-->
+
+        <s:Int32 x:Key="SettingsTabAccount">0</s:Int32>
+        <s:Int32 x:Key="SettingsTabPreferences">1</s:Int32>
+        <s:Int32 x:Key="SettingsTabSecurity">2</s:Int32>
+        <s:Int32 x:Key="SettingsTabShortcuts">3</s:Int32>
+        <s:Int32 x:Key="SettingsTabHelp">4</s:Int32>
+
+        <s:Int32 x:Key="Files">1</s:Int32>
+        <s:Int32 x:Key="Csv">2</s:Int32>
+        <s:Int32 x:Key="Zip">3</s:Int32>
+
+        <s:Boolean x:Key="True">True</s:Boolean>
+        <s:Boolean x:Key="False">False</s:Boolean>
+
+        <s:String x:Key="NoEntryIcon">/Images/noentry.png</s:String>
+        <s:String x:Key="RobotClawIcon">/Images/robotclaw.png</s:String>
+        <s:String x:Key="BrainIcon">/Images/brain.png</s:String>
+        <s:String x:Key="LeftClickIcon">/Images/leftclick.png</s:String>
+        <s:String x:Key="RightClickIcon">/Images/rightclick.png</s:String>
+        <s:String x:Key="AppendIcon">/Images/append.png</s:String>
+        <s:String x:Key="HelpIcon">/Images/help.png</s:String>
+        <s:String x:Key="PlayIcon">/Images/play.png</s:String>
+        <s:String x:Key="PauseIcon">/Images/pause.png</s:String>
+        <s:String x:Key="CogIcon">/Images/cog.png</s:String>
+        <s:String x:Key="PasteIcon">/Images/paste.png</s:String>
+        <s:String x:Key="DeleteIcon">/Images/Delete.png</s:String>
+        <s:String x:Key="EditIcon">/Images/edit.png</s:String>
+        <s:String x:Key="EditContentIcon">/Images/caret.png</s:String>
+        <s:String x:Key="ToolsIcon">/Images/tools.png</s:String>
+        <s:String x:Key="RenameIcon">/Images/rename.png</s:String>
+        <s:String x:Key="DuplicateIcon">/Images/duplicate.png</s:String>
+        <s:String x:Key="MergeIcon">/Images/merge.png</s:String>
+        <s:String x:Key="EmailIcon">/Images/email.png</s:String>
+        <s:String x:Key="QrIcon">/Images/qr.png</s:String>
+        <s:String x:Key="SpeakIcon">/Images/speak.png</s:String>
+        <s:String x:Key="SearchIcon">/Images/web.png</s:String>
+        <s:String x:Key="GoogleIcon">/Images/googleIcon.png</s:String>
+        <s:String x:Key="BingIcon">/Images/bingIcon.png</s:String>
+        <s:String x:Key="DuckIcon">/Images/duckduckgoIcon.png</s:String>
+        <s:String x:Key="YandexIcon">/Images/yandexIcon.png</s:String>
+        <s:String x:Key="SelectionIcon">/Images/selection.png</s:String>
+        <s:String x:Key="BringToFrontIcon">/Images/bringToFront.png</s:String>
+        <s:String x:Key="SendToBackIcon">/Images/sendToBack.png</s:String>
+        <s:String x:Key="SelectAllIcon">/Images/selectall.png</s:String>
+        <s:String x:Key="InvertSelectionIcon">/Images/invertSelection.png</s:String>
+        <s:String x:Key="HotkeyIcon">/Images/joystick.png</s:String>
+        <s:String x:Key="HotkeyActiveIcon">/Images/joystickactive.png</s:String>
+        <s:String x:Key="PasteToAppIcon">/Images/bullseye.png</s:String>
+        <s:String x:Key="PinToCollectionIcon">/Images/tag.png</s:String>
+        <s:String x:Key="TranslateIcon">/Images/translate.png</s:String>
+        <s:String x:Key="UserIcon">/Images/user.png</s:String>
+        <s:String x:Key="SlidersIcon">/Images/sliders.png</s:String>
+        <s:String x:Key="ShieldIcon">/Images/shield.png</s:String>
+        
+        <!-- Color Palletes -->
+        <SolidColorBrush x:Key="AppColorDark">DarkViolet</SolidColorBrush>
+        <SolidColorBrush x:Key="AppColorLight">MediumPurple</SolidColorBrush>
+        <SolidColorBrush x:Key="ClipTileTitleTextBoxBackgroundBrush"
+                         Color="White"
+                         Opacity="0.5" />
+        <SolidColorBrush x:Key="ClipTileDetectedObjectTextBoxBackgroundBrush"
+                         Color="Black"
+                         Opacity="0.5" />
+
+        <local:MpVisibilityToBoolConverter x:Key="VisibilityToBoolConverter" />
+        <local:MpImageSourceToBitmapSourceConverter x:Key="ImageSourceToBitmapSourceConverter" />
+        <local:MpIntToMpRoutingTypeConverter x:Key="IntToMpRoutingTypeConverter" />
+        <local:MpIntToWindowCommandConverter x:Key="IntToWindowCommandConverter" />
+        <local:MpStringToImageConverter x:Key="StringToImageConverter" />
+        <local:MpStringToIconConverter x:Key="StringToIconConverter" />
+        <local:MpStringToBrushConverter x:Key="StringToBrushConverter" />
+        <local:MpPointCollectionConverter x:Key="PointCollectionConverter" />
+        <local:MpIntToStringConverter x:Key="IntToStringConverter" />
+        <local:MpBoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <local:MpSolidColorBrushToBrushConverter x:Key="SolidColorBrushToBrushConverter" />
+        
         <local:MpMainWindowViewModel x:Key="MainWindowViewModel" />
     </Application.Resources>
 </Application>

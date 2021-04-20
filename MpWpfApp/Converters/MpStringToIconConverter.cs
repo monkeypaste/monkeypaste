@@ -6,10 +6,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpStringToImageConverter : IValueConverter {
+    public class MpStringToIconConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is string) {
-                return @"/Resources" + value.ToString();
+                var icon = new Image();
+                icon.Source = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + value.ToString()));
+                return icon;
             }
             return null;
         }

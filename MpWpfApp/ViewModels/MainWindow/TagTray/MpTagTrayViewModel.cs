@@ -62,15 +62,15 @@ namespace MpWpfApp {
                 return;
             };
             RefreshAllCounts();
+
             UpdateSortOrder(true);
             GetRecentTagTileViewModel().IsSelected = true;
         }
 
         public void AddClipToSudoTags(MpClipTileViewModel ctvm) {
             GetHistoryTagTileViewModel().AddClip(ctvm);
-            GetRecentTagTileViewModel().AddClip(ctvm);
+            //GetRecentTagTileViewModel().AddClip(ctvm);
 
-            RefreshRecentTag();
             RefreshAllCounts();
         }
 
@@ -93,6 +93,10 @@ namespace MpWpfApp {
                     }
                 }
             }
+            if (GetRecentTagTileViewModel().IsSelected) {
+                //will trigger reselection in Add's property change
+                GetRecentTagTileViewModel().IsSelected = false;
+            }
         }
 
         public void RefreshRecentTag() {
@@ -104,12 +108,36 @@ namespace MpWpfApp {
                         rctvml.Add(ctvm);
                     }
                 }
-                rctvml.OrderBy(x => x.CopyItemCreatedDateTime);
+                rctvml = rctvml.OrderBy(x => x.CopyItemCreatedDateTime).ToList();
                 int itemsToRemoveCount = rtvm.TagClipCount - Properties.Settings.Default.MaxRecentClipItems;
                 for (int i = 0; i < itemsToRemoveCount; i++) {
-                    rtvm.Tag.UnlinkWithCopyItem(rctvml[i].CopyItem);
-                    //rtvm.TagClipCount--;
+                    rtvm.RemoveClip(rctvml[i]);
                 }
+
+                if(rtvm.IsSelected) {
+                    //will trigger reselection in Add's property change
+                    rtvm.IsSelected = false;
+                }
+                rtvm.TagClipCount = Properties.Settings.Default.MaxRecentClipItems;
+            } else if (GetRecentTagTileViewModel().TagClipCount < Properties.Settings.Default.MaxRecentClipItems) {
+                var rtvm = GetRecentTagTileViewModel();
+                var rctvml = new List<MpClipTileViewModel>();
+                foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel) {
+                    if (rtvm.IsLinkedWithClipTile(ctvm)) {
+                        rctvml.Add(ctvm);
+                    }
+                }
+                rctvml = rctvml.OrderBy(x => x.CopyItemCreatedDateTime).ToList();
+                int itemsToRemoveCount = rtvm.TagClipCount - Properties.Settings.Default.MaxRecentClipItems;
+                for (int i = 0; i < itemsToRemoveCount; i++) {
+                    rtvm.RemoveClip(rctvml[i]);
+                }
+
+                if (rtvm.IsSelected) {
+                    //will trigger reselection in Add's property change
+                    rtvm.IsSelected = false;
+                }
+                rtvm.TagClipCount = Properties.Settings.Default.MaxRecentClipItems;
             }
         }
         public new void Add(MpTagTileViewModel newTagTile) {
@@ -133,11 +161,17 @@ namespace MpWpfApp {
                                 GetRecentTagTileViewModel().IsSelected = true;
                             }
                         } else {
+                            MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon = null;
+                            MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp = false;
+
                             foreach (MpClipTileViewModel clipTile in MainWindowViewModel.ClipTrayViewModel) {
                                 //this ensures when switching between tags the last selected tag in a list reset
                                 clipTile.IsSelected = false;
                                 if (tagChanged.IsLinkedWithClipTile(clipTile)) {
                                     clipTile.TileVisibility = Visibility.Visible;
+                                    foreach(var rtbvm in clipTile.RichTextBoxViewModelCollection) {
+                                        rtbvm.SubItemVisibility = Visibility.Visible;
+                                    }
                                 } else {
                                     clipTile.TileVisibility = Visibility.Collapsed;
                                 }

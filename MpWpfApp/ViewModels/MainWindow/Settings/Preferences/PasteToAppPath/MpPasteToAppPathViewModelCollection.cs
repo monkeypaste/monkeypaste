@@ -267,33 +267,44 @@ namespace MpWpfApp {
             this.Remove(SelectedPasteToAppPathViewModel);
         }
 
-        private RelayCommand _addPasteToAppPathCommand;
+        private RelayCommand<object> _addPasteToAppPathCommand;
         public ICommand AddPasteToAppPathCommand {
             get {
                 if (_addPasteToAppPathCommand == null) {
-                    _addPasteToAppPathCommand = new RelayCommand(AddPasteToAppPath);
+                    _addPasteToAppPathCommand = new RelayCommand<object>(AddPasteToAppPath);
                 }
                 return _addPasteToAppPathCommand;
             }
         }
-        private void AddPasteToAppPath() {
-            var openFileDialog = new OpenFileDialog() {
-                Filter = "Applications|*.lnk;*.exe",
-                Title = "Select application path",                
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
-            };
-            bool? openResult = openFileDialog.ShowDialog();
-            if (openResult != null && openResult.Value) {
-                string terminalPath = openFileDialog.FileName;
-                if (Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
-                    terminalPath = MpHelpers.Instance.GetShortcutTargetPath(openFileDialog.FileName);
+        private void AddPasteToAppPath(object args) {
+            string appPath = string.Empty;
+            if(args is MpApp) {
+                appPath = (args as MpApp).AppPath;
+                if(!File.Exists(appPath)) {
+                    Console.WriteLine("AddPasteToAppPath error, appPath does not exist: " + appPath);
+                    return;
                 }
-                var nptapvm = new MpPasteToAppPathViewModel(new MpPasteToAppPath(terminalPath, string.Empty, false));
-                nptapvm.PasteToAppPath.WriteToDatabase();
-                this.Add(nptapvm);
-
-                Validate();
+            } else {
+                var openFileDialog = new OpenFileDialog() {
+                    Filter = "Applications|*.lnk;*.exe",
+                    Title = "Select application path",
+                    InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+                };
+                bool? openResult = openFileDialog.ShowDialog();
+                if (openResult != null && openResult.Value) {
+                    appPath = openFileDialog.FileName;
+                    if (Path.GetExtension(openFileDialog.FileName).Contains("lnk")) {
+                        appPath = MpHelpers.Instance.GetShortcutTargetPath(openFileDialog.FileName);
+                    }
+                }
             }
+            
+            var nptapvm = new MpPasteToAppPathViewModel(new MpPasteToAppPath(appPath, string.Empty, false));
+            nptapvm.PasteToAppPath.WriteToDatabase();
+            this.Add(nptapvm);
+
+            SelectedPasteToAppPathViewModel = nptapvm;
+            Validate();
         }
         #endregion
     }

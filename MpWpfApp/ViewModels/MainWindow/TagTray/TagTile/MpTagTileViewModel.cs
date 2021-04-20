@@ -382,6 +382,12 @@ namespace MpWpfApp {
                 Tag.TagId == 0) {
                 return false;
             }
+            if(IsRecentTag) {
+                return MainWindowViewModel.ClipTrayViewModel.
+                    OrderByDescending(x => x.CopyDateTime).
+                    Take(Properties.Settings.Default.MaxRecentClipItems).
+                    Contains(ctvm);
+            }
             return Tag.IsLinkedWithCopyItem(ctvm.CopyItem);
         }
 
@@ -393,6 +399,12 @@ namespace MpWpfApp {
                 Tag.TagId == 0) {
                 return false;
             }
+            if (IsRecentTag) {
+                return MainWindowViewModel.ClipTrayViewModel.
+                    OrderByDescending(x => x.CopyDateTime).
+                    Take(Properties.Settings.Default.MaxRecentClipItems).
+                    Contains(rtbvm.HostClipTileViewModel);
+            }
             return Tag.IsLinkedWithCopyItem(rtbvm.CopyItem);
         }
         #endregion
@@ -401,16 +413,16 @@ namespace MpWpfApp {
         #endregion
 
         #region Commands
-        private RelayCommand _assignHotkeyCommand;
+        private RelayCommand<object> _assignHotkeyCommand;
         public ICommand AssignHotkeyCommand {
             get {
                 if (_assignHotkeyCommand == null) {
-                    _assignHotkeyCommand = new RelayCommand(AssignHotkey);
+                    _assignHotkeyCommand = new RelayCommand<object>(AssignHotkey);
                 }
                 return _assignHotkeyCommand;
             }
         }
-        private void AssignHotkey() {
+        private void AssignHotkey(object args) {
             ShortcutKeyString = MpShortcutCollectionViewModel.Instance.RegisterViewModelShortcut(this, "Select " + TagName, ShortcutKeyString, SelectTagCommand, null);
         }
 

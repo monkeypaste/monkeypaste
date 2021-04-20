@@ -647,6 +647,44 @@ namespace MpWpfApp {
             WriteToDatabase();
         }
 
+        public MpCopyItem LinkCompositeChild(MpCopyItem cci, int forceIdx = -1) {
+            if(CopyItemType != MpCopyItemType.RichText || CopyItemType != MpCopyItemType.Composite) {
+                return cci;
+            }
+            if (CompositeItemList.Contains(cci) && CompositeItemList.IndexOf(cci) == forceIdx) {
+                return cci;
+            }
+            cci.UnlinkFromCompositeParent();
+
+            MpCopyItem pcci = null;
+            if(CopyItemType == MpCopyItemType.RichText) {
+                pcci = new MpCopyItem(MpCopyItemType.Composite, Title, null, ItemColor.Color, IntPtr.Zero, App);
+                pcci.WriteToDatabase();
+                pcci.CompositeItemList.Add(this);
+                CompositeCopyItemId = 0;
+                CompositeParentCopyItemId = pcci.CopyItemId;
+                CompositeSortOrderIdx = 0;
+            } else {
+                pcci = this;
+            }
+            
+            cci.CompositeCopyItemId = 0;
+            cci.CompositeParentCopyItemId = pcci.CopyItemId;
+            if(forceIdx >= 0) {
+                if(forceIdx >= pcci.CompositeItemList.Count) {
+                    pcci.CompositeItemList.Add(cci);
+                } else {
+                    pcci.CompositeItemList.Insert(forceIdx, cci);
+                }
+            } else {
+                pcci.CompositeItemList.Add(cci);
+            }
+            cci.CompositeSortOrderIdx = pcci.CompositeItemList.IndexOf(cci);
+            pcci.WriteToDatabase();
+
+            return cci;
+        }
+
         public string GetDetail(MpCopyItemDetailType detailType) {
             string info = "I dunno";// string.Empty;
             switch (detailType) {
@@ -1212,7 +1250,6 @@ namespace MpWpfApp {
 
     public enum MpCopyItemDetailType {
         None = 0,
-        Shortcut,
         DateTimeCreated,
         DataSize,
         UsageStats

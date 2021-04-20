@@ -124,6 +124,7 @@
     <Compile Include="Converters\MpPointCollectionConverter.cs" />
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
     <Compile Include="Converters\MpStringToImageConverter.cs" />
+    <Compile Include="Converters\MpStringToIconConverter.cs" />
     <Compile Include="Converters\MpStringToBrushConverter.cs" />
     <Compile Include="Models\Db\MpDb.cs" />
     <Compile Include="Models\MpPasteToAppPath.cs" />
@@ -1730,6 +1731,12 @@
     <Resource Include="Resources\Images\rightclick.png" />
     <Resource Include="Resources\Images\append.png" />
     <Resource Include="Resources\Images\spellcheck.png" />
+    <Resource Include="Resources\Images\joystick.png" />
+    <Resource Include="Resources\Images\noentry.png" />
+    <Resource Include="Resources\Images\robotclaw.png" />
+    <Resource Include="Resources\Images\joystickactive.png" />
+    <Resource Include="Resources\Images\sliders.png" />
+    <Resource Include="Resources\Images\shield.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />

@@ -1116,12 +1116,15 @@ namespace MpWpfApp.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("25")]
         public int MaxRecentClipItems {
             get {
                 return ((int)(this["MaxRecentClipItems"]));
+            }
+            set {
+                this["MaxRecentClipItems"] = value;
             }
         }
         

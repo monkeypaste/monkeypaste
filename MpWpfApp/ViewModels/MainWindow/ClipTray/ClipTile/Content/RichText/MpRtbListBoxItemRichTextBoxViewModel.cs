@@ -17,6 +17,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
@@ -127,6 +128,37 @@ namespace MpWpfApp {
         #endregion
 
         #region Appearance
+        private BitmapSource _hotkeyIconSource = null;
+        public BitmapSource HotkeyIconSource {
+            get {
+                if (string.IsNullOrEmpty(ShortcutKeyString)) {
+                    return new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/joystick.png"));
+                }
+                return new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/joystickactive.png"));
+            }
+        }
+
+        public string HotkeyIconTooltip {
+            get {
+                if (string.IsNullOrEmpty(ShortcutKeyString)) {
+                    return @"Assign Shortcut";
+                }
+                return ShortcutKeyString;
+            }
+        }
+        public BitmapSource AppIcon {
+            get {
+                if (MainWindowViewModel == null ||
+                   MainWindowViewModel.ClipTrayViewModel == null ||
+                  !MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp) {
+                    if (CopyItem == null) {
+                        return null;
+                    }
+                    return CopyItemAppIcon;
+                }
+                return MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon;
+            }
+        }
         public Cursor RtbListBoxItemCursor {
             get {
                 if (HostClipTileViewModel == null) {
@@ -174,6 +206,12 @@ namespace MpWpfApp {
             }
         }
 
+        public double SubItemAppIconSize {
+            get {
+                return MpMeasurements.Instance.RtbCompositeAppIconSize;
+            }
+        }
+
         public double RtbListBoxItemTitleFontSize {
             get {
                 return MpMeasurements.Instance.RtbCompositeItemTitleFontSize;
@@ -188,7 +226,7 @@ namespace MpWpfApp {
                 var mm = MpMeasurements.Instance.RtbEditModeMinMargin;
 
                 if(SubItemOverlayVisibility == Visibility.Visible) {
-                    return new Thickness(DragButtonSize + mm, RtbListBoxItemTitleFontSize + mm, mm, 0);
+                    return new Thickness(DragButtonSize + mm, RtbListBoxItemTitleFontSize + mm, mm + SubItemAppIconSize, 0);
                 }
                 if(IsEditingContent) {
                     return new Thickness(0);
@@ -239,9 +277,15 @@ namespace MpWpfApp {
                 }
                 if (RichTextBoxViewModelCollection.Count == 1 && SubItemOverlayVisibility != Visibility.Visible) {
                     if (Rtb == null) {
-                        return CopyItemRichText.ToFlowDocument().GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;
+                        var fd = CopyItemRichText.ToFlowDocument();
+                        fd.PageWidth = RtbCanvasWidth - RtbPadding.Left - RtbPadding.Right;
+                        return fd.GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;
                     } else {
-                        return Rtb.Document.GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;
+                        return HostClipTileViewModel.TileContentHeight;
+
+                        //var fd = Rtb.Document;
+                        //fd.PageWidth = RtbCanvasWidth - RtbPadding.Left - RtbPadding.Right;
+                        //return fd.GetDocumentSize().Height + RtbPadding.Top + RtbPadding.Bottom;
                     }
                 }
                 return MpMeasurements.Instance.RtbCompositeItemMinHeight;
@@ -253,8 +297,7 @@ namespace MpWpfApp {
                 if (HostClipTileViewModel == null) {
                     return 0;
                 }
-                if (HostClipTileViewModel.IsExpanded) {
-                    
+                if (HostClipTileViewModel.IsExpanded) {                    
                     if (Rtb == null) {
                         double curFontSize = 16;
                         var width = Math.Max(
@@ -430,6 +473,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Visibility
+
         private Visibility _subItemVisibility = Visibility.Visible;
         public Visibility SubItemVisibility {
             get {
@@ -812,6 +856,24 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
+        public BitmapSource CopyItemAppIconBorder {
+            get {
+                if (CopyItem == null) {
+                    return new BitmapImage();
+                }
+                return CopyItem.App.IconBorderImage;
+            }
+        }
+
+        public BitmapSource CopyItemAppIcon {
+            get {
+                if (CopyItem == null) {
+                    return new BitmapImage();
+                }
+                return CopyItem.App.IconImage;
+            }
+        }
+
         public MpCopyItemType CopyItemType {
             get {
                 if (CopyItem == null) {
@@ -1088,7 +1150,7 @@ namespace MpWpfApp {
                             }
                             //RichTextBoxViewModelCollection.UpdateLayout();
                         } else {
-                            _detailIdx = 0;
+                            _detailIdx = 1;
                         }
                         //RichTextBoxViewModelCollection.OnPropertyChanged(nameof(RichTextBoxViewModelCollection.RtbListBoxHeight));
                         break;
@@ -1097,14 +1159,6 @@ namespace MpWpfApp {
                             _detailIdx++;
                             if (_detailIdx >= Enum.GetValues(typeof(MpCopyItemDetailType)).Length) {
                                 _detailIdx = 1;
-                            }
-                            if ((MpCopyItemDetailType)_detailIdx == MpCopyItemDetailType.Shortcut) {
-                                if (string.IsNullOrEmpty(ShortcutKeyString)) {
-                                    _detailIdx++;
-                                } else {
-                                    DetailText = ShortcutKeyString;
-                                    break;
-                                }
                             }
                             DetailText = CopyItem.GetDetail((MpCopyItemDetailType)_detailIdx);
                         }
@@ -1128,6 +1182,10 @@ namespace MpWpfApp {
             RtbListBoxItemTitleTextBlock = (TextBlock)Rtbc.FindName("RtbListBoxItemTitleTextBlock");
             RtbListBoxItemTitleTextBox = (TextBox)Rtbc.FindName("RtbListBoxItemTitleTextBox");
             DragButton = (Button)Rtbc.FindName("RtbListBoxItemOverlayBorderGridDragButton");
+            var titleIconImageButton = (Button)Rtbc.FindName("RtbItemAppIconImageButton");
+            var titleIconBorderImage = (Image)Rtbc.FindName("RtbItemAppIconBorderImage");
+            var titleIconBorderImageScaleTransform = (ScaleTransform)Rtbc.FindName("RtbItemAppIconBorderImageScaleTransform");
+            var titleIconHighlightBorderImage = (Image)Rtbc.FindName("RtbItemAppIconHighlightedBorderImage");
 
             HostClipTileViewModel.HighlightTextRangeViewModelCollection.UpdateInDocumentsBgColorList(Rtb);
 
@@ -1278,6 +1336,77 @@ namespace MpWpfApp {
                     IsEditingSubTitle = false;
                 }
             };
+
+            titleIconImageButton.MouseEnter += (s, e3) => {
+                if (MainWindowViewModel.ClipTrayViewModel.IsScrolling) {
+                    return;
+                }
+                var rtbvm = ((FrameworkElement)s).DataContext as MpRtbListBoxItemRichTextBoxViewModel;
+                if (rtbvm.HostClipTileViewModel.IsEditingTemplate || rtbvm.HostClipTileViewModel.IsPastingTemplate) {
+                    return;
+                }
+                double t = 100;
+
+                titleIconBorderImage.Visibility = Visibility.Visible;
+                double fromScale = 1;
+                double toScale = 1.1;
+                double st = 300;
+                var sa = new DoubleAnimation(fromScale, toScale, new Duration(TimeSpan.FromMilliseconds(st)));
+                var easing = new CubicEase();
+                easing.EasingMode = EasingMode.EaseOut;
+                sa.EasingFunction = easing;
+                titleIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, sa);
+                titleIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, sa);
+            };
+            titleIconImageButton.MouseLeave += (s, e3) => {
+                if (MainWindowViewModel.ClipTrayViewModel.IsScrolling) {
+                    return;
+                }
+                var rtbvm = ((FrameworkElement)s).DataContext as MpRtbListBoxItemRichTextBoxViewModel;
+                if (rtbvm.HostClipTileViewModel.IsEditingTemplate || rtbvm.HostClipTileViewModel.IsPastingTemplate) {
+                    return;
+                }
+                double fromScale = 1.15;
+                double toScale = 1;
+                double st = 300;
+                var sa = new DoubleAnimation(fromScale, toScale, new Duration(TimeSpan.FromMilliseconds(st)));
+                sa.Completed += (s1, e31) => {
+                    titleIconBorderImage.Visibility = Visibility.Hidden;
+                };
+                var easing = new CubicEase();
+                easing.EasingMode = EasingMode.EaseIn;
+                sa.EasingFunction = easing;
+                titleIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, sa);
+                titleIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, sa);
+            };
+            titleIconImageButton.PreviewMouseLeftButtonUp += (s, e7) => {
+                var rtbvm = ((FrameworkElement)s).DataContext as MpRtbListBoxItemRichTextBoxViewModel;
+
+                //MpHelpers.Instance.OpenUrl(CopyItem.App.AppPath);
+                RichTextBoxViewModelCollection.ClearSubSelection();
+                rtbvm.IsSubSelected = true;
+
+                foreach (var vctvm in MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles) {
+                    if (vctvm.CopyItemAppId != rtbvm.CopyItemAppId) {
+                        bool hasSubItemWithApp = false;
+                        if (vctvm.RichTextBoxViewModelCollection.Count > 1) {
+                            foreach (var vrtbvm in vctvm.RichTextBoxViewModelCollection) {
+                                if (vrtbvm.CopyItemAppId != rtbvm.CopyItemAppId) {
+                                    vrtbvm.SubItemVisibility = Visibility.Collapsed;
+                                } else {
+                                    hasSubItemWithApp = true;
+                                }
+                            }
+                        }
+                        if (!hasSubItemWithApp) {
+                            vctvm.TileVisibility = Visibility.Collapsed;
+                        }
+                    }
+                }
+                //this triggers clip tray to swap out the app icons for the filtered app
+                MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon = rtbvm.CopyItemAppIcon;
+                MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp = true;
+            };
             #endregion
 
             UpdateLayout();
@@ -1329,6 +1458,26 @@ namespace MpWpfApp {
             cm.Tag = rtbvm;
             rtbvm.IsSubContextMenuOpened = true;
             cm = MpPasteToAppPathViewModelCollection.Instance.UpdatePasteToMenuItem(cm);
+
+            MenuItem eami = null;
+            foreach (var mi in cm.Items) {
+                if (mi == null || mi is Separator) {
+                    continue;
+                }
+                if ((mi as MenuItem).Name == @"ToolsMenuItem") {
+                    foreach (var smi in (mi as MenuItem).Items) {
+                        if (smi == null || smi is Separator) {
+                            continue;
+                        }
+                        if ((smi as MenuItem).Name == "ExcludeApplication") {
+                            eami = smi as MenuItem;
+                        }
+                    }
+                }
+            }
+            if (eami != null) {
+                eami.Header = @"Exclude Application '" + CopyItem.App.AppName + "'";
+            }
 
             RefreshCommands();
 
