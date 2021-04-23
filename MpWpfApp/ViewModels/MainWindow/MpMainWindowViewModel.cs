@@ -282,6 +282,9 @@ namespace MpWpfApp {
             MainWindowCanvas = (Canvas)mw.FindName("MainWindowCanvas");
             MainWindowGrid = (Grid)mw.FindName("MainWindowGrid");
 
+            if(Properties.Settings.Default.DoFindBrowserUrlForCopy) {
+                Properties.Settings.Default.UserDefaultBrowserProcessPath = MpHelpers.Instance.GetSystemDefaultBrowserProcessPath();
+            }
             mw.Deactivated += (s, e2) => {
                 HideWindowCommand.Execute(null);
             };
@@ -321,7 +324,7 @@ namespace MpWpfApp {
 
             MpStandardBalloonViewModel.ShowBalloon(
                 "Monkey Paste",
-                "Successfully loaded w/ " + ClipTrayViewModel.Count + " items",
+                "Successfully loaded w/ " + MpCopyItem.GetTotalItemCount() + " items",
                 Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
 
             MpSoundPlayerGroupCollectionViewModel.Instance.PlayLoadedSoundCommand.Execute(null);

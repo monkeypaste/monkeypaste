@@ -182,6 +182,9 @@ namespace MpWpfApp {
         }
 
         public void ClipTileEditorToolbarBorder_Loaded(object sender, RoutedEventArgs args) {
+            if(HostClipTileViewModel == null) {
+                return;
+            }
             if (HostClipTileViewModel.CopyItemType != MpCopyItemType.RichText && 
                 HostClipTileViewModel.CopyItemType != MpCopyItemType.Composite) {
                 return;

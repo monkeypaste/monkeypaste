@@ -14,7 +14,7 @@ namespace MpWpfApp {
         public bool PressEnter { get; set; }
         public string Args { get; set; }
         public string Label { get; set; }
-        public BitmapSource Icon { get; set; }
+        public BitmapSource Icon { get; set; } = new BitmapImage();
         public WinApi.ShowWindowCommands WindowState { get; set; }
 
         public static List<MpPasteToAppPath> GetAllPasteToAppPaths() {

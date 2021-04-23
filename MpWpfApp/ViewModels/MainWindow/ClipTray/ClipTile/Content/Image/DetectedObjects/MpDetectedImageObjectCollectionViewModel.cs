@@ -20,6 +20,9 @@ namespace MpWpfApp {
         private BitmapSource _copyItemBmp = null;
         public BitmapSource CopyItemBmp {
             get {
+                if(_copyItemBmp == null) {
+                    return new BitmapImage();
+                }
                 return _copyItemBmp;
             }
             set {

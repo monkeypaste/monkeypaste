@@ -9,7 +9,7 @@ namespace MpWpfApp {
     public class MpStringToImageConverter : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is string) {
-                return @"/Resources" + value.ToString();
+                return @"//Resources" + value.ToString();
             }
             return null;
         }

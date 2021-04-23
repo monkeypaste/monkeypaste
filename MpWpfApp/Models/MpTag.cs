@@ -95,6 +95,9 @@ namespace MpWpfApp {
             return false;
         }
         public bool LinkWithCopyItem(MpCopyItem ci) {
+            if(ci == null) {
+                return false;
+            }
             //returns FALSE if copyitem is already linked to maintain correct counts
             if (IsLinkedWithCopyItem(ci)) {               
                 return false;
@@ -124,6 +127,9 @@ namespace MpWpfApp {
             return true;
         }
         public void UnlinkWithCopyItem(MpCopyItem ci) {
+            if(ci == null) {
+                return;
+            }
             if (!IsLinkedWithCopyItem(ci)) {
                 //Console.WriteLine("MpTag Warning attempting to unlink non-linked tag " + TagId + " with copyitem " + ci.copyItemId + " ignoring...");
                 return;

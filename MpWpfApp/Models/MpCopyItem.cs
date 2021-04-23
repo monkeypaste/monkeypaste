@@ -71,6 +71,8 @@ namespace MpWpfApp {
 
         public string ItemRichText { get; set; }
 
+        public BitmapSource ItemScreenshot { get; private set; }
+
         public MpEventEnabledFlowDocument ItemFlowDocument { get; set; }
 
         private string _itemCsv = string.Empty;
@@ -101,6 +103,9 @@ namespace MpWpfApp {
                     case MpCopyItemType.FileList:
                     case MpCopyItemType.Composite:
                     case MpCopyItemType.RichText:
+                        if(_itemBitmapSource == null) {
+                            return new BitmapImage();
+                        }
                         return _itemBitmapSource;
                 }
                 return new BitmapImage();
@@ -110,6 +115,8 @@ namespace MpWpfApp {
                 _itemBmpByteArray = _itemBitmapSource.ToByteArray();
             }
         }
+
+        public string ItemUrl { get; set; } = string.Empty;
 
         //public BitmapSource ItemTitleSwirl { get; set; }
 
@@ -579,6 +586,7 @@ namespace MpWpfApp {
             Client = new MpClient(0, 0, MpHelpers.Instance.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
             
             if(hwnd != IntPtr.Zero) {
+                //occurs for items added from clipboard
                 var appPath = MpHelpers.Instance.GetProcessPath(hwnd);
                 var appList = _AppList.Where(x => x.AppPath == appPath).ToList();
                 if (appList == null || appList.Count == 0) {
@@ -586,6 +594,11 @@ namespace MpWpfApp {
                     _AppList.Add(App);
                 } else {
                     App = appList[0];
+                }
+                if (Properties.Settings.Default.DoFindBrowserUrlForCopy) {
+                    if (MpRunningApplicationManager.Instance.ActiveProcessPath == Properties.Settings.Default.UserDefaultBrowserProcessPath) {
+                        ItemScreenshot = MpHelpers.Instance.CopyScreen();
+                    }
                 }
             } else if(app != null) {
                 App = app;
@@ -1015,7 +1028,10 @@ namespace MpWpfApp {
             CopyDateTime = DateTime.Parse(dr["CopyDateTime"].ToString());
             Title = dr["Title"].ToString();
             CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
-            
+            ItemUrl = dr["ItemUrl"].ToString();
+            if(ItemUrl == null) {
+                ItemUrl = string.Empty;
+            }
             ItemCsv = dr["ItemCsv"].ToString();
 
             Client = new MpClient(0, 0, MpHelpers.Instance.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
@@ -1141,12 +1157,14 @@ namespace MpWpfApp {
             if(string.IsNullOrEmpty(itemText)) {
                 itemText = string.Empty;
             }
+            
             //byte[] itemImage = MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource);
             //if copyitem already exists
             if (CopyItemId > 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "update MpCopyItem set ItemCsv=@icsv, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemImage=@ii where pk_MpCopyItemId=@ciid",
+                        "update MpCopyItem set ItemUrl=@iu, ItemCsv=@icsv, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemImage=@ii where pk_MpCopyItemId=@ciid",
                         new Dictionary<string, object> {
+                            { "@iu", ItemUrl },
                             { @"icsv",ItemCsv },
                             //{ "@ts", MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemTitleSwirl) },
                             { "@citd", (int)CopyItemType },
@@ -1161,10 +1179,11 @@ namespace MpWpfApp {
                         });
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpCopyItem(ItemCsv,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) " + 
-                    "values (@icsv,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
+                    "insert into MpCopyItem(ItemUrl, ItemCsv,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) " + 
+                    "values (@iu,@icsv,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
                     new Dictionary<string, object> {
-                            { @"icsv",ItemCsv },
+                            {"@iu",ItemUrl },
+                            { "@icsv",ItemCsv },
                             //{ "@ts", MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemTitleSwirl) },
                             { "@citd", (int)CopyItemType },
                             { "@cid", Client.ClientId },

@@ -216,6 +216,9 @@ namespace MpWpfApp {
         private BitmapSource _filterByAppIcon = null;
         public BitmapSource FilterByAppIcon {
             get {
+                if(_filterByAppIcon == null) {
+                    return new BitmapImage();
+                }
                 return _filterByAppIcon;
             }
             set {
@@ -453,6 +456,14 @@ namespace MpWpfApp {
                 }
                 Add(new MpClipTileViewModel(ci));
             }
+
+            //int emptyItemsToAdd = Properties.Settings.Default.MaxRecentClipItems - this.Count;
+            //while (emptyItemsToAdd > 0) {
+            //    var ectvm = new MpClipTileViewModel(true) { TileVisibility = Visibility.Collapsed };
+            //    ectvm.RichTextBoxViewModelCollection.Add(new MpRtbListBoxItemRichTextBoxViewModel(ectvm,ectvm.CopyItem));
+            //    base.Add(ectvm);
+            //    emptyItemsToAdd--;
+            //}
         }
 
         public void ClipTray_Loaded(object sender, RoutedEventArgs e) {
@@ -854,7 +865,7 @@ namespace MpWpfApp {
         }
         public async Task AddItemFromClipboard() {
             var sw = new Stopwatch();
-            sw.Start();
+            sw.Start();          
 
             var ncisw = new Stopwatch();
             ncisw.Start();
@@ -866,6 +877,7 @@ namespace MpWpfApp {
                 //this occurs if the copy item is not a known format
                 return;
             }
+           
             if (MainWindowViewModel.AppModeViewModel.IsInAppendMode && SelectedClipTiles.Count > 0) {
                 //when in append mode just append the new items text to selecteditem
                 var primarySelectedClipTile = PrimarySelectedClipTile;
@@ -899,6 +911,7 @@ namespace MpWpfApp {
                 }
             } else {
                 var nctvm = new MpClipTileViewModel(newCopyItem);
+
                 await this.AddAsync(nctvm);
 
                 if (Properties.Settings.Default.NotificationDoCopySound) {
@@ -929,9 +942,37 @@ namespace MpWpfApp {
         }
 
         public void Add(MpClipTileViewModel ctvm, int forceIdx = 0) {
-            if(forceIdx >= 0 && forceIdx < this.Count) {
+            if(MainWindowViewModel != null && MainWindowViewModel.TagTrayViewModel != null) {
+                if (MainWindowViewModel.TagTrayViewModel.SelectedTagTile != MainWindowViewModel.TagTrayViewModel.GetRecentTagTileViewModel()) {
+                    //always add new clips to recent tag
+                    MainWindowViewModel.TagTrayViewModel.GetRecentTagTileViewModel().IsSelected = true;
+                }
+            }
+
+            //int nextVisibleIdx = 0;
+            //if (VisibileClipTiles.Count < Properties.Settings.Default.MaxRecentClipItems) {
+            //    //occurs when there are not enough items to fill all recent tiles
+            //    //and the tile after all visible needs to be 'unstubbed'
+            //    if(VisibileClipTiles.Count > 0) {
+            //        nextVisibleIdx = this.IndexOf(VisibileClipTiles[VisibileClipTiles.Count - 1]) + 1;
+            //    }
+            //    this[nextVisibleIdx].TileVisibility = Visibility.Visible;
+            //} else {
+            //    //otherwise reuse tail of recent to virtualize item adding
+            //    nextVisibleIdx = this.IndexOf(VisibileClipTiles[VisibileClipTiles.Count - 1]);
+            //}
+
+            if (forceIdx >= 0 && forceIdx < this.Count) {
                 base.Insert(forceIdx, ctvm);
             } else {
+                //var ctvm = this[nextVisibleIdx];
+                //for (int i = 1; i < ctvm.RichTextBoxViewModelCollection.Count; i++) {
+                //    ctvm.RichTextBoxViewModelCollection.RemoveAt(i);
+                //}
+                //ctvm.CopyItem = ci;
+                //if(ctvm.IsTextItem) {
+                //    ctvm.RichTextBoxViewModelCollection[0].CopyItem = ci;
+                //}
                 base.Add(ctvm);
             }
             

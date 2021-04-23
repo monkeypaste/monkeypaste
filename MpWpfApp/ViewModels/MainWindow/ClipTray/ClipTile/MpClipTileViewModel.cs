@@ -238,13 +238,30 @@
                 return ShortcutKeyString;
             }
         }
+
+        private BitmapSource _favIcon = null;
+        public BitmapSource FavIcon {
+            get {
+                return _favIcon;
+            }
+            set {
+                if (_favIcon != value) {
+                    _favIcon = value;
+                    OnPropertyChanged(nameof(FavIcon));
+                }
+            }
+        }
+
         public BitmapSource AppIcon {
             get {
                 if(MainWindowViewModel == null || 
                    MainWindowViewModel.ClipTrayViewModel == null ||
                   !MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp) {
                     if(CopyItem == null) {
-                        return null;
+                        return new BitmapImage();
+                    }
+                    if(FavIcon != null) {
+                        return FavIcon;
                     }
                     return CopyItemAppIcon;
                 }
@@ -744,7 +761,12 @@
         #endregion
 
         #region Business Logic
-        
+        public bool IsStubItem {
+            get {
+                return CopyItemId == 0 && TileVisibility != Visibility.Visible;
+            }
+        }
+
         public bool IsTextItem {
             get {
                 return CopyItemType == MpCopyItemType.RichText || CopyItemType == MpCopyItemType.Composite;
@@ -1480,6 +1502,10 @@
                     //    _copyItem = value;
                     //}
                     _copyItem = value;
+                    if(CopyItem != null) {
+                        CopyItem.WriteToDatabase();
+                    }
+                    
                     OnPropertyChanged(nameof(CopyItem));
                     OnPropertyChanged(nameof(CopyItemId));
                     OnPropertyChanged(nameof(CopyItemType));
@@ -1514,7 +1540,6 @@
                     OnPropertyChanged(nameof(TrialOverlayVisibility));
                     OnPropertyChanged(nameof(RichTextBoxViewModelCollection));
                     OnPropertyChanged(nameof(TitleFontSize));
-                    CopyItem.WriteToDatabase();
                 }
             }
         }
@@ -1637,8 +1662,7 @@
             EditTemplateToolbarViewModel = new MpEditTemplateToolbarViewModel(this);
             PasteTemplateToolbarViewModel = new MpPasteTemplateToolbarViewModel(this);
             HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
-
-        }
+        }        
 
         #region Loading Initializers
         public void ClipTile_Loaded(object sender, RoutedEventArgs e) {
@@ -2444,6 +2468,7 @@
                 RichTextBoxViewModelCollection.SubSelectedClipItems[0].Rtb.Selection.Select(rtbSelection.Start, rtbSelection.End);
             }
         }
+                
 
         public async Task<string> GetPastableRichText() {
             if (HasTemplate) {

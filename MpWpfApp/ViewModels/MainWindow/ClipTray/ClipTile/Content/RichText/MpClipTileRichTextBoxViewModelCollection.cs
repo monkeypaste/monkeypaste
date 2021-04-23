@@ -274,6 +274,9 @@ namespace MpWpfApp {
 
         public double RtbListBoxHeight {
             get {
+                if(HostClipTileViewModel == null) {
+                    return 0;
+                }
                 double ch = MpMeasurements.Instance.ClipTileContentHeight;
                 if (HostClipTileViewModel.IsEditingTile) {
                     ch -= MpMeasurements.Instance.ClipTileEditToolbarHeight;
@@ -541,6 +544,9 @@ namespace MpWpfApp {
         }
 
         public void SyncItemsWithModel() {
+            if(HostClipTileViewModel == null) {
+                return;
+            }
             var sw = new Stopwatch();
             sw.Start();
             var hci = HostClipTileViewModel.CopyItem;

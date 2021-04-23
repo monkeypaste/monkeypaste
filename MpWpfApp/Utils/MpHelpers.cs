@@ -35,12 +35,13 @@ using static MpWpfApp.MpShellEx;
 using static QRCoder.PayloadGenerator;
 //using Windows.Graphics.Imaging;
 //using Windows.Media.Ocr;
-using CsvHelper;
+//using CsvHelper;
 using System.Windows.Threading;
 using System.Security.Principal;
 using System.Windows.Controls.Primitives;
 using System.Speech.Synthesis;
 using WindowsInput;
+using Microsoft.Win32;
 
 namespace MpWpfApp {
     public class MpHelpers {
@@ -870,11 +871,11 @@ namespace MpWpfApp {
             if (filePath.ToLower().Contains(@".tmp")) {
                 filePath = filePath.ToLower().Replace(@".tmp", @".csv");
             }
-            using (var writer = new StreamWriter(filePath)) {
-                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) {
-                    csv.WriteRecords(textList);
-                }
-            }
+            //using (var writer = new StreamWriter(filePath)) {
+            //    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture)) {
+            //        csv.WriteRecords(textList);
+            //    }
+            //}
             if (isTemporary) {
                 ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AddTempFile(filePath);
             }
@@ -1362,9 +1363,54 @@ namespace MpWpfApp {
             // get the file attributes for file or directory
             return File.GetAttributes(str).HasFlag(FileAttributes.Directory);
         }
+
+        public string GetSystemDefaultBrowserProcessPath() {
+            string name = string.Empty;
+            RegistryKey regKey = null;
+
+            try {
+                var regDefault = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\.htm\\UserChoice", false);
+                var stringDefault = regDefault.GetValue("ProgId");
+
+                regKey = Registry.ClassesRoot.OpenSubKey(stringDefault + "\\shell\\open\\command", false);
+                name = regKey.GetValue(null).ToString().ToLower().Replace("" + (char)34, "");
+
+                if (!name.EndsWith("exe"))
+                    name = name.Substring(0, name.LastIndexOf(".exe") + 4);
+
+            } catch (Exception ex) {
+                name = string.Format("ERROR: An exception of type: {0} occurred in method: {1} in the following module: {2}", ex.GetType(), ex.TargetSite, this.GetType());
+            } finally {
+                if (regKey != null)
+                    regKey.Close();
+            }
+
+            return name;
+        }
         #endregion
 
         #region Visual
+        
+        public BitmapSource CopyScreen() {
+            var left = System.Windows.Forms.Screen.AllScreens.Min(screen => screen.Bounds.X);
+            var top = System.Windows.Forms.Screen.AllScreens.Min(screen => screen.Bounds.Y);
+            var right = System.Windows.Forms.Screen.AllScreens.Max(screen => screen.Bounds.X + screen.Bounds.Width);
+            var bottom = System.Windows.Forms.Screen.AllScreens.Max(screen => screen.Bounds.Y + screen.Bounds.Height);
+            var width = right - left;
+            var height = bottom - top;
+
+            using (var screenBmp = new System.Drawing.Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb)) {
+                using (var bmpGraphics = System.Drawing.Graphics.FromImage(screenBmp)) {
+                    bmpGraphics.CopyFromScreen(left, top, 0, 0, new System.Drawing.Size(width, height));
+                    return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                        screenBmp.GetHbitmap(),
+                        IntPtr.Zero,
+                        Int32Rect.Empty,
+                        BitmapSizeOptions.FromEmptyOptions());
+                }
+            }
+        }       
+
         public bool IsMouseOver(Visual target) {
             if(target == null) {
                 return false;
@@ -1786,7 +1832,6 @@ namespace MpWpfApp {
             } else {
                 formattedBmpSrc = bmpSrc;
             }
-
             var bmp = new WriteableBitmap(formattedBmpSrc);
             var pixels = GetPixels(bmp);
             var pixelColor = new PixelColor[1, 1];
@@ -2138,6 +2183,22 @@ namespace MpWpfApp {
         #endregion
 
         #region Converters
+        public BitmapSource ConvertBitmapSourceToGrayScale(BitmapSource bmpSrc) {
+            var grayScaleSsBmp = new FormatConvertedBitmap();
+
+            // BitmapSource objects like FormatConvertedBitmap can only have their properties
+            // changed within a BeginInit/EndInit block.
+            grayScaleSsBmp.BeginInit();
+
+            // Use the BitmapSource object defined above as the source for this new
+            // BitmapSource (chain the BitmapSource objects together).
+            grayScaleSsBmp.Source = bmpSrc;
+
+            // Set the new format to Gray32Float (grayscale).
+            grayScaleSsBmp.DestinationFormat = PixelFormats.Gray32Float;
+            grayScaleSsBmp.EndInit();
+            return grayScaleSsBmp;
+        }
         public BitmapSource ConvertFlowDocumentToBitmap(FlowDocument document, Size size, Brush bgBrush = null) {
             if (size.Width <= 0) {
                 size.Width = 1;
@@ -2668,6 +2729,42 @@ namespace MpWpfApp {
         #endregion
 
         #region Http
+        public string GetFullyFormattedUrl(string str) {
+            if (str.StartsWith(@"http://")) {
+                return str;
+            }
+            if (str.StartsWith(@"https://")) {
+                return str;
+            }
+            return @"https://" + str;
+        }
+
+        public bool IsValidUrl(string str) {
+            var mc = Regex.Match(str, MpRegEx.Instance.GetRegExForTokenType(MpSubTextTokenType.Uri), RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture);
+            return mc.Success;
+        }
+
+        public BitmapSource GetUrlFavicon(String url) {
+            try {
+                Uri favicon = new Uri("http://www.google.com/s2/favicons?domain=" + GetUrlDomain(url), UriKind.Absolute);
+                var img = new BitmapImage(favicon);
+                return img;
+            } catch(Exception ex) {
+                Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url + " with exception: "+ex);
+                return null;
+            }
+        }
+
+        public string GetUrlDomain(string url) {
+            try {
+                string[] hostParts = new System.Uri(url).Host.Split('.');
+                return String.Join(".", hostParts.Skip(Math.Max(0, hostParts.Length - 2)).Take(2));
+            } catch(Exception ex) {
+                Console.WriteLine("MpHelpers.GetUrlDomain error for url: " + url + " with exception: " + ex);
+            }
+            return null;
+        }
+
         public BitmapSource ConvertUrlToQrCode(string url) {
             using (var qrGenerator = new QRCodeGenerator()) {
                 using (var qrCodeData = qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q)) {

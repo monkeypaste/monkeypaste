@@ -414,6 +414,7 @@ namespace MpWpfApp {
                     , ItemImage longblob
                     , ItemText text NOT NULL       
                     , ItemCsv text
+                    , ItemUrl text
                     , Screenshot longblob
                     , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL
                     , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)

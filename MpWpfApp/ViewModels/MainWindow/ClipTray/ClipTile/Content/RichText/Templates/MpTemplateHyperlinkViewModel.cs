@@ -20,20 +20,7 @@ namespace MpWpfApp {
         Pounds,
         Euros,
         Yen
-    }
-
-    public enum MpSubTextTokenType {
-        None = 0,
-        FileOrFolder,
-        Uri,
-        Email,
-        PhoneNumber,
-        Currency,
-        HexColor6,
-        StreetAddress,
-        TemplateSegment,
-        HexColor8
-    }
+    }    
     public class MpTemplateHyperlinkViewModel : MpUndoableViewModelBase<MpTemplateHyperlinkViewModel>, ICloneable {
         #region Private Variables
         #endregion

@@ -128,6 +128,19 @@ namespace MpWpfApp {
         #endregion
 
         #region Appearance
+        private BitmapSource _favIcon = null;
+        public BitmapSource FavIcon { 
+            get {
+                return _favIcon;
+            }
+            set {
+                if(_favIcon != value) {
+                    _favIcon = value;
+                    OnPropertyChanged(nameof(FavIcon));
+                }
+            }
+        }
+
         private BitmapSource _hotkeyIconSource = null;
         public BitmapSource HotkeyIconSource {
             get {
@@ -152,7 +165,10 @@ namespace MpWpfApp {
                    MainWindowViewModel.ClipTrayViewModel == null ||
                   !MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp) {
                     if (CopyItem == null) {
-                        return null;
+                        return new BitmapImage();
+                    }
+                    if(FavIcon != null) {
+                        return FavIcon;
                     }
                     return CopyItemAppIcon;
                 }
@@ -1063,6 +1079,9 @@ namespace MpWpfApp {
                 //if(_copyItem != value) 
                     {
                     _copyItem = value;
+                    if (CopyItem != null) {
+                        CopyItem.WriteToDatabase();
+                    }
                     OnPropertyChanged(nameof(CopyItem));
                     OnPropertyChanged(nameof(CopyItemId));
                     OnPropertyChanged(nameof(CompositeParentCopyItemId));
@@ -1170,6 +1189,12 @@ namespace MpWpfApp {
                         HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.TileBorderBrush));
                         HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.TileBorderBrushRect));
                         break;
+                }
+            };
+
+            ViewModelLoaded += async (s, e) => {
+                if(!MainWindowViewModel.IsLoading) {
+                    await GatherAnalytics();
                 }
             };
         }
@@ -1487,6 +1512,20 @@ namespace MpWpfApp {
         }
         #endregion      
 
+        public async Task GatherAnalytics() {
+            if(CopyItem.ItemScreenshot != null) {
+                string detectedUrl = await MpBrowserUrlDetector.Instance.FindUrlAddressFromScreenshot(CopyItem.ItemScreenshot);
+                if(!string.IsNullOrEmpty(detectedUrl)) {
+                    FavIcon = MpHelpers.Instance.GetUrlFavicon(detectedUrl);
+                    if(HostClipTileViewModel.RichTextBoxViewModelCollection.Count == 1) {
+                        HostClipTileViewModel.FavIcon = FavIcon;
+                        HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.AppIcon));
+                    }
+                }
+                Console.WriteLine("Detected Browser Address: " + detectedUrl);
+            }
+        }
+
         public void RefreshCommands() {
             RichTextBoxViewModelCollection.BringSubSelectedClipTilesToFrontCommand.RaiseCanExecuteChanged();
             RichTextBoxViewModelCollection.SendSubSelectedClipTilesToBackCommand.RaiseCanExecuteChanged();
@@ -1649,38 +1688,19 @@ namespace MpWpfApp {
             if(Rtb == null) {
                 return;
             }
-            
-            var regExGroupList = new List<string> {
-                //File or folder path
-                @"^(?:[\w]\:|\\)(\\[a-zA-Z_\-\s0-9\.()~!@#$%^&=+';,{}\[\]]+)+(\.("+Properties.Settings.Default.KnownFileExtensionsPsv+@")|(\\|\w))$",
-                //WebLink
-                @"(?:https?://|www\.)\S+", 
-                //Email
-                @"([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})",
-                //PhoneNumber
-                @"(\+?\d{1,3}?[ -.]?)?\(?(\d{3})\)?[ -.]?(\d{3})[ -.]?(\d{4})",
-                //Currency
-                @"[$|£|€|¥][\d|\.]([0-9]{0,3},([0-9]{3},)*[0-9]{3}|[0-9]+)?(\.\d{0,2})?",
-                //HexColor (no alpha)
-                @"#([0-9]|[a-fA-F]){6}",
-                //StreetAddress
-                @"\d+[ ](?:[A-Za-z0-9.-]+[ ]?)+(?:Avenue|Lane|Road|Boulevard|Drive|Street|Ave|Dr|Rd|Blvd|Ln|St)\.?,\s(?:[A-Z][a-z.-]+[ ]?)+ \b\d{5}(?:-\d{4})?\b",                
-                //Text Template (dynamically matching from CopyItemTemplate.TemplateName)
-                CopyItem.TemplateRegExMatchString,                
-                //HexColor (with alpha)
-                @"#([0-9]|[a-fA-F]){8}",
-            };
-            //var docPlainText = new TextRange(Rtb.Document.ContentStart, Rtb.Document.ContentEnd).Text;
 
             var rtbSelection = Rtb?.Selection.Clone();
-            for (int i = 0; i < regExGroupList.Count; i++) {
-                var linkType = (MpSubTextTokenType)(i + 1);                
+            for (int i = 1; i < MpRegEx.Instance.RegExList.Count; i++) {
+                var linkType = (MpSubTextTokenType)i;                
                 if (linkType == MpSubTextTokenType.StreetAddress) {
                     //doesn't consistently work and presents bugs so disabling for now
                     continue;
                 }
                 var lastRangeEnd = Rtb.Document.ContentStart;
-                var regExStr = regExGroupList[i];
+                var regExStr = MpRegEx.Instance.GetRegExForTokenType(linkType);
+                if(linkType == MpSubTextTokenType.TemplateSegment) {
+                    regExStr = CopyItem.TemplateRegExMatchString;
+                }
                 if (string.IsNullOrEmpty(regExStr)) {
                     //this occurs for templates when copyitem has no templates
                     continue;
@@ -1741,10 +1761,22 @@ namespace MpWpfApp {
                                         hl.NavigateUri = new Uri("https://google.com/maps/place/" + linkText.Replace(' ', '+'));
                                         break;
                                     case MpSubTextTokenType.Uri:
-                                        if (!linkText.Contains("https://")) {
-                                            hl.NavigateUri = new Uri("https://" + linkText);
-                                        } else {
-                                            hl.NavigateUri = new Uri(linkText);
+                                        try {
+                                            if (!linkText.Contains("https://")) {
+                                                hl.NavigateUri = new Uri("https://" + linkText);
+                                            } else {
+                                                hl.NavigateUri = new Uri(linkText);
+                                            }
+                                        }
+                                        catch(Exception ex) {
+                                            Console.WriteLine("CreateHyperlinks error creating uri from: " + linkText + " replacing as run and ignoring");
+                                            var par = hl.Parent.FindParentOfType<Paragraph>();
+                                            var s = new Span();
+                                            s.Inlines.AddRange(hl.Inlines.ToArray());
+                                            par.Inlines.InsertAfter(hl, s);
+                                            par.Inlines.Remove(hl);
+                                            break;
+
                                         }
                                         MenuItem minifyUrl = new MenuItem();
                                         minifyUrl.Header = "Minify with bit.ly";

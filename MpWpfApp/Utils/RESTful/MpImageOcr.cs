@@ -27,7 +27,7 @@ namespace MpWpfApp {
         /// the Computer Vision REST API.
         /// </summary>
         /// <param name="imageFilePath">The image file with printed text.</param>
-        public async Task<string> OcrImage(byte[] byteData) {
+        public async Task<MpOcr> OcrImage(byte[] byteData) {
             try {
                 HttpClient client = new HttpClient();
 
@@ -68,7 +68,17 @@ namespace MpWpfApp {
                 Console.WriteLine("\nResponse:\n\n{0}\n",
                     JToken.Parse(contentString).ToString());
 
-                var j = JsonConvert.DeserializeObject<MpOcr>(contentString);
+                return JsonConvert.DeserializeObject<MpOcr>(contentString);
+            }
+            catch (Exception e) {
+                Console.WriteLine("\n" + e.Message);
+            }
+            return null;
+        }
+
+        public async Task<string> OcrImageForText(byte[] byteData) {
+            try {
+                var j = await OcrImage(byteData);
                 var sb = new StringBuilder();
                 foreach (var region in j.regions) {
                     foreach (var line in region.lines) {
@@ -80,8 +90,7 @@ namespace MpWpfApp {
                 }
 
                 return sb.ToString();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Console.WriteLine("\n" + e.Message);
             }
             return string.Empty;

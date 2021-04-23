@@ -1227,5 +1227,29 @@ namespace MpWpfApp.Properties {
                 this["MainWindowMonitorIdx"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DoFindBrowserUrlForCopy {
+            get {
+                return ((bool)(this["DoFindBrowserUrlForCopy"]));
+            }
+            set {
+                this["DoFindBrowserUrlForCopy"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string UserDefaultBrowserProcessPath {
+            get {
+                return ((string)(this["UserDefaultBrowserProcessPath"]));
+            }
+            set {
+                this["UserDefaultBrowserProcessPath"] = value;
+            }
+        }
     }
 }

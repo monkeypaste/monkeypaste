@@ -10,8 +10,8 @@ namespace MpWpfApp {
     public class MpIcon : MpDbObject {
         public static int TotalIconCount = 0;
         public int IconId { get; set; }
-        public BitmapSource IconImage { get; set; }
-        public BitmapSource IconBorderImage { get; set; }
+        public BitmapSource IconImage { get; set; } = new BitmapImage();
+        public BitmapSource IconBorderImage { get; set; } = new BitmapImage();
 
         public static List<MpIcon> GetAllIcons() {
             var iconList = new List<MpIcon>();

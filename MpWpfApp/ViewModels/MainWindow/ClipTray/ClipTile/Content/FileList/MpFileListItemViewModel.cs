@@ -73,6 +73,9 @@ namespace MpWpfApp {
         private BitmapSource _icon = null;
         public BitmapSource Icon {
             get {
+                if(_icon == null) {
+                    return new BitmapImage();
+                }
                 return _icon;
             }
             set {
