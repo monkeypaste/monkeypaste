@@ -163,6 +163,7 @@
     <Compile Include="Utils\MpSettingsBindingExtension.cs" />
     <Compile Include="Utils\MpVisualUtility.cs" />
     <Compile Include="Utils\RESTful\MpTextAnalyzer.cs" />
+    <Compile Include="Utils\System\MpDebugTraceListener.cs" />
     <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
     <Compile Include="Utils\System\MpRunningApplicationManager.cs" />
     <Compile Include="Utils\UndoRedo\MpIUndoRedo.cs" />
@@ -1736,6 +1737,7 @@
     <Resource Include="Resources\Images\joystickactive.png" />
     <Resource Include="Resources\Images\sliders.png" />
     <Resource Include="Resources\Images\shield.png" />
+    <Resource Include="Resources\Images\signout.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />

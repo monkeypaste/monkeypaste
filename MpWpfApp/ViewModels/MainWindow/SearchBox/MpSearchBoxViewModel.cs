@@ -70,6 +70,20 @@ namespace MpWpfApp {
             }
         }
 
+        private bool _searchByUrl = Properties.Settings.Default.SearchBySourceUrl;
+        public bool SearchByUrl {
+            get {
+                return _searchByUrl;
+            }
+            set {
+                if (_searchByUrl != value) {
+                    _searchByUrl = value;
+                    Properties.Settings.Default.SearchBySourceUrl = _searchByUrl;
+                    OnPropertyChanged(nameof(SearchByUrl));
+                }
+            }
+        }
+
         private bool _searchByFileList = Properties.Settings.Default.SearchByFileList;
         public bool SearchByFileList {
             get {
@@ -393,6 +407,8 @@ namespace MpWpfApp {
                 searchByContextMenu.Items.Add(
                     CreateSearchByMenuItem("Text", SearchByRichText));
                 searchByContextMenu.Items.Add(
+                    CreateSearchByMenuItem("Source Url", SearchByUrl));
+                searchByContextMenu.Items.Add(
                     CreateSearchByMenuItem("File List", SearchByFileList));
                 searchByContextMenu.Items.Add(
                     CreateSearchByMenuItem("Image", SearchByImage));
@@ -421,15 +437,18 @@ namespace MpWpfApp {
                                 SearchByRichText = isChecked;
                                 break;
                             case 4:
-                                SearchByFileList = isChecked;
+                                SearchByUrl = isChecked;
                                 break;
                             case 5:
-                                SearchByImage = isChecked;
+                                SearchByFileList = isChecked;
                                 break;
                             case 6:
-                                SearchByApplicationName = isChecked;
+                                SearchByImage = isChecked;
                                 break;
                             case 7:
+                                SearchByApplicationName = isChecked;
+                                break;
+                            case 8:
                                 SearchByProcessName = isChecked;
                                 break;
                         }

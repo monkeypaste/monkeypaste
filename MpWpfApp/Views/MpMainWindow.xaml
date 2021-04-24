@@ -126,7 +126,7 @@
                                   Command="{Binding ShowSettingsWindowCommand}"
                                   CommandParameter="{StaticResource SettingsTabHelp}" />
                         <MenuItem Header="Exit"
-                                  Icon="{Binding Source={StaticResource DeleteIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                                  Icon="{Binding Source={StaticResource SignOutIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                                   Command="{Binding ExitApplicationCommand}" />
                     </ContextMenu>
                 </tb:TaskbarIcon.ContextMenu>
@@ -188,7 +188,7 @@
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
                     </Button>
-                    <ToggleButton x:Name="TogglekMainWindowLockButton"
+                    <ToggleButton x:Name="ToggleMainWindowLockButton"
                                   Width="35"
                                   Height="35"
                                   Margin="5,0,0,0"
@@ -859,10 +859,10 @@
                                                     <MenuItem x:Name="ExcludeApplication" 
                                                               Header="Exclude Application"
                                                               Icon="{Binding Source={StaticResource NoEntryIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                              Command="{Binding ExcludeApplicationCommand}" />
+                                                              Command="{Binding Data.ExcludeApplicationCommand, Source={StaticResource ClipTileProxy}}" />
                                                     <MenuItem Header="Add Paste Macro For Application"
                                                               Icon="{Binding Source={StaticResource RobotClawIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                              Command="{Binding MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand}"
+                                                              Command="{Binding Data.MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand, Source={StaticResource ClipTileProxy}}"
                                                               CommandParameter="{Binding}" />
                                                 </MenuItem>
                                                 <MenuItem Header="_Selection"
@@ -949,15 +949,6 @@
                                                                                 MethodName="ClipTileTitle_Loaded" />
                                                         </i:EventTrigger>
                                                     </i:Interaction.Triggers>
-                                                    <!--<Image x:Name="TitleSwirl"
-                                                       Canvas.Top="-1"
-                                                       Canvas.Left="-1"
-                                                       Visibility="Hidden"
-                                                       RenderOptions.BitmapScalingMode="HighQuality"
-                                                       Stretch="Fill"
-                                                       Width="{Binding TileBorderWidth}"
-                                                       Height="{Binding TileTitleHeight}"
-                                                       Source="{Binding TitleSwirl}" />-->
                                                     <Viewbox VerticalAlignment="Top"
                                                              HorizontalAlignment="Left"
                                                              Stretch="Fill"
@@ -1056,13 +1047,13 @@
                                                                    Foreground="White"
                                                                    Background="Transparent"
                                                                    Visibility="{Binding TileTitleTextBlockVisibility}">
-                                            <!--<TextBlock.Effect>
-                                                <DropShadowEffect ShadowDepth="0.5"
-                                                                  Direction="300"
-                                                                  Color="Black"
-                                                                  Opacity="1.0"
-                                                                  BlurRadius="0.1" />
-                                            </TextBlock.Effect>-->
+                                                        <!--<TextBlock.Effect>
+                                                            <DropShadowEffect ShadowDepth="0.5"
+                                                                              Direction="300"
+                                                                              Color="Black"
+                                                                              Opacity="1.0"
+                                                                              BlurRadius="0.1" />
+                                                        </TextBlock.Effect>-->
                                                         </TextBlock>
                                                         <!-- Clip Title TextBox -->
                                                         <TextBox x:Name="ClipTileTitleTextBox"
@@ -1094,10 +1085,10 @@
                                                             <ContextMenu>
                                                                 <MenuItem Header="Exclude Application"
                                                                           Icon="{Binding Source={StaticResource NoEntryIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                                          Command="{Binding ExcludeApplicationCommand}" />
+                                                                          Command="{Binding Data.ExcludeApplicationCommand, Source={StaticResource ClipTileProxy}}" />
                                                                 <MenuItem Header="Add Paste Macro For Application"
                                                                           Icon="{Binding Source={StaticResource RobotClawIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                                          Command="{Binding MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand}"
+                                                                          Command="{Binding Data.MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand, Source={StaticResource ClipTileProxy}}"
                                                                           CommandParameter="{Binding}" />
                                                             </ContextMenu>
                                                         </Button.ContextMenu>
@@ -1427,8 +1418,8 @@
                                                                         </local:MpMultiSelectListBox.Resources>
                                                                         <local:MpMultiSelectListBox.ItemsPanel>
                                                                             <ItemsPanelTemplate>
-                                                                                <StackPanel IsItemsHost="True"
-                                                                                            Orientation="Vertical" />
+                                                                                <VirtualizingStackPanel IsItemsHost="True"
+                                                                                                        Orientation="Vertical" />
                                                                             </ItemsPanelTemplate>
                                                                         </local:MpMultiSelectListBox.ItemsPanel>
                                                                         <local:MpMultiSelectListBox.ItemContainerStyle>
@@ -1452,7 +1443,8 @@
                                                                         </local:MpMultiSelectListBox.ItemContainerStyle>
                                                                         <local:MpMultiSelectListBox.ItemTemplate>
                                                                             <DataTemplate>
-                                                                                <AdornerDecorator Visibility="{Binding SubItemVisibility}"
+                                                                                <AdornerDecorator x:Name="RtbListBoxItemCanvasAdorner" 
+                                                                                                  Visibility="{Binding SubItemVisibility}"
                                                                                                   DataContext="{Binding}">
                                                                                     <Canvas x:Name="RtbListBoxItemCanvas"
                                                                                             DataContext="{Binding}"
@@ -1581,7 +1573,7 @@
                                                                                                               Command="{Binding Data.ExcludeSubSelectedItemApplicationCommand, Source={StaticResource RtbListBoxItemProxy}}" />
                                                                                                     <MenuItem Header="Add Paste Macro For Application"
                                                                                                               Icon="{Binding Source={StaticResource RobotClawIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                                                                              Command="{Binding MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand}"
+                                                                                                              Command="{Binding Data.MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand, Source={StaticResource RtbListBoxItemProxy}}"
                                                                                                               CommandParameter="{Binding}" />
                                                                                                 </MenuItem>
                                                                                                 <MenuItem Header="_Selection"
@@ -1641,7 +1633,8 @@
                                                                                                 </MenuItem>
                                                                                             </ContextMenu>
                                                                                         </Canvas.ContextMenu>
-                                                                                        <AdornerDecorator DataContext="{Binding}">
+                                                                                        <AdornerDecorator x:Name="RtbListBoxItemRichTextBoxAdorner" 
+                                                                                                          DataContext="{Binding}">
                                                                                             <RichTextBox x:Name="RtbListBoxItemRichTextBox"
                                                                                                          Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                                                                          IsReadOnly="{Binding HostClipTileViewModel.IsRtbReadOnly}"
@@ -1684,9 +1677,9 @@
                                                                                                             CornerRadius="5">
                                                                                             <local:MpClipBorder.ToolTip>
                                                                                                 <ToolTip x:Name="ClipTileTooltip"
-                                                                                                         Visibility="{Binding SubItemToolTipVisibility}"
+                                                                                                         Visibility="{Binding Data.SubItemToolTipVisibility, Source={StaticResource RtbListBoxItemProxy}}"
                                                                                                          Placement="Top"
-                                                                                                         HorizontalOffset="{Binding HostClipTileViewModel.TileBorderWidth}">
+                                                                                                         HorizontalOffset="{Binding Data.HostClipTileViewModel.TileBorderWidth, Source={StaticResource RtbListBoxItemProxy}}">
                                                                                                     <ToolTip.Template>
                                                                                                         <ControlTemplate>
                                                                                                             <Border Background="White"
@@ -1694,9 +1687,7 @@
                                                                                                                     BorderBrush="Black"
                                                                                                                     Padding="5">
                                                                                                                 <Image Stretch="Fill"
-                                                                                                                       HorizontalAlignment="Center"
-                                                                                                                       VerticalAlignment="Center"
-                                                                                                                       Source="{Binding Data.CopyItemBmp,Source={StaticResource ClipTileProxy}}" />
+                                                                                                                       Source="{Binding Data.CopyItemBmp,Source={StaticResource RtbListBoxItemProxy}}" />
                                                                                                             </Border>
                                                                                                         </ControlTemplate>
                                                                                                     </ToolTip.Template>
@@ -1778,47 +1769,59 @@
                                                                                                              IsReadOnly="False"
                                                                                                              Visibility="{Binding RtbListBoxItemTitleTextBoxVisibility}"
                                                                                                              Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=LostFocus}" />
-                                                                                                    <!-- Clip Title Icon Image -->
-                                                                                                    <Button x:Name="RtbItemAppIconImageButton"
-                                                                                                            DockPanel.Dock="Bottom"
+                                                                                                    <!-- Sub Item Title Icon Image -->
+                                                                                                    <Canvas DockPanel.Dock="Right"
                                                                                                             HorizontalAlignment="Right"
+                                                                                                            Width="{Binding SubItemAppIconBorderSize}"
+                                                                                                            Height="{Binding SubItemAppIconBorderSize}"
+                                                                                                            Background="Transparent"
                                                                                                             Margin="0,0,25,3"
+                                                                                                            Visibility="{Binding SubItemOverlayVisibility}">
+                                                                                                        <Image x:Name="RtbItemAppIconHighlightedBorderImage"
+                                                                                                           Source="{Binding CopyItemAppIconHighlightBorder, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
+                                                                                                           Stretch="Fill"
+                                                                                                           Visibility="{Binding AppIconHighlightBorderVisibility}"
+                                                                                                           Width="{Binding SubItemAppIconBorderSize}"
+                                                                                                           Height="{Binding SubItemAppIconBorderSize}"/>
+                                                                                                        <Button x:Name="RtbItemAppIconImageButton"
+                                                                                                            Margin="2"
                                                                                                             Style="{StaticResource Transparent_Button}"
                                                                                                             Visibility="{Binding SubItemOverlayVisibility}"
                                                                                                             Background="Transparent"
                                                                                                             BorderThickness="0">
-                                                                                                        <Button.ContextMenu>
-                                                                                                            <ContextMenu>
-                                                                                                                <MenuItem Header="Exclude Application"
+                                                                                                            <Button.ContextMenu>
+                                                                                                                <ContextMenu>
+                                                                                                                    <MenuItem Header="Exclude Application"
                                                                                                                           Icon="{Binding Source={StaticResource NoEntryIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                                                                                                                           Command="{Binding Data.ExcludeSubSelectedItemApplicationCommand, Source={StaticResource RtbListBoxItemProxy}}" />
-                                                                                                                <MenuItem Header="Add Paste Macro For Application"
+                                                                                                                    <MenuItem Header="Add Paste Macro For Application"
                                                                                                                           Icon="{Binding Source={StaticResource RobotClawIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                                                                                          Command="{Binding MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand}"
+                                                                                                                          Command="{Binding Data.MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand, Source={StaticResource RtbListBoxItemProxy}}"
                                                                                                                           CommandParameter="{Binding}" />
-                                                                                                            </ContextMenu>
-                                                                                                        </Button.ContextMenu>
-                                                                                                        <Grid>
-                                                                                                            <Image x:Name="RtbItemAppIconBorderImage"
+                                                                                                                </ContextMenu>
+                                                                                                            </Button.ContextMenu>
+                                                                                                            <Grid>
+                                                                                                                <Image x:Name="RtbItemAppIconBorderImage"
                                                                                                                    Source="{Binding CopyItemAppIconBorder, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
                                                                                                                    Stretch="Fill"
                                                                                                                    RenderTransformOrigin="0.5, 0.5"
                                                                                                                    Visibility="Hidden"
                                                                                                                    Width="{Binding SubItemAppIconSize}"
                                                                                                                    Height="{Binding SubItemAppIconSize}">
-                                                                                                                <Image.RenderTransform>
-                                                                                                                    <ScaleTransform x:Name="RtbItemAppIconBorderImageScaleTransform" />
-                                                                                                                </Image.RenderTransform>
-                                                                                                            </Image>
-                                                                                                            <Image x:Name="RtbItemAppIconImage"
+                                                                                                                    <Image.RenderTransform>
+                                                                                                                        <ScaleTransform x:Name="RtbItemAppIconBorderImageScaleTransform" />
+                                                                                                                    </Image.RenderTransform>
+                                                                                                                </Image>
+                                                                                                                <Image x:Name="RtbItemAppIconImage"
                                                                                                                    Source="{Binding AppIcon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
                                                                                                                    Stretch="Fill"
                                                                                                                    Width="{Binding SubItemAppIconSize}"
                                                                                                                    Height="{Binding SubItemAppIconSize}">
-                                                                                                            </Image>
-
-                                                                                                        </Grid>
-                                                                                                    </Button>
+                                                                                                                </Image>
+                                                                                                            </Grid>
+                                                                                                        </Button>
+                                                                                                    </Canvas>
+                                                                                                    
                                                                                                 </DockPanel>                                                                                                
                                                                                             </DockPanel>
                                                                                         </local:MpClipBorder>
@@ -2164,7 +2167,8 @@
                                                         </ListBox.ItemContainerStyle>
                                                         <ListBox.ItemTemplate>
                                                             <DataTemplate>
-                                                                <Border Height="22"
+                                                                <Border x:Name="FileListItem" 
+                                                                        Height="22"
                                                                         BorderThickness="0">
                                                                     <Grid>
                                                                         <StackPanel Visibility="{Binding Data.FileListStackPanelVisibility, Source={StaticResource ClipTileProxy}}"

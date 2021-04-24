@@ -12,6 +12,10 @@
              d1p1:Ignorable="d" 
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
     <Application.Resources>
+        <Style TargetType="{x:Type ItemsControl}">
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+        </Style>
         <!-- Button Templates Start -->
         <ControlTemplate x:Key="ButtonControlTemplate"
                          TargetType="{x:Type Button}">
@@ -768,6 +772,7 @@
         <s:String x:Key="UserIcon">/Images/user.png</s:String>
         <s:String x:Key="SlidersIcon">/Images/sliders.png</s:String>
         <s:String x:Key="ShieldIcon">/Images/shield.png</s:String>
+        <s:String x:Key="SignOutIcon">/Images/signout.png</s:String>
         
         <!-- Color Palletes -->
         <SolidColorBrush x:Key="AppColorDark">DarkViolet</SolidColorBrush>

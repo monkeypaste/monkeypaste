@@ -22,8 +22,6 @@ namespace MpWpfApp {
 
         #endregion
 
-
-
         #region Properties
 
         #region View Models
@@ -164,8 +162,13 @@ namespace MpWpfApp {
         }
 
         public void HighlightRange() {
-            if(HighlightType == MpHighlightType.App) {
-                HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.CopyItemAppIconHighlightBorder));
+            HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.CopyItemAppIconHighlightBorder));
+            foreach (var rtbvm in HostClipTileViewModel.RichTextBoxViewModelCollection) {
+                rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemOverlayVisibility));
+                rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemAppIconHighlightBorder));
+            }
+            if (HighlightType == MpHighlightType.App) {
+                
             } else {
                 Range.ApplyPropertyValue(TextElement.BackgroundProperty, HighlightBrush);
             }                       

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -7,6 +8,13 @@ namespace MpWpfApp {
     /// Simple application. Check the XAML for comments.
     /// </summary>
     public partial class App : Application {
+        protected override void OnStartup(StartupEventArgs e) {
+            PresentationTraceSources.Refresh();
+            PresentationTraceSources.DataBindingSource.Listeners.Add(new ConsoleTraceListener());
+            PresentationTraceSources.DataBindingSource.Listeners.Add(new MpDebugTraceListener());
+            PresentationTraceSources.DataBindingSource.Switch.Level = SourceLevels.Warning | SourceLevels.Error;
+            base.OnStartup(e);
+        }
 
         //from https://stackoverflow.com/questions/12769264/openclipboard-failed-when-copy-pasting-data-from-wpf-datagrid
         //for exception: System.Runtime.InteropServices.COMException: 'OpenClipboard Failed (Exception from HRESULT: 0x800401D0 (CLIPBRD_E_CANT_OPEN))'

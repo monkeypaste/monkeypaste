@@ -142,56 +142,57 @@
         </EventTrigger>
     </UserControl.Triggers>
     <Grid x:Name="grid"
+          MouseLeftButtonUp="grid_MouseLeftButtonUp"
           MouseEnter="grid_MouseEnter">
-        <Border HorizontalAlignment="Stretch"
+            <Border HorizontalAlignment="Stretch"
                 Margin="5,5,5,5"
                 BorderThickness="7"
                 BorderBrush="WhiteSmoke"
                 Background="MediumPurple">
-        </Border>
-        <Image HorizontalAlignment="Left"
+            </Border>
+            <Image HorizontalAlignment="Left"
                Margin="20,20,0,0"
                Width="72"
                Source="{Binding BalloonBitmapSource}"
                Stretch="Fill"
                Height="72"
-               VerticalAlignment="Top" />        
-        <TextBlock x:Name="TitleTextBlock" 
+               VerticalAlignment="Top" />
+            <TextBlock x:Name="TitleTextBlock" 
                    Margin="105,17,20,0"
                    VerticalAlignment="Top"
                    FontSize="24"    
                    Text="{Binding BalloonTitle}"
                    Foreground="White"
                    FontWeight="Bold" />
-        <Button x:Name="PropertiesButton"
+            <Button x:Name="PropertiesButton"
                 Margin="0,12,40,0"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Right"
                 Template="{StaticResource ButtonControlTemplate}"
                 Click="PropertiesButton_Click">
-            <Image Source="/Resources/Images/wrench.png"
+                <Image Source="/Resources/Images/wrench.png"
                    Width="24"
                    Height="24"
                    Stretch="Fill"
                    Opacity="1"
                    ToolTip="Preferences"
                    x:Name="Config" />
-        </Button>
-        <Button x:Name="CloseButton"
+            </Button>
+            <Button x:Name="CloseButton"
                 Margin="0,12,14,0"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Right"
                 Click="CloseButton_Click"
                 Template="{StaticResource ButtonControlTemplate}">
-            <Image Width="24"
+                <Image Width="24"
                    Height="24"
                    Source="/Resources/Images/Close.png"
                    Stretch="Fill"
                    Opacity="1"
                    ToolTip="Close"
                    x:Name="imgClose" />
-        </Button>        
-        <TextBlock x:Name="ContentTextBlock"
+            </Button>
+            <TextBlock x:Name="ContentTextBlock"
                    HorizontalAlignment="Left"
                    Margin="107,50,0,0"
                    MaxWidth="230"
@@ -201,17 +202,17 @@
                    VerticalAlignment="Top"
                    Text="{Binding BalloonContent}"
                    MouseDown="imgClose_MouseDown" />
-        <DockPanel VerticalAlignment="Bottom"
+            <DockPanel VerticalAlignment="Bottom"
                    Visibility="Collapsed"
-                   Margin="35,0,0,10">            
-            <CheckBox x:Name="DoNotShowAgainCheckBox"
+                   Margin="35,0,0,10">
+                <CheckBox x:Name="DoNotShowAgainCheckBox"
                       DockPanel.Dock="Left"
                       VerticalAlignment="Center"
                       IsChecked="{Binding DoNotShowAgain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}" />
-            <Label DockPanel.Dock="Right"
+                <Label DockPanel.Dock="Right"
                    VerticalAlignment="Center"
                    FontSize="12"
                    Content="Hide" />
-        </DockPanel>     
-    </Grid>
+            </DockPanel>
+        </Grid>
 </UserControl>

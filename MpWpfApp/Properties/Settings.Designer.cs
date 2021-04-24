@@ -1251,5 +1251,17 @@ namespace MpWpfApp.Properties {
                 this["UserDefaultBrowserProcessPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SearchBySourceUrl {
+            get {
+                return ((bool)(this["SearchBySourceUrl"]));
+            }
+            set {
+                this["SearchBySourceUrl"] = value;
+            }
+        }
     }
 }

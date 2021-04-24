@@ -297,6 +297,18 @@ namespace MpWpfApp {
             }
         }
 
+        public double RtbCompositeAppIconBorderSizeRatio {
+            get {
+                return 1.5;
+            }
+        }
+
+        public double RtbCompositeAppIconBorderSize {
+            get {
+                return RtbCompositeAppIconSize * RtbCompositeAppIconBorderSizeRatio;
+            }
+        }
+
         public double RtbCompositeDragButtonSize {
             get {
                 return ClipTileContentHeight / 7;

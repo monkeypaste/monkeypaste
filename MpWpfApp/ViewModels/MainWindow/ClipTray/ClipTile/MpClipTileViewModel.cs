@@ -1388,7 +1388,8 @@
                 OnPropertyChanged(nameof(AppIconHighlightBorderVisibility));
                 if (HighlightTextRangeViewModelCollection.HasAppMatch) {
                     if (HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel != null &&
-                       HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.HighlightType == MpHighlightType.App) {
+                       HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.HighlightType == MpHighlightType.App &&
+                       (RichTextBoxViewModelCollection.Count == 1 || HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.RtbItemViewModel == null)) {
                         return CopyItem.App.IconSelectedHighlightBorderImage;
                     }
                     return CopyItem.App.IconHighlightBorderImage;
@@ -1421,6 +1422,22 @@
                     return string.Empty;
                 }
                 return CopyItem.App.AppPath;
+            }
+        }
+
+        public string CopyItemUrl {
+            get {
+                if (CopyItem == null) {
+                    return string.Empty;
+                }
+                return CopyItem.ItemUrl;
+            }
+            set {
+                if(CopyItem != null && CopyItem.ItemUrl != value) {
+                    CopyItem.ItemUrl = value;
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyItem));
+                }
             }
         }
 
@@ -1519,6 +1536,8 @@
                     OnPropertyChanged(nameof(CopyItemRichText));
                     OnPropertyChanged(nameof(CopyItemBmp));
                     OnPropertyChanged(nameof(CopyItemFileDropList));
+                    OnPropertyChanged(nameof(CopyItemUrl));
+                    OnPropertyChanged(nameof(FavIcon));
                     OnPropertyChanged(nameof(CopyItemAppIcon));
                     OnPropertyChanged(nameof(CopyItemAppName));
                     OnPropertyChanged(nameof(CopyItemAppPath));
@@ -1548,20 +1567,18 @@
         #endregion
 
         #region Public Methods
-        public MpClipTileViewModel() : base() { }
-
-        public MpClipTileViewModel(bool isPlaceholder) : base() {
+        public MpClipTileViewModel() : base() {
             PropertyChanged += (s, e1) => {
                 var ctvm = s as MpClipTileViewModel;
                 switch (e1.PropertyName) {
                     case nameof(ctvm.IsSelected):
                         if (ctvm.IsSelected) {
-                            if(ctvm.TileVisibility != Visibility.Visible) {
+                            if (ctvm.TileVisibility != Visibility.Visible) {
                                 ctvm.IsSelected = false;
                                 break;
                             }
                             ctvm.LastSelectedDateTime = DateTime.Now;
-                            if(ctvm.RichTextBoxViewModelCollection.Count == 1) {
+                            if (ctvm.RichTextBoxViewModelCollection.Count == 1) {
                                 ctvm.RichTextBoxViewModelCollection[0].IsSubSelected = true;
                             }
                             //RichTextBoxViewModelCollection.SubSelectAll();
@@ -1572,11 +1589,11 @@
 
                         ctvm.RefreshCommands();
                         break;
-                    case nameof(ctvm.IsHovering):                        
-                        if(ctvm.IsHovering) {
+                    case nameof(ctvm.IsHovering):
+                        if (ctvm.IsHovering) {
                             if (MainWindowViewModel.ClipTrayViewModel.IsScrolling) {
                                 ctvm.IsHovering = false;
-                                foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                                foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
                                     rtbvm.IsSubHovering = false;
                                 }
                             }
@@ -1594,25 +1611,14 @@
                         break;
                     case nameof(ctvm.IsEditingTile):
                         if (ctvm.IsEditingTile) {
-                            //if(!IsSelected) {
-                            //    MainWindowViewModel.ClipTrayViewModel.ClearClipSelection(false);
-                            //    IsSelected = true;
-                            //    foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel) {
-                            //        ctvm.IsPrimarySelected = false;
-                            //    }
-                            //}
-                            //
                             MainWindowViewModel.ExpandClipTile(this);
                         } else {
-                            ctvm.SaveToDatabase(); 
-                            //ContentPreviewToolTipBmpSrc = null;
-                            //OnPropertyChanged(nameof(ContentPreviewToolTipBmpSrc));
-                            MainWindowViewModel.ShrinkClipTile(this);                            
+                            ctvm.SaveToDatabase();
+                            MainWindowViewModel.ShrinkClipTile(this);
                         }
-                        //ctvm.RichTextBoxViewModelCollection.Refresh();
                         break;
                     case nameof(ctvm.IsEditingTemplate):
-                        if(ctvm.IsEditingTemplate) {
+                        if (ctvm.IsEditingTemplate) {
                             ctvm.TileContentHeight += ctvm.TileDetailHeight;
                         } else {
                             ctvm.TileContentHeight -= ctvm.TileDetailHeight;
@@ -1624,7 +1630,6 @@
                         } else {
                             ctvm.TileContentHeight -= ctvm.TileDetailHeight;
                         }
-                        //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
                         break;
                     case nameof(ctvm.IsClipDropping):
                         foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
@@ -1638,6 +1643,14 @@
                 }
             };
 
+            ViewModelLoaded += async (s, e) => {
+                if (!MainWindowViewModel.IsLoading) {
+                    await GatherAnalytics();
+                }
+            };
+        }
+
+        public MpClipTileViewModel(bool isPlaceholder) : this() {
             if (isPlaceholder) {
                 CopyItem = null;
             }
@@ -2375,6 +2388,18 @@
             int forceIdx = -1, 
             DispatcherPriority priority = DispatcherPriority.Background) {
             await Application.Current.Dispatcher.BeginInvoke(priority, (Action) (()=> { MergeClip(ocil, forceIdx); }));
+        }
+
+        public async Task GatherAnalytics() {
+            if (CopyItem.ItemScreenshot != null && CopyItemType == MpCopyItemType.Image) {
+                string detectedUrl = await MpBrowserUrlDetector.Instance.FindUrlAddressFromScreenshot(CopyItem.ItemScreenshot);
+                if (!string.IsNullOrEmpty(detectedUrl)) {
+                    CopyItemUrl = detectedUrl;
+                    FavIcon = MpHelpers.Instance.GetUrlFavicon(detectedUrl);
+                    OnPropertyChanged(nameof(AppIcon));
+                }
+                Console.WriteLine("Detected Browser Address: " + detectedUrl);
+            }
         }
 
         public void FadeIn(double bt = 0,double ms = 1000) {

@@ -230,15 +230,6 @@ namespace MpWpfApp {
                 return Convert.ToInt32(dt.Rows[0][0].ToString());
             }
             return -1;
-            /*SQLiteConnection sql_con = SetConnection();
-            sql_con.Open();
-            SQLiteCommand sql_cmd = sql_con.CreateCommand();
-            sql_cmd.CommandText = "select last_insert_rowid()";
-            // The row ID is a 64-bit value - cast the Command result to an Int64.
-            Int64 lastRowID64 = (Int64)sql_cmd.ExecuteScalar();
-
-            // Then grab the bottom 32-bits as the unique ID of the row.
-            return (int)lastRowID64;*/
         }
 
         public void ResetDb() {
