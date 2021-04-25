@@ -20,6 +20,11 @@ namespace MpWpfApp {
     public partial class MpImageAnalysisDocument : UserControl {
         public MpImageAnalysisDocument() {
             InitializeComponent();
+            DataContext = new MpImageAnalysisViewModel();
+        }
+        public MpImageAnalysisDocument(string analysisData) {
+            InitializeComponent();
+            DataContext = new MpImageAnalysisViewModel(analysisData);
         }
     }
 }

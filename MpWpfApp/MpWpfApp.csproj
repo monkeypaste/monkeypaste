@@ -108,10 +108,12 @@
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
     <Compile Include="AttachedProperties\MpDocumentRtf.cs" />
+    <Compile Include="AttachedProperties\MpSpanOperations.cs" />
     <Compile Include="AttachedProperties\MpTextBoxBehavior.cs" />
     <Compile Include="AttachedProperties\MpVisibilityAnimation.cs" />
     <Compile Include="Behaviors\MpAnimatedVisibilityFadeBehavior.cs" />
     <Compile Include="Behaviors\MpKineticBehavior.cs" />
+    <Compile Include="Behaviors\MpParagraphInlineBehavior.cs" />
     <Compile Include="Controls\Adorners\MpRtbListBoxAdorner.cs" />
     <Compile Include="Controls\Adorners\MpClipTrayAdorner.cs" />
     <Compile Include="Controls\Adorners\MpRtbListBoxItemAdorner.cs" />
@@ -157,11 +159,19 @@
     <Compile Include="Utils\DragDrop\ListBoxDragDropManager.cs" />
     <Compile Include="Utils\DragDrop\ListViewDragDropManager.cs" />
     <Compile Include="Utils\DragDrop\MouseUtilities.cs" />
+    <Compile Include="Utils\FlowDocuments\MpAttached.cs" />
+    <Compile Include="Utils\FlowDocuments\MpBindableRun.cs" />
+    <Compile Include="Utils\FlowDocuments\MpBlockTemplateContent.cs" />
+    <Compile Include="Utils\FlowDocuments\MpFlowDocumentHelpers.cs" />
+    <Compile Include="Utils\FlowDocuments\MpFragment.cs" />
+    <Compile Include="Utils\FlowDocuments\MpItemsContent.cs" />
     <Compile Include="Utils\MpImageHistogram.cs" />
     <Compile Include="Utils\MpBrowserUrlDetector.cs" />
     <Compile Include="Utils\MpRegEx.cs" />
     <Compile Include="Utils\MpSettingsBindingExtension.cs" />
     <Compile Include="Utils\MpVisualUtility.cs" />
+    <Compile Include="Utils\RESTful\JsonObjects\MpImageAnalysis.cs" />
+    <Compile Include="Utils\RESTful\JsonObjects\MpOcrAnalysis.cs" />
     <Compile Include="Utils\RESTful\MpTextAnalyzer.cs" />
     <Compile Include="Utils\System\MpDebugTraceListener.cs" />
     <Compile Include="Utils\System\MpOpenWindowGetter.cs" />
@@ -218,6 +228,7 @@
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\FileList\MpFileListItemViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectCollectionViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\DetectedObjects\MpDetectedImageObjectViewModel.cs" />
+    <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\Image\MpImageAnalysisViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\Highlighting\MpHighlightTextRangeViewModelCollection.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpRtbListBoxItemRichTextBoxViewModel.cs" />
     <Compile Include="ViewModels\MainWindow\ClipTray\ClipTile\Content\RichText\MpClipTileRichTextBoxViewModelCollection.cs" />
@@ -1738,6 +1749,7 @@
     <Resource Include="Resources\Images\sliders.png" />
     <Resource Include="Resources\Images\shield.png" />
     <Resource Include="Resources\Images\signout.png" />
+    <Resource Include="Resources\Images\whitecircle.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />

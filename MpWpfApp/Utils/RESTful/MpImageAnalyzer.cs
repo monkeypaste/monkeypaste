@@ -28,7 +28,7 @@ namespace MpWpfApp {
         /// the Computer Vision REST API.
         /// </summary>
         /// <param name="imageFilePath">The image file with printed text.</param>
-        public async Task<MpImageAnalysis> AnalyzeImage(byte[] byteData) {
+        public async Task<string> AnalyzeImage(byte[] byteData) {
             try {
                 HttpClient client = new HttpClient();
 
@@ -73,9 +73,9 @@ namespace MpWpfApp {
                 // Display the JSON response.
                 Console.WriteLine("\nResponse:\n\n{0}\n",
                     JToken.Parse(contentString).ToString());
-                                
-                return JsonConvert.DeserializeObject<MpImageAnalysis>(contentString);
-                //var sb = new StringBuilder();
+
+                return contentString;                                
+                //return JsonConvert.DeserializeObject<MpImageAnalysis>(contentString);
 
             }
             catch (Exception e) {
@@ -83,39 +83,6 @@ namespace MpWpfApp {
             }
 
             return null;
-        }
-
-        public class MpImageAnalysis {
-            public List<MpImageCategory> categories { get; set; }
-            public MpImageColor color { get; set; }
-            public MpImageDescription description { get; set; }
-            public string requestId { get; set; }
-            public MpImageMetaData metadata { get; set; }
-        }
-
-        public class MpImageCategory {
-            public string name { get; set; }
-            public double score { get; set; }
-        }
-        public class MpImageColor {
-            public string dominantColorForeground { get; set; }
-            public string dominantColorBackground { get; set; }
-            public List<string> dominantColors { get; set; }
-            public string accentColor { get; set; }
-            public bool isBwImg { get; set; }
-        }
-        public class MpImageDescription {
-            public List<string> tags { get; set; }
-            public List<MpImageCaptions> captions { get; set; }
-        }
-        public class MpImageCaptions {
-            public string text { get; set; }
-            public double confidence { get; set; }
-        }
-        public class MpImageMetaData {
-            public int height { get; set; }
-            public int width { get; set; }
-            public string format { get; set; }
         }
     }
 }

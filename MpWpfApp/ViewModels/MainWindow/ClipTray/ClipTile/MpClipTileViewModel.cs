@@ -26,6 +26,7 @@
     using AsyncAwaitBestPractices.MVVM;
     using GalaSoft.MvvmLight.CommandWpf;
     using GongSolutions.Wpf.DragDrop.Utilities;
+    using Newtonsoft.Json;
 
     public class MpClipTileViewModel : MpUndoableViewModelBase<MpClipTileViewModel>, IDisposable {        
         #region Private Variables
@@ -363,6 +364,12 @@
             }
         }
 
+        public double TileTitleIconInnerBorderSize {
+            get {
+                return TileTitleIconBorderSize * 0.8;
+            }
+        }
+
         public double TileBorderMinWidth {
             get {
                 return MpMeasurements.Instance.ClipTileBorderMinSize;
@@ -558,7 +565,7 @@
         }
         public Visibility ToolTipVisibility {
             get {
-                if (CopyItem == null) {
+                if (CopyItem == null || CopyItemType == MpCopyItemType.Image) {
                     return Visibility.Collapsed;
                 }
                 return (MainWindowViewModel.ClipTrayViewModel.IsScrolling || IsSelected) ? Visibility.Collapsed : Visibility.Visible;
@@ -573,9 +580,22 @@
             }
         }
 
-        public Visibility ClipTileTitleAppIconVisibility {
+        public Visibility ClipTileTitleAppIconButtonVisibility {
             get {
                 return IsExpanded ? Visibility.Hidden : Visibility.Visible;
+            }
+        }
+
+        public Visibility ClipTileTitleAppIconImageVisibility {
+            get {
+                if(MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null || !IsSelected) {
+                    return Visibility.Visible;
+                }
+                if(MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count > 1 &&
+                   !IsHovering) {
+                    return Visibility.Hidden;
+                }
+                return Visibility.Visible;
             }
         }
 
@@ -758,6 +778,18 @@
                         MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded)) ? Visibility.Collapsed : Visibility.Visible;
             }
         }
+
+        public Visibility MultiSelectOrderMarkerVisibility {
+            get {
+                if(MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null) {
+                    return Visibility.Hidden;
+                }
+                if(IsSelected && MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count > 1) {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
         #endregion
 
         #region Business Logic
@@ -870,6 +902,20 @@
         #endregion
 
         #region State Properties 
+        public string MultiSelectedOrderIdxDisplayValue {
+            get {
+                if(MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null || !IsSelected) {
+                    return string.Empty;
+                }
+                int multiIdx = MainWindowViewModel.ClipTrayViewModel.GetSelectionOrderIdxForItem(this);
+                if(multiIdx < 0) {
+                    return string.Empty;
+                }
+                multiIdx++;
+                return multiIdx.ToString();
+            }
+        }
+
         public bool IsDroppingOntoNotepad { get; set; } = false;
 
         public Point MouseDownPosition = new Point();
@@ -964,7 +1010,7 @@
                     OnPropertyChanged(nameof(TileDetailGridVisibility));
                     OnPropertyChanged(nameof(TileContentHeight));
                     OnPropertyChanged(nameof(IsExpanded));
-                    OnPropertyChanged(nameof(ClipTileTitleAppIconVisibility));
+                    OnPropertyChanged(nameof(ClipTileTitleAppIconButtonVisibility));
                     OnPropertyChanged(nameof(ToggleEditModeButtonVisibility));
                     OnPropertyChanged(nameof(SelectionOverlayGridVisibility));
                 }
@@ -983,7 +1029,7 @@
                     OnPropertyChanged(nameof(TileDetailGridVisibility));
                     OnPropertyChanged(nameof(TileContentHeight));
                     OnPropertyChanged(nameof(IsExpanded));
-                    OnPropertyChanged(nameof(ClipTileTitleAppIconVisibility));
+                    OnPropertyChanged(nameof(ClipTileTitleAppIconButtonVisibility));
                     OnPropertyChanged(nameof(DetailGridVisibility));
                     OnPropertyChanged(nameof(TileDetailHeight));
                 }
@@ -1002,7 +1048,7 @@
                     OnPropertyChanged(nameof(TileDetailGridVisibility));
                     OnPropertyChanged(nameof(TileContentHeight));
                     OnPropertyChanged(nameof(IsExpanded));
-                    OnPropertyChanged(nameof(ClipTileTitleAppIconVisibility));
+                    OnPropertyChanged(nameof(ClipTileTitleAppIconButtonVisibility));
                     OnPropertyChanged(nameof(SelectionOverlayGridVisibility));
                     OnPropertyChanged(nameof(DetailGridVisibility));
                     OnPropertyChanged(nameof(TileDetailHeight));
@@ -1303,6 +1349,29 @@
                 }
                 return CopyItem.ItemPlainText;
             }
+            set {
+                if (CopyItem != null && CopyItem.ItemPlainText != value) {
+                    CopyItem.ItemPlainText = value;
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyItem));
+                }
+            }
+        }
+
+        public string CopyItemDescription {
+            get {
+                if (CopyItem == null || CopyItem.ItemDescription == null) {
+                    return string.Empty;
+                }
+                return CopyItem.ItemDescription;
+            }
+            set {
+                if(CopyItem != null && CopyItem.ItemDescription != value) {
+                    CopyItem.ItemDescription = value;
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyItem));
+                }
+            }
         }
 
         public string CopyItemRichText {
@@ -1534,6 +1603,7 @@
                     OnPropertyChanged(nameof(CopyItemTitle));
                     OnPropertyChanged(nameof(CopyItemPlainText));
                     OnPropertyChanged(nameof(CopyItemRichText));
+                    OnPropertyChanged(nameof(CopyItemDescription));
                     OnPropertyChanged(nameof(CopyItemBmp));
                     OnPropertyChanged(nameof(CopyItemFileDropList));
                     OnPropertyChanged(nameof(CopyItemUrl));
@@ -1578,15 +1648,24 @@
                                 break;
                             }
                             ctvm.LastSelectedDateTime = DateTime.Now;
-                            if (ctvm.RichTextBoxViewModelCollection.Count == 1) {
-                                ctvm.RichTextBoxViewModelCollection[0].IsSubSelected = true;
+                            foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                                rtbvm.IsSubSelected = true;
                             }
                             //RichTextBoxViewModelCollection.SubSelectAll();
                         } else {
                             ctvm.RichTextBoxViewModelCollection.ClearSubSelection();
                             ctvm.LastSelectedDateTime = DateTime.MaxValue;
-                        }
 
+                            //multi-select label stuff (disabled)
+                            //ctvm.OnPropertyChanged(nameof(ctvm.MultiSelectOrderMarkerVisibility));
+                            //ctvm.OnPropertyChanged(nameof(ctvm.ClipTileTitleAppIconImageVisibility));
+
+                            //foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                            //    rtbvm.OnPropertyChanged(nameof(rtbvm.MultiSelectOrderMarkerVisibility));
+                            //    rtbvm.OnPropertyChanged(nameof(rtbvm.AppIconImageVisibility));
+                            //}
+                        }
+                        
                         ctvm.RefreshCommands();
                         break;
                     case nameof(ctvm.IsHovering):
@@ -2108,6 +2187,7 @@
                 MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp = true;
             };
         }
+        public MpImageAnalysisDocument ImagePreview { get; set; }
 
         public void ClipTileImageCanvas_Loaded(object sender, RoutedEventArgs e) {
             var ctvm = ((FrameworkElement)sender).DataContext as MpClipTileViewModel;
@@ -2122,6 +2202,9 @@
             //vb.ContextMenu = ctcc.ContextMenu = ic.ContextMenu = (ContextMenu)((FrameworkElement)sender).GetVisualAncestor<MpClipBorder>().FindName("ClipTile_ContextMenu");
 
             ctvm.DetectedImageObjectCollectionViewModel = new MpDetectedImageObjectCollectionViewModel(CopyItem);
+
+            Console.WriteLine("Image Analysis: " + CopyItemDescription);
+            ImagePreview = new MpImageAnalysisDocument();
         }
 
         public void ClipTileFileListBox_Loaded(object sender, RoutedEventArgs e) {
@@ -2391,14 +2474,39 @@
         }
 
         public async Task GatherAnalytics() {
-            if (CopyItem.ItemScreenshot != null && CopyItemType == MpCopyItemType.Image) {
-                string detectedUrl = await MpBrowserUrlDetector.Instance.FindUrlAddressFromScreenshot(CopyItem.ItemScreenshot);
+            var analyticTasks = new List<Task>();
+            Task<string> urlTask = null, ocrTask = null, cvTask = null;
+            if (CopyItem.ItemScreenshot != null) {
+                urlTask = MpBrowserUrlDetector.Instance.FindUrlAddressFromScreenshot(CopyItem.ItemScreenshot);
+                analyticTasks.Add(urlTask);                
+            }
+
+            if(CopyItemType == MpCopyItemType.Image) {
+                ocrTask = MpImageOcr.Instance.OcrImageForText(CopyItem.ItemBmpByteArray);
+                analyticTasks.Add(ocrTask);
+                cvTask = MpImageAnalyzer.Instance.AnalyzeImage(CopyItem.ItemBmpByteArray);
+                analyticTasks.Add(cvTask);
+            }
+
+            await Task.WhenAll(analyticTasks.ToArray());
+
+            if(urlTask != null) {
+                string detectedUrl = await urlTask;
                 if (!string.IsNullOrEmpty(detectedUrl)) {
                     CopyItemUrl = detectedUrl;
                     FavIcon = MpHelpers.Instance.GetUrlFavicon(detectedUrl);
                     OnPropertyChanged(nameof(AppIcon));
                 }
                 Console.WriteLine("Detected Browser Address: " + detectedUrl);
+            }
+
+            if(ocrTask != null) {
+                CopyItemPlainText = await ocrTask;
+            }
+
+            if(cvTask != null) {
+                CopyItemDescription = await cvTask;
+                //var imgAnalysis = JsonConvert.DeserializeObject<MpImageAnalysis>(cvContent);
             }
         }
 

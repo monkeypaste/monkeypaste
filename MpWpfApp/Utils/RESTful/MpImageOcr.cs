@@ -27,7 +27,7 @@ namespace MpWpfApp {
         /// the Computer Vision REST API.
         /// </summary>
         /// <param name="imageFilePath">The image file with printed text.</param>
-        public async Task<MpOcr> OcrImage(byte[] byteData) {
+        public async Task<MpOcrAnalysis> OcrImage(byte[] byteData) {
             try {
                 HttpClient client = new HttpClient();
 
@@ -68,7 +68,7 @@ namespace MpWpfApp {
                 Console.WriteLine("\nResponse:\n\n{0}\n",
                     JToken.Parse(contentString).ToString());
 
-                return JsonConvert.DeserializeObject<MpOcr>(contentString);
+                return JsonConvert.DeserializeObject<MpOcrAnalysis>(contentString);
             }
             catch (Exception e) {
                 Console.WriteLine("\n" + e.Message);
@@ -95,25 +95,5 @@ namespace MpWpfApp {
             }
             return string.Empty;
         }
-    }
-
-    public class MpOcr {
-        public string language { get; set; }
-        public double textAngle { get; set; }
-        public string orientation { get; set; }
-        public List<MpOcrRegion> regions { get; set; }
-
-    }
-    public class MpOcrRegion {
-        public string boundingBox { get; set; }
-        public List<MpOcrRegionLine> lines { get; set; }
-    }
-    public class MpOcrRegionLine {
-        public string boundingBox { get; set; }
-        public List<MpOcrRegionWord> words { get; set; }
-    }
-    public class MpOcrRegionWord {
-        public string boundingBox { get; set; }
-        public string text { get; set; }
-    }
+    }    
 }

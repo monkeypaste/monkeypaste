@@ -595,39 +595,23 @@ namespace MpWpfApp {
 
                 MainWindowViewModel.TagTrayViewModel.UpdateTagAssociation();
 
-                
-                //if (SelectedClipTiles.Count > 1) {
-                //    //order selected tiles by ascending datetime 
-                //    var selectedTileList = SelectedClipTiles.ToList();
-                //    foreach (var sctvm in selectedTileList) {
-                //        if (sctvm == selectedTileList[0]) {
-                //            sctvm.IsPrimarySelected = true;
-                //        } else {
-                //            sctvm.IsPrimarySelected = false;
-                //        }
-                //    }
-                //} else if (SelectedClipTiles.Count == 1) {
-                //    SelectedClipTiles[0].IsPrimarySelected = false;
-                //}
-                //foreach (var osctvm in e8.AddedItems) {
-                //    if (osctvm.GetType() == typeof(MpClipTileViewModel)) {
-                //        //((MpClipTileViewModel)osctvm).IsSelected = false;
-                //        ((MpClipTileViewModel)osctvm).LastSelectedDateTime = DateTime.Now;
-                //    } else {
-                //        Console.WriteLine("Unknown deselected type: " + osctvm.GetType().ToString());
-                //    }
-                //}
-                //foreach (var osctvm in e8.RemovedItems) {
-                //    if (osctvm.GetType() == typeof(MpClipTileViewModel)) {
-                //        //((MpClipTileViewModel)osctvm).IsSelected = false;
-                //        ((MpClipTileViewModel)osctvm).LastSelectedDateTime = DateTime.MaxValue;
-                //    } else {
-                //        Console.WriteLine("Unknown deselected type: " + osctvm.GetType().ToString());
-                //    }
-                //}
                 if (PrimarySelectedClipTile != null) {
                     PrimarySelectedClipTile.OnPropertyChanged(nameof(PrimarySelectedClipTile.TileBorderBrush));
                 }
+
+                //multi-select label stuff (disabled)
+                //foreach (var sctvm in SelectedClipTiles) {
+                //    sctvm.OnPropertyChanged(nameof(sctvm.MultiSelectOrderMarkerVisibility));
+                //    sctvm.OnPropertyChanged(nameof(sctvm.MultiSelectedOrderIdxDisplayValue));
+                //    sctvm.OnPropertyChanged(nameof(sctvm.ClipTileTitleAppIconImageVisibility));
+                //    sctvm.OnPropertyChanged(nameof(sctvm.CopyItemAppIconHighlightBorder));
+                //    sctvm.OnPropertyChanged(nameof(sctvm.AppIconHighlightBorderVisibility));
+                //    foreach(var srtbvm in sctvm.RichTextBoxViewModelCollection.SubSelectedClipItems) {
+                //        srtbvm.OnPropertyChanged(nameof(srtbvm.MultiSelectOrderMarkerVisibility));
+                //        srtbvm.OnPropertyChanged(nameof(srtbvm.AppIconImageVisibility));
+                //        srtbvm.OnPropertyChanged(nameof(srtbvm.MultiSelectedOrderIdxDisplayValue));
+                //    }
+                //}
             };
 
             ListBox.MouseLeftButtonDown += (s, e9) => {
@@ -1222,6 +1206,36 @@ namespace MpWpfApp {
             return filePath;
         }
 
+        public int GetSelectionOrderIdxForItem(object vm) {
+            //returns -1 if vm is not associated with selection
+            //returns -2 if vm is a ctvm with sub-selected rtbvms
+            if(vm == null) {
+                return -1;
+            }
+            int vmIdx = -1;
+            for (int i = 0; i < SelectedClipTiles.Count; i++) {
+                var sctvm = SelectedClipTiles[i];
+                if(sctvm.RichTextBoxViewModelCollection.SubSelectedClipItems.Count <= 1 && 
+                   sctvm.RichTextBoxViewModelCollection.Count <= 1) {
+                    vmIdx++; 
+                    if (sctvm == vm) {
+                        return vmIdx;
+                    }
+                    continue;
+                }                
+                for (int j = 0; j < sctvm.RichTextBoxViewModelCollection.SubSelectedClipItems.Count; j++) {
+                    var srtbvm = sctvm.RichTextBoxViewModelCollection.SubSelectedClipItems[j];
+                    vmIdx++;                    
+                    if(srtbvm == vm) {
+                        return vmIdx;
+                    }
+                    if(srtbvm.HostClipTileViewModel == vm) {
+                        return -2;
+                    }
+                }
+            }
+            return -1;
+        }
         #endregion
 
         #region Private Methods

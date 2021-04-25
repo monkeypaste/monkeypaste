@@ -233,6 +233,12 @@ namespace MpWpfApp {
             }
         }
 
+        public double SubItemAppIconInnerBorderSize {
+            get {
+                return MpMeasurements.Instance.RtbCompositeAppIconBorderSize * 0.8;
+            }
+        }
+
         public double RtbListBoxItemTitleFontSize {
             get {
                 return MpMeasurements.Instance.RtbCompositeItemTitleFontSize;
@@ -494,6 +500,19 @@ namespace MpWpfApp {
         #endregion
 
         #region Visibility
+        public Visibility MultiSelectOrderMarkerVisibility {
+            get {
+                if (MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null) {
+                    return Visibility.Hidden;
+                }
+                if (IsSubSelected && 
+                    (MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count > 1 ||
+                     RichTextBoxViewModelCollection.SubSelectedClipItems.Count > 1)) {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
 
         private Visibility _subItemVisibility = Visibility.Visible;
         public Visibility SubItemVisibility {
@@ -592,6 +611,19 @@ namespace MpWpfApp {
                 return HostClipTileViewModel.HighlightTextRangeViewModelCollection.AppMatchRtbvmList.Contains(this) ? Visibility.Visible : Visibility.Hidden;
             }
         }
+
+        public Visibility AppIconImageVisibility {
+            get {
+                if (MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null || !IsSelected) {
+                    return Visibility.Visible;
+                }
+                if (MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count > 1 &&
+                   !IsSubHovering) {
+                    return Visibility.Hidden;
+                }
+                return Visibility.Visible;
+            }
+        }
         #endregion
 
         #region Header & Footer 
@@ -664,6 +696,20 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+        public string MultiSelectedOrderIdxDisplayValue {
+            get {
+                if (MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null || !IsSubSelected) {
+                    return string.Empty;
+                }
+                int multiIdx = MainWindowViewModel.ClipTrayViewModel.GetSelectionOrderIdxForItem(this);
+                if (multiIdx < 0) {
+                    return string.Empty;
+                }
+                multiIdx++;
+                return multiIdx.ToString();
+            }
+        }
+
         private bool _isOverDragButton = false;
         public bool IsOverDragButton {
             get {
@@ -1035,6 +1081,22 @@ namespace MpWpfApp {
                     return string.Empty;
                 }
                 return CopyItem.ItemPlainText;
+            }
+        }
+
+        public string CopyItemDescription {
+            get {
+                if (CopyItem == null || CopyItem.ItemDescription == null) {
+                    return string.Empty;
+                }
+                return CopyItem.ItemDescription;
+            }
+            set {
+                if (CopyItem != null && CopyItem.ItemDescription != value) {
+                    CopyItem.ItemDescription = value;
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyItem));
+                }
             }
         }
 

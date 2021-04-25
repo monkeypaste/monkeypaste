@@ -19,7 +19,6 @@ namespace MpWpfApp {
         #region Private Variables
         //private static int _CopyItemCount = 0;
         private object _itemData = null;
-        private byte[] _itemBmpByteArray = null;
         private static List<MpApp> _AppList = null;
         private static List<MpColor> _ColorList = null;
 
@@ -66,6 +65,8 @@ namespace MpWpfApp {
                 return CopyCount + PasteCount;
             }
         }
+
+        public string ItemDescription { get; set; }
                 
         public string ItemPlainText { get; set; }
 
@@ -116,6 +117,12 @@ namespace MpWpfApp {
             }
         }
 
+        private byte[] _itemBmpByteArray = null;
+        public byte[] ItemBmpByteArray {
+            get {
+                return _itemBmpByteArray;
+            }
+        }
         public string ItemUrl { get; set; } = string.Empty;
 
         //public BitmapSource ItemTitleSwirl { get; set; }
@@ -924,26 +931,10 @@ namespace MpWpfApp {
                     
                     break;
                 case MpCopyItemType.Image:
-                    if (Application.Current.MainWindow.DataContext == null ||
-                       ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).IsLoading) {
-                        //when loading from database
-                        ImageItemObjectList = MpDetectedImageObject.GetAllObjectsForItem(CopyItemId);
-                    } else {
-                        //var ibsba = MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource);
-
-                        //var ia = MpImageAnalyzer.Instance.AnalyzeImage(ibsba).Result;
-
-                        //var iocr = MpImageOcr.Instance.OcrImage(ibsba).Result;
-
-                        //if (string.IsNullOrEmpty(ItemPlainText)) {
-                        //    if(ImageItemObjectList.Count > 0) {
-                        //        ItemPlainText = ItemCsv;
-                        //    } else {
-                        //        ItemPlainText = "Image";
-                        //    }                            
-                        //}
-
-                        ItemPlainText = "Image";
+                    if(_itemBmpByteArray == null) {
+                        _itemBmpByteArray = ItemBitmapSource.ToByteArray();
+                    }
+                    if(!string.IsNullOrEmpty(ItemPlainText)) {
                         ItemRichText = ItemPlainText.ToRichText();
                         ItemFlowDocument = ItemRichText.ToFlowDocument();
                     }
@@ -1029,7 +1020,9 @@ namespace MpWpfApp {
             Title = dr["Title"].ToString();
             CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
             ItemUrl = dr["ItemUrl"].ToString();
-            if(ItemUrl == null) {
+            ItemDescription = dr["ItemDescription"].ToString();
+
+            if (ItemUrl == null) {
                 ItemUrl = string.Empty;
             }
             ItemCsv = dr["ItemCsv"].ToString();
@@ -1045,8 +1038,8 @@ namespace MpWpfApp {
             ItemColor = _ColorList.Where(x => x.ColorId == colorId).ToList()[0];
 
             if (CopyItemType == MpCopyItemType.Image) {
-                SetData(MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]));
                 ItemPlainText = dr["ItemText"].ToString();
+                SetData(MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["ItemImage"]));
                 //ItemCsv = ItemPlainText;
             } else if(CopyItemType == MpCopyItemType.Composite) {
                 var compositeItemIdList = GetCompsiteCopyItemIdBySortOrderList();
@@ -1162,8 +1155,9 @@ namespace MpWpfApp {
             //if copyitem already exists
             if (CopyItemId > 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "update MpCopyItem set ItemUrl=@iu, ItemCsv=@icsv, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemImage=@ii where pk_MpCopyItemId=@ciid",
+                        "update MpCopyItem set ItemDescription=@id, ItemUrl=@iu, ItemCsv=@icsv, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemImage=@ii where pk_MpCopyItemId=@ciid",
                         new Dictionary<string, object> {
+                            { "@id", ItemDescription },
                             { "@iu", ItemUrl },
                             { @"icsv",ItemCsv },
                             //{ "@ts", MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemTitleSwirl) },
@@ -1179,10 +1173,11 @@ namespace MpWpfApp {
                         });
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpCopyItem(ItemUrl, ItemCsv,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) " + 
-                    "values (@iu,@icsv,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
+                    "insert into MpCopyItem(ItemDescription, ItemUrl, ItemCsv,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) " + 
+                    "values (@id,@iu,@icsv,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
                     new Dictionary<string, object> {
-                            {"@iu",ItemUrl },
+                            { "@id", ItemDescription },
+                            { "@iu", ItemUrl },
                             { "@icsv",ItemCsv },
                             //{ "@ts", MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemTitleSwirl) },
                             { "@citd", (int)CopyItemType },

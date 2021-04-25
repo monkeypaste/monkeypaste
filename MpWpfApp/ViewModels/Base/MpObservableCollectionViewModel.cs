@@ -553,7 +553,7 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
         #endregion
 
         #region INotifyPropertyChanged 
-        public bool ThrowOnInvalidPropertyName { get; private set; }
+        public bool ThrowOnInvalidPropertyName { get; private set; } = true;
 
         //private event PropertyChangedEventHandler _vmPropertyChanged;
         //public event PropertyChangedEventHandler VmPropertyChanged {

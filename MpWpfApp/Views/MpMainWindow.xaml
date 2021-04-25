@@ -19,7 +19,7 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Background="Transparent"
-        Top="0"        
+        Top="0"
         Visibility="Visible"
         ShowInTaskbar="False"
         ResizeMode="CanResize"
@@ -78,8 +78,8 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        
-        
+
+
     </Window.Resources>
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -120,7 +120,7 @@
                                   CommandParameter="{StaticResource SettingsTabAccount}" />
                         <MenuItem Header="{Binding PauseOrPlayHeader}"
                                   Icon="{Binding PauseOrPlayIconSource, Converter={StaticResource StringToIconConverter}}"
-                                  Command="{Binding MainWindowViewModel.AppModeViewModel.ToggleIsAppPausedCommand}"/>
+                                  Command="{Binding MainWindowViewModel.AppModeViewModel.ToggleIsAppPausedCommand}" />
                         <MenuItem Header="Help"
                                   Icon="{Binding Source={StaticResource HelpIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                                   Command="{Binding ShowSettingsWindowCommand}"
@@ -528,7 +528,7 @@
                 </Grid>
             </Grid>
             <Grid Grid.Row="2"
-                  Grid.Column="0"                  
+                  Grid.Column="0"
                   Focusable="True"
                   Background="MediumPurple">
                 <Grid.ColumnDefinitions>
@@ -561,7 +561,7 @@
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Center"
                                   ToolTipService.InitialShowDelay="0"
-                                  ToolTip="{Binding MainWindowViewModel.SystemTrayViewModel.PauseOrPlayHeader}"                                  
+                                  ToolTip="{Binding MainWindowViewModel.SystemTrayViewModel.PauseOrPlayHeader}"
                                   Padding="10"
                                   Content="{Binding MainWindowViewModel.SystemTrayViewModel.PauseOrPlayIconSource, Converter={StaticResource StringToIconConverter}}"
                                   IsChecked="{Binding IsAppPaused}">
@@ -625,28 +625,28 @@
                     </Grid.Resources>
                     <AdornerDecorator>
                         <local:MpMultiSelectListBox x:Name="ClipTray"
-                                                     DataContext="{Binding}"
-                                                     ItemsSource="{Binding}"
-                                                     Visibility="{Binding ClipTrayVisibility}"
-                                                     Width="{Binding MainWindowViewModel.ClipTrayWidth}"
+                                                    DataContext="{Binding}"
+                                                    ItemsSource="{Binding}"
+                                                    Visibility="{Binding ClipTrayVisibility}"
+                                                    Width="{Binding MainWindowViewModel.ClipTrayWidth}"
                                                     HorizontalContentAlignment="Left"
                                                     VerticalContentAlignment="Top"
                                                     AllowDrop="True"
-                                                     ScrollToSelectedItem="True"
-                                                     IsSynchronizedWithCurrentItem="True"
-                                                     Margin="0,0,0,0"
-                                                     Focusable="True"
-                                                     BorderThickness="0"
-                                                     VerticalAlignment="Stretch"
-                                                     Background="Transparent"
-                                                     SelectionMode="Extended"
-                                                     VirtualizingPanel.IsVirtualizing="True"
-                                                     VirtualizingPanel.ScrollUnit="Pixel"
-                                                     VirtualizingPanel.VirtualizationMode="Recycling"
-                                                     ScrollViewer.CanContentScroll="False"
-                                                     ScrollViewer.IsDeferredScrollingEnabled="True"
-                                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                                                     ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                                                    ScrollToSelectedItem="True"
+                                                    IsSynchronizedWithCurrentItem="True"
+                                                    Margin="0,0,0,0"
+                                                    Focusable="True"
+                                                    BorderThickness="0"
+                                                    VerticalAlignment="Stretch"
+                                                    Background="Transparent"
+                                                    SelectionMode="Extended"
+                                                    VirtualizingPanel.IsVirtualizing="True"
+                                                    VirtualizingPanel.ScrollUnit="Pixel"
+                                                    VirtualizingPanel.VirtualizationMode="Recycling"
+                                                    ScrollViewer.CanContentScroll="False"
+                                                    ScrollViewer.IsDeferredScrollingEnabled="True"
+                                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                                    ScrollViewer.VerticalScrollBarVisibility="Hidden">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="Loaded">
                                     <i:CallMethodAction MethodName="ClipTray_Loaded"
@@ -770,7 +770,7 @@
                                                                             MethodName="ClipTile_ContextMenu_Closed" />
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
-                                                <MenuItem Header="_Paste" 
+                                                <MenuItem Header="_Paste"
                                                           Tag="6"
                                                           Icon="{Binding Source={StaticResource PasteIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                                                           Command="{Binding Data.PasteSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
@@ -788,7 +788,7 @@
                                                     <MenuItem Header="_Rename"
                                                               Tag="21"
                                                               Icon="{Binding Source={StaticResource RenameIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                              Command="{Binding Data.EditSelectedTitleCommand, Source={StaticResource ClipTrayProxy}}"  />
+                                                              Command="{Binding Data.EditSelectedTitleCommand, Source={StaticResource ClipTrayProxy}}" />
                                                     <Separator />
                                                     <MenuItem x:Name="TranslateMenuItem"
                                                               Header="Translate"
@@ -810,13 +810,13 @@
                                                         </MenuItem.ItemContainerStyle>
                                                     </MenuItem>
                                                 </MenuItem>
-                                                <MenuItem x:Name="ToolsMenuItem" 
+                                                <MenuItem x:Name="ToolsMenuItem"
                                                           Header="_Tools"
                                                           Icon="{Binding Source={StaticResource ToolsIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}">
                                                     <MenuItem Header="Duplicate"
                                                               Tag="22"
                                                               Icon="{Binding Source={StaticResource DuplicateIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                              Command="{Binding Data.DuplicateSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}"/>
+                                                              Command="{Binding Data.DuplicateSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
                                                     <MenuItem Header="_Merge"
                                                               Tag="17"
                                                               Icon="{Binding Source={StaticResource MergeIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
@@ -856,7 +856,7 @@
                                                                   CommandParameter="https://yandex.com/search/?text=" />
                                                     </MenuItem>
                                                     <Separator />
-                                                    <MenuItem x:Name="ExcludeApplication" 
+                                                    <MenuItem x:Name="ExcludeApplication"
                                                               Header="Exclude Application"
                                                               Icon="{Binding Source={StaticResource NoEntryIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                                                               Command="{Binding Data.ExcludeApplicationCommand, Source={StaticResource ClipTileProxy}}" />
@@ -1037,7 +1037,6 @@
                                                             </Path>
                                                         </Canvas>
                                                     </Viewbox>
-
                                                     <Grid x:Name="ClipTileTitleTextGrid"
                                                           Background="{Binding TileTitleTextGridBackgroundBrush}">
                                                         <!-- Clip Title TextBlock -->
@@ -1074,7 +1073,7 @@
                                                     <!-- Clip Title Icon Image -->
                                                     <Button x:Name="ClipTileAppIconImageButton"
                                                             Style="{StaticResource Transparent_Button}"
-                                                            Visibility="{Binding ClipTileTitleAppIconVisibility}"
+                                                            Visibility="{Binding ClipTileTitleAppIconButtonVisibility}"
                                                             RenderTransformOrigin="0.5,0.5"
                                                             Background="Transparent"
                                                             BorderThickness="0">
@@ -1107,10 +1106,32 @@
                                                             <Image x:Name="ClipTileAppIconImage"
                                                                    Source="{Binding AppIcon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
                                                                    Stretch="Fill"
+                                                                   Visibility="{Binding ClipTileTitleAppIconImageVisibility}"
                                                                    Width="{Binding TileTitleIconSize}"
                                                                    Height="{Binding TileTitleIconSize}">
                                                             </Image>
-
+                                                            <!--<Viewbox Width="{Binding TileTitleIconSize}"
+                                                                     Height="{Binding TileTitleIconSize}"
+                                                                     Visibility="{Binding MultiSelectOrderMarkerVisibility}">
+                                                                <Grid>
+                                                                    <Ellipse HorizontalAlignment="Center"
+                                                                             VerticalAlignment="Center"
+                                                                             Width="{Binding TileTitleIconBorderSize}"
+                                                                             Height="{Binding TileTitleIconBorderSize}"
+                                                                             Fill="{Binding TileBorderBrush}" />
+                                                                    <Ellipse HorizontalAlignment="Center"
+                                                                             VerticalAlignment="Center"
+                                                                             Width="{Binding TileTitleIconSize}"
+                                                                             Height="{Binding TileTitleIconSize}"
+                                                                             Fill="White" />
+                                                                    <TextBlock Background="Transparent"
+                                                                               Foreground="Black"
+                                                                               HorizontalAlignment="Center"
+                                                                               VerticalAlignment="Center"
+                                                                               FontSize="20"
+                                                                               Text="{Binding MultiSelectedOrderIdxDisplayValue}" />
+                                                                </Grid>
+                                                            </Viewbox>-->
                                                         </Grid>
                                                     </Button>
                                                 </Canvas>
@@ -1124,7 +1145,7 @@
                                                     <!-- RichText Content -->
                                                     <Canvas x:Name="ClipTileRichTextBoxListBoxGridContainerCanvas"
                                                             Visibility="{Binding RtbVisibility}"
-                                                            ClipToBounds="True" 
+                                                            ClipToBounds="True"
                                                             Height="{Binding TileContentHeight}"
                                                             Width="{Binding TileContentWidth}">
                                                         <Border x:Name="ClipTileEditorToolbar"
@@ -1382,26 +1403,26 @@
                                                                           VerticalScrollBarVisibility="{Binding VerticalScrollbarVisibility}">
                                                                 <AdornerDecorator>
                                                                     <local:MpMultiSelectListBox x:Name="ClipTilRichTextBoxListBox"
-                                                                                           VerticalAlignment="Top"
-                                                                                           HorizontalAlignment="Left"
-                                                                                           HorizontalContentAlignment="Left"
-                                                                                           VerticalContentAlignment="Top"
-                                                                                           BorderThickness="0"
-                                                                                           BorderBrush="Pink"
-                                                                                           SelectionMode="Multiple" 
-                                                                                           ScrollToSelectedItem="True"
-                                                                                           IsSynchronizedWithCurrentItem="False"
-                                                                                           Width="{Binding RtbLbWidth}"
-                                                                                           Height="{Binding RtbListBoxHeight}"
-                                                                                           Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
-                                                                                           ItemsSource="{Binding}"
-                                                                                           Focusable="True"
-                                                                                           IsEnabled="True"
-                                                                                           ScrollViewer.CanContentScroll="False"
-                                                                                           ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                                                                           ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                                                                           VirtualizingPanel.IsVirtualizing="True"
-                                                                                           Padding="0">
+                                                                                                VerticalAlignment="Top"
+                                                                                                HorizontalAlignment="Left"
+                                                                                                HorizontalContentAlignment="Left"
+                                                                                                VerticalContentAlignment="Top"
+                                                                                                BorderThickness="0"
+                                                                                                BorderBrush="Pink"
+                                                                                                SelectionMode="Multiple"
+                                                                                                ScrollToSelectedItem="True"
+                                                                                                IsSynchronizedWithCurrentItem="False"
+                                                                                                Width="{Binding RtbLbWidth}"
+                                                                                                Height="{Binding RtbListBoxHeight}"
+                                                                                                Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
+                                                                                                ItemsSource="{Binding}"
+                                                                                                Focusable="True"
+                                                                                                IsEnabled="True"
+                                                                                                ScrollViewer.CanContentScroll="False"
+                                                                                                ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                                                                                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                                                                                VirtualizingPanel.IsVirtualizing="True"
+                                                                                                Padding="0">
                                                                         <i:Interaction.Triggers>
                                                                             <i:EventTrigger EventName="Loaded">
                                                                                 <i:CallMethodAction TargetObject="{Binding}"
@@ -1443,7 +1464,7 @@
                                                                         </local:MpMultiSelectListBox.ItemContainerStyle>
                                                                         <local:MpMultiSelectListBox.ItemTemplate>
                                                                             <DataTemplate>
-                                                                                <AdornerDecorator x:Name="RtbListBoxItemCanvasAdorner" 
+                                                                                <AdornerDecorator x:Name="RtbListBoxItemCanvasAdorner"
                                                                                                   Visibility="{Binding SubItemVisibility}"
                                                                                                   DataContext="{Binding}">
                                                                                     <Canvas x:Name="RtbListBoxItemCanvas"
@@ -1521,7 +1542,7 @@
                                                                                                         </MenuItem.ItemContainerStyle>
                                                                                                     </MenuItem>
                                                                                                 </MenuItem>
-                                                                                                <MenuItem x:Name="ToolsMenuItem" 
+                                                                                                <MenuItem x:Name="ToolsMenuItem"
                                                                                                           Header="_Tools"
                                                                                                           Icon="{Binding Source={StaticResource ToolsIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}">
                                                                                                     <MenuItem Header="Duplicate"
@@ -1607,7 +1628,7 @@
                                                                                                 <Separator />
                                                                                                 <MenuItem x:Name="PasteToAppPathMenuItem"
                                                                                                           Header="Paste To Application"
-                                                                                                          Icon="{Binding Source={StaticResource PasteToAppIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"/>
+                                                                                                          Icon="{Binding Source={StaticResource PasteToAppIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}" />
                                                                                                 <Separator />
                                                                                                 <MenuItem Header="Pin To _Collection"
                                                                                                           Icon="{Binding Source={StaticResource PinToCollectionIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
@@ -1633,13 +1654,13 @@
                                                                                                 </MenuItem>
                                                                                             </ContextMenu>
                                                                                         </Canvas.ContextMenu>
-                                                                                        <AdornerDecorator x:Name="RtbListBoxItemRichTextBoxAdorner" 
+                                                                                        <AdornerDecorator x:Name="RtbListBoxItemRichTextBoxAdorner"
                                                                                                           DataContext="{Binding}">
                                                                                             <RichTextBox x:Name="RtbListBoxItemRichTextBox"
                                                                                                          Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                                                                          IsReadOnly="{Binding HostClipTileViewModel.IsRtbReadOnly}"
-                                                                                                         IsEnabled="True" 
-                                                                                                         AllowDrop="False" 
+                                                                                                         IsEnabled="True"
+                                                                                                         AllowDrop="False"
                                                                                                          AutoWordSelection="False"
                                                                                                          IsInactiveSelectionHighlightEnabled="True"
                                                                                                          IsDocumentEnabled="True"
@@ -1772,58 +1793,70 @@
                                                                                                              Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=LostFocus}" />
                                                                                                     <!-- Sub Item Title Icon Image -->
                                                                                                     <Canvas DockPanel.Dock="Right"
-                                                                                                            HorizontalAlignment="Right"
+                                                                                                            HorizontalAlignment="Right"                                                                                                            
                                                                                                             Width="{Binding SubItemAppIconBorderSize}"
                                                                                                             Height="{Binding SubItemAppIconBorderSize}"
                                                                                                             Background="Transparent"
-                                                                                                            Margin="0,0,25,3"
+                                                                                                            Margin="0,0,25,0"
                                                                                                             Visibility="{Binding SubItemOverlayVisibility}">
                                                                                                         <Image x:Name="RtbItemAppIconHighlightedBorderImage"
-                                                                                                           Source="{Binding CopyItemAppIconHighlightBorder, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
-                                                                                                           Stretch="Fill"
-                                                                                                           Visibility="{Binding AppIconHighlightBorderVisibility}"
-                                                                                                           Width="{Binding SubItemAppIconBorderSize}"
-                                                                                                           Height="{Binding SubItemAppIconBorderSize}"/>
+                                                                                                               Source="{Binding CopyItemAppIconHighlightBorder, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
+                                                                                                               Stretch="Fill"
+                                                                                                               Visibility="{Binding AppIconHighlightBorderVisibility}"
+                                                                                                               Width="{Binding SubItemAppIconBorderSize}"
+                                                                                                               Height="{Binding SubItemAppIconBorderSize}" />
                                                                                                         <Button x:Name="RtbItemAppIconImageButton"
-                                                                                                            Margin="4"
-                                                                                                            Style="{StaticResource Transparent_Button}"
-                                                                                                            Visibility="{Binding SubItemOverlayVisibility}"
-                                                                                                            Background="Transparent"
-                                                                                                            BorderThickness="0">
+                                                                                                                Canvas.Top="-2"
+                                                                                                                Margin="0" 
+                                                                                                                Style="{StaticResource Transparent_Button}"
+                                                                                                                Visibility="{Binding SubItemOverlayVisibility}"
+                                                                                                                Background="Transparent"
+                                                                                                                BorderThickness="0">
                                                                                                             <Button.ContextMenu>
                                                                                                                 <ContextMenu>
                                                                                                                     <MenuItem Header="Exclude Application"
-                                                                                                                          Icon="{Binding Source={StaticResource NoEntryIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                                                                                          Command="{Binding Data.ExcludeSubSelectedItemApplicationCommand, Source={StaticResource RtbListBoxItemProxy}}" />
+                                                                                                                              Icon="{Binding Source={StaticResource NoEntryIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                                                                                                                              Command="{Binding Data.ExcludeSubSelectedItemApplicationCommand, Source={StaticResource RtbListBoxItemProxy}}" />
                                                                                                                     <MenuItem Header="Add Paste Macro For Application"
-                                                                                                                          Icon="{Binding Source={StaticResource RobotClawIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                                                                                          Command="{Binding Data.MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand, Source={StaticResource RtbListBoxItemProxy}}"
-                                                                                                                          CommandParameter="{Binding}" />
+                                                                                                                              Icon="{Binding Source={StaticResource RobotClawIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                                                                                                                              Command="{Binding Data.MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand, Source={StaticResource RtbListBoxItemProxy}}"
+                                                                                                                              CommandParameter="{Binding}" />
                                                                                                                 </ContextMenu>
                                                                                                             </Button.ContextMenu>
                                                                                                             <Grid>
-                                                                                                                <Image x:Name="RtbItemAppIconBorderImage"
-                                                                                                                   Source="{Binding CopyItemAppIconBorder, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
-                                                                                                                   Stretch="Fill"
-                                                                                                                   RenderTransformOrigin="0.5, 0.5"
-                                                                                                                   Visibility="Hidden"
-                                                                                                                   Width="{Binding SubItemAppIconSize}"
-                                                                                                                   Height="{Binding SubItemAppIconSize}">
-                                                                                                                    <Image.RenderTransform>
-                                                                                                                        <ScaleTransform x:Name="RtbItemAppIconBorderImageScaleTransform" />
-                                                                                                                    </Image.RenderTransform>
-                                                                                                                </Image>
                                                                                                                 <Image x:Name="RtbItemAppIconImage"
-                                                                                                                   Source="{Binding AppIcon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
-                                                                                                                   Stretch="Fill"
-                                                                                                                   Width="{Binding SubItemAppIconSize}"
-                                                                                                                   Height="{Binding SubItemAppIconSize}">
-                                                                                                                </Image>
+                                                                                                                       Visibility="{Binding AppIconImageVisibility}"
+                                                                                                                       Source="{Binding AppIcon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
+                                                                                                                       Stretch="Fill"
+                                                                                                                       Width="{Binding SubItemAppIconSize}"
+                                                                                                                       Height="{Binding SubItemAppIconSize}" />
+                                                                                                                <!--<Viewbox Visibility="{Binding MultiSelectOrderMarkerVisibility}"
+                                                                                                                         Width="{Binding SubItemAppIconBorderSize}"
+                                                                                                                         Height="{Binding SubItemAppIconBorderSize}">
+                                                                                                                    <Grid>
+                                                                                                                        <Ellipse HorizontalAlignment="Center"
+                                                                                                                                 VerticalAlignment="Center"
+                                                                                                                                 Width="{Binding SubItemAppIconBorderSize}"
+                                                                                                                                 Height="{Binding SubItemAppIconBorderSize}"
+                                                                                                                                 Fill="{Binding RtbOverlayBorderBrush}" />
+                                                                                                                        <Ellipse HorizontalAlignment="Center"
+                                                                                                                                 VerticalAlignment="Center"
+                                                                                                                                 Width="{Binding SubItemAppIconSize}"
+                                                                                                                                 Height="{Binding TileTitleIconSize}"
+                                                                                                                                 Fill="White" />
+                                                                                                                        <TextBlock Background="Transparent"
+                                                                                                                                   Foreground="Black"
+                                                                                                                                   HorizontalAlignment="Center"
+                                                                                                                                   VerticalAlignment="Center"
+                                                                                                                                   FontSize="14"
+                                                                                                                                   Text="{Binding MultiSelectedOrderIdxDisplayValue}" />
+                                                                                                                    </Grid>
+                                                                                                                </Viewbox>-->
                                                                                                             </Grid>
                                                                                                         </Button>
                                                                                                     </Canvas>
-                                                                                                    
-                                                                                                </DockPanel>                                                                                                
+
+                                                                                                </DockPanel>
                                                                                             </DockPanel>
                                                                                         </local:MpClipBorder>
                                                                                     </Canvas>
@@ -2061,6 +2094,7 @@
                                                     </Canvas>
                                                     <!-- Image Content-->
                                                     <Grid Margin="0"
+                                                          ToolTip="{Binding ImagePreview}"
                                                           Background="Transparent"
                                                           Height="{Binding TileContentHeight}"
                                                           Width="{Binding TileContentWidth}"
@@ -2140,16 +2174,16 @@
                                                     </Grid>
                                                     <!--File List Content -->
                                                     <local:MpMultiSelectListBox x:Name="ClipTileFileListBox"
-                                                             SelectionMode="Extended"
-                                                             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                                             ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                                             Width="{Binding TileBorderWidth}"
-                                                             Height="{Binding TileContentHeight}"
-                                                             ItemsSource="{Binding FileListCollectionViewModel}"
-                                                             Visibility="{Binding FileListVisibility}"
-                                                             IsEnabled="{Binding IsSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
-                                                             BorderThickness="0"
-                                                             Focusable="False">
+                                                                                SelectionMode="Extended"
+                                                                                ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                                                                ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                                                                Width="{Binding TileBorderWidth}"
+                                                                                Height="{Binding TileContentHeight}"
+                                                                                ItemsSource="{Binding FileListCollectionViewModel}"
+                                                                                Visibility="{Binding FileListVisibility}"
+                                                                                IsEnabled="{Binding IsSelected, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                                                                                BorderThickness="0"
+                                                                                Focusable="False">
                                                         <i:Interaction.Triggers>
                                                             <i:EventTrigger EventName="Loaded">
                                                                 <i:CallMethodAction TargetObject="{Binding}"
@@ -2168,7 +2202,7 @@
                                                         </ListBox.ItemContainerStyle>
                                                         <ListBox.ItemTemplate>
                                                             <DataTemplate>
-                                                                <Border x:Name="FileListItem" 
+                                                                <Border x:Name="FileListItem"
                                                                         Height="22"
                                                                         BorderThickness="0">
                                                                     <Grid>
@@ -2204,11 +2238,11 @@
                                                                         </TextBlock>
                                                                         </StackPanel>
                                                                         <WebBrowser x:Name="FileItemMoonPdfPanel"
-                                                                                          Visibility="{Binding Data.WebBrowserFileViewerVisibility, Source={StaticResource ClipTileProxy}}"
-                                                                                          VerticalAlignment="Center"
-                                                                                          HorizontalAlignment="Center"
-                                                                                          ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                                                                                          ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                                                                                    Visibility="{Binding Data.WebBrowserFileViewerVisibility, Source={StaticResource ClipTileProxy}}"
+                                                                                    VerticalAlignment="Center"
+                                                                                    HorizontalAlignment="Center"
+                                                                                    ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                                                                    ScrollViewer.VerticalScrollBarVisibility="Hidden">
                                                                             <i:Interaction.Triggers>
                                                                                 <i:EventTrigger EventName="Loaded">
                                                                                     <i:CallMethodAction TargetObject="{Binding}"
@@ -2260,8 +2294,8 @@
                                                     <Grid>
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="auto" />
-                                                            <ColumnDefinition Width="*"/>
-                                                            <ColumnDefinition Width="auto"/>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="auto" />
                                                         </Grid.ColumnDefinitions>
                                                         <i:Interaction.Triggers>
                                                             <i:EventTrigger EventName="Loaded">
@@ -2344,5 +2378,5 @@
             </Grid>
             <!--3rd row row for tray -->
         </Grid>
-    </Canvas>    
+    </Canvas>
 </Window>

@@ -403,7 +403,8 @@ namespace MpWpfApp {
                     , CopyCount integer not null default 1
                     , PasteCount integer not null default 0
                     , ItemImage longblob
-                    , ItemText text NOT NULL       
+                    , ItemText text NOT NULL      
+                    , ItemDescription text
                     , ItemCsv text
                     , ItemUrl text
                     , Screenshot longblob

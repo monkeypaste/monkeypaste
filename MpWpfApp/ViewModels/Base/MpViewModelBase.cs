@@ -143,7 +143,7 @@ namespace MpWpfApp {
         #endregion
 
         #region INotifyPropertyChanged 
-        public bool ThrowOnInvalidPropertyName { get; private set; }
+        public bool ThrowOnInvalidPropertyName { get; private set; } = true;
 
         private event PropertyChangedEventHandler _propertyChanged;
         public event PropertyChangedEventHandler PropertyChanged {
@@ -160,8 +160,8 @@ namespace MpWpfApp {
             }
         }
 
-        [Conditional("DEBUG")]
-        [DebuggerStepThrough]
+        //[Conditional("DEBUG")]
+        //[DebuggerStepThrough]
         public void VerifyPropertyName(string propertyName) {
             // Verify that the property name matches a real, 
             // public, instance property on this object. 
