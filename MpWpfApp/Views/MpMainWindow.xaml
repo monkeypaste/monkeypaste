@@ -1697,7 +1697,8 @@
                                                                                                        DataContext="{Binding}"
                                                                                                        Width="{Binding RtbCanvasWidth}"
                                                                                                        Height="{Binding RtbCanvasHeight}">
-                                                                                                <DockPanel DockPanel.Dock="Left">
+                                                                                                <DockPanel DockPanel.Dock="Left"
+                                                                                                           Visibility="{Binding DragAndHotkeyButtonVisibility}">
                                                                                                     <Button x:Name="RtbListBoxItemOverlayBorderGridDragButton"
                                                                                                             DockPanel.Dock="Top"
                                                                                                             BorderThickness="0"
@@ -1784,7 +1785,7 @@
                                                                                                            Width="{Binding SubItemAppIconBorderSize}"
                                                                                                            Height="{Binding SubItemAppIconBorderSize}"/>
                                                                                                         <Button x:Name="RtbItemAppIconImageButton"
-                                                                                                            Margin="2"
+                                                                                                            Margin="4"
                                                                                                             Style="{StaticResource Transparent_Button}"
                                                                                                             Visibility="{Binding SubItemOverlayVisibility}"
                                                                                                             Background="Transparent"

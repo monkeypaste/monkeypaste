@@ -516,7 +516,7 @@ namespace MpWpfApp {
             }
             var ct = MainWindowViewModel.ClipTrayViewModel;
             //wait till all highlighting is complete then hide non-matching tiles at the same time
-            var newVisibilityDictionary = new Dictionary<MpClipTileViewModel, Visibility>();
+            var newVisibilityDictionary = new Dictionary<MpClipTileViewModel, Dictionary<object, Visibility>>();
             bool showMatchNav = false;
             foreach (var ctvm in ct) {
                 var newVisibility = await ctvm.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(SearchText);
@@ -533,7 +533,19 @@ namespace MpWpfApp {
                 }
             } else {
                 foreach (var kvp in newVisibilityDictionary) {
-                    kvp.Key.TileVisibility = kvp.Value;
+                    foreach(var skvp in kvp.Value) {
+                        if (skvp.Key is MpClipTileViewModel) {
+                            (skvp.Key as MpClipTileViewModel).TileVisibility = skvp.Value;                            
+                        }
+                        if(skvp.Key is MpClipTileViewModel && skvp.Value == Visibility.Collapsed) {
+                            //if tile is collapsed ignore children visibility
+                            break;
+                        }
+                        if(skvp.Key is MpRtbListBoxItemRichTextBoxViewModel) {
+                            (skvp.Key as MpRtbListBoxItemRichTextBoxViewModel).SubItemVisibility = skvp.Value;
+                        }
+                    }
+                    
                 }
             }
             SearchNavigationButtonPanelVisibility = showMatchNav ? Visibility.Visible : Visibility.Collapsed;

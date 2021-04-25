@@ -507,6 +507,16 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public Visibility DragAndHotkeyButtonVisibility {
+            get {
+                if(MainWindowViewModel.SearchBoxViewModel.HasText) {
+                    return Visibility.Hidden;
+                }
+                return Visibility.Visible;
+            }
+        }
+
         public Visibility SubItemToolTipVisibility {
             get {
                 if (CopyItem == null) {
@@ -518,6 +528,7 @@ namespace MpWpfApp {
 
         public Visibility SubItemOverlayVisibility {
             get {
+                OnPropertyChanged(nameof(DragAndHotkeyButtonVisibility));
                 if (HostClipTileViewModel == null) {
                     return Visibility.Collapsed;
                 }
@@ -534,7 +545,7 @@ namespace MpWpfApp {
                 if(MainWindowViewModel.SearchBoxViewModel.HasText &&
                    HostClipTileViewModel.TileVisibility == Visibility.Visible &&
                    (HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.RtbItemViewModel != this ||
-                    HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.HighlightType != MpHighlightType.Text)) {
+                    HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.HighlightType != MpHighlightType.Text)) {                    
                     return Visibility.Visible;
                 }
                 if(IsSubSelected && !HostClipTileViewModel.IsExpanded) {
@@ -1811,10 +1822,9 @@ namespace MpWpfApp {
                                         break;
                                     case MpSubTextTokenType.Uri:
                                         try {
-                                            if (!linkText.Contains("https://")) {
-                                                hl.NavigateUri = new Uri("https://" + linkText);
-                                            } else {
-                                                hl.NavigateUri = new Uri(linkText);
+                                            string urlText = MpHelpers.Instance.GetFullyFormattedUrl(linkText);
+                                            if(Uri.IsWellFormedUriString(urlText,UriKind.RelativeOrAbsolute)) {
+                                                hl.NavigateUri = new Uri(urlText);
                                             }
                                         }
                                         catch(Exception ex) {

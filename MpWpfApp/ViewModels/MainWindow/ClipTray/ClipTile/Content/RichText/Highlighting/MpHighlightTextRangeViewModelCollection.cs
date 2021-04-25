@@ -85,6 +85,46 @@ namespace MpWpfApp {
                 return appMatchRtbvmList;
             }
         }
+
+        public Dictionary<object,Visibility> VisibilityDictionary {
+            get {
+                var vdict = new Dictionary<object, Visibility>();
+                if (this.Count == 0) {
+                    if(MainWindowViewModel.SearchBoxViewModel.HasText) {
+                        vdict.Add(ClipTileViewModel, Visibility.Collapsed);
+                    } else {
+                        vdict.Add(ClipTileViewModel, Visibility.Visible);
+                        foreach(var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {
+                            vdict.Add(rtbvm, Visibility.Visible);
+                        }
+                    }
+                } else {
+                    foreach(var hltrvm in this) {
+                        if(hltrvm.RtbItemViewModel == null) {
+                            if(!vdict.ContainsKey(ClipTileViewModel)) {
+                                vdict.Add(ClipTileViewModel, Visibility.Visible);
+                            }                            
+                        } else {
+                            if(!vdict.ContainsKey(hltrvm.RtbItemViewModel)) {
+                                vdict.Add(hltrvm.RtbItemViewModel, Visibility.Visible);
+                            }                            
+                        }
+                    }
+                    if(vdict.Count > 0 && !vdict.ContainsKey(ClipTileViewModel)) {
+                        vdict.Add(ClipTileViewModel, Visibility.Visible);
+                    } else if(!vdict.ContainsKey(ClipTileViewModel)) {
+                        vdict.Add(ClipTileViewModel, Visibility.Collapsed);
+                    }
+                    foreach(var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {
+                        //this loop adds any unmatched rtbvm's to the dictionary so they are collapsed
+                        if(!vdict.ContainsKey(rtbvm)) {
+                            vdict.Add(rtbvm, Visibility.Collapsed);
+                        }
+                    }
+                }
+                return vdict;
+            }
+        }
         #endregion
 
         #region Public Methods
@@ -125,26 +165,26 @@ namespace MpWpfApp {
             NonTransparentDocumentBackgroundRangeList.AddRange(rtb.FindNonTransparentRangeList());
         }
 
-        public async Task<Visibility> PerformHighlightingAsync(string hlt) {
+        public async Task<Dictionary<object,Visibility>> PerformHighlightingAsync(string hlt) {
             HighlightTaskCount++;
 
             ClearHighlightingCommand.Execute(null);
 
             if (ClipTileViewModel.MainWindowViewModel.IsLoading || ClipTileViewModel.IsLoading) {
                 HighlightTaskCount--;
-                return Visibility.Visible;
+                return VisibilityDictionary;
             }
             
             if(MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded && !ClipTileViewModel.IsExpanded) {
                 HighlightTaskCount--;
-                return Visibility.Collapsed;
+                return new Dictionary<object, Visibility> { { ClipTileViewModel, Visibility.Collapsed } };
             }
 
             var sttvm = MainWindowViewModel.TagTrayViewModel.SelectedTagTile;
             if (!sttvm.IsLinkedWithClipTile(ClipTileViewModel)) {
                 Console.WriteLine("Clip tile w/ title " + ClipTileViewModel.CopyItemTitle + " is not linked with current tag");
                 HighlightTaskCount--;
-                return Visibility.Collapsed;
+                return new Dictionary<object, Visibility> { { ClipTileViewModel, Visibility.Collapsed } };
             }
 
             if (string.IsNullOrEmpty(hlt.Trim()) || hlt == Properties.Settings.Default.SearchPlaceHolderText) {
@@ -153,7 +193,7 @@ namespace MpWpfApp {
                 HighlightTaskCount--;
 
                 ClipTileViewModel.ResetContentScroll();
-                return Visibility.Visible;
+                return VisibilityDictionary;
             }
 
             var result = await PerformHighlightAsync(hlt);
@@ -162,7 +202,7 @@ namespace MpWpfApp {
             return result;
         }
         
-        private async Task<Visibility> PerformHighlightAsync(string hlt) {
+        private async Task<Dictionary<object,Visibility>> PerformHighlightAsync(string hlt) {
             var result = Visibility.Visible;
             await Dispatcher.CurrentDispatcher.InvokeAsync(
                 (Action)(() => {
@@ -305,7 +345,7 @@ namespace MpWpfApp {
                 }),
                 DispatcherPriority.Background);
 
-            return result;
+            return VisibilityDictionary;
         }
 
         public void ClearSelection() {
@@ -340,6 +380,22 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Methods
+        private Dictionary<object,Visibility> AddSubResult(Dictionary<object,Visibility> dict, object vm, Visibility vis) {
+            //this abstracts adding sub results so if dict contains a collapsed kvp it is removed if new one is visible
+            //and ignores if new one exists or simply adds it
+            if(dict.ContainsKey(vm)) {
+                if(dict[vm] == vis) {
+                    return dict;
+                }
+                if(dict[vm] == Visibility.Collapsed && vis == Visibility.Visible) {
+                    dict.Remove(vm);
+                    dict.Add(vm, vis);
+                }
+            } else {
+                dict.Add(vm, vis);
+            }
+            return dict;
+        }
         public int CompareHighlightRanges(MpHighlightTextRangeViewModel a,MpHighlightTextRangeViewModel b) {
             // return -1 if this instance precedes obj
             // return 0 if this instance is obj
