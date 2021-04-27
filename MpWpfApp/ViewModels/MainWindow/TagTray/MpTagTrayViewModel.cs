@@ -1,17 +1,31 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
+using GongSolutions.Wpf.DragDrop.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpTagTrayViewModel : MpObservableCollectionViewModel<MpTagTileViewModel> {
+    public class MpTagTrayViewModel : MpUndoableObservableCollectionViewModel<MpTagTrayViewModel,MpTagTileViewModel> {
+        #region Private Variables
+        private double _xOffset = 0;
+        private Canvas _trayCanvas = null;
+        private double _leftButtonX = 0;
+        private double _rightButtonX = 0;
+        #endregion
         #region View Models
         public MpTagTileViewModel SelectedTagTile {
             get {
-                return this.Where(tt => tt.IsSelected).ToList()[0];
+                var sttl = this.Where(tt => tt.IsSelected)?.ToList();
+                if(sttl.Count > 0) {
+                    return sttl[0];
+                }
+                return null;
             }
         }
         #endregion
@@ -22,7 +36,33 @@ namespace MpWpfApp {
                 return SelectedTagTile.IsEditing;
             }
         }
-        #endregion--
+
+        private double _maxTagTrayWidth = 800;
+        public double MaxTagTrayWidth { 
+            get {
+                return _maxTagTrayWidth;
+            }
+            set {
+                if(_maxTagTrayWidth != value) {
+                    _maxTagTrayWidth = value;
+                    OnPropertyChanged(nameof(MaxTagTrayWidth));
+                }
+            }
+        }
+
+        public Visibility NavButtonVisibility {
+            get {
+                if(ListBox == null || _trayCanvas == null) {
+                    return Visibility.Collapsed;
+                }
+                ListBox.UpdateLayout();
+                if(NavLeftCommand.CanExecute(null) || NavRightCommand.CanExecute(null)) {
+                    return Visibility.Visible;
+                }
+                return Visibility.Collapsed;
+            }
+        }
+        #endregion
 
         #region Public Methods
 
@@ -55,16 +95,34 @@ namespace MpWpfApp {
         public void TagTray_Loaded(object sender, RoutedEventArgs e) {
             var tagTrayStackPanel = (StackPanel)sender;
             var tagTray = (ListBox)tagTrayStackPanel.FindName("TagTray");
+            var leftButton = (RepeatButton)tagTrayStackPanel.FindName("TagTrayNavLeftButton");
+            var rightButton = (RepeatButton)tagTrayStackPanel.FindName("TagTrayNavRightButton");
+
+            ListBox = tagTray;
+            _trayCanvas = ListBox.GetVisualAncestor<Canvas>();
+            IsHorizontal = true;
+
+
             tagTrayStackPanel.PreviewMouseDown += (s, e10) => {
                 MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();
             };
             tagTray.Drop += (s, e2) => {
                 return;
             };
+
+            //leftButton.MouseDown += (s, e6) => {
+            //    NavLeftCommand.Execute(null);
+            //};
+            //rightButton.MouseDown += (s, e6) => {
+            //    NavRightCommand.Execute(null);
+            //};
             RefreshAllCounts();
 
             UpdateSortOrder(true);
+
             GetRecentTagTileViewModel().IsSelected = true;
+
+            OnPropertyChanged(nameof(NavButtonVisibility));
         }
 
         public void AddClipToSudoTags(MpClipTileViewModel ctvm) {
@@ -90,6 +148,13 @@ namespace MpWpfApp {
                 foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel) {
                     if(ttvm.IsLinkedWithClipTile(ctvm)) {
                         ttvm.TagClipCount++;
+                    }
+                    if(ctvm.CopyItemType == MpCopyItemType.Composite && ttvm != GetRecentTagTileViewModel()) {
+                        foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                            if(ttvm.IsLinkedWithRtbItem(rtbvm)) {
+                                ttvm.TagClipCount++;
+                            }
+                        }
                     }
                 }
             }
@@ -143,9 +208,9 @@ namespace MpWpfApp {
         public new void Add(MpTagTileViewModel newTagTile) {
             base.Add(newTagTile);
 
-            if (newTagTile.IsNew) {
-                newTagTile.Tag.WriteToDatabase();
-            }
+            //if (newTagTile.IsNew) {
+            //    newTagTile.Tag.WriteToDatabase();
+            //}
             //watches Tag IsSelected so History is selected if none are
             newTagTile.PropertyChanged += (s, e) => {
                 switch (e.PropertyName) {
@@ -164,16 +229,29 @@ namespace MpWpfApp {
                             MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon = null;
                             MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp = false;
 
-                            foreach (MpClipTileViewModel clipTile in MainWindowViewModel.ClipTrayViewModel) {
+                            foreach (MpClipTileViewModel ctvm in MainWindowViewModel.ClipTrayViewModel) {
                                 //this ensures when switching between tags the last selected tag in a list reset
-                                clipTile.IsSelected = false;
-                                if (tagChanged.IsLinkedWithClipTile(clipTile)) {
-                                    clipTile.TileVisibility = Visibility.Visible;
-                                    foreach(var rtbvm in clipTile.RichTextBoxViewModelCollection) {
+                                //ctvm.IsSelected = false;
+                                if (tagChanged.IsLinkedWithClipTile(ctvm)) {
+                                    ctvm.TileVisibility = Visibility.Visible;
+                                    foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                                        //if composite parent is linked show all children
                                         rtbvm.SubItemVisibility = Visibility.Visible;
                                     }
+                                } else if(ctvm.CopyItemType == MpCopyItemType.Composite) {
+                                    bool hasSubLink = false;
+                                    foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                                        if(tagChanged.IsLinkedWithRtbItem(rtbvm)) {
+                                            rtbvm.HostClipTileViewModel.TileVisibility = Visibility.Visible;
+                                            rtbvm.SubItemVisibility = Visibility.Visible;
+                                            hasSubLink = true;
+                                        }
+                                    }
+                                    if(!hasSubLink) {
+                                        ctvm.TileVisibility = Visibility.Collapsed;
+                                    }
                                 } else {
-                                    clipTile.TileVisibility = Visibility.Collapsed;
+                                    ctvm.TileVisibility = Visibility.Collapsed;
                                 }
                             }
                             if (MainWindowViewModel.ClipTrayViewModel.ListBox != null) {
@@ -186,6 +264,8 @@ namespace MpWpfApp {
                             }
                             
                         }
+
+                        OnPropertyChanged(nameof(NavButtonVisibility));
                         break;
                 }
             };
@@ -193,10 +273,6 @@ namespace MpWpfApp {
 
         public new void Remove(MpTagTileViewModel tagTileToRemove) {
             //when removing a tag auto-select the history tag
-            if (tagTileToRemove.IsSelected) {
-                tagTileToRemove.IsSelected = false;
-                this.Where(tt => tt.Tag.TagName == Properties.Settings.Default.HistoryTagTitle).ToList()[0].IsSelected = true;
-            }
             base.Remove(tagTileToRemove);
             tagTileToRemove.Tag.DeleteFromDatabase();
 
@@ -208,6 +284,9 @@ namespace MpWpfApp {
             foreach (var scvmToRemove in scvmToRemoveList) {
                 MpShortcutCollectionViewModel.Instance.Remove(scvmToRemove);
             }
+
+            ResetTagSelection();
+            OnPropertyChanged(nameof(NavButtonVisibility));
         }
 
         public void ClearTagEditing() {
@@ -219,14 +298,14 @@ namespace MpWpfApp {
             ClearTagEditing();
             foreach (var tagTile in this) {
                 tagTile.IsSelected = false;
-                //tagTile.IsTextBoxFocused = false;
             }
         }
 
         public void ResetTagSelection() {
             ClearTagSelection();
-            //GetHistoryTagTileViewModel().IsSelected = true;
             GetRecentTagTileViewModel().IsSelected = true;
+            _xOffset = 0;
+            Canvas.SetLeft(ListBox, 0);
         }
 
         public void UpdateTagAssociation() {
@@ -235,13 +314,18 @@ namespace MpWpfApp {
                     continue;
                 }
 
-                bool isTagLinkedToAllSelectedClips = true;
+                bool isTagLinkedToAnySelectedClips = false;
                 foreach (var sctvm in MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles) {
-                    if (!ttvm.IsLinkedWithClipTile(sctvm)) {
-                        isTagLinkedToAllSelectedClips = false;
+                    if (ttvm.IsLinkedWithClipTile(sctvm)) {
+                        isTagLinkedToAnySelectedClips = true;
+                    }
+                    foreach(var srtbvm in sctvm.RichTextBoxViewModelCollection) {
+                        if(ttvm.IsLinkedWithRtbItem(srtbvm)) {
+                            isTagLinkedToAnySelectedClips = true;
+                        }
                     }
                 }
-                ttvm.IsAssociated = isTagLinkedToAllSelectedClips && MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count > 0;
+                ttvm.IsAssociated = isTagLinkedToAnySelectedClips && MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count > 0;
 
             }
         }
@@ -267,7 +351,10 @@ namespace MpWpfApp {
         }
         private bool CanDeleteTag() {
             //allow delete if any tag besides history tag is selected, delete method will ignore history\
-            return SelectedTagTile.TagName != Properties.Settings.Default.HistoryTagTitle;
+            if(SelectedTagTile == null) {
+                return false;
+            }
+            return !SelectedTagTile.IsTagReadOnly;
         }
         private void DeleteTag() {
             this.Remove(SelectedTagTile);
@@ -288,6 +375,55 @@ namespace MpWpfApp {
             this.Add(new MpTagTileViewModel(newTag));
         }
 
+        private RelayCommand _navRightCommand = null;
+        public ICommand NavRightCommand {
+            get {
+                if(_navRightCommand == null) {
+                    _navRightCommand = new RelayCommand(NavRight, CanNavRight);
+                }
+                return _navRightCommand;
+            }
+        }
+        private bool CanNavRight() {
+            if(ListBox == null || _trayCanvas == null) {
+                return false;
+            }
+
+            var tail_lbi = this.ListBox.ItemContainerGenerator.ContainerFromIndex(this.Count-1) as ListBoxItem;
+            //var tail_lbi_rect1 = GetListBoxItemRect(this.Count - 1);
+            var tail_lbi_rect = tail_lbi.TransformToAncestor((Visual)_trayCanvas).TransformBounds(LayoutInformation.GetLayoutSlot(tail_lbi));
+            var lbRect = ListBox.TransformToAncestor((Visual)_trayCanvas).TransformBounds(LayoutInformation.GetLayoutSlot(ListBox));
+            //return tail_lbi_rect.Right > ListBox.ActualWidth + _trayCanvas.ActualWidth;
+
+            return Math.Abs(_xOffset) < ListBox.ActualWidth - _trayCanvas.ActualWidth;
+        }
+        private void NavRight() {
+            _xOffset -= 20;
+            Canvas.SetLeft(ListBox, _xOffset);
+            //crollViewer.ScrollToHorizontalOffset(ScrollViewer.HorizontalOffset + 20);
+        }
+
+        private RelayCommand _navLeftCommand = null;
+        public ICommand NavLeftCommand {
+            get {
+                if (_navLeftCommand == null) {
+                    _navLeftCommand = new RelayCommand(NavLeft, CanNavLeft);
+                }
+                return _navLeftCommand;
+            }
+        }
+        private bool CanNavLeft() {
+            if (ListBox == null || _trayCanvas == null) {
+                return false;
+            }
+            var lbRect = ListBox.TransformToAncestor((Visual)_trayCanvas).TransformBounds(LayoutInformation.GetLayoutSlot(ListBox));
+            return lbRect.X < 0;
+        }
+        private void NavLeft() {
+            _xOffset += 20;
+            Canvas.SetLeft(ListBox, _xOffset);
+            //ScrollViewer.ScrollToHorizontalOffset(ScrollViewer.HorizontalOffset - 20);
+        }
         #endregion
     }
 }

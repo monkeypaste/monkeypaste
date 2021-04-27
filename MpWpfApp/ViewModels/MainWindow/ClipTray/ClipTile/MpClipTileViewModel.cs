@@ -123,12 +123,30 @@
                     if (tagTile.IsSudoTag) {
                         continue;
                     }
+                    bool isTagAssociated = tagTile.IsLinkedWithClipTile(this);
+                    string partialAssociationIconPath = string.Empty;
+                    if(CopyItemType == MpCopyItemType.Composite && !isTagAssociated) {
+                        //composite/tag cases:
+                        //1. All or some sub-items but not composite are linked to tag: show minus and clicking associate composite
+                        //2. Composite is linked to tag: show check and clicking unassociates composite only (will change to minus if sub-items linked)
+                        //3. Neither Composite or subitems are linked to tag: show empty
+                        foreach(var rtbvm in RichTextBoxViewModelCollection) {
+                            if(tagTile.IsLinkedWithRtbItem(rtbvm)) {
+                                partialAssociationIconPath = Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/minus.png";
+                                break;
+                            }
+                        }
+                    }
                     _tagMenuItems.Add(
                         new MpContextMenuItemViewModel(
                             tagTile.TagName,
                             MainWindowViewModel.ClipTrayViewModel.LinkTagToCopyItemCommand,
                             tagTile,
-                            tagTile.IsLinkedWithClipTile(this)));
+                            isTagAssociated,
+                            partialAssociationIconPath,
+                            null,
+                            tagTile.ShortcutKeyString,
+                            tagTile.TagColor));
                 }
                 return _tagMenuItems;
             }
@@ -221,7 +239,6 @@
         #endregion
 
         #region Appearance
-        private BitmapSource _hotkeyIconSource = null;
         public BitmapSource HotkeyIconSource {
             get {
                 if(string.IsNullOrEmpty(ShortcutKeyString)) {
@@ -565,7 +582,7 @@
         }
         public Visibility ToolTipVisibility {
             get {
-                if (CopyItem == null || CopyItemType == MpCopyItemType.Image) {
+                if (CopyItem == null) {
                     return Visibility.Collapsed;
                 }
                 return (MainWindowViewModel.ClipTrayViewModel.IsScrolling || IsSelected) ? Visibility.Collapsed : Visibility.Visible;
@@ -1114,7 +1131,7 @@
 
         public bool IsAnySubContextMenuOpened {
             get {
-                return RichTextBoxViewModelCollection.Any(x => x.IsSubContextMenuOpened);
+                return RichTextBoxViewModelCollection.Any(x => x.IsSubContextMenuOpened && RichTextBoxViewModelCollection.Count > 1);
             }
         }
 
@@ -1986,7 +2003,7 @@
                 ctvm.RichTextBoxViewModelCollection.UpdateAdorners();
             };
 
-            ClipBorder.PreviewDrop += async (s3, e2) => {
+            ClipBorder.PreviewDrop += (s3, e2) => {
                 var ctvm = ((FrameworkElement)s3).DataContext as MpClipTileViewModel;
                 bool wasDropped = false;
                 var dctvml = new List<MpClipTileViewModel>();
@@ -2204,7 +2221,7 @@
             ctvm.DetectedImageObjectCollectionViewModel = new MpDetectedImageObjectCollectionViewModel(CopyItem);
 
             Console.WriteLine("Image Analysis: " + CopyItemDescription);
-            ImagePreview = new MpImageAnalysisDocument();
+            //ImagePreview = new MpImageAnalysisDocument();
         }
 
         public void ClipTileFileListBox_Loaded(object sender, RoutedEventArgs e) {
@@ -2281,10 +2298,9 @@
                         }
                         if ((smi as MenuItem).Name == "ExcludeApplication") {
                             eami = smi as MenuItem;
-
                         }
                     }
-                }
+                } 
             }
             if (eami != null) {
                 eami.Header = @"Exclude Application '" + CopyItemAppName + "'";

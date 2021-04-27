@@ -114,6 +114,19 @@ namespace MpWpfApp {
             } 
         }
 
+        private Brush _iconBackgroundBrush = Brushes.Transparent;
+        public Brush IconBackgroundBrush {
+            get {
+                return _iconBackgroundBrush;
+            }
+            set {
+                if(_iconBackgroundBrush != value) {
+                    _iconBackgroundBrush = value;
+                    OnPropertyChanged(nameof(IconBackgroundBrush));
+                }
+            }
+        }
+
         private Image _icon = null;
         public Image Icon {
             get {
@@ -164,7 +177,8 @@ namespace MpWpfApp {
             bool isChecked,
             string iconSource = "",
             ObservableCollection<MpContextMenuItemViewModel> subItems = null,
-            string inputGestureText = "") : this() {
+            string inputGestureText = "",
+            Brush bgBrush = null) : this() {
             IsSeparator = false;
             Header = header;
             Command = command;
@@ -173,6 +187,7 @@ namespace MpWpfApp {
             IconSource = iconSource;
             SubItems = subItems ?? new ObservableCollection<MpContextMenuItemViewModel>();
             InputGestureText = inputGestureText;
+            IconBackgroundBrush = bgBrush == null ? Brushes.Transparent : bgBrush;
         }
         #endregion
     }

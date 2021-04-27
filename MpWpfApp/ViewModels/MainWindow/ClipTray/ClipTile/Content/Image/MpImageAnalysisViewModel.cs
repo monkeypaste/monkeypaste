@@ -42,6 +42,9 @@ namespace MpWpfApp {
                     return captions;
                 }
                 foreach(var caption in ImageAnalysis.description.captions) {
+                    if(caption.confidence < _minScore) {
+                        continue;
+                    }
                     captions.Add(caption.text);
                 }
                 return captions;

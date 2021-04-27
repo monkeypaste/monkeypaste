@@ -31,7 +31,6 @@ namespace MpWpfApp {
         private HwndSourceHook hook;
         private HwndSource hwndSource;
         private IntPtr _nextClipboardViewer;
-        private bool _wasLastDataCsv = false;
         private IDictionary<string, object> _lastDataObject = null;
 
         private MpClipboardManager() {

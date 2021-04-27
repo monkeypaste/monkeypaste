@@ -105,6 +105,7 @@ namespace MpWpfApp {
                                         outStr += "{F" + val + "}";
                                     }
                                     catch(Exception ex) {
+                                        Console.WriteLine(@"ShortcutViewModel.SendKeys exception creating key: " + key + " with exception: " + ex);
                                         outStr += key.ToUpper();
                                         break;
                                     }

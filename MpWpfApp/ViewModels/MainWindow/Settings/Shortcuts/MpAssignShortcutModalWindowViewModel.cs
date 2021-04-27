@@ -13,6 +13,8 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     public class MpAssignShortcutModalWindowViewModel : MpViewModelBase {
@@ -24,6 +26,9 @@ namespace MpWpfApp {
         private ListBox _shortCutListBox = null;
         private bool _isSeqComplete = false;
         private bool _isNewCombination = true;
+
+        private bool _isReplacingShortcut = false;
+        private bool _wasPreviouslyASequence = false;
 
         private Window _windowRef = null;
 
@@ -114,7 +119,7 @@ namespace MpWpfApp {
             }
         }        
 
-        private string _warningString = string.Empty;
+        private string _warningString = @"Sequence hot key's require a restart to be enabled";
         public string WarningString {
             get {
                 return _warningString;
@@ -124,6 +129,51 @@ namespace MpWpfApp {
                     _warningString = value;
                     OnPropertyChanged(nameof(WarningString));
                 }
+            }
+        }
+
+        public BitmapSource WarningBmp {
+            get {
+                if (_isReplacingShortcut) {
+                    return (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath+@"/Images/warning.png"));
+                }
+                if (_wasPreviouslyASequence || _keyList.Count > 1) {
+                    return (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/info.png"));
+                }
+                return new BitmapImage();
+            }
+        }
+
+        public Visibility WarningVisibility {
+            get {
+                if (_isReplacingShortcut || _wasPreviouslyASequence || _keyList.Count > 1) {
+                    return Visibility.Visible;
+                }
+                return Visibility.Hidden;
+            }
+        }
+
+        public Brush WarningBorderBrush {
+            get {
+                if(_isReplacingShortcut) {
+                    return Brushes.IndianRed;
+                }
+                if(_wasPreviouslyASequence || _keyList.Count > 1) {
+                    return Brushes.LightBlue;
+                }
+                return Brushes.Transparent;
+            }
+        }
+
+        public Brush WarningTextBrush {
+            get {
+                if (_isReplacingShortcut) {
+                    return Brushes.AntiqueWhite;
+                }
+                if (_wasPreviouslyASequence || _keyList.Count > 1) {
+                    return Brushes.DimGray;
+                }
+                return Brushes.Transparent;
             }
         }
         #endregion
@@ -228,6 +278,20 @@ namespace MpWpfApp {
         #region Private Methods
 
         private MpAssignShortcutModalWindowViewModel(string shortcutName, string keyString, ICommand command) : base() {
+            PropertyChanged += (s, e) => {
+                switch (e.PropertyName) {
+                    case nameof(WarningString):
+                        OnPropertyChanged(nameof(WarningBorderBrush));
+                        OnPropertyChanged(nameof(WarningVisibility));
+                        OnPropertyChanged(nameof(WarningBmp));
+                        OnPropertyChanged(nameof(WarningTextBrush));
+                        break;
+                }
+            };
+
+            if(!string.IsNullOrEmpty(keyString) && keyString.Contains(@",")) {
+                _wasPreviouslyASequence = true;
+            }
             _keyList = MpHelpers.Instance.ConvertStringToKeySequence(keyString);
             _assigningCommand = command;
             ShortcutDisplayName = shortcutName;
@@ -272,7 +336,7 @@ namespace MpWpfApp {
             //when KeysString changes check full system for duplicates, ignoring order of combinations
             WarningString = string.Empty;
             DuplicatedShortcutViewModel = null;
-
+            _isReplacingShortcut = false;
             //iterate over ALL shortcuts
             foreach (var scvm in MpShortcutCollectionViewModel.Instance) {                
                 if (scvm.Command == _assigningCommand ||
@@ -282,25 +346,29 @@ namespace MpWpfApp {
                     continue;
                 }
 
-                bool isDuplicate = true;
+                _isReplacingShortcut = true;
                 int klIdx = 0;
                 foreach(var kl in scvm.KeyList) {
                     if(kl.Count != _keyList[klIdx].Count) {
-                        isDuplicate = false;
+                        _isReplacingShortcut = false;
                         break;
                     }
                     foreach(var k in kl) {
                         if(!_keyList[klIdx].Contains(k)) {
-                            isDuplicate = false;
+                            _isReplacingShortcut = false;
                         }
                     }
                     klIdx++;
                 }
-                if (isDuplicate && KeyString != string.Empty) {
+                if (_isReplacingShortcut && KeyString != string.Empty) {
                     DuplicatedShortcutViewModel = scvm;
                     WarningString = "This combination conflicts with '" + scvm.ShortcutDisplayName + "' which will be cleared if saved";
                     return false;
                 }
+            }
+            if (_wasPreviouslyASequence || _keyList.Count > 1) {
+                WarningString = @"Sequence hot key's require a restart to be enabled";
+                return true;
             }
             return true;
         }

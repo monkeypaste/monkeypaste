@@ -76,7 +76,6 @@
     }
 }
     
-    -->
     
     
     
@@ -104,7 +103,7 @@
             </Paragraph>
         </FlowDocument>
     </FlowDocumentReader>
-    <!--<FlowDocumentScrollViewer Background="White"
+    <FlowDocumentScrollViewer Background="White"
                               Margin="0">
         <FlowDocument Background="White">
             <Paragraph>

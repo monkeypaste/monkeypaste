@@ -88,9 +88,13 @@ namespace MpWpfApp {
                     _tagMenuItems.Add(
                         new MpContextMenuItemViewModel(
                             tagTile.TagName,
-                            MainWindowViewModel.ClipTrayViewModel.LinkTagToCopyItemCommand,
+                            RichTextBoxViewModelCollection.LinkTagToSubSelectedClipsCommand,
                             tagTile,
-                            tagTile.IsLinkedWithRtbItem(this)));
+                            tagTile.IsLinkedWithRtbItem(this),
+                            string.Empty,
+                            null,
+                            tagTile.ShortcutKeyString,
+                            tagTile.TagColor));
                 }
                 return _tagMenuItems;
             }
@@ -1395,6 +1399,9 @@ namespace MpWpfApp {
                 IsSubDragging = false;
                 RichTextBoxViewModelCollection.SyncMultiSelectDragButton(true, false);
             };
+            DragButton.PreviewMouseDown += (s, e8) => {
+                RichTextBoxViewModelCollection.SyncMultiSelectDragButton(true, true);
+            };
             DragButton.PreviewMouseMove += (s, e7) => {
                 if (e7.MouseDevice.LeftButton == MouseButtonState.Pressed) {
                     if(IsEditingContent || (HostClipTileViewModel.IsExpanded && RichTextBoxViewModelCollection.Count == 1)) {
@@ -1440,14 +1447,14 @@ namespace MpWpfApp {
 
             RtbListBoxItemAdornerLayer = AdornerLayer.GetAdornerLayer(Rtbc);
             RtbListBoxItemAdornerLayer?.Add(new MpRtbListBoxItemAdorner(Rtbc));
-
-            
+                        
             Rtbc.MouseEnter += (s, e2) => {
                 IsSubHovering = true;
             };
             Rtbc.MouseLeave += (s, e2) => {
                 IsSubHovering = false;
             };
+
             #region Title
             RtbListBoxItemTitleTextBlock.PreviewMouseLeftButtonDown += (s, e7) => {
                 //RichTextBoxViewModelCollection.ClearSubSelection();
@@ -1484,47 +1491,6 @@ namespace MpWpfApp {
                 }
             };
 
-            titleIconImageButton.MouseEnter += (s, e3) => {
-                if (MainWindowViewModel.ClipTrayViewModel.IsScrolling) {
-                    return;
-                }
-                var rtbvm = ((FrameworkElement)s).DataContext as MpRtbListBoxItemRichTextBoxViewModel;
-                if (rtbvm.HostClipTileViewModel.IsEditingTemplate || rtbvm.HostClipTileViewModel.IsPastingTemplate) {
-                    return;
-                }
-
-                titleIconBorderImage.Visibility = Visibility.Visible;
-                double fromScale = 1;
-                double toScale = 1.1;
-                double st = 300;
-                var sa = new DoubleAnimation(fromScale, toScale, new Duration(TimeSpan.FromMilliseconds(st)));
-                var easing = new CubicEase();
-                easing.EasingMode = EasingMode.EaseOut;
-                sa.EasingFunction = easing;
-                titleIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, sa);
-                titleIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, sa);
-            };
-            titleIconImageButton.MouseLeave += (s, e3) => {
-                if (MainWindowViewModel.ClipTrayViewModel.IsScrolling) {
-                    return;
-                }
-                var rtbvm = ((FrameworkElement)s).DataContext as MpRtbListBoxItemRichTextBoxViewModel;
-                if (rtbvm.HostClipTileViewModel.IsEditingTemplate || rtbvm.HostClipTileViewModel.IsPastingTemplate) {
-                    return;
-                }
-                double fromScale = 1.15;
-                double toScale = 1;
-                double st = 300;
-                var sa = new DoubleAnimation(fromScale, toScale, new Duration(TimeSpan.FromMilliseconds(st)));
-                sa.Completed += (s1, e31) => {
-                    titleIconBorderImage.Visibility = Visibility.Hidden;
-                };
-                var easing = new CubicEase();
-                easing.EasingMode = EasingMode.EaseIn;
-                sa.EasingFunction = easing;
-                titleIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleXProperty, sa);
-                titleIconBorderImageScaleTransform.BeginAnimation(ScaleTransform.ScaleYProperty, sa);
-            };
             titleIconImageButton.PreviewMouseLeftButtonUp += (s, e7) => {
                 var rtbvm = ((FrameworkElement)s).DataContext as MpRtbListBoxItemRichTextBoxViewModel;
 
@@ -1555,8 +1521,7 @@ namespace MpWpfApp {
             };
             #endregion
 
-            UpdateLayout();
-            
+            UpdateLayout();            
 
             OnViewModelLoaded();
         }
@@ -1676,7 +1641,6 @@ namespace MpWpfApp {
             Rtbc?.UpdateLayout();
             Rtb?.UpdateLayout();
             RtbListBoxItemClipBorder?.UpdateLayout();  
-
         }
 
 
@@ -1732,9 +1696,6 @@ namespace MpWpfApp {
             var sw = new Stopwatch();
             sw.Start();
 
-            //int sso = Rtb.Document.ContentStart.GetOffsetToPosition(Rtb.Selection.Start);
-            //int seo = Rtb.Document.ContentStart.GetOffsetToPosition(Rtb.Selection.End);
-
             //remove links to update model rich text
             ClearHyperlinks();
 
@@ -1747,9 +1708,6 @@ namespace MpWpfApp {
 
             var cipcsw = new Stopwatch();
             cipcsw.Start();
-            //if(CopyItemType == MpCopyItemType.RichText) {
-            //    CopyItemBmp = RichTextBoxViewModelCollection[0].CopyItemBmp;
-            //}
 
             HostClipTileViewModel.CopyItemBmp = HostClipTileViewModel.CopyItem.GetSeparatedCompositeFlowDocument().ToBitmapSource();
             //OnPropertyChanged(nameof(CopyItem));
@@ -1758,32 +1716,7 @@ namespace MpWpfApp {
 
             sw.Stop();
             Console.WriteLine("Saving(VIdx:" + RichTextBoxViewModelCollection.IndexOf(this) + "): " + sw.ElapsedMilliseconds + "ms");
-
-            //since rtb.document is recreated when ci.rtf is updated the initial selection
-            //must be retrieved since the document is not the same
-            //var stp = Rtb.Document.ContentStart.GetPositionAtOffset(sso);
-            //var etp = Rtb.Document.ContentStart.GetPositionAtOffset(seo);
-            //Rtb.Selection.Select(stp, etp);
         }
-
-        //public async Task<string> GetPastableRichText() {
-        //    if (HasTemplate) {
-        //        TemplateRichText = string.Empty;
-        //        //RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(RichTextBoxViewModelCollection.IndexOf(this),false);
-                
-        //        await Task.Run(() => {
-        //            while (string.IsNullOrEmpty(TemplateRichText)) {
-        //                System.Threading.Thread.Sleep(500);
-        //            }
-        //            //TemplateRichText is set in PasteTemplateCommand
-        //        });
-
-        //        return TemplateRichText;
-        //    }
-        //    return CopyItemRichText;
-
-        //    //both return to ClipTray.GetDataObjectFromSelectedClips
-        //}
 
         #region Hyperlinks
         public void ClearHyperlinks() {
@@ -1890,7 +1823,7 @@ namespace MpWpfApp {
                                             }
                                         }
                                         catch(Exception ex) {
-                                            //Console.WriteLine("CreateHyperlinks error creating uri from: " + linkText + " replacing as run and ignoring");
+                                            Console.WriteLine("CreateHyperlinks error creating uri from: " + linkText + " replacing as run and ignoring with exception: "+ex);
                                             var par = hl.Parent.FindParentOfType<Paragraph>();
                                             var s = new Span();
                                             s.Inlines.AddRange(hl.Inlines.ToArray());
@@ -2188,7 +2121,7 @@ namespace MpWpfApp {
         #endregion
 
         #region Overrides
-        public new void Dispose() {
+        public void Dispose() {
             if(RichTextBoxViewModelCollection.Contains(this)) {
                 RichTextBoxViewModelCollection.Remove(this);
             }

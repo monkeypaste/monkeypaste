@@ -54,7 +54,7 @@
                            Height="50"
                            Width="50"
                            Margin="0,10,0,0"
-                           Source="{Binding Source={StaticResource UserIcon}, Converter={StaticResource StringToImageConverter}}" />
+                           Source="/MpWpfApp;component/Resources/Images/user.png" />
                     <Label HorizontalAlignment="Center"
                            FontSize="16"
                            Content="Account" />
@@ -70,7 +70,7 @@
                            Height="50"
                            Width="50"
                            Margin="0,10,0,0"
-                           Source="{Binding Source={StaticResource SlidersIcon}, Converter={StaticResource StringToImageConverter}}" />
+                           Source="/MpWpfApp;component/Resources/Images/sliders.png" />
                     <Label HorizontalAlignment="Center"
                            FontSize="16"
                            Content="Preferences" />
@@ -86,7 +86,7 @@
                            Height="50"
                            Width="50"
                            Margin="0,10,0,0"
-                           Source="{Binding Source={StaticResource ShieldIcon}, Converter={StaticResource StringToImageConverter}}"  />
+                           Source="/MpWpfApp;component/Resources/Images/shield.png"  />
                     <Label HorizontalAlignment="Center"
                            FontSize="16"
                            Content="Security" />
@@ -102,7 +102,7 @@
                            Height="50"
                            Width="50"
                            Margin="0,10,0,0"
-                           Source="{Binding Source={StaticResource HotkeyIcon}, Converter={StaticResource StringToImageConverter}}"  />
+                           Source="/MpWpfApp;component/Resources/Images/joystick.png"  />
                     <Label HorizontalAlignment="Center"
                            FontSize="16"
                            Content="Shortcuts" />
@@ -414,6 +414,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0"
+                        Visibility="Collapsed"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">
                 <Image Width="30"

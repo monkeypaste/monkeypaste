@@ -221,10 +221,12 @@ namespace MpWpfApp {
                         }
                     }                    
                     if(Properties.Settings.Default.SearchByRichText) {
-                        cc = ClipTileViewModel.CopyItemPlainText.ContainsByCaseSetting(hlt);
+                        cc = ClipTileViewModel.CopyItemPlainText.ContainsByCaseSetting(hlt) ||
+                             ClipTileViewModel.CopyItemDescription.ContainsByCaseSetting(hlt);
                         if (ClipTileViewModel.CopyItemType == MpCopyItemType.Composite && !cc) {
                             foreach (var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {
-                                cc = rtbvm.CopyItemPlainText.ContainsByCaseSetting(hlt) ? true : cc;
+                                cc = rtbvm.CopyItemPlainText.ContainsByCaseSetting(hlt) ||
+                                     ClipTileViewModel.CopyItemDescription.ContainsByCaseSetting(hlt) ? true : cc;
                             }
                         }
                     }
@@ -314,9 +316,9 @@ namespace MpWpfApp {
                             }
                             break;
                         case MpCopyItemType.Image:
-                            // TODO Add filtering for images
                             if(Properties.Settings.Default.SearchByImage && cc) {
-
+                                //already found in pre-pass
+                                this.Add(new MpHighlightTextRangeViewModel(ClipTileViewModel, null, null, -1, MpHighlightType.Image));
                             }
                             break;
                         case MpCopyItemType.FileList:

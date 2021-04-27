@@ -13,8 +13,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Variables
-        private Timer _shortcutValidationTimer = null;
-        private bool _isBlockingInput = false;
         #endregion
 
         #region Properties
@@ -151,13 +149,24 @@ namespace MpWpfApp {
         public void UpdateInputGestures(ItemsControl cm) {
             foreach (var item in cm.Items) {
                 if (item is MenuItem mi && mi.Tag != null) {
-                    var scvm = this.Where(x => x.ShortcutId == Convert.ToInt32(mi.Tag.ToString())).First();
-                    if (scvm != null) {
-                        mi.InputGestureText = scvm.KeyString;
+                    int tagNum = Convert.ToInt32(mi.Tag.ToString());
+                    if(tagNum == 8080) {
+                        foreach (var smi in ((MenuItem)mi).Items) {
+                            if (smi == null || smi is Separator) {
+                                continue;
+                            }
+                            string header = (smi as MpContextMenuItemViewModel).Header.ToString();
+                            (smi as MpContextMenuItemViewModel).InputGestureText = MainWindowViewModel.TagTrayViewModel.Where(x => x.TagName == header).FirstOrDefault().ShortcutKeyString;
+                        }
+                    } else {
+                        var scvm = this.Where(x => x.ShortcutId == tagNum).First();
+                        if (scvm != null) {
+                            mi.InputGestureText = scvm.KeyString;
+                        }
+                        if (mi.HasItems) {
+                            UpdateInputGestures(mi);
+                        }
                     }                    
-                    if(mi.HasItems) {
-                        UpdateInputGestures(mi);
-                    }
                 }
             }
         }
@@ -182,7 +191,7 @@ namespace MpWpfApp {
                 GlobalHook.MouseUp += (s, e) => {
                     if (MainWindowViewModel.AppModeViewModel.IsAutoCopyMode) {
                         if (e.Button == System.Windows.Forms.MouseButtons.Left && !MpHelpers.Instance.ApplicationIsActivated()) {
-                            System.Windows.Forms.SendKeys.SendWait("^c");
+                            System.Windows.Forms.SendKeys.SendWait(" ^ c");
                         }
                     }
                     if (MainWindowViewModel.AppModeViewModel.IsRightClickPasteMode) {

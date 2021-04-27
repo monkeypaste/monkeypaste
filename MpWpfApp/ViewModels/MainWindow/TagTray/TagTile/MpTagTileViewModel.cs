@@ -10,6 +10,7 @@ namespace MpWpfApp {
     public class MpTagTileViewModel : MpViewModelBase {
         #region Private Variables
         private int _tagClipCount = 0;
+        private string _originalTagName = string.Empty;
         #endregion
 
         #region Properties
@@ -32,12 +33,18 @@ namespace MpWpfApp {
             }
         }
 
+        public bool IsTagReadOnly {
+            get {
+                return TagId != 0 && TagId <= 4;
+            }
+        }
+
         public bool IsSudoTag {
             get {
                 if(Tag == null) {
                     return false;
                 }
-                return Tag.TagId == 1 || Tag.TagId == 2;
+                return Tag.TagId == 1 || Tag.TagId == 2 || Tag.TagId == 4;
             }
         }
 
@@ -327,10 +334,20 @@ namespace MpWpfApp {
                 if(TextBoxVisibility == Visibility.Visible) {
                     tagTextBox.Focus();
                     tagTextBox.SelectAll();
+                } else {
+                    Tag.WriteToDatabase();
                 }
             };
             tagTextBox.LostFocus += (s, e2) => {
                 IsEditing = false;
+            };
+            tagTextBox.PreviewKeyDown += (s, e3) => {
+                if(e3.Key == Key.Enter) {
+                    IsEditing = false;
+                } else if(e3.Key == Key.Escape) {
+                    TagName = _originalTagName;
+                    IsEditing = false;
+                }
             };
             //if tag is created at runtime show tbox w/ all selected
             if (IsNew) {
@@ -340,22 +357,36 @@ namespace MpWpfApp {
 
         public void TagTile_ContextMenu_Loaded(object sender, RoutedEventArgs e) {
             var cm = (ContextMenu)sender;
+            cm.DataContext = this;
             MenuItem cmi = null;
-            foreach (MenuItem mi in cm.Items) {
-                if (mi.Name == "TagTileColorContextMenuItem") {
-                    cmi = mi;
+            foreach (var mi in cm.Items) {
+                if (mi == null || mi is Separator) {
+                    continue;
+                }
+                if ((mi as MenuItem).Name == "ClipTileColorContextMenuItem") {
+                    cmi = (MenuItem)mi;
                     break;
                 }
             }
             MpHelpers.Instance.SetColorChooserMenuItem(
-                cm,
-                cmi,
-                (s, e1) => {
-                    ChangeTagColorCommand.Execute((Brush)((Border)s).Tag);
-                },
-                MpHelpers.Instance.GetColorColumn(TagColor),
-                MpHelpers.Instance.GetColorRow(TagColor)
-            );
+                    cm,
+                    cmi,
+                    (s, e1) => {
+                        ChangeTagColorCommand.Execute((Brush)((Border)s).Tag);
+                    },
+                    MpHelpers.Instance.GetColorColumn(TagColor),
+                    MpHelpers.Instance.GetColorRow(TagColor)
+                );
+        }
+
+        public void TagTile_ContextMenu_Opened(object sender, RoutedEventArgs e) {
+            var cm = sender as ContextMenu;
+            var ttvm = (MpTagTileViewModel)cm.DataContext;
+            cm.Tag = ttvm;
+            MpShortcutCollectionViewModel.Instance.UpdateInputGestures(cm);
+        }
+
+        public void TagTile_ContextMenu_Closed(object sender, RoutedEventArgs e) {
         }
 
         public void AddClip(MpClipTileViewModel ctvm) {
@@ -436,9 +467,8 @@ namespace MpWpfApp {
             }
         }
         private void ChangeTagColor(Brush newBrush) {
-            var result = newBrush != null ? newBrush : MpHelpers.Instance.ShowColorDialog(TagColor);
-            if(result != null) {
-                TagColor = result;
+            if(newBrush != null) {
+                TagColor = newBrush;
                 Tag.WriteToDatabase();
             }
         }
@@ -453,9 +483,10 @@ namespace MpWpfApp {
             }
         }
         private bool CanRenameTag() {
-            return TagName != Properties.Settings.Default.HistoryTagTitle;
+            return !IsTagReadOnly;
         }
         private void RenameTag() {
+            _originalTagName = TagName;
             MainWindowViewModel.TagTrayViewModel.ClearTagSelection();
             IsSelected = true;
             IsEditing = true;

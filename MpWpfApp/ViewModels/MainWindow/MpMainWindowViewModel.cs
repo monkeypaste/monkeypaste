@@ -146,19 +146,6 @@ namespace MpWpfApp {
                 }
             }
         }
-
-        private bool _isLoading = true;
-        public bool IsLoading {
-            get {
-                return _isLoading;
-            }
-            set {
-                if (_isLoading != value) {
-                    _isLoading = value;
-                    OnPropertyChanged(nameof(IsLoading));
-                }
-            }
-        }
         #endregion
 
         #region Layout

@@ -272,136 +272,188 @@
                                                 TargetObject="{Binding}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                    <ListBox x:Name="TagTray"
-                             Focusable="False"
-                             Background="Transparent"
-                             BorderBrush="Transparent"
-                             dd:DragDrop.IsDragSource="True"
-                             dd:DragDrop.IsDropTarget="True"
-                             HorizontalAlignment="Center"
-                             SelectionMode="Single"
-                             ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                             ItemsSource="{Binding}">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="{x:Type ListBoxItem}">
-                                <Setter Property="IsSelected"
-                                        Value="{Binding IsSelected}" />
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                            <ContentPresenter />
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                                <Setter Property="HorizontalContentAlignment"
-                                        Value="Left" />
-                                <Setter Property="VerticalContentAlignment"
-                                        Value="Top" />
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel IsItemsHost="True"
-                                                        ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                                                        Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <!-- Tag Tile Border -->
-                                <local:MpClipBorder x:Name="TagTileBorder"
-                                                    CornerRadius="10"
-                                                    Margin="5,0,5,0"
-                                                    Padding="7,5,7,5"
-                                                    Focusable="True"
-                                                    VerticalAlignment="Center"
-                                                    Background="{Binding TagBorderBackgroundBrush}"
-                                                    BorderBrush="{Binding TagBorderBrush}"
-                                                    BorderThickness="1.5"
-                                                    Height="{Binding TagHeight}">
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="Loaded">
-                                            <i:CallMethodAction TargetObject="{Binding}"
-                                                                MethodName="TagTile_Loaded" />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                    <local:MpClipBorder.ContextMenu>
-                                        <ContextMenu>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.1*" />
+                            <ColumnDefinition Width="*" MaxWidth="700" />
+                            <ColumnDefinition Width="0.1*" />
+                        </Grid.ColumnDefinitions>
+                        <RepeatButton x:Name="TagTrayNavLeftButton"
+                                      Margin="5"
+                                      Padding="5"
+                                      Width="30"
+                                      Grid.Column="0"
+                                      Visibility="{Binding NavButtonVisibility}"
+                                      Command="{Binding NavLeftCommand}">
+                            <Image Source="/Resources/Images/back_black.png"
+                                   Stretch="Fill" />
+                        </RepeatButton>
+                        <Canvas x:Name="TagTrayCanvas" 
+                                Grid.Column="1"
+                                Height="{Binding MainWindowViewModel.FilterMenuHeight}"
+                                ClipToBounds="True"
+                                Width="700"                                
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center">
+                            <ListBox x:Name="TagTray"
+                                     Canvas.Left="0"
+                                     Focusable="False"
+                                     Background="Transparent"
+                                     BorderBrush="Transparent"
+                                     dd:DragDrop.IsDragSource="True"
+                                     dd:DragDrop.IsDropTarget="True"
+                                     HorizontalAlignment="Left"
+                                     VerticalAlignment="Center"
+                                     SelectionMode="Single"
+                                     IsSynchronizedWithCurrentItem="False"
+                                     ScrollViewer.CanContentScroll="True"
+                                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                                     ItemsSource="{Binding}">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListBoxItem}">
+                                        <Setter Property="IsSelected"
+                                                Value="{Binding IsSelected}" />
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                    <ContentPresenter />
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel IsItemsHost="True"
+                                                                ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                                                                Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <!-- Tag Tile Border -->
+                                        <local:MpClipBorder x:Name="TagTileBorder"
+                                                            CornerRadius="10"
+                                                            Margin="5,3,0,0"
+                                                            Padding="7,5,7,5"
+                                                            Focusable="True"
+                                                            VerticalAlignment="Stretch"
+                                                            Background="{Binding TagBorderBackgroundBrush}"
+                                                            BorderBrush="{Binding TagBorderBrush}"
+                                                            BorderThickness="1.5"
+                                                            Height="{Binding TagHeight}">
+                                            <local:MpClipBorder.Resources>
+                                                <local:MpBindingProxy x:Key="TagTileProxy"
+                                                                      Data="{Binding}" />
+                                            </local:MpClipBorder.Resources>
                                             <i:Interaction.Triggers>
                                                 <i:EventTrigger EventName="Loaded">
                                                     <i:CallMethodAction TargetObject="{Binding}"
-                                                                        MethodName="TagTile_ContextMenu_Loaded" />
+                                                                        MethodName="TagTile_Loaded" />
                                                 </i:EventTrigger>
                                             </i:Interaction.Triggers>
-                                            <MenuItem Header="Rename"
-                                                      Command="{Binding RenameTagCommand}" />
-                                            <MenuItem Header="Hotkey"
-                                                      InputGestureText="{Binding ShortcutKeyString}"
-                                                      Command="{Binding AssignHotkeyCommand}" />
-                                            <MenuItem Header="Change Color"
-                                                      Command="{Binding ChangeTagColorCommand}" />
-                                            <MenuItem x:Name="TagTileColorContextMenuItem"
-                                                      Style="{StaticResource MenuItemStyle}" />
-                                            <MenuItem Header="Delete"
-                                                      Command="{Binding TagTrayViewModel.DeleteTagCommand}" />
-                                        </ContextMenu>
-                                    </local:MpClipBorder.ContextMenu>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition />
-                                            <ColumnDefinition />
-                                        </Grid.ColumnDefinitions>
-                                        <!-- Tag Count Box-->
-                                        <local:MpClipBorder CornerRadius="5"
-                                                            Grid.Column="0"
-                                                            Grid.Row="0"
-                                                            MinWidth="20"
-                                                            Margin="3,0,0,0"
-                                                            Padding="5"
-                                                            BorderThickness="0"
-                                                            Background="{Binding TagColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
-                                            <TextBlock Background="Transparent"
-                                                       VerticalAlignment="Center"
-                                                       HorizontalAlignment="Center"
-                                                       Text="{Binding TagClipCount, Converter={StaticResource IntToStringConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
-                                                       Foreground="{Binding TagCountTextColor}" />
+                                            <local:MpClipBorder.ContextMenu>
+                                                <ContextMenu>
+                                                    <i:Interaction.Triggers>
+                                                        <i:EventTrigger EventName="Loaded">
+                                                            <i:CallMethodAction TargetObject="{Binding}"
+                                                                                MethodName="TagTile_ContextMenu_Loaded" />
+                                                        </i:EventTrigger>
+                                                        <i:EventTrigger EventName="Opened">
+                                                            <i:CallMethodAction TargetObject="{Binding}"
+                                                                                MethodName="TagTile_ContextMenu_Opened" />
+                                                        </i:EventTrigger>
+                                                        <i:EventTrigger EventName="Closed">
+                                                            <i:CallMethodAction TargetObject="{Binding}"
+                                                                                MethodName="TagTile_ContextMenu_Closed" />
+                                                        </i:EventTrigger>
+                                                    </i:Interaction.Triggers>
+                                                    <MenuItem Header="Rename"
+                                                              Icon="{Binding Source={StaticResource RenameIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                                                              Command="{Binding Data.RenameTagCommand, Source={StaticResource TagTileProxy}}" />
+                                                    <MenuItem Header="Assign Hotkey"
+                                                              Icon="{Binding Source={StaticResource HotkeyIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                                                              InputGestureText="{Binding Data.ShortcutKeyString, Source={StaticResource TagTileProxy}}"
+                                                              Command="{Binding Data.AssignHotkeyCommand, Source={StaticResource TagTileProxy}}" />
+                                                    <Separator />
+                                                    <MenuItem x:Name="ClipTileColorContextMenuItem"
+                                                              Style="{StaticResource MenuItemStyle}" />
+                                                    <Separator />
+                                                    <MenuItem Header="Delete"
+                                                              Icon="{Binding Source={StaticResource DeleteIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                                                              Command="{Binding Data.MainWindowViewModel.TagTrayViewModel.DeleteTagCommand, Source={StaticResource TagTileProxy}}" />
+                                                </ContextMenu>
+                                            </local:MpClipBorder.ContextMenu>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition />
+                                                    <ColumnDefinition />
+                                                </Grid.ColumnDefinitions>
+                                                <!-- Tag Count Box-->
+                                                <local:MpClipBorder CornerRadius="5"
+                                                                    Grid.Column="0"
+                                                                    Grid.Row="0"
+                                                                    MinWidth="20"
+                                                                    Margin="3,0,0,0"
+                                                                    Padding="5"
+                                                                    BorderThickness="0"
+                                                                    Background="{Binding TagColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
+                                                    <TextBlock Background="Transparent"
+                                                               VerticalAlignment="Center"
+                                                               HorizontalAlignment="Center"
+                                                               Text="{Binding TagClipCount, Converter={StaticResource IntToStringConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"
+                                                               Foreground="{Binding TagCountTextColor}" />
+                                                </local:MpClipBorder>
+                                                <TextBlock x:Name="TagTextBlock"
+                                                           Grid.Column="1"
+                                                           Grid.Row="0"
+                                                           Margin="5,0,0,0"
+                                                           Background="Transparent"
+                                                           HorizontalAlignment="Center"
+                                                           VerticalAlignment="Center"
+                                                           Visibility="{Binding TextBlockVisibility}"
+                                                           FontSize="{Binding TagFontSize}"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{Binding TagTextColor}"
+                                                           Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
+                                                </TextBlock>
+                                                <TextBox x:Name="TagTextBox"
+                                                         Grid.Row="0"
+                                                         Grid.Column="1"
+                                                         Margin="5,0,0,0"
+                                                         Background="White"
+                                                         Foreground="Black"
+                                                         IsReadOnly="False"
+                                                         HorizontalAlignment="Center"
+                                                         VerticalAlignment="Center"
+                                                         Visibility="{Binding TextBoxVisibility}"
+                                                         FontSize="{Binding TagFontSize}"
+                                                         Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                                            </Grid>
                                         </local:MpClipBorder>
-                                        <TextBlock x:Name="TagTextBlock"
-                                                   Grid.Column="1"
-                                                   Grid.Row="0"
-                                                   Margin="5,0,0,0"
-                                                   Background="Transparent"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   Visibility="{Binding TextBlockVisibility}"
-                                                   FontSize="{Binding TagFontSize}"
-                                                   FontWeight="SemiBold"
-                                                   Foreground="{Binding TagTextColor}"
-                                                   Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}">
-                                        </TextBlock>
-                                        <TextBox x:Name="TagTextBox"
-                                                 Grid.Row="0"
-                                                 Grid.Column="1"
-                                                 Margin="5,0,0,0"
-                                                 Background="White"
-                                                 Foreground="Black"
-                                                 IsReadOnly="False"
-                                                 HorizontalAlignment="Center"
-                                                 VerticalAlignment="Center"
-                                                 Visibility="{Binding TextBoxVisibility}"
-                                                 FontSize="{Binding TagFontSize}"
-                                                 Text="{Binding TagName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
-                                    </Grid>
-                                </local:MpClipBorder>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Canvas>
+                        <RepeatButton x:Name="TagTrayNavRightButton"
+                                Grid.Column="2"
+                                      Margin="5"
+                                      Padding="5"
+                                      Width="30"
+                                Visibility="{Binding NavButtonVisibility}"
+                                      Command="{Binding NavRightCommand}">
+                            <Image Source="/Resources/Images/forward_black.png"
+                                   Stretch="Fill" />
+                        </RepeatButton>
+                    </Grid>                   
                     <!-- Add Tag Button -->
                     <Button x:Name="AddTagButton"
                             Height="30"
                             Width="30"
                             BorderThickness="0"
+                            ToolTip="Add Collection"
+                            ToolTipService.InitialShowDelay="100"
                             Template="{StaticResource SearchButtonControlTemplate}"
                             Background="Transparent"
                             Command="{Binding CreateTagCommand}">
@@ -898,7 +950,9 @@
                                                           Header="Paste To Application"
                                                           Icon="{Binding Source={StaticResource PasteToAppIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}" />
                                                 <Separator />
-                                                <MenuItem Header="Pin To _Collection"
+                                                <MenuItem x:Name="CollectionParentMenuItem"                                                           
+                                                          Header="Pin To _Collection"
+                                                          Tag="8080"
                                                           Icon="{Binding Source={StaticResource PinToCollectionIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                                                           ItemsSource="{Binding Data.TagMenuItems, Source={StaticResource ClipTileProxy}}">
                                                     <MenuItem.ItemContainerStyle>
@@ -913,6 +967,10 @@
                                                                     Value="True" />
                                                             <Setter Property="IsChecked"
                                                                     Value="{Binding IsChecked}" />
+                                                            <Setter Property="InputGestureText"
+                                                                    Value="{Binding InputGestureText}" />
+                                                            <!--<Setter Property="Background"
+                                                                    Value="{Binding IconBackgroundBrush}" />-->
                                                             <Setter Property="HorizontalContentAlignment"
                                                                     Value="Left" />
                                                             <Setter Property="VerticalContentAlignment"
@@ -1630,7 +1688,9 @@
                                                                                                           Header="Paste To Application"
                                                                                                           Icon="{Binding Source={StaticResource PasteToAppIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}" />
                                                                                                 <Separator />
-                                                                                                <MenuItem Header="Pin To _Collection"
+                                                                                                <MenuItem x:Name="CollectionParentMenuItem"
+                                                                                                          Tag="8080"
+                                                                                                          Header="Pin To _Collection"
                                                                                                           Icon="{Binding Source={StaticResource PinToCollectionIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                                                                                                           ItemsSource="{Binding Data.TagMenuItems, Source={StaticResource RtbListBoxItemProxy}}">
                                                                                                     <MenuItem.ItemContainerStyle>
@@ -1645,6 +1705,8 @@
                                                                                                                     Value="True" />
                                                                                                             <Setter Property="IsChecked"
                                                                                                                     Value="{Binding IsChecked}" />
+                                                                                                            <Setter Property="InputGestureText"
+                                                                                                                    Value="{Binding InputGestureText}" />
                                                                                                             <Setter Property="HorizontalContentAlignment"
                                                                                                                     Value="Left" />
                                                                                                             <Setter Property="VerticalContentAlignment"

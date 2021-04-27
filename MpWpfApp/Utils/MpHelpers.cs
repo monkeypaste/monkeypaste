@@ -2657,6 +2657,7 @@ namespace MpWpfApp {
                     return bit;
                 }
                 catch (Exception ex) {
+                    Console.WriteLine("MpHelpers.ConvertBitmapSourceToByteArray exception: " + ex);
                     return null;
                 }
                 

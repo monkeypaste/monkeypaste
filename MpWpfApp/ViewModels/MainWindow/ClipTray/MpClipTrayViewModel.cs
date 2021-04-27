@@ -1733,7 +1733,7 @@ namespace MpWpfApp {
                 ocil.Add(sctvm.CopyItem);
             }
 
-            PrimarySelectedClipTile.MergeClip(ocil);
+            await PrimarySelectedClipTile.MergeClipAsync(ocil);
         }
 
         private AsyncCommand<string> _translateSelectedClipTextAsyncCommand;

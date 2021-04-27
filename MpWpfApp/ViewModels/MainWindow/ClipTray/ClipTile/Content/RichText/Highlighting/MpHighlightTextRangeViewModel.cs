@@ -12,6 +12,7 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public enum MpHighlightType {
         None = -5,
+        Image = -3,
         Title = -2,
         App = -1,
         Text = 0
@@ -167,7 +168,7 @@ namespace MpWpfApp {
                 rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemOverlayVisibility));
                 rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItemAppIconHighlightBorder));
             }
-            if (HighlightType == MpHighlightType.App) {
+            if (HighlightType == MpHighlightType.App || HighlightType == MpHighlightType.Image) {
                 
             } else {
                 Range.ApplyPropertyValue(TextElement.BackgroundProperty, HighlightBrush);
@@ -175,7 +176,7 @@ namespace MpWpfApp {
         }
         
         public void ClearHighlighting() {
-            if (HighlightType == MpHighlightType.App) {
+            if (HighlightType == MpHighlightType.App || HighlightType == MpHighlightType.Image) {
                 
             } else {
                 Range.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.Transparent);
@@ -198,62 +199,6 @@ namespace MpWpfApp {
                 return 1;
             }
             return 0;
-
-            //if (Range == null) {
-            //    if(ContentId > ohltrvm.ContentId) {
-            //        return 1;
-            //    }
-            //    return -1;
-            //}
-            //if (ohltrvm.Range == null) {
-            //    if (ContentId < ohltrvm.ContentId) {
-            //        return -1;
-            //    }
-            //    return 1;
-            //}
-
-            //MpRtbListBoxItemRichTextBoxViewModel trtbvm = null;
-            //MpRtbListBoxItemRichTextBoxViewModel ortbvm = null;
-
-            //var trtb = Range.Start.Parent.FindParentOfType<RichTextBox>();
-            //if (trtb != null && trtb.DataContext is MpRtbListBoxItemRichTextBoxViewModel) {
-            //    trtbvm = trtb.DataContext as MpRtbListBoxItemRichTextBoxViewModel;
-            //} else {
-            //    var ttb = Range.Start.Parent.FindParentOfType<TextBlock>();
-            //    if(ttb != null && ttb.DataContext is MpRtbListBoxItemRichTextBoxViewModel) {
-            //        trtbvm = ttb.DataContext as MpRtbListBoxItemRichTextBoxViewModel;
-            //    }
-            //}
-
-            //var ortb = ohltrvm.Range.Start.Parent.FindParentOfType<RichTextBox>();
-            //if (ortb != null && ortb.DataContext is MpRtbListBoxItemRichTextBoxViewModel) {
-            //    ortbvm = ortb.DataContext as MpRtbListBoxItemRichTextBoxViewModel;
-            //} else {
-            //    var otb = ohltrvm.Range.Start.Parent.FindParentOfType<TextBlock>();
-            //    if (otb != null && otb.DataContext is MpRtbListBoxItemRichTextBoxViewModel) {
-            //        trtbvm = otb.DataContext as MpRtbListBoxItemRichTextBoxViewModel;
-            //    }
-            //}
-            //int thisIdx = ClipTileViewModel.RichTextBoxViewModelCollection.IndexOf(trtbvm);
-            //int otherIdx = ClipTileViewModel.RichTextBoxViewModelCollection.IndexOf(ortbvm);
-            //if (thisIdx < otherIdx) {
-            //    return -1;
-            //}
-            //if (thisIdx > otherIdx) {
-            //    return 1;
-            //}
-           
-            //if (ContentId < ohltrvm.ContentId) {
-            //    return -1;
-            //}
-            //if (ContentId > ohltrvm.ContentId) {
-            //    return 1;
-            //}
-            //if (!Range.Start.IsInSameDocument(ohltrvm.Range.Start)) {
-            //    return -1;
-            //}
-            //return Range.Start.CompareTo(ohltrvm.Range.Start);
-            //return ohltrvm.Range.Start.CompareTo(Range.Start);
         }
         #endregion
 

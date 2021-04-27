@@ -1220,8 +1220,8 @@ namespace MpWpfApp {
                 return true;
             }
             bool isLastClipTileLinked = tagToLink.IsLinkedWithRtbItem(SubSelectedClipItems[0]);
-            foreach (var selectedClipTile in SubSelectedClipItems) {
-                if (tagToLink.IsLinkedWithRtbItem(selectedClipTile) != isLastClipTileLinked) {
+            foreach (var srtbvm in SubSelectedClipItems) {
+                if (tagToLink.IsLinkedWithRtbItem(srtbvm) != isLastClipTileLinked) {
                     return false;
                 }
             }
@@ -1229,11 +1229,11 @@ namespace MpWpfApp {
         }
         private void LinkTagToSubSelectedClips(MpTagTileViewModel tagToLink) {
             bool isUnlink = tagToLink.IsLinkedWithRtbItem(SubSelectedClipItems[0]);
-            foreach (var selectedClipTile in SubSelectedClipItems) {
+            foreach (var srtbvm in SubSelectedClipItems) {
                 if (isUnlink) {
-                    tagToLink.RemoveClip(selectedClipTile);
+                    tagToLink.RemoveClip(srtbvm);
                 } else {
-                    tagToLink.AddClip(selectedClipTile);
+                    tagToLink.AddClip(srtbvm);
                 }
             }
             MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();

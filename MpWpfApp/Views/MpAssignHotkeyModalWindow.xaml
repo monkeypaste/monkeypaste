@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:MpWpfApp"
         mc:Ignorable="d"
         Title="Assign Hotkey"
-        Height="250"
+        Height="300"
         Width="400"
         Topmost="True"
         ShowInTaskbar="False"
@@ -35,7 +35,7 @@
             <RowDefinition Height="0.7*" />
             <RowDefinition Height="0.7*"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="1.3*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0"
@@ -155,13 +155,33 @@
                    HorizontalAlignment="Center"
                    Foreground="Red"
                    Text="{Binding KeyString}" />
-        <TextBlock Grid.Row="3"
-                   FontSize="10"
-                   FontStyle="Oblique"
-                   TextWrapping="Wrap"
-                   HorizontalAlignment="Center"
-                   Foreground="Red"
-                   Text="{Binding WarningString}" />
+        <Border Background="{Binding WarningBorderBrush}"
+                Visibility="{Binding WarningVisibility}"
+                Margin="10"
+                CornerRadius="10"                
+                Grid.Row="3"
+                BorderThickness="1"
+                BorderBrush="AntiqueWhite">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.25*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Image Source="{Binding WarningBmp}"
+                       Margin="20,7,7,7"
+                       Grid.Column="0"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center" />
+                <TextBlock Grid.Column="1"
+                           FontSize="12"
+                           FontStyle="Oblique"
+                           TextWrapping="Wrap"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"                           
+                           Foreground="{Binding WarningTextBrush}"
+                           Text="{Binding WarningString}" />
+            </Grid>
+        </Border>        
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />

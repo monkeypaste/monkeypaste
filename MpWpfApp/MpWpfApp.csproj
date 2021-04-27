@@ -1750,6 +1750,7 @@
     <Resource Include="Resources\Images\shield.png" />
     <Resource Include="Resources\Images\signout.png" />
     <Resource Include="Resources\Images\whitecircle.png" />
+    <Resource Include="Resources\Images\warning.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />
