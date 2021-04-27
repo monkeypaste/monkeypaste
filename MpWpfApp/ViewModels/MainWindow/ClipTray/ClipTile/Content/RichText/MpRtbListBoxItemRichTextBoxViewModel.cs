@@ -687,6 +687,8 @@ namespace MpWpfApp {
                 if (_shortcutKeyString != value) {
                     _shortcutKeyString = value;
                     OnPropertyChanged(nameof(ShortcutKeyString));
+                    OnPropertyChanged(nameof(HotkeyIconSource));
+                    OnPropertyChanged(nameof(HotkeyIconTooltip));
                 }
             }
         }
@@ -700,6 +702,19 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+        private TextRange _rtbSelectionRange = null;
+        public TextRange RtbSelectionRange {
+            get {
+                return _rtbSelectionRange;
+            }
+            set {
+                if(_rtbSelectionRange != value) {
+                    _rtbSelectionRange = value;
+                    OnPropertyChanged(nameof(RtbSelectionRange));
+                }
+            }
+        }
+
         public string MultiSelectedOrderIdxDisplayValue {
             get {
                 if (MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null || !IsSubSelected) {
@@ -1291,7 +1306,8 @@ namespace MpWpfApp {
                             } else if (!MpHelpers.Instance.IsMultiSelectKeyDown() && 
                                        !IsSubDragging && 
                                        !HostClipTileViewModel.IsContextMenuOpened && 
-                                       !IsSubContextMenuOpened) {
+                                       !IsSubContextMenuOpened &&
+                                       !MainWindowViewModel.ClipTrayViewModel.IsHotKeyPasting) {
                                 IsSubSelected = false;
                             }
                             if (HostClipTileViewModel.IsEditingTile) {
@@ -1349,6 +1365,8 @@ namespace MpWpfApp {
                 if(!MainWindowViewModel.IsLoading) {
                     await GatherAnalytics();
                 }
+
+                RtbSelectionRange = new TextRange(Rtb.Document.ContentEnd, Rtb.Document.ContentEnd);
             };
         }
 
@@ -1521,7 +1539,12 @@ namespace MpWpfApp {
             };
             #endregion
 
-            UpdateLayout();            
+            UpdateLayout();
+
+            var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == CopyItemId).ToList();
+            if (scvml.Count > 0) {
+                ShortcutKeyString = scvml[0].KeyString;
+            }
 
             OnViewModelLoaded();
         }
@@ -1590,7 +1613,7 @@ namespace MpWpfApp {
                 eami.Header = @"Exclude Application '" + CopyItem.App.AppName + "'";
             }
 
-            RefreshCommands();
+            RefreshAsyncCommands();
 
             OnPropertyChanged(nameof(TagMenuItems));
 
@@ -1613,7 +1636,8 @@ namespace MpWpfApp {
             }
         }
 
-        public void RefreshCommands() {
+        public void RefreshAsyncCommands() {
+            MainWindowViewModel.ClipTrayViewModel.HotkeyPasteCommand.RaiseCanExecuteChanged();
             RichTextBoxViewModelCollection.BringSubSelectedClipTilesToFrontCommand.RaiseCanExecuteChanged();
             RichTextBoxViewModelCollection.SendSubSelectedClipTilesToBackCommand.RaiseCanExecuteChanged();
             RichTextBoxViewModelCollection.SpeakSubSelectedClipsAsyncCommand.RaiseCanExecuteChanged();            
@@ -2125,6 +2149,14 @@ namespace MpWpfApp {
             if(RichTextBoxViewModelCollection.Contains(this)) {
                 RichTextBoxViewModelCollection.Remove(this);
             }
+            var scvmToRemoveList = new List<MpShortcutViewModel>();
+            foreach (var scvmToRemove in MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == CopyItemId).ToList()) {
+                scvmToRemoveList.Add(scvmToRemove);
+            }
+            foreach (var scvmToRemove in scvmToRemoveList) {
+                MpShortcutCollectionViewModel.Instance.Remove(scvmToRemove);
+            }
+            CopyItem.DeleteFromDatabase();
             Rtb = null;
             RtbListBoxItemOverlayDockPanel = null;
             RtbListBoxItemClipBorder = null;

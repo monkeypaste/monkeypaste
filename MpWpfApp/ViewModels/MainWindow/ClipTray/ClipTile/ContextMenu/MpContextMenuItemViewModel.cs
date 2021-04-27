@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -162,6 +164,26 @@ namespace MpWpfApp {
                         if(!string.IsNullOrEmpty(IconSource)) {
                             var icon = new Image();
                             icon.Source = (BitmapSource)new BitmapImage(new Uri(IconSource));
+                            Icon = icon;
+                        }
+                        break;
+                    case nameof(IconBackgroundBrush):
+                        if (IconBackgroundBrush != null) {
+                            var bgBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
+                            bgBmp = MpHelpers.Instance.TintBitmapSource(bgBmp, ((SolidColorBrush)IconBackgroundBrush).Color, false);
+                            var borderBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/textureborder.png"));
+                            if(!MpHelpers.Instance.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
+                                borderBmp = MpHelpers.Instance.TintBitmapSource(borderBmp, Colors.White, false);
+                            }
+                            var icon = new Image();
+                            icon.Source = MpHelpers.Instance.MergeImages(new List<BitmapSource> { bgBmp, borderBmp });
+                            if (IsChecked) {
+                                var checkBmp = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/check.png"));
+                                if (!MpHelpers.Instance.IsBright((IconBackgroundBrush as SolidColorBrush).Color)) {
+                                    checkBmp = MpHelpers.Instance.TintBitmapSource(checkBmp, Colors.White, false);
+                                }
+                                icon.Source = MpHelpers.Instance.MergeImages(new List<BitmapSource> { (BitmapSource)icon.Source, checkBmp });
+                            } 
                             Icon = icon;
                         }
                         break;

@@ -493,7 +493,8 @@ namespace MpWpfApp {
 
         public async Task FillAllTemplates() {
             bool hasExpanded = false;
-            foreach (var rtbvm in this) {
+            var subSelectedRtbvm = SubSelectedClipItems;
+            foreach (var rtbvm in subSelectedRtbvm) {
                 if (rtbvm.HasTemplate) {
                     rtbvm.IsSubSelected = true;
                     rtbvm.IsPastingTemplate = true;

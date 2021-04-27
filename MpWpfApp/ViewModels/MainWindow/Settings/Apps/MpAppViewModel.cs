@@ -82,7 +82,7 @@ namespace MpWpfApp {
             }
             set {
                 if(App != null && App.IsAppRejected != value) {
-                    App.IsAppRejected = value;
+                    App.IsAppRejected = MpAppCollectionViewModel.Instance.UpdateRejection(this, value); 
                     App.WriteToDatabase();
                     OnPropertyChanged(nameof(IsAppRejected));
                     OnPropertyChanged(nameof(App));

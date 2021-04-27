@@ -1263,5 +1263,17 @@ namespace MpWpfApp.Properties {
                 this["SearchBySourceUrl"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ResetClipboardAfterMonkeyPaste {
+            get {
+                return ((bool)(this["ResetClipboardAfterMonkeyPaste"]));
+            }
+            set {
+                this["ResetClipboardAfterMonkeyPaste"] = value;
+            }
+        }
     }
 }

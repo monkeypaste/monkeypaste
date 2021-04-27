@@ -119,7 +119,7 @@ namespace MpWpfApp {
             }
         }        
 
-        private string _warningString = @"Sequence hot key's require a restart to be enabled";
+        private string _warningString =string.Empty;
         public string WarningString {
             get {
                 return _warningString;
@@ -146,16 +146,16 @@ namespace MpWpfApp {
 
         public Visibility WarningVisibility {
             get {
-                if (_isReplacingShortcut || _wasPreviouslyASequence || _keyList.Count > 1) {
+                if (!string.IsNullOrEmpty(WarningString)) {
                     return Visibility.Visible;
                 }
-                return Visibility.Hidden;
+                return Visibility.Collapsed;
             }
         }
 
         public Brush WarningBorderBrush {
             get {
-                if(_isReplacingShortcut) {
+                if (_isReplacingShortcut) {
                     return Brushes.IndianRed;
                 }
                 if(_wasPreviouslyASequence || _keyList.Count > 1) {
@@ -291,6 +291,7 @@ namespace MpWpfApp {
 
             if(!string.IsNullOrEmpty(keyString) && keyString.Contains(@",")) {
                 _wasPreviouslyASequence = true;
+                WarningString = @"Sequence hot key's require a restart to be enabled";
             }
             _keyList = MpHelpers.Instance.ConvertStringToKeySequence(keyString);
             _assigningCommand = command;

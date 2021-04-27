@@ -374,7 +374,7 @@ namespace MpWpfApp {
                 iconColorChooserMenuItem,
                 (s1, e1) => {
                     var brush = (Brush)((Border)s1).Tag;
-                    var bmpSrc = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/Texture.bmp"));
+                    var bmpSrc = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/texture.png"));
                     AppIcon = MpHelpers.Instance.TintBitmapSource(bmpSrc, ((SolidColorBrush)brush).Color);
                 }
             );

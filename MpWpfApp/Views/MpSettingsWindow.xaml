@@ -160,6 +160,14 @@
                     <CheckBox IsChecked="{Binding UseSpellCheck, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
+                    <Label Content="Ignore Empty or whitespace clipboard items" />
+                    <CheckBox IsChecked="{Binding IgnoreWhiteSpaceCopyItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Reset Clipboard After Paste" />
+                    <CheckBox IsChecked="{Binding ResetClipboard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <Label Content="Language" />
                     <ComboBox ItemsSource="{Binding Languages}"
                               SelectedItem="{Binding SelectedLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />

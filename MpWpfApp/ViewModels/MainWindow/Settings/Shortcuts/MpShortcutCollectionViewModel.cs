@@ -358,10 +358,13 @@ namespace MpWpfApp {
                                     }
                                     var rtbvm = ctvm.RichTextBoxViewModelCollection.GetRtbItemByCopyItemId(ci.CopyItemId);
                                     rtbvm.ShortcutKeyString = sc.KeyString;
-                                    shortcutCommand = rtbvm.PasteSubItemCommand;
+                                    shortcutCommand = MainWindowViewModel.ClipTrayViewModel.HotkeyPasteCommand;
+                                    commandParameter = rtbvm.CopyItemId;
                                 } else {
                                     ctvm.ShortcutKeyString = sc.KeyString;
                                     shortcutCommand = ctvm.PasteClipCommand;
+                                    shortcutCommand = MainWindowViewModel.ClipTrayViewModel.HotkeyPasteCommand;
+                                    commandParameter = ctvm.CopyItemId;
                                 }
                             } else if (sc.TagId > 0) {
                                 var ttvm = MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.TagId == sc.TagId).Single();

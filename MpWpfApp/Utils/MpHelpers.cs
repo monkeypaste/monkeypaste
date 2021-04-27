@@ -1986,11 +1986,12 @@ namespace MpWpfApp {
             return ColorFromHSV(h, s, v);
         }
 
-        public bool IsBright(Color c, int brightThreshold = 130) {
-            return (int)Math.Sqrt(
+        public bool IsBright(Color c, int brightThreshold = 150) {
+            int grayVal = (int)Math.Sqrt(
             c.R * c.R * .299 +
             c.G * c.G * .587 +
-            c.B * c.B * .114) > brightThreshold;
+            c.B * c.B * .114);
+            return grayVal > brightThreshold;
         }
 
         public SolidColorBrush ChangeBrushAlpha(SolidColorBrush solidColorBrush, byte alpha) {

@@ -112,6 +112,35 @@ namespace MpWpfApp {
                 }
             }
         }
+        private bool _ignoreWhiteSpaceCopyItems = Properties.Settings.Default.IgnoreWhiteSpaceCopyItems;
+        public bool IgnoreWhiteSpaceCopyItems {
+            get {
+                return _ignoreWhiteSpaceCopyItems;
+            }
+            set {
+                if (_ignoreWhiteSpaceCopyItems != value) {
+                    _ignoreWhiteSpaceCopyItems = value;
+                    Properties.Settings.Default.IgnoreWhiteSpaceCopyItems = _ignoreWhiteSpaceCopyItems;
+                    Properties.Settings.Default.Save();
+                    OnPropertyChanged(nameof(IgnoreWhiteSpaceCopyItems));
+                }
+            }
+        }
+
+        private bool _resetClipboard = Properties.Settings.Default.ResetClipboardAfterMonkeyPaste;
+        public bool ResetClipboard {
+            get {
+                return _resetClipboard;
+            }
+            set {
+                if (_resetClipboard != value) {
+                    _resetClipboard = value;
+                    Properties.Settings.Default.ResetClipboardAfterMonkeyPaste = _resetClipboard;
+                    Properties.Settings.Default.Save();
+                    OnPropertyChanged(nameof(ResetClipboard));
+                }
+            }
+        }
 
         private bool _useSpellCheck = Properties.Settings.Default.UseSpellCheck;
         public bool UseSpellCheck {

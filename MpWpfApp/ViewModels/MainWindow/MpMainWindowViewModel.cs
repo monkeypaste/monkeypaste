@@ -454,6 +454,26 @@ namespace MpWpfApp {
             //};
             //T.BeginAnimation(TranslateTransform.XProperty, anim);
         }
+
+        public void PasteDataObject(IDataObject pasteDataObject, bool fromHotkey = false) {
+            if (ClipTrayViewModel.IsPastingTemplate) {
+                IsMainWindowLocked = false;
+            }
+            ClipTrayViewModel.PerformPaste(pasteDataObject, fromHotkey);
+
+            foreach (var sctvm in ClipTrayViewModel.SelectedClipTiles) {
+                if (sctvm.HasTemplate) {
+                    //cleanup template by recreating hyperlinks
+                    //and reseting tile state
+                    sctvm.TileVisibility = Visibility.Visible;
+                    sctvm.TemplateRichText = string.Empty;
+                    //sctvm.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
+                    foreach (var rtbvm in sctvm.RichTextBoxViewModelCollection) {
+                        rtbvm.TemplateRichText = string.Empty;
+                    }
+                }
+            }
+        }
         #endregion
 
         #region Private Methods
@@ -523,25 +543,6 @@ namespace MpWpfApp {
             int exStyle = (int)WinApi.GetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE);
             exStyle |= (int)WinApi.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
             WinApi.SetWindowLong(wndHelper.Handle, (int)WinApi.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
-        }
-
-        private void PasteDataObject(IDataObject pasteDataObject) {
-            if (ClipTrayViewModel.IsPastingTemplate) {
-                IsMainWindowLocked = false;
-            }
-            ClipTrayViewModel.PerformPaste(pasteDataObject);
-            foreach (var sctvm in ClipTrayViewModel.SelectedClipTiles) {
-                if (sctvm.HasTemplate) {
-                    //cleanup template by recreating hyperlinks
-                    //and reseting tile state
-                    sctvm.TileVisibility = Visibility.Visible;
-                    sctvm.TemplateRichText = string.Empty;
-                    //sctvm.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
-                    foreach (var rtbvm in sctvm.RichTextBoxViewModelCollection) {
-                        rtbvm.TemplateRichText = string.Empty;
-                    }
-                }
-            }
         }
 
         public void AddTempFile(string fp) {
@@ -667,7 +668,7 @@ namespace MpWpfApp {
                 if(ClipTrayViewModel.IsPastingTemplate) {
                     IsMainWindowLocked = true;
                 }
-                pasteDataObject = await ClipTrayViewModel.GetDataObjectFromSelectedClips(pasteSelected);
+                pasteDataObject = await ClipTrayViewModel.GetDataObjectFromSelectedClips();
             } else {
                 //ClipTrayViewModel.HideVisibleTiles(500);
             }
@@ -717,13 +718,15 @@ namespace MpWpfApp {
                     } else {
                         MainWindowGridTop = _startMainWindowTop;
                         timer.Stop();
-                        if (pasteSelected) {
-                            PasteDataObject(pasteDataObject);
-                        }
+                        
 
                         ResetTraySelection();
 
                         mw.Visibility = Visibility.Collapsed;
+                        if (pasteSelected) {
+                            PasteDataObject(pasteDataObject);
+                        }
+
                         IsMainWindowLocked = false;
                         if(wasMainWindowLocked) {
                             ShowWindowCommand.Execute(null);
@@ -735,7 +738,7 @@ namespace MpWpfApp {
                 };
                 timer.Start();
             } else if(pasteDataObject != null) {
-                PasteDataObject(pasteDataObject);
+                PasteDataObject(pasteDataObject,true);
             }
         }
 

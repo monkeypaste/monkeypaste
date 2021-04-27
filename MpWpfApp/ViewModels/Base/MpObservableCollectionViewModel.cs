@@ -106,10 +106,6 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
         public ScrollViewer ScrollViewer {
             get {
                 return _scrollViewer;
-                //var border = (Border)VisualTreeHelper.GetChild(ListBox, 0);
-                //return (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
-                //return ListBox.GetVisualAncestor<ScrollViewer>();
-               // return (ScrollViewer)ListBox.GetVisualAncestor<MpClipBorder>().FindName("ClipTileRichTextBoxListBoxScrollViewer");//RtbLbAdornerLayer.GetVisualAncestor<ScrollViewer>()
             }
             set {
                 if(_scrollViewer != value) {

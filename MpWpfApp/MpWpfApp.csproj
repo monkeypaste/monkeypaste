@@ -107,7 +107,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MpBindingProxy.cs" />
-    <Compile Include="AttachedProperties\MpDocumentRtf.cs" />
+    <Compile Include="AttachedProperties\MpRtbSelection.cs" />
+    <Compile Include="AttachedProperties\MpDocumentRtfExtension.cs" />
     <Compile Include="AttachedProperties\MpSpanOperations.cs" />
     <Compile Include="AttachedProperties\MpTextBoxBehavior.cs" />
     <Compile Include="AttachedProperties\MpVisibilityAnimation.cs" />
@@ -477,9 +478,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\star_outline.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Texture.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\texture.png" />
@@ -1751,6 +1749,9 @@
     <Resource Include="Resources\Images\signout.png" />
     <Resource Include="Resources\Images\whitecircle.png" />
     <Resource Include="Resources\Images\warning.png" />
+    <Resource Include="Resources\Images\check.png" />
+    <Resource Include="Resources\Images\checkgray.png" />
+    <Resource Include="Resources\Images\textureborder.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />

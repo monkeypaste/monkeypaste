@@ -124,18 +124,9 @@
                         continue;
                     }
                     bool isTagAssociated = tagTile.IsLinkedWithClipTile(this);
-                    string partialAssociationIconPath = string.Empty;
-                    if(CopyItemType == MpCopyItemType.Composite && !isTagAssociated) {
-                        //composite/tag cases:
-                        //1. All or some sub-items but not composite are linked to tag: show minus and clicking associate composite
-                        //2. Composite is linked to tag: show check and clicking unassociates composite only (will change to minus if sub-items linked)
-                        //3. Neither Composite or subitems are linked to tag: show empty
-                        foreach(var rtbvm in RichTextBoxViewModelCollection) {
-                            if(tagTile.IsLinkedWithRtbItem(rtbvm)) {
-                                partialAssociationIconPath = Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/minus.png";
-                                break;
-                            }
-                        }
+                    string checkIconPath = string.Empty;
+                    if(isTagAssociated) {
+                        checkIconPath = Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/minus.png";
                     }
                     _tagMenuItems.Add(
                         new MpContextMenuItemViewModel(
@@ -143,7 +134,7 @@
                             MainWindowViewModel.ClipTrayViewModel.LinkTagToCopyItemCommand,
                             tagTile,
                             isTagAssociated,
-                            partialAssociationIconPath,
+                            checkIconPath,
                             null,
                             tagTile.ShortcutKeyString,
                             tagTile.TagColor));
@@ -1660,7 +1651,7 @@
                 switch (e1.PropertyName) {
                     case nameof(ctvm.IsSelected):
                         if (ctvm.IsSelected) {
-                            if (ctvm.TileVisibility != Visibility.Visible) {
+                            if (ctvm.TileVisibility != Visibility.Visible && !MainWindowViewModel.ClipTrayViewModel.IsHotKeyPasting) {
                                 ctvm.IsSelected = false;
                                 break;
                             }
@@ -1683,7 +1674,7 @@
                             //}
                         }
                         
-                        ctvm.RefreshCommands();
+                        ctvm.RefreshAsyncCommands();
                         break;
                     case nameof(ctvm.IsHovering):
                         if (ctvm.IsHovering) {
@@ -2045,6 +2036,10 @@
             };
             #endregion
 
+            var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == CopyItemId).ToList();
+            if(scvml.Count > 0) {
+                ShortcutKeyString = scvml[0].KeyString;
+            }
             OnViewModelLoaded();
         }
 
@@ -2306,7 +2301,7 @@
                 eami.Header = @"Exclude Application '" + CopyItemAppName + "'";
             }
 
-            RefreshCommands();
+            RefreshAsyncCommands();
 
             OnPropertyChanged(nameof(TagMenuItems));
 
@@ -2418,7 +2413,8 @@
             timer.Start();
         }
 
-        public void RefreshCommands() {
+        public void RefreshAsyncCommands() {
+            MainWindowViewModel.ClipTrayViewModel.HotkeyPasteCommand.RaiseCanExecuteChanged();
             MainWindowViewModel.ClipTrayViewModel.BringSelectedClipTilesToFrontCommand.RaiseCanExecuteChanged();
             MainWindowViewModel.ClipTrayViewModel.SendSelectedClipTilesToBackCommand.RaiseCanExecuteChanged();
             MainWindowViewModel.ClipTrayViewModel.SpeakSelectedClipsAsyncCommand.RaiseCanExecuteChanged();
@@ -2620,28 +2616,33 @@
                 
 
         public async Task<string> GetPastableRichText() {
-            if (HasTemplate) {
-                //bool hasExpanded = false;
-                IsPastingTemplate = true;
-                TemplateRichText = string.Empty.ToRichText();
-                await RichTextBoxViewModelCollection.FillAllTemplates();
-
-                foreach (var rtbvm in RichTextBoxViewModelCollection) {
+            if(IsTextItem) {
+                if(RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 0) {
+                    RichTextBoxViewModelCollection.SubSelectAll();
+                }
+                bool isPastingTemplate = RichTextBoxViewModelCollection.SubSelectedClipItems.Any(x => x.HasTemplate);
+                if(isPastingTemplate) {
+                    IsPastingTemplate = true;
+                    TemplateRichText = string.Empty.ToRichText();
+                    await RichTextBoxViewModelCollection.FillAllTemplates();
+                }
+                var sb = new StringBuilder();
+                sb.Append(string.Empty.ToRichText());
+                foreach (var rtbvm in RichTextBoxViewModelCollection.SubSelectedClipItems) {
                     if (rtbvm.HasTemplate) {
-                        rtbvm.IsSubSelected = true;
+                        //rtbvm.IsSubSelected = true;
                         PasteTemplateToolbarViewModel.SetTemplate(rtbvm.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
                         PasteTemplateToolbarViewModel.PasteTemplateCommand.Execute(null);
-                        TemplateRichText = MpHelpers.Instance.CombineRichText(rtbvm.TemplateRichText, TemplateRichText, true);
+                        sb.Append(MpHelpers.Instance.CombineRichText(rtbvm.TemplateRichText, sb.ToString(), true));
                         rtbvm.TemplateRichText = string.Empty;
                     } else {
-                        TemplateRichText = MpHelpers.Instance.CombineRichText(rtbvm.CopyItemRichText, TemplateRichText, true);
+                        sb.Append(MpHelpers.Instance.CombineRichText(rtbvm.CopyItemRichText, sb.ToString(), true));
                     }
-                    
-                }
-                return TemplateRichText;
+                }                
+                return sb.ToString();
             }
+            
             return CopyItemRichText;
-
             //both return to ClipTray.GetDataObjectFromSelectedClips
         }
 
@@ -2826,19 +2827,19 @@
             MpAppCollectionViewModel.Instance.UpdateRejection(MpAppCollectionViewModel.Instance.GetAppViewModelByAppId(CopyItemAppId), true);
         }               
 
-        private RelayCommand _pasteClipCommand;
+        private RelayCommand<object> _pasteClipCommand;
         public ICommand PasteClipCommand {
             get {
                 if (_pasteClipCommand == null) {
-                    _pasteClipCommand = new RelayCommand(PasteClip);
+                    _pasteClipCommand = new RelayCommand<object>(PasteClip);
                 }
                 return _pasteClipCommand;
             }
         }
-        private void PasteClip() {
+        private void PasteClip(object args) {
             MainWindowViewModel.ClipTrayViewModel.ClearClipSelection();
             IsSelected = true; 
-            MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand.Execute(null);
+            MainWindowViewModel.ClipTrayViewModel.PasteSelectedClipsCommand.Execute(args);
         }
 
         private RelayCommand _assignHotkeyCommand;
@@ -2868,6 +2869,14 @@
         public void Dispose() {
             if (MainWindowViewModel.ClipTrayViewModel.Contains(this)) {
                 MainWindowViewModel.ClipTrayViewModel.Remove(this);
+            }
+            //remove any shortcuts associated with clip
+            var scvmToRemoveList = new List<MpShortcutViewModel>();
+            foreach (var scvmToRemove in MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == CopyItemId).ToList()) {
+                scvmToRemoveList.Add(scvmToRemove);
+            }
+            foreach (var scvmToRemove in scvmToRemoveList) {
+                MpShortcutCollectionViewModel.Instance.Remove(scvmToRemove);
             }
             CopyItem.DeleteFromDatabase();
             ClipBorder = null;

@@ -58,25 +58,31 @@ namespace MpWpfApp {
         protected virtual void OnClipboardChanged() => ClipboardChanged?.Invoke(this, EventArgs.Empty);
 
         public void PasteDataObject(IDataObject dataObject, IntPtr handle) {
+            //Mouse.OverrideCursor = Cursors.Wait;
             IgnoreClipboardChangeEvent = true;
             try {
-                _lastDataObject = GetClipboardData();
+                if(Properties.Settings.Default.ResetClipboardAfterMonkeyPaste) {
+                    _lastDataObject = GetClipboardData();
+                }
 
                 Clipboard.SetDataObject(dataObject);
                 WinApi.SetForegroundWindow(handle);
                 WinApi.SetActiveWindow(handle);
                 System.Windows.Forms.SendKeys.SendWait("^v");
 
-                //from https://stackoverflow.com/a/52438404/105028
-                var clipboardThread = new Thread(new ThreadStart(GetClipboard));
-                clipboardThread.SetApartmentState(ApartmentState.STA);
-                clipboardThread.Start();
-
-                IgnoreClipboardChangeEvent = false;
+                if(Properties.Settings.Default.ResetClipboardAfterMonkeyPaste) {
+                    //from https://stackoverflow.com/a/52438404/105028
+                    var clipboardThread = new Thread(new ThreadStart(GetClipboard));
+                    clipboardThread.SetApartmentState(ApartmentState.STA);
+                    clipboardThread.Start();
+                } else {
+                    IgnoreClipboardChangeEvent = false;
+                }
             }
             catch (Exception e) {
                 Console.WriteLine("ClipboardMonitor error during paste: " + e.ToString());
             }
+            //Mouse.OverrideCursor = null;
         }
         private IDictionary<string, object> GetClipboardData() {
             var dict = new Dictionary<string, object>();
@@ -88,7 +94,6 @@ namespace MpWpfApp {
         }
 
         private void SetClipboardData(IDictionary<string, object> dict) {
-            var dataObject = Clipboard.GetDataObject();
             var d = new DataObject();
             foreach (var kvp in dict) {
                 d.SetData(kvp.Key, kvp.Value);
@@ -98,6 +103,7 @@ namespace MpWpfApp {
 
         private void GetClipboard() {
             SetClipboardData(_lastDataObject);
+            IgnoreClipboardChangeEvent = false;
         }
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {

@@ -462,15 +462,6 @@ namespace MpWpfApp {
                             cci.CompositeSortOrderIdx = compositeItem.CompositeItemList.IndexOf(cci);
                         }
                     }
-                    //always remove tag associations from other item if added its in the ctvm
-                    foreach (var tag in MpTag.GetAllTags()) {
-                        if (tag.IsLinkedWithCopyItem(fromItem)) {
-                            tag.LinkWithCopyItem(compositeItem);
-                        }
-                        if (tag.IsLinkedWithCopyItem(toItem)) {
-                            tag.LinkWithCopyItem(compositeItem);
-                        }
-                    }
                     compositeItem.SetData(null);
                     compositeItem.WriteToDatabase();
                     return compositeItem;
@@ -513,14 +504,6 @@ namespace MpWpfApp {
                     }
 
                     fromItem.CompositeItemList.Clear();
-                    foreach (var tag in MpTag.GetAllTags()) {
-                        if (tag.IsLinkedWithCopyItem(fromItem)) {
-                            tag.LinkWithCopyItem(compositeItem);
-                        }
-                        if (tag.IsLinkedWithCopyItem(toItem)) {
-                            tag.LinkWithCopyItem(compositeItem);
-                        }
-                    }
                     if (fromItem.CopyItemType == MpCopyItemType.Composite) {
                         fromItem.DeleteFromDatabase();
                     }
@@ -1035,7 +1018,14 @@ namespace MpWpfApp {
             if(_ColorList == null) {
                 _ColorList = MpColor.GetAllColors();
             }
-            ItemColor = _ColorList.Where(x => x.ColorId == colorId).ToList()[0];
+            var icl = _ColorList.Where(x => x.ColorId == colorId).ToList();
+            if(icl.Count > 0) {
+                ItemColor = icl[0];
+            } else {
+                ItemColor = new MpColor(MpHelpers.Instance.GetRandomColor());
+                ItemColor.WriteToDatabase();
+            }
+            
 
             if (CopyItemType == MpCopyItemType.Image) {
                 ItemPlainText = dr["ItemText"].ToString();

@@ -40,6 +40,12 @@ namespace MpWpfApp {
             }
         }
 
+        public double MaxTagTrayWidth {
+            get {
+                return MainWindowRect.Width * 0.333;
+            }
+        }
+
         public double TitleMenuHeight {
             get {
                 return MainWindowMinHeight / 20;

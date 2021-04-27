@@ -42,13 +42,16 @@ namespace MpWpfApp {
             return null;
         }
 
-        public void UpdateRejection(MpAppViewModel app, bool rejectApp) {
+        public bool UpdateRejection(MpAppViewModel app, bool rejectApp) {
+            if(app.App.IsAppRejected == rejectApp) {
+                return rejectApp;
+            }
             if (this.Contains(app)) {
                 bool wasCanceled = false;
                 if (rejectApp) {
                     var ctrvm = MainWindowViewModel.ClipTrayViewModel;
                     var clipsFromApp = ctrvm.GetClipTilesByAppId(app.AppId);
-                    if(clipsFromApp != null && clipsFromApp.Count > 0) {
+                    if (clipsFromApp != null && clipsFromApp.Count > 0) {
                         MessageBoxResult confirmExclusionResult = MessageBox.Show("Would you also like to remove all clips from '" + app.AppName + "'", "Remove associated clips?", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning, MessageBoxResult.Yes, MessageBoxOptions.DefaultDesktopOnly);
                         if (confirmExclusionResult == MessageBoxResult.Cancel) {
                             wasCanceled = true;
@@ -67,13 +70,30 @@ namespace MpWpfApp {
                                 }
                             }
                         }
-                    }                    
+                    }
                 }
-                if (!wasCanceled) {
-                    this[this.IndexOf(app)].IsAppRejected = rejectApp;
-                    this[this.IndexOf(app)].App.WriteToDatabase();
+                if (wasCanceled) {
+                    return app.IsAppRejected;
                 }
+                int appIdx = this.IndexOf(app);
+                this[appIdx].App.IsAppRejected = rejectApp;
+                this[appIdx].App.WriteToDatabase();
+
+                // TODO Ensure appcollection is loaded BEFORE clip tiles and its App object references part of this collection and not another instance w/ same appId
+                foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel) {
+                    if (ctvm.CopyItem.App.AppId == this[appIdx].AppId) {
+                        ctvm.CopyItem.App = this[appIdx].App;
+                    }
+                    foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                        if (rtbvm.CopyItem.App.AppId == this[appIdx].AppId) {
+                            rtbvm.CopyItem.App = this[appIdx].App;
+                        }
+                    }
+                }
+            } else {
+                Console.WriteLine("AppCollection.UpdateRejection error, app: " + app.AppName + " is not in collection");
             }
+            return rejectApp;
         }
 
         public new void Add(MpAppViewModel avm) {

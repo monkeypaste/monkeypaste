@@ -63,9 +63,7 @@ namespace MpWpfApp {
                 return _isSelected;
             }
             set {
-                //if (_isSelected != value) 
-                //always update so if filtering by app this will unfilter
-                    {
+                if (_isSelected != value || MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp)                    {
                     _isSelected = value;
                     OnPropertyChanged(nameof(IsSelected));
                     OnPropertyChanged(nameof(TagBorderBackgroundBrush));
@@ -352,7 +350,9 @@ namespace MpWpfApp {
             //if tag is created at runtime show tbox w/ all selected
             if (IsNew) {
                 RenameTagCommand.Execute(null);
-            } 
+            }
+
+            OnViewModelLoaded();
         }
 
         public void TagTile_ContextMenu_Loaded(object sender, RoutedEventArgs e) {

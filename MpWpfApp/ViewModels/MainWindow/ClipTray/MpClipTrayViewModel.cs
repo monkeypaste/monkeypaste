@@ -213,6 +213,14 @@ namespace MpWpfApp {
         #endregion
 
         #region State
+        public bool IsHotKeyPasting { get; set; } = false;
+
+        public bool IsAnyContextMenuOpened {
+            get {
+                return this.Any(x => x.IsContextMenuOpened || x.IsAnySubContextMenuOpened);
+            }
+        }
+
         private BitmapSource _filterByAppIcon = null;
         public BitmapSource FilterByAppIcon {
             get {
@@ -844,7 +852,7 @@ namespace MpWpfApp {
 
         public void RefreshAllCommands() {
             foreach(MpClipTileViewModel ctvm in this) {
-                ctvm.RefreshCommands();
+                ctvm.RefreshAsyncCommands();
             }
         }
         public async Task AddItemFromClipboard() {
@@ -991,26 +999,17 @@ namespace MpWpfApp {
             if (clipTileToRemove.CopyItem == null) {
                 //occurs when duplicate detected on background thread
                 return;
-            }
-
-            if (!isMerge) {
-                clipTileToRemove.CopyItem.DeleteFromDatabase();
-
-                //remove any shortcuts associated with clip
-                var scvmToRemoveList = new List<MpShortcutViewModel>();
-                foreach (var scvmToRemove in MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == clipTileToRemove.CopyItem.CopyItemId).ToList()) {
-                    scvmToRemoveList.Add(scvmToRemove);
-                }
-                foreach (var scvmToRemove in scvmToRemoveList) {
-                    MpShortcutCollectionViewModel.Instance.Remove(scvmToRemove);
-                }
-                clipTileToRemove.Dispose();
-                clipTileToRemove = null;
-            } else {
+            } 
+            
+            if(isMerge) {
                 clipTileToRemove.IsClipDragging = false;
-                foreach(var rtbvm in clipTileToRemove.RichTextBoxViewModelCollection) {
+                foreach (var rtbvm in clipTileToRemove.RichTextBoxViewModelCollection) {
                     rtbvm.IsSubDragging = false;
                 }
+            }
+            else {                
+                clipTileToRemove.Dispose();
+                clipTileToRemove = null;
             }            
         }
 
@@ -1026,17 +1025,16 @@ namespace MpWpfApp {
         public async Task<IDataObject> GetDataObjectFromSelectedClips(bool isDragDrop = false) {
             IDataObject d = new DataObject();
 
-            string rtf = string.Empty;
+            var sb = new StringBuilder();
+            sb.Append(string.Empty.ToRichText());
             foreach (var sctvm in SelectedClipTiles) {
-                var task = sctvm.GetPastableRichText();
-                string rt = await task;
-                if (string.IsNullOrEmpty(rtf)) {
-                    rtf = rt;
-                } else {
-                    rtf = MpHelpers.Instance.CombineRichText(rtf, rt);
+                if (sctvm.RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 0) {
+                    sctvm.RichTextBoxViewModelCollection.SubSelectAll();
                 }
+                sb.Append(MpHelpers.Instance.CombineRichText(await sctvm.GetPastableRichText(), sb.ToString()));
             }
-            
+            string rtf = sb.ToString();
+
             if (!string.IsNullOrEmpty(rtf)) {
                 d.SetData(DataFormats.Rtf, rtf);
                 d.SetData(DataFormats.Text, rtf.ToPlainText());
@@ -1080,7 +1078,7 @@ namespace MpWpfApp {
             //awaited in MainWindowViewModel.HideWindow
         }
 
-        public void PerformPaste(IDataObject pasteDataObject) {
+        public void PerformPaste(IDataObject pasteDataObject, bool fromHotKey = false) {
             //called in the oncompleted of hide command in mwvm
             if (pasteDataObject != null) {
                 Console.WriteLine("Pasting " + SelectedClipTiles.Count + " items");
@@ -1109,18 +1107,23 @@ namespace MpWpfApp {
                 if(_selectedPasteToAppPathViewModel != null && _selectedPasteToAppPathViewModel.PressEnter) {
                     System.Windows.Forms.SendKeys.SendWait("{ENTER}");
                 }
-                //resort list so pasted items are in front and paste is tracked
-                for (int i = SelectedClipTiles.Count - 1; i >= 0; i--) {
-                    var sctvm = SelectedClipTiles[i];
-                    this.Move(this.IndexOf(sctvm), 0);
-                    new MpPasteHistory(sctvm.CopyItem, MpClipboardManager.Instance.LastWindowWatcher.LastHandle);
+                
+                if(!fromHotKey) {
+                    //resort list so pasted items are in front and paste is tracked
+                    for (int i = SelectedClipTiles.Count - 1; i >= 0; i--) {
+                        var sctvm = SelectedClipTiles[i];
+                        this.Move(this.IndexOf(sctvm), 0);
+                        new MpPasteHistory(sctvm.CopyItem, MpClipboardManager.Instance.LastWindowWatcher.LastHandle);
+                    }
+                    //Refresh();
                 }
-                Refresh();
             } else if (pasteDataObject == null) {
                 Console.WriteLine("MainWindow Hide Command pasteDataObject was null, ignoring paste");
             }
             _selectedPasteToAppPathViewModel = null;
-            ResetClipSelection();
+            if(!fromHotKey) {
+                ResetClipSelection();
+            }            
         }
 
         public List<MpClipTileViewModel> GetClipTilesByAppId(int appId) {
@@ -1363,6 +1366,55 @@ namespace MpWpfApp {
             }
         }
 
+        private AsyncCommand<object> _hotkeyPasteCommand;
+        public IAsyncCommand<object> HotkeyPasteCommand {
+            get {
+                if (_hotkeyPasteCommand == null) {
+                    _hotkeyPasteCommand = new AsyncCommand<object>(HotkeyPaste, CanHotkeyPaste);
+                }
+                return _hotkeyPasteCommand;
+            }
+        }
+        private bool CanHotkeyPaste(object args) {
+            return !MpMainWindowViewModel.IsMainWindowOpen;
+        }
+        private async Task HotkeyPaste(object args) {
+            if(args == null) {
+                return;
+            }
+            IsHotKeyPasting = true;
+            int copyItemId = (int)args;
+            IDataObject pasteDataObject = null;
+            var pctvm = MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(copyItemId);
+            if (pctvm != null) {
+                ClearClipSelection();
+                pctvm.IsSelected = true;
+                pasteDataObject = await GetDataObjectFromSelectedClips();
+            } else {
+                //otherwise check if it is a composite within a tile
+                MpRtbListBoxItemRichTextBoxViewModel prtbvm = null;
+                foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel) {
+                    prtbvm = ctvm.RichTextBoxViewModelCollection.GetRtbItemByCopyItemId(copyItemId);
+                    if (prtbvm != null) {
+                        break;
+                    }
+                }
+                if (prtbvm != null) {
+                    ClearClipSelection();
+                    prtbvm.HostClipTileViewModel.IsSelected = true;
+                    prtbvm.HostClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
+                    prtbvm.IsSubSelected = true;
+                    pasteDataObject = await GetDataObjectFromSelectedClips();
+                }
+            }
+            //In order to paste the app must hide first 
+            //this triggers hidewindow to paste selected items
+            if(pasteDataObject != null) {
+                MainWindowViewModel.PasteDataObject(pasteDataObject);
+            }
+            IsHotKeyPasting = false;
+        }
+
         private RelayCommand<object> _pasteSelectedClipsCommand;
         public ICommand PasteSelectedClipsCommand {
             get {
@@ -1372,30 +1424,30 @@ namespace MpWpfApp {
                 return _pasteSelectedClipsCommand;
             }
         }
-        private bool CanPasteSelectedClips(object ptapId) {
+        private bool CanPasteSelectedClips(object args) {
             return MpAssignShortcutModalWindowViewModel.IsOpen == false && 
                 !IsEditingClipTile && 
                 !IsEditingClipTitle && 
                 !IsPastingTemplate &&
                 !IsTrialExpired;
         }
-        private void PasteSelectedClips(object ptapId) {
-            if(ptapId != null && ptapId.GetType() == typeof(int) && (int)ptapId > 0) {
+        private void PasteSelectedClips(object args) {
+            if(args != null && args.GetType() == typeof(int) && (int)args > 0) {
                 //when pasting to a user defined application
                 _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
-                _selectedPasteToAppPathViewModel = MpPasteToAppPathViewModelCollection.Instance.Where(x => x.PasteToAppPathId == (int)ptapId).ToList()[0];                
-            } else if(ptapId != null && ptapId.GetType() == typeof(IntPtr) && (IntPtr)ptapId != IntPtr.Zero) {
+                _selectedPasteToAppPathViewModel = MpPasteToAppPathViewModelCollection.Instance.Where(x => x.PasteToAppPathId == (int)args).ToList()[0];                
+            } else if(args != null && args.GetType() == typeof(IntPtr) && (IntPtr)args != IntPtr.Zero) {
                 //when pasting to a running application
-                _selectedPasteToAppPathWindowHandle = (IntPtr)ptapId;
+                _selectedPasteToAppPathWindowHandle = (IntPtr)args;
                 _selectedPasteToAppPathViewModel = null;
             }
-              else {
+            else {
                 _selectedPasteToAppPathWindowHandle = IntPtr.Zero;
                 _selectedPasteToAppPathViewModel = null;
             }
             //In order to paste the app must hide first 
             //this triggers hidewindow to paste selected items
-            MainWindowViewModel.HideWindowCommand.Execute(true);                        
+            MainWindowViewModel.HideWindowCommand.Execute(true);
         }
 
         private AsyncCommand _bringSelectedClipTilesToFrontCommand;
