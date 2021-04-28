@@ -75,9 +75,8 @@ namespace MpWpfApp {
                     var clipboardThread = new Thread(new ThreadStart(GetClipboard));
                     clipboardThread.SetApartmentState(ApartmentState.STA);
                     clipboardThread.Start();
-                } else {
-                    IgnoreClipboardChangeEvent = false;
                 }
+                IgnoreClipboardChangeEvent = false;
             }
             catch (Exception e) {
                 Console.WriteLine("ClipboardMonitor error during paste: " + e.ToString());
@@ -99,11 +98,12 @@ namespace MpWpfApp {
                 d.SetData(kvp.Key, kvp.Value);
             }
             System.Windows.Forms.Clipboard.SetDataObject(d, true, 10, 100);
+            Thread.Sleep(1000);
+            IgnoreClipboardChangeEvent = false;
         }
 
         private void GetClipboard() {
             SetClipboardData(_lastDataObject);
-            IgnoreClipboardChangeEvent = false;
         }
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled) {

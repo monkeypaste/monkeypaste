@@ -1,5 +1,6 @@
 ﻿using Gma.System.MouseKeyHook;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using System.Windows.Controls;
@@ -53,13 +54,34 @@ namespace MpWpfApp {
                 shortcutKeyString = string.Empty;
             } else if (shortcutKeyString == string.Empty) {
                 //if an empty assignment was ok'd check if exists 
-                var scvml = this.Where(x => x.Command == command).ToList();
+                List<MpShortcutViewModel> scvml = null;
+                if (vm.GetType() == typeof(MpShortcutViewModel)) {
+                    scvml = this.Where(x => x.Command == command && x.CommandParameter == commandParameter).ToList();
+                } else if(vm is MpClipTileViewModel || vm is MpRtbListBoxItemRichTextBoxViewModel) {
+                    scvml = this.Where(x => x.CopyItemId == (int)commandParameter).ToList();
+                } else {
+                    scvml = this.Where(x => x.TagId == (int)commandParameter).ToList();
+                }
+                //var scvml = this.Where(x => x.Command == command && x.CommandParameter == commandParameter).ToList();
                 //if it does clear, save and unregister
                 if (scvml != null && this.Count > 0) {
                     foreach (var scvm in scvml) {
                         scvm.ClearShortcutKeyString();
                         scvm.Shortcut.WriteToDatabase();
                         scvm.Unregister();
+                        if (vm is MpClipTileViewModel) {
+                            (vm as MpClipTileViewModel).ShortcutKeyString = string.Empty;
+                        } else if (vm is MpRtbListBoxItemRichTextBoxViewModel) {
+                            (vm as MpRtbListBoxItemRichTextBoxViewModel).ShortcutKeyString = string.Empty;
+                        } else if (vm is MpTagTileViewModel) {
+                            (vm as MpTagTileViewModel).ShortcutKeyString = string.Empty;
+                        }
+
+                        if (vm is MpShortcutViewModel) {
+
+                        } else {
+                            this.Remove(scvm);
+                        }
                     }
                 } else {
                     //nothing to do since no shortcut created
@@ -82,6 +104,15 @@ namespace MpWpfApp {
                             keys,
                             "Paste " + ctvm.CopyItemTitle),
                             command, commandParameter);
+            } else if (vm.GetType() == typeof(MpRtbListBoxItemRichTextBoxViewModel)) {
+                var rtbvm = (MpRtbListBoxItemRichTextBoxViewModel)vm;
+                nscvm = new MpShortcutViewModel(
+                        new MpShortcut(
+                            rtbvm.CopyItem.CopyItemId,
+                            0,
+                            keys,
+                            "Paste " + rtbvm.CopyItemTitle),
+                            command, commandParameter);
             } else if (vm.GetType() == typeof(MpTagTileViewModel)) {
                 var ttvm = (MpTagTileViewModel)vm;
                 nscvm = new MpShortcutViewModel(
@@ -96,28 +127,22 @@ namespace MpWpfApp {
                 nscvm.KeyString = keys;
                 nscvm.Command = command;
                 nscvm.CommandParameter = commandParameter;
-            }
-            if (vm.GetType() == typeof(MpRtbListBoxItemRichTextBoxViewModel)) {
-                var rtbvm = (MpRtbListBoxItemRichTextBoxViewModel)vm;
-                nscvm = new MpShortcutViewModel(
-                        new MpShortcut(
-                            rtbvm.CopyItem.CopyItemId,
-                            0,
-                            keys,
-                            "Paste " + rtbvm.CopyItemTitle),
-                            command, commandParameter);
-            }
+            } 
 
             if (nscvm != null) {
                 //check by command if shortcut exists if it does swap it with scvm otherwise add and always register
-                var curScvml = this.Where(x => x.Command == nscvm.Command).ToList();
-                if (curScvml != null && curScvml.Count > 0) {
-                    foreach (var curscvm in curScvml) {
-                        this[this.IndexOf(curscvm)].Unregister();
-                        this[this.IndexOf(curscvm)].KeyString = nscvm.KeyString;
-                        nscvm = this[this.IndexOf(curscvm)];
-                        break;
-                    }
+                List<MpShortcutViewModel> scvml = null;
+                if (vm.GetType() == typeof(MpShortcutViewModel)) {
+                    scvml = this.Where(x => x.Command == nscvm.Command && x.CommandParameter == commandParameter).ToList();
+                } else {
+                    scvml = this.Where(x => x.CopyItemId == nscvm.CopyItemId && x.TagId == nscvm.TagId && x.KeyString != nscvm.KeyString).ToList();
+                }
+                if (scvml != null && scvml.Count > 0) {
+                    var scvm = scvml[0];
+                    int scvmIdx = this.IndexOf(scvm);
+                    this[scvmIdx].Unregister();
+                    this[scvmIdx].KeyString = nscvm.KeyString;
+                    nscvm = this[scvmIdx];
                 } else {
                     this.Insert(this.Count, nscvm);
                 }
@@ -137,6 +162,14 @@ namespace MpWpfApp {
                     var ctvm = MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(scvm.Shortcut.CopyItemId);
                     if(ctvm != null) {
                         ctvm.ShortcutKeyString = string.Empty;
+                    } else {
+                        foreach(var ctvm1 in MainWindowViewModel.ClipTrayViewModel) {
+                            foreach(var rtbvm in ctvm1.RichTextBoxViewModelCollection) {
+                                if(rtbvm.CopyItemId == scvm.CopyItemId) {
+                                    rtbvm.ShortcutKeyString = string.Empty;
+                                }
+                            }
+                        }
                     }
                 } else {
                     foreach(var ttvm in MainWindowViewModel.TagTrayViewModel.Where(x => x.Tag.TagId == scvm.Shortcut.TagId).ToList()) {

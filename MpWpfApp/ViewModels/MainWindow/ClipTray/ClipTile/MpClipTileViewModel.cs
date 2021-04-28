@@ -1651,7 +1651,7 @@
                 switch (e1.PropertyName) {
                     case nameof(ctvm.IsSelected):
                         if (ctvm.IsSelected) {
-                            if (ctvm.TileVisibility != Visibility.Visible && !MainWindowViewModel.ClipTrayViewModel.IsHotKeyPasting) {
+                            if (ctvm.TileVisibility != Visibility.Visible && !MainWindowViewModel.ClipTrayViewModel.IsPastingHotKey) {
                                 ctvm.IsSelected = false;
                                 break;
                             }
@@ -2039,6 +2039,8 @@
             var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == CopyItemId).ToList();
             if(scvml.Count > 0) {
                 ShortcutKeyString = scvml[0].KeyString;
+            } else {
+                ShortcutKeyString = string.Empty;
             }
             OnViewModelLoaded();
         }
@@ -2463,6 +2465,13 @@
 
                 CopyItem = MpCopyItem.Merge(oci, CopyItem, false, false, forceIdx);
             }
+            var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == CopyItemId).ToList();
+            if (scvml.Count > 0) {
+                ShortcutKeyString = scvml[0].KeyString;
+            } else {
+                ShortcutKeyString = string.Empty;
+            }
+
             MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
 
             RichTextBoxViewModelCollection.SyncItemsWithModel();
@@ -2626,20 +2635,22 @@
                     TemplateRichText = string.Empty.ToRichText();
                     await RichTextBoxViewModelCollection.FillAllTemplates();
                 }
-                var sb = new StringBuilder();
-                sb.Append(string.Empty.ToRichText());
+                //var sb = new StringBuilder();
+                //sb.Append(string.Empty.ToRichText());
+                string rtf = string.Empty.ToRichText();
                 foreach (var rtbvm in RichTextBoxViewModelCollection.SubSelectedClipItems) {
                     if (rtbvm.HasTemplate) {
                         //rtbvm.IsSubSelected = true;
                         PasteTemplateToolbarViewModel.SetTemplate(rtbvm.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
                         PasteTemplateToolbarViewModel.PasteTemplateCommand.Execute(null);
-                        sb.Append(MpHelpers.Instance.CombineRichText(rtbvm.TemplateRichText, sb.ToString(), true));
+                        string rtbvmrtf = rtbvm.TemplateRichText;
+                        rtf = MpHelpers.Instance.CombineRichText(rtbvmrtf, rtf, true);
                         rtbvm.TemplateRichText = string.Empty;
                     } else {
-                        sb.Append(MpHelpers.Instance.CombineRichText(rtbvm.CopyItemRichText, sb.ToString(), true));
+                        rtf = MpHelpers.Instance.CombineRichText(rtbvm.CopyItemRichText, rtf, true);
                     }
                 }                
-                return sb.ToString();
+                return rtf;
             }
             
             return CopyItemRichText;
@@ -2856,7 +2867,7 @@
                 this,
                 "Paste " + CopyItemTitle,
                 ShortcutKeyString,
-                PasteClipCommand, null);
+                MainWindowViewModel.ClipTrayViewModel.HotkeyPasteCommand, CopyItemId);
         }
         #endregion
 
@@ -2869,6 +2880,11 @@
         public void Dispose() {
             if (MainWindowViewModel.ClipTrayViewModel.Contains(this)) {
                 MainWindowViewModel.ClipTrayViewModel.Remove(this);
+            }
+            var rtbvmToRemove = RichTextBoxViewModelCollection;
+            RichTextBoxViewModelCollection.Clear();
+            foreach(var rtbvm in rtbvmToRemove) {
+                rtbvm.Dispose();
             }
             //remove any shortcuts associated with clip
             var scvmToRemoveList = new List<MpShortcutViewModel>();

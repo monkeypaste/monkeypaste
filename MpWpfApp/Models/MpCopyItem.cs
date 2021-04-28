@@ -934,8 +934,8 @@ namespace MpWpfApp {
                     break;
                 case MpCopyItemType.Composite:
                     //_itemData is null and needs to be gathered from sub-items
-                    _itemData = GetCompositeItemRichText();
-                    ItemRichText = (string)_itemData;
+                    _itemData = null;// GetCompositeItemRichText();
+                    ItemRichText = string.Empty.ToRichText();// (string)_itemData;
                     ItemFlowDocument = ItemRichText.ToFlowDocument();
                     ItemPlainText = ItemRichText.ToPlainText();                     
                     ItemBitmapSource = GetSeparatedCompositeFlowDocument().ToBitmapSource();

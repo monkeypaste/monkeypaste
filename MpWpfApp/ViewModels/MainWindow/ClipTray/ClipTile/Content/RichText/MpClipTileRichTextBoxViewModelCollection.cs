@@ -629,13 +629,20 @@ namespace MpWpfApp {
                 HostClipTileViewModel.CopyItem.UnlinkCompositeChild(loneCompositeCopyItem);
                 HostClipTileViewModel.CopyItem.DeleteFromDatabase();
                 HostClipTileViewModel.CopyItem = loneCompositeCopyItem;
+
+                var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == loneCompositeCopyItem.CopyItemId).ToList();
+                if (scvml.Count > 0) {
+                    HostClipTileViewModel.ShortcutKeyString = scvml[0].KeyString;
+                } else {
+                    HostClipTileViewModel.ShortcutKeyString = string.Empty;
+                }
             } else {
                 UpdateSortOrder();
             }
             
 
             if(!isMerge) {
-                rtbvm.CopyItem.DeleteFromDatabase();
+                rtbvm.Dispose();
             }
             //Refresh();
             UpdateAdorners();

@@ -213,7 +213,8 @@ namespace MpWpfApp {
         #endregion
 
         #region State
-        public bool IsHotKeyPasting { get; set; } = false;
+        public bool IsPastingHotKey { get; set; } = false;
+        public bool IsPastingSelected { get; set; } = false;
 
         public bool IsAnyContextMenuOpened {
             get {
@@ -1025,18 +1026,20 @@ namespace MpWpfApp {
         public async Task<IDataObject> GetDataObjectFromSelectedClips(bool isDragDrop = false) {
             IDataObject d = new DataObject();
 
-            var sb = new StringBuilder();
-            sb.Append(string.Empty.ToRichText());
+            //var sb = new StringBuilder();
+            //sb.Append(string.Empty.ToRichText());
+            string rtf = string.Empty.ToRichText();
             foreach (var sctvm in SelectedClipTiles) {
                 if (sctvm.RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 0) {
                     sctvm.RichTextBoxViewModelCollection.SubSelectAll();
                 }
-                sb.Append(MpHelpers.Instance.CombineRichText(await sctvm.GetPastableRichText(), sb.ToString()));
+                string sctrtf = await sctvm.GetPastableRichText();
+                rtf = MpHelpers.Instance.CombineRichText(sctrtf, rtf);
             }
-            string rtf = sb.ToString();
-
+            
             if (!string.IsNullOrEmpty(rtf)) {
                 d.SetData(DataFormats.Rtf, rtf);
+                string pt = rtf.ToPlainText();
                 d.SetData(DataFormats.Text, rtf.ToPlainText());
             }
 
@@ -1382,14 +1385,19 @@ namespace MpWpfApp {
             if(args == null) {
                 return;
             }
-            IsHotKeyPasting = true;
+            Console.WriteLine("HotKey pasting copyitemid: " + (int)args);
+            IsPastingHotKey = true;
             int copyItemId = (int)args;
             IDataObject pasteDataObject = null;
             var pctvm = MainWindowViewModel.ClipTrayViewModel.GetClipTileByCopyItemId(copyItemId);
             if (pctvm != null) {
                 ClearClipSelection();
                 pctvm.IsSelected = true;
+                if(pctvm.CopyItemType == MpCopyItemType.Composite) {
+                    pctvm.RichTextBoxViewModelCollection.SubSelectAll();
+                }
                 pasteDataObject = await GetDataObjectFromSelectedClips();
+                ClearClipSelection();
             } else {
                 //otherwise check if it is a composite within a tile
                 MpRtbListBoxItemRichTextBoxViewModel prtbvm = null;
@@ -1405,14 +1413,17 @@ namespace MpWpfApp {
                     prtbvm.HostClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
                     prtbvm.IsSubSelected = true;
                     pasteDataObject = await GetDataObjectFromSelectedClips();
+                    prtbvm.HostClipTileViewModel.RichTextBoxViewModelCollection.ClearSubSelection();
+                    ClearClipSelection();
                 }
             }
             //In order to paste the app must hide first 
             //this triggers hidewindow to paste selected items
             if(pasteDataObject != null) {
                 MainWindowViewModel.PasteDataObject(pasteDataObject);
+                ResetClipSelection();
             }
-            IsHotKeyPasting = false;
+            IsPastingHotKey = false;
         }
 
         private RelayCommand<object> _pasteSelectedClipsCommand;
@@ -1447,7 +1458,9 @@ namespace MpWpfApp {
             }
             //In order to paste the app must hide first 
             //this triggers hidewindow to paste selected items
+            IsPastingSelected = true;
             MainWindowViewModel.HideWindowCommand.Execute(true);
+            IsPastingSelected = false;
         }
 
         private AsyncCommand _bringSelectedClipTilesToFrontCommand;

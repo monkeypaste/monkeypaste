@@ -719,9 +719,6 @@ namespace MpWpfApp {
                         MainWindowGridTop = _startMainWindowTop;
                         timer.Stop();
                         
-
-                        ResetTraySelection();
-
                         mw.Visibility = Visibility.Collapsed;
                         if (pasteSelected) {
                             PasteDataObject(pasteDataObject);
@@ -734,6 +731,7 @@ namespace MpWpfApp {
                         } else {
                             SearchBoxViewModel.IsTextBoxFocused = false;
                         }
+                        ResetTraySelection();
                     }
                 };
                 timer.Start();

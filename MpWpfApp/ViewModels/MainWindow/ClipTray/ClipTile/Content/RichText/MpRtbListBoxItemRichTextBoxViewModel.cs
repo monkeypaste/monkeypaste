@@ -1307,7 +1307,8 @@ namespace MpWpfApp {
                                        !IsSubDragging && 
                                        !HostClipTileViewModel.IsContextMenuOpened && 
                                        !IsSubContextMenuOpened &&
-                                       !MainWindowViewModel.ClipTrayViewModel.IsHotKeyPasting) {
+                                       !MainWindowViewModel.ClipTrayViewModel.IsPastingHotKey &&
+                                       !MainWindowViewModel.ClipTrayViewModel.IsPastingSelected) {
                                 IsSubSelected = false;
                             }
                             if (HostClipTileViewModel.IsEditingTile) {
@@ -2140,7 +2141,7 @@ namespace MpWpfApp {
                 this,
                 "Paste " + CopyItemTitle,
                 ShortcutKeyString,
-                PasteSubItemCommand, null);
+                 MainWindowViewModel.ClipTrayViewModel.HotkeyPasteCommand, CopyItemId);
         }
         #endregion
 
