@@ -303,7 +303,7 @@ namespace MpWpfApp {
 
         public void UpdateTagAssociation() {
             foreach (var ttvm in this) {
-                if (ttvm == GetHistoryTagTileViewModel() || ttvm.IsSelected) {
+                if (ttvm.IsSudoTag || ttvm.IsSelected) {
                     continue;
                 }
 

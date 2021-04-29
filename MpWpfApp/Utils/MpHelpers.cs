@@ -48,9 +48,11 @@ namespace MpWpfApp {
         private static readonly Lazy<MpHelpers> _Lazy = new Lazy<MpHelpers>(() => new MpHelpers());
         public static MpHelpers Instance { get { return _Lazy.Value; } }
         private InputSimulator sim = new InputSimulator();
+        private BitmapSource _defaultFavIcon = null;
         //private YoloWrapper yoloWrapper = null;
         public void Init() {
             //yoloWrapper = new YoloWrapper(new ConfigurationDetector().Detect());
+            _defaultFavIcon = (BitmapSource)new BitmapImage(new Uri(Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/defaultfavicon.png"));
         }
 
         #region Documents    
@@ -91,8 +93,7 @@ namespace MpWpfApp {
             } else {
                 return null;
             }
-        }
-        
+        }        
         
         public List<TextRange> FindStringRangesFromPosition(TextPointer position, string matchStr, bool isCaseSensitive = false) {
             if (string.IsNullOrEmpty(matchStr)) {
@@ -2738,7 +2739,8 @@ namespace MpWpfApp {
             if (str.StartsWith(@"https://")) {
                 return str;
             }
-            return @"https://" + str;
+            //use http without s because if it is https then it will resolve to but otherwise will not load
+            return @"http://" + str;
         }
 
         public bool IsValidUrl(string str) {
@@ -2748,8 +2750,12 @@ namespace MpWpfApp {
 
         public BitmapSource GetUrlFavicon(String url) {
             try {
-                Uri favicon = new Uri("http://www.google.com/s2/favicons?domain=" + GetUrlDomain(url), UriKind.Absolute);
+                string urlDomain = GetUrlDomain(url);
+                Uri favicon = new Uri("http://www.google.com/s2/favicons?domain=" + urlDomain, UriKind.Absolute);
                 var img = new BitmapImage(favicon);
+                if((img as BitmapSource).IsEqual(_defaultFavIcon)) {
+                    return null;
+                }
                 return img;
             } catch(Exception ex) {
                 Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url + " with exception: "+ex);
@@ -2759,8 +2765,18 @@ namespace MpWpfApp {
 
         public string GetUrlDomain(string url) {
             try {
-                string[] hostParts = new System.Uri(url).Host.Split('.');
-                return String.Join(".", hostParts.Skip(Math.Max(0, hostParts.Length - 2)).Take(2));
+                int domainStartIdx = url.IndexOf(@"//") + 2;
+                if(url.Length <= domainStartIdx) {
+                    return string.Empty;
+                }
+                if(!url.Substring(domainStartIdx).Contains(@"/")) {
+                    return url.Substring(domainStartIdx);
+                }
+                int domainEndIdx = url.Substring(domainStartIdx).IndexOf(@"/");
+                return url.Substring(domainStartIdx).Substring(0, domainEndIdx);
+
+                //string[] hostParts = new System.Uri(url).Host.Split('.');
+                //return String.Join(".", hostParts.Skip(Math.Max(0, hostParts.Length - 2)).Take(2));
             } catch(Exception ex) {
                 Console.WriteLine("MpHelpers.GetUrlDomain error for url: " + url + " with exception: " + ex);
             }

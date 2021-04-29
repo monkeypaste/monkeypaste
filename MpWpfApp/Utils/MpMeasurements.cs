@@ -117,6 +117,13 @@ namespace MpWpfApp {
                 return ClipTileTitleHeight * 0.75;
             }
         }
+
+        public double ClipTileTitleFavIconSize {
+            get {
+                return ClipTileTitleIconSize * 0.5;
+            }
+        }
+
         public double ClipTileTitleIconBorderSizeRatio {
             get {
                 return 1.25;
@@ -126,6 +133,12 @@ namespace MpWpfApp {
         public double ClipTileTitleIconBorderSize {
             get {
                 return ClipTileTitleIconSize * ClipTileTitleIconBorderSizeRatio;
+            }
+        }
+
+        public double ClipTileTitleFavIconBorderSize {
+            get {
+                return ClipTileTitleFavIconSize * ClipTileTitleIconBorderSizeRatio;
             }
         }
 

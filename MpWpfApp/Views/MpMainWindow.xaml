@@ -198,7 +198,7 @@
                                   Command="{Binding ToggleMainWindowLockCommand}"
                                   CommandParameter="{StaticResource True}"
                                   Template="{StaticResource LockToggleButtonControlTemplate}">
-                        <Image Source="/Resources/Images/lock.png"
+                        <Image Source="{Binding Source={StaticResource LockIcon}, Converter={StaticResource StringToImageConverter}}"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center" />
                     </ToggleButton>
@@ -610,22 +610,29 @@
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Center"
                                   ToolTipService.InitialShowDelay="0"
-                                  ToolTip="{Binding MainWindowViewModel.SystemTrayViewModel.PauseOrPlayHeader}"
+                                  Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                                  ToolTip="{Binding IsAppPausedTooltip}"
                                   Padding="10"
-                                  Content="{Binding MainWindowViewModel.SystemTrayViewModel.PauseOrPlayIconSource, Converter={StaticResource StringToIconConverter}}"
                                   IsChecked="{Binding IsAppPaused}">
+                        <Image Source="{Binding MainWindowViewModel.SystemTrayViewModel.PauseOrPlayIconSource, Converter={StaticResource StringToImageConverter}}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
                     </ToggleButton>
                     <ToggleButton Grid.Row="1"
                                   Grid.Column="0"
                                   ToolTipService.InitialShowDelay="0"
-                                  ToolTip="Auto Copy Selection"
+                                  ToolTip="{Binding IsAutoCopyModeTooltip}"
                                   Width="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
                                   Height="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Center"
-                                  Content="{Binding Source={StaticResource LeftClickIcon}, Converter={StaticResource StringToIconConverter}}"
+                                  Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                                  IsEnabled="{Binding IsAutoCopyModeEnabled}"
                                   IsChecked="{Binding IsAutoCopyMode}"
                                   Padding="10">
+                        <Image Source="{Binding Source={StaticResource LeftClickIcon}, Converter={StaticResource StringToImageConverter}}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
                     </ToggleButton>
                     <ToggleButton Grid.Row="2"
                                   Grid.Column="0"
@@ -634,10 +641,14 @@
                                   Height="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Center"
-                                  ToolTip="Right-Click Paste"
-                                  Content="{Binding Source={StaticResource RightClickIcon}, Converter={StaticResource StringToIconConverter}}"
+                                  Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                                  ToolTip="{Binding IsRighClickPasteModeTooltip}"
+                                  IsEnabled="{Binding IsRighClickPasteModeEnabled}"
                                   IsChecked="{Binding IsRightClickPasteMode}"
                                   Padding="10">
+                        <Image Source="{Binding Source={StaticResource RightClickIcon}, Converter={StaticResource StringToImageConverter}}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
                     </ToggleButton>
                     <ToggleButton Grid.Row="3"
                                   Grid.Column="0"
@@ -647,9 +658,13 @@
                                   Height="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Center"
-                                  ToolTip="Append Copy"
-                                  Content="{Binding Source={StaticResource AppendIcon}, Converter={StaticResource StringToIconConverter}}"
+                                  Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                                  ToolTip="{Binding IsAppendModeTooltip}"
+                                  IsEnabled="{Binding IsAppendModeEnabled}"
                                   IsChecked="{Binding IsInAppendMode}">
+                        <Image Source="{Binding Source={StaticResource AppendIcon}, Converter={StaticResource StringToImageConverter}}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
                     </ToggleButton>
                     <ToggleButton Grid.Row="4"
                                   Grid.Column="0"
@@ -658,10 +673,14 @@
                                   Height="{Binding MainWindowViewModel.AppModeButtonGridWidth}"
                                   VerticalAlignment="Center"
                                   HorizontalAlignment="Center"
-                                  ToolTip="Auto Analyze"
-                                  Content="{Binding Source={StaticResource BrainIcon}, Converter={StaticResource StringToIconConverter}}"
+                                  Template="{StaticResource AppModeToggleButtonControlTemplate}"
+                                  ToolTip="{Binding IsAutoAnalysisModeTooltip}"
+                                  IsEnabled="{Binding IsAutoAnalysisModeEnabled}"
                                   IsChecked="{Binding IsInAutoAnalyzeMode}"
                                   Padding="10">
+                        <Image Source="{Binding Source={StaticResource BrainIcon}, Converter={StaticResource StringToImageConverter}}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center" />
                     </ToggleButton>
                 </Grid>
                 <Grid x:Name="ClipTrayGrid"
@@ -945,7 +964,7 @@
                                                 <Separator />
                                                 <MenuItem x:Name="PasteToAppPathMenuItem"
                                                           Header="Paste To Application"
-                                                          Icon="{Binding Source={StaticResource PasteToAppIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}" />
+                                                          Icon="{Binding Source={StaticResource PasteIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}" />
                                                 <Separator />
                                                 <MenuItem x:Name="CollectionParentMenuItem"
                                                           Header="Pin To _Collection"
@@ -988,7 +1007,7 @@
                                                     <RowDefinition Height="{Binding TileDetailHeight}" />
                                                 </Grid.RowDefinitions>
                                                 <!-- Tile Title Canvas -->
-                                                <Canvas Grid.Row="0"
+                                                <Grid Grid.Row="0"
                                                         Grid.Column="0"
                                                         VerticalAlignment="Top"
                                                         HorizontalAlignment="Left"
@@ -1000,8 +1019,11 @@
                                                                                 MethodName="ClipTileTitle_Loaded" />
                                                         </i:EventTrigger>
                                                     </i:Interaction.Triggers>
-                                                    <Viewbox VerticalAlignment="Top"
-                                                             HorizontalAlignment="Left"
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="0.75*" />
+                                                        <ColumnDefinition Width="0.25*" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Viewbox Grid.ColumnSpan="2"
                                                              Stretch="Fill"
                                                              Width="{Binding TileBorderWidth,Mode=TwoWay}"
                                                              Height="{Binding TileTitleHeight,Mode=TwoWay}">
@@ -1027,7 +1049,7 @@
                                                                             <PathFigure StartPoint="0,22"
                                                                                         IsClosed="True">
                                                                                 <BezierSegment Point1="150,-10"
-                                                                                               Point2="180,110"
+                                                                                               Point2="160,85"
                                                                                                Point3="270,40" />
                                                                                 <LineSegment Point="270,0" />
                                                                                 <LineSegment Point="0,0" />
@@ -1044,13 +1066,13 @@
                                                                 <Path.Data>
                                                                     <PathGeometry>
                                                                         <PathGeometry.Figures>
-                                                                            <PathFigure StartPoint="0,40"
+                                                                            <PathFigure StartPoint="0,35"
                                                                                         IsClosed="True">
-                                                                                <BezierSegment Point1="90,65"
-                                                                                               Point2="65,20"
-                                                                                               Point3="135,20" />
-                                                                                <BezierSegment Point1="205,20"
-                                                                                               Point2="180,65"
+                                                                                <BezierSegment Point1="40,45"
+                                                                                               Point2="75,20"
+                                                                                               Point3="100,20" />
+                                                                                <BezierSegment Point1="185,20"
+                                                                                               Point2="130,65"
                                                                                                Point3="270,40" />
                                                                                 <LineSegment Point="270,0" />
                                                                                 <LineSegment Point="0,0" />
@@ -1063,11 +1085,11 @@
                                                                      StrokeThickness="0"
                                                                      DataContext="{Binding SwirlLayer2}"
                                                                      Fill="{Binding LayerBrush}"
-                                                                     Opacity="{Binding LayerOpacity}"
-                                                                     Width="84"
+                                                                     Opacity="0.2"
+                                                                     Width="87"
                                                                      Height="28"
-                                                                     Canvas.Left="171"
-                                                                     Canvas.Top="34" />
+                                                                     Canvas.Left="165"
+                                                                     Canvas.Top="24" />
                                                             <Path x:Name="Layer3"
                                                                   StrokeThickness="0"
                                                                   DataContext="{Binding SwirlLayer3}"
@@ -1089,6 +1111,7 @@
                                                         </Canvas>
                                                     </Viewbox>
                                                     <Grid x:Name="ClipTileTitleTextGrid"
+                                                          Grid.Column="0" Margin="5,0,30,25"
                                                           Background="{Binding TileTitleTextGridBackgroundBrush}">
                                                         <!-- Clip Title TextBlock -->
                                                         <TextBlock x:Name="ClipTileTitleTextBlock"
@@ -1115,6 +1138,7 @@
                                                                  Text="{Binding CopyItemTitle, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=LostFocus}" />
                                                     </Grid>
                                                     <Image x:Name="ClipTileAppIconHighlightedBorderImage"
+                                                           Grid.Column="1"
                                                            Source="{Binding CopyItemAppIconHighlightBorder, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
                                                            Stretch="Fill"
                                                            Visibility="{Binding AppIconHighlightBorderVisibility}"
@@ -1122,46 +1146,51 @@
                                                            Height="{Binding TileTitleIconBorderSize}">
                                                     </Image>
                                                     <!-- Clip Title Icon Image -->
-                                                    <Button x:Name="ClipTileAppIconImageButton"
-                                                            Style="{StaticResource Transparent_Button}"
-                                                            Visibility="{Binding ClipTileTitleAppIconButtonVisibility}"
-                                                            RenderTransformOrigin="0.5,0.5"
-                                                            Background="Transparent"
-                                                            BorderThickness="0">
-                                                        <Button.RenderTransform>
-                                                            <RotateTransform x:Name="ClipTileAppIconImageButtonRotateTransform" />
-                                                        </Button.RenderTransform>
-                                                        <Button.ContextMenu>
-                                                            <ContextMenu>
-                                                                <MenuItem Header="Exclude Application"
-                                                                          Icon="{Binding Source={StaticResource NoEntryIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                                          Command="{Binding Data.ExcludeApplicationCommand, Source={StaticResource ClipTileProxy}}" />
-                                                                <MenuItem Header="Add Paste Macro For Application"
-                                                                          Icon="{Binding Source={StaticResource RobotClawIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                                          Command="{Binding Data.MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand, Source={StaticResource ClipTileProxy}}"
-                                                                          CommandParameter="{Binding}" />
-                                                            </ContextMenu>
-                                                        </Button.ContextMenu>
-                                                        <Grid>
-                                                            <Image x:Name="ClipTileAppIconBorderImage"
-                                                                   Source="{Binding CopyItemAppIconBorder, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
-                                                                   Stretch="Fill"
-                                                                   RenderTransformOrigin="0.5, 0.5"
-                                                                   Visibility="Hidden"
-                                                                   Width="{Binding TileTitleIconSize}"
-                                                                   Height="{Binding TileTitleIconSize}">
-                                                                <Image.RenderTransform>
-                                                                    <ScaleTransform x:Name="ClipTileAppIconBorderImageScaleTransform" />
-                                                                </Image.RenderTransform>
-                                                            </Image>
-                                                            <Image x:Name="ClipTileAppIconImage"
-                                                                   Source="{Binding AppIcon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
-                                                                   Stretch="Fill"
-                                                                   Visibility="{Binding ClipTileTitleAppIconImageVisibility}"
-                                                                   Width="{Binding TileTitleIconSize}"
-                                                                   Height="{Binding TileTitleIconSize}">
-                                                            </Image>
-                                                            <!--<Viewbox Width="{Binding TileTitleIconSize}"
+                                                    <Grid Grid.Column="1">
+                                                        <Button x:Name="ClipTileAppIconImageButton"
+                                                                Style="{StaticResource Transparent_Button}"
+                                                                Visibility="{Binding ClipTileTitleAppIconButtonVisibility}"
+                                                                HorizontalAlignment="Left"
+                                                                VerticalAlignment="Center"
+                                                                RenderTransformOrigin="0.5,0.5"
+                                                                Background="Transparent"
+                                                                BorderThickness="0">
+                                                            <Button.RenderTransform>
+                                                                <RotateTransform x:Name="ClipTileAppIconImageButtonRotateTransform" />
+                                                            </Button.RenderTransform>
+                                                            <Button.ContextMenu>
+                                                                <ContextMenu>
+                                                                    <MenuItem Header="Exclude Application"
+                                                                              Icon="{Binding Source={StaticResource NoEntryIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                                                                              Command="{Binding Data.ExcludeApplicationCommand, Source={StaticResource ClipTileProxy}}" />
+                                                                    <MenuItem Header="Add Paste Macro For Application"
+                                                                              Icon="{Binding Source={StaticResource RobotClawIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                                                                              Command="{Binding Data.MainWindowViewModel.SystemTrayViewModel.ShowSettingsWindowCommand, Source={StaticResource ClipTileProxy}}"
+                                                                              CommandParameter="{Binding}" />
+                                                                </ContextMenu>
+                                                            </Button.ContextMenu>
+                                                            <Grid>
+                                                                <Image x:Name="ClipTileAppIconBorderImage"
+                                                                       Source="{Binding CopyItemAppIconBorder, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
+                                                                       Stretch="Fill"
+                                                                       RenderTransformOrigin="0.5, 0.5"
+                                                                       Visibility="Hidden"
+                                                                       Width="{Binding TileTitleIconSize}"
+                                                                       Height="{Binding TileTitleIconSize}">
+                                                                    <Image.RenderTransform>
+                                                                        <ScaleTransform x:Name="ClipTileAppIconBorderImageScaleTransform" />
+                                                                    </Image.RenderTransform>
+                                                                </Image>
+                                                                <Image x:Name="ClipTileAppIconImage"
+                                                                       Source="{Binding AppIcon, Converter={StaticResource ImageSourceToBitmapSourceConverter}}"
+                                                                       Stretch="Fill"
+                                                                       HorizontalAlignment="Center"
+                                                                       VerticalAlignment="Center"
+                                                                       Visibility="{Binding ClipTileTitleAppIconImageVisibility}"
+                                                                       Width="{Binding TileTitleIconSize}"
+                                                                       Height="{Binding TileTitleIconSize}">
+                                                                </Image>
+                                                                <!--<Viewbox Width="{Binding TileTitleIconSize}"
                                                                      Height="{Binding TileTitleIconSize}"
                                                                      Visibility="{Binding MultiSelectOrderMarkerVisibility}">
                                                                 <Grid>
@@ -1183,9 +1212,10 @@
                                                                                Text="{Binding MultiSelectedOrderIdxDisplayValue}" />
                                                                 </Grid>
                                                             </Viewbox>-->
-                                                        </Grid>
-                                                    </Button>
-                                                </Canvas>
+                                                            </Grid>
+                                                        </Button>
+                                                    </Grid>
+                                                </Grid>
                                                 <!-- Content Container Canvas -->
                                                 <Canvas x:Name="ClipTileContentCanvas"
                                                         Grid.Row="1"

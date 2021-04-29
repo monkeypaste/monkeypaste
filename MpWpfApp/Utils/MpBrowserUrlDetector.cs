@@ -28,10 +28,14 @@ namespace MpWpfApp {
             double cutoffHeight = ssbmp.Height / 4;
 
             foreach (var region in ocr.regions) {
+                var rbb = ParseStringForRect(region.boundingBox);
                 foreach (var line in region.lines) {
+                    var lbb = ParseStringForRect(line.boundingBox);
                     foreach (var word in line.words) {
-                        var bb = ParseStringForRect(word.boundingBox);
-                        if(bb.Y > cutoffHeight) {
+                        var wbb = ParseStringForRect(word.boundingBox);
+                        if(rbb.Y > cutoffHeight && 
+                           lbb.Y > cutoffHeight && 
+                           wbb.Y > cutoffHeight) {
                             return string.Empty;
                         }
                         if(MpHelpers.Instance.IsValidUrl(word.text)) {

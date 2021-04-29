@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -253,6 +254,30 @@ namespace MpWpfApp {
                 #endregion
 
                 #region Keyboard
+                GlobalHook.OnCombination(new Dictionary<Combination, Action> {{
+                        Combination.FromString("Control+V"), () => {
+                            try {
+                                string cbText = Clipboard.GetText();
+                                if(!string.IsNullOrEmpty(cbText)) {
+                                    Application.Current.Dispatcher.BeginInvoke((Action)(()=>{
+                                        foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel) {
+                                            if(ctvm.CopyItemPlainText == cbText && !ctvm.IsTextItem) {
+                                                ctvm.PasteCount++;
+                                            }
+                                            foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                                                if(rtbvm.CopyItemPlainText == cbText) {
+                                                    rtbvm.PasteCount++;
+                                                }
+                                            }
+                                        }
+                                    }),System.Windows.Threading.DispatcherPriority.Background);
+                                }
+                            } catch(Exception ex) {
+                                Console.WriteLine("Global Keyboard Paste watch exception getting text: "+ex);
+                            }
+
+                        }
+                }});
 
                 ApplicationHook.KeyPress += (s, e) => {
                     if (MainWindowViewModel.ClipTrayViewModel != null && MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded) {
@@ -374,6 +399,12 @@ namespace MpWpfApp {
                     case 24:
                         shortcutCommand = MainWindowViewModel.ClipTrayViewModel.CreateQrCodeFromSelectedClipsCommand;
                         break;
+                    case 25:
+                        shortcutCommand = MainWindowViewModel.AppModeViewModel.ToggleAutoAnalysisModeCommand;
+                        break;
+                    case 26:
+                        shortcutCommand = MainWindowViewModel.AppModeViewModel.ToggleIsAppPausedCommand;
+                        break;
                     default:
                         try {
                             if (sc.CopyItemId > 0) {
@@ -418,7 +449,13 @@ namespace MpWpfApp {
             OnViewModelLoaded();
         }
 
-        
+        public MpShortcutViewModel GetShortcutViewModelById(int shortcutId) {
+            var scvml = this.Where(x => x.ShortcutId == shortcutId).ToList();
+            if(scvml.Count > 0) {
+                return scvml[0];
+            }
+            return null;
+        }
         #endregion
 
         #region Commands

@@ -57,6 +57,15 @@ namespace MpWpfApp {
             }
         }
 
+        public bool IsAllTag {
+            get {
+                if (Tag == null) {
+                    return false;
+                }
+                return Tag.TagId == 1;
+            }
+        }
+
         private bool _isSelected = false;
         public bool IsSelected {
             get {
@@ -413,6 +422,9 @@ namespace MpWpfApp {
                 Tag.TagId == 0) {
                 return false;
             }
+            if(IsAllTag) {
+                return true;
+            }
             if(IsRecentTag) {
                 return MainWindowViewModel.ClipTrayViewModel.
                     OrderByDescending(x => x.CopyDateTime).
@@ -429,6 +441,9 @@ namespace MpWpfApp {
                 Tag == null ||
                 Tag.TagId == 0) {
                 return false;
+            }
+            if (IsAllTag) {
+                return true;
             }
             if (IsRecentTag) {
                 return MainWindowViewModel.ClipTrayViewModel.

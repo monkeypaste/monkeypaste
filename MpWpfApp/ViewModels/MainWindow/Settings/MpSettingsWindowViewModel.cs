@@ -213,10 +213,6 @@ namespace MpWpfApp {
                     } 
                 }
             }
-            //var clonedList = MpShortcutCollectionViewModel.Instance.Select(x => (MpShortcutViewModel)x.Clone()).ToList();
-            //_shortcutViewModelsBackup = new ObservableCollection<MpShortcutViewModel>(clonedList);
-
-            
         }
 
         public bool ShowSettingsWindow(int tabToShow = 0, object args = null) {

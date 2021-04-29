@@ -608,6 +608,8 @@ namespace MpWpfApp {
                     PrimarySelectedClipTile.OnPropertyChanged(nameof(PrimarySelectedClipTile.TileBorderBrush));
                 }
 
+                MainWindowViewModel.AppModeViewModel.RefreshState();
+
                 //multi-select label stuff (disabled)
                 //foreach (var sctvm in SelectedClipTiles) {
                 //    sctvm.OnPropertyChanged(nameof(sctvm.MultiSelectOrderMarkerVisibility));
@@ -1076,6 +1078,18 @@ namespace MpWpfApp {
                     }
                 }
                 d.SetData(Properties.Settings.Default.ClipTileDragDropFormatName, SelectedClipTiles.ToList());
+            }
+
+            if(!isDragDrop) {
+                foreach(var ctvm in SelectedClipTiles) {
+                    if(ctvm.RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 0) {
+                        ctvm.PasteCount++;
+                    } else {
+                        foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection.SubSelectedClipItems) {
+                            rtbvm.PasteCount++;
+                        }
+                    }
+                }
             }
             return d;
             //awaited in MainWindowViewModel.HideWindow

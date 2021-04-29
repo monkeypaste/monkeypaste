@@ -132,19 +132,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Appearance
-        private BitmapSource _favIcon = null;
-        public BitmapSource FavIcon { 
-            get {
-                return _favIcon;
-            }
-            set {
-                if(_favIcon != value) {
-                    _favIcon = value;
-                    OnPropertyChanged(nameof(FavIcon));
-                }
-            }
-        }
-
         public BitmapSource HotkeyIconSource {
             get {
                 if (string.IsNullOrEmpty(ShortcutKeyString)) {
@@ -170,8 +157,8 @@ namespace MpWpfApp {
                     if (CopyItem == null) {
                         return new BitmapImage();
                     }
-                    if(FavIcon != null) {
-                        return FavIcon;
+                    if(CopyItemFavIcon != null) {
+                        return CopyItemFavIcon;
                     }
                     return CopyItemAppIcon;
                 }
@@ -968,6 +955,23 @@ namespace MpWpfApp {
         #endregion
 
         #region Model
+        public BitmapSource CopyItemFavIcon {
+            get {
+                if (CopyItem == null) {
+                    return null;
+                }
+                return CopyItem.ItemFavIcon;
+            }
+            set {
+                if (CopyItem != null && CopyItem.ItemFavIcon != value) {
+                    CopyItem.ItemFavIcon = value;
+                    //CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyItem));
+                    OnPropertyChanged(nameof(AppIcon));
+                }
+            }
+        }
+
         public BitmapSource CopyItemAppIconHighlightBorder {
             get {
                 if (CopyItem == null || HostClipTileViewModel == null) {
@@ -1032,7 +1036,7 @@ namespace MpWpfApp {
             set {
                 if (CopyItem.ItemBitmapSource != value) {
                     CopyItem.ItemBitmapSource = value;
-                    CopyItem.WriteToDatabase();
+                    //CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItem));
                 }
             }
@@ -1061,7 +1065,7 @@ namespace MpWpfApp {
             set {
                 if(CopyItem != null && CopyItem.CompositeParentCopyItemId != value) {
                     CopyItem.CompositeParentCopyItemId = value;
-                    CopyItem.WriteToDatabase();
+                    //CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItem));
                     HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.CopyItem));
                 }
@@ -1078,7 +1082,7 @@ namespace MpWpfApp {
             set {
                 if (CopyItem != null && CopyItem.CompositeSortOrderIdx != value) {
                     CopyItem.CompositeSortOrderIdx = value;
-                    CopyItem.WriteToDatabase();
+                    //CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItem));
                     HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.CopyItem));
                 }
@@ -1113,7 +1117,7 @@ namespace MpWpfApp {
             set {
                 if (CopyItem != null && CopyItem.ItemDescription != value) {
                     CopyItem.ItemDescription = value;
-                    CopyItem.WriteToDatabase();
+                    //CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItem));
                 }
             }
@@ -1133,8 +1137,8 @@ namespace MpWpfApp {
                 if (CopyItem != null && CopyItem.ItemRichText != value) {
                     //value should be raw rtf where templates are encoded into #name#color# groups
                     CopyItem.SetData(value);
-                    CopyItem.WriteToDatabase();                    
-                    OnPropertyChanged(nameof(CopyItemRichText));
+                    //CopyItem.WriteToDatabase();                    
+                    OnPropertyChanged(nameof(CopyItem));
                 }
             }
         }
@@ -1169,7 +1173,7 @@ namespace MpWpfApp {
                 if (CopyItem != null && CopyItem.Title != value) {
                     AddUndo(this, nameof(CopyItemTitle), CopyItem.Title, value);
                     CopyItem.Title = value;
-                    CopyItem.WriteToDatabase();
+                    //CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItem));
                 }
             }
@@ -1194,7 +1198,7 @@ namespace MpWpfApp {
             set {
                 if(CopyItem.ItemColor.ColorBrush != value) {
                     CopyItem.ItemColor = new MpColor(((SolidColorBrush)value).Color);
-                    CopyItem.WriteToDatabase();
+                    //CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItem));
                 }
             }
@@ -1210,7 +1214,7 @@ namespace MpWpfApp {
             set {
                 if (CopyItem != null && CopyItem.ItemUrl != value) {
                     CopyItem.ItemUrl = value;
-                    CopyItem.WriteToDatabase();
+                    //CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItem));
                 }
             }
@@ -1234,6 +1238,22 @@ namespace MpWpfApp {
             }
         }
 
+        public int PasteCount {
+            get {
+                if (CopyItem == null) {
+                    return 0;
+                }
+                return CopyItem.PasteCount;
+            }
+            set {
+                if (CopyItem != null && CopyItem.PasteCount != value) {
+                    CopyItem.PasteCount = value;
+                    //CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyItem));
+                }
+            }
+        }
+
         private MpCopyItem _copyItem = null;
         public MpCopyItem CopyItem {
             get {
@@ -1242,6 +1262,7 @@ namespace MpWpfApp {
             set {
                 //if(_copyItem != value) 
                     {
+                    var tb = new ToggleButton();                    
                     _copyItem = value;
                     if (CopyItem != null) {
                         CopyItem.WriteToDatabase();
@@ -1256,8 +1277,9 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(CopyItemTitle));
                     OnPropertyChanged(nameof(CopyItemBmp));
                     OnPropertyChanged(nameof(CopyItemUrl));
-                    OnPropertyChanged(nameof(FavIcon));
+                    OnPropertyChanged(nameof(CopyItemFavIcon));
                     OnPropertyChanged(nameof(CopyItemAppIcon));
+                    OnPropertyChanged(nameof(PasteCount));
                     OnPropertyChanged(nameof(CopyItemAppName));
                 }
             }
@@ -1627,10 +1649,11 @@ namespace MpWpfApp {
                 string detectedUrl = await MpBrowserUrlDetector.Instance.FindUrlAddressFromScreenshot(CopyItem.ItemScreenshot);
                 if(!string.IsNullOrEmpty(detectedUrl)) {
                     CopyItemUrl = detectedUrl;
-                    FavIcon = MpHelpers.Instance.GetUrlFavicon(detectedUrl);
-                    if(HostClipTileViewModel.RichTextBoxViewModelCollection.Count == 1) {
-                        HostClipTileViewModel.FavIcon = FavIcon;
-                        HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.AppIcon));
+                    CopyItemFavIcon = MpHelpers.Instance.GetUrlFavicon(detectedUrl);          
+                    if(RichTextBoxViewModelCollection.Count == 1) {
+                        Application.Current.Dispatcher.BeginInvoke((Action)(() => {
+                            HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.AppIcon));
+                        }),DispatcherPriority.Render);
                     }
                 }
                 Console.WriteLine("Detected Browser Address: " + detectedUrl);

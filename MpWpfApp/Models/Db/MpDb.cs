@@ -301,7 +301,9 @@ namespace MpWpfApp {
                     ,('Rename',1,'F2','F2')
                     ,('Duplicate',1,'Control+D','Control+D')
                     ,('Email',1,'Control+E','Control+E')
-                    ,('Qr Code',1,'Control+Shift+Q','Control+Shift+Q');
+                    ,('Qr Code',1,'Control+Shift+Q','Control+Shift+Q')
+                    ,('Toggle Auto-Analyze Mode',2,'Control+Shift+B','Control+Shift+B')
+                    ,('Toggle Is App Paused',2,'Control+Shift+P','Control+Shift+P');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPasteToAppPath (
                       pk_MpPasteToAppPathId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -407,6 +409,7 @@ namespace MpWpfApp {
                     , ItemDescription text
                     , ItemCsv text
                     , ItemUrl text
+                    , ItemFavIcon image
                     , Screenshot longblob
                     , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL
                     , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)

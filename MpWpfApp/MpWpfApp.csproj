@@ -1752,6 +1752,7 @@
     <Resource Include="Resources\Images\check.png" />
     <Resource Include="Resources\Images\checkgray.png" />
     <Resource Include="Resources\Images\textureborder.png" />
+    <Resource Include="Resources\Images\defaultfavicon.png" />
     <Content Include="Resources\Sounds\alert.wav" />
     <Content Include="Resources\Sounds\blip.wav" />
     <Content Include="Resources\Sounds\blip2.wav" />

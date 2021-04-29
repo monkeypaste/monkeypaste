@@ -125,6 +125,8 @@ namespace MpWpfApp {
         }
         public string ItemUrl { get; set; } = string.Empty;
 
+        public BitmapSource ItemFavIcon { get; set; } = null;
+
         //public BitmapSource ItemTitleSwirl { get; set; }
 
         public List<MpDetectedImageObject> ImageItemObjectList = new List<MpDetectedImageObject>();
@@ -1004,6 +1006,7 @@ namespace MpWpfApp {
             CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
             ItemUrl = dr["ItemUrl"].ToString();
             ItemDescription = dr["ItemDescription"].ToString();
+            PasteCount = Convert.ToInt32(dr["PasteCount"].ToString());
 
             if (ItemUrl == null) {
                 ItemUrl = string.Empty;
@@ -1046,6 +1049,11 @@ namespace MpWpfApp {
             if (dr["ItemImage"] != null && dr["ItemImage"].GetType() != typeof(System.DBNull)) {
                 _itemBmpByteArray = (byte[])dr["ItemImage"];
                 ItemBitmapSource = MpHelpers.Instance.ConvertByteArrayToBitmapSource(_itemBmpByteArray);
+            }
+
+            if (dr["ItemFavIcon"] != null && dr["ItemFavIcon"].GetType() != typeof(System.DBNull)) {
+                var favIconByteArray = (byte[])dr["ItemFavIcon"];
+                ItemFavIcon = MpHelpers.Instance.ConvertByteArrayToBitmapSource(favIconByteArray);
             }
 
             CompositeParentCopyItemId = GetCompositeParentCopyItemId();
@@ -1140,13 +1148,15 @@ namespace MpWpfApp {
             if(string.IsNullOrEmpty(itemText)) {
                 itemText = string.Empty;
             }
-            
+            byte[] itemFavIcon = ItemFavIcon == null ? null : ItemFavIcon.ToByteArray();
             //byte[] itemImage = MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource);
             //if copyitem already exists
             if (CopyItemId > 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "update MpCopyItem set ItemDescription=@id, ItemUrl=@iu, ItemCsv=@icsv, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemImage=@ii where pk_MpCopyItemId=@ciid",
+                        "update MpCopyItem set PasteCount=@pc, ItemFavIcon=@ifi, ItemDescription=@id, ItemUrl=@iu, ItemCsv=@icsv, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemImage=@ii where pk_MpCopyItemId=@ciid",
                         new Dictionary<string, object> {
+                            { "@pc", PasteCount },
+                            { "@ifi",itemFavIcon },
                             { "@id", ItemDescription },
                             { "@iu", ItemUrl },
                             { @"icsv",ItemCsv },
@@ -1163,9 +1173,11 @@ namespace MpWpfApp {
                         });
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpCopyItem(ItemDescription, ItemUrl, ItemCsv,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) " + 
-                    "values (@id,@iu,@icsv,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
+                    "insert into MpCopyItem(PasteCount,ItemFavIcon, ItemDescription, ItemUrl, ItemCsv,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) " + 
+                    "values (@pc,@ifi,@id,@iu,@icsv,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
                     new Dictionary<string, object> {
+                            { "@pc", PasteCount },
+                            { "@ifi",itemFavIcon },
                             { "@id", ItemDescription },
                             { "@iu", ItemUrl },
                             { "@icsv",ItemCsv },

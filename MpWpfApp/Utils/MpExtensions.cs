@@ -726,6 +726,13 @@ namespace MpWpfApp {
         //          pixels.GetLength(0) * pixels.GetLength(1) * sizeof(PixelColor),
         //          stride);
         //}
+        public static bool IsEqual(this BitmapSource image1, BitmapSource image2) {
+            if (image1 == null || image2 == null) {
+                return false;
+            }
+            return image1.ToByteArray().SequenceEqual(image2.ToByteArray());
+        }
+
         public static byte[] ToByteArray(this BitmapSource source) {
             return MpHelpers.Instance.ConvertBitmapSourceToByteArray(source);
         }

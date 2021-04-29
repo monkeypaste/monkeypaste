@@ -1,15 +1,19 @@
 ﻿using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
+using GongSolutions.Wpf.DragDrop.Utilities;
 using System;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace MpWpfApp {
     public class MpAppModeViewModel : MpViewModelBase {
-        #region View Models
-        #endregion
 
         #region Properties
+
+        #region View Models
+        #endregion
 
         public Visibility AppModeColumnVisibility {
             get {
@@ -20,6 +24,81 @@ namespace MpWpfApp {
                 return MainWindowViewModel.ClipTrayViewModel.IsAnyTileExpanded ? Visibility.Collapsed : Visibility.Visible;
             }
         }
+
+        public bool IsAutoAnalysisModeEnabled {
+            get {
+                return ToggleAutoAnalysisModeCommand.CanExecute(null);
+            }
+        }
+
+        public bool IsRighClickPasteModeEnabled {
+            get {
+                return ToggleRightClickPasteCommand.CanExecute(null);
+            }
+        }
+
+        public bool IsAutoCopyModeEnabled {
+            get {
+                return ToggleAutoCopyModeCommand.CanExecute(null);
+            }
+        }
+
+        public bool IsAppendModeEnabled {
+            get {
+                return ToggleAppendModeCommand.CanExecute(null);
+            }
+        }
+
+        public string IsAutoAnalysisModeTooltip {
+            get {
+                string tt = @"Auto Analyze";
+                if (!MainWindowViewModel.IsLoading) {
+                    tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(25).KeyString;
+                }
+                return tt;
+            }
+        }
+
+        public string IsRighClickPasteModeTooltip {
+            get {
+                string tt = @"Right-Click Paste";
+                if (!MainWindowViewModel.IsLoading) {
+                    tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(5).KeyString;
+                }
+                return tt;
+            }
+        }
+
+        public string IsAutoCopyModeTooltip {
+            get {
+                string tt = @"Auto Copy Selection";
+                if (!MainWindowViewModel.IsLoading) {
+                    tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(4).KeyString;
+                }
+                return tt;
+            }
+        }
+
+        public string IsAppendModeTooltip {
+            get {
+                string tt = @"Append Copy";
+                if (!MainWindowViewModel.IsLoading) {
+                    tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(3).KeyString;
+                }
+                return tt;
+            }
+        }
+
+        public string IsAppPausedTooltip {
+            get {
+                string tt = IsAppPaused ? "Resume":"Pause";
+                if (!MainWindowViewModel.IsLoading) {
+                    tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(26).KeyString;
+                }                
+                return tt;
+            }
+        }
+
 
         private bool _isRightClickPasteMode = false;
         public bool IsRightClickPasteMode {
@@ -85,6 +164,10 @@ namespace MpWpfApp {
                 if (_isAppPaused != value) {
                     _isAppPaused = value;
                     OnPropertyChanged(nameof(IsAppPaused));
+                    OnPropertyChanged(nameof(IsAutoCopyModeEnabled));
+                    OnPropertyChanged(nameof(IsRighClickPasteModeEnabled));
+                    OnPropertyChanged(nameof(IsAppendModeEnabled));
+                    OnPropertyChanged(nameof(IsAutoAnalysisModeEnabled));
                 }
             }
         }
@@ -104,6 +187,7 @@ namespace MpWpfApp {
                         break;
                     case nameof(IsInAppendMode):
                         ShowNotifcation("Append Mode", IsInAppendMode ? "ON" : "OFF", IsInAppendMode);
+                        UpdateAppendMode();
                         break;
                     case nameof(IsAutoCopyMode):
                         ShowNotifcation("Auto-Copy Mode", IsAutoCopyMode ? "ON" : "OFF", IsAutoCopyMode);
@@ -115,7 +199,27 @@ namespace MpWpfApp {
             };
         }
 
-        public void AppMode_Loaded(object sender, RoutedEventArgs args) {            
+        public void AppMode_Loaded(object sender, RoutedEventArgs args) {
+            var appModeGrid = (Grid)sender;
+            var toggleButtonList = appModeGrid.GetVisualDescendents<ToggleButton>();
+            foreach(var tb in toggleButtonList) {
+                tb.MouseEnter += (s, e) => {
+                    OnPropertyChanged(nameof(IsAppendModeTooltip));
+                    OnPropertyChanged(nameof(IsAppPausedTooltip));
+                    OnPropertyChanged(nameof(IsRighClickPasteModeTooltip));
+                    OnPropertyChanged(nameof(IsAutoCopyModeTooltip));
+                    OnPropertyChanged(nameof(IsAutoAnalysisModeTooltip));
+                };
+            }
+        }
+
+        public void RefreshState() {
+            OnPropertyChanged(nameof(IsAutoCopyModeEnabled));
+            OnPropertyChanged(nameof(IsRighClickPasteModeEnabled));
+            OnPropertyChanged(nameof(IsAppendModeEnabled));
+            OnPropertyChanged(nameof(IsAutoAnalysisModeEnabled));
+
+            UpdateAppendMode();
         }
         #endregion
 
@@ -126,6 +230,15 @@ namespace MpWpfApp {
             }
             if (Properties.Settings.Default.NotificationDoModeChangeSound) {
                 MpSoundPlayerGroupCollectionViewModel.Instance.PlayModeChangeCommand.Execute(isOn);
+            }
+        }
+
+        private void UpdateAppendMode() {
+            if (IsInAppendMode &&
+               MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
+               MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles[0] != MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles[0]) {
+                int selectedIdx = MainWindowViewModel.ClipTrayViewModel.IndexOf(MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles[0]);
+                MainWindowViewModel.ClipTrayViewModel.Move(selectedIdx, 0);
             }
         }
         #endregion
@@ -171,11 +284,15 @@ namespace MpWpfApp {
             }
         }
         private bool CanToggleAppendMode() {
+            if(MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null) {
+                return false;
+            }
             //only allow append mode to activate if app is not paused and only ONE clip is selected
-            return !IsAppPaused;
+            return !IsAppPaused && MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count <= 1;
         }
         private void ToggleAppendMode() {
             IsInAppendMode = !IsInAppendMode;
+            UpdateAppendMode();
         }
 
         private RelayCommand _toggleAutoCopyModeCommand;
@@ -192,6 +309,22 @@ namespace MpWpfApp {
         }
         private void ToggleAutoCopyMode() {
             IsAutoCopyMode = !IsAutoCopyMode;
+        }
+
+        private RelayCommand _toggleAutoAnalysisModeCommand;
+        public ICommand ToggleAutoAnalysisModeCommand {
+            get {
+                if (_toggleAutoAnalysisModeCommand == null) {
+                    _toggleAutoAnalysisModeCommand = new RelayCommand(ToggleAutoAnalysisMode, CanToggleAutoAnalysisMode);
+                }
+                return _toggleAutoAnalysisModeCommand;
+            }
+        }
+        private bool CanToggleAutoAnalysisMode() {
+            return !IsAppPaused;
+        }
+        private void ToggleAutoAnalysisMode() {
+            IsInAutoAnalyzeMode = !IsInAutoAnalyzeMode;
         }
         #endregion
     }

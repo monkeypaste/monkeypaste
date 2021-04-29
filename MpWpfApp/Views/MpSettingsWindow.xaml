@@ -214,7 +214,7 @@
                                                     BorderThickness="0"
                                                     Cursor="Hand"
                                                     Background="Transparent"
-                                                    Template="{StaticResource ButtonControlTemplate}"
+                                                    Template="{StaticResource SearchButtonControlTemplate}"
                                                     Command="{Binding ChangeIconCommand}"
                                                     CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
                                                 <Image Width="20"
