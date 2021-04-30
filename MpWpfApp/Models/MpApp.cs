@@ -10,11 +10,17 @@ using System.Windows.Media;
 using System.Diagnostics;
 
 namespace MpWpfApp {
+    public enum MpAppType {
+        None = 0,
+        LocalApp,
+        WebUrl
+    }
 
     public class MpApp : MpDbObject {
         public static int TotalAppCount = 0;
 
         public int AppId { get; set; } = 0;
+        public MpAppType AppType { get; set; } = MpAppType.LocalApp;
         public string AppPath { get; set; } = string.Empty;
         public string AppName { get; set; } = string.Empty;
         public bool IsAppRejected { get; set; } = false;
@@ -74,6 +80,17 @@ namespace MpWpfApp {
             PrimaryIconColorList = CreatePrimaryColorList(IconImage);
         }
 
+        public MpApp(string url, bool isDomainRejected) {
+            AppPath = url;
+            AppName = MpHelpers.Instance.GetUrlDomain(url);
+            IsAppRejected = isDomainRejected;
+            IconImage = MpHelpers.Instance.GetUrlFavicon(url);
+            IconBorderImage = CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.White);
+            IconHighlightBorderImage = CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Yellow);
+            IconSelectedHighlightBorderImage = CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Pink); 
+            PrimaryIconColorList = CreatePrimaryColorList(IconImage);
+        }
+
         public MpApp() { }
 
         public MpApp(DataRow dr) {
@@ -82,12 +99,14 @@ namespace MpWpfApp {
         
         public override void LoadDataRow(DataRow dr) {
             AppId = Convert.ToInt32(dr["pk_MpAppId"].ToString());
+            AppType = (MpAppType)Convert.ToInt32(dr["AppType"].ToString());
             AppPath = dr["SourcePath"].ToString();
             AppName = dr["AppName"].ToString();
             IconImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
             IconBorderImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBorderBlob"]);
             IconSelectedHighlightBorderImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconSelectedHighlightBorderBlob"]);
             IconHighlightBorderImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconHighlightBorderBlob"]);
+            IsAppRejected = Convert.ToInt32(dr["IsAppRejected"].ToString()) == 1;
 
             PrimaryIconColorList.Clear();
             for (int i = 0; i < 5; i++) {
@@ -95,13 +114,7 @@ namespace MpWpfApp {
                 if(ColorId[i] > 0) {
                     PrimaryIconColorList.Add(new MpColor(ColorId[i]));
                 }
-            }
-
-            if (Convert.ToInt32(dr["IsAppRejected"].ToString()) == 0) {
-                IsAppRejected = false;
-            } else {
-                IsAppRejected = true;
-            }            
+            }      
         }
 
         public override void WriteToDatabase() {
@@ -112,8 +125,10 @@ namespace MpWpfApp {
             }
             if (AppId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "insert into MpApp(IconBlob,IconBorderBlob,IconSelectedHighlightBorderBlob,IconHighlightBorderBlob,SourcePath,IsAppRejected,AppName,fk_MpColorId1,fk_MpColorId2,fk_MpColorId3,fk_MpColorId4,fk_MpColorId5) values (@ib,@ibb,@ishbb,@ihbb,@sp,@iar,@an,@c1,@c2,@c3,@c4,@c5)",
+                        "insert into MpApp(AppType,IconBlob,IconBorderBlob,IconSelectedHighlightBorderBlob,IconHighlightBorderBlob,SourcePath,IsAppRejected,AppName,fk_MpColorId1,fk_MpColorId2,fk_MpColorId3,fk_MpColorId4,fk_MpColorId5) " +
+                        "values (@at,@ib,@ibb,@ishbb,@ihbb,@sp,@iar,@an,@c1,@c2,@c3,@c4,@c5)",
                         new Dictionary<string, object> {
+                            { "@at", (int)AppType },
                             { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconImage) },
                             { "@ibb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconBorderImage) },
                             { "@ishbb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconSelectedHighlightBorderImage) },
@@ -131,12 +146,13 @@ namespace MpWpfApp {
             } else {
                 MpDb.Instance.ExecuteWrite(
                     //"update MpApp set IconBlob=@ib, IconBorderBlob=@ibb,IconSelectedHighlightBorderBlob=@ishbb,IconHighlightBorderBlob=@ihbb, IsAppRejected=@iar, SourcePath=@sp, AppName=@an, fk_MpColorId1=@c1,fk_MpColorId2=@c2,fk_MpColorId3=@c3,fk_MpColorId4=@c4,fk_MpColorId5=@c5 where pk_MpAppId=@aid",
-                    "update MpApp set IsAppRejected=@iar, SourcePath=@sp, AppName=@an, fk_MpColorId1=@c1,fk_MpColorId2=@c2,fk_MpColorId3=@c3,fk_MpColorId4=@c4,fk_MpColorId5=@c5 where pk_MpAppId=@aid",
+                    "update MpApp set AppType=@at, IsAppRejected=@iar, SourcePath=@sp, AppName=@an, fk_MpColorId1=@c1,fk_MpColorId2=@c2,fk_MpColorId3=@c3,fk_MpColorId4=@c4,fk_MpColorId5=@c5 where pk_MpAppId=@aid",
                     new Dictionary<string, object> {
                         //{ "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconImage) },
                         //{ "@ibb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconBorderImage) },
                         //{ "@ishbb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconSelectedHighlightBorderImage) },
                         //{ "@ihbb", MpHelpers.Instance.ConvertBitmapSourceToByteArray(IconHighlightBorderImage) },
+                        { "@at", (int)AppType },
                         { "@iar", Convert.ToInt32(IsAppRejected) },
                         { "@sp", AppPath },
                         { "@an", AppName },

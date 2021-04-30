@@ -31,8 +31,6 @@ namespace MpWpfApp {
         
         private MpPasteToAppPathViewModel _selectedPasteToAppPathViewModel = null;
 
-        
-
         private List<MpClipTileViewModel> _hiddenTiles = new List<MpClipTileViewModel>();
 
         //private double _originalExpandedTileX = 0;
@@ -119,6 +117,15 @@ namespace MpWpfApp {
         //        return MpHelpers.Instance.CombineBitmap(bmpList, false);
         //    }
         //}
+
+        public int SelectedIndex {
+            get {
+                if(SelectedClipTiles.Count > 0) {
+                    return this.IndexOf(SelectedClipTiles[0]);
+                }
+                return -1;
+            }
+        }
 
         public string SelectedClipTilesCsv {
             get {
@@ -873,6 +880,7 @@ namespace MpWpfApp {
                 return;
             }
            
+
             if (MainWindowViewModel.AppModeViewModel.IsInAppendMode && SelectedClipTiles.Count > 0) {
                 //when in append mode just append the new items text to selecteditem
                 var primarySelectedClipTile = PrimarySelectedClipTile;
@@ -883,11 +891,14 @@ namespace MpWpfApp {
                 primarySelectedClipTile.MergeClip(new List<MpCopyItem>() { newCopyItem });
                 
                 if (Properties.Settings.Default.NotificationShowAppendBufferToast) {
+                    // TODO now composite item doesn't roll up children so the buffer needs to be created here
+                    // if I use this at all
                     MpStandardBalloonViewModel.ShowBalloon(
                     "Append Buffer",
                     SelectedClipTiles[0].CopyItemPlainText,
                     Properties.Settings.Default.AbsoluteResourcesPath + @"/Images/monkey (2).png");
                 }
+
                 if (Properties.Settings.Default.NotificationDoCopySound) {
                     MpSoundPlayerGroupCollectionViewModel.Instance.PlayCopySoundCommand.Execute(null);
                 }
@@ -906,7 +917,6 @@ namespace MpWpfApp {
                 }
             } else {
                 var nctvm = new MpClipTileViewModel(newCopyItem);
-
                 await this.AddAsync(nctvm);
 
                 if (Properties.Settings.Default.NotificationDoCopySound) {
@@ -957,6 +967,7 @@ namespace MpWpfApp {
             //    nextVisibleIdx = this.IndexOf(VisibileClipTiles[VisibileClipTiles.Count - 1]);
             //}
 
+
             if (forceIdx >= 0 && forceIdx < this.Count) {
                 base.Insert(forceIdx, ctvm);
             } else {
@@ -979,9 +990,33 @@ namespace MpWpfApp {
             } else {
                // ctvm.IsSelected = false;
             }
+
+            if(!MpMainWindowViewModel.IsApplicationLoading) {
+                var svm = MainWindowViewModel.SearchBoxViewModel;
+                if (ctvm.WasAddedAtRuntime &&
+                   MainWindowViewModel.IsMainWindowLocked &&
+                   svm.HasText) {
+                    //when user is searching w/ locked window and an item is added
+                    //it shouldn't be added until search is empty just to keep simple
+                    //because it may but likely won't meet search criteria
+                    Application.Current.Dispatcher.BeginInvoke((Action)(async () => {
+                        var visibilityDictionary = await ctvm.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(svm.SearchText);
+                        foreach (var kvp in visibilityDictionary) {
+                            if (kvp.Key == ctvm) {
+                                ctvm.TileVisibility = kvp.Value;
+                            }
+                        }
+                        if (svm.SearchNavigationButtonPanelVisibility != Visibility.Visible) {
+                            svm.SearchNavigationButtonPanelVisibility = ctvm.HighlightTextRangeViewModelCollection.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
+                        }
+
+                    }), DispatcherPriority.Background);
+                }
+            }            
+
             //not calling this doesn't associate the items clipborder to this listbox I don't know why
             if (MpMainWindowViewModel.IsMainWindowOpen) {
-                Refresh();
+                //Refresh();
             } else {
                 WasItemAdded = true;
             }
@@ -1431,12 +1466,18 @@ namespace MpWpfApp {
                     ClearClipSelection();
                 }
             }
-            //In order to paste the app must hide first 
-            //this triggers hidewindow to paste selected items
-            if(pasteDataObject != null) {
+
+            if (MpMainWindowViewModel.IsMainWindowOpen) {
+                //occurs during hotkey paste and set in ctvm.GetPastableRichText
+                MainWindowViewModel.HideWindowCommand.Execute(pasteDataObject);
+            } else if (pasteDataObject != null) {
+                //In order to paste the app must hide first 
+                //this triggers hidewindow to paste selected items
                 MainWindowViewModel.PasteDataObject(pasteDataObject);
                 ResetClipSelection();
             }
+
+
             IsPastingHotKey = false;
         }
 
@@ -1488,7 +1529,7 @@ namespace MpWpfApp {
         }
         private bool CanBringSelectedClipTilesToFront(object arg) {
             if(IsBusy || 
-                MainWindowViewModel.IsLoading || 
+                MpMainWindowViewModel.IsApplicationLoading || 
                 VisibileClipTiles.Count == 0 || 
                 SelectedClipTiles.Count == 0) {
                 return false;
@@ -1534,7 +1575,7 @@ namespace MpWpfApp {
         }
         private bool CanSendSelectedClipTilesToBack(object args) {
             if (IsBusy || 
-                MainWindowViewModel.IsLoading || 
+                MpMainWindowViewModel.IsApplicationLoading || 
                 VisibileClipTiles.Count == 0 || 
                 SelectedClipTiles.Count == 0) {
                 return false;
@@ -1688,7 +1729,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanEditSelectedTitle() {
-            if (MainWindowViewModel.IsLoading) {
+            if (MpMainWindowViewModel.IsApplicationLoading) {
                 return false;
             }
             return SelectedClipTiles.Count == 1 && 
@@ -1708,7 +1749,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanEditSelectedContent() {
-            if (MainWindowViewModel.IsLoading) {
+            if (MpMainWindowViewModel.IsApplicationLoading) {
                 return false;
             }
             return SelectedClipTiles.Count == 1 &&

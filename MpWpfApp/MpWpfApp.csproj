@@ -468,7 +468,9 @@
     <Resource Include="Resources\Images\MonkeyIcon1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Sounds\MonkeySound1.wav" />
+    <Resource Include="Resources\Sounds\MonkeySound1.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\search.png" />
@@ -557,6 +559,9 @@
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="5.0.3" />
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.12</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Windows.SDK.Contracts">
+      <Version>10.0.19041.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf">
       <Version>1.1.31</Version>
@@ -1753,13 +1758,24 @@
     <Resource Include="Resources\Images\checkgray.png" />
     <Resource Include="Resources\Images\textureborder.png" />
     <Resource Include="Resources\Images\defaultfavicon.png" />
-    <Content Include="Resources\Sounds\alert.wav" />
-    <Content Include="Resources\Sounds\blip.wav" />
-    <Content Include="Resources\Sounds\blip2.wav" />
-    <Content Include="Resources\Sounds\chime.wav" />
-    <Content Include="Resources\Sounds\ting.wav" />
+    <Content Include="Resources\Sounds\alert.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Sounds\blip.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Sounds\blip2.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Sounds\chime.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Sounds\ting.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Resources\Data\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

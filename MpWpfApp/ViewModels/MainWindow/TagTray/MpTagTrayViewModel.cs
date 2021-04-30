@@ -125,7 +125,6 @@ namespace MpWpfApp {
 
         public void AddClipToSudoTags(MpClipTileViewModel ctvm) {
             GetHistoryTagTileViewModel().AddClip(ctvm);
-            //GetRecentTagTileViewModel().AddClip(ctvm);
 
             RefreshAllCounts();
         }
@@ -219,7 +218,9 @@ namespace MpWpfApp {
                                 //GetHistoryTagTileViewModel().IsSelected = true;
                                 GetRecentTagTileViewModel().IsSelected = true;
                             }
-                        } else {
+                        } else if(!MainWindowViewModel.SearchBoxViewModel.HasText && !MainWindowViewModel.IsMainWindowLocked) {
+                            //this else if prevents filtered out tiles from being shown while searching and an item is 
+                            //added while main window is locked
                             MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon = null;
                             MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp = false;
 

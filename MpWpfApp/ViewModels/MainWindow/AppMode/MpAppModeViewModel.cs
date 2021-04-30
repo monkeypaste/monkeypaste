@@ -52,7 +52,7 @@ namespace MpWpfApp {
         public string IsAutoAnalysisModeTooltip {
             get {
                 string tt = @"Auto Analyze";
-                if (!MainWindowViewModel.IsLoading) {
+                if (!MpMainWindowViewModel.IsApplicationLoading) {
                     tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(25).KeyString;
                 }
                 return tt;
@@ -62,7 +62,7 @@ namespace MpWpfApp {
         public string IsRighClickPasteModeTooltip {
             get {
                 string tt = @"Right-Click Paste";
-                if (!MainWindowViewModel.IsLoading) {
+                if (!MpMainWindowViewModel.IsApplicationLoading) {
                     tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(5).KeyString;
                 }
                 return tt;
@@ -72,7 +72,7 @@ namespace MpWpfApp {
         public string IsAutoCopyModeTooltip {
             get {
                 string tt = @"Auto Copy Selection";
-                if (!MainWindowViewModel.IsLoading) {
+                if (!MpMainWindowViewModel.IsApplicationLoading) {
                     tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(4).KeyString;
                 }
                 return tt;
@@ -82,7 +82,7 @@ namespace MpWpfApp {
         public string IsAppendModeTooltip {
             get {
                 string tt = @"Append Copy";
-                if (!MainWindowViewModel.IsLoading) {
+                if (!MpMainWindowViewModel.IsApplicationLoading) {
                     tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(3).KeyString;
                 }
                 return tt;
@@ -92,7 +92,7 @@ namespace MpWpfApp {
         public string IsAppPausedTooltip {
             get {
                 string tt = IsAppPaused ? "Resume":"Pause";
-                if (!MainWindowViewModel.IsLoading) {
+                if (!MpMainWindowViewModel.IsApplicationLoading) {
                     tt += @" " + MpShortcutCollectionViewModel.Instance.GetShortcutViewModelById(26).KeyString;
                 }                
                 return tt;

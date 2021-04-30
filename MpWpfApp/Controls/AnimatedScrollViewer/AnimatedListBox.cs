@@ -12,28 +12,23 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MpWpfApp
-{
+namespace MpWpfApp {
     [TemplatePart(Name = "PART_AnimatedScrollViewer", Type = typeof(AnimatedScrollViewer))]
 
-    public class AnimatedListBox : ListBox
-    {
+    public class AnimatedListBox : ListBox {
         #region PART holders
         public AnimatedScrollViewer AnimatedScrollViewer;
         #endregion
-        
-        static AnimatedListBox()
-        {
+
+        static AnimatedListBox() {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(AnimatedListBox), new FrameworkPropertyMetadata(typeof(AnimatedListBox)));
         }
 
-        public override void OnApplyTemplate()
-        {
+        public override void OnApplyTemplate() {
             base.OnApplyTemplate();
 
             AnimatedScrollViewer scrollViewerHolder = base.GetTemplateChild("PART_AnimatedScrollViewer") as AnimatedScrollViewer;
-            if (scrollViewerHolder != null)
-            {
+            if (scrollViewerHolder != null) {
                 AnimatedScrollViewer = scrollViewerHolder;
             }
 
@@ -42,41 +37,37 @@ namespace MpWpfApp
             this.LayoutUpdated += new EventHandler(AnimatedListBox_LayoutUpdated);
         }
 
-        void AnimatedListBox_LayoutUpdated(object sender, EventArgs e)
-        {
+        void AnimatedListBox_LayoutUpdated(object sender, EventArgs e) {
             updateScrollPosition(sender);
         }
 
-        void AnimatedListBox_Loaded(object sender, RoutedEventArgs e)
-        {
+        void AnimatedListBox_Loaded(object sender, RoutedEventArgs e) {
             updateScrollPosition(sender);
         }
 
-        void AnimatedListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+        void AnimatedListBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             updateScrollPosition(sender);
         }
 
-        public void updateScrollPosition(object sender)
-        {
+        public void updateScrollPosition(object sender) {
             AnimatedListBox thisLB = (AnimatedListBox)sender;
 
-            if (thisLB != null)
-            {
-                if (thisLB.ScrollToSelectedItem)
-                {
+            if (thisLB != null) {
+                if (thisLB.ScrollToSelectedItem) {
                     double scrollTo = 0;
-                    for (int i = 0; i < (thisLB.SelectedIndex + thisLB.SelectedIndexOffset); i++)
-                    {
+                    for (int i = 0; i < (thisLB.SelectedIndex + thisLB.SelectedIndexOffset); i++) {
                         ListBoxItem tempItem = thisLB.ItemContainerGenerator.ContainerFromItem(thisLB.Items[i]) as ListBoxItem;
 
-                        if (tempItem != null)
-                        {
-                            scrollTo += tempItem.ActualHeight;
+                        if (tempItem != null) {
+                            scrollTo += IsListBoxHorizontal ? tempItem.ActualWidth : tempItem.ActualHeight;
                         }
                     }
 
-                    AnimatedScrollViewer.TargetVerticalOffset = scrollTo;
+                    if(IsListBoxHorizontal) {
+                        AnimatedScrollViewer.TargetHorizontalOffset = scrollTo;
+                    } else {
+                        AnimatedScrollViewer.TargetVerticalOffset = scrollTo;
+                    }
                 }
             }
         }
@@ -88,8 +79,7 @@ namespace MpWpfApp
         /// <summary>
         /// A description of the property.
         /// </summary>
-        public bool ScrollToSelectedItem
-        {
+        public bool ScrollToSelectedItem {
             get { return (bool)GetValue(ScrollToSelectedItemProperty); }
             set { SetValue(ScrollToSelectedItemProperty, value); }
         }
@@ -103,8 +93,7 @@ namespace MpWpfApp
         /// <summary>
         /// Use this property to choose the scroll to an item that is not selected, but is X above or below the selected item
         /// </summary>
-        public int SelectedIndexOffset
-        {
+        public int SelectedIndexOffset {
             get { return (int)GetValue(SelectedIndexOffsetProperty); }
             set { SetValue(SelectedIndexOffsetProperty, value); }
         }
@@ -113,5 +102,16 @@ namespace MpWpfApp
               new PropertyMetadata(0));
 
         #endregion
+
+        public bool IsListBoxHorizontal {
+            get { return (bool)GetValue(IsListBoxHorizontalProperty); }
+            set { SetValue(IsListBoxHorizontalProperty, value); }
+        }
+        public static readonly DependencyProperty IsListBoxHorizontalProperty =
+            DependencyProperty.Register(
+                "IsListBoxHorizontal", 
+                typeof(bool), 
+                typeof(AnimatedListBox),
+                new PropertyMetadata(false));
     }
 }

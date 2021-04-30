@@ -554,7 +554,7 @@
         }
         public Visibility ToolTipVisibility {
             get {
-                if (CopyItem == null) {
+                if (CopyItem == null || !Properties.Settings.Default.ShowItemPreview) {
                     return Visibility.Collapsed;
                 }
                 return (MainWindowViewModel.ClipTrayViewModel.IsScrolling || IsSelected) ? Visibility.Collapsed : Visibility.Visible;
@@ -1189,16 +1189,19 @@
                 }
                 if(CopyItem.ItemFavIcon == null && RichTextBoxViewModelCollection.Count == 1) {
                     CopyItem.ItemFavIcon = RichTextBoxViewModelCollection[0].CopyItemFavIcon;
-                    OnPropertyChanged(nameof(CopyItem));
-                    
+                    OnPropertyChanged(nameof(CopyItemFavIcon));
+                    //OnPropertyChanged(nameof(AppIcon));
+                    OnPropertyChanged(nameof(TileTitleIconSize));
+                    OnPropertyChanged(nameof(TileTitleIconBorderSize));
+
                 }
                 return CopyItem.ItemFavIcon;
             }
             set {
                 if (CopyItem != null && CopyItem.ItemFavIcon != value) {
                     CopyItem.ItemFavIcon = value;
-                    //CopyItem.WriteToDatabase();
-                    OnPropertyChanged(nameof(CopyItem));
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyItemFavIcon));
                     OnPropertyChanged(nameof(AppIcon));
                     OnPropertyChanged(nameof(TileTitleIconSize));
                     OnPropertyChanged(nameof(TileTitleIconBorderSize));
@@ -1229,8 +1232,8 @@
             set {
                 if(CopyItem != null && CopyItem.CopyCount != value) {
                     CopyItem.CopyCount = value;
-                    //CopyItem.WriteToDatabase();
-                    OnPropertyChanged(nameof(CopyItem));
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyCount));
                 }
             }
         }
@@ -1245,8 +1248,8 @@
             set {
                 if(CopyItem != null && CopyItem.PasteCount != value) {
                     CopyItem.PasteCount = value;
-                    //CopyItem.WriteToDatabase();
-                    OnPropertyChanged(nameof(CopyItem));
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(PasteCount));
                 }
             }
         }
@@ -1297,9 +1300,8 @@
             set {
                 if (CopyItem != null && CopyItem.ItemColor.Color != ((SolidColorBrush)value).Color) {
                     CopyItem.ItemColor = new MpColor(((SolidColorBrush)value).Color);
-                    //CopyItem.WriteToDatabase();
+                    CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(TitleBackgroundColor));
-                    OnPropertyChanged(nameof(CopyItem));
                 }
             }
         }
@@ -1348,9 +1350,8 @@
                 if (CopyItem != null && CopyItem.Title != value) {
                     AddUndo(this, nameof(CopyItemTitle), CopyItem.Title, value);
                     CopyItem.Title = value;
-                    //CopyItem.WriteToDatabase();
+                    CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItemTitle));
-                    OnPropertyChanged(nameof(CopyItem));
                 }
             }
         }
@@ -1365,8 +1366,8 @@
             set {
                 if (CopyItem != null && CopyItem.ItemPlainText != value) {
                     CopyItem.ItemPlainText = value;
-                    //CopyItem.WriteToDatabase();
-                    OnPropertyChanged(nameof(CopyItem));
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyItemPlainText));
                 }
             }
         }
@@ -1381,8 +1382,8 @@
             set {
                 if(CopyItem != null && CopyItem.ItemDescription != value) {
                     CopyItem.ItemDescription = value;
-                    //CopyItem.WriteToDatabase();
-                    OnPropertyChanged(nameof(CopyItem));
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyItemDescription));
                 }
             }
         }
@@ -1401,11 +1402,11 @@
                 if (CopyItem != null && CopyItem.ItemRichText != value) {
                     //value should be raw rtf where templates are encoded into #name#color# groups
                     CopyItem.SetData(value);
-                    //CopyItem.WriteToDatabase();
+                    CopyItem.WriteToDatabase();
                     //OnPropertyChanged(nameof(CopyItemRichText));
                     //OnPropertyChanged(nameof(CharCount));
                     //OnPropertyChanged(nameof(LineCount));
-                    OnPropertyChanged(nameof(CopyItem));
+                    OnPropertyChanged(nameof(CopyItemRichText));
                 }
             }
         }
@@ -1420,8 +1421,8 @@
             set {
                 if(CopyItem.ItemBitmapSource != value) {
                     CopyItem.ItemBitmapSource = value;
-                   // CopyItem.WriteToDatabase();
-                    OnPropertyChanged(nameof(CopyItem));
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyItemBmp));
                 }
             }
         }
@@ -1517,8 +1518,8 @@
             set {
                 if(CopyItem != null && CopyItem.ItemUrl != value) {
                     CopyItem.ItemUrl = value;
-                    //CopyItem.WriteToDatabase();
-                    OnPropertyChanged(nameof(CopyItem));
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyItemUrl));
                 }
             }
         }
@@ -1533,8 +1534,8 @@
             set {
                 if (CopyItem != null && CopyItem.CopyDateTime != value) {
                     CopyItem.CopyDateTime = value;
-                    //CopyItem.WriteToDatabase();
-                    OnPropertyChanged(nameof(CopyItem));
+                    CopyItem.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyDateTime));
                 }
             }
         }
@@ -1592,6 +1593,12 @@
                     //} else {
                     //    _copyItem = value;
                     //}
+
+
+                    //bool updateVms = false;
+                    //if(_copyItem != value && _copyItem != null && value != null) {
+                    //    updateVms = true;
+                    //}
                     _copyItem = value;
                     if(CopyItem != null) {
                         CopyItem.WriteToDatabase();
@@ -1637,6 +1644,15 @@
                     OnPropertyChanged(nameof(AppIcon));
                     OnPropertyChanged(nameof(TileTitleIconSize));
                     OnPropertyChanged(nameof(TileTitleIconBorderSize));
+                    
+                    //if(updateVms) {
+                    //    TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
+                    //    RichTextBoxViewModelCollection = new MpClipTileRichTextBoxViewModelCollection(this);
+                    //    EditRichTextBoxToolbarViewModel = new MpEditRichTextBoxToolbarViewModel(this);
+                    //    EditTemplateToolbarViewModel = new MpEditTemplateToolbarViewModel(this);
+                    //    PasteTemplateToolbarViewModel = new MpPasteTemplateToolbarViewModel(this);
+                    //    HighlightTextRangeViewModelCollection = new MpHighlightTextRangeViewModelCollection(this);
+                    //}
                 }
             }
         }
@@ -1731,7 +1747,7 @@
             };
 
             ViewModelLoaded += async (s, e) => {
-                if (!MainWindowViewModel.IsLoading) {
+                if (!MpMainWindowViewModel.IsApplicationLoading) {
                     await GatherAnalytics();
                 }
                 OnPropertyChanged(nameof(AppIcon));
@@ -1750,7 +1766,7 @@
                 CopyItem = ci;
                 return;
             }
-            if (ci.CopyItemId == 0 && !MainWindowViewModel.IsLoading) {
+            if (ci.CopyItemId == 0 && !MpMainWindowViewModel.IsApplicationLoading) {
                 ci.WriteToDatabase();
                 _wasAddedAtRuntime = true;
             }
@@ -2585,7 +2601,7 @@
             }
             
             //remove links to update model rich text
-            RichTextBoxViewModelCollection.ClearAllHyperlinks();
+            //RichTextBoxViewModelCollection.ClearAllHyperlinks();
 
             //clear any search highlighting when saving the document then restore after save
             HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(null);
@@ -2593,18 +2609,14 @@
             var rtsw = new Stopwatch();
             rtsw.Start();
             foreach (var rtbvm in RichTextBoxViewModelCollection) {
-                if (rtbvm.Rtb == null) {
-                    continue;
-                }
-                //property change will write the copyitem to the database
-                rtbvm.CopyItemRichText = rtbvm.Rtb.Document.ToRichText();
+                rtbvm.SaveSubItemToDatabase();
             }
             rtsw.Stop();
             Console.WriteLine("Saving rich text from rtb's time: " + rtsw.ElapsedMilliseconds + "ms");
 
             //CopyItemRichText = RichTextBoxViewModelCollection.FullDocument.ToRichText();
             HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(null);
-            RichTextBoxViewModelCollection.CreateAllHyperlinks();
+            //RichTextBoxViewModelCollection.CreateAllHyperlinks();
             //CopyItem.WriteToDatabase();
 
             var cipcsw = new Stopwatch();
@@ -2636,6 +2648,9 @@
                 if(isPastingTemplate) {
                     IsPastingTemplate = true;
                     TemplateRichText = string.Empty.ToRichText();
+                    if(!MpMainWindowViewModel.IsMainWindowOpen) {
+                        MainWindowViewModel.ShowWindowCommand.Execute(null);
+                    }
                     await RichTextBoxViewModelCollection.FillAllTemplates();
                 }
                 //var sb = new StringBuilder();
@@ -2784,7 +2799,7 @@
             }
         }
         private bool CanEditTitle() {
-            if (MainWindowViewModel.IsLoading) {
+            if (MpMainWindowViewModel.IsApplicationLoading) {
                 return false;
             }
             return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
@@ -2808,7 +2823,7 @@
             }
         }
         private bool CanEditContent() {
-            if (MainWindowViewModel.IsLoading) {
+            if (MpMainWindowViewModel.IsApplicationLoading) {
                 return false;
             }
             return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&

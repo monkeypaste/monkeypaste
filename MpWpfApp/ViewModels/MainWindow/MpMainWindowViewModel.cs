@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Threading;
 using System.Windows;
@@ -27,6 +28,7 @@ namespace MpWpfApp {
 
         public static bool IsShowingMainWindow { get; set; } = false;
 
+        public static bool IsApplicationLoading { get; set; } = true;
         //public static bool IsMainWindowOpen { get; private set; } = false;
         #endregion
 
@@ -252,7 +254,7 @@ namespace MpWpfApp {
 
         #region Public Methods        
         public MpMainWindowViewModel() : base() {
-            IsLoading = true;
+            MpMainWindowViewModel.IsApplicationLoading = true;
 
             MpHelpers.Instance.Init();
 
@@ -269,9 +271,8 @@ namespace MpWpfApp {
             MainWindowCanvas = (Canvas)mw.FindName("MainWindowCanvas");
             MainWindowGrid = (Grid)mw.FindName("MainWindowGrid");
 
-            if(Properties.Settings.Default.DoFindBrowserUrlForCopy) {
-                Properties.Settings.Default.UserDefaultBrowserProcessPath = MpHelpers.Instance.GetSystemDefaultBrowserProcessPath();
-            }
+            InitDefaultProperties();
+
             mw.Deactivated += (s, e2) => {
                 HideWindowCommand.Execute(null);
             };
@@ -320,7 +321,7 @@ namespace MpWpfApp {
             //for (int i = 0; i < 50; i++) {
             //    ClipTrayViewModel.Add(new MpClipTileViewModel(MpCopyItem.CreateRandomItem(MpCopyItemType.RichText)));
             //}
-            IsLoading = false;
+            MpMainWindowViewModel.IsApplicationLoading = false;
 
             //ClipTrayViewModel.Refresh();
         }
@@ -509,6 +510,13 @@ namespace MpWpfApp {
             //    });
         }
 
+        private void InitDefaultProperties() {
+            if (Properties.Settings.Default.DoFindBrowserUrlForCopy) {
+                Properties.Settings.Default.UserDefaultBrowserProcessPath = MpHelpers.Instance.GetSystemDefaultBrowserProcessPath();
+            }
+            Properties.Settings.Default.UserCultureInfoName = CultureInfo.CurrentCulture.Name;
+        }
+
         private void SetupMainWindowRect() {
             var mw = (MpMainWindow)Application.Current.MainWindow;
 
@@ -602,7 +610,7 @@ namespace MpWpfApp {
         private bool CanShowWindow() {
             return (Application.Current.MainWindow == null ||
                 //Application.Current.MainWindow.Visibility != Visibility.Visible ||
-                IsLoading ||
+                MpMainWindowViewModel.IsApplicationLoading ||
                 !MpSettingsWindowViewModel.IsOpen) && !IsMainWindowOpen && !IsShowingMainWindow;
         }
         private void ShowWindow() {
@@ -619,8 +627,8 @@ namespace MpWpfApp {
             mw.Visibility = Visibility.Visible;
             mw.Topmost = true;
 
-            if (IsLoading) {
-                IsLoading = false;
+            if (MpMainWindowViewModel.IsApplicationLoading) {
+                MpMainWindowViewModel.IsApplicationLoading = false;
                 ClipTileSortViewModel.SelectedSortType = ClipTileSortViewModel.SortTypes[0];
             } else {
             }
@@ -645,24 +653,31 @@ namespace MpWpfApp {
             timer.Start();
         }
 
-        private RelayCommand<bool> _hideWindowCommand;
+        private RelayCommand<object> _hideWindowCommand;
         public ICommand HideWindowCommand {
             get {
                 if (_hideWindowCommand == null) {
-                    _hideWindowCommand = new RelayCommand<bool>(HideWindow, CanHideWindow);
+                    _hideWindowCommand = new RelayCommand<object>(HideWindow, CanHideWindow);
                 }
                 return _hideWindowCommand;
             }
         }
-        private bool CanHideWindow(bool pasteSelected) {
+        private bool CanHideWindow(object args) {
             ///return false;
             return (Application.Current.MainWindow != null &&
                    Application.Current.MainWindow.Visibility == Visibility.Visible &&
-                   IsShowingDialog == false && !IsMainWindowLocked && IsMainWindowOpen && !IsShowingMainWindow)  || pasteSelected;
+                   IsShowingDialog == false && !IsMainWindowLocked && IsMainWindowOpen && !IsShowingMainWindow)  || args != null;
         }
-        private async void HideWindow(bool pasteSelected) {
+        private async void HideWindow(object args) {
             IDataObject pasteDataObject = null;
-
+            bool pasteSelected = false;
+            if(args != null) {
+                if(args is bool) {
+                    pasteSelected = (bool)args;
+                } else if(args is IDataObject) {
+                    pasteDataObject = (IDataObject)args;
+                }
+            }
             bool wasMainWindowLocked = IsMainWindowLocked;
             if (pasteSelected) {
                 if(ClipTrayViewModel.IsPastingTemplate) {
@@ -674,36 +689,7 @@ namespace MpWpfApp {
             }
 
             var mw = (MpMainWindow)Application.Current.MainWindow;
-            //MpHelpers.Instance.AnimateDoubleProperty(
-            //    _endMainWindowTop,
-            //    _startMainWindowTop,
-            //    Properties.Settings.Default.ShowMainWindowAnimationMilliseconds,
-            //    mw,
-            //    Window.TopProperty,
-            //    (s, e) => {
-            //        if (pasteSelected) {
-            //            if(ClipTrayViewModel.IsPastingTemplate) {
-            //                IsMainWindowLocked = false;
-            //            }
-            //            ClipTrayViewModel.PerformPaste(pasteDataObject);
-            //            foreach (var sctvm in ClipTrayViewModel.SelectedClipTiles) {
-            //                if (sctvm.HasTemplate) {
-            //                    //cleanup template by recreating hyperlinks
-            //                    //and reseting tile state
-            //                    sctvm.TileVisibility = Visibility.Visible;
-            //                    sctvm.TemplateRichText = string.Empty;
-            //                    //sctvm.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
-            //                    foreach (var rtbvm in sctvm.RichTextBoxViewModelCollection) {
-            //                        rtbvm.TemplateRichText = string.Empty;
-            //                    }
-            //                }
-            //            }
-            //        }
 
-            //        ResetTraySelection();
-                    
-            //        mw.Visibility = Visibility.Collapsed;
-            //    });
             if(IsMainWindowOpen) {
                 double tt = Properties.Settings.Default.ShowMainWindowAnimationMilliseconds;
                 double fps = 30;
@@ -720,7 +706,7 @@ namespace MpWpfApp {
                         timer.Stop();
                         
                         mw.Visibility = Visibility.Collapsed;
-                        if (pasteSelected) {
+                        if (pasteDataObject != null) {
                             PasteDataObject(pasteDataObject);
                         }
 

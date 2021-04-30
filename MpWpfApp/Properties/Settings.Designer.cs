@@ -415,7 +415,7 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool NotificationShowAppendBufferToast {
             get {
                 return ((bool)(this["NotificationShowAppendBufferToast"]));
@@ -451,7 +451,7 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Sounds\\Ting.wav")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Sounds/Ting.wav")]
         public string NotificationCopySound1Path {
             get {
                 return ((string)(this["NotificationCopySound1Path"]));
@@ -472,7 +472,7 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Sounds\\chime.wav")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Sounds/chime.wav")]
         public string NotificationCopySound2Path {
             get {
                 return ((string)(this["NotificationCopySound2Path"]));
@@ -481,7 +481,7 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Sounds\\blip.wav")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Sounds/blip.wav")]
         public string NotificationAppendModeOnSoundPath {
             get {
                 return ((string)(this["NotificationAppendModeOnSoundPath"]));
@@ -493,7 +493,7 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Sounds\\blip2.wav")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Sounds/blip2.wav")]
         public string NotificationAppendModeOffSoundPath {
             get {
                 return ((string)(this["NotificationAppendModeOffSoundPath"]));
@@ -1004,7 +1004,7 @@ namespace MpWpfApp.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Sounds\\MonkeySound1.wav")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Sounds/MonkeySound1.wav")]
         public string NotificationLoadedPath {
             get {
                 return ((string)(this["NotificationLoadedPath"]));
@@ -1273,6 +1273,39 @@ namespace MpWpfApp.Properties {
             }
             set {
                 this["ResetClipboardAfterMonkeyPaste"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowItemPreview {
+            get {
+                return ((bool)(this["ShowItemPreview"]));
+            }
+            set {
+                this["ShowItemPreview"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string UserCultureInfoName {
+            get {
+                return ((string)(this["UserCultureInfoName"]));
+            }
+            set {
+                this["UserCultureInfoName"] = value;
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("en-US")]
+        public string DefaultCultureInfoName {
+            get {
+                return ((string)(this["DefaultCultureInfoName"]));
             }
         }
     }

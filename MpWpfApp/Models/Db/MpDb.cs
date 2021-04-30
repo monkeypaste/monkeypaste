@@ -378,6 +378,7 @@ namespace MpWpfApp {
                       pk_MpAppId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , SourcePath text NOT NULL 
                     , AppName text 
+                    , AppType int NOT NULL default 1
                     , IsAppRejected integer NOT NULL                    
                     , IconBlob image NOT NULL
                     , IconBorderBlob image NOT NULL

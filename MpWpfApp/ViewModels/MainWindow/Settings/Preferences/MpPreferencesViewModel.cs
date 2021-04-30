@@ -142,6 +142,29 @@ namespace MpWpfApp {
             }
         }
 
+        private bool _showItemPreview = Properties.Settings.Default.ShowItemPreview;
+        public bool ShowItemPreview {
+            get {
+                return _showItemPreview;
+            }
+            set {
+                if (_showItemPreview != value) {
+                    _showItemPreview = value;
+                    Properties.Settings.Default.ShowItemPreview = _showItemPreview;
+                    Properties.Settings.Default.Save();
+                    if(!MpMainWindowViewModel.IsApplicationLoading) {
+                        foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel) {
+                            ctvm.OnPropertyChanged(nameof(ctvm.ToolTipVisibility));
+                            foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                                rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemToolTipVisibility));
+                            }
+                        }
+                    }
+                    OnPropertyChanged(nameof(ShowItemPreview));
+                }
+            }
+        }
+
         private bool _useSpellCheck = Properties.Settings.Default.UseSpellCheck;
         public bool UseSpellCheck {
             get {

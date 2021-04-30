@@ -496,7 +496,7 @@ namespace MpWpfApp {
             Text = string.Empty;
             SearchText = Text;
             SearchTextBox.Focus();
-            //MainWindowViewModel.ClipTrayViewModel.Refresh();
+            MainWindowViewModel.ClipTrayViewModel.ResetClipSelection();
             //IsSearching = true;
         }
 

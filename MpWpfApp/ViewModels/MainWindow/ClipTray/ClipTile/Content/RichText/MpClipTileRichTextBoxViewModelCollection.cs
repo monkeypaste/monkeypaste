@@ -566,7 +566,7 @@ namespace MpWpfApp {
                     this.Add(new MpRtbListBoxItemRichTextBoxViewModel(HostClipTileViewModel, hci));                    
                 } 
             }
-            Refresh();
+            //Refresh();
             UpdateLayout();
             sw.Stop();
             Console.WriteLine("Rtbvmc Sync: " + sw.ElapsedMilliseconds + "ms");
@@ -947,7 +947,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanToggleEditSubSelectedItem(object args) {
-            if (MainWindowViewModel.IsLoading) {
+            if (MpMainWindowViewModel.IsApplicationLoading) {
                 return false;
             }
             return MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
@@ -1085,7 +1085,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanBringSubSelectedClipTilesToFront(object arg) {
-            if (IsBusy || MainWindowViewModel.IsLoading || VisibleSubRtbViewModels.Count == 0) {
+            if (IsBusy || MpMainWindowViewModel.IsApplicationLoading || VisibleSubRtbViewModels.Count == 0) {
                 return false;
             }
             bool canBringForward = false;
@@ -1127,7 +1127,7 @@ namespace MpWpfApp {
             }
         }
         private bool CanSendSubSelectedClipTilesToBack(object args) {
-            if (IsBusy || MainWindowViewModel.IsLoading || VisibleSubRtbViewModels.Count == 0) {
+            if (IsBusy || MpMainWindowViewModel.IsApplicationLoading || VisibleSubRtbViewModels.Count == 0) {
                 return false;
             }
             bool canSendBack = false;

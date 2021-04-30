@@ -168,6 +168,10 @@
                     <CheckBox IsChecked="{Binding ResetClipboard, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
+                    <Label Content="Show Item Preview" />
+                    <CheckBox IsChecked="{Binding ShowItemPreview, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <Label Content="Language" />
                     <ComboBox ItemsSource="{Binding Languages}"
                               SelectedItem="{Binding SelectedLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />

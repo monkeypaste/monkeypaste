@@ -165,7 +165,7 @@ namespace MpWpfApp {
             }
         }
         private void PerformSelectedSort() {
-            if (MainWindowViewModel.IsLoading) {
+            if (MpMainWindowViewModel.IsApplicationLoading) {
                 return;
             }
             IsSorting = true;

@@ -118,8 +118,9 @@ namespace MpWpfApp {
             string body = "text=" + System.Web.HttpUtility.UrlEncode(text);
             byte[] data = Encoding.UTF8.GetBytes(body);
             spellCheckWebRequest.ContentLength = data.Length;
-            using (var requestStream = spellCheckWebRequest.GetRequestStream())
+            using (var requestStream = spellCheckWebRequest.GetRequestStream()) {
                 requestStream.Write(data, 0, data.Length);
+            }
             HttpWebResponse response = (HttpWebResponse)spellCheckWebRequest.GetResponse();
 
             // Read and parse the JSON response; get spelling corrections
@@ -135,9 +136,10 @@ namespace MpWpfApp {
             for (int i = 0; i < flaggedTokens.Length; i++) {
                 var correction = flaggedTokens[i];
                 var suggestion = correction["suggestions"][0];  // consider only first suggestion
-                if (suggestion["score"] > (decimal)0.7)         // take it only if highly confident
+                if (suggestion["score"] > (decimal)0.7) {       // take it only if highly confident
                     corrections[(int)correction["offset"]] = new string[]   // dict key   = offset
                         { correction["token"], suggestion["suggestion"] };  // dict value = {error, correction}
+                }
             }
 
             // Apply spelling corrections, in order, from right to left
@@ -146,8 +148,11 @@ namespace MpWpfApp {
                 var newtext = corrections[i][1];
 
                 // Apply capitalization from original text to correction - all caps or initial caps
-                if (text.Substring(i, oldtext.Length).All(char.IsUpper)) newtext = newtext.ToUpper();
-                else if (char.IsUpper(text[i])) newtext = newtext[0].ToString().ToUpper() + newtext.Substring(1);
+                if (text.Substring(i, oldtext.Length).All(char.IsUpper)) {
+                    newtext = newtext.ToUpper();
+                } else if (char.IsUpper(text[i])) {
+                    newtext = newtext[0].ToString().ToUpper() + newtext.Substring(1);
+                }
 
                 text = text.Substring(0, i) + newtext + text.Substring(i + oldtext.Length);
             }

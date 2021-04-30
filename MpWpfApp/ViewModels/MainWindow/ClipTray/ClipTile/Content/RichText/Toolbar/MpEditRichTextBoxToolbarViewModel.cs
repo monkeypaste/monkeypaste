@@ -72,6 +72,19 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        private double _editBorderWidth = -MpMeasurements.Instance.ClipTileBorderMinSize;
+        public double EditBorderWidth {
+            get {
+                return _editBorderWidth;
+            }
+            set {
+                if (_editBorderWidth != value) {
+                    _editBorderWidth = value;
+                    OnPropertyChanged(nameof(EditBorderWidth));
+                }
+            }
+        }
         #endregion
 
         #region Visibility Properties
@@ -196,8 +209,8 @@ namespace MpWpfApp {
         public void InitWithRichTextBox(RichTextBox rtb, bool doAnimation) {
             HasTextChanged = false;
             SelectedRtb = rtb;
-            EditToolbarBorder = BorderStackPanel.GetVisualAncestor<Border>();
             var cb = HostClipTileViewModel.ClipBorder;
+            EditToolbarBorder = (Border)cb.FindName("ClipTileEditorToolbar");
             var rtblbgc = (Canvas)cb.FindName("ClipTileRichTextBoxListBoxGridContainerCanvas");
             var rtblbg = (Grid)rtblbgc.FindName("ClipTileRichTextboxListBoxContainerGrid");
             var rtblb = (ListBox)cb.FindName("ClipTileRichTextBoxListBox");
@@ -779,8 +792,8 @@ namespace MpWpfApp {
         }
         private void RefreshDocument() {
             HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems[0].SaveSubItemToDatabase();
-            HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems[0].ClearHyperlinks();
-            HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems[0].CreateHyperlinks();
+            //HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems[0].ClearHyperlinks();
+            //HostClipTileViewModel.RichTextBoxViewModelCollection.SubSelectedClipItems[0].CreateHyperlinks();
         }
         #endregion
 

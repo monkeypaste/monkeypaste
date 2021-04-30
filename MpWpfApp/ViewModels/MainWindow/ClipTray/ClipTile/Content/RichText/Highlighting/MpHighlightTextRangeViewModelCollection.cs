@@ -20,6 +20,8 @@ namespace MpWpfApp {
 
         #endregion
 
+        #region Properties
+
         #region View Models
         private MpClipTileViewModel _clipTileViewModel;
         public MpClipTileViewModel ClipTileViewModel {
@@ -27,7 +29,7 @@ namespace MpWpfApp {
                 return _clipTileViewModel;
             }
             set {
-                if(_clipTileViewModel != value) {
+                if (_clipTileViewModel != value) {
                     _clipTileViewModel = value;
                     OnPropertyChanged(nameof(ClipTileViewModel));
                 }
@@ -46,8 +48,7 @@ namespace MpWpfApp {
         }
         #endregion
 
-        #region Properties
-        public List<KeyValuePair<TextRange, Brush>> NonTransparentDocumentBackgroundRangeList = new List<KeyValuePair<TextRange, Brush>>();
+        public List<KeyValuePair<TextRange, Brush>> NonTransparentDocumentBackgroundRangeList { get; set; } = new List<KeyValuePair<TextRange, Brush>>();
         
         private int _highlightTaskCount = 0;
         public int HighlightTaskCount {
@@ -170,7 +171,7 @@ namespace MpWpfApp {
 
             ClearHighlightingCommand.Execute(null);
 
-            if (ClipTileViewModel.MainWindowViewModel.IsLoading || ClipTileViewModel.IsLoading) {
+            if (MpMainWindowViewModel.IsApplicationLoading || ClipTileViewModel.IsLoading) {
                 HighlightTaskCount--;
                 return VisibilityDictionary;
             }
@@ -214,7 +215,7 @@ namespace MpWpfApp {
 
                     if(Properties.Settings.Default.SearchByTitle) {
                         tc = ClipTileViewModel.CopyItemTitle.ContainsByCaseSetting(hlt);
-                        if (ClipTileViewModel.CopyItemType == MpCopyItemType.Composite && !tc) {
+                        if (ClipTileViewModel.IsTextItem && !tc) {
                             foreach (var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {
                                 tc = rtbvm.CopyItemTitle.ContainsByCaseSetting(hlt) ? true : tc;
                             }
@@ -223,7 +224,7 @@ namespace MpWpfApp {
                     if(Properties.Settings.Default.SearchByRichText) {
                         cc = ClipTileViewModel.CopyItemPlainText.ContainsByCaseSetting(hlt) ||
                              ClipTileViewModel.CopyItemDescription.ContainsByCaseSetting(hlt);
-                        if (ClipTileViewModel.CopyItemType == MpCopyItemType.Composite && !cc) {
+                        if (ClipTileViewModel.IsTextItem && !cc) {
                             foreach (var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {
                                 cc = rtbvm.CopyItemPlainText.ContainsByCaseSetting(hlt) ||
                                      ClipTileViewModel.CopyItemDescription.ContainsByCaseSetting(hlt) ? true : cc;
@@ -236,7 +237,7 @@ namespace MpWpfApp {
                         if (anc) {
                             this.Add(new MpHighlightTextRangeViewModel(ClipTileViewModel, null, null, sortIdx++, MpHighlightType.App));                            
                         }
-                        if (ClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
+                        if (ClipTileViewModel.IsTextItem) {
                             foreach (var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {
                                 bool ranc = rtbvm.CopyItemAppName.ContainsByCaseSetting(hlt);
                                 anc = ranc ? true : anc;
@@ -251,7 +252,7 @@ namespace MpWpfApp {
                         if (apc) {
                             this.Add(new MpHighlightTextRangeViewModel(ClipTileViewModel, null, null, sortIdx++, MpHighlightType.App));
                         }
-                        if (ClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
+                        if (ClipTileViewModel.IsTextItem) {
                             foreach (var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {
                                 bool rapc = rtbvm.CopyItemAppPath.ContainsByCaseSetting(hlt);
                                 apc = rapc ? true : apc;
@@ -267,7 +268,7 @@ namespace MpWpfApp {
                         if (uc) {
                             this.Add(new MpHighlightTextRangeViewModel(ClipTileViewModel, null, null, sortIdx++, MpHighlightType.App));
                         }
-                        if (ClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
+                        if (ClipTileViewModel.IsTextItem) {
                             foreach (var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {
                                 bool ruc = rtbvm.CopyItemUrl.ContainsByCaseSetting(hlt);
                                 uc = ruc ? true : uc;
@@ -294,7 +295,7 @@ namespace MpWpfApp {
                         foreach (var mr in trl) {
                             this.Add(new MpHighlightTextRangeViewModel(ClipTileViewModel, null, mr, sortIdx++, MpHighlightType.Title));
                         }
-                        if (ClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
+                        if (ClipTileViewModel.IsTextItem) {
                             foreach(var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {
                                 var strl = MpHelpers.Instance.FindStringRangesFromPosition(rtbvm.RtbListBoxItemTitleTextBlock.ContentStart, hlt, Properties.Settings.Default.SearchByIsCaseSensitive);
                                 foreach (var mr in strl) {

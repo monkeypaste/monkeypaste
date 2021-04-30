@@ -395,7 +395,7 @@ namespace MpWpfApp {
                     var hook = RoutingType == MpRoutingType.Internal ? MpShortcutCollectionViewModel.Instance.ApplicationHook : MpShortcutCollectionViewModel.Instance.GlobalHook;
                     
                     if (IsSequence()) {
-                        if(MainWindowViewModel.IsLoading) {
+                        if(MpMainWindowViewModel.IsApplicationLoading) {
                             //only register sequences at startup
                             hook.OnSequence(new Dictionary<Sequence, Action> {
                                 {

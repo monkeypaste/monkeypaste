@@ -506,6 +506,9 @@ namespace MpWpfApp {
                     if(deltaTemplateTop > 0) {
                         PasteTemplateBorderCanvasTop -= HostClipTileViewModel.PasteTemplateToolbarHeight;
                         PasteTemplateBorderCanvasTop += HostClipTileViewModel.TileDetailHeight;
+                        if(SelectedTemplateTextBox == null) {
+                            InitWithRichTextBox(SubSelectedRtbViewModel.Rtb, false);
+                        }
                         SelectedTemplateTextBox.Focus();
                     } else {
                         PasteTemplateBorderCanvasTop = MpMeasurements.Instance.ClipTileContentHeight;

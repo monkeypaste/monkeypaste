@@ -122,7 +122,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="NotificationShowAppendBufferToast" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="NotificationShowModeChangeToast" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -131,19 +131,19 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="NotificationCopySound1Path" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Sounds\Ting.wav</Value>
+      <Value Profile="(Default)">Sounds/Ting.wav</Value>
     </Setting>
     <Setting Name="NotificationCopySoundCustomPath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="NotificationCopySound2Path" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Sounds\chime.wav</Value>
+      <Value Profile="(Default)">Sounds/chime.wav</Value>
     </Setting>
     <Setting Name="NotificationAppendModeOnSoundPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Sounds\blip.wav</Value>
+      <Value Profile="(Default)">Sounds/blip.wav</Value>
     </Setting>
     <Setting Name="NotificationAppendModeOffSoundPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Sounds\blip2.wav</Value>
+      <Value Profile="(Default)">Sounds/blip2.wav</Value>
     </Setting>
     <Setting Name="LoadOnLogin" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -281,7 +281,7 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="NotificationLoadedPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Sounds\MonkeySound1.wav</Value>
+      <Value Profile="(Default)">Sounds/MonkeySound1.wav</Value>
     </Setting>
     <Setting Name="NotificationDoLoadedSound" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
@@ -351,6 +351,15 @@
     </Setting>
     <Setting Name="ResetClipboardAfterMonkeyPaste" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ShowItemPreview" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="UserCultureInfoName" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DefaultCultureInfoName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">en-US</Value>
     </Setting>
   </Settings>
 </SettingsFile>

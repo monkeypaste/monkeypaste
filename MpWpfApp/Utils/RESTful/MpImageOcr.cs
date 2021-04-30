@@ -1,21 +1,22 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Media.Ocr;
 
 namespace MpWpfApp {
     public class MpImageOcr {
         private static readonly Lazy<MpImageOcr> _Lazy = new Lazy<MpImageOcr>(() => new MpImageOcr());
         public static MpImageOcr Instance { get { return _Lazy.Value; } }
 
+        private bool _isOcrLocal = true;
+
         // Add your Computer Vision subscription key and endpoint to your environment variables.
         private string _subscriptionKey = Properties.Settings.Default.AzureCognitiveServicesKey;
-
         private static string _endpoint = Properties.Settings.Default.AzureCognitiveServicesEndpoint;
 
         // the OCR method endpoint
@@ -28,6 +29,11 @@ namespace MpWpfApp {
         /// </summary>
         /// <param name="imageFilePath">The image file with printed text.</param>
         public async Task<MpOcrAnalysis> OcrImage(byte[] byteData) {
+            if(_isOcrLocal) {
+                var ocrResult = await OcrEngineFromByteArrayAsync(byteData);
+                Console.WriteLine(ocrResult.ToString());
+                return ocrResult;
+            }
             try {
                 HttpClient client = new HttpClient();
 
@@ -80,12 +86,20 @@ namespace MpWpfApp {
             try {
                 var j = await OcrImage(byteData);
                 var sb = new StringBuilder();
-                foreach (var region in j.regions) {
-                    foreach (var line in region.lines) {
-                        foreach (var word in line.words) {
-                            sb.Append(word.text + " ");
+                if(j.regions != null) {
+                    foreach (var region in j.regions) {
+                        if(region.lines == null) {
+                            continue;
                         }
-                        sb.Append(Environment.NewLine);
+                        foreach (var line in region.lines) {
+                            if (line.words == null) {
+                                continue;
+                            }
+                            foreach (var word in line.words) {
+                                sb.Append(word.text + " ");
+                            }
+                            sb.Append(Environment.NewLine);
+                        }
                     }
                 }
 
@@ -94,6 +108,40 @@ namespace MpWpfApp {
                 Console.WriteLine("\n" + e.Message);
             }
             return string.Empty;
+        }
+
+        private async Task<MpOcrAnalysis> OcrEngineFromByteArrayAsync(byte[] byteData, bool isTemporaryFile = true) {
+            string imagePath = MpHelpers.Instance.WriteBitmapSourceToFile(MpHelpers.Instance.GetTempFileNameWithExtension(@".png"), byteData.ToBitmapSource());
+
+            var ocrResult = await OcrEngineFromFileAsync(imagePath, isTemporaryFile);
+
+            return new MpOcrAnalysis(ocrResult);
+        }
+
+        private async Task<OcrResult> OcrEngineFromFileAsync(string imagePath, bool isTemporaryFile = true) {
+            // see this about packaging https://docs.microsoft.com/en-us/answers/questions/4354/is-the-ocr-api-supported-from-win32-applications-w.html
+
+            var engine = OcrEngine.TryCreateFromLanguage(new Windows.Globalization.Language(Properties.Settings.Default.UserCultureInfoName));
+            if(engine == null) {
+                engine = OcrEngine.TryCreateFromLanguage(new Windows.Globalization.Language(Properties.Settings.Default.DefaultCultureInfoName));
+            }
+            if(engine == null) {
+                Console.WriteLine(@"MpImageOcr.OcrEngineFromFileAsync error unable to create engine for language named: " + Properties.Settings.Default.UserCultureInfoName);
+                return null;
+            }
+            var file = await Windows.Storage.StorageFile.GetFileFromPathAsync(imagePath);
+            using (var stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read)) {
+                var decoder = await Windows.Graphics.Imaging.BitmapDecoder.CreateAsync(stream);
+                var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
+                OcrResult ocrResult = await engine.RecognizeAsync(softwareBitmap);
+
+                Console.WriteLine(ocrResult.Text);
+
+                if(isTemporaryFile) {
+                    File.Delete(imagePath);
+                }
+                return ocrResult;
+            }
         }
     }    
 }

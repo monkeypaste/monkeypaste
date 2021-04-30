@@ -228,6 +228,17 @@ namespace MpWpfApp {
                 }
             };
 
+            SelectedTemplateNameTextBox.PreviewKeyDown += (s, e8) => {
+                if (e8.Key == Key.Escape) {
+                    CancelCommand.Execute(null);
+                    e8.Handled = true;
+                }
+                if (e8.Key == Key.Enter) {
+                    OkCommand.Execute(null);                    
+                    e8.Handled = true;
+                }
+            };
+
             rtb.PreviewMouseLeftButtonDown += (s1, e1) => {
                 if (HostClipTileViewModel.IsEditingTemplate) {
                     //clicking out of edit template toolbar performs Ok Command (save template & hide toolbar)
@@ -330,7 +341,7 @@ namespace MpWpfApp {
                 OkCommand.Execute(null);
             } else {
                 //Console.WriteLine("SetTemplate Resize edit template toolbar deltaHeight: " + HostClipTileViewModel.EditTemplateToolbarHeight);
-                Resize(-HostClipTileViewModel.EditTemplateToolbarHeight* 0.5);
+                ShowToolbar();
             }
         }
         #endregion
@@ -391,7 +402,23 @@ namespace MpWpfApp {
             ValidationText = string.Empty;
             return true;
         }
-        
+
+        private void ShowToolbar() {
+            if (IsSelectedNewTemplate) {
+                Resize(-HostClipTileViewModel.EditTemplateToolbarHeight * 0.5);
+            } else {
+                Resize(-HostClipTileViewModel.EditTemplateToolbarHeight * 0.75);
+            }
+        }
+
+        private void HideToolbar() {
+            if (IsSelectedNewTemplate) {
+                Resize(HostClipTileViewModel.EditTemplateToolbarHeight * 0.5);
+            } else {
+                Resize(HostClipTileViewModel.EditTemplateToolbarHeight * 0.75);
+            }
+        }
+
         #endregion
 
         #region Commands        
@@ -422,7 +449,7 @@ namespace MpWpfApp {
                 }
             }
             HostClipTileViewModel.IsEditingTemplate = false;
-            Resize(HostClipTileViewModel.EditTemplateToolbarHeight*0.5);
+            HideToolbar();
         }
 
         private RelayCommand _okCommand;
@@ -456,7 +483,7 @@ namespace MpWpfApp {
 
             SelectedTemplateHyperlinkViewModel.IsSelected = true;
             HostClipTileViewModel.IsEditingTemplate = false;
-            Resize(HostClipTileViewModel.EditTemplateToolbarHeight*0.5);
+            HideToolbar();
             SubSelectedRtbViewModel.Rtb.Focus();
         }
 
