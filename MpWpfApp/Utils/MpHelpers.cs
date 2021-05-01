@@ -2538,6 +2538,9 @@ namespace MpWpfApp {
         }
 
         public MpEventEnabledFlowDocument ConvertRichTextToFlowDocument(string rtf) {
+            if(string.IsNullOrEmpty(rtf)) {
+                return string.Empty.ToRichText().ToFlowDocument();
+            }
             if(IsStringRichText(rtf)) {
                 //using (var stream = new MemoryStream(Encoding.Default.GetBytes(rtf))) {
                 using (var stream = new MemoryStream(UTF8Encoding.Default.GetBytes(rtf))) {
@@ -2742,12 +2745,12 @@ namespace MpWpfApp {
             bool hasValidExtension = false;
             string lstr = str.ToLower();
             foreach (var ext in _domainExtensions) {
-                if(lstr.Contains(ext)) {
+                if (lstr.Contains(ext)) {
                     hasValidExtension = true;
                     break;
                 }
             }
-            if(!hasValidExtension) {
+            if (!hasValidExtension) {
                 return false;
             }
             var mc = Regex.Match(str, MpRegEx.Instance.GetRegExForTokenType(MpSubTextTokenType.Uri), RegexOptions.IgnoreCase | RegexOptions.Compiled | RegexOptions.ExplicitCapture);

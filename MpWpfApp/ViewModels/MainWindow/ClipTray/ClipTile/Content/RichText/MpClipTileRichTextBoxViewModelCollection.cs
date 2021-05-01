@@ -493,24 +493,26 @@ namespace MpWpfApp {
 
         public async Task FillAllTemplates() {
             bool hasExpanded = false;
-            var subSelectedRtbvm = SubSelectedClipItems;
-            foreach (var rtbvm in subSelectedRtbvm) {
+            foreach (var rtbvm in SubSelectedClipItems) {
                 if (rtbvm.HasTemplate) {
                     rtbvm.IsSubSelected = true;
                     rtbvm.IsPastingTemplate = true;
-                    if (!hasExpanded) {
+                    if (!hasExpanded) { 
                         //tile will be shrunk in on completed of hide window
                         MainWindowViewModel.ExpandClipTile(HostClipTileViewModel);
+                        if (!MainWindowViewModel.ClipTrayViewModel.IsPastingHotKey) {
+                            HostClipTileViewModel.PasteTemplateToolbarViewModel.IsLoading = true;
+                        }
                         hasExpanded = true;
-                    } else {
-                        HostClipTileViewModel.PasteTemplateToolbarViewModel.SetTemplate(rtbvm.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
-                    }
+                    } 
+                    HostClipTileViewModel.PasteTemplateToolbarViewModel.SetSubItem(rtbvm);                    
                     await Task.Run(() => {
-                        while (!HostClipTileViewModel.PasteTemplateToolbarViewModel.IsTemplateReadyToPaste) {
+                        while (!HostClipTileViewModel.PasteTemplateToolbarViewModel.HaveAllSubItemTemplatesBeenVisited) {
                             System.Threading.Thread.Sleep(100);
                         }
                         //TemplateRichText is set in PasteTemplateCommand
                     });
+                    rtbvm.TemplateHyperlinkCollectionViewModel.ClearSelection();
                 }
                 
             }
@@ -666,17 +668,10 @@ namespace MpWpfApp {
 
         public void Resize(double deltaTop, double deltaWidth, double deltaHeight) {
             RtblbCanvasTop += deltaTop;
-            //RtbListBoxHeight += (-deltaTop + deltaHeight);
             RtbLbScrollViewerWidth += deltaWidth;
             RtbLbScrollViewerHeight += deltaHeight;
-            //if (RtbListBoxHeight > RtbLbScrollViewerHeight) {
-            //    RtbLbScrollViewerWidth -= MpMeasurements.Instance.ScrollbarWidth;
-            //}
+
             UpdateLayout();
-
-            //Refresh();
-
-           // MainWindowViewModel.ClipTrayViewModel.Refresh();
         }
 
         public void UpdateLayout() {
@@ -705,163 +700,8 @@ namespace MpWpfApp {
                 ScrollViewer.Height = RtbLbScrollViewerHeight;
                 ScrollViewer.UpdateLayout();
             }
-
-            
-
-            
-            //if (RichTextBoxListBox == null || ScrollViewer == null) {
-            //    return;
-            //}
-            //Refresh();
-
-
-            //ScrollViewer.Width = RelativeWidthMax;
-            //ScrollViewer.Height = TotalItemHeight;
-            //ScrollViewer.ScrollToVerticalOffset(0);
-            //ScrollViewer.ScrollToHorizontalOffset(0);
-            //ScrollViewer.UpdateLayout();
-
-            //if (HostClipTileViewModel.IsExpanded) {
-            //    if (RelativeWidthMax > HostClipTileViewModel.TileContentWidth) {
-            //        HorizontalScrollbarVisibility = ScrollBarVisibility.Visible;
-            //    } else {
-            //        HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //    }
-
-            //    if (TotalItemHeight > RtbListBoxHeight) {
-            //        VerticalScrollBarVisibility = ScrollBarVisibility.Visible;
-            //    }
-            //} else {
-            //    HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //    VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            //}
-
-            //sv.Height = TotalItemHeight;
-            //ScrollViewer.UpdateLayout();
-            //sv.InvalidateScrollInfo();
-
-
-            //OnPropertyChanged(nameof(RtbVerticalScrollbarVisibility));
-            //OnPropertyChanged(nameof(RtbHorizontalScrollbarVisibility));
-            //Console.WriteLine("Total Item Height: " + TotalItemHeight);
         }
-
-        public void Animate(
-            double deltaTop, 
-            double deltaHeight, 
-            double tt, 
-            EventHandler onCompleted, 
-            double fps = 30,
-            DispatcherPriority priority = DispatcherPriority.Render) {
-            double fromTop = RtblbCanvasTop;
-            double toTop = fromTop + deltaTop;
-            double dt = (deltaTop / tt) / fps;
-
-            double fromHeight = RtbListBoxHeight;
-            double toHeight = fromHeight + deltaHeight;
-            double dh = (deltaHeight / tt) / fps;
-
-            var timer = new DispatcherTimer(priority) { Interval = TimeSpan.FromMilliseconds(fps) };
-            timer.Tick += (s, e32) => {
-                bool isTopDone = false;
-                bool isHeightDone = false;
-                if (MpHelpers.Instance.DistanceBetweenValues(RtblbCanvasTop, toTop) > 0.5) {
-                    RtblbCanvasTop += dt;
-                    Canvas.SetTop(RtbContainerGrid, RtblbCanvasTop);
-                } else {
-                    isTopDone = true;
-                }
-
-                if (MpHelpers.Instance.DistanceBetweenValues(RtbListBoxHeight, toHeight) > 0.5) {
-                    //RtbListBoxHeight += dh;
-                } else {
-                    isHeightDone = true;
-                }
-                if (isTopDone && isHeightDone) {
-                    timer.Stop();
-                    UpdateLayout();
-                    if(onCompleted != null) {
-                        onCompleted.BeginInvoke(this, new EventArgs(), null, null);
-                    }
-                }
-            };
-            timer.Start();
-        }
-
-        //public void AnimateItems(
-        //    double fromWidth,double toWidth, 
-        //    double fromHeight, double toHeight,
-        //    double fromTop, double toTop,
-        //    double fromBottom, double toBottom, 
-        //    double animMs) {
-        //    if(toWidth > 0) {
-        //        foreach (var rtbvm in this) {
-        //            if(rtbvm.Rtbc == null) {
-        //                //not sure why theres nulls here, maybe happens when there's more items than can be visible
-        //                continue;
-        //            }
-        //            MpHelpers.Instance.AnimateDoubleProperty(
-        //                    fromWidth,
-        //                    toWidth,
-        //                    animMs,
-        //                    new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
-        //                    FrameworkElement.WidthProperty,
-        //                    (s1, e44) => {
-        //                        rtbvm.UpdateLayout();
-        //                    });
-        //        }
-        //    }
-        //    if (toHeight > 0) {
-        //        //double heightDiff = toHeight - fromHeight;
-        //        foreach (var rtbvm in this) {
-        //            if (rtbvm.Rtbc == null) {
-        //                //not sure why theres nulls here, maybe happens when there's more items than can be visible
-        //                continue;
-        //            }
-        //            MpHelpers.Instance.AnimateDoubleProperty(
-        //                    rtbvm.Rtbc.ActualHeight,
-        //                    rtbvm.RtbCanvasHeight + rtbvm.RtbPadding.Top + rtbvm.RtbPadding.Bottom,
-        //                    animMs,
-        //                    new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
-        //                    FrameworkElement.HeightProperty,
-        //                    (s1, e44) => {
-        //                        rtbvm.UpdateLayout();
-        //                        if(!HostClipTileViewModel.IsExpanded) {
-        //                            rtbvm.IsEditingContent = false;
-        //                            rtbvm.IsSubSelected = false;
-        //                            rtbvm.IsSubHovering = false;
-        //                            rtbvm.OnPropertyChanged(nameof(rtbvm.SubItemOverlayVisibility));
-        //                        }
-        //                    });
-        //        }
-        //    }
-        //    if (toTop > 0) {
-        //        foreach(var rtbvm in this) {
-        //            if (rtbvm.Rtbc == null) {
-        //                //not sure why theres nulls here, maybe happens when there's more items than can be visible
-        //                continue;
-        //            }
-        //            MpHelpers.Instance.AnimateDoubleProperty(
-        //                    fromTop,
-        //                    toTop,
-        //                    animMs,
-        //                    new List<FrameworkElement> { rtbvm.Rtb, rtbvm.Rtbc, rtbvm.RtbListBoxItemClipBorder, rtbvm.RtbListBoxItemOverlayDockPanel },
-        //                    Canvas.TopProperty,
-        //                    (s1, e44) => {
-
-        //                    });
-        //            fromTop += rtbvm.RtbCanvasHeight;
-        //            toTop += rtbvm.RtbCanvasHeight;
-        //        }
-        //    }
-        //    if (toBottom > 0) {
-
-        //    }
-        //}
-
-
         
-
         public void SubSelectAll() {
             foreach(var rtbvm in this) {
                 rtbvm.IsSubSelected = true;

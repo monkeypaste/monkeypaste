@@ -88,9 +88,9 @@ namespace MpWpfApp {
         #region Brush Properties
         public Brush TemplateBorderBrush {
             get {
-                if(HostRtbItemViewModel != null && 
+                if(HostRtbItemViewModel == null && 
                   !HostRtbItemViewModel.HostClipTileViewModel.IsEditingTile && 
-                  !HostRtbItemViewModel.HostClipTileViewModel.IsEditingTile && 
+                  !HostRtbItemViewModel.HostClipTileViewModel.IsPastingTemplate && 
                   !HostRtbItemViewModel.IsPastingTemplate) {
                     return Brushes.Transparent;
                 }
@@ -416,16 +416,16 @@ namespace MpWpfApp {
                         if(IsSelected && HostRtbItemViewModel.IsEditingContent) {
                             HostRtbItemViewModel.HostClipTileViewModel.EditTemplateToolbarViewModel.InitWithRichTextBox(HostRtbItemViewModel.Rtb);
                         }
-                        if(!IsSelected && HostRtbItemViewModel.IsPastingTemplate && !string.IsNullOrEmpty(TemplateText)) {
-                            //occurs during template paste after a template has been navigated away from it and 
-                            //user provided text
-                            foreach(var thlvm in HostRtbItemViewModel.TemplateHyperlinkCollectionViewModel) {
-                                if(thlvm.TemplateName == TemplateName) {
-                                    WasVisited = true;
-                                }
-                            }
+                        //if(!IsSelected && HostRtbItemViewModel.IsPastingTemplate && !string.IsNullOrEmpty(TemplateText) && HostRtbItemViewModel.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder.Count > 1) {
+                        //    //occurs during template paste after a template has been navigated away from it and 
+                        //    //user provided text
+                        //    foreach(var thlvm in HostRtbItemViewModel.TemplateHyperlinkCollectionViewModel) {
+                        //        if(thlvm.TemplateName == TemplateName) {
+                        //            WasVisited = true;
+                        //        }
+                        //    }
                             
-                        }
+                        //}
                         break;
                 }
             };
@@ -490,10 +490,6 @@ namespace MpWpfApp {
                 if (HostRtbItemViewModel.HostClipTileViewModel.IsEditingTile) {
                     e.Handled = true;
                     HostRtbItemViewModel.HostClipTileViewModel.EditTemplateToolbarViewModel.SetTemplate(this, true);
-                }
-                if(HostRtbItemViewModel.IsPastingTemplate) {
-                    e.Handled = true;
-                    HostRtbItemViewModel.HostClipTileViewModel.PasteTemplateToolbarViewModel.SetTemplate(TemplateName);
                 }
             };
 

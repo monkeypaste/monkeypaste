@@ -61,7 +61,7 @@ namespace MpWpfApp {
             get {
                 return _isLoading;
             }
-            protected set {
+            set {
                 if (_isLoading != value) {
                     _isLoading = value;
                     OnPropertyChanged(nameof(IsLoading));

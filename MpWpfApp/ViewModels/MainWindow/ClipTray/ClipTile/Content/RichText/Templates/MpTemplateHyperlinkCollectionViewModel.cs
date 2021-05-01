@@ -114,6 +114,11 @@ namespace MpWpfApp {
             };
             //templates are added in the CreateHyperlinks rtb extension
         }
+        public void ClearSelection() {
+            foreach(var thlvm in this) {
+                thlvm.IsSelected = false;
+            }
+        }
         public void Reset() {
             foreach (var thlvm in this) {
                 thlvm.SetTemplateText(string.Empty);

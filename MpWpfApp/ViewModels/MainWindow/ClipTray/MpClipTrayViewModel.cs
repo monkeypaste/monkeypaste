@@ -805,9 +805,8 @@ namespace MpWpfApp {
                 }
                 ctvm.IsEditingTemplate = false;
                 if (ctvm.IsPastingTemplate) {
-                    MainWindowViewModel.ShrinkClipTile(ctvm);
                     ctvm.IsPastingTemplate = false;
-                    
+                    MainWindowViewModel.ShrinkClipTile(ctvm);                    
                 }
                 foreach (var rtbvm in ctvm.RichTextBoxViewModelCollection) {
                     //rtbvm.IsEditingContent = false;

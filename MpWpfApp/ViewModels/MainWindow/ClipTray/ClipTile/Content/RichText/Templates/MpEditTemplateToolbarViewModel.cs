@@ -260,43 +260,8 @@ namespace MpWpfApp {
             }
         }
         public void Resize(double deltaTemplateTop) {
-            EditTemplateBorderCanvasTop += deltaTemplateTop;
-        }
-
-        public void Animate(
-            double deltaTop,
-            double tt,
-            EventHandler onCompleted,
-            double fps = 30,
-            DispatcherPriority priority = DispatcherPriority.Render) {
-            double fromTop = EditTemplateBorderCanvasTop;
-            double toTop = fromTop + deltaTop;
-            double dt = (deltaTop / tt) / fps;
-
-            var timer = new DispatcherTimer(priority);
-            timer.Interval = TimeSpan.FromMilliseconds(fps);
-            timer.Tick += (s, e32) => {
-                if (MpHelpers.Instance.DistanceBetweenValues(EditTemplateBorderCanvasTop, toTop) > 0.5) {
-                    EditTemplateBorderCanvasTop += dt;
-                } else {
-                    timer.Stop();
-                    if (HostClipTileViewModel.IsEditingTemplate) {
-                        SelectedTemplateNameTextBox.Focus();
-                        SelectedTemplateNameTextBox.SelectAll();
-                    } else if(_wasEdited) {
-                        ResetState();
-                        if (!Validate()) {
-                            CancelCommand.Execute(null);
-                        } else {
-                            OkCommand.Execute(null);
-                        }
-                    }
-                    if (onCompleted != null) {
-                        onCompleted.BeginInvoke(this, new EventArgs(), null, null);
-                    }
-                }
-            };
-            timer.Start();
+            //EditTemplateBorderCanvasTop += deltaTemplateTop;
+            HideToolbar();
         }
 
         public void SetTemplate(MpTemplateHyperlinkViewModel ttcvm, bool isEditMode) {
@@ -404,19 +369,11 @@ namespace MpWpfApp {
         }
 
         private void ShowToolbar() {
-            if (IsSelectedNewTemplate) {
-                Resize(-HostClipTileViewModel.EditTemplateToolbarHeight * 0.5);
-            } else {
-                Resize(-HostClipTileViewModel.EditTemplateToolbarHeight * 0.75);
-            }
+            EditTemplateBorderCanvasTop = HostClipTileViewModel.TileContentHeight - HostClipTileViewModel.EditTemplateToolbarHeight;
         }
 
         private void HideToolbar() {
-            if (IsSelectedNewTemplate) {
-                Resize(HostClipTileViewModel.EditTemplateToolbarHeight * 0.5);
-            } else {
-                Resize(HostClipTileViewModel.EditTemplateToolbarHeight * 0.75);
-            }
+            EditTemplateBorderCanvasTop = HostClipTileViewModel.TileContentHeight + 20;
         }
 
         #endregion
@@ -432,6 +389,9 @@ namespace MpWpfApp {
             }
         }
         private void Cancel() {
+            if(HostClipTileViewModel.IsPastingTemplate) {
+                return;
+            }
             SubSelectedRtbViewModel.Rtb.Focus();
             if (IsSelectedNewTemplate) {
                 var selectionStart = SelectedTemplateHyperlinkViewModel.TemplateHyperlinkRange.Start;

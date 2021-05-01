@@ -2357,7 +2357,6 @@
             TileBorderHeight += deltaHeight;
             TileContentHeight += deltaHeight;
 
-
             EditRichTextBoxToolbarViewModel.Resize(deltaEditToolbarTop, deltaWidth);
 
             RichTextBoxViewModelCollection.Resize(deltaEditToolbarTop, deltaWidth, deltaHeight);
@@ -2365,72 +2364,6 @@
             EditTemplateToolbarViewModel.Resize(deltaHeight);
 
             PasteTemplateToolbarViewModel.Resize(deltaHeight);
-        }
-
-        public void Animate(
-            double deltaWidth,
-            double deltaEditToolbarTop,
-            double deltaTemplateTop,
-            double deltaContentHeight,
-            double tt, 
-            EventHandler onCompleted,
-            double fps = 60,
-            DispatcherPriority priority = DispatcherPriority.Normal) {
-
-            double fromWidth = TileBorderWidth;//TileBorderMinWidth;
-            double toWidth = fromWidth + deltaWidth;//TileBorderMaxWidth;            
-            double dw = (deltaWidth / tt) / fps;
-
-            var timer = new DispatcherTimer(priority);
-            timer.Interval = TimeSpan.FromMilliseconds(fps);
-
-            timer.Tick += (s, e32) => {
-                if (MpHelpers.Instance.DistanceBetweenValues(TileBorderWidth, toWidth) > 0.5) {
-                    TileBorderWidth += dw;
-                    TileContentWidth += dw;
-                    foreach (var rtbvm in RichTextBoxViewModelCollection) {
-                        rtbvm.OnPropertyChanged(nameof(rtbvm.RtbCanvasWidth));
-                        rtbvm.OnPropertyChanged(nameof(rtbvm.RtbWidth));
-                        rtbvm.OnPropertyChanged(nameof(rtbvm.RtbPageWidth));
-                    }
-                } else {
-                    timer.Stop();
-                    if (onCompleted != null) {
-                        onCompleted.BeginInvoke(this, new EventArgs(), null, null);
-                        //Dispatcher.CurrentDispatcher.Invoke(() => onCompleted);
-                    }                                     
-                }         
-            };
-            EditRichTextBoxToolbarViewModel.Animate(
-                        deltaEditToolbarTop,
-                        tt,
-                        null,
-                        fps,
-                        priority);
-
-            RichTextBoxViewModelCollection.Animate(
-                deltaEditToolbarTop,
-                deltaContentHeight,
-                tt,
-                null,
-                fps,
-                priority);
-
-            //EditTemplateToolbarViewModel.Animate(
-            //    deltaTemplateTop,
-            //    tt,
-            //    null,
-            //    fps,
-            //    priority);
-
-            PasteTemplateToolbarViewModel.Animate(
-                deltaTemplateTop,
-                tt,
-                null,
-                fps,
-                priority);
-
-            timer.Start();
         }
 
         public void RefreshAsyncCommands() {
@@ -2651,23 +2584,39 @@
                     if(!MpMainWindowViewModel.IsMainWindowOpen) {
                         MainWindowViewModel.ShowWindowCommand.Execute(null);
                     }
+                    foreach(var rtbvm in RichTextBoxViewModelCollection.SubSelectedClipItems) {
+                        rtbvm.UpdateLayout();
+                    }
                     await RichTextBoxViewModelCollection.FillAllTemplates();
                 }
                 //var sb = new StringBuilder();
                 //sb.Append(string.Empty.ToRichText());
+                if(isPastingTemplate) {
+                    Application.Current.MainWindow.Cursor = Cursors.Wait;
+                    Application.Current.MainWindow.ForceCursor = true;
+                }
+                var sw = new Stopwatch();
+                sw.Start();
                 string rtf = string.Empty.ToRichText();
                 foreach (var rtbvm in RichTextBoxViewModelCollection.SubSelectedClipItems) {
                     if (rtbvm.HasTemplate) {
                         //rtbvm.IsSubSelected = true;
-                        PasteTemplateToolbarViewModel.SetTemplate(rtbvm.TemplateHyperlinkCollectionViewModel.UniqueTemplateHyperlinkViewModelListByDocOrder[0].TemplateName);
+                        PasteTemplateToolbarViewModel.SubSelectedRtbViewModel = rtbvm;
                         PasteTemplateToolbarViewModel.PasteTemplateCommand.Execute(null);
                         string rtbvmrtf = rtbvm.TemplateRichText;
                         rtf = MpHelpers.Instance.CombineRichText(rtbvmrtf, rtf, true);
                         rtbvm.TemplateRichText = string.Empty;
+                        rtbvm.TemplateHyperlinkCollectionViewModel.Reset();
                     } else {
                         rtf = MpHelpers.Instance.CombineRichText(rtbvm.CopyItemRichText, rtf, true);
                     }
-                }                
+                }
+                sw.Stop();
+                Console.WriteLine(@"Time to combine richtext: " + sw.ElapsedMilliseconds + "ms");
+                if (isPastingTemplate) {
+                    Application.Current.MainWindow.Cursor = Cursors.Arrow;
+                    Application.Current.MainWindow.ForceCursor = true;
+                }
                 return rtf;
             }
             

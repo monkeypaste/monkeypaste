@@ -166,6 +166,7 @@
     <Compile Include="Utils\FlowDocuments\MpFlowDocumentHelpers.cs" />
     <Compile Include="Utils\FlowDocuments\MpFragment.cs" />
     <Compile Include="Utils\FlowDocuments\MpItemsContent.cs" />
+    <Compile Include="Utils\MpConsole.cs" />
     <Compile Include="Utils\MpImageHistogram.cs" />
     <Compile Include="Utils\MpBrowserUrlDetector.cs" />
     <Compile Include="Utils\MpRegEx.cs" />
@@ -277,6 +278,9 @@
     <Compile Include="Views\Analytics\MpImageAnalysisDocument.xaml.cs">
       <DependentUpon>MpImageAnalysisDocument.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MpLoadingWindow.xaml.cs">
+      <DependentUpon>MpLoadingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MpStandardBalloonControl.xaml.cs">
       <DependentUpon>MpStandardBalloonControl.xaml</DependentUpon>
     </Compile>
@@ -321,6 +325,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MpAssignHotkeyModalWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MpLoadingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

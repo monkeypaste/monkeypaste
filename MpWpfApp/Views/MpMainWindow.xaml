@@ -158,16 +158,40 @@
                     </Border>
                 </tb:TaskbarIcon.TrayToolTip>
             </tb:TaskbarIcon>
+            <Grid Background="DarkViolet"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Height="150"
+                  Width="300"
+                  Visibility="{Binding ProcessingVisibility}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="2*" />
+                </Grid.RowDefinitions>
+                <Label x:Name="LoadingLabel"
+                       Grid.Row="0"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="White"
+                       FontSize="30"
+                       Content="Processing" />
+                <Viewbox Grid.Row="1"
+                         Margin="20">
+                    <spinners:ucSpinnerCogs />
+                </Viewbox>
+            </Grid>
             <!-- Main Menu -->
             <StackPanel Grid.Row="0"
                         Grid.Column="0"
                         Orientation="Horizontal"
-                        Background="DarkGreen" />
+                        Background="DarkGreen" 
+                        Visibility="{Binding AppVisibility}"/>
             <!-- FilterMenu -->
             <Grid Grid.Row="1"
                   Grid.Column="0"
                   Focusable="True"
-                  Background="DarkViolet">
+                  Background="DarkViolet"
+                  Visibility="{Binding AppVisibility}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.5*" />
                     <ColumnDefinition Width="1.15*" />
@@ -579,7 +603,8 @@
             <Grid Grid.Row="2"
                   Grid.Column="0"
                   Focusable="True"
-                  Background="MediumPurple">
+                  Background="MediumPurple"
+                  Visibility="{Binding AppVisibility}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="{Binding AppModeButtonGridWidth}" />
                     <ColumnDefinition Width="*" />
@@ -1751,7 +1776,6 @@
                                                                                                          AutoWordSelection="False"
                                                                                                          IsInactiveSelectionHighlightEnabled="True"
                                                                                                          IsDocumentEnabled="True"
-                                                                                                         local:MpRtbSelection.RtbSelection="{Binding RtbSelectionRange, Mode=TwoWay, UpdateSourceTrigger=LostFocus,NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True}"
                                                                                                          Focusable="{Binding HostClipTileViewModel.IsEditingTile}"
                                                                                                          Cursor="{Binding RtbListBoxItemCursor}"
                                                                                                          Width="{Binding RtbWidth}"
@@ -2067,10 +2091,11 @@
                                                                                     Margin="0,3,0,3">
                                                                     <ComboBox x:Name="SelectedTemplateComboBox"
                                                                               FontSize="14"
+                                                                              MinWidth="100"
                                                                               Background="Transparent"
                                                                               HorizontalContentAlignment="Left"
                                                                               VerticalContentAlignment="Center"
-                                                                              SelectedItem="{Binding SelectedTemplate, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                                                                              SelectedIndex="{Binding SelectedTemplateIdx, Mode=TwoWay, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                                                                               ItemsSource="{Binding UniqueTemplateHyperlinkViewModelListByDocOrder}">
                                                                         <ComboBox.ItemTemplate>
                                                                             <ItemContainerTemplate>
@@ -2080,6 +2105,7 @@
                                                                                             DockPanel.Dock="Left"
                                                                                             Height="15"
                                                                                             Width="15"
+                                                                                            Margin="0,0,5,0"
                                                                                             BorderThickness="1"
                                                                                             CornerRadius="10" />
                                                                                     <TextBlock DockPanel.Dock="Right"
@@ -2104,7 +2130,7 @@
                                                                                     CornerRadius="10"
                                                                                     Background="White"
                                                                                     BorderThickness="0.5"
-                                                                                    BorderBrush="DimGray"
+                                                                                    BorderBrush="{Binding SelectedTemplateTextBoxBorderBrush}"
                                                                                     Margin="1"
                                                                                     Padding="0"
                                                                                     VerticalAlignment="Center"
@@ -2148,6 +2174,7 @@
                                                                             HorizontalAlignment="Center"
                                                                             Margin="8,0,0,0">
                                                                     <Button x:Name="PreviousTemplateButton"
+                                                                            BorderBrush="{Binding PreviousButtonBorderBrush}"
                                                                             TabIndex="2"
                                                                             Command="{Binding PreviousTemplateTokenCommand}"
                                                                             Width="20"
@@ -2157,6 +2184,7 @@
                                                                         <Image Source="/Resources/Images/back_black.png" />
                                                                     </Button>
                                                                     <Button x:Name="NextTemplateButton"
+                                                                            BorderBrush="{Binding NextButtonBorderBrush}"
                                                                             TabIndex="3"
                                                                             Command="{Binding NextTemplateTokenCommand}"
                                                                             Width="20"
@@ -2169,14 +2197,16 @@
                                                                 <Button x:Name="PasteTemplateButton"
                                                                         Grid.Column="4"
                                                                         TabIndex="4"
-                                                                        IsEnabled="{Binding IsTemplateReadyToPaste}"
+                                                                        Visibility="{Binding PasteButtonVisibility}"
+                                                                        BorderBrush="{Binding PasteButtonBorderBrush}"
                                                                         Command="{Binding PasteTemplateCommand}"
+                                                                        Content="{Binding PasteButtonText}"
                                                                         Margin="15,0,15,0"
-                                                                        Padding="0,0,0,0"
+                                                                        Padding="10,5,10,5"
                                                                         FontSize="12"
+                                                                        HorizontalAlignment="Left"
                                                                         VerticalContentAlignment="Top"
-                                                                        VerticalAlignment="Center"
-                                                                        Content="PASTE" />
+                                                                        VerticalAlignment="Center"/>
                                                             </Grid>
                                                         </Border>
                                                     </Canvas>
