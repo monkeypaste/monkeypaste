@@ -264,13 +264,13 @@ namespace MpWpfApp {
                     }
 
                     if (Properties.Settings.Default.SearchBySourceUrl) {
-                        uc = ClipTileViewModel.CopyItemUrl.ContainsByCaseSetting(hlt);
+                        uc = ClipTileViewModel.CopyItemUrl.UrlPath.ContainsByCaseSetting(hlt);
                         if (uc) {
                             this.Add(new MpHighlightTextRangeViewModel(ClipTileViewModel, null, null, sortIdx++, MpHighlightType.App));
                         }
                         if (ClipTileViewModel.IsTextItem) {
                             foreach (var rtbvm in ClipTileViewModel.RichTextBoxViewModelCollection) {
-                                bool ruc = rtbvm.CopyItemUrl.ContainsByCaseSetting(hlt);
+                                bool ruc = rtbvm.CopyItemUrl.UrlPath.ContainsByCaseSetting(hlt);
                                 uc = ruc ? true : uc;
                                 if(ruc) {
                                     this.Add(new MpHighlightTextRangeViewModel(ClipTileViewModel, rtbvm, null, sortIdx++, MpHighlightType.App));

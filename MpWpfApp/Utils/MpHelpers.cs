@@ -1400,7 +1400,11 @@ namespace MpWpfApp {
         #endregion
 
         #region Visual
-        
+
+        public BitmapSource CreateBorder(BitmapSource img, double scale, Color bgColor) {
+            return MpHelpers.Instance.TintBitmapSource(img, bgColor, true);
+        }
+
         public BitmapSource CopyScreen() {
             var left = System.Windows.Forms.Screen.AllScreens.Min(screen => screen.Bounds.X);
             var top = System.Windows.Forms.Screen.AllScreens.Min(screen => screen.Bounds.Y);
@@ -2730,6 +2734,54 @@ namespace MpWpfApp {
         #endregion
 
         #region Http
+        public async Task<string> GetUrlTitle(string url) {
+            string urlSource = await GetHttpSourceCode(url);
+
+            //sdf<title>poop</title>
+            //pre 3
+            //post 14
+            return GetXmlElementContent(urlSource, @"title");
+        }
+
+        public string GetXmlElementContent(string xml, string element) {
+            if (string.IsNullOrEmpty(xml) || string.IsNullOrEmpty(element)) {
+                return string.Empty;
+            }
+            element = element.Replace(@"<", string.Empty).Replace(@"/>", string.Empty);
+            element = @"<" + element + @">";
+            var strl = xml.Split(new string[] { element }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            if(strl.Count > 1) {
+                element = element.Replace(@"<", @"</");
+                return strl[1].Substring(0, strl[1].IndexOf(element));
+            }
+            return string.Empty;
+            int sIdx = xml.IndexOf(element);
+            if (sIdx < 0) {
+                return string.Empty;
+            }
+            sIdx += element.Length;
+            element = element.Replace(@"<", @"</");
+            int eIdx = xml.IndexOf(element);
+            if (eIdx < 0) {
+                return string.Empty;
+            }
+            return xml.Substring(sIdx, eIdx - sIdx);
+        }
+        
+        public async Task<string> GetHttpSourceCode(string url) {
+            if(!IsValidUrl(url)) {
+                return string.Empty;
+            }
+
+            using (HttpClient client = new HttpClient()) {
+                using (HttpResponseMessage response = client.GetAsync(url).Result) {
+                    using (HttpContent content = response.Content) {
+                        return await content.ReadAsStringAsync();
+                    }
+                }
+            }
+        }
+
         public string GetFullyFormattedUrl(string str) {
             if (str.StartsWith(@"http://")) {
                 return str;
@@ -2760,7 +2812,7 @@ namespace MpWpfApp {
         public BitmapSource GetUrlFavicon(String url) {
             try {
                 string urlDomain = GetUrlDomain(url);
-                Uri favicon = new Uri("http://www.google.com/s2/favicons?domain=" + urlDomain, UriKind.Absolute);
+                Uri favicon = new Uri(@"https://www.google.com/s2/favicons?sz=128&domain_url=" + urlDomain, UriKind.Absolute);
                 var img = new BitmapImage(favicon);
                 if((img as BitmapSource).IsEqual(_defaultFavIcon)) {
                     return null;
@@ -2774,6 +2826,7 @@ namespace MpWpfApp {
 
         public string GetUrlDomain(string url) {
             try {
+                url = GetFullyFormattedUrl(url);
                 int domainStartIdx = url.IndexOf(@"//") + 2;
                 if(url.Length <= domainStartIdx) {
                     return string.Empty;

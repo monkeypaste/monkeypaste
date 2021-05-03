@@ -16,11 +16,11 @@ using System.Windows.Threading;
 
 namespace MpWpfApp {
     public class MpCopyItem : MpDbObject, ICloneable {
+        private static List<MpCopyItem> _AllCopyItemList = null;
+        public static int TotalCopyItemCount = 0;
         #region Private Variables
         //private static int _CopyItemCount = 0;
         private object _itemData = null;
-        private static List<MpApp> _AppList = null;
-        private static List<MpColor> _ColorList = null;
 
         #endregion
 
@@ -33,6 +33,8 @@ namespace MpWpfApp {
         public int PostCopyItemId { get; set; } = 0;
 
         public MpApp App { get; set; }
+
+        public MpUrl ItemUrl { get; set; }
 
         public MpClient Client { get; set; }
 
@@ -123,9 +125,9 @@ namespace MpWpfApp {
                 return _itemBmpByteArray;
             }
         }
-        public string ItemUrl { get; set; } = string.Empty;
+        //public string ItemUrl { get; set; } = string.Empty;
 
-        public BitmapSource ItemFavIcon { get; set; } = null;
+       // public BitmapSource ItemFavIcon { get; set; } = null;
 
         //public BitmapSource ItemTitleSwirl { get; set; }
 
@@ -182,15 +184,15 @@ namespace MpWpfApp {
         #endregion
 
         #region Factory Methods
-            public static async Task<MpCopyItem> CreateFromClipboardAsync(IntPtr processHandle, int remainingRetryCount = 5, DispatcherPriority priority = DispatcherPriority.Background) {
-                MpCopyItem newCopyItem = null;
-                await Application.Current.Dispatcher.BeginInvoke(
-                        (Action)(() => {
-                            newCopyItem = CreateFromClipboard(processHandle, remainingRetryCount);
-                        }), priority);
+        public static async Task<MpCopyItem> CreateFromClipboardAsync(IntPtr processHandle, int remainingRetryCount = 5, DispatcherPriority priority = DispatcherPriority.Background) {
+            MpCopyItem newCopyItem = null;
+            await Application.Current.Dispatcher.BeginInvoke(
+                    (Action)(() => {
+                        newCopyItem = CreateFromClipboard(processHandle, remainingRetryCount);
+                    }), priority);
 
-                return newCopyItem;
-            }
+            return newCopyItem;
+        }
 
         public static MpCopyItem CreateFromClipboard(IntPtr processHandle, int remainingRetryCount = 5) {
             if(remainingRetryCount < 0) {
@@ -295,21 +297,23 @@ namespace MpWpfApp {
         }
 
         public static List<MpCopyItem> GetAllCopyItems(out int count) {
-            _AppList = MpApp.GetAllApps();
-            _ColorList = MpColor.GetAllColors();
             count = 0;
-            var clips = new List<MpCopyItem>();
-            var dt = MpDb.Instance.Execute("select * from MpCopyItem order by CopyDateTime DESC", null);
-            if (dt != null && dt.Rows.Count > 0) {
-                foreach (DataRow dr in dt.Rows) {
-                    var ci = new MpCopyItem(dr);
-                    if(!ci.IsSubCompositeItem) {
-                        count++;
+            if(_AllCopyItemList == null) {
+                _AllCopyItemList = new List<MpCopyItem>();
+                var dt = MpDb.Instance.Execute("select * from MpCopyItem order by CopyDateTime DESC", null);
+                if (dt != null && dt.Rows.Count > 0) {
+                    foreach (DataRow dr in dt.Rows) {
+                        var ci = new MpCopyItem(dr);
+                        if (!ci.IsSubCompositeItem) {
+                            count++;
+                        }
+                        _AllCopyItemList.Add(ci);
                     }
-                    clips.Add(ci);
                 }
+            } else {
+                count = _AllCopyItemList.Where(x => x.CopyItemType != MpCopyItemType.Composite).ToList().Count;
             }
-            return clips;
+            return _AllCopyItemList;
         }
 
         public static MpCopyItem GetCopyItemById(int ciid) {
@@ -580,10 +584,10 @@ namespace MpWpfApp {
             if(hwnd != IntPtr.Zero) {
                 //occurs for items added from clipboard
                 var appPath = MpHelpers.Instance.GetProcessPath(hwnd);
-                var appList = _AppList.Where(x => x.AppPath == appPath).ToList();
+                var appList = MpApp.GetAllApps().Where(x => x.AppPath == appPath).ToList();
                 if (appList == null || appList.Count == 0) {
                     App = new MpApp(false, hwnd);
-                    _AppList.Add(App);
+                    MpApp.GetAllApps().Add(App);
                 } else {
                     App = appList[0];
                 }
@@ -596,10 +600,10 @@ namespace MpWpfApp {
                 App = app;
             }
 
-            var color = _ColorList.Where(x => x.Color == tileColor).ToList();
+            var color = MpColor.GetAllColors().Where(x => x.Color == tileColor).ToList();
             if(color == null || color.Count == 0) {
                 ItemColor = new MpColor(tileColor);
-                _ColorList.Add(ItemColor);
+                MpColor.GetAllColors().Add(ItemColor);
             } else {
                 ItemColor = color[0];
             }
@@ -1004,31 +1008,18 @@ namespace MpWpfApp {
             CopyDateTime = DateTime.Parse(dr["CopyDateTime"].ToString());
             Title = dr["Title"].ToString();
             CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
-            ItemUrl = dr["ItemUrl"].ToString();
             ItemDescription = dr["ItemDescription"].ToString();
             PasteCount = Convert.ToInt32(dr["PasteCount"].ToString());
 
-            if (ItemUrl == null) {
-                ItemUrl = string.Empty;
-            }
             ItemCsv = dr["ItemCsv"].ToString();
 
             Client = new MpClient(0, 0, MpHelpers.Instance.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
-            if(_AppList == null) {
-                _AppList = MpApp.GetAllApps();
-            }
-            App = _AppList.Where(x => x.AppId == appId).ToList()[0];
-            if(_ColorList == null) {
-                _ColorList = MpColor.GetAllColors();
-            }
-            var icl = _ColorList.Where(x => x.ColorId == colorId).ToList();
-            if(icl.Count > 0) {
-                ItemColor = icl[0];
-            } else {
+            App = MpApp.GetAppById(appId);
+            ItemColor = MpColor.GetColorById(colorId);
+            if(ItemColor == null) {
                 ItemColor = new MpColor(MpHelpers.Instance.GetRandomColor());
                 ItemColor.WriteToDatabase();
-            }
-            
+            }            
 
             if (CopyItemType == MpCopyItemType.Image) {
                 ItemPlainText = dr["ItemText"].ToString();
@@ -1051,9 +1042,9 @@ namespace MpWpfApp {
                 ItemBitmapSource = MpHelpers.Instance.ConvertByteArrayToBitmapSource(_itemBmpByteArray);
             }
 
-            if (dr["ItemFavIcon"] != null && dr["ItemFavIcon"].GetType() != typeof(System.DBNull)) {
-                var favIconByteArray = (byte[])dr["ItemFavIcon"];
-                ItemFavIcon = MpHelpers.Instance.ConvertByteArrayToBitmapSource(favIconByteArray);
+            if (dr["fk_MpUrlId"] != null && dr["fk_MpUrlId"].GetType() != typeof(System.DBNull)) {
+                int urlId = Convert.ToInt32(dr["fk_MpUrlId"].ToString());
+                ItemUrl = MpUrl.GetUrlById(urlId);
             }
 
             CompositeParentCopyItemId = GetCompositeParentCopyItemId();
@@ -1132,9 +1123,10 @@ namespace MpWpfApp {
                     cci.DeleteFromDatabase();
                 }
             }
-            
-            //var mwvm = (MpMainWindowViewModel)Application.Current.MainWindow.DataContext;
-            //mwvm.ClipTrayViewModel.GetDataSource().CopyItemDataProvider.OnCopyItemChanged(this, new MpCopyItemChangeEventArgs(MpCopyItemChangeType.Remove));
+            var cil = GetAllCopyItems(out int count).Where(x => x.CopyItemId == CopyItemId).ToList();
+            if (cil.Count > 0) {
+                _AllCopyItemList.RemoveAt(_AllCopyItemList.IndexOf(cil[0]));
+            }
         }
 
         // still req'd if NoDb=true
@@ -1148,17 +1140,15 @@ namespace MpWpfApp {
             if(string.IsNullOrEmpty(itemText)) {
                 itemText = string.Empty;
             }
-            byte[] itemFavIcon = ItemFavIcon == null ? null : ItemFavIcon.ToByteArray();
             //byte[] itemImage = MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemBitmapSource);
             //if copyitem already exists
             if (CopyItemId > 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "update MpCopyItem set PasteCount=@pc, ItemFavIcon=@ifi, ItemDescription=@id, ItemUrl=@iu, ItemCsv=@icsv, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemImage=@ii where pk_MpCopyItemId=@ciid",
+                        "update MpCopyItem set PasteCount=@pc, fk_MpUrlId=@uid, ItemDescription=@id, ItemCsv=@icsv, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemImage=@ii where pk_MpCopyItemId=@ciid",
                         new Dictionary<string, object> {
                             { "@pc", PasteCount },
-                            { "@ifi",itemFavIcon },
+                            { "@uid", ItemUrl == null ? 0:ItemUrl.UrlId },
                             { "@id", ItemDescription },
-                            { "@iu", ItemUrl },
                             { @"icsv",ItemCsv },
                             //{ "@ts", MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemTitleSwirl) },
                             { "@citd", (int)CopyItemType },
@@ -1173,15 +1163,13 @@ namespace MpWpfApp {
                         });
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpCopyItem(PasteCount,ItemFavIcon, ItemDescription, ItemUrl, ItemCsv,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) " + 
-                    "values (@pc,@ifi,@id,@iu,@icsv,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
+                    "insert into MpCopyItem(PasteCount, ItemDescription, fk_MpUrlId, ItemCsv,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,ItemImage) " + 
+                    "values (@pc,@id,@uid,@icsv,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
                     new Dictionary<string, object> {
                             { "@pc", PasteCount },
-                            { "@ifi",itemFavIcon },
                             { "@id", ItemDescription },
-                            { "@iu", ItemUrl },
+                            { "@uid", ItemUrl == null ? 0:ItemUrl.UrlId },
                             { "@icsv",ItemCsv },
-                            //{ "@ts", MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemTitleSwirl) },
                             { "@citd", (int)CopyItemType },
                             { "@cid", Client.ClientId },
                             { "@aid", App.AppId },
@@ -1233,7 +1221,14 @@ namespace MpWpfApp {
                 cit.CopyItemId = CopyItemId;
                 cit.WriteToDatabase();
             }
-            
+
+            var cil = GetAllCopyItems(out int count).Where(x => x.CopyItemId == CopyItemId).ToList();
+            if (cil.Count > 0) {
+                _AllCopyItemList[_AllCopyItemList.IndexOf(cil[0])] = this;
+            } else {
+                _AllCopyItemList.Add(this);
+            }
+
             sw.Stop();
             Console.WriteLine("CopyItem(Id:" + CopyItemId + ") WriteToDatabase time: " + sw.ElapsedMilliseconds + "ms");
         }

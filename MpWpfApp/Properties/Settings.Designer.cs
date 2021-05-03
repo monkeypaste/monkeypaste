@@ -1308,5 +1308,15 @@ namespace MpWpfApp.Properties {
                 return ((string)(this["DefaultCultureInfoName"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://www.google.com/s2/favicons?https://www.google.com/s2/favicons?sz=64&domai" +
+            "n_url=")]
+        public string DomainFavIconEndpoint {
+            get {
+                return ((string)(this["DomainFavIconEndpoint"]));
+            }
+        }
     }
 }

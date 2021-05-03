@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
     public class MpColor : MpDbObject {
+        private static List<MpColor> _AllColorList = null;
+        public static int TotalColorCount = 0;
+
         public int ColorId { get; set; }
         public Color Color {
             get {
@@ -31,14 +36,61 @@ namespace MpWpfApp {
         private int _r, _g, _b, _a; 
 
         public static List<MpColor> GetAllColors() {
-            var colorList = new List<MpColor>();
-            DataTable dt = MpDb.Instance.Execute("select * from MpColor", null);
-            if (dt != null && dt.Rows.Count > 0) {
-                foreach (DataRow dr in dt.Rows) {
-                    colorList.Add(new MpColor(dr));
+            if(_AllColorList == null) {
+                _AllColorList = new List<MpColor>();
+                DataTable dt = MpDb.Instance.Execute("select * from MpColor", null);
+                if (dt != null && dt.Rows.Count > 0) {
+                    foreach (DataRow dr in dt.Rows) {
+                        _AllColorList.Add(new MpColor(dr));
+                    }
                 }
             }
-            return colorList;
+            return _AllColorList;
+        }
+        public static MpColor GetColorById(int colorId) {
+            if (_AllColorList == null) {
+                GetAllColors();
+            }
+            var udbpl = _AllColorList.Where(x => x.ColorId == colorId).ToList();
+            if (udbpl.Count > 0) {
+                return udbpl[0];
+            }
+            return null;
+        }
+
+        public static MpObservableCollection<MpColor> CreatePrimaryColorList(BitmapSource bmpSource) {
+            //var sw = new Stopwatch();
+            //sw.Start();
+            var primaryIconColorList = new MpObservableCollection<MpColor>();
+            var hist = MpImageHistogram.Instance.GetStatistics(bmpSource);
+            foreach (var kvp in hist) {
+                var c = new MpColor(kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, 255);
+
+                //Console.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
+                if (primaryIconColorList.Count == 5) {
+                    break;
+                }
+                //between 0-255 where 0 is black 255 is white
+                var rgDiff = Math.Abs((int)c.Color.R - (int)c.Color.G);
+                var rbDiff = Math.Abs((int)c.Color.R - (int)c.Color.B);
+                var gbDiff = Math.Abs((int)c.Color.G - (int)c.Color.B);
+                var totalDiff = rgDiff + rbDiff + gbDiff;
+
+                //0-255 0 is black
+                var grayScaleValue = 0.2126 * (int)c.Color.R + 0.7152 * (int)c.Color.G + 0.0722 * (int)c.Color.B;
+                var relativeDist = primaryIconColorList.Count == 0 ? 1 : MpHelpers.Instance.ColorDistance(primaryIconColorList[primaryIconColorList.Count - 1].Color, c.Color);
+                if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
+                    primaryIconColorList.Add(c);
+                }
+            }
+
+            //if only 1 color found within threshold make random list
+            for (int i = primaryIconColorList.Count; i < 5; i++) {
+                primaryIconColorList.Add(new MpColor(MpHelpers.Instance.GetRandomColor()));
+            }
+            //sw.Stop();
+            //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
+            return primaryIconColorList;
         }
 
         public MpColor(int colorId) {
@@ -115,6 +167,12 @@ namespace MpWpfApp {
                         { "@cid", ColorId }
                     });
             }
+            var al = _AllColorList.Where(x => x.ColorId == ColorId).ToList();
+            if (al.Count > 0) {
+                _AllColorList[_AllColorList.IndexOf(al[0])] = this;
+            } else {
+                _AllColorList.Add(this);
+            }        
         }
     }
 }

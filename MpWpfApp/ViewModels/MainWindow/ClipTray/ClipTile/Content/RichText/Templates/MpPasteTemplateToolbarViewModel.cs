@@ -614,6 +614,11 @@ namespace MpWpfApp {
                 return;
             }
 
+            foreach(var uthlvm in UniqueTemplateHyperlinkViewModelListByDocOrder) {
+                SubSelectedRtbViewModel.RawRtf = SubSelectedRtbViewModel.RawRtf.Replace(uthlvm.TemplateName, uthlvm.TemplateText);
+            }
+            SubSelectedRtbViewModel.TemplateRichText = SubSelectedRtbViewModel.RawRtf;
+            return;
             //to paste w/ templated text a clone of the templates is created then 
             //the links are cleared (returning the edited text to the template names
             var uthlvmlc = new List<MpTemplateHyperlinkViewModel>();

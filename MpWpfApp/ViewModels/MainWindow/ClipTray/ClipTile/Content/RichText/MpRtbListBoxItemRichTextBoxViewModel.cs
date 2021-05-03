@@ -661,6 +661,19 @@ namespace MpWpfApp {
         #endregion 
 
         #region Business Logic 
+        private string _rawRtf;
+        public string RawRtf {
+            get {
+                return _rawRtf;
+            }
+            set {
+                if(_rawRtf != value) {
+                    _rawRtf = value;
+                    OnPropertyChanged(nameof(RawRtf));
+                }
+            }
+        }
+
         private DateTime _lastSubSelectedDateTime;
         public DateTime LastSubSelectedDateTime {
             get {
@@ -966,15 +979,15 @@ namespace MpWpfApp {
         #region Model
         public BitmapSource CopyItemFavIcon {
             get {
-                if (CopyItem == null) {
+                if (CopyItemUrlDomain == null) {
                     return null;
                 }
-                return CopyItem.ItemFavIcon;
+                return CopyItemUrlDomain.FavIconImage;
             }
             set {
-                if (CopyItem != null && CopyItem.ItemFavIcon != value) {
-                    CopyItem.ItemFavIcon = value;
-                    CopyItem.WriteToDatabase();
+                if (CopyItemUrlDomain != null && CopyItemUrlDomain.FavIconImage != value) {
+                    CopyItemUrlDomain.FavIconImage = value;
+                    CopyItemUrlDomain.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItemFavIcon));
                     OnPropertyChanged(nameof(AppIcon));
                 }
@@ -1213,18 +1226,39 @@ namespace MpWpfApp {
             }
         }
 
-        public string CopyItemUrl {
+        public MpUrlDomain CopyItemUrlDomain {
+            get {
+                if (CopyItemUrl == null) {
+                    return null;
+                }
+                return CopyItemUrl.UrlDomain;
+            }
+            set {
+                if (CopyItemUrl != null && CopyItemUrl.UrlDomain != value) {
+                    CopyItemUrl.UrlDomain = value;
+                    CopyItemUrl.UrlDomain.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyItemUrlDomain));
+                }
+            }
+        }
+
+        public MpUrl CopyItemUrl {
             get {
                 if (CopyItem == null) {
-                    return string.Empty;
+                    return null;
                 } 
                 return CopyItem.ItemUrl;
             }
             set {
                 if (CopyItem != null && CopyItem.ItemUrl != value) {
                     CopyItem.ItemUrl = value;
+                    CopyItemUrlDomain = CopyItemUrl.UrlDomain;
+                    CopyItem.ItemUrl.WriteToDatabase();
                     CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItemUrl));
+                    OnPropertyChanged(nameof(CopyItemUrlDomain));
+                    OnPropertyChanged(nameof(AppIcon));
+                    OnPropertyChanged(nameof(CopyItem));
                 }
             }
         }
@@ -1270,10 +1304,9 @@ namespace MpWpfApp {
             }
             set {
                 //if(_copyItem != value) 
-                    {
-                    var tb = new ToggleButton();                    
+                    {                   
                     _copyItem = value;
-                    if (CopyItem != null) {
+                    if (CopyItem != null && !MpMainWindowViewModel.IsApplicationLoading) {
                         CopyItem.WriteToDatabase();
                     }
                     OnPropertyChanged(nameof(CopyItem));
@@ -1290,6 +1323,8 @@ namespace MpWpfApp {
                     OnPropertyChanged(nameof(CopyItemAppIcon));
                     OnPropertyChanged(nameof(PasteCount));
                     OnPropertyChanged(nameof(CopyItemAppName));
+                    OnPropertyChanged(nameof(CopyItemUrl));
+                    OnPropertyChanged(nameof(CopyItemUrlDomain));
                 }
             }
         }
@@ -1410,7 +1445,7 @@ namespace MpWpfApp {
             };
         }
 
-        public void ClipTileRichTextBoxListItemCanvas_Loaded(object sender, RoutedEventArgs e) {
+        public void RtbItem_Loaded(object sender, RoutedEventArgs e) {
             Rtbc = (Canvas)sender;
             Rtb = (RichTextBox)Rtbc.FindName("RtbListBoxItemRichTextBox");
             RtbListBoxItemClipBorder = (MpClipBorder)Rtbc.FindName("RtbListBoxItemOverlayBorder");
@@ -1435,11 +1470,15 @@ namespace MpWpfApp {
                 }
             };
 
-            //if (HasTemplate) 
-            {
-                ClearHyperlinks();
-            }
+            ClearHyperlinks();
+            RawRtf = Rtb.Document.ToRichText();
+           
             CreateHyperlinks();
+
+            if (HasTemplate) {
+                Console.WriteLine(@"Raw RTF for " + TemplateHyperlinkCollectionViewModel.Count);
+                Console.WriteLine(RawRtf);
+            }
 
             #region Drag & Drop
             var mouseDownPosition = new Point();
@@ -1662,19 +1701,37 @@ namespace MpWpfApp {
         #endregion      
 
         public async Task GatherAnalytics() {
-            if(CopyItem.ItemScreenshot != null) {
-                string detectedUrl = await MpBrowserUrlDetector.Instance.FindUrlAddressFromScreenshot(CopyItem.ItemScreenshot);
-                if(!string.IsNullOrEmpty(detectedUrl)) {
-                    CopyItemUrl = detectedUrl;
-                    CopyItemFavIcon = MpHelpers.Instance.GetUrlFavicon(detectedUrl);          
-                    if(RichTextBoxViewModelCollection.Count == 1) {
-                       await Application.Current.Dispatcher.BeginInvoke((Action)(() => {
-                            HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.AppIcon));
-                            HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.TileTitleIconSize));
-                            HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.TileTitleIconBorderSize));
-                        }),DispatcherPriority.Render);
-                    }
+            string detectedUrl = string.Empty;
+
+            if (CopyItem.ItemScreenshot != null) {
+                detectedUrl = await MpBrowserUrlDetector.Instance.FindUrlAddressFromScreenshot(CopyItem.ItemScreenshot);
+            }
+
+            if (!string.IsNullOrEmpty(detectedUrl)) {
+                string urlTitle = await MpHelpers.Instance.GetUrlTitle(detectedUrl); 
+                var itemUrl = new MpUrl(detectedUrl, urlTitle);
+                if(itemUrl.UrlDomain == null) {
+                    string urlDomain = MpHelpers.Instance.GetUrlDomain(detectedUrl);
+                    var urlFavIcon = MpHelpers.Instance.GetUrlFavicon(urlDomain);
+                    urlDomain = MpHelpers.Instance.GetFullyFormattedUrl(urlDomain);
+                    string urlDomainTitle = await MpHelpers.Instance.GetUrlTitle(urlDomain);
+                    CopyItemUrlDomain = new MpUrlDomain(urlDomain, urlFavIcon, urlDomainTitle, false);
                 }
+                itemUrl.UrlDomain = CopyItemUrlDomain;
+                CopyItemUrl = itemUrl;
+
+                if (RichTextBoxViewModelCollection.Count == 1) {
+                    await Application.Current.Dispatcher.BeginInvoke((Action)(() => {
+                        HostClipTileViewModel.CopyItemUrl = CopyItemUrl;
+                        HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.CopyItemFavIcon));
+                        HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.AppIcon));
+                        HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.TileTitleIconSize));
+                        HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.TileTitleIconBorderSize));
+                    }), DispatcherPriority.Render);
+                }
+
+                
+
                 Console.WriteLine("Detected Browser Address: " + detectedUrl);
             }
         }
@@ -1766,6 +1823,9 @@ namespace MpWpfApp {
             //remove links to update model rich text
             ClearHyperlinks();
 
+            if(Rtb != null) {
+                RawRtf = Rtb.Document.ToRichText();
+            }
             //clear any search highlighting when saving the document then restore after save
             HostClipTileViewModel.HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(this);
 
@@ -1801,7 +1861,7 @@ namespace MpWpfApp {
                     linkText = thlvm.TemplateName;
                 }
                 hl.Inlines.Clear();
-                new Span(new Run(linkText), hl.ContentStart);
+                new Span(new Run(linkText), hl.ElementStart);
             }
             TemplateHyperlinkCollectionViewModel.Clear();
             if (rtbSelection != null) {

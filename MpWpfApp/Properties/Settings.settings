@@ -361,5 +361,8 @@
     <Setting Name="DefaultCultureInfoName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">en-US</Value>
     </Setting>
+    <Setting Name="DomainFavIconEndpoint" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">https://www.google.com/s2/favicons?https://www.google.com/s2/favicons?sz=64&amp;domain_url=</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

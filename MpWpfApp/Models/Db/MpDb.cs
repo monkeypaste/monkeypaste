@@ -378,7 +378,6 @@ namespace MpWpfApp {
                       pk_MpAppId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , SourcePath text NOT NULL 
                     , AppName text 
-                    , AppType int NOT NULL default 1
                     , IsAppRejected integer NOT NULL                    
                     , IconBlob image NOT NULL
                     , IconBorderBlob image NOT NULL
@@ -394,13 +393,43 @@ namespace MpWpfApp {
                     , CONSTRAINT FK_MpApp_2_0 FOREIGN KEY (fk_MpColorId3) REFERENCES MpColor (pk_MpColorId)
                     , CONSTRAINT FK_MpApp_3_0 FOREIGN KEY (fk_MpColorId4) REFERENCES MpColor (pk_MpColorId)
                     , CONSTRAINT FK_MpApp_4_0 FOREIGN KEY (fk_MpColorId5) REFERENCES MpColor (pk_MpColorId)
-                    );                
+                    );   
+                    ---------------------------------------------------------------------------------------------------------------------
+                    CREATE TABLE MpUrlDomain (
+                      pk_MpUrlDomainId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , UrlDomainPath text NOT NULL 
+                    , UrlDomainTitle text
+                    , IsUrlDomainRejected integer NOT NULL DEFAULT 0              
+                    , FavIconBlob image 
+                    , FavIconBorderBlob image 
+                    , FavIconSelectedHighlightBorderBlob image
+                    , FavIconHighlightBorderBlob image 
+                    , fk_MpColorId1 integer default 0
+                    , fk_MpColorId2 integer default 0
+                    , fk_MpColorId3 integer default 0
+                    , fk_MpColorId4 integer default 0
+                    , fk_MpColorId5 integer default 0
+                    , CONSTRAINT FK_MpUrlDomain_0_0 FOREIGN KEY (fk_MpColorId1) REFERENCES MpColor (pk_MpColorId)
+                    , CONSTRAINT FK_MpUrlDomain_1_0 FOREIGN KEY (fk_MpColorId2) REFERENCES MpColor (pk_MpColorId)
+                    , CONSTRAINT FK_MpUrlDomain_2_0 FOREIGN KEY (fk_MpColorId3) REFERENCES MpColor (pk_MpColorId)
+                    , CONSTRAINT FK_MpUrlDomain_3_0 FOREIGN KEY (fk_MpColorId4) REFERENCES MpColor (pk_MpColorId)
+                    , CONSTRAINT FK_MpUrlDomain_4_0 FOREIGN KEY (fk_MpColorId5) REFERENCES MpColor (pk_MpColorId)
+                    );  
+                    ---------------------------------------------------------------------------------------------------------------------
+                    CREATE TABLE MpUrl (
+                      pk_MpUrlId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , UrlPath text NOT NULL 
+                    , UrlTitle text
+                    , fk_MpUrlDomainId int NOT NULL
+                    , CONSTRAINT FK_MpUrl_0_0 FOREIGN KEY (fk_MpUrlDomainId) REFERENCES MpUrlDomain (pk_MpUrlDomainId)
+                    );   
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCopyItem (
                       pk_MpCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemTypeId integer NOT NULL
                     , fk_MpClientId integer NOT NULL
                     , fk_MpAppId integer NOT NULL
+                    , fk_MpUrlId integer
                     , fk_MpColorId integer
                     , Title text NULL 
                     , CopyCount integer not null default 1
@@ -409,14 +438,13 @@ namespace MpWpfApp {
                     , ItemText text NOT NULL      
                     , ItemDescription text
                     , ItemCsv text
-                    , ItemUrl text
-                    , ItemFavIcon image
                     , Screenshot longblob
                     , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL
                     , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
                     , CONSTRAINT FK_MpCopyItem_1_0 FOREIGN KEY (fk_MpClientId) REFERENCES MpClient (pk_MpClientId)
                     , CONSTRAINT FK_MpCopyItem_2_0 FOREIGN KEY (fk_MpCopyItemTypeId) REFERENCES MpCopyItemType (pk_MpCopyItemTypeId) 
                     , CONSTRAINT FK_MpCopyItem_3_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId) 
+                    , CONSTRAINT FK_MpCopyItem_4_0 FOREIGN KEY (fk_MpUrlId) REFERENCES MpUrl (pk_MpUrlId) 
                     );
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCompositeCopyItem (

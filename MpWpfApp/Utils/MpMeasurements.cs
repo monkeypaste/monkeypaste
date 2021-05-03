@@ -120,7 +120,7 @@ namespace MpWpfApp {
 
         public double ClipTileTitleFavIconSize {
             get {
-                return ClipTileTitleIconSize * 0.5;
+                return ClipTileTitleIconSize * 1.0;
             }
         }
 

@@ -337,7 +337,7 @@
 
         public double TileTitleIconSize {
             get {
-                if(CopyItem.ItemFavIcon == null) {
+                if(CopyItemUrlDomain == null || CopyItemUrlDomain.FavIconImage == null) {
                     return MpMeasurements.Instance.ClipTileTitleIconSize;
                 }
                 return MpMeasurements.Instance.ClipTileTitleFavIconSize;
@@ -346,7 +346,7 @@
 
         public double TileTitleIconBorderSize {
             get {
-                if (CopyItem.ItemFavIcon == null) {
+                if (CopyItemUrlDomain == null || CopyItemUrlDomain.FavIconImage == null) {
                     return MpMeasurements.Instance.ClipTileTitleIconBorderSize;
                 }
                 return MpMeasurements.Instance.ClipTileTitleFavIconBorderSize;
@@ -1184,25 +1184,18 @@
         #region Model
         public BitmapSource CopyItemFavIcon {
             get {
-                if(CopyItem == null) {
+                if (CopyItemUrlDomain == null) {
                     return null;
                 }
-                if(CopyItem.ItemFavIcon == null && RichTextBoxViewModelCollection.Count == 1) {
-                    CopyItem.ItemFavIcon = RichTextBoxViewModelCollection[0].CopyItemFavIcon;
-                    OnPropertyChanged(nameof(CopyItemFavIcon));
-                    //OnPropertyChanged(nameof(AppIcon));
-                    OnPropertyChanged(nameof(TileTitleIconSize));
-                    OnPropertyChanged(nameof(TileTitleIconBorderSize));
-
-                }
-                return CopyItem.ItemFavIcon;
+                return CopyItemUrlDomain.FavIconImage;
             }
             set {
-                if (CopyItem != null && CopyItem.ItemFavIcon != value) {
-                    CopyItem.ItemFavIcon = value;
-                    CopyItem.WriteToDatabase();
+                if (CopyItemUrlDomain != null && CopyItemUrlDomain.FavIconImage != value) {
+                    CopyItemUrlDomain.FavIconImage = value;
+                    CopyItemUrlDomain.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItemFavIcon));
                     OnPropertyChanged(nameof(AppIcon));
+
                     OnPropertyChanged(nameof(TileTitleIconSize));
                     OnPropertyChanged(nameof(TileTitleIconBorderSize));
                 }
@@ -1473,9 +1466,18 @@
                     if (HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel != null &&
                        HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.HighlightType == MpHighlightType.App &&
                        (RichTextBoxViewModelCollection.Count == 1 || HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.RtbItemViewModel == null)) {
+                        if(CopyItemFavIcon != null) {
+                            return CopyItemUrlDomain.FavIconSelectedHighlightBorderImage;
+                        }
                         return CopyItem.App.IconSelectedHighlightBorderImage;
                     }
+                    if (CopyItemFavIcon != null) {
+                        return CopyItemUrlDomain.FavIconHighlightBorderImage;
+                    }
                     return CopyItem.App.IconHighlightBorderImage;
+                }
+                if (CopyItemFavIcon != null) {
+                    return CopyItemUrlDomain.FavIconHighlightBorderImage;
                 }
                 return CopyItem.App.IconHighlightBorderImage;
             }
@@ -1485,6 +1487,9 @@
             get {
                 if (CopyItem == null) {
                     return new BitmapImage();
+                }
+                if (CopyItemFavIcon != null) {
+                    return CopyItemUrlDomain.FavIconBorderImage;
                 }
                 return CopyItem.App.IconBorderImage;
             }
@@ -1508,18 +1513,41 @@
             }
         }
 
-        public string CopyItemUrl {
+        public MpUrlDomain CopyItemUrlDomain {
+            get {
+                if (CopyItemUrl == null) {
+                    return null;
+                }
+                return CopyItemUrl.UrlDomain;
+            }
+            set {
+                if (CopyItemUrl != null && CopyItemUrl.UrlDomain != value) {
+                    CopyItemUrl.UrlDomain = value;
+                    CopyItemUrl.UrlDomain.WriteToDatabase();
+                    OnPropertyChanged(nameof(CopyItemUrlDomain));
+                }
+            }
+        }
+
+        public MpUrl CopyItemUrl {
             get {
                 if (CopyItem == null) {
-                    return string.Empty;
+                    return null;
                 }
                 return CopyItem.ItemUrl;
             }
             set {
-                if(CopyItem != null && CopyItem.ItemUrl != value) {
+                if (CopyItem != null && CopyItem.ItemUrl != value) {
                     CopyItem.ItemUrl = value;
+                    CopyItemUrlDomain = CopyItemUrl.UrlDomain;
+                    CopyItem.ItemUrl.WriteToDatabase();
                     CopyItem.WriteToDatabase();
                     OnPropertyChanged(nameof(CopyItemUrl));
+                    OnPropertyChanged(nameof(CopyItemUrlDomain));
+                    OnPropertyChanged(nameof(CopyItemFavIcon));
+                    OnPropertyChanged(nameof(AppIcon));
+                    OnPropertyChanged(nameof(TileTitleIconSize));
+                    OnPropertyChanged(nameof(TileTitleIconBorderSize));
                 }
             }
         }
@@ -1600,7 +1628,7 @@
                     //    updateVms = true;
                     //}
                     _copyItem = value;
-                    if(CopyItem != null) {
+                    if(CopyItem != null && !MpMainWindowViewModel.IsApplicationLoading) {
                         CopyItem.WriteToDatabase();
                     }
                     
@@ -1644,7 +1672,8 @@
                     OnPropertyChanged(nameof(AppIcon));
                     OnPropertyChanged(nameof(TileTitleIconSize));
                     OnPropertyChanged(nameof(TileTitleIconBorderSize));
-                    
+                    OnPropertyChanged(nameof(CopyItemUrl));
+                    OnPropertyChanged(nameof(CopyItemUrlDomain));
                     //if(updateVms) {
                     //    TitleSwirlViewModel = new MpClipTileTitleSwirlViewModel(this);
                     //    RichTextBoxViewModelCollection = new MpClipTileRichTextBoxViewModelCollection(this);
@@ -1747,7 +1776,7 @@
             };
 
             ViewModelLoaded += async (s, e) => {
-                if (!MpMainWindowViewModel.IsApplicationLoading) {
+                if (!MpMainWindowViewModel.IsApplicationLoading && !IsTextItem) {
                     await GatherAnalytics();
                 }
                 OnPropertyChanged(nameof(AppIcon));
@@ -2059,6 +2088,10 @@
             } else {
                 ShortcutKeyString = string.Empty;
             }
+
+            if (RichTextBoxViewModelCollection.Count == 1) {
+                CopyItemUrl = RichTextBoxViewModelCollection[0].CopyItemUrl;
+            }
             OnViewModelLoaded();
         }
 
@@ -2217,7 +2250,10 @@
                 //this triggers clip tray to swap out the app icons for the filtered app
                 MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon = ctvm.CopyItemAppIcon;
                 MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp = true;
-            };           
+            };      
+            
+
+
         }
         public MpImageAnalysisDocument ImagePreview { get; set; }
 
@@ -2465,8 +2501,14 @@
             if(urlTask != null) {
                 string detectedUrl = await urlTask;
                 if (!string.IsNullOrEmpty(detectedUrl)) {
-                    CopyItemUrl = detectedUrl;
-                    CopyItemFavIcon = MpHelpers.Instance.GetUrlFavicon(detectedUrl);
+                    string urlTitle = await MpHelpers.Instance.GetUrlTitle(detectedUrl);
+                    CopyItemUrl = new MpUrl(detectedUrl, urlTitle);
+                    if (CopyItemUrlDomain == null) {
+                        string urlDomain = MpHelpers.Instance.GetUrlDomain(detectedUrl);
+                        var urlFavIcon = MpHelpers.Instance.GetUrlFavicon(urlDomain);
+                        string urlDomainTitle = await MpHelpers.Instance.GetUrlTitle(urlDomain);
+                        CopyItemUrlDomain = new MpUrlDomain(urlDomain, urlFavIcon, urlDomainTitle, false);
+                    }
                 }
                 Console.WriteLine("Detected Browser Address: " + detectedUrl);
             }
@@ -2480,7 +2522,7 @@
                 //var imgAnalysis = JsonConvert.DeserializeObject<MpImageAnalysis>(cvContent);
             }
 
-            OnPropertyChanged(nameof(AppIcon));
+            OnPropertyChanged(nameof(AppIcon));            
         }
 
         public void FadeIn(double bt = 0,double ms = 1000) {

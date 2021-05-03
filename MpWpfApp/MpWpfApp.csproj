@@ -133,6 +133,8 @@
     <Compile Include="Models\MpPasteToAppPath.cs" />
     <Compile Include="Models\MpCopyItemTemplate.cs" />
     <Compile Include="Models\MpDetectedImageObject.cs" />
+    <Compile Include="Models\MpUrlDomain.cs" />
+    <Compile Include="Models\MpUrl.cs" />
     <Compile Include="Properties\DefaultUiStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

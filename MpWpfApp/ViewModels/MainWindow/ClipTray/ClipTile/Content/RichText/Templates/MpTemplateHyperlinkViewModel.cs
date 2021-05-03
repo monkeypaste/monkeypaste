@@ -468,7 +468,7 @@ namespace MpWpfApp {
             hl.Tag = MpSubTextTokenType.TemplateSegment;
             hl.IsEnabled = true;
             hl.TextDecorations = null;
-            hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
+            //hl.NavigateUri = new Uri(Properties.Settings.Default.TemplateTokenUri);
             hl.Unloaded += (s, e) => {
                 //occurs when template is deleted in edit tile mode
                 
@@ -528,11 +528,23 @@ namespace MpWpfApp {
         public void SetTemplateText(string templateText) {
             TemplateText = templateText;
         }
+
+        public void SwapWithSpan() {
+            var hl = TemplateHyperlink;
+            hl.Inlines.Clear();
+            new Span(new Run(TemplateText), hl.ElementStart);
+        }
+
+        public void SwapWithTemplate() {
+            var hl = TemplateHyperlink;
+            hl.Inlines.Clear();
+            TemplateHyperlink = MpTemplateHyperlinkViewModel.CreateTemplateHyperlink(HostRtbItemViewModel, CopyItemTemplate, TemplateHyperlinkRange);
+        }
         #endregion
 
         #region Commands
-        
-        #endregion             
+
+        #endregion
 
         #region Overrides
         public override string ToString() {
