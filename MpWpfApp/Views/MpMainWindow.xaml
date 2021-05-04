@@ -864,10 +864,15 @@
                                                                             MethodName="ClipTile_ContextMenu_Closed" />
                                                     </i:EventTrigger>
                                                 </i:Interaction.Triggers>
+                                                <MenuItem Header="_Copy"
+                                                          Tag="27"
+                                                          Icon="{Binding Source={StaticResource CopyIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                                                          Command="{Binding Data.CopySelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
                                                 <MenuItem Header="_Paste"
                                                           Tag="6"
                                                           Icon="{Binding Source={StaticResource PasteIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                                                           Command="{Binding Data.PasteSelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
+                                                <Separator />
                                                 <MenuItem Header="Delete"
                                                           Tag="7"
                                                           Icon="{Binding Source={StaticResource DeleteIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
@@ -1575,11 +1580,13 @@
                                                                         <local:MpMultiSelectListBox.ItemTemplate>
                                                                             <DataTemplate>
                                                                                 <AdornerDecorator x:Name="RtbListBoxItemCanvasAdorner"
+                                                                                                  AllowDrop="True"
                                                                                                   Visibility="{Binding SubItemVisibility}"
                                                                                                   DataContext="{Binding}">
                                                                                     <Canvas x:Name="RtbListBoxItemCanvas"
                                                                                             DataContext="{Binding}"
                                                                                             HorizontalAlignment="Left"
+                                                                                            AllowDrop="True"
                                                                                             VerticalAlignment="Top"
                                                                                             Focusable="{Binding HostClipTileViewModel.IsExpanded}"
                                                                                             Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
@@ -1612,10 +1619,15 @@
                                                                                                                             MethodName="RtbItem_ContextMenu_Closed" />
                                                                                                     </i:EventTrigger>
                                                                                                 </i:Interaction.Triggers>
+                                                                                                <MenuItem Header="_Copy"
+                                                                                                          Tag="27"
+                                                                                                          Icon="{Binding Source={StaticResource CopyIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
+                                                                                                          Command="{Binding Data.CopySelectedClipsCommand, Source={StaticResource ClipTrayProxy}}" />
                                                                                                 <MenuItem Header="_Paste"
                                                                                                           Tag="6"
                                                                                                           Icon="{Binding Source={StaticResource PasteIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                                                                                                           Command="{Binding Data.PasteSubItemCommand, Source={StaticResource RtbListBoxItemProxy}}" />
+                                                                                                <Separator />
                                                                                                 <MenuItem Header="Delete"
                                                                                                           Tag="7"
                                                                                                           Icon="{Binding Source={StaticResource DeleteIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
@@ -1725,7 +1737,7 @@
                                                                                                     <MenuItem Header="_Invert Selection"
                                                                                                               Tag="11"
                                                                                                               Icon="{Binding Source={StaticResource InvertSelectionIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
-                                                                                                              Command="{Binding Data.InvertSubSelectionCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />
+                                                                                                              Command="{Binding Data.InvertSubSelectionCommand, Source={StaticResource ClipTileRichTextBoxListBox_Proxy}}" />                                                                                                    
                                                                                                 </MenuItem>
                                                                                                 <MenuItem Header="_Hotkey"
                                                                                                           Tag="14"
@@ -1772,7 +1784,7 @@
                                                                                                          Background="{local:MpSettingBinding ThemeClipTileBackgroundColor, Converter={StaticResource StringToBrushConverter}}"
                                                                                                          IsReadOnly="{Binding HostClipTileViewModel.IsRtbReadOnly}"
                                                                                                          IsEnabled="True"
-                                                                                                         AllowDrop="False"
+                                                                                                         AllowDrop="True"
                                                                                                          AutoWordSelection="False"
                                                                                                          IsInactiveSelectionHighlightEnabled="True"
                                                                                                          IsDocumentEnabled="True"

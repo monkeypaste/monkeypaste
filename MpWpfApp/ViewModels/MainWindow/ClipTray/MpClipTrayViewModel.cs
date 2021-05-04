@@ -245,8 +245,6 @@ namespace MpWpfApp {
             }
         }
 
-        public bool WasItemAdded { get; set; } = false;
-
         public bool IsTrayDropping { get; set; } = false;
 
         public bool IsAnyClipOrSubItemDragging {
@@ -500,7 +498,7 @@ namespace MpWpfApp {
             };
             ListBox.DragOver += (s2, e1) => {
                 IsTrayDropping = false;
-                e1.Effects = DragDropEffects.None;
+                //e1.Effects = DragDropEffects.None;
                 ClipTrayAdornerLayer.Update();
                 if(IsAnyClipDropping) {
                     return;
@@ -531,7 +529,7 @@ namespace MpWpfApp {
                     if (dropIdx >= 0 && (dropIdx >= this.Count || (dropIdx < this.Count && !this[dropIdx].IsClipDragging))) {
                         if (dropIdx < this.Count && this[dropIdx].IsClipDragging) {
                             //ignore dropping dragged tile onto itself
-                            e2.Effects = DragDropEffects.None;
+                            //e2.Effects = DragDropEffects.None;
                             e2.Handled = true;
                             IsTrayDropping = false;
                             ClipTrayAdornerLayer.Update();
@@ -598,7 +596,7 @@ namespace MpWpfApp {
                     e2.Effects = DragDropEffects.Move;
                     //Refresh();
                 } else {
-                    e2.Effects = DragDropEffects.None;                    
+                    //e2.Effects = DragDropEffects.None;                    
                 }
                 e2.Handled = true;
                 IsTrayDropping = false;
@@ -888,7 +886,7 @@ namespace MpWpfApp {
                     primarySelectedClipTile.IsSelected = true;
                 }
                 primarySelectedClipTile.MergeClip(new List<MpCopyItem>() { newCopyItem });
-                
+                MainWindowViewModel.TagTrayViewModel.RefreshAllCounts();
                 if (Properties.Settings.Default.NotificationShowAppendBufferToast) {
                     // TODO now composite item doesn't roll up children so the buffer needs to be created here
                     // if I use this at all
@@ -953,72 +951,33 @@ namespace MpWpfApp {
                 }
             }
 
-            //int nextVisibleIdx = 0;
-            //if (VisibileClipTiles.Count < Properties.Settings.Default.MaxRecentClipItems) {
-            //    //occurs when there are not enough items to fill all recent tiles
-            //    //and the tile after all visible needs to be 'unstubbed'
-            //    if(VisibileClipTiles.Count > 0) {
-            //        nextVisibleIdx = this.IndexOf(VisibileClipTiles[VisibileClipTiles.Count - 1]) + 1;
-            //    }
-            //    this[nextVisibleIdx].TileVisibility = Visibility.Visible;
-            //} else {
-            //    //otherwise reuse tail of recent to virtualize item adding
-            //    nextVisibleIdx = this.IndexOf(VisibileClipTiles[VisibileClipTiles.Count - 1]);
-            //}
-
-
             if (forceIdx >= 0 && forceIdx < this.Count) {
                 base.Insert(forceIdx, ctvm);
             } else {
-                //var ctvm = this[nextVisibleIdx];
-                //for (int i = 1; i < ctvm.RichTextBoxViewModelCollection.Count; i++) {
-                //    ctvm.RichTextBoxViewModelCollection.RemoveAt(i);
-                //}
-                //ctvm.CopyItem = ci;
-                //if(ctvm.IsTextItem) {
-                //    ctvm.RichTextBoxViewModelCollection[0].CopyItem = ci;
-                //}
                 base.Add(ctvm);
-            }
-            
-
-            // NOTE removing this refresh will confuse the tiles flowdocument owner or something
-            // it probably is something I can fix to avoid the refresh but not sure how
-            if (MainWindowViewModel == null || !MainWindowViewModel.IsMainWindowLocked) {
-                //Refresh();
-            } else {
-               // ctvm.IsSelected = false;
-            }
-
-            if(!MpMainWindowViewModel.IsApplicationLoading) {
-                var svm = MainWindowViewModel.SearchBoxViewModel;
-                if (ctvm.WasAddedAtRuntime &&
-                   MainWindowViewModel.IsMainWindowLocked &&
-                   svm.HasText) {
-                    //when user is searching w/ locked window and an item is added
-                    //it shouldn't be added until search is empty just to keep simple
-                    //because it may but likely won't meet search criteria
-                    Application.Current.Dispatcher.BeginInvoke((Action)(async () => {
-                        var visibilityDictionary = await ctvm.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(svm.SearchText);
-                        foreach (var kvp in visibilityDictionary) {
-                            if (kvp.Key == ctvm) {
-                                ctvm.TileVisibility = kvp.Value;
-                            }
-                        }
-                        if (svm.SearchNavigationButtonPanelVisibility != Visibility.Visible) {
-                            svm.SearchNavigationButtonPanelVisibility = ctvm.HighlightTextRangeViewModelCollection.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
-                        }
-
-                    }), DispatcherPriority.Background);
-                }
             }            
 
-            //not calling this doesn't associate the items clipborder to this listbox I don't know why
-            if (MpMainWindowViewModel.IsMainWindowOpen) {
-                //Refresh();
-            } else {
-                WasItemAdded = true;
-            }
+            if(!MpMainWindowViewModel.IsApplicationLoading &&
+                ctvm.WasAddedAtRuntime &&
+                MainWindowViewModel.IsMainWindowLocked &&
+                MainWindowViewModel.SearchBoxViewModel.HasText) {
+                //when user is searching w/ locked window and an item is added
+                //it shouldn't be added until search is empty just to keep simple
+                //because it may but likely won't meet search criteria
+                var svm = MainWindowViewModel.SearchBoxViewModel;
+                Application.Current.Dispatcher.BeginInvoke((Action)(async () => {
+                    var visibilityDictionary = await ctvm.HighlightTextRangeViewModelCollection.PerformHighlightingAsync(svm.SearchText);
+                    foreach (var kvp in visibilityDictionary) {
+                        if (kvp.Key == ctvm) {
+                            ctvm.TileVisibility = kvp.Value;
+                        }
+                    }
+                    if (svm.SearchNavigationButtonPanelVisibility != Visibility.Visible) {
+                        svm.SearchNavigationButtonPanelVisibility = ctvm.HighlightTextRangeViewModelCollection.Count > 1 ? Visibility.Visible : Visibility.Collapsed;
+                    }
+
+                }), DispatcherPriority.Background);
+            }         
         }
         
         public async Task AddAsync(MpClipTileViewModel ctvm, int forceIdx = 0, DispatcherPriority priority = DispatcherPriority.Background) {
@@ -1069,7 +1028,7 @@ namespace MpWpfApp {
                 if (sctvm.RichTextBoxViewModelCollection.SubSelectedClipItems.Count == 0) {
                     sctvm.RichTextBoxViewModelCollection.SubSelectAll();
                 }
-                string sctrtf = await sctvm.GetPastableRichText();
+                string sctrtf = await sctvm.GetSubSelectedPastableRichText();
                 rtf = MpHelpers.Instance.CombineRichText(sctrtf, rtf);
             }
             
@@ -1129,7 +1088,11 @@ namespace MpWpfApp {
             //awaited in MainWindowViewModel.HideWindow
         }
 
-        public void PerformPaste(IDataObject pasteDataObject, bool fromHotKey = false) {
+        public void PasteDataObject(IDataObject pasteDataObject, bool fromHotKey = false) {
+            if (IsPastingTemplate) {
+                MainWindowViewModel.IsMainWindowLocked = false;
+            }
+            
             //called in the oncompleted of hide command in mwvm
             if (pasteDataObject != null) {
                 Console.WriteLine("Pasting " + SelectedClipTiles.Count + " items");
@@ -1174,7 +1137,28 @@ namespace MpWpfApp {
             _selectedPasteToAppPathViewModel = null;
             if(!fromHotKey) {
                 ResetClipSelection();
-            }            
+            }
+
+            IsPastingHotKey = IsPastingSelected = false;
+            foreach (var sctvm in SelectedClipTiles) {
+                //clean up pasted items state after paste
+                sctvm.IsPastingTemplate = false;                
+                if (sctvm.HasTemplate) {
+                    sctvm.TileVisibility = Visibility.Visible;
+                    sctvm.TemplateRichText = string.Empty;
+                    foreach (var rtbvm in sctvm.RichTextBoxViewModelCollection) {
+                        rtbvm.IsPastingTemplate = false;
+                        rtbvm.SubItemVisibility = Visibility.Visible;
+                        rtbvm.TemplateHyperlinkCollectionViewModel.Reset();
+                        rtbvm.TemplateRichText = string.Empty;
+                        rtbvm.Rtb.ScrollToHorizontalOffset(0);
+                        rtbvm.Rtb.ScrollToVerticalOffset(0);
+                        rtbvm.UpdateLayout();
+                    }
+                    sctvm.RichTextBoxViewModelCollection.UpdateLayout();
+                    sctvm.RichTextBoxViewModelCollection.RtblbCanvasTop = 0;
+                }
+            }
         }
 
         public List<MpClipTileViewModel> GetClipTilesByAppId(int appId) {
@@ -1472,12 +1456,37 @@ namespace MpWpfApp {
             } else if (pasteDataObject != null) {
                 //In order to paste the app must hide first 
                 //this triggers hidewindow to paste selected items
-                MainWindowViewModel.PasteDataObject(pasteDataObject);
+                PasteDataObject(pasteDataObject);
                 ResetClipSelection();
             }
+        }
 
-
-            IsPastingHotKey = false;
+        private AsyncCommand _copySelectedClipsCommand;
+        public IAsyncCommand CopySelectedClipsCommand {
+            get {
+                if (_copySelectedClipsCommand == null) {
+                    _copySelectedClipsCommand = new AsyncCommand(CopySelectedClips, CanCopySelectedClips);
+                }
+                return _copySelectedClipsCommand;
+            }
+        }
+        private bool CanCopySelectedClips(object args) {            
+            foreach(var sctvm in SelectedClipTiles) {
+                foreach(var srtbvm in sctvm.RichTextBoxViewModelCollection.SubSelectedClipItems) {
+                    if(srtbvm.HasTemplate) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        private async Task CopySelectedClips() {
+            var dataObject = await GetDataObjectFromSelectedClips();
+            if(dataObject != null) {
+                MpClipboardManager.Instance.IgnoreClipboardChangeEvent = true;
+                MpClipboardManager.Instance.SetDataObject(dataObject);
+                MpClipboardManager.Instance.IgnoreClipboardChangeEvent = false;
+            }
         }
 
         private RelayCommand<object> _pasteSelectedClipsCommand;

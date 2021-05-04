@@ -380,32 +380,6 @@ namespace MpWpfApp {
             }
         }
 
-        public double RtbOverlayWidth {
-            get {
-                if(RichTextBoxViewModelCollection == null) {
-                    return 0;
-                }
-                var w = RichTextBoxViewModelCollection.RtbLbScrollViewerWidth;
-                if (RichTextBoxViewModelCollection.VerticalScrollbarVisibility == ScrollBarVisibility.Visible) {
-                    w -= MpMeasurements.Instance.ScrollbarWidth;
-                }
-                return w;
-            }
-        }
-
-        public double RtbOverlayHeight {
-            get {
-                if (RichTextBoxViewModelCollection == null) {
-                    return 0;
-                }
-                var w = RichTextBoxViewModelCollection.RtbLbScrollViewerWidth;
-                if (RichTextBoxViewModelCollection.VerticalScrollbarVisibility == ScrollBarVisibility.Visible) {
-                    w -= MpMeasurements.Instance.ScrollbarWidth;
-                }
-                return w;
-            }
-        }
-
         public double RtbRelativeWidthMax {
             get {
                 if (CopyItem == null) {
@@ -563,6 +537,7 @@ namespace MpWpfApp {
                 }
                 if(MainWindowViewModel.SearchBoxViewModel.HasText &&
                    HostClipTileViewModel.TileVisibility == Visibility.Visible &&
+                   HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel != null &&
                    (HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.RtbItemViewModel != this ||
                     HostClipTileViewModel.HighlightTextRangeViewModelCollection.SelectedHighlightTextRangeViewModel.HighlightType != MpHighlightType.Text)) {                    
                     return Visibility.Visible;
@@ -1379,10 +1354,7 @@ namespace MpWpfApp {
                             }
                             if (HostClipTileViewModel.IsEditingTile) {
                                 HostClipTileViewModel.EditRichTextBoxToolbarViewModel.InitWithRichTextBox(Rtb, false);
-                            }
-                            //if (HostClipTileViewModel.IsPastingTemplate) {
-                            //    HostClipTileViewModel.PasteTemplateToolbarViewModel.SetSubItem(this);
-                            //}                      
+                            }              
                         } else if(HostClipTileViewModel.IsEditingTile) {
                             SaveSubItemToDatabase();
                         } else {
@@ -1395,7 +1367,6 @@ namespace MpWpfApp {
                     case nameof(IsSubHovering):
                         if(IsSubHovering) {
                             if (MainWindowViewModel.ClipTrayViewModel.IsScrolling) {
-                                //HostClipTileViewModel.IsHovering = false;
                                 IsSubHovering = false;
                             }
                             foreach (var rtbvm in RichTextBoxViewModelCollection) {
@@ -1403,11 +1374,9 @@ namespace MpWpfApp {
                                     rtbvm.IsSubHovering = false;
                                 }
                             }
-                            //RichTextBoxViewModelCollection.UpdateLayout();
                         } else {
                             _detailIdx = 1;
                         }
-                        //RichTextBoxViewModelCollection.OnPropertyChanged(nameof(RichTextBoxViewModelCollection.RtbListBoxHeight));
                         break;
                     case nameof(IsHoveringOnTitleTextBlock):
                         if(IsHoveringOnTitleTextBlock) {
@@ -1759,47 +1728,11 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(RtbPageWidth));
             OnPropertyChanged(nameof(RtbPageHeight));
             OnPropertyChanged(nameof(RtbListBoxItemBackgroundColor));
-            OnPropertyChanged(nameof(RtbOverlayWidth));
 
             
             Rtbc?.UpdateLayout();
             Rtb?.UpdateLayout();
             RtbListBoxItemClipBorder?.UpdateLayout();  
-        }
-
-
-        public IDataObject GetTextDataObject() {
-            if(Rtb == null) {
-                return null;
-            }
-            string selectedText = string.Empty;
-            if(Rtb.Selection.IsEmpty) {
-                selectedText = CopyItemPlainText;
-            } else {
-                selectedText = Rtb.Selection.Text;
-            }
-            var dataObject = new DataObject();
-            dataObject.SetData(DataFormats.Text, selectedText);
-            dataObject.SetData(DataFormats.Rtf, selectedText.ToRichText());
-            return dataObject;
-        }
-
-        public TextPointer GetRtbPointerUnderPosition(Point mp) {
-            if (Rtb == null) {
-                return null;
-            }
-            foreach(var rtbvm in RichTextBoxViewModelCollection) {
-                if(rtbvm.IsSubHovering && rtbvm != this) {
-                    return rtbvm.Rtb.CaretPosition;
-                }
-            }
-            return null;
-        }
-
-        public void Resize(double deltaWidth) {
-            if(IsSubSelected && HostClipTileViewModel.IsExpanded) {
-
-            }
         }
 
         public void ResetRtb() {
@@ -1824,13 +1757,14 @@ namespace MpWpfApp {
             ClearHyperlinks();
 
             if(Rtb != null) {
-                RawRtf = Rtb.Document.ToRichText();
+                
             }
             //clear any search highlighting when saving the document then restore after save
             HostClipTileViewModel.HighlightTextRangeViewModelCollection.HideHighlightingCommand.Execute(this);
 
             if(Rtb != null) {
-                CopyItemRichText = Rtb.Document.ToRichText();
+                RawRtf = Rtb.Document.ToRichText();
+                CopyItemRichText = RawRtf;
             }
 
             HostClipTileViewModel.HighlightTextRangeViewModelCollection.ApplyHighlightingCommand.Execute(this);
@@ -1885,7 +1819,6 @@ namespace MpWpfApp {
                 var regExStr = MpRegEx.Instance.GetRegExForTokenType(linkType);
                 if(linkType == MpSubTextTokenType.TemplateSegment) {
                     regExStr = CopyItem.TemplateRegExMatchString;
-                    Console.WriteLine("RegEx: " + regExStr);
                 }
                 if (string.IsNullOrEmpty(regExStr)) {
                     //this occurs for templates when copyitem has no templates

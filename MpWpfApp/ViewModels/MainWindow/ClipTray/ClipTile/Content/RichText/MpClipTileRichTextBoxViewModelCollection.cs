@@ -480,6 +480,8 @@ namespace MpWpfApp {
 
             RtbLbAdornerLayer = AdornerLayer.GetAdornerLayer(ListBox);
             RtbLbAdornerLayer.Add(new MpRtbListBoxAdorner(ListBox));
+
+            Refresh();
         }
 
         
@@ -641,9 +643,9 @@ namespace MpWpfApp {
             } else {
                 UpdateSortOrder();
             }
-            
+            HostClipTileViewModel.CopyItemBmp = HostClipTileViewModel.CopyItem.GetSeparatedCompositeFlowDocument().ToBitmapSource();
 
-            if(!isMerge) {
+            if (!isMerge) {
                 rtbvm.Dispose();
             }
             //Refresh();
@@ -660,10 +662,10 @@ namespace MpWpfApp {
         }
 
         public void UpdateAdorners() {
-            RtbLbAdornerLayer?.Update();
             foreach (var rtbvm in this) {
-                rtbvm.RtbListBoxItemAdornerLayer?.Update();
+                //rtbvm.RtbListBoxItemAdornerLayer?.Update();
             }
+            RtbLbAdornerLayer?.Update();
         }
 
         public void Resize(double deltaTop, double deltaWidth, double deltaHeight) {

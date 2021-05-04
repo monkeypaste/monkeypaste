@@ -383,30 +383,6 @@ namespace MpWpfApp {
             OnPropertyChanged(nameof(AppModeButtonGridWidth));
         }
 
-        public void PasteDataObject(IDataObject pasteDataObject, bool fromHotkey = false) {
-            if (ClipTrayViewModel.IsPastingTemplate) {
-                IsMainWindowLocked = false;
-            }
-            ClipTrayViewModel.PerformPaste(pasteDataObject, fromHotkey);
-
-            foreach (var sctvm in ClipTrayViewModel.SelectedClipTiles) {
-                if (sctvm.HasTemplate) {
-                    //cleanup template by recreating hyperlinks
-                    //and reseting tile state
-                    sctvm.TileVisibility = Visibility.Visible;
-                    sctvm.TemplateRichText = string.Empty;
-                    //sctvm.RichTextBoxViewModelCollection.SelectRichTextBoxViewModel(0, false, true);
-                    foreach (var rtbvm in sctvm.RichTextBoxViewModelCollection) {
-                        rtbvm.SubItemVisibility = Visibility.Visible;
-                        rtbvm.TemplateHyperlinkCollectionViewModel.Reset();
-                        rtbvm.TemplateRichText = string.Empty;
-                        rtbvm.Rtb.ScrollToHorizontalOffset(0);
-                        rtbvm.Rtb.ScrollToVerticalOffset(0);
-                        rtbvm.UpdateLayout();
-                    }
-                }
-            }
-        }
         #endregion
 
         #region Private Methods
@@ -591,9 +567,7 @@ namespace MpWpfApp {
                     IsMainWindowLocked = true;
                 }
                 pasteDataObject = await ClipTrayViewModel.GetDataObjectFromSelectedClips();
-            } else {
-                //ClipTrayViewModel.HideVisibleTiles(500);
-            }
+            } 
 
             var mw = (MpMainWindow)Application.Current.MainWindow;
 
@@ -614,7 +588,7 @@ namespace MpWpfApp {
                         
                         mw.Visibility = Visibility.Collapsed;
                         if (pasteDataObject != null) {
-                            PasteDataObject(pasteDataObject);
+                            ClipTrayViewModel.PasteDataObject(pasteDataObject);
                         }
 
                         IsMainWindowLocked = false;
@@ -629,7 +603,7 @@ namespace MpWpfApp {
                 };
                 timer.Start();
             } else if(pasteDataObject != null) {
-                PasteDataObject(pasteDataObject,true);
+                ClipTrayViewModel.PasteDataObject(pasteDataObject,true);
             }
         }
 

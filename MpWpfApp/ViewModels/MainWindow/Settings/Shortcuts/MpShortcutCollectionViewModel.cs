@@ -193,7 +193,7 @@ namespace MpWpfApp {
                             (smi as MpContextMenuItemViewModel).InputGestureText = MainWindowViewModel.TagTrayViewModel.Where(x => x.TagName == header).FirstOrDefault().ShortcutKeyString;
                         }
                     } else {
-                        var scvm = this.Where(x => x.ShortcutId == tagNum).First();
+                        var scvm = this.Where(x => x.ShortcutId == tagNum).FirstOrDefault();
                         if (scvm != null) {
                             mi.InputGestureText = scvm.KeyString;
                         }
@@ -404,6 +404,9 @@ namespace MpWpfApp {
                         break;
                     case 26:
                         shortcutCommand = MainWindowViewModel.AppModeViewModel.ToggleIsAppPausedCommand;
+                        break;
+                    case 27:
+                        shortcutCommand = MainWindowViewModel.ClipTrayViewModel.CopySelectedClipsCommand;
                         break;
                     default:
                         try {

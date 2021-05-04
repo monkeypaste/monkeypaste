@@ -70,10 +70,10 @@ namespace MpWpfApp {
                     }
                 }
                 //if none selected but exist select first one
-                if (this.Count > 0) {
-                    this[0].IsSelected = true;
-                    return SelectedTemplateHyperlinkViewModel;
-                }
+                //if (this.Count > 0) {
+                //    this[0].IsSelected = true;
+                //    return SelectedTemplateHyperlinkViewModel;
+                //}
                 return null;
             }
             set {
@@ -123,9 +123,7 @@ namespace MpWpfApp {
             foreach (var thlvm in this) {
                 thlvm.SetTemplateText(string.Empty);
             }
-            if(this.Count > 0) {
-                this[0].IsSelected = true;
-            }
+            ClearSelection();
         }
         public void SelectTemplate(string templateName) {
             foreach(var thlvm in this) {

@@ -60,6 +60,8 @@ namespace MpWpfApp {
 
         public int FileCount { get; set; } = 0;
 
+        public Size ItemSize { get; set; } 
+
         public double DataSizeInMb { get; set; } = 0;
 
         public int RelevanceScore {
@@ -125,11 +127,6 @@ namespace MpWpfApp {
                 return _itemBmpByteArray;
             }
         }
-        //public string ItemUrl { get; set; } = string.Empty;
-
-       // public BitmapSource ItemFavIcon { get; set; } = null;
-
-        //public BitmapSource ItemTitleSwirl { get; set; }
 
         public List<MpDetectedImageObject> ImageItemObjectList = new List<MpDetectedImageObject>();
 
@@ -143,6 +140,9 @@ namespace MpWpfApp {
             get {
                 var outStr = string.Empty;
                 foreach(var t in TemplateList) {
+                    if(outStr.Contains(t.TemplateName)) {
+                        continue;
+                    }
                     outStr += t.TemplateName + "|";
                 }
                 if(!string.IsNullOrEmpty(outStr)) {
@@ -884,6 +884,12 @@ namespace MpWpfApp {
             return fileList;
         }
 
+        public async Task GatherAnalytics() {
+            if(ItemScreenshot == null) {
+                return;
+            }
+
+        }
         #endregion
 
         #region Private Methods
@@ -940,8 +946,8 @@ namespace MpWpfApp {
                     break;
                 case MpCopyItemType.Composite:
                     //_itemData is null and needs to be gathered from sub-items
-                    _itemData = null;// GetCompositeItemRichText();
-                    ItemRichText = string.Empty.ToRichText();// (string)_itemData;
+                    _itemData = null;
+                    ItemRichText = string.Empty.ToRichText();
                     ItemFlowDocument = ItemRichText.ToFlowDocument();
                     ItemPlainText = ItemRichText.ToPlainText();                     
                     ItemBitmapSource = GetSeparatedCompositeFlowDocument().ToBitmapSource();
@@ -956,7 +962,9 @@ namespace MpWpfApp {
         private void UpdateDetails() {
             switch(CopyItemType) {
                 case MpCopyItemType.Image:
-
+                    if(ItemBitmapSource != null) {
+                        ItemSize = new Size(ItemBitmapSource.Width, ItemBitmapSource.Height);
+                    }
                     break;
                 case MpCopyItemType.FileList:
                     FileCount = GetFileList().Count;
@@ -969,10 +977,12 @@ namespace MpWpfApp {
                         LineCount += MpHelpers.Instance.GetRowCount(sci.ItemPlainText);
                         CharCount += sci.ItemPlainText.Length;
                     }
+                    ItemSize = GetCompositeItemRichText().ToFlowDocument().GetDocumentSize();
                     break;
                 case MpCopyItemType.RichText:
                     LineCount = MpHelpers.Instance.GetRowCount(ItemPlainText);
                     CharCount = ItemPlainText.Length;
+                    ItemSize = ItemFlowDocument.GetDocumentSize();
                     break;
             }
         }

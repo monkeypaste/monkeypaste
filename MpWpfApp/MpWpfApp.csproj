@@ -152,16 +152,9 @@
     <Compile Include="Utils\DataVirtualization\IFilterOrderDescription.cs" />
     <Compile Include="Utils\DataVirtualization\MemberPathFilterText.cs" />
     <Compile Include="Utils\DataVirtualization\MemberPathSortingDirection.cs" />
-    <Compile Include="Utils\Adorners\AdornedControl.cs" />
-    <Compile Include="Utils\Adorners\AdornerPlacement.cs" />
-    <Compile Include="Utils\Adorners\DragAdorner.cs" />
-    <Compile Include="Utils\Adorners\FrameworkElementAdorner.cs" />
     <Compile Include="Utils\DataVirtualization\ParentOfTypeExtensions.cs" />
     <Compile Include="Utils\DataVirtualization\SortDescription.cs" />
     <Compile Include="Utils\DataVirtualization\SortDescriptionList.cs" />
-    <Compile Include="Utils\DragDrop\ListBoxDragDropManager.cs" />
-    <Compile Include="Utils\DragDrop\ListViewDragDropManager.cs" />
-    <Compile Include="Utils\DragDrop\MouseUtilities.cs" />
     <Compile Include="Utils\FlowDocuments\MpAttached.cs" />
     <Compile Include="Utils\FlowDocuments\MpBindableRun.cs" />
     <Compile Include="Utils\FlowDocuments\MpBlockTemplateContent.cs" />
@@ -1768,6 +1761,7 @@
     <Resource Include="Resources\Images\checkgray.png" />
     <Resource Include="Resources\Images\textureborder.png" />
     <Resource Include="Resources\Images\defaultfavicon.png" />
+    <Resource Include="Resources\Images\copy.png" />
     <Content Include="Resources\Sounds\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -303,7 +303,8 @@ namespace MpWpfApp {
                     ,('Email',1,'Control+E','Control+E')
                     ,('Qr Code',1,'Control+Shift+Q','Control+Shift+Q')
                     ,('Toggle Auto-Analyze Mode',2,'Control+Shift+B','Control+Shift+B')
-                    ,('Toggle Is App Paused',2,'Control+Shift+P','Control+Shift+P');
+                    ,('Toggle Is App Paused',2,'Control+Shift+P','Control+Shift+P')
+                    ,('Copy Selection',1,'Control+C','Control+C');
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPasteToAppPath (
                       pk_MpPasteToAppPathId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT

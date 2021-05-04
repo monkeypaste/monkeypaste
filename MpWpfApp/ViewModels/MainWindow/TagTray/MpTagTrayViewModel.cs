@@ -155,10 +155,10 @@ namespace MpWpfApp {
                     }
                 }
             }
-            if (GetRecentTagTileViewModel().IsSelected) {
-                //will trigger reselection in Add's property change
-                GetRecentTagTileViewModel().IsSelected = false;
-            }
+            //if (GetRecentTagTileViewModel().IsSelected) {
+            //    //will trigger reselection in Add's property change
+            //    GetRecentTagTileViewModel().IsSelected = false;
+            //}
         }
 
         public void RefreshRecentTag() {

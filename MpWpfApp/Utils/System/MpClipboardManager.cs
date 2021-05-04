@@ -83,6 +83,11 @@ namespace MpWpfApp {
             }
             //Mouse.OverrideCursor = null;
         }
+
+        public void SetDataObject(IDataObject dataObject) {
+            Clipboard.SetDataObject(dataObject, true);
+        }
+
         private IDictionary<string, object> GetClipboardData() {
             var dict = new Dictionary<string, object>();
             var dataObject = Clipboard.GetDataObject();
