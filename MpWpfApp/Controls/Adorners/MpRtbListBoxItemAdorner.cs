@@ -31,7 +31,7 @@ namespace MpWpfApp {
             var blackPen = new Pen(Brushes.Gray, 1);
             blackPen.DashStyle = DashStyles.Dash;
 
-            if (rtbvm.Next != null) {                
+            if (rtbvm.RichTextBoxViewModelCollection.IndexOf(rtbvm) < rtbvm.RichTextBoxViewModelCollection.VisibleSubRtbViewModels.Count - 1) {                
                 drawingContext.DrawLine(blackPen, adornedElementRect.BottomLeft, adornedElementRect.BottomRight);
             }
         }

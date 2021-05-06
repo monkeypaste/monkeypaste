@@ -493,11 +493,11 @@ namespace MpWpfApp {
             //Console.WriteLine("Rtblb(HVIdx:"+MainWindowViewModel.ClipTrayViewModel.VisibleSubRtbViewModels.IndexOf(HostClipTileViewModel)+") Refreshed (" + sw.ElapsedMilliseconds + "ms)");
         }
 
-        public async Task FillAllTemplates() {
+        public async Task FillAllSubSelectedTemplates() {
             bool hasExpanded = false;
             foreach (var rtbvm in SubSelectedClipItems) {
                 if (rtbvm.HasTemplate) {
-                    rtbvm.IsSubSelected = true;
+                    //rtbvm.IsSubSelected = true;
                     rtbvm.IsPastingTemplate = true;
                     if (!hasExpanded) { 
                         //tile will be shrunk in on completed of hide window
@@ -507,19 +507,13 @@ namespace MpWpfApp {
                         }
                         hasExpanded = true;
                     } 
-                    HostClipTileViewModel.PasteTemplateToolbarViewModel.SetSubItem(rtbvm);
-                    await Application.Current.Dispatcher.BeginInvoke((Action)(() => {
+                    HostClipTileViewModel.PasteTemplateToolbarViewModel.SetSubItem(rtbvm);                    
+                    await Task.Run(() => {
                         while (!HostClipTileViewModel.PasteTemplateToolbarViewModel.HaveAllSubItemTemplatesBeenVisited) {
                             System.Threading.Thread.Sleep(100);
                         }
-                    }), DispatcherPriority.Background);
-
-                    //await Task.Run(() => {
-                    //    while (!HostClipTileViewModel.PasteTemplateToolbarViewModel.HaveAllSubItemTemplatesBeenVisited) {
-                    //        System.Threading.Thread.Sleep(100);
-                    //    }
-                    //    //TemplateRichText is set in PasteTemplateCommand
-                    //});
+                        //TemplateRichText is set in PasteTemplateCommand
+                    });
                     rtbvm.TemplateHyperlinkCollectionViewModel.ClearSelection();
                 }
                 
@@ -540,17 +534,16 @@ namespace MpWpfApp {
             string outerBrush = isOver ? "#FF7CA0CC" : isDown ? "#FF2E4E76" : transBrush;
             string innerBrush = isOver ? "#FFE4EFFD" : isDown ? "#FF116EE4" : transBrush;
             string innerBg = isOver ? "#FFDAE7F5" : isDown ? "#FF3272B8" : transBrush;
-            foreach (var sctvm in MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles) {
-                foreach (var srtbvm in sctvm.RichTextBoxViewModelCollection.SubSelectedClipItems) {
-                    var outerBorder = (Border)srtbvm.DragButton.Template.FindName("OuterBorder", srtbvm.DragButton);
-                    if (outerBorder != null) {
-                        outerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFromString(outerBrush);
-                    }
-                    var innerBorder = (Border)srtbvm.DragButton.Template.FindName("InnerBorder", srtbvm.DragButton);
-                    if (innerBorder != null) {
-                        innerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFromString(innerBrush);
-                        innerBorder.Background = (Brush)new BrushConverter().ConvertFromString(innerBg);
-                    }
+            foreach (var srtbvm in SubSelectedClipItems) {
+                var outerBorder = (Border)srtbvm.DragButton.Template.FindName("OuterBorder", srtbvm.DragButton);
+                if(outerBorder != null) {
+                    outerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFromString(outerBrush);
+                }
+
+                var innerBorder = (Border)srtbvm.DragButton.Template.FindName("InnerBorder", srtbvm.DragButton);
+                if(innerBorder != null) {
+                    innerBorder.BorderBrush = (Brush)new BrushConverter().ConvertFromString(innerBrush);
+                    innerBorder.Background = (Brush)new BrushConverter().ConvertFromString(innerBg);
                 }
             }
         }
@@ -597,7 +590,7 @@ namespace MpWpfApp {
         }
         public void Add(MpRtbListBoxItemRichTextBoxViewModel rtbvm, int forceIdx = 0, bool isMerge = false) {    
             if(isMerge) {
-                HostClipTileViewModel.CopyItem = HostClipTileViewModel.CopyItem.LinkCompositeChild(rtbvm.CopyItem);
+                rtbvm.CopyItem = HostClipTileViewModel.CopyItem.LinkCompositeChild(rtbvm.CopyItem);
             }
             if (forceIdx >= 0) {
                 if (forceIdx >= this.Count) {
@@ -608,9 +601,7 @@ namespace MpWpfApp {
             } else {
                 base.Add(rtbvm);
             }
-            rtbvm.OnPropertyChanged(nameof(rtbvm.CopyItem));
-            HostClipTileViewModel.OnPropertyChanged(nameof(HostClipTileViewModel.CopyItem));
-            SyncItemsWithModel();
+            
             UpdateAdorners();
             //ClipTileViewModel.RichTextBoxListBox.Items.Refresh();
         }
@@ -635,17 +626,14 @@ namespace MpWpfApp {
 
             HostClipTileViewModel.CopyItem.UnlinkCompositeChild(rtbvm.CopyItem);
 
-            if(this.Count == 0 && HostClipTileViewModel.CopyItemType == MpCopyItemType.Composite) {
-                //remove empty composite or RichText container
+            if(this.Count == 0) {
                 HostClipTileViewModel.Dispose();
-                return;
             } else if(this.Count == 1) {
                 var loneCompositeCopyItem = this[0].CopyItem;
                 HostClipTileViewModel.CopyItem.UnlinkCompositeChild(loneCompositeCopyItem);
                 HostClipTileViewModel.CopyItem.DeleteFromDatabase();
                 HostClipTileViewModel.CopyItem = loneCompositeCopyItem;
 
-                //now since tile is a single clip update the tiles shortcut button
                 var scvml = MpShortcutCollectionViewModel.Instance.Where(x => x.CopyItemId == loneCompositeCopyItem.CopyItemId).ToList();
                 if (scvml.Count > 0) {
                     HostClipTileViewModel.ShortcutKeyString = scvml[0].KeyString;
@@ -653,7 +641,6 @@ namespace MpWpfApp {
                     HostClipTileViewModel.ShortcutKeyString = string.Empty;
                 }
             } else {
-                //update composite sort order without removed item
                 UpdateSortOrder();
             }
             HostClipTileViewModel.CopyItemBmp = HostClipTileViewModel.CopyItem.GetSeparatedCompositeFlowDocument().ToBitmapSource();
@@ -675,11 +662,8 @@ namespace MpWpfApp {
         }
 
         public void UpdateAdorners() {
-            //if(!HostClipTileViewModel.IsClipDropping) 
-                {
-                foreach (var rtbvm in this) {
-                    rtbvm.RtbListBoxItemAdornerLayer?.Update();
-                }
+            foreach (var rtbvm in this) {
+                //rtbvm.RtbListBoxItemAdornerLayer?.Update();
             }
             RtbLbAdornerLayer?.Update();
         }

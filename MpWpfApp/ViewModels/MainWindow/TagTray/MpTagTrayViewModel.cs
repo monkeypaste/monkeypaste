@@ -81,9 +81,11 @@ namespace MpWpfApp {
                     foreach (MpClipTileViewModel ctvm in ctrvm) {
                         AddClipToSudoTags(ctvm);
                     }
+                    RefreshRecentTag();
                 }
-                if (e.OldItems != null) {
+                if (e.OldItems != null && e.NewItems == null) {
                     RefreshAllCounts();
+                    RefreshRecentTag();
                 }
             };
 

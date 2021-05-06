@@ -1581,7 +1581,6 @@
                                                                             <DataTemplate>
                                                                                 <AdornerDecorator x:Name="RtbListBoxItemCanvasAdorner"
                                                                                                   AllowDrop="True"
-                                                                                                  Visibility="{Binding SubItemVisibility}"
                                                                                                   DataContext="{Binding}">
                                                                                     <Canvas x:Name="RtbListBoxItemCanvas"
                                                                                             DataContext="{Binding}"

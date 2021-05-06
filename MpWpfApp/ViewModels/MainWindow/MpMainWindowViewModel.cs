@@ -566,7 +566,7 @@ namespace MpWpfApp {
                 if(ClipTrayViewModel.IsPastingTemplate) {
                     IsMainWindowLocked = true;
                 }
-                pasteDataObject = await ClipTrayViewModel.GetDataObjectFromSelectedClips();
+                pasteDataObject = await ClipTrayViewModel.GetDataObjectFromSelectedClips(false,true);
             } 
 
             var mw = (MpMainWindow)Application.Current.MainWindow;

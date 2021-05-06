@@ -263,7 +263,7 @@ namespace MpWpfApp {
                         }
                     }
 
-                    if (Properties.Settings.Default.SearchBySourceUrl) {
+                    if (Properties.Settings.Default.SearchBySourceUrl && ClipTileViewModel.CopyItemUrl != null) {
                         uc = ClipTileViewModel.CopyItemUrl.UrlPath.ContainsByCaseSetting(hlt);
                         if (uc) {
                             this.Add(new MpHighlightTextRangeViewModel(ClipTileViewModel, null, null, sortIdx++, MpHighlightType.App));
@@ -287,7 +287,7 @@ namespace MpWpfApp {
 
                     //begin text range highlighting
 
-                    Console.WriteLine("Beginning highlight clip with title: " + ClipTileViewModel.CopyItemTitle + " with highlight text: " + hlt);
+                    //Console.WriteLine("Beginning highlight clip with title: " + ClipTileViewModel.CopyItemTitle + " with highlight text: " + hlt);
                     
                     //highlight title 
                     if(tc && ttb != null) {

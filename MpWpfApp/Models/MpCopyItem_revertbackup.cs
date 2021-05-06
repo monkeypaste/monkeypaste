@@ -657,7 +657,7 @@ namespace MpWpfApp {
         }
 
         public MpCopyItem LinkCompositeChild(MpCopyItem cci, int forceIdx = -1) {
-            if(CopyItemType != MpCopyItemType.RichText && CopyItemType != MpCopyItemType.Composite) {
+            if(CopyItemType != MpCopyItemType.RichText || CopyItemType != MpCopyItemType.Composite) {
                 return cci;
             }
             if (CompositeItemList.Contains(cci) && CompositeItemList.IndexOf(cci) == forceIdx) {
@@ -665,34 +665,33 @@ namespace MpWpfApp {
             }
             cci.UnlinkFromCompositeParent();
 
-            var newItem = MpCopyItem.Merge(cci,this,false,false,forceIdx);
-            return newItem;
-            //if(CopyItemType == MpCopyItemType.RichText) {
-            //    pcci = new MpCopyItem(MpCopyItemType.Composite, Title, null, ItemColor.Color, IntPtr.Zero, App);
-            //    pcci.WriteToDatabase();
-            //    pcci.CompositeItemList.Add(this);
-            //    CompositeCopyItemId = 0;
-            //    CompositeParentCopyItemId = pcci.CopyItemId;
-            //    CompositeSortOrderIdx = 0;
-            //} else {
-            //    pcci = this;
-            //}
+            MpCopyItem pcci = null;
+            if(CopyItemType == MpCopyItemType.RichText) {
+                pcci = new MpCopyItem(MpCopyItemType.Composite, Title, null, ItemColor.Color, IntPtr.Zero, App);
+                pcci.WriteToDatabase();
+                pcci.CompositeItemList.Add(this);
+                CompositeCopyItemId = 0;
+                CompositeParentCopyItemId = pcci.CopyItemId;
+                CompositeSortOrderIdx = 0;
+            } else {
+                pcci = this;
+            }
             
-            //cci.CompositeCopyItemId = 0;
-            //cci.CompositeParentCopyItemId = pcci.CopyItemId;
-            //if(forceIdx >= 0) {
-            //    if(forceIdx >= pcci.CompositeItemList.Count) {
-            //        pcci.CompositeItemList.Add(cci);
-            //    } else {
-            //        pcci.CompositeItemList.Insert(forceIdx, cci);
-            //    }
-            //} else {
-            //    pcci.CompositeItemList.Add(cci);
-            //}
-            //cci.CompositeSortOrderIdx = pcci.CompositeItemList.IndexOf(cci);
-            //pcci.WriteToDatabase();
+            cci.CompositeCopyItemId = 0;
+            cci.CompositeParentCopyItemId = pcci.CopyItemId;
+            if(forceIdx >= 0) {
+                if(forceIdx >= pcci.CompositeItemList.Count) {
+                    pcci.CompositeItemList.Add(cci);
+                } else {
+                    pcci.CompositeItemList.Insert(forceIdx, cci);
+                }
+            } else {
+                pcci.CompositeItemList.Add(cci);
+            }
+            cci.CompositeSortOrderIdx = pcci.CompositeItemList.IndexOf(cci);
+            pcci.WriteToDatabase();
 
-            //return cci;
+            return cci;
         }
 
         public string GetDetail(MpCopyItemDetailType detailType) {
@@ -823,12 +822,230 @@ namespace MpWpfApp {
 
             return -1;
         }
+        public List<string> GetFileList3(string baseDir = "", MpCopyItemType forceType = MpCopyItemType.None) {
+            //returns path of tmp file for rt or img and actual paths of filelist
+            bool isTemp = string.IsNullOrEmpty(baseDir);
+            string op = Path.GetTempFileName();
+            var fileList = new List<string>();
+            switch (CopyItemType) {
+                case MpCopyItemType.FileList:
+                    switch (forceType) {
+                        case MpCopyItemType.Image:
+                            fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, ItemBitmapSource, isTemp, Title));
+                            break;
+                        case MpCopyItemType.RichText:
+                            fileList.Add(MpHelpers.Instance.WriteTextToFile(op, ItemPlainText, isTemp, Title));
+                            break;
+                        default:
+                            var splitArray = ItemPlainText.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                            if (splitArray == null || splitArray.Length == 0) {
+                                throw new Exception("CopyItem GetFileList error, file list should not be empty");
+                            } else {
+                                foreach (string p in splitArray) {
+                                    if (!string.IsNullOrEmpty(p.Trim())) {
+                                        fileList.Add(p);
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                    break;
+                case MpCopyItemType.RichText:
+                    switch (forceType) {
+                        case MpCopyItemType.Image:
+                            fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, ItemBitmapSource, isTemp, Title));
+                            break;
+                        default:
+                            fileList.Add(MpHelpers.Instance.WriteTextToFile(op, ItemRichText, isTemp, Title));
+                            break;
+                    }
+                    break;
+                case MpCopyItemType.Composite:
+                    foreach (var cci in CompositeItemList) {
+                        switch (forceType) {
+                            case MpCopyItemType.Image:
+                                fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, cci.ItemBitmapSource, isTemp, Title));
+                                break;
+                            default:
+                                fileList.Add(MpHelpers.Instance.WriteTextToFile(op, cci.ItemRichText, isTemp, Title));
+                                break;
+                        }
+                        op = Path.GetTempFileName();
+                    }
+                    break;
+                case MpCopyItemType.Image:
+                    switch (forceType) {
+                        case MpCopyItemType.RichText:
+                            fileList.Add(MpHelpers.Instance.WriteTextToFile(op, ItemPlainText, isTemp, Title));
+                            break;
+                        default:
+                            fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, ItemBitmapSource, isTemp, Title));
+                            break;
+                    }
+                    break;
+            }
 
-        public List<string> GetFileList(string baseDir = "",MpCopyItemType forceType = MpCopyItemType.None) {
+            if (!string.IsNullOrEmpty(baseDir) &&
+               (!MpHelpers.Instance.IsPathDirectory(baseDir) || !Directory.Exists(baseDir))) {
+                Console.WriteLine("MpCopyItem.GetFileList error, attempting to write non-existent directory: " + baseDir + " so ignoring and writing to temp");
+                baseDir = string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(baseDir) && Application.Current.MainWindow.DataContext != null) {
+                //for temporary files add to mwvm list for shutdown cleanup
+                foreach (var fp in fileList) {
+                    ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AddTempFile(fp);
+                }
+            }
+
+            if(!string.IsNullOrEmpty(baseDir)) {
+                var finalFileList = new List<string>();
+                foreach (var fp in fileList) {
+                    string finalFilePath = fp;
+                    string curDirPath = Directory.GetParent(fp).FullName;
+                    finalFilePath = fp.Replace(curDirPath, baseDir);
+                    try {
+                        File.Move(fp, finalFilePath);
+                    } catch (Exception ex) {
+                        Console.WriteLine(@"MpCopyItem.GetFileList error, cannot move file: " + fp + "to new directory: " + finalFilePath);
+                        Console.WriteLine(@"With exception: " + ex);
+                    }
+                    switch (CopyItemType) {
+                        case MpCopyItemType.Image:
+                        case MpCopyItemType.RichText:
+                            finalFilePath = MpHelpers.Instance.ForceFileName(finalFilePath, Title);
+                            break;
+                        case MpCopyItemType.Composite:
+                            int cciIdx = fileList.IndexOf(fp);
+                            finalFilePath = MpHelpers.Instance.ForceFileName(finalFilePath, CompositeItemList[cciIdx].Title);
+                            break;
+                        case MpCopyItemType.FileList:
+                            // TODO maybe have option to create subdirectory with FileList item title
+                            //do nothing to retain file names
+                            break;
+                    }
+                    finalFileList.Add(finalFilePath);
+                }
+
+                return finalFileList;
+            }
+            return fileList;
+        }
+        public List<string> GetFileList2(string baseDir = "",MpCopyItemType forceType = MpCopyItemType.None) {
+            //returns path of tmp file for rt or img and actual paths of filelist
+            
+            string op = Path.GetTempFileName();
+            var fileList = new List<string>();
+            switch (CopyItemType) {
+                case MpCopyItemType.FileList:
+                    switch(forceType) {
+                        case MpCopyItemType.Image:
+                            fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(Path.GetTempFileName(), ItemBitmapSource));
+                            break;
+                        case MpCopyItemType.RichText:
+                            fileList.Add(MpHelpers.Instance.WriteTextToFile(Path.GetTempFileName(), ItemPlainText));
+                            break;
+                        default:
+                            var splitArray = ItemPlainText.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+                            if (splitArray == null || splitArray.Length == 0) {
+                                throw new Exception("CopyItem GetFileList error, file list should not be empty");
+                            } else {
+                                foreach (string p in splitArray) {
+                                    if (!string.IsNullOrEmpty(p.Trim())) {
+                                        fileList.Add(p);
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                    break;
+                case MpCopyItemType.RichText:
+                    switch (forceType) {
+                        case MpCopyItemType.Image:
+                            fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, ItemBitmapSource));
+                            break;
+                        default:
+                            fileList.Add(MpHelpers.Instance.WriteTextToFile(op, ItemRichText));
+                            break;
+                    }
+                    break;
+                case MpCopyItemType.Composite:
+                    foreach (var cci in CompositeItemList) {
+                        switch (forceType) {
+                            case MpCopyItemType.Image:
+                                fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, cci.ItemBitmapSource));
+                                break;
+                            default:
+                                fileList.Add(MpHelpers.Instance.WriteTextToFile(op, cci.ItemRichText));
+                                break;
+                        }
+                        op = Path.GetTempFileName(); 
+                    }
+                    break;
+                case MpCopyItemType.Image:
+                    switch (forceType) {
+                        case MpCopyItemType.RichText:
+                            fileList.Add(MpHelpers.Instance.WriteTextToFile(op, ItemPlainText));
+                            break;
+                        default:
+                            fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, ItemBitmapSource));
+                            break;
+                    }
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(baseDir) &&
+               (!MpHelpers.Instance.IsPathDirectory(baseDir) || !Directory.Exists(baseDir))) {
+                Console.WriteLine("MpCopyItem.GetFileList error, attempting to write non-existent directory: " + baseDir + " so ignoring and writing to temp");
+                baseDir = string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(baseDir) && Application.Current.MainWindow.DataContext != null) {
+                //for temporary files add to mwvm list for shutdown cleanup
+                foreach(var fp in fileList) {
+                    ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AddTempFile(fp);
+                }
+            }
+            return fileList;
+
+            var finalFileList = new List<string>();
+            foreach(var fp in fileList) {
+                string finalFilePath = fp;
+                if(!string.IsNullOrEmpty(baseDir)) {
+                    string curDirPath = Directory.GetParent(fp).FullName;
+                    finalFilePath = fp.Replace(curDirPath, baseDir);
+                    try {
+                        File.Move(fp, finalFilePath);
+                    } catch(Exception ex) {
+                        Console.WriteLine(@"MpCopyItem.GetFileList error, cannot move file: " + fp + "to new directory: " + finalFilePath);
+                        Console.WriteLine(@"With exception: " + ex);
+                    }
+                }
+                switch(CopyItemType) {
+                    case MpCopyItemType.Image:
+                    case MpCopyItemType.RichText:
+                        finalFilePath = MpHelpers.Instance.ForceFileName(finalFilePath, Title);
+                        break;
+                    case MpCopyItemType.Composite:
+                        int cciIdx = fileList.IndexOf(fp);
+                        finalFilePath = MpHelpers.Instance.ForceFileName(finalFilePath, CompositeItemList[cciIdx].Title);
+                        break;
+                    case MpCopyItemType.FileList:
+                        // TODO maybe have option to create subdirectory with FileList item title
+                        //do nothing to retain file names
+                        break;
+                }
+                finalFileList.Add(finalFilePath);
+            }
+
+            return finalFileList;
+        }
+
+        public List<string> GetFileList(string baseDir = "", MpCopyItemType forceType = MpCopyItemType.None) {
             //returns path of tmp file for rt or img and actual paths of filelist
             var fileList = new List<string>();
             if (CopyItemType == MpCopyItemType.FileList) {
-                if(forceType == MpCopyItemType.Image) {
+                if (forceType == MpCopyItemType.Image) {
                     fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(Path.GetTempFileName(), ItemBitmapSource));
                 } else if (forceType == MpCopyItemType.RichText) {
                     fileList.Add(MpHelpers.Instance.WriteTextToFile(Path.GetTempFileName(), ItemPlainText));
@@ -849,14 +1066,14 @@ namespace MpWpfApp {
                 //file extension
                 switch (CopyItemType) {
                     case MpCopyItemType.RichText:
-                        if(forceType == MpCopyItemType.Image) {
+                        if (forceType == MpCopyItemType.Image) {
                             fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, ItemBitmapSource));
                         } else {
                             fileList.Add(MpHelpers.Instance.WriteTextToFile(op, ItemRichText));
                         }
                         break;
                     case MpCopyItemType.Composite:
-                        foreach(var cci in CompositeItemList) {
+                        foreach (var cci in CompositeItemList) {
                             if (forceType == MpCopyItemType.Image) {
                                 fileList.Add(MpHelpers.Instance.WriteBitmapSourceToFile(op, cci.ItemBitmapSource));
                             } else {
@@ -875,9 +1092,9 @@ namespace MpWpfApp {
                 }
             }
 
-            if(string.IsNullOrEmpty(baseDir) && Application.Current.MainWindow.DataContext != null) {
+            if (string.IsNullOrEmpty(baseDir) && Application.Current.MainWindow.DataContext != null) {
                 //for temporary files add to mwvm list for shutdown cleanup
-                foreach(var fp in fileList) {
+                foreach (var fp in fileList) {
                     ((MpMainWindowViewModel)Application.Current.MainWindow.DataContext).AddTempFile(fp);
                 }
             }

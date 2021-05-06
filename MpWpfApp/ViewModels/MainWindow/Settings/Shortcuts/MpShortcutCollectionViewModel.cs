@@ -182,8 +182,8 @@ namespace MpWpfApp {
 
         public void UpdateInputGestures(ItemsControl cm) {
             foreach (var item in cm.Items) {
-                if (item is MenuItem mi && mi.Tag != null) {
-                    int tagNum = Convert.ToInt32(mi.Tag.ToString());
+                if (item is MenuItem mi) {
+                    int tagNum =  mi.Tag == null ? -1 : Convert.ToInt32(mi.Tag.ToString());
                     if(tagNum == 8080) {
                         foreach (var smi in ((MenuItem)mi).Items) {
                             if (smi == null || smi is Separator) {

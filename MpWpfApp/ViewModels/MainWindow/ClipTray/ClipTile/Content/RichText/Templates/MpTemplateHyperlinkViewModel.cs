@@ -484,7 +484,8 @@ namespace MpWpfApp {
                 if (!HostRtbItemViewModel.IsSelected) {
                     return;
                 }
-                if (HostRtbItemViewModel.HostClipTileViewModel.IsEditingTile || HostRtbItemViewModel.IsPastingTemplate) {
+                if (HostRtbItemViewModel.HostClipTileViewModel.IsEditingTile || 
+                    HostRtbItemViewModel.IsPastingTemplate) {
                     IsSelected = true;
                 }
                 if (HostRtbItemViewModel.HostClipTileViewModel.IsEditingTile) {
@@ -500,7 +501,8 @@ namespace MpWpfApp {
                 if (!HostRtbItemViewModel.IsSelected) {
                     return;
                 }
-                if (HostRtbItemViewModel.HostClipTileViewModel.IsEditingTile || HostRtbItemViewModel.IsPastingTemplate) {
+                if (HostRtbItemViewModel.HostClipTileViewModel.IsEditingTile || 
+                    HostRtbItemViewModel.IsPastingTemplate) {
                     IsSelected = true;
                 }
                 if (HostRtbItemViewModel.HostClipTileViewModel.IsEditingTile) {
