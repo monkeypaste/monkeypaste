@@ -145,16 +145,16 @@ namespace MpWpfApp {
             foreach(var ttvm in this) {
                 ttvm.TagClipCount = 0;
                 foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel) {
-                    if(ttvm.IsLinkedWithClipTile(ctvm) && ctvm.CopyItemType != MpCopyItemType.Composite) {
+                    if(ttvm.IsLinkedWithClipTile(ctvm) /*&& ctvm.CopyItemType != MpCopyItemType.Composite*/) {
                         ttvm.TagClipCount++;
                     }
-                    if(ctvm.CopyItemType == MpCopyItemType.Composite) {
-                        foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
-                            if(ttvm.IsLinkedWithRtbItem(rtbvm)) {
-                                ttvm.TagClipCount++;
-                            }
-                        }
-                    }
+                    //if(ctvm.CopyItemType == MpCopyItemType.Composite) {
+                    //    foreach(var rtbvm in ctvm.RichTextBoxViewModelCollection) {
+                    //        if(ttvm.IsLinkedWithRtbItem(rtbvm)) {
+                    //            ttvm.TagClipCount++;
+                    //        }
+                    //    }
+                    //}
                 }
             }
             //if (GetRecentTagTileViewModel().IsSelected) {
@@ -182,7 +182,7 @@ namespace MpWpfApp {
                     //will trigger reselection in Add's property change
                     rtvm.IsSelected = false;
                 }
-                rtvm.TagClipCount = Properties.Settings.Default.MaxRecentClipItems;
+                //rtvm.TagClipCount = Properties.Settings.Default.MaxRecentClipItems;
             } else if (GetRecentTagTileViewModel().TagClipCount < Properties.Settings.Default.MaxRecentClipItems) {
                 var rtvm = GetRecentTagTileViewModel();
                 var rctvml = new List<MpClipTileViewModel>();
@@ -201,7 +201,7 @@ namespace MpWpfApp {
                     //will trigger reselection in Add's property change
                     rtvm.IsSelected = false;
                 }
-                rtvm.TagClipCount = Properties.Settings.Default.MaxRecentClipItems;
+                //rtvm.TagClipCount = Properties.Settings.Default.MaxRecentClipItems;
             }
         }
         public new void Add(MpTagTileViewModel newTagTile) {

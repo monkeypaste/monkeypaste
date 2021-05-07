@@ -129,12 +129,24 @@
     <Compile Include="Converters\MpStringToImageConverter.cs" />
     <Compile Include="Converters\MpStringToIconConverter.cs" />
     <Compile Include="Converters\MpStringToBrushConverter.cs" />
+    <Compile Include="Models\Base\MpDbObject.cs" />
+    <Compile Include="Models\Base\MpObject.cs" />
     <Compile Include="Models\Db\MpDb.cs" />
-    <Compile Include="Models\MpPasteToAppPath.cs" />
+    <Compile Include="Models\MpApp.cs" />
+    <Compile Include="Models\MpClient.cs" />
+    <Compile Include="Models\MpColor.cs" />
+    <Compile Include="Models\MpCopyItem.cs" />
     <Compile Include="Models\MpCopyItemTemplate.cs" />
     <Compile Include="Models\MpDetectedImageObject.cs" />
-    <Compile Include="Models\MpUrlDomain.cs" />
+    <Compile Include="Models\MpIcon.cs" />
+    <Compile Include="Models\MpPasteHistory.cs" />
+    <Compile Include="Models\MpPasteToAppPath.cs" />
+    <Compile Include="Models\MpPlatform.cs" />
+    <Compile Include="Models\MpShortcut.cs" />
+    <Compile Include="Models\MpTag.cs" />
     <Compile Include="Models\MpUrl.cs" />
+    <Compile Include="Models\MpUrlDomain.cs" />
+    <Compile Include="Models\MpUser.cs" />
     <Compile Include="Properties\DefaultUiStrings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -198,18 +210,6 @@
     <Compile Include="Converters\MpBoolToVisibilityConverter.cs" />
     <Compile Include="Converters\MpSolidColorBrushToBrushConverter.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Models\MpApp.cs" />
-    <Compile Include="Models\MpClient.cs" />
-    <Compile Include="Models\MpShortcut.cs" />
-    <Compile Include="Models\MpColor.cs" />
-    <Compile Include="Models\MpCopyItem.cs" />
-    <Compile Include="Models\Base\MpDbObject.cs" />
-    <Compile Include="Models\MpIcon.cs" />
-    <Compile Include="Models\Base\MpObject.cs" />
-    <Compile Include="Models\MpPasteHistory.cs" />
-    <Compile Include="Models\MpPlatform.cs" />
-    <Compile Include="Models\MpTag.cs" />
-    <Compile Include="Models\MpUser.cs" />
     <Compile Include="Utils\MpExtensions.cs" />
     <Compile Include="Utils\MpHelpers.cs" />
     <Compile Include="Utils\MpMeasurements.cs" />
@@ -540,6 +540,9 @@
   <ItemGroup>
     <PackageReference Include="AsyncAwaitBestPractices.MVVM">
       <Version>5.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Autofac">
+      <Version>6.2.0</Version>
     </PackageReference>
     <PackageReference Include="Azure.AI.TextAnalytics">
       <Version>5.0.0</Version>
