@@ -2,10 +2,16 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:MonkeyPaste"
+             xmlns:converters="clr-namespace:MonkeyPaste.Converters"
              x:Class="MonkeyPaste.Views.MpMainView"
             Title="Do Too!">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:MpStatusColorConverter x:Key="StatusColorConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Command="{Binding AddItem}" />
+        <ToolbarItem Text="Add" Command="{Binding AddNewItemCommand}" />
     </ContentPage.ToolbarItems>
     <Grid>
         <Grid.RowDefinitions>
@@ -13,7 +19,41 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Button Text="Toggle filter" />
-        <ListView Grid.Row="1">
+        <ListView x:Name="ItemsListView" 
+                  Grid.Row="1"
+                  RowHeight="70"
+                  SelectedItem="{Binding SelectedItem}"
+                  ItemsSource="{Binding Items}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="{Binding StatusText}"
+                                      Command="{Binding SetClipboardToItemCommand}" />
+                        </ViewCell.ContextActions>
+                        <Grid Padding="15,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <BoxView Grid.RowSpan="2" />
+                            <Label Grid.Column="1"
+                                   Text="{Binding Item.Title}"
+                                   FontSize="Large" />
+
+                            <Label Grid.Column="1"
+                                   Grid.Row="1"
+                                   Text="{Binding Item.CopyDateTime, StringFormat='{0:MMMM d, yyyy}'}"
+                                   FontSize="Micro" />
+                            <Label Grid.Column="1"
+                                   Grid.Row="1"
+                                   HorizontalTextAlignment="End"
+                                   Text="{Binding Item.ItemPlainText}"
+                                   FontSize="Micro" />
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>        
         </ListView>
     </Grid>    
 </ContentPage>

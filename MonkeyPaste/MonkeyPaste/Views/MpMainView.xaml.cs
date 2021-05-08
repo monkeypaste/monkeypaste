@@ -14,7 +14,9 @@ namespace MonkeyPaste.Views {
         public MpMainView(MpMainViewModel viewModel) {
             InitializeComponent();
             viewModel.Navigation = Navigation;
-            BindingContext = viewModel;            
+            BindingContext = viewModel;
+
+            ItemsListView.ItemSelected += (s, e) => ItemsListView.SelectedItem = null;
         }
     }
 }

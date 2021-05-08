@@ -15,7 +15,6 @@ namespace MonkeyPaste.ViewModels.Base {
         #endregion
 
         public INavigation Navigation { get; set; }
-
         
         public bool CanAcceptChildren { get; set; } = true;
 
@@ -40,8 +39,6 @@ namespace MonkeyPaste.ViewModels.Base {
             }
         }
 
-        private static bool _osBinding = false;
-
         private string _name = string.Empty;
         public string Name {
             get {
@@ -62,15 +59,14 @@ namespace MonkeyPaste.ViewModels.Base {
         #endregion
 
         #region Protected Methods
-        protected MpViewModelBase() {
+        protected MpViewModelBase() { }
+
+        public void RaisePropertyChanged(params string[] propertyNames) {
+            foreach (var propertyName in propertyNames) {
+                OnPropertyChanged(propertyName);
+                //_propertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
-
-        /// <summary>
-        /// With this method, we can inject design time data into the view so that we can
-        /// create a more Blendable application.
-        /// </summary>
-        protected virtual void DesignData() {  }
-
 
         #endregion
 

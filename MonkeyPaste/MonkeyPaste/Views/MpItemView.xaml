@@ -4,13 +4,13 @@
              x:Class="MonkeyPaste.Views.MpItemView"
              Title="New todo item">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Save" />
+        <ToolbarItem Text="Save" Command="{Binding Save}" />
     </ContentPage.ToolbarItems>
     <StackLayout Padding="14">
         <Label Text="Title" />
-        <Entry />
+        <Entry Text="{Binding Item.Title}" />
         <Label Text="Due" />
-        <DatePicker />
+        <DatePicker Date="{Binding Item.CopyDateTime}" />
         <StackLayout Orientation="Horizontal">
             <Switch />
             <Label Text="Completed" />

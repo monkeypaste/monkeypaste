@@ -8,7 +8,6 @@ namespace MonkeyPaste.UWP {
     public class MpBootstrapper : MonkeyPaste.MpBootstrapper {
         public static void Init() {
             var instance = new MpBootstrapper();
-        }
-        
+        }        
     }
 }
