@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDisplayName</key>
-	<string>MonkeyPaste</string>
+	<string>MonkeyPaste.iOS</string>
 	<key>CFBundleName</key>
 	<string>MpShareTextExtension</string>
 	<key>CFBundleIdentifier</key>
@@ -25,12 +25,12 @@
 			<key>NSExtensionActivationRule</key>
 			<string>TRUEPREDICATE</string>
 		</dict>
-		<key>NSExtensionMainStoryboard</key>
-		<string>MainInterface</string>
+		<key>NSExtensionPrincipalClass</key>
+		<string>MpShareTextExtensionViewController</string>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.share-services</string>
 	</dict>
 	<key>MinimumOSVersion</key>
-	<string>8.0</string>
+	<string>10.0</string>
 </dict>
 </plist>

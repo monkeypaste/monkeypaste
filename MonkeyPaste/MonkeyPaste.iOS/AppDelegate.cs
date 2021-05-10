@@ -14,6 +14,8 @@ namespace MonkeyPaste.iOS
     [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
+
+        public static string Text = string.Empty;
         //
         // This method is invoked when the application has loaded and is ready to run. In this 
         // method you should instantiate the window, load the UI into it and then make the window
@@ -25,12 +27,18 @@ namespace MonkeyPaste.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             MpBootstrapper.Init();
+            //Console.WriteLine(@"App Delegate Finished launching");
             //var timer = new Timer();
             //timer.Interval = 100;
-            //timer.Elapsed += async (s, e) => {
-            //    var itemPlainText = await Clipboard.GetTextAsync();
-            //    Console.WriteLine(@"Clipboard Text: " + itemPlainText);
+            //timer.Elapsed += (s, e) => {
+            //    if(!string.IsNullOrEmpty(Text)) {
+            //        Console.WriteLine(@"Shared Text: " + Text);
+            //    }
             //};
+
+            MpShareTextExtension.MpShareTextExtensionViewController.OnShareText += (s, e) => {
+                Console.WriteLine(@"Shared Text: " + e);
+            };
             LoadApplication(new App());
 
             //timer.Start();

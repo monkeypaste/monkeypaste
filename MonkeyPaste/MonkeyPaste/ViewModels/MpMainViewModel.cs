@@ -25,6 +25,10 @@ namespace MonkeyPaste.ViewModels {
 
             Task.Run(async () => await LoadData());
         }
+
+        public void AddSharedText(string newText) {
+            Console.WriteLine(@"Shared Text: " + newText);
+        }
         public MpCopyItemViewModel SelectedItem {
             get { 
                 return null; 

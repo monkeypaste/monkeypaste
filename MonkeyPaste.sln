@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MpWpfApp", "MpWpfApp\MpWpfApp.csproj", "{AB141214-C52C-4390-B86B-1491D5F24E51}"
-	ProjectSection(ProjectDependencies) = postProject
-		{EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA} = {EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA}
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C56184B6-D260-4411-B257-A11BD4E8DD31}"
 	ProjectSection(SolutionItems) = preProject
@@ -21,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyPaste.Android", "Monk
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyPaste.iOS", "MonkeyPaste\MonkeyPaste.iOS\MonkeyPaste.iOS.csproj", "{1808457D-E1B4-42B1-9647-BF47B23C6166}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyPaste", "MonkeyPaste\MonkeyPaste\MonkeyPaste.csproj", "{EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonkeyPaste", "MonkeyPaste\MonkeyPaste\MonkeyPaste.csproj", "{EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyPaste.iOS.ShareTextExtension", "MpShareTextExtension\MonkeyPaste.iOS.ShareTextExtension.csproj", "{9F068B30-F89C-4189-A83C-D72E1071DEB3}"
 EndProject
