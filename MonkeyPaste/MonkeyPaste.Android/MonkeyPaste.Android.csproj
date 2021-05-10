@@ -16,7 +16,6 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v11.0</TargetFrameworkVersion>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
     <AndroidUseAapt2>true</AndroidUseAapt2>
@@ -59,6 +58,9 @@
     </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
+    <PackageReference Include="Xamarin.Plugins.Clipboard">
+      <Version>2.3.0</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
@@ -93,7 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">
-      <Project>{894271FD-E919-4D1E-8D60-F174CDA464AB}</Project>
+      <Project>{EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA}</Project>
       <Name>MonkeyPaste</Name>
     </ProjectReference>
   </ItemGroup>

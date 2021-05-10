@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Timers;
 using Foundation;
 using UIKit;
+using Xamarin.Essentials;
 
 namespace MonkeyPaste.iOS
 {
@@ -24,8 +25,15 @@ namespace MonkeyPaste.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             MpBootstrapper.Init();
+            //var timer = new Timer();
+            //timer.Interval = 100;
+            //timer.Elapsed += async (s, e) => {
+            //    var itemPlainText = await Clipboard.GetTextAsync();
+            //    Console.WriteLine(@"Clipboard Text: " + itemPlainText);
+            //};
             LoadApplication(new App());
 
+            //timer.Start();
             return base.FinishedLaunching(app, options);
         }
     }
