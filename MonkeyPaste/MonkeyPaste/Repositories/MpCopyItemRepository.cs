@@ -1,4 +1,4 @@
-﻿using MonkeyPaste.Models;
+﻿
 using SQLite;
 using System;
 using System.Collections.Generic;
@@ -25,7 +25,7 @@ namespace MonkeyPaste.Repositories {
             if (await _connection.Table<MpCopyItem>().CountAsync() == 0) {
                 await _connection.InsertAsync(new MpCopyItem() {
                     Title = "First copy item",
-                    ItemPlainText = "Test first item",
+                    CopyItemText = "Test first item",
                     CopyDateTime = DateTime.Now
                 });
             }

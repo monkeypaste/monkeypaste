@@ -157,7 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">
-      <Project>{894271FD-E919-4D1E-8D60-F174CDA464AB}</Project>
+      <Project>{EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA}</Project>
       <Name>MonkeyPaste</Name>
     </ProjectReference>
   </ItemGroup>

@@ -1,4 +1,4 @@
-﻿using MonkeyPaste.Models;
+﻿
 using MonkeyPaste.Repositories;
 using MonkeyPaste.Views;
 using System;
@@ -53,7 +53,7 @@ namespace MonkeyPaste.ViewModels {
         private async Task LoadData() {
             var items = await _repository.GetItems();
             if (!ShowAll) {
-                items = items.Where(x => Clipboard.GetTextAsync().Result == x.ItemPlainText).ToList();
+                items = items.Where(x => Clipboard.GetTextAsync().Result == x.CopyItemText).ToList();
             }
                 
             var itemViewModels = items.Select(i => CreateCopyItemViewModel(i));
@@ -70,7 +70,7 @@ namespace MonkeyPaste.ViewModels {
         private void ItemStatusChanged(object sender, EventArgs e) {
             if (sender is MpCopyItemViewModel item) {
                 if (!ShowAll && 
-                    Clipboard.GetTextAsync().Result == item.CopyItem.ItemPlainText) {
+                    Clipboard.GetTextAsync().Result == item.CopyItem.CopyItemText) {
                     Items.Remove(item);
                 }
                 Task.Run(async () => await _repository.UpdateItem(item.CopyItem));
@@ -104,15 +104,8 @@ namespace MonkeyPaste.ViewModels {
             }
         }
         private async void AddItemFromClipboard(string itemPlainText) {
-            var newCopyItem = new MpCopyItem() { CopyDateTime = DateTime.Now, Title = "Text", ItemPlainText = itemPlainText };
+            var newCopyItem = new MpCopyItem() { CopyDateTime = DateTime.Now, Title = "Text", CopyItemText = itemPlainText };
             await _repository.AddOrUpdate(newCopyItem);
         }
-
-        //public ICommand AddItem => new Command(async () => {
-        //    var itemView = MpResolver.Resolve<MpItemView>();
-        //    await Navigation.PushAsync(itemView);
-        //});
-
-
     }
 }

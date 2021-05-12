@@ -3,10 +3,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using Xamarin.Forms;
 
-namespace MonkeyPaste.ViewModels.Base {
+namespace MonkeyPaste {
     public class MpViewModelBase : INotifyPropertyChanged {
         #region Private Variables
-
         #endregion        
 
         #region Properties

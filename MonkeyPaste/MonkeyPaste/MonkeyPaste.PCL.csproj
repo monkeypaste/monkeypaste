@@ -12,15 +12,6 @@
 
   <ItemGroup>
     <Compile Remove="MainPage.xaml.cs" />
-    <Compile Remove="Models\MpApp.cs" />
-    <Compile Remove="Models\MpColor.cs" />
-    <Compile Remove="Models\MpCopyItemTemplate.cs" />
-    <Compile Remove="Models\MpIcon.cs" />
-    <Compile Remove="Models\MpPasteHistory.cs" />
-    <Compile Remove="Models\MpPasteToAppPath.cs" />
-    <Compile Remove="Models\MpShortcut.cs" />
-    <Compile Remove="Models\MpUrl.cs" />
-    <Compile Remove="Models\MpUrlDomain.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,7 +19,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="config.json" />
     <None Remove="Settings.settings" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -47,13 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\MpCopyItemView.xaml.cs">
-      <DependentUpon>MpCopyItemView.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Views\MpCopyItemView.xaml">
+    <EmbeddedResource Update="Views\MpItemView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\MpMainView.xaml">

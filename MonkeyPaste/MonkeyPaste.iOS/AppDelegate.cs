@@ -27,21 +27,7 @@ namespace MonkeyPaste.iOS
         {
             global::Xamarin.Forms.Forms.Init();
             MpBootstrapper.Init();
-            //Console.WriteLine(@"App Delegate Finished launching");
-            //var timer = new Timer();
-            //timer.Interval = 100;
-            //timer.Elapsed += (s, e) => {
-            //    if(!string.IsNullOrEmpty(Text)) {
-            //        Console.WriteLine(@"Shared Text: " + Text);
-            //    }
-            //};
-
-            MpShareTextExtension.MpShareTextExtensionViewController.OnShareText += (s, e) => {
-                Console.WriteLine(@"Shared Text: " + e);
-            };
             LoadApplication(new App());
-
-            //timer.Start();
             return base.FinishedLaunching(app, options);
         }
     }

@@ -52,11 +52,13 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <MtouchArch>ARM64</MtouchArch>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>Apple Development: thomas kefauver (MY7R67BXWM)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <CodesignEntitlements>
+    </CodesignEntitlements>
     <MtouchLink>None</MtouchLink>
     <MtouchInterpreter>-all</MtouchInterpreter>
+    <CodesignProvision>VS: WildCard Development</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -125,8 +127,8 @@
     </ImageAsset>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MpShareTextExtension">
-      <HintPath>..\..\MpShareTextExtension\bin\iPhoneSimulator\Debug\MpShareTextExtension.dll</HintPath>
+    <Reference Include="MonkeyPaste.iOS.KeyboardExtension">
+      <HintPath>..\MonkeyPaste.iOS.KeyboardExtension\bin\iPhone\Debug\MonkeyPaste.iOS.KeyboardExtension.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -150,12 +152,6 @@
     <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">
       <Project>{EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA}</Project>
       <Name>MonkeyPaste</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\MpShareTextExtension\MonkeyPaste.iOS.ShareTextExtension.csproj">
-      <IsAppExtension>true</IsAppExtension>
-      <Project>{9F068B30-F89C-4189-A83C-D72E1071DEB3}</Project>
-      <Name>MonkeyPaste.iOS.ShareTextExtension</Name>
-      <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
   </ItemGroup>
 </Project>

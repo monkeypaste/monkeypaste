@@ -6,13 +6,10 @@
 
 using Foundation;
 
-namespace MpShareTextExtension
-{
+namespace MonkeyPaste.iOS.ShareExtension {
     [Register("ShareViewController")]
-    partial class ShareViewController
-    {
-        void ReleaseDesignerOutlets()
-        {
+    partial class ShareViewController {
+        void ReleaseDesignerOutlets() {
         }
     }
 }
