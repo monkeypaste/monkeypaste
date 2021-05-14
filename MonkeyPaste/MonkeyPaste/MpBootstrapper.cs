@@ -1,6 +1,4 @@
 ﻿using Autofac;
-using MonkeyPaste.Repositories;
-using MonkeyPaste.ViewModels.Base;
 using System.Linq;
 using System.Reflection;
 using Xamarin.Forms;
@@ -23,7 +21,7 @@ namespace MonkeyPaste {
                                        e.IsSubclassOf(typeof(MpViewModelBase)))) {
                 ContainerBuilder.RegisterType(type.AsType());
             }
-            ContainerBuilder.RegisterType<MpCopyItemRepository>().SingleInstance();
+            //ContainerBuilder.RegisterType<MpCopyItemRepository>().SingleInstance();
         }
 
         private void FinishInitialization() {

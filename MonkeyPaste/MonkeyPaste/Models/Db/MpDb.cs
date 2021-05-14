@@ -22,7 +22,13 @@ namespace MonkeyPaste {
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
         #endregion
-                
+
+        #region Events
+        public event EventHandler<MpDbObject> OnItemAdded;
+        public event EventHandler<MpDbObject> OnItemUpdated;
+        public event EventHandler<MpDbObject> OnItemDeleted;
+        #endregion
+
 
         private async Task Init() {
             InitUser(IdentityToken);
@@ -65,6 +71,7 @@ namespace MonkeyPaste {
             
             return await _connection.QueryAsync<T>(query, args);
         }
+        
         public async Task<int> GetLastRowIdAsync<T>() where T: new() {
             var result = await _connection.QueryAsync<T>("select * from " + typeof(T) + " ORDER BY Id DESC LIMIT 1;", null);
              if (result != null && result.Count > 0) {
@@ -79,13 +86,13 @@ namespace MonkeyPaste {
 
         public async Task AddItem<T>(T item) where T: new() {
             await _connection.InsertAsync(item);
-            //OnItemAdded?.Invoke(this, item);
+            OnItemAdded?.Invoke(this, item as MpDbObject);
         }
 
         public async Task UpdateItem<T>(T item) where T: new() {
             //await CreateConnection();
             await _connection.UpdateAsync(item);
-            //OnItemUpdated?.Invoke(this, item);
+            OnItemUpdated?.Invoke(this, item as MpDbObject);
         }
 
         public async Task AddOrUpdate<T>(T item) where T: new() {
@@ -96,8 +103,9 @@ namespace MonkeyPaste {
             }
         }
 
-        public Task DeleteItem(MpCopyItem item) {
-            throw new NotImplementedException();
+        public async Task DeleteItem(MpCopyItem item) {
+            await _connection.DeleteAsync(item);
+            OnItemDeleted?.Invoke(this, item as MpDbObject);
         }
 
         public void InitUser(string idToken) {

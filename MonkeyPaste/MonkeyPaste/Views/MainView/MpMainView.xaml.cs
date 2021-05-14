@@ -9,12 +9,11 @@ using Xamarin.Forms.Xaml;
 
 namespace MonkeyPaste {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class MpCopyItemView : ContentPage {
-        public MpCopyItemView(MpCopyItemViewModel viewModel) {
+    public partial class MpMainView : ContentPage {
+        public MpMainView(MpMainViewModel viewModel) {
             InitializeComponent();
             viewModel.Navigation = Navigation;
             BindingContext = viewModel;
-            
         }
     }
 }

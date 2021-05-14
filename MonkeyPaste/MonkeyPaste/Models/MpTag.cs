@@ -5,22 +5,22 @@ using SQLite;
 using SQLiteNetExtensions;
 using System.Threading.Tasks;
 using System.Linq;
+using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
-    [Table(nameof(MpTag))]
     public class MpTag : MpDbObject {
         #region Columns
         [PrimaryKey, AutoIncrement]
         public override int Id { get; set; }
 
-        [Column(nameof(TagSortIdx))]
         public int TagSortIdx { get; set; } = 1;
 
-        [Column(nameof(TagColor))]
         public string TagColor { get; set; }
 
-        [Column(nameof(TagName))]
         public string TagName { get; set; } = "Untitled";
+
+        [ManyToMany(typeof(MpCopyItem))]
+        public List<MpCopyItem> CopyItemList { get; set; }
 
         //unused        
         //public int ParentTagId { get; set; }

@@ -1,12 +1,10 @@
 ﻿using System;
-
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
 using Xamarin.Essentials;
-using MonkeyPaste.ViewModels;
 
 namespace MonkeyPaste.Droid {
     [Activity(
@@ -24,16 +22,18 @@ namespace MonkeyPaste.Droid {
             MpBootstrapper.Init();
 
             LoadApplication(new App());
+
             LoadSelectedTextAsync();
         }
 
         private async void LoadSelectedTextAsync() {
-            var text = Intent!.GetStringExtra("selectedText");
-            if (!string.IsNullOrWhiteSpace(text)) {
-                await Clipboard.SetTextAsync(text);
+            var selectedText = Intent!.GetStringExtra("SelectedText") ?? string.Empty;
+            var hostInfo = Intent!.GetStringExtra("HostInfo") ?? string.Empty;
+            if (!string.IsNullOrWhiteSpace(selectedText)) {
+                await Clipboard.SetTextAsync(selectedText);
 
-                var mvm = MpResolver.Resolve<MpMainViewModel>();
-                mvm.AddItemFromClipboardCommand.Execute(text);
+                var cicvm = MpResolver.Resolve<MpCopyItemCollectionViewModel>();
+                cicvm.AddItemFromClipboardCommand.Execute(new object[] { hostInfo, selectedText });
             }
         }
 

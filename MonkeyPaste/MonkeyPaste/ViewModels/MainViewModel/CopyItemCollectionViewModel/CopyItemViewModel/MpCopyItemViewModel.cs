@@ -5,13 +5,25 @@ using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public class MpCopyItemViewModel : MpViewModelBase {
-        public MpCopyItemViewModel(MpCopyItem item) => CopyItem = item;
-
+        #region Private Variables
         public event EventHandler ItemStatusChanged;
+        #endregion
 
-        public MpCopyItem CopyItem { get; private set; }
+        #region Properties
+        public bool IsSelected { get; set; } = false;
+
+        public MpCopyItem CopyItem { get; set; }
 
         public string StatusText => CopyItem.Title;
+        #endregion
+
+        #region Public Methods
+        public MpCopyItemViewModel(MpCopyItem item) => CopyItem = item;
+        #endregion
+
+        #region Private Methods
+
+        #endregion
 
         #region Commands
 

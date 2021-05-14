@@ -24,28 +24,10 @@ namespace MonkeyPaste.Droid {
                 Console.WriteLine(@"PROCESS_TEXT: " + selectedText.ToString());
 
                 var intent = new Intent(this, typeof(MainActivity));
-                intent.PutExtra("selectedText", selectedText);
+                intent.PutExtra("SelectedText", selectedText);
+                intent.PutExtra("HostInfo", this.Referrer.Host);
                 StartActivity(intent);
             }
-            
-
-
-            
-            //Get text from popup selection
-
-            //var text = this.Intent.GetCharSequenceExtra(Intent.ExtraProcessText);
-
-            //if (!string.IsNullOrEmpty(text)) {
-            //    var word = DataLoader.Dictionary.GetWordModel(text);
-            //    if (word != null) {
-            //        var result = DataLoader.Dictionary.GetCompleteResult(word);
-            //        if (result != null) {
-            //            NavigationService.Navigate(MainActivity.Current, typeof(DetailActivity), result);
-            //        }
-            //    }
-
-            //}
-            // Create your application here
         }
     }
 }

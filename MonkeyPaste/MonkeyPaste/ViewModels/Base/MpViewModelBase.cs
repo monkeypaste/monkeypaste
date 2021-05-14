@@ -11,6 +11,11 @@ namespace MonkeyPaste {
         #region Properties
 
         #region View Models
+        public MpMainViewModel MainViewModel {
+            get {
+                return Application.Current.MainPage.BindingContext as MpMainViewModel;
+            }
+        }
         #endregion
 
         public INavigation Navigation { get; set; }

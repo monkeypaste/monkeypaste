@@ -7,14 +7,11 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace MonkeyPaste {
+namespace MonkeyPaste.Views.MainView.CopyItemCollectionView.CopyItemView {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class MpCopyItemView : ContentPage {
-        public MpCopyItemView(MpCopyItemViewModel viewModel) {
+    public partial class MpCopyItemView : ContentView {
+        public MpCopyItemView() {
             InitializeComponent();
-            viewModel.Navigation = Navigation;
-            BindingContext = viewModel;
-            
         }
     }
 }

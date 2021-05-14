@@ -1,29 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:MonkeyPaste"
-             xmlns:converters="clr-namespace:MonkeyPaste.Converters"
-             x:Class="MonkeyPaste.Views.MpMainView"
-            Title="Do Too!">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <converters:MpStatusColorConverter x:Key="StatusColorConverter" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Command="{Binding AddNewItemCommand}" />
-    </ContentPage.ToolbarItems>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Button Text="Toggle filter" />
-        <ListView x:Name="ItemsListView" 
-                  Grid.Row="1"
-                  RowHeight="100"
-                  SelectedItem="{Binding SelectedItem}"
-                  ItemsSource="{Binding Items}">
+             x:Class="MonkeyPaste.MpCopyItemCollectionView">
+  <ContentView.Content>
+        <ListView x:Name="CopyItemCollectionListView"
+                  SelectedItem="{Binding SelectedCopyItemViewModel}" 
+                  ItemsSource="{Binding CopyItemViewModels}">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -52,8 +34,7 @@
                         </Grid>
                     </ViewCell>
                 </DataTemplate>
-            </ListView.ItemTemplate>        
+            </ListView.ItemTemplate>
         </ListView>
-    </Grid>    
-</ContentPage>
-
+    </ContentView.Content>
+</ContentView>

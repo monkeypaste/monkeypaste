@@ -1,5 +1,4 @@
-﻿using MonkeyPaste.Views;
-using System;
+﻿using System;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;

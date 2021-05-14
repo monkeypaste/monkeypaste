@@ -11,11 +11,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Repositories\**" />
+    <EmbeddedResource Remove="Repositories\**" />
+    <None Remove="Repositories\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="MainPage.xaml.cs" />
-    <Compile Remove="Models\MpApp.cs" />
     <Compile Remove="Models\MpColor.cs" />
     <Compile Remove="Models\MpCopyItemTemplate.cs" />
-    <Compile Remove="Models\MpIcon.cs" />
     <Compile Remove="Models\MpPasteHistory.cs" />
     <Compile Remove="Models\MpPasteToAppPath.cs" />
     <Compile Remove="Models\MpShortcut.cs" />
@@ -35,6 +39,7 @@
     <PackageReference Include="Autofac" Version="6.2.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.3.3" />
     <PackageReference Include="RtfPipe" Version="2.0.7677.4303" />
+    <PackageReference Include="SkiaSharp" Version="2.80.2" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
     <PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
@@ -43,6 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Icons\search.png" />
     <Resource Include="Settings.settings" />
   </ItemGroup>
 
@@ -53,11 +59,36 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Views\MainView\CopyItemCollectionView\CopyItemView\MpCopyItemView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MainView\CopyItemCollectionView\MpCopyItemCollectionView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\MainView\MainFlyOut\TagTray\MpTagCollectionView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\MpCopyItemView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\MpMainView.xaml">
+    <EmbeddedResource Update="Views\MainView\MpMainView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\Icons\search.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\MainViewModel\CopyItemCollectionViewModel\CopyItemViewModel\Content\FileList\" />
+    <Folder Include="ViewModels\MainViewModel\CopyItemCollectionViewModel\CopyItemViewModel\Content\Image\" />
+    <Folder Include="ViewModels\MainViewModel\CopyItemCollectionViewModel\CopyItemViewModel\Title\" />
+    <Folder Include="Views\MainView\CopyItemCollectionView\CopyItemView\Content\Image\" />
+    <Folder Include="Views\MainView\CopyItemCollectionView\CopyItemView\Content\FileList\" />
+    <Folder Include="Views\MainView\CopyItemCollectionView\CopyItemView\Content\Text\" />
+    <Folder Include="Views\MainView\CopyItemCollectionView\CopyItemView\Title\" />
   </ItemGroup>
 </Project>
