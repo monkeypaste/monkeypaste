@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
-    <ProjectGuid>{FA7569F2-FE28-474D-A0D6-D7DCDEE2072D}</ProjectGuid>
+    <ProjectGuid>{7D6DFA97-AF05-44A5-9C4B-EEC0B107AFC6}</ProjectGuid>
     <ProjectTypeGuids>{EE2C853D-36AF-4FDB-B1AD-8E90477E2198};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>MonkeyPaste.iOS.ShareExtension</RootNamespace>
-    <AssemblyName>MonkeyPaste.iOS.ShareExtension</AssemblyName>
+    <RootNamespace>MonkeyPaste.iOS.KeyboardExtension</RootNamespace>
+    <AssemblyName>MonkeyPaste.iOS.KeyboardExtension</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <ProvisioningType>automatic</ProvisioningType>
@@ -49,7 +49,8 @@
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <MtouchArch>ARM64</MtouchArch>
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <CodesignEntitlements>
+    </CodesignEntitlements>
     <CodesignKey>Apple Development: thomas kefauver (MY7R67BXWM)</CodesignKey>
     <MtouchDebug>true</MtouchDebug>
     <CodesignProvision>VS: WildCard Development</CodesignProvision>
@@ -65,17 +66,16 @@
     <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
+    <AppExtensionDebugBundleId />
+  </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ShareViewController.cs" />
-    <Compile Include="ShareViewController.designer.cs">
-      <DependentUpon>ShareViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
+    <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <InterfaceDefinition Include="MainInterface.storyboard" />
+    <Compile Include="KeyboardViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

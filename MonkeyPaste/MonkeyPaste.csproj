@@ -1,0 +1,91 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+  </PropertyGroup>
+
+  <PropertyGroup>
+   <LangVersion>9.0</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Repositories\**" />
+    <EmbeddedResource Remove="Repositories\**" />
+    <None Remove="Repositories\**" />
+    <Compile Remove="ViewModels\Base\MpUndoableViewModelBase.cs" />
+    <None Remove=".DS_Store" />
+    <None Remove="Resources\Icons\monkey.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="MainPage.xaml.cs" />
+    <Compile Remove="Models\MpCopyItemTemplate.cs" />
+    <Compile Remove="Models\MpPasteHistory.cs" />
+    <Compile Remove="Models\MpPasteToAppPath.cs" />
+    <Compile Remove="Models\MpShortcut.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="MainPage.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.2.0" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.3.3" />
+    <PackageReference Include="RtfPipe" Version="2.0.7677.4303" />
+    <PackageReference Include="SkiaSharp" Version="2.80.2" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
+    <PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
+    <PackageReference Include="Xamarin.Plugins.Clipboard" Version="2.3.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Xamarin.FFImageLoading" Version="2.4.11.982" />
+    <PackageReference Include="Xamarin.FFImageLoading.Transformations" Version="2.4.11.982" />
+    <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
+    <PackageReference Include="Xamarin.FFImageLoading.Svg.Forms" Version="2.4.11.982" />
+    <PackageReference Include="Xamarin.FFImageLoading.Svg" Version="2.4.11.982" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Icons\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Views\Shell\MainView\CopyItemCollectionView\CopyItemView\MpCopyItemView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Shell\MainView\CopyItemCollectionView\MpCopyItemCollectionView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Shell\MainView\MainFlyOut\TagTray\MpTagCollectionView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\Icons\search.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\MainViewModel\CopyItemCollectionViewModel\CopyItemViewModel\Content\FileList\" />
+    <Folder Include="ViewModels\MainViewModel\CopyItemCollectionViewModel\CopyItemViewModel\Content\Image\" />
+    <Folder Include="ViewModels\MainViewModel\CopyItemCollectionViewModel\CopyItemViewModel\Title\" />
+    <Folder Include="Views\Shell\MainView\CopyItemCollectionView\CopyItemView\Content\Image\" />
+    <Folder Include="Views\Shell\MainView\CopyItemCollectionView\CopyItemView\Content\FileList\" />
+    <Folder Include="Views\Shell\MainView\CopyItemCollectionView\CopyItemView\Content\Text\" />
+    <Folder Include="Views\Shell\MainView\CopyItemCollectionView\CopyItemView\Title\" />
+    <Folder Include="Bootstrapper\" />
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Icons\monkey.png" />
+  </ItemGroup>
+</Project>

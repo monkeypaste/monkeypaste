@@ -1,0 +1,64 @@
+﻿<ContentView
+    x:Class="MonkeyPaste.MpCopyItemCollectionView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:MonkeyPaste"
+    xmlns:skia="clr-namespace:SkiaSharp;assembly=SkiaSharp"
+    BackgroundColor="Yellow"
+    WidthRequest="1000"
+    HeightRequest="1000"
+    x:DataType="local:MpCopyItemCollectionViewModel">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Grid">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="Opacity" Value="0.5" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+        <local:MpByteArrayToImageConverter x:Key="ByteArrayToImageConverter" />
+    </ContentView.Resources>
+    <ContentView.Content>
+        <CollectionView
+            x:Name="CopyItemViewModels"
+            EmptyView="{Binding}"
+            ItemsSource="{Binding CopyItemViewModels}"
+            RemainingItemsThreshold="5"
+            RemainingItemsThresholdReachedCommand="{Binding LoadMore}"
+            SelectionChanged="CopyItemViewModels_SelectionChanged"
+            SelectionMode="Single">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical"
+                                   SnapPointsAlignment="Start"
+                                   SnapPointsType="Mandatory" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="local:MpCopyItemViewModel">
+                    <local:MpCopyItemView BindingContext="{Binding .}" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.EmptyViewTemplate>
+                <DataTemplate x:DataType="local:MpCopyItemCollectionViewModel">
+                    <Grid>
+                        <ActivityIndicator IsVisible="{Binding IsBusy}" />
+                        <Label
+                            HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center"
+                            IsVisible="{Binding IsNotBusy}"
+                            Text="No photos to import could be found"
+                            VerticalOptions="Center" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.EmptyViewTemplate>
+        </CollectionView>
+    </ContentView.Content>
+</ContentView>

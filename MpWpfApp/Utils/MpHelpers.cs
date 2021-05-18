@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -2782,16 +2782,7 @@ namespace MpWpfApp {
             }
         }
 
-        public string GetFullyFormattedUrl(string str) {
-            if (str.StartsWith(@"http://")) {
-                return str;
-            }
-            if (str.StartsWith(@"https://")) {
-                return str;
-            }
-            //use http without s because if it is https then it will resolve to but otherwise will not load
-            return @"http://" + str;
-        }
+        
 
         public bool IsValidUrl(string str) {
             bool hasValidExtension = false;
@@ -2822,6 +2813,20 @@ namespace MpWpfApp {
                 Console.WriteLine("MpHelpers.GetUrlFavicon error for url: " + url + " with exception: "+ex);
                 return null;
             }
+        }
+
+        public string GetFullyFormattedUrl(string str)
+        {
+            if (str.StartsWith(@"http://"))
+            {
+                return str;
+            }
+            if (str.StartsWith(@"https://"))
+            {
+                return str;
+            }
+            //use http without s because if it is https then it will resolve to but otherwise will not load
+            return @"http://" + str;
         }
 
         public string GetUrlDomain(string url) {

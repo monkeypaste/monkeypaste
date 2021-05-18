@@ -1,0 +1,64 @@
+﻿<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:MonkeyPaste"
+    x:Class="MonkeyPaste.MpGalleryView"
+    x:DataType="local:MpGalleryViewModel">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Grid">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                     <VisualStateGroupList>
+                         <VisualStateGroup x:Name="CommonStates">
+                             <VisualState x:Name="Normal" />
+                             <VisualState x:Name="Selected">
+                                 <VisualState.Setters>
+                                     <Setter Property="Opacity" Value="0.5" />
+                                 </VisualState.Setters>
+                             </VisualState>
+                         </VisualStateGroup>
+                     </VisualStateGroupList>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+        <local:MpByteArrayToImageConverter x:Key="ByteArrayToImageConverter"/>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Select" Clicked="SelectToolBarItem_Clicked" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Content>
+        <CollectionView x:Name="Photos"
+                        EmptyView="{Binding}"
+                        ItemsSource="{Binding Photos}"
+                        SelectionMode="Multiple"
+                        RemainingItemsThreshold="5"
+                        RemainingItemsThresholdReachedCommand="{Binding LoadMore}">
+            <CollectionView.ItemsLayout>
+                 <GridItemsLayout Orientation="Vertical"
+                                  Span="3"
+                                  HorizontalItemSpacing="0" />
+             </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                 <DataTemplate x:DataType="local:Photo"> 
+                    <Grid>
+                        <Image Aspect="AspectFill"
+                               Source="{Binding Bytes, Converter={StaticResource ToImage}}"
+                               HeightRequest="120" /> 
+                    </Grid> 
+                </DataTemplate> 
+            </CollectionView.ItemTemplate>
+            <CollectionView.EmptyViewTemplate>
+                <DataTemplate x:DataType="local:MpGalleryViewModel">
+                     <Grid>
+                         <ActivityIndicator IsVisible="{Binding IsBusy}" />
+                         <Label Text="No photos to import could be found"
+                                IsVisible="{Binding IsNotBusy}"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                HorizontalTextAlignment="Center" />
+                     </Grid>
+                </DataTemplate>
+             </CollectionView.EmptyViewTemplate>
+         </CollectionView>
+    </ContentPage.Content>
+</ContentPage>
