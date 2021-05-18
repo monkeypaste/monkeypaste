@@ -21,7 +21,6 @@
                 </Setter>
             </Style>
         </ResourceDictionary>
-        <local:MpByteArrayToImageConverter x:Key="ByteArrayToImageConverter"/>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Select" Clicked="SelectToolBarItem_Clicked" />

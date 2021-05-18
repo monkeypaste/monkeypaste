@@ -38,5 +38,11 @@
 	<string>LaunchScreen</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>We want to show your photos in this app</string>
+  <key>UIAppFonts</key>
+  <array>
+    <string>FontAwesomeBrandsRegular.otf</string>
+    <string>FontAwesomeRegular.otf</string>
+    <string>FontAwesomeSolid.otf</string>
+  </array>
 </dict>
 </plist>

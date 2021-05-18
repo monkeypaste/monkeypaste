@@ -5,9 +5,6 @@
     xmlns:local="clr-namespace:MonkeyPaste"
     Title="Monkey Poop"
     x:DataType="local:MpMainViewModel">
-    <ContentPage.Resources>
-        <local:MpByteArrayToImageConverter x:Key="ByteArrayToImageConverter" />
-    </ContentPage.Resources>
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="/Resources/Icons/search.png" />
     </ContentPage.ToolbarItems>

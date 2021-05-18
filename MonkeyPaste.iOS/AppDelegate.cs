@@ -24,12 +24,12 @@ namespace MonkeyPaste.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
 
             _ = new MpBootstrapper();
 
             global::Xamarin.Forms.Forms.Init();
 
+            CachedImageRenderer.Init();
             CachedImageRenderer.InitImageSourceHandler();
 
             LoadApplication(new App());

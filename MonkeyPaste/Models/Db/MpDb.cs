@@ -5,6 +5,7 @@ using System.Text;
 using SQLite;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public class MpDb : MpICopyItemImporter {
@@ -58,36 +59,50 @@ namespace MonkeyPaste {
             await _connection.CreateTableAsync<MpUrlDomain>();
             await _connection.CreateTableAsync<MpIcon>();
 
-            await _connection.InsertAsync(new MpCopyItem()
-            {
-                Title = "Test Title 1",
-                ItemText = "Test item 1",
-                CopyDateTime = DateTime.Now
-            });
+            if (await _connection.Table<MpTag>().CountAsync() == 0) {
+                await _connection.InsertAsync(new MpTag() {
+                    TagName = "Recent",
+                    TagColor = Color.Green.ToHex(),
+                    TagSortIdx = 0
+                });
 
+                await _connection.InsertAsync(new MpTag() {
+                    TagName = "All",
+                    TagColor = Color.Blue.ToHex(),
+                    TagSortIdx = 1
+                });
 
-            await _connection.InsertAsync(new MpCopyItem()
-            {
-                Title = "Test Title 2",
-                ItemText = "Test item 2",
-                CopyDateTime = DateTime.Now
-            });
+                await _connection.InsertAsync(new MpTag() {
+                    TagName = "Favorites",
+                    TagColor = Color.Yellow.ToHex(),
+                    TagSortIdx = 2
+                });
 
-
-            await _connection.InsertAsync(new MpCopyItem()
-            {
-                Title = "Test Title 3",
-                ItemText = "Test item 3",
-                CopyDateTime = DateTime.Now
-            });
-
-
-
+                await _connection.InsertAsync(new MpTag() {
+                    TagName = "Help",
+                    TagColor = Color.Orange.ToHex(),
+                    TagSortIdx = 3
+                });
+            }
 
             if (await _connection.Table<MpCopyItem>().CountAsync() == 0) {
                 await _connection.InsertAsync(new MpCopyItem() {
-                    Title = "First copy item",
-                    ItemText = "Test first item",
+                    Title = "Test Title 1",
+                    ItemText = "Test item 1",
+                    CopyDateTime = DateTime.Now
+                });
+
+
+                await _connection.InsertAsync(new MpCopyItem() {
+                    Title = "Test Title 2",
+                    ItemText = "Test item 2",
+                    CopyDateTime = DateTime.Now
+                });
+
+
+                await _connection.InsertAsync(new MpCopyItem() {
+                    Title = "Test Title 3",
+                    ItemText = "Test item 3",
                     CopyDateTime = DateTime.Now
                 });
             }
@@ -114,6 +129,11 @@ namespace MonkeyPaste {
                 return (result as MpDbObject).Id;
             }
             return -1;
+        }
+
+        public async Task<List<T>> Query<T>(string query, params object[] args) where T: new() {
+            var result = await _connection.QueryAsync<T>(query, args);
+            return result;
         }
 
         public async Task<List<T>> GetItems<T>() where T : new() {

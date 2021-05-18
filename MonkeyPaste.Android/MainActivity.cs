@@ -19,13 +19,13 @@ namespace MonkeyPaste.Droid {
 
         protected override void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
-            CachedImageRenderer.Init(enableFastRenderer: true);
 
             _ = new MpBootstrapper();
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 
+            CachedImageRenderer.Init(true);
             CachedImageRenderer.InitImageViewHandler();
 
             Current = this;
@@ -38,10 +38,11 @@ namespace MonkeyPaste.Droid {
         private async void LoadSelectedTextAsync() {
             var selectedText = Intent!.GetStringExtra("SelectedText");// ?? string.Empty;
             var hostInfo = Intent!.GetStringExtra("HostInfo") ?? string.Empty;
+            var hostIconByteArray = Intent!.GetByteArrayExtra("HostIconByteArray") ?? null;
             if (!string.IsNullOrWhiteSpace(selectedText)) {
                 await Clipboard.SetTextAsync(selectedText);
                 var cicvm = MpResolver.Resolve<MpCopyItemCollectionViewModel>();
-                cicvm.AddItemFromClipboardCommand.Execute(new object[] { hostInfo, selectedText });
+                cicvm.AddItemFromClipboardCommand.Execute(new object[] { hostInfo, selectedText, hostIconByteArray });
             }
         }
 

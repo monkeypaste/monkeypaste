@@ -64,8 +64,7 @@ namespace MonkeyPaste {
         public string Host { get; set; }
 
         
-        #endregion
-                
+        #endregion                
         
         public MpCopyItem() : base(){ }
 

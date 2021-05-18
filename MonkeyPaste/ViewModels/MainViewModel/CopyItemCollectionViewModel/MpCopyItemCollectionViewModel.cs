@@ -47,7 +47,10 @@ namespace MonkeyPaste {
         {
             IsBusy = true;
             var copyItems = await _copyItemImporter.Get(1, 0, 20);
-            CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>(copyItems.Select(x => CreateCopyItemViewModel(x)).ToList());
+            CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>();
+            foreach (var ci in copyItems) {
+                CopyItemViewModels.Add(CreateCopyItemViewModel(ci));
+            }
             OnPropertyChanged(nameof(CopyItemViewModels));
             CopyItemViewModels.CollectionChanged += CopyItemViewModels_CollectionChanged;
             await Task.Delay(3000);
@@ -93,13 +96,6 @@ namespace MonkeyPaste {
             vm.CopyItem = item.CopyItem;
             //await Navigation.PushAsync(itemView);
         }
-
-        private async Task LoadData() {
-            var items = await MpDb.Instance.GetItems<MpCopyItem>();
-            var itemViewModels = items.Select(i => CreateCopyItemViewModel(i));
-            CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>(itemViewModels);            
-            MpConsole.Instance.WriteLine(@"CopyItems Loaded: " + CopyItemViewModels.Count);
-        }
         #endregion
 
         #region Commands
@@ -137,14 +133,28 @@ namespace MonkeyPaste {
             }
             string sourceHostInfo = (args as object[])[0] as string;
             string itemPlainText = (args as object[])[1] as string;
+            var hostIconByteArray = (args as object[])[2] as byte[];
             var newCopyItem = new MpCopyItem() { 
                 CopyDateTime = DateTime.Now, 
                 Title = "Text", 
                 ItemText = itemPlainText,
-                Host = sourceHostInfo
+                Host = sourceHostInfo,
+                ItemImage = hostIconByteArray
             };
+
             await MpDb.Instance.AddOrUpdate(newCopyItem);
-            //await _repository.AddOrUpdate(newCopyItem);
+
+            var defaultTagList = await MpDb.Instance.Query<MpTag>("select * from MpTag where TagName=? or TagName=?", "All", "Recent");
+
+            if(defaultTagList != null) {
+                foreach(var tag in defaultTagList) {
+                    var copyItemTag = new MpCopyItemTag() {
+                        CopyItemId = newCopyItem.Id,
+                        TagId = tag.Id
+                    };
+                    await MpDb.Instance.AddItem<MpCopyItemTag>(copyItemTag);
+                }
+            }
         }
         #endregion
     }

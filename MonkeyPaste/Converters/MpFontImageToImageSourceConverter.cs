@@ -6,19 +6,16 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace MonkeyPaste {
-    public class MpByteArrayToImageConverter : IValueConverter
+    public class MpFontImageToImageSourceConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value != null)
+            if (value != null && value is FontImageExtension fie)
             {
-                var bytes = (byte[])value;
-                using (var stream = new MemoryStream(bytes))
-                {
-                    return ImageSource.FromStream(() => stream);
-                }
+                //return fie.ProvideValue(IServiceProvider)
             }
             return null;
         }

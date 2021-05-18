@@ -4,9 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MonkeyPaste"
     xmlns:skia="clr-namespace:SkiaSharp;assembly=SkiaSharp"
-    BackgroundColor="Yellow"
     WidthRequest="1000"
-    HeightRequest="1000"
+    HeightRequest="1000" BackgroundColor="Purple"
     x:DataType="local:MpCopyItemCollectionViewModel">
     <ContentView.Resources>
         <ResourceDictionary>
@@ -25,7 +24,6 @@
                 </Setter>
             </Style>
         </ResourceDictionary>
-        <local:MpByteArrayToImageConverter x:Key="ByteArrayToImageConverter" />
     </ContentView.Resources>
     <ContentView.Content>
         <CollectionView

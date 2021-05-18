@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MonkeyPaste.UWP</RootNamespace>
     <AssemblyName>MonkeyPaste.UWP</AssemblyName>
-	<LangVersion>8.0</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.19041.0</TargetPlatformVersion>
@@ -22,7 +22,7 @@
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
   </PropertyGroup>
   <PropertyGroup>
-   <LangVersion>9.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -164,6 +164,15 @@
       <Project>{EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA}</Project>
       <Name>MonkeyPaste</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\FontAwesome5Solid.otf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\FontAwesome5Regular.otf" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\FontAwesome5Brands.otf" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

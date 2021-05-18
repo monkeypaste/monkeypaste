@@ -1,59 +1,106 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:local="clr-namespace:MonkeyPaste"
              x:Class="MonkeyPaste.MpCopyItemView"
              x:DataType="local:MpCopyItemViewModel">
+    <ContentView.Resources>
+        <Style TargetType="BoxView" x:Key="CopyItem_Selection_BoxView">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="Color"
+                                        Value="{StaticResource UnselectedColor}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="Color"
+                                        Value="{StaticResource SelectedColor}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentView.Resources>
     <ContentView.Content>
-        <Frame IsClippedToBounds="True"
-               HasShadow="True"
-               Padding="0"
-               BackgroundColor="White">
-            <Frame.OutlineColor>
-                <OnPlatform x:TypeArguments="Color"
-                            Android="Gray"
-                            iOS="Gray" />
-            </Frame.OutlineColor>
-            <Frame.Margin>
-                <OnPlatform x:TypeArguments="Thickness"
-                            Android="10"
-                            iOS="10" />
-            </Frame.Margin>
-            <StackLayout Orientation="Horizontal">
-                <BoxView Color="Red"
-                         WidthRequest="6" />
-                <Grid VerticalOptions="CenterAndExpand"
-                      Padding="0"
-                      HorizontalOptions="FillAndExpand"
-                      BackgroundColor="Transparent">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Label FontAttributes="Bold"
-                           TextColor="Black"
-                           Grid.Row="0"
-                           HorizontalTextAlignment="Start"
-                           VerticalTextAlignment="Center"
-                           FontSize="16"
-                           Text="{Binding CopyItem.Title, Mode = TwoWay}">
-                        <Label.LineBreakMode>
-                            <OnPlatform x:TypeArguments="LineBreakMode"
-                                        Android="NoWrap"
-                                        iOS="TailTruncation" />
-                        </Label.LineBreakMode>
-                    </Label>
-                    <BoxView Grid.Row="1"
-                             Color="Gray"
-                             HorizontalOptions="FillAndExpand"
-                             HeightRequest="1" />
-                    <Label Grid.Row="2"
-                           TextColor="Black"
-                           FontSize="16"
-                           Text="{Binding CopyItem.ItemText, Mode=TwoWay}" />
-                </Grid>
-            </StackLayout>
-        </Frame>
+        <SwipeView>
+            <SwipeView.LeftItems>
+                <SwipeItems>
+                    <SwipeItem Text="Favorite"
+                               IconImageSource="{StaticResource StarOutlineIcon}"
+                               BackgroundColor="LightGreen"
+                               Command="{Binding AddToFavoritesCommand}"
+                               CommandParameter="{Binding}" />
+                    <SwipeItem Text="Delete"
+                               IconImageSource="{StaticResource DeleteIcon}"
+                               BackgroundColor="LightPink"
+                               Command="{Binding DeleteItemCommand}"
+                               CommandParameter="{Binding}" />
+                </SwipeItems>
+            </SwipeView.LeftItems>
+            <Frame IsClippedToBounds="True"
+                   HasShadow="True"
+                   Padding="0"
+                   BackgroundColor="White">
+                <Frame.OutlineColor>
+                    <OnPlatform x:TypeArguments="Color"
+                                Android="Gray"
+                                iOS="Gray" />
+                </Frame.OutlineColor>
+                <Frame.Margin>
+                    <OnPlatform x:TypeArguments="Thickness"
+                                Android="10"
+                                iOS="10" />
+                </Frame.Margin>
+                <StackLayout Orientation="Horizontal">
+                    <BoxView Style="{StaticResource CopyItem_Selection_BoxView}"
+                             WidthRequest="6" />
+                    <ff:CachedImage Source="{Binding CopyItem.ItemImage, Converter={StaticResource ByteArrayToImageSourceConverter}}"
+                                    Aspect="AspectFill"
+                                    LoadingPlaceholder="{StaticResource SearchIcon}"
+                                    ErrorPlaceholder="{StaticResource AppIcon}"
+                                    CacheDuration="50"
+                                    RetryCount="3"
+                                    RetryDelay="600"
+                                    DownsampleToViewSize="true" />
+                    <Grid VerticalOptions="CenterAndExpand"
+                          Padding="0"
+                          HorizontalOptions="FillAndExpand"
+                          BackgroundColor="Transparent">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Label FontAttributes="Bold"
+                               TextColor="Black"
+                               Grid.Row="0"
+                               HorizontalTextAlignment="Start"
+                               VerticalTextAlignment="Center"
+                               FontSize="16"
+                               Text="{Binding CopyItem.Title, Mode = TwoWay}">
+                            <Label.LineBreakMode>
+                                <OnPlatform x:TypeArguments="LineBreakMode"
+                                            Android="NoWrap"
+                                            iOS="TailTruncation" />
+                            </Label.LineBreakMode>
+                        </Label>
+                        <BoxView Grid.Row="1"
+                                 Color="Gray"
+                                 HorizontalOptions="FillAndExpand"
+                                 HeightRequest="1" />
+                        <Label Grid.Row="2"
+                               TextColor="Black"
+                               FontSize="16"
+                               Text="{Binding CopyItem.ItemText, Mode=TwoWay}" />
+                    </Grid>
+                </StackLayout>
+            </Frame>
+        </SwipeView>
     </ContentView.Content>
 </ContentView>
