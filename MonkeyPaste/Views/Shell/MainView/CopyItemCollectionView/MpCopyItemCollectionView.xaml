@@ -5,7 +5,9 @@
     xmlns:local="clr-namespace:MonkeyPaste"
     xmlns:skia="clr-namespace:SkiaSharp;assembly=SkiaSharp"
     WidthRequest="1000"
-    HeightRequest="1000" BackgroundColor="Purple"
+    HeightRequest="1000" 
+    BackgroundColor="Purple"
+    x:Name="CopyItemCollectionView"
     x:DataType="local:MpCopyItemCollectionViewModel">
     <ContentView.Resources>
         <ResourceDictionary>
@@ -41,7 +43,7 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="local:MpCopyItemViewModel">
-                    <local:MpCopyItemView BindingContext="{Binding .}" />
+                    <local:MpCopyItemView BindingContext="{Binding .}"/>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
             <CollectionView.EmptyViewTemplate>

@@ -12,8 +12,9 @@ namespace MonkeyPaste {
     public class MpCopyItemCollectionViewModel : MpViewModelBase {
         #region Private Variables
         private readonly MpICopyItemImporter _copyItemImporter;
-        private int itemsAdded;
-        private int currentStartIndex = 0;
+        private int _itemsAdded = 0;
+        private int _currentStartIndex = 0;
+        private int _pageSize = 20;
         #endregion
 
         #region Properties
@@ -38,6 +39,7 @@ namespace MonkeyPaste {
         public MpCopyItemViewModel CreateCopyItemViewModel(MpCopyItem item) {
             var itemViewModel = new MpCopyItemViewModel(item);
             itemViewModel.PropertyChanged += CopyItemViewModels_PropertyChanged;
+            Routing.RegisterRoute(@"copyitem/" + itemViewModel,typeof(MpCopyItemDetailPageView));
             return itemViewModel;
         }
         #endregion
@@ -61,10 +63,10 @@ namespace MonkeyPaste {
         {
             foreach (MpCopyItem copyItem in args.NewItems)
             {
-                itemsAdded++;
+                _itemsAdded++;
                 CopyItemViewModels.Add(CreateCopyItemViewModel(copyItem));
             }
-            if (itemsAdded == 20)
+            if (_itemsAdded == 20)
             {
                 var collection = (ObservableCollection<MpCopyItem>)sender;
                 collection.CollectionChanged -= Collection_CollectionChanged;
@@ -86,26 +88,31 @@ namespace MonkeyPaste {
                 Task.Run(async () => await MpDb.Instance.UpdateItem(item.CopyItem));
             }
         }
-
-        private async Task NavigateToItem(MpCopyItemViewModel item) {
-            if (item == null) {
-                return;
-            }
-            var itemView = MpResolver.Resolve<MpCopyItemView>();
-            var vm = itemView.BindingContext as MpCopyItemViewModel;
-            vm.CopyItem = item.CopyItem;
-            //await Navigation.PushAsync(itemView);
-        }
         #endregion
 
         #region Commands
+        public ICommand DeleteItemCommand => new Command<object>(async (args) => {
+            if(args == null || args is not MpCopyItemViewModel civm) {
+                return;
+            }
+            CopyItemViewModels.Remove(civm);
+            await MpDb.Instance.DeleteItem(civm.CopyItem);
+        });
 
+        public ICommand ItemSelected => new Command(async (selectedCopyItemViewModel) => {
+            if(selectedCopyItemViewModel == null) {
+                return;
+            }
+            var scivm = selectedCopyItemViewModel as MpCopyItemViewModel;
+            var selectedCopyItemDetailPageView = new MpCopyItemDetailPageView(scivm);
+            await Navigation.NavigateTo(@"copyitem/" + scivm.CopyItem.Id);// PushModal(selectedCopyItemDetailPageView);
+        });
 
         public ICommand LoadMore => new Command(async () =>
         {
-            currentStartIndex += 20;
-            itemsAdded = 0;
-            var collection = await _copyItemImporter.Get(1, currentStartIndex, 20);
+            _currentStartIndex += 20;
+            _itemsAdded = 0;
+            var collection = await _copyItemImporter.Get(1, _currentStartIndex, 20);
             collection.CollectionChanged += Collection_CollectionChanged;
         });
 
@@ -118,36 +125,31 @@ namespace MonkeyPaste {
             MessagingCenter.Send(this, "FavoritesAdded");
         });
 
-        private Command<object> _addItemFromClipboardCommand = null;
-        public ICommand AddItemFromClipboardCommand {
-            get {
-                if (_addItemFromClipboardCommand == null) {
-                    _addItemFromClipboardCommand = new Command<object>(AddItemFromClipboard);
-                }
-                return _addItemFromClipboardCommand;
-            }
-        }
-        private async void AddItemFromClipboard(object args) {
-            if(args == null) {
+        public ICommand AddItemFromClipboardCommand => new Command<object>(async (args) => {
+            if (args == null) {
                 return;
             }
-            string sourceHostInfo = (args as object[])[0] as string;
+            //create CopyItem
+            string hostPackageName = (args as object[])[0] as string;
             string itemPlainText = (args as object[])[1] as string;
-            var hostIconByteArray = (args as object[])[2] as byte[];
-            var newCopyItem = new MpCopyItem() { 
-                CopyDateTime = DateTime.Now, 
-                Title = "Text", 
+            var hostAppName = (args as object[])[2] as string;
+            var hostAppImage = (args as object[])[3] as byte[];
+
+            var newCopyItem = new MpCopyItem() {
+                CopyDateTime = DateTime.Now,
+                Title = "Text",
                 ItemText = itemPlainText,
-                Host = sourceHostInfo,
-                ItemImage = hostIconByteArray
+                Host = hostPackageName,
+                ItemImage = hostAppImage
             };
 
             await MpDb.Instance.AddOrUpdate(newCopyItem);
 
+            //add copyitem to default tags
             var defaultTagList = await MpDb.Instance.Query<MpTag>("select * from MpTag where TagName=? or TagName=?", "All", "Recent");
 
-            if(defaultTagList != null) {
-                foreach(var tag in defaultTagList) {
+            if (defaultTagList != null) {
+                foreach (var tag in defaultTagList) {
                     var copyItemTag = new MpCopyItemTag() {
                         CopyItemId = newCopyItem.Id,
                         TagId = tag.Id
@@ -155,7 +157,35 @@ namespace MonkeyPaste {
                     await MpDb.Instance.AddItem<MpCopyItemTag>(copyItemTag);
                 }
             }
-        }
+
+
+            if(!string.IsNullOrEmpty(hostPackageName)) {
+                //add or update copyitem's source app
+                var appFromHostList = await MpDb.Instance.Query<MpApp>("select * from MpApp where AppPath=?", hostPackageName);
+                if (appFromHostList != null && appFromHostList.Count >= 1) {
+                    var app = appFromHostList[0];
+
+                    newCopyItem.AppId = app.Id;
+                    await MpDb.Instance.UpdateItem<MpCopyItem>(newCopyItem);
+                } else {
+                    var newIcon = new MpIcon() {
+                       IconImage = hostAppImage 
+                    };
+                    await MpDb.Instance.AddItem<MpIcon>(newIcon);
+
+                    var newApp = new MpApp() {
+                        AppPath = hostPackageName,
+                        AppName = hostAppName,
+                        IconId = newIcon.Id
+                    };
+
+                    await MpDb.Instance.AddItem<MpApp>(newApp);
+
+                    newCopyItem.AppId = newApp.Id;
+                    await MpDb.Instance.UpdateItem<MpCopyItem>(newCopyItem);
+                }
+            }
+        });
         #endregion
     }
 }

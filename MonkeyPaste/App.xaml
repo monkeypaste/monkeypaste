@@ -1,30 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:local="clr-namespace:MonkeyPaste"
              x:Class="MonkeyPaste.App">
     <Application.Resources>
         <ResourceDictionary>
-            <local:MpByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
-            <Style TargetType="NavigationPage">
-                <Setter Property="BarBackgroundColor"
-                        Value="#A25EBB" />
-                <Setter Property="BarTextColor"
-                        Value="#FFFFFF" />
-            </Style>
-            <Style x:Key="FilterButton"
-                   TargetType="Button">
-                <Setter Property="Margin"
-                        Value="15" />
-                <Setter Property="BorderWidth"
-                        Value="1" />
-                <Setter Property="BorderRadius"
-                        Value="6" />
-                <Setter Property="BorderColor"
-                        Value="Silver" />
-                <Setter Property="TextColor" 
-                        Value="Black" />
-            </Style>
+            <local:MpByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />            
             
             <Color x:Key="CompletedColor">#1C8859</Color>
             <Color x:Key="ActiveColor">#D3D3D3</Color>
@@ -108,6 +90,83 @@
                        Glyph="&#xf005;"
                        Size="22"
                        Color="Gold" />
+
+            <FontImageSource x:Key="HourGlassStartIcon"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf251;"
+                             Size="22"
+                             Color="Black" />
+
+            <FontImageSource x:Key="ErrorIcon"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf071;"
+                             Size="22"
+                             Color="Orange" />
+
+            <FontImageSource x:Key="TagsIcon"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf02c;"
+                             Size="22"
+                             Color="Black" />
+
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor"
+                        Value="#A25EBB" />
+                <Setter Property="BarTextColor"
+                        Value="#FFFFFF" />
+            </Style>
+            <Style x:Key="FilterButton"
+                   TargetType="Button">
+                <Setter Property="Margin"
+                        Value="15" />
+                <Setter Property="BorderWidth"
+                        Value="1" />
+                <Setter Property="BorderRadius"
+                        Value="6" />
+                <Setter Property="BorderColor"
+                        Value="Silver" />
+                <Setter Property="TextColor"
+                        Value="Black" />
+            </Style>
+
+            <Style x:Key="DynamicCachedImageStyle"
+                   TargetType="{x:Type ff:CachedImage}">
+                <Setter Property="LoadingPlaceholder"
+                        Value="{StaticResource HourGlassStartIcon}" />
+                <Setter Property="ErrorPlaceholder"
+                        Value="{StaticResource ErrorIcon}" />
+                <Setter Property="CacheDuration"
+                        Value="50" />
+                <Setter Property="RetryCount"
+                        Value="3" />
+                <Setter Property="RetryDelay"
+                        Value="600" />
+                <Setter Property="DownsampleToViewSize"
+                        Value="true" />
+            </Style>
+
+
+            <Style TargetType="BoxView"
+                   x:Key="CopyItem_Selection_BoxView">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="Color"
+                                            Value="{StaticResource UnselectedColor}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="Color"
+                                            Value="{StaticResource SelectedColor}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

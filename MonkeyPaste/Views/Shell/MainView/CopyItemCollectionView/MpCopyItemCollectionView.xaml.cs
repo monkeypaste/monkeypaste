@@ -19,18 +19,17 @@ namespace MonkeyPaste {
             //CopyItemCollectionListView.S += (s, e) => CopyItemCollectionListView.SelectedItem = null;
         }
 
-        void CopyItemViewModels_SelectionChanged(System.Object sender, Xamarin.Forms.SelectionChangedEventArgs e)
-        {            
-            var viewModel = (MpCopyItemCollectionViewModel)BindingContext;
-            if(e.CurrentSelection.Count == 0) {
-                viewModel.SelectedCopyItemViewModel = null;
+        void CopyItemViewModels_SelectionChanged(System.Object sender, Xamarin.Forms.SelectionChangedEventArgs e) {
+            var cicvm = (MpCopyItemCollectionViewModel)BindingContext;
+            if (e.CurrentSelection.Count == 0) {
+                cicvm.SelectedCopyItemViewModel = null;
             } else {
-                viewModel.SelectedCopyItemViewModel = e.CurrentSelection[0] as MpCopyItemViewModel;
+                var scivm = e.CurrentSelection[0] as MpCopyItemViewModel;
+                cicvm.SelectedCopyItemViewModel = scivm;
+                //cicvm.ItemSelected.Execute(scivm);
             }
 
-            MpConsole.Instance.WriteLine(@"CopyItem: " + viewModel.SelectedCopyItemViewModel.CopyItem.ItemText + " selected");
-            //viewModel.AddFavorites.Execute(Photos.SelectedItems.Select(x => (Photo)x).ToList());
-            //DisplayAlert("Added", "Selected photos has been added to favorites", "OK");
+            MpConsole.Instance.WriteLine(@"CopyItem: " + cicvm.SelectedCopyItemViewModel.CopyItem.ItemText + " selected");
         }
     }
 }

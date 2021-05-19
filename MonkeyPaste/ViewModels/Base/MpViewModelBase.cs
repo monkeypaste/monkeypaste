@@ -18,7 +18,8 @@ namespace MonkeyPaste {
         }
         #endregion
 
-        public INavigation Navigation { get; set; }
+        public MpINavigate Navigation { get; set; } = new MpNavigator();
+
         
         public bool CanAcceptChildren { get; set; } = true;
 

@@ -35,13 +35,14 @@ namespace MonkeyPaste {
 
         public ImageSource IconImageSource {
             get {
-                if(CopyItem == null) {
+                if(CopyItem == null || string.IsNullOrEmpty(CopyItem.Host)) {
                     return null;
                 }
-                return ImageSource.FromStream(() =>
-                {
-                    return new MemoryStream(CopyItem.ItemImage);
-                });
+                var imgSrc = MpPackageNameSource.FromPackageName(CopyItem.Host);
+                if(imgSrc == null) {
+                    Console.WriteLine("Null icon for host: " + CopyItem.Host);
+                }
+                return imgSrc;
             }
         }
         #endregion
@@ -74,16 +75,11 @@ namespace MonkeyPaste {
                 }
             }
         });
-
-        public ICommand DeleteItemCommand => new Command(async () => {
-            var cicvm = MpResolver.Resolve<MpCopyItemCollectionViewModel>();
-            cicvm.CopyItemViewModels.Remove(this);
-            await MpDb.Instance.DeleteItem(CopyItem);
-        });
+        
 
         public ICommand Save => new Command(async () => {
             await MpDb.Instance.AddOrUpdate<MpCopyItem>(CopyItem);
-            await Navigation.PopAsync();
+            //wait Navigation.PopAsync();
         });
 
         private Command _setClipboardToItemCommand = null;

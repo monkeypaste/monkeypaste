@@ -37,12 +37,13 @@ namespace MonkeyPaste.Droid {
 
         private async void LoadSelectedTextAsync() {
             var selectedText = Intent!.GetStringExtra("SelectedText");// ?? string.Empty;
-            var hostInfo = Intent!.GetStringExtra("HostInfo") ?? string.Empty;
-            var hostIconByteArray = Intent!.GetByteArrayExtra("HostIconByteArray") ?? null;
+            var hostPackageName = Intent!.GetStringExtra("HostPackageName") ?? string.Empty;
+            var hostAppName = Intent!.GetStringExtra("HostAppName") ?? string.Empty;
+            var hostAppIcon = Intent!.GetByteArrayExtra("HostIconByteArray") ?? null;
             if (!string.IsNullOrWhiteSpace(selectedText)) {
                 await Clipboard.SetTextAsync(selectedText);
                 var cicvm = MpResolver.Resolve<MpCopyItemCollectionViewModel>();
-                cicvm.AddItemFromClipboardCommand.Execute(new object[] { hostInfo, selectedText, hostIconByteArray });
+                cicvm.AddItemFromClipboardCommand.Execute(new object[] { hostPackageName, selectedText, hostAppName, hostAppIcon });
             }
         }
 

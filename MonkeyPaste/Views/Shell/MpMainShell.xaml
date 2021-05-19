@@ -3,21 +3,15 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MonkeyPaste">
-    <FlyoutItem FlyoutDisplayOptions="AsMultipleItems">
-        <Tab Title="Collections">
-            <ShellContent Title="All"
-                          ContentTemplate="{DataTemplate local:MpMainView}" />
-        </Tab>
-        <!--
-        Shell has implicit conversion operators that enable the Shell visual hierarchy to be simplified.
-        This is possible because a subclassed Shell object can only ever contain a FlyoutItem object or a TabBar object,
-        which can only ever contain Tab objects, which can only ever contain ShellContent objects.
-
-        The implicit conversion automatically wraps the ShellContent objects below in Tab objects.
-        -->
+    <FlyoutItem FlyoutDisplayOptions="AsSingleItem">
+        <ShellContent Title="Collections"
+                      Icon="{StaticResource TagsIcon}"
+                      ContentTemplate="{DataTemplate local:MpMainView}" />
+    </FlyoutItem>
+    <FlyoutItem FlyoutDisplayOptions="AsSingleItem">
         <ShellContent Title="Settings" />
+    </FlyoutItem>
+    <FlyoutItem FlyoutDisplayOptions="AsSingleItem">
         <ShellContent Title="Help" />
     </FlyoutItem>
-    <!--<ShellContent Title="Home" ContentTemplate="{DataTemplate local:MpMainView}" />
-    <ShellContent Title="Gallery" ContentTemplate="{DataTemplate local:MpGalleryView}" />-->
 </Shell>
