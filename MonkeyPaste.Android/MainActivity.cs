@@ -10,9 +10,9 @@ using FFImageLoading.Forms.Platform;
 namespace MonkeyPaste.Droid {
     [Activity(
         Label = "MonkeyPaste",
-        Icon = "@mipmap/icon",
+        Icon = "@drawable/icon",
         Theme = "@style/MainTheme",
-        MainLauncher = true,
+        MainLauncher = false,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity {
         public static MainActivity Current;

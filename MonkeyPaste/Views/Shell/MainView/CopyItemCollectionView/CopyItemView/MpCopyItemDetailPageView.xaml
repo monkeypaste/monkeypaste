@@ -5,7 +5,6 @@
              xmlns:local="clr-namespace:MonkeyPaste"
              x:Class="MonkeyPaste.MpCopyItemDetailPageView"
              x:DataType="local:MpCopyItemViewModel">
-    <Shell.
     <ContentPage.Content>        
         <Frame IsClippedToBounds="True"
                HasShadow="True"

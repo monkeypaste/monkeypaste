@@ -109,6 +109,42 @@
                              Size="22"
                              Color="Black" />
 
+            <FontImageSource x:Key="HelpIcon"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf059;"
+                             Size="22"
+                             Color="Black" />
+
+            <FontImageSource x:Key="SquareIcon0"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf45c;"
+                             Size="22"
+                             Color="Black" />
+
+            <FontImageSource x:Key="SquareIcon1"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf45c;"
+                             Size="22"
+                             Color="Black" />
+
+            <FontImageSource x:Key="SquareIcon2"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf45c;"
+                             Size="22"
+                             Color="Black" />
+            
+            <FontImageSource x:Key="SquareIcon3"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf45c;"
+                             Size="22"
+                             Color="Black" />
+            
+            <FontImageSource x:Key="SquareIcon4"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf45c;"
+                             Size="22"
+                             Color="Black" />
+
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor"
                         Value="#A25EBB" />

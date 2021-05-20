@@ -4,7 +4,6 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using FFImageLoading.Forms;
-using SkiaSharp;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 using Xamarin.Forms;
@@ -23,15 +22,15 @@ namespace MonkeyPaste {
         public byte A { get; set; }
 
         [Ignore]
-        public SKColor Color {
+        public Color Color {
             get {
-                return new SKColor(R, G, B, A);
+                return Color.FromRgba(R, G, B, A);
             }
             set {   
-                R = (byte)value.Red;
-                G = (byte)value.Green;
-                B = (byte)value.Blue;
-                A = (byte)value.Alpha;
+                R = (byte)(value.R * 255);
+                G = (byte)(value.G * 255);
+                B = (byte)(value.B * 255);
+                A = (byte)(value.A * 255);
             }
         }
 
@@ -76,13 +75,13 @@ namespace MonkeyPaste {
                     break;
                 }
                 //between 0-255 where 0 is black 255 is white
-                var rgDiff = Math.Abs((int)c.Color.Red - (int)c.Color.Green);
-                var rbDiff = Math.Abs((int)c.Color.Red - (int)c.Color.Blue);
-                var gbDiff = Math.Abs((int)c.Color.Green - (int)c.Color.Blue);
+                var rgDiff = Math.Abs((int)c.Color.R - (int)c.Color.G);
+                var rbDiff = Math.Abs((int)c.Color.R - (int)c.Color.B);
+                var gbDiff = Math.Abs((int)c.Color.G - (int)c.Color.B);
                 var totalDiff = rgDiff + rbDiff + gbDiff;
 
                 //0-255 0 is black
-                var grayScaleValue = 0.2126 * (int)c.Color.Red + 0.7152 * (int)c.Color.Green + 0.0722 * (int)c.Color.Blue;
+                var grayScaleValue = 0.2126 * (int)c.Color.R + 0.7152 * (int)c.Color.G + 0.0722 * (int)c.Color.B;
                 var relativeDist = primaryIconColorList.Count == 0 ? 1 : MpHelpers.Instance.ColorDistance(primaryIconColorList[primaryIconColorList.Count - 1].Color, c.Color);
                 if (totalDiff > 50 && grayScaleValue < 200 && relativeDist > 0.15) {
                     primaryIconColorList.Add(c);

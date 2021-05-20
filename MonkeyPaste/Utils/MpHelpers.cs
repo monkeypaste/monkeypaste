@@ -124,13 +124,13 @@ namespace MonkeyPaste {
         {
             return _ContentColors[c][r];
         }
-        public double ColorDistance(SKColor e1, SKColor e2)
+        public double ColorDistance(Color e1, Color e2)
         {
             //max between 0 and 764.83331517396653 (found by checking distance from white to black)
-            long rmean = ((long)e1.Red + (long)e2.Red) / 2;
-            long r = (long)e1.Red - (long)e2.Red;
-            long g = (long)e1.Green - (long)e2.Green;
-            long b = (long)e1.Blue - (long)e2.Blue;
+            long rmean = ((long)e1.R + (long)e2.R) / 2;
+            long r = (long)e1.R - (long)e2.R;
+            long g = (long)e1.G - (long)e2.G;
+            long b = (long)e1.B - (long)e2.B;
             double max = 764.83331517396653;
             double d = Math.Sqrt((((512 + rmean) * r * r) >> 8) + 4 * g * g + (((767 - rmean) * b * b) >> 8));
             return d / max;
