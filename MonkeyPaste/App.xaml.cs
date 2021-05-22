@@ -9,7 +9,7 @@ namespace MonkeyPaste {
     public partial class App : Application {
         public App() {
             InitializeComponent();
-            MainPage = new MpMainShell(); 
+            MainPage = MpResolver.Resolve<MpMainShell>();
         }
 
         protected override void OnStart() {

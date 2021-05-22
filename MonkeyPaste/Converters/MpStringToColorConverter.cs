@@ -5,14 +5,13 @@ using System.Text;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpStatusColorConverter : IValueConverter {
+    public class MpStringToColorConverter : IValueConverter {
         public object Convert(object value, Type targetType,
                               object parameter, CultureInfo culture) {
-            return (bool)value ? (Color)Application.Current.Resources["CompletedColor"] :
-                                 (Color)Application.Current.Resources["ActiveColor"];
+            return Color.FromHex(value.ToString());
         }
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
-            return null;
+            return ((Color)value).ToHex();
         }
     }
 }

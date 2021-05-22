@@ -8,15 +8,20 @@ using Xamarin.Forms.Xaml;
 
 namespace MonkeyPaste {
     [XamlCompilation(XamlCompilationOptions.Compile)]
+    [QueryProperty(nameof(TagId), "TagId")]
     public partial class MpCopyItemCollectionView : ContentView {
+        public int TagId {
+            set {
+                LoadTagItems(value);
+            }
+        }
         public MpCopyItemCollectionView() {
             InitializeComponent();
+            BindingContext = MpResolver.Resolve<MpCopyItemCollectionViewModel>();
+        }
 
-            //var viewModel = new MpCopyItemCollectionViewModel(MpDb.Instance);
-            //viewModel.Navigation = Navigation;
-            //BindingContext = viewModel;
-
-            //CopyItemCollectionListView.S += (s, e) => CopyItemCollectionListView.SelectedItem = null;
+        void LoadTagItems(int tagId) {
+            (BindingContext as MpCopyItemCollectionViewModel).TagId = tagId;
         }
 
         void CopyItemViewModels_SelectionChanged(System.Object sender, Xamarin.Forms.SelectionChangedEventArgs e) {

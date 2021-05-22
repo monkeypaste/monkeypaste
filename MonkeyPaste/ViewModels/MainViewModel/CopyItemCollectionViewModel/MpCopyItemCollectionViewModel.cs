@@ -18,20 +18,23 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
-        //public ObservableCollection<MpCopyItem> CopyItems { get; set; }
-
+        public int TagId { get; set; } = 1;
         public ObservableCollection<MpCopyItemViewModel> CopyItemViewModels { get; set; }
 
         public MpCopyItemViewModel SelectedCopyItemViewModel { get; set; }
         #endregion
 
         #region Public Methods
-        //public MpCopyItemCollectionViewModel() : base() {
-        //    Task.Run(async () => await LoadData());
-        //}
 
         public MpCopyItemCollectionViewModel(MpICopyItemImporter copyItemImporter) : base()
         {
+            PropertyChanged += (s,e)=> {
+                switch(e.PropertyName) {
+                    case nameof(TagId):
+                        Device.BeginInvokeOnMainThread(async ()=> { await Initialize(); });
+                        break;
+                }
+            };
             _copyItemImporter = copyItemImporter;
             Task.Run(Initialize);
         }
@@ -48,11 +51,8 @@ namespace MonkeyPaste {
         private async Task Initialize()
         {
             IsBusy = true;
-            var copyItems = await _copyItemImporter.Get(1, 0, 20);
-            CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>();
-            foreach (var ci in copyItems) {
-                CopyItemViewModels.Add(CreateCopyItemViewModel(ci));
-            }
+            var copyItems = await _copyItemImporter.Get(TagId, 0, 20);
+            CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>(copyItems.Select(x=>CreateCopyItemViewModel(x)));
             OnPropertyChanged(nameof(CopyItemViewModels));
             CopyItemViewModels.CollectionChanged += CopyItemViewModels_CollectionChanged;
             await Task.Delay(3000);
@@ -105,7 +105,7 @@ namespace MonkeyPaste {
             }
             var scivm = selectedCopyItemViewModel as MpCopyItemViewModel;
             var selectedCopyItemDetailPageView = new MpCopyItemDetailPageView(scivm);
-            await Navigation.NavigateTo(@"copyitem/" + scivm.CopyItem.Id);// PushModal(selectedCopyItemDetailPageView);
+            //await Navigation.NavigateTo(@"copyitem/" + scivm.CopyItem.Id);// PushModal(selectedCopyItemDetailPageView);
         });
 
         public ICommand LoadMore => new Command(async () =>

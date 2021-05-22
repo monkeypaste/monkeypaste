@@ -1,105 +1,105 @@
 ﻿<Shell x:Class="MonkeyPaste.MpMainShell"
        xmlns="http://xamarin.com/schemas/2014/forms"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-       xmlns:local="clr-namespace:MonkeyPaste">
-    <!--<Shell.Resources>
-        <Style x:Key="FlyoutHeaderStyle"
-               TargetType="Label">
-            <Setter Property="FontSize"
-                    Value="Default" />
-            <Setter Property="Margin"
-                    Value="15,0" />
-            <Setter Property="TextColor"
-                    Value="Black" />
-            <Setter Property="FontAttributes"
-                    Value="Bold" />
-            <Setter Property="HorizontalOptions"
-                    Value="Start" />
-        </Style>
-
-        <Style x:Key="FlyoutItemStyle"
-               TargetType="Label">
-            <Setter Property="FontSize"
-                    Value="Default" />
-            <Setter Property="Margin"
-                    Value="15,1" />
-            <Setter Property="TextColor"
-                    Value="Red" />
-            <Setter Property="HorizontalOptions"
-                    Value="Start" />
-        </Style>
-
-        <Style x:Key="FlyoutMenuStyle"
-               TargetType="Label">
-            <Setter Property="FontSize"
-                    Value="Default" />
-            <Setter Property="TextColor"
-                    Value="Gray" />
-            <Setter Property="FontAttributes"
-                    Value="Italic" />
-            <Setter Property="Margin"
-                    Value="15,0" />
-            <Setter Property="HorizontalOptions"
-                    Value="Start" />
-        </Style>
-
-        <DataTemplate x:Key="FlyoutItemTemplate">
-            <StackLayout Orientation="Horizontal">
-                <BoxView BackgroundColor="{Binding FlyoutColor}"
-                         Margin="5,0,5,0"
-                         WidthRequest="4"
-                         VerticalOptions="CenterAndExpand" />
-                <Label FontFamily="{StaticResource MaterialFontFamily}"
-                       Text="{StaticResource {Binding ItemReferenceImage}}"
-                       Margin="0,0,10,0" />
-                <Label Style="{StaticResource FlyoutItemStyle}"
-                       Text="{Binding Title}"
-                       TextColor="Black"
-                       VerticalOptions="Center" />
-            </StackLayout>
-        </DataTemplate>
-        <DataTemplate x:Key="FlyoutHeaderTemplate">
-            <StackLayout Orientation="Horizontal"
-                         Margin="5,0,5,0">
-                <BoxView BackgroundColor="{Binding FlyoutColor}"
-                         WidthRequest="4"
-                         VerticalOptions="CenterAndExpand" />
-                <StackLayout Orientation="Vertical">
-                    <Label Style="{StaticResource FlyoutHeaderStyle}"
-                           Text="{Binding Title}"
+       xmlns:local="clr-namespace:MonkeyPaste"
+       Title="Monkey Paste">
+    <Shell.FlyoutContentTemplate>
+        <DataTemplate>
+            <StackLayout>
+                <Grid Margin="10"
+                      HeightRequest="100">
+                    <Image Source="{StaticResource AppIcon}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Margin="20" />
+                </Grid>
+                <ListView x:Name="MenuItemsListView"
+                          Margin="10"
+                          SeparatorVisibility="Default"
+                          HasUnevenRows="true"
+                          ItemSelected="MenuItemsListView_ItemSelected"
+                          ItemsSource="{Binding TagCollectionViewModel.TagViewModels}">
+                    <ListView.Header>
+                        <Grid ColumnDefinitions="0.2*,0.6*,0.2*">
+                            <Image Source="{StaticResource TagsIcon}"
+                                   Margin="5"
+                                   HeightRequest="45" />
+                            <Label Grid.Column="1"
+                                   Text="Collections"
+                                   TextColor="Black"
+                                   FontAttributes="Italic"
+                                   VerticalTextAlignment="Center" />
+                            <Button HeightRequest="40"
+                                    BackgroundColor="Transparent"
+                                    Grid.Column="2"
+                                    Margin="10"
+                                    ImageSource="{StaticResource PlusIcon}" />
+                        </Grid>
+                    </ListView.Header>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell x:DataType="local:MpTagViewModel">                                
+                                <Grid ColumnDefinitions="0.25*,0.6*,0.2*">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <BoxView WidthRequest="25"
+                                                 HeightRequest="25" HorizontalOptions="Center" VerticalOptions="Center"
+                                                 BackgroundColor="{Binding Tag.TagColor, Converter={StaticResource StringToColorConverter}}"
+                                                 Margin="30,20,10,20" />
+                                        <Label Text="0"
+                                               Grid.Row="0"
+                                               TextColor="{Binding Tag.TagColor, Converter={StaticResource TextColorFromBackgroundColorConverter}}" 
+                                               Margin="20,0,0,0"
+                                               HorizontalOptions="Center"
+                                               VerticalOptions="Center"
+                                               BackgroundColor="Transparent"
+                                               FontSize="Micro"/>
+                                    </Grid>                                    
+                                    <Label Grid.Column="1"
+                                           Text="{Binding Tag.TagName}"
+                                           TextColor="Black"
+                                           FontAttributes="Italic"
+                                           VerticalTextAlignment="Center" />
+                                    <Button HeightRequest="40"
+                                            Grid.Column="2"
+                                            BackgroundColor="Transparent"
+                                            Margin="10"
+                                            ImageSource="{StaticResource EllipsesVIcon}" />
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Grid ColumnDefinitions="0.2*,0.8*">
+                    <Image Source="{StaticResource SettingsIcon}"
+                           Margin="5"
+                           HeightRequest="45" />
+                    <Label Grid.Column="1"
+                           Text="Settings"
                            TextColor="Black"
-                           VerticalOptions="Center" />
-                    <BoxView Margin="15,2,25,0"
-                             BackgroundColor="{StaticResource HackneyRed}"
-                             HeightRequest="1"
-                             HorizontalOptions="FillAndExpand" />
-                </StackLayout>
+                           FontAttributes="Italic"
+                           VerticalTextAlignment="Center" />
+                </Grid>
+                <Grid ColumnDefinitions="0.2*,0.8*">
+                    <Image Source="{StaticResource HelpIcon}"
+                           Margin="5"
+                           HeightRequest="45" />
+                    <Label Grid.Column="1"
+                           Text="Help"
+                           TextColor="Black"
+                           FontAttributes="Italic"
+                           VerticalTextAlignment="Center" />
+                </Grid>
             </StackLayout>
-
         </DataTemplate>
-        <local:NavigationFlyoutItemTemplateSelector x:Key="FlyoutTemplateSelector"
-                                                       NavigationHeaderTemplate="{StaticResource FlyoutHeaderTemplate}"
-                                                       NavigationItemTemplate="{StaticResource FlyoutItemTemplate}" />
-    </Shell.Resources>-->
-    <FlyoutItem x:Name="FlyoutItem" FlyoutDisplayOptions="AsMultipleItems" >
+    </Shell.FlyoutContentTemplate>
+    <FlyoutItem x:Name="FlyoutItem"
+                FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent x:Name="CollectionsContent"
                       Title="Collections"
                       Icon="{StaticResource TagsIcon}"
                       ContentTemplate="{DataTemplate local:MpMainView}" />
-        <!--
-        <ShellContent Title="Settings">
-        </ShellContent>
-        <ShellContent Title="Help" />-->
     </FlyoutItem>
-    <!--<FlyoutItem FlyoutDisplayOptions="AsSingleItem">
-        <ShellContent Title="Collections"
-                      Icon="{StaticResource TagsIcon}"
-                      ContentTemplate="{DataTemplate local:MpMainView}" />
-    </FlyoutItem>
-    <FlyoutItem FlyoutDisplayOptions="AsSingleItem">
-        <ShellContent Title="Settings" />
-        </FlyoutItem>
-        <FlyoutItem FlyoutDisplayOptions="AsSingleItem">
-            <ShellContent Title="Help" />
-        </FlyoutItem>-->
 </Shell>

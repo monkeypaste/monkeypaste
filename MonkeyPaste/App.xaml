@@ -6,8 +6,9 @@
              x:Class="MonkeyPaste.App">
     <Application.Resources>
         <ResourceDictionary>
-            <local:MpByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />            
-            
+            <local:MpByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
+            <local:MpStringToColorConverter x:Key="StringToColorConverter" />
+            <local:MpTextColorFromBackgroundColorConverter x:Key="TextColorFromBackgroundColorConverter" />
             <Color x:Key="CompletedColor">#1C8859</Color>
             <Color x:Key="ActiveColor">#D3D3D3</Color>
 
@@ -48,26 +49,26 @@
                 <On Platform="UWP"
                     Value="/Assets/FontAwesome5Regular.otf#Font Awesome 5 Free" />
             </OnPlatform>
-            
-            <FontImage x:Key="HomeIcon"
+
+            <FontImageSource x:Key="HomeIcon"
                        FontFamily="{StaticResource FontAwesomeSolid}"
                        Glyph='&#xf015;'
                        Size="22"
                        Color="Black" />
-            <FontImage x:Key="HeadlinesIcon"
+            <FontImageSource x:Key="HeadlinesIcon"
                        FontFamily="{StaticResource FontAwesomeSolid}"
                        Glyph="&#xf70e;"
                        Size="22" />
-            <FontImage x:Key="NewsIcon"
+            <FontImageSource x:Key="NewsIcon"
                        FontFamily="{StaticResource FontAwesomeSolid}"
                        Glyph="&#xf1ea;"
                        Size="22" />
-            <FontImage x:Key="SettingsIcon"
+            <FontImageSource x:Key="SettingsIcon"
                        FontFamily="{StaticResource FontAwesomeSolid}"
                        Glyph="&#xf013;"
                        Size="22"
                        Color="Black" />
-            <FontImage x:Key="AboutIcon"
+            <FontImageSource x:Key="AboutIcon"
                        FontFamily="{StaticResource FontAwesomeSolid}"
                        Glyph="&#xf05a;"
                        Size="22"
@@ -78,8 +79,8 @@
                                Glyph="&#xf2ed;"
                                Size="22"
                                Color="Black" />
-            
-            <FontImage x:Key="StarFilledIcon"
+
+            <FontImageSource x:Key="StarFilledIcon"
                        FontFamily="{StaticResource FontAwesomeSolid}"
                        Glyph="&#xf005;"
                        Size="22"
@@ -142,6 +143,18 @@
             <FontImageSource x:Key="SquareIcon4"
                              FontFamily="{StaticResource FontAwesomeSolid}"
                              Glyph="&#xf45c;"
+                             Size="22"
+                             Color="Black" />
+
+            <FontImageSource x:Key="EllipsesVIcon"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf142;"
+                             Size="22"
+                             Color="Black" />
+
+            <FontImageSource x:Key="PlusIcon"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf067;"
                              Size="22"
                              Color="Black" />
 

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Linq;
 using SQLite;
+using SQLiteNetExtensionsAsync.Extensions;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Xamarin.Forms;
@@ -38,7 +39,7 @@ namespace MonkeyPaste {
         private async Task Init() {
             InitUser(IdentityToken);
             InitClient(AccessToken);
-
+            
             await CreateConnection();
             IsLoaded = true;
         }
@@ -58,6 +59,8 @@ namespace MonkeyPaste {
             await _connection.CreateTableAsync<MpUrl>();
             await _connection.CreateTableAsync<MpUrlDomain>();
             await _connection.CreateTableAsync<MpIcon>();
+
+            ..await _connection.DeleteAllAsync<MpTag>();
 
             if (await _connection.Table<MpTag>().CountAsync() == 0) {
                 await _connection.InsertAsync(new MpTag() {
