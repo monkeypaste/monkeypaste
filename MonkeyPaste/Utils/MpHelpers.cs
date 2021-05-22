@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using FFImageLoading.Work;
 using SkiaSharp;
@@ -17,6 +18,159 @@ namespace MonkeyPaste {
         #endregion
 
         private Random Rand { get; set; }
+
+        #region Documents
+        public bool IsStringCsv(string text) {
+            if (string.IsNullOrEmpty(text) || IsStringRichText(text)) {
+                return false;
+            }
+            return text.Contains(",");
+        }
+
+        public bool IsStringRichText(string text) {
+            if (string.IsNullOrEmpty(text)) {
+                return false;
+            }
+            return text.StartsWith(@"{\rtf");
+        }
+
+        public bool IsStringXaml(string text) {
+            if (string.IsNullOrEmpty(text)) {
+                return false;
+            }
+            return text.StartsWith(@"<Section xmlns=") || text.StartsWith(@"<Span xmlns=");
+        }
+
+        public bool IsStringSpan(string text) {
+            if (string.IsNullOrEmpty(text)) {
+                return false;
+            }
+            return text.StartsWith(@"<Span xmlns=");
+        }
+
+        public bool IsStringSection(string text) {
+            if (string.IsNullOrEmpty(text)) {
+                return false;
+            }
+            return text.StartsWith(@"<Section xmlns=");
+        }
+
+        public bool IsStringPlainText(string text) {
+            //returns true for csv
+            if (text == null) {
+                return false;
+            }
+            if (text == string.Empty) {
+                return true;
+            }
+            if (IsStringRichText(text) || IsStringSection(text) || IsStringSpan(text) || IsStringXaml(text)) {
+                return false;
+            }
+            return true;
+        }
+        #endregion
+
+        #region System
+        public string AppStorageFilePath {
+            get {
+                return Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            }
+        }
+
+        public double ConvertBytesToMegabytes(long bytes, int precision = 2) {
+            return Math.Round((bytes / 1024f) / 1024f, precision);
+        }
+
+        public double ConvertMegaBytesToBytes(long megabytes, int precision = 2) {
+            return Math.Round((megabytes * 1024f) * 1024f, precision);
+        }
+
+        public double GetFileSizeInBytes(string filePath) {
+            try {
+                if(File.Exists(filePath)) {
+                    FileInfo fi = new FileInfo(filePath);
+                    return fi.Length;
+                }
+            } catch(Exception ex) {
+                MpConsole.WriteLine($"Error checking size of path {filePath}", ex);
+            }
+            return -1;
+        }
+
+        public void AppendTextToFile(string path, string textToAppend) {
+            try {
+                if (!File.Exists(path)) {
+                    // Create a file to write to.
+                    using (var sw = File.CreateText(path)) {
+                        sw.WriteLine(textToAppend);
+                    }
+                } else {
+                    // This text is always added, making the file longer over time
+                    // if it is not deleted.
+                    using (StreamWriter sw = File.AppendText(path)) {
+                        sw.WriteLine(textToAppend);
+                    }
+                }
+            } catch(Exception ex) {
+                MpConsole.WriteLine($"Error appending text '{textToAppend}' to path '{path}'");
+                MpConsole.WriteLine($"With exception: {ex}");
+            }            
+        }
+
+        public string ReadTextFromFile(string filePath) {
+            try {
+                using (StreamReader f = new StreamReader(filePath)) {
+                    string outStr = string.Empty;
+                    outStr = f.ReadToEnd();
+                    f.Close();
+                    return outStr;
+                }
+            } catch (Exception ex) {
+                Console.WriteLine("MpHelpers.ReadTextFromFile error for filePath: " + filePath + ex.ToString());
+                return null;
+            }
+        }
+
+        public string WriteTextToFile(string filePath, string text, bool isTemporary = false) {
+            try {
+                if (filePath.ToLower().Contains(@".tmp")) {
+                    string extension = string.Empty;
+                    if (MpHelpers.Instance.IsStringRichText(text)) {
+                        extension = @".rtf";
+                    } else if (MpHelpers.Instance.IsStringCsv(text)) {
+                        extension = @".csv";
+                    } else {
+                        extension = @".txt";
+                    }
+                    filePath = filePath.ToLower().Replace(@".tmp", extension);
+                }
+                using (var of = new StreamWriter(filePath)) {
+                    of.Write(text);
+                    of.Close();
+                    if (isTemporary) {
+                        MpTempFileManager.Instance.AddTempFilePath(filePath);
+                    }
+                    return filePath;
+                }
+            } catch(Exception ex) {
+                MpConsole.WriteLine($"Error writing to path '{filePath}' with text '{text}'",ex);
+                return null;
+            }            
+        }
+
+        public string WriteByteArrayToFile(string filePath, byte[] byteArray, bool isTemporary = false) {
+            try {
+                if (filePath.ToLower().Contains(@".tmp")) {
+                    filePath = filePath.ToLower().Replace(@".tmp", @".png");
+                }
+                File.WriteAllBytes(filePath, byteArray);
+                return filePath;
+            } catch(Exception ex) {
+                MpConsole.WriteLine($"Error writing to path {filePath} for byte array " + (byteArray == null ? "which is null" : "which is NOT null"), ex);
+                return null;
+            }
+        }
+        #endregion
 
         #region Visual
         private List<List<Brush>> _ContentColors = new List<List<Brush>> {

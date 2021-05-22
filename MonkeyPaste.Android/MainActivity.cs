@@ -20,7 +20,7 @@ namespace MonkeyPaste.Droid {
         protected override void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
 
-            _ = new MpBootstrapper();
+            //_ = new MpBootstrapper();
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
@@ -42,19 +42,19 @@ namespace MonkeyPaste.Droid {
             var hostAppIcon = Intent!.GetByteArrayExtra("HostIconByteArray") ?? null;
             if (!string.IsNullOrWhiteSpace(selectedText)) {
                 await Clipboard.SetTextAsync(selectedText);
-                var cicvm = MpResolver.Resolve<MpCopyItemCollectionViewModel>();
-                cicvm.AddItemFromClipboardCommand.Execute(new object[] { hostPackageName, selectedText, hostAppName, hostAppIcon });
+
+                await MonkeyPaste.MpCopyItem.AddNewCopyItem(new object[] { hostPackageName, selectedText, hostAppName, hostAppIcon });
             }
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-            if (requestCode == 33)
-            {
-                var importer = (MpPhotoImporter)MpResolver.Resolve<MpIPhotoImporter>();
-                importer.ContinueWithPermission(true);// grantResults == null || grantResults.Length == 0 || (Permission)grantResults[0] == Permission.Granted);
-            }
+            //if (requestCode == 33)
+            //{
+            //    var importer = (MpPhotoImporter)MpResolver.Resolve<MpIPhotoImporter>();
+            //    importer.ContinueWithPermission(true);// grantResults == null || grantResults.Length == 0 || (Permission)grantResults[0] == Permission.Granted);
+            //}
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 

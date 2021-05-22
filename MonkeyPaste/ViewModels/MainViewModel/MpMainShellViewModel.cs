@@ -7,7 +7,7 @@ namespace MonkeyPaste {
         public MpTagCollectionViewModel TagCollectionViewModel { get; set; }
 
         public MpMainShellViewModel() {
-            TagCollectionViewModel = MpResolver.Resolve<MpTagCollectionViewModel>();
+            TagCollectionViewModel = new MpTagCollectionViewModel();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace MonkeyPaste {
         }
         public MpCopyItemCollectionView() {
             InitializeComponent();
-            BindingContext = MpResolver.Resolve<MpCopyItemCollectionViewModel>();
+            BindingContext = new MpCopyItemCollectionViewModel(MpDb.Instance);
         }
 
         void LoadTagItems(int tagId) {
@@ -34,7 +34,7 @@ namespace MonkeyPaste {
                 //cicvm.ItemSelected.Execute(scivm);
             }
 
-            MpConsole.Instance.WriteLine(@"CopyItem: " + cicvm.SelectedCopyItemViewModel.CopyItem.ItemText + " selected");
+            MpConsole.WriteLine(@"CopyItem: " + cicvm.SelectedCopyItemViewModel.CopyItem.ItemText + " selected");
         }
     }
 }

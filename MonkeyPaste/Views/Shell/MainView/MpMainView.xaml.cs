@@ -14,7 +14,7 @@ namespace MonkeyPaste
     {
         public MpMainView() {
             InitializeComponent();
-            BindingContext = MpResolver.Resolve<MpMainViewModel>();
+            BindingContext = new MpMainViewModel();
         }
     }
 }

@@ -15,9 +15,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Bootstrapper\**" />
     <Compile Remove="Repositories\**" />
+    <Compile Remove="Views\Shell\MainView\CopyItemCollectionView\CopyItemView\Content\**" />
+    <Compile Remove="Views\Shell\MainView\CopyItemCollectionView\CopyItemView\Title\**" />
+    <EmbeddedResource Remove="Bootstrapper\**" />
     <EmbeddedResource Remove="Repositories\**" />
+    <EmbeddedResource Remove="Views\Shell\MainView\CopyItemCollectionView\CopyItemView\Content\**" />
+    <EmbeddedResource Remove="Views\Shell\MainView\CopyItemCollectionView\CopyItemView\Title\**" />
+    <None Remove="Bootstrapper\**" />
     <None Remove="Repositories\**" />
+    <None Remove="Views\Shell\MainView\CopyItemCollectionView\CopyItemView\Content\**" />
+    <None Remove="Views\Shell\MainView\CopyItemCollectionView\CopyItemView\Title\**" />
     <Compile Remove="ViewModels\Base\MpUndoableViewModelBase.cs" />
     <None Remove=".DS_Store" />
     <None Remove="Resources\Icons\monkey.png" />
@@ -40,11 +49,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="6.2.0" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.3.3" />
     <PackageReference Include="RtfPipe" Version="2.0.7677.4303" />
     <PackageReference Include="SkiaSharp" Version="2.80.2" />
     <PackageReference Include="sqlite-net-pcl" Version="1.7.335" />
+    <PackageReference Include="sqlite-net-sqlcipher" Version="1.7.335" />
     <PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
     <PackageReference Include="SQLiteNetExtensions.Async" Version="2.1.0" />
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
@@ -93,11 +102,6 @@
     <Folder Include="ViewModels\MainViewModel\CopyItemCollectionViewModel\CopyItemViewModel\Content\FileList\" />
     <Folder Include="ViewModels\MainViewModel\CopyItemCollectionViewModel\CopyItemViewModel\Content\Image\" />
     <Folder Include="ViewModels\MainViewModel\CopyItemCollectionViewModel\CopyItemViewModel\Title\" />
-    <Folder Include="Views\Shell\MainView\CopyItemCollectionView\CopyItemView\Content\Image\" />
-    <Folder Include="Views\Shell\MainView\CopyItemCollectionView\CopyItemView\Content\FileList\" />
-    <Folder Include="Views\Shell\MainView\CopyItemCollectionView\CopyItemView\Content\Text\" />
-    <Folder Include="Views\Shell\MainView\CopyItemCollectionView\CopyItemView\Title\" />
-    <Folder Include="Bootstrapper\" />
   </ItemGroup>
 
   <ItemGroup>

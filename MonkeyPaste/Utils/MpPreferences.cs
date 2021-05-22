@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using Xamarin.Essentials;
 
@@ -15,12 +16,36 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
+        public string LocalStoragePath {
+            get {
+                return Preferences.Get(nameof(DbPath), Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)); 
+            }
+        }
+
         public string DbPath {
             get {
-                return Preferences.Get(nameof(DbPath), "Unknown");
+                return Preferences.Get(nameof(DbPath), MpDbConstants.DbPath);
             }
             set {
                 Preferences.Set(nameof(DbPath), value);
+            }
+        }
+
+        public string DbName {
+            get {
+                return Preferences.Get(nameof(DbName), MpDbConstants.DbName);
+            }
+            set {
+                Preferences.Set(nameof(DbName), value);
+            }
+        }
+
+        public string DbMediaFolderPath {
+            get {
+                return Preferences.Get(nameof(DbMediaFolderPath), Path.Combine(LocalStoragePath,"media"));
+            }
+            set {
+                Preferences.Set(nameof(DbMediaFolderPath), value);
             }
         }
         #endregion

@@ -33,7 +33,7 @@ namespace MonkeyPaste.Droid {
 
             var selectedText = Intent.GetCharSequenceExtra(Intent.ExtraProcessText);
             if (!string.IsNullOrEmpty(selectedText)) {
-                MpConsole.Instance.WriteLine(@"PROCESS_TEXT: " + selectedText.ToString());
+                MpConsole.WriteLine(@"PROCESS_TEXT: " + selectedText.ToString());
 
                 var intent = new Intent(this, typeof(MainActivity));
                 intent.PutExtra("SelectedText", selectedText);
@@ -45,8 +45,8 @@ namespace MonkeyPaste.Droid {
                         var appName = appInfo != null ? this.ApplicationContext.PackageManager.GetApplicationLabel(appInfo) : "(unknown)";
                         intent.PutExtra("HostAppName", appName);
                     } catch (Exception ex) {
-                        MpConsole.Instance.WriteLine(@"Android.ProcessTextActivity error finding app name for referrer: " + this.Referrer.Host);
-                        MpConsole.Instance.WriteLine(@"With Exception: " + ex);
+                        MpConsole.WriteLine(@"Android.ProcessTextActivity error finding app name for referrer: " + this.Referrer.Host);
+                        MpConsole.WriteLine(@"With Exception: " + ex);
                     }                    
                     var imgSrc = MpPackageNameSource.FromPackageName(this.Referrer.Host);
                     var pnsh = new MpPackageNameSourceHandler();
