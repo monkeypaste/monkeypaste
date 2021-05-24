@@ -7,6 +7,6 @@ namespace MonkeyPaste
 {
     public interface MpICopyItemImporter
     {
-        Task<ObservableCollection<MpCopyItem>> Get(int tagId, int start, int count, Quality quality = Quality.Low);
+        Task<ObservableCollection<MpCopyItem>> Get(int tagId, int start, int count, string sortColumn = "Id", bool isDescending = false);
     }
 }

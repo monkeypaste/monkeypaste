@@ -23,10 +23,10 @@ namespace MonkeyPaste {
                 if(CopyItem == null) {
                     return false;
                 }
-                var favTagList = MpDb.Instance.Query<MpTag>("select * from MpTag where TagName=?", "Favorites").Result;
+                var favTagList = MpDb.Instance.QueryAsync<MpTag>("select * from MpTag where TagName=?", "Favorites").Result;
 
                 if (favTagList != null && favTagList.Count > 0) {
-                    var result = MpDb.Instance.Query<MpCopyItemTag>("select * from MpCopyItemTag where CopyItemId=? and TagId=?", CopyItem.Id, favTagList[0].Id).Result;
+                    var result = MpDb.Instance.QueryAsync<MpCopyItemTag>("select * from MpCopyItemTag where CopyItemId=? and TagId=?", CopyItem.Id, favTagList[0].Id).Result;
                     return result != null && result.Count > 0;
                 }
                 return false;
@@ -63,7 +63,7 @@ namespace MonkeyPaste {
         #region Commands
 
         public ICommand AddToFavoritesCommand => new Command(async () => {
-            var favTagList = await MpDb.Instance.Query<MpTag>("select * from MpTag where TagName=?", "Favorites");
+            var favTagList = await MpDb.Instance.QueryAsync<MpTag>("select * from MpTag where TagName=?", "Favorites");
 
             if (favTagList != null) {
                 foreach (var tag in favTagList) {
@@ -92,7 +92,7 @@ namespace MonkeyPaste {
             }
         }
         private void SetClipboardToItem() {
-            Clipboard.SetTextAsync(CopyItem.ItemText);
+            Clipboard.SetTextAsync(CopyItem.ItemPlainText);
             ItemStatusChanged?.Invoke(this, new EventArgs());
         }
         #endregion

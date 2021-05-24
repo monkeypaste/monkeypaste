@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.OS;
 using Xamarin.Essentials;
 using FFImageLoading.Forms.Platform;
+using System.Reflection;
 
 namespace MonkeyPaste.Droid {
     [Activity(
@@ -21,6 +22,15 @@ namespace MonkeyPaste.Droid {
             base.OnCreate(savedInstanceState);
 
             //_ = new MpBootstrapper();
+            AndroidEnvironment.UnhandledExceptionRaiser += delegate (object sender, RaiseThrowableEventArgs args) {
+                typeof(System.Exception).GetField("stack_trace", BindingFlags.NonPublic | BindingFlags.Instance)
+                    .SetValue(args.Exception, null);
+                throw args.Exception;
+            };
+
+            AndroidEnvironment.UnhandledExceptionRaiser += (sender, args) => {
+                args.Handled = true;
+            };
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);

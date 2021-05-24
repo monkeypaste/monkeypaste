@@ -85,7 +85,7 @@ namespace MonkeyPaste {
 
         private void CopyItemViewModels_PropertyChanged(object sender, EventArgs e) {
             if (sender is MpCopyItemViewModel item) {
-                Task.Run(async () => await MpDb.Instance.UpdateItem(item.CopyItem));
+                Task.Run(async () => await MpDb.Instance.UpdateWithChildren(item.CopyItem));
             }
         }
         #endregion
@@ -96,7 +96,8 @@ namespace MonkeyPaste {
                 return;
             }
             CopyItemViewModels.Remove(civm);
-            await MpDb.Instance.DeleteItem(civm.CopyItem);
+            
+            //await MpDb.Instance.DeleteItem(civm.CopyItem);
         });
 
         public ICommand ItemSelected => new Command(async (selectedCopyItemViewModel) => {
@@ -129,62 +130,7 @@ namespace MonkeyPaste {
             if (args == null) {
                 return;
             }
-            //create CopyItem
-            string hostPackageName = (args as object[])[0] as string;
-            string itemPlainText = (args as object[])[1] as string;
-            var hostAppName = (args as object[])[2] as string;
-            var hostAppImage = (args as object[])[3] as byte[];
-
-            var newCopyItem = new MpCopyItem() {
-                CopyDateTime = DateTime.Now,
-                Title = "Text",
-                ItemText = itemPlainText,
-                Host = hostPackageName,
-                ItemImage = hostAppImage
-            };
-
-            await MpDb.Instance.AddOrUpdate(newCopyItem);
-
-            //add copyitem to default tags
-            var defaultTagList = await MpDb.Instance.Query<MpTag>("select * from MpTag where TagName=? or TagName=?", "All", "Recent");
-
-            if (defaultTagList != null) {
-                foreach (var tag in defaultTagList) {
-                    var copyItemTag = new MpCopyItemTag() {
-                        CopyItemId = newCopyItem.Id,
-                        TagId = tag.Id
-                    };
-                    await MpDb.Instance.AddItem<MpCopyItemTag>(copyItemTag);
-                }
-            }
-
-
-            if(!string.IsNullOrEmpty(hostPackageName)) {
-                //add or update copyitem's source app
-                var appFromHostList = await MpDb.Instance.Query<MpApp>("select * from MpApp where AppPath=?", hostPackageName);
-                if (appFromHostList != null && appFromHostList.Count >= 1) {
-                    var app = appFromHostList[0];
-
-                    newCopyItem.AppId = app.Id;
-                    await MpDb.Instance.UpdateItem<MpCopyItem>(newCopyItem);
-                } else {
-                    var newIcon = new MpIcon() {
-                       IconImage = hostAppImage 
-                    };
-                    await MpDb.Instance.AddItem<MpIcon>(newIcon);
-
-                    var newApp = new MpApp() {
-                        AppPath = hostPackageName,
-                        AppName = hostAppName,
-                        IconId = newIcon.Id
-                    };
-
-                    await MpDb.Instance.AddItem<MpApp>(newApp);
-
-                    newCopyItem.AppId = newApp.Id;
-                    await MpDb.Instance.UpdateItem<MpCopyItem>(newCopyItem);
-                }
-            }
+            await MpCopyItem.AddNewCopyItem(args);
         });
         #endregion
     }

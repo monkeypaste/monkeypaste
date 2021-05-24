@@ -16,12 +16,11 @@ namespace MonkeyPaste {
 
         [ForeignKey(typeof(MpUrlDomain))]
         public int UrlDomainId { get; set; }
+        [ManyToOne]
+        public MpUrlDomain UrlDomain { get; set; }
 
         public string UrlPath { get; set; }
         public string UrlTitle { get; set; }
-
-        [ManyToOne]
-        public MpUrlDomain UrlDomain { get; set; }
 
         public MpUrl() { }
         public MpUrl(string urlPath, string urlTitle) {
@@ -31,7 +30,7 @@ namespace MonkeyPaste {
         }
         public static async Task<List<MpUrl>> GetAllUrls() {
             if(_AllUrlList == null) {
-                _AllUrlList = await MpDb.Instance.ExecuteAsync<MpUrl>("select * from MpUrl", null);
+                _AllUrlList = await MpDb.Instance.QueryAsync<MpUrl>("select * from MpUrl", null);
             }
             
             return _AllUrlList;

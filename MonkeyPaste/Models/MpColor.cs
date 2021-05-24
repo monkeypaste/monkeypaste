@@ -9,17 +9,17 @@ using SQLiteNetExtensions.Attributes;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpColor : MpDbObject {
+    public class MpColor : MpDbObject {        
         private static List<MpColor> _AllColorList = null;
         public static int TotalColorCount = 0;
-
-        [PrimaryKey,AutoIncrement]
-        public override int Id { get; set; }
-
+               
         public byte R { get; set; }
         public byte G { get; set; }
         public byte B { get; set; }
         public byte A { get; set; }
+
+        [PrimaryKey,AutoIncrement]
+        public override int Id { get; set; }
 
         [Ignore]
         public Color Color {
@@ -34,25 +34,35 @@ namespace MonkeyPaste {
             }
         }
 
+        [Ignore]
         public Brush ColorBrush {
             get {
                 if(Color == null) {
                     return Brush.Red;
                 }
-                return new SolidColorBrush(new Xamarin.Forms.Color((double)R,(double)G,(double)B,(double)A));
+                return new SolidColorBrush(Color);
             }
-
         }
+        public MpColor() { }
+
+        public MpColor(double r, double g, double b, double a) {
+            R = (byte)(r * 255);
+            G = (byte)(g * 255);
+            B = (byte)(b * 255);
+            A = (byte)(a * 255);
+        }
+
+        public MpColor(Color c) : this(c.R, c.G, c.B, c.A) { }
 
         public static async Task<List<MpColor>> GetAllColors() {
             if(_AllColorList == null) {
-                _AllColorList = await MpDb.Instance.ExecuteAsync<MpColor>("select * from MpColor", null);
+                _AllColorList = await MpDb.Instance.GetItems<MpColor>();
             }
             return _AllColorList;
         }
-        public static MpColor GetColorById(int colorId) {
+        public static async Task<MpColor> GetColorById(int colorId) {
             if (_AllColorList == null) {
-                GetAllColors();
+                await GetAllColors();
             }
             var udbpl = _AllColorList.Where(x => x.Id == colorId).ToList();
             if (udbpl.Count > 0) {
@@ -97,15 +107,17 @@ namespace MonkeyPaste {
             return primaryIconColorList;
         }
 
-        public MpColor() { }
+        //public override void WriteToDatabase() {
+        //    throw new NotImplementedException();
+        //}
 
-        public MpColor(double r, double g, double b, double a) {
-            R = (byte)r;
-            G = (byte)g;
-            B = (byte)b;
-            A = (byte)a;
-        }
+        //public override void DeleteFromDatabase() {
+        //    throw new NotImplementedException();
+        //}
 
-        public MpColor(Color c) : this(c.R, c.G, c.B, c.A) { }
+        //public override string ToString() {
+        //    throw new NotImplementedException();
+        //}
+
     }
 }

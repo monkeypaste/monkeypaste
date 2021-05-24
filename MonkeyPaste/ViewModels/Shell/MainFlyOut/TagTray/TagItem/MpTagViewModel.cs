@@ -6,6 +6,7 @@ namespace MonkeyPaste {
     public class MpTagViewModel : MpViewModelBase {
         public MpTag Tag { get; set; }
 
+        public bool IsSelected { get; set; } = false;
         //public int CopyItemCount {
         //    get {
         //        if (Tag == null || Tag.CopyItemList == null) {

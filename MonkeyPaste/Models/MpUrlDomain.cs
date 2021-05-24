@@ -39,17 +39,16 @@ namespace MonkeyPaste {
 
         [ForeignKey(typeof(MpIcon))]
         public int FavIconId { get; set; } = 0;
-
         [OneToOne]
         public MpIcon FavIcon { get; set; }
 
-        [OneToMany(CascadeOperations = CascadeOperation.All)]
+        [OneToMany]
         public List<MpUrl> Urls { get; set; }
 
         #region Static Methods
         public static async Task<List<MpUrlDomain>> GetAllUrlDomains() {
             if(_AllUrlDomainList == null) {
-                _AllUrlDomainList = await MpDb.Instance.ExecuteAsync<MpUrlDomain>("select * from MpUrlDomain", null);
+                _AllUrlDomainList = await MpDb.Instance.QueryAsync<MpUrlDomain>("select * from MpUrlDomain", null);
             }
             return _AllUrlDomainList;
         }

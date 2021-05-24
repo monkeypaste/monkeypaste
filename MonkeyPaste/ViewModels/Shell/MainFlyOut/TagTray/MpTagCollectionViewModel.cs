@@ -9,7 +9,13 @@ using System.Windows.Input;
 
 namespace MonkeyPaste {
     public class MpTagCollectionViewModel : MpViewModelBase {
-        public ObservableCollection<MpTagViewModel> TagViewModels { get; set; }
+        public ObservableCollection<MpTagViewModel> TagViewModels { get; set; } = new ObservableCollection<MpTagViewModel>();
+
+        public MpTagViewModel SelectedTagViewModel {
+            get {
+                return TagViewModels.Where(x => x.IsSelected).FirstOrDefault();
+            }
+        }
 
         public MpTagCollectionViewModel() : base() {
             Task.Run(Initialize);
@@ -23,24 +29,16 @@ namespace MonkeyPaste {
 
         private async Task Initialize() {
             IsBusy = true;
-            var tagItems = await MpDb.Instance.GetItems<MpTag>();
+            var tagItems = await MpTag.GetAllTags();
             TagViewModels = new ObservableCollection<MpTagViewModel>(tagItems.Select(x=>CreateTagViewModel(x)));
             OnPropertyChanged(nameof(TagViewModels));
-            TagViewModels.CollectionChanged += TagViewModels_CollectionChanged;
             await Task.Delay(3000);
             IsBusy = false;
         }
 
-        private void TagViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            if (e.NewItems != null && e.NewItems.Count > 0) {
-                IsBusy = false;
-                TagViewModels.CollectionChanged -= TagViewModels_CollectionChanged;
-            }
-        }
-
         private void TagViewModel_PropertyChanged(object sender, EventArgs e) {
             if (sender is MpTagViewModel tvm) {
-                Task.Run(async () => await MpDb.Instance.UpdateItem(tvm.Tag));
+                Task.Run(async () => await MpDb.Instance.UpdateWithChildren(tvm.Tag));
             }
         }
     }

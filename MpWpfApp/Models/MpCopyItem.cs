@@ -21,7 +21,6 @@ namespace MpWpfApp {
         #region Private Variables
         //private static int _CopyItemCount = 0;
         private object _itemData = null;
-
         #endregion
 
         #region Properties

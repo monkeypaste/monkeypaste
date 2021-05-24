@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace MonkeyPaste {
@@ -64,21 +65,28 @@ namespace MonkeyPaste {
             }
         }
 
-        public static void WriteLine(object line) {
+        public static void WriteLine(object line, object args = null, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
             if(!_isLoaded) {
                 Init();
             }
-            string str = line.ToString();
-            Console.WriteLine(str);
-            _sb.AppendLine(string.Format(@"[{0}] : {1}", DateTime.Now,str));
+            line = line == null ? new object(): line;
+            args = args == null ? new object() : args;
+            string outStr = string.Empty;
+            if(args != null && args.GetType() == typeof(Exception)) {
+                outStr = string.Format(@"File: {0}\nMember: {1}\nLine: {2}\nMessage: {3}\nException: {4}", callerFilePath, callerName, lineNum, line,args.ToString());
+            } else {
+                outStr = string.Format(@"File: {0}\nMember: {1}\nLine: {2}\nMessage: {3}", callerFilePath, callerName, lineNum, string.Format(line.ToString(),args.ToString()));
+            }
+            
+            Console.WriteLine(outStr);
+            _sb.AppendLine(string.Format(@"[{0}] : {1}", DateTime.Now, outStr));
         }
 
-        public static void WriteLine(string format,object args) {
+        public static void WriteLine(string format,object args, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath="",[CallerLineNumber] int lineNum = 0) {
             if(args == null || args.GetType() != typeof(Exception)) {
-                WriteLine(string.Format(format, args));
+                WriteLine(string.Format(format, args),null,callerName,callerFilePath,lineNum);
             } else {
-                WriteLine(format);
-                WriteLine(@"With Exception: " + args.ToString());
+                WriteLine(format,args, callerName, callerFilePath, lineNum);
             }
             
         }

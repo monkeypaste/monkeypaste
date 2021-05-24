@@ -15,7 +15,10 @@ namespace MonkeyPaste {
 
         public int TagSortIdx { get; set; } = 1;
 
-        public string TagColor { get; set; }
+        [ForeignKey(typeof(MpColor))]
+        public int ColorId { get; set; }
+        [ManyToOne]
+        public MpColor TagColor { get; set; }
 
         public string TagName { get; set; } = "Untitled";
 
@@ -25,14 +28,28 @@ namespace MonkeyPaste {
         //unused        
         //public int ParentTagId { get; set; }
         #endregion
+        
+        public static async Task<List<MpTag>> GetAllTags() {
+            var tags = await MpDb.Instance.GetItems<MpTag>();
+            foreach(var tag in tags) {
+                var citl = await MpCopyItemTag.GetAllCopyItemsForTagId(tag.Id);
+                tag.CopyItemList = new List<MpCopyItem>();
+                foreach(var cit in citl) {
+                    var ci = await MpCopyItem.GetCopyItemById(cit.CopyItemId);
+                    tag.CopyItemList.Add(ci);
+                }
+                tag.TagColor = await MpColor.GetColorById(tag.ColorId);
+            }
+            return tags;
+        }
 
         public MpTag() { }
 
-        public MpTag(string tagName, string tagColor, int tagCount) {
-            TagName = tagName;
-            TagColor = tagColor;
-            TagSortIdx = tagCount;
-        }
+        //public MpTag(string tagName, string tagColor, int tagCount) {
+        //    TagName = tagName;
+        //    TagColor = tagColor;
+        //    TagSortIdx = tagCount;
+        //}
         
         public bool IsLinkedWithCopyItemAsync(MpCopyItem ci) {
             if(ci == null) {
@@ -51,19 +68,7 @@ namespace MonkeyPaste {
                 return false;
             }
 
-            var result = await MpDb.Instance.ExecuteAsync<MpCopyItemTag>(
-                "select * from MpCopyItemTag where TagId=@tid",
-                new Dictionary<string, object> {
-                    { "@tid", Id }
-                });
-
-            int SortOrderIdx =result.Count + 1;
-            await MpDb.Instance.ExecuteWriteAsync<MpCopyItemTag>(
-                "insert into MpCopyItemTag(CopyItemId,TagId) values(@ciid,@tid)",
-                new Dictionary<string, object> {
-                    { "@ciid", ci.Id },
-                    { "@tid", Id }
-                });
+            await MpDb.Instance.AddItem<MpCopyItemTag>(new MpCopyItemTag() { CopyItemId = ci.Id, TagId = Id });
 
             Console.WriteLine("Tag link created between tag " + Id + " with copyitem " + ci.Id);
             return true;
@@ -77,27 +82,23 @@ namespace MonkeyPaste {
                 //Console.WriteLine("MpTag Warning attempting to unlink non-linked tag " + TagId + " with copyitem " + ci.copyItemId + " ignoring...");
                 return;
             }
-            await MpDb.Instance.ExecuteWriteAsync<MpCopyItemTag>(
-                "delete from MpCopyItemTag where CopyItemId=@ciid and TagId=@tid",
-                new Dictionary<string, object> {
-                    { "@ciid", ci.Id },
-                    { "@tid", Id }
-                });
+            var result = await MpDb.Instance.QueryAsync<MpCopyItemTag>(@"select * from MpCopyItemTag where TagId=? and CopyItemId=?", Id, ci.Id);
+            await MpDb.Instance.DeleteItem<MpCopyItemTag>(result[0]);
             //MpDb.Instance.ExecuteWrite("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
             Console.WriteLine("Tag link removed between tag " + Id + " with copyitem " + ci.Id + " ignoring...");
         }
         public async Task DeleteFromDatabaseAsync() {
-            await MpDb.Instance.ExecuteWriteAsync<MpTag>(
-                "delete from MpTag where Id=@tid",
-                new Dictionary<string, object> {
-                    { "@tid", Id }
-                });
+            //await MpDb.Instance.ExecuteWriteAsync<MpTag>(
+            //    "delete from MpTag where Id=@tid",
+            //    new Dictionary<string, object> {
+            //        { "@tid", Id }
+            //    });
 
-            await MpDb.Instance.ExecuteWriteAsync<MpCopyItemTag>(
-                "delete from MpCopyItemTag where TagId=@tid",
-                new Dictionary<string, object> {
-                    { "@tid", Id }
-                });
+            //await MpDb.Instance.ExecuteWriteAsync<MpCopyItemTag>(
+            //    "delete from MpCopyItemTag where TagId=@tid",
+            //    new Dictionary<string, object> {
+            //        { "@tid", Id }
+            //    });
         }
     }
 }

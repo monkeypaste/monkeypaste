@@ -1,17 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
+    [Table(nameof(MpCopyItem))]
     public class MpCopyItem : MpDbObject {
+        private static List<MpCopyItem> _AllCopyItemsList = null;
         #region Column Definitions
-        [PrimaryKey, AutoIncrement]
+        //public int CopyItemId { get; set; }
+
+        [PrimaryKey,AutoIncrement]
         public override int Id { get; set; }
 
         public string Title { get; set; }
 
         public int TypeId { get; set; } = 0;
+
         [Ignore]
         public MpCopyItemType ItemType
         {
@@ -44,11 +51,13 @@ namespace MonkeyPaste {
         public int ColorId { get; set; }
 
         [ManyToOne]
-        public MpColor Color { get; set; }
+        public MpColor ItemColor { get; set; }
 
         public DateTime CopyDateTime { get; set; }
 
-        public string ItemText { get; set; }
+        public string ItemPlainText { get; set; }
+
+        public string ItemRichText { get; set; }
 
         public string ItemCsv { get; set; }
 
@@ -64,9 +73,25 @@ namespace MonkeyPaste {
 
         public string Host { get; set; }
 
-        
-        #endregion                
-        
+
+        #endregion
+        public static async Task<List<MpCopyItem>> GetAllCopyItems() {
+            if (_AllCopyItemsList == null) {
+                _AllCopyItemsList = await MpDb.Instance.GetItems<MpCopyItem>();
+            }
+            return _AllCopyItemsList;
+        }
+        public static async Task<MpCopyItem> GetCopyItemById(int copyItemId) {
+            if (_AllCopyItemsList == null) {
+                await GetAllCopyItems();
+            }
+            var udbpl = _AllCopyItemsList.Where(x => x.Id == copyItemId).ToList();
+            if (udbpl.Count > 0) {
+                return udbpl[0];
+            }
+            return null;
+        }
+
         public MpCopyItem() : base(){ }
 
         public MpCopyItem(object data, string sourceInfo) {
@@ -76,7 +101,7 @@ namespace MonkeyPaste {
         }
         public MpCopyItem(string title, string itemPlainText) {
             Title = title;
-            ItemText = itemPlainText;
+            ItemPlainText = itemPlainText;
             CopyDateTime = DateTime.Now;
         }
 
@@ -93,21 +118,16 @@ namespace MonkeyPaste {
             var newCopyItem = new MpCopyItem() {
                 CopyDateTime = DateTime.Now,
                 Title = "Text",
-                ItemText = itemPlainText,
+                ItemPlainText = itemPlainText,
                 Host = hostPackageName,
                 ItemImage = hostAppImage
             };
 
-            await MpDb.Instance.AddOrUpdate(newCopyItem);
+            await MpDb.Instance.AddItem<MpCopyItem>(newCopyItem);
 
             //add copyitem to default tags
-            var defaultTagList = await MpDb.Instance.ExecuteAsync<MpTag>(
-                "select * from MpTag where TagName=@tna or TagName=@tnr",
-                new System.Collections.Generic.Dictionary<string, object>() {
-                    {"@tna","All" },
-                    {"@tnr","Recent" }
-                }
-             );
+            var defaultTagList = await MpDb.Instance.QueryAsync<MpTag>(
+                "select * from MpTag where TagName=? or TagName=?","All","Recent");
 
             if (defaultTagList != null) {
                 foreach (var tag in defaultTagList) {
@@ -116,42 +136,51 @@ namespace MonkeyPaste {
                         TagId = tag.Id
                     };
                     await MpDb.Instance.AddItem<MpCopyItemTag>(copyItemTag);
+
+                    //await MpDb.Instance.UpdateWithChildren(tag);
                 }
             }
 
 
-            if (!string.IsNullOrEmpty(hostPackageName)) {
-                //add or update copyitem's source app
-                var appFromHostList = await MpDb.Instance.ExecuteAsync<MpApp>(
-                    "select * from MpApp where AppPath=@hpn",
-                new System.Collections.Generic.Dictionary<string, object>() {
-                    {"@hpn",hostPackageName }
-                }
-             );
-                if (appFromHostList != null && appFromHostList.Count >= 1) {
-                    var app = appFromHostList[0];
+            //if (!string.IsNullOrEmpty(hostPackageName)) {
+            //    //add or update copyitem's source app
+            //    var appFromHostList = await MpDb.Instance.QueryAsync<MpApp>(
+            //        "select * from MpApp where AppPath=@hpn",
+            //    new System.Collections.Generic.Dictionary<string, object>() {
+            //        {"@hpn",hostPackageName }
+            //    }
+            // );
+            //    if (appFromHostList != null && appFromHostList.Count >= 1) {
+            //        var app = appFromHostList[0];
 
-                    newCopyItem.AppId = app.Id;
-                    await MpDb.Instance.UpdateItem<MpCopyItem>(newCopyItem);
-                } else {
-                    var newIcon = new MpIcon() {
-                        IconImage = hostAppImage
-                    };
-                    await MpDb.Instance.AddItem<MpIcon>(newIcon);
+            //        newCopyItem.AppId = app.Id;
+            //        await MpDb.Instance.UpdateItem<MpCopyItem>(newCopyItem);
+            //    } else {
+            //        var newIcon = new MpIcon() {
+            //            IconImage = hostAppImage
+            //        };
+            //        await MpDb.Instance.AddItem<MpIcon>(newIcon);
 
-                    var newApp = new MpApp() {
-                        AppPath = hostPackageName,
-                        AppName = hostAppName,
-                        IconId = newIcon.Id
-                    };
+            //        var newApp = new MpApp() {
+            //            AppPath = hostPackageName,
+            //            AppName = hostAppName,
+            //            IconId = newIcon.Id
+            //        };
 
-                    await MpDb.Instance.AddItem<MpApp>(newApp);
+            //        await MpDb.Instance.AddItem<MpApp>(newApp);
 
-                    newCopyItem.AppId = newApp.Id;
-                    await MpDb.Instance.UpdateItem<MpCopyItem>(newCopyItem);
-                }
-            }
+            //        newCopyItem.AppId = newApp.Id;
+            //        await MpDb.Instance.UpdateItem<MpCopyItem>(newCopyItem);
+            //    }
+            //}
         }
+        //public override void DeleteFromDatabase() {
+        //    throw new NotImplementedException();
+        //}
+
+        //public override string ToString() {
+        //    throw new NotImplementedException();
+        //}
     }
 
     public enum MpCopyItemDetailType {
