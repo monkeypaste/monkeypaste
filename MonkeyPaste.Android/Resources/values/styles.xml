@@ -13,9 +13,10 @@
     <!--<item name="colorPrimaryDark">#1976D2</item>-->
     <!-- colorAccent is used as the default value for colorControlActivated
          which is used to tint widgets -->
+    <!--Theme.AppCompat.Light.NoActionBar-->
     <!--<item name="colorAccent">#FF4081</item>-->
   </style>
-  <style name="Splash" parent="Theme.AppCompat.Light.NoActionBar">
+  <style name="Splash" parent="MainTheme">
     <item name="android:windowBackground">@drawable/splash_background</item>
     <item name="android:windowNoTitle">true</item>
     <item name="android:windowFullscreen">true</item>

@@ -7,11 +7,11 @@ using SQLite;
 using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
-    public class MpUrl : MpDbObject {
+    public class MpUrl : MpDbObject, MpICopyItemSource {
         private static List<MpUrl> _AllUrlList = null;
         public static int TotalUrlCount = 0;
 
-        [PrimaryKey,AutoIncrement]
+        [PrimaryKey, AutoIncrement]
         public override int Id { get; set; }
 
         [ForeignKey(typeof(MpUrlDomain))]
@@ -22,8 +22,8 @@ namespace MonkeyPaste {
         public string UrlPath { get; set; }
         public string UrlTitle { get; set; }
 
-        public MpUrl() { }
-        public MpUrl(string urlPath, string urlTitle) {
+        public MpUrl() : base(typeof(MpUrl)) { }
+        public MpUrl(string urlPath, string urlTitle) : this() {
             UrlPath = urlPath;
             UrlTitle = urlTitle;
             UrlDomain = MpUrlDomain.GetUrlDomainByPath(MpHelpers.Instance.GetUrlDomain(urlPath));            
@@ -35,6 +35,7 @@ namespace MonkeyPaste {
             
             return _AllUrlList;
         }
+
         public static MpUrl GetUrlById(int urlId) {
             if (_AllUrlList == null) {
                 GetAllUrls();
@@ -45,5 +46,33 @@ namespace MonkeyPaste {
             }
             return null;
         }
+
+
+        #region MpICopyItemSource Implementation
+        public MpIcon SourceIcon {
+            get {
+                if (UrlDomain == null) {
+                    return null;
+                }
+                return UrlDomain.FavIcon;
+            }
+        }
+
+        public string SourcePath => UrlPath;
+
+        public string SourceName => UrlTitle;
+
+        public int RootId {
+            get {
+                if (UrlDomain == null) {
+                    return 0;
+                }
+                return UrlDomain.Id;
+            }
+        }
+
+        public bool IsSubSource => true;
+
+        #endregion
     }
 }

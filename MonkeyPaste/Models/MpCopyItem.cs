@@ -9,11 +9,20 @@ namespace MonkeyPaste {
     [Table(nameof(MpCopyItem))]
     public class MpCopyItem : MpDbObject {
         private static List<MpCopyItem> _AllCopyItemsList = null;
-        #region Column Definitions
-        //public int CopyItemId { get; set; }
 
+        #region Column Definitions
         [PrimaryKey,AutoIncrement]
         public override int Id { get; set; }
+
+        [ForeignKey(typeof(MpSource))]
+        public int SourceId { get; set; }
+        [ManyToOne]
+        public MpSource Source { get; set; }
+
+        [ForeignKey(typeof(MpColor))]
+        public int ColorId { get; set; }
+        [ManyToOne]
+        public MpColor ItemColor { get; set; }
 
         public string Title { get; set; }
 
@@ -33,25 +42,7 @@ namespace MonkeyPaste {
                     TypeId = (int)value;
                 }
             }
-        }
-
-        [ForeignKey(typeof(MpApp))]
-        public int AppId { get; set; }
-
-        [ManyToOne]
-        public MpApp App { get; set; }
-
-        [ForeignKey(typeof(MpUrl))]
-        public int UrlId { get; set; }
-
-        [ManyToOne]
-        public MpUrl Url { get; set; }
-
-        [ForeignKey(typeof(MpColor))]
-        public int ColorId { get; set; }
-
-        [ManyToOne]
-        public MpColor ItemColor { get; set; }
+        }       
 
         public DateTime CopyDateTime { get; set; }
 
@@ -72,8 +63,17 @@ namespace MonkeyPaste {
         public int PasteCount { get; set; }
 
         public string Host { get; set; }
+        #endregion
 
+        #region Fk Objects
+        [OneToMany]
+        public List<MpCopyItemTemplate> Templates { get; set; }
 
+        [OneToMany]
+        public List<MpCopyItem> CompositeSubItems { get; set; }
+
+        [OneToMany]
+        public List<MpPasteHistory> PasteHistoryList { get; set; }
         #endregion
         public static async Task<List<MpCopyItem>> GetAllCopyItems() {
             if (_AllCopyItemsList == null) {
@@ -92,14 +92,14 @@ namespace MonkeyPaste {
             return null;
         }
 
-        public MpCopyItem() : base(){ }
+        public MpCopyItem() : base(typeof(MpCopyItem)) { }
 
-        public MpCopyItem(object data, string sourceInfo) {
+        public MpCopyItem(object data, string sourceInfo) : this() {
             if(data == null) {
                 return;
             }
         }
-        public MpCopyItem(string title, string itemPlainText) {
+        public MpCopyItem(string title, string itemPlainText) : this() {
             Title = title;
             ItemPlainText = itemPlainText;
             CopyDateTime = DateTime.Now;

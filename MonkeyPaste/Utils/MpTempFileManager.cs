@@ -46,8 +46,8 @@ namespace MonkeyPaste {
 
                 _isLoaded = true;
             } catch (Exception ex) {
-                MpConsole.WriteLine(@"Could not read or delete temp file at path: " + _lastTempListFilePath);
-                MpConsole.WriteLine(@"With Exception: " + ex);
+                MpConsole.WriteTraceLine(@"Could not read or delete temp file at path: " + _lastTempListFilePath);
+                MpConsole.WriteTraceLine(@"With Exception: " + ex);
             }
         }
 

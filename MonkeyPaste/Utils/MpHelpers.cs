@@ -98,7 +98,7 @@ namespace MonkeyPaste {
                     return fi.Length;
                 }
             } catch(Exception ex) {
-                MpConsole.WriteLine($"Error checking size of path {filePath}", ex);
+                MpConsole.WriteTraceLine($"Error checking size of path {filePath}", ex);
             }
             return -1;
         }
@@ -118,8 +118,8 @@ namespace MonkeyPaste {
                     }
                 }
             } catch(Exception ex) {
-                MpConsole.WriteLine($"Error appending text '{textToAppend}' to path '{path}'");
-                MpConsole.WriteLine($"With exception: {ex}");
+                MpConsole.WriteTraceLine($"Error appending text '{textToAppend}' to path '{path}'");
+                MpConsole.WriteTraceLine($"With exception: {ex}");
             }            
         }
 
@@ -159,7 +159,7 @@ namespace MonkeyPaste {
                     return filePath;
                 }
             } catch(Exception ex) {
-                MpConsole.WriteLine($"Error writing to path '{filePath}' with text '{text}'",ex);
+                MpConsole.WriteTraceLine($"Error writing to path '{filePath}' with text '{text}'",ex);
                 return null;
             }            
         }
@@ -172,7 +172,7 @@ namespace MonkeyPaste {
                 File.WriteAllBytes(filePath, byteArray);
                 return filePath;
             } catch(Exception ex) {
-                MpConsole.WriteLine($"Error writing to path {filePath} for byte array " + (byteArray == null ? "which is null" : "which is NOT null"), ex);
+                MpConsole.WriteTraceLine($"Error writing to path {filePath} for byte array " + (byteArray == null ? "which is null" : "which is NOT null"), ex);
                 return null;
             }
         }
@@ -284,6 +284,7 @@ namespace MonkeyPaste {
         {
             return _ContentColors[c][r];
         }
+
         public double ColorDistance(Color e1, Color e2)
         {
             //max between 0 and 764.83331517396653 (found by checking distance from white to black)
@@ -406,6 +407,9 @@ namespace MonkeyPaste {
             }
             return null;
         }
+        #endregion
+
+        #region Converters
         #endregion
     }
 }

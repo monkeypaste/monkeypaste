@@ -36,5 +36,7 @@ namespace MonkeyPaste {
         }
 
         #endregion
+
+        public MpCopyItemTag() : base(typeof(MpCopyItemTag)) { }
     }
 }

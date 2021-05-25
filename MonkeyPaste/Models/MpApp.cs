@@ -5,7 +5,7 @@ using System.Text;
 using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
-    public class MpApp : MpDbObject {
+    public class MpApp : MpDbObject, MpICopyItemSource {
         public override int Id { get; set; } = 0;
         
         public string AppPath { get; set; } = string.Empty;
@@ -35,5 +35,19 @@ namespace MonkeyPaste {
 
         [OneToOne]
         public MpIcon Icon { get; set; }
+
+        public MpApp() : base(typeof(MpApp)) { }
+
+        #region MpICopyItemSource Implementation
+        public MpIcon SourceIcon => Icon;
+
+        public string SourcePath => AppPath;
+
+        public string SourceName => AppName;
+
+        public int RootId => Id;
+
+        public bool IsSubSource => false;
+        #endregion
     }
 }

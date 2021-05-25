@@ -21,6 +21,14 @@ namespace MonkeyPaste {
         [PrimaryKey,AutoIncrement]
         public override int Id { get; set; }
 
+        //[OneToMany(CascadeOperations = CascadeOperation.None)]
+        //public List<MpTag> TagList { get; set; }
+
+        //[OneToMany(CascadeOperations = CascadeOperation.None)]
+        //public List<MpCopyItem> CopyItemList { get; set; }
+
+
+
         [Ignore]
         public Color Color {
             get {
@@ -43,9 +51,9 @@ namespace MonkeyPaste {
                 return new SolidColorBrush(Color);
             }
         }
-        public MpColor() { }
+        public MpColor() : base(typeof(MpColor)) { }
 
-        public MpColor(double r, double g, double b, double a) {
+        public MpColor(double r, double g, double b, double a) : this() {
             R = (byte)(r * 255);
             G = (byte)(g * 255);
             B = (byte)(b * 255);

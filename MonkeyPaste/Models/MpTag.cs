@@ -43,7 +43,7 @@ namespace MonkeyPaste {
             return tags;
         }
 
-        public MpTag() { }
+        public MpTag() : base(typeof(MpTag)) { }
 
         //public MpTag(string tagName, string tagColor, int tagCount) {
         //    TagName = tagName;

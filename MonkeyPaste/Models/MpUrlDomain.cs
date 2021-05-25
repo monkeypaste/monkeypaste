@@ -10,44 +10,12 @@ using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
     public class MpUrlDomain : MpDbObject {
+        #region Static Cache
         private static List<MpUrlDomain> _AllUrlDomainList = null;
         public static int TotalUrlDomainCount = 0;
 
-        [PrimaryKey, AutoIncrement]
-        public override int Id { get; set; } = 0;
-
-        public string UrlDomainPath { get; set; } = string.Empty;
-        public string UrlDomainTitle { get; set; } = string.Empty;
-
-        public int IsRejected { get; set; } = 0;
-
-        [Ignore]
-        public bool IsUrlDomainRejected
-        {
-            get
-            {
-                return IsRejected == 1;
-            }
-            set
-            {
-                if (IsUrlDomainRejected != value)
-                {
-                    IsRejected = value ? 1 : 0;
-                }
-            }
-        }
-
-        [ForeignKey(typeof(MpIcon))]
-        public int FavIconId { get; set; } = 0;
-        [OneToOne]
-        public MpIcon FavIcon { get; set; }
-
-        [OneToMany]
-        public List<MpUrl> Urls { get; set; }
-
-        #region Static Methods
         public static async Task<List<MpUrlDomain>> GetAllUrlDomains() {
-            if(_AllUrlDomainList == null) {
+            if (_AllUrlDomainList == null) {
                 _AllUrlDomainList = await MpDb.Instance.QueryAsync<MpUrlDomain>("select * from MpUrlDomain", null);
             }
             return _AllUrlDomainList;
@@ -65,11 +33,11 @@ namespace MonkeyPaste {
         }
 
         public static MpUrlDomain GetUrlDomainByPath(string urlDomain) {
-            if(_AllUrlDomainList == null) {
+            if (_AllUrlDomainList == null) {
                 GetAllUrlDomains();
             }
             var udbpl = _AllUrlDomainList.Where(x => x.UrlDomainPath.ToLower().Contains(urlDomain)).ToList();
-            if(udbpl.Count > 0) {
+            if (udbpl.Count > 0) {
                 return udbpl[0];
             }
             return null;
@@ -86,19 +54,48 @@ namespace MonkeyPaste {
             //return false;
         }
         public static async Task<List<MpUrlDomain>> GetAllRejectedUrlDomains() {
-            await Task.Run(()=>Thread.Sleep(10));
-            return new List<MpUrlDomain>(); 
+            await Task.Run(() => Thread.Sleep(10));
+            return new List<MpUrlDomain>();
             //return GetAllUrlDomains().Where(x => x.IsUrlDomainRejected == true).ToList();
         }
         #endregion
 
-        public MpUrlDomain(string domainUrl, int favIconId, string domainTitle = "", bool isUrlDomainRejected = false) {
-            UrlDomainPath = domainUrl;
-            UrlDomainTitle = string.IsNullOrEmpty(domainTitle) ? UrlDomainPath : domainTitle;
-            IsUrlDomainRejected = isUrlDomainRejected;
-            FavIconId = favIconId;
-        }
+        #region Columns
+        [PrimaryKey, AutoIncrement]
+        public override int Id { get; set; } = 0;
 
-        public MpUrlDomain() { }
+        public string UrlDomainPath { get; set; } = string.Empty;
+        public string UrlDomainTitle { get; set; } = string.Empty;
+
+        public int IsRejected { get; set; } = 0;
+
+        [ForeignKey(typeof(MpIcon))]
+        public int FavIconId { get; set; } = 0;
+        #endregion
+
+        #region Fk objects
+        [OneToOne]
+        public MpIcon FavIcon { get; set; }
+
+        [OneToMany]
+        public List<MpUrl> Urls { get; set; }
+        #endregion
+
+        [Ignore]
+        public bool IsUrlDomainRejected
+        {
+            get
+            {
+                return IsRejected == 1;
+            }
+            set
+            {
+                if (IsUrlDomainRejected != value)
+                {
+                    IsRejected = value ? 1 : 0;
+                }
+            }
+        }        
+        public MpUrlDomain() : base(typeof(MpUrlDomain)) { }
     }
 }

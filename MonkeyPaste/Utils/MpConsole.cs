@@ -61,11 +61,15 @@ namespace MonkeyPaste {
                 _isLoaded = true;
             }
             catch(Exception ex) {
-                WriteLine(@"Error deleting previus log file w/ path: " + LogFilePath + " with exception: " + ex);
+                WriteTraceLine(@"Error deleting previus log file w/ path: " + LogFilePath + " with exception: " + ex);
             }
         }
 
-        public static void WriteLine(object line, object args = null, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
+        public static void WriteLine(object line) {
+            Console.WriteLine(line.ToString());
+        }
+
+        public static void WriteTraceLine(object line, object args = null, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
             if(!_isLoaded) {
                 Init();
             }
@@ -82,11 +86,11 @@ namespace MonkeyPaste {
             _sb.AppendLine(string.Format(@"[{0}] : {1}", DateTime.Now, outStr));
         }
 
-        public static void WriteLine(string format,object args, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath="",[CallerLineNumber] int lineNum = 0) {
+        public static void WriteTraceLine(string format,object args, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath="",[CallerLineNumber] int lineNum = 0) {
             if(args == null || args.GetType() != typeof(Exception)) {
-                WriteLine(string.Format(format, args),null,callerName,callerFilePath,lineNum);
+                WriteTraceLine(string.Format(format, args),null,callerName,callerFilePath,lineNum);
             } else {
-                WriteLine(format,args, callerName, callerFilePath, lineNum);
+                WriteTraceLine(format,args, callerName, callerFilePath, lineNum);
             }
             
         }

@@ -19,14 +19,14 @@ namespace MonkeyPaste {
         }
 
         protected override void OnStart() {
-            MpConsole.WriteLine(Environment.NewLine + @"-------------Application Starting----------" + Environment.NewLine);
+            MpConsole.WriteTraceLine(Environment.NewLine + @"-------------Application Starting----------" + Environment.NewLine);
         }
         protected override void OnSleep() {
-            MpConsole.WriteLine(Environment.NewLine + @"-------------Application Sleeping----------" + Environment.NewLine);
+            MpConsole.WriteTraceLine(Environment.NewLine + @"-------------Application Sleeping----------" + Environment.NewLine);
         }
 
         protected override void OnResume() {
-            MpConsole.WriteLine(Environment.NewLine + @"-------------Application Resuming----------" + Environment.NewLine);
+            MpConsole.WriteTraceLine(Environment.NewLine + @"-------------Application Resuming----------" + Environment.NewLine);
         }
     }
 }

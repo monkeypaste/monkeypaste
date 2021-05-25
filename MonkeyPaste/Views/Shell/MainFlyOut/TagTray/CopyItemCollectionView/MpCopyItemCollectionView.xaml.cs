@@ -34,7 +34,7 @@ namespace MonkeyPaste {
                 //cicvm.ItemSelected.Execute(scivm);
             }
 
-            MpConsole.WriteLine(@"CopyItem: " + cicvm.SelectedCopyItemViewModel.CopyItem.ItemPlainText + " selected");
+            MpConsole.WriteTraceLine(@"CopyItem: " + cicvm.SelectedCopyItemViewModel.CopyItem.ItemPlainText + " selected");
         }
     }
 }

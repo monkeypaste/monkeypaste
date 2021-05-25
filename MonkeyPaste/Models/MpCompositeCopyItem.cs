@@ -8,8 +8,7 @@ using SQLiteNetExtensions.Attributes;
 using System.Linq;
 
 namespace MonkeyPaste {
-    public class MpCopyItemTemplate : MpDbObject {
-        private static List<MpCopyItemTag> _AllCopyItemTagList = null;
+    public class MpCompositeCopyItem : MpDbObject {
         #region Columns
         [PrimaryKey, AutoIncrement]
         public override int Id { get; set; }
@@ -17,15 +16,13 @@ namespace MonkeyPaste {
         [ForeignKey(typeof(MpCopyItem))]
         public int CopyItemId { get; set; }
 
-        [ForeignKey(typeof(MpColor))]
-        public int ColorId { get; set; }
+        [ForeignKey(typeof(MpCopyItem))]
+        public int ParentCopyItemId { get; set; }
 
-        public string TemplateName { get; set; }
+        public int SortOrderIdx { get; set; }
 
-        [ManyToOne]
-        public MpColor Color { get; set; }
         #endregion
 
-        public MpCopyItemTemplate() : base(typeof(MpCopyItemTemplate)) { }
+        public MpCompositeCopyItem() : base(typeof(MpCompositeCopyItem)) { }
     }
 }

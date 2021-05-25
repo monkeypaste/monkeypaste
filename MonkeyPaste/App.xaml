@@ -6,7 +6,6 @@
              x:Class="MonkeyPaste.App">
     <Application.Resources>
         <ResourceDictionary>
-            <local:MpByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
             <local:MpStringToColorConverter x:Key="StringToColorConverter" />
             <local:MpTextColorFromBackgroundColorConverter x:Key="TextColorFromBackgroundColorConverter" />
             <Color x:Key="CompletedColor">#1C8859</Color>

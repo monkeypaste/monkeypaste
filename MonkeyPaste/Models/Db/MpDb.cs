@@ -28,7 +28,6 @@ namespace MonkeyPaste {
 
         #region Properties
         public bool UseWAL { get; set; } = false;
-
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
         public bool IsLoaded { get; set; }
@@ -52,11 +51,24 @@ namespace MonkeyPaste {
             if (_connectionAsync != null) {
                 return;
             }
-            if (File.Exists(MpDbConstants.DbPath)) {
-                File.Delete(MpDbConstants.DbPath);
-            }
-            _connectionAsync = new SQLiteAsyncConnection(MpDbConstants.DbPath, MpDbConstants.Flags);
+            bool isNewDb = !File.Exists(MpDbConstants.DbPath);
             
+            _connectionAsync = new SQLiteAsyncConnection(MpDbConstants.DbPath, MpDbConstants.Flags);
+
+            await InitTablesAsync();
+
+            if(isNewDb) {
+                await InitDefaultDataAsync();
+            }
+
+
+            if (_connectionAsync != null && UseWAL) {
+                // On sqlite-net v1.6.0+, enabling write-ahead logging allows for faster database execution
+                await _connectionAsync.EnableWriteAheadLoggingAsync().ConfigureAwait(false);
+            }
+            MpConsole.WriteTraceLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
+        }
+        private async Task InitTablesAsync() {
             await _connectionAsync.CreateTableAsync<MpCopyItem>();
             await _connectionAsync.CreateTableAsync<MpTag>();
             await _connectionAsync.CreateTableAsync<MpCopyItemTag>();
@@ -65,50 +77,36 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpUrl>();
             await _connectionAsync.CreateTableAsync<MpUrlDomain>();
             await _connectionAsync.CreateTableAsync<MpIcon>();
+        }
+        private async Task InitDefaultDataAsync() {
+            await AddItem<MpColor>(new MpColor(Color.Green));
+            await AddItem<MpColor>(new MpColor(Color.Blue));
+            await AddItem<MpColor>(new MpColor(Color.Yellow));
+            await AddItem<MpColor>(new MpColor(Color.Orange));
 
-            int colorCount = await _connectionAsync.Table<MpColor>().CountAsync();
-            var green = new MpColor(Color.Green);
-            if (colorCount == 0) {
-                await _connectionAsync.InsertAsync(green);
-                await _connectionAsync.InsertAsync(new MpColor(Color.Blue));
-                await _connectionAsync.InsertAsync(new MpColor(Color.Yellow));
-                await _connectionAsync.InsertAsync(new MpColor(Color.Orange));
+            await AddItem<MpTag>(new MpTag() {
+                TagName = "Recent",
+                ColorId = 1,
+                TagSortIdx = 0
+            });
+            await AddItem<MpTag>(new MpTag() {
+                TagName = "All",
+                ColorId = 2,
+                TagSortIdx = 1
+            });
 
-                var recentTag = new MpTag() {
-                    TagName = "Recent",
-                    ColorId = 1,
-                    TagSortIdx = 0
-                };
+            await AddItem<MpTag>(new MpTag() {
+                TagName = "Favorites",
+                ColorId = 3,
+                TagSortIdx = 2
+            });
+            await AddItem<MpTag>(new MpTag() {
+                TagName = "Help",
+                ColorId = 4,
+                TagSortIdx = 3
+            });
 
-                await _connectionAsync.InsertAsync(recentTag);
-
-                var allTag = new MpTag() {
-                    TagName = "All",
-                    ColorId = 2,
-                    TagSortIdx = 1
-                };
-                await _connectionAsync.InsertAsync(allTag);
-                var favTag = new MpTag() {
-                    TagName = "Favorites",
-                    ColorId = 3,
-                    TagSortIdx = 2
-                };
-                await _connectionAsync.InsertAsync(favTag);
-                var helpTag = new MpTag() {
-                    TagName = "Help",
-                    ColorId = 4,
-                    TagSortIdx = 3
-                };
-                await _connectionAsync.InsertAsync(helpTag);
-
-                MpConsole.WriteLine(@"Create all default tables");
-            } 
-
-            if (_connectionAsync != null && UseWAL) {
-                // On sqlite-net v1.6.0+, enabling write-ahead logging allows for faster database execution
-                await _connectionAsync.EnableWriteAheadLoggingAsync().ConfigureAwait(false);
-            }
-            MpConsole.WriteLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
+            MpConsole.WriteTraceLine(@"Create all default tables");
         }
         public async Task<List<T>> QueryAsync<T>(string query, params object[] args) where T : new() {
             var result = await _connectionAsync.QueryAsync<T>(query, args);
