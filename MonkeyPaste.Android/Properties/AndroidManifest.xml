@@ -5,5 +5,6 @@
 	<uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
-	<application android:requestLegacyExternalStorage="true" android:label="MonkeyPaste.Android" android:theme="@style/Splash" android:icon="@drawable/icon"></application>
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+	<application android:requestLegacyExternalStorage="true" android:label="Monkey Paste" android:theme="@style/Splash" android:icon="@drawable/icon"></application>
 </manifest>

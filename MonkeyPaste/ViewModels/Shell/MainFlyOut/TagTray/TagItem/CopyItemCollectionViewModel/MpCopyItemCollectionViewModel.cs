@@ -97,7 +97,8 @@ namespace MonkeyPaste {
             }
             CopyItemViewModels.Remove(civm);
             
-            //await MpDb.Instance.DeleteItem(civm.CopyItem);
+            await MpDb.Instance.DeleteItem(civm.CopyItem);
+            await MpCopyItemTag.DeleteAllCopyItemTagsForCopyItemId(civm.CopyItem.Id);
         });
 
         public ICommand ItemSelected => new Command(async (selectedCopyItemViewModel) => {
@@ -130,7 +131,7 @@ namespace MonkeyPaste {
             if (args == null) {
                 return;
             }
-            await MpCopyItem.AddNewCopyItem(args);
+            await MpCopyItem.Create(args);
         });
         #endregion
     }

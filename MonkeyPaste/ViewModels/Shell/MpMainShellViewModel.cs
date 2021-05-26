@@ -7,9 +7,10 @@ using Xamarin.Forms;
 namespace MonkeyPaste {
     public class MpMainShellViewModel : MpViewModelBase {
         public MpTagCollectionViewModel TagCollectionViewModel { get; set; }
+        public static bool IsContextMenuOpen { get; set; }
 
         public MpMainShellViewModel() {
-            Device.BeginInvokeOnMainThread(async () => await Initialize());
+            //Device.BeginInvokeOnMainThread(async () => await Initialize());
             Task.Run(Initialize);
             
         }

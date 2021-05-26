@@ -47,13 +47,36 @@ namespace MonkeyPaste {
             await CreateConnectionAsync();
             IsLoaded = true;
         }
+
+        //public void SetDbPassword(string newPassword) {
+        //    if(MpPreferences.DbPassword != newPassword) {
+        //        MpPreferences.EncryptDb = true;
+        //        //if db is not encrypted use rekey otherwise key
+        //        string encryptQuery = string.Format(
+        //            @"PRAGMA {0}={1}",
+        //            string.IsNullOrEmpty(MpPreferences.DbPassword) ?
+        //                "key" : "rekey",
+        //            newPassword);
+        //        _connectionAsync.QueryAsync<int>(encryptQuery);
+        //        MpConsole.WriteLine(@"Db Password updated");
+        //    }
+        //}
+
         private async Task CreateConnectionAsync() {
             if (_connectionAsync != null) {
                 return;
             }
-            bool isNewDb = !File.Exists(MpDbConstants.DbPath);
-            
-            _connectionAsync = new SQLiteAsyncConnection(MpDbConstants.DbPath, MpDbConstants.Flags);
+            bool isNewDb = !File.Exists(MpPreferences.Instance.DbPath);
+
+            var connStr = new SQLiteConnectionString(
+                databasePath: MpPreferences.Instance.DbPath, 
+                storeDateTimeAsTicks: true,
+                key: MpPreferences.Instance.DbPassword,
+                openFlags: MpPreferences.DbFlags
+                );
+
+
+            _connectionAsync = new SQLiteAsyncConnection(connStr);
 
             await InitTablesAsync();
 
@@ -77,6 +100,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpUrl>();
             await _connectionAsync.CreateTableAsync<MpUrlDomain>();
             await _connectionAsync.CreateTableAsync<MpIcon>();
+            await _connectionAsync.CreateTableAsync<MpDbImage>();
         }
         private async Task InitDefaultDataAsync() {
             await AddItem<MpColor>(new MpColor(Color.Green));

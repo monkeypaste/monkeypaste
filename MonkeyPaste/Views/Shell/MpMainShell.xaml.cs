@@ -16,11 +16,5 @@ namespace MonkeyPaste
             Routing.RegisterRoute("//tagitems", typeof(MpCopyItemCollectionView));
             BindingContext = new MpMainShellViewModel();
         }
-
-        private async void MenuItemsListView_ItemSelected(object sender, SelectedItemChangedEventArgs e) {
-            var stvm = e.SelectedItem as MpTagViewModel;
-            //MpResolver.Resolve<MpCopyItemCollectionViewModel>().TagId = stvm.Tag.Id;
-            //await Shell.Current.GoToAsync($"//tagitems?TagId={stvm.Tag.Id}");
-        }
     }
 }

@@ -63,17 +63,7 @@ namespace MonkeyPaste {
         #region Commands
 
         public ICommand AddToFavoritesCommand => new Command(async () => {
-            var favTagList = await MpDb.Instance.QueryAsync<MpTag>("select * from MpTag where TagName=?", "Favorites");
-
-            if (favTagList != null) {
-                foreach (var tag in favTagList) {
-                    var copyItemTag = new MpCopyItemTag() {
-                        CopyItemId = CopyItem.Id,
-                        TagId = tag.Id
-                    };
-                    await MpDb.Instance.AddItem<MpCopyItemTag>(copyItemTag);
-                }
-            }
+            await MpTag.FavoritesTag.LinkWithCopyItemAsync(CopyItem.Id);
         });
         
 

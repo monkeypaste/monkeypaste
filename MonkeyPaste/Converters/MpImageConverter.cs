@@ -64,6 +64,9 @@ namespace MonkeyPaste {
                         using (var stream = new MemoryStream(fromBytes)) {
                             outObject = ImageSource.FromStream(() => stream);
                         }
+                    } else if(targetType == typeof(CachedImage)) {
+                        var imgSrc = (ImageSource)Convert(fromBytes, typeof(ImageSource), parameter);
+                        outObject = new CachedImage() { Source = imgSrc };
                     }
                 } else if(value is SKBitmap fromSkBitmap) {
                     if (targetType == typeof(SKBitmap)) {

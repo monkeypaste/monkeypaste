@@ -14,10 +14,20 @@ namespace MonkeyPaste {
         [PrimaryKey,AutoIncrement]
         public override int Id { get; set; }
 
-        [ForeignKey(typeof(MpSource))]
-        public int SourceId { get; set; }
+        //[ForeignKey(typeof(MpSource))]
+        //public int SourceId { get; set; }
+        //[ManyToOne]
+        //public MpSource Source { get; set; }
+
+        [ForeignKey(typeof(MpApp))]
+        public int AppId { get; set; }
         [ManyToOne]
-        public MpSource Source { get; set; }
+        public MpApp App { get; set; }
+
+        [ForeignKey(typeof(MpUrl))]
+        public int UrlId { get; set; }
+        [ManyToOne]
+        public MpUrl Url { get; set; }
 
         [ForeignKey(typeof(MpColor))]
         public int ColorId { get; set; }
@@ -91,7 +101,15 @@ namespace MonkeyPaste {
             }
             return null;
         }
-
+        public static async Task<List<MpCopyItem>> GetAllCopyItemsByTagId(int tagId) {
+            var citl = await MpCopyItemTag.GetAllCopyItemsForTagId(tagId);
+            var cil = new List<MpCopyItem>();
+            foreach(var cit in citl) {
+                var ci = await MpCopyItem.GetCopyItemById(cit.CopyItemId);
+                cil.Add(ci);
+            }
+            return cil;
+        }
         public MpCopyItem() : base(typeof(MpCopyItem)) { }
 
         public MpCopyItem(object data, string sourceInfo) : this() {
@@ -105,10 +123,11 @@ namespace MonkeyPaste {
             CopyDateTime = DateTime.Now;
         }
 
-        public static async Task AddNewCopyItem(object args) {
+        public static async Task<MpCopyItem> Create(object args) {
             if (args == null) {
-                return;
+                return null;
             }
+
             //create CopyItem
             string hostPackageName = (args as object[])[0] as string;
             string itemPlainText = (args as object[])[1] as string;
@@ -141,38 +160,18 @@ namespace MonkeyPaste {
                 }
             }
 
-
-            //if (!string.IsNullOrEmpty(hostPackageName)) {
-            //    //add or update copyitem's source app
-            //    var appFromHostList = await MpDb.Instance.QueryAsync<MpApp>(
-            //        "select * from MpApp where AppPath=@hpn",
-            //    new System.Collections.Generic.Dictionary<string, object>() {
-            //        {"@hpn",hostPackageName }
-            //    }
-            // );
-            //    if (appFromHostList != null && appFromHostList.Count >= 1) {
-            //        var app = appFromHostList[0];
-
-            //        newCopyItem.AppId = app.Id;
-            //        await MpDb.Instance.UpdateItem<MpCopyItem>(newCopyItem);
-            //    } else {
-            //        var newIcon = new MpIcon() {
-            //            IconImage = hostAppImage
-            //        };
-            //        await MpDb.Instance.AddItem<MpIcon>(newIcon);
-
-            //        var newApp = new MpApp() {
-            //            AppPath = hostPackageName,
-            //            AppName = hostAppName,
-            //            IconId = newIcon.Id
-            //        };
-
-            //        await MpDb.Instance.AddItem<MpApp>(newApp);
-
-            //        newCopyItem.AppId = newApp.Id;
-            //        await MpDb.Instance.UpdateItem<MpCopyItem>(newCopyItem);
-            //    }
-            //}
+            //add source to copyitem
+            if (!string.IsNullOrEmpty(hostPackageName)) {
+                //add or update copyitem's source app
+                MpApp app = await MpApp.GetAppByPath(hostPackageName);
+                if (app == null) {
+                    app = await MpApp.Create(hostPackageName, hostAppName, hostAppImage);
+                } 
+                newCopyItem.App = app;
+                newCopyItem.AppId = app.Id;
+                await MpDb.Instance.UpdateItem<MpCopyItem>(newCopyItem);
+            }
+            return newCopyItem;
         }
         //public override void DeleteFromDatabase() {
         //    throw new NotImplementedException();

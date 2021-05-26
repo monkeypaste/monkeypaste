@@ -24,7 +24,32 @@ namespace MonkeyPaste
         private static readonly Lazy<MpImageHistogram> _Lazy = new Lazy<MpImageHistogram>(() => new MpImageHistogram());
         public static MpImageHistogram Instance { get { return _Lazy.Value; } }
 
-        public async Task<List<KeyValuePair<SKColor, int>>> GetStatistics(CachedImage cachedImage)
+        public async Task<List<KeyValuePair<SKColor, int>>> GetStatistics(SKBitmap bitmap) {
+            var countDictionary = new Dictionary<SKColor, int>();
+            await Task.Run(() => {
+                for (int x = 0; x < bitmap.Width; x++) {
+                    for (int y = 0; y < bitmap.Height; y++) {
+                        SKColor currentColor = bitmap.GetPixel(x, y);
+                        if (currentColor.Alpha == 0) {
+                            continue;
+                        }
+                        //If a record already exists for this color, set the count, otherwise just set it as 0
+                        int currentCount = countDictionary.ContainsKey(currentColor) ? countDictionary[currentColor] : 0;
+
+                        if (currentCount == 0) {
+                            //If this color doesnt already exists in the dictionary, add it
+                            countDictionary.Add(currentColor, 1);
+                        } else {
+                            //If it exists, increment the value and update it
+                            countDictionary[currentColor] = currentCount + 1;
+                        }
+                    }
+                }
+            });
+            //order the list from most used to least used before returning
+            return countDictionary.OrderByDescending(o => o.Value).ToList();
+        }
+            public async Task<List<KeyValuePair<SKColor, int>>> GetStatistics2(CachedImage cachedImage)
         {
             var countDictionary = new Dictionary<SKColor, int>();
 

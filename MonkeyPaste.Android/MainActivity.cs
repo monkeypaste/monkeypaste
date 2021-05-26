@@ -9,6 +9,7 @@ using FFImageLoading.Forms.Platform;
 using System.Reflection;
 using Android.Support.V4.App;
 using TaskStackBuilder = Android.Support.V4.App.TaskStackBuilder;
+using Android.Media;
 
 namespace MonkeyPaste.Droid {
     [Activity(
@@ -23,10 +24,10 @@ namespace MonkeyPaste.Droid {
         static readonly string CHANNEL_ID = "location_notification";
         internal static readonly string COUNT_KEY = "count";
         int count = 0;
+
         protected override void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
 
-            //_ = new MpBootstrapper();
             AndroidEnvironment.UnhandledExceptionRaiser += delegate (object sender, RaiseThrowableEventArgs args) {
                 typeof(System.Exception).GetField("stack_trace", BindingFlags.NonPublic | BindingFlags.Instance)
                     .SetValue(args.Exception, null);
@@ -49,9 +50,16 @@ namespace MonkeyPaste.Droid {
 
             LoadSelectedTextAsync();
 
-            CreateNotificationChannel();
+            //CreateNotificationChannel();
 
-            PublishNotification();
+            //PublishNotification();
+
+            //var intent = new Intent(Android.App.Application.Context, typeof(MyForegroundService));
+
+            //// start foreground service.
+            //if (Android.OS.Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.O) {
+            //    StartForegroundService(intent);
+            //}
         }
 
         void CreateNotificationChannel() {
@@ -74,17 +82,17 @@ namespace MonkeyPaste.Droid {
 
         void PublishNotification() {
             // Pass the current button press count value to the next activity:
-            var valuesForActivity = new Bundle();
-            valuesForActivity.PutInt(COUNT_KEY, count);
+            //var valuesForActivity = new Bundle();
+            //valuesForActivity.PutInt(COUNT_KEY, count);
 
             // When the user clicks the notification, SecondActivity will start up.
             var resultIntent = new Intent(this, typeof(MpCopyClipboardNotificationActivity));
-
+            //resultIntent.SetAction("COPY_CLIPBOARD");
             // Pass some values to SecondActivity:
-            resultIntent.PutExtras(valuesForActivity);
+            //resultIntent.PutExtras(valuesForActivity);
 
             // Construct a back stack for cross-task navigation:
-            var stackBuilder = TaskStackBuilder.Create(this);             
+            var stackBuilder = TaskStackBuilder.Create(this);
             stackBuilder.AddParentStack(Java.Lang.Class.FromType(typeof(MpCopyClipboardNotificationActivity)));
             stackBuilder.AddNextIntent(resultIntent);
 
@@ -93,12 +101,19 @@ namespace MonkeyPaste.Droid {
 
             // Build the notification:
             var builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                          .SetAutoCancel(true) // Dismiss the notification from the notification area when the user clicks on it
+                          .SetAutoCancel(false) // Dismiss the notification from the notification area when the user clicks on it
                           .SetContentIntent(resultPendingIntent) // Start up this activity when the user clicks the intent.
-                          .SetContentTitle("Button Clicked") // Set the title
-                          .SetNumber(count) // Display the count in the Content Info
+                          .SetContentTitle("Tap to store clipboard") // Set the title
+                          //.SetNumber(count) // Display the count in the Content Info
                           .SetSmallIcon(Resources.GetIdentifier("icon", "drawable", PackageName)) // This is the icon to display
-                          .SetContentText($"The button has been clicked {count} times."); // the message to display.
+                          .SetContentText(string.Empty)
+                          .SetDefaults((int)(NotificationDefaults.Sound | NotificationDefaults.Vibrate))
+                          .SetSound(RingtoneManager.GetDefaultUri(RingtoneType.Alarm))
+                          .SetColor(Resource.Color.colorPrimary)
+                          .SetColorized(true)
+                          .SetStyle(new NotificationCompat.DecoratedCustomViewStyle());
+
+            //builder.AddAction(Resources.GetIdentifier("icon", "drawable", PackageName), "Copy Title", resultPendingIntent);
 
             // Finally, publish the notification:
             var notificationManager = NotificationManagerCompat.From(this);
@@ -116,7 +131,7 @@ namespace MonkeyPaste.Droid {
             if (!string.IsNullOrWhiteSpace(selectedText)) {
                 await Clipboard.SetTextAsync(selectedText);
 
-                await MonkeyPaste.MpCopyItem.AddNewCopyItem(new object[] { hostPackageName, selectedText, hostAppName, hostAppIcon });
+                await MonkeyPaste.MpCopyItem.Create(new object[] { hostPackageName, selectedText, hostAppName, hostAppIcon });
             }
         }
 

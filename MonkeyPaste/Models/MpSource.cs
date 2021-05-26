@@ -2,10 +2,14 @@
 using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpSource : MpDbObject {
+        private static List<MpSource> _AllSources = null;
+
         [PrimaryKey,AutoIncrement]
         public override int Id { get; set; }
 
@@ -46,6 +50,28 @@ namespace MonkeyPaste {
             }
         }
 
+        public static async Task<List<MpSource>> GetAllSources() {
+            if(_AllSources == null) {
+                _AllSources = await MpDb.Instance.GetItems<MpSource>();
+            }
+            return _AllSources;
+        }
+        public static async Task<MpSource> GetSourceById(int appId,int urlId) {
+            var allSources = await GetAllSources();
+            return allSources.Where(x => x.AppId == appId && x.UrlId == urlId).FirstOrDefault();
+        }
+
+        //public static async Task<MpSource> GetOrCreateSource(string appPath,string urlPath) {
+        //    var app = await MpApp.GetAppByPath(appPath);
+        //    var url = await MpUrl.GetUrlByPath(urlPath);
+        //    if(url == null) {
+        //        if(app == null) {
+
+        //        }
+        //    }
+        //    var allSources = await GetAllSources();
+
+        //}
         public MpSource() : base(typeof(MpSource)) { }
     }
 }

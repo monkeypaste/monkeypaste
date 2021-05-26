@@ -16,38 +16,65 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
-        public string LocalStoragePath {
-            get {
-                return Preferences.Get(nameof(DbPath), Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)); 
-            }
-        }
+        #region Application Properties
+        public const string DbName = "Mp.db";
+        public const int MinDbPasswordLength = 12;
+        public const int MaxDbPasswordLength = 18;
+
+        public const SQLite.SQLiteOpenFlags DbFlags =
+            // open the database in read/write mode
+            SQLite.SQLiteOpenFlags.ReadWrite |
+            // create the database if it doesn't exist
+            SQLite.SQLiteOpenFlags.Create |
+            // enable multi-threaded database access
+            SQLite.SQLiteOpenFlags.SharedCache;
 
         public string DbPath {
             get {
-                return Preferences.Get(nameof(DbPath), MpDbConstants.DbPath);
-            }
-            set {
-                Preferences.Set(nameof(DbPath), value);
+                var basePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                return System.IO.Path.Combine(basePath, DbName);
             }
         }
-
-        public string DbName {
+        public string LocalStoragePath {
             get {
-                return Preferences.Get(nameof(DbName), MpDbConstants.DbName);
-            }
-            set {
-                Preferences.Set(nameof(DbName), value);
+                return Preferences.Get(nameof(DbPath), Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
             }
         }
 
         public string DbMediaFolderPath {
             get {
-                return Preferences.Get(nameof(DbMediaFolderPath), Path.Combine(LocalStoragePath,"media"));
+                return Preferences.Get(nameof(DbMediaFolderPath), Path.Combine(LocalStoragePath, "media"));
             }
             set {
                 Preferences.Set(nameof(DbMediaFolderPath), value);
             }
         }
+        #endregion
+
+        #region User Properties
+        public static bool EncryptDb {
+            get {
+                return Preferences.Get(nameof(EncryptDb), true);
+            }
+            set {
+                Preferences.Set(nameof(EncryptDb), value);
+            }
+        }
+
+        public string DbPassword {
+            get {
+                return Preferences.Get(
+                    nameof(DbPassword), 
+                    MpHelpers.Instance.GetRandomString(
+                        MpHelpers.Instance.Rand.Next(
+                            MinDbPasswordLength, 
+                            MaxDbPasswordLength), 
+                        MpHelpers.Instance.PasswordChars));
+            }
+        }
+        #endregion
+
+        
         #endregion
     }
 }

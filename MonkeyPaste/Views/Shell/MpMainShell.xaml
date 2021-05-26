@@ -2,6 +2,7 @@
        xmlns="http://xamarin.com/schemas/2014/forms"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
        xmlns:local="clr-namespace:MonkeyPaste"
+       x:DataType="local:MpMainShellViewModel"
        Title="Monkey Paste">
     <Shell.FlyoutContentTemplate>
         <DataTemplate>
@@ -13,65 +14,7 @@
                            VerticalOptions="Center"
                            Margin="20" />
                 </Grid>
-                <ListView x:Name="MenuItemsListView"
-                          Margin="10"
-                          SeparatorVisibility="Default"
-                          HasUnevenRows="true"
-                          ItemSelected="MenuItemsListView_ItemSelected"
-                          ItemsSource="{Binding TagCollectionViewModel.TagViewModels}">
-                    <ListView.Header>
-                        <Grid ColumnDefinitions="0.2*,0.6*,0.2*">
-                            <Image Source="{StaticResource TagsIcon}"
-                                   Margin="5"
-                                   HeightRequest="45" />
-                            <Label Grid.Column="1"
-                                   Text="Collections"
-                                   TextColor="Black"
-                                   FontAttributes="Italic"
-                                   VerticalTextAlignment="Center" />
-                            <Button HeightRequest="40"
-                                    BackgroundColor="Transparent"
-                                    Grid.Column="2"
-                                    Margin="10"
-                                    ImageSource="{StaticResource PlusIcon}" />
-                        </Grid>
-                    </ListView.Header>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell x:DataType="local:MpTagViewModel">                                
-                                <Grid ColumnDefinitions="0.25*,0.6*,0.2*">
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
-                                        <BoxView WidthRequest="25"
-                                                 HeightRequest="25" HorizontalOptions="Center" VerticalOptions="Center"
-                                                 BackgroundColor="{Binding Tag.TagColor, Converter={StaticResource StringToColorConverter}}"
-                                                 Margin="30,20,10,20" />
-                                        <Label Text="0"
-                                               Grid.Row="0"
-                                               TextColor="{Binding Tag.TagColor, Converter={StaticResource TextColorFromBackgroundColorConverter}}" 
-                                               Margin="20,0,0,0"
-                                               HorizontalOptions="Center"
-                                               VerticalOptions="Center"
-                                               BackgroundColor="Transparent"
-                                               FontSize="Micro"/>
-                                    </Grid>                                    
-                                    <Label Grid.Column="1"
-                                           Text="{Binding Tag.TagName}"
-                                           TextColor="Black"
-                                           FontAttributes="Italic"
-                                           VerticalTextAlignment="Center" />
-                                    <Button HeightRequest="40"
-                                            Grid.Column="2"
-                                            BackgroundColor="Transparent"
-                                            Margin="10"
-                                            ImageSource="{StaticResource EllipsesVIcon}" />
-                                </Grid>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                <local:MpTagCollectionView BindingContext="{Binding TagCollectionViewModel}" />
                 <Grid ColumnDefinitions="0.2*,0.8*">
                     <Image Source="{StaticResource SettingsIcon}"
                            Margin="5"
@@ -92,7 +35,7 @@
                            FontAttributes="Italic"
                            VerticalTextAlignment="Center" />
                 </Grid>
-            </StackLayout>
+            </StackLayout>            
         </DataTemplate>
     </Shell.FlyoutContentTemplate>
     <FlyoutItem x:Name="FlyoutItem"

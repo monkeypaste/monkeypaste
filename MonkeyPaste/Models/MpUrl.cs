@@ -19,6 +19,7 @@ namespace MonkeyPaste {
         [ManyToOne]
         public MpUrlDomain UrlDomain { get; set; }
 
+        [Indexed]
         public string UrlPath { get; set; }
         public string UrlTitle { get; set; }
 
@@ -34,6 +35,11 @@ namespace MonkeyPaste {
             }
             
             return _AllUrlList;
+        }
+
+        public static async Task<MpUrl> GetUrlByPath(string urlPath) {
+            var allUrls = await GetAllUrls();
+            return allUrls.Where(x => x.UrlPath.ToLower() == urlPath.ToLower()).FirstOrDefault();
         }
 
         public static MpUrl GetUrlById(int urlId) {

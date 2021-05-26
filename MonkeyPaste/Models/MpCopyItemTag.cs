@@ -27,6 +27,26 @@ namespace MonkeyPaste {
             return _AllCopyItemTagList.Where(x => x.TagId == tagId).ToList();
         }
 
+        public static async Task DeleteAllCopyItemTagsForCopyItemId(int copyItemId) {
+            if (_AllCopyItemTagList == null) {
+                await GetAllCopyItemsTags();
+            }
+            var citl = _AllCopyItemTagList.Where(x => x.CopyItemId == copyItemId).ToList();
+            foreach(var cit in citl) {
+                await MpDb.Instance.DeleteItem<MpCopyItemTag>(cit);
+            }
+        }
+
+        public static async Task DeleteAllCopyItemTagsForTagId(int tagId) {
+            if (_AllCopyItemTagList == null) {
+                await GetAllCopyItemsTags();
+            }
+            var citl = _AllCopyItemTagList.Where(x => x.TagId == tagId).ToList();
+            foreach (var cit in citl) {
+                await MpDb.Instance.DeleteItem<MpCopyItemTag>(cit);
+            }
+        }
+
         public static async Task<List<MpCopyItemTag>> GetAllCopyItemsTags() {
             if(_AllCopyItemTagList != null) {
                 return _AllCopyItemTagList;

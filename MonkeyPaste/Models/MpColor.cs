@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using FFImageLoading.Forms;
+using SkiaSharp;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 using Xamarin.Forms;
@@ -79,17 +80,17 @@ namespace MonkeyPaste {
             return null;
         }
 
-        public static async Task<List<MpColor>> CreatePrimaryColorList(CachedImage bmpSource) {
+        public static async Task<List<MpColor>> CreatePrimaryColorList(SKBitmap skbmp, int listCount = 5) {
             //var sw = new Stopwatch();
             //sw.Start();
             
             var primaryIconColorList = new List<MpColor>();
-            var hist = await MpImageHistogram.Instance.GetStatistics(bmpSource);
+            var hist = await MpImageHistogram.Instance.GetStatistics(skbmp);
             foreach (var kvp in hist) {
                 var c = new MpColor(kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, 255);
 
                 //Console.WriteLine(string.Format(@"R:{0} G:{1} B:{2} Count:{3}", kvp.Key.Red, kvp.Key.Green, kvp.Key.Blue, kvp.Value));
-                if (primaryIconColorList.Count == 5) {
+                if (primaryIconColorList.Count == listCount) {
                     break;
                 }
                 //between 0-255 where 0 is black 255 is white
@@ -107,7 +108,7 @@ namespace MonkeyPaste {
             }
 
             //if only 1 color found within threshold make random list
-            for (int i = primaryIconColorList.Count; i < 5; i++) {
+            for (int i = primaryIconColorList.Count; i < listCount; i++) {
                 primaryIconColorList.Add(new MpColor(MpHelpers.Instance.GetRandomColor()));
             }
             //sw.Stop();
