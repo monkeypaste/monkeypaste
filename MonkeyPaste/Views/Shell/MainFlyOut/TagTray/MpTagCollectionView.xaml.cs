@@ -6,19 +6,27 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using System.Linq;
 
 namespace MonkeyPaste {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MpTagCollectionView : ContentView {
+        //public MpTagCollectionViewModel TagItemCollectionViewModel => (MpTagCollectionViewModel)BindingContext;
+
         public MpTagCollectionView() {
             InitializeComponent();
-            //BindingContext = ((App.Current.MainPage as MpMainShell).BindingContext as MpMainShellViewModel).TagCollectionViewModel;
         }
 
-        private async void MenuItemsListView_ItemSelected(object sender, SelectedItemChangedEventArgs e) {
-            var stvm = e.SelectedItem as MpTagItemViewModel;
-            //MpResolver.Resolve<MpCopyItemCollectionViewModel>().TagId = stvm.Tag.Id;
-            //await Shell.Current.GoToAsync($"//tagitems?TagId={stvm.Tag.Id}");
-        }
+        //private void TagCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        //    var tcvm = BindingContext as MpTagCollectionViewModel;
+        //    tcvm.ClearSelection();
+        //    if (e.CurrentSelection != null) {
+        //        var stivm = tcvm.TagViewModels.Where(x => x == e.SelectedItem).FirstOrDefault();
+        //        if (stivm != null) {
+        //            stivm.IsSelected = true;
+        //            tcvm.SelectedTagViewModel = stivm;
+        //        }
+        //    }
+        //}
     }
 }

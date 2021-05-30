@@ -11,9 +11,9 @@ namespace MonkeyPaste {
         #region Properties
 
         #region View Models
-        public MpMainViewModel MainViewModel {
+        public MpMainShellViewModel MainShellViewModel {
             get {
-                return Application.Current.MainPage.BindingContext as MpMainViewModel;
+                return Application.Current.MainPage.BindingContext as MpMainShellViewModel;
             }
         }
         #endregion

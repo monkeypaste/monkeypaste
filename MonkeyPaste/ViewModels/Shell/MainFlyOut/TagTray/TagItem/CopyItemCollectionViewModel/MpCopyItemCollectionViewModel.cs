@@ -10,82 +10,135 @@ using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public class MpCopyItemCollectionViewModel : MpViewModelBase {
-        #region Private Variables
-        private readonly MpICopyItemImporter _copyItemImporter;
+        #region Private Variables        
         private int _itemsAdded = 0;
         private int _currentStartIndex = 0;
         private int _pageSize = 20;
         #endregion
 
         #region Properties
-        public int TagId { get; set; } = 1;
         public ObservableCollection<MpCopyItemViewModel> CopyItemViewModels { get; set; }
 
         public MpCopyItemViewModel SelectedCopyItemViewModel { get; set; }
         #endregion
 
         #region Public Methods
+        public MpCopyItemCollectionViewModel() : this(MpTag.RecentTag.Id) { }
 
-        public MpCopyItemCollectionViewModel(MpICopyItemImporter copyItemImporter) : base()
+        public MpCopyItemCollectionViewModel(int tagId) : base() {
+            MpDb.Instance.OnItemAdded += Db_OnItemAdded;
+            MpDb.Instance.OnItemUpdated += Db_OnItemUpdated;
+            MpDb.Instance.OnItemDeleted += Db_OnItemDeleted;
+
+            SetTag(tagId);
+        }
+
+        public async Task SetTag(int tagId)
         {
-            PropertyChanged += (s,e)=> {
-                switch(e.PropertyName) {
-                    case nameof(TagId):
-                        Device.BeginInvokeOnMainThread(async ()=> { await Initialize(); });
-                        break;
-                }
-            };
-            _copyItemImporter = copyItemImporter;
-            Task.Run(Initialize);
+           await Device.InvokeOnMainThreadAsync(async () => await Initialize(tagId));
         }
 
         public MpCopyItemViewModel CreateCopyItemViewModel(MpCopyItem item) {
             var itemViewModel = new MpCopyItemViewModel(item);
-            itemViewModel.PropertyChanged += CopyItemViewModels_PropertyChanged;
-            Routing.RegisterRoute(@"copyitem/" + itemViewModel,typeof(MpCopyItemDetailPageView));
+            itemViewModel.PropertyChanged += CopyItemViewModel_PropertyChanged;
+            Routing.RegisterRoute(@"copyitem/" + itemViewModel, typeof(MpCopyItemDetailPageView));
             return itemViewModel;
+        }
+
+        public void ClearSelection() {
+            foreach (var civm in CopyItemViewModels) {
+                civm.IsSelected = false;
+            }
         }
         #endregion
 
         #region Private Methods
-        private async Task Initialize()
-        {
+        private async Task Initialize(int tagId) {
             IsBusy = true;
-            var copyItems = await _copyItemImporter.Get(TagId, 0, 20);
-            CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>(copyItems.Select(x=>CreateCopyItemViewModel(x)));
-            OnPropertyChanged(nameof(CopyItemViewModels));
+            await MpDb.Instance.Init();
+            var copyItems = await MpDb.Instance.Get(tagId, 0, _pageSize);
+            CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>(copyItems.Select(x => CreateCopyItemViewModel(x)));
             CopyItemViewModels.CollectionChanged += CopyItemViewModels_CollectionChanged;
-            await Task.Delay(3000);
+            OnPropertyChanged(nameof(CopyItemViewModels));
+            await Task.Delay(300);
             IsBusy = false;
         }
+        #endregion
 
-        private void Collection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs args)
-        {
-            foreach (MpCopyItem copyItem in args.NewItems)
-            {
+        #region Event Handlers
+        //private async Task OnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        //    switch (e.PropertyName) {
+
+        //    }
+        //}
+        //private async void MpCopyItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+        //    //await OnPropertyChanged(sender, e);
+        //}        
+
+        private void Db_OnItemDeleted(object sender, MpDbObject e) {
+            //throw new NotImplementedException();
+        }
+
+        private void Db_OnItemUpdated(object sender, MpDbObject e) {
+            //throw new NotImplementedException();
+        }
+
+        private void Db_OnItemAdded(object sender, MpDbObject e) {
+            if (e is MpCopyItem nci) {
+                CopyItemViewModels.Add(CreateCopyItemViewModel(nci));
+            }
+        }
+
+        private void Collection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs args) {
+            foreach (MpCopyItem copyItem in args.NewItems) {
                 _itemsAdded++;
                 CopyItemViewModels.Add(CreateCopyItemViewModel(copyItem));
             }
-            if (_itemsAdded == 20)
-            {
+            if (_itemsAdded == _pageSize) {
                 var collection = (ObservableCollection<MpCopyItem>)sender;
                 collection.CollectionChanged -= Collection_CollectionChanged;
             }
         }
 
-
-        private void CopyItemViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null && e.NewItems.Count > 0)
-            {
+        private void CopyItemViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            if (e.NewItems != null && e.NewItems.Count > 0) {
                 IsBusy = false;
                 CopyItemViewModels.CollectionChanged -= CopyItemViewModels_CollectionChanged;
             }
         }
 
-        private void CopyItemViewModels_PropertyChanged(object sender, EventArgs e) {
-            if (sender is MpCopyItemViewModel item) {
-                Task.Run(async () => await MpDb.Instance.UpdateWithChildren(item.CopyItem));
+        private async void CopyItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            if (sender is MpCopyItemViewModel civm)
+            {
+                switch (e.PropertyName)
+                {
+                    case nameof(civm.IsSelected):
+                        if (civm.IsSelected)
+                        {
+                            if (SelectedCopyItemViewModel == civm)
+                            {
+                                //implies selection came from ui do nothing
+                            }
+                            else
+                            {
+                                if (SelectedCopyItemViewModel != null)
+                                {
+                                    SelectedCopyItemViewModel.IsSelected = false;
+                                }
+                                SelectedCopyItemViewModel = civm;
+                            }
+                        }
+                        else
+                        {
+                            if (SelectedCopyItemViewModel == civm)
+                            {
+                                SelectedCopyItemViewModel = null;
+                            }
+                        }
+                        break;
+                }
+
+                await MpDb.Instance.UpdateItem<MpCopyItem>(civm.CopyItem);
             }
         }
         #endregion
@@ -112,9 +165,9 @@ namespace MonkeyPaste {
 
         public ICommand LoadMore => new Command(async () =>
         {
-            _currentStartIndex += 20;
+            _currentStartIndex += _pageSize;
             _itemsAdded = 0;
-            var collection = await _copyItemImporter.Get(1, _currentStartIndex, 20);
+            var collection = await MpDb.Instance.Get(1, _currentStartIndex, _pageSize);
             collection.CollectionChanged += Collection_CollectionChanged;
         });
 
@@ -127,12 +180,6 @@ namespace MonkeyPaste {
             MessagingCenter.Send(this, "FavoritesAdded");
         });
 
-        public ICommand AddItemFromClipboardCommand => new Command<object>(async (args) => {
-            if (args == null) {
-                return;
-            }
-            await MpCopyItem.Create(args);
-        });
         #endregion
     }
 }

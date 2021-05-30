@@ -12,9 +12,8 @@ namespace MonkeyPaste
         public MpMainShell()
         {
             InitializeComponent();
-
-            Routing.RegisterRoute("//tagitems", typeof(MpCopyItemCollectionView));
-            BindingContext = new MpMainShellViewModel();
+            //Routing.RegisterRoute("//tagitems", typeof(MpCopyItemCollectionView));
+            //BindingContext = new MpMainShellViewModel();
         }
     }
 }

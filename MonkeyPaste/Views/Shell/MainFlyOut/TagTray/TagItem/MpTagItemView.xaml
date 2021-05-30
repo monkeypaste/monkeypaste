@@ -8,16 +8,15 @@
         <SwipeView>
             <SwipeView.LeftItems>
                 <SwipeItems>
-                    <SwipeItem Text="Rename"
-                               IconImageSource="{StaticResource StarOutlineIcon}"
-                               BackgroundColor="LightBlue"
+                    <SwipeItem BackgroundColor="LightBlue"
                                Command="{Binding RenameTagCommand}"
-                               CommandParameter="{Binding .}" />
-                    <SwipeItem Text="Delete"
+                               IconImageSource="{StaticResource EditIcon}"
+                               Text="Rename" />
+                    <SwipeItem BackgroundColor="LightPink"
+                               Command="{Binding BindingContext.DeleteTagCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                               CommandParameter="{Binding .}"
                                IconImageSource="{StaticResource DeleteIcon}"
-                               BackgroundColor="LightPink"
-                               Command="{Binding BindingContext.DeleteTagCommand, Source={RelativeSource AncestorType={x:Type ListView}}}"
-                               CommandParameter="{Binding .}" />
+                               Text="Delete" />
                 </SwipeItems>
             </SwipeView.LeftItems>
             <Grid ColumnDefinitions="0.25*,0.6*,0.2*">
@@ -25,33 +24,30 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <BoxView WidthRequest="25"
+                    <BoxView Margin="30,20,10,20"
+                             BackgroundColor="{Binding Tag.TagColor.Color}"
                              HeightRequest="25"
                              HorizontalOptions="Center"
                              VerticalOptions="Center"
-                             BackgroundColor="{Binding Tag.TagColor.Color}"
-                             Margin="30,20,10,20" />
-                    <Label Text="{Binding CopyItemCount}"
-                           Grid.Row="0"
-                           TextColor="{Binding Tag.TagColor.Color, Converter={StaticResource TextColorFromBackgroundColorConverter}}"
+                             WidthRequest="25" />
+                    <Label Grid.Row="0"
                            Margin="20,0,0,0"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"
                            BackgroundColor="Transparent"
-                           FontSize="Micro" />
+                           FontSize="Micro"
+                           HorizontalOptions="Center"
+                           Text="{Binding CopyItemCount}"
+                           TextColor="{Binding Tag.TagColor.Color, Converter={StaticResource TextColorFromBackgroundColorConverter}}"
+                           VerticalOptions="Center" />
                 </Grid>
-                <Label Grid.Column="1"
+                <Entry x:Name="TagNameEntry"
+                       Background="{x:Null}"
+                       BackgroundColor="Transparent"
+                       Grid.Column="1"
+                       FontAttributes="Italic"
+                       IsReadOnly="{Binding IsNameReadOnly}"
                        Text="{Binding Tag.TagName}"
                        TextColor="Black"
-                       FontAttributes="Italic"
                        VerticalTextAlignment="Center" />
-                <!--<Button  x:Name="TagContextButton"
-                         HeightRequest="40"
-                         Grid.Column="2"
-                         BackgroundColor="Transparent"
-                         Margin="10"
-                         Command="{Binding ShowContextMenuCommand}"
-                         ImageSource="{StaticResource EllipsesVIcon}" />-->
             </Grid>
         </SwipeView>
     </ContentView.Content>

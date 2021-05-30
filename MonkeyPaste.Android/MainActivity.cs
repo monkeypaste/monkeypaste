@@ -28,13 +28,15 @@ namespace MonkeyPaste.Droid {
         protected override void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
 
-            AndroidEnvironment.UnhandledExceptionRaiser += delegate (object sender, RaiseThrowableEventArgs args) {
+            AndroidEnvironment.UnhandledExceptionRaiser += delegate (object sender, RaiseThrowableEventArgs args)
+            {
                 typeof(System.Exception).GetField("stack_trace", BindingFlags.NonPublic | BindingFlags.Instance)
                     .SetValue(args.Exception, null);
                 throw args.Exception;
             };
 
-            AndroidEnvironment.UnhandledExceptionRaiser += (sender, args) => {
+            AndroidEnvironment.UnhandledExceptionRaiser += (sender, args) =>
+            {
                 args.Handled = true;
             };
 

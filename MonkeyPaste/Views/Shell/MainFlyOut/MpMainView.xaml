@@ -3,7 +3,7 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:MonkeyPaste"
-    Title="Monkey Poop"
+    Title="Monkey Paste"
     x:DataType="local:MpMainViewModel">
     <ContentPage.ToolbarItems>
         <ToolbarItem IconImageSource="/Resources/Icons/search.png" />

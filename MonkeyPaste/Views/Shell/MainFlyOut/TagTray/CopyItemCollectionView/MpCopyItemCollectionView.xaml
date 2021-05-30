@@ -1,15 +1,18 @@
-﻿<ContentView
-    x:Class="MonkeyPaste.MpCopyItemCollectionView"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:MonkeyPaste"
-    xmlns:skia="clr-namespace:SkiaSharp;assembly=SkiaSharp"
-    WidthRequest="1000"
-    HeightRequest="1000" 
-    BackgroundColor="Purple"
-    x:Name="CopyItemCollectionView"
-    x:DataType="local:MpCopyItemCollectionViewModel">
-    <ContentView.Resources>
+﻿<ContentPage x:Class="MonkeyPaste.MpCopyItemCollectionView"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:MonkeyPaste"
+             xmlns:skia="clr-namespace:SkiaSharp;assembly=SkiaSharp"
+             WidthRequest="1000"
+             HeightRequest="1000"
+             BackgroundColor="Purple"
+             Title="Monkey Paste"
+             x:Name="CopyItemCollectionView"
+             x:DataType="local:MpCopyItemCollectionViewModel">
+    <ContentPage.BindingContext>
+        <local:MpCopyItemCollectionViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="Grid">
                 <Setter Property="VisualStateManager.VisualStateGroups">
@@ -26,15 +29,15 @@
                 </Setter>
             </Style>
         </ResourceDictionary>
-    </ContentView.Resources>
-    <ContentView.Content>
+    </ContentPage.Resources>
+    <ContentPage.Content>
         <CollectionView
             x:Name="CopyItemViewModels"
             EmptyView="{Binding}"
             ItemsSource="{Binding CopyItemViewModels}"
             RemainingItemsThreshold="5"
             RemainingItemsThresholdReachedCommand="{Binding LoadMore}"
-            SelectionChanged="CopyItemViewModels_SelectionChanged"
+            SelectedItem="{Binding SelectedCopyItemViewModel, Mode=TwoWay}"
             SelectionMode="Single">
             <CollectionView.ItemsLayout>
                 <LinearItemsLayout Orientation="Vertical"
@@ -60,5 +63,5 @@
                 </DataTemplate>
             </CollectionView.EmptyViewTemplate>
         </CollectionView>
-    </ContentView.Content>
-</ContentView>
+    </ContentPage.Content>
+</ContentPage>

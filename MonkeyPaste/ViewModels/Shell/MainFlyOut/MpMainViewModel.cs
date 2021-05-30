@@ -28,7 +28,7 @@ namespace MonkeyPaste {
 
         #region Public Methods
         public MpMainViewModel() : base() {
-            CopyItemCollectionViewModel = new MpCopyItemCollectionViewModel(MpDb.Instance);
+            CopyItemCollectionViewModel = new MpCopyItemCollectionViewModel(1);
         }
 
         //public MpMainViewModel(MpIPhotoImporter photoImporter, MpILocalStorage localStorage)

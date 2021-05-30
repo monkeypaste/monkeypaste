@@ -8,12 +8,10 @@ using Xamarin.Forms.Xaml;
 
 namespace MonkeyPaste {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class App : Application {
-        
-
+    public partial class App : Application {      
         public App() {
             MpTempFileManager.Instance.Init();
-
+            Device.BeginInvokeOnMainThread(async () => { await MpDb.Instance.Init(); });
             InitializeComponent();
             MainPage = new MpMainShell();
         }

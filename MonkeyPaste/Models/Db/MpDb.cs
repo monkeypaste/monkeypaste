@@ -147,7 +147,6 @@ namespace MonkeyPaste {
         }
 
         public async Task UpdateItem<T>(T item) where T : new() {
-            //await CreateConnection();
             await _connectionAsync.UpdateAsync(item);
             OnItemUpdated?.Invoke(this, item as MpDbObject);
         }
@@ -161,21 +160,21 @@ namespace MonkeyPaste {
         }
 
         public async Task DeleteItem<T>(T item) where T: new() {
-            await _connectionAsync.DeleteAsync<T>(item);
+            await _connectionAsync.DeleteAsync<T>((item as MpDbObject).Id);
             OnItemDeleted?.Invoke(this, item as MpDbObject);
         }
 
-        public async Task UpdateWithChildren(MpDbObject dbo) {
-            await _connectionAsync.UpdateWithChildrenAsync(dbo);
-        }
+        //public async Task UpdateWithChildren(MpDbObject dbo) {
+        //    await _connectionAsync.UpdateWithChildrenAsync(dbo);
+        //}
 
-        public async Task<T> GetWithChildren<T>(T item) where T: new() {
-            return await _connectionAsync.GetWithChildrenAsync<T>((item as MpDbObject).Id);
-        }
+        //public async Task<T> GetWithChildren<T>(T item) where T: new() {
+        //    return await _connectionAsync.GetWithChildrenAsync<T>((item as MpDbObject).Id);
+        //}
 
-        public async Task<List<T>> GetAllWithChildren<T>() where T : new() {
-            return await _connectionAsync.GetAllWithChildrenAsync<T>();
-        }
+        //public async Task<List<T>> GetAllWithChildren<T>() where T : new() {
+        //    return await _connectionAsync.GetAllWithChildrenAsync<T>();
+        //}
         #region Private Methods
         #endregion
 

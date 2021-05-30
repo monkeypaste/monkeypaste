@@ -31,6 +31,7 @@
     <None Remove="Views\Shell\MainFlyOut\TagTray\CopyItemCollectionView\CopyItemView\Content\**" />
     <None Remove="Views\Shell\MainFlyOut\TagTray\CopyItemCollectionView\CopyItemView\Title\**" />
     <Compile Remove="ViewModels\Base\MpUndoableViewModelBase.cs" />
+    <Compile Remove="Views\Shell\MainFlyOut\MpMainView.xaml.cs" />
     <None Remove=".DS_Store" />
     <None Remove="Resources\Icons\monkey.png" />
   </ItemGroup>
@@ -43,6 +44,7 @@
 
   <ItemGroup>
     <EmbeddedResource Remove="MainPage.xaml" />
+    <EmbeddedResource Remove="Views\Shell\MainFlyOut\MpMainView.xaml" />
   </ItemGroup>
 
   <ItemGroup>

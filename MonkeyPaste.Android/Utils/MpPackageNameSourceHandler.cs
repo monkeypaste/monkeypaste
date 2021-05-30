@@ -40,6 +40,9 @@ namespace MonkeyPaste.Droid {
 
         public Task LoadImageAsync(ImageSource imagesource, ImageView imageView, CancellationToken cancellationToken = default(CancellationToken)) {
             var packageName = ((MpPackageNameSource)imagesource).PackageName;
+            if(string.IsNullOrEmpty(packageName)) {
+                return Task.FromResult(false);
+            }
             using (var pm = Android.App.Application.Context.PackageManager) {
                 var info = pm.GetApplicationInfo(packageName, PackageInfoFlags.MetaData);
                 imageView.SetImageDrawable(info.LoadIcon(pm));

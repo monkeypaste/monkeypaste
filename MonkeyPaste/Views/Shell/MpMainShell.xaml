@@ -1,41 +1,42 @@
-﻿<Shell x:Class="MonkeyPaste.MpMainShell"
-       xmlns="http://xamarin.com/schemas/2014/forms"
-       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
-       xmlns:local="clr-namespace:MonkeyPaste"
-       x:DataType="local:MpMainShellViewModel"
-       Title="Monkey Paste">
+﻿<Shell
+    x:Class="MonkeyPaste.MpMainShell"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:MonkeyPaste"
+    Title="Monkey Paste"
+    x:DataType="local:MpMainShellViewModel">
     <Shell.FlyoutContentTemplate>
         <DataTemplate>
             <StackLayout>
                 <Grid Margin="10"
                       HeightRequest="100">
-                    <Image Source="{StaticResource AppIcon}"
+                    <Image Margin="20"
                            HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           Margin="20" />
+                           Source="{StaticResource AppIcon}"
+                           VerticalOptions="Center" />
                 </Grid>
-                <local:MpTagCollectionView BindingContext="{Binding TagCollectionViewModel}" />
+                <local:MpTagCollectionView />                
                 <Grid ColumnDefinitions="0.2*,0.8*">
-                    <Image Source="{StaticResource SettingsIcon}"
-                           Margin="5"
-                           HeightRequest="45" />
+                    <Image Margin="5"
+                           HeightRequest="45"
+                           Source="{StaticResource SettingsIcon}" />
                     <Label Grid.Column="1"
+                           FontAttributes="Italic"
                            Text="Settings"
                            TextColor="Black"
-                           FontAttributes="Italic"
                            VerticalTextAlignment="Center" />
                 </Grid>
                 <Grid ColumnDefinitions="0.2*,0.8*">
-                    <Image Source="{StaticResource HelpIcon}"
-                           Margin="5"
-                           HeightRequest="45" />
+                    <Image Margin="5"
+                           HeightRequest="45"
+                           Source="{StaticResource HelpIcon}" />
                     <Label Grid.Column="1"
+                           FontAttributes="Italic"
                            Text="Help"
                            TextColor="Black"
-                           FontAttributes="Italic"
                            VerticalTextAlignment="Center" />
                 </Grid>
-            </StackLayout>            
+            </StackLayout>
         </DataTemplate>
     </Shell.FlyoutContentTemplate>
     <FlyoutItem x:Name="FlyoutItem"
@@ -43,6 +44,6 @@
         <ShellContent x:Name="CollectionsContent"
                       Title="Collections"
                       Icon="{StaticResource TagsIcon}"
-                      ContentTemplate="{DataTemplate local:MpMainView}" />
+                      ContentTemplate="{DataTemplate local:MpCopyItemCollectionView}" />
     </FlyoutItem>
 </Shell>
