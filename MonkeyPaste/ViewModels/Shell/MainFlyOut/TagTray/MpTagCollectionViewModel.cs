@@ -27,8 +27,7 @@ namespace MonkeyPaste {
 
         #region Public Methods
         public MpTagCollectionViewModel() : base() {
-            CopyItemCollectionViewModel = new MpCopyItemCollectionViewModel(1);
-
+            CopyItemCollectionViewModel = new MpCopyItemCollectionViewModel();
             PropertyChanged += MpTagCollectionViewModel_PropertyChanged;
             MpDb.Instance.OnItemAdded += Db_OnItemAdded;
             Task.Run(Initialize);
@@ -68,14 +67,14 @@ namespace MonkeyPaste {
         //    }
         //}
 
-        private void MpTagCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-           switch (e.PropertyName) {
-                //case nameof(SelectedTagViewModel):
-                //    if(SelectedTagViewModel != null) {
-                //        CopyItemCollectionViewModel.SetTag(SelectedTagViewModel.Tag.Id);
-                //    }
-                //    break;
-            }
+        private async void MpTagCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+           //switch (e.PropertyName) {
+           //     case nameof(SelectedTagViewModel):
+           //         if (SelectedTagViewModel != null) {
+           //             await CopyItemCollectionViewModel.SetTag(SelectedTagViewModel.Tag.Id);
+           //         }
+           //         break;
+           // }
         }
         #endregion
 

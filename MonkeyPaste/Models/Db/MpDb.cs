@@ -10,7 +10,7 @@ using Xamarin.Forms;
 using System.IO;
 
 namespace MonkeyPaste {
-    public class MpDb : MpICopyItemImporter {
+    public class MpDb {
         #region Singleton
         private static readonly Lazy<MpDb> _Lazy = new Lazy<MpDb>(() => new MpDb());
         public static MpDb Instance { get { return _Lazy.Value; } }
@@ -30,7 +30,7 @@ namespace MonkeyPaste {
         public bool UseWAL { get; set; } = false;
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
-        public bool IsLoaded { get; set; }
+        public bool IsLoaded { get; set; } = false;
         #endregion
 
         #region Events
@@ -184,39 +184,6 @@ namespace MonkeyPaste {
         }
         public void InitClient(string accessToken) {
             //Client = new MpClient(0, 3, MpHelpers.Instance.GetCurrentIPAddress()/*.MapToIPv4()*/.ToString(), accessToken, DateTime.Now);
-        }
-
-        public async Task<ObservableCollection<MpCopyItem>> Get(int tagId, int start, int count, string sortColumn = "Id", bool isDescending = false)
-        {
-            //SELECT
-            //user_number,
-            //user_name
-            //FROM user_table
-            //WHERE(user_name LIKE '%{1}%' OR user_number LIKE '%{2}%')
-            //AND user_category = { 3 } OR user_category = { 4 }
-            //ORDER BY user_uid LIMIT { 5}
-            //OFFSET { 6}
-            //Where { 5} is page size and { 6 } is page number * page size.
-
-            var result = await QueryAsync<MpCopyItem>(
-                                string.Format(
-                                    @"SELECT * from MpCopyItem
-                                      WHERE Id in 
-                                        (SELECT CopyItemId FROM MpCopyItemTag 
-                                         WHERE TagId=?)
-                                      ORDER BY {0} {1} LIMIT ? OFFSET ?",
-                                    sortColumn,
-                                    (isDescending ? "DESC":"ASC")),
-                                tagId,
-                                count,
-                                start);
-
-            return new ObservableCollection<MpCopyItem>(result);
-
-            //var items = await GetItems<MpCopyItem>();
-            //return new ObservableCollection<MpCopyItem>(items);
-
-            //return new ObservableCollection<MpCopyItem>(items.GetRange(start, count));
-        }
+        }       
     }
 }

@@ -11,11 +11,12 @@ namespace MonkeyPaste {
         #region Properties
 
         #region View Models
-        public MpMainShellViewModel MainShellViewModel {
-            get {
-                return Application.Current.MainPage.BindingContext as MpMainShellViewModel;
-            }
-        }
+        //public MpMainShellViewModel MainShellViewModel {
+        //    get {
+        //        return Application.Current.MainPage.BindingContext as MpMainShellViewModel;
+        //    }
+        //}
+        public MpViewModelBase ParentViewModel { get; set; }
         #endregion
 
         public MpINavigate Navigation { get; set; } = new MpNavigator();

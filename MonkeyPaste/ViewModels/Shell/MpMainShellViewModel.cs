@@ -12,8 +12,9 @@ namespace MonkeyPaste {
 
         public MpMainShellViewModel() {
             //Device.BeginInvokeOnMainThread(async () => await Initialize());
-            TagCollectionViewModel = new MpTagCollectionViewModel();
+
             Task.Run(Initialize);
+            TagCollectionViewModel = new MpTagCollectionViewModel();
             
         }
 

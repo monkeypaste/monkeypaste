@@ -3,6 +3,17 @@ using System.Globalization;
 using Xamarin.Forms;
 namespace MonkeyPaste {
     public static class MpExtensions {
+        #region Documents
+        public static bool ContainsByUserSensitivity(this string str, string ostr) {
+            if(string.IsNullOrEmpty(str) || string.IsNullOrEmpty(ostr)) {
+                return false;
+            }
+            if(MpPreferences.IsSearchCaseSensitive) {
+                return str.Contains(ostr);
+            }
+            return str.ToLowerInvariant().Contains(ostr.ToLowerInvariant());
+        }
+        #endregion
         #region Visual
         public static string GetHexString(this Xamarin.Forms.Color color) {
             var red = (int)(color.R * 255);

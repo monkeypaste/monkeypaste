@@ -10,6 +10,9 @@ using Xamarin.Forms;
 namespace MonkeyPaste {
     public class MpTagItemViewModel : MpViewModelBase {
         #region Properties
+
+        //public MpCopyItemCollectionViewModel CopyItemCollectionViewModel { get; set; }
+
         public MpTag Tag { get; set; }
 
         public bool IsSelected { get; set; } = false;
@@ -35,6 +38,7 @@ namespace MonkeyPaste {
             MpDb.Instance.OnItemAdded += Db_OnItemAdded;
             MpDb.Instance.OnItemDeleted += Db_OnItemDeleted;
             Tag = tag;
+            //CopyItemCollectionViewModel = new MpCopyItemCollectionViewModel(Tag.Id);
             Task.Run(Initialize);
         }        
         #endregion

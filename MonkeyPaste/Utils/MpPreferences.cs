@@ -72,9 +72,18 @@ namespace MonkeyPaste {
                         MpHelpers.Instance.PasswordChars));
             }
         }
+
+        public static bool IsSearchCaseSensitive {
+            get {
+                return Preferences.Get(nameof(IsSearchCaseSensitive), false);
+            }
+            set {
+                Preferences.Set(nameof(IsSearchCaseSensitive), value);
+            }
+        }
         #endregion
 
-        
+
         #endregion
     }
 }

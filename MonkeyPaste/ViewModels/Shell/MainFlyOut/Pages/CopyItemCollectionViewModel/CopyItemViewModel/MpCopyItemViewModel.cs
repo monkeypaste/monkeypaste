@@ -45,18 +45,37 @@ namespace MonkeyPaste {
                 return imgSrc;
             }
         }
+
+        public bool IsVisible { get; set; } = true;
         #endregion
 
         #region Public Methods
         public MpCopyItemViewModel() { }
 
-        public MpCopyItemViewModel(MpCopyItem item)
-        {
+        public MpCopyItemViewModel(MpCopyItem item) {
+            PropertyChanged += MpCopyItemViewModel_PropertyChanged;
             CopyItem = item;
+            Routing.RegisterRoute("copyitemdetails", typeof(MpCopyItemDetailPageView));
         }
+
+
         #endregion
 
         #region Private Methods
+
+        #region Event Handlers
+        private void MpCopyItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(IsSelected):
+                    if(IsSelected) {
+                        Device.InvokeOnMainThreadAsync(async () => {
+                            await Shell.Current.GoToAsync($"copyitemdetails?CopyItemId={CopyItem.Id}");
+                        });
+                    }
+                    break;
+            }
+        }
+        #endregion
 
         #endregion
 

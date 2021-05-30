@@ -5,7 +5,7 @@
              x:DataType="local:MpTagItemViewModel"
              x:Class="MonkeyPaste.MpTagItemView">
   <ContentView.Content>
-        <SwipeView>
+        <SwipeView Threshold="1000">
             <SwipeView.LeftItems>
                 <SwipeItems>
                     <SwipeItem BackgroundColor="LightBlue"

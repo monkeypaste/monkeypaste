@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -14,28 +16,40 @@ namespace MonkeyPaste {
         private int _itemsAdded = 0;
         private int _currentStartIndex = 0;
         private int _pageSize = 20;
+        private int _tagId = 0;
         #endregion
 
         #region Properties
+        
+        #region View Models
         public ObservableCollection<MpCopyItemViewModel> CopyItemViewModels { get; set; }
 
         public MpCopyItemViewModel SelectedCopyItemViewModel { get; set; }
         #endregion
 
+        #endregion
+
         #region Public Methods
-        public MpCopyItemCollectionViewModel() : this(MpTag.RecentTag.Id) { }
+        public MpCopyItemCollectionViewModel() : this(1) { }
 
         public MpCopyItemCollectionViewModel(int tagId) : base() {
+            PropertyChanged += MpCopyItemCollectionViewModel_PropertyChanged;
+
             MpDb.Instance.OnItemAdded += Db_OnItemAdded;
             MpDb.Instance.OnItemUpdated += Db_OnItemUpdated;
             MpDb.Instance.OnItemDeleted += Db_OnItemDeleted;
 
-            SetTag(tagId);
+            _ = Task.Run(() => Initialize(tagId));
         }
 
-        public async Task SetTag(int tagId)
-        {
-           await Device.InvokeOnMainThreadAsync(async () => await Initialize(tagId));
+        public async Task SetTag(int tagId) {
+            _tagId = tagId;
+            await MainThread.InvokeOnMainThreadAsync(async () => {
+                var copyItems = await MpCopyItem.GetPage(_tagId, 0, _pageSize);
+                CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>(copyItems.Select(x => CreateCopyItemViewModel(x)));
+                CopyItemViewModels.CollectionChanged += CopyItemViewModels_CollectionChanged;
+                OnPropertyChanged(nameof(CopyItemViewModels));
+            });
         }
 
         public MpCopyItemViewModel CreateCopyItemViewModel(MpCopyItem item) {
@@ -50,30 +64,42 @@ namespace MonkeyPaste {
                 civm.IsSelected = false;
             }
         }
+
+        public void OnSearchQueryChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            var civmsh = sender as MpCopyItemViewModelSearchHandler;
+            switch(e.PropertyName) {
+                case nameof(civmsh.Query):
+                    PerformSearchCommand.Execute(civmsh.Query);
+                    break;
+            }
+        }
         #endregion
 
         #region Private Methods
         private async Task Initialize(int tagId) {
             IsBusy = true;
-            await MpDb.Instance.Init();
-            var copyItems = await MpDb.Instance.Get(tagId, 0, _pageSize);
-            CopyItemViewModels = new ObservableCollection<MpCopyItemViewModel>(copyItems.Select(x => CreateCopyItemViewModel(x)));
-            CopyItemViewModels.CollectionChanged += CopyItemViewModels_CollectionChanged;
-            OnPropertyChanged(nameof(CopyItemViewModels));
+            while(!MpDb.Instance.IsLoaded) {
+                Thread.Sleep(50);
+            }
+
+            await SetTag(tagId);
             await Task.Delay(300);
             IsBusy = false;
         }
-        #endregion
 
         #region Event Handlers
-        //private async Task OnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-        //    switch (e.PropertyName) {
+        private async void MpCopyItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            switch(e.PropertyName) {
+                case nameof(SelectedCopyItemViewModel):
+                    ClearSelection();
+                    SelectedCopyItemViewModel.IsSelected = true;
+                    break;
+            }
+        }
 
-        //    }
-        //}
-        //private async void MpCopyItemCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-        //    //await OnPropertyChanged(sender, e);
-        //}        
+        private void SearchBarViewModel_SearchTextChanged(object sender, string e) {
+            PerformSearchCommand.Execute(e);
+        }
 
         private void Db_OnItemDeleted(object sender, MpDbObject e) {
             //throw new NotImplementedException();
@@ -108,30 +134,20 @@ namespace MonkeyPaste {
         }
 
         private async void CopyItemViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            if (sender is MpCopyItemViewModel civm)
-            {
-                switch (e.PropertyName)
-                {
+            if (sender is MpCopyItemViewModel civm) {
+                switch (e.PropertyName) {
                     case nameof(civm.IsSelected):
-                        if (civm.IsSelected)
-                        {
-                            if (SelectedCopyItemViewModel == civm)
-                            {
+                        if (civm.IsSelected) {
+                            if (SelectedCopyItemViewModel == civm) {
                                 //implies selection came from ui do nothing
-                            }
-                            else
-                            {
-                                if (SelectedCopyItemViewModel != null)
-                                {
+                            } else {
+                                if (SelectedCopyItemViewModel != null) {
                                     SelectedCopyItemViewModel.IsSelected = false;
                                 }
                                 SelectedCopyItemViewModel = civm;
                             }
-                        }
-                        else
-                        {
-                            if (SelectedCopyItemViewModel == civm)
-                            {
+                        } else {
+                            if (SelectedCopyItemViewModel == civm) {
                                 SelectedCopyItemViewModel = null;
                             }
                         }
@@ -141,9 +157,30 @@ namespace MonkeyPaste {
                 await MpDb.Instance.UpdateItem<MpCopyItem>(civm.CopyItem);
             }
         }
+
+       
+        #endregion
+
         #endregion
 
         #region Commands
+        public ICommand PerformSearchCommand => new Command<string>((string query) => {
+            if(CopyItemViewModels == null) {
+                return;
+            }
+            IEnumerable<MpCopyItemViewModel> searchResult = null;
+            if (string.IsNullOrEmpty(query)) {
+                searchResult = CopyItemViewModels;
+            } else {
+                searchResult = from civm in CopyItemViewModels
+                               where civm.CopyItem.ItemPlainText.ContainsByUserSensitivity(query)
+                               select civm;//.Skip(2).Take(2);
+            }
+            foreach(var civm in CopyItemViewModels) {
+                civm.IsVisible = searchResult.Contains(civm);
+            }
+        });
+
         public ICommand DeleteItemCommand => new Command<object>(async (args) => {
             if(args == null || args is not MpCopyItemViewModel civm) {
                 return;
@@ -167,7 +204,7 @@ namespace MonkeyPaste {
         {
             _currentStartIndex += _pageSize;
             _itemsAdded = 0;
-            var collection = await MpDb.Instance.Get(1, _currentStartIndex, _pageSize);
+            var collection = await MpCopyItem.GetPage(1, _currentStartIndex, _pageSize);
             collection.CollectionChanged += Collection_CollectionChanged;
         });
 

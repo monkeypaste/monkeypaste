@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using SQLite;
@@ -11,7 +12,7 @@ namespace MonkeyPaste {
         private static List<MpCopyItem> _AllCopyItemsList = null;
 
         #region Column Definitions
-        [PrimaryKey,AutoIncrement]
+        [PrimaryKey, AutoIncrement]
         public override int Id { get; set; }
 
         //[ForeignKey(typeof(MpSource))]
@@ -39,20 +40,16 @@ namespace MonkeyPaste {
         public int TypeId { get; set; } = 0;
 
         [Ignore]
-        public MpCopyItemType ItemType
-        {
-            get
-            {
+        public MpCopyItemType ItemType {
+            get {
                 return (MpCopyItemType)TypeId;
             }
-            set
-            {
-                if (ItemType != value)
-                {
+            set {
+                if (ItemType != value) {
                     TypeId = (int)value;
                 }
             }
-        }       
+        }
 
         public DateTime CopyDateTime { get; set; }
 
@@ -85,6 +82,7 @@ namespace MonkeyPaste {
         [OneToMany]
         public List<MpPasteHistory> PasteHistoryList { get; set; }
         #endregion
+
         public static async Task<List<MpCopyItem>> GetAllCopyItems() {
             if (_AllCopyItemsList == null) {
                 _AllCopyItemsList = await MpDb.Instance.GetItems<MpCopyItem>();
@@ -104,12 +102,53 @@ namespace MonkeyPaste {
         public static async Task<List<MpCopyItem>> GetAllCopyItemsByTagId(int tagId) {
             var citl = await MpCopyItemTag.GetAllCopyItemsForTagId(tagId);
             var cil = new List<MpCopyItem>();
-            foreach(var cit in citl) {
+            foreach (var cit in citl) {
                 var ci = await MpCopyItem.GetCopyItemById(cit.CopyItemId);
                 cil.Add(ci);
             }
             return cil;
         }
+
+        public static async Task<ObservableCollection<MpCopyItem>> GetPage(int tagId, int start, int count, string sortColumn = "Id", bool isDescending = false) {
+            //SELECT
+            //user_number,
+            //user_name
+            //FROM user_table
+            //WHERE(user_name LIKE '%{1}%' OR user_number LIKE '%{2}%')
+            //AND user_category = { 3 } OR user_category = { 4 }
+            //ORDER BY user_uid LIMIT { 5}
+            //OFFSET { 6}
+            //Where { 5} is page size and { 6 } is page number * page size.
+
+            var result = await MpDb.Instance.QueryAsync<MpCopyItem>(
+                                string.Format(
+                                    @"SELECT * from MpCopyItem
+                                      WHERE Id in 
+                                        (SELECT CopyItemId FROM MpCopyItemTag 
+                                         WHERE TagId=?)
+                                      ORDER BY {0} {1} LIMIT ? OFFSET ?",
+                                    sortColumn,
+                                    (isDescending ? "DESC" : "ASC")),
+                                tagId,
+                                count,
+                                start);
+
+            return new ObservableCollection<MpCopyItem>(result);
+        }
+
+        public static async Task<ObservableCollection<MpCopyItem>> Search(int tagId, string searchString) {
+            IEnumerable<MpCopyItem> searchResult = null;
+            await Task.Run(() => {
+                searchResult = (from ci in _AllCopyItemsList
+                              join cit in MpCopyItemTag.GetAllCopyItemsTags().Result on
+                              tagId equals cit.TagId
+                              where ci.ItemPlainText.ContainsByUserSensitivity(searchString)
+                              select ci);//.Skip(2).Take(2);
+            });
+            
+            return new ObservableCollection<MpCopyItem>(searchResult);
+        }
+
         public MpCopyItem() : base(typeof(MpCopyItem)) { }
 
         public MpCopyItem(object data, string sourceInfo) : this() {

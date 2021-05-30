@@ -17,20 +17,21 @@
   <ItemGroup>
     <Compile Remove="Bootstrapper\**" />
     <Compile Remove="Repositories\**" />
-    <Compile Remove="ViewModels\Shell\MainFlyOut\TagTray\TagItem\CopyItemCollectionViewModel\CopyItemViewModel\Title\**" />
-    <Compile Remove="Views\Shell\MainFlyOut\TagTray\CopyItemCollectionView\CopyItemView\Content\**" />
-    <Compile Remove="Views\Shell\MainFlyOut\TagTray\CopyItemCollectionView\CopyItemView\Title\**" />
+    <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModel\CopyItemViewModel\Title\**" />
+    <Compile Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionView\CopyItemView\Content\**" />
+    <Compile Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionView\CopyItemView\Title\**" />
     <EmbeddedResource Remove="Bootstrapper\**" />
     <EmbeddedResource Remove="Repositories\**" />
-    <EmbeddedResource Remove="ViewModels\Shell\MainFlyOut\TagTray\TagItem\CopyItemCollectionViewModel\CopyItemViewModel\Title\**" />
-    <EmbeddedResource Remove="Views\Shell\MainFlyOut\TagTray\CopyItemCollectionView\CopyItemView\Content\**" />
-    <EmbeddedResource Remove="Views\Shell\MainFlyOut\TagTray\CopyItemCollectionView\CopyItemView\Title\**" />
+    <EmbeddedResource Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModel\CopyItemViewModel\Title\**" />
+    <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionView\CopyItemView\Content\**" />
+    <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionView\CopyItemView\Title\**" />
     <None Remove="Bootstrapper\**" />
     <None Remove="Repositories\**" />
-    <None Remove="ViewModels\Shell\MainFlyOut\TagTray\TagItem\CopyItemCollectionViewModel\CopyItemViewModel\Title\**" />
-    <None Remove="Views\Shell\MainFlyOut\TagTray\CopyItemCollectionView\CopyItemView\Content\**" />
-    <None Remove="Views\Shell\MainFlyOut\TagTray\CopyItemCollectionView\CopyItemView\Title\**" />
+    <None Remove="ViewModels\Shell\MainFlyOut\Pages\CopyItemCollectionViewModel\CopyItemViewModel\Title\**" />
+    <None Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionView\CopyItemView\Content\**" />
+    <None Remove="Views\Shell\MainFlyOut\Pages\CopyItemCollectionView\CopyItemView\Title\**" />
     <Compile Remove="ViewModels\Base\MpUndoableViewModelBase.cs" />
+    <Compile Remove="ViewModels\Shell\MainFlyOut\MpMainViewModel.cs" />
     <Compile Remove="Views\Shell\MainFlyOut\MpMainView.xaml.cs" />
     <None Remove=".DS_Store" />
     <None Remove="Resources\Icons\monkey.png" />
@@ -79,13 +80,13 @@
     <EmbeddedResource Update="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\TagTray\CopyItemCollectionView\CopyItemView\MpCopyItemDetailPageView.xaml">
+    <EmbeddedResource Update="Views\Shell\MainFlyOut\Pages\CopyItemCollectionView\CopyItemView\MpCopyItemDetailPageView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\TagTray\CopyItemCollectionView\CopyItemView\MpCopyItemView.xaml">
+    <EmbeddedResource Update="Views\Shell\MainFlyOut\Pages\CopyItemCollectionView\CopyItemView\MpCopyItemView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\TagTray\CopyItemCollectionView\MpCopyItemCollectionView.xaml">
+    <EmbeddedResource Update="Views\Shell\MainFlyOut\Pages\CopyItemCollectionView\MpCopyItemCollectionPageView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Shell\MainFlyOut\Help\MpHelpPageView.xaml">
@@ -112,8 +113,11 @@
     <Compile Update="Views\Shell\MainFlyOut\ContextMenu\MpContextMenuView.xaml.cs">
       <DependentUpon>MpContextMenuView.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Shell\MainFlyOut\TagTray\CopyItemCollectionView\CopyItemView\MpCopyItemDetailPageView.xaml.cs">
+    <Compile Update="Views\Shell\MainFlyOut\Pages\CopyItemCollectionView\CopyItemView\MpCopyItemDetailPageView.xaml.cs">
       <DependentUpon>MpCopyItemDetailPageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Shell\MainFlyOut\Pages\CopyItemCollectionView\MpCopyItemCollectionPageView.xaml.cs">
+      <DependentUpon>MpCopyItemCollectionPageView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

@@ -5,6 +5,9 @@
     xmlns:local="clr-namespace:MonkeyPaste"
     Title="Monkey Paste"
     x:DataType="local:MpMainShellViewModel">
+    <Shell.BindingContext>
+        <local:MpMainShellViewModel />
+    </Shell.BindingContext>
     <Shell.FlyoutContentTemplate>
         <DataTemplate>
             <StackLayout>
@@ -15,7 +18,8 @@
                            Source="{StaticResource AppIcon}"
                            VerticalOptions="Center" />
                 </Grid>
-                <local:MpTagCollectionView />                
+                <local:MpTagCollectionView x:Name="TagCollectionView" 
+                                           BindingContext="{Binding TagCollectionViewModel}"/>                
                 <Grid ColumnDefinitions="0.2*,0.8*">
                     <Image Margin="5"
                            HeightRequest="45"
@@ -39,11 +43,12 @@
             </StackLayout>
         </DataTemplate>
     </Shell.FlyoutContentTemplate>
-    <FlyoutItem x:Name="FlyoutItem"
+    <FlyoutItem x:Name="CollectionsFlyoutItem"
                 FlyoutDisplayOptions="AsMultipleItems">
         <ShellContent x:Name="CollectionsContent"
                       Title="Collections"
                       Icon="{StaticResource TagsIcon}"
-                      ContentTemplate="{DataTemplate local:MpCopyItemCollectionView}" />
+                      BindingContext="{Binding TagCollectionViewModel.CopyItemCollectionViewModel}"
+                      ContentTemplate="{DataTemplate local:MpCopyItemCollectionPageView}" />
     </FlyoutItem>
 </Shell>

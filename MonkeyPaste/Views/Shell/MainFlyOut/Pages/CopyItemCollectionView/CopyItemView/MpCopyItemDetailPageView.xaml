@@ -3,10 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:local="clr-namespace:MonkeyPaste"
+             Title="{Binding CopyItem.Title}"
              x:Class="MonkeyPaste.MpCopyItemDetailPageView"
-             x:DataType="local:MpCopyItemViewModel">
-    <ContentPage.Content>        
-        <Frame IsClippedToBounds="True"
+             x:DataType="local:MpCopyItemDetailViewModel">
+    <ContentPage.Content>
+        <Grid>
+        <Label TextColor="Black"
+               FontSize="16"
+                Text="{Binding CopyItem.ItemPlainText}" />
+        </Grid>
+        <!--<Frame IsClippedToBounds="True"
                HasShadow="True"
                Padding="0"
                BackgroundColor="White">
@@ -64,6 +70,6 @@
                            Text="{Binding CopyItem.ItemPlainText, Mode=TwoWay}" />
                 </Grid>
             </StackLayout>
-        </Frame>
+        </Frame>-->
     </ContentPage.Content>
 </ContentPage>
