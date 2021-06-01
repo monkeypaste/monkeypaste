@@ -9,6 +9,7 @@
         <ResourceDictionary>
             <local:MpStringToColorConverter x:Key="StringToColorConverter" />
             <local:MpTextColorFromBackgroundColorConverter x:Key="TextColorFromBackgroundColorConverter" />
+            <local:MpImageConverter x:Key="ImageConverter" />
             <Color x:Key="CompletedColor">#1C8859</Color>
             <Color x:Key="ActiveColor">#D3D3D3</Color>
 
@@ -194,7 +195,7 @@
             </Style>
 
 
-            <Style x:Key="CopyItem_Selection_BoxView" TargetType="BoxView">
+            <Style x:Key="Clip_Selection_BoxView" TargetType="BoxView">
                 <Setter Property="VisualStateManager.VisualStateGroups">
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CommonStates">

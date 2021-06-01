@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpSource : MpDbObject {
+    public class MpSource : MpDbModelBase {
         private static List<MpSource> _AllSources = null;
 
         [PrimaryKey,AutoIncrement]
@@ -24,7 +24,7 @@ namespace MonkeyPaste {
         public MpApp App { get; set; }
 
         [Ignore]
-        public MpICopyItemSource PrimarySource {
+        public MpIClipSource PrimarySource {
             get {
                 if (UrlId <= 0) {
                     if (AppId <= 0) {
@@ -40,7 +40,7 @@ namespace MonkeyPaste {
         }
 
         [Ignore]
-        public MpICopyItemSource SecondarySource {
+        public MpIClipSource SecondarySource {
             get {
                 var ps = PrimarySource;
                 if(ps != null) {

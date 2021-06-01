@@ -7,10 +7,7 @@ using SQLite;
 using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
-    public class MpUrl : MpDbObject, MpICopyItemSource {
-        private static List<MpUrl> _AllUrlList = null;
-        public static int TotalUrlCount = 0;
-
+    public class MpUrl : MpDbModelBase, MpIClipSource {
         [PrimaryKey, AutoIncrement]
         public override int Id { get; set; }
 
@@ -29,24 +26,15 @@ namespace MonkeyPaste {
             UrlTitle = urlTitle;
             UrlDomain = MpUrlDomain.GetUrlDomainByPath(MpHelpers.Instance.GetUrlDomain(urlPath));            
         }
-        public static async Task<List<MpUrl>> GetAllUrls() {
-            if(_AllUrlList == null) {
-                _AllUrlList = await MpDb.Instance.QueryAsync<MpUrl>("select * from MpUrl", null);
-            }
-            
-            return _AllUrlList;
-        }
 
         public static async Task<MpUrl> GetUrlByPath(string urlPath) {
-            var allUrls = await GetAllUrls();
+            var allUrls = await MpDb.Instance.GetItems<MpUrl>();
             return allUrls.Where(x => x.UrlPath.ToLower() == urlPath.ToLower()).FirstOrDefault();
         }
 
-        public static MpUrl GetUrlById(int urlId) {
-            if (_AllUrlList == null) {
-                GetAllUrls();
-            }
-            var udbpl = _AllUrlList.Where(x => x.Id == urlId).ToList();
+        public static async Task<MpUrl> GetUrlById(int urlId) {
+            var allUrls = await MpDb.Instance.GetItems<MpUrl>();
+            var udbpl = allUrls.Where(x => x.Id == urlId).ToList();
             if (udbpl.Count > 0) {
                 return udbpl[0];
             }
@@ -54,7 +42,7 @@ namespace MonkeyPaste {
         }
 
 
-        #region MpICopyItemSource Implementation
+        #region MpIClipSource Implementation
         public MpIcon SourceIcon {
             get {
                 if (UrlDomain == null) {

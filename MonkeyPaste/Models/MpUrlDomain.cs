@@ -9,7 +9,7 @@ using System.Threading;
 using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
-    public class MpUrlDomain : MpDbObject {
+    public class MpUrlDomain : MpDbModelBase {
         #region Static Cache
         private static List<MpUrlDomain> _AllUrlDomainList = null;
         public static int TotalUrlDomainCount = 0;

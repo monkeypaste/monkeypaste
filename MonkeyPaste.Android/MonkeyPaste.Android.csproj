@@ -112,7 +112,6 @@
     <Compile Include="Renderers\MpWebViewRenderer.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MpPhotoImporter.cs" />
     <Compile Include="SplashActivity.cs" />
     <Compile Include="Utils\MpBrowserHistoryManager.cs" />
     <Compile Include="Utils\MpPackageNameSourceHandler.cs" />

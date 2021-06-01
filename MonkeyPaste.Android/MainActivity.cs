@@ -133,7 +133,7 @@ namespace MonkeyPaste.Droid {
             if (!string.IsNullOrWhiteSpace(selectedText)) {
                 await Clipboard.SetTextAsync(selectedText);
 
-                await MonkeyPaste.MpCopyItem.Create(new object[] { hostPackageName, selectedText, hostAppName, hostAppIcon });
+                await MonkeyPaste.MpClip.Create(new object[] { hostPackageName, selectedText, hostAppName, hostAppIcon });
             }
         }
 

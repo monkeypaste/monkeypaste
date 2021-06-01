@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using FFImageLoading.Forms;
 using SkiaSharp;
+using System.Linq;
 
 namespace MonkeyPaste {
-    public class MpIcon : MpDbObject {
+    public class MpIcon : MpDbModelBase {
         #region Columns
         [PrimaryKey,AutoIncrement]
         public override int Id { get; set; }
@@ -57,13 +58,18 @@ namespace MonkeyPaste {
         public MpColor Color5 { get; set; }
         #endregion
 
+        public static async Task<MpIcon> GetIconById(int id) {
+            var allicons = await MpDb.Instance.GetItems<MpIcon>();
+            return allicons.Where(x => x.Id == id).FirstOrDefault();
+        }
+
         public static async Task<MpIcon> Create(byte[] iconImg) {
             
             var newImage = new MpDbImage() {
                 ImageBytes = iconImg
             };
             await MpDb.Instance.AddItem<MpDbImage>(newImage);
-
+            
             var iconSkBmp = new MpImageConverter().Convert(iconImg, typeof(SKBitmap)) as SKBitmap;
             var colorList = await MpColor.CreatePrimaryColorList(iconSkBmp);
             // TODO create border images here

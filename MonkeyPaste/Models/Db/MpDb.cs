@@ -27,20 +27,23 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
-        public bool UseWAL { get; set; } = false;
+        public bool UseWAL { get; set; } = true;
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
         public bool IsLoaded { get; set; } = false;
         #endregion
 
         #region Events
-        public event EventHandler<MpDbObject> OnItemAdded;
-        public event EventHandler<MpDbObject> OnItemUpdated;
-        public event EventHandler<MpDbObject> OnItemDeleted;
+        public event EventHandler<MpDbModelBase> OnItemAdded;
+        public event EventHandler<MpDbModelBase> OnItemUpdated;
+        public event EventHandler<MpDbModelBase> OnItemDeleted;
         #endregion
 
 
-        public async Task Init() {
+        private async Task Init() {
+            if(_connectionAsync != null) {
+                return;
+            }
             InitUser(IdentityToken);
             InitClient(AccessToken);
 
@@ -48,24 +51,11 @@ namespace MonkeyPaste {
             IsLoaded = true;
         }
 
-        //public void SetDbPassword(string newPassword) {
-        //    if(MpPreferences.DbPassword != newPassword) {
-        //        MpPreferences.EncryptDb = true;
-        //        //if db is not encrypted use rekey otherwise key
-        //        string encryptQuery = string.Format(
-        //            @"PRAGMA {0}={1}",
-        //            string.IsNullOrEmpty(MpPreferences.DbPassword) ?
-        //                "key" : "rekey",
-        //            newPassword);
-        //        _connectionAsync.QueryAsync<int>(encryptQuery);
-        //        MpConsole.WriteLine(@"Db Password updated");
-        //    }
-        //}
-
         private async Task CreateConnectionAsync() {
             if (_connectionAsync != null) {
                 return;
             }
+
             bool isNewDb = !File.Exists(MpPreferences.Instance.DbPath);
 
             var connStr = new SQLiteConnectionString(
@@ -80,10 +70,9 @@ namespace MonkeyPaste {
 
             await InitTablesAsync();
 
-            if(isNewDb) {
+            if (isNewDb) {
                 await InitDefaultDataAsync();
             }
-
 
             if (_connectionAsync != null && UseWAL) {
                 // On sqlite-net v1.6.0+, enabling write-ahead logging allows for faster database execution
@@ -92,16 +81,23 @@ namespace MonkeyPaste {
             MpConsole.WriteTraceLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
         }
         private async Task InitTablesAsync() {
-            await _connectionAsync.CreateTableAsync<MpCopyItem>();
-            await _connectionAsync.CreateTableAsync<MpTag>();
-            await _connectionAsync.CreateTableAsync<MpCopyItemTag>();
             await _connectionAsync.CreateTableAsync<MpApp>();
+            await _connectionAsync.CreateTableAsync<MpClient>();
+            await _connectionAsync.CreateTableAsync<MpClientPlatform>();
+            await _connectionAsync.CreateTableAsync<MpClip>();
+            await _connectionAsync.CreateTableAsync<MpClipComposite>();
+            await _connectionAsync.CreateTableAsync<MpClipTag>();
+            await _connectionAsync.CreateTableAsync<MpClipTemplate>();
             await _connectionAsync.CreateTableAsync<MpColor>();
+            await _connectionAsync.CreateTableAsync<MpDbImage>();
+            await _connectionAsync.CreateTableAsync<MpIcon>();
+            await _connectionAsync.CreateTableAsync<MpPasteHistory>();
+            await _connectionAsync.CreateTableAsync<MpSource>();
+            await _connectionAsync.CreateTableAsync<MpTag>();
             await _connectionAsync.CreateTableAsync<MpUrl>();
             await _connectionAsync.CreateTableAsync<MpUrlDomain>();
-            await _connectionAsync.CreateTableAsync<MpIcon>();
-            await _connectionAsync.CreateTableAsync<MpDbImage>();
         }
+
         private async Task InitDefaultDataAsync() {
             await AddItem<MpColor>(new MpColor(Color.Green));
             await AddItem<MpColor>(new MpColor(Color.Blue));
@@ -133,26 +129,38 @@ namespace MonkeyPaste {
             MpConsole.WriteTraceLine(@"Create all default tables");
         }
         public async Task<List<T>> QueryAsync<T>(string query, params object[] args) where T : new() {
+            if(_connectionAsync == null) {
+                await Init();
+            }
             var result = await _connectionAsync.QueryAsync<T>(query, args);
             return result;
         }
 
         public async Task<List<T>> GetItems<T>() where T : new() {
+            if (_connectionAsync == null) {
+                await Init();
+            }
             return await _connectionAsync.Table<T>().ToListAsync();
         }
 
         public async Task AddItem<T>(T item) where T : new() {
+            if (_connectionAsync == null) {
+                await Init();
+            }
             await _connectionAsync.InsertAsync(item);
-            OnItemAdded?.Invoke(this, item as MpDbObject);
+            OnItemAdded?.Invoke(this, item as MpDbModelBase);
         }
 
         public async Task UpdateItem<T>(T item) where T : new() {
+            if (_connectionAsync == null) {
+                await Init();
+            }
             await _connectionAsync.UpdateAsync(item);
-            OnItemUpdated?.Invoke(this, item as MpDbObject);
+            OnItemUpdated?.Invoke(this, item as MpDbModelBase);
         }
 
         public async Task AddOrUpdate<T>(T item) where T : new() {
-            if ((item as MpDbObject).Id == 0) {
+            if ((item as MpDbModelBase).Id == 0) {
                 await AddItem(item);
             } else {
                 await UpdateItem(item);
@@ -160,8 +168,11 @@ namespace MonkeyPaste {
         }
 
         public async Task DeleteItem<T>(T item) where T: new() {
-            await _connectionAsync.DeleteAsync<T>((item as MpDbObject).Id);
-            OnItemDeleted?.Invoke(this, item as MpDbObject);
+            if (_connectionAsync == null) {
+                await Init();
+            }
+            await _connectionAsync.DeleteAsync<T>((item as MpDbModelBase).Id);
+            OnItemDeleted?.Invoke(this, item as MpDbModelBase);
         }
 
         //public async Task UpdateWithChildren(MpDbObject dbo) {

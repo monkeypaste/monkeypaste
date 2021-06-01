@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 using System.Linq;
 
 namespace MonkeyPaste {
-    public class MpApp : MpDbObject, MpICopyItemSource {
-        private static List<MpApp> _AllApps = null;
+    public class MpApp : MpDbModelBase, MpIClipSource {
         public override int Id { get; set; } = 0;
         
         [Indexed]
@@ -40,19 +39,13 @@ namespace MonkeyPaste {
         [OneToOne]
         public MpIcon Icon { get; set; }
 
-        public static async Task<List<MpApp>> GetAllApps() {
-            if(_AllApps == null) {
-                _AllApps = await MpDb.Instance.GetItems<MpApp>();
-            }
-            return _AllApps;
-        }
         public static async Task<MpApp> GetAppByPath(string appPath) {
-            var allApps = await GetAllApps();
+            var allApps = await MpDb.Instance.GetItems<MpApp>();
             return allApps.Where(x => x.AppPath.ToLower() == appPath.ToLower()).FirstOrDefault();
         }
 
         public static async Task<MpApp> GetAppById(int appId) {
-            var allApps = await GetAllApps();
+            var allApps = await MpDb.Instance.GetItems<MpApp>();
             return allApps.Where(x => x.Id == appId).FirstOrDefault();
         }
 
@@ -74,7 +67,7 @@ namespace MonkeyPaste {
         }
         public MpApp() : base(typeof(MpApp)) { }
 
-        #region MpICopyItemSource Implementation
+        #region MpIClipSource Implementation
         public MpIcon SourceIcon => Icon;
 
         public string SourcePath => AppPath;

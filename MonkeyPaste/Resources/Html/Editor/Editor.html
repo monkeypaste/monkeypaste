@@ -4,36 +4,124 @@
 <head>
     <meta charset="utf-8" />
     <title>Yo this is a title</title>
+    <link href="https://cdn.quilljs.com/2.0.0-dev.4/quill.snow.css"
+          rel="stylesheet" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/github.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+    <script charset="UTF-8"
+            src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/xml.min.js"></script>
+    <script src="https://cdn.quilljs.com/2.0.0-dev.4/quill.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
+    <style>
+        body {
+            margin:0px;
+            padding:0px;
+        }
+
+        .btn {
+            border: none;
+            background-color: green;
+            padding: 14px 28px;
+            font-size: 16px;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+            /* On mouse-over */
+            .btn:hover {
+                background: #eee;
+            }
+
+        .success {
+            color: green;
+        }
+    </style>
 </head>
 <body>
-    <!-- Include stylesheet -->
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-
-    <!-- Create the editor container -->
     <div id='editor'>
     </div>
 
-    <!-- Include the Quill library -->
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-
-    <!-- Initialize Quill editor -->
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Promise"
+            crossorigin="anonymous"></script>
+    <script src="https://benwinding.github.io/quill-html-edit-button/dist/quill.htmlEditButton.min.js"></script>
     <script type="text/javascript">
-        var quill = new Quill('#editor', {
-            theme: 'snow'
+        Quill.register("modules/htmlEditButton", htmlEditButton);
+
+        // Specify Quill fonts
+        var fontList = ['Arial', 'Courier', 'Garamond', 'Tahoma', 'Times New Roman', 'Verdana'];
+        var fontNames = fontList.map(font => getFontName(font));
+        var fonts = Quill.import('attributors/class/font');
+        fonts.whitelist = fontNames;
+        Quill.register(fonts, true);
+
+        // Add fonts to CSS style
+        var fontStyles = "";
+        fontList.forEach(function (font) {
+            var fontName = getFontName(font);
+            fontStyles += ".ql-snow .ql-picker.ql-font .ql-picker-label[data-value=" + fontName + "]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=" + fontName + "]::before {" +
+                "content: '" + font + "';" +
+                "font-family: '" + font + "', sans-serif;" +
+                "}" +
+                ".ql-font-" + fontName + "{" +
+                " font-family: '" + font + "', sans-serif;" +
+                "}";
         });
+
+        // Configure Quill editor options
+        var toolbarOptions = [
+            [{ header: [1, 2, 3, false] }],
+            [{ 'font': fonts.whitelist }],
+            ['bold', 'italic', 'underline'],
+            ['clean']
+            ["image"],
+        ];
+
+        var quill;
+        $(function () {
+            // Append the CSS stylesheet to the page
+            var node = document.createElement('style');
+            node.innerHTML = fontStyles;
+            document.body.appendChild(node);
+
+            quill = new Quill('#editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: toolbarOptions,
+                    htmlEditButton: {
+                        syntax: true,
+                    },
+                }
+            });
+        });
+
+        // Generate code-friendly font names
+        function getFontName(font) {
+            return font.toLowerCase().replace(/\s/g, "-");
+        }
 
 
         function setText(text) {
             quill.setText(text + '\n');
         }
 
+        function setHtml(html) {
+            var delta = quill.clipboard.convert(html);
+            quill.setContents(delta, 'silent');
+        }
+
         function getText() {
-            var text = quill.getText(0, quill.getLength()-1);
-            //var text = document.getElementById("editor").innerText;
+            var text = quill.getText(0, quill.getLength() - 1);
             return text;
         }
+
+        function getHtml() {
+            var val = document.getElementById("editor").innerHTML;
+            return val;
+        }
     </script>
-</body>
+
+    </body>
 </html>
 

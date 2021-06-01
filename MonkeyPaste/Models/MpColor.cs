@@ -10,10 +10,7 @@ using SQLiteNetExtensions.Attributes;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpColor : MpDbObject {        
-        private static List<MpColor> _AllColorList = null;
-        public static int TotalColorCount = 0;
-               
+    public class MpColor : MpDbModelBase {                       
         public byte R { get; set; }
         public byte G { get; set; }
         public byte B { get; set; }
@@ -26,7 +23,7 @@ namespace MonkeyPaste {
         //public List<MpTag> TagList { get; set; }
 
         //[OneToMany(CascadeOperations = CascadeOperation.None)]
-        //public List<MpCopyItem> CopyItemList { get; set; }
+        //public List<MpClip> ClipList { get; set; }
 
 
 
@@ -63,17 +60,9 @@ namespace MonkeyPaste {
 
         public MpColor(Color c) : this(c.R, c.G, c.B, c.A) { }
 
-        public static async Task<List<MpColor>> GetAllColors() {
-            if(_AllColorList == null) {
-                _AllColorList = await MpDb.Instance.GetItems<MpColor>();
-            }
-            return _AllColorList;
-        }
         public static async Task<MpColor> GetColorById(int colorId) {
-            if (_AllColorList == null) {
-                await GetAllColors();
-            }
-            var udbpl = _AllColorList.Where(x => x.Id == colorId).ToList();
+            var allColors = await MpDb.Instance.GetItems<MpColor>();
+            var udbpl = allColors.Where(x => x.Id == colorId).ToList();
             if (udbpl.Count > 0) {
                 return udbpl[0];
             }

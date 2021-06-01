@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MonkeyPaste {
-    public interface MpICopyItemSource {
+    public interface MpIClipSource {
         public abstract MpIcon SourceIcon { get; }
         public abstract string SourcePath { get; }
         public abstract string SourceName { get; }

@@ -8,21 +8,21 @@ using SQLiteNetExtensions.Attributes;
 using System.Linq;
 
 namespace MonkeyPaste {
-    public class MpPasteHistory : MpDbModelBase {
+    public class MpClipComposite : MpDbModelBase {
         #region Columns
         [PrimaryKey, AutoIncrement]
         public override int Id { get; set; }
 
-        [ForeignKey(typeof(MpClient))]
-        public int ClientId { get; set; }
-
         [ForeignKey(typeof(MpClip))]
         public int ClipId { get; set; }
 
-        [ForeignKey(typeof(MpSource))]
-        public int SourceId { get; set; }
+        [ForeignKey(typeof(MpClip))]
+        public int ParentClipId { get; set; }
+
+        public int SortOrderIdx { get; set; }
+
         #endregion
 
-        public MpPasteHistory() : base(typeof(MpPasteHistory)) { }
+        public MpClipComposite() : base(typeof(MpClipComposite)) { }
     }
 }

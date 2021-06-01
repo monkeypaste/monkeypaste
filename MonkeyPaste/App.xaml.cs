@@ -11,7 +11,6 @@ namespace MonkeyPaste {
     public partial class App : Application {      
         public App() {
             MpTempFileManager.Instance.Init();
-            Device.BeginInvokeOnMainThread(async () => { await MpDb.Instance.Init(); });
             InitializeComponent();
             MainPage = new MpMainShell();
         }
