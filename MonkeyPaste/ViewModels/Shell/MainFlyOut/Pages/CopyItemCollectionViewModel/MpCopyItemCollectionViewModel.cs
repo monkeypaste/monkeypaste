@@ -111,7 +111,7 @@ namespace MonkeyPaste {
 
         private void Db_OnItemAdded(object sender, MpDbObject e) {
             if (e is MpCopyItem nci) {
-                CopyItemViewModels.Add(CreateCopyItemViewModel(nci));
+                Task.Run(() => AddCopyItem(nci));
             }
         }
 
@@ -160,7 +160,12 @@ namespace MonkeyPaste {
 
        
         #endregion
-
+        private async Task AddCopyItem(MpCopyItem nci) {
+            while (IsBusy) {
+                await Task.Delay(100);
+            }
+            CopyItemViewModels.Add(CreateCopyItemViewModel(nci));
+        }
         #endregion
 
         #region Commands
@@ -180,8 +185,7 @@ namespace MonkeyPaste {
                 civm.IsVisible = searchResult.Contains(civm);
             }
         });
-
-        public ICommand DeleteItemCommand => new Command<object>(async (args) => {
+        public ICommand DeleteCopyItemCommand => new Command<object>(async (args) => {
             if(args == null || args is not MpCopyItemViewModel civm) {
                 return;
             }
@@ -191,30 +195,11 @@ namespace MonkeyPaste {
             await MpCopyItemTag.DeleteAllCopyItemTagsForCopyItemId(civm.CopyItem.Id);
         });
 
-        public ICommand ItemSelected => new Command(async (selectedCopyItemViewModel) => {
-            if(selectedCopyItemViewModel == null) {
-                return;
-            }
-            var scivm = selectedCopyItemViewModel as MpCopyItemViewModel;
-            var selectedCopyItemDetailPageView = new MpCopyItemDetailPageView(scivm);
-            //await Navigation.NavigateTo(@"copyitem/" + scivm.CopyItem.Id);// PushModal(selectedCopyItemDetailPageView);
-        });
-
-        public ICommand LoadMore => new Command(async () =>
-        {
+        public ICommand LoadMoreCopyItemsCommand => new Command(async () => {
             _currentStartIndex += _pageSize;
             _itemsAdded = 0;
             var collection = await MpCopyItem.GetPage(1, _currentStartIndex, _pageSize);
             collection.CollectionChanged += Collection_CollectionChanged;
-        });
-
-        public ICommand AddFavorites => new Command<List<MpCopyItem>>((copyItems) =>
-        {
-            foreach (var copyItem in copyItems)
-            {
-                //localStorage.Store(photo.Filename);
-            }
-            MessagingCenter.Send(this, "FavoritesAdded");
         });
 
         #endregion

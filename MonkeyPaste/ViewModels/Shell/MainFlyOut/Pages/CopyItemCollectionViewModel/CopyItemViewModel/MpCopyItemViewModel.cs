@@ -54,11 +54,10 @@ namespace MonkeyPaste {
 
         public MpCopyItemViewModel(MpCopyItem item) {
             PropertyChanged += MpCopyItemViewModel_PropertyChanged;
+            MpDb.Instance.OnItemUpdated += MpDb_OnItemUpdated;
             CopyItem = item;
             Routing.RegisterRoute("copyitemdetails", typeof(MpCopyItemDetailPageView));
         }
-
-
         #endregion
 
         #region Private Methods
@@ -73,6 +72,14 @@ namespace MonkeyPaste {
                         });
                     }
                     break;
+            }
+        }
+
+        private void MpDb_OnItemUpdated(object sender, MpDbObject e) {
+            if(e is MpCopyItem ci) {
+                if(ci.Id == CopyItem.Id) {
+                    CopyItem = ci;
+                }
             }
         }
         #endregion

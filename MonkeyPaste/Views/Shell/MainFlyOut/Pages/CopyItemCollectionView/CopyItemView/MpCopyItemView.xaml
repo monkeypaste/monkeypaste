@@ -1,59 +1,50 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-<ContentView
-    x:Class="MonkeyPaste.MpCopyItemView"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-    IsVisible="{Binding IsVisible}"
-    xmlns:local="clr-namespace:MonkeyPaste"
-    x:DataType="local:MpCopyItemViewModel">
+<ContentView x:Class="MonkeyPaste.MpCopyItemView"
+             xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+             IsVisible="{Binding IsVisible}"
+             xmlns:local="clr-namespace:MonkeyPaste"
+             x:DataType="local:MpCopyItemViewModel">
     <ContentView.Content>
-        <SwipeView>
+        <SwipeView IsEnabled="{Binding IsSelected}">
             <SwipeView.LeftItems>
                 <SwipeItems>
-                    <SwipeItem
-                        BackgroundColor="LightGreen"
-                        Command="{Binding AddToFavoritesCommand}"
-                        CommandParameter="{Binding .}"
-                        IconImageSource="{StaticResource StarOutlineIcon}"
-                        Text="Favorite" />
-                    <SwipeItem
-                        BackgroundColor="LightPink"
-                        Command="{Binding BindingContext.DeleteItemCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
-                        CommandParameter="{Binding .}"
-                        IconImageSource="{StaticResource DeleteIcon}"
-                        Text="Delete" />
+                    <SwipeItem BackgroundColor="LightGreen"
+                               Command="{Binding AddToFavoritesCommand}"
+                               CommandParameter="{Binding .}"
+                               IconImageSource="{StaticResource StarOutlineIcon}"
+                               Text="Favorite" />
+                    <SwipeItem BackgroundColor="LightPink"
+                               Command="{Binding BindingContext.DeleteCopyItemCommand, Source={RelativeSource AncestorType={x:Type CollectionView}}}"
+                               CommandParameter="{Binding .}"
+                               IconImageSource="{StaticResource DeleteIcon}"
+                               Text="Delete" />
                 </SwipeItems>
             </SwipeView.LeftItems>
-            <Frame
-                Padding="0"
-                BackgroundColor="White"
-                HasShadow="True"
-                HeightRequest="100"
-                IsClippedToBounds="True">
-                <Frame.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding BindingContext.ItemSelected, Source={RelativeSource AncestorType={x:Type CollectionView}}}" CommandParameter="{Binding .}" />
-                </Frame.GestureRecognizers>
+            <Frame Padding="0"
+                   BackgroundColor="White"
+                   HasShadow="True"
+                   HeightRequest="100"
+                   IsClippedToBounds="True">
                 <Frame.OutlineColor>
-                    <OnPlatform
-                        x:TypeArguments="Color"
-                        Android="Gray"
-                        iOS="Gray" />
+                    <OnPlatform x:TypeArguments="Color"
+                                Android="Gray"
+                                iOS="Gray" />
                 </Frame.OutlineColor>
                 <Frame.Margin>
-                    <OnPlatform
-                        x:TypeArguments="Thickness"
-                        Android="10"
-                        iOS="10" />
+                    <OnPlatform x:TypeArguments="Thickness"
+                                Android="10"
+                                iOS="10" />
                 </Frame.Margin>
                 <StackLayout Orientation="Horizontal">
-                    <BoxView Style="{StaticResource CopyItem_Selection_BoxView}" WidthRequest="6" />
-                    <Image
-                        Margin="0,10,0,0"
-                        Aspect="AspectFit"
-                        HeightRequest="60"
-                        VerticalOptions="Start"
-                        WidthRequest="60">
+                    <BoxView Style="{StaticResource CopyItem_Selection_BoxView}"
+                             WidthRequest="6" />
+                    <Image Margin="0,10,0,0"
+                           Aspect="AspectFit"
+                           HeightRequest="60"
+                           VerticalOptions="Start"
+                           WidthRequest="60">
                         <Image.Source>
                             <local:MpPackageNameSource PackageName="{Binding CopyItem.Host}" />
                         </Image.Source>
@@ -71,41 +62,36 @@
                                     DownsampleToViewSize="true">
                     </ff:CachedImage>-->
 
-                    <Grid
-                        Padding="0"
-                        BackgroundColor="Transparent"
-                        HorizontalOptions="FillAndExpand"
-                        VerticalOptions="CenterAndExpand">
+                    <Grid Padding="0"
+                          BackgroundColor="Transparent"
+                          HorizontalOptions="FillAndExpand"
+                          VerticalOptions="CenterAndExpand">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="0.3*" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <Label
-                            Grid.Row="0"
-                            FontAttributes="Bold"
-                            FontSize="16"
-                            HorizontalTextAlignment="Start"
-                            Text="{Binding CopyItem.Title, Mode=TwoWay}"
-                            TextColor="Black"
-                            VerticalTextAlignment="Center">
+                        <Label Grid.Row="0"
+                               FontAttributes="Bold"
+                               FontSize="16"
+                               HorizontalTextAlignment="Start"
+                               Text="{Binding CopyItem.Title, Mode=TwoWay}"
+                               TextColor="Black"
+                               VerticalTextAlignment="Center">
                             <Label.LineBreakMode>
-                                <OnPlatform
-                                    x:TypeArguments="LineBreakMode"
-                                    Android="NoWrap"
-                                    iOS="TailTruncation" />
+                                <OnPlatform x:TypeArguments="LineBreakMode"
+                                            Android="NoWrap"
+                                            iOS="TailTruncation" />
                             </Label.LineBreakMode>
                         </Label>
-                        <BoxView
-                            Grid.Row="1"
-                            HeightRequest="1"
-                            HorizontalOptions="FillAndExpand"
-                            Color="Gray" />
-                        <Label
-                            Grid.Row="2"
-                            FontSize="16"
-                            Text="{Binding CopyItem.ItemPlainText, Mode=TwoWay}"
-                            TextColor="Black" />
+                        <BoxView Grid.Row="1"
+                                 HeightRequest="1"
+                                 HorizontalOptions="FillAndExpand"
+                                 Color="Gray" />
+                        <Label Grid.Row="2"
+                               FontSize="16"
+                               Text="{Binding CopyItem.ItemPlainText, Mode=TwoWay}"
+                               TextColor="Black" />
                     </Grid>
                 </StackLayout>
             </Frame>

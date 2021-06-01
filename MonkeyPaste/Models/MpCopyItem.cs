@@ -90,10 +90,11 @@ namespace MonkeyPaste {
             return _AllCopyItemsList;
         }
         public static async Task<MpCopyItem> GetCopyItemById(int copyItemId) {
-            if (_AllCopyItemsList == null) {
-                await GetAllCopyItems();
-            }
-            var udbpl = _AllCopyItemsList.Where(x => x.Id == copyItemId).ToList();
+            //if (_AllCopyItemsList == null) {
+            //    await GetAllCopyItems();
+            //}
+            var allItems = await MpDb.Instance.GetItems<MpCopyItem>();
+            var udbpl = allItems.Where(x => x.Id == copyItemId).ToList();
             if (udbpl.Count > 0) {
                 return udbpl[0];
             }

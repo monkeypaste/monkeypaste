@@ -9,25 +9,6 @@
              Title="Monkey Paste"
              x:Name="CopyItemCollectionView"
              x:DataType="local:MpCopyItemCollectionViewModel">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Style TargetType="Grid">
-                <Setter Property="VisualStateManager.VisualStateGroups">
-                    <VisualStateGroupList>
-                        <VisualStateGroup x:Name="CommonStates">
-                            <VisualState x:Name="Normal" />
-                            <VisualState x:Name="Selected">
-                                <VisualState.Setters>
-                                    <Setter Property="Opacity"
-                                            Value="0.5" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
-                    </VisualStateGroupList>
-                </Setter>
-            </Style>
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <Shell.SearchHandler>
         <local:MpCopyItemViewModelSearchHandler x:Name="CopyItemViewModelSearchHandler" 
                                                 Placeholder="Enter search term"
@@ -64,7 +45,7 @@
                             EmptyView="{Binding}"
                             ItemsSource="{Binding CopyItemViewModels}"
                             RemainingItemsThreshold="5"
-                            RemainingItemsThresholdReachedCommand="{Binding LoadMore}"
+                            RemainingItemsThresholdReachedCommand="{Binding LoadMoreCopyItemsCommand}"
                             SelectedItem="{Binding SelectedCopyItemViewModel, Mode=TwoWay}"
                             SelectionMode="Single">
                 <CollectionView.ItemsLayout>

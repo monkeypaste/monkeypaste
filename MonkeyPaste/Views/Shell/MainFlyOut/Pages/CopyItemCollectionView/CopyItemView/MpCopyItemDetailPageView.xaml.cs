@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-
+using System.Web;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -17,28 +18,26 @@ namespace MonkeyPaste {
             }
         }
 
-        void LoadCopyItem(int id) {
-            try {
-                if (Application.Current.MainPage == null) {
-                    return;
-                }
-                var ms = (Application.Current.MainPage as MpMainShell);
-                if (ms.BindingContext == null) {
-                    return;
-                }
-                var msvm = ms.BindingContext as MpMainShellViewModel;
-
-                BindingContext = msvm.TagCollectionViewModel.CopyItemCollectionViewModel.CopyItemViewModels
-                                    .FirstOrDefault(x => x.CopyItem.Id == id);
-            } catch (Exception) {
-                MpConsole.WriteLine($"Failed to load copy item {id}.");
-            }
-        }
-        public MpCopyItemDetailPageView() : this(new MpCopyItemViewModel()) { }
-
-        public MpCopyItemDetailPageView(MpCopyItemViewModel viewModel) : base() {
+        public MpCopyItemDetailPageView() : base() {
             InitializeComponent();
-            BindingContext = viewModel;
+        }
+        protected override async void OnDisappearing() {
+            var cidpvm = BindingContext as MpCopyItemDetailPageViewModel;
+            var itemText = await cidpvm.EvaluateJavascript($"getText()");
+            itemText = itemText.Replace("\"", string.Empty);
+            cidpvm.CopyItem.ItemPlainText = itemText;
+            await MpDb.Instance.UpdateItem<MpCopyItem>(cidpvm.CopyItem);
+
+            base.OnDisappearing();
+        }
+
+        private async void LoadCopyItem(int ciid) {
+            try {
+                var ci = await MpCopyItem.GetCopyItemById(ciid);
+                BindingContext = new MpCopyItemDetailPageViewModel(ci);
+            } catch (Exception) {
+                MpConsole.WriteLine($"Failed to load copy item {ciid}.");
+            }
         }
     }
 }
