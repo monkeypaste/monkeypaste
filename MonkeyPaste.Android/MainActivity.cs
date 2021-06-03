@@ -10,6 +10,7 @@ using System.Reflection;
 using Android.Support.V4.App;
 using TaskStackBuilder = Android.Support.V4.App.TaskStackBuilder;
 using Android.Media;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste.Droid {
     [Activity(
@@ -25,18 +26,16 @@ namespace MonkeyPaste.Droid {
         internal static readonly string COUNT_KEY = "count";
         int count = 0;
 
-        protected override void OnCreate(Bundle savedInstanceState) {
+        protected override async void OnCreate(Bundle savedInstanceState) {
             base.OnCreate(savedInstanceState);
 
-            AndroidEnvironment.UnhandledExceptionRaiser += delegate (object sender, RaiseThrowableEventArgs args)
-            {
+            AndroidEnvironment.UnhandledExceptionRaiser += delegate (object sender, RaiseThrowableEventArgs args) {
                 typeof(System.Exception).GetField("stack_trace", BindingFlags.NonPublic | BindingFlags.Instance)
                     .SetValue(args.Exception, null);
                 throw args.Exception;
             };
 
-            AndroidEnvironment.UnhandledExceptionRaiser += (sender, args) =>
-            {
+            AndroidEnvironment.UnhandledExceptionRaiser += (sender, args) => {
                 args.Handled = true;
             };
 
@@ -51,6 +50,7 @@ namespace MonkeyPaste.Droid {
             LoadApplication(new App());
 
             LoadSelectedTextAsync();
+
 
             //CreateNotificationChannel();
 
@@ -106,7 +106,7 @@ namespace MonkeyPaste.Droid {
                           .SetAutoCancel(false) // Dismiss the notification from the notification area when the user clicks on it
                           .SetContentIntent(resultPendingIntent) // Start up this activity when the user clicks the intent.
                           .SetContentTitle("Tap to store clipboard") // Set the title
-                          //.SetNumber(count) // Display the count in the Content Info
+                                                                     //.SetNumber(count) // Display the count in the Content Info
                           .SetSmallIcon(Resources.GetIdentifier("icon", "drawable", PackageName)) // This is the icon to display
                           .SetContentText(string.Empty)
                           .SetDefaults((int)(NotificationDefaults.Sound | NotificationDefaults.Vibrate))
@@ -137,8 +137,7 @@ namespace MonkeyPaste.Droid {
             }
         }
 
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
-        {
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults) {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             //if (requestCode == 33)
             //{

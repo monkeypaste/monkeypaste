@@ -56,10 +56,13 @@ namespace MonkeyPaste {
                 return;
             }
 
-            bool isNewDb = !File.Exists(MpPreferences.Instance.DbPath);
+            string dbPath = DependencyService.Get<MpIDbFilePath>().DbFilePath();
+
+            bool isNewDb = !File.Exists(dbPath);
+
 
             var connStr = new SQLiteConnectionString(
-                databasePath: MpPreferences.Instance.DbPath, 
+                databasePath: dbPath,//MpPreferences.Instance.DbPath, 
                 storeDateTimeAsTicks: true,
                 key: MpPreferences.Instance.DbPassword,
                 openFlags: MpPreferences.DbFlags

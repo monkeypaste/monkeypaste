@@ -54,6 +54,8 @@ namespace MonkeyPaste {
 
         public string ItemRichText { get; set; }
 
+        public string ItemHtml { get; set; }
+
         public string ItemCsv { get; set; }
 
         public byte[] ItemImage { get; set; }

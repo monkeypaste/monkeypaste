@@ -10,36 +10,39 @@
     </Shell.BindingContext>
     <Shell.FlyoutContentTemplate>
         <DataTemplate>
-            <StackLayout>
-                <Grid Margin="10"
-                      HeightRequest="100">
-                    <Image Margin="20"
+            <StackLayout BackgroundColor="LightYellow">
+                <Grid HeightRequest="200">
+                    <Image Margin="3"
+                           Aspect="AspectFill"
+                           HeightRequest="100"
+                           WidthRequest="100"
                            HorizontalOptions="Center"
                            Source="{StaticResource AppIcon}"
                            VerticalOptions="Center" />
                 </Grid>
                 <local:MpTagCollectionView x:Name="TagCollectionView" 
-                                           BindingContext="{Binding TagCollectionViewModel}"/>                
-                <Grid ColumnDefinitions="0.2*,0.8*">
-                    <Image Margin="5"
+                                           BindingContext="{Binding TagCollectionViewModel}"/>
+                <StackLayout Orientation="Horizontal">
+                    <Image Margin="20,0,0,0"
                            HeightRequest="45"
                            Source="{StaticResource SettingsIcon}" />
-                    <Label Grid.Column="1"
-                           FontAttributes="Italic"
-                           Text="Settings"
-                           TextColor="Black"
-                           VerticalTextAlignment="Center" />
-                </Grid>
-                <Grid ColumnDefinitions="0.2*,0.8*">
-                    <Image Margin="5"
+                    <Button Margin="5"
+                            Text="Settings"
+                            BackgroundColor="LightYellow"
+                            TextColor="DimGray"
+                            VerticalOptions="Center"/>
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Image Margin="20,0,0,0"
                            HeightRequest="45"
                            Source="{StaticResource HelpIcon}" />
-                    <Label Grid.Column="1"
-                           FontAttributes="Italic"
-                           Text="Help"
-                           TextColor="Black"
-                           VerticalTextAlignment="Center" />
-                </Grid>
+                    <Button Margin="0,5,5,5"
+                            Text="Help"
+                            BackgroundColor="LightYellow"
+                            TextColor="DimGray"
+                            HorizontalOptions="Start"
+                            VerticalOptions="Center" />
+                </StackLayout>
             </StackLayout>
         </DataTemplate>
     </Shell.FlyoutContentTemplate>

@@ -23,9 +23,15 @@ namespace MonkeyPaste {
         }
         protected override async void OnDisappearing() {
             var cidpvm = BindingContext as MpClipDetailPageViewModel;
+            
             var itemText = await cidpvm.EvaluateJavascript($"getText()");
             itemText = itemText.Replace("\"", string.Empty);
             cidpvm.Clip.ItemPlainText = itemText;
+
+            var itemHtml = await cidpvm.EvaluateJavascript($"getHtml()");
+            itemHtml = itemHtml.Replace("\"", string.Empty);
+            cidpvm.Clip.ItemHtml = itemHtml;
+
             await MpDb.Instance.UpdateItem<MpClip>(cidpvm.Clip);
 
             base.OnDisappearing();

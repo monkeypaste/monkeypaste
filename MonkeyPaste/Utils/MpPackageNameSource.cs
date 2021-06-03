@@ -6,10 +6,14 @@ using Xamarin.Forms;
 
 namespace MonkeyPaste {
     [TypeConverter(typeof(MpPackageNameSourceConverter))]
-    public sealed class MpPackageNameSource : ImageSource {
-        public static readonly BindableProperty PackageNameProperty = BindableProperty.Create(nameof(PackageName), typeof(string), typeof(MpPackageNameSource), default(string));
+    public sealed class MpPackageNameSource : StreamImageSource {
+        public static readonly BindableProperty PackageNameProperty = BindableProperty.Create(
+            nameof(PackageName), 
+            typeof(string), 
+            typeof(MpPackageNameSource), 
+            default(string));
 
-        public static ImageSource FromPackageName(string packageName) {
+        public static StreamImageSource FromPackageName(string packageName) {
             return new MpPackageNameSource { PackageName = packageName };
         }
                 

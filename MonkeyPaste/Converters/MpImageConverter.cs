@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
@@ -90,14 +91,28 @@ namespace MonkeyPaste {
                         outObject = fromImageSource;
                     } else if (targetType == typeof(byte[])) {
                         //ImageSource->byte[]
-                        var skBmp = Convert(fromImageSource, typeof(SKBitmap),parameter);
-                        outObject = Convert(skBmp, typeof(byte[]), parameter);
+                        if (value is StreamImageSource fromStreamImageSource) {
+                            //StreamImageSource->byte[]
+                            var streamFromImageSource = fromStreamImageSource.Stream(CancellationToken.None).Result;
+
+                            if (streamFromImageSource == null) {
+                                return null;
+                            }
+                            using var memoryStream = new MemoryStream();
+                            streamFromImageSource.CopyTo(memoryStream);
+                            
+                            outObject = memoryStream.ToArray();
+                        } else {
+                            //ImageSource->byte[]
+                            var skBmp = Convert(fromImageSource, typeof(SKBitmap), parameter);
+                            outObject = Convert(skBmp, typeof(byte[]), parameter);
+                        }                        
                     } else if (targetType == typeof(SKBitmap)) {
                         //ImageSource->SKBitmap
                         SKBitmapImageSource skBmpImgSrc = (SKBitmapImageSource)fromImageSource;
                         outObject = skBmpImgSrc.Bitmap;
                     }
-                }
+                } 
                 #endregion
 
                 #region Process Parameters

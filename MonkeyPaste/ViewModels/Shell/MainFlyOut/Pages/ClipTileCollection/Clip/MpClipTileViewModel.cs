@@ -38,7 +38,7 @@ namespace MonkeyPaste {
                 if(Clip == null) {
                     return null;
                 }
-                return (ImageSource)new MpImageConverter().Convert(Clip.App.Icon.IconImage.ImageBytes, typeof(ImageSource));
+                return (StreamImageSource)new MpImageConverter().Convert(Clip.App.Icon.IconImage.ImageBytes, typeof(ImageSource));
             }
         }
 
@@ -61,6 +61,9 @@ namespace MonkeyPaste {
         #region Event Handlers
         private void MpClipViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
+                case nameof(Clip):
+                    OnPropertyChanged(nameof(IconImageSource));
+                    break;
                 case nameof(IsSelected):
                     if(IsSelected) {
                         //Device.InvokeOnMainThreadAsync(async () => {

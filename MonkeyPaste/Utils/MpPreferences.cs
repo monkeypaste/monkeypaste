@@ -29,15 +29,16 @@ namespace MonkeyPaste {
             // enable multi-threaded database access
             SQLite.SQLiteOpenFlags.SharedCache;
 
-        public string DbPath {
-            get {
-                var basePath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                return System.IO.Path.Combine(basePath, DbName);
-            }
-        }
+
         public string LocalStoragePath {
             get {
-                return Preferences.Get(nameof(DbPath), Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+                return Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            }
+        }
+
+        public string DbPath {
+            get {
+                return Preferences.Get(nameof(DbPath), Path.Combine(LocalStoragePath, DbName));
             }
         }
 

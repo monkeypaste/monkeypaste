@@ -50,7 +50,6 @@ namespace MonkeyPaste.Droid {
                     }                    
                     var imgSrc = MpPackageNameSource.FromPackageName(this.Referrer.Host);
                     var pnsh = new MpPackageNameSourceHandler();
-
                     var bmp = await pnsh.LoadImageAsync(imgSrc, this.ApplicationContext);
                     byte[] imageInByte = GetByteArray(bmp);
                     if (imageInByte != null && imageInByte.Length > 0) {
@@ -59,37 +58,9 @@ namespace MonkeyPaste.Droid {
                 }
                 
                 StartActivity(intent);
-            }
-
-
-            
+            }            
         }
 
-        public IImageSourceHandler GetHandler(ImageSource source) {
-            //Image source handler to return 
-            IImageSourceHandler returnValue = null;
-            //check the specific source type and return the correct image source handler 
-            if (source is UriImageSource) {
-                returnValue = new ImageLoaderSourceHandler();
-            } else if (source is FileImageSource) {
-                returnValue = new FileImageSourceHandler();
-            } else if (source is StreamImageSource) {
-                returnValue = new StreamImagesourceHandler();
-            }
-            return returnValue;
-        }
-        public async Task<Bitmap> GetBitmapFromImageSourceAsync(ImageSource source, Context context) {
-            var handler = GetHandler(source);
-            var returnValue = (Bitmap)null;
-            returnValue = await handler.LoadImageAsync(source, context);
-            return returnValue;
-        }
-
-        private async Task<Bitmap> GetBitmap(Xamarin.Forms.ImageSource imgSrc) {
-            var handler = new ImageLoaderSourceHandler();
-            var bmp = await handler.LoadImageAsync(imgSrc, this.ApplicationContext);
-            return bmp;
-        }
         private byte[] GetByteArray(Bitmap bmp) {
             using (var stream = new MemoryStream()) {
                 bmp.Compress(Bitmap.CompressFormat.Png, 0, stream);
