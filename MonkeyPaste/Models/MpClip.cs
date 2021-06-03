@@ -162,42 +162,45 @@ namespace MonkeyPaste {
             string itemPlainText = (args as object[])[1] as string;
             var hostAppName = (args as object[])[2] as string;
             var hostAppImage = (args as object[])[3] as byte[];
-
+            var hostAppImageBase64 = (args as object[])[4] as string;
             var newClip = new MpClip() {
                 CopyDateTime = DateTime.Now,
                 Title = "Text",
                 ItemPlainText = itemPlainText,
                 //Host = hostPackageName,
-                ItemImage = hostAppImage
+                //ItemImage = hostAppImage
             };
 
-            await MpDb.Instance.AddItem<MpClip>(newClip);
-
-            //add Clip to default tags
-            var defaultTagList = await MpDb.Instance.QueryAsync<MpTag>(
-                "select * from MpTag where Id=? or Id=?","1","2");
-
-            if (defaultTagList != null) {
-                foreach (var tag in defaultTagList) {
-                    var ClipTag = new MpClipTag() {
-                        ClipId = newClip.Id,
-                        TagId = tag.Id
-                    };
-                    await MpDb.Instance.AddItem<MpClipTag>(ClipTag);
-                }
-            }
+            //await MpDb.Instance.AddItem<MpClip>(newClip);
 
             //add source to Clip
             if (!string.IsNullOrEmpty(hostPackageName)) {
                 //add or update Clip's source app
                 MpApp app = await MpApp.GetAppByPath(hostPackageName);
                 if (app == null) {
-                    app = await MpApp.Create(hostPackageName, hostAppName, hostAppImage);
+                    app = await MpApp.Create(hostPackageName, hostAppName, hostAppImageBase64);
                 } 
                 newClip.App = app;
                 newClip.AppId = app.Id;
-                await MpDb.Instance.UpdateItem<MpClip>(newClip);
+                await MpDb.Instance.AddOrUpdate<MpClip>(newClip);
+
+                //add Clip to default tags
+                var defaultTagList = await MpDb.Instance.QueryAsync<MpTag>(
+                    "select * from MpTag where Id=? or Id=?", "1", "2");
+
+                if (defaultTagList != null) {
+                    foreach (var tag in defaultTagList) {
+                        var ClipTag = new MpClipTag() {
+                            ClipId = newClip.Id,
+                            TagId = tag.Id
+                        };
+                        await MpDb.Instance.AddItem<MpClipTag>(ClipTag);
+                    }
+                }
+                return newClip;
             }
+
+            MpConsole.WriteTraceLine($"Error creating clip, there was no source application");
             return newClip;
         }
         //public override void DeleteFromDatabase() {

@@ -38,37 +38,5 @@ namespace MonkeyPaste.Functions {
                 }
             }
         }
-
-        [FunctionName("Messages")]
-        public async static Task SendMessages(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] object message,
-            [SignalR(HubName = "MonkeyPaste")] IAsyncCollector<SignalRMessage> signalRMessages) {
-            var jsonObject = (JObject)message;
-            var msg = jsonObject.ToObject<MpMessage>();
-            if (msg.TypeInfo.Name == nameof(MpPhotoMessage)) {
-                //ToDo: Upload the photo to blob storage.
-            }
-            await signalRMessages.AddAsync(new SignalRMessage {
-                Target = "newMessage",
-                Arguments = new[] { message }
-            });
-
-            if (msg.TypeInfo.Name == nameof(MpPhotoMessage)) {
-                var photoMessage = jsonObject.ToObject<MpPhotoMessage>();
-                var bytes = Convert.FromBase64String(photoMessage.Base64Photo);
-                var url = await StorageHelper.Upload(bytes, photoMessage.FileEnding);
-                msg = new MpPhotoUrlMessage(photoMessage.Username) {
-                    Id = photoMessage.Id,
-                    Timestamp = photoMessage.Timestamp,
-                    Url = url
-                };
-                await signalRMessages.AddAsync(new SignalRMessage {
-                    Target = "newMessage",
-                    Arguments = new[] { message }
-                });
-                return;
-            }
-
-        }
     }
 }

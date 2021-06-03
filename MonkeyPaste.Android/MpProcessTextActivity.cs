@@ -54,6 +54,7 @@ namespace MonkeyPaste.Droid {
                     byte[] imageInByte = GetByteArray(bmp);
                     if (imageInByte != null && imageInByte.Length > 0) {
                         intent.PutExtra("HostIconByteArray", imageInByte);
+                        intent.PutExtra("HostIconBase64", Convert.ToBase64String(imageInByte));
                     }
                 }
                 

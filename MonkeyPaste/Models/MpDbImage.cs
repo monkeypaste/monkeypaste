@@ -10,7 +10,9 @@ namespace MonkeyPaste {
         [PrimaryKey,AutoIncrement]
         public override int Id { get; set; }
 
-        public byte[] ImageBytes { get; set; }
+        //public byte[] ImageBytes { get; set; }
+
+        public string ImageBase64 { get; set; }
 
         public static async Task<MpDbImage> GetDbImageById(int id) {
             var allicons = await MpDb.Instance.GetItems<MpDbImage>();

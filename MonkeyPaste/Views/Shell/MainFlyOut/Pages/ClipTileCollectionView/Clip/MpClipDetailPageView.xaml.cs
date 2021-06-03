@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -29,7 +30,13 @@ namespace MonkeyPaste {
             cidpvm.Clip.ItemPlainText = itemText;
 
             var itemHtml = await cidpvm.EvaluateJavascript($"getHtml()");
-            itemHtml = itemHtml.Replace("\"", string.Empty);
+            // Unescape that damn Unicode Java bull.
+            itemHtml = Regex.Replace(
+                itemHtml,
+                @"\\[Uu]([0-9A-Fa-f]{4})", 
+                m => char.ToString((char)ushort.Parse(m.Groups[1].Value, NumberStyles.AllowHexSpecifier)));
+            itemHtml = Regex.Unescape(itemHtml);
+            //itemHtml = itemHtml.Replace("\"", string.Empty);
             cidpvm.Clip.ItemHtml = itemHtml;
 
             await MpDb.Instance.UpdateItem<MpClip>(cidpvm.Clip);

@@ -63,14 +63,15 @@ namespace MonkeyPaste {
             return allicons.Where(x => x.Id == id).FirstOrDefault();
         }
 
-        public static async Task<MpIcon> Create(byte[] iconImg) {
+        public static async Task<MpIcon> Create(string iconImgBase64) {
             
             var newImage = new MpDbImage() {
-                ImageBytes = iconImg
+                //ImageBytes = iconImg
+                ImageBase64 = iconImgBase64
             };
             await MpDb.Instance.AddItem<MpDbImage>(newImage);
             
-            var iconSkBmp = new MpImageConverter().Convert(iconImg, typeof(SKBitmap)) as SKBitmap;
+            var iconSkBmp = new MpImageConverter().Convert(iconImgBase64, typeof(SKBitmap)) as SKBitmap;
             var colorList = await MpColor.CreatePrimaryColorList(iconSkBmp);
             // TODO create border images here
             var newIcon = new MpIcon() {

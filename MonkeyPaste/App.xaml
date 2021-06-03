@@ -10,6 +10,18 @@
             <local:MpStringToColorConverter x:Key="StringToColorConverter" />
             <local:MpTextColorFromBackgroundColorConverter x:Key="TextColorFromBackgroundColorConverter" />
             <local:MpImageConverter x:Key="ImageConverter" />
+
+            <StyleSheet Source="/Css/Styles.css" />
+
+            <ResourceDictionary>
+                <Style TargetType="NavigationPage">
+                    <Setter Property="BarBackgroundColor"
+                            Value="#273E47" />
+                    <Setter Property="BarTextColor"
+                            Value="White" />
+                </Style>
+            </ResourceDictionary>
+
             <Color x:Key="CompletedColor">#1C8859</Color>
             <Color x:Key="ActiveColor">#D3D3D3</Color>
 

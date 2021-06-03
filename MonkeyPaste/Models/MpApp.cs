@@ -49,10 +49,10 @@ namespace MonkeyPaste {
             return allApps.Where(x => x.Id == appId).FirstOrDefault();
         }
 
-        public static async Task<MpApp> Create(string appPath,string appName,byte[] appIcon) {
+        public static async Task<MpApp> Create(string appPath,string appName, string appIconBase64) {
             //if app doesn't exist create image,icon,app and source
 
-            var newIcon = await MpIcon.Create(appIcon);
+            var newIcon = await MpIcon.Create(appIconBase64);
 
             var newApp = new MpApp() {
                 AppPath = appPath,

@@ -11,6 +11,13 @@ using Android.Support.V4.App;
 using TaskStackBuilder = Android.Support.V4.App.TaskStackBuilder;
 using Android.Media;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
+using Android.Graphics;
+using static Android.Graphics.Paint;
+using static Android.Provider.Settings;
+using static Java.Util.Jar.Attributes;
+using Xamarin.Forms;
+using Plugin.CurrentActivity;
 
 namespace MonkeyPaste.Droid {
     [Activity(
@@ -27,6 +34,9 @@ namespace MonkeyPaste.Droid {
         int count = 0;
 
         protected override async void OnCreate(Bundle savedInstanceState) {
+            TabLayoutResource = Resource.Layout.Tabbar;
+            ToolbarResource = Resource.Layout.Toolbar;
+
             base.OnCreate(savedInstanceState);
 
             AndroidEnvironment.UnhandledExceptionRaiser += delegate (object sender, RaiseThrowableEventArgs args) {
@@ -34,21 +44,21 @@ namespace MonkeyPaste.Droid {
                     .SetValue(args.Exception, null);
                 throw args.Exception;
             };
-
             AndroidEnvironment.UnhandledExceptionRaiser += (sender, args) => {
                 args.Handled = true;
             };
 
+            UserDialogs.Init(this);
+            CrossCurrentActivity.Current.Init(this, savedInstanceState);
+
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            
 
             CachedImageRenderer.Init(true);
             CachedImageRenderer.InitImageViewHandler();
-
             Current = this;
-
             LoadApplication(new App());
-
             LoadSelectedTextAsync();
 
 
@@ -130,10 +140,11 @@ namespace MonkeyPaste.Droid {
             var hostPackageName = Intent!.GetStringExtra("HostPackageName") ?? string.Empty;
             var hostAppName = Intent!.GetStringExtra("HostAppName") ?? string.Empty;
             var hostAppIcon = Intent!.GetByteArrayExtra("HostIconByteArray") ?? null;
+            var hostAppIconBase64 = Intent!.GetStringExtra("HostIconBase64") ?? string.Empty;
             if (!string.IsNullOrWhiteSpace(selectedText)) {
                 await Clipboard.SetTextAsync(selectedText);
 
-                await MonkeyPaste.MpClip.Create(new object[] { hostPackageName, selectedText, hostAppName, hostAppIcon });
+                await MonkeyPaste.MpClip.Create(new object[] { hostPackageName, selectedText, hostAppName, hostAppIcon, hostAppIconBase64 });
             }
         }
 

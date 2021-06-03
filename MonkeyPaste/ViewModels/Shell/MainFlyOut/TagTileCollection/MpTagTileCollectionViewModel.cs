@@ -112,7 +112,9 @@ namespace MonkeyPaste {
 
         public ICommand SelectTagCommand => new Command<object>(async (args) => {
             if (args != null && args is MpTagTileViewModel stivm && stivm != SelectedTagViewModel) {
-                SelectedTagViewModel.IsSelected = false;
+                if(SelectedTagViewModel != null) {
+                    SelectedTagViewModel.IsSelected = false;
+                }
                 stivm.IsSelected = true;
                 SelectedTagViewModel = stivm;
                 await ClipCollectionViewModel.SetTag(SelectedTagViewModel.Tag.Id);

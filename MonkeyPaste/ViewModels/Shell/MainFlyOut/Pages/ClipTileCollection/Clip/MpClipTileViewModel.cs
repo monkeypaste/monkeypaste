@@ -38,7 +38,7 @@ namespace MonkeyPaste {
                 if(Clip == null) {
                     return null;
                 }
-                return (StreamImageSource)new MpImageConverter().Convert(Clip.App.Icon.IconImage.ImageBytes, typeof(ImageSource));
+                return (StreamImageSource)new MpImageConverter().Convert(Clip.App.Icon.IconImage.ImageBase64, typeof(ImageSource));
             }
         }
 

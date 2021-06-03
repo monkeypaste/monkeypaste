@@ -59,6 +59,12 @@
     <AOTMode>None</AOTMode>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Acr.UserDialogs, Version=7.1.0.514, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Acr.UserDialogs.7.1.0.514\lib\xamarinmac20\Acr.UserDialogs.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Media, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xam.Plugin.Media.5.0.1\lib\netstandard2.0\Plugin.Media.dll</HintPath>
+    </Reference>
     <Reference Include="Plugin.SimpleAudioPlayer, Version=1.0.7308.22066, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xam.Plugin.SimpleAudioPlayer.1.4.0\lib\Xamarin.Mac20\Plugin.SimpleAudioPlayer.dll</HintPath>
     </Reference>

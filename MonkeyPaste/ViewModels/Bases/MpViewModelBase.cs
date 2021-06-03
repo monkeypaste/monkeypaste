@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Reflection;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
@@ -20,6 +21,7 @@ namespace MonkeyPaste {
         #endregion
 
         public MpINavigate Navigation { get; set; } = new MpNavigator();
+        public static string User { get; set; }
 
         
         public bool CanAcceptChildren { get; set; } = true;

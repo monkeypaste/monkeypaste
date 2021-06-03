@@ -28,6 +28,7 @@
                            Source="{StaticResource SettingsIcon}" />
                     <Button Margin="5"
                             Text="Settings"
+                            Clicked="Button_Clicked"
                             BackgroundColor="LightYellow"
                             TextColor="DimGray"
                             VerticalOptions="Center"/>
