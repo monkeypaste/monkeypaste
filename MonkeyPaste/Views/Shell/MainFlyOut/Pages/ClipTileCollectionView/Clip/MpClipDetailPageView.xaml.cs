@@ -36,7 +36,7 @@ namespace MonkeyPaste {
                 @"\\[Uu]([0-9A-Fa-f]{4})", 
                 m => char.ToString((char)ushort.Parse(m.Groups[1].Value, NumberStyles.AllowHexSpecifier)));
             itemHtml = Regex.Unescape(itemHtml);
-            //itemHtml = itemHtml.Replace("\"", string.Empty);
+            itemHtml = itemHtml.Replace("\"", string.Empty);
             cidpvm.Clip.ItemHtml = itemHtml;
 
             await MpDb.Instance.UpdateItem<MpClip>(cidpvm.Clip);

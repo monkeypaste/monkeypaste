@@ -20,8 +20,11 @@
                            Source="{StaticResource AppIcon}"
                            VerticalOptions="Center" />
                 </Grid>
-                <local:MpTagCollectionView x:Name="TagCollectionView" 
-                                           BindingContext="{Binding TagCollectionViewModel}"/>
+                <ContentView>
+                    <local:MpTagCollectionView x:Name="TagCollectionView"
+                                               BindingContext="{Binding TagCollectionViewModel}" />
+                </ContentView>
+                
                 <StackLayout Orientation="Horizontal">
                     <Image Margin="20,0,0,0"
                            HeightRequest="45"

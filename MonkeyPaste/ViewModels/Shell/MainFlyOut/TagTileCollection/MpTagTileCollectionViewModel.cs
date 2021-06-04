@@ -31,7 +31,6 @@ namespace MonkeyPaste {
 
         #region Public Methods
         public MpTagTileCollectionViewModel() : base() {
-            ClipCollectionViewModel = new MpClipTileCollectionPageViewModel();
             PropertyChanged += MpTagCollectionViewModel_PropertyChanged;
             MpDb.Instance.OnItemAdded += Db_OnItemAdded;
             Task.Run(Initialize);
@@ -44,7 +43,6 @@ namespace MonkeyPaste {
         }
 
         public void ClearSelection() {
-            SelectedTagViewModel = null;
             foreach (var tivm in TagViewModels) {
                 tivm.IsSelected = false;
             }
@@ -56,23 +54,23 @@ namespace MonkeyPaste {
             IsBusy = true;
             var tags = await MpDb.Instance.GetItems<MpTag>();
             TagViewModels = new ObservableCollection<MpTagTileViewModel>(tags.Select(x => CreateTagViewModel(x)));
-            //foreach(var tvm in TagViewModels) {
-            //    MpDb.Instance.DeleteItem<MpTag>(tvm.Tag);
-            //}
             OnPropertyChanged(nameof(TagViewModels));
             SelectedTagViewModel = RecentTagViewModel;
+            ClipCollectionViewModel = new MpClipTileCollectionPageViewModel();
             await Task.Delay(300);
             IsBusy = false;
         }
 
         private async void MpTagCollectionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            //switch (e.PropertyName) {
-            //     case nameof(SelectedTagViewModel):
-            //         if (SelectedTagViewModel != null) {
-            //             await ClipCollectionViewModel.SetTag(SelectedTagViewModel.Tag.Id);
-            //         }
-            //         break;
-            // }
+            switch (e.PropertyName) {
+                case nameof(SelectedTagViewModel):
+                    if (SelectedTagViewModel != null && ClipCollectionViewModel != null) {
+                        ClearSelection();
+                        SelectedTagViewModel.IsSelected = true;
+                        await ClipCollectionViewModel.SetTag(SelectedTagViewModel.Tag.Id);
+                    }
+                    break;
+            }
         }
         #endregion
 
@@ -87,20 +85,20 @@ namespace MonkeyPaste {
             if (sender is MpTagTileViewModel ttvm) {
                 switch (e.PropertyName) {
                     case nameof(ttvm.IsSelected):
-                        if (ttvm.IsSelected) {
-                            if (SelectedTagViewModel == ttvm) {
-                                //implies selection came from ui do nothing
-                            } else {
-                                if (SelectedTagViewModel != null) {
-                                    SelectedTagViewModel.IsSelected = false;
-                                }
-                                SelectedTagViewModel = ttvm;
-                            }
-                        } else {
-                            if (SelectedTagViewModel == ttvm) {
-                                SelectedTagViewModel = null;
-                            }
-                        }
+                        //if (ttvm.IsSelected) {
+                        //    if (SelectedTagViewModel == ttvm) {
+                        //        //implies selection came from ui do nothing
+                        //    } else {
+                        //        if (SelectedTagViewModel != null) {
+                        //            SelectedTagViewModel.IsSelected = false;
+                        //        }
+                        //        SelectedTagViewModel = ttvm;
+                        //    }
+                        //} else {
+                        //    if (SelectedTagViewModel == ttvm) {
+                        //        SelectedTagViewModel = null;
+                        //    }
+                        //}
                         break;
                 }
                 await MpDb.Instance.UpdateItem<MpTag>(ttvm.Tag);
@@ -111,16 +109,16 @@ namespace MonkeyPaste {
         #region Commands       
 
         public ICommand SelectTagCommand => new Command<object>(async (args) => {
-            if (args != null && args is MpTagTileViewModel stivm && stivm != SelectedTagViewModel) {
-                if(SelectedTagViewModel != null) {
-                    SelectedTagViewModel.IsSelected = false;
-                }
-                stivm.IsSelected = true;
-                SelectedTagViewModel = stivm;
-                await ClipCollectionViewModel.SetTag(SelectedTagViewModel.Tag.Id);
-            } else if (args == null) {
-                ClearSelection();
-            }
+            //if (args != null && args is MpTagTileViewModel stivm && stivm != SelectedTagViewModel) {
+            //    if(SelectedTagViewModel != null) {
+            //        SelectedTagViewModel.IsSelected = false;
+            //    }
+            //    stivm.IsSelected = true;
+            //    SelectedTagViewModel = stivm;
+            //    await ClipCollectionViewModel.SetTag(SelectedTagViewModel.Tag.Id);
+            //} else if (args == null) {
+            //    ClearSelection();
+            //}
         });
 
         public ICommand DeleteTagCommand => new Command<object>(async (args) => {

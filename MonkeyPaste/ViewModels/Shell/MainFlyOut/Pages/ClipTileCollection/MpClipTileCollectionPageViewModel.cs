@@ -16,7 +16,7 @@ namespace MonkeyPaste {
         private int _itemsAdded = 0;
         private int _currentStartIndex = 0;
         private int _pageSize = 20;
-        private int _tagId = 0;
+        
         #endregion
 
         #region Properties
@@ -27,6 +27,7 @@ namespace MonkeyPaste {
         public MpClipTileViewModel SelectedClipViewModel { get; set; }
         #endregion
 
+        public int TagId { get; set; }
         #endregion
 
         #region Public Methods
@@ -43,10 +44,10 @@ namespace MonkeyPaste {
         }
 
         public async Task SetTag(int tagId) {
-            _tagId = tagId;
+            TagId = tagId;
             await MainThread.InvokeOnMainThreadAsync(async () => {
                 ClipViewModels = new ObservableCollection<MpClipTileViewModel>();
-                var clips = await MpClip.GetPage(_tagId, 0, _pageSize);
+                var clips = await MpClip.GetPage(TagId, 0, _pageSize);
                 foreach(var c in clips) {
                     var ctvm = await CreateClipViewModel(c);
                     ClipViewModels.Add(ctvm);
@@ -60,7 +61,7 @@ namespace MonkeyPaste {
 
         public async Task<MpClipTileViewModel> CreateClipViewModel(MpClip c) {
             MpClipTileViewModel ctvm = null;
-            await Task.Run(async () => {
+            await Device.InvokeOnMainThreadAsync(async () => {
                 MpApp app = await MpApp.GetAppById(c.AppId);
                 app.Icon = await MpIcon.GetIconById(app.IconId);
                 app.Icon.IconImage = await MpDbImage.GetDbImageById(app.Icon.IconImageId);
@@ -73,7 +74,7 @@ namespace MonkeyPaste {
                 ctvm = new MpClipTileViewModel(c);
 
                 ctvm.PropertyChanged += ClipViewModel_PropertyChanged;
-                Routing.RegisterRoute(@"Clip/" + ctvm, typeof(MpClipDetailPageView));
+                //Routing.RegisterRoute(@"Clipdetails/" + ctvm, typeof(MpClipDetailPageView));
             });
             
             return ctvm;
@@ -112,7 +113,9 @@ namespace MonkeyPaste {
             switch(e.PropertyName) {
                 case nameof(SelectedClipViewModel):
                     ClearSelection();
-                    SelectedClipViewModel.IsSelected = true;
+                    if(SelectedClipViewModel != null) {
+                        SelectedClipViewModel.IsSelected = true;
+                    }
                     break;
             }
         }

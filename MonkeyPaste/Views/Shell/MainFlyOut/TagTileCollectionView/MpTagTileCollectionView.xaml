@@ -10,10 +10,8 @@
             x:Name="TagCollectionView"
             Margin="10"        
             SelectionMode="Single"
-            SelectionChangedCommand="{Binding SelectTagCommand}"
-            SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference TagCollectionView}}"
             ItemsSource="{Binding TagViewModels}"
-            SelectedItem="{Binding RecentTagViewModel, Mode=TwoWay}">
+            SelectedItem="{Binding SelectedTagViewModel, Mode=TwoWay}">
             <CollectionView.Header>
                 <Grid ColumnDefinitions="0.2*,0.6*,0.2*">
                     <Image

@@ -9,6 +9,10 @@ using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
     public class MpTag : MpDbModelBase {
+        public const int RecentTagId = 1;
+        public const int AllTagId = 2;
+        public const int FavoritesTagId = 3;
+        public const int HelpTagId = 4;
 
         #region Columns
         [PrimaryKey, AutoIncrement]
@@ -32,49 +36,48 @@ namespace MonkeyPaste {
 
         public MpTag() : base(typeof(MpTag)) { }
 
-        //public MpTag(string tagName, string tagColor, int tagCount) {
-        //    TagName = tagName;
-        //    TagColor = tagColor;
-        //    TagSortIdx = tagCount;
-        //}
-        
-        public async Task<bool> IsLinkedWithClipAsync(int cid) {
-            if(cid <= 0) {
+        public async Task<bool> IsLinkedWithClipAsync(MpClip clip) {
+            if(clip == null) {
                 return false;
             }
             var citl = await MpClipTag.GetAllClipsForTagId(Id);
-            return citl.Any(x => x.ClipId == cid);
+            return citl.Any(x => x.ClipId == clip.Id);
         }
 
-        public async Task<bool> LinkWithClipAsync(int cid) {
-            if(cid <= 0) {
+        public async Task<bool> LinkWithClipAsync(MpClip clip) {
+            if(clip == null) {
                 return false;
             }
             //returns FALSE if Clip is already linked to maintain correct counts
-            bool isLinked = await IsLinkedWithClipAsync(cid);
-            if (isLinked) {               
+            bool isLinked = await IsLinkedWithClipAsync(clip);
+            if (isLinked) {
                 return false;
             }
 
-            await MpDb.Instance.AddItem<MpClipTag>(new MpClipTag() { ClipId = cid, TagId = Id });
+            await MpDb.Instance.AddItem<MpClipTag>(new MpClipTag() { ClipId = clip.Id, TagId = Id });
 
-            Console.WriteLine("Tag link created between tag " + Id + " with Clip " + cid);
+            //ClipList.Add(clip);
+            Console.WriteLine("Tag link created between tag " + Id + " with Clip " + clip.Id);
             return true;
         }
-        public async Task UnlinkWithClipAsync(int cid) {
-            if(cid <= 0) {
+        public async Task UnlinkWithClipAsync(MpClip clip) {
+            if(clip == null) {
                 return;
             }
-            bool isLinked = await IsLinkedWithClipAsync(cid);
+            bool isLinked = await IsLinkedWithClipAsync(clip);
             if (!isLinked) {
-                //Console.WriteLine("MpTag Warning attempting to unlink non-linked tag " + TagId + " with Clip " + ci.ClipId + " ignoring...");
                 return;
             }
-            var result = await MpDb.Instance.QueryAsync<MpClipTag>(@"select * from MpClipTag where TagId=? and ClipId=?", Id, cid);
+            var result = await MpDb.Instance.QueryAsync<MpClipTag>(@"select * from MpClipTag where TagId=? and ClipId=?", Id, clip.Id);
             await MpDb.Instance.DeleteItem<MpClipTag>(result[0]);
-            //MpDb.Instance.ExecuteWrite("delete from MpTagClipSortOrder where fk_MpTagId=" + this.TagId);
-            Console.WriteLine("Tag link removed between tag " + Id + " with Clip " + cid + " ignoring...");
+
+            //var clipToRemove = ClipList.Where(x => x.Id == clip.Id).FirstOrDefault();
+            //if(clipToRemove != null) {
+            //    ClipList.Remove(clipToRemove);
+            //}
+            Console.WriteLine("Tag link removed between tag " + Id + " with Clip " + clip.Id + " ignoring...");
         }
+
         public async Task DeleteFromDatabaseAsync() {
             //await MpDb.Instance.ExecuteWriteAsync<MpTag>(
             //    "delete from MpTag where Id=@tid",

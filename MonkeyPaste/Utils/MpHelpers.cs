@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using FFImageLoading.Work;
 using SkiaSharp;
@@ -386,6 +387,13 @@ namespace MonkeyPaste {
         #endregion
 
         #region Http
+        public string GetUserIp4Address() {
+            var ipAddress = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault();
+            if (ipAddress != null) {
+                return ipAddress.ToString();
+            }
+            return null;
+        }
         public string GetFullyFormattedUrl(string str)
         {
             //returns url so it has protocol prefix

@@ -25,9 +25,9 @@
             <Color x:Key="CompletedColor">#1C8859</Color>
             <Color x:Key="ActiveColor">#D3D3D3</Color>
 
-            <Color x:Key="UnselectedColor">Transparent</Color>
+            <Color x:Key="UnselectedColor">White</Color>
             <Color x:Key="HoverColor">Yellow</Color>
-            <Color x:Key="SelectedColor">Red</Color>
+            <Color x:Key="SelectedColor">Orange</Color>
             <Color x:Key="PrimarySelectedColor">Blue</Color>
 
             <ImageSource x:Key="AppIcon">/Resources/Icons/monkey.png</ImageSource>
@@ -183,7 +183,20 @@
                 FontFamily="{StaticResource FontAwesomeSolid}"
                 Glyph="&#xf044;"
                 Size="22"
-                Color="Black" />
+                Color="Black" />            
+            
+
+            <FontImageSource x:Key="CheckedIcon"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf00c;"
+                             Size="22"
+                             Color="Black" />
+            
+            <FontImageSource x:Key="SquareOutlineIcon"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf0c8;"
+                             Size="22"
+                             Color="Black" />
 
             <Style TargetType="NavigationPage">
                 <Setter Property="BarBackgroundColor" Value="#A25EBB" />

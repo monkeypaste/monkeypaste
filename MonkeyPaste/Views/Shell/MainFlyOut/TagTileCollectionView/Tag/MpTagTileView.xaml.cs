@@ -15,7 +15,8 @@ namespace MonkeyPaste {
         }
 
         private void SwipeView_SwipeStarted(object sender, SwipeStartedEventArgs e) {
-            if (sender != null && sender is MpTagTileViewModel ttvm) {
+            if (sender != null && sender is SwipeView sv) {
+                var ttvm = sv.BindingContext as MpTagTileViewModel;
                 ttvm.IsSelected = true;
             }
         }

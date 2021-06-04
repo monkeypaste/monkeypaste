@@ -19,7 +19,7 @@ namespace MonkeyPaste.UWP
     {
         public MainPage()
         {
-            //FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
+           // FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
             this.InitializeComponent();
 
             LoadApplication(new MonkeyPaste.App());

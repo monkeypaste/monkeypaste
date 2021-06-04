@@ -98,6 +98,12 @@
     <EmbeddedResource Update="Views\Shell\MainFlyOut\Help\MpHelpPageView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\AssociatedTags\MpClipTagAssociatedItemView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\AssociatedTags\MpClipTagAssociationPageView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

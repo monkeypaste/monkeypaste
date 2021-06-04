@@ -7,6 +7,7 @@ namespace MonkeyPaste {
         #region Properties
         public bool IsSwiping { get; set; } = false;
         public bool IsSwiped { get; set; } = false;
+        public bool IsSelected { get; set; } = false;
         #endregion
     }
 }

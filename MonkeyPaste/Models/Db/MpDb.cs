@@ -64,7 +64,7 @@ namespace MonkeyPaste {
             var connStr = new SQLiteConnectionString(
                 databasePath: dbPath,//MpPreferences.Instance.DbPath, 
                 storeDateTimeAsTicks: true,
-                key: MpPreferences.Instance.DbPassword,
+                //key: MpPreferences.Instance.DbPassword,
                 openFlags: MpPreferences.DbFlags
                 );
 

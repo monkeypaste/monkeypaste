@@ -1,6 +1,7 @@
 ﻿using FFImageLoading.Forms;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -53,11 +54,15 @@ namespace MonkeyPaste {
             MpDb.Instance.OnItemUpdated += MpDb_OnItemUpdated;
             Clip = item;
             Routing.RegisterRoute("Clipdetails", typeof(MpClipDetailPageView));
+            Routing.RegisterRoute("ClipTagAssociations", typeof(MpClipTagAssociationPageView));
+            Task.Run(Initialize);
         }
         #endregion
 
         #region Private Methods
-
+        private async Task Initialize() {
+            //Clip.App
+        }
         #region Event Handlers
         private void MpClipViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             switch(e.PropertyName) {
@@ -86,13 +91,19 @@ namespace MonkeyPaste {
         #endregion
 
         #region Commands
-        public ICommand AddToFavoritesCommand => new Command(async () => {
-            await (Application.Current.MainPage.BindingContext as MpMainShellViewModel).TagCollectionViewModel.FavoritesTagViewModel.Tag.LinkWithClipAsync(Clip.Id);
+        public ICommand ShowTagAssociationsCommand => new Command(async () => {
+            Device.InvokeOnMainThreadAsync(async () => {
+                await Shell.Current.GoToAsync($"ClipTagAssociations?ClipId={Clip.Id}");
+            });
+            //await Navigation.PushModal(new MpClipTagAssociationPageView(new MpClipTagAssociationPageViewModel(Clip)));
+            //await (Application.Current.MainPage.BindingContext as MpMainShellViewModel).TagCollectionViewModel.FavoritesTagViewModel.Tag.LinkWithClipAsync(Clip.Id);
         });
 
         public ICommand ClipTileTappedCommand => new Command(async () => {
             if(IsSelected) {
-                await Shell.Current.GoToAsync($"Clipdetails?ClipId={Clip.Id}");
+                Device.InvokeOnMainThreadAsync(async () => {
+                    await Shell.Current.GoToAsync($"Clipdetails?ClipId={Clip.Id}");
+                });
             }
         });
 

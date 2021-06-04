@@ -12,8 +12,6 @@ namespace MonkeyPaste {
 
         public MpMainShell() {
             InitializeComponent();
-            //Routing.RegisterRoute("//Tags", typeof(MpClipCollectionView));
-            //BindingContext = new MpMainShellViewModel();
         }
 
         public ICommand OpenSettingsPageCommand => new Command(async () => {

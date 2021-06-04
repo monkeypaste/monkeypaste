@@ -49,11 +49,9 @@ namespace MonkeyPaste {
             Tag.TagColor = await MpColor.GetColorById(Tag.ColorId);
         }
 
-        #endregion
-
         #region Event Handlers
         private void MpTagViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            switch(e.PropertyName) {
+            switch (e.PropertyName) {
                 case nameof(IsSelected):
                     break;
             }
@@ -73,13 +71,13 @@ namespace MonkeyPaste {
                     }
                 } else if (e is MpClip nci) {
                     //occurs for all and recent
-                    bool isLinked = await Tag.IsLinkedWithClipAsync(nci.Id);
-                    if (isLinked) {
+                    bool isLinked = await Tag.IsLinkedWithClipAsync(nci);
+                    if (isLinked && !Tag.ClipList.Any(x=>x.Id == nci.Id)) {
                         Tag.ClipList.Add(nci);
                         OnPropertyChanged(nameof(ClipCount));
                     }
                 }
-            });            
+            });
         }
 
         private void Db_OnItemDeleted(object sender, MpDbModelBase e) {
@@ -95,7 +93,7 @@ namespace MonkeyPaste {
                     }
                 } else if (e is MpClip dci) {
                     //when copy item deleted
-                    if (Tag.ClipList.Contains(dci)) {
+                    if (Tag.ClipList.Any(x=>x.Id == dci.Id)) {
                         Tag.ClipList.Remove(dci);
                         OnPropertyChanged(nameof(ClipCount));
                     }
@@ -103,6 +101,7 @@ namespace MonkeyPaste {
             });
         }
         #endregion
+        #endregion        
 
         #region Commands
         public ICommand RenameTagCommand => new Command(() => {
