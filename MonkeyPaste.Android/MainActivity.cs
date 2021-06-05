@@ -51,6 +51,9 @@ namespace MonkeyPaste.Droid {
             UserDialogs.Init(this);
             CrossCurrentActivity.Current.Init(this, savedInstanceState);
 
+            Couchbase.Lite.Support.Droid.Activate(ApplicationContext);
+
+
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             

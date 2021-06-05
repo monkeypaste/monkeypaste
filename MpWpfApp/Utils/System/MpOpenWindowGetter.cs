@@ -30,7 +30,10 @@ namespace MpWpfApp {
                     int length = WinApi.GetWindowTextLength(hWnd);
                     if (length == 0) return true;
 
-                    process.WaitForInputIdle(100);
+                    //if(MpHelpers.Instance.IsThisAppAdmin()) {
+                    //    process.WaitForInputIdle(100);
+                    //}
+                    
                     StringBuilder builder = new StringBuilder(length);
                     WinApi.GetWindowText(hWnd, builder, length + 1);
 

@@ -8,11 +8,13 @@ using Xamarin.Forms;
 namespace MonkeyPaste {
     public class MpMainShellViewModel : MpViewModelBase {
         public MpTagTileCollectionViewModel TagCollectionViewModel { get; set; }
-
-        public static bool IsContextMenuOpen { get; set; }
-
+        
         public MpMainShellViewModel() {
-            TagCollectionViewModel = new MpTagTileCollectionViewModel();
+            Task.Run(() => {
+                MpSocketClient.Instance.Init();
+            });
+
+            TagCollectionViewModel = new MpTagTileCollectionViewModel();            
         }        
     }
 }

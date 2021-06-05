@@ -1,5 +1,5 @@
-create database MpSDB;
-use MpSDB;
+--create database MpSDB;
+use mps;
 -- UserStates: Pending,Active,Reset,Inactive,Deactivated
 create table MpUserState(
 MpUserStateId int not null auto_increment primary key,

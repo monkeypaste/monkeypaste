@@ -58,7 +58,7 @@ namespace MonkeyPaste {
             UpdateClientState();
 
             await Task.Factory.StartNew(async () => {
-                while (true) {
+                while (true) { 
                     WebSocketReceiveResult result;
                     var message = new ArraySegment<byte>(new byte[4096]);
                     do {

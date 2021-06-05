@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Speech.Synthesis;
@@ -245,6 +246,10 @@ namespace MpWpfApp {
         }
 
         private void SetLoadOnLogin(bool loadOnLogin) {
+            if(!MpHelpers.Instance.IsThisAppAdmin()) {
+                MonkeyPaste.MpConsole.WriteLine("Process not running as admin, cannot alter load on login");
+                return;
+            }
             Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
             string appName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
             string appPath = MpHelpers.Instance.GetApplicationDirectory();// MainWindowViewModel.ClipTrayViewModel.ClipboardManager.LastWindowWatcher.ThisAppPath;

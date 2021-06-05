@@ -210,6 +210,10 @@ namespace MonkeyPaste {
         //public override string ToString() {
         //    throw new NotImplementedException();
         //}
+
+        public override string ToString() {
+            return $"Id:{Id} Text:{ItemPlainText}" + Environment.NewLine;
+        }
     }
 
     public enum MpClipDetailType {

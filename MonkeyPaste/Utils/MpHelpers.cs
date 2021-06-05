@@ -390,7 +390,7 @@ namespace MonkeyPaste {
         public string GetUserIp4Address() {
             var ipAddress = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault();
             if (ipAddress != null) {
-                return ipAddress.ToString();
+                return ipAddress.MapToIPv4().ToString();
             }
             return null;
         }

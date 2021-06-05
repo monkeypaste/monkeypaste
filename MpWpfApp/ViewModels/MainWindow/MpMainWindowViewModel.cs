@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -14,6 +15,7 @@ using DataGridAsyncDemoMVVM.filtersort;
 using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
 using Hardcodet.Wpf.TaskbarNotification;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase, IDisposable {
@@ -42,7 +44,7 @@ namespace MpWpfApp {
 
         #region Public Variables
 
-        public bool IsShowingDialog = false;        
+        public bool IsShowingDialog = false;
 
         #endregion
 
@@ -145,6 +147,9 @@ namespace MpWpfApp {
                 if(_isMainWindowLocked != value) {
                     _isMainWindowLocked = value;
                     OnPropertyChanged(nameof(IsMainWindowLocked));
+                    if(IsMainWindowLocked) {
+                        SystemTrayViewModel.ShowLogDialogCommand.Execute(null);
+                    }
                 }
             }
         }
@@ -273,6 +278,11 @@ namespace MpWpfApp {
 
         #region Public Methods        
         public MpMainWindowViewModel() : base() {
+            Task.Run(() => {
+                MpSocketServer.Instance.Init();
+            });
+            
+
             MpMainWindowViewModel.IsApplicationLoading = true;
 
             MpHelpers.Instance.Init();
@@ -446,7 +456,8 @@ namespace MpWpfApp {
 
         #region Disposable
         public void Dispose() {
-           foreach(string tfp in _tempFilePathList) {
+            MonkeyPaste.MpSocketServer.Instance.Stop();
+           foreach (string tfp in _tempFilePathList) {
                 if(File.Exists(tfp)) {
                     try {
                         File.Delete(tfp);

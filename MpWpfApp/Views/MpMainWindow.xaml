@@ -125,6 +125,9 @@
                                   Icon="{Binding Source={StaticResource HelpIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                                   Command="{Binding ShowSettingsWindowCommand}"
                                   CommandParameter="{StaticResource SettingsTabHelp}" />
+                        <MenuItem Header="Log..."
+                                  Command="{Binding ShowLogDialogCommand}" />
+                        <Separator />
                         <MenuItem Header="Exit"
                                   Icon="{Binding Source={StaticResource SignOutIcon}, Converter={StaticResource StringToIconConverter}, Mode=OneWay}"
                                   Command="{Binding ExitApplicationCommand}" />

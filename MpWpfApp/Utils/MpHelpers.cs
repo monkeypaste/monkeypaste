@@ -1199,6 +1199,15 @@ namespace MpWpfApp {
             return winType;
         }
 
+        public IntPtr GetThisAppHandle() {
+            return Process.GetCurrentProcess().Handle;
+        }
+
+        public bool IsThisAppAdmin() {
+            return (new WindowsPrincipal(WindowsIdentity.GetCurrent()))
+                      .IsInRole(WindowsBuiltInRole.Administrator);
+        }
+
         public bool IsProcessAdmin(IntPtr handle) {
             if(handle == null || handle == IntPtr.Zero) {
                 return false;
