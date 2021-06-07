@@ -11,7 +11,7 @@ namespace MonkeyPaste {
         
         public MpMainShellViewModel() {
             Task.Run(() => {
-                MpSocketClient.Instance.Init();
+                //MpSocketClient.Instance.Init();
             });
 
             TagCollectionViewModel = new MpTagTileCollectionViewModel();            

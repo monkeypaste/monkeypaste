@@ -1,37 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
-using RtfPipe.Tokens;
-using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
 
 namespace MonkeyPaste {
-
-    public class AsynchronousClient {
-        // The port number for the remote device.  
-        private const int port = 6000;
-
+    public class MpSocketClient {
         // ManualResetEvent instances signal completion.  
-        private static ManualResetEvent connectDone = new ManualResetEvent(false);
-        private static ManualResetEvent sendDone = new ManualResetEvent(false);
-        private static ManualResetEvent receiveDone = new ManualResetEvent(false);
+        private static ManualResetEvent connectDone =
+            new ManualResetEvent(false);
+        private static ManualResetEvent sendDone =
+            new ManualResetEvent(false);
+        private static ManualResetEvent receiveDone =
+            new ManualResetEvent(false);
 
         // The response from the remote device.  
         private static String response = String.Empty;
-        
-        public static void StartClient(string ip,int port) {
+
+        public static void StartClient(string hostNameOrIpAddress) {
             // Connect to a remote device.  
             try {
                 // Establish the remote endpoint for the socket.  
                 // The name of the
                 // remote device is "host.contoso.com".  
-                IPHostEntry ipHostInfo = Dns.GetHostEntry(ip);
+                IPHostEntry ipHostInfo = Dns.GetHostEntry(hostNameOrIpAddress);
                 IPAddress ipAddress = ipHostInfo.AddressList[0];
-                IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
+                IPEndPoint remoteEP = new IPEndPoint(ipAddress, MpSocketStateObject.Port);
 
                 // Create a TCP/IP socket.  
                 Socket client = new Socket(ipAddress.AddressFamily,
@@ -56,6 +50,7 @@ namespace MonkeyPaste {
                 // Release the socket.  
                 client.Shutdown(SocketShutdown.Both);
                 client.Close();
+
             }
             catch (Exception e) {
                 Console.WriteLine(e.ToString());
@@ -84,11 +79,11 @@ namespace MonkeyPaste {
         private static void Receive(Socket client) {
             try {
                 // Create the state object.  
-                StateObject state = new StateObject();
+                MpSocketStateObject state = new MpSocketStateObject();
                 state.workSocket = client;
 
                 // Begin receiving the data from the remote device.  
-                client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                client.BeginReceive(state.buffer, 0, MpSocketStateObject.BufferSize, 0,
                     new AsyncCallback(ReceiveCallback), state);
             }
             catch (Exception e) {
@@ -100,7 +95,7 @@ namespace MonkeyPaste {
             try {
                 // Retrieve the state object and the client socket
                 // from the asynchronous state object.  
-                StateObject state = (StateObject)ar.AsyncState;
+                MpSocketStateObject state = (MpSocketStateObject)ar.AsyncState;
                 Socket client = state.workSocket;
 
                 // Read data from the remote device.  
@@ -111,7 +106,7 @@ namespace MonkeyPaste {
                     state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
 
                     // Get the rest of the data.  
-                    client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                    client.BeginReceive(state.buffer, 0, MpSocketStateObject.BufferSize, 0,
                         new AsyncCallback(ReceiveCallback), state);
                 } else {
                     // All the data has arrived; put it in response.  
@@ -152,50 +147,5 @@ namespace MonkeyPaste {
                 Console.WriteLine(e.ToString());
             }
         }
-    }
-
-    public class MpSocketClient {
-        #region Singleton
-        private static readonly Lazy<MpSocketClient> _Lazy = new Lazy<MpSocketClient>(() => new MpSocketClient());
-        public static MpSocketClient Instance { get { return _Lazy.Value; } }
-
-        private MpSocketClient() { }
-        #endregion
-
-        #region Private Variables
-        private string _hostIp = "31.85.174.2";
-        private int _port = 6000;
-        #endregion
-
-        #region Properties
-        public ObservableCollection<string> StatusLog = new ObservableCollection<string>();
-        #endregion
-
-        #region Public Methods
-        public void Init() {
-            AsynchronousClient.StartClient(_hostIp, _port);
-
-            StatusLog.CollectionChanged += (s, e) => {
-                if (e.NewItems != null) {
-                    foreach (var msg in e.NewItems) {
-                        MpConsole.WriteLine(msg);
-                    }
-                }
-            };
-        }
-
-        public void SendMessage(string message) {
-
-        }
-        #endregion
-
-        #region Private Methods
-        private void AddMessage(string message) {
-            StatusLog.Add(string.Format("{0}\n", message));
-        }
-        #region Event Handlers 
-        #endregion
-
-        #endregion
     }
 }

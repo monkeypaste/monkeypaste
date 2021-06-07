@@ -387,12 +387,25 @@ namespace MonkeyPaste {
         #endregion
 
         #region Http
+        public bool CheckForInternetConnection() {
+            try {
+                using (var client = new WebClient())
+                using (client.OpenRead("http://www.google.com/")) {
+                    return true;
+                }
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+                return false;
+            }
+        }
         public string GetUserIp4Address() {
-            var ipAddress = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault();
+            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+            IPAddress ipAddress = ipHostInfo.AddressList[ipHostInfo.AddressList.Length - 1];
             if (ipAddress != null) {
                 return ipAddress.MapToIPv4().ToString();
             }
-            return null;
+            return "0.0.0.0";
         }
         public string GetFullyFormattedUrl(string str)
         {

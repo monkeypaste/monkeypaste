@@ -7,45 +7,27 @@ using System.Text;
 using System.Threading;
 
 namespace MonkeyPaste {
-
-    // State object for reading client data asynchronously  
-    public class StateObject {
-        // Size of receive buffer.  
-        public const int BufferSize = 1024;
-
-        // Receive buffer.  
-        public byte[] buffer = new byte[BufferSize];
-
-        // Received data string.
-        public StringBuilder sb = new StringBuilder();
-
-        // Client socket.
-        public Socket workSocket = null;
-    }
-
-    public class AsynchronousSocketListener {
+    public class MpSocketListener {
         // Thread signal.  
         public static ManualResetEvent allDone = new ManualResetEvent(false);
 
-        public AsynchronousSocketListener() {
-        }
+        public MpSocketListener() { }
 
-        public static void StartListening(int port) {
+        public static void StartListening() {
             // Establish the local endpoint for the socket.  
             // The DNS name of the computer  
             // running the listener is "host.contoso.com".  
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
+            IPAddress ipAddress = ipHostInfo.AddressList[ipHostInfo.AddressList.Length - 1];
+            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, MpSocketStateObject.Port);
 
             // Create a TCP/IP socket.  
-            Socket listener = new Socket(ipAddress.AddressFamily,
-                SocketType.Stream, ProtocolType.Tcp);
+            Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
             // Bind the socket to the local endpoint and listen for incoming connections.  
             try {
                 listener.Bind(localEndPoint);
-                listener.Listen(port);
+                listener.Listen(100);
 
                 while (true) {
                     // Set the event to nonsignaled state.  
@@ -53,9 +35,7 @@ namespace MonkeyPaste {
 
                     // Start an asynchronous socket to listen for connections.  
                     Console.WriteLine("Waiting for a connection...");
-                    listener.BeginAccept(
-                        new AsyncCallback(AcceptCallback),
-                        listener);
+                    listener.BeginAccept(new AsyncCallback(AcceptCallback), listener);
 
                     // Wait until a connection is made before continuing.  
                     allDone.WaitOne();
@@ -80,10 +60,15 @@ namespace MonkeyPaste {
             Socket handler = listener.EndAccept(ar);
 
             // Create the state object.  
-            StateObject state = new StateObject();
+            MpSocketStateObject state = new MpSocketStateObject();
             state.workSocket = handler;
-            handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                new AsyncCallback(ReadCallback), state);
+            handler.BeginReceive(
+                state.buffer,
+                0,
+                MpSocketStateObject.BufferSize,
+                0,
+                new AsyncCallback(ReadCallback),
+                state);
         }
 
         public static void ReadCallback(IAsyncResult ar) {
@@ -91,7 +76,7 @@ namespace MonkeyPaste {
 
             // Retrieve the state object and the handler socket  
             // from the asynchronous state object.  
-            StateObject state = (StateObject)ar.AsyncState;
+            MpSocketStateObject state = (MpSocketStateObject)ar.AsyncState;
             Socket handler = state.workSocket;
 
             // Read data from the client socket.
@@ -99,13 +84,12 @@ namespace MonkeyPaste {
 
             if (bytesRead > 0) {
                 // There  might be more data, so store the data received so far.  
-                state.sb.Append(Encoding.ASCII.GetString(
-                    state.buffer, 0, bytesRead));
+                state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
 
                 // Check for end-of-file tag. If it is not there, read
                 // more data.  
                 content = state.sb.ToString();
-                if (content.IndexOf("<EOF>") > -1) {
+                if (content.IndexOf(MpSocketStateObject.EofToken) > -1) {
                     // All the data has been read from the
                     // client. Display it on the console.  
                     Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",
@@ -114,12 +98,17 @@ namespace MonkeyPaste {
                     Send(handler, content);
                 } else {
                     // Not all data received. Get more.  
-                    handler.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                    new AsyncCallback(ReadCallback), state);
+                    handler.BeginReceive(
+                        state.buffer,
+                        0,
+                        MpSocketStateObject.BufferSize,
+                        0,
+                        new AsyncCallback(ReadCallback),
+                        state);
                 }
             }
-
         }
+
         private static void Send(Socket handler, String data) {
             // Convert the string data to byte data using ASCII encoding.  
             byte[] byteData = Encoding.ASCII.GetBytes(data);
@@ -146,53 +135,5 @@ namespace MonkeyPaste {
                 Console.WriteLine(e.ToString());
             }
         }
-    }
-
-
-        public class MpSocketServer {
-        #region Singleton
-        private static readonly Lazy<MpSocketServer> _Lazy = new Lazy<MpSocketServer>(() => new MpSocketServer());
-        public static MpSocketServer Instance { get { return _Lazy.Value; } }
-
-        private MpSocketServer() { }
-        #endregion
-
-        #region Private Variables
-        //private SocketServer _socketServer;
-        #endregion
-
-        #region Properties
-        public ObservableCollection<string> StatusLog = new ObservableCollection<string>();
-        #endregion
-
-        #region Public Methods
-        public void Init() {
-            AsynchronousSocketListener.StartListening(6000);
-
-            StatusLog.CollectionChanged += (s, e) => {
-                if(e.NewItems != null) {
-                    foreach(var msg in e.NewItems) {
-                        MpConsole.WriteLine(msg);
-                    }
-                }
-            };
-        }
-
-        public void Run(int port) {
-        }
-
-        public void Stop() {
-        }
-        #endregion
-
-        #region Private Methods
-        private void AddMessage(string message) {
-            StatusLog.Add(string.Format("{0}\n", message));
-        }
-
-        #region Event Handlers
-        #endregion
-
-        #endregion
     }
 }

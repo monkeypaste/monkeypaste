@@ -13,6 +13,9 @@ namespace MonkeyPaste {
     public partial class App : Application {
         public App() {
             MpTempFileManager.Instance.Init();
+            //MpSocketClient.StartClient("192.168.43.209");
+            MpSessionManager.Instance.Init(@"tkefauver@gmail.com");
+
             InitializeComponent();
             MainPage = new MpMainShell();
         }
@@ -22,41 +25,10 @@ namespace MonkeyPaste {
         }
         protected override void OnSleep() {
             MpConsole.WriteTraceLine(Environment.NewLine + @"-------------Application Sleeping----------" + Environment.NewLine);
-
-            //var msv = Application.Current.MainPage as MpMainShell;
-            //if(msv.SettingsPageView != null) {
-            //    if(msv.SettingsPageView.ChatPageView != null) {
-            //        var cpvm = msv.SettingsPageView.ChatPageView.BindingContext as MpChatPageViewModel;
-            //        var chatService = cpvm.ChatService;
-            //        chatService.Dispose();
-            //    }
-            //}
         }
 
         protected override void OnResume() {
             MpConsole.WriteTraceLine(Environment.NewLine + @"-------------Application Resuming----------" + Environment.NewLine);
-
-            //var msv = Application.Current.MainPage as MpMainShell;
-            //if (msv.SettingsPageView != null) {
-            //    if (msv.SettingsPageView.ChatPageView != null) {
-            //        var cpvm = msv.SettingsPageView.ChatPageView.BindingContext as MpChatPageViewModel;
-            //        var chatService = cpvm.ChatService;
-            //        Task.Run(async () => {
-            //            if (!chatService.IsConnected) {
-            //                await chatService.CreateConnection();
-            //            }
-            //        });
-
-            //        Page view = null;
-            //        if (MpViewModelBase.User != null) {
-            //            view = msv.SettingsPageView.ChatPageView;
-            //        } else {
-            //            view = msv;
-            //        }
-            //        //var navigationPage = new NavigationPage(view);
-            //        MainPage = view;
-            //    }
-            //}
         }
     }
 }
