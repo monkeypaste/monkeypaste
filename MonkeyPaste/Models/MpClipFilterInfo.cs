@@ -7,7 +7,7 @@ using SQLiteNetExtensions;
 namespace MonkeyPaste {
     //public class MpClipFilterInfoItem : MpDbObject {
     //    [AutoIncrement, PrimaryKey]
-    //    public override int Id { get; set; }
+    //    public override int Id { get; set; } = -1;
 
     //    public string FilterByObjectTypeName { get; set; }
 
@@ -18,7 +18,7 @@ namespace MonkeyPaste {
 
     //public class MpClipFilterInfo : MpDbObject {
     //    [AutoIncrement,PrimaryKey]
-    //    public override int Id { get; set; }
+    //    public override int Id { get; set; } = -1;
 
     //    public string FilterByObjectTypeName { get; set; }
         

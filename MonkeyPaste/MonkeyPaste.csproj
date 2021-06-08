@@ -17,22 +17,27 @@
   <ItemGroup>
     <Compile Remove="Bootstrapper\**" />
     <Compile Remove="Repositories\**" />
+    <Compile Remove="Services\**" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\ClipCollectionViewModelClip\ClipViewModelClip\Title\**" />
     <Compile Remove="Views\Shell\MainFlyOut\Pages\ClipCollectionViewClip\ClipViewClip\Content\**" />
     <Compile Remove="Views\Shell\MainFlyOut\Pages\ClipCollectionViewClip\ClipViewClip\Title\**" />
     <EmbeddedResource Remove="Bootstrapper\**" />
     <EmbeddedResource Remove="Repositories\**" />
+    <EmbeddedResource Remove="Services\**" />
     <EmbeddedResource Remove="ViewModels\Shell\MainFlyOut\Pages\ClipCollectionViewModelClip\ClipViewModelClip\Title\**" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\ClipCollectionViewClip\ClipViewClip\Content\**" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\Pages\ClipCollectionViewClip\ClipViewClip\Title\**" />
     <None Remove="Bootstrapper\**" />
     <None Remove="Repositories\**" />
+    <None Remove="Services\**" />
     <None Remove="ViewModels\Shell\MainFlyOut\Pages\ClipCollectionViewModelClip\ClipViewModelClip\Title\**" />
     <None Remove="Views\Shell\MainFlyOut\Pages\ClipCollectionViewClip\ClipViewClip\Content\**" />
     <None Remove="Views\Shell\MainFlyOut\Pages\ClipCollectionViewClip\ClipViewClip\Title\**" />
     <Compile Remove="ViewModels\Bases\MpUndoableViewModelBase.cs" />
     <Compile Remove="ViewModels\Shell\MainFlyOut\MpMainViewModel.cs" />
+    <Compile Remove="ViewModels\Shell\MainFlyOut\Pages\Settings\MpChatPageViewModel.cs" />
     <Compile Remove="Views\Shell\MainFlyOut\MpMainView.xaml.cs" />
+    <Compile Remove="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml.cs" />
     <None Remove=".DS_Store" />
     <None Remove="Resources\Html\Editor.html" />
     <None Remove="Resources\Icons\monkey.png" />
@@ -47,6 +52,7 @@
   <ItemGroup>
     <EmbeddedResource Remove="MainPage.xaml" />
     <EmbeddedResource Remove="Views\Shell\MainFlyOut\MpMainView.xaml" />
+    <EmbeddedResource Remove="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -103,9 +109,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Shell\MainFlyOut\Pages\ClipTileCollectionView\Clip\AssociatedTags\MpClipTagAssociationPageView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Shell\MainFlyOut\TagTileCollectionView\MpTagTileCollectionView.xaml">

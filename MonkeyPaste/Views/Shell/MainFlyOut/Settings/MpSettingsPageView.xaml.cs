@@ -12,7 +12,6 @@ using Xamarin.Forms.Xaml;
 namespace MonkeyPaste {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MpSettingsPageView : ContentPage {
-        public MpChatPageView ChatPageView { get; set; }
         
         public MpSettingsPageView() {
             InitializeComponent();
@@ -20,14 +19,14 @@ namespace MonkeyPaste {
         }
 
         public ICommand Start => new Command(async () => {
-            var spvm = BindingContext as MpSettingsPageViewModel;
-            MpViewModelBase.User = spvm.Username;
+            //var spvm = BindingContext as MpSettingsPageViewModel;
+            //MpViewModelBase.User = spvm.Username;
 
-            if(ChatPageView == null) {
-                var cpvm = new MpChatPageViewModel(new MpSyncService());
-                ChatPageView = new MpChatPageView(cpvm);
-            }
-            await Navigation.PushModalAsync(ChatPageView);
+            //if(ChatPageView == null) {
+            //    var cpvm = new MpChatPageViewModel(new MpSyncService());
+            //    ChatPageView = new MpChatPageView(cpvm);
+            //}
+            //await Navigation.PushModalAsync(ChatPageView);
         });
 
         private void Button_Clicked(object sender, EventArgs e) {

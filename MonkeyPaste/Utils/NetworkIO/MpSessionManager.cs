@@ -4,12 +4,20 @@ using System.Net.Http;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace MonkeyPaste {
-    public class MpSessionManager {
+    public class MpSessionManager : IDisposable {
         #region Singleton
         private static readonly Lazy<MpSessionManager> _Lazy = new Lazy<MpSessionManager>(() => new MpSessionManager());
         public static MpSessionManager Instance { get { return _Lazy.Value; } }
+
+        private MpSessionManager() {
+            // Register for connectivity changes, be sure to unsubscribe when finished
+            Connectivity.ConnectivityChanged += MpSessionManager_ConnectivityChanged;
+        }       
+
+        
         #endregion
 
         #region Private Variables 
@@ -36,13 +44,21 @@ namespace MonkeyPaste {
         public string ConnectAction { get; set; } = @"Connect";
 
         public string DisconnectAction { get; set; } = @"Disconnect";
+
+        public bool IsConnected => !string.IsNullOrEmpty(_accessToken);
         #endregion
 
         #region Public Methods
         public bool Init(string email) {
-            if(!MpHelpers.Instance.CheckForInternetConnection()) {
+            if(!MpHelpers.Instance.IsConnectedToInternet()) {
+                MpConsole.WriteLine("*************** NO INTERNET CONNECTION AVAILABLE **********************");
                 return false;
             }
+            if (!MpHelpers.Instance.IsMpServerAvailable()) {
+                MpConsole.WriteLine("*************** HOST SERVER NOT AVAILABLE **********************");
+                return false;
+            }
+            
 
             Task.Run(async () => {
                 Uri uri = new Uri(
@@ -54,19 +70,39 @@ namespace MonkeyPaste {
                     email,
                     MpHelpers.Instance.GetUserIp4Address()
                     ));
-
-                HttpResponseMessage response = await _client.GetAsync(uri);
-                if (response.IsSuccessStatusCode) {
-                    var byteArray = await response.Content.ReadAsByteArrayAsync();
-                    _accessToken = Encoding.UTF8.GetString(byteArray, 0, byteArray.Length);
-
-                    MpConsole.WriteLine(@"Session access token: " + _accessToken);
-                } else {
-                    MpConsole.WriteTraceLine(@"Could not connect server: " + uri.ToString());
+                try {
+                    HttpResponseMessage response = await _client.GetAsync(uri);
+                    if (response.IsSuccessStatusCode) {
+                        var byteArray = await response.Content.ReadAsByteArrayAsync();
+                        _accessToken = Encoding.UTF8.GetString(byteArray, 0, byteArray.Length);
+                        MpConsole.WriteLine(@"Session access token: " + _accessToken);
+                    } else {
+                        _accessToken = string.Empty;
+                        MpConsole.WriteTraceLine(@"Could not connect server: " + uri.ToString());
+                    }
+                }
+                catch(Exception ex) {
+                    _accessToken = string.Empty;
+                    MpConsole.WriteTraceLine("", ex);
                 }
             });
             return true;
         }
+
+        public void Dispose() {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region Private Methods
+
+        #region Event Handlers
+        private void MpSessionManager_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e) {
+            var access = e.NetworkAccess;
+            var profiles = e.ConnectionProfiles;
+        }
+        #endregion
+
         #endregion
     }
 }

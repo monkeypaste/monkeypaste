@@ -90,7 +90,7 @@ namespace MonkeyPaste {
             if(args == null || args.GetType() != typeof(Exception)) {
                 WriteTraceLine(string.Format(format, args),null,callerName,callerFilePath,lineNum);
             } else {
-                WriteTraceLine(format,args, callerName, callerFilePath, lineNum);
+                WriteTraceLine(format, args, callerName, callerFilePath, lineNum);
             }
             
         }

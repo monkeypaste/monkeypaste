@@ -11,7 +11,7 @@ namespace MonkeyPaste {
         private static List<MpSource> _AllSources = null;
 
         [PrimaryKey,AutoIncrement]
-        public override int Id { get; set; }
+        public override int Id { get; set; } = -1;
 
         [ForeignKey(typeof(MpUrl))]
         public int UrlId { get; set; }

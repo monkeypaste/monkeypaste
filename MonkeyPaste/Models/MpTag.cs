@@ -16,7 +16,7 @@ namespace MonkeyPaste {
 
         #region Columns
         [PrimaryKey, AutoIncrement]
-        public override int Id { get; set; }
+        public override int Id { get; set; } = -1;
 
         public int TagSortIdx { get; set; } = 1;
 

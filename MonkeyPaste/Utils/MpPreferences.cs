@@ -16,6 +16,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
+
         #region Application Properties
         public const string DbName = "Mp.db";
         public const int MinDbPasswordLength = 12;
@@ -50,6 +51,15 @@ namespace MonkeyPaste {
                 Preferences.Set(nameof(DbMediaFolderPath), value);
             }
         }
+
+        public static string SyncServerEndpoint {
+            get {
+                return Preferences.Get(nameof(SyncServerEndpoint), @"https://192.168.43.209:44380/");
+            }
+            set {
+                Preferences.Set(nameof(SyncServerEndpoint), value);
+            }
+        }
         #endregion
 
         #region User Properties
@@ -80,6 +90,24 @@ namespace MonkeyPaste {
             }
             set {
                 Preferences.Set(nameof(IsSearchCaseSensitive), value);
+            }
+        }
+
+        public static string UserName {
+            get {
+                return Preferences.Get(nameof(UserName), "Not Set");
+            }
+            set {
+                Preferences.Set(nameof(UserName), value);
+            }
+        }
+
+        public static int SyncPort {
+            get {
+                return Preferences.Get(nameof(UserName), 11000);
+            }
+            set {
+                Preferences.Set(nameof(UserName), value);
             }
         }
         #endregion

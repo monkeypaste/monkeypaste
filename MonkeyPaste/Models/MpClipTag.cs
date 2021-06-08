@@ -11,7 +11,7 @@ namespace MonkeyPaste {
     public class MpClipTag : MpDbModelBase {
         #region Columns
         [PrimaryKey, AutoIncrement]
-        public override int Id { get; set; }
+        public override int Id { get; set; } = -1;
 
         [ForeignKey(typeof(MpTag))]
         public int TagId { get; set; }

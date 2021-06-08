@@ -7,6 +7,7 @@ using System.Text;
 using FFImageLoading.Work;
 using SkiaSharp;
 using Xamarin.Forms;
+using Xamarin.Essentials;
 
 namespace MonkeyPaste {
     public class MpHelpers {
@@ -387,18 +388,62 @@ namespace MonkeyPaste {
         #endregion
 
         #region Http
-        public bool CheckForInternetConnection() {
+        public bool IsConnectedToInternet() {
+            //try {
+            //    using (var client = new WebClient()) {
+            //        try {
+            //            var stream = client.OpenRead("http://www.google.com");
+            //            stream.Dispose();
+            //            return true;
+            //        }
+            //        catch(Exception ex) {
+            //            MpConsole.WriteTraceLine("No internet", ex);
+            //            return false;
+            //        }
+            //    }
+
+            //}
+            //catch (Exception e) {
+            //    Console.WriteLine(e.ToString());
+            //    return false;
+            //}
+            var current = Connectivity.NetworkAccess;
+
+            if (current == NetworkAccess.Internet) {
+                return true;
+            }
+            return false;
+        }
+
+        public bool IsMpServerAvailable() {
+            if(!IsConnectedToInternet()) {
+                return false;
+            }
             try {
-                using (var client = new WebClient())
-                using (client.OpenRead("http://www.google.com/")) {
-                    return true;
+                
+                using (var client = new WebClient()) {
+                    try {
+                        var stream = client.OpenRead(MpPreferences.SyncServerEndpoint);
+                        stream.Dispose();
+                        return true;
+                    }
+                    catch(System.AggregateException ex) {
+                        MpConsole.WriteTraceLine("Sync Server Unavailable", ex);
+                        return false;
+                    }
+                    catch (Exception ex) {
+                        MpConsole.WriteTraceLine("Sync Server Unavailable", ex);
+                        return false;
+                    }
                 }
+
             }
             catch (Exception e) {
                 Console.WriteLine(e.ToString());
                 return false;
             }
         }
+
         public string GetUserIp4Address() {
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
             IPAddress ipAddress = ipHostInfo.AddressList[ipHostInfo.AddressList.Length - 1];

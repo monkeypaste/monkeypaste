@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public class MpDbImage : MpDbModelBase {
         [PrimaryKey,AutoIncrement]
-        public override int Id { get; set; }
+        public override int Id { get; set; } = -1;
 
         //public byte[] ImageBytes { get; set; }
 

@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace MonkeyPaste {
     public class MpApp : MpDbModelBase, MpIClipSource {
-        public override int Id { get; set; } = 0;
+        public override int Id { get; set; } = -1;
         
         [Indexed]
         public string AppPath { get; set; } = string.Empty;

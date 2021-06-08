@@ -7,7 +7,9 @@
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	<application android:label="Monkey Paste"  android:usesCleartextTraffic="true" android:theme="@style/Splash" android:icon="@drawable/icon">
+	<uses-permission android:name="android.permission.INTERNET" />
+	
+  <application android:label="Monkey Paste" android:usesCleartextTraffic="true" android:theme="@style/Splash" android:icon="@drawable/icon">
 		<provider android:name="android.support.v4.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
 		</provider>
