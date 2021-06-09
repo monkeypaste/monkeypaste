@@ -12,10 +12,6 @@ namespace MonkeyPaste {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class App : Application {
         public App() {
-            MpTempFileManager.Instance.Init();
-            //MpSocketClient.StartClient("192.168.43.209");
-            MpSessionManager.Instance.Init(@"tkefauver@gmail.com");
-
             InitializeComponent();
             MainPage = new MpMainShell();
         }

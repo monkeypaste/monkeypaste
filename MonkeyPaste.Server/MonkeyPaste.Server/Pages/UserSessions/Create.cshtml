@@ -1,0 +1,54 @@
+﻿@page
+@model MonkeyPaste.Server.Pages.UserSessions.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>MpUserSession</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MpUserSession.UserId" class="control-label"></label>
+                <input asp-for="MpUserSession.UserId" class="form-control" />
+                <span asp-validation-for="MpUserSession.UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MpUserSession.AccessToken" class="control-label"></label>
+                <input asp-for="MpUserSession.AccessToken" class="form-control" />
+                <span asp-validation-for="MpUserSession.AccessToken" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MpUserSession.Ip4Address" class="control-label"></label>
+                <input asp-for="MpUserSession.Ip4Address" class="form-control" />
+                <span asp-validation-for="MpUserSession.Ip4Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MpUserSession.PortNum" class="control-label"></label>
+                <input asp-for="MpUserSession.PortNum" class="form-control" />
+                <span asp-validation-for="MpUserSession.PortNum" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MpUserSession.LoginDateTime" class="control-label"></label>
+                <input asp-for="MpUserSession.LoginDateTime" class="form-control" />
+                <span asp-validation-for="MpUserSession.LoginDateTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

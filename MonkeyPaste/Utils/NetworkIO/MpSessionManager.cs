@@ -35,41 +35,38 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
-        public string ServerIpOrHostname { get; set; } = @"192.168.43.209";
+        public string ControllerName { get; set; } = @"UserSessions";
 
-        public int ServerPortNum { get; set; } = 44380;
+        public string ConnectAction { get; set; } = @"Create";
 
-        public string ControllerName { get; set; } = @"MpUsers";
-
-        public string ConnectAction { get; set; } = @"Connect";
-
-        public string DisconnectAction { get; set; } = @"Disconnect";
+        public string DisconnectAction { get; set; } = @"Delete";
 
         public bool IsConnected => !string.IsNullOrEmpty(_accessToken);
         #endregion
 
         #region Public Methods
-        public bool Init(string email) {
+        public bool Init() {
             if(!MpHelpers.Instance.IsConnectedToInternet()) {
                 MpConsole.WriteLine("*************** NO INTERNET CONNECTION AVAILABLE **********************");
                 return false;
             }
-            if (!MpHelpers.Instance.IsMpServerAvailable()) {
-                MpConsole.WriteLine("*************** HOST SERVER NOT AVAILABLE **********************");
-                return false;
-            }
+            //if (!MpHelpers.Instance.IsMpServerAvailable()) {
+            //    MpConsole.WriteLine("*************** HOST SERVER NOT AVAILABLE **********************");
+            //    return false;
+            //}
             
 
             Task.Run(async () => {
                 Uri uri = new Uri(
-                    string.Format(@"https://{0}:{1}/{2}/{3}?email={4}&ip={5}", 
-                    ServerIpOrHostname, 
-                    ServerPortNum,
+                    string.Format(@"{0}/{1}/{2}?email={3}&ip={4}",
+                    MpPreferences.SyncServerEndpoint,
                     ControllerName,
                     ConnectAction,
-                    email,
+                    MpPreferences.UserEmail,
                     MpHelpers.Instance.GetUserIp4Address()
                     ));
+                //var connStr = $"https://192.168.43.209:44376/UserSessions?email={MpPreferences.UserEmail}&ip={MpHelpers.Instance.GetUserIp4Address()}";
+                //var uri = new Uri(connStr);
                 try {
                     HttpResponseMessage response = await _client.GetAsync(uri);
                     if (response.IsSuccessStatusCode) {

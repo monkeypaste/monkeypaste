@@ -52,12 +52,36 @@ namespace MonkeyPaste {
             }
         }
 
-        public static string SyncServerEndpoint {
+        public static string SyncServerProtocol {
             get {
-                return Preferences.Get(nameof(SyncServerEndpoint), @"https://192.168.43.209:44380/");
+                return Preferences.Get(nameof(SyncServerProtocol), @"https://");
             }
             set {
-                Preferences.Set(nameof(SyncServerEndpoint), value);
+                Preferences.Set(nameof(SyncServerProtocol), value);
+            }
+        }
+
+        public static string SyncServerHostNameOrIp {
+            get {
+                return Preferences.Get(nameof(SyncServerHostNameOrIp), @"192.168.43.209");
+            }
+            set {
+                Preferences.Set(nameof(SyncServerHostNameOrIp), value);
+            }
+        }
+
+        public static int SyncServerPort {
+            get {
+                return Preferences.Get(nameof(SyncServerPort), 44376);
+            }
+            set {
+                Preferences.Set(nameof(SyncServerPort), value);
+            }
+        }
+
+        public static string SyncServerEndpoint {
+            get {
+                return $"{SyncServerProtocol}{SyncServerHostNameOrIp}:{SyncServerPort}";
             }
         }
         #endregion
@@ -99,6 +123,15 @@ namespace MonkeyPaste {
             }
             set {
                 Preferences.Set(nameof(UserName), value);
+            }
+        }
+
+        public static string UserEmail {
+            get {
+                return Preferences.Get(nameof(UserEmail), "tkefauver@gmail.com");
+            }
+            set {
+                Preferences.Set(nameof(UserEmail), value);
             }
         }
 

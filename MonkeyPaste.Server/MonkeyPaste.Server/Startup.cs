@@ -10,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using MonkeyPaste.Server.Data;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,9 +27,12 @@ namespace MonkeyPaste.Server {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddRazorPages();
+            
+
+            services.AddRazorPages(); 
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -69,9 +73,10 @@ namespace MonkeyPaste.Server {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             } else {
-                app.UseExceptionHandler("/Error");
+                //app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                //app.UseHsts();
+                app.UseHttpsRedirection();
             }
 
             app.UseHttpsRedirection();
@@ -81,6 +86,7 @@ namespace MonkeyPaste.Server {
 
             app.UseAuthentication();
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapRazorPages();
