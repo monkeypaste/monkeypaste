@@ -8,10 +8,29 @@ using FFImageLoading.Work;
 using SkiaSharp;
 using Xamarin.Forms;
 using Xamarin.Essentials;
+using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Numerics;
+using System.Runtime.ConstrainedExecution;
+using System.Security.Cryptography.X509Certificates;
+using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto.Prng;
+using Org.BouncyCastle.Security;
+using Org.BouncyCastle.X509;
+using Org.BouncyCastle.Utilities;
+using Org.BouncyCastle.Asn1.X509;
+using Org.BouncyCastle.Asn1.Pkcs;
+using Org.BouncyCastle.Crypto.Operators;
+using Org.BouncyCastle.Crypto.Generators;
+using Org.BouncyCastle.Pkcs;
+using Org.BouncyCastle.Asn1;
+using Org.BouncyCastle.OpenSsl;
+using Org.BouncyCastle.Crypto.Parameters;
 
 namespace MonkeyPaste {
-    public class MpHelpers {
-        #region Singleton
+public class MpHelpers {
+#region Singleton
         private static readonly Lazy<MpHelpers> _Lazy = new Lazy<MpHelpers>(() => new MpHelpers());
         public static MpHelpers Instance { get { return _Lazy.Value; } }
 
@@ -388,25 +407,55 @@ namespace MonkeyPaste {
         #endregion
 
         #region Http
-        public bool IsConnectedToInternet() {
-            //try {
-            //    using (var client = new WebClient()) {
-            //        try {
-            //            var stream = client.OpenRead("http://www.google.com");
-            //            stream.Dispose();
-            //            return true;
-            //        }
-            //        catch(Exception ex) {
-            //            MpConsole.WriteTraceLine("No internet", ex);
-            //            return false;
-            //        }
-            //    }
+        //if you are using local Hosting or on premises with self signed certficate,   
+        //in IOS add domain host address and Android use IP ADDRESS  
+        const string SERVICE_BASE_URL = "https://devenvexe.com"; //replace base address   
+        const string SERVICE_RELATIVE_URL = "/my/api/path";
 
-            //}
-            //catch (Exception e) {
-            //    Console.WriteLine(e.ToString());
-            //    return false;
-            //}
+        public async Task<string> GetDataAsync(string baseUrl, string relUrl) {
+            var uri = new Uri(relUrl, UriKind.Relative);
+            var request = new HttpRequestMessage {
+                Method = HttpMethod.Get,
+                RequestUri = uri
+            };
+
+            var client = GetHttpClient(baseUrl);
+
+            HttpResponseMessage response = null;
+
+            try {
+                response = await client.GetAsync(request.RequestUri, HttpCompletionOption.ResponseHeadersRead);
+            }
+            catch (Exception ex) {
+                return ex.InnerException.Message;
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            return content;
+        }
+
+        HttpClient GetHttpClient(string baseUrl) {
+            var handler = new HttpClientHandler {
+                UseProxy = true,
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+
+            var client = new HttpClient(handler) {
+                BaseAddress = new Uri(baseUrl)
+            };
+
+            client.DefaultRequestHeaders.Connection.Add("keep-alive");
+            client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+            client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
+
+            return client;
+        }
+
+        
+
+
+        public bool IsConnectedToInternet() {
             var current = Connectivity.NetworkAccess;
 
             if (current == NetworkAccess.Internet) {
@@ -452,6 +501,7 @@ namespace MonkeyPaste {
             }
             return "0.0.0.0";
         }
+
         public string GetFullyFormattedUrl(string str)
         {
             //returns url so it has protocol prefix

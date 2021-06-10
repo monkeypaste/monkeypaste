@@ -18,6 +18,9 @@ namespace MonkeyPaste {
         #region Properties
 
         #region Application Properties
+        public const string SslAlgorithm = "SHA256WITHRSA";
+        public const string SslCASubject = "CN=MPCA";
+        public const string SslCertSubject = "CN=127.0.01";
         public const string DbName = "Mp.db";
         public const int MinDbPasswordLength = 12;
         public const int MaxDbPasswordLength = 18;
@@ -87,6 +90,33 @@ namespace MonkeyPaste {
         #endregion
 
         #region User Properties
+        public string SslPrivateKey {
+            get {
+                return Preferences.Get(nameof(SslPrivateKey), string.Empty);
+            }
+            set {
+                Preferences.Set(nameof(SslPrivateKey), value);
+            }
+        }
+
+        public string SslPublicKey {
+            get {
+                return Preferences.Get(nameof(SslPublicKey), string.Empty);
+            }
+            set {
+                Preferences.Set(nameof(SslPublicKey), value);
+            }
+        }
+
+        public DateTime SslCertExpirationDateTime {
+            get {
+                return Preferences.Get(nameof(SslCertExpirationDateTime), DateTime.UtcNow.AddDays(-1));
+            }
+            set {
+                Preferences.Set(nameof(SslCertExpirationDateTime), value);
+            }
+        }
+
         public static bool EncryptDb {
             get {
                 return Preferences.Get(nameof(EncryptDb), true);

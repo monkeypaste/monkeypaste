@@ -19,6 +19,7 @@ using static Java.Util.Jar.Attributes;
 using Xamarin.Forms;
 using Plugin.CurrentActivity;
 using System.Net;
+using Java.Security;
 
 namespace MonkeyPaste.Droid {
     [Activity(
@@ -53,9 +54,7 @@ namespace MonkeyPaste.Droid {
             CrossCurrentActivity.Current.Init(this, savedInstanceState);
 
             ServicePointManager.ServerCertificateValidationCallback += (o, cert, chain, errors) => true;
-            //Couchbase.Lite.Support.Droid.Activate(ApplicationContext);
-
-
+           
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             
