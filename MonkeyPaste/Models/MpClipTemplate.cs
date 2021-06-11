@@ -12,7 +12,7 @@ namespace MonkeyPaste {
         private static List<MpClipTag> _AllClipTagList = null;
         #region Columns
         [PrimaryKey, AutoIncrement]
-        public override int Id { get; set; } = -1;
+        public override int Id { get; set; }
 
         [ForeignKey(typeof(MpClip))]
         public int ClipId { get; set; }

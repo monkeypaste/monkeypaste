@@ -35,7 +35,7 @@ namespace MonkeyPaste {
     }
     public class MpClientPlatform : MpDbModelBase {
         [PrimaryKey,AutoIncrement]
-        public override int Id { get; set; } = -1;
+        public override int Id { get; set; }
 
         public string Version { get; set; }
         public string CpuId { get; set; }

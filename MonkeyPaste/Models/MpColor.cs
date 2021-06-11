@@ -17,7 +17,7 @@ namespace MonkeyPaste {
         public byte A { get; set; }
 
         [PrimaryKey,AutoIncrement]
-        public override int Id { get; set; } = -1;
+        public override int Id { get; set; }
 
         //[OneToMany(CascadeOperations = CascadeOperation.None)]
         //public List<MpTag> TagList { get; set; }

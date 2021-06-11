@@ -7,7 +7,7 @@ using SQLiteNetExtensions.Attributes;
 namespace MonkeyPaste {
     public class MpClient : MpDbModelBase {
         [PrimaryKey,AutoIncrement]
-        public override int Id { get; set; } = -1;
+        public override int Id { get; set; }
 
         [ForeignKey(typeof(MpClientPlatform))]
         public int ClientPlatformId { get; set; }

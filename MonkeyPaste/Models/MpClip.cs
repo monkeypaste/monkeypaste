@@ -10,7 +10,7 @@ namespace MonkeyPaste {
     public class MpClip : MpDbModelBase {
         #region Column Definitions
         [PrimaryKey, AutoIncrement]
-        public override int Id { get; set; } = -1;
+        public override int Id { get; set; }
 
         //[ForeignKey(typeof(MpSource))]
         //public int SourceId { get; set; }
@@ -81,6 +81,8 @@ namespace MonkeyPaste {
         [OneToMany]
         public List<MpPasteHistory> PasteHistoryList { get; set; }
         #endregion
+
+        #region Static Methods
         public static async Task<MpClip> GetClipById(int ClipId) {
             var allItems = await MpDb.Instance.GetItems<MpClip>();
             var udbpl = allItems.Where(x => x.Id == ClipId).ToList();
@@ -99,7 +101,12 @@ namespace MonkeyPaste {
             return cil;
         }
 
-        public static async Task<ObservableCollection<MpClip>> GetPage(int tagId, int start, int count, string sortColumn = "Id", bool isDescending = false) {
+        public static async Task<ObservableCollection<MpClip>> GetPage(
+            int tagId, 
+            int start, 
+            int count, 
+            string sortColumn = "Id", 
+            bool isDescending = false) {
             //SELECT
             //user_number,
             //user_name
@@ -139,18 +146,6 @@ namespace MonkeyPaste {
             return new ObservableCollection<MpClip>(searchResult);
         }
 
-        public MpClip() : base(typeof(MpClip)) { }
-
-        public MpClip(object data, string sourceInfo) : this() {
-            if(data == null) {
-                return;
-            }
-        }
-        public MpClip(string title, string itemPlainText) : this() {
-            Title = title;
-            ItemPlainText = itemPlainText;
-            CopyDateTime = DateTime.Now;
-        }
 
         public static async Task<MpClip> Create(object args) {
             if (args == null) {
@@ -179,7 +174,7 @@ namespace MonkeyPaste {
                 MpApp app = await MpApp.GetAppByPath(hostPackageName);
                 if (app == null) {
                     app = await MpApp.Create(hostPackageName, hostAppName, hostAppImageBase64);
-                } 
+                }
                 newClip.App = app;
                 newClip.AppId = app.Id;
                 await MpDb.Instance.AddOrUpdate<MpClip>(newClip);
@@ -203,6 +198,21 @@ namespace MonkeyPaste {
             MpConsole.WriteTraceLine($"Error creating clip, there was no source application");
             return newClip;
         }
+        #endregion
+
+        public MpClip() : base(typeof(MpClip)) { }
+
+        public MpClip(object data, string sourceInfo) : this() {
+            if(data == null) {
+                return;
+            }
+        }
+        public MpClip(string title, string itemPlainText) : this() {
+            Title = title;
+            ItemPlainText = itemPlainText;
+            CopyDateTime = DateTime.Now;
+        }
+
         //public override void DeleteFromDatabase() {
         //    throw new NotImplementedException();
         //}

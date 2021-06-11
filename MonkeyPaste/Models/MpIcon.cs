@@ -13,7 +13,7 @@ namespace MonkeyPaste {
     public class MpIcon : MpDbModelBase {
         #region Columns
         [PrimaryKey,AutoIncrement]
-        public override int Id { get; set; } = -1;
+        public override int Id { get; set; }
 
         [ForeignKey(typeof(MpDbImage))]
         public int IconImageId { get; set; }

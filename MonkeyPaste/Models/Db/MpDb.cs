@@ -58,6 +58,8 @@ namespace MonkeyPaste {
 
             string dbPath = DependencyService.Get<MpIDbFilePath>().DbFilePath();
 
+            //File.Delete(dbPath);
+
             bool isNewDb = !File.Exists(dbPath);
 
 

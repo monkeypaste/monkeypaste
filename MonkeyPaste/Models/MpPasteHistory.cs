@@ -11,7 +11,7 @@ namespace MonkeyPaste {
     public class MpPasteHistory : MpDbModelBase {
         #region Columns
         [PrimaryKey, AutoIncrement]
-        public override int Id { get; set; } = -1;
+        public override int Id { get; set; }
 
         [ForeignKey(typeof(MpClient))]
         public int ClientId { get; set; }

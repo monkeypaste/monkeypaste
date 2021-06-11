@@ -29,13 +29,28 @@
             display: inline-block;
         }
 
-            /* On mouse-over */
-            .btn:hover {
-                background: #eee;
-            }
+        /* On mouse-over */
+        .btn:hover {
+            background: #eee;
+        }
 
         .success {
             color: green;
+        }
+
+        .ql-omega:after {
+            content: "Ω";
+        }
+
+        span.template {
+            border-style: solid;
+            border-color: white;
+            border-radius: 10px;
+            padding: 7px;
+            background-color: purple;
+            color: white;
+            text-align: center;
+            font-size: medium;
         }
     </style>
 </head>
@@ -49,6 +64,9 @@
     <script type="text/javascript">
         Quill.register("modules/htmlEditButton", htmlEditButton);
 
+        //==================================================================================================
+        // FONTS
+        //==================================================================================================
         // Specify Quill fonts
         var fontList = ['Arial', 'Courier', 'Garamond', 'Tahoma', 'Times New Roman', 'Verdana'];
         var fontNames = fontList.map(font => getFontName(font));
@@ -69,8 +87,17 @@
                 "}";
         });
 
+        // Generate code-friendly font names
+        function getFontName(font) {
+            return font.toLowerCase().replace(/\s/g, "-");
+        }
+        //==================================================================================================
+
+        //==================================================================================================
+        // TOOLBAR
+        //==================================================================================================
         // Configure Quill editor options
-        var toolbarOptions = [
+        var toolbarOptions2 = [
             [{ header: [1, 2, 3, false] }],
             [{ 'font': fonts.whitelist }],
             ['bold', 'italic', 'underline'],
@@ -78,6 +105,35 @@
             ["image"],
         ];
 
+        var toolbarOptions = [
+
+            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+            [{ 'font': fonts.whitelist }],
+            ['bold', 'italic', 'underline'/*, 'strike'*/],        // toggled buttons
+            //['blockquote', 'code-block'],
+
+           // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+           // [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+            [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+            //[{ 'direction': 'rtl' }],                         // text direction
+
+           // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+            [{ 'align': [] }],
+
+           // ['clean'],                                         // remove formatting button
+            ['omega']
+        ];
+
+       
+        //==================================================================================================
+
+
+        //==================================================================================================
+        // INIT
+        //==================================================================================================
         var quill;
         $(function () {
             // Append the CSS stylesheet to the page
@@ -94,14 +150,43 @@
                     },
                 }
             });
+
+            var toolbar = quill.getModule('toolbar');
+            toolbar.addHandler('omega', function () {
+                console.log('omega')
+            });
+
+
+            var customButton = document.querySelector('.ql-omega');
+            customButton.addEventListener('click', function () {
+                var range = quill.getSelection();
+                if (range) {
+                    //var sIdx = range.index > 0 ? range.index - 1 : 0;
+                    //let delta = quill.getContents();
+
+                    //const a = delta.retain(sIdx).delete(range.length).insert('POOOP');
+
+                    //var ops = [
+                    //    { retain: sIdx },
+                    //    { delete: range.length },
+                    //    { insert: 'POOOP' }
+                    //];
+
+                    //quill.updateContents(ops);
+                    //quill.insertText(range.index, "Ω");
+                    //setSelectionContent('pooopy');
+                    //setSelection(range.index, range.index + range.length);
+
+                    //createTemplateSpan('New Template #1');
+                    createLink();
+                }
+            });            
         });
+        //==================================================================================================      
 
-        // Generate code-friendly font names
-        function getFontName(font) {
-            return font.toLowerCase().replace(/\s/g, "-");
-        }
-
-
+        //==================================================================================================
+        // METHODS
+        //==================================================================================================
         function setText(text) {
             quill.setText(text + '\n');
         }
@@ -117,9 +202,37 @@
         }
 
         function getHtml() {
-            var val = document.getElementById("editor").innerHTML;
+            //document.getElementsByClassName
+            var val = document.getElementsByClassName("ql-editor")[0].innerHTML;
             return val;
         }
+
+        function createTemplateSpan(templateName) {
+            var range = quill.getSelection(true);
+            if (range) {
+                quill.deleteText(range.index, range.length);
+                var ts = '<span style="border-style:solid;border-color:orange;border-radius:10px;padding:15px;background-color:purple;color:white;font-size:15em">&lt;' + templateName + '&gt;</span>';
+                quill.clipboard.dangerouslyPasteHTML(range.index, ts);
+
+                console.log('text:\n' + getText());
+                console.table('\nhtml:\n' + getHtml());
+            }
+        }
+
+        function createLink() {
+            var range = quill.getSelection(true);
+            if (range) {
+                var text = quill.getText(range.index, range.length);
+                quill.deleteText(range.index, range.length);
+                var ts = '<a href="https://www.google.com">' + text + '</a>';
+                quill.clipboard.dangerouslyPasteHTML(range.index, ts);
+
+                console.log('text:\n' + getText());
+                console.table('\nhtml:\n' + getHtml());
+            }
+        }
+        //==================================================================================================
+
     </script>
 
     </body>

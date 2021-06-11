@@ -20,5 +20,7 @@ namespace MonkeyPaste {
 
         public DateTime LastModifiedDateTime { get; set; }
         public DateTime LastSyncDateTime { get; set; }
+
+        public DateTime DeleteDateTime { get; set; }
     }
 }

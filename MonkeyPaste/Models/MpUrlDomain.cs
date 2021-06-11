@@ -62,7 +62,7 @@ namespace MonkeyPaste {
 
         #region Columns
         [PrimaryKey, AutoIncrement]
-        public override int Id { get; set; } = -1;
+        public override int Id { get; set; }
 
         public string UrlDomainPath { get; set; } = string.Empty;
         public string UrlDomainTitle { get; set; } = string.Empty;
