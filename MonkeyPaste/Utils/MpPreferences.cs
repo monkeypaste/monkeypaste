@@ -21,6 +21,7 @@ namespace MonkeyPaste {
         public const string SslAlgorithm = "SHA256WITHRSA";
         public const string SslCASubject = "CN=MPCA";
         public const string SslCertSubject = "CN=127.0.01";
+
         public const string DbName = "Mp.db";
         public const int MinDbPasswordLength = 12;
         public const int MaxDbPasswordLength = 18;
@@ -52,6 +53,24 @@ namespace MonkeyPaste {
             }
             set {
                 Preferences.Set(nameof(DbMediaFolderPath), value);
+            }
+        }
+
+        public string SyncCertFolderPath {
+            get {
+                return Path.Combine(LocalStoragePath, "SyncCerts");
+            }
+        }
+
+        public string SyncCaPath {
+            get {
+                return Path.Combine(SyncCertFolderPath, @"MPCA.cert");
+            }
+        }
+
+        public string SyncCertPath {
+            get {
+                return Path.Combine(SyncCertFolderPath, @"MPSC.cert");
             }
         }
 

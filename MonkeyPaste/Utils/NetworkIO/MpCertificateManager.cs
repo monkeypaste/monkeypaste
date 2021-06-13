@@ -17,6 +17,7 @@ using System.Runtime.ConstrainedExecution;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using RtfPipe.Tokens;
+using System.IO;
 
 namespace MonkeyPaste {
     public class MpCertificateManager {
@@ -26,7 +27,7 @@ namespace MonkeyPaste {
             if (DateTime.UtcNow > MpPreferences.Instance.SslCertExpirationDateTime) {
                 CreateCertificate();
             }
-            _cert = LoadCertificate(MpPreferences.SslCertSubject, StoreName.My, StoreLocation.LocalMachine);
+            _cert = LoadCertificate(MpPreferences.Instance.SyncCertPath);
 
             if (_cert == null) {
                 MpConsole.WriteTraceLine(@"Error could not load sync certificate");
@@ -40,7 +41,7 @@ namespace MonkeyPaste {
 
             MpPreferences.Instance.SslPublicKey = cert.GetPublicKeyString();
 
-            SaveCertificate(cert, StoreName.My, StoreLocation.LocalMachine);
+            SaveCertificate(MpPreferences.Instance.SyncCertPath, cert);
         }
 
         private AsymmetricKeyParameter GenerateCACertificate(string subjectName, int keyStrength = 2048) {
@@ -108,7 +109,7 @@ namespace MonkeyPaste {
             //var x509 = new X509Certificate2(certificate.GetEncoded(),string.Empty);
 
             // Add CA certificate to Root store
-            SaveCertificate(certificate, StoreName.Root, StoreLocation.LocalMachine);
+            SaveCertificate(MpPreferences.Instance.SyncCaPath, certificate);
 
             return issuerKeyPair.Private;
         }
@@ -205,33 +206,40 @@ namespace MonkeyPaste {
 
 
         // You can also load the certificate from to CurrentUser store
-        private X509Certificate2 LoadCertificate(string subject,
-            System.Security.Cryptography.X509Certificates.StoreName st,
-            System.Security.Cryptography.X509Certificates.StoreLocation sl) {
-            var userStore = new X509Store(st, sl);
-            userStore.Open(OpenFlags.OpenExistingOnly);
-            var collection = userStore.Certificates.Find(X509FindType.FindBySubjectName, Environment.MachineName, false);
-            if (collection.Count > 0) {
-                return collection[0];
+        private X509Certificate2 LoadCertificate(string path) {
+            try {
+                var bytes = File.ReadAllBytes(path);
+                var cert = new X509Certificate2(bytes);
+                return cert;
             }
-            userStore.Close();
+            catch(Exception ex) {
+                MpConsole.WriteTraceLine(@"Error loading cert at path: " + path, ex);
+            }
+            //var userStore = new X509Store(st, sl);
+            //userStore.Open(OpenFlags.OpenExistingOnly);
+            //var collection = userStore.Certificates.Find(X509FindType.FindBySubjectName, Environment.MachineName, false);
+            //if (collection.Count > 0) {
+            //    return collection[0];
+            //}
+            //userStore.Close();
             return null;
         }
 
-        private bool SaveCertificate(
-            System.Security.Cryptography.X509Certificates.X509Certificate2 cert,
-            System.Security.Cryptography.X509Certificates.StoreName st,
-            System.Security.Cryptography.X509Certificates.StoreLocation sl) {
+        private bool SaveCertificate(string path, X509Certificate2 cert) {
             try {
-                X509Store store = new X509Store(st, sl);
-                store.Open(OpenFlags.ReadWrite);
-                store.Add(cert);
+                // Export the certificate including the private key.
+                byte[] certBytes = cert.Export(X509ContentType.Pkcs12);
+                File.WriteAllBytes(path, certBytes);
 
-                store.Close();
+                //X509Store store = new X509Store(st, sl);
+                //store.Open(OpenFlags.ReadWrite);
+                //store.Add(cert);
+
+                //store.Close();
                 return true;
             }
             catch (Exception ex) {
-                MpConsole.WriteTraceLine("", ex);
+                MpConsole.WriteTraceLine("Error writing cert to path: "+path, ex);
             }
             return false;
         }

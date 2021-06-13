@@ -701,8 +701,9 @@ namespace MpWpfApp {
 
         public void Resize(double deltaEditToolbarTop, double deltaWidth) {
             EditBorderCanvasTop += deltaEditToolbarTop;
-            Canvas.SetTop(EditToolbarBorder, EditBorderCanvasTop);
-            EditToolbarBorder.Width += deltaWidth;
+            //Canvas.SetTop(EditToolbarBorder, EditBorderCanvasTop);
+            EditBorderWidth += deltaWidth;
+            //EditToolbarBorder.Width += deltaWidth;
 
             if (HostClipTileViewModel.IsEditingTile) {
                 MainWindowViewModel.ClipTrayViewModel.ListBox.ScrollIntoView(HostClipTileViewModel);

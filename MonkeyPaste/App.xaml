@@ -118,9 +118,15 @@
             <FontImageSource
                 x:Key="TagsIcon"
                 FontFamily="{StaticResource FontAwesomeSolid}"
-                Glyph="&#xf02c;"
+                Glyph="&#xf02d;"
                 Size="22"
                 Color="Black" />
+
+            <FontImageSource x:Key="TemplateIcon"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf02c;"
+                             Size="22"
+                             Color="Black" />
 
             <FontImageSource
                 x:Key="HelpIcon"

@@ -8,8 +8,8 @@
              x:DataType="local:MpClipDetailPageViewModel">
     <ContentPage.Content>
         <Grid>
-            <local:MpWebView x:Name="ContentEditorWebView" 
-                             EvaluateJavascript="{Binding EvaluateJavascript, Mode=OneWayToSource}">
+            <local:MpWebView x:Name="ContentEditorWebView"
+                             EvaluateJavascript="{Binding EvaluateEditorJavaScript, Mode=OneWayToSource}">
                 <local:MpWebView.Source>
                     <HtmlWebViewSource Html="{Binding EditorHtml}" />
                 </local:MpWebView.Source>

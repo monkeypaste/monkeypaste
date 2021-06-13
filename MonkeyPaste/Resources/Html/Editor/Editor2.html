@@ -1,0 +1,240 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Yo this is a title</title>
+    <link href="https://cdn.quilljs.com/2.0.0-dev.4/quill.snow.css"
+          rel="stylesheet" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/github.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
+    <script charset="UTF-8"
+            src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/xml.min.js"></script>
+    <script src="https://cdn.quilljs.com/2.0.0-dev.4/quill.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+    <style>
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .btn {
+            border: none;
+            background-color: green;
+            padding: 14px 28px;
+            font-size: 16px;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+            /* On mouse-over */
+            .btn:hover {
+                background: #eee;
+            }
+
+        .success {
+            color: green;
+        }
+
+        .ql-omega:after {
+            content: "Ω";
+        }
+
+        span.template {
+            border-style: solid;
+            border-color: white;
+            border-radius: 10px;
+            padding: 7px;
+            background-color: purple;
+            color: white;
+            text-align: center;
+            font-size: medium;
+        }
+    </style>
+</head>
+<body>
+    <div id='editor'>
+    </div>
+
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Promise"
+            crossorigin="anonymous"></script>
+    <script src="https://benwinding.github.io/quill-html-edit-button/dist/quill.htmlEditButton.min.js"></script>
+    <script type="text/javascript">
+        Quill.register("modules/htmlEditButton", htmlEditButton);
+
+        //==================================================================================================
+        // FONTS
+        //==================================================================================================
+        // Specify Quill fonts
+        var fontList = ['Arial', 'Courier', 'Garamond', 'Tahoma', 'Times New Roman', 'Verdana'];
+        var fontNames = fontList.map(font => getFontName(font));
+        var fonts = Quill.import('attributors/class/font');
+        fonts.whitelist = fontNames;
+        Quill.register(fonts, true);
+
+        // Add fonts to CSS style
+        var fontStyles = "";
+        fontList.forEach(function (font) {
+            var fontName = getFontName(font);
+            fontStyles += ".ql-snow .ql-picker.ql-font .ql-picker-label[data-value=" + fontName + "]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=" + fontName + "]::before {" +
+                "content: '" + font + "';" +
+                "font-family: '" + font + "', sans-serif;" +
+                "}" +
+                ".ql-font-" + fontName + "{" +
+                " font-family: '" + font + "', sans-serif;" +
+                "}";
+        });
+
+        // Generate code-friendly font names
+        function getFontName(font) {
+            return font.toLowerCase().replace(/\s/g, "-");
+        }
+        //==================================================================================================
+
+        //==================================================================================================
+        // TOOLBAR
+        //==================================================================================================
+        // Configure Quill editor options
+        var toolbarOptions2 = [
+            [{ header: [1, 2, 3, false] }],
+            [{ 'font': fonts.whitelist }],
+            ['bold', 'italic', 'underline'],
+            ['clean']
+            ["image"],
+        ];
+
+        var toolbarOptions = [
+
+            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+            [{ 'font': fonts.whitelist }],
+            ['bold', 'italic', 'underline'/*, 'strike'*/],        // toggled buttons
+            //['blockquote', 'code-block'],
+
+            // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            // [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+            [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+            //[{ 'direction': 'rtl' }],                         // text direction
+
+            // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+            [{ 'align': [] }],
+
+            // ['clean'],                                         // remove formatting button
+            ['omega']
+        ];
+
+
+        //==================================================================================================
+
+
+        //==================================================================================================
+        // INIT
+        //==================================================================================================
+        var quill;
+        $(function () {
+            // Append the CSS stylesheet to the page
+            var node = document.createElement('style');
+            node.innerHTML = fontStyles;
+            document.body.appendChild(node);
+
+            quill = new Quill('#editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: toolbarOptions,
+                    htmlEditButton: {
+                        syntax: true,
+                    },
+                }
+            });
+
+            var toolbar = quill.getModule('toolbar');
+            toolbar.addHandler('omega', function () {
+                console.log('omega')
+            });
+
+
+            var customButton = document.querySelector('.ql-omega');
+            customButton.addEventListener('click', function () {
+                var range = quill.getSelection();
+                if (range) {
+                    //var sIdx = range.index > 0 ? range.index - 1 : 0;
+                    //let delta = quill.getContents();
+
+                    //const a = delta.retain(sIdx).delete(range.length).insert('POOOP');
+
+                    //var ops = [
+                    //    { retain: sIdx },
+                    //    { delete: range.length },
+                    //    { insert: 'POOOP' }
+                    //];
+
+                    //quill.updateContents(ops);
+                    //quill.insertText(range.index, "Ω");
+                    //setSelectionContent('pooopy');
+                    //setSelection(range.index, range.index + range.length);
+
+                    //createTemplateSpan('New Template #1');
+                    createLink();
+                }
+            });
+        });
+        //==================================================================================================
+
+        //==================================================================================================
+        // METHODS
+        //==================================================================================================
+        function setText(text) {
+            quill.setText(text + '\n');
+        }
+
+        function setHtml(html) {
+            var delta = quill.clipboard.convert(html);
+            quill.setContents(delta, 'silent');
+        }
+
+        function getText() {
+            var text = quill.getText(0, quill.getLength() - 1);
+            return text;
+        }
+
+        function getHtml() {
+            //document.getElementsByClassName
+            var val = document.getElementsByClassName("ql-editor")[0].innerHTML;
+            return val;
+        }
+
+        function createTemplateSpan(templateName) {
+            var range = quill.getSelection(true);
+            if (range) {
+                quill.deleteText(range.index, range.length);
+                var ts = '<span style="border-style:solid;border-color:orange;border-radius:10px;padding:15px;background-color:purple;color:white;font-size:15em">&lt;' + templateName + '&gt;</span>';
+                quill.clipboard.dangerouslyPasteHTML(range.index, ts);
+
+                console.log('text:\n' + getText());
+                console.table('\nhtml:\n' + getHtml());
+            }
+        }
+
+        function createLink() {
+            var range = quill.getSelection(true);
+            if (range) {
+                var text = quill.getText(range.index, range.length);
+                quill.deleteText(range.index, range.length);
+                var ts = '<a href="https://www.google.com">' + text + '</a>';
+                quill.clipboard.dangerouslyPasteHTML(range.index, ts);
+
+                console.log('text:\n' + getText());
+                console.table('\nhtml:\n' + getHtml());
+            }
+        }
+            //==================================================================================================
+
+    </script>
+
+</body>
+</html>
+

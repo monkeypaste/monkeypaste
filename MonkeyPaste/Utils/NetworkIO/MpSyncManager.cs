@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpSyncManager {
+    public class MpSyncManager : IDisposable {
         #region Singleton
         private static readonly Lazy<MpSyncManager> _Lazy = new Lazy<MpSyncManager>(() => new MpSyncManager());
         public static MpSyncManager Instance { get { return _Lazy.Value; } }
@@ -20,6 +20,8 @@ namespace MonkeyPaste {
         public MpCertificateManager CertManager { get; set; }
         
         public MpSessionManager SessionManager { get; set; }
+        
+        public string StatusLog { get; set; }
         #endregion
 
         #region Public Methods
@@ -31,6 +33,10 @@ namespace MonkeyPaste {
                 }
                 // do sync stuff if other devices connected
             });
+        }
+
+        public void Dispose() {
+            SessionManager.Dispose();
         }
         #endregion
     }

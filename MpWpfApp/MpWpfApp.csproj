@@ -1785,11 +1785,5 @@
     <Folder Include="Resources\Data\" />
     <Folder Include="ViewModels\MainWindow\Settings\Notifications\Sound\" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MonkeyPaste\MonkeyPaste.csproj">
-      <Project>{effa9e68-c567-4f5a-ae60-0ba2937cf5fa}</Project>
-      <Name>MonkeyPaste</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

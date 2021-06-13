@@ -40,6 +40,7 @@
     <Compile Remove="Views\Shell\MainFlyOut\Settings\MpChatPageView.xaml.cs" />
     <None Remove=".DS_Store" />
     <None Remove="Resources\Html\Editor.html" />
+    <None Remove="Resources\Html\Editor\Editor2.html" />
     <None Remove="Resources\Icons\monkey.png" />
   </ItemGroup>
 
@@ -57,15 +58,14 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\Html\Editor\Editor.html" />
+    <EmbeddedResource Include="Resources\Html\Editor\Editor2.html" />
     <EmbeddedResource Include="Resources\Icons\monkey.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Acr.UserDialogs" Version="7.1.0.514" />
-    <PackageReference Include="Couchbase.Lite" Version="2.8.4" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.6" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.10" />
-    <PackageReference Include="PropertyChanged.Fody" Version="3.3.3" />
+    <PackageReference Include="PropertyChanged.Fody" Version="3.4.0" />
     <PackageReference Include="RtfPipe" Version="2.0.7677.4303" />
     <PackageReference Include="SkiaSharp" Version="2.80.2" />
     <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.2" />
@@ -151,9 +151,5 @@
     <Compile Update="Views\Shell\MainFlyOut\TagTileCollectionView\Tag\MpTagTileView.xaml.cs">
       <DependentUpon>MpTagTileView.xaml</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\MonkeyPaste.Messages\MonkeyPaste.Messages.csproj" />
   </ItemGroup>
 </Project>

@@ -35,14 +35,14 @@ namespace MonkeyPaste {
         #region Public Methods
         public MpSessionManager() {
             // Register for connectivity changes, be sure to unsubscribe when finished
-            Connectivity.ConnectivityChanged += MpSessionManager_ConnectivityChanged;
-            Task.Run(Initialize);
-        }
 
-        
+            Connectivity.ConnectivityChanged += MpSessionManager_ConnectivityChanged;
+
+            Task.Run(Initialize);
+        }        
 
         public void Dispose() {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
         #endregion
 

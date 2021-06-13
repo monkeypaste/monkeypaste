@@ -493,7 +493,7 @@
                                     <Button Background="White"
                                             BorderThickness="0"
                                             ToolTip="Delete"
-                                            Template="{StaticResource ButtonControlTemplate}"
+                                            Template="{StaticResource SearchButtonControlTemplate}"
                                             Visibility="{Binding DeleteButtonVisibility}"
                                             Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.DeleteShortcutCommand}">
                                         <Image Width="20"
@@ -501,9 +501,9 @@
                                                Source="/MpWpfApp;component/Resources/Images/delete.png" />
                                     </Button>
                                     <Button Background="White"
-                                            Template="{StaticResource ButtonControlTemplate}"
                                             BorderThickness="0"
                                             ToolTip="Reset"
+                                            Template="{StaticResource SearchButtonControlTemplate}"
                                             Visibility="{Binding ResetButtonVisibility}"
                                             Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.ResetShortcutCommand}">
                                         <Image Width="20"

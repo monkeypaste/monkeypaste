@@ -145,11 +145,7 @@ namespace MpWpfApp {
             }
         }
         private void ShowLogDialog() {
-            string logStr = string.Empty;
-            foreach(var msg in MonkeyPaste.MpSocketServer.Instance.StatusLog) {
-                logStr += msg + Environment.NewLine;
-            }
-            var result = MessageBox.Show(logStr, "Server Log", MessageBoxButton.OK, MessageBoxImage.Error);
+           // var result = MessageBox.Show(MonkeyPaste.MpSyncManager.Instance.StatusLog, "Server Log", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private RelayCommand<object> _showSettingsWindowCommand;

@@ -24,20 +24,20 @@ namespace MonkeyPaste {
         }
         protected override async void OnDisappearing() {
             var cidpvm = BindingContext as MpClipDetailPageViewModel;
-            
-            var itemText = await cidpvm.EvaluateJavascript($"getText()");
-            itemText = itemText.Replace("\"", string.Empty);
-            cidpvm.Clip.ItemPlainText = itemText;
+                        
+            cidpvm.Clip.ItemPlainText = await cidpvm.StopMessageListener();
 
-            var itemHtml = await cidpvm.EvaluateJavascript($"getHtml()");
-            // Unescape that damn Unicode Java bull.
-            itemHtml = Regex.Replace(
-                itemHtml,
-                @"\\[Uu]([0-9A-Fa-f]{4})", 
-                m => char.ToString((char)ushort.Parse(m.Groups[1].Value, NumberStyles.AllowHexSpecifier)));
-            itemHtml = Regex.Unescape(itemHtml);
-            itemHtml = itemHtml.Replace("\"", string.Empty);
-            cidpvm.Clip.ItemHtml = itemHtml;
+            //var itemHtml = await cidpvm.EvaluateJavascript($"getHtml()");
+            //// Unescape that damn Unicode Java bull.
+            //itemHtml = Regex.Replace(
+            //    itemHtml,
+            //    @"\\[Uu]([0-9A-Fa-f]{4})", 
+            //    m => char.ToString((char)ushort.Parse(m.Groups[1].Value, NumberStyles.AllowHexSpecifier)));
+            //itemHtml = Regex.Unescape(itemHtml);
+            //itemHtml = itemHtml.Replace("\"", string.Empty);
+            //cidpvm.Clip.ItemHtml = itemHtml;
+
+            cidpvm.StopMessageListener();
 
             await MpDb.Instance.UpdateItem<MpClip>(cidpvm.Clip);
 
@@ -47,10 +47,18 @@ namespace MonkeyPaste {
         private async void LoadClip(int ciid) {
             try {
                 var ci = await MpClip.GetClipById(ciid);
-                BindingContext = new MpClipDetailPageViewModel(ci);
+                var cidpvm = new MpClipDetailPageViewModel(ci);
+                BindingContext = cidpvm;
+                //Task.Delay(500);
+                
             } catch (Exception) {
                 MpConsole.WriteLine($"Failed to load copy item {ciid}.");
             }
+        }
+
+        private void ContentEditorWebView_Navigated(object sender, WebNavigatedEventArgs e) {
+            var cidpvm = BindingContext as MpClipDetailPageViewModel;
+            //cidpvm.StartMessageListener();
         }
     }
 }

@@ -15,7 +15,6 @@ using DataGridAsyncDemoMVVM.filtersort;
 using GalaSoft.MvvmLight.CommandWpf;
 using Gma.System.MouseKeyHook;
 using Hardcodet.Wpf.TaskbarNotification;
-using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpMainWindowViewModel : MpViewModelBase, IDisposable {
@@ -278,9 +277,9 @@ namespace MpWpfApp {
 
         #region Public Methods        
         public MpMainWindowViewModel() : base() {
-            Task.Run(() => {
-                MpSocketServer.Instance.Init();
-            });
+            //Task.Run(() => {
+            //    MonkeyPaste.MpSyncManager.Instance.Init();
+            //});
             
 
             MpMainWindowViewModel.IsApplicationLoading = true;
@@ -456,8 +455,9 @@ namespace MpWpfApp {
 
         #region Disposable
         public void Dispose() {
-            MonkeyPaste.MpSocketServer.Instance.Stop();
-           foreach (string tfp in _tempFilePathList) {
+           // MonkeyPaste.MpSyncManager.Instance.Dispose();
+           
+            foreach (string tfp in _tempFilePathList) {
                 if(File.Exists(tfp)) {
                     try {
                         File.Delete(tfp);
