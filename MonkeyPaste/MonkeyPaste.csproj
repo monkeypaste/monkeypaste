@@ -41,6 +41,10 @@
     <None Remove=".DS_Store" />
     <None Remove="Resources\Html\Editor.html" />
     <None Remove="Resources\Html\Editor\Editor2.html" />
+    <None Remove="Resources\Html\Editor\Quill_Formated_Text.html" />
+    <None Remove="Resources\Html\Editor\TestData\quillFormattedTextSample1.html" />
+    <None Remove="Resources\Html\Editor\TestData\quillFormattedTextSample2.html" />
+    <None Remove="Resources\Html\Editor\TestData\quillFormattedTextSample3.html" />
     <None Remove="Resources\Icons\monkey.png" />
   </ItemGroup>
 
@@ -59,6 +63,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Resources\Html\Editor\Editor.html" />
     <EmbeddedResource Include="Resources\Html\Editor\Editor2.html" />
+    <EmbeddedResource Include="Resources\Html\Editor\TestData\quillFormattedTextSample1.html" />
+    <EmbeddedResource Include="Resources\Html\Editor\TestData\quillFormattedTextSample2.html" />
+    <EmbeddedResource Include="Resources\Html\Editor\TestData\quillFormattedTextSample3.html" />
     <EmbeddedResource Include="Resources\Icons\monkey.png" />
   </ItemGroup>
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Timers;
 
 namespace MonkeyPaste {
+    
     public class MpJsMessageListener {
         #region Private Variables
         private Timer _msgListenerTimer = null;

@@ -10,11 +10,6 @@ using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpJsMessage {
-        public string Header { get; set; }
-        public object Message { get; set; }
-    }
-
     public class MpClipDetailPageViewModel : MpViewModelBase {
         #region Properties
         public MpClip Clip { get; set; }
@@ -83,10 +78,10 @@ namespace MonkeyPaste {
         #region Private Methods
         private void Initialize() {
             var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpClipDetailPageViewModel)).Assembly;
-            var stream = assembly.GetManifestResourceStream("MonkeyPaste.Resources.Html.Editor.Editor.html");
+            var stream = assembly.GetManifestResourceStream("MonkeyPaste.Resources.Html.Editor.Editor2.html");
             using (var reader = new System.IO.StreamReader(stream)) {
                 var html = reader.ReadToEnd();
-                string contentTag = @"<div id='editor-container'>";
+                string contentTag = @"<div id='editor'>";
                 html = html.Replace(contentTag, contentTag + Clip.ItemPlainText);
                 EditorHtml = html;
             }

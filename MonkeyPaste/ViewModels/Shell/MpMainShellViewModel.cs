@@ -16,6 +16,8 @@ namespace MonkeyPaste {
             //MpSyncManager.Instance.Init();
 
             TagCollectionViewModel = new MpTagTileCollectionViewModel();
+
+            MpHtmlReader.Instance.Test1();
         }        
     }
 }

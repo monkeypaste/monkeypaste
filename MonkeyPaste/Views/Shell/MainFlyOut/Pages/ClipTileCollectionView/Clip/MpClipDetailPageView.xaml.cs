@@ -25,19 +25,18 @@ namespace MonkeyPaste {
         protected override async void OnDisappearing() {
             var cidpvm = BindingContext as MpClipDetailPageViewModel;
                         
-            cidpvm.Clip.ItemPlainText = await cidpvm.StopMessageListener();
+            //cidpvm.Clip.ItemPlainText = await cidpvm.StopMessageListener();
+            cidpvm.Clip.ItemPlainText = await cidpvm.EvaluateEditorJavaScript($"getText()");
 
-            //var itemHtml = await cidpvm.EvaluateJavascript($"getHtml()");
-            //// Unescape that damn Unicode Java bull.
-            //itemHtml = Regex.Replace(
-            //    itemHtml,
-            //    @"\\[Uu]([0-9A-Fa-f]{4})", 
-            //    m => char.ToString((char)ushort.Parse(m.Groups[1].Value, NumberStyles.AllowHexSpecifier)));
-            //itemHtml = Regex.Unescape(itemHtml);
-            //itemHtml = itemHtml.Replace("\"", string.Empty);
-            //cidpvm.Clip.ItemHtml = itemHtml;
-
-            cidpvm.StopMessageListener();
+            var itemHtml = await cidpvm.EvaluateEditorJavaScript($"getHtml()");
+            // Unescape that damn Unicode Java bull.
+            itemHtml = Regex.Replace(
+                itemHtml,
+                @"\\[Uu]([0-9A-Fa-f]{4})",
+                m => char.ToString((char)ushort.Parse(m.Groups[1].Value, NumberStyles.AllowHexSpecifier)));
+            itemHtml = Regex.Unescape(itemHtml);
+            itemHtml = itemHtml.Replace("\"", string.Empty);
+            cidpvm.Clip.ItemHtml = itemHtml;
 
             await MpDb.Instance.UpdateItem<MpClip>(cidpvm.Clip);
 
