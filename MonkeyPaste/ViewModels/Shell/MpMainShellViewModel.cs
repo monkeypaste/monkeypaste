@@ -17,7 +17,7 @@ namespace MonkeyPaste {
 
             TagCollectionViewModel = new MpTagTileCollectionViewModel();
 
-            MpHtmlReader.Instance.Test1();
+            MpHtmlTagReader.Instance.Test1();
         }        
     }
 }
