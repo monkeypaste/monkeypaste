@@ -280,7 +280,7 @@ namespace MpWpfApp {
             //Task.Run(() => {
             //    MonkeyPaste.MpSyncManager.Instance.Init();
             //});
-            
+
 
             MpMainWindowViewModel.IsApplicationLoading = true;
 

@@ -199,6 +199,10 @@ namespace MpWpfApp {
                 return null;
             }            
             try {
+                if(processHandle == IntPtr.Zero) {
+                    // since source is unknown set to this app
+                    processHandle = MpClipboardManager.Instance.LastWindowWatcher.ThisAppHandle;
+                }
                 IDataObject iData = Clipboard.GetDataObject();
                 if (iData == null) {
                     return null;

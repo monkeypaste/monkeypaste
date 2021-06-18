@@ -695,6 +695,10 @@ namespace MpWpfApp {
             return output;
         }
 
+        public static string InlineInnerText(this HtmlAgilityPack.HtmlNode htmlNode) {
+            return htmlNode.InnerText.Replace(Environment.NewLine, string.Empty);
+        }
+
         public static string GetText(FlowDocument doc) {
             StringBuilder sb = new StringBuilder();
 
@@ -706,13 +710,21 @@ namespace MpWpfApp {
         }
 
         public static bool ContainsByCaseSetting(this string str, string compareStr) {
+            return str.ContainsByCase(compareStr, Properties.Settings.Default.SearchByIsCaseSensitive);
+        }
+
+        public static bool ContainsByCase(this string str, string compareStr, bool isCaseSensitive) {
             if (string.IsNullOrEmpty(str) || string.IsNullOrEmpty(compareStr)) {
                 return false;
             }
-            if (Properties.Settings.Default.SearchByIsCaseSensitive) {
+            if (isCaseSensitive) {
                 return str.Contains(compareStr);
             }
             return str.ToLower().Contains(compareStr.ToLower());
+        }
+
+        public static List<int> IndexListOfAll(this string str, string compareStr) {
+            return MpHelpers.Instance.IndexListOfAll(str, compareStr);
         }
         #endregion
 

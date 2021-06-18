@@ -623,6 +623,9 @@ namespace MpWpfApp {
             if (Properties.Settings.Default.IsInitialLoad) {
                 InitIntroItems();
             }
+
+
+            MpHtmlToRtfConverter.Instance.Test();
         }
 
         private int GetDropIdx(Point mp) {

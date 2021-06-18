@@ -203,7 +203,8 @@
 
         function getHtml() {
             //document.getElementsByClassName
-            var val = document.getElementsByClassName("ql-editor")[0].innerHTML;
+            //var val = document.getElementsByClassName("ql-editor")[0].innerHTML;
+            var val = quill.root.innerHTML;
             return val;
         }
 

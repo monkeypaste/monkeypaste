@@ -123,6 +123,7 @@
     <Compile Include="Controls\MpClipBorder.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpRichTextBox.cs" />
+    <Compile Include="Converters\MpHtmlToRtfConverter.cs" />
     <Compile Include="Converters\MpIntToWindowCommandConverter.cs" />
     <Compile Include="Converters\MpPointCollectionConverter.cs" />
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
@@ -553,6 +554,9 @@
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf">
       <Version>1.0.8</Version>
     </PackageReference>
+    <PackageReference Include="HtmlAgilityPack">
+      <Version>1.11.34</Version>
+    </PackageReference>
     <PackageReference Include="InputSimulatorPlus">
       <Version>1.0.7</Version>
     </PackageReference>
@@ -657,6 +661,9 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample1.html" />
+    <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample2.html" />
+    <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample3.html" />
     <Resource Include="Resources\Icons\Bulb.ico" />
     <Resource Include="Resources\Icons\Computers.ico" />
     <Resource Include="Resources\Icons\Error.ico" />

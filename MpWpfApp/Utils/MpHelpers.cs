@@ -58,6 +58,22 @@ namespace MpWpfApp {
         }
 
         #region Documents    
+        public List<int> IndexListOfAll(string text, string matchStr) {
+            var idxList = new List<int>();
+            int curIdx = text.IndexOf(matchStr);
+            int offset = 0;
+            while(curIdx >= 0 && curIdx < text.Length) {
+                idxList.Add(curIdx + offset);
+                if(curIdx + matchStr.Length + 1 >= text.Length) {
+                    break;
+                }
+                text = text.Substring(curIdx + matchStr.Length + 1);
+                offset = curIdx + 1;
+                curIdx = text.IndexOf(matchStr);
+            }
+            return idxList;
+        }
+
         public void ApplyBackgroundBrushToRangeList(MpObservableCollection<MpObservableCollection<TextRange>> rangeList, Brush bgBrush, CancellationToken ct) {
             if (rangeList == null || rangeList.Count == 0) {
                 return;
