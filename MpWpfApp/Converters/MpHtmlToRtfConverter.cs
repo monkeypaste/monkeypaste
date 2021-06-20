@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management.Instrumentation;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -9,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using HtmlAgilityPack;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace MpWpfApp {
     public class MpHtmlToRtfConverter {
@@ -16,15 +18,12 @@ namespace MpWpfApp {
         private static readonly Lazy<MpHtmlToRtfConverter> _Lazy = new Lazy<MpHtmlToRtfConverter>(() => new MpHtmlToRtfConverter());
         public static MpHtmlToRtfConverter Instance { get { return _Lazy.Value; } }
 
-        private MpHtmlToRtfConverter() {
-        }
+        private MpHtmlToRtfConverter() { }
         #endregion
 
         #region Private Variables
         private RichTextBox _rtb;
-        //private Dictionary<string, int> _subStringMatchCountLookUp = new Dictionary<string, int>();
-
-        private Dictionary<string, int> _subStringMatchLastProcessedLookUp = new Dictionary<string, int>();
+        private double _indentCharCount = 5;
         #endregion
 
         #region Properties
@@ -38,156 +37,92 @@ namespace MpWpfApp {
             _rtb.Document = string.Empty.ToFlowDocument();
             _rtb.Document.Blocks.Clear();
             foreach (var htmlBlockNode in htmlDoc.DocumentNode.ChildNodes) {
-                if (htmlBlockNode.Name == "p") {
-                    var p = CreateParagraph(htmlBlockNode);
-                    _rtb.Document.Blocks.Add(p);
-                } else if (htmlBlockNode.Name == "ol") {
-                    var list = CreateList(htmlBlockNode);
-                    _rtb.Document.Blocks.Add(list);
-                } else if (htmlBlockNode.Name == "table") {
-
-                } else if (htmlBlockNode.Name.StartsWith("h")) {
-
-                }
-
-                _subStringMatchLastProcessedLookUp.Clear();
+                _rtb.Document.Blocks.Add(ConvertHtmlNode(htmlBlockNode) as Block);
             }
-
             return _rtb.Document.ToRichText();
         }
-
-        private Paragraph CreateParagraph(HtmlNode node) {
-            var p = new Paragraph();
-            p.Inlines.Add(new Run(node.InlineInnerText()));
-            ApplyAttributeFormatting(node, p);
-
-            foreach (var subBlockNode in node.ChildNodes) {
-                CreateSubParagraphElement(p, subBlockNode);
+        
+        private TextElement ConvertHtmlNode(HtmlNode n) {
+            var cel = new List<TextElement>();
+            foreach (var c in n.ChildNodes) {
+                cel.Add(ConvertHtmlNode(c));
             }
-            return p;
-        }
-        private List CreateList(HtmlNode node) {
-            var list = new List();
-            if (node.FirstChild.GetAttributeValue("data-list",string.Empty) == "ordered") {
-                list.MarkerStyle = TextMarkerStyle.Decimal;
-            }
-            ApplyAttributeFormatting(node, list);
-            
-            foreach (var subBlockNode in node.ChildNodes) {
-                CreateListItem(list, subBlockNode);
-            }
-            return list;
-        }
-        private ListItem CreateListItem(List l,HtmlNode subNode) {
-            var nodeListItem = new ListItem(CreateParagraph(subNode));//new Paragraph(new Run(nodeText, nodeRange.Start)));
-            return nodeListItem;
+            return CreateTextElement(n, cel.ToArray());
         }
 
-        private TextElement CreateSubParagraphElement(TextElement p, HtmlNode subBlockNode) {
-            //UpdateMatchLookUp(new TextRange(b.ContentStart,b.ContentEnd).Text, subBlockNode.InlineInnerText());
-
-            //since paragraph may multiple sub-strings of this sub-nodes text we need 
-            //to ensure we get the range representing htmlnode
-            string parentText = new TextRange(p.ContentStart, p.ContentEnd).Text;
-            string text = subBlockNode.InlineInnerText();
-            TextRange nodeRange = null;
-            if(string.IsNullOrEmpty(text)) {
-                nodeRange = new TextRange(p.ContentStart, p.ContentStart);
-            } else {
-                if (!_subStringMatchLastProcessedLookUp.ContainsKey(parentText)) {
-                    int matchCount = parentText.IndexListOfAll(text).Count;
-                    //_subStringMatchCountLookUp.Add(matchStr, matchCount);
-                    _subStringMatchLastProcessedLookUp.Add(text, 0);
-                } else {
-                    _subStringMatchLastProcessedLookUp[text]++;
-                }
-
-                var allNodeMatchRanges = MpHelpers.Instance.FindStringRangesFromPosition(p.ContentStart, text);
-                int matchIdx = _subStringMatchLastProcessedLookUp[text];
-                if (matchIdx >= allNodeMatchRanges.Count) {
-                    matchIdx = allNodeMatchRanges.Count - 1;
-                }
-                nodeRange = allNodeMatchRanges[matchIdx];
+        private TextElement CreateTextElement(HtmlNode n, TextElement[] cl) {
+            var te = GetTextElement(n);
+            foreach (var c in cl) {
+                te = AddChildToELement(te, c);
             }
-            
-            string nodeText = nodeRange.Text;
-            nodeRange.Text = "";
-
-            var nodeRun = new Run(nodeText, nodeRange.Start);
-            var span = new Span(nodeRun, nodeRange.Start);
-            return (Span)FormatSubBlockElement(subBlockNode, span);
+            return FormatTextElement(n.Attributes,te);
         }
 
-        private TextElement FormatSubBlockElement(HtmlNode htmlCurNode, TextElement element) {
-            switch (htmlCurNode.Name) {
+        private TextElement GetTextElement(HtmlNode n) {
+            TextElement te = null;
+            switch (n.Name) {
                 case "#text":
-                    // no formatting so ignore
-                    break;
-                case "span":
-                    // only formats from attributes
-                    break;
-                case "strong":
-                    element.FontWeight = FontWeights.Bold;
-                    //_rtb.Selection.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold);
+                    te = new Run(n.InnerText);
                     break;
                 case "em":
-                    element.FontStyle = FontStyles.Italic;
-                    //_rtb.Selection.ApplyPropertyValue(TextElement.FontStyleProperty, FontStyles.Italic);
+                    te = new Italic();
+                    break;
+                case "span":
+                    te = new Span();
+                    break;
+                case "strong":
+                    te = new Bold();
                     break;
                 case "u":
-                    new TextRange(element.ContentStart, element.ContentEnd).ApplyPropertyValue(Inline.TextDecorationsProperty, TextDecorations.Underline);
+                    te = new Underline();
+                    break;
+                case "br":
+                    te = new LineBreak();
+                    break;
+                case "a":
+                    te = new Hyperlink();
+                    break;
+                case "p":
+                    te = new Paragraph();
                     break;
                 case "li":
-                    //only formats from attributes
+                    te = new ListItem();
+                    break;
+                case "ol":
+                    te = new List();
+                    //since wpf handles list types by list and not list items (like quill)
+                    //this is a special case
+                    if(n.ChildNodes.Count > 0) {
+                        string listTypeName = n.FirstChild.GetAttributeValue("data-list", string.Empty);
+                        if (listTypeName == "unordered") {
+                            (te as List).MarkerStyle = TextMarkerStyle.Disc;
+                        } else if (listTypeName == "ordered") {
+                            (te as List).MarkerStyle = TextMarkerStyle.Decimal;
+                        }
+                    }
+                    break;
+                // add table types
+                default:
+                    throw new Exception("Unhanlded html doc element: " + n.Name);
                     break;
             }
-
-            element = ApplyAttributeFormatting(htmlCurNode, element);
-            foreach(var htmlSubNode in htmlCurNode.ChildNodes) {
-                CreateSubParagraphElement(element, htmlSubNode);
-            }
-            return element;
+            return te;
         }
 
-        public TextElement ApplyAttributeFormatting(HtmlNode htmlNode, TextElement element) {
-            foreach (var nodeAttribute in htmlNode.GetAttributes()) {
-                string attributeValue = nodeAttribute.Value;
-                switch (nodeAttribute.Name) {
+        private TextElement FormatTextElement(HtmlAttributeCollection ac, TextElement te) {
+            foreach (var a in ac) {
+                switch (a.Name) {
                     case "class":
-                        if (attributeValue.StartsWith("ql-font-")) {
-                            string fontName = attributeValue.Replace("ql-font-", string.Empty);
-                            var ff = GetFontFamily(fontName);
-                            element.FontFamily = ff;
-                            //_rtb.Selection.ApplyPropertyValue(TextElement.FontFamilyProperty, ff);
-                        } else if (attributeValue.Contains("ql-align-left")) {
-                            //_rtb.Selection.ApplyPropertyValue(Paragraph.TextAlignmentProperty, TextAlignment.Left);
-                            (element as Block).TextAlignment = TextAlignment.Left;
-                        } else if (attributeValue.Contains("ql-align-center")) {
-                            //_rtb.Selection.ApplyPropertyValue(Paragraph.TextAlignmentProperty, TextAlignment.Center);
-                            (element as Block).TextAlignment = TextAlignment.Center;
-                        } else if (attributeValue.Contains("ql-align-right")) {
-                            //_rtb.Selection.ApplyPropertyValue(Paragraph.TextAlignmentProperty, TextAlignment.Right);
-                            (element as Block).TextAlignment = TextAlignment.Right;
-                        } else if (attributeValue.Contains("ql-align-justify")) {
-                            //_rtb.Selection.ApplyPropertyValue(Paragraph.TextAlignmentProperty, TextAlignment.Justify);
-                            (element as Block).TextAlignment = TextAlignment.Justify;
-                        }
+                        var cvl = a.Value.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var cv in cvl) {
+                            te = ApplyClassFormatting(te, cv.Trim());
+                        }                        
                         break;
                     case "style":
-                        var styleItemList = attributeValue.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-                        foreach (var rawStyleItem in styleItemList) {
-                            string styleItem = rawStyleItem.Trim();
-                            if (attributeValue.StartsWith("color")) {
-                                var itemColorBrush = ParseRgb(attributeValue);
-                                element.Foreground = itemColorBrush;
-                                //_rtb.Selection.ApplyPropertyValue(FlowDocument.ForegroundProperty, itemColorBrush);
-                            } else if (attributeValue.StartsWith("background-color")) {
-                                var itemColorBrush = ParseRgb(attributeValue);
-                                element.Background = itemColorBrush;
-                               // _rtb.Selection.ApplyPropertyValue(TextElement.BackgroundProperty, itemColorBrush);
-                            }
+                        var svl = a.Value.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var sv in svl) {
+                            te = ApplyStyleFormatting(te, sv.Trim());
                         }
-
                         break;
                     case "data-list":
                         //special case since html handles list types differently
@@ -199,13 +134,58 @@ namespace MpWpfApp {
 
                         break;
                 }
+                
             }
-            return element;
+            return te;
         }
 
-        public bool IsLineBreak(string text) {            
-            return text == "\r" || text == "\n" || text == "\r\n";
+        private TextElement ApplyClassFormatting(TextElement te, string cv) {
+            if (cv.StartsWith("ql-font-")) {
+                te.FontFamily = GetFontFamily(cv);
+            } else if (cv.Contains("ql-align-left")) {
+                (te as Block).TextAlignment = TextAlignment.Left;
+            } else if (cv.Contains("ql-align-center")) {
+                (te as Block).TextAlignment = TextAlignment.Center;
+            } else if (cv.Contains("ql-align-right")) {
+                 (te as Block).TextAlignment = TextAlignment.Right;
+            } else if (cv.Contains("ql-align-justify")) {
+                (te as Block).TextAlignment = TextAlignment.Justify;
+            } else if(cv.Contains("ql-indent-")) {
+                (te as Paragraph).TextIndent = GetIndentLevel(cv) * _indentCharCount;
+            }
+            return te;
         }
+
+        private TextElement ApplyStyleFormatting(TextElement te, string sv) {
+            if (sv.StartsWith("color")) {
+                var itemColorBrush = ParseRgb(sv);
+                te.Foreground = itemColorBrush;
+            } else if (sv.StartsWith("background-color")) {
+                var itemColorBrush = ParseRgb(sv);
+                te.Background = itemColorBrush;
+            } else if(sv.StartsWith("font-size")) {
+                te.FontSize = GetFontSize(sv);
+            }
+            return te;
+        }
+        private TextElement AddChildToELement(TextElement te, TextElement cte) {
+            if (te is List) {
+                (te as List).ListItems.Add(cte as ListItem);
+            } else if (te is ListItem) {
+                if((te as ListItem).Blocks.Count == 0) {
+                    //special case since wpf requires list items to be in a paragraph
+                    //we must add them implicitly
+                    (te as ListItem).Blocks.Add(new Paragraph());
+                }
+                ((te as ListItem).Blocks.FirstBlock as Paragraph).Inlines.Add(cte as Inline);
+            } else if (te is Paragraph) {
+                (te as Paragraph).Inlines.Add(cte as Inline);
+            } else if(te is Span) {
+                (te as Span).Inlines.Add(cte as Inline);
+            }
+            return te;
+        }
+
         public Brush ParseRgb(string text) {
             Brush defaultBrush = Brushes.Black;
 
@@ -218,6 +198,7 @@ namespace MpWpfApp {
             var rgbItemList = rgbColors.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
             
             var color = new Color();
+            color.A = 255;
             color.R = Convert.ToByte(rgbItemList[0]);
             color.G = Convert.ToByte(rgbItemList[1]);
             color.B = Convert.ToByte(rgbItemList[2]);
@@ -225,11 +206,24 @@ namespace MpWpfApp {
             return new SolidColorBrush(color);
         }
 
-        private FontFamily GetFontFamily(string fontName) {
+        public double GetFontSize(string styleValue) {
+            //for some reason wpf will not accept px values and converts to 3/4 size (for 96DPI)
+            //but giving pt will use the displays DIP
+            string fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("px","pt");
+            double fs = (double)new FontSizeConverter().ConvertFrom(fontSizeStr);
+            return fs;
+        }
+
+        public double GetIndentLevel(string classValue) {
+            return Convert.ToDouble(classValue.Replace("ql-indent-", string.Empty));
+        }
+
+        private FontFamily GetFontFamily(string classValue) {
             string defaultFontName = "arial";
             FontFamily defaultFontFamily = null;
             FontFamily closestFontFamily = null;
-            foreach(var ff in Fonts.SystemFontFamilies) {
+            string fontName = classValue.Replace("ql-font-", string.Empty);
+            foreach (var ff in Fonts.SystemFontFamilies) {
                 string ffName = ff.ToString().ToLower();
                 if(ffName.Contains(fontName)) {
                     closestFontFamily = ff;

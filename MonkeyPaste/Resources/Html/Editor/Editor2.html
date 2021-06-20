@@ -8,10 +8,21 @@
           rel="stylesheet" />
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/styles/github.min.css" />
+    <link type="text/css" href="https://unpkg.com/quill-better-table@1.2.7/dist/quill-better-table.css" rel="stylesheet" />
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/highlight.min.js"></script>
     <script charset="UTF-8"
             src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.2/languages/xml.min.js"></script>
     <script src="https://cdn.quilljs.com/2.0.0-dev.4/quill.min.js"></script>
+
+
+    <script src="https://cdn.quilljs.com/2.0.0-dev.3/quill.js"></script>
+    <script src="https://unpkg.com/quill-better-table@1.2.8/dist/quill-better-table.min.js"></script>
+    <link type="text/css" href="https://cdn.quilljs.com/2.0.0-dev.3/quill.snow.css" rel="stylesheet">
+    <link type="text/css" href="https://unpkg.com/quill-better-table@1.2.7/dist/quill-better-table.css" rel="stylesheet" />
+
+    <script src="https://unpkg.com/quill-better-table@1.2.8/dist/quill-better-table.min.js"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
     <style>
@@ -52,6 +63,44 @@
             text-align: center;
             font-size: medium;
         }
+
+        /* maps font sizes to font drop down*/
+        .ql-snow
+        .ql-picker.ql-size
+        .ql-picker-label[data-value]::before,
+        .ql-snow .ql-picker.ql-size
+        .ql-picker-item[data-value]::before {
+            content: attr(data-value) !important;
+        }
+
+        /* Table Styles*/
+        .ql-snow .ql-Table-Input .ql-picker-options {
+            padding: 3px 5px;
+            width: 152px;
+        }
+
+        .ql-snow .ql-Table-Input .ql-picker-item {
+            border: 1px solid transparent;
+            float: left;
+            height: 16px;
+            margin: 2px;
+            padding: 0px;
+            width: 16px;
+            background: lightsteelblue;
+        }
+
+            .ql-snow .ql-Table-Input .ql-picker-item:hover, .ql-snow .ql-Table-Input .ql-picker-item.ql-picker-item-highlight {
+                border-color: #000;
+                background: steelblue;
+            }
+
+        .ql-snow .ql-Table-Input.ql-picker {
+            width: 28px;
+        }
+
+            .ql-snow .ql-Table-Input.ql-picker .ql-picker-label {
+                padding: 2px 4px;
+            }
     </style>
 </head>
 <body>
@@ -62,7 +111,23 @@
             crossorigin="anonymous"></script>
     <script src="https://benwinding.github.io/quill-html-edit-button/dist/quill.htmlEditButton.min.js"></script>
     <script type="text/javascript">
-        Quill.register("modules/htmlEditButton", htmlEditButton);
+        Quill.register("modules/htmlEditButton", htmlEditButton);        
+        Quill.register({
+            'modules/better-table': quillBetterTable
+        }, true);
+        var curQuillDiv = $("#editor");
+        //==================================================================================================
+        // TABLES
+        //==================================================================================================
+        var tableOptions = [];
+        var maxRows = 7;
+        var maxCols = 7;
+
+        for (let r = 1; r <= maxRows; r++) {
+            for (let c = 1; c <= maxCols; c++) {
+                tableOptions.push('newtable_' + r + '_' + c);
+            }
+        }
 
         //==================================================================================================
         // FONTS
@@ -73,6 +138,12 @@
         var fonts = Quill.import('attributors/class/font');
         fonts.whitelist = fontNames;
         Quill.register(fonts, true);
+
+        //font sizes
+        const fontSizeArr = ['8px', '9px', '10px', '12px', '14px', '16px', '20px', '24px', '32px', '42px', '54px', '68px', '84px', '98px'];
+        var size = Quill.import('attributors/style/size');
+        size.whitelist = fontSizeArr;
+        Quill.register(size, true);
 
         // Add fonts to CSS style
         var fontStyles = "";
@@ -106,8 +177,8 @@
         ];
 
         var toolbarOptions = [
-
-            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+            //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+            [{ 'size': fontSizeArr }],               // font sizes
             [{ 'font': fonts.whitelist }],
             ['bold', 'italic', 'underline'/*, 'strike'*/],        // toggled buttons
             //['blockquote', 'code-block'],
@@ -122,9 +193,10 @@
 
             [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
             [{ 'align': [] }],
-
             // ['clean'],                                         // remove formatting button
-            ['omega']
+            ['omega'],
+
+            [{ 'Table-Input': tableOptions }]
         ];
 
 
@@ -141,14 +213,66 @@
             node.innerHTML = fontStyles;
             document.body.appendChild(node);
 
-            quill = new Quill('#editor', {
+            quill = new Quill(curQuillDiv[0], {
+                placeholder: 'Compose your text...',
                 theme: 'snow',
                 modules: {
                     toolbar: toolbarOptions,
                     htmlEditButton: {
                         syntax: true,
                     },
+                    table: false,
+                    'better-table': {
+                        operationMenu: {
+                            items: {
+                                unmergeCells: {
+                                    text: 'Unmerge cells'
+                                }
+                            },
+                            color: {
+                                colors: ['green', 'red', 'yellow', 'blue', 'white'],
+                                text: 'Background Colors:'
+                            }
+                        }
+                    },
+                    keyboard: {
+                        bindings: quillBetterTable.keyboardBindings
+                    }
                 }
+            });
+
+            var curTableIconSpan = curQuillDiv.parent().find('span.ql-Table-Input.ql-picker')[0].childNodes[0];
+            curTableIconSpan.innerHTML = "<svg style=\"right: 4px;\" viewbox=\"0 0 18 18\"> <rect class=ql-stroke height=12 width=12 x=3 y=3></rect> <rect class=ql-fill height=2 width=3 x=5 y=5></rect> <rect class=ql-fill height=2 width=4 x=9 y=5></rect> <g class=\"ql-fill ql-transparent\"> <rect height=2 width=3 x=5 y=8></rect> <rect height=2 width=4 x=9 y=8></rect> <rect height=2 width=3 x=5 y=11></rect> <rect height=2 width=4 x=9 y=11></rect> </g> </svg>";
+            var curTableCellIconSpans = $(curTableIconSpan.parentNode.childNodes[1]).children();
+            curTableCellIconSpans.click((function () {
+                var curQuillBetterTable = quill.getModule('better-table');
+                var curQuillToolbar = quill.getModule('toolbar');
+                return function () {
+                    var curRowIndex = Number(this.dataset.value.substring(9).split('_')[0]);
+                    var curColIndex = Number(this.dataset.value.substring(9).split('_')[1]);
+                    curQuillBetterTable.insertTable(curRowIndex, curColIndex);
+                    // The following two lines have been added, thinking that it would fix the issue of keeping the icon in blue color.  However Quill keeps adding the classes back, so this fix doesn't work.
+                    $(this).parent().parent().find(".ql-selected").removeClass("ql-selected"); $(this).parent().parent().find(".ql-active").removeClass("ql-active");
+                };
+            })());
+            curTableCellIconSpans.hover(function () {
+                var curRowIndex = Number(this.dataset.value.substring(9).split('_')[0]);
+                var curColIndex = Number(this.dataset.value.substring(9).split('_')[1]);
+                $(this).parent().children().each((function () {
+                    var curRowIndex1 = curRowIndex;
+                    var curColIndex1 = curColIndex;
+                    return function () {
+                        var curRowIndex2 = Number(this.dataset.value.substring(9).split('_')[0]);
+                        var curColIndex2 = Number(this.dataset.value.substring(9).split('_')[1]);
+                        if (curRowIndex2 <= curRowIndex1 && curColIndex2 <= curColIndex1) {
+                            $(this).addClass("ql-picker-item-highlight");
+                        }
+                    };
+                })());
+
+
+            }, function () {
+                $(this).parent().children().removeClass("ql-picker-item-highlight");
             });
 
             var toolbar = quill.getModule('toolbar');
