@@ -14,7 +14,23 @@ namespace MpWpfApp {
         public bool PressEnter { get; set; }
         public string Args { get; set; }
         public string Label { get; set; }
-        public BitmapSource Icon { get; set; } = new BitmapImage();
+
+        public int DbIconImageId { get; set; }
+
+        public MpDbImage DbIconImage { get; set; }
+
+        public BitmapSource Icon {
+            get {
+                return DbIconImage.DbImage;
+            }
+            set {
+                if(DbIconImage == null) {
+                    DbIconImage = new MpDbImage();
+                }
+                DbIconImage.DbImage = value;
+            }
+        }
+
         public WinApi.ShowWindowCommands WindowState { get; set; }
 
         public static List<MpPasteToAppPath> GetAllPasteToAppPaths() {
@@ -39,7 +55,16 @@ namespace MpWpfApp {
             }
         }
 
-        public MpPasteToAppPath(string appPath, string appName, bool isAdmin, bool isSilent = false, string label = "", string args = "", BitmapSource icon = null, WinApi.ShowWindowCommands windowState = WinApi.ShowWindowCommands.Normal, bool pressEnter = false) {
+        public MpPasteToAppPath(
+            string appPath, 
+            string appName, 
+            bool isAdmin, 
+            bool isSilent = false, 
+            string label = "", 
+            string args = "", 
+            BitmapSource icon = null, 
+            WinApi.ShowWindowCommands windowState = WinApi.ShowWindowCommands.Normal, 
+            bool pressEnter = false) {
             AppPath = appPath;
             AppName = appName;
             IsAdmin = isAdmin;
@@ -49,6 +74,7 @@ namespace MpWpfApp {
             Icon = icon;
             WindowState = windowState;
             PressEnter = pressEnter;
+
         }
         public MpPasteToAppPath() : this(string.Empty,string.Empty,false) { }
 
@@ -63,11 +89,14 @@ namespace MpWpfApp {
             IsSilent = Convert.ToInt32(dr["IsSilent"].ToString()) > 0 ? true : false;
             PressEnter = Convert.ToInt32(dr["PressEnter"].ToString()) > 0 ? true : false;
             WindowState = (WinApi.ShowWindowCommands)Convert.ToInt32(dr["WindowState"].ToString());
-            if (dr["IconBlob"] != null && dr["IconBlob"].GetType() != typeof(System.DBNull)) {
-                Icon = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
-            } else {
-                Icon = null;
-            }
+            //if (dr["IconBlob"] != null && dr["IconBlob"].GetType() != typeof(System.DBNull)) {
+            //    Icon = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
+            //} else {
+            //    Icon = null;
+            //}
+            DbIconImageId = Convert.ToInt32(dr["fk_MpDbImageId"].ToString());
+            DbIconImage = new MpDbImage(DbIconImageId);
+
             Label = dr["Label"].ToString();
             Args = dr["Args"].ToString();
         }
@@ -77,6 +106,7 @@ namespace MpWpfApp {
                 return;
             }
 
+            DbIconImage.DeleteFromDatabase();
             MpDb.Instance.ExecuteWrite(
                 "delete from MpPasteToAppPath where pk_MpPasteToAppPathId=@cid",
                 new Dictionary<string, object> {
@@ -85,6 +115,9 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase() {
+            DbIconImage.WriteToDatabase();
+            DbIconImageId = DbIconImage.DbImageId;
+
             if (PasteToAppPathId == 0) {
                 DataTable dt = MpDb.Instance.Execute(
                     "select * from MpPasteToAppPath where AppPath=@ap and IsAdmin=@ia and IsSilent=@is and Args=@a",
@@ -98,14 +131,14 @@ namespace MpWpfApp {
                     PasteToAppPathId = Convert.ToInt32(dt.Rows[0]["pk_MpPasteToAppPathId"].ToString());
                 } else {
                     MpDb.Instance.ExecuteWrite(
-                        "insert into MpPasteToAppPath(AppPath,AppName,IsAdmin,Label,Args,IconBlob,IsSilent,WindowState,PressEnter) values(@ap,@an,@ia,@l,@a,@ib,@is,@ws,@pe)",
+                        "insert into MpPasteToAppPath(AppPath,AppName,IsAdmin,Label,Args,fk_MpDbImageId,IsSilent,WindowState,PressEnter) values(@ap,@an,@ia,@l,@a,@dbiid,@is,@ws,@pe)",
                         new System.Collections.Generic.Dictionary<string, object> {
                         { "@ap", AppPath },
                         { "@an",AppName },
                         { "@ia", IsAdmin ? 1:0 },
                         { "@l", Label },
                         { "@a", Args },
-                        { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
+                        { "@dbiid", DbIconImageId },
                         { "@is", IsSilent ? 1:0 },
                         { "@ws", (int)WindowState },
                         {"@pe", PressEnter ? 1:0 }
@@ -114,7 +147,7 @@ namespace MpWpfApp {
                 }
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpPasteToAppPath set AppPath=@ap, AppName=@an, IsAdmin=@ia, IsSilent=@is, Label=@l, Args=@a, IconBlob=@ib, WindowState=@ws, PressEnter=@pe where pk_MpPasteToAppPathId=@cid",
+                    "update MpPasteToAppPath set AppPath=@ap, AppName=@an, IsAdmin=@ia, IsSilent=@is, Label=@l, Args=@a, fk_MpDbImageId=@dbiid, WindowState=@ws, PressEnter=@pe where pk_MpPasteToAppPathId=@cid",
                     new System.Collections.Generic.Dictionary<string, object> {
                         { "@ap", AppPath },
                         { "@an",AppName },
@@ -122,7 +155,7 @@ namespace MpWpfApp {
                         { "@cid", PasteToAppPathId },
                         { "@l", Label },
                         { "@a", Args },
-                        { "@ib", MpHelpers.Instance.ConvertBitmapSourceToByteArray(Icon) },
+                        { "@dbiid", DbIconImageId },
                         { "@is", IsSilent ? 1:0 },
                         { "@ws", (int)WindowState },
                         { "@pe", PressEnter ? 1:0 }

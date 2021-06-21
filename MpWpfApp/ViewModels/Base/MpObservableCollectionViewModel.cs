@@ -323,6 +323,8 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
         #region Public Methods
         public MpObservableCollectionViewModel() : base() { }
         public MpObservableCollectionViewModel(List<T> list) : base(list) { }
+        public MpObservableCollectionViewModel(int maxSize) : this(new List<T>(maxSize)) { }
+
         public MpObservableCollectionViewModel(IEnumerable<T> collection) : base(collection) { }
 
         public bool IsListBoxItemVisible(int index) {
@@ -516,6 +518,13 @@ public class MpObservableCollection<T> : ObservableCollection<T> {
                     ListBox.SelectedItems.Clear();
                     lbi.IsSelected = true;
                 }
+            }
+        }
+
+        public void RaisePropertyChanged(params string[] propertyNames) {
+            foreach (var propertyName in propertyNames) {
+                OnPropertyChanged(propertyName);
+                //_propertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
         }
         #endregion

@@ -740,14 +740,13 @@
             }
         }
 
-        private Visibility _tileVisibility = Visibility.Visible;
         public Visibility TileVisibility {
             get {
-                return _tileVisibility;
+                return ItemVisibility;
             }
             set {
-                if (_tileVisibility != value) {
-                    _tileVisibility = value;
+                if (ItemVisibility != value) {
+                    ItemVisibility = value;
                     OnPropertyChanged(nameof(TileVisibility));
                 }
             }
@@ -2521,9 +2520,10 @@
             }
 
             if (CopyItemType == MpCopyItemType.Image) {
-                ocrTask = MpImageOcr.Instance.OcrImageForText(CopyItem.ItemBmpByteArray);
+                var itemBmpBytes = MpHelpers.Instance.ConvertBitmapSourceToByteArray(CopyItem.ItemBitmapSource);
+                ocrTask = MpImageOcr.Instance.OcrImageForText(itemBmpBytes);
                 analyticTasks.Add(ocrTask);
-                cvTask = MpImageAnalyzer.Instance.AnalyzeImage(CopyItem.ItemBmpByteArray);
+                cvTask = MpImageAnalyzer.Instance.AnalyzeImage(itemBmpBytes);
                 analyticTasks.Add(cvTask);
             }
 

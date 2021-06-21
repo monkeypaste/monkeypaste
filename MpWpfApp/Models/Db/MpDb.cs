@@ -243,6 +243,12 @@ namespace MpWpfApp {
         private string GetCreateString() {
             return @"
                     ---------------------------------------------------------------------------------------------------------------------
+                    CREATE TABLE MpDbImage (
+                      pk_MpDbImageId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , ImageBase64 text
+                    , ImageBlob image
+                    );
+                    ---------------------------------------------------------------------------------------------------------------------                    
                     CREATE TABLE MpTag (
                       pk_MpTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_ParentTagId integer
@@ -262,8 +268,24 @@ namespace MpWpfApp {
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpIcon (
                       pk_MpIconId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
-                    , IconBlob image NOT NULL
-                    , IconBorderBlob image 
+                    , fk_IconDbImageId integer
+                    , fk_IconBorderDbImageId integer
+                    , fk_IconSelectedHighlightBorderDbImageId integer
+                    , fk_IconHighlightBorderDbImageId integer
+                    , fk_MpColorId1 integer default 0
+                    , fk_MpColorId2 integer default 0
+                    , fk_MpColorId3 integer default 0
+                    , fk_MpColorId4 integer default 0
+                    , fk_MpColorId5 integer default 0
+                    , CONSTRAINT FK_MpIcon_0_0 FOREIGN KEY (fk_MpColorId1) REFERENCES MpColor (pk_MpColorId)
+                    , CONSTRAINT FK_MpIcon_1_0 FOREIGN KEY (fk_MpColorId2) REFERENCES MpColor (pk_MpColorId)
+                    , CONSTRAINT FK_MpIcon_2_0 FOREIGN KEY (fk_MpColorId3) REFERENCES MpColor (pk_MpColorId)
+                    , CONSTRAINT FK_MpIcon_3_0 FOREIGN KEY (fk_MpColorId4) REFERENCES MpColor (pk_MpColorId)
+                    , CONSTRAINT FK_MpIcon_4_0 FOREIGN KEY (fk_MpColorId5) REFERENCES MpColor (pk_MpColorId)
+                    , CONSTRAINT FK_MpIcon_0_0 FOREIGN KEY (fk_IconDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
+                    , CONSTRAINT FK_MpIcon_1_0 FOREIGN KEY (fk_IconBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)                       
+                    , CONSTRAINT FK_MpIcon_0_0 FOREIGN KEY (fk_IconSelectedHighlightBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
+                    , CONSTRAINT FK_MpIcon_1_0 FOREIGN KEY (fk_IconHighlightBorderDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)   
                     );
                     ---------------------------------------------------------------------------------------------------------------------                    
                     CREATE TABLE MpShortcut (
@@ -312,13 +334,14 @@ namespace MpWpfApp {
                     , AppName text
                     , Args text
                     , Label text
-                    , IconBlob image
+                    , fk_MpDbImageId integer default 0
                     , WindowState integer default 1
                     , IsSilent integer NOT NULL default 0
                     , IsAdmin integer NOT NULL default 0
                     , PressEnter integer NOT NULL default 0
+                    , CONSTRAINT FK_MpPasteToAppPath_0_0 FOREIGN KEY (fk_MpDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)                    
                     );
-                    INSERT INTO MpPasteToAppPath(AppPath,IsAdmin,IconBlob) VALUES ('%windir%\System32\cmd.exe',0,null);
+                    INSERT INTO MpPasteToAppPath(AppPath,IsAdmin) VALUES ('%windir%\System32\cmd.exe',0);
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpDeviceType (
                       pk_MpDeviceTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -379,42 +402,18 @@ namespace MpWpfApp {
                       pk_MpAppId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , SourcePath text NOT NULL 
                     , AppName text 
-                    , IsAppRejected integer NOT NULL                    
-                    , IconBlob image NOT NULL
-                    , IconBorderBlob image NOT NULL
-                    , IconSelectedHighlightBorderBlob image NOT NULL
-                    , IconHighlightBorderBlob image NOT NULL
-                    , fk_MpColorId1 integer default 0
-                    , fk_MpColorId2 integer default 0
-                    , fk_MpColorId3 integer default 0
-                    , fk_MpColorId4 integer default 0
-                    , fk_MpColorId5 integer default 0
-                    , CONSTRAINT FK_MpApp_0_0 FOREIGN KEY (fk_MpColorId1) REFERENCES MpColor (pk_MpColorId)
-                    , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpColorId2) REFERENCES MpColor (pk_MpColorId)
-                    , CONSTRAINT FK_MpApp_2_0 FOREIGN KEY (fk_MpColorId3) REFERENCES MpColor (pk_MpColorId)
-                    , CONSTRAINT FK_MpApp_3_0 FOREIGN KEY (fk_MpColorId4) REFERENCES MpColor (pk_MpColorId)
-                    , CONSTRAINT FK_MpApp_4_0 FOREIGN KEY (fk_MpColorId5) REFERENCES MpColor (pk_MpColorId)
+                    , IsAppRejected integer NOT NULL   
+                    , fk_MpIconId integer
+                    , CONSTRAINT FK_MpApp_0_0 FOREIGN KEY (fk_MpIconId) REFERENCES MpIcon (pk_MpIconId)
                     );   
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpUrlDomain (
                       pk_MpUrlDomainId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , UrlDomainPath text NOT NULL 
                     , UrlDomainTitle text
-                    , IsUrlDomainRejected integer NOT NULL DEFAULT 0              
-                    , FavIconBlob image 
-                    , FavIconBorderBlob image 
-                    , FavIconSelectedHighlightBorderBlob image
-                    , FavIconHighlightBorderBlob image 
-                    , fk_MpColorId1 integer default 0
-                    , fk_MpColorId2 integer default 0
-                    , fk_MpColorId3 integer default 0
-                    , fk_MpColorId4 integer default 0
-                    , fk_MpColorId5 integer default 0
-                    , CONSTRAINT FK_MpUrlDomain_0_0 FOREIGN KEY (fk_MpColorId1) REFERENCES MpColor (pk_MpColorId)
-                    , CONSTRAINT FK_MpUrlDomain_1_0 FOREIGN KEY (fk_MpColorId2) REFERENCES MpColor (pk_MpColorId)
-                    , CONSTRAINT FK_MpUrlDomain_2_0 FOREIGN KEY (fk_MpColorId3) REFERENCES MpColor (pk_MpColorId)
-                    , CONSTRAINT FK_MpUrlDomain_3_0 FOREIGN KEY (fk_MpColorId4) REFERENCES MpColor (pk_MpColorId)
-                    , CONSTRAINT FK_MpUrlDomain_4_0 FOREIGN KEY (fk_MpColorId5) REFERENCES MpColor (pk_MpColorId)
+                    , IsUrlDomainRejected integer NOT NULL DEFAULT 0   
+                    , fk_MpIconId integer default 0
+                    , CONSTRAINT FK_MpUrlDomain_0_0 FOREIGN KEY (fk_MpIconId) REFERENCES MpIcon (pk_MpIconId)
                     );  
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpUrl (
@@ -435,17 +434,20 @@ namespace MpWpfApp {
                     , Title text NULL 
                     , CopyCount integer not null default 1
                     , PasteCount integer not null default 0
-                    , ItemImage longblob
+                    , fk_MpDbImageId integer
+                    , fk_SsMpDbImageId integer default 0
                     , ItemText text NOT NULL      
                     , ItemDescription text
                     , ItemCsv text
                     , Screenshot longblob
-                    , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL
+                    , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL                
                     , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
                     , CONSTRAINT FK_MpCopyItem_1_0 FOREIGN KEY (fk_MpClientId) REFERENCES MpClient (pk_MpClientId)
                     , CONSTRAINT FK_MpCopyItem_2_0 FOREIGN KEY (fk_MpCopyItemTypeId) REFERENCES MpCopyItemType (pk_MpCopyItemTypeId) 
                     , CONSTRAINT FK_MpCopyItem_3_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId) 
                     , CONSTRAINT FK_MpCopyItem_4_0 FOREIGN KEY (fk_MpUrlId) REFERENCES MpUrl (pk_MpUrlId) 
+                    , CONSTRAINT FK_MpCopyItem_5_0 FOREIGN KEY (fk_MpDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)
+                    , CONSTRAINT FK_MpCopyItem_6_0 FOREIGN KEY (fk_SsMpDbImageId) REFERENCES MpDbImage (pk_MpDbImageId)    
                     );
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCompositeCopyItem (

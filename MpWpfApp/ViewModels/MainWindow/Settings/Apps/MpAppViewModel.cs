@@ -104,11 +104,11 @@ namespace MpWpfApp {
                 if(App == null) {
                     return new MpObservableCollection<MpColor>();
                 }
-                return App.PrimaryIconColorList;
+                return App.Icon.PrimaryIconColorList;
             }
             set {
-                if(App != null && App.PrimaryIconColorList != value) {
-                    App.PrimaryIconColorList = value;
+                if(App != null && App.Icon.PrimaryIconColorList != value) {
+                    App.Icon.PrimaryIconColorList = value;
                     OnPropertyChanged(nameof(PrimaryIconColorList));
                 }
             }

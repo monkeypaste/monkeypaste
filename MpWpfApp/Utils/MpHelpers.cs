@@ -42,9 +42,6 @@ using System.Windows.Controls.Primitives;
 using System.Speech.Synthesis;
 using WindowsInput;
 using Microsoft.Win32;
-
-
-
 namespace MpWpfApp {
     public class MpHelpers {
         private static readonly Lazy<MpHelpers> _Lazy = new Lazy<MpHelpers>(() => new MpHelpers());
@@ -1427,7 +1424,9 @@ namespace MpWpfApp {
         #region Visual
 
         public BitmapSource CreateBorder(BitmapSource img, double scale, Color bgColor) {
-            return MpHelpers.Instance.TintBitmapSource(img, bgColor, true);
+            var borderBmpSrc = MpHelpers.Instance.TintBitmapSource(img, bgColor, true);
+            var borderSize = new Size(borderBmpSrc.Width * scale, borderBmpSrc.Height * scale);
+            return MpHelpers.Instance.ResizeBitmapSource(borderBmpSrc, borderSize);
         }
 
         public BitmapSource CopyScreen() {
@@ -2805,9 +2804,7 @@ namespace MpWpfApp {
                     }
                 }
             }
-        }
-
-        
+        }        
 
         public bool IsValidUrl(string str) {
             bool hasValidExtension = false;
@@ -2896,6 +2893,19 @@ namespace MpWpfApp {
             RenderTargetBitmap bmp = new RenderTargetBitmap((int)source.Width, (int)source.Height, 96, 96, PixelFormats.Pbgra32);
             bmp.Render(drawingVisual); 
             return bmp;
+        }
+
+        public BitmapSource ConvertStringToBitmapSource(string base64Str) {
+            if(string.IsNullOrEmpty(base64Str)) {
+                return new BitmapImage();
+            }
+            var bytes = System.Convert.FromBase64String(base64Str);
+            return ConvertByteArrayToBitmapSource(bytes);
+        }
+
+        public string ConvertBitmapSourceToBase64String(BitmapSource bmpSrc) {
+            var bytes = ConvertBitmapSourceToByteArray(bmpSrc);
+            return Convert.ToBase64String(bytes);
         }
         #endregion
 

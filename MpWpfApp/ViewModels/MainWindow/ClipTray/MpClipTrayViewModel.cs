@@ -35,6 +35,7 @@ namespace MpWpfApp {
 
         //private double _originalExpandedTileX = 0;
         //private int _expandedTileVisibleIdx = 0;
+        private int _pageSize = 15;
         #endregion
 
         #region Properties
@@ -463,6 +464,7 @@ namespace MpWpfApp {
                         break;
                 }
             };
+
             var allItems = MpCopyItem.GetAllCopyItems(out int _totalEntryCount);
             foreach (var ci in allItems) {
                 if (ci.IsSubCompositeItem) {
@@ -945,6 +947,7 @@ namespace MpWpfApp {
         }
 
         public void Add(MpClipTileViewModel ctvm, int forceIdx = 0) {
+                
             if(MainWindowViewModel != null && MainWindowViewModel.TagTrayViewModel != null) {
                 if (MainWindowViewModel.TagTrayViewModel.SelectedTagTile != MainWindowViewModel.TagTrayViewModel.GetRecentTagTileViewModel()) {
                     //always add new clips to recent tag
@@ -952,7 +955,15 @@ namespace MpWpfApp {
                 }
             }
 
-            if (forceIdx >= 0 && forceIdx < this.Count) {
+            /*if(!MpMainWindowViewModel.IsApplicationLoading) {
+                for (int i = VisibileClipTiles.Count - 1; i > 0; i--) {
+                    VisibileClipTiles[i].CopyItem = VisibileClipTiles[i-1].CopyItem;
+                    VisibileClipTiles[i].RichTextBoxViewModelCollection[0].CopyItem = VisibileClipTiles[i - 1].RichTextBoxViewModelCollection[0].CopyItem;
+                }
+                VisibileClipTiles[0].CopyItem = ctvm.CopyItem;
+                VisibileClipTiles[0].RichTextBoxViewModelCollection[0].CopyItem = ctvm.CopyItem;
+            }
+            else */if (forceIdx >= 0 && forceIdx < this.Count) {
                 base.Insert(forceIdx, ctvm);
             } else {
                 base.Add(ctvm);

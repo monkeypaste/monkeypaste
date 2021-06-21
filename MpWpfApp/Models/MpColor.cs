@@ -174,5 +174,17 @@ namespace MpWpfApp {
                 _AllColorList.Add(this);
             }        
         }
+
+        public void DeleteFromDatabase() {
+            if (ColorId <= 0) {
+                return;
+            }
+
+            MpDb.Instance.ExecuteWrite(
+                "delete from MpColor where pk_MpColorId=@cid",
+                new Dictionary<string, object> {
+                    { "@cid", ColorId }
+                });
+        }
     }
 }

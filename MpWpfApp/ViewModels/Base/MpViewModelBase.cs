@@ -91,11 +91,33 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        private Visibility _itemVisibility = Visibility.Visible;
+        public Visibility ItemVisibility {
+            get {
+                return _itemVisibility;
+            }
+            set {
+                if(_itemVisibility != value) {
+                    _itemVisibility = value;
+                    OnPropertyChanged(nameof(ItemVisibility));
+                }
+            }
+        }
         #endregion
 
         #region Events
         public event EventHandler ViewModelLoaded;
         protected virtual void OnViewModelLoaded() => ViewModelLoaded?.Invoke(this, EventArgs.Empty);
+        #endregion
+
+        #region Public Methods
+        public void RaisePropertyChanged(params string[] propertyNames) {
+            foreach (var propertyName in propertyNames) {
+                OnPropertyChanged(propertyName);
+                //_propertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
         #endregion
 
         #region Protected Methods
@@ -126,6 +148,7 @@ namespace MpWpfApp {
         protected virtual void DesignData() {  }
 
 
+
         #endregion
 
         #region Private methods
@@ -143,7 +166,7 @@ namespace MpWpfApp {
         #endregion
 
         #region INotifyPropertyChanged 
-        public bool ThrowOnInvalidPropertyName { get; private set; } = true;
+        public bool ThrowOnInvalidPropertyName { get; private set; } = false;
 
         private event PropertyChangedEventHandler _propertyChanged;
         public event PropertyChangedEventHandler PropertyChanged {

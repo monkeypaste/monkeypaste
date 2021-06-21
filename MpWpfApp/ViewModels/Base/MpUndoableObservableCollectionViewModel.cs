@@ -11,7 +11,7 @@ namespace MpWpfApp {
         /// <summary>
         /// Initializes a new instance of <see cref="UndoableViewModelBase"/>
         /// </summary>
-        //public MpUndoableObservableCollectionViewModel(P parent) : base(parent) { }
+        //public MpUndoableObservableCollectionViewModel(int maxItems) : base(maxItems) { }
 
         
         /// <summary>
