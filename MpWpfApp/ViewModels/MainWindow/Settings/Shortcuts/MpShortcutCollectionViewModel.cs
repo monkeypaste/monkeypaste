@@ -164,7 +164,7 @@ namespace MpWpfApp {
                     if(ctvm != null) {
                         ctvm.ShortcutKeyString = string.Empty;
                     } else {
-                        foreach(var ctvm1 in MainWindowViewModel.ClipTrayViewModel) {
+                        foreach(var ctvm1 in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
                             foreach(var rtbvm in ctvm1.RichTextBoxViewModelCollection) {
                                 if(rtbvm.CopyItemId == scvm.CopyItemId) {
                                     rtbvm.ShortcutKeyString = string.Empty;
@@ -260,7 +260,7 @@ namespace MpWpfApp {
                                 string cbText = Clipboard.GetText();
                                 if(!string.IsNullOrEmpty(cbText)) {
                                     Application.Current.Dispatcher.BeginInvoke((Action)(()=>{
-                                        foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel) {
+                                        foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
                                             if(ctvm.CopyItemPlainText == cbText && !ctvm.IsTextItem) {
                                                 ctvm.PasteCount++;
                                             }

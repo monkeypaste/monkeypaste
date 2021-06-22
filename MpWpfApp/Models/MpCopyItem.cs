@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Diagnostics;
 using System.IO;
@@ -205,6 +206,45 @@ namespace MpWpfApp {
         #endregion
 
         #region Factory Methods
+        public static async Task<ObservableCollection<MpCopyItem>> GetPage(
+            int tagId,
+            int start,
+            int count,
+            string sortColumn = "pk_MpCopyItemId",
+            bool isDescending = false) {
+            //SELECT
+            //user_number,
+            //user_name
+            //FROM user_table
+            //WHERE(user_name LIKE '%{1}%' OR user_number LIKE '%{2}%')
+            //AND user_category = { 3 } OR user_category = { 4 }
+            //ORDER BY user_uid LIMIT { 5}
+            //OFFSET { 6}
+            //Where { 5} is page size and { 6 } is page number * page size.
+
+            var result = MpDb.Instance.Execute(
+                                @"SELECT * from MpCopyItem
+                                      WHERE pk_MpCopyItemId in 
+                                        (SELECT fk_MpCopyItemId FROM MpCopyItemTag 
+                                         WHERE fk_MpTagId=@tid)
+                                      ORDER BY @sc @sd LIMIT @c OFFSET @s",
+                                new Dictionary<string, object> {
+                                    { "@tid",tagId },
+                                    { "@sc",sortColumn },
+                                    { "@sd",(isDescending ? "DESC" : "ASC") },
+                                    { "@c",count },
+                                    { "@s",start }
+                                });
+
+            var cil = new List<MpCopyItem>();
+            if(result != null) {
+                foreach(var dr in result.Rows) {
+                    cil.Add(new MpCopyItem((DataRow)dr));
+                }
+            }
+            return new ObservableCollection<MpCopyItem>(cil);
+        }
+
         public static async Task<MpCopyItem> CreateFromClipboardAsync(IntPtr processHandle, int remainingRetryCount = 5, DispatcherPriority priority = DispatcherPriority.Background) {
             MpCopyItem newCopyItem = null;
             await Application.Current.Dispatcher.BeginInvoke(
@@ -968,7 +1008,10 @@ namespace MpWpfApp {
                     ItemRichText = (string)_itemData;
                     ItemFlowDocument = ItemRichText.ToFlowDocument();
                     ItemPlainText = ItemRichText.ToPlainText();
-                    ItemBitmapSource = ItemFlowDocument.ToBitmapSource();
+                    if(Properties.Settings.Default.ShowItemPreview) {
+                        ItemBitmapSource = ItemFlowDocument.ToBitmapSource();
+                    }
+                    
                     if (!string.IsNullOrEmpty(ItemCsv) && MpHelpers.Instance.IsStringCsv(ItemPlainText)) {
                         //this is when copying from excel or DataObject type supports csv
                         ItemCsv = ItemPlainText;
@@ -1177,13 +1220,22 @@ namespace MpWpfApp {
 
         // still req'd if NoDb=true
         public override void WriteToDatabase() {
+            if(CopyItemId < 0) {
+                //when CopyItemId == -1 it means its a placeholder clip tile and shouldn't affect database
+                return;
+            }
             var sw = new Stopwatch();
             sw.Start();
-            DbImageScreenshot.WriteToDatabase();
-            DbImageScreenshotId = DbImageScreenshot.DbImageId;
+            if(ItemScreenshot != null) {
+                DbImageScreenshot.WriteToDatabase();
+                DbImageScreenshotId = DbImageScreenshot.DbImageId;
+            }
 
-            ItemDbImage.WriteToDatabase();
-            ItemDbImageId = ItemDbImage.DbImageId;
+            if(ItemBitmapSource != null) {
+                //when preview is turned off will not happen
+                ItemDbImage.WriteToDatabase();
+                ItemDbImageId = ItemDbImage.DbImageId;
+            }
 
             App.WriteToDatabase();
             ItemColor.WriteToDatabase();

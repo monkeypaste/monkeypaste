@@ -35,7 +35,15 @@
         #endregion
 
         #region Statics
-
+        public static MpClipTileViewModel CreateEmptyClipTile() {
+            var eci = new MpCopyItem(MpCopyItemType.RichText, @"Empty Tile", MpHelpers.Instance.GetThisAppHandle());
+            eci.CopyItemId = -1;
+            eci.CopyDateTime = DateTime.MinValue;
+            var ectvm = new MpClipTileViewModel(eci);
+            ectvm.TileVisibility = Visibility.Collapsed;
+            ectvm.IsPlaceholder = true;
+            return ectvm;
+        }
         #endregion
 
         #region Properties
@@ -272,7 +280,7 @@
 
         public Rect TileRect {
             get {
-                return MainWindowViewModel.ClipTrayViewModel.GetListBoxItemRect(MainWindowViewModel.ClipTrayViewModel.IndexOf(this));
+                return MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.GetListBoxItemRect(MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.IndexOf(this));
                 //if(ClipBorder == null || ClipBorder.Parent == null) {
                 //    return new Rect(new Point(double.MinValue,double.MinValue),new Size());
                 //}
@@ -1175,6 +1183,19 @@
             }
         }
 
+        private bool _isPlaceholder = false;
+        public bool IsPlaceholder {
+            get {
+                return _isPlaceholder;
+            }
+            set {
+                if (_isPlaceholder != value) {
+                    _isPlaceholder = value;
+                    OnPropertyChanged(nameof(IsPlaceholder));
+                }
+            }
+        }
+
 
         #endregion
 
@@ -1768,6 +1789,14 @@
                     case nameof(ctvm.IsBusy):
                         ctvm.OnPropertyChanged(nameof(ctvm.ContentVisibility));
                         ctvm.OnPropertyChanged(nameof(ctvm.LoadingSpinnerVisibility));
+                        break;
+                    case nameof(ctvm.TileVisibility):
+                        if(ctvm.TileVisibility == Visibility.Collapsed) {
+                            return;
+                        }
+                        if(ctvm.IsPlaceholder) {
+                            ctvm.TileVisibility = Visibility.Collapsed;
+                        }
                         break;
                 }
             };
@@ -2918,7 +2947,7 @@
         //}
 
         public void Dispose() {
-            if (MainWindowViewModel.ClipTrayViewModel.Contains(this)) {
+            if (MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.Contains(this)) {
                 MainWindowViewModel.ClipTrayViewModel.Remove(this);
             }
             var rtbvmToRemove = RichTextBoxViewModelCollection;

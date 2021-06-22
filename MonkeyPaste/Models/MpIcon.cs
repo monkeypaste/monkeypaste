@@ -13,26 +13,43 @@ namespace MonkeyPaste {
     public class MpIcon : MpDbModelBase {
         #region Columns
         [PrimaryKey,AutoIncrement]
+        [Column("pk_MpIconId")]
         public override int Id { get; set; }
 
         [ForeignKey(typeof(MpDbImage))]
+        [Column("fk_IconDbImageId")]
         public int IconImageId { get; set; }
+
         [ForeignKey(typeof(MpDbImage))]
+        [Column("fk_IconBorderDbImageId")]
         public int IconBorderImageId { get; set; }
+
         [ForeignKey(typeof(MpDbImage))]
+        [Column("fk_IconHighlightBorderDbImageId")]
         public int IconBorderHighlightImageId { get; set; }
+        
         [ForeignKey(typeof(MpDbImage))]
+        [Column("fk_IconSelectedHighlightBorderDbImageId")]
         public int IconBorderHighlightSelectedImageId { get; set; }
 
         [ForeignKey(typeof(MpColor))]
+        [Column("fk_MpColorId1")]
         public int Color1Id { get; set; }
+
         [ForeignKey(typeof(MpColor))]
+        [Column("fk_MpColorId2")]
         public int Color2Id { get; set; }
+
         [ForeignKey(typeof(MpColor))]
+        [Column("fk_MpColorId3")]
         public int Color3Id { get; set; }
+
         [ForeignKey(typeof(MpColor))]
+        [Column("fk_MpColorId4")]
         public int Color4Id { get; set; }
+
         [ForeignKey(typeof(MpColor))]
+        [Column("fk_MpColorId5")]
         public int Color5Id { get; set; }
         #endregion
 

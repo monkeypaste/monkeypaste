@@ -436,10 +436,11 @@ namespace MpWpfApp {
                     , PasteCount integer not null default 0
                     , fk_MpDbImageId integer
                     , fk_SsMpDbImageId integer default 0
-                    , ItemText text NOT NULL      
+                    , ItemText text 
+                    , ItemRtf text 
+                    , ItemHtml text 
                     , ItemDescription text
                     , ItemCsv text
-                    , Screenshot longblob
                     , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL                
                     , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
                     , CONSTRAINT FK_MpCopyItem_1_0 FOREIGN KEY (fk_MpClientId) REFERENCES MpClient (pk_MpClientId)
@@ -482,20 +483,24 @@ namespace MpWpfApp {
                     CREATE TABLE MpCopyItemTemplate (
                       pk_MpCopyItemTemplateId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemId integer NOT NULL
+                    , fk_MpColorId integer default 2
                     , HexColor text NOT NULL
                     , TemplateName text NOT NULL 
                     , CONSTRAINT FK_MpCopyItemTemplate_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)                    
+                    , CONSTRAINT FK_MpCopyItemTemplate_0_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId)                    
                     );       
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPasteHistory (
                       pk_MpPasteHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , fk_MpCopyItemId integer NOT NULL
                     , fk_MpClientId integer NOT NULL
-                    , fk_MpAppId integer 
+                    , fk_MpAppId integer                     
+                    , fk_MpUrlId integer 
                     , PasteDateTime datetime NOT NULL
                     , CONSTRAINT FK_MpPasteHistory_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
                     , CONSTRAINT FK_MpPasteHistory_1_0 FOREIGN KEY (fk_MpClientId) REFERENCES MpClient (pk_MpClientId)
                     , CONSTRAINT FK_MpPasteHistory_2_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
+                    , CONSTRAINT FK_MpPasteHistory_3_0 FOREIGN KEY (fk_MpUrlId) REFERENCES MpUrl (pk_MpUrlId)
                     );
                     ---------------------------------------------------------------------------------------------------------------------                    
             ";

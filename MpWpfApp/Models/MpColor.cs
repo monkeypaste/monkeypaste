@@ -135,18 +135,7 @@ namespace MpWpfApp {
 
         public override void WriteToDatabase() {
             if (ColorId == 0) {
-                DataTable dt = MpDb.Instance.Execute(
-                    "select * from MpColor where R=@r and G=@g and B=@b and A=@a",
-                    new System.Collections.Generic.Dictionary<string, object> {
-                        { "@r", _r },
-                        { "@g", _g },
-                        { "@b", _b },
-                        { "@a", _a }
-                    });
-                if (dt != null && dt.Rows.Count > 0) {
-                    ColorId = Convert.ToInt32(dt.Rows[0]["pk_MpColorId"].ToString());
-                } else {
-                    MpDb.Instance.ExecuteWrite(
+                MpDb.Instance.ExecuteWrite(
                         "insert into MpColor(R,G,B,A) values(@r,@g,@b,@a)",
                         new System.Collections.Generic.Dictionary<string, object> {
                         { "@r", _r },
@@ -154,8 +143,7 @@ namespace MpWpfApp {
                         { "@b", _b },
                         { "@a", _a }
                     });
-                    ColorId = MpDb.Instance.GetLastRowId("MpColor", "pk_MpColorId");
-                }
+                ColorId = MpDb.Instance.GetLastRowId("MpColor", "pk_MpColorId");
             } else {
                 MpDb.Instance.ExecuteWrite(
                     "update MpColor set R=@r, G=@g, B=@b, A=@a where pk_MpColorId=@cid",

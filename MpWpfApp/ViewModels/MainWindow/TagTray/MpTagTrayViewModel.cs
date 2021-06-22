@@ -73,12 +73,12 @@ namespace MpWpfApp {
             CollectionChanged += (s, e) => {
                 UpdateSortOrder();
             };
-            ctrvm.CollectionChanged += (s, e) => {
+            ctrvm.ClipTileViewModels.CollectionChanged += (s, e) => {
                 if(MainWindowViewModel.ClipTileSortViewModel.IsSorting) {
                     return;
                 }
                 if (e.NewItems != null) {
-                    foreach (MpClipTileViewModel ctvm in ctrvm) {
+                    foreach (MpClipTileViewModel ctvm in ctrvm.ClipTileViewModels) {
                         AddClipToSudoTags(ctvm);
                     }
                     RefreshRecentTag();
@@ -144,7 +144,7 @@ namespace MpWpfApp {
         public void RefreshAllCounts() {
             foreach(var ttvm in this) {
                 ttvm.TagClipCount = 0;
-                foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel) {
+                foreach(var ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
                     if(ttvm.IsLinkedWithClipTile(ctvm) /*&& ctvm.CopyItemType != MpCopyItemType.Composite*/) {
                         ttvm.TagClipCount++;
                     }
@@ -167,7 +167,7 @@ namespace MpWpfApp {
             if (GetRecentTagTileViewModel().TagClipCount >= Properties.Settings.Default.MaxRecentClipItems) {
                 var rtvm = GetRecentTagTileViewModel();
                 var rctvml = new List<MpClipTileViewModel>();
-                foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel) {
+                foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
                     if (rtvm.IsLinkedWithClipTile(ctvm)) {
                         rctvml.Add(ctvm);
                     }
@@ -186,7 +186,7 @@ namespace MpWpfApp {
             } else if (GetRecentTagTileViewModel().TagClipCount < Properties.Settings.Default.MaxRecentClipItems) {
                 var rtvm = GetRecentTagTileViewModel();
                 var rctvml = new List<MpClipTileViewModel>();
-                foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel) {
+                foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
                     if (rtvm.IsLinkedWithClipTile(ctvm)) {
                         rctvml.Add(ctvm);
                     }
@@ -226,7 +226,7 @@ namespace MpWpfApp {
                             MainWindowViewModel.ClipTrayViewModel.FilterByAppIcon = null;
                             MainWindowViewModel.ClipTrayViewModel.IsFilteringByApp = false;
 
-                            foreach (MpClipTileViewModel ctvm in MainWindowViewModel.ClipTrayViewModel) {
+                            foreach (MpClipTileViewModel ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
                                 //this ensures when switching between tags the last selected tag in a list reset
                                 //ctvm.IsSelected = false;
                                 if (newTagTile.IsLinkedWithClipTile(ctvm)) {
@@ -251,7 +251,7 @@ namespace MpWpfApp {
                                     ctvm.TileVisibility = Visibility.Collapsed;
                                 }
                             }
-                            if (MainWindowViewModel.ClipTrayViewModel.ListBox != null) {
+                            if (MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.ListBox != null) {
                                 //this ensures visibility takes affect if filtering by app
                                 //MainWindowViewModel.ClipTrayViewModel.GetTray().Items.Refresh();
                             }

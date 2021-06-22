@@ -237,8 +237,8 @@ namespace MpWpfApp {
             if (IsInAppendMode &&
                MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles.Count == 1 &&
                MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles[0] != MainWindowViewModel.ClipTrayViewModel.VisibileClipTiles[0]) {
-                int selectedIdx = MainWindowViewModel.ClipTrayViewModel.IndexOf(MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles[0]);
-                MainWindowViewModel.ClipTrayViewModel.Move(selectedIdx, 0);
+                int selectedIdx = MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.IndexOf(MainWindowViewModel.ClipTrayViewModel.SelectedClipTiles[0]);
+                MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.Move(selectedIdx, 0);
             }
         }
         #endregion

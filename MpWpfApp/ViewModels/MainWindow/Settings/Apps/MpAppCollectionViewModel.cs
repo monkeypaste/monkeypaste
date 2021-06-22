@@ -80,7 +80,7 @@ namespace MpWpfApp {
                 this[appIdx].App.WriteToDatabase();
 
                 // TODO Ensure appcollection is loaded BEFORE clip tiles and its App object references part of this collection and not another instance w/ same appId
-                foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel) {
+                foreach (var ctvm in MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels) {
                     if (ctvm.CopyItem.App.AppId == this[appIdx].AppId) {
                         ctvm.CopyItem.App = this[appIdx].App;
                     }
@@ -110,7 +110,7 @@ namespace MpWpfApp {
                             MpApp appToReject = dupList[0].App;
                             if (confirmExclusionResult == MessageBoxResult.Yes) {
                                 var clipTilesToRemove = new List<MpClipTileViewModel>();
-                                foreach (MpClipTileViewModel ctvm in ctrvm) {
+                                foreach (MpClipTileViewModel ctvm in ctrvm.ClipTileViewModels) {
                                     if (ctvm.CopyItemAppId == appToReject.AppId) {
                                         clipTilesToRemove.Add(ctvm);
                                     }

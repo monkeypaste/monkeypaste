@@ -7,7 +7,22 @@ namespace MpWpfApp {
     public class MpCopyItemTemplate : MpDbObject {
         public int CopyItemTemplateId { get; set; } = 0;
         public int CopyItemId { get; set; } = 0;
-        public Brush TemplateColor { get; set; } = Brushes.Red;
+        public int ColorId { get; set; } = 0;
+
+        public MpColor Color { get; set; }
+
+        public Brush TemplateColor { 
+            get {
+                if(Color == null) {
+                    Color = new MpColor(MpHelpers.Instance.GetRandomColor());
+                }
+                return Color.ColorBrush;
+            }
+            set {
+                Color = new MpColor((value as SolidColorBrush).Color);
+            }
+        }
+
         public string TemplateName { get; set; } = String.Empty;
         //only set at runtime
         public string TemplateText { get; set; } = string.Empty;
@@ -40,32 +55,40 @@ namespace MpWpfApp {
         public override void LoadDataRow(DataRow dr) {
             CopyItemTemplateId = Convert.ToInt32(dr["pk_MpCopyItemTemplateId"].ToString());
             CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemId"].ToString());
+
+            ColorId = Convert.ToInt32(dr["fk_MpColorId"].ToString());
+            Color = new MpColor(ColorId);
             TemplateName = dr["TemplateName"].ToString(); 
-            TemplateColor = (Brush)new BrushConverter().ConvertFromString(dr["HexColor"].ToString());
+            //TemplateColor = (Brush)new BrushConverter().ConvertFromString(dr["HexColor"].ToString());
         }
 
         public override void WriteToDatabase() {
+            Color.WriteToDatabase();
+            ColorId = Color.ColorId;
+
             if (CopyItemTemplateId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "insert into MpCopyItemTemplate(fk_MpCopyItemId,HexColor,TemplateName) values(@ciid,@hc,@tn)",
+                        "insert into MpCopyItemTemplate(fk_MpCopyItemId,fk_MpColorId,TemplateName) values(@ciid,@cid,@tn)",
                         new System.Collections.Generic.Dictionary<string, object> {
                         { "@ciid", CopyItemId },
-                        { "@hc", new BrushConverter().ConvertToString(TemplateColor)},
+                        { "@cid", ColorId},
                         { "@tn", TemplateName }
                     });
                 CopyItemTemplateId = MpDb.Instance.GetLastRowId("MpCopyItemTemplate", "pk_MpCopyItemTemplateId");
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpCopyItemTemplate set fk_MpCopyItemId=@ciid, HexColor=@hc, TemplateName=@tn where pk_MpCopyItemTemplateId=@citid",
+                    "update MpCopyItemTemplate set fk_MpCopyItemId=@ciid, fk_MpColorId=@cid, TemplateName=@tn where pk_MpCopyItemTemplateId=@citid",
                     new System.Collections.Generic.Dictionary<string, object> {
                         { "@citid", CopyItemTemplateId },
                         { "@ciid", CopyItemId },
-                        { "@hc", new BrushConverter().ConvertToString(TemplateColor) },
+                        { "@cid", ColorId },
                         { "@tn", TemplateName }
                     });
             }
         }
         public void DeleteFromDatabase() {
+            Color.DeleteFromDatabase();
+
             MpDb.Instance.ExecuteWrite(
                 "delete from MpCopyItemTemplate where pk_MpCopyItemTemplateId=@citid",
                 new Dictionary<string, object> {

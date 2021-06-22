@@ -21,7 +21,7 @@ namespace MpWpfApp {
                 if(MainWindowViewModel == null || MainWindowViewModel.ClipTrayViewModel == null || Tag == null) {
                     return new List<MpClipTileViewModel>();
                 }
-                return MainWindowViewModel.ClipTrayViewModel.Where(x => IsLinkedWithClipTile(x)).ToList();
+                return MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.Where(x => IsLinkedWithClipTile(x)).ToList();
             }
         }
         #endregion
@@ -426,7 +426,7 @@ namespace MpWpfApp {
                 return true;
             }
             if(IsRecentTag) {
-                return MainWindowViewModel.ClipTrayViewModel.
+                return MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.
                     OrderByDescending(x => x.CopyDateTime).
                     Take(Properties.Settings.Default.MaxRecentClipItems).
                     Contains(ctvm);
@@ -446,7 +446,7 @@ namespace MpWpfApp {
                 return true;
             }
             if (IsRecentTag) {
-                return MainWindowViewModel.ClipTrayViewModel.
+                return MainWindowViewModel.ClipTrayViewModel.ClipTileViewModels.
                     OrderByDescending(x => x.CopyDateTime).
                     Take(Properties.Settings.Default.MaxRecentClipItems).
                     Contains(rtbvm.HostClipTileViewModel);

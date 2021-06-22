@@ -122,7 +122,7 @@ namespace MonkeyPaste {
             }
         }
         private void SetClipboardToItem() {
-            Clipboard.SetTextAsync(Clip.ItemPlainText);
+            Clipboard.SetTextAsync(Clip.ItemText);
             ItemStatusChanged?.Invoke(this, new EventArgs());
         }
         #endregion

@@ -198,7 +198,7 @@ namespace MonkeyPaste {
                 searchResult = ClipViewModels;
             } else {
                 searchResult = from civm in ClipViewModels
-                               where civm.Clip.ItemPlainText.ContainsByUserSensitivity(query)
+                               where civm.Clip.ItemText.ContainsByUserSensitivity(query)
                                select civm;//.Skip(2).Take(2);
             }
             foreach(var civm in ClipViewModels) {

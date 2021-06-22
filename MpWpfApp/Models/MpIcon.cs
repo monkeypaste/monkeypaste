@@ -91,21 +91,39 @@ namespace MpWpfApp {
             ++TotalIconCount;
         }
         public MpIcon(BitmapSource iconImage) : base() {
-            IconId = 0;
-            DbIconImage = new MpDbImage(iconImage);
-            DbIconBorderImage = new MpDbImage(MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.White));
-            DbIconBorderHighlightImage = new MpDbImage(MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Yellow));
-            DbIconBorderHighlightSelectedImage = new MpDbImage(MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Pink));
-            //IconImage = iconImage;
-            //IconBorderImage = CreateBorder(iconImage, 1.25);
-            //IconImage = MpHelpers.Instance.GetIconImage(AppPath);
-            //IconBorderImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.White);
-            //IconBorderHighlightImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Yellow);
-            //IconBorderHighlightSelectedImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Pink);
-            PrimaryIconColorList = MpColor.CreatePrimaryColorList(IconImage);
-
             
-            ++TotalIconCount;
+            MpIcon dupIcon = null;
+            //foreach (var i in GetAllIcons()) {
+            //    if (i.IconImage.IsEqual(IconImage)) {
+            //        dupIcon = i;
+            //    }
+            //}
+            if (dupIcon == null) {
+                DbIconImage = new MpDbImage(iconImage);
+                DbIconBorderImage = new MpDbImage(MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.White));
+                DbIconBorderHighlightImage = new MpDbImage(MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Yellow));
+                DbIconBorderHighlightSelectedImage = new MpDbImage(MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Pink));
+                //IconImage = iconImage;
+                //IconBorderImage = CreateBorder(iconImage, 1.25);
+                //IconImage = MpHelpers.Instance.GetIconImage(AppPath);
+                //IconBorderImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.White);
+                //IconBorderHighlightImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Yellow);
+                //IconBorderHighlightSelectedImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Pink);
+                PrimaryIconColorList = MpColor.CreatePrimaryColorList(IconImage);
+                ++TotalIconCount;
+            } else {
+                IconId = dupIcon.IconId;
+                DbIconImageId = dupIcon.DbIconImageId;
+                DbIconBorderImageId = dupIcon.DbIconBorderImageId;
+                DbIconBorderHighlightImageId = dupIcon.DbIconBorderHighlightImageId;
+                DbIconBorderHighlightSelectedImageId = dupIcon.DbIconBorderHighlightSelectedImageId;
+
+                DbIconImage = dupIcon.DbIconImage;
+                DbIconBorderImage = dupIcon.DbIconBorderImage;
+                DbIconBorderHighlightImage = dupIcon.DbIconBorderHighlightImage;
+                DbIconBorderHighlightSelectedImage = dupIcon.DbIconBorderHighlightSelectedImage;
+            }
+            
         }
         public MpIcon(int iconId) {
             DataTable dt = MpDb.Instance.Execute(

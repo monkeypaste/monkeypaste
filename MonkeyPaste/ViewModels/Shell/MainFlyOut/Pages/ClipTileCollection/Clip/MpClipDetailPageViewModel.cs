@@ -82,7 +82,7 @@ namespace MonkeyPaste {
             using (var reader = new System.IO.StreamReader(stream)) {
                 var html = reader.ReadToEnd();
                 string contentTag = @"<div id='editor'>";
-                html = html.Replace(contentTag, contentTag + Clip.ItemPlainText);
+                html = html.Replace(contentTag, contentTag + Clip.ItemText);
                 EditorHtml = html;
             }
         }

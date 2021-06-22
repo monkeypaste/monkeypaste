@@ -544,6 +544,7 @@ namespace MpWpfApp {
                     //SearchBoxViewModel.IsTextBoxFocused = true;
                 }
             };
+            ClipTrayViewModel.AddNewTiles();
             timer.Start();
         }
 

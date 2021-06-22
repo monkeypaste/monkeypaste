@@ -722,7 +722,7 @@
                     <AdornerDecorator>
                         <local:MpMultiSelectListBox x:Name="ClipTray"
                                                     DataContext="{Binding}"
-                                                    ItemsSource="{Binding}"
+                                                    ItemsSource="{Binding ClipTileViewModels}"
                                                     Visibility="{Binding ClipTrayVisibility}"
                                                     Width="{Binding MainWindowViewModel.ClipTrayWidth}"
                                                     IsListBoxHorizontal="True"

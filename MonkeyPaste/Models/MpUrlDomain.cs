@@ -62,14 +62,17 @@ namespace MonkeyPaste {
 
         #region Columns
         [PrimaryKey, AutoIncrement]
+        [Column("pk_MpUrlDomainId")]
         public override int Id { get; set; }
 
         public string UrlDomainPath { get; set; } = string.Empty;
         public string UrlDomainTitle { get; set; } = string.Empty;
 
+        [Column("IsUrlDomainRejected")]
         public int IsRejected { get; set; } = 0;
 
         [ForeignKey(typeof(MpIcon))]
+        [Column("fk_MpIconId")]
         public int FavIconId { get; set; } = 0;
         #endregion
 

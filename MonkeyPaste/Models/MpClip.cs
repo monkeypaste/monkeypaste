@@ -7,33 +7,34 @@ using SQLite;
 using SQLiteNetExtensions.Attributes;
 
 namespace MonkeyPaste {
+    [Table("MpCopyItem")]
     public class MpClip : MpDbModelBase {
         #region Column Definitions
         [PrimaryKey, AutoIncrement]
+        [Column("pk_MpCopyItemId")]
         public override int Id { get; set; }
 
-        //[ForeignKey(typeof(MpSource))]
-        //public int SourceId { get; set; }
-        //[ManyToOne]
-        //public MpSource Source { get; set; }
-
         [ForeignKey(typeof(MpApp))]
+        [Column("fk_MpAppId")]
         public int AppId { get; set; }
         [ManyToOne]
         public MpApp App { get; set; }
 
         [ForeignKey(typeof(MpUrl))]
+        [Column("fk_MpUrlId")]
         public int UrlId { get; set; }
         [ManyToOne]
         public MpUrl Url { get; set; }
 
         [ForeignKey(typeof(MpColor))]
+        [Column("fk_MpColorId")]
         public int ColorId { get; set; }
         [ManyToOne]
         public MpColor ItemColor { get; set; }
 
         public string Title { get; set; }
 
+        [Column("fk_MpCopyItemTypeId")]
         public int TypeId { get; set; } = 0;
 
         [Ignore]
@@ -50,17 +51,29 @@ namespace MonkeyPaste {
 
         public DateTime CopyDateTime { get; set; }
 
-        public string ItemPlainText { get; set; }
+        public string ItemText { get; set; }
 
-        public string ItemRichText { get; set; }
+        public string ItemRtf { get; set; }
 
         public string ItemHtml { get; set; }
 
         public string ItemCsv { get; set; }
 
-        public byte[] ItemImage { get; set; }
+        [ForeignKey(typeof(MpDbImage))]
+        [Column("fk_MpDbImageId")]
+        public int ItemImageId { get; set; }
+        [OneToOne]
+        [Ignore]
+        public MpDbImage ItemDbImage{ get; set; }
 
-        public byte[] ItemScreenShot { get; set; }
+        [ForeignKey(typeof(MpDbImage))]
+        [Column("fk_SsMpDbImageId")]
+        public int SsDbImageId { get; set; }
+        [OneToOne]
+        [Ignore]
+        public MpDbImage SsDbImage { get; set; }
+
+        
 
         public string ItemDescription { get; set; }
 
@@ -105,7 +118,7 @@ namespace MonkeyPaste {
             int tagId, 
             int start, 
             int count, 
-            string sortColumn = "Id", 
+            string sortColumn = "pk_MpCopyItemId", 
             bool isDescending = false) {
             //SELECT
             //user_number,
@@ -119,10 +132,10 @@ namespace MonkeyPaste {
 
             var result = await MpDb.Instance.QueryAsync<MpClip>(
                                 string.Format(
-                                    @"SELECT * from MpClip
-                                      WHERE Id in 
-                                        (SELECT ClipId FROM MpClipTag 
-                                         WHERE TagId=?)
+                                    @"SELECT * from MpCopyItem
+                                      WHERE pk_MpCopyItemId in 
+                                        (SELECT fk_MpCopyItemId FROM MpCopyItemTag 
+                                         WHERE fk_MpTagId=?)
                                       ORDER BY {0} {1} LIMIT ? OFFSET ?",
                                     sortColumn,
                                     (isDescending ? "DESC" : "ASC")),
@@ -140,7 +153,7 @@ namespace MonkeyPaste {
             var searchResult = (from ci in allClips
                                 join cit in allClipTags on
                                 tagId equals cit.TagId
-                                where ci.ItemPlainText.ContainsByUserSensitivity(searchString)
+                                where ci.ItemText.ContainsByUserSensitivity(searchString)
                                 select ci);//.Skip(2).Take(2);
 
             return new ObservableCollection<MpClip>(searchResult);
@@ -161,7 +174,7 @@ namespace MonkeyPaste {
             var newClip = new MpClip() {
                 CopyDateTime = DateTime.Now,
                 Title = "Text",
-                ItemPlainText = itemPlainText,
+                ItemText = itemPlainText,
                 //Host = hostPackageName,
                 //ItemImage = hostAppImage
             };
@@ -209,7 +222,7 @@ namespace MonkeyPaste {
         }
         public MpClip(string title, string itemPlainText) : this() {
             Title = title;
-            ItemPlainText = itemPlainText;
+            ItemText = itemPlainText;
             CopyDateTime = DateTime.Now;
         }
 
@@ -222,7 +235,7 @@ namespace MonkeyPaste {
         //}
 
         public override string ToString() {
-            return $"Id:{Id} Text:{ItemPlainText}" + Environment.NewLine;
+            return $"Id:{Id} Text:{ItemText}" + Environment.NewLine;
         }
     }
 

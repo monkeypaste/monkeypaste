@@ -121,8 +121,10 @@
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedListBox.cs" />
     <Compile Include="Controls\AnimatedScrollViewer\AnimatedScrollViewer.cs" />
     <Compile Include="Controls\MpClipBorder.cs" />
+    <Compile Include="AttachedProperties\MpPagingListBox.cs" />
     <Compile Include="Controls\MpEventEnabledFlowDocument.cs" />
     <Compile Include="Controls\MpRichTextBox.cs" />
+    <Compile Include="Converters\MpRtfToHtmlConverter.cs" />
     <Compile Include="Converters\MpHtmlToRtfConverter.cs" />
     <Compile Include="Converters\MpIntToWindowCommandConverter.cs" />
     <Compile Include="Converters\MpPointCollectionConverter.cs" />
@@ -598,6 +600,9 @@
     </PackageReference>
     <PackageReference Include="QRCoder">
       <Version>1.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="RtfPipe">
+      <Version>2.0.7677.4303</Version>
     </PackageReference>
     <PackageReference Include="System.Data.SQLite">
       <Version>1.0.113.7</Version>

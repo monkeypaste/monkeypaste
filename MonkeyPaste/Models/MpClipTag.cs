@@ -8,15 +8,19 @@ using SQLiteNetExtensions.Attributes;
 using System.Linq;
 
 namespace MonkeyPaste {
+    [Table("MpCopyItemTag")]
     public class MpClipTag : MpDbModelBase {
         #region Columns
         [PrimaryKey, AutoIncrement]
+        [Column("pk_MpCopyItemTagId")]
         public override int Id { get; set; }
 
         [ForeignKey(typeof(MpTag))]
+        [Column("fk_MpTagId")]
         public int TagId { get; set; }
 
         [ForeignKey(typeof(MpClip))]
+        [Column("fk_MpCopyItemId")]
         public int ClipId { get; set; }
 
         public static async Task<List<MpClipTag>> GetAllClipsForTagId(int tagId) {

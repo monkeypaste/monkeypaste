@@ -50,11 +50,12 @@ namespace MpWpfApp {
         }
 
         public override void WriteToDatabase() {
+            string imgStr = DbImageBase64;//MpHelpers.Instance.ConvertBitmapSourceToBase64String(DbImage);
             if (DbImageId == 0) {
                 MpDb.Instance.ExecuteWrite(
                     "insert into MpDbImage(ImageBase64) values(@ib64)",
                     new Dictionary<string, object> {
-                        { "@ib64", DbImageBase64 }
+                        { "@ib64", imgStr }
                     });
                 DbImageId = MpDb.Instance.GetLastRowId("MpDbImage", "pk_MpDbImageId");
             } else {
@@ -62,7 +63,7 @@ namespace MpWpfApp {
                     "update MpDbImage set ImageBase64=@ib64 where pk_MpDbImageId=@dbiid",
                     new Dictionary<string, object> {
                         { "@dbiid", DbImageId },
-                        { "@ib64", DbImageBase64  }
+                        { "@ib64", imgStr  }
                     });
             }
         }

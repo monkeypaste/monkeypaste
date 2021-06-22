@@ -1310,6 +1310,9 @@ namespace MpWpfApp {
                         //occurs with messageboxes and dialogs
                         return GetApplicationProcessPath();
                     }
+                    if(proc.MainWindowHandle == IntPtr.Zero) {
+                        return GetApplicationProcessPath();
+                    }
                     return proc.MainModule.FileName.ToString();
                 }
             }

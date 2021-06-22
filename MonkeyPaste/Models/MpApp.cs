@@ -8,13 +8,16 @@ using System.Linq;
 
 namespace MonkeyPaste {
     public class MpApp : MpDbModelBase, MpIClipSource {
+        [Column("pk_MpAppId")]
         public override int Id { get; set; }
         
         [Indexed]
+        [Column("SourcePath")]
         public string AppPath { get; set; } = string.Empty;
         
         public string AppName { get; set; } = string.Empty;
 
+        [Column("IsAppRejected")]
         public int IsRejected { get; set; } = 0;
 
         [Ignore]
@@ -34,6 +37,7 @@ namespace MonkeyPaste {
         }
 
         [ForeignKey(typeof(MpIcon))]
+        [Column("fk_MpIconId")]
         public int IconId { get; set; }
 
         [OneToOne]

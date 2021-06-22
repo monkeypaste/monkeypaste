@@ -29,7 +29,7 @@
                         </Image>
                         <Label FontSize="14"
                                FontAttributes="Italic"
-                               Text="{Binding Clip.ItemPlainText}"
+                               Text="{Binding Clip.ItemText}"
                                TextColor="Black" />
                     </Grid>
                 </DataTemplate>

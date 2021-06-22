@@ -26,7 +26,7 @@ namespace MonkeyPaste {
             var cidpvm = BindingContext as MpClipDetailPageViewModel;
                         
             //cidpvm.Clip.ItemPlainText = await cidpvm.StopMessageListener();
-            cidpvm.Clip.ItemPlainText = await cidpvm.EvaluateEditorJavaScript($"getText()");
+            cidpvm.Clip.ItemText = await cidpvm.EvaluateEditorJavaScript($"getText()");
 
             var itemHtml = await cidpvm.EvaluateEditorJavaScript($"getHtml()");
             // Unescape that damn Unicode Java bull.

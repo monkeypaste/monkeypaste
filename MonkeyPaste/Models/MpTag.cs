@@ -16,11 +16,14 @@ namespace MonkeyPaste {
 
         #region Columns
         [PrimaryKey, AutoIncrement]
+        [Column("pk_MpTagId")]
         public override int Id { get; set; }
 
+        [Column("SortIdx")]
         public int TagSortIdx { get; set; } = 1;
 
         [ForeignKey(typeof(MpColor))]
+        [Column("fk_MpColorId")]
         public int ColorId { get; set; }
         [ManyToOne]
         public MpColor TagColor { get; set; }

@@ -17,15 +17,8 @@ namespace MonkeyPaste {
         public byte A { get; set; }
 
         [PrimaryKey,AutoIncrement]
+        [Column("pk_MpColorId")]
         public override int Id { get; set; }
-
-        //[OneToMany(CascadeOperations = CascadeOperation.None)]
-        //public List<MpTag> TagList { get; set; }
-
-        //[OneToMany(CascadeOperations = CascadeOperation.None)]
-        //public List<MpClip> ClipList { get; set; }
-
-
 
         [Ignore]
         public Color Color {
@@ -104,18 +97,5 @@ namespace MonkeyPaste {
             //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
             return primaryIconColorList;
         }
-
-        //public override void WriteToDatabase() {
-        //    throw new NotImplementedException();
-        //}
-
-        //public override void DeleteFromDatabase() {
-        //    throw new NotImplementedException();
-        //}
-
-        //public override string ToString() {
-        //    throw new NotImplementedException();
-        //}
-
     }
 }

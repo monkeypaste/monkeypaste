@@ -9,9 +9,11 @@ using SQLiteNetExtensions.Attributes;
 namespace MonkeyPaste {
     public class MpUrl : MpDbModelBase, MpIClipSource {
         [PrimaryKey, AutoIncrement]
+        [Column("pk_MpUrlId")]
         public override int Id { get; set; }
 
         [ForeignKey(typeof(MpUrlDomain))]
+        [Column("fk_MpUrlDomainId")]
         public int UrlDomainId { get; set; }
         [ManyToOne]
         public MpUrlDomain UrlDomain { get; set; }
