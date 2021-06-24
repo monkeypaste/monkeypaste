@@ -1,0 +1,141 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Media;
+using Windows.Networking;
+
+namespace MpWpfApp {
+    public class MpRichTextFormatProperties {
+        #region Singleton
+        private static readonly Lazy<MpRichTextFormatProperties> _Lazy = new Lazy<MpRichTextFormatProperties>(() => new MpRichTextFormatProperties());
+        public static MpRichTextFormatProperties Instance { get { return _Lazy.Value; } }
+
+        private MpRichTextFormatProperties() {
+            FontFamilys = new ObservableCollection<string>(_defaultFontFamilys);
+            FontSizes = new ObservableCollection<int>(_defaultFontSizes);
+            FontColors = new ObservableCollection<Color>(_defaultColors);
+        }
+        #endregion
+
+        #region Private Variables
+        private List<Color> _defaultColors = new List<Color> {
+            Colors.Black,
+            Colors.White
+        };
+
+        private List<string> _defaultFontFamilys = new List<string> {
+            "arial",
+            "courier",
+            "garamond",
+            "georgia",
+            "tahoma",
+            "times new roman",
+            "verdana"
+        };
+
+        private List<int> _defaultFontSizes = new List<int> {
+             8, 9, 10, 12, 14, 16, 20, 24, 32, 42, 54, 68, 84, 98
+        };
+
+        private int _defaultFontIdx = 0;
+        private int _defaultFontSizeIdx = 0;
+        private int _defaultFgColorIdx = 0;
+        private int _defaultBgColorIdx = 1;
+        #endregion
+
+        #region Properties
+        public ObservableCollection<string> FontFamilys { get; private set; }
+
+        public ObservableCollection<int> FontSizes { get; private set; }
+
+        public ObservableCollection<Color> FontColors { get; private set; }
+
+        public string DefaultFont {
+            get {
+                return FontFamilys[_defaultFontIdx];
+            }
+        }
+
+        public int DefaultFontIdx {
+            get {
+                return _defaultFontIdx;
+            }
+        }
+
+        public int DefaultFontSize {
+            get {
+                return FontSizes[_defaultFontSizeIdx];
+            }
+        }
+
+        public int DefaultFontSizeIdx {
+            get {
+                return _defaultFontSizeIdx;
+            }
+        }
+
+        public Color DefaultFgColor {
+            get {
+                return FontColors[_defaultFgColorIdx];
+            }
+        }
+
+        public Color DefaultBgColor {
+            get {
+                return FontColors[_defaultBgColorIdx];
+            }
+        }
+
+        public int DefaultFgColorIdx {
+            get {
+                return _defaultFgColorIdx;
+            }
+        }
+
+        public int DefaultBgColorIdx {
+            get {
+                return _defaultBgColorIdx;
+            }
+        }
+        #endregion
+
+        #region Public Methods
+        public void AddFont(string fontName) {
+            if(!FontFamilys.Contains(fontName)) {
+                FontFamilys.Add(fontName);
+                FontFamilys = new ObservableCollection<string>(FontFamilys.OrderBy(x => x));
+            }
+        }
+
+        public void AddFontSize(int newSize) {
+            if (!FontSizes.Contains(newSize)) {
+                FontSizes.Add(newSize);
+                FontSizes = new ObservableCollection<int>(FontSizes.OrderBy(x => x));
+            }
+        }
+
+        public void AddFontColor(Color c) {
+            if (!FontColors.Contains(c)) {
+                FontColors.Add(c);
+            }
+        }
+
+        public void SetDefaultFont(string fontName) {
+            if(!FontFamilys.Contains(fontName)) {
+                AddFont(fontName);
+            }
+            _defaultFontIdx = FontFamilys.IndexOf(fontName);
+        }
+
+        public void SetDefaultFontSize(int fontSize) {
+            if (!FontSizes.Contains(fontSize)) {
+                AddFontSize(fontSize);
+            }
+            _defaultFontSizeIdx = FontSizes.IndexOf(fontSize);
+        }
+        #endregion
+    }
+}

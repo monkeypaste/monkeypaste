@@ -110,114 +110,123 @@
     <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Promise"
             crossorigin="anonymous"></script>
     <script src="https://benwinding.github.io/quill-html-edit-button/dist/quill.htmlEditButton.min.js"></script>
-    <script type="text/javascript">
-        Quill.register("modules/htmlEditButton", htmlEditButton);        
-        Quill.register({
-            'modules/better-table': quillBetterTable
-        }, true);
+    <script type="text/javascript">        
         var curQuillDiv = $("#editor");
-        //==================================================================================================
-        // TABLES
-        //==================================================================================================
-        var tableOptions = [];
-        var maxRows = 7;
-        var maxCols = 7;
+        var quill;
 
-        for (let r = 1; r <= maxRows; r++) {
-            for (let c = 1; c <= maxCols; c++) {
-                tableOptions.push('newtable_' + r + '_' + c);
+        function init(html, fontFamilys, fontSizes, defaultFontIdx, indentSize) {
+            if (fontFamilys == null) {
+                fontFamilys = ['Arial', 'Courier', 'Garamond', 'Tahoma', 'Times New Roman', 'Verdana'];
+            }
+            if (fontSizes == null) {
+                fontSizes = ['8px', '9px', '10px', '12px', '14px', '16px', '20px', '24px', '32px', '42px', '54px', '68px', '84px', '98px'];
+            }
+            if (defaultFontIdx == null) {
+                defaultFontIdx = 0;
+            }
+            loadQuill(fontFamilys, fontSizes, defaultFontIdx);
+
+            if (html != null) {
+                setHtml(html);
             }
         }
 
-        //==================================================================================================
-        // FONTS
-        //==================================================================================================
-        // Specify Quill fonts
-        var fontList = ['Arial', 'Courier', 'Garamond', 'Tahoma', 'Times New Roman', 'Verdana'];
-        var fontNames = fontList.map(font => getFontName(font));
-        var fonts = Quill.import('attributors/class/font');
-        fonts.whitelist = fontNames;
-        Quill.register(fonts, true);
+        function loadTable() {
+            var tableOptions = [];
+            var maxRows = 7;
+            var maxCols = 7;
 
-        //font sizes
-        const fontSizeArr = ['8px', '9px', '10px', '12px', '14px', '16px', '20px', '24px', '32px', '42px', '54px', '68px', '84px', '98px'];
-        var size = Quill.import('attributors/style/size');
-        size.whitelist = fontSizeArr;
-        Quill.register(size, true);
-
-        // Add fonts to CSS style
-        var fontStyles = "";
-        fontList.forEach(function (font) {
-            var fontName = getFontName(font);
-            fontStyles += ".ql-snow .ql-picker.ql-font .ql-picker-label[data-value=" + fontName + "]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=" + fontName + "]::before {" +
-                "content: '" + font + "';" +
-                "font-family: '" + font + "', sans-serif;" +
-                "}" +
-                ".ql-font-" + fontName + "{" +
-                " font-family: '" + font + "', sans-serif;" +
-                "}";
-        });
-
-        // Generate code-friendly font names
-        function getFontName(font) {
-            return font.toLowerCase().replace(/\s/g, "-");
+            for (let r = 1; r <= maxRows; r++) {
+                for (let c = 1; c <= maxCols; c++) {
+                    tableOptions.push('newtable_' + r + '_' + c);
+                }
+            }
+            return tableOptions;
         }
-        //==================================================================================================
 
-        //==================================================================================================
-        // TOOLBAR
-        //==================================================================================================
-        // Configure Quill editor options
-        var toolbarOptions2 = [
-            [{ header: [1, 2, 3, false] }],
-            [{ 'font': fonts.whitelist }],
-            ['bold', 'italic', 'underline'],
-            ['clean']
-            ["image"],
-        ];
+        function loadToolbar(fontFamilys, fontSizes, defaultFontIdx) {
+            var fonts = loadFonts(fontFamilys);
 
-        var toolbarOptions = [
-            //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-            [{ 'size': fontSizeArr }],               // font sizes
-            [{ 'font': fonts.whitelist }],
-            ['bold', 'italic', 'underline'/*, 'strike'*/],        // toggled buttons
-            //['blockquote', 'code-block'],
+            var toolbarOptions2 = [
+                [{ header: [1, 2, 3, false] }],
+                [{ 'font': fonts.whitelist }],
+                ['bold', 'italic', 'underline'],
+                ['clean']
+                ["image"],
+            ];
 
-            // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-            // [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-            [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-            //[{ 'direction': 'rtl' }],                         // text direction
+            var toolbarOptions = [
+                //[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+                [{ 'size': fontSizes }],               // font sizes
+                [{ 'font': fonts.whitelist }],
+                ['bold', 'italic', 'underline'/*, 'strike'*/],        // toggled buttons
+                //['blockquote', 'code-block'],
 
-            // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                // [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+                [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+                //[{ 'direction': 'rtl' }],                         // text direction
 
-            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-            [{ 'align': [] }],
-            // ['clean'],                                         // remove formatting button
-            ['omega'],
+                // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
-            [{ 'Table-Input': tableOptions }]
-        ];
+                [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+                [{ 'align': [] }],
+                // ['clean'],                                         // remove formatting button
+                ['omega'],
 
+                [{ 'Table-Input': loadTable() }]
+            ];
 
-        //==================================================================================================
+            return toolbarOptions;
+        }
 
+        function loadFonts(fontFamilys, fontSizes, defaultFontIdx) {
+            // Specify Quill fonts
+            var fontNames = fontFamilys.map(font => getFontName(font));
+            var fonts = Quill.import('attributors/class/font');
+            fonts.whitelist = fontNames;
+            Quill.register(fonts, true);
 
-        //==================================================================================================
-        // INIT
-        //==================================================================================================
-        var quill;
-        $(function () {
+            //font sizes
+            var size = Quill.import('attributors/style/size');
+            size.whitelist = fontSizes;
+            Quill.register(size, true);
+
+            return fonts;
+        }
+
+        function loadFontStyles(fontFamilys) {
+            // Add fonts to CSS style
+            var fontStyles = "";
+            fontFamilys.forEach(function (font) {
+                var fontName = getFontName(font);
+                fontStyles += ".ql-snow .ql-picker.ql-font .ql-picker-label[data-value=" + fontName + "]::before, .ql-snow .ql-picker.ql-font .ql-picker-item[data-value=" + fontName + "]::before {" +
+                    "content: '" + font + "';" +
+                    "font-family: '" + font + "', sans-serif;" +
+                    "}" +
+                    ".ql-font-" + fontName + "{" +
+                    " font-family: '" + font + "', sans-serif;" +
+                    "}";
+            });
+
+            return fontStyles;
+        }
+
+        function loadQuill(fontFamilys, fontSizes, defaultFontIdx, indentSize) {
+            Quill.register("modules/htmlEditButton", htmlEditButton);
+            Quill.register({ 'modules/better-table': quillBetterTable }, true);
+
             // Append the CSS stylesheet to the page
             var node = document.createElement('style');
-            node.innerHTML = fontStyles;
+            node.innerHTML = loadFontStyles(fontFamilys);
             document.body.appendChild(node);
 
             quill = new Quill(curQuillDiv[0], {
                 placeholder: 'Compose your text...',
                 theme: 'snow',
                 modules: {
-                    toolbar: toolbarOptions,
+                    toolbar: loadToolbar(fontFamilys, fontSizes, defaultFontIdx),
                     htmlEditButton: {
                         syntax: true,
                     },
@@ -306,19 +315,21 @@
                     createLink();
                 }
             });
-        });
-        //==================================================================================================
+        }
 
-        //==================================================================================================
-        // METHODS
-        //==================================================================================================
+        function getFontName(font) {
+            // Generate code-friendly font names
+            return font.toLowerCase().replace(/\s/g, "-");
+        }
+
         function setText(text) {
             quill.setText(text + '\n');
         }
 
         function setHtml(html) {
-            var delta = quill.clipboard.convert(html);
-            quill.setContents(delta, 'silent');
+            //var delta = quill.clipboard.convert(html);
+            //quill.setContents(delta, 'silent');
+            quill.root.innerHTML = html;
         }
 
         function getText() {

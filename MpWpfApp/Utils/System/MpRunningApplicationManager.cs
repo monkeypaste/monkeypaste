@@ -134,7 +134,13 @@ namespace MpWpfApp {
                 if (LastWindowStateHandleDictionary.ContainsKey(fgHandle)) {
                     LastWindowStateHandleDictionary.Remove(fgHandle);
                 }
-                LastWindowStateHandleDictionary.Add(fgHandle, placement.showCmd);
+                try {
+                    LastWindowStateHandleDictionary.Add(fgHandle, placement.showCmd);
+                }
+                catch(Exception ex) {
+                    //intermittenly fgHandle is still in dictionary so hopefully this swallows exception
+                    Console.WriteLine($"FgHandle: {fgHandle} already exists...ignoring");
+                }
                 //Console.WriteLine(@"Last Window State for " + processName + " was " + Enum.GetName(typeof(WinApi.ShowWindowCommands), placement.showCmd));
             }
         }

@@ -2582,9 +2582,9 @@ namespace MpWpfApp {
 
                         var tr = new TextRange(flowDocument.ContentStart, flowDocument.ContentEnd);
                         var rtbAlignment = tr.GetPropertyValue(FlowDocument.TextAlignmentProperty);
-                        if (rtbAlignment == null ||
-                            rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}" ||
-                            (TextAlignment)rtbAlignment == TextAlignment.Justify) {
+                        if(rtbAlignment == null || rtbAlignment.ToString() == "{DependencyProperty.UnsetValue}") {
+                            //ignore to r
+                        } else if((TextAlignment)rtbAlignment == TextAlignment.Justify) {
                             tr.ApplyPropertyValue(FlowDocument.TextAlignmentProperty, TextAlignment.Left);
                         }
                         var ps = flowDocument.GetDocumentSize();

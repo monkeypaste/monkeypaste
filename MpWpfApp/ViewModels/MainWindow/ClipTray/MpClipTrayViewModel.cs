@@ -655,7 +655,8 @@ namespace MpWpfApp {
             }
 
 
-            MpHtmlToRtfConverter.Instance.Test();
+            //MpHtmlToRtfConverter.Instance.Test();
+            MpRtfToHtmlConverter.Instance.Test();
         }
 
         private int GetDropIdx(Point mp) {

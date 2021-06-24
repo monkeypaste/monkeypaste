@@ -22,7 +22,6 @@ namespace MpWpfApp {
         #endregion
 
         #region Private Variables
-        private RichTextBox _rtb;
         private double _indentCharCount = 5;
         #endregion
 
@@ -33,13 +32,12 @@ namespace MpWpfApp {
         public string ConvertHtmlToRtf(string html) {
             var htmlDoc = new HtmlDocument();
             htmlDoc.LoadHtml(html);
-            _rtb = new RichTextBox();
-            _rtb.Document = string.Empty.ToFlowDocument();
-            _rtb.Document.Blocks.Clear();
+            var fd = string.Empty.ToFlowDocument();
+            fd.Blocks.Clear();
             foreach (var htmlBlockNode in htmlDoc.DocumentNode.ChildNodes) {
-                _rtb.Document.Blocks.Add(ConvertHtmlNode(htmlBlockNode) as Block);
+                fd.Blocks.Add(ConvertHtmlNode(htmlBlockNode) as Block);
             }
-            return _rtb.Document.ToRichText();
+            return fd.ToRichText();
         }
         
         private TextElement ConvertHtmlNode(HtmlNode n) {
@@ -141,11 +139,11 @@ namespace MpWpfApp {
 
         private TextElement ApplyClassFormatting(TextElement te, string cv) {
             if (cv.StartsWith("ql-font-")) {
-                te.FontFamily = GetFontFamily(cv);
+                te.FontFamily = GetFontFamily(cv);                
             } else if (cv.Contains("ql-align-left")) {
                 (te as Block).TextAlignment = TextAlignment.Left;
             } else if (cv.Contains("ql-align-center")) {
-                (te as Block).TextAlignment = TextAlignment.Center;
+                (te as Paragraph).TextAlignment = TextAlignment.Center;
             } else if (cv.Contains("ql-align-right")) {
                  (te as Block).TextAlignment = TextAlignment.Right;
             } else if (cv.Contains("ql-align-justify")) {
@@ -203,6 +201,8 @@ namespace MpWpfApp {
             color.G = Convert.ToByte(rgbItemList[1]);
             color.B = Convert.ToByte(rgbItemList[2]);
 
+            MpRichTextFormatProperties.Instance.AddFontColor(color);
+
             return new SolidColorBrush(color);
         }
 
@@ -211,6 +211,7 @@ namespace MpWpfApp {
             //but giving pt will use the displays DIP
             string fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("px","pt");
             double fs = (double)new FontSizeConverter().ConvertFrom(fontSizeStr);
+            MpRichTextFormatProperties.Instance.AddFontSize((int)fs);
             return fs;
         }
 
@@ -222,14 +223,15 @@ namespace MpWpfApp {
             string defaultFontName = "arial";
             FontFamily defaultFontFamily = null;
             FontFamily closestFontFamily = null;
-            string fontName = classValue.Replace("ql-font-", string.Empty);
+            string fontName = classValue.Replace("ql-font-", string.Empty).Replace("-"," ");
             foreach (var ff in Fonts.SystemFontFamilies) {
                 string ffName = ff.ToString().ToLower();
                 if(ffName.Contains(fontName)) {
                     closestFontFamily = ff;
                 }
                 if(ffName == fontName) {
-                    return ff;
+                    closestFontFamily = ff;
+                    break;
                 }
                 if(ffName == defaultFontName) {
                     defaultFontFamily = ff;
@@ -237,28 +239,13 @@ namespace MpWpfApp {
             }
 
             if (closestFontFamily != null) {
-                Console.WriteLine("Could not find exact system font: " + fontName + " using "+closestFontFamily.ToString()+" instead");
+                //Console.WriteLine("Could not find exact system font: " + fontName + " using "+closestFontFamily.ToString()+" instead");
+                MpRichTextFormatProperties.Instance.AddFont(closestFontFamily.ToString().ToLower());
                 return closestFontFamily;
             }
             Console.WriteLine("Could not find system font: " + fontName);
             return defaultFontFamily;
-        } 
-
-        //private void ClearMatchLookUp() {
-        //    //_subStringMatchCountLookUp.Clear();
-        //    _subStringMatchLastProcessedLookUp.Clear();
-        //}
-        //private void UpdateMatchLookUp(string text,string matchStr) {
-        //    //since paragraph may multiple sub-strings of this sub-nodes text we need 
-        //    //to ensure we get the range representing htmlnode
-        //    if (!_subStringMatchLastProcessedLookUp.ContainsKey(matchStr)) {
-        //        int matchCount = text.IndexListOfAll(matchStr).Count;
-        //        //_subStringMatchCountLookUp.Add(matchStr, matchCount);
-        //        _subStringMatchLastProcessedLookUp.Add(matchStr, 0);
-        //    } else {
-        //        _subStringMatchLastProcessedLookUp[matchStr]++;
-        //    }
-        //}
+        }
 
         public void Test() {
             var assembly = IntrospectionExtensions.GetTypeInfo(typeof(MpHtmlToRtfConverter)).Assembly;
@@ -266,9 +253,6 @@ namespace MpWpfApp {
             using (var reader = new System.IO.StreamReader(stream)) {
                 var html = reader.ReadToEnd();
                 string rtf = ConvertHtmlToRtf(html);
-
-                //Clipboard.SetData(DataFormats.Rtf, rtf);
-
                 MpHelpers.Instance.WriteTextToFile(@"C:\Users\tkefauver\Desktop\rtftest.rtf", rtf, false);
             }
         }
