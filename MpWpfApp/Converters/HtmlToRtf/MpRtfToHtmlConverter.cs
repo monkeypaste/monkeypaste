@@ -122,12 +122,7 @@ namespace MpWpfApp {
                     sb.Append(@"class='ql-align-justify");
                     break;
             }
-            if (p.TextIndent > 0) {
-                int indentLevel = (int)(p.TextIndent / _indentCharCount);
-                sb.Append(@" ql-indent-" + indentLevel + "'");
-            } else {
-                sb.Append(@"'");
-            }
+            sb.Append(GetParagraphIndent(p) + "'");
             sb.AppendFormat(@">{0}</p>",content);
             return sb.ToString();
         }        
@@ -146,14 +141,18 @@ namespace MpWpfApp {
         private string WrapWithTag(string tag, string content) {
             return string.Format(@"<{0}>{1}</{0}>", tag, content);
         }
+
+        private string GetParagraphIndent(Paragraph p) {
+            if (p.TextIndent > 0) {
+                int indentLevel = (int)(p.TextIndent / _indentCharCount);
+                return @" ql-indent-" + indentLevel; ;
+            }
+            return string.Empty;
+        }
         private string GetSpanAttributes(Span s) {
             var sb = new StringBuilder();
             sb.AppendFormat(@"class='ql-font-{0}'", GetHtmlFont(s));
-            int sfs = (int)s.FontSize;
-            
-            MpRichTextFormatProperties.Instance.AddFontSize(sfs);
-
-            sb.AppendFormat(@" style='font-size: {0}px;", sfs);
+            sb.AppendFormat(GetFontSize(s));
             if(s.Foreground != null) {
                 sb.AppendFormat(@" color: {0};", GetHtmlColor((s.Foreground as SolidColorBrush).Color));
             }
@@ -164,6 +163,12 @@ namespace MpWpfApp {
             }           
             
             return sb.ToString();
+        }
+
+        private string GetFontSize(Span s) {
+            double fs = (double)new FontSizeConverter().ConvertFrom(s.FontSize+"pt");
+            MpRichTextFormatProperties.Instance.AddFontSize(fs);
+            return string.Format(@" style='font-size: {0}px;", fs);
         }
 
         private string GetHtmlColor(Color c) {

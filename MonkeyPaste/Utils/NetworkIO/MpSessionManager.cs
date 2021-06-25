@@ -58,11 +58,8 @@ namespace MonkeyPaste {
             //    return false;
             //}
             Uri uri = new Uri(
-                    string.Format(@"{0}/{1}/{2}?email={3}&ip={4}",
-                    MpPreferences.SyncServerEndpoint,
-                    ControllerName,
-                    ConnectAction,
-                    MpPreferences.UserEmail,
+                    string.Format(@"https://www.monkeypaste.com/test.php?email={0}&ip={1}",
+                    @"test@test.com",
                     MpHelpers.Instance.GetUserIp4Address()
                     ));
             //var connStr = $"https://192.168.43.209:44376/UserSessions?email={MpPreferences.UserEmail}&ip={MpHelpers.Instance.GetUserIp4Address()}";

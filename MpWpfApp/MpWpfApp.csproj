@@ -672,6 +672,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample4.html" />
     <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample1.html" />
     <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample2.html" />
     <EmbeddedResource Include="Resources\TestData\quillFormattedTextSample3.html" />

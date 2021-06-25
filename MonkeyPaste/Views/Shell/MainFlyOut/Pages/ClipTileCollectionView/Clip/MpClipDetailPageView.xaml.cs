@@ -27,6 +27,7 @@ namespace MonkeyPaste {
                         
             //cidpvm.Clip.ItemPlainText = await cidpvm.StopMessageListener();
             cidpvm.Clip.ItemText = await cidpvm.EvaluateEditorJavaScript($"getText()");
+            cidpvm.Clip.ItemText = cidpvm.Clip.ItemText.Replace("\"", string.Empty);
 
             var itemHtml = await cidpvm.EvaluateEditorJavaScript($"getHtml()");
             // Unescape that damn Unicode Java bull.
@@ -38,6 +39,9 @@ namespace MonkeyPaste {
             itemHtml = itemHtml.Replace("\"", string.Empty);
             cidpvm.Clip.ItemHtml = itemHtml;
 
+            ContentEditorWebView = null;
+            cidpvm.Dispose();
+
             await MpDb.Instance.UpdateItem<MpClip>(cidpvm.Clip);
 
             base.OnDisappearing();
@@ -48,7 +52,7 @@ namespace MonkeyPaste {
                 var ci = await MpClip.GetClipById(ciid);
                 var cidpvm = new MpClipDetailPageViewModel(ci);
                 BindingContext = cidpvm;
-                //Task.Delay(500);
+                //init when evaljs is non-null
                 
             } catch (Exception) {
                 MpConsole.WriteLine($"Failed to load copy item {ciid}.");

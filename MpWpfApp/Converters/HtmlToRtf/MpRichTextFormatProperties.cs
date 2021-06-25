@@ -15,7 +15,7 @@ namespace MpWpfApp {
 
         private MpRichTextFormatProperties() {
             FontFamilys = new ObservableCollection<string>(_defaultFontFamilys);
-            FontSizes = new ObservableCollection<int>(_defaultFontSizes);
+            FontSizes = new ObservableCollection<double>(_defaultFontSizes);
             FontColors = new ObservableCollection<Color>(_defaultColors);
         }
         #endregion
@@ -36,7 +36,7 @@ namespace MpWpfApp {
             "verdana"
         };
 
-        private List<int> _defaultFontSizes = new List<int> {
+        private List<double> _defaultFontSizes = new List<double> {
              8, 9, 10, 12, 14, 16, 20, 24, 32, 42, 54, 68, 84, 98
         };
 
@@ -49,7 +49,7 @@ namespace MpWpfApp {
         #region Properties
         public ObservableCollection<string> FontFamilys { get; private set; }
 
-        public ObservableCollection<int> FontSizes { get; private set; }
+        public ObservableCollection<double> FontSizes { get; private set; }
 
         public ObservableCollection<Color> FontColors { get; private set; }
 
@@ -65,7 +65,7 @@ namespace MpWpfApp {
             }
         }
 
-        public int DefaultFontSize {
+        public double DefaultFontSize {
             get {
                 return FontSizes[_defaultFontSizeIdx];
             }
@@ -110,10 +110,10 @@ namespace MpWpfApp {
             }
         }
 
-        public void AddFontSize(int newSize) {
+        public void AddFontSize(double newSize) {
             if (!FontSizes.Contains(newSize)) {
                 FontSizes.Add(newSize);
-                FontSizes = new ObservableCollection<int>(FontSizes.OrderBy(x => x));
+                FontSizes = new ObservableCollection<double>(FontSizes.OrderBy(x => x));
             }
         }
 

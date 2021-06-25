@@ -35,6 +35,8 @@ namespace MonkeyPaste.Droid {
         internal static readonly string COUNT_KEY = "count";
         int count = 0;
 
+        public MpIKeyboardInteractionService KeyboardInteractionService { get; set; }
+
         protected override async void OnCreate(Bundle savedInstanceState) {
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
@@ -62,7 +64,9 @@ namespace MonkeyPaste.Droid {
             CachedImageRenderer.Init(true);
             CachedImageRenderer.InitImageViewHandler();
             Current = this;
-            LoadApplication(new App());
+
+            KeyboardInteractionService = new MpKeyboardInteractionService();
+            LoadApplication(new App(KeyboardInteractionService));
             LoadSelectedTextAsync();
 
 

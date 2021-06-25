@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Management.Instrumentation;
 using System.Reflection;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using HtmlAgilityPack;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace MpWpfApp {
     public class MpHtmlToRtfConverter {
@@ -62,6 +61,11 @@ namespace MpWpfApp {
                 case "#text":
                     te = new Run(n.InnerText);
                     break;
+                case "img":
+                    var ic = new InlineUIContainer();
+                    var img = new System.Windows.Controls.Image();
+                    ic.Child = img;
+                    return ic;
                 case "em":
                     te = new Italic();
                     break;
@@ -102,7 +106,6 @@ namespace MpWpfApp {
                 // add table types
                 default:
                     throw new Exception("Unhanlded html doc element: " + n.Name);
-                    break;
             }
             return te;
         }
@@ -122,6 +125,12 @@ namespace MpWpfApp {
                             te = ApplyStyleFormatting(te, sv.Trim());
                         }
                         break;
+                    case "src":                        
+                        te = ApplyImgSrcFormatting(te, a.Value);
+                        break;
+                    case "href":
+                        te = ApplyHrefFormatting(te, a.Value);
+                        break;
                     case "data-list":
                         //special case since html handles list types differently
                         break;
@@ -134,6 +143,26 @@ namespace MpWpfApp {
                 }
                 
             }
+            return te;
+        }
+
+        private TextElement ApplyHrefFormatting(TextElement te, string hv) {
+            (te as Hyperlink).NavigateUri = new Uri(hv);
+            return te;
+        }
+        private TextElement ApplyImgSrcFormatting(TextElement te, string sv) {
+            var srcvl = sv.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+            string imgStr = srcvl[1];//.Replace(@"\", string.Empty);
+            int mod4 = imgStr.Length % 4;
+            if (mod4 > 0) {
+                imgStr += new string('=', 4 - mod4);
+            }
+            var img = te.FindChildren<Image>().FirstOrDefault();
+            //byte[] data = Convert.FromBase64String(imgStr);
+            //string decodedString = Encoding.UTF8.GetString(data);
+            img.Source = MpHelpers.Instance.ConvertStringToBitmapSource(imgStr);
+            img.Height = 100;
+            img.Width = 100;
             return te;
         }
 
@@ -211,7 +240,7 @@ namespace MpWpfApp {
             //but giving pt will use the displays DIP
             string fontSizeStr = styleValue.Replace("font-size: ", string.Empty).Replace("px","pt");
             double fs = (double)new FontSizeConverter().ConvertFrom(fontSizeStr);
-            MpRichTextFormatProperties.Instance.AddFontSize((int)fs);
+            MpRichTextFormatProperties.Instance.AddFontSize(fs);
             return fs;
         }
 

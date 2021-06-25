@@ -85,7 +85,7 @@ namespace MonkeyPaste {
 
         public static string SyncServerHostNameOrIp {
             get {
-                return Preferences.Get(nameof(SyncServerHostNameOrIp), @"192.168.43.209");
+                return Preferences.Get(nameof(SyncServerHostNameOrIp), @"monkeypaste.com");
             }
             set {
                 Preferences.Set(nameof(SyncServerHostNameOrIp), value);

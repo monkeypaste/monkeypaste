@@ -169,7 +169,7 @@
                 //[{ 'direction': 'rtl' }],                         // text direction
 
                 // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
+                ['link', 'image', 'video', 'formula'],
                 [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
                 [{ 'align': [] }],
                 // ['clean'],                                         // remove formatting button
@@ -341,7 +341,13 @@
             //document.getElementsByClassName
             //var val = document.getElementsByClassName("ql-editor")[0].innerHTML;
             var val = quill.root.innerHTML;
-            return val;
+            return unescape(val);
+        }
+
+        function decodeHtml(html) {
+            var txt = document.createElement("textarea");
+            txt.innerHTML = html;
+            return txt.value;
         }
 
         function createTemplateSpan(templateName) {
@@ -368,8 +374,21 @@
                 console.table('\nhtml:\n' + getHtml());
             }
         }
-            //==================================================================================================
 
+        function moveToolbarTop(y) {
+            $(".ql-toolbar").css("position", "absolute");
+            $(".ql-toolbar").css("top", y);
+
+
+            $("#editor").css("position", "absolute");
+            if (y <= 0) {
+                $("#editor").css("top", $(".ql-toolbar").height());
+            } else {
+                $("#editor").css("top", 0);
+            }
+        }
+            //==================================================================================================
+        init(null, null, null,null, null);
     </script>
 
 </body>

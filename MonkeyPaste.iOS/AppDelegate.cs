@@ -15,6 +15,7 @@ namespace MonkeyPaste.iOS
     [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
+        public MpIKeyboardInteractionService LayoutService { get; set; }
         //
         // This method is invoked when the application has loaded and is ready to run. In this 
         // method you should instantiate the window, load the UI into it and then make the window
@@ -31,8 +32,8 @@ namespace MonkeyPaste.iOS
 
             CachedImageRenderer.Init();
             CachedImageRenderer.InitImageSourceHandler();
-
-            LoadApplication(new App());
+            LayoutService = new MpKeyboardInteractionService();
+            LoadApplication(new App(LayoutService));
 
             return base.FinishedLaunching(app, options);
         }

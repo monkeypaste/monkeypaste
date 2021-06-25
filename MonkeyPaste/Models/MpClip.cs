@@ -194,7 +194,7 @@ namespace MonkeyPaste {
 
                 //add Clip to default tags
                 var defaultTagList = await MpDb.Instance.QueryAsync<MpTag>(
-                    "select * from MpTag where Id=? or Id=?", "1", "2");
+                    "select * from MpTag where pk_MpTagId=? or pk_MpTagId=?", "1", "2");
 
                 if (defaultTagList != null) {
                     foreach (var tag in defaultTagList) {

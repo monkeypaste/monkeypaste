@@ -9,9 +9,14 @@ using System.Windows.Input;
 namespace MonkeyPaste {
     public partial class MpMainShell : Shell {
         public MpSettingsPageView SettingsPageView { get; set; }
+        public MpIKeyboardInteractionService LayoutService { get; set; }
 
         public MpMainShell() {
             InitializeComponent();
+        }
+
+        public MpMainShell(MpIKeyboardInteractionService kis) : this() {
+            LayoutService = kis;
         }
 
         public ICommand OpenSettingsPageCommand => new Command(async () => {

@@ -16,6 +16,11 @@ namespace MonkeyPaste {
             MainPage = new MpMainShell();
         }
 
+        public App(MpIKeyboardInteractionService kis)  {
+            InitializeComponent();
+            MainPage = new MpMainShell(kis);
+        }
+
         protected override void OnStart() {
             MpConsole.WriteTraceLine(Environment.NewLine + @"-------------Application Starting----------" + Environment.NewLine);
         }

@@ -10,7 +10,7 @@ using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpClipDetailPageViewModel : MpViewModelBase {
+    public class MpClipDetailPageViewModel : MpViewModelBase, IDisposable {
         #region Properties
         public MpClip Clip { get; set; }
 
@@ -18,15 +18,18 @@ namespace MonkeyPaste {
 
         public Func<string, Task<string>> EvaluateEditorJavaScript { get; set; }
 
+        public event EventHandler OnEditorLoaded;
+
         public string EditorHtml { get; set; }
         #endregion
 
         #region Public Methods
-        public MpClipDetailPageViewModel() : base() {      
-        }
+        public MpClipDetailPageViewModel() : base() { }
+
         public MpClipDetailPageViewModel(MpClip ci) : this() {
             PropertyChanged += MpClipDetailPageViewModel_PropertyChanged;
             Clip = ci;
+            
             //JsMessageListener = new MpJsMessageListener(EvaluateEditorJavaScript);
             Initialize();
         }
@@ -35,8 +38,9 @@ namespace MonkeyPaste {
             switch(e.PropertyName) {
                 case nameof(EvaluateEditorJavaScript):
                     if(EvaluateEditorJavaScript != null) {
-                        JsMessageListener = new MpJsMessageListener(EvaluateEditorJavaScript);
-                        StartMessageListener();
+                        InitEditor();
+                        //JsMessageListener = new MpJsMessageListener(EvaluateEditorJavaScript);
+                        //StartMessageListener();
                     }
                     break;
             }
@@ -56,6 +60,10 @@ namespace MonkeyPaste {
             return itemText;
         }
 
+        private async Task SetToolbarTop(int y) {
+            await EvaluateEditorJavaScript($"moveToolbarTop({y})");
+        } 
+
         public async Task<string> GetEditorText() {
             var itemText = await EvaluateEditorJavaScript($"getText()");
             return itemText.Replace("\"", string.Empty);
@@ -73,6 +81,22 @@ namespace MonkeyPaste {
         public async Task SetEditorHtml(string html) {
             await EvaluateEditorJavaScript($"setHtml('{html}')");
         }
+
+        public async Task InitEditor() {
+            (Application.Current.MainPage as MpMainShell).LayoutService.OnKeyboardHeightChanged += LayoutService_OnKeyboardHeightChanged;
+            string content = Clip.ItemHtml;
+            if(string.IsNullOrEmpty(content)) {
+                content = Clip.ItemText;
+            }
+            //await EvaluateEditorJavaScript($"init('{content}',null,null,null,null)");
+        }
+
+        private async void LayoutService_OnKeyboardHeightChanged(object sender, float e) {
+            if (EvaluateEditorJavaScript != null) {
+                MpConsole.WriteLine(@"Kb Top: " + e);
+                await SetToolbarTop((int)e);
+            }
+        }
         #endregion
 
         #region Private Methods
@@ -85,6 +109,11 @@ namespace MonkeyPaste {
                 html = html.Replace(contentTag, contentTag + Clip.ItemText);
                 EditorHtml = html;
             }
+        }
+
+        public void Dispose() {
+            EvaluateEditorJavaScript = null;
+            (Application.Current.MainPage as MpMainShell).LayoutService.OnKeyboardHeightChanged -= LayoutService_OnKeyboardHeightChanged;
         }
         #endregion
 

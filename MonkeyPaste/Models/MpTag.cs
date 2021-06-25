@@ -71,7 +71,7 @@ namespace MonkeyPaste {
             if (!isLinked) {
                 return;
             }
-            var result = await MpDb.Instance.QueryAsync<MpClipTag>(@"select * from MpClipTag where TagId=? and ClipId=?", Id, clip.Id);
+            var result = await MpDb.Instance.QueryAsync<MpClipTag>(@"select * from MpCopyItemTag where fk_MpTagId=? and fk_MpCopyItemId=?", Id, clip.Id);
             await MpDb.Instance.DeleteItem<MpClipTag>(result[0]);
 
             //var clipToRemove = ClipList.Where(x => x.Id == clip.Id).FirstOrDefault();
