@@ -42,8 +42,8 @@ public class MpHelpers {
         public Random Rand { get; set; }
 
         #region Documents
-        public const string AlphaNumericChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
+        public const string AlphaNumericChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        public const string OtherChars = @"`~!@#$%^*()_-+[{]}\|;':,<./";
         private string _passwordChars = null;
         public string PasswordChars {
             get {
@@ -63,6 +63,10 @@ public class MpHelpers {
 
         public string GetRandomString(int length, string chars = AlphaNumericChars) {
             return new string(Enumerable.Repeat(chars, length).Select(s => s[Rand.Next(s.Length)]).ToArray());
+        }
+
+        public string GetNewAccessToken() {
+            return GetRandomString(Rand.Next(20, 50), AlphaNumericChars + OtherChars);
         }
 
         public bool IsStringCsv(string text) {
@@ -452,9 +456,6 @@ public class MpHelpers {
             return client;
         }
 
-        
-
-
         public bool IsConnectedToInternet() {
             var current = Connectivity.NetworkAccess;
 
@@ -472,7 +473,7 @@ public class MpHelpers {
                 
                 using (var client = new WebClient()) {
                     try {
-                        var stream = client.OpenRead(MpPreferences.SyncServerEndpoint);
+                        var stream = client.OpenRead(@"https://www.monkeypaste.com/");
                         stream.Dispose();
                         return true;
                     }
@@ -500,6 +501,10 @@ public class MpHelpers {
                 return ipAddress.MapToIPv4().ToString();
             }
             return "0.0.0.0";
+        }
+
+        public string GetExternalIpAddress() {
+            return new System.Net.WebClient().DownloadString("https://api.ipify.org");
         }
 
         public string GetFullyFormattedUrl(string str)

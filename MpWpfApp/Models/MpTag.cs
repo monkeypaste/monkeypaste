@@ -13,10 +13,10 @@ namespace MpWpfApp {
         //unused
         public int ParentTagId { get; set; }
 
-        public MpTag(string tagName, Color tagColor, int tagCount) {
+        public MpTag(string tagName, Color tagColor, int tagSortIdx) {
             TagName = tagName;
             TagColor = new MpColor((int)tagColor.R, (int)tagColor.G, (int)tagColor.B, 255);
-            TagSortIdx = tagCount;
+            TagSortIdx = tagSortIdx;
         }
         public MpTag(int tagId) {
             DataTable dt = MpDb.Instance.Execute(

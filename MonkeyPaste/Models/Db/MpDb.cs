@@ -10,7 +10,7 @@ using Xamarin.Forms;
 using System.IO;
 
 namespace MonkeyPaste {
-    public class MpDb {
+    public class MpDb : MpISyncData {
         #region Singleton
         private static readonly Lazy<MpDb> _Lazy = new Lazy<MpDb>(() => new MpDb());
         public static MpDb Instance { get { return _Lazy.Value; } }
@@ -39,7 +39,7 @@ namespace MonkeyPaste {
         public event EventHandler<MpDbModelBase> OnItemDeleted;
         #endregion
 
-
+        #region Private Methods
         private async Task Init() {
             if(_connectionAsync != null) {
                 return;
@@ -133,6 +133,9 @@ namespace MonkeyPaste {
 
             MpConsole.WriteTraceLine(@"Create all default tables");
         }
+        #endregion
+
+        #region Public Methods
         public async Task<List<T>> QueryAsync<T>(string query, params object[] args) where T : new() {
             if(_connectionAsync == null) {
                 await Init();
@@ -191,15 +194,40 @@ namespace MonkeyPaste {
         //public async Task<List<T>> GetAllWithChildren<T>() where T : new() {
         //    return await _connectionAsync.GetAllWithChildrenAsync<T>();
         //}
-        #region Private Methods
-        #endregion
-
 
         public void InitUser(string idToken) {
             // User = new MpUser() { IdentityToken = idToken };
         }
         public void InitClient(string accessToken) {
             //Client = new MpClient(0, 3, MpHelpers.Instance.GetCurrentIPAddress()/*.MapToIPv4()*/.ToString(), accessToken, DateTime.Now);
-        }       
+        }
+        #endregion
+
+        #region Sync Data
+        public async Task<List<object>> GetLocalData() {
+            var ld = new List<object>();
+            var cil = await GetItems<MpClip>();
+            foreach(var c in cil) {
+                //MpApp app = await MpApp.GetAppById(c.AppId);
+                //app.Icon = await MpIcon.GetIconById(app.IconId);
+                //app.Icon.IconImage = await MpDbImage.GetDbImageById(app.Icon.IconImageId);
+                //c.App = app;
+
+                //var color = await MpColor.GetColorById(c.ColorId);
+                //if (color != null) {
+                //    c.ItemColor = color;
+                //}
+                ld.Add(c);
+            }
+            return ld;
+        }
+
+        public async Task ProcessRemoteData(List<object> remoteData) {
+            foreach(var rdi in remoteData) {
+                Console.WriteLine(rdi.ToString());
+            }
+            await Task.Delay(10);
+        }
+        #endregion
     }
 }

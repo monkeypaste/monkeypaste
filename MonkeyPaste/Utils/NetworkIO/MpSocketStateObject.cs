@@ -6,7 +6,8 @@ using System.Text;
 namespace MonkeyPaste {
     // State object for reading client data asynchronously 
     public class MpSocketStateObject {
-        public const int Port = 11000;
+        //public string Ip4Adress = string.Empty
+        public int Port = -1;
         public const string EofToken = "<EOF>";
 
         // Size of receive buffer.  
@@ -20,5 +21,14 @@ namespace MonkeyPaste {
 
         // Client socket.
         public Socket workSocket = null;
+
+        public MpSocketStateObject(int port) { 
+            Port = port; 
+        }
+
+        //public MpSocketStateObject(string ip, int port) {
+        //    Ip4Adress = ip;
+        //    Port = port;
+        //}
     }
 }

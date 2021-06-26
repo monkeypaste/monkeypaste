@@ -23,6 +23,9 @@ EndProject
 Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "MpWpfWap", "MpWpfWap\MpWpfWap.wapproj", "{4D8D3D09-DD0F-40DA-B48C-1E5411ABF229}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MpWpfApp", "MpWpfApp\MpWpfApp.csproj", "{AB141214-C52C-4390-B86B-1491D5F24E51}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA} = {EFFA9E68-C567-4F5A-AE60-0BA2937CF5FA}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonkeyPaste.GTK", "MonkeyPaste.GTK\MonkeyPaste.GTK.csproj", "{D37EC76C-A341-4C44-8156-282EDFA01588}"
 	ProjectSection(ProjectDependencies) = postProject

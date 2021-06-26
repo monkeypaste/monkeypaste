@@ -8,8 +8,8 @@ namespace MonkeyPaste {
             if(string.IsNullOrEmpty(str) || string.IsNullOrEmpty(ostr)) {
                 return false;
             }
-            if(MpPreferences.IsSearchCaseSensitive) {
-                return str.Contains(ostr);
+            if(MpPreferences.Instance.IsSearchCaseSensitive) {
+                return str.ContainsByUserSensitivity(ostr);
             }
             return str.ToLowerInvariant().Contains(ostr.ToLowerInvariant());
         }

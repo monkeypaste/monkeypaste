@@ -10,9 +10,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Microsoft.Win32;
+using MonkeyPaste;
 
 namespace MpWpfApp {
-    public class MpDb {
+    public class MpDb : MonkeyPaste.MpISyncData {
         private static readonly Lazy<MpDb> _Lazy = new Lazy<MpDb>(() => new MpDb());
         public static MpDb Instance { get { return _Lazy.Value; } }
 
@@ -40,6 +41,13 @@ namespace MpWpfApp {
             _isLoaded = true;
         }
         private void InitDb() {
+            //Task.Run(async () => {
+            //    var t = new MonkeyPaste.MpTag() { TagColor = new MonkeyPaste.MpColor(1,1,0,1), TagName = "test", TagSortIdx = 4 };
+            //    await MonkeyPaste.MpDb.Instance.AddItem<MonkeyPaste.MpTag>(t);
+            //    var test = await MonkeyPaste.MpDb.Instance.GetItems<MonkeyPaste.MpTag>();
+            //    MpConsole.Instance.WriteLine(test.ToString());
+            //});
+
             //if db does not exist create it with a random password and set its path and password properties
             if (string.IsNullOrEmpty(Properties.Settings.Default.DbPath) || !File.Exists(Properties.Settings.Default.DbPath)) {
                 Console.WriteLine("Db does not exist in " + MpHelpers.Instance.GetApplicationDirectory());
@@ -561,5 +569,32 @@ namespace MpWpfApp {
                 drop table if exists MpColor;
             ";
         }
+
+        #region Sync Data
+        public async Task<List<object>> GetLocalData() {
+            var ld = new List<object>();
+            foreach (var c in MpCopyItem.GetAllCopyItems(out int allItems)) {
+                //MpApp app = await MpApp.GetAppById(c.AppId);
+                //app.Icon = await MpIcon.GetIconById(app.IconId);
+                //app.Icon.IconImage = await MpDbImage.GetDbImageById(app.Icon.IconImageId);
+                //c.App = app;
+
+                //var color = await MpColor.GetColorById(c.ColorId);
+                //if (color != null) {
+                //    c.ItemColor = color;
+                //}
+                ld.Add(c);
+            }
+            await Task.Delay(10);
+            return ld;
+        }
+
+        public async Task ProcessRemoteData(List<object> remoteData) {
+            foreach (var rdi in remoteData) {
+                Console.WriteLine(rdi.ToString());
+            }
+            await Task.Delay(10);
+        }
+        #endregion
     }
 }

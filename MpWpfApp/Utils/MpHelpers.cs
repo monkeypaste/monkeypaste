@@ -42,6 +42,8 @@ using System.Windows.Controls.Primitives;
 using System.Speech.Synthesis;
 using WindowsInput;
 using Microsoft.Win32;
+using System.Net.Sockets;
+
 namespace MpWpfApp {
     public class MpHelpers {
         private static readonly Lazy<MpHelpers> _Lazy = new Lazy<MpHelpers>(() => new MpHelpers());
@@ -765,39 +767,7 @@ namespace MpWpfApp {
             return (int)activeProcId == procId;
         }
 
-        public void OpenUrl(string url, bool openInNewWindow = true) {
-            if(url.StartsWith(@"http") && !openInNewWindow) {
-                //WinApi.SetActiveWindow()
-            } else {
-                Process.Start(url);
-            }
-        }
         
-        public string CreateEmail(string fromAddress, string subject, object body, string attachmentPath = "") {
-            //this returns the .eml file that will need to be deleted
-            var mailMessage = new MailMessage();
-            mailMessage.From = new MailAddress(fromAddress);
-            mailMessage.Subject = "Your subject here";
-            if(body.GetType() == typeof(BitmapSource)) {
-                mailMessage.IsBodyHtml = true;
-                mailMessage.Body = string.Format("<img src='{0}'>", MpHelpers.Instance.WriteBitmapSourceToFile(Path.GetTempPath(),(BitmapSource)body), true);
-            } else {
-                mailMessage.Body = (string)body;
-            }            
-
-            if(!string.IsNullOrEmpty(attachmentPath)) {
-                mailMessage.Attachments.Add(new Attachment(attachmentPath));
-            }
-
-            var filename = Path.GetTempPath() + "mymessage.eml";
-
-            //save the MailMessage to the filesystem
-            mailMessage.Save(filename);
-
-            //Open the file with the default associated application registered on the local machine
-            Process.Start(filename);
-            return filename;
-        }
         
         public double FileListSize(string[] paths) {
             long total = 0;
@@ -1371,28 +1341,8 @@ namespace MpWpfApp {
             return null;
         }
 
-        public IPAddress GetCurrentIPAddress() {
-            Ping ping = new Ping();
-            var replay = ping.Send(Dns.GetHostName());
 
-            if (replay.Status == IPStatus.Success) {
-                return replay.Address;
-            }
-            return null;
-        }
-
-        public bool CheckForInternetConnection() {
-            try {
-                using (var client = new WebClient())
-                using (client.OpenRead("http://www.google.com/")) {
-                    return true;
-                }
-            }
-            catch (Exception e) {
-                Console.WriteLine(e.ToString());
-                return false;
-            }
-        }
+        
 
         public bool IsPathDirectory(string str) {
             // get the file attributes for file or directory
@@ -2761,6 +2711,75 @@ namespace MpWpfApp {
         #endregion
 
         #region Http
+        public void OpenUrl(string url, bool openInNewWindow = true) {
+            if (url.StartsWith(@"http") && !openInNewWindow) {
+                //WinApi.SetActiveWindow()
+            } else {
+                Process.Start(url);
+            }
+        }
+
+        public string CreateEmail(string fromAddress, string subject, object body, string attachmentPath = "") {
+            //this returns the .eml file that will need to be deleted
+            var mailMessage = new MailMessage();
+            mailMessage.From = new MailAddress(fromAddress);
+            mailMessage.Subject = "Your subject here";
+            if (body.GetType() == typeof(BitmapSource)) {
+                mailMessage.IsBodyHtml = true;
+                mailMessage.Body = string.Format("<img src='{0}'>", MpHelpers.Instance.WriteBitmapSourceToFile(Path.GetTempPath(), (BitmapSource)body), true);
+            } else {
+                mailMessage.Body = (string)body;
+            }
+
+            if (!string.IsNullOrEmpty(attachmentPath)) {
+                mailMessage.Attachments.Add(new Attachment(attachmentPath));
+            }
+
+            var filename = Path.GetTempPath() + "mymessage.eml";
+
+            //save the MailMessage to the filesystem
+            mailMessage.Save(filename);
+
+            //Open the file with the default associated application registered on the local machine
+            Process.Start(filename);
+            return filename;
+        }
+        public string GetCurrentIPAddress() {
+            Ping ping = new Ping();
+            var replay = ping.Send(Dns.GetHostName());
+
+            if (replay.Status == IPStatus.Success) {
+                return replay.Address.MapToIPv4().ToString();
+            }
+            return null;
+        }
+
+        public string GetExternalIpAddress() {
+            return new System.Net.WebClient().DownloadString("https://api.ipify.org");
+        }
+
+        public string GetLocalIPAddress() {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList) {
+                if (ip.AddressFamily == AddressFamily.InterNetwork) {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("No network adapters with an IPv4 address in the system!");
+        }
+
+        public bool CheckForInternetConnection() {
+            try {
+                using (var client = new WebClient())
+                using (client.OpenRead("http://www.google.com/")) {
+                    return true;
+                }
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+                return false;
+            }
+        }
         public async Task<string> GetUrlTitle(string url) {
             string urlSource = await GetHttpSourceCode(url);
 

@@ -644,7 +644,7 @@ namespace MpWpfApp {
                 Title = title;
             }
             CopyCount = 1;
-            Client = new MpClient(0, 0, MpHelpers.Instance.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
+            Client = new MpClient(0, 0, MpHelpers.Instance.GetCurrentIPAddress(), "unknown", DateTime.Now);
             
             if(hwnd != IntPtr.Zero) {
                 //occurs for items added from clipboard
@@ -1102,7 +1102,7 @@ namespace MpWpfApp {
 
             ItemCsv = dr["ItemCsv"].ToString();
 
-            Client = new MpClient(0, 0, MpHelpers.Instance.GetCurrentIPAddress().MapToIPv4().ToString(), "unknown", DateTime.Now);
+            Client = new MpClient(0, 0, MpHelpers.Instance.GetCurrentIPAddress(), "unknown", DateTime.Now);
             App = MpApp.GetAppById(appId);
             ItemColor = MpColor.GetColorById(colorId);
             if(ItemColor == null) {

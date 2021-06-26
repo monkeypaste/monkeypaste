@@ -28,7 +28,7 @@
                    IsClippedToBounds="True">
                 <Frame.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding ClipTileTappedCommand}"
-                                          NumberOfTapsRequired="2" />
+                                          NumberOfTapsRequired="1" />
                 </Frame.GestureRecognizers>
                 <Frame.OutlineColor>
                     <OnPlatform x:TypeArguments="Color"

@@ -376,14 +376,16 @@
         }
 
         function moveToolbarTop(y) {
-            $(".ql-toolbar").css("position", "absolute");
-            $(".ql-toolbar").css("top", y);
-
-
             $("#editor").css("position", "absolute");
+            $(".ql-toolbar").css("position", "absolute");
+
+            let tbh = $(".ql-toolbar").outerHeight();
             if (y <= 0) {
-                $("#editor").css("top", $(".ql-toolbar").height());
+                //keyboard is not visible
+                $(".ql-toolbar").css("top", y);
+                $("#editor").css("top", y + tbh);
             } else {
+                $(".ql-toolbar").css("top", y + tbh);
                 $("#editor").css("top", 0);
             }
         }

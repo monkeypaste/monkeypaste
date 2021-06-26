@@ -74,7 +74,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static string SyncServerProtocol {
+        public string SyncServerProtocol {
             get {
                 return Preferences.Get(nameof(SyncServerProtocol), @"https://");
             }
@@ -83,7 +83,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static string SyncServerHostNameOrIp {
+        public string SyncServerHostNameOrIp {
             get {
                 return Preferences.Get(nameof(SyncServerHostNameOrIp), @"monkeypaste.com");
             }
@@ -92,7 +92,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static int SyncServerPort {
+        public int SyncServerPort {
             get {
                 return Preferences.Get(nameof(SyncServerPort), 44376);
             }
@@ -101,7 +101,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static string SyncServerEndpoint {
+        public string SyncServerEndpoint {
             get {
                 return $"{SyncServerProtocol}{SyncServerHostNameOrIp}:{SyncServerPort}";
             }
@@ -136,7 +136,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static bool EncryptDb {
+        public bool EncryptDb {
             get {
                 return Preferences.Get(nameof(EncryptDb), true);
             }
@@ -157,7 +157,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static bool IsSearchCaseSensitive {
+        public bool IsSearchCaseSensitive {
             get {
                 return Preferences.Get(nameof(IsSearchCaseSensitive), false);
             }
@@ -166,7 +166,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static string UserName {
+        public string UserName {
             get {
                 return Preferences.Get(nameof(UserName), "Not Set");
             }
@@ -175,7 +175,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static string UserEmail {
+        public string UserEmail {
             get {
                 return Preferences.Get(nameof(UserEmail), "tkefauver@gmail.com");
             }
@@ -184,7 +184,7 @@ namespace MonkeyPaste {
             }
         }
 
-        public static int SyncPort {
+        public int SyncPort {
             get {
                 return Preferences.Get(nameof(UserName), 11000);
             }

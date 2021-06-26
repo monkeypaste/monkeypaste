@@ -3,61 +3,116 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
+using System.Diagnostics;
 
 namespace MonkeyPaste {
-    public class MpSocketClient {
+    public class MpSocketClient : IDisposable {
+        #region Private Variables
+        //private MpSocketStateObject _sso = null;
+
         // ManualResetEvent instances signal completion.  
-        private static ManualResetEvent connectDone =
-            new ManualResetEvent(false);
-        private static ManualResetEvent sendDone =
-            new ManualResetEvent(false);
-        private static ManualResetEvent receiveDone =
-            new ManualResetEvent(false);
+        private ManualResetEvent connectDone = new ManualResetEvent(false);
+        private ManualResetEvent sendDone = new ManualResetEvent(false);
+        private ManualResetEvent receiveDone = new ManualResetEvent(false);
 
         // The response from the remote device.  
-        private static String response = String.Empty;
+        private string response = String.Empty;
 
-        public static void StartClient(string hostNameOrIpAddress) {
-            // Connect to a remote device.  
+        //private Socket _client = null;
+
+        private string _hostIp;
+        private int _hostPort;
+        #endregion
+
+        #region Events
+        public event EventHandler<string> OnReceive;
+        #endregion
+
+        #region Public Methods
+
+        public void StartClient(string hostIp, int hostPort) {
+            _hostIp = hostIp;
+            _hostPort = hostPort;
             try {
-                // Establish the remote endpoint for the socket.  
-                // The name of the
-                // remote device is "host.contoso.com".  
-                IPHostEntry ipHostInfo = Dns.GetHostEntry(hostNameOrIpAddress);
-                IPAddress ipAddress = ipHostInfo.AddressList[0];
-                IPEndPoint remoteEP = new IPEndPoint(ipAddress, MpSocketStateObject.Port);
-
-                // Create a TCP/IP socket.  
-                Socket client = new Socket(ipAddress.AddressFamily,
-                    SocketType.Stream, ProtocolType.Tcp);
-
-                // Connect to the remote endpoint.  
-                client.BeginConnect(remoteEP,
-                    new AsyncCallback(ConnectCallback), client);
-                connectDone.WaitOne();
+                //_client = Connect();
 
                 // Send test data to the remote device.  
-                Send(client, "This is a test<EOF>");
+                Send("This is a test<EOF>");
                 sendDone.WaitOne();
 
                 // Receive the response from the remote device.  
-                Receive(client);
+                Receive();
                 receiveDone.WaitOne();
 
                 // Write the response to the console.  
                 Console.WriteLine("Response received : {0}", response);
 
-                // Release the socket.  
-                client.Shutdown(SocketShutdown.Both);
-                client.Close();
-
+                Disconnect();
             }
             catch (Exception e) {
                 Console.WriteLine(e.ToString());
             }
         }
 
-        private static void ConnectCallback(IAsyncResult ar) {
+        public void Disconnect() {
+            var client = Connect();
+            if(client != null) {
+                // Release the socket.  
+                client.Shutdown(SocketShutdown.Both);
+                client.Close();
+            }
+        }
+
+        public void Send(string data) {
+            var client = Connect();
+
+            Debug.Assert(client != null, "Cannot send client is null");
+            // Convert the string data to byte data using ASCII encoding.  
+            byte[] byteData = Encoding.ASCII.GetBytes(data);
+
+            // Begin sending the data to the remote device.  
+            client.BeginSend(byteData, 0, byteData.Length, 0,
+                new AsyncCallback(SendCallback), client);
+        }
+
+        public void Dispose() {
+            Disconnect();
+        }
+        #endregion
+
+        #region Private Methods
+        private Socket Connect() {
+            // Establish the remote endpoint for the socket.  
+            // The name of the
+            // remote device is "host.contoso.com".  
+            var ipHostInfo = Dns.GetHostEntry(_hostIp);
+            IPAddress ipAddress = null;
+            foreach (var ipa in ipHostInfo.AddressList) {
+                if (ipa.ToString() == _hostIp) {
+                    ipAddress = ipa;
+                }
+            }
+            if (ipAddress == null) {
+                throw new Exception($"Unable to connect to socket server at {_hostIp}:{_hostPort}");
+            }
+            var remoteEP = new IPEndPoint(ipAddress, _hostPort);
+            // Create a TCP/IP socket.  
+            var client = new Socket(
+                ipAddress.AddressFamily,
+                SocketType.Stream,
+                ProtocolType.Tcp);
+
+            // Connect to the remote endpoint.  
+            client.BeginConnect(
+                remoteEP,
+                new AsyncCallback(ConnectCallback),
+                client);
+
+            connectDone.WaitOne();
+
+            return client;
+        }
+        private void ConnectCallback(IAsyncResult ar) {
             try {
                 // Retrieve the socket from the state object.  
                 Socket client = (Socket)ar.AsyncState;
@@ -65,7 +120,8 @@ namespace MonkeyPaste {
                 // Complete the connection.  
                 client.EndConnect(ar);
 
-                Console.WriteLine("Socket connected to {0}",
+                Console.WriteLine(
+                    "Socket connected to {0}",
                     client.RemoteEndPoint.ToString());
 
                 // Signal that the connection has been made.  
@@ -76,27 +132,34 @@ namespace MonkeyPaste {
             }
         }
 
-        private static void Receive(Socket client) {
+        private void Receive() {
+            var client = Connect();
+            Debug.Assert(client != null, @"Cannot receive client is null");
             try {
                 // Create the state object.  
-                MpSocketStateObject state = new MpSocketStateObject();
+                MpSocketStateObject state = new MpSocketStateObject(_hostPort);
                 state.workSocket = client;
 
                 // Begin receiving the data from the remote device.  
-                client.BeginReceive(state.buffer, 0, MpSocketStateObject.BufferSize, 0,
-                    new AsyncCallback(ReceiveCallback), state);
+                client.BeginReceive(
+                    state.buffer, 
+                    0, 
+                    MpSocketStateObject.BufferSize, 
+                    0,
+                    new AsyncCallback(ReceiveCallback), 
+                    state);
             }
             catch (Exception e) {
                 Console.WriteLine(e.ToString());
             }
         }
 
-        private static void ReceiveCallback(IAsyncResult ar) {
+        private void ReceiveCallback(IAsyncResult ar) {
             try {
                 // Retrieve the state object and the client socket
                 // from the asynchronous state object.  
-                MpSocketStateObject state = (MpSocketStateObject)ar.AsyncState;
-                Socket client = state.workSocket;
+                var state = (MpSocketStateObject)ar.AsyncState;
+                var client = state.workSocket;
 
                 // Read data from the remote device.  
                 int bytesRead = client.EndReceive(ar);
@@ -106,8 +169,13 @@ namespace MonkeyPaste {
                     state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
 
                     // Get the rest of the data.  
-                    client.BeginReceive(state.buffer, 0, MpSocketStateObject.BufferSize, 0,
-                        new AsyncCallback(ReceiveCallback), state);
+                    client.BeginReceive(
+                        state.buffer, 
+                        0, 
+                        MpSocketStateObject.BufferSize, 
+                        0,
+                        new AsyncCallback(ReceiveCallback), 
+                        state);
                 } else {
                     // All the data has arrived; put it in response.  
                     if (state.sb.Length > 1) {
@@ -115,6 +183,8 @@ namespace MonkeyPaste {
                     }
                     // Signal that all bytes have been received.  
                     receiveDone.Set();
+
+                    OnReceive?.Invoke(this, response);
                 }
             }
             catch (Exception e) {
@@ -122,19 +192,11 @@ namespace MonkeyPaste {
             }
         }
 
-        private static void Send(Socket client, String data) {
-            // Convert the string data to byte data using ASCII encoding.  
-            byte[] byteData = Encoding.ASCII.GetBytes(data);
 
-            // Begin sending the data to the remote device.  
-            client.BeginSend(byteData, 0, byteData.Length, 0,
-                new AsyncCallback(SendCallback), client);
-        }
-
-        private static void SendCallback(IAsyncResult ar) {
+        private void SendCallback(IAsyncResult ar) {
             try {
                 // Retrieve the socket from the state object.  
-                Socket client = (Socket)ar.AsyncState;
+                var client = (Socket)ar.AsyncState;
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = client.EndSend(ar);
@@ -147,5 +209,6 @@ namespace MonkeyPaste {
                 Console.WriteLine(e.ToString());
             }
         }
+        #endregion
     }
 }
