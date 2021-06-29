@@ -1378,8 +1378,8 @@ namespace MpWpfApp {
 
         public BitmapSource CreateBorder(BitmapSource img, double scale, Color bgColor) {
             var borderBmpSrc = MpHelpers.Instance.TintBitmapSource(img, bgColor, true);
-            var borderSize = new Size(borderBmpSrc.Width * scale, borderBmpSrc.Height * scale);
-            return MpHelpers.Instance.ResizeBitmapSource(borderBmpSrc, borderSize);
+            //var borderSize = new Size(borderBmpSrc.Width * scale, borderBmpSrc.Height * scale);
+            return MpHelpers.Instance.ResizeBitmapSource(borderBmpSrc, new Size(scale,scale));
         }
 
         public BitmapSource CopyScreen() {

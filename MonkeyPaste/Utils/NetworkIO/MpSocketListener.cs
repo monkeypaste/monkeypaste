@@ -5,19 +5,19 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpSocketListener : IDisposable {
         #region Private Variables
-        //private MpSocketStateObject _sso = null;
-        private string _ip;
+        
         private int _port;
         // Thread signal.  
         private ManualResetEvent _allDone = new ManualResetEvent(false);
         #endregion
 
         #region Properties
-
+        public bool IsRunning { get; set; } = false;
         #endregion
 
         #region Events
@@ -28,19 +28,92 @@ namespace MonkeyPaste {
         #region Public Methods
         public MpSocketListener() { }
 
-        public void StartListening(string ip, int port) {
-            _ip = ip;
+        public void Start(MpDeviceEndpoint thisEndpoint) {
+            Task.Run(() => {
+                TcpListener server = null;
+                try {
+                    // Set the TcpListener on port 13000.
+                    Int32 port = thisEndpoint.PortNum;
+                    //IPAddress localAddr = IPAddress.Parse("127.0.0.1");
+                                         
+                    //server = new TcpListener(port);
+                    server = new TcpListener(IPAddress.IPv6Any, port);
+                    server.AllowNatTraversal(true);
+
+                    // Start listening for client requests.
+                    server.Start();
+
+                    // Buffer for reading data
+                    Byte[] bytes = new Byte[256];
+                    String data = null;
+
+                    IsRunning = true;
+                    // Enter the listening loop.
+                    while (IsRunning) {
+                        Console.Write("Waiting for a connection... ");
+
+                        // Perform a blocking call to accept requests.
+                        // You could also use server.AcceptSocket() here.
+                        TcpClient client = server.AcceptTcpClient();
+                        Console.WriteLine("Connected!");
+
+                        data = null;
+
+                        // Get a stream object for reading and writing
+                        NetworkStream stream = client.GetStream();
+
+                        int i;
+                        var sb = new StringBuilder();
+                        // Loop to receive all the data sent by the client.
+                        while ((i = stream.Read(bytes, 0, bytes.Length)) != 0) {
+                            // Translate data bytes to a ASCII string.
+                            data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                            Console.WriteLine("Received: {0}", data);
+
+                            // Process the data sent by the client.
+                            //data = data.ToUpper();
+                            sb.Append(data);
+
+                            byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
+
+                            // Send back a response.
+                            stream.Write(msg, 0, msg.Length);
+                            Console.WriteLine("Sent: {0}", data);
+                        }
+                        OnReceive?.Invoke(this, sb.ToString());
+                        // Shutdown and end connection
+                        client.Close();
+                    }
+                }
+                catch (SocketException e) {
+                    Console.WriteLine("SocketException: {0}", e);
+                } finally {
+                    // Stop listening for new clients.
+                    server.Stop();
+                }
+
+                Console.WriteLine("\nHit enter to continue...");
+                Console.Read();
+            });            
+        }
+
+        public void Stop() {
+            IsRunning = false;
+        }
+        public void StartListening(int port) {
             _port = port;
             //_sso = new MpSocketStateObject(ip, port);
 
             // Establish the local endpoint for the socket.  
             // The DNS name of the computer  
             // running the listener is "host.contoso.com".  
-            IPAddress ipAddress = IPAddress.Parse(ip);
             IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, port);
 
             // Create a TCP/IP socket.  
-            Socket listener = new Socket(IPAddress.Any.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            Socket listener = new Socket(
+                IPAddress.Any.AddressFamily, 
+                SocketType.Stream, 
+                ProtocolType.Tcp);
 
             // Bind the socket to the local endpoint and listen for incoming connections.  
             try {

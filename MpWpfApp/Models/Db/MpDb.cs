@@ -449,7 +449,8 @@ namespace MpWpfApp {
                     , ItemHtml text 
                     , ItemDescription text
                     , ItemCsv text
-                    , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL                
+                    , CopyDateTime datetime DEFAULT (current_timestamp) NOT NULL          
+                    
                     , CONSTRAINT FK_MpCopyItem_0_0 FOREIGN KEY (fk_MpAppId) REFERENCES MpApp (pk_MpAppId)
                     , CONSTRAINT FK_MpCopyItem_1_0 FOREIGN KEY (fk_MpClientId) REFERENCES MpClient (pk_MpClientId)
                     , CONSTRAINT FK_MpCopyItem_2_0 FOREIGN KEY (fk_MpCopyItemTypeId) REFERENCES MpCopyItemType (pk_MpCopyItemTypeId) 

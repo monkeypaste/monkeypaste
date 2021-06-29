@@ -22,31 +22,17 @@ namespace MonkeyPaste {
             }
         }
 
-        private string _accessToken = string.Empty;
 
         private string _ip;
         private int _port;
         #endregion
 
         #region Properties
-        public ObservableCollection<MpDeviceEndpoint> AvailableEndPoints { get; set; } = new ObservableCollection<MpDeviceEndpoint>();
 
-        public MpDeviceEndpoint ThisEndPoint { get; set; } = null;
-
-        public MpDeviceEndpoint HostEndPoint {
-            get {
-                if(AvailableEndPoints.Count > 0) {
-                    return AvailableEndPoints[0];
-                }
-                return null;
-            }
-        }
-
-        public bool CanSync => ThisEndPoint != null && AvailableEndPoints.Count > 1;
-
-        public bool IsHost => ThisEndPoint == HostEndPoint;
-
-        public bool IsConnected => ThisEndPoint != null && !string.IsNullOrEmpty(ThisEndPoint.AccessToken);
+        public MpSocketManager SocketManager { get; set; }
+        #region Events
+        public event EventHandler<string> OnConnected;
+        #endregion
         #endregion
 
         #region Public Methods
@@ -63,35 +49,40 @@ namespace MonkeyPaste {
         }
 
         public async Task<bool> Disconnect() {
-            if(!IsConnected) {
+            if(SocketManager == null) {
                 return true;
             }
-            var uri = new Uri(
-                    string.Format(@"https://www.monkeypaste.com/api/disconnect.php?email={0}&ip={1}&at={2}",
-                    @"test@test.com",
-                    _ip,
-                    ThisEndPoint.AccessToken
-                    ));
-            try {
-                var response = await _client.GetAsync(uri);
-                if (response.IsSuccessStatusCode) {                    
-                    MpConsole.WriteLine(@"Closed sync session");
-                    return true;
-                } else {
-                    MpConsole.WriteTraceLine(@"Could not close session");
-                    return false;
-                }
-            }
-            catch (Exception ex) {
-                MpConsole.WriteTraceLine("", ex);
-                return false;
-            }
+            return await SocketManager.Disconnect();
         }
+
+        //public async Task Upload(object data) {
+        //    var dataItems = (List<object>)data;
+        //    var baseUrl = @"https://www.monkeypaste.com/api/upload.php?at={0}&data={1}&groupId={2}&packetId={3}";
+
+        //    for (int i = 0; i < dataItems.Count; i++) {
+        //        var uri = new Uri(
+        //            string.Format(baseUrl,
+        //            _accessToken,
+        //            dataItems[i].ToString(),
+        //            i,
+        //            0));
+        //        try {
+        //            var response = await _client.GetAsync(uri);
+        //            if (response.IsSuccessStatusCode) {
+        //                continue;
+        //            } else {
+        //                Console.WriteLine("Failure");
+        //            }
+        //        }
+        //        catch (Exception ex) {
+        //            Console.WriteLine("Failure: " + ex);
+        //        }
+        //    } 
+        //}
 
         public void Dispose() {
             Disconnect();
-            AvailableEndPoints.Clear();
-            ThisEndPoint = null;
+            SocketManager.Dispose();
         }
         #endregion
 
@@ -110,27 +101,16 @@ namespace MonkeyPaste {
             try {
                 var response = await _client.GetAsync(uri);
                 if (response.IsSuccessStatusCode) {
-                    _accessToken = at;
+                    //OnConnected?.Invoke(this, at);
+                    //_accessToken = at;
                     var result = await response.Content.ReadAsStringAsync();// ReadAsByteArrayAsync();
-
-                    var deviceData = result.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                    for (int i = 0; i < deviceData.Length; i += 3) {
-                        AvailableEndPoints.Add(
-                            new MpDeviceEndpoint(
-                                deviceData[i],
-                                Convert.ToInt32(deviceData[i + 1]),
-                                deviceData[i + 2]));
-                    }
-                    ThisEndPoint = new MpDeviceEndpoint(_ip, _port, at);
-                    AvailableEndPoints.Add(ThisEndPoint);
-                    MpConsole.WriteLine(@"Session access token: " + _accessToken);
-                } else {
-                    _accessToken = string.Empty;
+                    SocketManager = new MpSocketManager(result, at);   
+                    //_accessToken = string.Empty;
                     MpConsole.WriteTraceLine(@"Could not connect server: " + uri.ToString());
                 }
             }
             catch (Exception ex) {
-                _accessToken = string.Empty;
+                //_accessToken = string.Empty;
                 MpConsole.WriteTraceLine("", ex);
             }
         }

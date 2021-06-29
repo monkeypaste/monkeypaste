@@ -15,16 +15,18 @@ namespace MonkeyPaste {
         #region Private Variables
         private string _thisIp = string.Empty;
         private int _syncPort = -1;
-
+        private string _at = string.Empty;
         private MpISyncData _localSyncData;
         #endregion
 
         #region Properties
-        public MpSocketClient SocketClient { get; set; } = new MpSocketClient();
+        //public MpSocketClient SocketClient { get; set; } = new MpSocketClient();
+        //public MpSocketListener SocketListener { get; set; } = new MpSocketListener();
 
-        public MpSocketListener SocketListener { get; set; } = new MpSocketListener();
+        //public MpSslTcpClient SslClient { get; set; } = new MpSslTcpClient(null);
+        //public MpSslTcpServer SslServer { get; set; } = new MpSslTcpServer(null);
 
-        public MpCertificateManager CertManager { get; set; }
+        
         
         public MpSessionManager SessionManager { get; set; }
         
@@ -32,43 +34,50 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public void Init(MpISyncData localSyncData, string ip, int port) {
+        public void Init(MpISyncData localSyncData, string ip) {
             _localSyncData = localSyncData;
             _thisIp = ip;
-            _syncPort = port;
-            SessionManager = new MpSessionManager(_thisIp, _syncPort);
-            SessionManager.AvailableEndPoints.CollectionChanged += EndPoints_CollectionChanged;            
+
+            var client = MpSocketClient.CreateClient(
+                new MpDeviceEndpoint(@"206.72.205.68", 44376, @"Access Token", DateTime.Now),
+                (s, e) => {
+                    Console.WriteLine(@"Sent: " + e);
+                },
+                (s, e) => {
+                    Console.WriteLine(@"Received: " + e);
+                },
+                (s, e) => {
+                    Console.WriteLine(@"Error: " + e);
+                }
+            );
+            client.Send(@"Hi Server!");
+            //_syncPort = 443;
+
+            //SocketListener.OnReceive += SocketListener_OnReceive;
+            //SocketClient.OnReceive += SocketClient_OnReceive;
+
+            //SessionManager = new MpSessionManager(_thisIp, _syncPort);
+
+            //SessionManager.OnConnected += async (s,e) => {
+            //    var data = _localSyncData.GetLocalData();
+            //    await SessionManager.Upload(data);
+            //};
+            //SessionManager.AvailableEndPoints.CollectionChanged += EndPoints_CollectionChanged;            
+        }
+
+        public void Upload() {
+
         }
 
         public void Dispose() {
             SessionManager.Dispose();
-            SocketClient.Dispose();
-            SocketListener.Dispose();
         }
         #endregion
 
         #region Private Methods
 
         #region Event Handlers
-        private async void EndPoints_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
-            if(!SessionManager.IsConnected) {
-                return;
-            }
-            if (SessionManager.IsHost) {
-                //this device will become the server since its connected and 
-                //there are no other clients
-                SocketListener.StartListening(_thisIp, _syncPort);
-                SocketListener.OnReceive += SocketListener_OnReceive;
-            } else if(SessionManager.CanSync) {
-                SocketClient.StartClient(SessionManager.HostEndPoint.Ip4Address, SessionManager.HostEndPoint.PortNum);
-                SocketClient.OnReceive += SocketClient_OnReceive;
-
-                var cil = await _localSyncData.GetLocalData();
-                foreach(var c in cil) {
-                    SocketClient.Send(c.ToString());
-                }
-            }
-        }
+        
 
         private void SocketClient_OnReceive(object sender, string e) {
             throw new NotImplementedException();

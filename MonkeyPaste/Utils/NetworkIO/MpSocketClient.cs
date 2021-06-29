@@ -20,39 +20,100 @@ namespace MonkeyPaste {
 
         //private Socket _client = null;
 
-        private string _hostIp;
-        private int _hostPort;
+        //private string _hostIp;
+        //private int _hostPort;
+
+        private MpDeviceEndpoint _sep;
         #endregion
 
         #region Events
+        public event EventHandler<string> OnSend;
         public event EventHandler<string> OnReceive;
+        public event EventHandler<string> OnError;
         #endregion
 
         #region Public Methods
+        public static MpSocketClient CreateClient(MpDeviceEndpoint sep, EventHandler<string> onSend, EventHandler<string> onReceive, EventHandler<string> onError) {
+            var newClient = new MpSocketClient(sep);
+            newClient.OnSend += onSend;
+            newClient.OnReceive += onReceive;
+            newClient.OnError += onError;
 
-        public void StartClient(string hostIp, int hostPort) {
-            _hostIp = hostIp;
-            _hostPort = hostPort;
-            try {
-                //_client = Connect();
-
-                // Send test data to the remote device.  
-                Send("This is a test<EOF>");
-                sendDone.WaitOne();
-
-                // Receive the response from the remote device.  
-                Receive();
-                receiveDone.WaitOne();
-
-                // Write the response to the console.  
-                Console.WriteLine("Response received : {0}", response);
-
-                Disconnect();
-            }
-            catch (Exception e) {
-                Console.WriteLine(e.ToString());
-            }
+            return newClient;
         }
+
+        //public void Send(MpDeviceEndpoint sep, String message) {
+        //    try {
+        //        // Create a TcpClient.
+        //        // Note, for this client to work you need to have a TcpServer
+        //        // connected to the same address as specified by the server, port
+        //        // combination.
+        //        TcpClient client = new TcpClient(sep.IPEndPoint);
+
+        //        // Translate the passed message into ASCII and store it as a Byte array.
+        //        Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
+
+        //        // Get a client stream for reading and writing.
+        //        //  Stream stream = client.GetStream();
+
+        //        NetworkStream stream = client.GetStream();
+
+        //        // Send the message to the connected TcpServer.
+        //        stream.Write(data, 0, data.Length);
+
+        //        Console.WriteLine("Sent: {0}", message);
+
+        //        // Receive the TcpServer.response.
+
+        //        // Buffer to store the response bytes.
+        //        data = new Byte[256];
+
+        //        // String to store the response ASCII representation.
+        //        String responseData = String.Empty;
+
+        //        // Read the first batch of the TcpServer response bytes.
+        //        Int32 bytes = stream.Read(data, 0, data.Length);
+        //        responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
+        //        Console.WriteLine("Received: {0}", responseData);
+
+        //        // Close everything.
+        //        stream.Close();
+        //        client.Close();
+        //    }
+        //    catch (ArgumentNullException e) {
+        //        Console.WriteLine("ArgumentNullException: {0}", e);
+        //    }
+        //    catch (SocketException e) {
+        //        Console.WriteLine("SocketException: {0}", e);
+        //    }
+
+        //    Console.WriteLine("\n Press Enter to continue...");
+        //    Console.Read();
+        //}
+
+        //public void StartClient(string hostIp, int hostPort) {
+        //    _hostIp = hostIp;
+        //    _hostPort = hostPort;
+        //    try {
+        //        //_client = Connect();
+
+        //        // Send test data to the remote device.  
+        //        Send("This is a test<EOF>");
+        //        sendDone.WaitOne();
+
+        //        // Receive the response from the remote device.  
+        //        Receive();
+        //        receiveDone.WaitOne();
+
+        //        // Write the response to the console.  
+        //        Console.WriteLine("Response received : {0}", response);
+
+        //        Disconnect();
+        //    }
+        //    catch (Exception e) {
+        //        Console.WriteLine(e.ToString());
+        //    }
+        //}
 
         public void Disconnect() {
             var client = Connect();
@@ -81,30 +142,35 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Methods
+        private MpSocketClient(MpDeviceEndpoint sep) {
+            _sep = sep;
+        }
+
         private Socket Connect() {
             // Establish the remote endpoint for the socket.  
             // The name of the
             // remote device is "host.contoso.com".  
-            var ipHostInfo = Dns.GetHostEntry(_hostIp);
-            IPAddress ipAddress = null;
-            foreach (var ipa in ipHostInfo.AddressList) {
-                if (ipa.ToString() == _hostIp) {
-                    ipAddress = ipa;
-                }
-            }
-            if (ipAddress == null) {
-                throw new Exception($"Unable to connect to socket server at {_hostIp}:{_hostPort}");
-            }
-            var remoteEP = new IPEndPoint(ipAddress, _hostPort);
+            //var ipHostInfo = Dns.GetHostEntry(IPAddress.Parse(_hostIp));
+            //IPAddress ipAddress = null;
+            //foreach (var ipa in ipHostInfo.AddressList) {
+            //    if (ipa.ToString() == _hostIp) {
+            //        ipAddress = ipa;
+            //    }
+            //}
+            //if (ipAddress == null) {
+            //    throw new Exception($"Unable to connect to socket server at {_hostIp}:{_hostPort}");
+            //}
+            //var ip = IPAddress.Parse(_hostIp); 
+            //var remoteEP = new IPEndPoint(ip, _hostPort);
             // Create a TCP/IP socket.  
             var client = new Socket(
-                ipAddress.AddressFamily,
+                _sep.IPEndPoint.AddressFamily,
                 SocketType.Stream,
                 ProtocolType.Tcp);
 
             // Connect to the remote endpoint.  
             client.BeginConnect(
-                remoteEP,
+                _sep.IPEndPoint,
                 new AsyncCallback(ConnectCallback),
                 client);
 
@@ -112,6 +178,7 @@ namespace MonkeyPaste {
 
             return client;
         }
+
         private void ConnectCallback(IAsyncResult ar) {
             try {
                 // Retrieve the socket from the state object.  
@@ -129,6 +196,7 @@ namespace MonkeyPaste {
             }
             catch (Exception e) {
                 Console.WriteLine(e.ToString());
+                OnError?.Invoke(this, e.ToString());
             }
         }
 
@@ -137,7 +205,7 @@ namespace MonkeyPaste {
             Debug.Assert(client != null, @"Cannot receive client is null");
             try {
                 // Create the state object.  
-                MpSocketStateObject state = new MpSocketStateObject(_hostPort);
+                MpSocketStateObject state = new MpSocketStateObject(_sep.PortNum);
                 state.workSocket = client;
 
                 // Begin receiving the data from the remote device.  
@@ -151,6 +219,7 @@ namespace MonkeyPaste {
             }
             catch (Exception e) {
                 Console.WriteLine(e.ToString());
+                OnError?.Invoke(this, e.ToString());
             }
         }
 
@@ -189,9 +258,9 @@ namespace MonkeyPaste {
             }
             catch (Exception e) {
                 Console.WriteLine(e.ToString());
+                OnError?.Invoke(this, e.ToString());
             }
         }
-
 
         private void SendCallback(IAsyncResult ar) {
             try {
@@ -204,9 +273,11 @@ namespace MonkeyPaste {
 
                 // Signal that all bytes have been sent.  
                 sendDone.Set();
+                OnSend?.Invoke(this, string.Empty);
             }
             catch (Exception e) {
                 Console.WriteLine(e.ToString());
+                OnError?.Invoke(this, e.ToString());
             }
         }
         #endregion

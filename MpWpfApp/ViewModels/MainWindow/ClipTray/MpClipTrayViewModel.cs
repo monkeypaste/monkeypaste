@@ -657,7 +657,7 @@ namespace MpWpfApp {
 
             //MpHtmlToRtfConverter.Instance.Test();
             //MpRtfToHtmlConverter.Instance.Test();
-            MonkeyPaste.MpSyncManager.Instance.Init(MpDb.Instance, MpHelpers.Instance.GetExternalIpAddress(),44376);
+            //MonkeyPaste.MpSyncManager.Instance.Init(MpDb.Instance, MpHelpers.Instance.GetExternalIpAddress());
         }
 
         private int GetDropIdx(Point mp) {

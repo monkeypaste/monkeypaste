@@ -18,9 +18,9 @@ namespace MonkeyPaste {
         
         public Guid Guid { get; set; }
 
-        public DateTime LastModifiedDateTime { get; set; }
-        public DateTime LastSyncDateTime { get; set; }
-
-        public DateTime DeleteDateTime { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime Modified { get; set; }
+        public DateTime Synced { get; set; }
+        public DateTime Deleted { get; set; }
     }
 }

@@ -13,7 +13,7 @@ namespace MonkeyPaste {
             MpTempFileManager.Instance.Init();
             //MpSocketClient.StartClient("192.168.43.209");
 
-            MpSyncManager.Instance.Init(MpDb.Instance, MpHelpers.Instance.GetExternalIpAddress(),29675);
+            MpSyncManager.Instance.Init(MpDb.Instance, @"2600:387:b:9a2::64");
 
             TagCollectionViewModel = new MpTagTileCollectionViewModel();
 

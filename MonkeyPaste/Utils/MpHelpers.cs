@@ -66,7 +66,7 @@ public class MpHelpers {
         }
 
         public string GetNewAccessToken() {
-            return GetRandomString(Rand.Next(20, 50), AlphaNumericChars + OtherChars);
+            return GetRandomString(Rand.Next(20, 50), AlphaNumericChars);
         }
 
         public bool IsStringCsv(string text) {
