@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 namespace MpWpfApp {
     public class MpDbImage : MpDbObject {
         public int DbImageId { get; set; }
+        public Guid DbImageGuid { get; set; }
 
         public BitmapSource DbImage { get; set; }
 
@@ -18,6 +19,7 @@ namespace MpWpfApp {
         public MpDbImage() { }
 
         public MpDbImage(BitmapSource img) {
+            DbImageGuid = Guid.NewGuid();
             DbImage = img;
             DbImageBase64 = MpHelpers.Instance.ConvertBitmapSourceToBase64String(DbImage);
         }
@@ -44,6 +46,7 @@ namespace MpWpfApp {
 
         public override void LoadDataRow(DataRow dr) {
             DbImageId = Convert.ToInt32(dr["pk_MpDbImageId"].ToString());
+            DbImageGuid = Guid.Parse(dr["MpDbImageGuid"].ToString());
             //DbImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["ImageBlob"]);
             DbImageBase64 = dr["ImageBase64"].ToString();
             DbImage = MpHelpers.Instance.ConvertStringToBitmapSource(DbImageBase64);
@@ -53,18 +56,20 @@ namespace MpWpfApp {
             string imgStr = DbImageBase64;//MpHelpers.Instance.ConvertBitmapSourceToBase64String(DbImage);
             if (DbImageId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpDbImage(ImageBase64) values(@ib64)",
+                    "insert into MpDbImage(MpDbImageGuid,ImageBase64) values(@dbig,@ib64)",
                     new Dictionary<string, object> {
+                        { "@dbig",DbImageGuid.ToString() },
                         { "@ib64", imgStr }
-                    });
+                    },DbImageGuid.ToString());
                 DbImageId = MpDb.Instance.GetLastRowId("MpDbImage", "pk_MpDbImageId");
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpDbImage set ImageBase64=@ib64 where pk_MpDbImageId=@dbiid",
+                    "update MpDbImage set MpDbImageGuid=@dbig, ImageBase64=@ib64 where pk_MpDbImageId=@dbiid",
                     new Dictionary<string, object> {
+                        { "@dbig", DbImageGuid.ToString() },
                         { "@dbiid", DbImageId },
                         { "@ib64", imgStr  }
-                    });
+                    },DbImageGuid.ToString());
             }
         }
 
@@ -73,7 +78,7 @@ namespace MpWpfApp {
                 "delete from MpDbImage where pk_MpDbImageId=@tid",
                 new Dictionary<string, object> {
                     { "@tid", DbImageId }
-                });
+                },DbImageGuid.ToString());
         }
     }
 }

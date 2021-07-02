@@ -65,6 +65,22 @@ namespace MonkeyPaste {
         [Column("pk_MpUrlDomainId")]
         public override int Id { get; set; }
 
+        [Column("MpUrlDomainGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        [Ignore]
+        public Guid UrlDomainGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
         public string UrlDomainPath { get; set; } = string.Empty;
         public string UrlDomainTitle { get; set; } = string.Empty;
 
@@ -99,6 +115,10 @@ namespace MonkeyPaste {
                 }
             }
         }        
-        public MpUrlDomain() : base(typeof(MpUrlDomain)) { }
+
+
+        public MpUrlDomain() : base(typeof(MpUrlDomain)) {
+            UrlDomainGuid = System.Guid.NewGuid();
+        }
     }
 }

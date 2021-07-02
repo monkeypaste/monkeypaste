@@ -10,14 +10,16 @@ namespace MonkeyPaste {
         public MpTagTileCollectionViewModel TagCollectionViewModel { get; set; }
         
         public MpMainShellViewModel() {
-            MpTempFileManager.Instance.Init();
-            //MpSocketClient.StartClient("192.168.43.209");
+            Task.Run(async () => {
+                await MpDb.Instance.Init();
 
-            MpSyncManager.Instance.Init(MpDb.Instance, @"2600:387:b:9a2::64");
+                MpTempFileManager.Instance.Init();
+                //MpSocketClient.StartClient("192.168.43.209");
 
-            TagCollectionViewModel = new MpTagTileCollectionViewModel();
+                MpSyncManager.Instance.Init(MpDb.Instance, false);
 
-
+                TagCollectionViewModel = new MpTagTileCollectionViewModel();
+            });
         }        
     }
 }

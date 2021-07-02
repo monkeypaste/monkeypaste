@@ -7,5 +7,6 @@ namespace MonkeyPaste {
     public interface MpISyncData {
         Task<List<object>> GetLocalData();
         Task ProcessRemoteData(List<object> remoteData);
+        string ConvertToJson(List<object> objList);
     }
 }

@@ -11,6 +11,7 @@ namespace MpWpfApp {
     public class MpIcon : MpDbObject {
         public static int TotalIconCount = 0;
         public int IconId { get; set; }
+        public Guid IconGuid { get; set; }
 
         public int DbIconImageId { get; set; }
         public int DbIconBorderImageId { get; set; }
@@ -86,6 +87,7 @@ namespace MpWpfApp {
         }
         public MpIcon() {
             IconId = 0;
+            IconGuid = Guid.NewGuid();
             IconImage = null;
             IconBorderImage = null;
             ++TotalIconCount;
@@ -99,6 +101,7 @@ namespace MpWpfApp {
             //    }
             //}
             if (dupIcon == null) {
+                IconGuid = Guid.NewGuid();
                 DbIconImage = new MpDbImage(iconImage);
                 DbIconBorderImage = new MpDbImage(MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.White));
                 DbIconBorderHighlightImage = new MpDbImage(MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Yellow));
@@ -113,6 +116,7 @@ namespace MpWpfApp {
                 ++TotalIconCount;
             } else {
                 IconId = dupIcon.IconId;
+                IconGuid = dupIcon.IconGuid;
                 DbIconImageId = dupIcon.DbIconImageId;
                 DbIconBorderImageId = dupIcon.DbIconBorderImageId;
                 DbIconBorderHighlightImageId = dupIcon.DbIconBorderHighlightImageId;
@@ -142,6 +146,8 @@ namespace MpWpfApp {
         }
         public override void LoadDataRow(DataRow dr) {
             IconId = Convert.ToInt32(dr["pk_MpIconId"].ToString());
+            IconGuid = Guid.Parse(dr["MpIconGuid"].ToString());
+
             DbIconImageId = Convert.ToInt32(dr["fk_IconDbImageId"].ToString());
             DbIconBorderImageId = Convert.ToInt32(dr["fk_IconBorderDbImageId"].ToString());
             DbIconBorderHighlightImageId = Convert.ToInt32(dr["fk_IconSelectedHighlightBorderDbImageId"].ToString());
@@ -187,9 +193,10 @@ namespace MpWpfApp {
 
             if (IconId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                         "insert into MpIcon(fk_IconDbImageId,fk_IconBorderDbImageId,fk_IconSelectedHighlightBorderDbImageId,fk_IconHighlightBorderDbImageId,fk_MpColorId1,fk_MpColorId2,fk_MpColorId3,fk_MpColorId4,fk_MpColorId5) " +
-                         "values(@iiid,@ibiid,@ishiid,@ihiid,@c1,@c2,@c3,@c4,@c5)",
+                         "insert into MpIcon(MpIconGuid,fk_IconDbImageId,fk_IconBorderDbImageId,fk_IconSelectedHighlightBorderDbImageId,fk_IconHighlightBorderDbImageId,fk_MpColorId1,fk_MpColorId2,fk_MpColorId3,fk_MpColorId4,fk_MpColorId5) " +
+                         "values(@ig,@iiid,@ibiid,@ishiid,@ihiid,@c1,@c2,@c3,@c4,@c5)",
                          new Dictionary<string, object> {
+                             { "@ig", IconGuid.ToString() },
                             { "@iiid", DbIconImageId },
                             { "@ibiid", DbIconBorderImageId },
                             { "@ishiid", DbIconBorderHighlightSelectedImageId },
@@ -199,24 +206,24 @@ namespace MpWpfApp {
                             { "@c3", ColorId[2] },
                             { "@c4", ColorId[3] },
                             { "@c5", ColorId[4] }
-                         });
+                         },IconGuid.ToString());
                 IconId = MpDb.Instance.GetLastRowId("MpIcon", "pk_MpIconId");
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpIcon set fk_IconDbImageId=@iiid,fk_IconBorderDbImageId=@ibiid,fk_IconSelectedHighlightBorderDbImageId=@ishiid,fk_IconHighlightBorderDbImageId=@ihiid, fk_MpColorId1=@c1,fk_MpColorId2=@c2,fk_MpColorId3=@c3,fk_MpColorId4=@c4,fk_MpColorId5=@c5 where pk_MpIconId=@iid",
+                    "update MpIcon set MpIconGuid=@ig, fk_IconDbImageId=@iiid,fk_IconBorderDbImageId=@ibiid,fk_IconSelectedHighlightBorderDbImageId=@ishiid,fk_IconHighlightBorderDbImageId=@ihiid, fk_MpColorId1=@c1,fk_MpColorId2=@c2,fk_MpColorId3=@c3,fk_MpColorId4=@c4,fk_MpColorId5=@c5 where pk_MpIconId=@iid",
                     new Dictionary<string, object> {
-
-                            { "@iiid", DbIconImageId },
-                            { "@ibiid", DbIconBorderImageId },
-                            { "@ishiid", DbIconBorderHighlightSelectedImageId },
-                            { "@ihiid", DbIconBorderHighlightImageId },
+                        { "@ig", IconGuid.ToString() },
+                        { "@iiid", DbIconImageId },
+                        { "@ibiid", DbIconBorderImageId },
+                        { "@ishiid", DbIconBorderHighlightSelectedImageId },
+                        { "@ihiid", DbIconBorderHighlightImageId },
                         { "@c1", ColorId[0] },
                         { "@c2", ColorId[1] },
                         { "@c3", ColorId[2] },
                         { "@c4", ColorId[3] },
                         { "@c5", ColorId[4] },
                         { "@iid", IconId }
-                    });
+                    },IconGuid.ToString());
             }
         }
 
@@ -240,7 +247,7 @@ namespace MpWpfApp {
                 "delete from MpIcon where pk_MpIconId=@cid",
                 new Dictionary<string, object> {
                     { "@cid", IconId }
-                });
+                },IconGuid.ToString());
         }
     }
 }

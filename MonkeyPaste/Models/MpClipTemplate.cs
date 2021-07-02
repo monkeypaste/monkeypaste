@@ -16,6 +16,22 @@ namespace MonkeyPaste {
         [Column("pk_MpCopyItemTemplateId")]
         public override int Id { get; set; }
 
+        [Column("MpCopyItemTemplateGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        [Ignore]
+        public Guid ClipTemplateGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
         [ForeignKey(typeof(MpClip))]
         [Column("fk_MpCopyItemId")]
         public int ClipId { get; set; }
@@ -30,6 +46,8 @@ namespace MonkeyPaste {
         public MpColor Color { get; set; }
         #endregion
 
-        public MpClipTemplate() : base(typeof(MpClipTemplate)) { }
+        public MpClipTemplate() : base(typeof(MpClipTemplate)) {
+             ClipTemplateGuid = System.Guid.NewGuid();
+        }
     }
 }

@@ -6,6 +6,8 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpTag : MpDbObject {
         public int TagId { get; set; }
+        public Guid TagGuid { get; set; }
+
         public int TagSortIdx { get; set; }
         public int ColorId { get; set; }
         public string TagName { get; set; }
@@ -14,6 +16,7 @@ namespace MpWpfApp {
         public int ParentTagId { get; set; }
 
         public MpTag(string tagName, Color tagColor, int tagSortIdx) {
+            TagGuid = Guid.NewGuid();
             TagName = tagName;
             TagColor = new MpColor((int)tagColor.R, (int)tagColor.G, (int)tagColor.B, 255);
             TagSortIdx = tagSortIdx;
@@ -43,6 +46,13 @@ namespace MpWpfApp {
         }
         public override void LoadDataRow(DataRow dr) {
             TagId = Convert.ToInt32(dr["pk_MpTagId"].ToString());
+            if (dr["MpTagGuid"] == null || dr["MpTagGuid"].GetType() == typeof(System.DBNull)) {
+                TagGuid = Guid.NewGuid();
+            } else {
+                TagGuid = Guid.Parse(dr["MpTagGuid"].ToString());
+            }
+            
+           
             TagSortIdx = Convert.ToInt32(dr["SortIdx"].ToString());
             TagName = dr["TagName"].ToString();
             ColorId = Convert.ToInt32(dr["fk_MpColorId"].ToString());
@@ -59,24 +69,26 @@ namespace MpWpfApp {
                 TagColor.WriteToDatabase();
                 ColorId = TagColor.ColorId;
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpTag(TagName,fk_MpColorId,SortIdx) values(@tn,@cid,@si)",
+                    "insert into MpTag(MpTagGuid,TagName,fk_MpColorId,SortIdx) values(@tg,@tn,@cid,@si)",
                     new Dictionary<string, object> {
+                        { "@tg", TagGuid.ToString() },
                         { "@tn", TagName },
                         { "@cid", ColorId },
                         { "@si", TagSortIdx }
-                    });
+                    },TagGuid.ToString());
                 TagId = MpDb.Instance.GetLastRowId("MpTag", "pk_MpTagId");
             } else {
                 TagColor.WriteToDatabase();
                 ColorId = TagColor.ColorId;
                 MpDb.Instance.ExecuteWrite(
-                    "update MpTag set TagName=@tn, fk_MpColorId=@cid, SortIdx=@si where pk_MpTagId=@tid",
+                    "update MpTag set MpTagGuid=@tg, TagName=@tn, fk_MpColorId=@cid, SortIdx=@si where pk_MpTagId=@tid",
                     new Dictionary<string, object> {
+                        { "@tg", TagGuid.ToString() },
                         { "@tn", TagName },
                         { "@cid", ColorId },
                         { "@tid", TagId },
                         { "@si", TagSortIdx }
-                    });
+                    },TagGuid.ToString());
             }
         }
         public bool IsLinkedWithCopyItem(MpCopyItem ci) {
@@ -108,19 +120,23 @@ namespace MpWpfApp {
                     { "@tid", TagId }
                 });
             int SortOrderIdx = dt.Rows.Count + 1;
+            var citg = Guid.NewGuid();
             MpDb.Instance.ExecuteWrite(
-                "insert into MpCopyItemTag(fk_MpCopyItemId,fk_MpTagId) values(@ciid,@tid)",
+                "insert into MpCopyItemTag(MpCopyItemTagGuid,fk_MpCopyItemId,fk_MpTagId) values(@citg,@ciid,@tid)",
                 new Dictionary<string, object> {
+                    { "@citg", citg.ToString() },
                     { "@ciid", ci.CopyItemId },
                     { "@tid", TagId }
-                });
+                },citg.ToString());
+            var cistog = Guid.NewGuid();
             MpDb.Instance.ExecuteWrite(
-                "insert into MpCopyItemSortTypeOrder(fk_MpCopyItemId,fk_MpSortTypeId,SortOrder) values(@ciid,@stid,@so)",
+                "insert into MpCopyItemSortTypeOrder(MpCopyItemSortTypeOrderGuid,fk_MpCopyItemId,fk_MpSortTypeId,SortOrder) values(@cistog,@ciid,@stid,@so)",
                 new Dictionary<string, object> {
+                    { "@cistog", cistog.ToString() },
                     { "@ciid", ci.CopyItemId },
                     { "@stid", TagId },
                     { "@so", SortOrderIdx }
-                });
+                },cistog.ToString());
                 //+ ci.CopyItemId + "," + this.TagId + "," + SortOrderIdx + ")");
             WriteToDatabase();
             Console.WriteLine("Tag link created between tag " + TagId + " with copyitem " + ci.CopyItemId);
@@ -134,12 +150,18 @@ namespace MpWpfApp {
                 //Console.WriteLine("MpTag Warning attempting to unlink non-linked tag " + TagId + " with copyitem " + ci.copyItemId + " ignoring...");
                 return;
             }
-            MpDb.Instance.ExecuteWrite(
-                "delete from MpCopyItemTag where fk_MpCopyItemId=@ciid and fk_MpTagId=@tid",
-                new Dictionary<string, object> {
-                    { "@ciid", ci.CopyItemId },
-                    { "@tid", TagId }
-                });
+            var dt = MpDb.Instance.Execute(@"select * from MpCopyItemTag where where fk_MpCopyItemId=@ciid and fk_MpTagId=@tid", new Dictionary<string, object> { { "@ciid", ci.CopyItemId },
+                    { "@tid", TagId } });
+            if (dt != null && dt.Rows.Count > 0) {
+                foreach (DataRow dr in dt.Rows) {
+                    var citg = Guid.Parse(dr["MpCopyItemTagGuid"].ToString());
+                    MpDb.Instance.ExecuteWrite(
+                    "delete from MpCopyItemTag where pk_MpCopyItemTagId=@citid",
+                    new System.Collections.Generic.Dictionary<string, object> {
+                        { "@citid", Convert.ToInt32(dr["pk_MpCopyItemTagId"].ToString()) }
+                        }, citg.ToString());
+                }
+            }
             //MpDb.Instance.ExecuteWrite("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
             Console.WriteLine("Tag link removed between tag " + TagId + " with copyitem " + ci.CopyItemId + " ignoring...");
         }
@@ -148,12 +170,19 @@ namespace MpWpfApp {
                 "delete from MpTag where pk_MpTagId=@tid",
                 new Dictionary<string, object> {
                     { "@tid", TagId }
-                });
-            MpDb.Instance.ExecuteWrite(
-                "delete from MpCopyItemTag where fk_MpTagId=@tid",
-                new Dictionary<string, object> {
-                    { "@tid", TagId }
-                });
+                },TagGuid.ToString());
+
+            var dt = MpDb.Instance.Execute(@"select * from MpCopyItemTag where where fk_MpTagId=@tid", new Dictionary<string, object> { { "@tid", TagId } });
+            if (dt != null && dt.Rows.Count > 0) {
+                foreach (DataRow dr in dt.Rows) {
+                    var citg = Guid.Parse(dr["MpCopyItemTagGuid"].ToString());
+                    MpDb.Instance.ExecuteWrite(
+                    "delete from MpCopyItemTag where pk_MpCopyItemTagId=@citid",
+                    new System.Collections.Generic.Dictionary<string, object> {
+                        { "@citid", Convert.ToInt32(dr["pk_MpCopyItemTagId"].ToString()) }
+                        }, citg.ToString());
+                }
+            }
             //MpDb.Instance.ExecuteWrite("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
         }
     }

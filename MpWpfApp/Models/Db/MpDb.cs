@@ -5,12 +5,14 @@ using System.Data.SqlClient;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using Microsoft.Win32;
 using MonkeyPaste;
+using Newtonsoft.Json;
 
 namespace MpWpfApp {
     public class MpDb : MonkeyPaste.MpISyncData {
@@ -35,6 +37,9 @@ namespace MpWpfApp {
             Init();
         }
         private void Init() {
+            if(string.IsNullOrEmpty(Properties.Settings.Default.ThisClientGuid)) {
+                Properties.Settings.Default.ThisClientGuid = Guid.NewGuid().ToString();
+            }
             InitUser(IdentityToken);
             InitClient(AccessToken);
             InitDb();
@@ -42,7 +47,7 @@ namespace MpWpfApp {
         }
         private void InitDb() {
             //Task.Run(async () => {
-            //    var t = new MonkeyPaste.MpTag() { TagColor = new MonkeyPaste.MpColor(1,1,0,1), TagName = "test", TagSortIdx = 4 };
+            //    var t = new MonkeyPaste.MpTag() { TagColor = new MonkeyPaste.MpColor(1, 1, 0, 1), TagName = "test", TagSortIdx = 4 };
             //    await MonkeyPaste.MpDb.Instance.AddItem<MonkeyPaste.MpTag>(t);
             //    var test = await MonkeyPaste.MpDb.Instance.GetItems<MonkeyPaste.MpTag>();
             //    MpConsole.Instance.WriteLine(test.ToString());
@@ -138,7 +143,12 @@ namespace MpWpfApp {
             }
             return conn;
         }
-        public int ExecuteWrite(string query, Dictionary<string, object> args) {
+        public int ExecuteWrite(string query, Dictionary<string, object> args, string dbObjectGuid = "", string sourceClientGuid = "") {
+            if(!string.IsNullOrEmpty(dbObjectGuid)) {
+                //only track objects providing a guid
+                MpDbLogTracker.TrackDbWrite(query, args, dbObjectGuid, sourceClientGuid);
+            }
+
             int numberOfRowsAffected;
             using (var con = SetConnection()) {
                 con.Open();
@@ -190,6 +200,7 @@ namespace MpWpfApp {
                 return numberOfRowsAffected;
             }
         }
+        
         public async Task<DataTable> ExecuteAsync(string query, Dictionary<string, object> args) {
             if (string.IsNullOrEmpty(query.Trim())) {
                 return null;
@@ -215,6 +226,7 @@ namespace MpWpfApp {
                 }
             }
         }
+        
         public void CloseDb() {
             SQLiteConnection sql_con = SetConnection();
             sql_con.Close();
@@ -251,14 +263,25 @@ namespace MpWpfApp {
         private string GetCreateString() {
             return @"
                     ---------------------------------------------------------------------------------------------------------------------
+                    CREATE TABLE MpDbLog (
+                      pk_MpDbLogId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , DbObjectGuid text
+                    , DbTableName text
+                    , LogActionType integer default 0
+                    , LogActionDateTime datetime
+                    , SourceClientGuid text
+                    );
+                    ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpDbImage (
                       pk_MpDbImageId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpDbImageGuid text
                     , ImageBase64 text
                     , ImageBlob image
                     );
                     ---------------------------------------------------------------------------------------------------------------------                    
                     CREATE TABLE MpTag (
                       pk_MpTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpTagGuid text
                     , fk_ParentTagId integer
                     , TagName text
                     , SortIdx integer
@@ -276,6 +299,7 @@ namespace MpWpfApp {
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpIcon (
                       pk_MpIconId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpIconGuid text
                     , fk_IconDbImageId integer
                     , fk_IconBorderDbImageId integer
                     , fk_IconSelectedHighlightBorderDbImageId integer
@@ -380,6 +404,7 @@ namespace MpWpfApp {
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCopyItemSortTypeOrder (
                       pk_MpCopyItemSortTypeOrderId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpCopyItemSortTypeOrderGuid text
                     , fk_MpCopyItemId integer NOT NULL
                     , fk_MpSortTypeId integer NOT NULL
                     , SortOrder integer NOT NULL 
@@ -389,6 +414,7 @@ namespace MpWpfApp {
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpClient (
                       pk_MpClientId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpClientGuid text
                     , fk_MpPlatformId integer NOT NULL
                     , Ip4Address text NULL 
                     , AccessToken text NULL 
@@ -399,6 +425,7 @@ namespace MpWpfApp {
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpColor (
                        pk_MpColorId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    ,  MpColorGuid text
                     ,  R integer not null default 255
                     ,  G integer not null default 255
                     ,  B integer not null default 255
@@ -408,6 +435,7 @@ namespace MpWpfApp {
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpApp (
                       pk_MpAppId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpAppGuid text
                     , SourcePath text NOT NULL 
                     , AppName text 
                     , IsAppRejected integer NOT NULL   
@@ -417,6 +445,7 @@ namespace MpWpfApp {
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpUrlDomain (
                       pk_MpUrlDomainId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpUrlDomainGuid text
                     , UrlDomainPath text NOT NULL 
                     , UrlDomainTitle text
                     , IsUrlDomainRejected integer NOT NULL DEFAULT 0   
@@ -426,6 +455,7 @@ namespace MpWpfApp {
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpUrl (
                       pk_MpUrlId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpUrlGuid text
                     , UrlPath text NOT NULL 
                     , UrlTitle text
                     , fk_MpUrlDomainId int NOT NULL
@@ -434,6 +464,7 @@ namespace MpWpfApp {
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCopyItem (
                       pk_MpCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpCopyItemGuid text
                     , fk_MpCopyItemTypeId integer NOT NULL
                     , fk_MpClientId integer NOT NULL
                     , fk_MpAppId integer NOT NULL
@@ -462,6 +493,7 @@ namespace MpWpfApp {
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCompositeCopyItem (
                       pk_MpCompositeCopyItemId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpCompositeCopyItemGuid text
                     , fk_MpCopyItemId INTEGER NOT NULL
                     , fk_ParentMpCopyItemId INTEGER NOT NULL
                     , SortOrderIdx INTEGER NOT NULL DEFAULT 0
@@ -471,6 +503,7 @@ namespace MpWpfApp {
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCopyItemTag (
                       pk_MpCopyItemTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpCopyItemTagGuid text
                     , fk_MpCopyItemId integer NOT NULL
                     , fk_MpTagId integer NOT NULL
                     , CONSTRAINT FK_MpCopyItemTag_0_0 FOREIGN KEY (fk_MpCopyItemId) REFERENCES MpCopyItem (pk_MpCopyItemId)
@@ -491,6 +524,7 @@ namespace MpWpfApp {
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpCopyItemTemplate (
                       pk_MpCopyItemTemplateId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , MpCopyItemTemplateGuid text
                     , fk_MpCopyItemId integer NOT NULL
                     , fk_MpColorId integer default 2
                     , HexColor text NOT NULL
@@ -501,6 +535,7 @@ namespace MpWpfApp {
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPasteHistory (
                       pk_MpPasteHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , SourceClientGuid text
                     , fk_MpCopyItemId integer NOT NULL
                     , fk_MpClientId integer NOT NULL
                     , fk_MpAppId integer                     
@@ -584,6 +619,7 @@ namespace MpWpfApp {
                 //if (color != null) {
                 //    c.ItemColor = color;
                 //}
+                c.ItemFlowDocument = null;
                 ld.Add(c);
             }
             await Task.Delay(10);
@@ -595,6 +631,15 @@ namespace MpWpfApp {
                 Console.WriteLine(rdi.ToString());
             }
             await Task.Delay(10);
+        }
+
+        public string ConvertToJson(List<object> objList) {
+            var sb = new StringBuilder();
+            foreach(var obj in objList) {
+                sb.Append(JsonConvert.SerializeObject(obj));
+            }
+            
+            return sb.ToString();
         }
         #endregion
     }

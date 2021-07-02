@@ -5,6 +5,8 @@ using System.Data;
 namespace MpWpfApp {
     public class MpClient : MpDbObject {
         public int ClientId { get; set; }
+        public Guid ClientGuid { get; set; }
+
         public int PlatformId { get; set; }
         public string Ip4Address { get; set; }
         public string AccessToken { get; set; }
@@ -13,6 +15,7 @@ namespace MpWpfApp {
 
         public MpClient(int clientId, int platformId, string ip4Address, string accessToken, DateTime loginTime) {
             ClientId = clientId;
+            ClientGuid = Guid.NewGuid();
             PlatformId = platformId;
             Ip4Address = ip4Address;
             AccessToken = accessToken;
@@ -30,6 +33,7 @@ namespace MpWpfApp {
         }
         public override void LoadDataRow(DataRow dr) {
             ClientId = Convert.ToInt32(dr["pk_MpClientId"].ToString());
+            ClientGuid = Guid.Parse(dr["MpClientGuid"].ToString());
             PlatformId = Convert.ToInt32(dr["fk_MpPlatformId"].ToString());
             Ip4Address = dr["Ip4Address"].ToString();
             AccessToken = dr["AccessToken"].ToString();
@@ -44,23 +48,25 @@ namespace MpWpfApp {
             }
             if (ClientId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpClient(fk_MpPlatformId,Ip4Address,AccessToken,LoginDateTime) values(@pId,@ip4,@at,@ldt)",
+                    "insert into MpClient(MpClientGuid, fk_MpPlatformId,Ip4Address,AccessToken,LoginDateTime) values(@cg,@pId,@ip4,@at,@ldt)",
                     new Dictionary<string, object> {
+                        { "@cg", ClientGuid.ToString() },
                         { "@pId", PlatformId },
                         { "@ip4", Ip4Address },
                         { "@at", AccessToken },
                         { "@ldt", LoginDateTime.ToString("yyyy-MM-dd HH:mm:ss") }
-                    });
+                    },ClientGuid.ToString());
 
                 ClientId = MpDb.Instance.GetLastRowId("MpClient", "pk_MpClientId");
             } else {
                 LogoutDateTime = DateTime.Now;
                 MpDb.Instance.ExecuteWrite(
-                    "update MpClient set LogoutDateTime=@lodt where pk_MpClientId=@cId",
+                    "update MpClient set MpClientGuid=@cg, LogoutDateTime=@lodt where pk_MpClientId=@cId",
                     new Dictionary<string, object> {
+                        { "@cg", ClientGuid.ToString() },
                         { "@lodt", LogoutDateTime.Value.ToString("yyyy-MM-dd HH:mm:ss") },
                         { "cId", ClientId }
-                    });
+                    }, ClientGuid.ToString());
             }
         }
     }

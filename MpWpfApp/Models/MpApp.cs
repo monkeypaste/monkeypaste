@@ -16,6 +16,7 @@ namespace MpWpfApp {
         public static int TotalAppCount = 0;
 
         public int AppId { get; set; } = 0;
+        public Guid AppGuid { get; set; }
         public int IconId { get; set; }
 
         public string AppPath { get; set; } = string.Empty;
@@ -103,6 +104,7 @@ namespace MpWpfApp {
         #endregion
 
         public MpApp(bool isAppRejected, IntPtr hwnd) {
+            AppGuid = Guid.NewGuid();
             AppPath = MpHelpers.Instance.GetProcessPath(hwnd);
             AppName = MpHelpers.Instance.GetProcessApplicationName(hwnd);
             IsAppRejected = isAppRejected;
@@ -116,6 +118,7 @@ namespace MpWpfApp {
         }
         public MpApp(string appPath) {
             //only called when user selects rejected app in settings
+            AppGuid = Guid.NewGuid();
             AppPath = appPath;
             AppName = appPath;
             IsAppRejected = true;
@@ -129,6 +132,7 @@ namespace MpWpfApp {
         }
 
         public MpApp(string url, bool isDomainRejected) {
+            AppGuid = Guid.NewGuid();
             AppPath = url;
             AppName = MpHelpers.Instance.GetUrlDomain(url);
             IsAppRejected = isDomainRejected;
@@ -148,6 +152,7 @@ namespace MpWpfApp {
         
         public override void LoadDataRow(DataRow dr) {
             AppId = Convert.ToInt32(dr["pk_MpAppId"].ToString());
+            AppGuid = Guid.Parse(dr["MpAppGuid"].ToString());
             AppPath = dr["SourcePath"].ToString();
             AppName = dr["AppName"].ToString();
             IconId = Convert.ToInt32(dr["fk_MpIconId"].ToString());
@@ -178,26 +183,28 @@ namespace MpWpfApp {
 
             if (AppId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "insert into MpApp(fk_MpIconId,SourcePath,IsAppRejected,AppName) " +
-                        "values (@iid,@sp,@iar,@an)",
+                        "insert into MpApp(MpAppGuid,fk_MpIconId,SourcePath,IsAppRejected,AppName) " +
+                        "values (@ag,@iid,@sp,@iar,@an)",
                         new Dictionary<string, object> {
+                            { "@ag", AppGuid.ToString() },
                             { "@iid", IconId },
                             { "@sp", AppPath },
                             { "@iar", Convert.ToInt32(IsAppRejected) },
                             { "@an", AppName },
-                        });
+                        },AppGuid.ToString());
                 AppId = MpDb.Instance.GetLastRowId("MpApp", "pk_MpAppId");                
             } else {
                 MpDb.Instance.ExecuteWrite(
                     //"update MpApp set IconBlob=@ib, IconBorderBlob=@ibb,IconSelectedHighlightBorderBlob=@ishbb,IconHighlightBorderBlob=@ihbb, IsAppRejected=@iar, SourcePath=@sp, AppName=@an, fk_MpColorId1=@c1,fk_MpColorId2=@c2,fk_MpColorId3=@c3,fk_MpColorId4=@c4,fk_MpColorId5=@c5 where pk_MpAppId=@aid",
-                    "update MpApp set fk_MpIconId=@iid, IsAppRejected=@iar, SourcePath=@sp, AppName=@an where pk_MpAppId=@aid",
+                    "update MpApp set MpAppGuid=@ag,fk_MpIconId=@iid, IsAppRejected=@iar, SourcePath=@sp, AppName=@an where pk_MpAppId=@aid",
                     new Dictionary<string, object> {
+                        { "@ag", AppGuid.ToString() },
                             { "@iid", IconId },
                         { "@iar", Convert.ToInt32(IsAppRejected) },
                         { "@sp", AppPath },
                         { "@an", AppName },
                         { "@aid", AppId }
-                    });
+                    }, AppGuid.ToString());
             }
 
             var al = GetAllApps().Where(x => x.AppId == AppId).ToList();
@@ -220,7 +227,7 @@ namespace MpWpfApp {
                 "delete from MpApp where pk_MpAppId=@aid",
                 new Dictionary<string, object> {
                     { "@aid", AppId }
-                });
+                }, AppGuid.ToString());
 
             var al = GetAllApps().Where(x => x.AppId == AppId).ToList();
             if (al.Count > 0) {

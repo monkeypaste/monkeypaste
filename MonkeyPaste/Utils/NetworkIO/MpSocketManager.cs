@@ -18,6 +18,8 @@ namespace MonkeyPaste {
         public MpSocketClient SocketClient { get; set; }
         public MpSocketListener SocketListener { get; set; }
 
+        public MpSessionManager SessionManager { get; set; }
+
         public ObservableCollection<MpDeviceEndpoint> AvailableEndPoints { get; set; } = new ObservableCollection<MpDeviceEndpoint>();
 
         public MpDeviceEndpoint ThisEndPoint { get; set; } = null;
@@ -41,23 +43,27 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public MpSocketManager(string connectResponse, string at) {
-            var deviceData = connectResponse.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < deviceData.Length; i += 4) {
-                var ep = new MpDeviceEndpoint(
-                        deviceData[i],
-                        Convert.ToInt32(deviceData[i + 1]),
-                        deviceData[i + 2],
-                        DateTime.Parse(deviceData[i + 3]));
-                AvailableEndPoints.Add(ep);
+        public MpSocketManager(string pubip, string privip) {
+            //ThisEndPoint = new MpDeviceEndpoint(pubip, privip, _upPort,);
 
-                if (ep.AccessToken == _accessToken) {
-                    ThisEndPoint = ep;
-                }
-            }
-            AvailableEndPoints.Add(ThisEndPoint);
+            //SessionManager = new MpSessionManager(_thisIp, _syncPort);
 
-            MpConsole.WriteLine(@"Session access token: " + _accessToken);
+            //var deviceData = connectResponse.Split(new string[] { "&" }, StringSplitOptions.RemoveEmptyEntries);
+            //for (int i = 0; i < deviceData.Length; i += 4) {
+            //    var ep = new MpDeviceEndpoint(
+            //            deviceData[i],
+            //            Convert.ToInt32(deviceData[i + 1]),
+            //            deviceData[i + 2],
+            //            DateTime.Parse(deviceData[i + 3]));
+            //    AvailableEndPoints.Add(ep);
+
+            //    if (ep.AccessToken == _accessToken) {
+            //        ThisEndPoint = ep;
+            //    }
+            //}
+            //AvailableEndPoints.Add(ThisEndPoint);
+
+            //MpConsole.WriteLine(@"Session access token: " + _accessToken);
         }
 
         public void Dispose() {
@@ -102,7 +108,7 @@ namespace MonkeyPaste {
                 //this device will become the server since its connected and 
                 //there are no other clients
                 //SocketListener.StartListening(_syncPort);
-                SocketListener.Start(ThisEndPoint);
+                //SocketListener.Start(ThisEndPoint);
             } else if (CanSync) {
                 //SocketClient.Send(HostEndPoint, "Hi Server!");
 

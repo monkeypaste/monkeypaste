@@ -4,6 +4,9 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Text;
 using System.Diagnostics;
+using Newtonsoft.Json;
+using System.IO;
+using System.Collections.Generic;
 
 namespace MonkeyPaste {
     public class MpSocketClient : IDisposable {
@@ -23,7 +26,7 @@ namespace MonkeyPaste {
         //private string _hostIp;
         //private int _hostPort;
 
-        private MpDeviceEndpoint _sep;
+        private MpDeviceEndpoint _sep, _cep;
         #endregion
 
         #region Events
@@ -33,8 +36,94 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public static MpSocketClient CreateClient(MpDeviceEndpoint sep, EventHandler<string> onSend, EventHandler<string> onReceive, EventHandler<string> onError) {
-            var newClient = new MpSocketClient(sep);
+        public static void Connect(String server, String message) {
+            try {
+                // Create a TcpClient.
+                // Note, for this client to work you need to have a TcpServer
+                // connected to the same address as specified by the server, port
+                // combination.
+                Int32 port = 44376;
+                TcpClient client = new TcpClient(server, port);
+
+                // Translate the passed message into ASCII and store it as a Byte array.
+                Byte[] data = System.Text.Encoding.ASCII.GetBytes(message);
+
+                // Get a client stream for reading and writing.
+                //  Stream stream = client.GetStream();
+
+                NetworkStream stream = client.GetStream();
+
+                // Send the message to the connected TcpServer.
+                stream.Write(data, 0, data.Length);
+
+                Console.WriteLine("Sent: {0}", message);
+
+                // Receive the TcpServer.response.
+
+                // Buffer to store the response bytes.
+                //data = new Byte[256];
+                //String responseData = string.Empty;
+                ////NetworkStream stream = client.GetStream();
+
+                //int i;
+                //Byte[] bytes = new Byte[256];
+                //var sb = new StringBuilder();
+                //// Loop to receive all the data sent by the client.
+                //while ((i = stream.Read(bytes, 0, bytes.Length)) != 0) {
+                //    // Translate data bytes to a ASCII string.
+                //    var substr = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                //    //Console.WriteLine("Received: {0}", substr);
+
+                //    // Process the data sent by the client.
+                //    //data = data.ToUpper();
+                //    sb.Append(substr);
+                //    //byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
+
+                //    //// Send back a response.
+                //    stream.Write(bytes, 0, bytes.Length);
+                //    //Console.WriteLine("Sent: {0}", data);
+                //}
+                
+                    
+                
+                //var sr = new StreamReader(stream);
+
+                // String to store the response ASCII representation.
+                
+
+                // Read the first batch of the TcpServer response bytes.
+                //var byteList = new List<byte>();
+                //do {
+                //    int curByte = stream.ReadByte();
+                //    if(curByte == -1) {
+                //        break;
+                //    }
+                //    byteList.Add((byte)curByte);
+                //} while (true);
+                ////Int32 bytes = stream.Read(data, 0, data.Length);
+                //responseData = System.Text.Encoding.ASCII.GetString(byteList.ToArray(), 0, byteList.Count);
+                
+                //Console.WriteLine("Received: {0}", sb.ToString());
+
+                // Close everything.
+                stream.Close();
+                client.Close();
+            }
+            catch (ArgumentNullException e) {
+                Console.WriteLine("ArgumentNullException: {0}", e);
+            }
+            catch (SocketException e) {
+                Console.WriteLine("SocketException: {0}", e);
+            }
+
+            Console.WriteLine("\n Press Enter to continue...");
+            Console.Read();
+        }
+
+        public static MpSocketClient CreateClient(
+            MpDeviceEndpoint sep, MpDeviceEndpoint cep,
+            EventHandler<string> onSend, EventHandler<string> onReceive, EventHandler<string> onError) {
+            var newClient = new MpSocketClient(sep,cep);
             newClient.OnSend += onSend;
             newClient.OnReceive += onReceive;
             newClient.OnError += onError;
@@ -142,8 +231,9 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Methods
-        private MpSocketClient(MpDeviceEndpoint sep) {
+        private MpSocketClient(MpDeviceEndpoint sep, MpDeviceEndpoint cep) {
             _sep = sep;
+            _cep = cep;
         }
 
         private Socket Connect() {
@@ -164,13 +254,13 @@ namespace MonkeyPaste {
             //var remoteEP = new IPEndPoint(ip, _hostPort);
             // Create a TCP/IP socket.  
             var client = new Socket(
-                _sep.IPEndPoint.AddressFamily,
+                _sep.PublicIPEndPoint.AddressFamily,
                 SocketType.Stream,
                 ProtocolType.Tcp);
 
             // Connect to the remote endpoint.  
             client.BeginConnect(
-                _sep.IPEndPoint,
+                _sep.PublicIPEndPoint,
                 new AsyncCallback(ConnectCallback),
                 client);
 
@@ -205,7 +295,7 @@ namespace MonkeyPaste {
             Debug.Assert(client != null, @"Cannot receive client is null");
             try {
                 // Create the state object.  
-                MpSocketStateObject state = new MpSocketStateObject(_sep.PortNum);
+                MpSocketStateObject state = new MpSocketStateObject(_sep.PublicPortNum);
                 state.workSocket = client;
 
                 // Begin receiving the data from the remote device.  

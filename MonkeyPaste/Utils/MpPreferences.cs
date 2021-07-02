@@ -109,6 +109,15 @@ namespace MonkeyPaste {
         #endregion
 
         #region User Properties
+        public string ThisClientGuidStr {
+            get {
+                return Preferences.Get(nameof(ThisClientGuidStr), Guid.NewGuid().ToString());
+            }
+            set {
+                Preferences.Set(nameof(ThisClientGuidStr), value);
+            }
+        }
+
         public string SslPrivateKey {
             get {
                 return Preferences.Get(nameof(SslPrivateKey), string.Empty);

@@ -6,11 +6,12 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace MonkeyPaste {
     public class MpSocketListener : IDisposable {
         #region Private Variables
-        
+        private MpDeviceEndpoint _sep;
         private int _port;
         // Thread signal.  
         private ManualResetEvent _allDone = new ManualResetEvent(false);
@@ -18,27 +19,106 @@ namespace MonkeyPaste {
 
         #region Properties
         public bool IsRunning { get; set; } = false;
+
+
         #endregion
 
         #region Events
-
+        public event EventHandler<string> OnSend;
         public event EventHandler<string> OnReceive;
+        public event EventHandler<string> OnError;
         #endregion
 
         #region Public Methods
-        public MpSocketListener() { }
+        public static MpSocketListener CreateListener(
+            MpDeviceEndpoint sep,
+            EventHandler<string> onSend, EventHandler<string> onReceive, EventHandler<string> onError) {
+            var newListener = new MpSocketListener(sep);
+            newListener.OnSend += onSend;
+            newListener.OnReceive += onReceive;
+            newListener.OnError += onError;
 
-        public void Start(MpDeviceEndpoint thisEndpoint) {
+            return newListener;
+        }
+        private MpSocketListener(MpDeviceEndpoint sep) {
+            _sep = sep;
+        }
+
+        public async Task Start2(MpISyncData syncData) {
+            TcpListener server = null;
+            try {
+                // Set the TcpListener on port 13000.
+                Int32 port = 44376;
+                //IPAddress localAddr = IPAddress.Parse("127.0.0.1");
+
+                // TcpListener server = new TcpListener(port);
+                server = new TcpListener(IPAddress.Any, port);
+
+                // Start listening for client requests.
+                server.Start();
+
+                // Buffer for reading data
+                Byte[] bytes = new Byte[256];
+                String data = null;
+
+                // Enter the listening loop.
+                while (true) {
+                    Console.Write("Waiting for a connection... ");
+
+                    // Perform a blocking call to accept requests.
+                    // You could also use server.AcceptSocket() here.
+                    TcpClient client = server.AcceptTcpClient();
+                    Console.WriteLine("Connected!");
+
+                    data = null;
+
+                    // Get a stream object for reading and writing
+                    NetworkStream stream = client.GetStream();
+
+                    int i;
+                    var sb = new StringBuilder();
+                    // Loop to receive all the data sent by the client.
+                    while ((i = stream.Read(bytes, 0, bytes.Length)) != 0) {
+                        // Translate data bytes to a ASCII string.
+                        data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                        //Console.WriteLine("Received: {0}", data);
+
+                        sb.Append(data);
+                        //byte[] msg = System.Text.Encoding.ASCII.GetBytes(@"From Server: "+data);
+
+                        //var msg = new List<byte>(Encoding.ASCII.GetBytes(data));
+                        ////// Send back a response.
+                        //for (int j = 0; j < msg.Count; j += 256) {
+                        //    int count = j + 256 < msg.Count ? 256 : msg.Count - j;
+                        //    var packet = msg.GetRange(j, count);
+                        //    stream.Write(packet.ToArray(), 0, packet.Count);
+                        //}
+
+                        //Console.WriteLine("Sent: {0}", data);
+                    }
+                    Console.WriteLine("Received: {0}", sb.ToString());
+                    // Shutdown and end connection
+                    client.Close();
+                }
+            }
+            catch (SocketException e) {
+                Console.WriteLine("SocketException: {0}", e);
+            } finally {
+                // Stop listening for new clients.
+                server.Stop();
+            }
+        }
+        public void Start() {
             Task.Run(() => {
                 TcpListener server = null;
                 try {
                     // Set the TcpListener on port 13000.
-                    Int32 port = thisEndpoint.PortNum;
+                    Int32 port = _sep.PublicPortNum;
                     //IPAddress localAddr = IPAddress.Parse("127.0.0.1");
                                          
                     //server = new TcpListener(port);
-                    server = new TcpListener(IPAddress.IPv6Any, port);
-                    server.AllowNatTraversal(true);
+                    server = new TcpListener(IPAddress.Any, port);
+                    //server.AllowNatTraversal(true);
 
                     // Start listening for client requests.
                     server.Start();
@@ -60,10 +140,14 @@ namespace MonkeyPaste {
                         data = null;
 
                         // Get a stream object for reading and writing
-                        NetworkStream stream = client.GetStream();
-
-                        int i;
                         var sb = new StringBuilder();
+                        NetworkStream stream = client.GetStream();
+                        if(!stream.CanRead || !stream.DataAvailable) {
+                            // Shutdown and end connection
+                            client.Close();
+                            continue;
+                        }
+                        int i;
                         // Loop to receive all the data sent by the client.
                         while ((i = stream.Read(bytes, 0, bytes.Length)) != 0) {
                             // Translate data bytes to a ASCII string.
@@ -80,20 +164,20 @@ namespace MonkeyPaste {
                             stream.Write(msg, 0, msg.Length);
                             Console.WriteLine("Sent: {0}", data);
                         }
+
                         OnReceive?.Invoke(this, sb.ToString());
-                        // Shutdown and end connection
-                        client.Close();
                     }
                 }
                 catch (SocketException e) {
                     Console.WriteLine("SocketException: {0}", e);
+                    OnError?.Invoke(this, e.ToString());
                 } finally {
                     // Stop listening for new clients.
                     server.Stop();
                 }
 
-                Console.WriteLine("\nHit enter to continue...");
-                Console.Read();
+                //Console.WriteLine("\nHit enter to continue...");
+                //Console.Read();
             });            
         }
 
@@ -231,10 +315,12 @@ namespace MonkeyPaste {
 
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
+                OnSend?.Invoke(this, string.Empty);
 
             }
             catch (Exception e) {
                 Console.WriteLine(e.ToString());
+                OnError?.Invoke(this, e.ToString());
             }
         }
         #endregion

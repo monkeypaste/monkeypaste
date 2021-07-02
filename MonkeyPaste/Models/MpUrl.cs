@@ -12,6 +12,22 @@ namespace MonkeyPaste {
         [Column("pk_MpUrlId")]
         public override int Id { get; set; }
 
+        [Column("MpUrlGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        [Ignore]
+        public Guid UrlGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
         [ForeignKey(typeof(MpUrlDomain))]
         [Column("fk_MpUrlDomainId")]
         public int UrlDomainId { get; set; }
@@ -22,7 +38,9 @@ namespace MonkeyPaste {
         public string UrlPath { get; set; }
         public string UrlTitle { get; set; }
 
-        public MpUrl() : base(typeof(MpUrl)) { }
+        public MpUrl() : base(typeof(MpUrl)) {
+            UrlGuid = System.Guid.NewGuid();
+        }
         public MpUrl(string urlPath, string urlTitle) : this() {
             UrlPath = urlPath;
             UrlTitle = urlTitle;

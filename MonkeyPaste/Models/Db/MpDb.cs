@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Xamarin.Forms;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace MonkeyPaste {
     public class MpDb : MpISyncData {
@@ -40,7 +41,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Methods
-        private async Task Init() {
+        public async Task Init() {
             if(_connectionAsync != null) {
                 return;
             }
@@ -56,9 +57,9 @@ namespace MonkeyPaste {
                 return;
             }
 
-            string dbPath = DependencyService.Get<MpIDbFilePath>().DbFilePath();
+            var dbPath = DependencyService.Get<MpIDbFilePath>().DbFilePath();
 
-            //File.Delete(dbPath);
+            File.Delete(dbPath);
 
             bool isNewDb = !File.Exists(dbPath);
 
@@ -101,6 +102,7 @@ namespace MonkeyPaste {
             await _connectionAsync.CreateTableAsync<MpTag>();
             await _connectionAsync.CreateTableAsync<MpUrl>();
             await _connectionAsync.CreateTableAsync<MpUrlDomain>();
+            await _connectionAsync.CreateTableAsync<MpDbLog>();
         }
 
         private async Task InitDefaultDataAsync() {
@@ -155,6 +157,8 @@ namespace MonkeyPaste {
             if (_connectionAsync == null) {
                 await Init();
             }
+            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Create, item as MpDbModelBase);
+
             await _connectionAsync.InsertAsync(item);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
         }
@@ -163,6 +167,8 @@ namespace MonkeyPaste {
             if (_connectionAsync == null) {
                 await Init();
             }
+            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Modify, item as MpDbModelBase);
+
             await _connectionAsync.UpdateAsync(item);
             OnItemUpdated?.Invoke(this, item as MpDbModelBase);
         }
@@ -179,6 +185,8 @@ namespace MonkeyPaste {
             if (_connectionAsync == null) {
                 await Init();
             }
+            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Delete, item as MpDbModelBase);
+
             await _connectionAsync.DeleteAsync<T>((item as MpDbModelBase).Id);
             OnItemDeleted?.Invoke(this, item as MpDbModelBase);
         }
@@ -227,6 +235,15 @@ namespace MonkeyPaste {
                 Console.WriteLine(rdi.ToString());
             }
             await Task.Delay(10);
+        }
+
+        public string ConvertToJson(List<object> objList) {
+            var sb = new StringBuilder();
+            foreach(var obj in objList) {
+                sb.Append(JsonConvert.SerializeObject(obj));
+            }
+            
+            return sb.ToString();
         }
         #endregion
     }

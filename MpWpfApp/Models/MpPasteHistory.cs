@@ -8,6 +8,8 @@ namespace MpWpfApp {
         public static int TotalPasteHistoryCount = 0;
 
         public int PasteHistoryId { get; set; }
+        public Guid SourceClientGuid { get; set; }
+
         public int CopyItemId { get; set; }
         public int DestAppId { get; set; }
         public DateTime PasteDateTime { get; set; }
@@ -20,6 +22,8 @@ namespace MpWpfApp {
         }
         public MpPasteHistory(MpCopyItem ci, IntPtr destHandle) {
             PasteHistoryId = 0;
+            SourceClientGuid = Guid.Parse(Properties.Settings.Default.ThisClientGuid);
+
             CopyItemId = ci.CopyItemId;
             _destHandle = destHandle;
             PasteDateTime = DateTime.Now;
@@ -38,6 +42,7 @@ namespace MpWpfApp {
         }
         public override void LoadDataRow(DataRow dr) {
             PasteHistoryId = Convert.ToInt32(dr["pk_MpPasteHistoryId"], CultureInfo.InvariantCulture);
+            SourceClientGuid = Guid.Parse(dr["SourceClientGuid"].ToString());
             CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemId"], CultureInfo.InvariantCulture);
             DestAppId = Convert.ToInt32(dr["fk_MpAppId"], CultureInfo.InvariantCulture);
             PasteDateTime = DateTime.Parse(dr["PasteDateTime"].ToString());
@@ -46,12 +51,13 @@ namespace MpWpfApp {
         public override void WriteToDatabase() {
             // TODO use _destHandle to find app but this tracking paste history is not critical so leaving DestAppId to null for now
             MpDb.Instance.ExecuteWrite(
-                "insert into MpPasteHistory(fk_MpCopyItemId,fk_MpClientId,PasteDateTime) values (@ciid, @cid, @pdt)",
+                "insert into MpPasteHistory(SourceClientGuid,fk_MpCopyItemId,fk_MpClientId,PasteDateTime) values (@phg,@ciid, @cid, @pdt)",
                 new Dictionary<string, object> {
+                    { "@phg", SourceClientGuid.ToString() },
                     { "@ciid", CopyItemId },
                     { "@cid", MpDb.Instance.Client.ClientId },
                     { "@pdt", PasteDateTime.ToString("yyyy-MM-dd HH:mm:ss") }
-                });
+                },SourceClientGuid.ToString());
             PasteHistoryId = MpDb.Instance.GetLastRowId("MpPasteHistory", "pk_MpPasteHistoryId");
         }
     }

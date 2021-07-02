@@ -16,6 +16,22 @@ namespace MonkeyPaste {
         [Column("pk_MpIconId")]
         public override int Id { get; set; }
 
+        [Column("MpIconGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        [Ignore]
+        public Guid IconGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
         [ForeignKey(typeof(MpDbImage))]
         [Column("fk_IconDbImageId")]
         public int IconImageId { get; set; }
@@ -109,7 +125,9 @@ namespace MonkeyPaste {
 
             return newIcon;
         }
-        public MpIcon() : base(typeof(MpIcon)) { }
+        public MpIcon() : base(typeof(MpIcon)) {
+            IconGuid = System.Guid.NewGuid();
+        }
 
 
         //public override void DeleteFromDatabase() {

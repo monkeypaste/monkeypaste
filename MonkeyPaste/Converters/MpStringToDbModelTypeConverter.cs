@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace MonkeyPaste {
+    public class MpStringToDbModelTypeConverter : MpIDbStringToDbObjectTypeConverter {
+        public Type Convert(string typeString) {
+            if (string.IsNullOrEmpty(typeString)) {
+                throw new Exception(@"typeString is null or empty");
+            }
+            if (!typeString.Contains(".")) {
+                throw new Exception(@"typeString must be namespace qualified");
+            }
+            if (!typeString.ToLower().StartsWith(@"mpwpfapp") &&
+               !typeString.ToLower().StartsWith(@"monkeypaste")) {
+                throw new Exception(@"typestring must be from a known namespace");
+            }
+            try {
+                if (typeString.ToLower().StartsWith(@"mpwpfapp")) {
+                    typeString = typeString.Replace(@"MpWpfApp", @"MonkeyPaste");
+                }
+                var asm = typeof(MpStringToDbModelTypeConverter).Assembly;
+                return asm.GetType(typeString);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteLine(@"Unknown type: " + typeString);
+                MpConsole.WriteLine(@"With exception: " + ex);
+            }
+            return null;
+        }
+    }
+}

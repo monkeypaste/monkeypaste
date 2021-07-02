@@ -14,6 +14,21 @@ namespace MonkeyPaste {
         [Column("pk_MpCopyItemId")]
         public override int Id { get; set; }
 
+        [Column("MpCopyItemGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+        [Ignore]
+        public Guid ClipGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
         [ForeignKey(typeof(MpApp))]
         [Column("fk_MpAppId")]
         public int AppId { get; set; }
@@ -213,7 +228,9 @@ namespace MonkeyPaste {
         }
         #endregion
 
-        public MpClip() : base(typeof(MpClip)) { }
+        public MpClip() : base(typeof(MpClip)) {
+            ClipGuid = System.Guid.NewGuid();
+        }
 
         public MpClip(object data, string sourceInfo) : this() {
             if(data == null) {

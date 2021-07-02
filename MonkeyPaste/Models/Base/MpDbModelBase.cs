@@ -15,9 +15,10 @@ namespace MonkeyPaste {
                 _AllDbObjectTypes.Add(subType);
             }
         }       
-        
-        public Guid Guid { get; set; }
 
+        [Ignore]
+        public string Guid { get; set; }
+        
         public DateTime Created { get; set; }
         public DateTime Modified { get; set; }
         public DateTime Synced { get; set; }

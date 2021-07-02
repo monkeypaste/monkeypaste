@@ -130,6 +130,7 @@
     <Compile Include="Converters\MpIntToWindowCommandConverter.cs" />
     <Compile Include="Converters\MpPointCollectionConverter.cs" />
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
+    <Compile Include="Converters\MpStringToDbObjectTypeConverter.cs" />
     <Compile Include="Converters\MpStringToImageConverter.cs" />
     <Compile Include="Converters\MpStringToIconConverter.cs" />
     <Compile Include="Converters\MpStringToBrushConverter.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="Models\Db\MpDb.cs" />
     <Compile Include="Models\MpApp.cs" />
     <Compile Include="Models\MpClient.cs" />
+    <Compile Include="Models\MpDbLog.cs" />
     <Compile Include="Models\MpColor.cs" />
     <Compile Include="Models\MpCopyItem.cs" />
     <Compile Include="Models\MpCopyItemTemplate.cs" />
@@ -179,6 +181,7 @@
     <Compile Include="Utils\FlowDocuments\MpFragment.cs" />
     <Compile Include="Utils\FlowDocuments\MpItemsContent.cs" />
     <Compile Include="Utils\MpConsole.cs" />
+    <Compile Include="Utils\MpDbLogTracker.cs" />
     <Compile Include="Utils\MpImageHistogram.cs" />
     <Compile Include="Utils\MpBrowserUrlDetector.cs" />
     <Compile Include="Utils\MpRegEx.cs" />

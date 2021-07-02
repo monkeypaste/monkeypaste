@@ -11,6 +11,8 @@ namespace MpWpfApp {
         public static int TotalColorCount = 0;
 
         public int ColorId { get; set; }
+        public Guid ColorGuid { get; set; }
+
         public Color Color {
             get {
                 return Color.FromArgb((byte)_a, (byte)_r, (byte)_g, (byte)_b);
@@ -104,6 +106,7 @@ namespace MpWpfApp {
             }
         }
         public MpColor(int r, int g, int b, int a) {
+            ColorGuid = Guid.NewGuid();
             _r = r;
             _g = g;
             _b = b;
@@ -116,6 +119,11 @@ namespace MpWpfApp {
         }
         public override void LoadDataRow(DataRow dr) {
             ColorId = Convert.ToInt32(dr["pk_MpColorId"].ToString());
+            if (dr["MpColorGuid"] == null || dr["MpColorGuid"].GetType() == typeof(System.DBNull)) {
+                ColorGuid = Guid.NewGuid();
+            } else {
+                ColorGuid = Guid.Parse(dr["MpColorGuid"].ToString());
+            }
             _r = Convert.ToInt32(dr["R"].ToString());
             _g = Convert.ToInt32(dr["G"].ToString());
             _b = Convert.ToInt32(dr["B"].ToString());
@@ -136,24 +144,26 @@ namespace MpWpfApp {
         public override void WriteToDatabase() {
             if (ColorId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "insert into MpColor(R,G,B,A) values(@r,@g,@b,@a)",
+                        "insert into MpColor(MpColorGuid,R,G,B,A) values(@cg,@r,@g,@b,@a)",
                         new System.Collections.Generic.Dictionary<string, object> {
+                            { "@cg",ColorGuid.ToString() },
                         { "@r", _r },
                         { "@g", _g },
                         { "@b", _b },
                         { "@a", _a }
-                    });
+                    },ColorGuid.ToString());
                 ColorId = MpDb.Instance.GetLastRowId("MpColor", "pk_MpColorId");
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpColor set R=@r, G=@g, B=@b, A=@a where pk_MpColorId=@cid",
+                    "update MpColor set MpColorGuid=@cg, R=@r, G=@g, B=@b, A=@a where pk_MpColorId=@cid",
                     new System.Collections.Generic.Dictionary<string, object> {
+                        { "@cg",ColorGuid.ToString() },
                         { "@r", _r },
                         { "@g", _g },
                         { "@b", _b },
                         { "@a", _a },
                         { "@cid", ColorId }
-                    });
+                    },ColorGuid.ToString());
             }
             var al = _AllColorList.Where(x => x.ColorId == ColorId).ToList();
             if (al.Count > 0) {
@@ -172,7 +182,7 @@ namespace MpWpfApp {
                 "delete from MpColor where pk_MpColorId=@cid",
                 new Dictionary<string, object> {
                     { "@cid", ColorId }
-                });
+                },ColorGuid.ToString());
         }
     }
 }

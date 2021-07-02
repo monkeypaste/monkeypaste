@@ -20,6 +20,22 @@ namespace MonkeyPaste {
         [Column("pk_MpColorId")]
         public override int Id { get; set; }
 
+        [Column("MpColorGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        [Ignore]
+        public Guid ColorGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
         [Ignore]
         public Color Color {
             get {
@@ -51,7 +67,9 @@ namespace MonkeyPaste {
             A = (byte)(a * 255);
         }
 
-        public MpColor(Color c) : this(c.R, c.G, c.B, c.A) { }
+        public MpColor(Color c) : this(c.R, c.G, c.B, c.A) { 
+            ColorGuid = System.Guid.NewGuid();
+        }
 
         public static async Task<MpColor> GetColorById(int colorId) {
             var allColors = await MpDb.Instance.GetItems<MpColor>();

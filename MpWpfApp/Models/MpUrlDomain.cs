@@ -17,6 +17,7 @@ namespace MpWpfApp {
         public static int TotalUrlDomainCount = 0;
 
         public int UrlDomainId { get; set; } = 0;
+        public Guid UrlDomainGuid { get; set; }
         public int FavIconId { get; set; }
 
         public string UrlDomainPath { get; set; } = string.Empty;
@@ -117,6 +118,7 @@ namespace MpWpfApp {
         #endregion
 
         public MpUrlDomain(string domainUrl, BitmapSource favIconBmpSrc, string domainTitle = "", bool isUrlDomainRejected = false) {
+            UrlDomainGuid = Guid.NewGuid();
             UrlDomainPath = domainUrl;
             UrlDomainTitle = string.IsNullOrEmpty(domainTitle) ? UrlDomainPath : domainTitle;
             IsUrlDomainRejected = isUrlDomainRejected;
@@ -138,6 +140,8 @@ namespace MpWpfApp {
 
         public override void LoadDataRow(DataRow dr) {
             UrlDomainId = Convert.ToInt32(dr["pk_MpUrlDomainId"].ToString());
+            UrlDomainGuid = Guid.Parse(dr["MpUrlDomainGuid"].ToString());
+
             UrlDomainPath = dr["UrlDomainPath"].ToString();
             UrlDomainTitle = dr["UrlDomainTitle"].ToString();
 
@@ -170,14 +174,15 @@ namespace MpWpfApp {
 
             if (UrlDomainId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "insert into MpUrlDomain(UrlDomainPath,UrlDomainTitle,fk_MpIconId,IsUrlDomainRejected) " +
-                        "values (@udp,@udt,@fib,@fibb,@fishbb,@fhbb,@iudr)",
+                        "insert into MpUrlDomain(MpUrlDomainGuid, UrlDomainPath,UrlDomainTitle,fk_MpIconId,IsUrlDomainRejected) " +
+                        "values (@udg,@udp,@udt,@fib,@fibb,@fishbb,@fhbb,@iudr)",
                         new Dictionary<string, object> {
+                            { "@udg",UrlDomainGuid.ToString() },
                             { "@udp", UrlDomainPath },
                             { "@udt", UrlDomainTitle },
                             { "@fib", FavIconId },
                             { "@iudr", Convert.ToInt32(IsUrlDomainRejected) }
-                        });
+                        },UrlDomainGuid.ToString());
                 UrlDomainId = MpDb.Instance.GetLastRowId("MpUrlDomain", "pk_MpUrlDomainId");
             }
 
@@ -200,7 +205,7 @@ namespace MpWpfApp {
                 "delete from MpUrlDomain where pk_MpUrlDomainId=@aid",
                 new Dictionary<string, object> {
                     { "@aid", UrlDomainId }
-                });
+                },UrlDomainGuid.ToString());
 
             var urldl = GetAllUrlDomains().Where(x => x.UrlDomainId == UrlDomainId).ToList();
             if (urldl.Count > 0) {

@@ -21,38 +21,17 @@ namespace MonkeyPaste {
                 return client;
             }
         }
-
-
-        private string _ip;
-        private int _port;
         #endregion
 
         #region Properties
-
-        public MpSocketManager SocketManager { get; set; }
         #region Events
-        public event EventHandler<string> OnConnected;
         #endregion
         #endregion
 
         #region Public Methods
-        public MpSessionManager(string ip, int port = 44376) {
-            _ip = ip;
-            _port = port;
-
-#if __MOBILE__
-// Register for connectivity changes, be sure to unsubscribe when finished
-            Connectivity.ConnectivityChanged += MpSessionManager_ConnectivityChanged;
-#endif
-
-            Task.Run(Initialize);
-        }
 
         public async Task<bool> Disconnect() {
-            if(SocketManager == null) {
-                return true;
-            }
-            return await SocketManager.Disconnect();
+            return true;
         }
 
         //public async Task Upload(object data) {
@@ -82,38 +61,37 @@ namespace MonkeyPaste {
 
         public void Dispose() {
             Disconnect();
-            SocketManager.Dispose();
         }
-        #endregion
 
-        #region Private Methods
-
-        private async Task Initialize() {
-            var at = MpHelpers.Instance.GetNewAccessToken();
-            
+        public async Task<string> Connect(MpDeviceEndpoint cep) {
             var uri = new Uri(
-                    string.Format(@"https://www.monkeypaste.com/api/connect.php?email={0}&ip={1}&port={2}&at={3}",
+                    string.Format(@"https://www.monkeypaste.com/api/connect.php?email={0}&passhash={1}&ip={2}&privip={3}port={4}&at={5}",
                     @"test@test.com",
-                    _ip,
-                    _port,
-                    at
+                    @"passhash",
+                    cep.PublicIp4Address,
+                    cep.PrivateIp4Address,
+                    cep.PublicPortNum,
+                    cep.AccessToken
                     ));
             try {
                 var response = await _client.GetAsync(uri);
                 if (response.IsSuccessStatusCode) {
-                    //OnConnected?.Invoke(this, at);
-                    //_accessToken = at;
-                    var result = await response.Content.ReadAsStringAsync();// ReadAsByteArrayAsync();
-                    SocketManager = new MpSocketManager(result, at);   
-                    //_accessToken = string.Empty;
+                    var result = await response.Content.ReadAsStringAsync();// ReadAsByteArrayAsync();                    
+                    MpConsole.WriteTraceLine(@"Connected to server with access token: " + uri.ToString());
+                    return result;
+                } else {
                     MpConsole.WriteTraceLine(@"Could not connect server: " + uri.ToString());
+                    return string.Empty;
                 }
             }
             catch (Exception ex) {
-                //_accessToken = string.Empty;
-                MpConsole.WriteTraceLine("", ex);
+                MpConsole.WriteTraceLine(@"Error connecting to server: " + ex);
+                return string.Empty;
             }
         }
+        #endregion
+
+        #region Private Methods
 
         #region Event Handlers
 

@@ -15,6 +15,22 @@ namespace MonkeyPaste {
         [Column("pk_MpCopyItemTagId")]
         public override int Id { get; set; }
 
+        [Column("MpCopyItemTagGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        [Ignore]
+        public Guid ClipTagGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
         [ForeignKey(typeof(MpTag))]
         [Column("fk_MpTagId")]
         public int TagId { get; set; }
@@ -46,6 +62,8 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public MpClipTag() : base(typeof(MpClipTag)) { }
+        public MpClipTag() : base(typeof(MpClipTag)) {
+            ClipTagGuid = System.Guid.NewGuid();
+        }
     }
 }

@@ -10,7 +10,23 @@ namespace MonkeyPaste {
     public class MpApp : MpDbModelBase, MpIClipSource {
         [Column("pk_MpAppId")]
         public override int Id { get; set; }
-        
+
+        [Column("MpAppGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        [Ignore]
+        public Guid AppGuid {
+            get {
+                if(string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
         [Indexed]
         [Column("SourcePath")]
         public string AppPath { get; set; } = string.Empty;
@@ -69,7 +85,9 @@ namespace MonkeyPaste {
 
             return newApp;
         }
-        public MpApp() : base(typeof(MpApp)) { }
+        public MpApp() : base(typeof(MpApp)) {
+            AppGuid = System.Guid.NewGuid();
+        }
 
         #region MpIClipSource Implementation
         public MpIcon SourceIcon => Icon;

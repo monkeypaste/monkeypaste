@@ -14,6 +14,22 @@ namespace MonkeyPaste {
         [Column("pk_MpPasteHistoryId")]
         public override int Id { get; set; }
 
+        [Column("SourceClientGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        [Ignore]
+        public Guid SourceClientGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
         [ForeignKey(typeof(MpClient))]
         [Column("fk_MpClientId")]
         public int ClientId { get; set; }

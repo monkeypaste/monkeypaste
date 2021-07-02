@@ -10,6 +10,21 @@ namespace MonkeyPaste {
         [PrimaryKey,AutoIncrement]
         public override int Id { get; set; }
 
+        [Column("MpDbImageGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        [Ignore]
+        public Guid DbImageGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
         //public byte[] ImageBytes { get; set; }
 
         public string ImageBase64 { get; set; }
@@ -18,6 +33,8 @@ namespace MonkeyPaste {
             var allicons = await MpDb.Instance.GetItems<MpDbImage>();
             return allicons.Where(x => x.Id == id).FirstOrDefault();
         }
-        public MpDbImage() : base(typeof(MpDbImage)) { }
+        public MpDbImage() : base(typeof(MpDbImage)) {
+            DbImageGuid = System.Guid.NewGuid();
+        }
     }
 }

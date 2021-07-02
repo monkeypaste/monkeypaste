@@ -364,5 +364,8 @@
     <Setting Name="DomainFavIconEndpoint" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://www.google.com/s2/favicons?https://www.google.com/s2/favicons?sz=64&amp;domain_url=</Value>
     </Setting>
+    <Setting Name="ThisClientGuid" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

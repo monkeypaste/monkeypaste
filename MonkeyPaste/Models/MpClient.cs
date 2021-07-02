@@ -9,6 +9,21 @@ namespace MonkeyPaste {
         [PrimaryKey,AutoIncrement]
         public override int Id { get; set; }
 
+        [Column("MpClientGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+        [Ignore]
+        public Guid ClientGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
+
         [ForeignKey(typeof(MpClientPlatform))]
         public int ClientPlatformId { get; set; }
 
@@ -19,6 +34,8 @@ namespace MonkeyPaste {
         [OneToOne]
         public MpClientPlatform ClientPlatform { get; set; }
 
-        public MpClient() : base(typeof(MpClient)) { }
+        public MpClient() : base(typeof(MpClient)) {
+            ClientGuid = System.Guid.NewGuid();
+        }
     }
 }

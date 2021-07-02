@@ -10,6 +10,8 @@ namespace MpWpfApp {
         public static int TotalUrlCount = 0;
 
         public int UrlId { get; set; }
+        public Guid UrlGuid { get; set; }
+
         public int UrlDomainId { get; set; }
         public string UrlPath { get; set; }
         public string UrlTitle { get; set; }
@@ -17,6 +19,7 @@ namespace MpWpfApp {
         public MpUrlDomain UrlDomain { get; set; }
 
         public MpUrl(string urlPath, string urlTitle) {
+            UrlGuid = Guid.NewGuid();
             UrlPath = urlPath;
             UrlTitle = urlTitle;
             UrlDomain = MpUrlDomain.GetUrlDomainByPath(MpHelpers.Instance.GetUrlDomain(urlPath));            
@@ -60,6 +63,7 @@ namespace MpWpfApp {
 
         public override void LoadDataRow(DataRow dr) {
             UrlId = Convert.ToInt32(dr["pk_MpUrlId"].ToString());
+            UrlGuid = Guid.Parse(dr["MpUrlGuid"].ToString());
             UrlPath = dr["UrlPath"].ToString();
             UrlTitle = dr["UrlTitle"].ToString();
             UrlDomainId = Convert.ToInt32(dr["fk_MpUrlDomainId"].ToString());
@@ -69,22 +73,24 @@ namespace MpWpfApp {
         public override void WriteToDatabase() {
             if (UrlId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpUrl(UrlPath,UrlTitle,fk_MpUrlDomainId) values(@up,@ut,@udid)",
+                    "insert into MpUrl(MpUrlGuid,UrlPath,UrlTitle,fk_MpUrlDomainId) values(@ug,@up,@ut,@udid)",
                     new Dictionary<string, object> {
+                        { "@ug", UrlGuid.ToString() },
                         { "@up", UrlPath },
                         { "@ut", UrlTitle },
                         { "@udid", UrlDomainId }
-                    });
+                    },UrlGuid.ToString());
                 UrlId = MpDb.Instance.GetLastRowId("MpUrl", "pk_MpUrlId");
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpUrl set UrlPath=@up, UrlTitle=@ut, fk_MpUrlDomainId=@udid where pk_MpUrlId=@uid",
+                    "update MpUrl set MpUrlGuid=@ug, UrlPath=@up, UrlTitle=@ut, fk_MpUrlDomainId=@udid where pk_MpUrlId=@uid",
                     new Dictionary<string, object> {
+                        { "@ug", UrlGuid.ToString() },
                         { "@uid",UrlId },
                         { "@up", UrlPath },
                         { "@ut", UrlTitle },
                         { "@udid", UrlDomainId }
-                    });
+                    },UrlGuid.ToString());
             }
 
             var urldl = GetAllUrls().Where(x => x.UrlId == UrlId).ToList();
@@ -100,7 +106,7 @@ namespace MpWpfApp {
                 "delete from MpUrl where pk_MpUrlId=@tid",
                 new Dictionary<string, object> {
                     { "@tid", UrlId }
-                });
+                },UrlGuid.ToString());
 
             var urldl = GetAllUrls().Where(x => x.UrlId == UrlId).ToList();
             if (urldl.Count > 0) {

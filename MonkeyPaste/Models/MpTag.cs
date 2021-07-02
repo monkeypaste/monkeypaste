@@ -6,9 +6,10 @@ using SQLiteNetExtensions;
 using System.Threading.Tasks;
 using System.Linq;
 using SQLiteNetExtensions.Attributes;
+using Newtonsoft.Json;
 
 namespace MonkeyPaste {
-    public class MpTag : MpDbModelBase {
+    public class MpTag : MpDbModelBase, MpISyncableDbObject {
         public const int RecentTagId = 1;
         public const int AllTagId = 2;
         public const int FavoritesTagId = 3;
@@ -18,6 +19,22 @@ namespace MonkeyPaste {
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpTagId")]
         public override int Id { get; set; }
+
+        [Column("MpTagGuid")]
+        public new string Guid { get => base.Guid; set => base.Guid = value; }
+
+        [Ignore]
+        public Guid TagGuid {
+            get {
+                if (string.IsNullOrEmpty(Guid)) {
+                    return System.Guid.Empty;
+                }
+                return System.Guid.Parse(Guid);
+            }
+            set {
+                Guid = value.ToString();
+            }
+        }
 
         [Column("SortIdx")]
         public int TagSortIdx { get; set; } = 1;
@@ -37,7 +54,11 @@ namespace MonkeyPaste {
         //public int ParentTagId { get; set; }
         #endregion
 
-        public MpTag() : base(typeof(MpTag)) { }
+
+
+        public MpTag() : base(typeof(MpTag)) {
+            TagGuid = System.Guid.NewGuid();
+        }
 
         public async Task<bool> IsLinkedWithClipAsync(MpClip clip) {
             if(clip == null) {
@@ -93,6 +114,24 @@ namespace MonkeyPaste {
             //    new Dictionary<string, object> {
             //        { "@tid", Id }
             //    });
+        }
+
+        public async Task<object> PopulateDbObjectFromJson(object obj) {
+            if(obj is not MpTag) {
+                throw new Exception(@"obj is not a MpTag");
+            }
+            var tag = obj as MpTag;
+            tag.TagColor = await MpColor.GetColorById(tag.ColorId);
+            // TODO also populate tag item list
+            return tag;
+        }
+
+        public string SerializeDbObject() {
+            return JsonConvert.SerializeObject(this);
+        }
+
+        public Type GetDbObjectType() {
+            return typeof(MpTag);
         }
     }
 }

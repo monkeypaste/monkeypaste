@@ -6,6 +6,8 @@ using System.Windows.Media;
 namespace MpWpfApp {
     public class MpCopyItemTemplate : MpDbObject {
         public int CopyItemTemplateId { get; set; } = 0;
+        public Guid CopyItemTemplateGuid { get; set; }
+
         public int CopyItemId { get; set; } = 0;
         public int ColorId { get; set; } = 0;
 
@@ -44,6 +46,7 @@ namespace MpWpfApp {
 
         public MpCopyItemTemplate(int ciid, Brush templateColor, string templateName) {
             CopyItemTemplateId = 0;
+            CopyItemTemplateGuid = Guid.NewGuid();
             CopyItemId = ciid;
             TemplateColor = templateColor;
             TemplateName = templateName;
@@ -54,6 +57,8 @@ namespace MpWpfApp {
         }
         public override void LoadDataRow(DataRow dr) {
             CopyItemTemplateId = Convert.ToInt32(dr["pk_MpCopyItemTemplateId"].ToString());
+            CopyItemTemplateGuid = Guid.Parse(dr["MpCopyItemTemplateGuid"].ToString());
+
             CopyItemId = Convert.ToInt32(dr["fk_MpCopyItemId"].ToString());
 
             ColorId = Convert.ToInt32(dr["fk_MpColorId"].ToString());
@@ -68,22 +73,24 @@ namespace MpWpfApp {
 
             if (CopyItemTemplateId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "insert into MpCopyItemTemplate(fk_MpCopyItemId,fk_MpColorId,TemplateName) values(@ciid,@cid,@tn)",
+                        "insert into MpCopyItemTemplate(MpCopyItemTemplateGuid,fk_MpCopyItemId,fk_MpColorId,TemplateName) values(@citg,@ciid,@cid,@tn)",
                         new System.Collections.Generic.Dictionary<string, object> {
-                        { "@ciid", CopyItemId },
-                        { "@cid", ColorId},
-                        { "@tn", TemplateName }
-                    });
+                            { "@citg", CopyItemTemplateGuid.ToString() },
+                            { "@ciid", CopyItemId },
+                            { "@cid", ColorId},
+                            { "@tn", TemplateName }
+                    },CopyItemTemplateGuid.ToString());
                 CopyItemTemplateId = MpDb.Instance.GetLastRowId("MpCopyItemTemplate", "pk_MpCopyItemTemplateId");
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpCopyItemTemplate set fk_MpCopyItemId=@ciid, fk_MpColorId=@cid, TemplateName=@tn where pk_MpCopyItemTemplateId=@citid",
+                    "update MpCopyItemTemplate set MpCopyItemTemplateGuid=@citg, fk_MpCopyItemId=@ciid, fk_MpColorId=@cid, TemplateName=@tn where pk_MpCopyItemTemplateId=@citid",
                     new System.Collections.Generic.Dictionary<string, object> {
-                        { "@citid", CopyItemTemplateId },
-                        { "@ciid", CopyItemId },
-                        { "@cid", ColorId },
-                        { "@tn", TemplateName }
-                    });
+                            { "@citg", CopyItemTemplateGuid.ToString() },
+                            { "@citid", CopyItemTemplateId },
+                            { "@ciid", CopyItemId },
+                            { "@cid", ColorId },
+                            { "@tn", TemplateName }
+                    },CopyItemTemplateGuid.ToString());
             }
         }
         public void DeleteFromDatabase() {
@@ -93,7 +100,7 @@ namespace MpWpfApp {
                 "delete from MpCopyItemTemplate where pk_MpCopyItemTemplateId=@citid",
                 new Dictionary<string, object> {
                     { "@citid", CopyItemTemplateId }
-                });
+                },CopyItemTemplateGuid.ToString());
         }
     }
 }
