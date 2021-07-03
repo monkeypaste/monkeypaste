@@ -139,6 +139,7 @@
     <Compile Include="Models\Db\MpDb.cs" />
     <Compile Include="Models\MpApp.cs" />
     <Compile Include="Models\MpClient.cs" />
+    <Compile Include="Models\MpSyncHistory.cs" />
     <Compile Include="Models\MpDbLog.cs" />
     <Compile Include="Models\MpColor.cs" />
     <Compile Include="Models\MpCopyItem.cs" />

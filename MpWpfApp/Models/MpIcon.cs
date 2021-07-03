@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Microsoft.Office.Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using static System.Data.Entity.Infrastructure.Design.Executor;
 
 
 namespace MpWpfApp {
@@ -18,10 +20,10 @@ namespace MpWpfApp {
         public int DbIconBorderHighlightImageId { get; set; }
         public int DbIconBorderHighlightSelectedImageId { get; set; }
 
-        public MpDbImage DbIconImage { get; set; }
-        public MpDbImage DbIconBorderImage { get; set; }
-        public MpDbImage DbIconBorderHighlightImage { get; set; }
-        public MpDbImage DbIconBorderHighlightSelectedImage { get; set; }
+        public MpDbImage DbIconImage { get; set; } = new MpDbImage();
+        public MpDbImage DbIconBorderImage { get; set; } = new MpDbImage();
+        public MpDbImage DbIconBorderHighlightImage { get; set; } = new MpDbImage();
+        public MpDbImage DbIconBorderHighlightSelectedImage { get; set; } = new MpDbImage();
 
         public int Color1Id { get; set; }
         public int Color2Id { get; set; }
@@ -85,15 +87,17 @@ namespace MpWpfApp {
             }
             return iconList;
         }
+
         public MpIcon() {
             IconId = 0;
             IconGuid = Guid.NewGuid();
             IconImage = null;
             IconBorderImage = null;
             ++TotalIconCount;
+            TrackHasChanged(true);
         }
-        public MpIcon(BitmapSource iconImage) : base() {
-            
+        public MpIcon(BitmapSource iconImage) : this() {
+
             MpIcon dupIcon = null;
             //foreach (var i in GetAllIcons()) {
             //    if (i.IconImage.IsEqual(IconImage)) {
@@ -127,9 +131,10 @@ namespace MpWpfApp {
                 DbIconBorderHighlightImage = dupIcon.DbIconBorderHighlightImage;
                 DbIconBorderHighlightSelectedImage = dupIcon.DbIconBorderHighlightSelectedImage;
             }
-            
+
         }
-        public MpIcon(int iconId) {
+
+        public MpIcon(int iconId) : this() {
             DataTable dt = MpDb.Instance.Execute(
                 "select * from MpIcon where pk_MpIconId=@iid",
                 new Dictionary<string, object> {
@@ -141,7 +146,7 @@ namespace MpWpfApp {
                 throw new Exception("MpIcon error trying access unknown icon w/ pk: " + iconId);
             }
         }
-        public MpIcon(DataRow dr) {
+        public MpIcon(DataRow dr) : this() {
             LoadDataRow(dr);
         }
         public override void LoadDataRow(DataRow dr) {
@@ -168,11 +173,30 @@ namespace MpWpfApp {
             //IconImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBlob"]);
             //IconBorderImage = MpHelpers.Instance.ConvertByteArrayToBitmapSource((byte[])dr["IconBorderBlob"]);
         }
+        private bool IsAltered() {
+            var dt = MpDb.Instance.Execute(
+            @"SELECT pk_MpIconId FROM MpIcon WHERE MpIconGuid=@ig AND fk_IconDbImageId = @iiid AND fk_IconBorderDbImageId = @ibiid AND fk_IconSelectedHighlightBorderDbImageId = @ishiid AND fk_IconHighlightBorderDbImageId = @ihiid AND fk_MpColorId1 = @c1 AND fk_MpColorId2 = @c2 AND fk_MpColorId3 = @c3 AND fk_MpColorId4 = @c4 AND fk_MpColorId5 = @c5",
+                            new Dictionary<string, object> {
+                        { "@ig", IconGuid.ToString() },
+                        { "@iiid", DbIconImageId },
+                        { "@ibiid", DbIconBorderImageId },
+                        { "@ishiid", DbIconBorderHighlightSelectedImageId },
+                        { "@ihiid", DbIconBorderHighlightImageId },
+                        { "@c1", ColorId[0] },
+                        { "@c2", ColorId[1] },
+                        { "@c3", ColorId[2] },
+                        { "@c4", ColorId[3] },
+                        { "@c5", ColorId[4] }
+            });
+            return dt.Rows.Count == 0;
+        }
         public override void WriteToDatabase() {
+            if (!IsAltered()) {
+                return;
+            }
             if (IconImage == null) {
                 throw new Exception("Error creating MpIcon Image cannot be null");
             }
-
             for (int i = 1; i <= PrimaryIconColorList.Count; i++) {
                 var c = PrimaryIconColorList[i - 1];
                 c.WriteToDatabase();
@@ -206,7 +230,7 @@ namespace MpWpfApp {
                             { "@c3", ColorId[2] },
                             { "@c4", ColorId[3] },
                             { "@c5", ColorId[4] }
-                         },IconGuid.ToString());
+                         }, IconGuid.ToString());
                 IconId = MpDb.Instance.GetLastRowId("MpIcon", "pk_MpIconId");
             } else {
                 MpDb.Instance.ExecuteWrite(
@@ -223,7 +247,7 @@ namespace MpWpfApp {
                         { "@c4", ColorId[3] },
                         { "@c5", ColorId[4] },
                         { "@iid", IconId }
-                    },IconGuid.ToString());
+                    }, IconGuid.ToString());
             }
         }
 
@@ -247,7 +271,7 @@ namespace MpWpfApp {
                 "delete from MpIcon where pk_MpIconId=@cid",
                 new Dictionary<string, object> {
                     { "@cid", IconId }
-                },IconGuid.ToString());
+                }, IconGuid.ToString());
         }
     }
 }

@@ -175,7 +175,7 @@ namespace MpWpfApp {
         }
 
         public virtual void OnPropertyChanged(string propertyName) {
-            this.VerifyPropertyName(propertyName);
+            //this.VerifyPropertyName(propertyName);
             PropertyChangedEventHandler handler = _propertyChanged;
             if (handler != null) {
                 var e = new PropertyChangedEventArgs(propertyName);

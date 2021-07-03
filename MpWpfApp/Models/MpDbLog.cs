@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using MonkeyPaste;
+using Newtonsoft.Json;
 
 namespace MpWpfApp {   
-    public class MpDbLog : MpDbObject {
+    public class MpDbLog : MpDbObject, MpISyncableDbObject {
         private static List<MpDbLog> _AllDbLogList = null;
         public static int TotalDbLogCount = 0;
 
@@ -129,6 +131,22 @@ namespace MpWpfApp {
                 new Dictionary<string, object> {
                     { "@cid", DbLogId }
                 });
+        }
+
+        public async Task<object> PopulateDbObjectFromJson(object obj) {
+            if (obj.GetType() != typeof(MpDbLog)) {
+                throw new Exception(@"obj is not a MpWpfApp.MpDbLog");
+            }
+            await Task.Delay(5);
+            return obj;
+        }
+
+        public string SerializeDbObject() {
+            return JsonConvert.SerializeObject(this);
+        }
+
+        public Type GetDbObjectType() {
+            return typeof(MpDbLog);
         }
     }
 }

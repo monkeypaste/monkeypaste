@@ -1,10 +1,13 @@
-﻿using System;
+﻿using MonkeyPaste;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 using System.Windows.Media;
 
 namespace MpWpfApp {
-    public class MpTag : MpDbObject {
+    public class MpTag : MpDbObject, MpISyncableDbObject {
         public int TagId { get; set; }
         public Guid TagGuid { get; set; }
 
@@ -13,8 +16,8 @@ namespace MpWpfApp {
         public string TagName { get; set; }
         public MpColor TagColor { get; set; }
         //unused
-        public int ParentTagId { get; set; }
-
+        public int ParentTagId { get; set; } = 0;
+        public MpTag() { }
         public MpTag(string tagName, Color tagColor, int tagSortIdx) {
             TagGuid = Guid.NewGuid();
             TagName = tagName;
@@ -59,13 +62,33 @@ namespace MpWpfApp {
             TagColor = new MpColor(ColorId);
         }
 
+        private bool IsAltered() {
+            var dt = MpDb.Instance.Execute(
+                @"SELECT pk_MpTagId FROM MpTag WHERE MpTagGuid=@tg AND fk_ParentTagId=@ptid AND TagName=@tn AND SortIdx=@si AND fk_MpColorId=@cid",
+                new Dictionary<string, object> {
+                    { "@tg", TagGuid.ToString() },
+                    { "@ptid", ParentTagId },
+                    { "@tn", TagName },
+                    { "@si", TagSortIdx },
+                    { "@cid", ColorId }
+                });
+            return dt.Rows.Count == 0;
+        }
+
         public override void WriteToDatabase() {
+            if (TagGuid == Guid.Empty) {
+                TagGuid = Guid.NewGuid();
+            }
+            if (!IsAltered()) {
+                return;
+            }
             if (string.IsNullOrEmpty(TagName)) {
                 Console.WriteLine("MpTag Error, cannot create nameless tag");
                 return;
             }
             //if new tag
             if (TagId == 0) {
+                
                 TagColor.WriteToDatabase();
                 ColorId = TagColor.ColorId;
                 MpDb.Instance.ExecuteWrite(
@@ -138,7 +161,7 @@ namespace MpWpfApp {
                     { "@so", SortOrderIdx }
                 },cistog.ToString());
                 //+ ci.CopyItemId + "," + this.TagId + "," + SortOrderIdx + ")");
-            WriteToDatabase();
+            //WriteToDatabase();
             Console.WriteLine("Tag link created between tag " + TagId + " with copyitem " + ci.CopyItemId);
             return true;
         }
@@ -184,6 +207,24 @@ namespace MpWpfApp {
                 }
             }
             //MpDb.Instance.ExecuteWrite("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
+        }
+
+        public async Task<object> PopulateDbObjectFromJson(object obj) {
+            if (obj.GetType() != typeof(MpTag)) {
+                throw new Exception(@"obj is not a MpTag");
+            }
+            var tag = obj as MpTag;
+            tag.TagColor = MpColor.GetColorById(tag.ColorId);
+            // TODO also populate tag item list
+            return tag;
+        }
+
+        public string SerializeDbObject() {
+            return JsonConvert.SerializeObject(this);
+        }
+
+        public Type GetDbObjectType() {
+            return typeof(MpTag);
         }
     }
 }

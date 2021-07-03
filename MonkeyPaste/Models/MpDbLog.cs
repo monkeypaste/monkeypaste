@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using MonkeyPaste;
+using Newtonsoft.Json;
 using SQLite;
 
 namespace MonkeyPaste {
@@ -15,7 +16,7 @@ namespace MonkeyPaste {
         Sync
     }
 
-    public class MpDbLog : MpDbModelBase {
+    public class MpDbLog : MpDbModelBase, MpISyncableDbObject {
         private static List<MpDbLog> _AllDbLogList = null;
         public static int TotalDbLogCount = 0;
 
@@ -73,6 +74,22 @@ namespace MonkeyPaste {
         public static async Task<MpDbLog> GetDbLogById(int DbLogId) {
             var allLogs = await MpDb.Instance.GetItems<MpDbLog>();
             return allLogs.Where(x => x.Id == DbLogId).FirstOrDefault();
+        }
+
+        public async Task<object> PopulateDbObjectFromJson(object obj) {
+            if (obj is not MpDbLog) {
+                throw new Exception(@"obj is not a MonkeyPaste.MpDbLog");
+            }
+            await Task.Delay(5);
+            return obj;
+        }
+
+        public string SerializeDbObject() {
+            return JsonConvert.SerializeObject(this);
+        }
+
+        public Type GetDbObjectType() {
+            return typeof(MpDbLog);
         }
 
         public MpDbLog() : base(typeof(MpDbLog)) { }

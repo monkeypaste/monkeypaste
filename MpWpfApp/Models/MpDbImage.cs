@@ -52,7 +52,20 @@ namespace MpWpfApp {
             DbImage = MpHelpers.Instance.ConvertStringToBitmapSource(DbImageBase64);
         }
 
+        private bool IsAltered() {
+            var dt = MpDb.Instance.Execute(
+                @"SELECT pk_MpDbImageId FROM MpDbImage WHERE MpDbImageGuid=@dbig AND ImageBase64=@ib64",
+                new Dictionary<string, object> {
+                    { "@dbig", DbImageGuid.ToString() },
+                    { "@ib64", DbImageBase64 }
+                });
+            return dt.Rows.Count == 0;
+        }
+
         public override void WriteToDatabase() {
+            if(!IsAltered()) {
+                return;
+            }
             string imgStr = DbImageBase64;//MpHelpers.Instance.ConvertBitmapSourceToBase64String(DbImage);
             if (DbImageId == 0) {
                 MpDb.Instance.ExecuteWrite(

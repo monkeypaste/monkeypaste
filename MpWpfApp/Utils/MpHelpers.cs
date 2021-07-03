@@ -2744,7 +2744,7 @@ namespace MpWpfApp {
             Process.Start(filename);
             return filename;
         }
-        public string GetCurrentIPAddress() {
+        public string GetLocalIp4Address() {
             Ping ping = new Ping();
             var replay = ping.Send(Dns.GetHostName());
 
@@ -2754,7 +2754,7 @@ namespace MpWpfApp {
             return null;
         }
 
-        public string GetExternalIpAddress() {
+        public string GetExternalIp4Address() {
             return new System.Net.WebClient().DownloadString("https://api.ipify.org");
         }
 

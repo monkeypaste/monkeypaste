@@ -15,7 +15,7 @@ using MonkeyPaste;
 using Newtonsoft.Json;
 
 namespace MpWpfApp {
-    public class MpDb : MonkeyPaste.MpISyncData {
+    public class MpDb : MonkeyPaste.MpISync {
         private static readonly Lazy<MpDb> _Lazy = new Lazy<MpDb>(() => new MpDb());
         public static MpDb Instance { get { return _Lazy.Value; } }
 
@@ -70,7 +70,7 @@ namespace MpWpfApp {
             // User = new MpUser() { IdentityToken = idToken };
         }
         public void InitClient(string accessToken) {
-            Client = new MpClient(0, 3, MpHelpers.Instance.GetCurrentIPAddress()/*.MapToIPv4()*/.ToString(), accessToken, DateTime.Now);
+            Client = new MpClient(0, 3, MpHelpers.Instance.GetLocalIp4Address()/*.MapToIPv4()*/.ToString(), accessToken, DateTime.Now);
         }
         public List<MpCopyItem> MergeCopyItemLists(List<MpCopyItem> listA, List<MpCopyItem> listB) {
             //sorts merged list by copy datetime
@@ -262,6 +262,11 @@ namespace MpWpfApp {
         }
         private string GetCreateString() {
             return @"
+                    CREATE TABLE MpSyncHistory (
+                      pk_MpSyncHistoryId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+                    , OtherClientGuid text
+                    , SyncDateTime datetime
+                    );
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpDbLog (
                       pk_MpDbLogId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -282,14 +287,13 @@ namespace MpWpfApp {
                     CREATE TABLE MpTag (
                       pk_MpTagId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , MpTagGuid text
-                    , fk_ParentTagId integer
+                    , fk_ParentTagId integer default 0
                     , TagName text
                     , SortIdx integer
                     , fk_MpColorId integer 
                     , CONSTRAINT FK_MpTag_0_0 FOREIGN KEY (fk_ParentTagId) REFERENCES MpTagType (pk_MpTagId)
                     , CONSTRAINT FK_MpApp_1_0 FOREIGN KEY (fk_MpColorId) REFERENCES MpColor (pk_MpColorId)
                     );
-                    INSERT INTO MpTag(TagName,fk_MpColorId,SortIdx) VALUES ('All',2,1),('Recent',4,0),('Favorites',3,2),('Help',1,3);
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpPlatformType (
                       pk_MpPlatformTypeId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -431,7 +435,6 @@ namespace MpWpfApp {
                     ,  B integer not null default 255
                     ,  A integer not null default 255
                     );
-                    INSERT INTO MpColor(R,G,B,A) VALUES (255,0,0,255),(0,255,0,255),(0,0,255,255),(255,255,0,255),(255,165,0,255);
                     ---------------------------------------------------------------------------------------------------------------------
                     CREATE TABLE MpApp (
                       pk_MpAppId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
@@ -640,6 +643,39 @@ namespace MpWpfApp {
             }
             
             return sb.ToString();
+        }
+
+        public string GetLocalIp4Address() {
+            return MpHelpers.Instance.GetLocalIp4Address();
+        }
+
+        public string GetExternalIp4Address() {
+            return MpHelpers.Instance.GetExternalIp4Address();
+        }
+
+        public async Task<string> GetLocalLog() {
+            var logItems = MpDbLog.GetAllDbLogs();
+            var dbol = new List<MpISyncableDbObject>();
+            foreach (var li in logItems) {
+                dbol.Add(li as MpISyncableDbObject);
+            }
+            var dbMsgStr = MpDbMessage.Create(dbol);
+            await Task.Delay(5);
+            return dbMsgStr; 
+            //MpConsole.WriteLine(dbMsgStr);
+
+            //var dbMsg = await MpDbMessage.Parse(dbMsgStr, new MpStringToDbModelTypeConverter());
+            //foreach (var jdbo in dbMsg.JsonDbObjects) {
+            //    MpConsole.WriteLine(@"Type: " + jdbo.DbObjectType.ToString());
+            //}
+        }
+
+        public Task<MpStreamMessage> ProcessRemoteDbLog(MpDbMessage dbLogMessage) {
+            throw new NotImplementedException();
+        }
+
+        public string GetThisClientGuid() {
+            return Properties.Settings.Default.ThisClientGuid;
         }
         #endregion
     }

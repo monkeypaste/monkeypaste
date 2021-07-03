@@ -24,6 +24,18 @@ namespace MpWpfApp {
 
         public abstract void WriteToDatabase();
 
+        protected void TrackHasChanged(bool doTracking) {
+            if(doTracking) {
+                PropertyChanged += MpDbObject_PropertyChanged;
+            } else {
+                PropertyChanged -= MpDbObject_PropertyChanged;
+            }
+        }
+
+        private void MpDbObject_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+            HasChanged = true;
+        }
+
         public override string ToString() {            
             string outstr = "";
             foreach (KeyValuePair<string, object> cd in columnData) {

@@ -1646,7 +1646,7 @@
                     //    updateVms = true;
                     //}
                     _copyItem = value;
-                    if (CopyItem != null && !MpMainWindowViewModel.IsApplicationLoading) {
+                    if (CopyItem != null && _wasAddedAtRuntime) {
                         CopyItem.WriteToDatabase();
                     }
 
@@ -1822,7 +1822,7 @@
                 return;
             }
             if (ci.CopyItemId == 0 && !MpMainWindowViewModel.IsApplicationLoading) {
-                ci.WriteToDatabase();
+                //ci.WriteToDatabase();
                 _wasAddedAtRuntime = true;
             }
 

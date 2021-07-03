@@ -42,6 +42,16 @@ public class MpHelpers {
         public Random Rand { get; set; }
 
         #region Documents
+        public string GetCheckSum(string theString) {
+            string hash;
+            using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create()) {
+                hash = BitConverter.ToString(
+                  md5.ComputeHash(Encoding.UTF8.GetBytes(theString))
+                ).Replace("-", String.Empty);
+            }
+            return hash;
+        }
+
         public const string AlphaNumericChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         public const string OtherChars = @"`~!@#$%^*()_-+[{]}\|;':,<./";
         private string _passwordChars = null;
@@ -494,7 +504,7 @@ public class MpHelpers {
             }
         }
 
-        public string GetUserIp4Address() {
+        public string GetLocalIp4Address() {
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
             IPAddress ipAddress = ipHostInfo.AddressList[ipHostInfo.AddressList.Length - 1];
             if (ipAddress != null) {
@@ -503,7 +513,7 @@ public class MpHelpers {
             return "0.0.0.0";
         }
 
-        public string GetExternalIpAddress() {
+        public string GetExternalIp4Address() {
             return new System.Net.WebClient().DownloadString("https://api.ipify.org");
         }
 

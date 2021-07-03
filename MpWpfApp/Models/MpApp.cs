@@ -103,7 +103,7 @@ namespace MpWpfApp {
         }
         #endregion
 
-        public MpApp(bool isAppRejected, IntPtr hwnd) {
+        public MpApp(bool isAppRejected, IntPtr hwnd) : this() {
             AppGuid = Guid.NewGuid();
             AppPath = MpHelpers.Instance.GetProcessPath(hwnd);
             AppName = MpHelpers.Instance.GetProcessApplicationName(hwnd);
@@ -116,7 +116,8 @@ namespace MpWpfApp {
             //IconSelectedHighlightBorderImage = MpHelpers.Instance.CreateBorder(IconImage, MpMeasurements.Instance.ClipTileTitleIconBorderSizeRatio, Colors.Pink);
             //PrimaryIconColorList = MpColor.CreatePrimaryColorList(IconImage);
         }
-        public MpApp(string appPath) {
+
+        public MpApp(string appPath) : this() {
             //only called when user selects rejected app in settings
             AppGuid = Guid.NewGuid();
             AppPath = appPath;
@@ -131,7 +132,7 @@ namespace MpWpfApp {
             //PrimaryIconColorList = MpColor.CreatePrimaryColorList(IconImage);
         }
 
-        public MpApp(string url, bool isDomainRejected) {
+        public MpApp(string url, bool isDomainRejected) : this() {
             AppGuid = Guid.NewGuid();
             AppPath = url;
             AppName = MpHelpers.Instance.GetUrlDomain(url);
@@ -144,9 +145,11 @@ namespace MpWpfApp {
             //PrimaryIconColorList = MpColor.CreatePrimaryColorList(IconImage);
         }
 
-        public MpApp() { }
+        public MpApp() {
+            TrackHasChanged(true);
+        }
 
-        public MpApp(DataRow dr) {
+        public MpApp(DataRow dr) : this() {
             LoadDataRow(dr);
         }
         
@@ -172,12 +175,28 @@ namespace MpWpfApp {
             //}      
         }
 
+        private bool IsAltered() {
+            var dt = MpDb.Instance.Execute(
+                @"SELECT pk_MpAppId FROM MpApp WHERE MpAppGuid=@ag AND SourcePath=@sp AND AppName=@an AND IsAppRejected=@iar AND fk_MpIconId=@iid",
+                new Dictionary<string, object> {
+                    { "@ag", AppGuid.ToString() },
+                    { "@sp", AppPath },
+                    { "@an", AppName },
+                    { "@iar", Convert.ToInt32(IsAppRejected) },
+                    { "@iid", IconId },
+                });
+            return dt.Rows.Count == 0;
+        }
+
         public override void WriteToDatabase() {
             //for (int i = 1; i <= PrimaryIconColorList.Count; i++) {
             //    var c = PrimaryIconColorList[i-1];
             //    c.WriteToDatabase();
             //    ColorId[i - 1] = c.ColorId;
             //}
+            if(!HasChanged) {
+                return;
+            }
             Icon.WriteToDatabase();
             IconId = Icon.IconId;
 

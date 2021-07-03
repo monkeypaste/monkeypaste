@@ -60,18 +60,7 @@ namespace MonkeyPaste {
             await Task.Delay(300);
             IsBusy = false;
 
-            //var tags = await MpDb.Instance.GetItems<MpTag>();
-            var dbol = new List<MpISyncableDbObject>();
-            foreach (var t in TagViewModels) {
-                dbol.Add(t.Tag as MpISyncableDbObject);
-            }
-            var dbMsgStr = MpDbMessage.Create(dbol);
-            MpConsole.WriteLine(dbMsgStr);
-
-            var dbMsg = await MpDbMessage.Parse(dbMsgStr, new MpStringToDbModelTypeConverter());
-            foreach (var jdbo in dbMsg.JsonDbObjects) {
-                MpConsole.WriteLine(@"Type: " + jdbo.DbObjectType.ToString());
-            }
+            
             return;
         }
 

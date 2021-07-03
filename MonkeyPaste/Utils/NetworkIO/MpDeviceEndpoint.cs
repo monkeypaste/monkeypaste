@@ -15,25 +15,35 @@ namespace MonkeyPaste {
         public string AccessToken { get; set; }
         public DateTime LoginDateTime { get; set; }
 
-        public IPEndPoint PublicIPEndPoint {
+        public bool IsPublic { get; set; } = false;
+
+        public string Ip4Address {
             get {
-                return new IPEndPoint(IPAddress.Parse(PublicIp4Address), PublicPortNum);
+                return IsPublic ? PublicIp4Address : PrivateIp4Address;
             }
         }
 
-        public IPEndPoint PrivateIPEndPoint {
+        public int PortNum {
             get {
-                return new IPEndPoint(IPAddress.Parse(PrivateIp4Address), PublicPortNum);
+                return IsPublic ? PublicPortNum : PrivatePortNum;
+            }
+        }
+
+        public string DeviceGuid { get; set; }
+
+        public IPEndPoint IPEndPoint {
+            get {
+                return new IPEndPoint(IPAddress.Parse(Ip4Address), PortNum);
             }
         }
         #endregion
 
         #region Public Methods
-        public MpDeviceEndpoint() : this(string.Empty, string.Empty, -1, string.Empty,DateTime.Now) { }
+        public MpDeviceEndpoint() { }
 
-        public MpDeviceEndpoint(string pubip, string priip,int port,string at,DateTime dt,int priport = -1) {
-            PublicIp4Address = pubip;
-            PrivateIp4Address = priip;
+        public MpDeviceEndpoint(MpISync sync, int port, string at,DateTime dt, int priport = -1) {
+            PublicIp4Address = sync.GetExternalIp4Address();
+            PrivateIp4Address = sync.GetLocalIp4Address();
             PublicPortNum = port;
             PrivatePortNum = priport < 0 ? PublicPortNum : priport;
             AccessToken = at;
@@ -41,7 +51,7 @@ namespace MonkeyPaste {
         }
 
         public override string ToString() {
-            return $"Endpoint {LoginDateTime.ToString()}   {PublicIp4Address}:{PublicPortNum} {AccessToken}";
+            return $"Endpoint {LoginDateTime.ToString()}   Public: {PublicIp4Address}:{PublicPortNum} Private: {PrivateIp4Address}:{PrivatePortNum} Active:{(IsPublic ? "Public":"Private")} {AccessToken}";
         }
         #endregion
     }

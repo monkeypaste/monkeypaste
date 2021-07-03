@@ -13,6 +13,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Header;
 //using Windows.Storage;
 
 namespace MpWpfApp {
@@ -76,6 +77,8 @@ namespace MpWpfApp {
         public string ItemPlainText { get; set; }
 
         public string ItemRichText { get; set; }
+
+        public string ItemHtml { get; set; }
 
         public BitmapSource ItemScreenshot { 
             get {
@@ -638,6 +641,7 @@ namespace MpWpfApp {
             Color tileColor,
             IntPtr hwnd,
             MpApp app) {
+            TrackHasChanged(true);
             CopyItemGuid = Guid.NewGuid();
             CopyItemType = itemType;
             CopyDateTime = DateTime.Now;
@@ -647,7 +651,7 @@ namespace MpWpfApp {
                 Title = title;
             }
             CopyCount = 1;
-            Client = new MpClient(0, 0, MpHelpers.Instance.GetCurrentIPAddress(), "unknown", DateTime.Now);
+            Client = new MpClient(0, 0, MpHelpers.Instance.GetLocalIp4Address(), "unknown", DateTime.Now);
             
             if(hwnd != IntPtr.Zero) {
                 //occurs for items added from clipboard
@@ -1096,6 +1100,8 @@ namespace MpWpfApp {
             Title = dr["Title"].ToString();
             CopyCount = Convert.ToInt32(dr["CopyCount"].ToString());
             ItemDescription = dr["ItemDescription"].ToString();
+            ItemRichText = dr["ItemRtf"].ToString();
+            ItemHtml = dr["ItemHtml"].ToString();
             PasteCount = Convert.ToInt32(dr["PasteCount"].ToString());
 
             ItemDbImageId = Convert.ToInt32(dr["fk_MpDbImageId"].ToString());
@@ -1106,7 +1112,7 @@ namespace MpWpfApp {
 
             ItemCsv = dr["ItemCsv"].ToString();
 
-            Client = new MpClient(0, 0, MpHelpers.Instance.GetCurrentIPAddress(), "unknown", DateTime.Now);
+            Client = new MpClient(0, 0, MpHelpers.Instance.GetLocalIp4Address(), "unknown", DateTime.Now);
             App = MpApp.GetAppById(appId);
             ItemColor = MpColor.GetColorById(colorId);
             if(ItemColor == null) {
@@ -1260,8 +1266,33 @@ namespace MpWpfApp {
             }
         }
 
+        private bool IsAltered() {
+            var dt = MpDb.Instance.Execute(
+                "SELECT pk_MpCopyItemId FROM MpCopyItem WHERE MpCopyItemGuid=@cig AND PasteCount=@pc AND fk_MpUrlId=@uid AND ItemDescription=@id AND ItemCsv=@icsv AND fk_MpCopyItemTypeId=@citd AND fk_MpClientId=@cid AND fk_MpAppId=@aid AND fk_MpColorId=@clrId AND Title=@t AND CopyCount=@cc AND ItemText=@it AND ItemRtf=@irtf AND ItemHtml=@ihtml AND fk_MpDbImageId=@ii",
+                        new Dictionary<string, object> {
+                            { "@cig",CopyItemGuid.ToString() },
+                            { "@pc", PasteCount },
+                            { "@uid", ItemUrl == null ? 0:ItemUrl.UrlId },
+                            { "@id", ItemDescription },
+                            { @"icsv",ItemCsv },
+                            { "@citd", (int)CopyItemType },
+                            { "@cid", Client.ClientId },
+                            { "@aid", App.AppId },
+                            { "@clrId", ItemColor.ColorId },
+                            { "@t", Title },
+                            { "@cc", CopyCount },
+                            { "@it", ItemPlainText },
+                            { "@irtf", ItemRichText },
+                            { "@ihtml", ItemHtml },
+                            { "@ii", ItemDbImageId}
+                        });
+            return dt.Rows.Count == 0;
+        }
         // still req'd if NoDb=true
         public override void WriteToDatabase() {
+            if(!IsAltered()) {
+                return;
+            }
             if(CopyItemId < 0) {
                 //when CopyItemId == -1 it means its a placeholder clip tile and shouldn't affect database
                 return;
@@ -1290,34 +1321,37 @@ namespace MpWpfApp {
             //if copyitem already exists
             if (CopyItemId > 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "update MpCopyItem set MpCopyItemGuid=@cig, PasteCount=@pc, fk_MpUrlId=@uid, ItemDescription=@id, ItemCsv=@icsv, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, fk_MpDbImageId=@ii where pk_MpCopyItemId=@ciid",
+                        "update MpCopyItem set MpCopyItemGuid=@cig, PasteCount=@pc, fk_MpUrlId=@uid, ItemDescription=@id, ItemCsv=@icsv, fk_MpCopyItemTypeId=@citd, fk_MpClientId=@cid, fk_MpAppId=@aid, fk_MpColorId=@clrId, Title=@t, CopyCount=@cc, ItemText=@it, ItemRtf=@irtf, ItemHtml=@ihtml, fk_MpDbImageId=@ii where pk_MpCopyItemId=@ciid",
                         new Dictionary<string, object> {
                             { "@cig",CopyItemGuid.ToString() },
                             { "@pc", PasteCount },
                             { "@uid", ItemUrl == null ? 0:ItemUrl.UrlId },
                             { "@id", ItemDescription },
                             { @"icsv",ItemCsv },
-                            //{ "@ts", MpHelpers.Instance.ConvertBitmapSourceToByteArray(ItemTitleSwirl) },
                             { "@citd", (int)CopyItemType },
                             { "@cid", Client.ClientId },
                             { "@aid", App.AppId },
                             { "@clrId", ItemColor.ColorId },
                             { "@t", Title },
                             { "@cc", CopyCount },
-                            { "@it", itemText },
+                            { "@it", ItemPlainText },
+                            { "@irtf", ItemRichText },
+                            { "@ihtml", ItemHtml },
                             { "@ii", ItemDbImageId},
                             { "@ciid", CopyItemId},
                         },CopyItemGuid.ToString());
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "insert into MpCopyItem(MpCopyItemGuid,PasteCount, ItemDescription, fk_MpUrlId, ItemCsv,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,fk_MpDbImageId) " + 
-                    "values (@cig,@pc,@id,@uid,@icsv,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
+                    "insert into MpCopyItem(ItemRtf,ItemHtml,MpCopyItemGuid,PasteCount, ItemDescription, fk_MpUrlId, ItemCsv,fk_MpCopyItemTypeId,fk_MpClientId,fk_MpAppId,fk_MpColorId,Title,CopyDateTime,CopyCount,ItemText,fk_MpDbImageId) " + 
+                    "values (@irtf,@ihtml,@cig,@pc,@id,@uid,@icsv,@citd,@cid,@aid,@clrId,@t,@cdt,@cc,@it,@ii)",
                     new Dictionary<string, object> {
                             { "@cig",CopyItemGuid.ToString() },
                             { "@pc", PasteCount },
                             { "@id", ItemDescription },
                             { "@uid", ItemUrl == null ? 0:ItemUrl.UrlId },
                             { "@icsv",ItemCsv },
+                            { "@irtf", ItemRichText },
+                            { "@ihtml", ItemHtml },
                             { "@citd", (int)CopyItemType },
                             { "@cid", Client.ClientId },
                             { "@aid", App.AppId },

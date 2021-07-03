@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public class MpDbImage : MpDbModelBase {
         [PrimaryKey,AutoIncrement]
+        [Column("pk_MpDbImageId")]
         public override int Id { get; set; }
 
         [Column("MpDbImageGuid")]

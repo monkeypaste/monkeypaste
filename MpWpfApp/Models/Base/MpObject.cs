@@ -4,6 +4,8 @@ using System.Diagnostics;
 
 namespace MpWpfApp {
     public abstract class MpObject : INotifyPropertyChanged {
+        public bool HasChanged { get; set; }
+
         public string DisplayName { get; set; }
         public bool ThrowOnInvalidPropertyName { get; private set; }
 
@@ -11,6 +13,7 @@ namespace MpWpfApp {
 
         protected virtual void OnPropertyChanged(string propertyName) {
             this.VerifyPropertyName(propertyName);
+            HasChanged = true;
             PropertyChangedEventHandler handler = this.PropertyChanged;
             if (handler != null) {
                 var e = new PropertyChangedEventArgs(propertyName);

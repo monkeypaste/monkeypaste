@@ -64,8 +64,65 @@ namespace MpWpfApp {
         #region Public Methods
 
         public MpTagTrayViewModel() : base() {
+            //INSERT INTO MpTag(TagName,fk_MpColorId,SortIdx) VALUES ('All',2,1),('Recent',4,0),('Favorites',3,2),('Help',1,3);
+            var allTags = MpTag.GetAllTags();
+            if(allTags.Count == 0) {
+                //occurs on first load
+                var green = new MpColor(0, 255, 0, 255) {
+                    ColorGuid = Guid.Parse("fec9579b-a580-4b02-af2f-d1b275812392")
+                };
+                green.WriteToDatabase();
+                var blue = new MpColor(0, 0, 255, 255) {
+                    ColorGuid = Guid.Parse("8b30650f-c616-4972-b4a7-a88d1022ae15")
+                };
+                blue.WriteToDatabase();
+                var yellow = new MpColor(255, 255, 0, 255) {
+                    ColorGuid = Guid.Parse("bb666db2-1762-4b18-a1da-dd678a458f7a")
+                };
+                yellow.WriteToDatabase();
+                var orange = new MpColor(255, 165, 0, 255) {
+                    ColorGuid = Guid.Parse("2c5a7c6f-042c-4890-92e5-5ccf088ee698")
+                };
+                orange.WriteToDatabase();
+
+                var t = new MpTag() {
+                    TagGuid = Guid.Parse("310ba30b-c541-4914-bd13-684a5e00a2d3"),
+                    TagName = "Recent",
+                    ColorId = green.ColorId,
+                    TagSortIdx = 0
+                };
+                t.WriteToDatabase();
+                allTags.Add(t);
+
+                t = new MpTag() {
+                    TagGuid = Guid.Parse("df388ecd-f717-4905-a35c-a8491da9c0e3"),
+                    TagName = "All",
+                    ColorId = blue.ColorId,
+                    TagSortIdx = 1
+                };
+                t.WriteToDatabase();
+                allTags.Add(t);
+
+                t = new MpTag() {
+                    TagGuid = Guid.Parse("54b61353-b031-4029-9bda-07f7ca55c123"),
+                    TagName = "Favorites",
+                    ColorId = yellow.ColorId,
+                    TagSortIdx = 2
+                };
+                t.WriteToDatabase();
+                allTags.Add(t);
+
+                t = new MpTag() {
+                    TagGuid = Guid.Parse("a0567976-dba6-48fc-9a7d-cbd306a4eaf3"),
+                    TagName = "Help",
+                    ColorId = orange.ColorId,
+                    TagSortIdx = 3
+                };
+                t.WriteToDatabase();
+                allTags.Add(t);
+            }
             //create tiles for all the tags
-            foreach (MpTag t in MpTag.GetAllTags()) {
+            foreach (MpTag t in allTags) {
                 this.Add(new MpTagTileViewModel(t));
             }
         }

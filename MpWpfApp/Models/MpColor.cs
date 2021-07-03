@@ -60,6 +60,17 @@ namespace MpWpfApp {
             return null;
         }
 
+        public static MpColor GetColorByGuid(string colorGuid) {
+            if (_AllColorList == null) {
+                GetAllColors();
+            }
+            var udbpl = _AllColorList.Where(x => x.ColorGuid.ToString() == colorGuid).ToList();
+            if (udbpl.Count > 0) {
+                return udbpl[0];
+            }
+            return null;
+        }
+
         public static MpObservableCollection<MpColor> CreatePrimaryColorList(BitmapSource bmpSource) {
             //var sw = new Stopwatch();
             //sw.Start();
@@ -95,7 +106,11 @@ namespace MpWpfApp {
             return primaryIconColorList;
         }
 
-        public MpColor(int colorId) {
+        public MpColor() {
+            TrackHasChanged(true);
+        }
+
+        public MpColor(int colorId) : this() {
             DataTable dt = MpDb.Instance.Execute(
                 "select * from MpColor where pk_MpColorId=@cid",
                 new System.Collections.Generic.Dictionary<string, object> {
@@ -105,18 +120,20 @@ namespace MpWpfApp {
                 LoadDataRow(dt.Rows[0]);
             }
         }
-        public MpColor(int r, int g, int b, int a) {
+        public MpColor(int r, int g, int b, int a) : this() {
             ColorGuid = Guid.NewGuid();
             _r = r;
             _g = g;
             _b = b;
             _a = a;
         }
+
         public MpColor(Color c) : this(c.R, c.G, c.B, c.A) { }
 
-        public MpColor(DataRow dr) {
+        public MpColor(DataRow dr) : this() {
             LoadDataRow(dr);
         }
+
         public override void LoadDataRow(DataRow dr) {
             ColorId = Convert.ToInt32(dr["pk_MpColorId"].ToString());
             if (dr["MpColorGuid"] == null || dr["MpColorGuid"].GetType() == typeof(System.DBNull)) {
@@ -141,7 +158,28 @@ namespace MpWpfApp {
         //        });
         //}
 
+        private bool IsAltered() {
+            var dt = MpDb.Instance.Execute(
+                @"SELECT pk_MpColorId FROM MpColor WHERE MpColorGuid=@cg AND R=@r AND G=@g AND B=@b AND A=@a",
+                new Dictionary<string, object> {
+                    { "@cg", ColorGuid.ToString() },
+                    { "@r", _r },
+                    { "@g", _g },
+                    { "@b", _b },
+                    { "@a", _a }
+                });
+            return dt.Rows.Count == 0;
+        }
+
         public override void WriteToDatabase() {
+            if (ColorGuid == Guid.Empty) {
+                ColorGuid = Guid.NewGuid();
+            }
+            if (!IsAltered()) {
+                return;
+            }
+            
+
             if (ColorId == 0) {
                 MpDb.Instance.ExecuteWrite(
                         "insert into MpColor(MpColorGuid,R,G,B,A) values(@cg,@r,@g,@b,@a)",
@@ -153,6 +191,7 @@ namespace MpWpfApp {
                         { "@a", _a }
                     },ColorGuid.ToString());
                 ColorId = MpDb.Instance.GetLastRowId("MpColor", "pk_MpColorId");
+                GetAllColors().Add(this);
             } else {
                 MpDb.Instance.ExecuteWrite(
                     "update MpColor set MpColorGuid=@cg, R=@r, G=@g, B=@b, A=@a where pk_MpColorId=@cid",
@@ -164,13 +203,12 @@ namespace MpWpfApp {
                         { "@a", _a },
                         { "@cid", ColorId }
                     },ColorGuid.ToString());
+                var c = _AllColorList.Where(x => x.ColorId == ColorId).FirstOrDefault();
+                if(c != null) {
+                    _AllColorList[_AllColorList.IndexOf(c)] = this;
+                }
             }
-            var al = _AllColorList.Where(x => x.ColorId == ColorId).ToList();
-            if (al.Count > 0) {
-                _AllColorList[_AllColorList.IndexOf(al[0])] = this;
-            } else {
-                _AllColorList.Add(this);
-            }        
+                  
         }
 
         public void DeleteFromDatabase() {

@@ -13,6 +13,10 @@ namespace MonkeyPaste {
             }
             return str.ToLowerInvariant().Contains(ostr.ToLowerInvariant());
         }
+
+        public static string CheckSum(this string str) {
+            return MpHelpers.Instance.GetCheckSum(str);
+        }
         #endregion
         #region Visual
         public static string GetHexString(this Xamarin.Forms.Color color) {

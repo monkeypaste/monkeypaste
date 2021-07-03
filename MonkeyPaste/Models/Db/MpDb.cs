@@ -11,7 +11,7 @@ using System.IO;
 using Newtonsoft.Json;
 
 namespace MonkeyPaste {
-    public class MpDb : MpISyncData {
+    public class MpDb : MpISync {
         #region Singleton
         private static readonly Lazy<MpDb> _Lazy = new Lazy<MpDb>(() => new MpDb());
         public static MpDb Instance { get { return _Lazy.Value; } }
@@ -40,9 +40,9 @@ namespace MonkeyPaste {
         public event EventHandler<MpDbModelBase> OnItemDeleted;
         #endregion
 
-        #region Private Methods
+        #region Public Methods
         public async Task Init() {
-            if(_connectionAsync != null) {
+            if (_connectionAsync != null) {
                 return;
             }
             InitUser(IdentityToken);
@@ -52,92 +52,6 @@ namespace MonkeyPaste {
             IsLoaded = true;
         }
 
-        private async Task CreateConnectionAsync() {
-            if (_connectionAsync != null) {
-                return;
-            }
-
-            var dbPath = DependencyService.Get<MpIDbFilePath>().DbFilePath();
-
-            File.Delete(dbPath);
-
-            bool isNewDb = !File.Exists(dbPath);
-
-
-            var connStr = new SQLiteConnectionString(
-                databasePath: dbPath,//MpPreferences.Instance.DbPath, 
-                storeDateTimeAsTicks: true,
-                //key: MpPreferences.Instance.DbPassword,
-                openFlags: MpPreferences.DbFlags
-                );
-
-
-            _connectionAsync = new SQLiteAsyncConnection(connStr);
-
-            await InitTablesAsync();
-
-            if (isNewDb) {
-                await InitDefaultDataAsync();
-            }
-
-            if (_connectionAsync != null && UseWAL) {
-                // On sqlite-net v1.6.0+, enabling write-ahead logging allows for faster database execution
-                await _connectionAsync.EnableWriteAheadLoggingAsync().ConfigureAwait(false);
-            }
-            MpConsole.WriteTraceLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
-        }
-        private async Task InitTablesAsync() {
-            await _connectionAsync.CreateTableAsync<MpApp>();
-            await _connectionAsync.CreateTableAsync<MpClient>();
-            await _connectionAsync.CreateTableAsync<MpClientPlatform>();
-            await _connectionAsync.CreateTableAsync<MpClip>();
-            await _connectionAsync.CreateTableAsync<MpClipComposite>();
-            await _connectionAsync.CreateTableAsync<MpClipTag>();
-            await _connectionAsync.CreateTableAsync<MpClipTemplate>();
-            await _connectionAsync.CreateTableAsync<MpColor>();
-            await _connectionAsync.CreateTableAsync<MpDbImage>();
-            await _connectionAsync.CreateTableAsync<MpIcon>();
-            await _connectionAsync.CreateTableAsync<MpPasteHistory>();
-            await _connectionAsync.CreateTableAsync<MpSource>();
-            await _connectionAsync.CreateTableAsync<MpTag>();
-            await _connectionAsync.CreateTableAsync<MpUrl>();
-            await _connectionAsync.CreateTableAsync<MpUrlDomain>();
-            await _connectionAsync.CreateTableAsync<MpDbLog>();
-        }
-
-        private async Task InitDefaultDataAsync() {
-            await AddItem<MpColor>(new MpColor(Color.Green));
-            await AddItem<MpColor>(new MpColor(Color.Blue));
-            await AddItem<MpColor>(new MpColor(Color.Yellow));
-            await AddItem<MpColor>(new MpColor(Color.Orange));
-
-            await AddItem<MpTag>(new MpTag() {
-                TagName = "Recent",
-                ColorId = 1,
-                TagSortIdx = 0
-            });
-            await AddItem<MpTag>(new MpTag() {
-                TagName = "All",
-                ColorId = 2,
-                TagSortIdx = 1
-            });
-
-            await AddItem<MpTag>(new MpTag() {
-                TagName = "Favorites",
-                ColorId = 3,
-                TagSortIdx = 2
-            });
-            await AddItem<MpTag>(new MpTag() {
-                TagName = "Help",
-                ColorId = 4,
-                TagSortIdx = 3
-            });
-
-            MpConsole.WriteTraceLine(@"Create all default tables");
-        }
-        #endregion
-
-        #region Public Methods
         public async Task<List<T>> QueryAsync<T>(string query, params object[] args) where T : new() {
             if(_connectionAsync == null) {
                 await Init();
@@ -211,6 +125,111 @@ namespace MonkeyPaste {
         }
         #endregion
 
+
+        #region Private Methods       
+
+        private async Task CreateConnectionAsync() {
+            if (_connectionAsync != null) {
+                return;
+            }
+
+            var dbPath = DependencyService.Get<MpIDbFilePath>().DbFilePath();
+
+            File.Delete(dbPath);
+
+            bool isNewDb = !File.Exists(dbPath);
+
+
+            var connStr = new SQLiteConnectionString(
+                databasePath: dbPath,//MpPreferences.Instance.DbPath, 
+                storeDateTimeAsTicks: true,
+                //key: MpPreferences.Instance.DbPassword,
+                openFlags: MpPreferences.DbFlags
+                );
+
+
+            _connectionAsync = new SQLiteAsyncConnection(connStr);
+
+            await InitTablesAsync();
+
+            if (isNewDb) {
+                await InitDefaultDataAsync();
+            }
+
+            if (_connectionAsync != null && UseWAL) {
+                // On sqlite-net v1.6.0+, enabling write-ahead logging allows for faster database execution
+                await _connectionAsync.EnableWriteAheadLoggingAsync().ConfigureAwait(false);
+            }
+            MpConsole.WriteTraceLine("Write ahead logging: " + (UseWAL ? "ENABLED" : "DISABLED"));
+        }
+        private async Task InitTablesAsync() {
+            await _connectionAsync.CreateTableAsync<MpApp>();
+            await _connectionAsync.CreateTableAsync<MpClient>();
+            await _connectionAsync.CreateTableAsync<MpClientPlatform>();
+            await _connectionAsync.CreateTableAsync<MpClip>();
+            await _connectionAsync.CreateTableAsync<MpClipComposite>();
+            await _connectionAsync.CreateTableAsync<MpClipTag>();
+            await _connectionAsync.CreateTableAsync<MpClipTemplate>();
+            await _connectionAsync.CreateTableAsync<MpColor>();
+            await _connectionAsync.CreateTableAsync<MpDbImage>();
+            await _connectionAsync.CreateTableAsync<MpIcon>();
+            await _connectionAsync.CreateTableAsync<MpPasteHistory>();
+            await _connectionAsync.CreateTableAsync<MpSource>();
+            await _connectionAsync.CreateTableAsync<MpTag>();
+            await _connectionAsync.CreateTableAsync<MpUrl>();
+            await _connectionAsync.CreateTableAsync<MpUrlDomain>();
+            await _connectionAsync.CreateTableAsync<MpDbLog>();
+            await _connectionAsync.CreateTableAsync<MpSyncHistory>();
+        }
+
+        private async Task InitDefaultDataAsync() {
+            var green = new MpColor(0, 255/255, 0, 255 / 255) {
+                ColorGuid = Guid.Parse("fec9579b-a580-4b02-af2f-d1b275812392")
+            };
+            var blue = new MpColor(0, 0, 255 / 255, 255 / 255) {
+                ColorGuid = Guid.Parse("8b30650f-c616-4972-b4a7-a88d1022ae15")
+            };
+            var yellow = new MpColor(255 / 255, 255 / 255, 0, 255 / 255) {
+                ColorGuid = Guid.Parse("bb666db2-1762-4b18-a1da-dd678a458f7a")
+            };
+            var orange = new MpColor(255 / 255, 165 / 255, 0, 255 / 255) {
+                ColorGuid = Guid.Parse("2c5a7c6f-042c-4890-92e5-5ccf088ee698")
+            };
+            await AddItem<MpColor>(green);
+            await AddItem<MpColor>(blue);
+            await AddItem<MpColor>(yellow);
+            await AddItem<MpColor>(orange);
+
+            await AddItem<MpTag>(new MpTag() {
+                TagGuid = Guid.Parse("310ba30b-c541-4914-bd13-684a5e00a2d3"),
+                TagName = "Recent",
+                ColorId = green.Id,
+                TagSortIdx = 0
+            });
+            await AddItem<MpTag>(new MpTag() {
+                TagGuid = Guid.Parse("df388ecd-f717-4905-a35c-a8491da9c0e3"),
+                TagName = "All",
+                ColorId = blue.Id,
+                TagSortIdx = 1
+            });
+
+            await AddItem<MpTag>(new MpTag() {
+                TagGuid = Guid.Parse("54b61353-b031-4029-9bda-07f7ca55c123"),
+                TagName = "Favorites",
+                ColorId = yellow.Id,
+                TagSortIdx = 2
+            });
+            await AddItem<MpTag>(new MpTag() {
+                TagGuid = Guid.Parse("a0567976-dba6-48fc-9a7d-cbd306a4eaf3"),
+                TagName = "Help",
+                ColorId = orange.Id,
+                TagSortIdx = 3
+            });
+
+            MpConsole.WriteTraceLine(@"Create all default tables");
+        }
+        #endregion
+
         #region Sync Data
         public async Task<List<object>> GetLocalData() {
             var ld = new List<object>();
@@ -244,6 +263,40 @@ namespace MonkeyPaste {
             }
             
             return sb.ToString();
+        }
+
+        public string GetLocalIp4Address() {
+            return MpHelpers.Instance.GetLocalIp4Address();
+        }
+
+        public string GetExternalIp4Address() {
+            return MpHelpers.Instance.GetExternalIp4Address();
+        }
+
+        public async Task<string> GetLocalLog() {
+            var logItems = await MpDb.Instance.GetItems<MpDbLog>();
+            var dbol = new List<MpISyncableDbObject>();
+            foreach (var li in logItems) {
+                dbol.Add(li as MpISyncableDbObject);
+            }
+            var dbMsgStr = MpDbMessage.Create(dbol);
+            //var streamMsg = MpStreamMessage.
+            return dbMsgStr;
+        }
+
+        public Task<MpStreamMessage> ProcessRemoteDbLog(MpDbMessage dbLogMessage) {
+            foreach(var jdbo in dbLogMessage.JsonDbObjects) {
+                string objTypeStr = jdbo.DbObjectType.ToString().ToLower();
+                dynamic obj = JsonConvert.DeserializeObject(jdbo.DbObjectJson);
+                if(objTypeStr.Contains("mptag")) {
+                    //var tag = 
+                }
+            }
+            return null;
+        }
+
+        public string GetThisClientGuid() {
+            return MpPreferences.Instance.ThisClientGuidStr;
         }
         #endregion
     }

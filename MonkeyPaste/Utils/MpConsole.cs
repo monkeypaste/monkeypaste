@@ -66,7 +66,9 @@ namespace MonkeyPaste {
         }
 
         public static void WriteLine(object line) {
+            Console.WriteLine(@"\n\n-----------------------------------------------------------------------\n");
             Console.WriteLine(line.ToString());
+            Console.WriteLine(@"\n-----------------------------------------------------------------------\n\n");
         }
 
         public static void WriteTraceLine(object line, object args = null, [CallerMemberName] string callerName = "", [CallerFilePath] string callerFilePath = "", [CallerLineNumber] int lineNum = 0) {
