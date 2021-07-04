@@ -26,8 +26,8 @@ namespace MpWpfApp {
                 return asm.GetType(typeString);
             }
             catch(Exception ex) {
-                MpConsole.Instance.WriteLine(@"Unknown type: " + typeString);
-                MpConsole.Instance.WriteLine(@"With exception: " + ex);
+                MonkeyPaste.MpConsole.WriteLine(@"Unknown type: " + typeString);
+                MonkeyPaste.MpConsole.WriteLine(@"With exception: " + ex);
             }
             return null;
         }

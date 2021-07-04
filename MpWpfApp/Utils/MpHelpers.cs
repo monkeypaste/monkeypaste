@@ -43,6 +43,7 @@ using System.Speech.Synthesis;
 using WindowsInput;
 using Microsoft.Win32;
 using System.Net.Sockets;
+using MonkeyPaste;
 
 namespace MpWpfApp {
     public class MpHelpers {
@@ -2744,41 +2745,56 @@ namespace MpWpfApp {
             Process.Start(filename);
             return filename;
         }
-        public string GetLocalIp4Address() {
-            Ping ping = new Ping();
-            var replay = ping.Send(Dns.GetHostName());
+        //public string GetLocalIp4Address() {
+        //    Ping ping = new Ping();
+        //    var replay = ping.Send(Dns.GetHostName());
 
-            if (replay.Status == IPStatus.Success) {
-                return replay.Address.MapToIPv4().ToString();
-            }
-            return null;
+        //    if (replay.Status == IPStatus.Success) {
+        //        return replay.Address.MapToIPv4().ToString();
+        //    }
+        //    return null;
+        //}
+        public string GetLocalIp4Address() {
+            return MonkeyPaste.MpHelpers.Instance.GetLocalIp4Address();
+            //string localIP;
+            //using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0)) {
+            //    socket.Connect("8.8.8.8", 65530);
+            //    IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+            //    localIP = endPoint.Address.ToString();
+            //}
+            //return localIP;
+            //IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
+            //foreach (var ip in ipHostInfo.AddressList) { 
+            //    if(ip.IsIPv6LinkLocal || ip.IsIPv6SiteLocal || ip.IsIPv6Multicast || ip.IsIPv6Teredo) {
+            //        continue;
+            //    }
+            //    string a = ip.MapToIPv4().ToString();
+            //    MpConsole.WriteLine(a);
+            //}
+            //IPAddress ipAddress = ipHostInfo.AddressList[ipHostInfo.AddressList.Length - 1];
+            //if (ipAddress != null) {
+            //    return ipAddress.MapToIPv4().ToString();
+            //}
+            //return "0.0.0.0";
         }
 
         public string GetExternalIp4Address() {
-            return new System.Net.WebClient().DownloadString("https://api.ipify.org");
+            return MonkeyPaste.MpHelpers.Instance.GetExternalIp4Address();
+            //return new System.Net.WebClient().DownloadString("https://api.ipify.org");
         }
 
-        public string GetLocalIPAddress() {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList) {
-                if (ip.AddressFamily == AddressFamily.InterNetwork) {
-                    return ip.ToString();
-                }
-            }
-            throw new Exception("No network adapters with an IPv4 address in the system!");
-        }
-
-        public bool CheckForInternetConnection() {
-            try {
-                using (var client = new WebClient())
-                using (client.OpenRead("http://www.google.com/")) {
-                    return true;
-                }
-            }
-            catch (Exception e) {
-                Console.WriteLine(e.ToString());
-                return false;
-            }
+        public bool IsConnectedToInternet() {
+            return MonkeyPaste.MpHelpers.Instance.IsConnectedToInternet();
+            //try {
+            //    using (var client = new WebClient())
+            //    using (client.OpenRead("http://www.google.com/")) {
+            //        return true;
+            //    }
+            //}
+            //catch (Exception e) {
+            //    Console.WriteLine(e.ToString());
+            //    return false;
+            //}
         }
         public async Task<string> GetUrlTitle(string url) {
             string urlSource = await GetHttpSourceCode(url);

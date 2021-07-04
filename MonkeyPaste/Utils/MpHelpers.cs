@@ -27,6 +27,8 @@ using Org.BouncyCastle.Pkcs;
 using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Crypto.Parameters;
+using System.Net.Sockets;
+using System.Net.NetworkInformation;
 
 namespace MonkeyPaste {
 public class MpHelpers {
@@ -467,12 +469,13 @@ public class MpHelpers {
         }
 
         public bool IsConnectedToInternet() {
-            var current = Connectivity.NetworkAccess;
+            return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+            //var current = Connectivity.NetworkAccess;
 
-            if (current == NetworkAccess.Internet) {
-                return true;
-            }
-            return false;
+            //if (current == NetworkAccess.Internet) {
+            //    return true;
+            //}
+            //return false;
         }
 
         public bool IsMpServerAvailable() {
@@ -505,12 +508,35 @@ public class MpHelpers {
         }
 
         public string GetLocalIp4Address() {
-            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = ipHostInfo.AddressList[ipHostInfo.AddressList.Length - 1];
-            if (ipAddress != null) {
-                return ipAddress.MapToIPv4().ToString();
+            var ips = GetAllLocalIPv4(NetworkInterfaceType.Wireless80211);
+            if(ips.Length > 0) {
+                return ips[0];
+            }
+            ips = GetAllLocalIPv4(NetworkInterfaceType.Ethernet);
+            if(ips.Length > 0) {
+                return ips[0];
             }
             return "0.0.0.0";
+        }
+
+        public string[] GetAllLocalIPv4() {
+            var ips = GetAllLocalIPv4(NetworkInterfaceType.Wireless80211).ToList();
+            ips.AddRange(GetAllLocalIPv4(NetworkInterfaceType.Ethernet));
+            return ips.ToArray();
+        }
+
+        private string[] GetAllLocalIPv4(NetworkInterfaceType _type) {
+            List<string> ipAddrList = new List<string>();
+            foreach (NetworkInterface item in NetworkInterface.GetAllNetworkInterfaces()) {
+                if (item.NetworkInterfaceType == _type && item.OperationalStatus == OperationalStatus.Up) {
+                    foreach (UnicastIPAddressInformation ip in item.GetIPProperties().UnicastAddresses) {
+                        if (ip.Address.AddressFamily == AddressFamily.InterNetwork) {
+                            ipAddrList.Add(ip.Address.ToString());
+                        }
+                    }
+                }
+            }
+            return ipAddrList.ToArray();
         }
 
         public string GetExternalIp4Address() {

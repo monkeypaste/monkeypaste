@@ -677,6 +677,10 @@ namespace MpWpfApp {
         public string GetThisClientGuid() {
             return Properties.Settings.Default.ThisClientGuid;
         }
+
+        public bool IsWpf() {
+            return true;
+        }
         #endregion
     }
 }

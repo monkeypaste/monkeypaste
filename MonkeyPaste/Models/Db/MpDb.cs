@@ -298,6 +298,10 @@ namespace MonkeyPaste {
         public string GetThisClientGuid() {
             return MpPreferences.Instance.ThisClientGuidStr;
         }
+
+        public bool IsWpf() {
+            return false;
+        }
         #endregion
     }
 }

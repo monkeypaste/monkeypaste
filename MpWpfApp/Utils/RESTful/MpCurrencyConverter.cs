@@ -135,7 +135,7 @@ namespace MpWpfApp {
 
         private MpCurrencyConverter() : base("Currency Conversion") {
             try {
-                if (!MpHelpers.Instance.CheckForInternetConnection()) {
+                if (!MpHelpers.Instance.IsConnectedToInternet()) {
                     return;
                 }
                 ApiKey = Properties.Settings.Default.CurrencyConverterFreeApiKey;

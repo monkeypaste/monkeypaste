@@ -5,9 +5,7 @@
              xmlns:local="clr-namespace:MpWpfApp" 
              x:Class="MpWpfApp.App" 
              StartupUri="Views\MpMainWindow.xaml"           
-             Exit="Application_Exit"
-             DispatcherUnhandledException="Application_DispatcherUnhandledException"
-             
+             Exit="Application_Exit"             
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              d1p1:Ignorable="d" 
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">

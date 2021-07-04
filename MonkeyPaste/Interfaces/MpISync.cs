@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public interface MpISync {
+        bool IsWpf();
         string GetThisClientGuid();
         string GetLocalIp4Address();
         string GetExternalIp4Address();

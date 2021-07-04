@@ -26,7 +26,7 @@ namespace MpWpfApp {
         }
 
         protected Nullable<bool> CheckRestfulApiStatus() {
-            if(!MpHelpers.Instance.CheckForInternetConnection()) {
+            if(!MpHelpers.Instance.IsConnectedToInternet()) {
                 MessageBox.Show("Please connect to internet to use "+_apiName, "No Internet Connection", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }

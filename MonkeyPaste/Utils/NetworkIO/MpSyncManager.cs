@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Text;
@@ -38,57 +39,48 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public void Init(MpISync localSyncData, bool isListener) {
-            _isListener = isListener;
-            _localSyncData = localSyncData;
-            ThisEndpoint = new MpDeviceEndpoint(localSyncData,
-                44376,
-                MpHelpers.Instance.GetNewAccessToken(),
-                DateTime.Now);
-            ThisEndpoint.IsPublic = false;
-            ThisEndpoint.DeviceGuid = localSyncData.GetThisClientGuid();
-
+        public void Init(MpISync localSync, bool isListener) {     
             Task.Run(async () => {
-                if (isListener) {
-                    if(SocketListener == null) {
-                        SocketListener = new MpSocketListener(ThisEndpoint);
-                        SocketListener.OnReceive += SocketListener_OnReceive;
-                    }
-                    SocketListener.Start2(localSyncData);
-                } else {
-
-                    if (ServerEndpoint == null) {
-                        ServerEndpoint = new MpDeviceEndpoint() {
-                            PublicIp4Address = @"107.242.121.35",
-                            PrivateIp4Address = @"10.60.240.173",//@"192.168.43.1",
-                            PrivatePortNum = 44376,
-                            PublicPortNum = 44376,
-                            AccessToken = @"<Listener Access Token>",
-                            IsPublic = false
-                        };
-                    }
-                    if (SocketClient == null) {
-                        SocketClient = new MpSocketClient(ThisEndpoint, ServerEndpoint);
-                        SocketClient.OnReceive += SocketClient_OnReceive;
-                    }
-
-                    //var sdata = await localSyncData.GetLocalLog();
-                    //var data = localSyncData.ConvertToJson(sdata);
-                    _lastMessageType = MpStreamMesageType.HandshakeStart;
-                    var startHandshakeMessage = MpStreamMessage.Create(
-                        _lastMessageType, 
-                        ThisEndpoint.ToString(), localSyncData.GetThisClientGuid());
-
-                    SocketClient.SendMessage(startHandshakeMessage.ToString());
+                while(!MpHelpers.Instance.IsConnectedToInternet()) {
+                    Thread.Sleep(10000);
                 }
+                _isListener = isListener;
+                _localSyncData = localSync;
+                ThisEndpoint = new MpDeviceEndpoint(localSync,
+                    44376,
+                    MpHelpers.Instance.GetNewAccessToken(),
+                    DateTime.Now);
+                ThisEndpoint.IsPublic = false;
+
+                var sw = new Stopwatch();
+                sw.Start();
+                SocketClient = await MpSocketClient.TryPrivateCreateAndConnect(ThisEndpoint,localSync.IsWpf());
+                sw.Stop();
+                MpConsole.WriteLine(@"Private ip sweep took {0} ms" + sw.ElapsedMilliseconds);
+
+                if(SocketClient == null) {
+                    MpConsole.WriteLine($"No listener found. Creating listener: {ThisEndpoint}");
+                    SocketListener = new MpSocketListener(ThisEndpoint);
+                    SocketListener.OnReceive += SocketListener_OnReceive;
+                    SocketListener.StartListening();
+                } else {
+                    MpConsole.WriteLine($"Created client: {ThisEndpoint}");
+                    SocketClient.OnReceive += SocketClient_OnReceive;
+                    SocketClient.StartClient();
+                }
+                //    //var sdata = await localSyncData.GetLocalLog();
+                //    //var data = localSyncData.ConvertToJson(sdata);
+
+                //    //_lastMessageType = MpStreamMesageType.HandshakeStart;
+                //    //var startHandshakeMessage = MpStreamMessage.Create(
+                //    //    _lastMessageType, 
+                //    //    ThisEndpoint.ToString(), localSyncData.GetThisClientGuid());
+
+                //    //SocketClient.SendMessage(startHandshakeMessage.ToString());
+                //}
             });
                        
         }
-
-        public void Upload() {
-
-        }
-
         public void Dispose() {
             SessionManager.Dispose();
         }
@@ -104,6 +96,7 @@ namespace MonkeyPaste {
         }
 
         private void SocketListener_OnReceive(object sender, string e) {
+            return;
             Task.Run(async () => {
                 var msgHeader = MpStreamMessage.ParseHeader(e);
                 MpStreamMessage responeStreamMessage = null;

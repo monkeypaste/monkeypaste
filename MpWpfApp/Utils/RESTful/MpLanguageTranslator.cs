@@ -31,7 +31,7 @@ namespace MpWpfApp {
 
         public MpLanguageTranslator() : base("Language Translation") {
             try {
-                if (!MpHelpers.Instance.CheckForInternetConnection()) {
+                if (!MpHelpers.Instance.IsConnectedToInternet()) {
                     Console.WriteLine("Client offline. Language Translation is inactive");
                     return;
                 }
@@ -162,7 +162,7 @@ namespace MpWpfApp {
 
         // ***** GET TRANSLATABLE LANGUAGE CODES
         private void GetLanguagesForTranslate() {
-            if(!MpHelpers.Instance.CheckForInternetConnection()) {
+            if(!MpHelpers.Instance.IsConnectedToInternet()) {
                 Console.WriteLine("Client offline. Language Translation is inactive");
                 return;
             }
@@ -185,7 +185,7 @@ namespace MpWpfApp {
                     }
                 }
             } catch(Exception ex) {
-                if(MpHelpers.Instance.CheckForInternetConnection()) {
+                if(MpHelpers.Instance.IsConnectedToInternet()) {
                     Console.WriteLine("Problem connecting to language server (" + ex.ToString() + "), re-attempting to connect..");
                     GetLanguagesForTranslate();
                 } else {
