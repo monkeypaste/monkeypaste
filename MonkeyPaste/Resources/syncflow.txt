@@ -1,0 +1,58 @@
+﻿/*
+        Sync Workflow
+
+        ++ Connection ++
+        0. Wait for network connection
+        1. Scan for local listener
+            1.1 If found connect as client
+            1.2 If not found create local listener
+        2. Wait for internet connection
+            2.1 Send endpoint info to server connect.php
+            2.2 Receive list of other connected clients
+                2.2.1 If other clients exist connect as client if not done in #1
+
+        ++ Sync ++
+        
+        Connect (C<->L)
+        Client sends EndPoint info to Listener then listener sends
+        endpoint info to client
+
+        HandshakeStart (C->L)
+        1. Client sends last MpSyncHistory datetime to listener for listener guid
+        
+        HandshakeBack (L->C)
+        2. Listener sends last sync datetime for the client guid (if they do not match work from oldest but probably some kind of cleanup)
+        
+        RequestLog (C->L)
+        3. Client sends earliest of sync datetimes to listener
+        
+        ResponseLog (L->C)
+        4. Listener sends MpDbMessage of MpDbLog query > sync datetime
+        
+        RequestData (C->L)
+        5. Client interprets log's dbo guid's with its own and 
+           then sends MpDbMessage of objectType/guid pairs it wants from listener
+        
+        ResponseData (L->C)
+        6. Listener creates MpDbMessage of the requested dbo pairs and sends to client
+
+        RequestComplete (C->L)  **Place to validate local/remote data for error state**
+        7. Client ensures received data matches checksum in header from listener 
+           then sends flipstart or FlipDone MpStreamMessage (no db info) 
+
+        FlipStart (L->C)
+        8. Roles reverse from #5-#7
+
+        FlipDone (C->L)
+        9. Client sends disconnect datetime to listener
+
+        DisconnectStart (L->C)
+        10. Listenerer logs and echos back disconnect datetime
+
+        DisconnectDone (C->L)
+        11. Client confirms disconnect time matches and sends 'Disconnect Done' to listener
+
+        Both sides do not alter local db until DisconnectDone and use disconnect datetime for
+        sync history
+        
+        */

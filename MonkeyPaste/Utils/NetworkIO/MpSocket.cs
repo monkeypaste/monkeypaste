@@ -16,17 +16,16 @@ namespace MonkeyPaste {
 
         #region Properties
         public bool IsRunning { get; set; } = false;
-        public string EofToken { get; set; } = "<EOF>";
+        public static string EofToken { get; set; } = "<EOF>";
+
+
+        public List<string> OutMessageQueue { get; set; } = new List<string>();
         //public MpDeviceEndpoint ThisEndPoint { get; set; }
         #endregion
-
-        #region Events
-        public event EventHandler<object> OnReceive;
 
         public void Dispose() {
             //throw new NotImplementedException();
         }
-        #endregion
 
         #region Public Methods
         //public abstract Task<bool> Connect(MpDeviceEndpoint otherEndPoint);

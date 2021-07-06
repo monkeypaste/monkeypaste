@@ -41,7 +41,7 @@ namespace MonkeyPaste {
         #region Public Methods
         public MpDeviceEndpoint() { }
 
-        public MpDeviceEndpoint(MpISync sync, int port, string at,DateTime dt, int priport = -1) {
+        public MpDeviceEndpoint(MpISync sync, int port, string at,DateTime dt, int priport = -1) {            
             PublicIp4Address = sync.GetExternalIp4Address();
             PrivateIp4Address = sync.GetLocalIp4Address();
             DeviceGuid = sync.GetThisClientGuid();

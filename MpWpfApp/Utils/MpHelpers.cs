@@ -2783,18 +2783,21 @@ namespace MpWpfApp {
             //return new System.Net.WebClient().DownloadString("https://api.ipify.org");
         }
 
+        public bool IsConnectedToNetwork() {
+            return MonkeyPaste.MpHelpers.Instance.IsConnectedToNetwork();            
+        }
+
         public bool IsConnectedToInternet() {
-            return MonkeyPaste.MpHelpers.Instance.IsConnectedToInternet();
-            //try {
-            //    using (var client = new WebClient())
-            //    using (client.OpenRead("http://www.google.com/")) {
-            //        return true;
-            //    }
-            //}
-            //catch (Exception e) {
-            //    Console.WriteLine(e.ToString());
-            //    return false;
-            //}
+            try {
+                using (var client = new WebClient())
+                using (client.OpenRead("http://www.google.com/")) {
+                    return true;
+                }
+            }
+            catch (Exception e) {
+                Console.WriteLine(e.ToString());
+                return false;
+            }
         }
         public async Task<string> GetUrlTitle(string url) {
             string urlSource = await GetHttpSourceCode(url);

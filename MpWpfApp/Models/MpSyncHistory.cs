@@ -41,11 +41,11 @@ namespace MpWpfApp {
             if (_AllSyncHistoryList == null) {
                 GetAllSyncHistorys();
             }
-            var udbpl = _AllSyncHistoryList.Where(x => x.OtherClientGuid.ToString() == guid).ToList();
-            if (udbpl.Count > 0) {
-                return udbpl[0];
-            }
-            return null;
+            var udbpl = _AllSyncHistoryList
+                            .Where(x => x.OtherClientGuid.ToString() == guid)
+                            .ToList().OrderByDescending(x=>x.SyncDateTime)
+                            .FirstOrDefault();
+            return udbpl;
         }
 
         public MpSyncHistory() {

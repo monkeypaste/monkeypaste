@@ -125,7 +125,6 @@ namespace MonkeyPaste {
         }
         #endregion
 
-
         #region Private Methods       
 
         private async Task CreateConnectionAsync() {
@@ -231,6 +230,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Sync Data
+
         public async Task<List<object>> GetLocalData() {
             var ld = new List<object>();
             var cil = await GetItems<MpClip>();
@@ -263,29 +263,24 @@ namespace MonkeyPaste {
             }
             
             return sb.ToString();
-        }
+        }       
 
-        public string GetLocalIp4Address() {
-            return MpHelpers.Instance.GetLocalIp4Address();
-        }
-
-        public string GetExternalIp4Address() {
-            return MpHelpers.Instance.GetExternalIp4Address();
-        }
-
-        public async Task<string> GetLocalLog() {
+        public async Task<string> GetLocalLog(DateTime fromDateTime) {
             var logItems = await MpDb.Instance.GetItems<MpDbLog>();
+            var matchLogItems = logItems.Where(x => x.LogActionDateTime > fromDateTime).ToList();
+
             var dbol = new List<MpISyncableDbObject>();
-            foreach (var li in logItems) {
+            foreach (var li in matchLogItems) {
                 dbol.Add(li as MpISyncableDbObject);
             }
             var dbMsgStr = MpDbMessage.Create(dbol);
-            //var streamMsg = MpStreamMessage.
             return dbMsgStr;
         }
 
-        public Task<MpStreamMessage> ProcessRemoteDbLog(MpDbMessage dbLogMessage) {
-            foreach(var jdbo in dbLogMessage.JsonDbObjects) {
+        public async Task<object> ProcessRemoteDbLog(string remoteDbLogStr) {
+            var dbLogMessage = await MpDbMessage.Parse(remoteDbLogStr,new MpStringToDbModelTypeConverter());
+
+            foreach (var jdbo in dbLogMessage.JsonDbObjects) {
                 string objTypeStr = jdbo.DbObjectType.ToString().ToLower();
                 dynamic obj = JsonConvert.DeserializeObject(jdbo.DbObjectJson);
                 if(objTypeStr.Contains("mptag")) {
@@ -301,6 +296,39 @@ namespace MonkeyPaste {
 
         public bool IsWpf() {
             return false;
+        }
+
+        public string GetLocalIp4Address() {
+            if (!IsConnectedToNetwork()) {
+                return string.Empty;
+            }
+            return MpHelpers.Instance.GetLocalIp4Address();
+        }
+
+        public string GetExternalIp4Address() {
+            if (!IsConnectedToInternet()) {
+                return string.Empty;
+            }
+            return MpHelpers.Instance.GetExternalIp4Address();
+        }
+
+        public bool IsConnectedToNetwork() {
+            return MpHelpers.Instance.IsConnectedToNetwork();
+        }
+
+        public bool IsConnectedToInternet() {
+            return MpHelpers.Instance.IsConnectedToInternet();
+        }
+
+        public async Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid) {
+            var shl = await GetItems<MpSyncHistory>();
+            var sh = shl.Where(x => x.OtherClientGuid.ToString() == otherDeviceGuid)
+                        .OrderByDescending(x => x.SyncDateTime)
+                        .FirstOrDefault();
+            if (sh != null) {
+                return sh.SyncDateTime;
+            }
+            return DateTime.MinValue;
         }
         #endregion
     }

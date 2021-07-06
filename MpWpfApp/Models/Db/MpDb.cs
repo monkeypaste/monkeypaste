@@ -644,30 +644,15 @@ namespace MpWpfApp {
             
             return sb.ToString();
         }
-
-        public string GetLocalIp4Address() {
-            return MpHelpers.Instance.GetLocalIp4Address();
-        }
-
-        public string GetExternalIp4Address() {
-            return MpHelpers.Instance.GetExternalIp4Address();
-        }
-
-        public async Task<string> GetLocalLog() {
-            var logItems = MpDbLog.GetAllDbLogs();
+        public async Task<string> GetLocalLog(DateTime fromDateTime) {
+            var logItems = MpDbLog.GetAllDbLogs().Where(x=>x.LogActionDateTime > fromDateTime).ToList();
             var dbol = new List<MpISyncableDbObject>();
             foreach (var li in logItems) {
                 dbol.Add(li as MpISyncableDbObject);
             }
             var dbMsgStr = MpDbMessage.Create(dbol);
-            await Task.Delay(5);
+            await Task.Delay(1);
             return dbMsgStr; 
-            //MpConsole.WriteLine(dbMsgStr);
-
-            //var dbMsg = await MpDbMessage.Parse(dbMsgStr, new MpStringToDbModelTypeConverter());
-            //foreach (var jdbo in dbMsg.JsonDbObjects) {
-            //    MpConsole.WriteLine(@"Type: " + jdbo.DbObjectType.ToString());
-            //}
         }
 
         public Task<MpStreamMessage> ProcessRemoteDbLog(MpDbMessage dbLogMessage) {
@@ -680,6 +665,50 @@ namespace MpWpfApp {
 
         public bool IsWpf() {
             return true;
+        }
+
+        public string GetLocalIp4Address() {
+            if (!IsConnectedToNetwork()) {
+                return string.Empty;
+            }
+            return MpHelpers.Instance.GetLocalIp4Address();
+        }
+
+        public string GetExternalIp4Address() {
+            if (!IsConnectedToInternet()) {
+                return string.Empty;
+            }
+            return MpHelpers.Instance.GetExternalIp4Address();
+        }
+
+        public bool IsConnectedToNetwork() {
+            return MpHelpers.Instance.IsConnectedToNetwork();
+        }
+
+        public bool IsConnectedToInternet() {
+            return MpHelpers.Instance.IsConnectedToInternet();
+        }
+
+        public async Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid) {
+            await Task.Delay(0);
+            var sh = MpSyncHistory.GetSyncHistoryByGuid(otherDeviceGuid);
+            if(sh != null) {
+                return sh.SyncDateTime;
+            }
+            return DateTime.MinValue;
+        }
+
+        public async Task<object> ProcessRemoteDbLog(string remoteDbLogStr) {
+            var dbLogMessage = await MpDbMessage.Parse(remoteDbLogStr, new MpStringToDbModelTypeConverter());
+
+            foreach (var jdbo in dbLogMessage.JsonDbObjects) {
+                string objTypeStr = jdbo.DbObjectType.ToString().ToLower();
+                dynamic obj = JsonConvert.DeserializeObject(jdbo.DbObjectJson);
+                if (objTypeStr.Contains("mptag")) {
+                    //var tag = 
+                }
+            }
+            return null;
         }
         #endregion
     }

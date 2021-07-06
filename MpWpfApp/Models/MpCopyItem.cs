@@ -428,14 +428,16 @@ namespace MpWpfApp {
                 }
                 return null;
             } else if(data is BitmapSource) {
-                DataTable dt = MpDb.Instance.Execute(
-                    "select * from MpCopyItem where ItemImage=@ii",
-                    new System.Collections.Generic.Dictionary<string, object> {
-                            { "@ii", MpHelpers.Instance.ConvertBitmapSourceToByteArray((BitmapSource)data) }
-                        });
-                if (dt != null && dt.Rows.Count > 0) {
-                    return new MpCopyItem(dt.Rows[0]);
-                }
+                return null;
+                // code below needs to be refactored to subquery dbimages for copyitem images
+                //DataTable dt = MpDb.Instance.Execute(
+                //    "select * from MpDbImage where pk_MpDbImageId=@iid and ImageBase64=@istr",
+                //    new System.Collections.Generic.Dictionary<string, object> {
+                //            { "@iid", ItemIm}
+                //        });
+                //if (dt != null && dt.Rows.Count > 0) {
+                //    return new MpCopyItem(dt.Rows[0]);
+                //}
             }
             return null;
         }

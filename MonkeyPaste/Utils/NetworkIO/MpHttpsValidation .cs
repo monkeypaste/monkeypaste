@@ -31,7 +31,7 @@ namespace MonkeyPaste {
 
         //Call GenerateSSLpubklickey callback method and repalce here   
         public MpHttpsValidation(Uri serverUri, string serverPublicKey) {
-            if(!MpHelpers.Instance.IsConnectedToInternet()) {
+            if(!MpHelpers.Instance.IsConnectedToNetwork()) {
                 Dispose();
             }
 

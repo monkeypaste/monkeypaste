@@ -467,19 +467,21 @@ public class MpHelpers {
 
             return client;
         }
-
         public bool IsConnectedToInternet() {
-            return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
-            //var current = Connectivity.NetworkAccess;
+            var current = Connectivity.NetworkAccess;
 
-            //if (current == NetworkAccess.Internet) {
-            //    return true;
-            //}
-            //return false;
+            if (current == NetworkAccess.Internet) {
+                return true;
+            }
+            return false;
+        }
+        public bool IsConnectedToNetwork() {
+            return System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable();
+            
         }
 
         public bool IsMpServerAvailable() {
-            if(!IsConnectedToInternet()) {
+            if(!IsConnectedToNetwork()) {
                 return false;
             }
             try {

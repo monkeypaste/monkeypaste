@@ -15,22 +15,28 @@ using Xamarin.Forms;
 namespace MonkeyPaste {
     public class MpSocketClient : MpSocket, IDisposable {
         #region Private Variables
+        private MpSocketStateObject _sso = null;
         // ManualResetEvent instances signal completion.  
         private ManualResetEvent connectDone = new ManualResetEvent(false);
-
         private ManualResetEvent sendDone = new ManualResetEvent(false);
-        private ManualResetEvent confirmSendDone = new ManualResetEvent(false);
-
         private ManualResetEvent receiveDone = new ManualResetEvent(false);
-        private ManualResetEvent confirmReceiveDone = new ManualResetEvent(false);
 
-        private MpDeviceEndpoint _sep, _cep;        
+        private MpDeviceEndpoint _sep, _cep;
         #endregion
 
         #region Events
-        public event EventHandler<string> OnSend;
+        public event EventHandler<string> OnConnect;
         public event EventHandler<string> OnReceive;
+        public event EventHandler<string> OnSend;
         public event EventHandler<string> OnError;
+        #endregion
+
+        #region Properties
+        public MpDeviceEndpoint ListenerEndpoint {
+            get {
+                return _sep;
+            }
+        }
         #endregion
 
         #region Public Methods
@@ -52,56 +58,7 @@ namespace MonkeyPaste {
             _cep = thisEndPoint;
             _sep = listenerEndPoint;
         }
-
-        public void SendMessage(string message) {
-            try {
-                // Create a TcpClient.
-                // Note, for this client to work you need to have a TcpServer
-                // connected to the same address as specified by the server, port
-                // combination.
-                MpConsole.WriteLine($"Connecting to remote endpoint {_sep.ToString()}");
-                TcpClient client = new TcpClient(_sep.Ip4Address, _sep.PortNum);
-
-                // Translate the passed message into ASCII and store it as a Byte array.
-                Byte[] outBytes = System.Text.Encoding.ASCII.GetBytes(message);
-
-                Byte[] inBytes = new Byte[256];
-                // Get a client stream for reading and writing.
-                //  Stream stream = client.GetStream();
-
-                NetworkStream stream = client.GetStream();
-
-                // Send the message to the connected TcpServer.
-                stream.Write(outBytes, 0, outBytes.Length);
-
-                Console.WriteLine("Sent: {0}", message);
-                while (true) {
-                    int i;
-                    var sb = new StringBuilder();
-                    // Loop to receive all the data sent by the client.
-                    while ((i = stream.Read(inBytes, 0, inBytes.Length)) != 0) {
-                        // Translate data bytes to a ASCII string.
-                        string inStr = System.Text.Encoding.ASCII.GetString(inBytes, 0, i);
-                        sb.Append(inStr);
-                    }
-                    string response = sb.ToString();
-                    Console.WriteLine("Client Received: {0}", response);
-                    OnReceive?.Invoke(this, response);
-                }
-                stream.Close();
-                client.Close();
-            }
-            catch (ArgumentNullException e) {
-                Console.WriteLine("ArgumentNullException: {0}", e);
-            }
-            catch (SocketException e) {
-                Console.WriteLine("SocketException: {0}", e);
-            }
-
-            //Console.WriteLine("\n Press Enter to continue...");
-            //Console.Read();
-        }
-
+       
         
         public void StartClient() {
             // Connect to a remote device.  
@@ -114,22 +71,25 @@ namespace MonkeyPaste {
                 client.BeginConnect(_sep.IPEndPoint,
                     new AsyncCallback(ConnectCallback), client);
                 connectDone.WaitOne();
+                _sso = new MpSocketStateObject();
+                _sso.WorkSocket = client;
+
                 IsRunning = true;
                 MpConsole.WriteLine($"Client ({_cep}) Connected to Listener ({_sep})");
                 // Send test data to the remote device.  
-                Send(client, "This is a test");
-                sendDone.WaitOne();
+                //Send(client, _cep.ToString());
+                //sendDone.WaitOne();
 
                 // Receive the response from the remote device.  
-                Receive(client);
-                receiveDone.WaitOne();
+                //Receive(client);
+                //receiveDone.WaitOne();
 
                 // Write the response to the console.  
-                Console.WriteLine("Response received : {0}", _lastReceive);
+                //Console.WriteLine("Response received : {0}", _lastReceive);
 
-                while (IsRunning) { 
+                //while (IsRunning) { 
                     
-                }
+                //}
                 // Release the socket.  
                 //client.Shutdown(SocketShutdown.Both);
                // client.Close();
@@ -142,7 +102,7 @@ namespace MonkeyPaste {
         public void Dispose() {
         }
         #endregion
-
+        
         #region Private Methods
         private void ConnectCallback(IAsyncResult ar) {
             try {
@@ -157,9 +117,11 @@ namespace MonkeyPaste {
 
                 // Signal that the connection has been made.  
                 connectDone.Set();
+                OnConnect?.Invoke(this, string.Empty);
             }
             catch (Exception e) {
                 Console.WriteLine(e.ToString());
+                OnError?.Invoke(this, @"Client Connect Callback exception:" + e.ToString());
             }
         }
 
@@ -194,7 +156,7 @@ namespace MonkeyPaste {
                     state.Sb.Append(Encoding.ASCII.GetString(state.Buffer, 0, bytesRead));
 
                     content = state.Sb.ToString();
-                    if (content.IndexOf("<EOF>") > -1) {
+                    if (content.IndexOf(EofToken) > -1) {
                         // All the data has been read from the
                         // client. Display it on the console.  
                         Console.WriteLine("Read {0} bytes from socket. \n Data : {1}", content.Length, content);
@@ -203,6 +165,8 @@ namespace MonkeyPaste {
                         // Signal that all bytes have been received.  
                         receiveDone.Set();
 
+                        OnReceive?.Invoke(this, content);
+                        // TODO add validation response
                         // Echo content checksum back to client 
                         //Send(client, content.CheckSum());
 
@@ -215,9 +179,16 @@ namespace MonkeyPaste {
             }
             catch (Exception e) {
                 Console.WriteLine(e.ToString());
+                OnError?.Invoke(this, @"Client ReceiveCallback exception:" + e.ToString());
             }
         }
-
+        public void Send(string data) {
+            if(_sso == null || _sso.WorkSocket == null || !_sso.WorkSocket.Connected) {
+                throw new Exception(@"Client not connected");
+            }
+            Send(_sso.WorkSocket, data);
+            sendDone.WaitOne();
+        }
         private void Send(Socket client, String data) {
             data += EofToken;
 
@@ -241,9 +212,12 @@ namespace MonkeyPaste {
 
                 // Signal that all bytes have been sent.  
                 sendDone.Set();
+
+                OnSend?.Invoke(this, _lastSend);
             }
             catch (Exception e) {
                 Console.WriteLine(e.ToString());
+                OnError?.Invoke(this, @"Client SendCallback exception:" + e.ToString());
             }
         }
 

@@ -88,7 +88,10 @@ namespace MpWpfApp {
             }
             //if new tag
             if (TagId == 0) {
-                
+                if(TagColor == null) {
+                    //occurs with initial tag creation on first load
+                    TagColor = MpColor.GetColorById(ColorId);
+                }
                 TagColor.WriteToDatabase();
                 ColorId = TagColor.ColorId;
                 MpDb.Instance.ExecuteWrite(

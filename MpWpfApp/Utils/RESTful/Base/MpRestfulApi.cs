@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 using System.Windows;
 
 namespace MpWpfApp {
-    public abstract class MpRestfulApi {
+    public abstract class MpRestfulApi  {
         private string _apiName = string.Empty;
 
         protected MpRestfulApi(string apiName) {
             _apiName = apiName;
         }
+
         protected abstract int GetMaxCallCount();
         protected abstract int GetCurCallCount();
         protected abstract void IncrementCallCount();

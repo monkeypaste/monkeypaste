@@ -11,18 +11,31 @@ using System.IO;
 namespace MonkeyPaste {
     public class MpSocketListener : MpSocket, IDisposable {
         #region Private Variables
-        private MpDeviceEndpoint _sep;        
-        // Thread signal.  
+        private int _clientCount = 0;
+
+        private MpSocketStateObject _sso;
+
+        private MpDeviceEndpoint _sep,_cep;        
+
         private ManualResetEvent _allDone = new ManualResetEvent(false);
+        private ManualResetEvent _connectDone = new ManualResetEvent(false);
+        private ManualResetEvent _sendDone = new ManualResetEvent(false);
+        private ManualResetEvent _receiveDone = new ManualResetEvent(false);
         #endregion
 
         #region Properties
-        public List<string> OutMessageQueue = new List<string>();
+        public MpDeviceEndpoint ClientEndpoint {
+            get {
+                return _cep;
+            }
+        }
+
         #endregion
 
         #region Events
-        public event EventHandler<string> OnSend;
+        public event EventHandler<string> OnConnect;
         public event EventHandler<string> OnReceive;
+        public event EventHandler<string> OnSend;
         public event EventHandler<string> OnError;
         #endregion
 
@@ -115,6 +128,7 @@ namespace MonkeyPaste {
             }
             catch (Exception e) {
                 Console.WriteLine(e.ToString());
+                OnError?.Invoke(this, @"Server start exception: " + e.ToString());
             }
         }
 
@@ -125,61 +139,92 @@ namespace MonkeyPaste {
 
         #region Private Methods
         private void AcceptCallback(IAsyncResult ar) {
-            // Get the socket that handles the client request.  
-            var listener = (Socket)ar.AsyncState;
-            var handler = listener.EndAccept(ar);
+            try {
+                // Get the socket that handles the client request.  
+                var listener = (Socket)ar.AsyncState;
+                var handler = listener.EndAccept(ar);
 
-            // Signal the main thread to continue.  
-            _allDone.Set();
+                _sso = new MpSocketStateObject() {
+                    WorkSocket = listener
+                };
+                // Signal the main thread to continue.  
+                _allDone.Set();
 
-            // Create the state object.  
-            var state = new MpSocketStateObject();
-            state.WorkSocket = handler;
-            handler.BeginReceive(state.Buffer,0,
-                MpSocketStateObject.BufferSize,
-                0,
-                new AsyncCallback(ReadCallback),
-                state);
+                // Create the state object.  
+                var state = new MpSocketStateObject();
+                state.WorkSocket = handler;
+                handler.BeginReceive(state.Buffer, 0,
+                    MpSocketStateObject.BufferSize,
+                    0,
+                    new AsyncCallback(ReadCallback),
+                    state);
+
+                //OnConnect?.Invoke(this, (++_clientCount).ToString());
+            }
+            catch(Exception ex) {
+                OnError?.Invoke(this, @"Server accept callback exception: " + ex.ToString());
+            }
+            
         }
 
         private void ReadCallback(IAsyncResult ar) {
-            // Retrieve the state object and the handler socket  
-            // from the asynchronous state object.  
-            MpSocketStateObject state = (MpSocketStateObject)ar.AsyncState;
-            Socket listener = state.WorkSocket;
-
-            if(!listener.Connected) {
-                return;
-            }
-            string content = string.Empty;
-            // Read data from the client socket.
-            int bytesRead = listener.EndReceive(ar);
-            if (bytesRead > 0) {
-                // There  might be more data, so store the data received so far.  
-                state.Sb.Append(Encoding.ASCII.GetString(
-                    state.Buffer, 0, bytesRead));
-
-                // Check for end-of-file tag. If it is not there, read
-                // more data.  
-                content = state.Sb.ToString();
-                if (content.IndexOf("<EOF>") > -1) {
-                    // All the data has been read from the
-                    // client. Display it on the console.  
-                    Console.WriteLine("Read {0} bytes from socket. \n Data : {1}",content.Length, content);
-
-                    // Echo content checksum back to client 
-                    Send(listener, content.CheckSum());
-
-                } else {
-                    // Not all data received. Get more.  
-                    listener.BeginReceive(state.Buffer, 0, MpSocketStateObject.BufferSize, 0,
-                    new AsyncCallback(ReadCallback), state);
+            try {
+                // Retrieve the state object and the handler socket  
+                // from the asynchronous state object.  
+                MpSocketStateObject state = (MpSocketStateObject)ar.AsyncState;
+                Socket listener = state.WorkSocket;
+                _sso.WorkSocket = listener;
+                if (!listener.Connected) {
+                    return;
                 }
-            }            
-        }
+                string content = string.Empty;
+                // Read data from the client socket.
+                int bytesRead = listener.EndReceive(ar);
+                if (bytesRead > 0) {
+                    // There  might be more data, so store the data received so far.  
+                    state.Sb.Append(Encoding.ASCII.GetString(
+                        state.Buffer, 0, bytesRead));
 
+                    // Check for end-of-file tag. If it is not there, read
+                    // more data.  
+                    content = state.Sb.ToString();
+                    if (content.IndexOf(EofToken) > -1) {
+                        _lastReceive = content;
+                        // All the data has been read from the
+                        // client. Display it on the console.  
+                        Console.WriteLine("Read {0} bytes from socket. \n Data : {1}", content.Length, content);
+
+                        if(_cep == null) {
+                            //this means content is clients endpoint to get 
+                            //its device guid
+
+                        }
+
+                        // Echo content checksum back to client 
+                        // TODO Add receive validation
+                        //Send(listener, content.CheckSum());
+                        OnReceive?.Invoke(this, content);
+                    } else {
+                        // Not all data received. Get more.  
+                        listener.BeginReceive(state.Buffer, 0, MpSocketStateObject.BufferSize, 0,
+                        new AsyncCallback(ReadCallback), state);
+                    }
+                }
+            }
+            catch (Exception ex) {
+                OnError?.Invoke(this, @"Server Read Callback exception:" + ex.ToString());
+            }     
+        }
+        public void Send(string data) {
+            if (_sso == null || _sso.WorkSocket == null || !_sso.WorkSocket.Connected) {
+                throw new Exception(@"Client not connected");
+            }
+            Send(_sso.WorkSocket, data);
+            _sendDone.WaitOne();
+        }
         private void Send(Socket handler, String data) {
             data += EofToken;
+            _lastSend = data;
             // Convert the string data to byte data using ASCII encoding.  
             byte[] byteData = Encoding.ASCII.GetBytes(data);
             Console.WriteLine(@"Sending '{0}' to client.. ", data);
@@ -192,19 +237,20 @@ namespace MonkeyPaste {
             try {
                 // Retrieve the socket from the state object.  
                 Socket handler = (Socket)ar.AsyncState;
-
+                _sso.WorkSocket = handler;
                 // Complete sending the data to the remote device.  
                 int bytesSent = handler.EndSend(ar);
                 Console.WriteLine("Sent {0} bytes to client.", bytesSent);
 
                 //handler.Shutdown(SocketShutdown.Both);
                 //handler.Close();
-                OnSend?.Invoke(this, string.Empty);
+                OnSend?.Invoke(this, _lastSend);
+                _sendDone.Set();
 
             }
             catch (Exception e) {
                 Console.WriteLine(e.ToString());
-                OnError?.Invoke(this, e.ToString());
+                OnError?.Invoke(this, @"Server send callback exception: " + e.ToString());
             }
         }
         #endregion

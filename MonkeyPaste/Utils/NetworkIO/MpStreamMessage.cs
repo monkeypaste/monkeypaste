@@ -1,46 +1,73 @@
-﻿using System;
+﻿using Acr.UserDialogs;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public enum MpStreamMesageType {
+    public enum MpSyncMesageType {
         None = 0,
+        Connect,
         HandshakeStart,
         HandshakeBack,
         RequestLog,
         ResponseLog,
-        ConfirmLog,
         RequestData,
         ResponseData,
-        ConfirmData,
         RequestComplete,
-        ConfirmComplete,
-        Disconnect
+        FlipStart,
+        FlipDone,
+        DisconnectStart,
+        DisconnectDone
     }
 
     public class MpStreamHeader {
+        private string _headerStr;
+        public const string HeaderParseToken = @"$$##@";
+
         public DateTime MessageDateTime { get; set; }
-        public MpStreamMesageType MessageType { get; set; }
+        public MpSyncMesageType MessageType { get; set; }
         public string ClientGuid { get; set; }
+
+        public static MpStreamHeader Parse(string headerStr) {
+            var headerParts = headerStr.Split(new string[] { HeaderParseToken }, StringSplitOptions.RemoveEmptyEntries);
+            return new MpStreamHeader() {
+                MessageDateTime = DateTime.Parse(headerParts[0]),
+                MessageType = (MpSyncMesageType)Convert.ToInt32(headerParts[1]),
+                ClientGuid = headerParts[2]
+            };
+        }
+        public override string ToString() {
+            //header string format: <SendDateTime><MessageTypeId><ClientGuid>
+            return string.Format(
+                 @"{1}{0}{2}{0}{3}",
+                 HeaderParseToken,
+                 MessageDateTime,
+                 (int)MessageType,
+                 ClientGuid);
+        }
     }
 
     public class MpStreamMessage {
         public const string HeaderContentParseToken = @"#^$*&";
-        public const string HeaderParseToken = @"$$##@";
 
-        public string Header { get; set; }
-        public string Contents { get; set; }
+        public MpStreamHeader Header { get; set; }
+        public string Content;
 
-        public static MpStreamMessage Create(MpStreamMesageType msgType, string content, string thisGuid) {
-            // Stream Message Format: <SendDateTime><MessageTypeId><ClientGuid><Content>
-            var sm = new MpStreamMessage();
-            sm.Contents = content;
-            sm.Header = sm.CreateHeader(msgType,thisGuid);
+        public static MpStreamMessage Create(MpSyncMesageType msgType, string content, string thisGuid) {
+            // Stream Message Format: <header><Content><eof>
+            var sm = new MpStreamMessage() {
+                Header = new MpStreamHeader() {
+                    MessageType = msgType,
+                    ClientGuid = thisGuid,
+                    MessageDateTime = DateTime.Now,
+                },
+                Content = content
+            };
             return sm;
         }
 
-        public static MpStreamHeader ParseHeader(string streamMessageStr) {
+        public static MpStreamMessage Parse(string streamMessageStr) {
             if (string.IsNullOrEmpty(streamMessageStr)) {
                 return null;
             }
@@ -48,35 +75,14 @@ namespace MonkeyPaste {
             if(msgParts.Length == 0) {
                 return null;
             }
-            string headerStr = msgParts[0];
-            var headerParts = headerStr.Split(new string[] { MpStreamMessage.HeaderParseToken }, StringSplitOptions.RemoveEmptyEntries);
-            var header = new MpStreamHeader() {
-                MessageDateTime = DateTime.Parse(headerParts[0]),
-                MessageType = (MpStreamMesageType)Convert.ToInt32(headerParts[1]),
-                ClientGuid = headerParts[2]
-            };
-            return header;
-        }
-
-        protected string CreateHeader(MpStreamMesageType msgType, string thisGuid) {
-            return string.Format(
-                @"{1}{0}{2}{0}{3}",
-                HeaderParseToken,
-                DateTime.Now.ToString(),
-                (int)msgType,
-                thisGuid);
-
-            //string header = string.Empty;
-
-            //switch(msgType) {
-            //    case MpStreamMesageType.RequestLog:
-
-            //        break;
-            //}
-        }
+            return new MpStreamMessage() {
+                Header = MpStreamHeader.Parse(msgParts[0]),
+                Content = msgParts[1]
+            };            
+        }        
 
         public override string ToString() {
-            return string.Format(@"{0}{1}{2}", Header,HeaderContentParseToken,Contents);
+            return string.Format(@"{0}{1}{2}", Header,HeaderContentParseToken,Content);
         }
     }
 }
