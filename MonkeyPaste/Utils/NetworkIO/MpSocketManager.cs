@@ -15,8 +15,8 @@ namespace MonkeyPaste {
         #endregion
 
         #region Properties
-        public MpSocketClient SocketClient { get; set; }
-        public MpSocketListener SocketListener { get; set; }
+        public MpSocketClientAsync SocketClient { get; set; }
+        public MpSocketListenerAsync SocketListener { get; set; }
 
         public MpSessionManager SessionManager { get; set; }
 

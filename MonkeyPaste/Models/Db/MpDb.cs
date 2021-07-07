@@ -294,6 +294,10 @@ namespace MonkeyPaste {
             return MpPreferences.Instance.ThisClientGuidStr;
         }
 
+        public int GetSyncPort() {
+            return 44380;
+        }
+
         public bool IsWpf() {
             return false;
         }
@@ -329,6 +333,10 @@ namespace MonkeyPaste {
                 return sh.SyncDateTime;
             }
             return DateTime.MinValue;
+        }
+
+        public async Task RunOnMainThread(Action action) {
+            await Device.InvokeOnMainThreadAsync(action);
         }
         #endregion
     }

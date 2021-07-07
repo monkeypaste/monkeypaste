@@ -667,6 +667,10 @@ namespace MpWpfApp {
             return true;
         }
 
+        public int GetSyncPort() {
+            return 44380;
+        }
+
         public string GetLocalIp4Address() {
             if (!IsConnectedToNetwork()) {
                 return string.Empty;
@@ -709,6 +713,10 @@ namespace MpWpfApp {
                 }
             }
             return null;
+        }
+        
+        public async Task RunOnMainThread(Action action) {
+            await Application.Current.MainWindow.Dispatcher.InvokeAsync(action);
         }
         #endregion
     }

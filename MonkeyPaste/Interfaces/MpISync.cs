@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public interface MpISync {
         bool IsWpf();
+        Task RunOnMainThread(Action action);
+
 
         bool IsConnectedToNetwork();
         bool IsConnectedToInternet();
+
+        int GetSyncPort();
 
         string GetThisClientGuid();
         string GetLocalIp4Address();

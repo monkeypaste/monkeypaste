@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public class MpSyncManager : IDisposable {
@@ -19,8 +21,7 @@ namespace MonkeyPaste {
         private MpSyncMesageType _lastMessageType = MpSyncMesageType.None;
         private MpISync _localSyncData;
         private bool _isListener;
-
-
+        private string _lastMsg = string.Empty;
         #endregion
 
         #region Properties
@@ -46,58 +47,48 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public void Init(MpISync localSync, bool isListener) {     
+        public void Init(MpISync localSync) {     
             Task.Run(async () => {
-                while(!MpHelpers.Instance.IsConnectedToNetwork()) {
+                _localSyncData = localSync;
+                while (!MpHelpers.Instance.IsConnectedToNetwork()) {
                     Thread.Sleep(10000);
                 }
-                _isListener = isListener;
-                _localSyncData = localSync;
-                ThisEndpoint = new MpDeviceEndpoint(localSync,
-                    44376,
-                    MpHelpers.Instance.GetNewAccessToken(),
-                    DateTime.Now);
-                ThisEndpoint.IsPublic = false;
+                ThisEndpoint = MpDeviceEndpointFactory.CreateEndpoint(localSync);
 
                 var sw = new Stopwatch();
                 sw.Start();
-                SocketClient = await MpSocketClient.TryPrivateCreateAndConnect(ThisEndpoint,localSync.IsWpf());
+                MpConsole.WriteLine(@"Attempting Listener discovery...");
+                string listenerIp = await MpPrivateEndpointDiscoveryHelper.Discover(
+                    ThisEndpoint.PrivateIp4Address,
+                    ThisEndpoint.PrivatePortNum, 
+                    localSync.IsWpf());
                 sw.Stop();
                 MpConsole.WriteLine(@"Private ip sweep took {0} ms" + sw.ElapsedMilliseconds);
 
-                if(SocketClient == null) {
+                if(string.IsNullOrEmpty(listenerIp)) {
+                    //no listener found so start listening
                     MpConsole.WriteLine($"No listener found. Creating listener: {ThisEndpoint}");
-                    SocketListener = new MpSocketListener(ThisEndpoint);
-                    SocketListener.OnConnect += SocketListener_OnConnect;
-                    SocketListener.OnSend += SocketListener_OnSend;
+
+                    SocketListener = new MpSocketListener();
                     SocketListener.OnReceive += SocketListener_OnReceive;
-                    SocketListener.OnError += SocketListener_OnError;
+                    SocketListener.OnListenerError += SocketListener_OnError;
 
-                    SocketListener.StartListening();
+                    SocketListener.StartListening(ThisEndpoint);
+                    
+                    // TODO Add Public Discovery here 
                 } else {
-                    MpConsole.WriteLine($"Created client: {ThisEndpoint}");
+
+                    MpConsole.WriteLine($"Connected to listener: {listenerIp}");
+
+                    SocketClient = new MpSocketClient();
                     SocketClient.OnConnect += SocketClient_OnConnect;
-                    SocketClient.OnSend += SocketClient_OnSend;
                     SocketClient.OnReceive += SocketClient_OnReceive;
-                    SocketClient.OnError += SocketClient_OnError;
+                    SocketClient.OnClientError += SocketClient_OnError;
 
-                    SocketClient.StartClient();
+                    SocketClient.Connect(listenerIp,ThisEndpoint.PrivatePortNum, false);
                 }
-                //    //var sdata = await localSyncData.GetLocalLog();
-                //    //var data = localSyncData.ConvertToJson(sdata);
-
-                //    //_lastMessageType = MpStreamMesageType.HandshakeStart;
-                //    //var startHandshakeMessage = MpStreamMessage.Create(
-                //    //    _lastMessageType, 
-                //    //    ThisEndpoint.ToString(), localSyncData.GetThisClientGuid());
-
-                //    //SocketClient.SendMessage(startHandshakeMessage.ToString());
-                //}
-            });
-                       
+            });                       
         }
-
-       
 
         public void Dispose() {
             SessionManager.Dispose();
@@ -105,27 +96,24 @@ namespace MonkeyPaste {
         #endregion
 
         #region Private Methods
-        private void UpdateSyncState(string msg) {
-           
-        }
         #region Event Handlers
         
         #region Listener Events
-        
-        private void SocketListener_OnConnect(object sender, string e) {
-
-        }
-
-        private void SocketListener_OnSend(object sender, string e) {
-            //throw new NotImplementedException();
-        }
 
         private void SocketListener_OnReceive(object sender, string e) {
+            //_lastMsg = OpenMessage(msg);
+            //_localSyncData.RunOnMainThread((Action)(() => UpdateListenerSyncState()));
+            
             string msg = OpenMessage(e);
-            Task.Run(async () => {
-                switch(LastSyncState) {
+            Task.Run(async () => {                
+                _lastMsg = string.Empty;
+                switch (LastSyncState) {
                     case MpSyncMesageType.None:
-                        OtherEndpoint = JsonConvert.DeserializeObject<MpDeviceEndpoint>(msg);
+                        OtherEndpoint = MpDeviceEndpoint.Parse(msg);
+                        if (OtherEndpoint == null) {
+                            // TODO handle error
+                            return;
+                        }
                         var lastSyncDateTime = await _localSyncData.GetLastSyncForRemoteDevice(OtherEndpoint.DeviceGuid);
                         LastSyncState = MpSyncMesageType.HandshakeBack;
                         SocketListener.Send(lastSyncDateTime.ToString());
@@ -134,7 +122,7 @@ namespace MonkeyPaste {
                         var confirmedLastSyncDateTime = DateTime.Parse(msg);
                         var localLogFromLastSync = await _localSyncData.GetLocalLog(confirmedLastSyncDateTime);
                         LastSyncState = MpSyncMesageType.ResponseData;
-                        SocketClient.Send(localLogFromLastSync);
+                        SocketListener.Send(localLogFromLastSync);
                         break;
                     case MpSyncMesageType.ResponseData:
 
@@ -162,23 +150,19 @@ namespace MonkeyPaste {
         }
 
         private void SocketListener_OnError(object sender, string e) {
-            throw new NotImplementedException();
+            MpConsole.WriteTraceLine("Listener error: " + e);
         }
         #endregion
 
         #region Client Events
-        private void SocketClient_OnConnect(object sender, string e) {
-            Task.Run(async () => {
-                await Task.Delay(1);
-                LastSyncState = MpSyncMesageType.Connect;
-                var thisEndpointJson = JsonConvert.SerializeObject(ThisEndpoint);
-                SocketClient.Send(thisEndpointJson);
-            });
+        private void SocketClient_OnConnect(object sender, TcpClient client) {
+            LastSyncState = MpSyncMesageType.Connect;
+            ThisEndpoint.LoginDateTime = DateTime.Now;
+            string epStr = ThisEndpoint.ToString();
+            MpConsole.WriteLine(@"Sending client endpoint info to listener: " + epStr);
+            SocketClient.Send(epStr);
         }
 
-        private void SocketClient_OnSend(object sender, string e) {
-            //throw new NotImplementedException();
-        }
         private void SocketClient_OnReceive(object sender, string e) {
             string msg = OpenMessage(e);
             Task.Run(async () => {
@@ -186,15 +170,15 @@ namespace MonkeyPaste {
                 //MpStreamMessage responeStreamMessage = null;
                 switch (LastSyncState) {
                     case MpSyncMesageType.Connect:
-                        OtherEndpoint = JsonConvert.DeserializeObject<MpDeviceEndpoint>(msg);
-                        var lastSyncDateTime = await _localSyncData.GetLastSyncForRemoteDevice(OtherEndpoint.DeviceGuid);                        
+                        OtherEndpoint = MpDeviceEndpoint.Parse(msg);
+                        var lastSyncDateTime = await _localSyncData.GetLastSyncForRemoteDevice(OtherEndpoint.DeviceGuid);
                         LastSyncState = MpSyncMesageType.HandshakeStart;
                         SocketClient.Send(lastSyncDateTime.ToString());
                         break;
                     case MpSyncMesageType.HandshakeStart: //step 3
                         var listenerLastSyncDateTime = DateTime.Parse(msg);
                         var localLastSyncDateTime = await _localSyncData.GetLastSyncForRemoteDevice(OtherEndpoint.DeviceGuid);
-                        var earliestLastSyncDateTime = listenerLastSyncDateTime.Ticks > localLastSyncDateTime.Ticks ? localLastSyncDateTime:listenerLastSyncDateTime;
+                        var earliestLastSyncDateTime = listenerLastSyncDateTime.Ticks > localLastSyncDateTime.Ticks ? localLastSyncDateTime : listenerLastSyncDateTime;
                         LastSyncState = MpSyncMesageType.RequestLog;
                         SocketClient.Send(earliestLastSyncDateTime.ToString());
                         break;
@@ -205,12 +189,11 @@ namespace MonkeyPaste {
                         break;
                 }
                 //SocketListener.OutMessageQueue.Add(responeStreamMessage.ToString());
-                
+
             });
         }
-
         private void SocketClient_OnError(object sender, string e) {
-            throw new NotImplementedException();
+            MpConsole.WriteTraceLine("Client error: " + e);
         }
         #endregion
 
