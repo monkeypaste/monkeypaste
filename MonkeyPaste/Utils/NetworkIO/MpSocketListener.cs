@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public class MpSocketListener : MpSocket {
         #region Private Variables
-        private ObservableCollection<TcpClient> _clients = new ObservableCollection<TcpClient>();
+        private List<TcpClient> _clients = new List<TcpClient>();
         #endregion
 
         #region Events
@@ -26,19 +26,34 @@ namespace MonkeyPaste {
         }       
 
         public void StartListening(MpDeviceEndpoint thisEndPoint) {
-            Task.Run(() => {
+            Task.Run(async () => {
                 TcpListener server = null;
                 try {
                     server = new TcpListener(thisEndPoint.PrivateIPEndPoint);
                     server.Start();
                     IsRunning = true;
                     while (IsRunning) {
-                        MpConsole.WriteLine("Waiting for a connection... ");
+                        MpConsole.WriteLine($"Waiting for a connection ({_clients.Count} clients connected)... ");
 
                         var client = server.AcceptTcpClient();
+                        //since this for local sync clients will always discover listener before connecting
+                        //so when client count becomes even the connection right before this one was a discovery
+                        //so replace this client without to avoid delegating discovery
+
+                        //if(_clients.Count % 2 == 1) {
+                        //    //the client count is about to become even so remove last client since it was a discovery connection
+                        //    int discoverIdx = _clients.Count - 1;
+                        //    _clients[discoverIdx].Close();
+                        //    _clients[discoverIdx].Dispose();
+                        //    _clients.RemoveAt(discoverIdx);
+                        //} else {
+                        //    MpConsole.WriteLine("Connected!");
+                        //}
                         MpConsole.WriteLine("Connected!");
 
-                        OnConnect?.Invoke(this, client);
+                        _clients.Add(client);
+                        await WaitForMessage(client);
+                        //OnConnect?.Invoke(this, client);
                     }
                     server.Stop();                    
                 }

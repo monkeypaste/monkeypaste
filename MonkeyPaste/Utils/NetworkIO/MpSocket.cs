@@ -28,27 +28,16 @@ namespace MonkeyPaste {
         public static string EofToken { get; set; } = "<EOF>";
         #endregion
 
-        #region Public Methods
-        public void Read(TcpClient client) {
-            try {
-                // Get a stream object for reading and writing
-                var reader = new BinaryReader(client.GetStream());
-                _lastReceive = reader.ReadString();
-                Console.WriteLine(@"Received: {0}", _lastReceive);
-                OnReceive?.Invoke(this, _lastReceive);
-            }
-            catch(Exception ex) {
-                MpConsole.WriteTraceLine(@"Socket Read Exception: ", ex);
-                OnError?.Invoke(this, ex.ToString());
-            }
-        }
+        #region Public Methods        
 
         public void Write(TcpClient client, string msg) {
             
             try {
                 msg += EofToken;
-                var writer = new BinaryWriter(client.GetStream());
-                writer.Write(msg);
+                var streamWriter = new StreamWriter(client.GetStream());
+                streamWriter.Write(msg);
+                //var msgBytes = Encoding.ASCII.GetBytes(msg);
+                //client.GetStream().Write(msgBytes, 0, msgBytes.Length);
                 _lastSend = msg;
                 MpConsole.WriteLine("Sent: {0}" + msg);
             }
@@ -57,17 +46,33 @@ namespace MonkeyPaste {
                 OnError?.Invoke(this, ex.ToString());
             }
         }
+        public void Read(TcpClient client) {
+            try {
+                // Get a stream object for reading and writing
+                //var reader = new BinaryReader(client.GetStream());
+                //_lastReceive = reader.ReadString();
+                var streamReader = new StreamReader(client.GetStream());
+                _lastReceive = streamReader.ReadToEnd();
+                MpConsole.WriteLine($"Received: {_lastReceive}");
+                OnReceive?.Invoke(this, _lastReceive);
+            }
+            catch (Exception ex) {
+                MpConsole.WriteTraceLine(@"Socket Read Exception: ", ex);
+                OnError?.Invoke(this, ex.ToString());
+            }
+        }
 
-        public void WaitForMessage(TcpClient listener) {
-            Task.Run(() => {
-                while (true) {
+        public async Task WaitForMessage(TcpClient listener) {
+            //Task.Run(() => {
+               // while (IsRunning) {
                     try {
                         while (listener.Available == 0) {
                             if (!listener.Connected) {
                                 OnDisconnect?.Invoke(this, listener);
                                 return;
                             }
-                            Thread.Sleep(100);
+                            //Thread.Sleep(100);
+                            await Task.Delay(100);
                         }
                         Read(listener);
                     }
@@ -75,8 +80,8 @@ namespace MonkeyPaste {
                         MpConsole.WriteTraceLine(@"Waiting for socket message exception: ", ex);
                         OnError?.Invoke(this, ex.ToString());
                     }
-                }
-            });
+               // }
+            //});
         }
         #endregion
 

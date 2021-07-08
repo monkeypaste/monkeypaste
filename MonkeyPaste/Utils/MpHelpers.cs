@@ -32,7 +32,7 @@ using System.Net.NetworkInformation;
 
 namespace MonkeyPaste {
 public class MpHelpers {
-#region Singleton
+        #region Singleton
         private static readonly Lazy<MpHelpers> _Lazy = new Lazy<MpHelpers>(() => new MpHelpers());
         public static MpHelpers Instance { get { return _Lazy.Value; } }
 
@@ -422,7 +422,7 @@ public class MpHelpers {
         }
         #endregion
 
-        #region Http
+        #region Network
         //if you are using local Hosting or on premises with self signed certficate,   
         //in IOS add domain host address and Android use IP ADDRESS  
         const string SERVICE_BASE_URL = "https://devenvexe.com"; //replace base address   

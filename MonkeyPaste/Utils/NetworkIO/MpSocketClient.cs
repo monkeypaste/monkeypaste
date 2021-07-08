@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -11,15 +12,19 @@ namespace MonkeyPaste {
         private TcpClient _listener;
         #endregion
 
+        #region Properties
+        public bool IsConnected => _listener != null && _listener.Connected;
+        #endregion
+
         #region Events
-        public event EventHandler<TcpClient> OnConnect;
+        public event EventHandler<string> OnConnect;
         public event EventHandler<string> OnClientError;
         #endregion
 
         #region Public Methods
         public MpSocketClient() {
             OnDisconnect += MpSocketClient_OnDisconnect;
-            OnError += MpSocketClient_OnError;
+            OnError += MpSocketClient_OnError;            
         }
 
         public void Send(string msg) {
@@ -28,7 +33,19 @@ namespace MonkeyPaste {
                 return;
             }
             Write(_listener, msg);
-            WaitForMessage(_listener);
+
+            //Task.Run(async () => {
+            //    await WaitForMessage(_listener);
+            //});            
+        }
+
+        public string Receive() {
+            if(_listener == null || !_listener.Connected || _listener.Available == 0) {
+                return null;
+            }
+            var streamReader = new StreamReader(_listener.GetStream());
+            _lastReceive = streamReader.ReadToEnd();
+            return _lastReceive;
         }
 
         public void Connect(string ip,int port, bool isPublic) {
@@ -36,15 +53,32 @@ namespace MonkeyPaste {
                 if (isPublic) {
 
                 } else {
-                    _listener = new TcpClient(ip,port);
-                    OnConnect?.Invoke(this, _listener);
+                    SetListener(new TcpClient(ip, port));
                 }
             }
             catch (Exception e) {
                 Console.WriteLine("ArgumentNullException: {0}", e);
                 OnClientError?.Invoke(this, e.ToString());
             }
+        }
 
+        public void SetListener(TcpClient client) {
+            _listener = client;
+
+            if (IsConnected) {
+                MpConsole.WriteLine(@"Connected to listener");
+                OnConnect?.Invoke(this, @"Connect"+EofToken);
+            }
+        }
+
+        public async Task<string> WaitForResponse() {
+            string response = null;
+            do {
+                response = Receive();
+                await Task.Delay(100);
+            }
+            while (response == null);
+            return response;
         }
 
         #endregion
