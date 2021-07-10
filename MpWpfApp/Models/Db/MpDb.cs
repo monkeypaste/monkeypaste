@@ -668,19 +668,19 @@ namespace MpWpfApp {
         }
 
         public int GetSyncPort() {
-            return 44380;
+            return 44381;
         }
 
         public string GetLocalIp4Address() {
             if (!IsConnectedToNetwork()) {
-                return string.Empty;
+                return "0.0.0.0";
             }
             return MpHelpers.Instance.GetLocalIp4Address();
         }
 
         public string GetExternalIp4Address() {
             if (!IsConnectedToInternet()) {
-                return string.Empty;
+                return "0.0.0.0";
             }
             return MpHelpers.Instance.GetExternalIp4Address();
         }

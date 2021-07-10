@@ -28,7 +28,7 @@ namespace MonkeyPaste {
 			jsonDbObject.DbObjectType = typeConverter.Convert(typeStr);
 			jsonDbObject.DbObjectJson = jsonStr;
 			jsonDbObject.DbObject = JsonConvert.DeserializeObject(jsonStr, jsonDbObject.DbObjectType);
-			jsonDbObject.DbObject = await (jsonDbObject.DbObject as MpISyncableDbObject).PopulateDbObjectFromJson(jsonDbObject.DbObject);
+			jsonDbObject.DbObject = await (jsonDbObject.DbObject as MpISyncableDbObject).DeserializeDbObject(jsonDbObject.DbObject);
 			return jsonDbObject;
 		}
 

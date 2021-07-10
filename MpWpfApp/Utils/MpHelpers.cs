@@ -2769,7 +2769,7 @@ namespace MpWpfApp {
             //        continue;
             //    }
             //    string a = ip.MapToIPv4().ToString();
-            //    MpConsole.WriteLine(a);
+            //    MonkeyPaste.MpConsole.WriteLine(a);
             //}
             //IPAddress ipAddress = ipHostInfo.AddressList[ipHostInfo.AddressList.Length - 1];
             //if (ipAddress != null) {

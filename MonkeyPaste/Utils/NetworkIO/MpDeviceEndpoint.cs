@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MonkeyPaste {
-    public class MpDeviceEndpoint {
+    public class MpDeviceEndpoint : MpISyncableDbObject {
         #region Properties
         public string PublicIp4Address { get; set; }
         public int PublicPortNum { get; set; }
@@ -15,7 +17,7 @@ namespace MonkeyPaste {
 
         public string AccessToken { get; set; }
 
-        public DateTime LoginDateTime { get; set; }
+        public DateTime ConnectDateTime { get; set; }
 
         public string DeviceGuid { get; set; }
 
@@ -55,13 +57,21 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public static MpDeviceEndpoint Parse(string destr) {
-            if(string.IsNullOrEmpty(destr)) {
+
+        public MpDeviceEndpoint() { }
+        
+
+        public override string ToString() {
+            return SerializeDbObject();
+        }
+
+        public static MpDeviceEndpoint Parse(string str) {
+            if (string.IsNullOrEmpty(str)) {
                 return null;
             }
-            var epParts = destr.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
-            if(epParts.Length != 7) {
-                throw new Exception("EP string must have 6 elements: " + destr);
+            var epParts = str.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+            if (epParts.Length != 7) {
+                throw new Exception("EP string must have 6 elements: " + str);
             }
             var ep = new MpDeviceEndpoint() {
                 PublicIp4Address = epParts[0],
@@ -70,14 +80,22 @@ namespace MonkeyPaste {
                 PrivatePortNum = Convert.ToInt32(epParts[3]),
                 AccessToken = epParts[4],
                 DeviceGuid = epParts[5],
-                LoginDateTime = DateTime.Parse(epParts[6])
+                ConnectDateTime = DateTime.Parse(epParts[6])
             };
+
             return ep;
         }
-        public MpDeviceEndpoint() { }
 
-        public override string ToString() {
-            return string.Format(@"{0},{1},{2},{3},{4},{5},{6}", PublicIp4Address, PublicPortNum, PrivateIp4Address, PrivatePortNum, AccessToken, DeviceGuid,LoginDateTime);
+        public string SerializeDbObject() {
+            return string.Format(@"{0},{1},{2},{3},{4},{5},{6}", PublicIp4Address, PublicPortNum, PrivateIp4Address, PrivatePortNum, AccessToken, DeviceGuid, ConnectDateTime);
+        }
+
+        public Type GetDbObjectType() {
+            return typeof(MpDeviceEndpoint);
+        }
+
+        public Task<object> DeserializeDbObject(object obj) {
+            throw new NotImplementedException();
         }
         #endregion
     }

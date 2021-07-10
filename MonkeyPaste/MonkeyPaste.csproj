@@ -79,6 +79,7 @@
     <PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
     <PackageReference Include="SQLiteNetExtensions.Async" Version="2.1.0" />
     <PackageReference Include="System.Reactive" Version="5.0.0" />
+    <PackageReference Include="WatsonTcp" Version="4.8.8" />
     <PackageReference Include="Xam.Plugin.Media" Version="5.0.1" />
     <PackageReference Include="Xam.Plugin.SimpleAudioPlayer" Version="1.4.0" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="1.1.0" />

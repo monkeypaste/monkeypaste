@@ -247,7 +247,7 @@ namespace MpWpfApp {
 
         private void SetLoadOnLogin(bool loadOnLogin) {
             if(!MpHelpers.Instance.IsThisAppAdmin()) {
-                //MonkeyPaste.MpConsole.WriteLine("Process not running as admin, cannot alter load on login");
+                //MonkeyPaste.MonkeyPaste.MpConsole.WriteLine("Process not running as admin, cannot alter load on login");
                 return;
             }
             Microsoft.Win32.RegistryKey rk = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);

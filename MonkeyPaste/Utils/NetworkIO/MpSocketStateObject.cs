@@ -7,8 +7,7 @@ namespace MonkeyPaste {
     // State object for reading client data asynchronously 
     public class MpSocketStateObject {
         public Socket WorkSocket = null;
-        public const int BufferSize = 1024;
+        public const int BufferSize = 8192;
         public byte[] Buffer = new byte[BufferSize];
-        public StringBuilder Sb = new StringBuilder();
     }
 }

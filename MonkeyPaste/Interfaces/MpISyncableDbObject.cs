@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public interface MpISyncableDbObject {
-        Task<object> PopulateDbObjectFromJson(object obj);
+        Task<object> DeserializeDbObject(object obj);
         string SerializeDbObject();
         Type GetDbObjectType();
     }

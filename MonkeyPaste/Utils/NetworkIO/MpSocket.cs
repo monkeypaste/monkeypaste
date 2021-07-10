@@ -14,6 +14,7 @@ namespace MonkeyPaste {
         #endregion
 
         #region Protected Variables
+        protected MpISync _localSync;
         protected string _lastSend, _lastReceive;
         #endregion
 
@@ -26,6 +27,23 @@ namespace MonkeyPaste {
         #region Properties
         public bool IsRunning { get; protected set; } = false;
         public static string EofToken { get; set; } = "<EOF>";
+        public static string EosToken { get; set; } = "<EOS>";
+        #endregion
+
+        #region Protected Methods
+        protected string OpenMessage(string e) {
+            if (!ValidateMessagee(e)) {
+                throw new Exception("Message either has a bad check sum or no <Eof>");
+            }
+            return e.Replace(MpSocket.EofToken, string.Empty).Replace(MpSocket.EosToken,string.Empty);
+        }
+
+        protected bool ValidateMessagee(string msg) {
+            if (msg == null) {
+                return false;
+            }
+            return msg.Contains(MpSocket.EofToken) || msg.Contains(MpSocket.EosToken);
+        }
         #endregion
 
         #region Public Methods        

@@ -76,7 +76,7 @@ namespace MonkeyPaste {
             return allLogs.Where(x => x.Id == DbLogId).FirstOrDefault();
         }
 
-        public async Task<object> PopulateDbObjectFromJson(object obj) {
+        public async Task<object> DeserializeDbObject(object obj) {
             if (obj is not MpDbLog) {
                 throw new Exception(@"obj is not a MonkeyPaste.MpDbLog");
             }

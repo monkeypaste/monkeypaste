@@ -15,11 +15,14 @@ using Xamarin.Forms;
 namespace MonkeyPaste {
     public class MpSocketClientAsync : MpSocket, IDisposable {
         #region Private Variables
-        private MpSocketStateObject _sso = null;
+        //private MpSocketStateObject _sso = null;
         // ManualResetEvent instances signal completion.  
         private ManualResetEvent connectDone = new ManualResetEvent(false);
         private ManualResetEvent sendDone = new ManualResetEvent(false);
         private ManualResetEvent receiveDone = new ManualResetEvent(false);
+        //private ManualResetEvent syncDone = new ManualResetEvent(false);
+
+        private Socket _listener,_client;
 
         private MpDeviceEndpoint _sep, _cep;
         #endregion
@@ -40,65 +43,98 @@ namespace MonkeyPaste {
         #endregion
 
         #region Public Methods
-        public static async Task<MpSocketClientAsync> TryPrivateCreateAndConnect(MpDeviceEndpoint thisEndpoint, bool isWpf) {
-            var sc = new MpSocketClientAsync(thisEndpoint);
-            var sep = await sc.FindPrivateListener(isWpf);
-            if(sep != null) {
-                //thisEndpoint.IsPublic = false;
-                //sep.IsPublic = false;
-                return new MpSocketClientAsync(thisEndpoint, sep);
-            }
-            return null;
-        }
-
-        private MpSocketClientAsync(MpDeviceEndpoint thisEndPoint) {
-            _cep = thisEndPoint;
-        }
-        public MpSocketClientAsync(MpDeviceEndpoint thisEndPoint, MpDeviceEndpoint listenerEndPoint) {
+        public MpSocketClientAsync(MpDeviceEndpoint thisEndPoint, MpDeviceEndpoint listenerEndPoint, MpISync localSync) {
             _cep = thisEndPoint;
             _sep = listenerEndPoint;
-        }
-       
+            _localSync = localSync;
+        }      
         
         public void StartClient() {
             // Connect to a remote device.  
             try {
                 // Create a TCP/IP socket.  
-                Socket client = new Socket(_cep.PrivateIPEndPoint.AddressFamily,
-                    SocketType.Stream, ProtocolType.Tcp);
+                Socket client = new Socket(
+                    _cep.PrivateIPEndPoint.AddressFamily,
+                    SocketType.Stream, 
+                    ProtocolType.Tcp);
 
                 // Connect to the remote endpoint.  
-                client.BeginConnect(_sep.PrivateIPEndPoint,
-                    new AsyncCallback(ConnectCallback), client);
+                client.BeginConnect(
+                    _sep.PrivateIPEndPoint,
+                    new AsyncCallback(ConnectCallback), 
+                    client);
                 connectDone.WaitOne();
-                _sso = new MpSocketStateObject();
-                _sso.WorkSocket = client;
-
+                
+                _client = client;
                 IsRunning = true;
                 MpConsole.WriteLine($"Client ({_cep}) Connected to Listener ({_sep})");
-                // Send test data to the remote device.  
-                //Send(client, _cep.ToString());
-                //sendDone.WaitOne();
+                
+                if(_listener != null) {
+                    // Send test data to the remote device.  
+                    _cep.ConnectDateTime = DateTime.UtcNow;
+                    Send(_cep.SerializeDbObject());
 
-                // Receive the response from the remote device.  
-                //Receive(client);
-                //receiveDone.WaitOne();
+                    // Receive the response from the remote device.  
+                    string sepStr = Receive();
+                    _sep = MpDeviceEndpoint.Parse(sepStr);
 
-                // Write the response to the console.  
-                //Console.WriteLine("Response received : {0}", _lastReceive);
+                    //Send last sync datetime
+                    var lastSyncDateTime = _localSync.GetLastSyncForRemoteDevice(_sep.DeviceGuid).Result;
+                    Send(lastSyncDateTime.ToString());
 
-                //while (IsRunning) { 
-                    
-                //}
-                // Release the socket.  
-                //client.Shutdown(SocketShutdown.Both);
-               // client.Close();
+                    //receive db log from listener
+                    string remoteDbLog = Receive();
+
+                    //send db obj request to listener
+                    var neededItemList = _localSync.ProcessRemoteDbLog(remoteDbLog).Result;
+                    Send(neededItemList.ToString());
+
+                    //receive db objects from listener
+                    string dbObjStr = Receive();
+                    MpConsole.WriteLine(@"Objects from listener: " + dbObjStr);
+                }
 
             }
             catch (Exception e) {
-                Console.WriteLine(e.ToString());
+                MpConsole.WriteLine(e.ToString());
             }
         }
+        public void Send(string msg) {
+            Send(_listener, msg);
+            sendDone.WaitOne();
+        }
+
+        public string Receive() {
+            _lastReceive = string.Empty;
+            Receive(_listener);
+            receiveDone.WaitOne();
+            return OpenMessage(_lastReceive);
+        }
+
+        public DateTime FinishSync() {
+            var finishSyncDateTime = DateTime.UtcNow;
+            Send(_listener, finishSyncDateTime.ToString(), true);
+            sendDone.WaitOne();
+
+            Receive(_listener);
+            receiveDone.WaitOne();
+
+            var confirmFinishSyncDateTime = DateTime.Parse(OpenMessage(_lastReceive));
+
+            if(!finishSyncDateTime.Equals(confirmFinishSyncDateTime)) {
+                throw new Exception("Sync history dt must match");
+            }
+            Disconnect();
+
+            return finishSyncDateTime;
+        }
+
+        public void Disconnect() {
+            // Release the socket.  
+            _client.Shutdown(SocketShutdown.Both);
+            _client.Close();
+        }
+
         public void Dispose() {
         }
         #endregion
@@ -112,31 +148,33 @@ namespace MonkeyPaste {
                 // Complete the connection.  
                 client.EndConnect(ar);
 
-                Console.WriteLine("Socket connected to {0}",
+                _listener = client;
+                MpConsole.WriteLine("Socket connected to {0}",
                     client.RemoteEndPoint.ToString());
 
                 // Signal that the connection has been made.  
                 connectDone.Set();
-                OnConnect?.Invoke(this, string.Empty);
             }
             catch (Exception e) {
-                Console.WriteLine(e.ToString());
+                MpConsole.WriteLine(e.ToString());
                 OnError?.Invoke(this, @"Client Connect Callback exception:" + e.ToString());
             }
         }
 
         private void Receive(Socket client) {
-            try {
+            try {                
                 // Create the state object.  
                 MpSocketStateObject state = new MpSocketStateObject();
                 state.WorkSocket = client;
-
+                //while (client.Available == 0) {
+                //    Thread.Sleep(10);
+                //}
                 // Begin receiving the data from the remote device.  
                 client.BeginReceive(state.Buffer, 0, MpSocketStateObject.BufferSize, 0,
                     new AsyncCallback(ReceiveCallback), state);
             }
             catch (Exception e) {
-                Console.WriteLine(e.ToString());
+                MpConsole.WriteLine(e.ToString());
             }
         }
 
@@ -147,28 +185,19 @@ namespace MonkeyPaste {
                 MpSocketStateObject state = (MpSocketStateObject)ar.AsyncState;
                 Socket client = state.WorkSocket;
 
-                string content = string.Empty;
+
                 // Read data from the remote device.  
                 int bytesRead = client.EndReceive(ar);
-
+                _listener = client;
                 if (bytesRead > 0) {
                     // There might be more data, so store the data received so far.  
-                    state.Sb.Append(Encoding.ASCII.GetString(state.Buffer, 0, bytesRead));
-
-                    content = state.Sb.ToString();
-                    if (content.IndexOf(EofToken) > -1) {
-                        // All the data has been read from the
-                        // client. Display it on the console.  
-                        Console.WriteLine("Read {0} bytes from socket. \n Data : {1}", content.Length, content);
-
-                        _lastReceive = content;
-                        // Signal that all bytes have been received.  
+                    _lastReceive += Encoding.ASCII.GetString(state.Buffer, 0, bytesRead);
+                    if (_lastReceive.IndexOf(EofToken) > -1) {
+                        MpConsole.WriteLine(@"Read {0} bytes from socket. \n Data : {1}", _lastReceive.Length, _lastReceive);
                         receiveDone.Set();
-
-                        OnReceive?.Invoke(this, content);
-                        // TODO add validation response
-                        // Echo content checksum back to client 
-                        //Send(client, content.CheckSum());
+                    } else if (_lastReceive.IndexOf(EosToken) > -1) {
+                        MpConsole.WriteLine(@"Listener has confirmed sync is completed with dt: "+ _lastReceive);
+                        receiveDone.Set();
 
                     } else {
                         // Not all data received. Get more.  
@@ -178,21 +207,14 @@ namespace MonkeyPaste {
                 } 
             }
             catch (Exception e) {
-                Console.WriteLine(e.ToString());
+                MpConsole.WriteLine(e.ToString());
                 OnError?.Invoke(this, @"Client ReceiveCallback exception:" + e.ToString());
             }
         }
-        public void Send(string data) {
-            if(_sso == null || _sso.WorkSocket == null || !_sso.WorkSocket.Connected) {
-                throw new Exception(@"Client not connected");
-            }
-            Send(_sso.WorkSocket, data);
-            sendDone.WaitOne();
-        }
-        private void Send(Socket client, String data) {
-            data += EofToken;
-
+        private void Send(Socket client, String data, bool isLastMessage = false) {
+            data += isLastMessage ? EosToken : EofToken;
             _lastSend = data;
+            MpConsole.WriteLine(@"Sending {0} to listener", data);
             // Convert the string data to byte data using ASCII encoding.  
             byte[] byteData = Encoding.ASCII.GetBytes(data);
 
@@ -208,7 +230,7 @@ namespace MonkeyPaste {
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = client.EndSend(ar);
-                Console.WriteLine("Sent {0} bytes to server.", bytesSent);
+                MpConsole.WriteLine("Sent {0} bytes to server. Data: {1}");
 
                 // Signal that all bytes have been sent.  
                 sendDone.Set();
@@ -216,116 +238,9 @@ namespace MonkeyPaste {
                 OnSend?.Invoke(this, _lastSend);
             }
             catch (Exception e) {
-                Console.WriteLine(e.ToString());
+                MpConsole.WriteLine(e.ToString());
                 OnError?.Invoke(this, @"Client SendCallback exception:" + e.ToString());
             }
-        }
-
-        private string TestConnect(string ip, int port, bool isWpf) {
-            if(!isWpf) {
-                if (test_connection_mobile_tcp(ip, port)) {
-                    return ip;
-                }
-                return null;
-            } 
-            if (test_connection_wpf(ip, port)) {
-                return ip;
-            }
-            return null;
-        }
-
-        public bool test_connection_wpf(String hostname, int portno) {
-            bool connected = true;
-            using(var tcp = new TcpClient()) {
-                IAsyncResult ar = tcp.BeginConnect(hostname, portno, null, null);
-                System.Threading.WaitHandle wh = ar.AsyncWaitHandle;
-                try {
-                    if (!ar.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(100), false)) {
-                        //Console.WriteLine("Tried " + hostname);
-                        tcp.Close();
-                        connected = false;
-                    } else {
-                        tcp.EndConnect(ar);
-                    }
-                } finally {
-                    wh.Close();
-                }
-            }            
-            return connected;
-        }
-        private bool test_connection_mobile_tcp(string hostname, int portno) {
-            using (var tcpc = new TcpClient()) {
-                tcpc.SendTimeout = 25;
-                tcpc.ReceiveTimeout = 25;
-                try {
-                    tcpc.Connect(hostname, portno);
-                    if (tcpc.Connected) {
-                        tcpc.Close();
-                        return true;
-                    }
-                    tcpc.Close();
-
-                }
-                catch (System.Net.Sockets.SocketException) {
-                    if (tcpc != null) {
-                        tcpc.Close();
-                    }
-                    return false;
-                }
-            }
-            return false;
-        }
-        
-        private bool test_connection_mobile(string hostname, int portno) {
-            
-            IPAddress ipa = (IPAddress)Dns.GetHostAddresses(hostname)[0];
-           using (Socket sock = new System.Net.Sockets.Socket(System.Net.Sockets.AddressFamily.InterNetwork, System.Net.Sockets.SocketType.Stream, System.Net.Sockets.ProtocolType.Tcp)) {
-                    try {
-                    sock.SendTimeout = 25;
-                    sock.Connect(ipa, portno); 
-                    if (sock.Connected) {
-                        sock.Close();
-                        return true;
-                    }
-                    sock.Close();
-
-                }
-                catch (System.Net.Sockets.SocketException) {
-                    if (sock != null) {
-                        sock.Close();
-                    }
-                    return false;
-                }
-            }            
-            return false;
-        }
-
-        private async Task<MpDeviceEndpoint> FindPrivateListener(bool isWpf) {
-            // TODO need to test in different network scenerios may need use
-            // private helper string[] GetAllIp4 and scan all local up addresses
-            // on LAN's with actual routers...
-            var thisIp = _cep.PrivateIp4Address;
-            var ipParts = thisIp.Split(new string[] { "." }, StringSplitOptions.RemoveEmptyEntries);
-            string ipPrefix = string.Format("{0}.{1}.{2}.", ipParts[0], ipParts[1], ipParts[2]);
-            var taskList = new List<Task<string>>();
-            for (int i = 1; i < 255; i++) {
-                string b4 = i.ToString();
-                if (b4 == ipParts[3]) {
-                    //skip this ip
-                    continue;
-                }
-                string ip = ipPrefix + b4;
-                if (TestConnect(ip, _cep.PrivatePortNum,isWpf) != null) {
-                    return new MpDeviceEndpoint() {
-                        PrivateIp4Address = ip,
-                        PrivatePortNum = _cep.PrivatePortNum,
-                        //IsPublic = false
-                    };
-                } else {
-                    await Task.Delay(0);
-                }
-            }
-            return null;
         }
 #endregion
     }

@@ -133,7 +133,7 @@ namespace MpWpfApp {
                 });
         }
 
-        public async Task<object> PopulateDbObjectFromJson(object obj) {
+        public async Task<object> DeserializeDbObject(object obj) {
             if (obj.GetType() != typeof(MpDbLog)) {
                 throw new Exception(@"obj is not a MpWpfApp.MpDbLog");
             }

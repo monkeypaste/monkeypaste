@@ -212,7 +212,7 @@ namespace MpWpfApp {
             //MpDb.Instance.ExecuteWrite("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
         }
 
-        public async Task<object> PopulateDbObjectFromJson(object obj) {
+        public async Task<object> DeserializeDbObject(object obj) {
             if (obj.GetType() != typeof(MpTag)) {
                 throw new Exception(@"obj is not a MpTag");
             }

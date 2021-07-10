@@ -76,14 +76,14 @@ namespace MpWpfApp {
                 CurrentProcessWindowHandleStackDictionary.Remove(processToRemove);
                 wasStackChanged = true;
 
-                Console.WriteLine(string.Format(@"Process: {0} REMOVED", processToRemove));
+                //Console.WriteLine(string.Format(@"Process: {0} REMOVED", processToRemove));
             }
             foreach(var handleToRemove in toRemoveHandleKeyValueList) {                
                 if(CurrentProcessWindowHandleStackDictionary.ContainsKey(handleToRemove.Key)) {
                     //remove individual window handles that were flagged
                     CurrentProcessWindowHandleStackDictionary[handleToRemove.Key].Remove(handleToRemove.Value);
                     wasStackChanged = true;
-                    Console.WriteLine(string.Format(@"Process: {0} Handle: {1} REMOVED", handleToRemove.Key, handleToRemove.Value));
+                    //Console.WriteLine(string.Format(@"Process: {0} Handle: {1} REMOVED", handleToRemove.Key, handleToRemove.Value));
                 }
                 if(LastWindowStateHandleDictionary.ContainsKey(handleToRemove.Value)) {
                     LastWindowStateHandleDictionary.Remove(handleToRemove.Value);
@@ -116,13 +116,13 @@ namespace MpWpfApp {
                 CurrentProcessWindowHandleStackDictionary[processName].Insert(0, fgHandle);
                 wasStackChanged = true;
                 ActiveProcessPath = processName;
-                Console.WriteLine(string.Format(@"(Known) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
+                //Console.WriteLine(string.Format(@"(Known) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
             } else {
                 //if its a new process create a new list with this handle as its element
                 CurrentProcessWindowHandleStackDictionary.Add(processName, new List<IntPtr> { fgHandle });
                 wasStackChanged = true;
                 ActiveProcessPath = processName;
-                Console.WriteLine(string.Format(@"(New) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
+                //Console.WriteLine(string.Format(@"(New) Process: {0} Handle:{1} ACTIVE", processName, fgHandle));
             }
             if (wasStackChanged) {
                 OnPropertyChanged(nameof(CurrentProcessWindowHandleStackDictionary));
@@ -139,7 +139,7 @@ namespace MpWpfApp {
                 }
                 catch(Exception ex) {
                     //intermittenly fgHandle is still in dictionary so hopefully this swallows exception
-                    Console.WriteLine($"FgHandle: {fgHandle} already exists...ignoring");
+                    //Console.WriteLine($"FgHandle: {fgHandle} already exists...ignoring");
                 }
                 //Console.WriteLine(@"Last Window State for " + processName + " was " + Enum.GetName(typeof(WinApi.ShowWindowCommands), placement.showCmd));
             }
@@ -163,7 +163,7 @@ namespace MpWpfApp {
                         Directory.GetParent(Environment.GetFolderPath(Environment.SpecialFolder.System)).FullName);
                 }
                 processPath = processPath.Replace(@"\\", @"\").ToLower();
-                Console.WriteLine(processPath);
+                //Console.WriteLine(processPath);
 
                 //forceHandle is only passed when its a running application
                 IntPtr handle = forceHandle == null ? IntPtr.Zero : (IntPtr)forceHandle;
@@ -194,7 +194,7 @@ namespace MpWpfApp {
                 return handle;
             }
             catch (Exception ex) {
-                Console.WriteLine("MpRunningApplicationManager.SetActiveApplication error: " + ex.ToString());
+                //Console.WriteLine("MpRunningApplicationManager.SetActiveApplication error: " + ex.ToString());
                 return IntPtr.Zero;
             }
         }
@@ -206,8 +206,8 @@ namespace MpWpfApp {
                 //Console.WriteLine("Window Title: " + window.Value);
                 UpdateHandleStack(window.Key);
             }
-            Console.WriteLine("RunningApplicationManager Initialized w/ contents: ");
-            Console.WriteLine(this.ToString());
+            //Console.WriteLine("RunningApplicationManager Initialized w/ contents: ");
+            //Console.WriteLine(this.ToString());
         }
 
         private string GetKnownProcessPath(IntPtr handle) {
