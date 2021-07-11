@@ -86,7 +86,7 @@ namespace MonkeyPaste {
                     string remoteDbLog = Receive();
 
                     //send db obj request to listener
-                    var neededItemList = _localSync.ProcessRemoteDbLog(remoteDbLog).Result;
+                    var neededItemList = _localSync.GetDbObjRequestFromRemoteLogStr(remoteDbLog).Result;
                     Send(neededItemList.ToString());
 
                     //receive db objects from listener

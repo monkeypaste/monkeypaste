@@ -13,6 +13,12 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
+    #region SyncException
+    public class MpSyncException : Exception {
+        public MpSyncException(MpSyncMesageType errorType, Socket client, string msg) : base(msg) { }
+    }
+    #endregion
+
     public class MpSyncManager : IDisposable {
         #region Singleton
         private static readonly Lazy<MpSyncManager> _Lazy = new Lazy<MpSyncManager>(() => new MpSyncManager());
@@ -27,8 +33,8 @@ namespace MonkeyPaste {
 
         private string _lastSend, _lastReceive;
 
-        private TcpListener _listener;
-        private TcpClient _client;
+        //private TcpListener _listener;
+        //private TcpClient _client;
         #endregion
 
         public event EventHandler<string> OnError;
@@ -39,7 +45,7 @@ namespace MonkeyPaste {
         //public MpSslTcpClient SslClient { get; set; } = new MpSslTcpClient(null);
         //public MpSslTcpServer SslServer { get; set; } = new MpSslTcpServer(null);
 
-        public static string EofToken { get; set; } = "<EOF>";
+        //public static string EofToken { get; set; } = "<EOF>";
 
         public MpDeviceEndpoint ThisEndpoint { get; set; }
         public MpDeviceEndpoint OtherEndpoint { get; set; }
@@ -49,9 +55,9 @@ namespace MonkeyPaste {
 
         public MpSessionManager SessionManager { get; set; }
 
-        public string StatusLog { get; set; }
+        //public string StatusLog { get; set; }
 
-        public MpSyncMesageType LastSyncState { get; set; } = MpSyncMesageType.None;
+        //public MpSyncMesageType LastSyncState { get; set; } = MpSyncMesageType.None;
 
         //public bool IsClient => SocketClient != null;
         #endregion
@@ -65,79 +71,157 @@ namespace MonkeyPaste {
                 }
                 ThisEndpoint = MpDeviceEndpointFactory.CreateEndpoint(localSync);
 
-                var sw = new Stopwatch();
-                sw.Start();
-                MpConsole.WriteLine(@"Attempting Listener discovery...");
+                //var sw = new Stopwatch();
+                //sw.Start();
+                //MpConsole.WriteLine(@"Attempting Listener discovery...");
 
                 //var privateClient = await MpPrivateEndpointDiscoveryHelper.Discover(
                 //    ThisEndpoint.PrivateIp4Address,
                 //    ThisEndpoint.PrivatePortNum, 
                 //    localSync.IsWpf());
-                sw.Stop();
-                MpConsole.WriteLine(@"Private ip sweep took {0} ms" + sw.ElapsedMilliseconds);
-                StreamWriter w = null;
-                StreamReader r = null;
+                //sw.Stop();
+                //MpConsole.WriteLine(@"Private ip sweep took {0} ms" + sw.ElapsedMilliseconds);
+
                 if (localSync.IsWpf()) {
-                   
-
-                    // let's go!
-                    //server.Start(IPAddress.Parse("192.168.43.209"), ThisEndpoint.PrivatePortNum);
-
-                    // once a client has connected...
-                    //server.Send("[ClientIp:Port]", "Hello, world!");
-                    //var listener = new MpSocketListenerAsync(ThisEndpoint,_localSyncData);
-                    //listener.OnConnect += Listener_OnConnect;
-                    //listener.OnDisconnect += Listener_OnDisconnect;
-                    //listener.StartListening();
-                    //var tcpl = new TcpListener(IPAddress.Parse("192.168.43.209"), ThisEndpoint.PrivatePortNum);
-                    //tcpl.Server.Blocking = true;
-                    //tcpl.Start();
-                    //var tcpc = tcpl.AcceptTcpClient(); 
-                    //using NetworkStream networkStream = tcpc.GetStream();
-                    //networkStream.ReadTimeout = 2000;
-                    //w = new StreamWriter(networkStream);
-                    //w.AutoFlush = true;
-                    //string lep = ThisEndpoint.SerializeDbObject();
-                    //w.WriteLine(lep);
-                    //w.Flush();
-
-                    //r = new StreamReader(tcpc.GetStream());
-                    //string cepstr = r.ReadToEnd();
-                    //OtherEndpoint = MpDeviceEndpoint.Parse(cepstr);
-                    //return;
+                    var server = new Socket(ThisEndpoint.PrivateIPEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                    server.Bind(ThisEndpoint.PrivateIPEndPoint);
+                    server.Listen(10);
+                    while(true) {
+                        Socket client = null;
+                        try {
+                            MpConsole.WriteLine("Waiting for connection...");
+                            client = server.Accept();
+                            MpConsole.WriteLine("Connection made");
+                            var handshakeRequest = Receive(client);
+                            OtherEndpoint = MpDeviceEndpoint.Parse(handshakeRequest.Content);
+                            var handshakeResponse = MpStreamMessage.CreateHandshakeResponse(ThisEndpoint, OtherEndpoint.DeviceGuid);
+                            var dbLogRequest = SendReceive(client, handshakeResponse);
+                            var lastSyncForOther = DateTime.Parse(dbLogRequest.Content);
+                            var dbLogQueryResultStr = await _localSyncData.GetLocalLogFromSyncDate(lastSyncForOther);
+                            var dbLogResponse = MpStreamMessage.CreateDbLogResponse(ThisEndpoint, OtherEndpoint.DeviceGuid, dbLogQueryResultStr);
+                            var dbObjectRequest = SendReceive(client, dbLogResponse);
+                            var dbObjResponseStr = await _localSyncData.GetDbObjResponseFromRequestStr(dbObjectRequest.Content);
+                        }
+                        catch(Exception ex) {
+                            if(ex is MpSyncException) {
+                                client.Shutdown(SocketShutdown.Both);
+                                client.Dispose();
+                                client = null;
+                                MpConsole.WriteLine("Connection lost with client");
+                            }
+                        }
+                    }
                 } else {
-                    
-                    //var tcpc = new TcpClient();
-                    //tcpc.Connect("192.168.43.209", ThisEndpoint.PrivatePortNum);
-                    //using NetworkStream networkStream = tcpc.GetStream();
-                    //networkStream.ReadTimeout = 2000;
-                    //r = new StreamReader(networkStream);
-                    //string sepstr = r.ReadToEnd();
-                    //OtherEndpoint = MpDeviceEndpoint.Parse(sepstr);
-
-                    //w = new StreamWriter(networkStream);
-                    //w.AutoFlush = true;
-                    //string cep = ThisEndpoint.SerializeDbObject();
-                    //w.WriteLine(cep);
-                    //w.Flush();
-                    //return;
-                    //OtherEndpoint = new MpDeviceEndpoint() {
-                    //    PublicIp4Address = @"192.168.43.209",
-                    //    PrivateIp4Address = @"192.168.43.209",
-                    //    DeviceGuid = "???",
-                    //    PublicPortNum = localSync.GetSyncPort(),
-                    //    PrivatePortNum = localSync.GetSyncPort(),
-                    //    AccessToken = "???"
-                    //};
-                    //var client = new MpSocketClientAsync(ThisEndpoint, OtherEndpoint,_localSyncData);
-                    //client.OnConnect += Client_OnConnect;
-                    //client.StartClient();
-                    //return;
-
+                    var listener = ConnectSocket(@"192.168.43.209", 44381);
+                    var handshakeRequest = MpStreamMessage.CreateHandshakeRequest(ThisEndpoint);
+                    var handshakeResponse = SendReceive(listener,handshakeRequest);
+                    OtherEndpoint = MpDeviceEndpoint.Parse(handshakeResponse.Content);
+                    var lastSyncDt = await _localSyncData.GetLastSyncForRemoteDevice(OtherEndpoint.DeviceGuid);
+                    var dbLogRequest = MpStreamMessage.CreateDbLogRequest(
+                        ThisEndpoint,
+                        OtherEndpoint.DeviceGuid,
+                        lastSyncDt);
+                    var dbLogResponse = SendReceive(listener, dbLogRequest);                    
+                    var dbObjectRequestStr = await _localSyncData.GetDbObjRequestFromRemoteLogStr(dbLogResponse.Content);
+                    var dbObjectRequest = MpStreamMessage.CreateDbObjectRequest(ThisEndpoint, OtherEndpoint.DeviceGuid, dbObjectRequestStr as string);
+                    var dbObjectResponse = SendReceive(listener, dbObjectRequest);
                 }
             });
         }
 
+        private Socket ConnectSocket(string server, int port) {
+            // Get host related information.
+            var hostEntry = Dns.GetHostEntry(server);
+
+            // Loop through the AddressList to obtain the supported AddressFamily. This is to avoid
+            // an exception that occurs when the host IP Address is not compatible with the address family
+            // (typical in the IPv6 case).
+            foreach (IPAddress address in hostEntry.AddressList) {
+                IPEndPoint ipe = new IPEndPoint(address, port);
+                Socket tempSocket = new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
+                tempSocket.Connect(ipe);
+
+                if (tempSocket.Connected) {
+                   return tempSocket;
+                }
+            }
+            return null;
+        }
+
+        private MpStreamMessage SendReceive(Socket s, MpStreamMessage smsg) {
+            if (s == null) {
+                return MpStreamMessage.CreateErrorMessage(ThisEndpoint, string.Empty, MpSyncMesageType.ErrorNotConnected, @"Socket is null");
+            }
+            if (!s.Connected) {
+                return MpStreamMessage.CreateErrorMessage(ThisEndpoint, string.Empty, MpSyncMesageType.ErrorNotConnected, $"Cannot connect to socket: {s.ToString()}");
+            }
+            string smsgStr = smsg.SerializeDbObject();
+            Byte[] bytesSent = Encoding.ASCII.GetBytes(smsgStr);
+            
+            MpConsole.WriteLine(@"Sending: " + smsgStr);
+            s.Send(bytesSent, bytesSent.Length, SocketFlags.None);
+            MpConsole.WriteLine(@"Sent: {0} bytes", bytesSent.Length);
+
+            var responeStreamMsg = Receive(s);
+            
+            return responeStreamMsg;
+        }
+
+        private MpStreamMessage Receive(Socket s) {
+            var bytesReceived = ReceiveAll(s);
+            var response = Encoding.ASCII.GetString(bytesReceived);
+            if (!response.Contains(MpStreamMessage.EofToken)) {
+                if(string.IsNullOrEmpty(response)) {
+                    return MpStreamMessage.CreateErrorMessage(ThisEndpoint, string.Empty, MpSyncMesageType.ErrorNotConnected, "Lost connection");
+                }
+                return MpStreamMessage.CreateErrorMessage(ThisEndpoint, string.Empty, MpSyncMesageType.ErrorInvalidData, $"No eof token received for msg: {response}");
+            } else {
+                response = response.Replace(MpStreamMessage.EofToken, string.Empty);
+            }
+            MpConsole.WriteLine(@"Received: " + response);
+            return MpStreamMessage.Parse(response);
+        }
+
+        private byte[] ReceiveAll(Socket socket) {
+            var buffer = new List<byte>();
+
+            while(socket.Available == 0) {
+                //if (!SocketConnected(socket)) {
+                //    throw new MpSyncException(MpSyncMesageType.ErrorNotConnected, socket, @"Client not connected");
+                //}
+            }
+
+            while (socket.Available > 0) {
+                var currByte = new Byte[1];
+                var byteCounter = socket.Receive(currByte, currByte.Length, SocketFlags.None);
+
+                if (byteCounter.Equals(1)) {
+                    buffer.Add(currByte[0]);
+                }
+            }
+
+            return buffer.ToArray();
+        }
+
+        private bool SocketConnected(Socket s) {
+            // Exit if socket is null
+            if (s == null)
+                return false;
+            bool part1 = s.Poll(1000, SelectMode.SelectRead);
+            bool part2 = (s.Available == 0);
+            if (part1 && part2)
+                return false;
+            else {
+                try {
+                    int sentBytesCount = s.Send(new byte[1], 1, 0);
+                    return sentBytesCount == 1;
+                }
+                catch {
+                    return false;
+                }
+            }
+        }
         private async void Listener_OnDisconnect(object sender, DateTime e) {
             await Task.Delay(3000);
             (sender as MpSocketListenerAsync).FinishSync();
@@ -157,7 +241,7 @@ namespace MonkeyPaste {
                 msg = client.Receive();
 
                 //send db obj request to listener
-                var neededItemList = await _localSyncData.ProcessRemoteDbLog(msg);
+                var neededItemList = await _localSyncData.GetDbObjRequestFromRemoteLogStr(msg);
                 client.Send(neededItemList.ToString());
 
                 //receive db objects from listener
@@ -188,7 +272,7 @@ namespace MonkeyPaste {
                 }
 
                 //send dblog for device guid after last sync datetime
-                var localLogFromLastSync = await _localSyncData.GetLocalLog(minLastSyncDateTime);
+                var localLogFromLastSync = await _localSyncData.GetLocalLogFromSyncDate(minLastSyncDateTime);
                 listener.Send(localLogFromLastSync);
 
                 //receive dbo request guid/table name pairs that client needs

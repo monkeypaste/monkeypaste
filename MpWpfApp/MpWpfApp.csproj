@@ -133,7 +133,7 @@
     <Compile Include="Converters\MpIntToWindowCommandConverter.cs" />
     <Compile Include="Converters\MpPointCollectionConverter.cs" />
     <Compile Include="Converters\MpRichTextToImageConverter.cs" />
-    <Compile Include="Converters\MpStringToDbObjectTypeConverter.cs" />
+    <Compile Include="Converters\MpWpfStringToDbObjectTypeConverter.cs" />
     <Compile Include="Converters\MpStringToImageConverter.cs" />
     <Compile Include="Converters\MpStringToIconConverter.cs" />
     <Compile Include="Converters\MpStringToBrushConverter.cs" />

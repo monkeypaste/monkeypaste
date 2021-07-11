@@ -19,13 +19,14 @@ namespace MonkeyPaste {
         string GetExternalIp4Address();
 
         Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid);
-        //this needs to return db object info 
-        Task<object> ProcessRemoteDbLog(string dbLogMessage);
+        Task<string> GetLocalLogFromSyncDate(DateTime fromDateTime);
+        Task<string> GetDbObjRequestFromRemoteLogStr(string dbLogMessageStr);
+        Task<string> GetDbObjResponseFromRequestStr(string dbObjReqStr);
+        Task<object> ProcessDbObjResponse(string dbObjRespStr);
+        Task CommitSync(object newObjs, string otherGuid, DateTime newSyncDt);
 
-        Task<string> GetLocalLog(DateTime fromDateTime);
+        MpIStringToSyncObjectTypeConverter GetTypeConverter();
 
-        Task<List<object>> GetLocalData();
-        Task ProcessRemoteData(List<object> remoteData);
         string ConvertToJson(List<object> objList);
     }
 }

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
 	public class MpDbMessage {
-		public List<MpJsonDbObject> JsonDbObjects { get; set; } = new List<MpJsonDbObject>();
+		public List<MpSerialzedSyncObjWithType> DbObjects { get; set; } = new List<MpSerialzedSyncObjWithType>();
 
-		public static async Task<MpDbMessage> Parse(string message, MpIDbStringToDbObjectTypeConverter typeConverter, string parseToken = "#$%^") {
+		public static MpDbMessage Parse(string message, MpIStringToSyncObjectTypeConverter converter, string parseToken = "#$%^") {
 			if(string.IsNullOrEmpty(message)) {
 				return null;
             }
@@ -16,11 +16,11 @@ namespace MonkeyPaste {
 			//and and to to list
 			var dbObjects = message.Split(new string[] { parseToken }, StringSplitOptions.RemoveEmptyEntries);
 			foreach(var dbo in dbObjects) {
-				var jdbo = await MpJsonDbObject.Parse(dbo,typeConverter);
+				var jdbo = MpSerialzedSyncObjWithType.ConvertFrom(dbo,converter);
 				if(jdbo == null) {
 					continue;
                 }
-				dbMessage.JsonDbObjects.Add(jdbo);
+				dbMessage.DbObjects.Add(jdbo);
             }
 			return dbMessage;
 		}
@@ -28,7 +28,7 @@ namespace MonkeyPaste {
 		public static string Create(List<MpISyncableDbObject> dbol, string parseToken = "#$%^") {			
 			var sb = new StringBuilder();
 			foreach(var oi in dbol) {
-				var jsonDbObject = MpJsonDbObject.Create(oi);
+				var jsonDbObject = MpSerialzedSyncObjWithType.ConvertTo(oi);
 				sb.Append(string.Format(@"{0}{1}", jsonDbObject, parseToken));
             }
 			return sb.ToString();

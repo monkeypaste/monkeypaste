@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
-    public class MpStringToDbObjectTypeConverter : MonkeyPaste.MpIDbStringToDbObjectTypeConverter {
+    public class MpWpfStringToDbObjectTypeConverter : MonkeyPaste.MpIStringToSyncObjectTypeConverter {
         public Type Convert(string typeString) {
             if(string.IsNullOrEmpty(typeString)) {
                 throw new Exception(@"typeString is null or empty");

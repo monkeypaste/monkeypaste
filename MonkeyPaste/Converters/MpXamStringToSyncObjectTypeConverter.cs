@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MonkeyPaste {
-    public class MpStringToDbModelTypeConverter : MpIDbStringToDbObjectTypeConverter {
+    public class MpXamStringToSyncObjectTypeConverter : MpIStringToSyncObjectTypeConverter {
         public Type Convert(string typeString) {
             if (string.IsNullOrEmpty(typeString)) {
                 throw new Exception(@"typeString is null or empty");
@@ -19,7 +19,7 @@ namespace MonkeyPaste {
                 if (typeString.ToLower().StartsWith(@"mpwpfapp")) {
                     typeString = typeString.Replace(@"MpWpfApp", @"MonkeyPaste");
                 }
-                var asm = typeof(MpStringToDbModelTypeConverter).Assembly;
+                var asm = typeof(MpXamStringToSyncObjectTypeConverter).Assembly;
                 return asm.GetType(typeString);
             }
             catch (Exception ex) {

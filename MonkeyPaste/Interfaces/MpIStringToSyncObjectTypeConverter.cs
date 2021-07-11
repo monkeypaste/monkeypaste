@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace MonkeyPaste {
-    public interface MpIDbStringToDbObjectTypeConverter {
+    public interface MpIStringToSyncObjectTypeConverter {
         Type Convert(string typeString);
     }
 }

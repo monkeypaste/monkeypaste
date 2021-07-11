@@ -148,7 +148,7 @@ namespace MonkeyPaste {
                         }
 
                         //send dblog for device guid after last sync datetime
-                        var localLogFromLastSync = _localSync.GetLocalLog(minLastSyncDateTime).Result;
+                        var localLogFromLastSync = _localSync.GetLocalLogFromSyncDate(minLastSyncDateTime).Result;
                         Send(localLogFromLastSync);
 
                         //receive dbo request guid/table name pairs that client needs

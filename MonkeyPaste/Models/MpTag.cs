@@ -54,8 +54,6 @@ namespace MonkeyPaste {
         //public int ParentTagId { get; set; }
         #endregion
 
-
-
         public MpTag() : base(typeof(MpTag)) {
             TagGuid = System.Guid.NewGuid();
         }
@@ -116,22 +114,18 @@ namespace MonkeyPaste {
             //    });
         }
 
-        public async Task<object> DeserializeDbObject(object obj) {
-            if(obj is not MpTag) {
-                throw new Exception(@"obj is not a MpTag");
-            }
-            var tag = obj as MpTag;
-            tag.TagColor = await MpColor.GetColorById(tag.ColorId);
-            // TODO also populate tag item list
-            return tag;
-        }
+        public async Task<object> DeserializeDbObject(string objStr,string parseToken = @"^(@!@") {
+            var newTag = new MpTag();
 
-        public string SerializeDbObject() {
-            return JsonConvert.SerializeObject(this);
+            return newTag;
         }
 
         public Type GetDbObjectType() {
             return typeof(MpTag);
+        }
+
+        public string SerializeDbObject(string parseToken = "^(@!@") {
+            throw new NotImplementedException();
         }
     }
 }

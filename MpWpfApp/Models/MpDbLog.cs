@@ -16,6 +16,8 @@ namespace MpWpfApp {
         public int DbLogId { get; set; }
         public Guid DbObjectGuid { get; set; }
         public string DbTableName { get; set; }
+        public string AffectedColumnName { get; set; } = "UnknownColumnName";
+        public string AffectedColumnValue { get; set; } = "UnknownColumnValue";
         public MpDbLogActionType LogActionType { get; set; } = MpDbLogActionType.None;
         public DateTime LogActionDateTime { get; set; }
         public Guid SourceClientGuid { get; set; }
@@ -43,6 +45,8 @@ namespace MpWpfApp {
             return null;
         }
 
+        public MpDbLog() { }
+
         public MpDbLog(int DbLogId) {
             DataTable dt = MpDb.Instance.Execute(
                 "select * from MpDbLog where pk_MpDbLogId=@cid",
@@ -56,11 +60,15 @@ namespace MpWpfApp {
         public MpDbLog(
             Guid dbObjectGuid, 
             string tableName, 
+            string affectedColumnName,
+            string affectedColumnValue,
             MpDbLogActionType actionType, 
             DateTime actionDateTime, 
             Guid sourceClientGuid) {
             DbObjectGuid = dbObjectGuid;
             DbTableName = tableName;
+            AffectedColumnName = affectedColumnName;
+            AffectedColumnValue = affectedColumnValue;
             LogActionType = actionType;
             LogActionDateTime = actionDateTime;
             SourceClientGuid = sourceClientGuid;
@@ -72,6 +80,8 @@ namespace MpWpfApp {
             DbLogId = Convert.ToInt32(dr["pk_MpDbLogId"].ToString());
             DbObjectGuid = Guid.Parse(dr["DbObjectGuid"].ToString());
             DbTableName = dr["DbTableName"].ToString();
+            AffectedColumnName = dr["AffectedColumnName"].ToString();
+            AffectedColumnValue = dr["AffectedColumnValue"].ToString();
             LogActionType = (MpDbLogActionType)Convert.ToInt32(dr["LogActionType"].ToString());
             LogActionDateTime = DateTime.Parse(dr["LogActionDateTime"].ToString());
             SourceClientGuid = Guid.Parse(dr["SourceClientGuid"].ToString());
@@ -91,11 +101,13 @@ namespace MpWpfApp {
         public override void WriteToDatabase() {
             if (DbLogId == 0) {
                 MpDb.Instance.ExecuteWrite(
-                        "insert into MpDbLog(DbObjectGuid,DbTableName,LogActionType,LogActionDateTime,SourceClientGuid) " +
-                        "values(@dbog,@dbtn,@lat,@ladt,@scg)",
+                        "insert into MpDbLog(DbObjectGuid,DbTableName,AffectedColumnName,AffectedColumnValue,LogActionType,LogActionDateTime,SourceClientGuid) " +
+                        "values(@dbog,@dbtn,@acn,@acv,@lat,@ladt,@scg)",
                         new System.Collections.Generic.Dictionary<string, object> {
                             { "@dbog",DbObjectGuid.ToString() },
                             { "@dbtn", DbTableName },
+                            { "@acn",AffectedColumnName },
+                            { "@acv",AffectedColumnValue },
                             { "@lat", (int)LogActionType },
                             { "@ladt",LogActionDateTime.ToString("yyyy-MM-dd HH:mm:ss") },
                             { "@scg", SourceClientGuid.ToString() }
@@ -103,11 +115,13 @@ namespace MpWpfApp {
                 DbLogId = MpDb.Instance.GetLastRowId("MpDbLog", "pk_MpDbLogId");
             } else {
                 MpDb.Instance.ExecuteWrite(
-                    "update MpDbLog set DbObjectGuid=@dbog,DbTableName=@dbtn,LogActionType=@lat,LogActionDateTime=@ladt,SourceClientGuid=@scg where pk_MpDbLogId=@dblid",
+                    "update MpDbLog set DbObjectGuid=@dbog,DbTableName=@dbtn,AffectedColumnName=@acn,AffectedColumnValue=@acv,LogActionType=@lat,LogActionDateTime=@ladt,SourceClientGuid=@scg where pk_MpDbLogId=@dblid",
                     new System.Collections.Generic.Dictionary<string, object> {
                         { "@dblid", DbLogId },
                         { "@dbog",DbObjectGuid.ToString() },
                         { "@dbtn", DbTableName },
+                        { "@acn",AffectedColumnName },
+                        { "@acv",AffectedColumnValue },
                         { "@lat", (int)LogActionType },
                         { "@ladt",LogActionDateTime.ToString("yyyy-MM-dd HH:mm:ss") },
                         { "@scg", SourceClientGuid.ToString() }
@@ -133,16 +147,34 @@ namespace MpWpfApp {
                 });
         }
 
-        public async Task<object> DeserializeDbObject(object obj) {
-            if (obj.GetType() != typeof(MpDbLog)) {
-                throw new Exception(@"obj is not a MpWpfApp.MpDbLog");
-            }
-            await Task.Delay(5);
-            return obj;
+        public async Task<object> DeserializeDbObject(string objStr, string parseToken = @"^(@!@") {
+            await Task.Delay(0);
+
+            var objParts = objStr.Split(new string[] { parseToken }, StringSplitOptions.RemoveEmptyEntries);
+
+            var dbLog = new MpDbLog() {
+                DbObjectGuid = System.Guid.Parse(objParts[0]),
+                DbTableName = objParts[1],
+                AffectedColumnName = objParts[2],
+                AffectedColumnValue = objParts[3],
+                LogActionType = (MpDbLogActionType)Convert.ToInt32(objParts[4]),
+                LogActionDateTime = DateTime.Parse(objParts[5]),
+                SourceClientGuid = System.Guid.Parse(objParts[6])
+            };
+            return dbLog;
         }
 
-        public string SerializeDbObject() {
-            return JsonConvert.SerializeObject(this);
+        public string SerializeDbObject(string parseToken = @"^(@!@") {
+            return string.Format(
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}",
+                parseToken,
+                DbObjectGuid.ToString(),
+                DbTableName,
+                AffectedColumnName,
+                AffectedColumnValue,
+                (int)LogActionType,
+                LogActionDateTime.ToString(),
+                SourceClientGuid.ToString());
         }
 
         public Type GetDbObjectType() {

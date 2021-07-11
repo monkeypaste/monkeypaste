@@ -143,10 +143,10 @@ namespace MpWpfApp {
             }
             return conn;
         }
-        public int ExecuteWrite(string query, Dictionary<string, object> args, string dbObjectGuid = "", string sourceClientGuid = "") {
+        public int ExecuteWrite(string query, Dictionary<string, object> args, string dbObjectGuid = "", Dictionary<string,string> alteredColumnNameValuePairs = null, string sourceClientGuid = "") {
             if(!string.IsNullOrEmpty(dbObjectGuid)) {
                 //only track objects providing a guid
-                MpDbLogTracker.TrackDbWrite(query, args, dbObjectGuid, sourceClientGuid);
+                MpDbLogTracker.TrackDbWrite(query, alteredColumnNameValuePairs, dbObjectGuid, sourceClientGuid);
             }
 
             int numberOfRowsAffected;
@@ -272,6 +272,8 @@ namespace MpWpfApp {
                       pk_MpDbLogId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
                     , DbObjectGuid text
                     , DbTableName text
+                    , AffectedColumnName text
+                    , AffectedColumnValue text
                     , LogActionType integer default 0
                     , LogActionDateTime datetime
                     , SourceClientGuid text
@@ -610,67 +612,27 @@ namespace MpWpfApp {
         }
 
         #region Sync Data
-        public async Task<List<object>> GetLocalData() {
-            var ld = new List<object>();
-            foreach (var c in MpCopyItem.GetAllCopyItems(out int allItems)) {
-                //MpApp app = await MpApp.GetAppById(c.AppId);
-                //app.Icon = await MpIcon.GetIconById(app.IconId);
-                //app.Icon.IconImage = await MpDbImage.GetDbImageById(app.Icon.IconImageId);
-                //c.App = app;
-
-                //var color = await MpColor.GetColorById(c.ColorId);
-                //if (color != null) {
-                //    c.ItemColor = color;
-                //}
-                c.ItemFlowDocument = null;
-                ld.Add(c);
-            }
-            await Task.Delay(10);
-            return ld;
-        }
-
-        public async Task ProcessRemoteData(List<object> remoteData) {
-            foreach (var rdi in remoteData) {
-                Console.WriteLine(rdi.ToString());
-            }
-            await Task.Delay(10);
-        }
-
-        public string ConvertToJson(List<object> objList) {
-            var sb = new StringBuilder();
-            foreach(var obj in objList) {
-                sb.Append(JsonConvert.SerializeObject(obj));
-            }
-            
-            return sb.ToString();
-        }
-        public async Task<string> GetLocalLog(DateTime fromDateTime) {
-            var logItems = MpDbLog.GetAllDbLogs().Where(x=>x.LogActionDateTime > fromDateTime).ToList();
-            var dbol = new List<MpISyncableDbObject>();
-            foreach (var li in logItems) {
-                dbol.Add(li as MpISyncableDbObject);
-            }
-            var dbMsgStr = MpDbMessage.Create(dbol);
-            await Task.Delay(1);
-            return dbMsgStr; 
-        }
-
-        public Task<MpStreamMessage> ProcessRemoteDbLog(MpDbMessage dbLogMessage) {
-            throw new NotImplementedException();
-        }
-
-        public string GetThisClientGuid() {
-            return Properties.Settings.Default.ThisClientGuid;
-        }
-
         public bool IsWpf() {
             return true;
+        }
+        public async Task RunOnMainThread(Action action) {
+            await Application.Current.MainWindow.Dispatcher.InvokeAsync(action);
+        }
+
+        public bool IsConnectedToNetwork() {
+            return MpHelpers.Instance.IsConnectedToNetwork();
+        }
+
+        public bool IsConnectedToInternet() {
+            return MpHelpers.Instance.IsConnectedToInternet();
         }
 
         public int GetSyncPort() {
             return 44381;
         }
-
+        public string GetThisClientGuid() {
+            return Properties.Settings.Default.ThisClientGuid;
+        }
         public string GetLocalIp4Address() {
             if (!IsConnectedToNetwork()) {
                 return "0.0.0.0";
@@ -685,38 +647,81 @@ namespace MpWpfApp {
             return MpHelpers.Instance.GetExternalIp4Address();
         }
 
-        public bool IsConnectedToNetwork() {
-            return MpHelpers.Instance.IsConnectedToNetwork();
-        }
-
-        public bool IsConnectedToInternet() {
-            return MpHelpers.Instance.IsConnectedToInternet();
-        }
-
         public async Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid) {
             await Task.Delay(0);
             var sh = MpSyncHistory.GetSyncHistoryByGuid(otherDeviceGuid);
-            if(sh != null) {
+            if (sh != null) {
                 return sh.SyncDateTime;
             }
             return DateTime.MinValue;
         }
 
-        public async Task<object> ProcessRemoteDbLog(string remoteDbLogStr) {
-            var dbLogMessage = await MpDbMessage.Parse(remoteDbLogStr, new MpStringToDbModelTypeConverter());
+        public async Task<string> GetLocalLogFromSyncDate(DateTime fromDateTime) {
+            var logItems = MpDbLog.GetAllDbLogs().Where(x => x.LogActionDateTime > fromDateTime).ToList();
+            var dbol = new List<MpISyncableDbObject>();
+            foreach (var li in logItems) {
+                dbol.Add(li as MpISyncableDbObject);
+            }
+            var dbMsgStr = MpDbMessage.Create(dbol);
+            await Task.Delay(1);
+            return dbMsgStr;
+        }
 
-            foreach (var jdbo in dbLogMessage.JsonDbObjects) {
-                string objTypeStr = jdbo.DbObjectType.ToString().ToLower();
-                dynamic obj = JsonConvert.DeserializeObject(jdbo.DbObjectJson);
-                if (objTypeStr.Contains("mptag")) {
-                    //var tag = 
+        public async Task<string> GetDbObjRequestFromRemoteLogStr(string dbLogMessageStr) {
+            var dbLogMessage = MpDbMessage.Parse(dbLogMessageStr, GetTypeConverter());
+
+            var dbLogs = new List<MpDbLog>();
+            foreach (var sobj in dbLogMessage.DbObjects) {
+                if(sobj.ObjType == typeof(MpDbLog)) {
+
                 }
             }
             return null;
         }
+
+        public async Task<string> GetDbObjResponseFromRequestStr(string dbObjReqStr) {
+            MpConsole.WriteTraceLine(dbObjReqStr);
+            await Task.Delay(1);
+            return null;
+            //var ld = new List<object>();
+            //foreach (var c in MpCopyItem.GetAllCopyItems(out int allItems)) {
+            //    //MpApp app = await MpApp.GetAppById(c.AppId);
+            //    //app.Icon = await MpIcon.GetIconById(app.IconId);
+            //    //app.Icon.IconImage = await MpDbImage.GetDbImageById(app.Icon.IconImageId);
+            //    //c.App = app;
+
+            //    //var color = await MpColor.GetColorById(c.ColorId);
+            //    //if (color != null) {
+            //    //    c.ItemColor = color;
+            //    //}
+            //    c.ItemFlowDocument = null;
+            //    ld.Add(c);
+            //}
+            //await Task.Delay(10);
+            //return ld;
+        }
+        public async Task<object> ProcessDbObjResponse(string dbObjRespStr) {
+            MpConsole.WriteTraceLine(dbObjRespStr);
+            await Task.Delay(1);
+            return null;
+        }
         
-        public async Task RunOnMainThread(Action action) {
-            await Application.Current.MainWindow.Dispatcher.InvokeAsync(action);
+        public async Task CommitSync(object newObjs, string otherGuid, DateTime newSyncDt) {
+            MpConsole.WriteTraceLine(@"Commit update");
+            await Task.Delay(1);
+        }
+
+        public MpIStringToSyncObjectTypeConverter GetTypeConverter() {
+            return new MpWpfStringToDbObjectTypeConverter();
+        }
+
+        public string ConvertToJson(List<object> objList) {
+            var sb = new StringBuilder();
+            foreach(var obj in objList) {
+                sb.Append(JsonConvert.SerializeObject(obj));
+            }
+            
+            return sb.ToString();
         }
         #endregion
     }

@@ -67,39 +67,39 @@ namespace MonkeyPaste {
             return await _connectionAsync.Table<T>().ToListAsync();
         }
 
-        public async Task AddItem<T>(T item) where T : new() {
+        public async Task AddItem<T>(T item, string sourceClientGuid = "") where T : new() {
             if (_connectionAsync == null) {
                 await Init();
             }
-            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Create, item as MpDbModelBase);
+            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Create,null, item as MpDbModelBase,sourceClientGuid);
 
             await _connectionAsync.InsertAsync(item);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
         }
 
-        public async Task UpdateItem<T>(T item) where T : new() {
+        public async Task UpdateItem<T>(T item, Dictionary<string,string> alteredColumnNameValuePairs = null, string sourceClientGuid = "") where T : new() {
             if (_connectionAsync == null) {
                 await Init();
             }
-            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Modify, item as MpDbModelBase);
+            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Modify, alteredColumnNameValuePairs, item as MpDbModelBase,sourceClientGuid);
 
             await _connectionAsync.UpdateAsync(item);
             OnItemUpdated?.Invoke(this, item as MpDbModelBase);
         }
 
-        public async Task AddOrUpdate<T>(T item) where T : new() {
+        public async Task AddOrUpdate<T>(T item, Dictionary<string, string> alteredColumnNameValuePairs = null, string sourceClientGuid = "") where T : new() {
             if ((item as MpDbModelBase).Id == 0) {
-                await AddItem(item);
+                await AddItem(item,sourceClientGuid);
             } else {
-                await UpdateItem(item);
+                await UpdateItem(item,alteredColumnNameValuePairs,sourceClientGuid);
             }
         }
 
-        public async Task DeleteItem<T>(T item) where T: new() {
+        public async Task DeleteItem<T>(T item, string sourceClientGuid = "") where T: new() {
             if (_connectionAsync == null) {
                 await Init();
             }
-            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Delete, item as MpDbModelBase);
+            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Delete, null, item as MpDbModelBase,sourceClientGuid); ;
 
             await _connectionAsync.DeleteAsync<T>((item as MpDbModelBase).Id);
             OnItemDeleted?.Invoke(this, item as MpDbModelBase);
@@ -230,78 +230,25 @@ namespace MonkeyPaste {
         #endregion
 
         #region Sync Data
-
-        public async Task<List<object>> GetLocalData() {
-            var ld = new List<object>();
-            var cil = await GetItems<MpClip>();
-            foreach(var c in cil) {
-                //MpApp app = await MpApp.GetAppById(c.AppId);
-                //app.Icon = await MpIcon.GetIconById(app.IconId);
-                //app.Icon.IconImage = await MpDbImage.GetDbImageById(app.Icon.IconImageId);
-                //c.App = app;
-
-                //var color = await MpColor.GetColorById(c.ColorId);
-                //if (color != null) {
-                //    c.ItemColor = color;
-                //}
-                ld.Add(c);
-            }
-            return ld;
-        }
-
-        public async Task ProcessRemoteData(List<object> remoteData) {
-            foreach(var rdi in remoteData) {
-                Console.WriteLine(rdi.ToString());
-            }
-            await Task.Delay(10);
-        }
-
-        public string ConvertToJson(List<object> objList) {
-            var sb = new StringBuilder();
-            foreach(var obj in objList) {
-                sb.Append(JsonConvert.SerializeObject(obj));
-            }
-            
-            return sb.ToString();
-        }       
-
-        public async Task<string> GetLocalLog(DateTime fromDateTime) {
-            var logItems = await MpDb.Instance.GetItems<MpDbLog>();
-            var matchLogItems = logItems.Where(x => x.LogActionDateTime > fromDateTime).ToList();
-
-            var dbol = new List<MpISyncableDbObject>();
-            foreach (var li in matchLogItems) {
-                dbol.Add(li as MpISyncableDbObject);
-            }
-            var dbMsgStr = MpDbMessage.Create(dbol);
-            return dbMsgStr;
-        }
-
-        public async Task<object> ProcessRemoteDbLog(string remoteDbLogStr) {
-            var dbLogMessage = await MpDbMessage.Parse(remoteDbLogStr,new MpStringToDbModelTypeConverter());
-
-            foreach (var jdbo in dbLogMessage.JsonDbObjects) {
-                string objTypeStr = jdbo.DbObjectType.ToString().ToLower();
-                dynamic obj = JsonConvert.DeserializeObject(jdbo.DbObjectJson);
-                if(objTypeStr.Contains("mptag")) {
-                    //var tag = 
-                }
-            }
-            return null;
-        }
-
-        public string GetThisClientGuid() {
-            return MpPreferences.Instance.ThisClientGuidStr;
-        }
-
-        public int GetSyncPort() {
-            return 44381;
-        }
-
         public bool IsWpf() {
             return false;
         }
+        public async Task RunOnMainThread(Action action) {
+            await Device.InvokeOnMainThreadAsync(action);
+        }
+        public bool IsConnectedToNetwork() {
+            return MpHelpers.Instance.IsConnectedToNetwork();
+        }
 
+        public bool IsConnectedToInternet() {
+            return MpHelpers.Instance.IsConnectedToInternet();
+        }
+        public int GetSyncPort() {
+            return 44381;
+        }
+        public string GetThisClientGuid() {
+            return MpPreferences.Instance.ThisClientGuidStr;
+        }
         public string GetLocalIp4Address() {
             if (!IsConnectedToNetwork()) {
                 return "0.0.0.0";
@@ -316,14 +263,6 @@ namespace MonkeyPaste {
             return MpHelpers.Instance.GetExternalIp4Address();
         }
 
-        public bool IsConnectedToNetwork() {
-            return MpHelpers.Instance.IsConnectedToNetwork();
-        }
-
-        public bool IsConnectedToInternet() {
-            return MpHelpers.Instance.IsConnectedToInternet();
-        }
-
         public async Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid) {
             var shl = await GetItems<MpSyncHistory>();
             var sh = shl.Where(x => x.OtherClientGuid.ToString() == otherDeviceGuid)
@@ -335,9 +274,74 @@ namespace MonkeyPaste {
             return DateTime.MinValue;
         }
 
-        public async Task RunOnMainThread(Action action) {
-            await Device.InvokeOnMainThreadAsync(action);
+        public async Task<string> GetLocalLogFromSyncDate(DateTime fromDateTime) {
+            var logItems = await MpDb.Instance.GetItems<MpDbLog>();
+            var matchLogItems = logItems.Where(x => x.LogActionDateTime > fromDateTime).ToList();
+
+            var dbol = new List<MpISyncableDbObject>();
+            foreach (var li in matchLogItems) {
+                dbol.Add(li as MpISyncableDbObject);
+            }
+            var dbMsgStr = MpDbMessage.Create(dbol);
+            return dbMsgStr;
         }
+
+        public async Task<string> GetDbObjRequestFromRemoteLogStr(string dbLogMessageStr) {
+            var dbLogMessage = MpDbMessage.Parse(dbLogMessageStr, GetTypeConverter());
+
+            var remoteDbLogs = new List<MpDbLog>();
+            var dbLogWorker = new MpDbLog();
+            foreach(var remoteLogRow in dbLogMessage.DbObjects) {
+                var logItem = await dbLogWorker.DeserializeDbObject(remoteLogRow.ObjStr);
+                remoteDbLogs.Add(logItem as MpDbLog);
+            }
+
+            return null;
+        }
+        public async Task<string> GetDbObjResponseFromRequestStr(string dbObjReqStr) {
+            MpConsole.WriteTraceLine(dbObjReqStr);
+            await Task.Delay(1);
+            return null;
+            //var ld = new List<object>();
+            //var cil = await GetItems<MpClip>();
+            //foreach(var c in cil) {
+            //    //MpApp app = await MpApp.GetAppById(c.AppId);
+            //    //app.Icon = await MpIcon.GetIconById(app.IconId);
+            //    //app.Icon.IconImage = await MpDbImage.GetDbImageById(app.Icon.IconImageId);
+            //    //c.App = app;
+
+            //    //var color = await MpColor.GetColorById(c.ColorId);
+            //    //if (color != null) {
+            //    //    c.ItemColor = color;
+            //    //}
+            //    ld.Add(c);
+            //}
+            //return ld;
+        }
+
+        public async Task<object> ProcessDbObjResponse(string dbObjRespStr) {
+            MpConsole.WriteTraceLine(dbObjRespStr);
+            await Task.Delay(1);
+            return null;
+        }
+
+        public async Task CommitSync(object newObjs, string otherGuid, DateTime newSyncDt) {
+            MpConsole.WriteTraceLine(@"Commit update");
+            await Task.Delay(1);
+        }
+
+        public MpIStringToSyncObjectTypeConverter GetTypeConverter() {
+            return new MpXamStringToSyncObjectTypeConverter();
+        }
+
+        public string ConvertToJson(List<object> objList) {
+            var sb = new StringBuilder();
+            foreach(var obj in objList) {
+                sb.Append(JsonConvert.SerializeObject(obj));
+            }
+            
+            return sb.ToString();
+        }       
         #endregion
     }
 }

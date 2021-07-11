@@ -1,11 +1,8 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using MonkeyPaste;
-using Newtonsoft.Json;
-using SQLite;
 
 namespace MonkeyPaste {
     public enum MpDbLogActionType {
@@ -25,6 +22,10 @@ namespace MonkeyPaste {
 
         [Column("DbObjectGuid")]
         public string ObjectGuid { get; set; }
+
+        public string AffectedColumnName { get; set; } = @"UnknownColumnName";
+
+        public string AffectedColumnValue { get; set; } = @"UnknownColumnValue";
 
         [Ignore]
         public Guid DbObjectGuid { 
@@ -76,16 +77,32 @@ namespace MonkeyPaste {
             return allLogs.Where(x => x.Id == DbLogId).FirstOrDefault();
         }
 
-        public async Task<object> DeserializeDbObject(object obj) {
-            if (obj is not MpDbLog) {
-                throw new Exception(@"obj is not a MonkeyPaste.MpDbLog");
-            }
-            await Task.Delay(5);
-            return obj;
+        public async Task<object> DeserializeDbObject(string objStr, string parseToken = @"^(@!@") {
+            var objParts = objStr.Split(new string[] { parseToken }, StringSplitOptions.RemoveEmptyEntries);
+
+            var dbLog = new MpDbLog() {
+                DbObjectGuid = System.Guid.Parse(objParts[0]),
+                DbTableName = objParts[1],
+                AffectedColumnName = objParts[2],
+                AffectedColumnValue = objParts[3],
+                LogActionType = (MpDbLogActionType)Convert.ToInt32(objParts[4]),
+                LogActionDateTime = DateTime.Parse(objParts[5]),
+                SourceClientGuid = System.Guid.Parse(objParts[6])
+            };
+            return dbLog;
         }
 
-        public string SerializeDbObject() {
-            return JsonConvert.SerializeObject(this);
+        public string SerializeDbObject(string parseToken = @"^(@!@") {
+            return string.Format(
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}",
+                parseToken,
+                ObjectGuid,
+                DbTableName,
+                AffectedColumnName,
+                AffectedColumnValue,
+                (int)LogActionType,
+                LogActionDateTime.ToString(),
+                SourceClientGuid.ToString());
         }
 
         public Type GetDbObjectType() {
@@ -97,12 +114,15 @@ namespace MonkeyPaste {
         public MpDbLog(
             Guid dbObjectGuid, 
             string tableName, 
+            string affectedColumnName,
+            string affectedColumnValue, 
             MpDbLogActionType actionType, 
             DateTime actionDateTime, 
             Guid sourceClientGuid) : this() {
-
             DbObjectGuid = dbObjectGuid;
             DbTableName = tableName;
+            AffectedColumnName = affectedColumnName;
+            AffectedColumnValue = affectedColumnValue;
             LogActionType = actionType;
             LogActionDateTime = actionDateTime;
             SourceClientGuid = sourceClientGuid;

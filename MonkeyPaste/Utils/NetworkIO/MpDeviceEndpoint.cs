@@ -86,7 +86,7 @@ namespace MonkeyPaste {
             return ep;
         }
 
-        public string SerializeDbObject() {
+        public string SerializeDbObject(string parseToken = @"^(@!@") {
             return string.Format(@"{0},{1},{2},{3},{4},{5},{6}", PublicIp4Address, PublicPortNum, PrivateIp4Address, PrivatePortNum, AccessToken, DeviceGuid, ConnectDateTime);
         }
 
@@ -94,7 +94,7 @@ namespace MonkeyPaste {
             return typeof(MpDeviceEndpoint);
         }
 
-        public Task<object> DeserializeDbObject(object obj) {
+        public Task<object> DeserializeDbObject(string objStr,string parseToken= @"^(@!@") {
             throw new NotImplementedException();
         }
         #endregion

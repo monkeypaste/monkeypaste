@@ -75,6 +75,17 @@ namespace MpWpfApp {
             return dt.Rows.Count == 0;
         }
 
+        private string AlteredColumnNames() {
+            var dt = MpDb.Instance.Execute(
+                @"SELECT * FROM MpTag WHERE pk_MpTagId=@tid",
+                new Dictionary<string, object> { { "@tid", TagId } });
+            if (dt == null || dt.Rows.Count == 0) {
+                return null;
+            }
+            var tag = new MpTag(dt.Rows[0]);
+            return null;
+        }
+
         public override void WriteToDatabase() {
             if (TagGuid == Guid.Empty) {
                 TagGuid = Guid.NewGuid();
@@ -212,18 +223,26 @@ namespace MpWpfApp {
             //MpDb.Instance.ExecuteWrite("delete from MpTagCopyItemSortOrder where fk_MpTagId=" + this.TagId);
         }
 
-        public async Task<object> DeserializeDbObject(object obj) {
-            if (obj.GetType() != typeof(MpTag)) {
-                throw new Exception(@"obj is not a MpTag");
-            }
-            var tag = obj as MpTag;
-            tag.TagColor = MpColor.GetColorById(tag.ColorId);
-            // TODO also populate tag item list
-            return tag;
+        public async Task<object> DeserializeDbObject(string objStr, string parseToken = @"^(@!@") {
+            var objParts = objStr.Split(new string[] { parseToken }, StringSplitOptions.RemoveEmptyEntries);
+            await Task.Delay(0);
+            var dbLog = new MpTag() {
+                TagGuid = System.Guid.Parse(objParts[0]),
+                TagName = objParts[1],
+                TagSortIdx = Convert.ToInt32(objParts[2]),
+                ColorId = Convert.ToInt32(objParts[3])
+            };
+            return dbLog;
         }
 
-        public string SerializeDbObject() {
-            return JsonConvert.SerializeObject(this);
+        public string SerializeDbObject(string parseToken = @"^(@!@") {
+            return string.Format(
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}",
+                parseToken,
+                TagGuid.ToString(),
+                TagName,
+                TagSortIdx,
+                ColorId);
         }
 
         public Type GetDbObjectType() {

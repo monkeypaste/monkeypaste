@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public class MpDbLogTracker {
-        public static void TrackDbWrite(MpDbLogActionType actionType, MpDbModelBase dbModel, string clientGuid = "") {
+        public static void TrackDbWrite(MpDbLogActionType actionType, Dictionary<string, string> alteredColumnNameValuePairs, MpDbModelBase dbModel, string clientGuid = "") {
             if(string.IsNullOrEmpty(dbModel.Guid)) {
                 //only set for sync items so ignore
                 return;
@@ -17,11 +17,17 @@ namespace MonkeyPaste {
             string tableName = dbModel.GetType().ToString();
             tableName = tableName.Substring(tableName.IndexOf(".") + 1);
             var actionDateTime = DateTime.Now;   
-
-            var dbl = new MpDbLog(objectGuid, tableName, actionType, actionDateTime, sourceClientGuid);
-
+            
             Task.Run(async () => {
-                await MpDb.Instance.AddItem(dbl); 
+                if (alteredColumnNameValuePairs == null || alteredColumnNameValuePairs.Count == 0) {
+                    var dbi = new MpDbLog(objectGuid, tableName, "*", "AllValues", actionType, actionDateTime, sourceClientGuid);
+                    await MpDb.Instance.AddItem(dbi);
+                } else {
+                    foreach (var kvp in alteredColumnNameValuePairs) {
+                        var dbi = new MpDbLog(objectGuid, tableName, kvp.Key, kvp.Value.ToString(), actionType, actionDateTime, sourceClientGuid);
+                        await MpDb.Instance.AddItem(dbi);
+                    }
+                }
             });
         }
     }
