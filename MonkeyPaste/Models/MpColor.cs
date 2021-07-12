@@ -10,11 +10,11 @@ using SQLiteNetExtensions.Attributes;
 using Xamarin.Forms;
 
 namespace MonkeyPaste {
-    public class MpColor : MpDbModelBase {                       
-        public byte R { get; set; }
-        public byte G { get; set; }
-        public byte B { get; set; }
-        public byte A { get; set; }
+    public class MpColor : MpDbModelBase, MpISyncableDbObject {                       
+        public int R { get; set; }
+        public int G { get; set; }
+        public int B { get; set; }
+        public int A { get; set; }
 
         [PrimaryKey,AutoIncrement]
         [Column("pk_MpColorId")]
@@ -42,10 +42,10 @@ namespace MonkeyPaste {
                 return Color.FromRgba(R, G, B, A);
             }
             set {   
-                R = (byte)(value.R * 255);
-                G = (byte)(value.G * 255);
-                B = (byte)(value.B * 255);
-                A = (byte)(value.A * 255);
+                R = (int)(value.R * 255);
+                G = (int)(value.G * 255);
+                B = (int)(value.B * 255);
+                A = (int)(value.A * 255);
             }
         }
 
@@ -61,10 +61,10 @@ namespace MonkeyPaste {
         public MpColor() : base(typeof(MpColor)) { }
 
         public MpColor(double r, double g, double b, double a) : this() {
-            R = (byte)(r * 255);
-            G = (byte)(g * 255);
-            B = (byte)(b * 255);
-            A = (byte)(a * 255);
+            R = (int)(r * 255);
+            G = (int)(g * 255);
+            B = (int)(b * 255);
+            A = (int)(a * 255);
         }
 
         public MpColor(Color c) : this(c.R, c.G, c.B, c.A) { 
@@ -114,6 +114,75 @@ namespace MonkeyPaste {
             //sw.Stop();
             //Console.WriteLine("Time to create icon statistics: " + sw.ElapsedMilliseconds + " ms");
             return primaryIconColorList;
+        }
+
+        public async Task<object> DeserializeDbObject(string objStr, string parseToken = @"^(@!@") {
+            var objParts = objStr.Split(new string[] { parseToken }, StringSplitOptions.RemoveEmptyEntries);
+            await Task.Delay(0);
+            var dbLog = new MpColor() {
+                Id = Convert.ToInt32(objParts[0]),
+                ColorGuid = System.Guid.Parse(objParts[1]),
+                R = Convert.ToInt32(objParts[2]),
+                G = Convert.ToInt32(objParts[3]),
+                B = Convert.ToInt32(objParts[4]),
+                A = Convert.ToInt32(objParts[5])
+            };
+            return dbLog;
+        }
+
+        public string SerializeDbObject(string parseToken = @"^(@!@") {
+            return string.Format(
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}",
+                parseToken,
+                Id,
+                ColorGuid.ToString(),
+                R,
+                G,
+                B,
+                A);
+        }
+
+        public Type GetDbObjectType() {
+            return typeof(MpColor);
+        }
+
+        public Dictionary<string, string> DbDiff(object drOrModel) {
+            MpColor other = null;
+            if (drOrModel == null) {
+                //this occurs when this model is being added
+                //and intended behavior is all values are returned
+                other = new MpColor();
+            } else if (drOrModel is MpColor) {
+                other = drOrModel as MpColor;
+            } else {
+                throw new Exception("Cannot compare xam model to local model");
+            }
+            var diffLookup = new Dictionary<string, string>();
+            if (Id > 0) {
+                diffLookup = CheckValue(Id, other.Id,
+                "pk_MpColorId",
+                diffLookup);
+            }
+            diffLookup = CheckValue(ColorGuid, other.ColorGuid,
+                "MpColorGuid",
+                diffLookup);
+            diffLookup = CheckValue(R, other.R,
+                "R",
+                diffLookup);
+            diffLookup = CheckValue(
+                G, other.G,
+                "G",
+                diffLookup);
+            diffLookup = CheckValue(
+                B, other.B,
+                "B",
+                diffLookup);
+            diffLookup = CheckValue(
+                A, other.A,
+                "A",
+                diffLookup);
+
+            return diffLookup;
         }
     }
 }

@@ -367,5 +367,11 @@
     <Setting Name="ThisClientGuid" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="WpfNamespaceName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">MpWpf</Value>
+    </Setting>
+    <Setting Name="XamNamespace" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">MonkeyPaste</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

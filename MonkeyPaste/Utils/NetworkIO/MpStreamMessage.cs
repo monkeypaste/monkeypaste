@@ -11,10 +11,10 @@ namespace MonkeyPaste {
         HandshakeResponse,
         DbLogRequest,
         DbLogResponse,
-        DbObjectRequest,
-        DbObjectResponse,
+        //DbObjectRequest,
+        //DbObjectResponse,
         FlipRequest, //swap A & B and return to RequestLog
-        FlipResponse,
+        //FlipResponse,
         DisconnectRequest,
         DisconnectResponse,
         //error types
@@ -30,7 +30,6 @@ namespace MonkeyPaste {
     public class MpStreamHeader : MpISyncableDbObject {
         private string _headerStr;
         public const string HeaderParseToken = @"$$##@";
-        public const string FlipCheckSumPrefix = @"-";
 
         public DateTime MessageDateTime { get; set; }
         public MpSyncMesageType MessageType { get; set; }
@@ -45,13 +44,12 @@ namespace MonkeyPaste {
             string fromGuid, 
             string toGuid, 
             DateTime sendDateTime, 
-            string checkSum = "",
-            bool isFlip = false) {
+            string checkSum = "") {
             MessageType = msgType;
             FromGuid = fromGuid;
             ToGuid = toGuid;
             MessageDateTime = sendDateTime;
-            ContentCheckSum = (isFlip ? FlipCheckSumPrefix : string.Empty) + checkSum;
+            ContentCheckSum = checkSum;
         }
 
 
@@ -84,11 +82,12 @@ namespace MonkeyPaste {
             return typeof(MpStreamHeader);
         }
 
-        public bool IsFlipped() {
-            return ContentCheckSum.StartsWith(FlipCheckSumPrefix);
-        }
 
         public Task<object> DeserializeDbObject(string objStr, string parseToken = "^(@!@") {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<string, string> DbDiff(object drOrModel) {
             throw new NotImplementedException();
         }
     }
@@ -107,15 +106,13 @@ namespace MonkeyPaste {
             MpSyncMesageType msgType, 
             string fromGuid, 
             string toGuid, 
-            string content,
-            bool isFlip = false) {
+            string content) {
             Header = new MpStreamHeader(
                 msgType, 
                 fromGuid, 
                 toGuid, 
                 DateTime.UtcNow,
-                content.CheckSum(),
-                isFlip);
+                content.CheckSum());
             Content = content;
         }
 
@@ -138,66 +135,32 @@ namespace MonkeyPaste {
             return sm;
         }
 
-        public static MpStreamMessage CreateDbLogRequest(MpDeviceEndpoint dep, string toGuid, DateTime lastSyncUtc, bool flip = false) {
+        public static MpStreamMessage CreateDbLogRequest(MpDeviceEndpoint dep, string toGuid, DateTime lastSyncUtc) {
             var sm = new MpStreamMessage(
                 MpSyncMesageType.DbLogRequest,
                 dep.DeviceGuid,
                 toGuid,
-                lastSyncUtc.ToString(),
-                flip);
+                lastSyncUtc.ToString());
             return sm;
         }
 
-        public static MpStreamMessage CreateDbLogResponse(MpDeviceEndpoint dep, string toGuid, string logDbMessageStr, bool flip = false) {
+        public static MpStreamMessage CreateDbLogResponse(MpDeviceEndpoint dep, string toGuid, string logDbMessageStr) {
             var sm = new MpStreamMessage(
                 MpSyncMesageType.DbLogResponse,
                 dep.DeviceGuid,
                 toGuid,
-                logDbMessageStr,
-                flip);
-            return sm;
-        }
-
-        public static MpStreamMessage CreateDbObjectRequest(MpDeviceEndpoint dep, string toGuid, string dboRequests, bool flip = false) {
-            var sm = new MpStreamMessage(
-                MpSyncMesageType.DbObjectRequest,
-                dep.DeviceGuid,
-                toGuid,
-                dboRequests,
-                flip);
-            return sm;
-        }
-
-        public static MpStreamMessage CreateDbObjectResponse(MpDeviceEndpoint dep, string toGuid, string dboMessageStr, bool flip = false) {
-            var sm = new MpStreamMessage(
-                MpSyncMesageType.DbObjectResponse,
-                dep.DeviceGuid,
-                toGuid,
-                dboMessageStr,
-                flip);
+                logDbMessageStr);
             return sm;
         }
                 
-        public static MpStreamMessage CreateFlipRequest(MpDeviceEndpoint dep, string toGuid, bool flipRequest) {
+        public static MpStreamMessage CreateFlipRequest(MpDeviceEndpoint dep, string toGuid) {
             // once B has needed A data it will make a flipRequest = true
             // once A has needed B data it will make a flipRequest of false to finish sync
             var sm = new MpStreamMessage(
-                flipRequest ? MpSyncMesageType.FlipRequest : MpSyncMesageType.FlipResponse,
+                MpSyncMesageType.FlipRequest,
                 dep.DeviceGuid,
                 toGuid,
-                @"FlipRequest",
-                flipRequest);
-            return sm;
-        }
-                
-        public static MpStreamMessage CreateFlipResponse(MpDeviceEndpoint dep, string toGuid, bool flipResponse) {
-            //if flip is starting the response will be true if flip is complete it will be false signaling to move to disconnect
-            var sm = new MpStreamMessage(
-                flipResponse ? MpSyncMesageType.FlipRequest : MpSyncMesageType.FlipResponse,
-                dep.DeviceGuid,
-                toGuid,
-                @"FlipResponse",
-                flipResponse);
+                @"FlipRequest");
             return sm;
         }
 
@@ -246,9 +209,7 @@ namespace MonkeyPaste {
             }
             string givenCheckSum = Header.ContentCheckSum;
             string calcCheckSum = Content.CheckSum();
-            if(Header.IsFlipped()) {
-                calcCheckSum = MpStreamHeader.FlipCheckSumPrefix + calcCheckSum;
-            }
+
             if(calcCheckSum != givenCheckSum) {
                 throw new Exception(string.Format(@"Checksum mismatch given: {0} calc: {1} for msg: {2}", givenCheckSum, calcCheckSum, Content));
             }
@@ -276,6 +237,10 @@ namespace MonkeyPaste {
         }
 
         public Task<object> DeserializeDbObject(string objStr, string parseToken = "^(@!@") {
+            throw new NotImplementedException();
+        }
+
+        public Dictionary<string, string> DbDiff(object drOrModel) {
             throw new NotImplementedException();
         }
     }

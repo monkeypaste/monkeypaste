@@ -9,8 +9,8 @@ namespace MonkeyPaste {
                 PublicIp4Address = sync.GetExternalIp4Address(),
                 PrivateIp4Address = sync.GetLocalIp4Address(),
                 DeviceGuid = sync.GetThisClientGuid(),
-                PublicPortNum = sync.GetSyncPort(),
-                PrivatePortNum = sync.GetSyncPort(),
+                PublicConnectPortNum = sync.GetSyncPort(),
+                PrivateConnectPortNum = sync.GetSyncPort(),
                 AccessToken = MpHelpers.Instance.GetNewAccessToken()
             };
             return newEndpoint;

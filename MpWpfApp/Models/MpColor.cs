@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace MpWpfApp {
-    public class MpColor : MpDbObject {
+    public class MpColor : MpDbObject, MonkeyPaste.MpISyncableDbObject {
         private static List<MpColor> _AllColorList = null;
         public static int TotalColorCount = 0;
 
@@ -15,13 +16,13 @@ namespace MpWpfApp {
 
         public Color Color {
             get {
-                return Color.FromArgb((byte)_a, (byte)_r, (byte)_g, (byte)_b);
+                return Color.FromArgb((byte)A, (byte)R, (byte)G, (byte)B);
             }
             set {   
-                _r = (byte)value.R;
-                _g = (byte)value.G;
-                _b = (byte)value.B;
-                _a = (byte)value.A;
+                R = (byte)value.R;
+                G = (byte)value.G;
+                B = (byte)value.B;
+                A = (byte)value.A;
                 WriteToDatabase();
             }
         }
@@ -35,7 +36,10 @@ namespace MpWpfApp {
             }
 
         }
-        private int _r, _g, _b, _a; 
+        public int R { get; private set; }
+         public int G { get; private set; }
+         public int B { get; private set; }
+         public int A { get; private set; } 
 
         public static List<MpColor> GetAllColors() {
             if(_AllColorList == null) {
@@ -122,10 +126,10 @@ namespace MpWpfApp {
         }
         public MpColor(int r, int g, int b, int a) : this() {
             ColorGuid = Guid.NewGuid();
-            _r = r;
-            _g = g;
-            _b = b;
-            _a = a;
+            R = r;
+            G = g;
+            B = b;
+            A = a;
         }
 
         public MpColor(Color c) : this(c.R, c.G, c.B, c.A) { }
@@ -141,10 +145,10 @@ namespace MpWpfApp {
             } else {
                 ColorGuid = Guid.Parse(dr["MpColorGuid"].ToString());
             }
-            _r = Convert.ToInt32(dr["R"].ToString());
-            _g = Convert.ToInt32(dr["G"].ToString());
-            _b = Convert.ToInt32(dr["B"].ToString());
-            _a = Convert.ToInt32(dr["A"].ToString());
+            R = Convert.ToInt32(dr["R"].ToString());
+            G = Convert.ToInt32(dr["G"].ToString());
+            B = Convert.ToInt32(dr["B"].ToString());
+            A = Convert.ToInt32(dr["A"].ToString());
         }
         //public void DeleteFromDatabase() {
         //    if (ColorId <= 0) {
@@ -163,33 +167,33 @@ namespace MpWpfApp {
                 @"SELECT pk_MpColorId FROM MpColor WHERE MpColorGuid=@cg AND R=@r AND G=@g AND B=@b AND A=@a",
                 new Dictionary<string, object> {
                     { "@cg", ColorGuid.ToString() },
-                    { "@r", _r },
-                    { "@g", _g },
-                    { "@b", _b },
-                    { "@a", _a }
+                    { "@r", R },
+                    { "@g", G },
+                    { "@b", B },
+                    { "@a", A }
                 });
             return dt.Rows.Count == 0;
         }
 
-        public override void WriteToDatabase() {
+        public override void WriteToDatabase(string sourceClientGuid) {
             if (ColorGuid == Guid.Empty) {
                 ColorGuid = Guid.NewGuid();
             }
             if (!IsAltered()) {
                 return;
             }
-            
+
 
             if (ColorId == 0) {
                 MpDb.Instance.ExecuteWrite(
                         "insert into MpColor(MpColorGuid,R,G,B,A) values(@cg,@r,@g,@b,@a)",
                         new System.Collections.Generic.Dictionary<string, object> {
                             { "@cg",ColorGuid.ToString() },
-                        { "@r", _r },
-                        { "@g", _g },
-                        { "@b", _b },
-                        { "@a", _a }
-                    },ColorGuid.ToString());
+                        { "@r", R },
+                        { "@g", G },
+                        { "@b", B },
+                        { "@a", A }
+                    }, ColorGuid.ToString(), sourceClientGuid,this);
                 ColorId = MpDb.Instance.GetLastRowId("MpColor", "pk_MpColorId");
                 GetAllColors().Add(this);
             } else {
@@ -197,21 +201,23 @@ namespace MpWpfApp {
                     "update MpColor set MpColorGuid=@cg, R=@r, G=@g, B=@b, A=@a where pk_MpColorId=@cid",
                     new System.Collections.Generic.Dictionary<string, object> {
                         { "@cg",ColorGuid.ToString() },
-                        { "@r", _r },
-                        { "@g", _g },
-                        { "@b", _b },
-                        { "@a", _a },
+                        { "@r", R },
+                        { "@g", G },
+                        { "@b", B },
+                        { "@a", A },
                         { "@cid", ColorId }
-                    },ColorGuid.ToString());
+                    }, ColorGuid.ToString(),sourceClientGuid,this);
                 var c = _AllColorList.Where(x => x.ColorId == ColorId).FirstOrDefault();
-                if(c != null) {
+                if (c != null) {
                     _AllColorList[_AllColorList.IndexOf(c)] = this;
                 }
             }
-                  
+        }
+        public override void WriteToDatabase() {
+            WriteToDatabase(Properties.Settings.Default.ThisClientGuid);      
         }
 
-        public void DeleteFromDatabase() {
+        public override void DeleteFromDatabase(string sourceClientGuid) {
             if (ColorId <= 0) {
                 return;
             }
@@ -220,7 +226,80 @@ namespace MpWpfApp {
                 "delete from MpColor where pk_MpColorId=@cid",
                 new Dictionary<string, object> {
                     { "@cid", ColorId }
-                },ColorGuid.ToString());
+                }, ColorGuid.ToString(),sourceClientGuid,this);
         }
+        public void DeleteFromDatabase() {
+            DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
+        }
+
+        public async Task<object> DeserializeDbObject(string objStr, string parseToken = @"^(@!@") {
+            var objParts = objStr.Split(new string[] { parseToken }, StringSplitOptions.RemoveEmptyEntries);
+            await Task.Delay(0);
+            var dbLog = new MpColor() {
+                ColorId = Convert.ToInt32(objParts[0]),
+                ColorGuid = System.Guid.Parse(objParts[1]),
+                R = Convert.ToInt32(objParts[2]),
+                G = Convert.ToInt32(objParts[3]),
+                B = Convert.ToInt32(objParts[4]),
+                A = Convert.ToInt32(objParts[5])
+            };
+            return dbLog;
+        }
+
+        public string SerializeDbObject(string parseToken = @"^(@!@") {
+            return string.Format(
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}",
+                parseToken,
+                ColorId,
+                ColorGuid.ToString(),
+                R,
+                G,
+                B,
+                A);
+        }
+
+        public Type GetDbObjectType() {
+            return typeof(MpColor);
+        }
+
+        public Dictionary<string,string> DbDiff(object drOrModel) {
+            MpColor other = null;
+            if(drOrModel == null) {
+                //this occurs when this model is being added
+                //and intended behavior is all values are returned
+                other = new MpColor();
+            } else if (drOrModel is DataRow) {
+                other = new MpColor(drOrModel as DataRow);
+            } else {
+                throw new Exception("Cannot compare xam model to local model");
+            }
+            var diffLookup = new Dictionary<string, string>();
+            if(ColorId > 0) {
+                diffLookup = CheckValue(ColorId, other.ColorId,
+                "pk_MpColorId",
+                diffLookup);
+            }
+            diffLookup = CheckValue(ColorGuid, other.ColorGuid,
+                "MpColorGuid",
+                diffLookup);
+            diffLookup = CheckValue(R, other.R,
+                "R",
+                diffLookup);
+            diffLookup = CheckValue(
+                G, other.G,
+                "G",
+                diffLookup);
+            diffLookup = CheckValue(
+                B, other.B,
+                "B",
+                diffLookup);
+            diffLookup = CheckValue(
+                A, other.A,
+                "A",
+                diffLookup);
+
+            return diffLookup;
+        }
+        
     }
 }

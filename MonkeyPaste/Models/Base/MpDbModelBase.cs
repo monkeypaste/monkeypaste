@@ -18,10 +18,13 @@ namespace MonkeyPaste {
 
         [Ignore]
         public string Guid { get; set; }
-        
-        public DateTime Created { get; set; }
-        public DateTime Modified { get; set; }
-        public DateTime Synced { get; set; }
-        public DateTime Deleted { get; set; }
+
+        protected Dictionary<string, string> CheckValue(object a, object b, string colName, Dictionary<string, string> diffLookup, object forceAVal = null) {
+            if (a == b) {
+                return diffLookup;
+            }
+            diffLookup.Add(colName, forceAVal == null ? a.ToString() : forceAVal.ToString());
+            return diffLookup;
+        }
     }
 }

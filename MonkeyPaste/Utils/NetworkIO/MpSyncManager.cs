@@ -83,8 +83,8 @@ namespace MonkeyPaste {
                 //MpConsole.WriteLine(@"Private ip sweep took {0} ms" + sw.ElapsedMilliseconds);
 
                 if (localSync.IsWpf()) {
-                    var server = new Socket(ThisEndpoint.PrivateIPEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                    server.Bind(ThisEndpoint.PrivateIPEndPoint);
+                    var server = new Socket(ThisEndpoint.PrivateConnectIPEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                    server.Bind(ThisEndpoint.PrivateConnectIPEndPoint);
                     server.Listen(10);
                     while(true) {
                         Socket client = null;
@@ -94,13 +94,33 @@ namespace MonkeyPaste {
                             MpConsole.WriteLine("Connection made");
                             var handshakeRequest = Receive(client);
                             OtherEndpoint = MpDeviceEndpoint.Parse(handshakeRequest.Content);
+                            
                             var handshakeResponse = MpStreamMessage.CreateHandshakeResponse(ThisEndpoint, OtherEndpoint.DeviceGuid);
                             var dbLogRequest = SendReceive(client, handshakeResponse);
                             var lastSyncForOther = DateTime.Parse(dbLogRequest.Content);
                             var dbLogQueryResultStr = await _localSyncData.GetLocalLogFromSyncDate(lastSyncForOther);
                             var dbLogResponse = MpStreamMessage.CreateDbLogResponse(ThisEndpoint, OtherEndpoint.DeviceGuid, dbLogQueryResultStr);
-                            var dbObjectRequest = SendReceive(client, dbLogResponse);
-                            var dbObjResponseStr = await _localSyncData.GetDbObjResponseFromRequestStr(dbObjectRequest.Content);
+                            
+                            var flipRequest = SendReceive(client, dbLogResponse);
+                            var thisLastSyncDt = await _localSyncData.GetLastSyncForRemoteDevice(OtherEndpoint.DeviceGuid);
+                            var thisDbLogRequest = MpStreamMessage.CreateDbLogRequest(
+                                ThisEndpoint,
+                                OtherEndpoint.DeviceGuid,
+                                thisLastSyncDt);
+                            var otherDbLogResponse = SendReceive(client, thisDbLogRequest);
+                            var remoteChangesLookup = await _localSyncData.PrepareRemoteLogForSyncing(otherDbLogResponse.Content);
+                            DateTime newSyncDt = DateTime.UtcNow;
+                            var disconnectRequest = MpStreamMessage.CreateDisconnectRequest(
+                                ThisEndpoint, OtherEndpoint.DeviceGuid,
+                                newSyncDt);
+                            var disconnectResponse = SendReceive(client, disconnectRequest);
+
+                            client.Close();
+
+                            await PerformSync(
+                                remoteChangesLookup,
+                                newSyncDt,
+                                OtherEndpoint.DeviceGuid);
                         }
                         catch(Exception ex) {
                             if(ex is MpSyncException) {
@@ -115,20 +135,109 @@ namespace MonkeyPaste {
                     var listener = ConnectSocket(@"192.168.43.209", 44381);
                     var handshakeRequest = MpStreamMessage.CreateHandshakeRequest(ThisEndpoint);
                     var handshakeResponse = SendReceive(listener,handshakeRequest);
-                    OtherEndpoint = MpDeviceEndpoint.Parse(handshakeResponse.Content);
+                    OtherEndpoint = MpDeviceEndpoint.Parse(handshakeResponse.Content);                   
+                    
                     var lastSyncDt = await _localSyncData.GetLastSyncForRemoteDevice(OtherEndpoint.DeviceGuid);
                     var dbLogRequest = MpStreamMessage.CreateDbLogRequest(
                         ThisEndpoint,
                         OtherEndpoint.DeviceGuid,
                         lastSyncDt);
-                    var dbLogResponse = SendReceive(listener, dbLogRequest);                    
-                    var dbObjectRequestStr = await _localSyncData.GetDbObjRequestFromRemoteLogStr(dbLogResponse.Content);
-                    var dbObjectRequest = MpStreamMessage.CreateDbObjectRequest(ThisEndpoint, OtherEndpoint.DeviceGuid, dbObjectRequestStr as string);
-                    var dbObjectResponse = SendReceive(listener, dbObjectRequest);
+                    var dbLogResponse = SendReceive(listener, dbLogRequest);
+                    var remoteChangesLookup = await _localSyncData.PrepareRemoteLogForSyncing(dbLogResponse.Content);
+                    var flipRequest = MpStreamMessage.CreateFlipRequest(
+                        ThisEndpoint,
+                        OtherEndpoint.DeviceGuid);
+
+                    var odbLogRequest = SendReceive(listener, flipRequest);
+                    var lastSyncForOther = DateTime.Parse(odbLogRequest.Content);
+                    var dbLogQueryResultStr = await _localSyncData.GetLocalLogFromSyncDate(lastSyncForOther);
+                    var thisdbLogResponse = MpStreamMessage.CreateDbLogResponse(ThisEndpoint, OtherEndpoint.DeviceGuid, dbLogQueryResultStr);
+                    var disconnectRequest = SendReceive(listener, thisdbLogResponse);
+                    var newSyncDt = DateTime.Parse(disconnectRequest.Content);
+                    var disconnectResponse = MpStreamMessage.CreateDisconnectResponse(
+                        ThisEndpoint, 
+                        OtherEndpoint.DeviceGuid, 
+                        newSyncDt);
+                    Send(listener, disconnectResponse);
+                    listener.Close();
+
+                    await PerformSync(
+                        remoteChangesLookup, 
+                        newSyncDt,
+                        OtherEndpoint.DeviceGuid);
                 }
             });
         }
 
+        private async Task PerformSync(Dictionary<Guid, List<MpDbLog>> changeLookup, DateTime newSyncDate, string remoteClientGuid) {
+            //var dbLogMessage = MpDbMessage.Parse(dbLogMessageStr, GetTypeConverter());
+
+            //var remoteDbLogs = new List<MpDbLog>();
+            //var dbLogWorker = new MpDbLog();
+
+            ////deserialize logs and put into guid buckets
+            //var remoteItemChangeLookup = new Dictionary<Guid, List<MpDbLog>>();
+            //foreach (var remoteLogRow in dbLogMessage.DbObjects) {
+            //    var logItem = await dbLogWorker.DeserializeDbObject(remoteLogRow.ObjStr) as MpDbLog;
+            //    if (remoteItemChangeLookup.ContainsKey(logItem.DbObjectGuid)) {
+            //        remoteItemChangeLookup[logItem.DbObjectGuid].Add(logItem);
+            //    } else {
+            //        remoteItemChangeLookup.Add(logItem.DbObjectGuid, new List<MpDbLog>() { logItem });
+            //    }
+            //}
+
+
+
+            ////analyze transactions
+            //var missingLocalItemLogs = new List<MpDbLog>();
+            //var logItemsToUpdateLookup = new Dictionary<MpDbModelBase, List<MpDbLog>>();
+            //var localItemsToDelete = new List<MpDbModelBase>();
+
+
+            //foreach (var remoteItemLogs in remoteItemChangeLookup) {
+            //    foreach (var ril in remoteItemLogs.Value) {
+            //        if (ril.LogActionType == MpDbLogActionType.Delete) {
+
+            //        }
+            //    }
+            //    var localItem = await MpDb.Instance.GetObjDbRow(
+            //        remoteDbLogItem.DbTableName,
+            //        remoteDbLogItem.DbObjectGuid.ToString()) as MpDbModelBase;
+
+            //    if (localItem == null) {
+            //        missingLocalItemLogs.Add(remoteDbLogItem);
+            //    } else if (remoteDbLogItem.LogActionType == MpDbLogActionType.Delete) {
+            //        localItemsToDelete.Add(localItem);
+            //    } else {
+            //        //check local item to see if its different if so re
+            //        if (logItemsToUpdateLookup.ContainsKey(localItem)) {
+            //            logItemsToUpdateLookup[localItem].Add(remoteDbLogItem);
+            //        } else {
+            //            logItemsToUpdateLookup.Add(localItem, new List<MpDbLog>() { remoteDbLogItem });
+            //        }
+            //    }
+            //}
+
+            ////formulate requests
+            //var rsb = new StringBuilder();
+
+            ////for missing non-deletes request all
+            //foreach (var mlil in missingLocalItemLogs) {
+            //    if (mlil.LogActionType == MpDbLogActionType.Delete) {
+            //        continue;
+            //    }
+            //    var dbRequest = new MpSyncDbObjectRequestMessage() {
+            //        TableName = mlil.DbTableName,
+            //        DbObjectGuid = mlil.DbObjectGuid.ToString(),
+            //        ColumnNames = new List<string> { "*" }
+            //    };
+            //    rsb.Append(dbRequest.SerializeDbObject());
+            //}
+            ////for updates updates reques
+            //return null;
+        }
+
+        #region Network I/O
         private Socket ConnectSocket(string server, int port) {
             // Get host related information.
             var hostEntry = Dns.GetHostEntry(server);
@@ -150,6 +259,15 @@ namespace MonkeyPaste {
         }
 
         private MpStreamMessage SendReceive(Socket s, MpStreamMessage smsg) {
+            var result = Send(s, smsg);
+            if(result != null) {
+                return result;
+            }
+            var responeStreamMsg = Receive(s);            
+            return responeStreamMsg;
+        }
+
+        private MpStreamMessage Send(Socket s, MpStreamMessage smsg) {
             if (s == null) {
                 return MpStreamMessage.CreateErrorMessage(ThisEndpoint, string.Empty, MpSyncMesageType.ErrorNotConnected, @"Socket is null");
             }
@@ -158,16 +276,12 @@ namespace MonkeyPaste {
             }
             string smsgStr = smsg.SerializeDbObject();
             Byte[] bytesSent = Encoding.ASCII.GetBytes(smsgStr);
-            
+
             MpConsole.WriteLine(@"Sending: " + smsgStr);
             s.Send(bytesSent, bytesSent.Length, SocketFlags.None);
             MpConsole.WriteLine(@"Sent: {0} bytes", bytesSent.Length);
-
-            var responeStreamMsg = Receive(s);
-            
-            return responeStreamMsg;
+            return null;
         }
-
         private MpStreamMessage Receive(Socket s) {
             var bytesReceived = ReceiveAll(s);
             var response = Encoding.ASCII.GetString(bytesReceived);
@@ -203,6 +317,8 @@ namespace MonkeyPaste {
 
             return buffer.ToArray();
         }
+        #endregion
+
 
         private bool SocketConnected(Socket s) {
             // Exit if socket is null
@@ -222,6 +338,7 @@ namespace MonkeyPaste {
                 }
             }
         }
+
         private async void Listener_OnDisconnect(object sender, DateTime e) {
             await Task.Delay(3000);
             (sender as MpSocketListenerAsync).FinishSync();

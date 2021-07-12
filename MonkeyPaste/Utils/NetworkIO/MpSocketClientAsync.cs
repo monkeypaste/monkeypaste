@@ -54,13 +54,13 @@ namespace MonkeyPaste {
             try {
                 // Create a TCP/IP socket.  
                 Socket client = new Socket(
-                    _cep.PrivateIPEndPoint.AddressFamily,
+                    _cep.PrivateConnectIPEndPoint.AddressFamily,
                     SocketType.Stream, 
                     ProtocolType.Tcp);
 
                 // Connect to the remote endpoint.  
                 client.BeginConnect(
-                    _sep.PrivateIPEndPoint,
+                    _sep.PrivateConnectIPEndPoint,
                     new AsyncCallback(ConnectCallback), 
                     client);
                 connectDone.WaitOne();

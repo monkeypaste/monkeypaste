@@ -21,6 +21,9 @@ namespace MpWpfApp {
 
         public BitmapSource Icon {
             get {
+                if (DbIconImage == null) {
+                    DbIconImage = new MpDbImage();
+                }
                 return DbIconImage.DbImage;
             }
             set {

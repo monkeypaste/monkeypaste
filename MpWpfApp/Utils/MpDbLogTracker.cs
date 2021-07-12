@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MpWpfApp {
     public class MpDbLogTracker {
-        public static void TrackDbWrite(string query, Dictionary<string,string> alteredColumnNameValuePairs, string objGuid, string clientGuid) {
-            if(string.IsNullOrEmpty(query.Trim())) {
-                return;
-            }
+        public static bool TrackDbWrite(string query, Dictionary<string,object> args, string objGuid, string clientGuid, object obj) {
             if(string.IsNullOrEmpty(objGuid)) {
-                throw new Exception(@"DbLog requires the altered objects guid");
+                throw new Exception(@"DbLog object guid cannot be null");
             }
+            
+
+            var alteredColumnNameValueLookUp = new Dictionary<string, string>();
 
             Guid objectGuid = Guid.Parse(objGuid);
             Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(Properties.Settings.Default.ThisClientGuid) : Guid.Parse(clientGuid);
@@ -24,7 +25,7 @@ namespace MpWpfApp {
                 actionType = MonkeyPaste.MpDbLogActionType.Create;
                 string preStr = "insert into ";
                 int tableNameLength = query.IndexOf(@"(") - preStr.Length;
-                tableName = query.Substring(preStr.Length, tableNameLength);
+                tableName = query.Substring(preStr.Length, tableNameLength);                
             } else if (query.ToLower().StartsWith("update")) {
                 actionType = MonkeyPaste.MpDbLogActionType.Modify;
                 string preStr = "update ";
@@ -39,14 +40,26 @@ namespace MpWpfApp {
                 throw new Exception(@"Unknown query format: " + query);
             }
 
-            if(alteredColumnNameValuePairs == null || alteredColumnNameValuePairs.Count == 0) {
-                new MpDbLog(objectGuid, tableName,"*","AllValues", actionType, actionDateTime, sourceClientGuid).WriteToDatabase();
-            } else {
-                foreach(var kvp in alteredColumnNameValuePairs) {
+            if(actionType != MonkeyPaste.MpDbLogActionType.Delete) {
+                if (obj == null) {
+                    throw new Exception(@"DbLog object cannot be null for non-delete transactions");
+                }
+                var oldRow = MpDb.Instance.GetObjDbRow(tableName, objGuid);
+                alteredColumnNameValueLookUp = (obj as MonkeyPaste.MpISyncableDbObject).DbDiff(oldRow);
+                if(alteredColumnNameValueLookUp.Count == 0) {
+                    //since no data is altered return false to not write to db or change log
+                    return false;
+                }
+                foreach (var kvp in alteredColumnNameValueLookUp) {
                     new MpDbLog(objectGuid, tableName, kvp.Key, kvp.Value.ToString(), actionType, actionDateTime, sourceClientGuid).WriteToDatabase();
                 }
+            } else {
+                new MpDbLog(objectGuid, tableName, "*", "AllValues", actionType, actionDateTime, sourceClientGuid).WriteToDatabase();
             }
-            
+
+            return true;
         }
+
+        
     }
 }

@@ -24,6 +24,7 @@ namespace MonkeyPaste {
         Task<string> GetDbObjResponseFromRequestStr(string dbObjReqStr);
         Task<object> ProcessDbObjResponse(string dbObjRespStr);
         Task CommitSync(object newObjs, string otherGuid, DateTime newSyncDt);
+        Task<Dictionary<Guid, List<MpDbLog>>> PrepareRemoteLogForSyncing(string dbLogMessageStr);
 
         MpIStringToSyncObjectTypeConverter GetTypeConverter();
 

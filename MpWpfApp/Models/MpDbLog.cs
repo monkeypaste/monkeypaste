@@ -180,5 +180,9 @@ namespace MpWpfApp {
         public Type GetDbObjectType() {
             return typeof(MpDbLog);
         }
+
+        public Dictionary<string, string> DbDiff(object drOrModel) {
+            throw new NotImplementedException();
+        }
     }
 }

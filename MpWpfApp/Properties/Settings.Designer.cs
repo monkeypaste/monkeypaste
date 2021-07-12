@@ -1330,5 +1330,23 @@ namespace MpWpfApp.Properties {
                 this["ThisClientGuid"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("MpWpf")]
+        public string WpfNamespaceName {
+            get {
+                return ((string)(this["WpfNamespaceName"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("MonkeyPaste")]
+        public string XamNamespace {
+            get {
+                return ((string)(this["XamNamespace"]));
+            }
+        }
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using SQLiteNetExtensions.Attributes;
 using Newtonsoft.Json;
+using FFImageLoading.Helpers.Exif;
 
 namespace MonkeyPaste {
     public class MpTag : MpDbModelBase, MpISyncableDbObject {
@@ -19,6 +20,10 @@ namespace MonkeyPaste {
         [PrimaryKey, AutoIncrement]
         [Column("pk_MpTagId")]
         public override int Id { get; set; }
+
+        [Column("fk_ParentTagId")]
+        [ForeignKey(typeof(MpTag))]
+        public int ParentTagId { get; set; } = 0;
 
         [Column("MpTagGuid")]
         public new string Guid { get => base.Guid; set => base.Guid = value; }
@@ -114,18 +119,71 @@ namespace MonkeyPaste {
             //    });
         }
 
-        public async Task<object> DeserializeDbObject(string objStr,string parseToken = @"^(@!@") {
-            var newTag = new MpTag();
+        public async Task<object> DeserializeDbObject(string objStr, string parseToken = @"^(@!@") {
+            var objParts = objStr.Split(new string[] { parseToken }, StringSplitOptions.RemoveEmptyEntries);
+            await Task.Delay(0);
+            var dbLog = new MpTag() {
+                TagGuid = System.Guid.Parse(objParts[0]),
+                TagName = objParts[1],
+                TagSortIdx = Convert.ToInt32(objParts[2]),
+                ColorId = Convert.ToInt32(objParts[3])
+            };
+            return dbLog;
+        }
 
-            return newTag;
+        public string SerializeDbObject(string parseToken = @"^(@!@") {
+            return string.Format(
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}",
+                parseToken,
+                TagGuid.ToString(),
+                TagName,
+                TagSortIdx,
+                ColorId);
         }
 
         public Type GetDbObjectType() {
             return typeof(MpTag);
         }
 
-        public string SerializeDbObject(string parseToken = "^(@!@") {
-            throw new NotImplementedException();
+        public Dictionary<string, string> DbDiff(object drOrModel) {
+            MpTag other = null;
+            if(drOrModel == null) {
+                other = new MpTag();
+            }
+            if (drOrModel is MpTag) {
+                other = drOrModel as MpTag;
+            } else {
+                throw new Exception("Cannot compare xam model to local model");
+            }
+            //returns db column name and string value of dr that is diff
+            var diffLookup = new Dictionary<string, string>();
+            if(Id > 0) {
+                diffLookup = CheckValue(Id, other.Id,
+                    "pk_MpTagId",
+                    diffLookup);
+            }
+            diffLookup = CheckValue(TagGuid, other.TagGuid,
+                "MpTagGuid",
+                diffLookup);
+            diffLookup = CheckValue(ParentTagId, other.ParentTagId,
+                "fk_ParentTagId",
+                diffLookup);
+            diffLookup = CheckValue(
+                TagName, other.TagName,
+                "G",
+                diffLookup);
+            diffLookup = CheckValue(
+                TagSortIdx, other.TagSortIdx,
+                "SortIdx",
+                diffLookup);
+            diffLookup = CheckValue(
+                ColorId, other.ColorId,
+                "fk_MpColorId",
+                diffLookup,
+                TagColor.ColorGuid
+                );
+
+            return diffLookup;
         }
     }
 }

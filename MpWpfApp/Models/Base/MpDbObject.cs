@@ -24,12 +24,23 @@ namespace MpWpfApp {
 
         public abstract void WriteToDatabase();
 
+        public virtual void WriteToDatabase(string sourceClientGuid) { }
+
+        public virtual void DeleteFromDatabase(string sourceClientGuid) { }
         protected void TrackHasChanged(bool doTracking) {
             if(doTracking) {
                 PropertyChanged += MpDbObject_PropertyChanged;
             } else {
                 PropertyChanged -= MpDbObject_PropertyChanged;
             }
+        }
+
+        protected Dictionary<string, string> CheckValue(object a, object b, string colName, Dictionary<string, string> diffLookup, object forceAVal = null) {
+            if (a == b) {
+                return diffLookup;
+            }
+            diffLookup.Add(colName, forceAVal == null ? a.ToString() : forceAVal.ToString());
+            return diffLookup;
         }
 
         private void MpDbObject_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {

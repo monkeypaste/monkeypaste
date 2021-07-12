@@ -2523,6 +2523,7 @@ namespace MpWpfApp {
             if(string.IsNullOrEmpty(rtf)) {
                 return string.Empty.ToRichText().ToFlowDocument();
             }
+            
             if(IsStringRichText(rtf)) {
                 //using (var stream = new MemoryStream(Encoding.Default.GetBytes(rtf))) {
                 using (var stream = new MemoryStream(UTF8Encoding.Default.GetBytes(rtf))) {
@@ -2549,6 +2550,8 @@ namespace MpWpfApp {
                         return rtf.ToPlainText().ToFlowDocument();
                     }
                 }
+            } else if(IsStringPlainText(rtf)) {
+                return ConvertRichTextToFlowDocument(rtf.ToRichText());
             }
             return ConvertXamlToFlowDocument(rtf);
         }

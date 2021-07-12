@@ -29,7 +29,7 @@ namespace MonkeyPaste {
             Task.Run(async () => {
                 TcpListener server = null;
                 try {
-                    server = new TcpListener(thisEndPoint.PrivateIPEndPoint);
+                    server = new TcpListener(thisEndPoint.PrivateConnectIPEndPoint);
                     server.Start();
                     IsRunning = true;
                     while (IsRunning) {

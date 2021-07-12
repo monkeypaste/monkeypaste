@@ -109,6 +109,10 @@ namespace MonkeyPaste {
             return typeof(MpDbLog);
         }
 
+        public Dictionary<string, string> DbDiff(object drOrModel) {
+            throw new NotImplementedException();
+        }
+
         public MpDbLog() : base(typeof(MpDbLog)) { }
 
         public MpDbLog(

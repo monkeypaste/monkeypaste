@@ -60,6 +60,24 @@ namespace MonkeyPaste {
             return result;
         }
 
+        public async Task<List<object>> QueryAsync(string tableName,string query, params object[] args) {
+            if (_connectionAsync == null) {
+                await Init();
+            }
+            TableMapping qtm = null;
+            foreach(var tm in _connectionAsync.TableMappings) {
+                if(tm.TableName.ToLower() == tableName.ToLower()) {
+                    qtm = tm;
+                    break;
+                }
+            }
+            if(qtm == null) {
+                throw new Exception($"Cannot find {tableName} table in db map");
+            }
+            var result = await _connectionAsync.QueryAsync(qtm, query, args);
+            return result;
+        }
+
         public async Task<List<T>> GetItems<T>() where T : new() {
             if (_connectionAsync == null) {
                 await Init();
@@ -71,27 +89,27 @@ namespace MonkeyPaste {
             if (_connectionAsync == null) {
                 await Init();
             }
-            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Create,null, item as MpDbModelBase,sourceClientGuid);
+            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Create, item as MpDbModelBase,sourceClientGuid);
 
             await _connectionAsync.InsertAsync(item);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
         }
 
-        public async Task UpdateItem<T>(T item, Dictionary<string,string> alteredColumnNameValuePairs = null, string sourceClientGuid = "") where T : new() {
+        public async Task UpdateItem<T>(T item, string sourceClientGuid = "") where T : new() {
             if (_connectionAsync == null) {
                 await Init();
             }
-            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Modify, alteredColumnNameValuePairs, item as MpDbModelBase,sourceClientGuid);
+            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Modify, item as MpDbModelBase,sourceClientGuid);
 
             await _connectionAsync.UpdateAsync(item);
             OnItemUpdated?.Invoke(this, item as MpDbModelBase);
         }
 
-        public async Task AddOrUpdate<T>(T item, Dictionary<string, string> alteredColumnNameValuePairs = null, string sourceClientGuid = "") where T : new() {
+        public async Task AddOrUpdate<T>(T item,  string sourceClientGuid = "") where T : new() {
             if ((item as MpDbModelBase).Id == 0) {
                 await AddItem(item,sourceClientGuid);
             } else {
-                await UpdateItem(item,alteredColumnNameValuePairs,sourceClientGuid);
+                await UpdateItem(item,sourceClientGuid);
             }
         }
 
@@ -99,12 +117,23 @@ namespace MonkeyPaste {
             if (_connectionAsync == null) {
                 await Init();
             }
-            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Delete, null, item as MpDbModelBase,sourceClientGuid); ;
+            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Delete, item as MpDbModelBase, sourceClientGuid); ;
 
             await _connectionAsync.DeleteAsync<T>((item as MpDbModelBase).Id);
             OnItemDeleted?.Invoke(this, item as MpDbModelBase);
         }
 
+        public async Task<object> GetObjDbRow(string tableName, string objGuid) {
+            var dt = await QueryAsync(
+                tableName,
+                string.Format(
+                    @"SELECT * FROM ? WHERE ?Guid=?",
+                    tableName, tableName, objGuid));
+            if (dt != null && dt.Count > 0) {
+                return dt[0];
+            }
+            return null;
+        }
         //public async Task UpdateWithChildren(MpDbObject dbo) {
         //    await _connectionAsync.UpdateWithChildrenAsync(dbo);
         //}
@@ -287,16 +316,28 @@ namespace MonkeyPaste {
         }
 
         public async Task<string> GetDbObjRequestFromRemoteLogStr(string dbLogMessageStr) {
+            await Task.Delay(1);
+            return null;
+        }
+
+        public async Task<Dictionary<Guid, List<MpDbLog>>> PrepareRemoteLogForSyncing(string dbLogMessageStr) {
             var dbLogMessage = MpDbMessage.Parse(dbLogMessageStr, GetTypeConverter());
 
             var remoteDbLogs = new List<MpDbLog>();
             var dbLogWorker = new MpDbLog();
-            foreach(var remoteLogRow in dbLogMessage.DbObjects) {
-                var logItem = await dbLogWorker.DeserializeDbObject(remoteLogRow.ObjStr);
-                remoteDbLogs.Add(logItem as MpDbLog);
+
+            //deserialize logs and put into guid buckets
+            var remoteItemChangeLookup = new Dictionary<Guid, List<MpDbLog>>();
+            foreach (var remoteLogRow in dbLogMessage.DbObjects) {
+                var logItem = await dbLogWorker.DeserializeDbObject(remoteLogRow.ObjStr) as MpDbLog;
+                if (remoteItemChangeLookup.ContainsKey(logItem.DbObjectGuid)) {
+                    remoteItemChangeLookup[logItem.DbObjectGuid].Add(logItem);
+                } else {
+                    remoteItemChangeLookup.Add(logItem.DbObjectGuid, new List<MpDbLog>() { logItem });
+                }
             }
 
-            return null;
+            return remoteItemChangeLookup;
         }
         public async Task<string> GetDbObjResponseFromRequestStr(string dbObjReqStr) {
             MpConsole.WriteTraceLine(dbObjReqStr);

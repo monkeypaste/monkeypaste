@@ -143,10 +143,10 @@ namespace MpWpfApp {
             }
             return conn;
         }
-        public int ExecuteWrite(string query, Dictionary<string, object> args, string dbObjectGuid = "", Dictionary<string,string> alteredColumnNameValuePairs = null, string sourceClientGuid = "") {
+        public int ExecuteWrite(string query, Dictionary<string, object> args, string dbObjectGuid = "", string sourceClientGuid = "", object dbObject = null) {
             if(!string.IsNullOrEmpty(dbObjectGuid)) {
                 //only track objects providing a guid
-                MpDbLogTracker.TrackDbWrite(query, alteredColumnNameValuePairs, dbObjectGuid, sourceClientGuid);
+                MpDbLogTracker.TrackDbWrite(query, args, dbObjectGuid, sourceClientGuid, dbObject);
             }
 
             int numberOfRowsAffected;
@@ -185,6 +185,21 @@ namespace MpWpfApp {
                 }
             }
         }
+
+        public DataRow GetObjDbRow(string tableName, string objGuid) {
+            var dt = MpDb.Instance.Execute(
+                    @"SELECT * FROM "+tableName+" WHERE @gcn=@gid",
+                    new Dictionary<string, object>() {
+                        //{ "@tn",tableName },
+                        { "@gcn",tableName+"Guid" },
+                        { "@gid",objGuid }
+                    });
+            if (dt != null && dt.Rows.Count > 0) {
+                return dt.Rows[0];
+            }
+            return null;
+        }
+
         public async Task<int> ExecuteWriteAsync(string query, Dictionary<string, object> args) {
             int numberOfRowsAffected;
             using (var con = SetConnection()) {
@@ -700,6 +715,27 @@ namespace MpWpfApp {
             //await Task.Delay(10);
             //return ld;
         }
+
+        public async Task<Dictionary<Guid, List<MonkeyPaste.MpDbLog>>> PrepareRemoteLogForSyncing(string dbLogMessageStr) {
+            var dbLogMessage = MpDbMessage.Parse(dbLogMessageStr, GetTypeConverter());
+
+            var remoteDbLogs = new List<MpDbLog>();
+            var dbLogWorker = new MpDbLog();
+
+            //deserialize logs and put into guid buckets
+            var remoteItemChangeLookup = new Dictionary<Guid, List<MonkeyPaste.MpDbLog>>();
+            foreach (var remoteLogRow in dbLogMessage.DbObjects) {
+                var logItem = await dbLogWorker.DeserializeDbObject(remoteLogRow.ObjStr) as MonkeyPaste.MpDbLog;
+                if (remoteItemChangeLookup.ContainsKey(logItem.DbObjectGuid)) {
+                    remoteItemChangeLookup[logItem.DbObjectGuid].Add(logItem);
+                } else {
+                    remoteItemChangeLookup.Add(logItem.DbObjectGuid, new List<MonkeyPaste.MpDbLog>() { logItem });
+                }
+            }
+
+            return remoteItemChangeLookup;
+        }
+
         public async Task<object> ProcessDbObjResponse(string dbObjRespStr) {
             MpConsole.WriteTraceLine(dbObjRespStr);
             await Task.Delay(1);

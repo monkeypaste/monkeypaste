@@ -51,7 +51,7 @@ namespace MonkeyPaste {
             }
             TcpListener server = null;
             try {
-                server = new TcpListener(IPAddress.Any, _sep.PublicPortNum);
+                server = new TcpListener(IPAddress.Any, _sep.PublicConnectPortNum);
 
                 MpConsole.WriteLine($"Starting Listener with endpoint: {_sep}");
                 server.Start();
@@ -108,13 +108,13 @@ namespace MonkeyPaste {
             // Create a TCP/IP socket.  
             var listener = new Socket(
                 //IPAddress.Any.AddressFamily, 
-                _sep.PrivateIPEndPoint.AddressFamily,
+                _sep.PrivateConnectIPEndPoint.AddressFamily,
                 SocketType.Stream, 
                 ProtocolType.Tcp);
 
             // Bind the socket to the local endpoint and listen for incoming connections.  
             try {
-                listener.Bind(_sep.PrivateIPEndPoint);
+                listener.Bind(_sep.PrivateConnectIPEndPoint);
                 listener.Listen(100);
                 IsRunning = true;
                 

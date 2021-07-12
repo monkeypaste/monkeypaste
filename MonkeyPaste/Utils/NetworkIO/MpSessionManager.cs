@@ -70,7 +70,7 @@ namespace MonkeyPaste {
                     @"passhash",
                     cep.PublicIp4Address,
                     cep.PrivateIp4Address,
-                    cep.PublicPortNum,
+                    cep.PublicConnectPortNum,
                     cep.AccessToken
                     ));
             try {
