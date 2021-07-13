@@ -27,16 +27,15 @@ namespace MpWpfApp {
         public virtual void WriteToDatabase(string sourceClientGuid) { }
 
         public virtual void DeleteFromDatabase(string sourceClientGuid) { }
-        protected void TrackHasChanged(bool doTracking) {
-            if(doTracking) {
-                PropertyChanged += MpDbObject_PropertyChanged;
-            } else {
-                PropertyChanged -= MpDbObject_PropertyChanged;
-            }
-        }
-
-        protected Dictionary<string, string> CheckValue(object a, object b, string colName, Dictionary<string, string> diffLookup, object forceAVal = null) {
-            if (a == b) {
+        
+        protected Dictionary<string, string> CheckValue(
+            object a, object b, string colName, Dictionary<string, string> diffLookup, object forceAVal = null) {
+            // a = current model property
+            // b = model in db
+            // when a != b add a to diffLookup OR substitue with forceVal (so guids are used instead of int keys)
+            a = a == null ? string.Empty : a;
+            b = b == null ? string.Empty : b;
+            if (a.ToString() == b.ToString()) {
                 return diffLookup;
             }
             diffLookup.Add(colName, forceAVal == null ? a.ToString() : forceAVal.ToString());

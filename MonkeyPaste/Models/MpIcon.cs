@@ -125,8 +125,7 @@ namespace MonkeyPaste {
 
             return newIcon;
         }
-        public MpIcon() : base(typeof(MpIcon)) {
-            IconGuid = System.Guid.NewGuid();
+        public MpIcon() {
         }
 
 

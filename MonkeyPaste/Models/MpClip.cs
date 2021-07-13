@@ -228,8 +228,7 @@ namespace MonkeyPaste {
         }
         #endregion
 
-        public MpClip() : base(typeof(MpClip)) {
-            ClipGuid = System.Guid.NewGuid();
+        public MpClip() {
         }
 
         public MpClip(object data, string sourceInfo) : this() {

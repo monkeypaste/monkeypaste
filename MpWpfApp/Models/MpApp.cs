@@ -145,9 +145,7 @@ namespace MpWpfApp {
             //PrimaryIconColorList = MpColor.CreatePrimaryColorList(IconImage);
         }
 
-        public MpApp() {
-            TrackHasChanged(true);
-        }
+        public MpApp() { }
 
         public MpApp(DataRow dr) : this() {
             LoadDataRow(dr);

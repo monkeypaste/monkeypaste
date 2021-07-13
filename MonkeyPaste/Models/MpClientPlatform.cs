@@ -44,6 +44,6 @@ namespace MonkeyPaste {
         public int DeviceTypeId { get; set; }
         public int PlatformTypeId { get; set; }
 
-        public MpClientPlatform() : base(typeof(MpClientPlatform)) { }
+        public MpClientPlatform() { }
     }
 }

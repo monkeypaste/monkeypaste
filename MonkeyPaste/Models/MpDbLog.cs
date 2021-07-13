@@ -113,7 +113,7 @@ namespace MonkeyPaste {
             throw new NotImplementedException();
         }
 
-        public MpDbLog() : base(typeof(MpDbLog)) { }
+        public MpDbLog() { }
 
         public MpDbLog(
             Guid dbObjectGuid, 

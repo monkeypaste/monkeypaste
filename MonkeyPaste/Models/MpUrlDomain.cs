@@ -117,8 +117,7 @@ namespace MonkeyPaste {
         }        
 
 
-        public MpUrlDomain() : base(typeof(MpUrlDomain)) {
-            UrlDomainGuid = System.Guid.NewGuid();
+        public MpUrlDomain() {
         }
     }
 }

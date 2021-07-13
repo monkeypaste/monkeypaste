@@ -135,6 +135,12 @@
                 Size="22"
                 Color="Black" />
 
+            <FontImageSource x:Key="SyncIcon"
+                             FontFamily="{StaticResource FontAwesomeSolid}"
+                             Glyph="&#xf2f1;"
+                             Size="22"
+                             Color="Black" />
+
             <FontImageSource
                 x:Key="SquareIcon0"
                 FontFamily="{StaticResource FontAwesomeSolid}"

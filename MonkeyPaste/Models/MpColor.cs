@@ -58,7 +58,7 @@ namespace MonkeyPaste {
                 return new SolidColorBrush(Color);
             }
         }
-        public MpColor() : base(typeof(MpColor)) { }
+        public MpColor() { }
 
         public MpColor(double r, double g, double b, double a) : this() {
             R = (int)(r * 255);
@@ -68,7 +68,6 @@ namespace MonkeyPaste {
         }
 
         public MpColor(Color c) : this(c.R, c.G, c.B, c.A) { 
-            ColorGuid = System.Guid.NewGuid();
         }
 
         public static async Task<MpColor> GetColorById(int colorId) {
@@ -151,18 +150,18 @@ namespace MonkeyPaste {
             if (drOrModel == null) {
                 //this occurs when this model is being added
                 //and intended behavior is all values are returned
-                other = new MpColor();
+                other = new MpColor() { R = -1, G = -1, B = -1, A = -1 };
             } else if (drOrModel is MpColor) {
                 other = drOrModel as MpColor;
             } else {
                 throw new Exception("Cannot compare xam model to local model");
             }
             var diffLookup = new Dictionary<string, string>();
-            if (Id > 0) {
-                diffLookup = CheckValue(Id, other.Id,
-                "pk_MpColorId",
-                diffLookup);
-            }
+            //if (Id > 0) {
+            //    diffLookup = CheckValue(Id, other.Id,
+            //    "pk_MpColorId",
+            //    diffLookup);
+            //}
             diffLookup = CheckValue(ColorGuid, other.ColorGuid,
                 "MpColorGuid",
                 diffLookup);

@@ -7,8 +7,11 @@ using Xamarin.Forms;
 
 namespace MonkeyPaste {
     public class MpMainShellViewModel : MpViewModelBase {
+        #region Properties
         public MpTagTileCollectionViewModel TagCollectionViewModel { get; set; }
-        
+        #endregion
+
+        #region Public Methods
         public MpMainShellViewModel() {
             Task.Run(async () => {
                 await MpDb.Instance.Init();
@@ -20,6 +23,16 @@ namespace MonkeyPaste {
 
                 TagCollectionViewModel = new MpTagTileCollectionViewModel();
             });
-        }        
+        }
+        #endregion
+
+        #region Commands
+        public ICommand SyncCommand => new Command<object>(async (args) => {
+            MpDbLogTracker.PrintDbLog();
+            //var ms = Application.Current.MainPage as MpMainShell;
+            //var curDbBytes = MpDb.Instance.GetDbFileBytes();
+            //ms.StorageService.CreateFile(@"mp_clone", curDbBytes, @".db");
+        });
+        #endregion
     }
 }

@@ -34,8 +34,7 @@ namespace MonkeyPaste {
         [OneToOne]
         public MpClientPlatform ClientPlatform { get; set; }
 
-        public MpClient() : base(typeof(MpClient)) {
-            ClientGuid = System.Guid.NewGuid();
+        public MpClient() {
         }
     }
 }

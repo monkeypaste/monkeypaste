@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+//using SQLite;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Xml.Linq;
 using Microsoft.Win32;
 using MonkeyPaste;
 using Newtonsoft.Json;
@@ -19,11 +21,15 @@ namespace MpWpfApp {
         private static readonly Lazy<MpDb> _Lazy = new Lazy<MpDb>(() => new MpDb());
         public static MpDb Instance { get { return _Lazy.Value; } }
 
+        //private SQLiteConnection _connection;
+
         public MpClient Client { get; set; }
         public MpUser User { get; set; }
 
         public string IdentityToken { get; set; }
         public string AccessToken { get; set; }
+
+       
 
         //private int _passwordAttempts = 0;
 
@@ -54,7 +60,8 @@ namespace MpWpfApp {
             //});
 
             //if db does not exist create it with a random password and set its path and password properties
-            if (string.IsNullOrEmpty(Properties.Settings.Default.DbPath) || !File.Exists(Properties.Settings.Default.DbPath)) {
+            if (string.IsNullOrEmpty(Properties.Settings.Default.DbPath) || 
+                !File.Exists(Properties.Settings.Default.DbPath)) {
                 Console.WriteLine("Db does not exist in " + MpHelpers.Instance.GetApplicationDirectory());
                 Properties.Settings.Default.DbPath = MpHelpers.Instance.GetApplicationDirectory() + Properties.Settings.Default.DbName;
                 Properties.Settings.Default.DbPassword = string.Empty;
@@ -186,14 +193,9 @@ namespace MpWpfApp {
             }
         }
 
-        public DataRow GetObjDbRow(string tableName, string objGuid) {
+        public DataRow GetDbObjectByTableGuid(string tableName, string objGuid) {            
             var dt = MpDb.Instance.Execute(
-                    @"SELECT * FROM "+tableName+" WHERE @gcn=@gid",
-                    new Dictionary<string, object>() {
-                        //{ "@tn",tableName },
-                        { "@gcn",tableName+"Guid" },
-                        { "@gid",objGuid }
-                    });
+                "select * from " + tableName + " where " + tableName + "Guid='" + objGuid + "'", null);
             if (dt != null && dt.Rows.Count > 0) {
                 return dt.Rows[0];
             }

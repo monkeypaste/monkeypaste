@@ -11,6 +11,7 @@ namespace MpWpfApp {
         #region Private Variables
         private int _tagClipCount = 0;
         private string _originalTagName = string.Empty;
+        private bool _wasEditingName = false;
         #endregion
 
         #region Properties
@@ -89,6 +90,7 @@ namespace MpWpfApp {
             set {
                 if (_isEditing != value) {
                     _isEditing = value;
+
                     OnPropertyChanged(nameof(IsEditing));
                     OnPropertyChanged(nameof(TextBlockVisibility));
                     OnPropertyChanged(nameof(TextBoxVisibility));
@@ -264,8 +266,7 @@ namespace MpWpfApp {
                     if (Tag.TagName.Trim() == string.Empty) {
                         Tag.TagName = "Untitled";
                         IsEditing = true;
-                    }
-                    Tag.WriteToDatabase();
+                    }                    
                     OnPropertyChanged(nameof(TagName));
                 }
             }
@@ -306,10 +307,23 @@ namespace MpWpfApp {
 
         #region Public Methods
         public MpTagTileViewModel(MpTag tag) : base() {
-            //PropertyChanged += (s, e1) => {
-            //    switch (e1.PropertyName) {
-            //    }
-            //};
+            PropertyChanged += (s, e1) => {
+                switch (e1.PropertyName) {
+                    case nameof(IsEditing):
+                        if(IsEditing) {
+                            _wasEditingName = true;
+                            _originalTagName = TagName;
+                        } else {
+                            if(_wasEditingName) {
+                                _wasEditingName = false;
+                                if(TagName != _originalTagName) {
+                                    Tag.WriteToDatabase();
+                                }
+                            }
+                        }
+                        break;
+                }
+            };
 
             Tag = tag;
         }

@@ -72,6 +72,6 @@ namespace MonkeyPaste {
         //    var allSources = await GetAllSources();
 
         //}
-        public MpSource() : base(typeof(MpSource)) { }
+        public MpSource() { }
     }
 }

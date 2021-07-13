@@ -34,8 +34,7 @@ namespace MonkeyPaste {
             var allicons = await MpDb.Instance.GetItems<MpDbImage>();
             return allicons.Where(x => x.Id == id).FirstOrDefault();
         }
-        public MpDbImage() : base(typeof(MpDbImage)) {
-            DbImageGuid = System.Guid.NewGuid();
+        public MpDbImage() {
         }
     }
 }

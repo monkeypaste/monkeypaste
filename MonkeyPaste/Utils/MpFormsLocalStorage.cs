@@ -6,8 +6,7 @@ using Xamarin.Forms;
 
 namespace MonkeyPaste
 {
-    public class MpFormsLocalStorage : MpILocalStorage
-    {
+    public class MpFormsLocalStorage : MpIPhotoGalleryManager {
         public const string FavoritePhotosKey = "FavoritePhotos";
         public async Task<List<string>> Get()
         {

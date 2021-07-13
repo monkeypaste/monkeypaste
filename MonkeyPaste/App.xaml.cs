@@ -16,9 +16,9 @@ namespace MonkeyPaste {
             MainPage = new MpMainShell();
         }
 
-        public App(MpIKeyboardInteractionService kis)  {
+        public App(MpINativeInterfaceWrapper niw)  {
             InitializeComponent();
-            MainPage = new MpMainShell(kis);
+            MainPage = new MpMainShell(niw);
         }
 
         protected override void OnStart() {

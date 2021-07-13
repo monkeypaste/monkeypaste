@@ -11,6 +11,6 @@ namespace MonkeyPaste {
         public Guid OtherClientGuid { get; set; }
         public DateTime SyncDateTime { get; set; }
 
-        public MpSyncHistory() : base(typeof(MpSyncHistory)) { }
+        public MpSyncHistory() { }
     }
 }

@@ -72,7 +72,7 @@ namespace MonkeyPaste {
                 }
             }
             if(qtm == null) {
-                throw new Exception($"Cannot find {tableName} table in db map");
+                return new List<object>();
             }
             var result = await _connectionAsync.QueryAsync(qtm, query, args);
             return result;
@@ -89,7 +89,13 @@ namespace MonkeyPaste {
             if (_connectionAsync == null) {
                 await Init();
             }
-            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Create, item as MpDbModelBase,sourceClientGuid);
+            if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
+                if(string.IsNullOrEmpty((item as MpDbModelBase).Guid)) {
+                    (item as MpDbModelBase).Guid = System.Guid.NewGuid().ToString();
+                }
+                MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Create, item as MpDbModelBase, sourceClientGuid);
+            }
+            
 
             await _connectionAsync.InsertAsync(item);
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
@@ -125,10 +131,8 @@ namespace MonkeyPaste {
 
         public async Task<object> GetObjDbRow(string tableName, string objGuid) {
             var dt = await QueryAsync(
-                tableName,
-                string.Format(
-                    @"SELECT * FROM ? WHERE ?Guid=?",
-                    tableName, tableName, objGuid));
+                "select * from " + tableName + " where " + tableName + "Guid='" + objGuid + "'", null);
+            
             if (dt != null && dt.Count > 0) {
                 return dt[0];
             }
@@ -151,6 +155,11 @@ namespace MonkeyPaste {
         }
         public void InitClient(string accessToken) {
             //Client = new MpClient(0, 3, MpHelpers.Instance.GetCurrentIPAddress()/*.MapToIPv4()*/.ToString(), accessToken, DateTime.Now);
+        }
+
+        public byte[] GetDbFileBytes() {
+            var dbPath = DependencyService.Get<MpIDbFilePath>().DbFilePath();
+            return File.ReadAllBytes(dbPath);
         }
         #endregion
 
@@ -232,12 +241,14 @@ namespace MonkeyPaste {
                 TagGuid = Guid.Parse("310ba30b-c541-4914-bd13-684a5e00a2d3"),
                 TagName = "Recent",
                 ColorId = green.Id,
+                TagColor = green,
                 TagSortIdx = 0
             });
             await AddItem<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("df388ecd-f717-4905-a35c-a8491da9c0e3"),
                 TagName = "All",
                 ColorId = blue.Id,
+                TagColor = blue,
                 TagSortIdx = 1
             });
 
@@ -245,12 +256,14 @@ namespace MonkeyPaste {
                 TagGuid = Guid.Parse("54b61353-b031-4029-9bda-07f7ca55c123"),
                 TagName = "Favorites",
                 ColorId = yellow.Id,
+                TagColor = yellow,
                 TagSortIdx = 2
             });
             await AddItem<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("a0567976-dba6-48fc-9a7d-cbd306a4eaf3"),
                 TagName = "Help",
                 ColorId = orange.Id,
+                TagColor = orange,
                 TagSortIdx = 3
             });
 

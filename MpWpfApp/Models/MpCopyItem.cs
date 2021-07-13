@@ -643,7 +643,6 @@ namespace MpWpfApp {
             Color tileColor,
             IntPtr hwnd,
             MpApp app) {
-            TrackHasChanged(true);
             CopyItemGuid = Guid.NewGuid();
             CopyItemType = itemType;
             CopyDateTime = DateTime.Now;

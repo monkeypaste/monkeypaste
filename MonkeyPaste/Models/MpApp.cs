@@ -85,8 +85,7 @@ namespace MonkeyPaste {
 
             return newApp;
         }
-        public MpApp() : base(typeof(MpApp)) {
-            AppGuid = System.Guid.NewGuid();
+        public MpApp() {
         }
 
         #region MpIClipSource Implementation

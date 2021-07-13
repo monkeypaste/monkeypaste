@@ -30,12 +30,13 @@ namespace MonkeyPaste.Droid {
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity {
         public static MainActivity Current;
+
         static readonly int NOTIFICATION_ID = 1000;
         static readonly string CHANNEL_ID = "location_notification";
         internal static readonly string COUNT_KEY = "count";
         int count = 0;
-
-        public MpIKeyboardInteractionService KeyboardInteractionService { get; set; }
+                
+        public MpINativeInterfaceWrapper AndroidInterfaceWrapper { get; set; }
 
         protected override async void OnCreate(Bundle savedInstanceState) {
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -65,8 +66,13 @@ namespace MonkeyPaste.Droid {
             CachedImageRenderer.InitImageViewHandler();
             Current = this;
 
-            KeyboardInteractionService = new MpKeyboardInteractionService();
-            LoadApplication(new App(KeyboardInteractionService));
+            AndroidInterfaceWrapper = new MpAndroidInterfaceWrapper() {
+                KeyboardService = new MpKeyboardInteractionService(),
+                StorageService = new MpLocalStorage_Android()
+            };           
+
+            
+            LoadApplication(new App(AndroidInterfaceWrapper));
             LoadSelectedTextAsync();
 
 

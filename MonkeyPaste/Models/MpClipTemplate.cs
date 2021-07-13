@@ -46,8 +46,7 @@ namespace MonkeyPaste {
         public MpColor Color { get; set; }
         #endregion
 
-        public MpClipTemplate() : base(typeof(MpClipTemplate)) {
-             ClipTemplateGuid = System.Guid.NewGuid();
+        public MpClipTemplate() {
         }
     }
 }

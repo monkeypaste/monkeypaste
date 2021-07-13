@@ -43,8 +43,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public MpClipComposite() : base(typeof(MpClipComposite)) {
-            ClipCompositeGuid = System.Guid.NewGuid();
+        public MpClipComposite() {
         }
     }
 }

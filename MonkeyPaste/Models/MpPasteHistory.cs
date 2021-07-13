@@ -47,6 +47,6 @@ namespace MonkeyPaste {
         public int AppId { get; set; }
         #endregion
 
-        public MpPasteHistory() : base(typeof(MpPasteHistory)) { }
+        public MpPasteHistory() { }
     }
 }

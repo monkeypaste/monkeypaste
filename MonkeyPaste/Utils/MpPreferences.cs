@@ -1,21 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using Xamarin.Essentials;
 
 namespace MonkeyPaste {
-    public class MpPreferences {
+    public class MpPreferences : MpIPreferences {
         #region Singleton
         private static readonly Lazy<MpPreferences> _Lazy = new Lazy<MpPreferences>(() => new MpPreferences());
         public static MpPreferences Instance { get { return _Lazy.Value; } }
 
         private MpPreferences() {
-
+            _prefDataTypeLookup = new Dictionary<string, Type>();
+            foreach(var prop in GetType().GetProperties()) {
+                _prefDataTypeLookup.Add(prop.Name, prop.PropertyType);
+            }
         }
         #endregion
 
+        #region Private Variables
+        private Dictionary<string, Type> _prefDataTypeLookup;
+        #endregion
+
         #region Properties
+
 
         #region Application Properties
         public const string SslAlgorithm = "SHA256WITHRSA";
@@ -204,6 +213,16 @@ namespace MonkeyPaste {
         #endregion
 
 
+        #endregion
+
+        #region MpIPreferences Implementation
+        public object GetPreferenceValue(string preferenceName) {
+            return this.GetType().GetProperty(preferenceName).GetValue(this);
+        }
+
+        public void SetPreferenceValue(string preferenceName, object preferenceValue) {
+            this.GetType().GetProperty(preferenceName).SetValue(this, preferenceValue);
+        }
         #endregion
     }
 }

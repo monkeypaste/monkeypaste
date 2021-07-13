@@ -10,13 +10,15 @@ namespace MonkeyPaste {
     public partial class MpMainShell : Shell {
         public MpSettingsPageView SettingsPageView { get; set; }
         public MpIKeyboardInteractionService LayoutService { get; set; }
+        public MpILocalStorage StorageService { get; set; }
 
         public MpMainShell() {
             InitializeComponent();
         }
 
-        public MpMainShell(MpIKeyboardInteractionService kis) : this() {
-            LayoutService = kis;
+        public MpMainShell(MpINativeInterfaceWrapper niw) : this() {
+            LayoutService = niw.GetKeyboardInteractionService();
+            StorageService = niw.GetLocalStorageManager();
         }
 
         public ICommand OpenSettingsPageCommand => new Command(async () => {

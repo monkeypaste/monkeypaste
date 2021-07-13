@@ -6,8 +6,7 @@ namespace MonkeyPaste
 {
     public interface MpILocalStorage
     {
-        Task Store(string filename);
-        Task<List<string>> Get();
+        bool CreateFile(string fileName, byte[] bytes, string fileType);        
     }
 
 }

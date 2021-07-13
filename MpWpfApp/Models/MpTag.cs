@@ -15,7 +15,10 @@ namespace MpWpfApp {
         public int ColorId { get; set; }
 
         public string TagName { get; set; }
-        public MpColor TagColor { get; set; }
+        public MpColor TagColor { 
+            get; 
+            set; 
+        }
         //unused
         public int ParentTagId { get; set; } = 0;
         public MpTag() { }
@@ -167,9 +170,9 @@ namespace MpWpfApp {
             if (TagGuid == Guid.Empty) {
                 TagGuid = Guid.NewGuid();
             }
-            if (!IsAltered()) {
-                return;
-            }
+            //if (!IsAltered()) {
+            //    return;
+            //}
             if (string.IsNullOrEmpty(TagName)) {
                 Console.WriteLine("MpTag Error, cannot create nameless tag");
                 return;
@@ -268,11 +271,11 @@ namespace MpWpfApp {
             }
             //returns db column name and string value of dr that is diff
             var diffLookup = new Dictionary<string, string>();
-            if(TagId > 0) {
-                diffLookup = CheckValue(TagId, other.TagId,
-                    "pk_MpTagId",
-                    diffLookup);
-            }
+            //if(TagId > 0) {
+            //    diffLookup = CheckValue(TagId, other.TagId,
+            //        "pk_MpTagId",
+            //        diffLookup);
+            //}
             diffLookup = CheckValue(TagGuid, other.TagGuid,
                 "MpTagGuid",
                 diffLookup);

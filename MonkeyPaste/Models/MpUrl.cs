@@ -38,8 +38,7 @@ namespace MonkeyPaste {
         public string UrlPath { get; set; }
         public string UrlTitle { get; set; }
 
-        public MpUrl() : base(typeof(MpUrl)) {
-            UrlGuid = System.Guid.NewGuid();
+        public MpUrl() {
         }
         public MpUrl(string urlPath, string urlTitle) : this() {
             UrlPath = urlPath;

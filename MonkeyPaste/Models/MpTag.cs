@@ -59,8 +59,7 @@ namespace MonkeyPaste {
         //public int ParentTagId { get; set; }
         #endregion
 
-        public MpTag() : base(typeof(MpTag)) {
-            TagGuid = System.Guid.NewGuid();
+        public MpTag() {
         }
 
         public async Task<bool> IsLinkedWithClipAsync(MpClip clip) {
@@ -149,19 +148,18 @@ namespace MonkeyPaste {
             MpTag other = null;
             if(drOrModel == null) {
                 other = new MpTag();
-            }
-            if (drOrModel is MpTag) {
+            } else if (drOrModel is MpTag) {
                 other = drOrModel as MpTag;
             } else {
                 throw new Exception("Cannot compare xam model to local model");
             }
             //returns db column name and string value of dr that is diff
             var diffLookup = new Dictionary<string, string>();
-            if(Id > 0) {
-                diffLookup = CheckValue(Id, other.Id,
-                    "pk_MpTagId",
-                    diffLookup);
-            }
+            //if(Id > 0) {
+            //    diffLookup = CheckValue(Id, other.Id,
+            //        "pk_MpTagId",
+            //        diffLookup);
+            //}
             diffLookup = CheckValue(TagGuid, other.TagGuid,
                 "MpTagGuid",
                 diffLookup);

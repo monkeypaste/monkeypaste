@@ -81,11 +81,11 @@ namespace MonkeyPaste {
                 //    localSync.IsWpf());
                 //sw.Stop();
                 //MpConsole.WriteLine(@"Private ip sweep took {0} ms" + sw.ElapsedMilliseconds);
-
+                return;
                 if (localSync.IsWpf()) {
                     var server = new Socket(ThisEndpoint.PrivateConnectIPEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                     server.Bind(ThisEndpoint.PrivateConnectIPEndPoint);
-                    server.Listen(10);
+                    server.Listen(10); 
                     while(true) {
                         Socket client = null;
                         try {

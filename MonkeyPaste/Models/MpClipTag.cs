@@ -62,8 +62,7 @@ namespace MonkeyPaste {
 
         #endregion
 
-        public MpClipTag() : base(typeof(MpClipTag)) {
-            ClipTagGuid = System.Guid.NewGuid();
+        public MpClipTag() {
         }
     }
 }

@@ -8,11 +8,6 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public class MpDbLogTracker {
         public static void TrackDbWrite(MpDbLogActionType actionType, MpDbModelBase dbModel, string clientGuid = "") {
-            if(dbModel is not MpISyncableDbObject || string.IsNullOrEmpty(dbModel.Guid)) {
-                //only set for sync items so ignore
-                return;
-            }
-
             Guid objectGuid = Guid.Parse(dbModel.Guid);
             Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpPreferences.Instance.ThisClientGuidStr) : Guid.Parse(clientGuid);
             string tableName = dbModel.GetType().ToString();
@@ -36,6 +31,17 @@ namespace MonkeyPaste {
             });
 
             
+        }
+
+        public static void PrintDbLog() {
+            Task.Run(async () => {
+                var dblil = await MpDb.Instance.GetItems<MpDbLog>();
+
+                foreach(var dbli in dblil) {
+                    Console.WriteLine(dbli.ToString());
+                }
+            });
+
         }
     }
 }

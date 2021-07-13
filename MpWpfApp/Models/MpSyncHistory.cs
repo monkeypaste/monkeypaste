@@ -48,9 +48,7 @@ namespace MpWpfApp {
             return udbpl;
         }
 
-        public MpSyncHistory() {
-            TrackHasChanged(true);
-        }
+        public MpSyncHistory() { }
 
         public MpSyncHistory(int SyncHistoryId) : this() {
             DataTable dt = MpDb.Instance.Execute(

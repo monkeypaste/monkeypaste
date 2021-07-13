@@ -6,21 +6,15 @@ using SQLite;
 
 namespace MonkeyPaste {
     public abstract class MpDbModelBase {
-        private static List<Type> _AllDbObjectTypes = new List<Type>();
-
-        public abstract int Id { set; get; }
-
-        public MpDbModelBase(Type subType) {
-            if(!_AllDbObjectTypes.Contains(subType)) {
-                _AllDbObjectTypes.Add(subType);
-            }
-        }       
+        public abstract int Id { set; get; }    
 
         [Ignore]
         public string Guid { get; set; }
 
         protected Dictionary<string, string> CheckValue(object a, object b, string colName, Dictionary<string, string> diffLookup, object forceAVal = null) {
-            if (a == b) {
+            a = a == null ? string.Empty : a;
+            b = b == null ? string.Empty : b;
+            if (a.ToString() == b.ToString()) {
                 return diffLookup;
             }
             diffLookup.Add(colName, forceAVal == null ? a.ToString() : forceAVal.ToString());

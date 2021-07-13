@@ -5,11 +5,13 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Permissions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using WindowsInput;
 using WindowsInput.Native;
 
@@ -123,7 +125,10 @@ namespace MpWpfApp {
                         else if(MpApp.IsAppRejectedByHandle(LastWindowWatcher.LastHandle)) {
                             Console.WriteLine("Clipboard Monitor: Ignoring app '" + MpHelpers.Instance.GetProcessPath(hwnd) + "' with handle: " + hwnd);
                         } else {
-                            OnClipboardChanged();
+                            Application.Current.Dispatcher.BeginInvoke((Action)(() => {
+                                OnClipboardChanged();
+                            }), DispatcherPriority.Background);
+                            
                         }
                     }
                     WinApi.SendMessage(_nextClipboardViewer, msg, wParam, lParam);

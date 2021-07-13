@@ -94,7 +94,6 @@ namespace MpWpfApp {
             IconImage = null;
             IconBorderImage = null;
             ++TotalIconCount;
-            TrackHasChanged(true);
         }
         public MpIcon(BitmapSource iconImage) : this() {
 
