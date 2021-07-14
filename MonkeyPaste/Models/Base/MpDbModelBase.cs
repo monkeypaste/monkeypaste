@@ -6,6 +6,7 @@ using SQLite;
 
 namespace MonkeyPaste {
     public abstract class MpDbModelBase {
+        public const string ParseToken = @"^(@!@";
         public abstract int Id { set; get; }    
 
         [Ignore]

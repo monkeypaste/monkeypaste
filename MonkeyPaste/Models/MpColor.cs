@@ -115,8 +115,41 @@ namespace MonkeyPaste {
             return primaryIconColorList;
         }
 
-        public async Task<object> DeserializeDbObject(string objStr, string parseToken = @"^(@!@") {
-            var objParts = objStr.Split(new string[] { parseToken }, StringSplitOptions.RemoveEmptyEntries);
+        public async Task<MpColor> CreateFromLogs(string colorGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+            var cdr = await MpDb.Instance.GetObjDbRow("MpColor", colorGuid);
+            MpColor newColor = null;
+            if (cdr == null) {
+                newColor = new MpColor();
+            } else {
+                newColor = cdr as MpColor;
+            }
+            foreach (var li in logs) {
+                switch (li.AffectedColumnName) {
+                    case "MpColorGuid":
+                        newColor.ColorGuid = System.Guid.Parse(li.AffectedColumnValue);
+                        break;
+                    case "R":
+                        newColor.R = Convert.ToInt32(li.AffectedColumnValue);
+                        break;
+                    case "G":
+                        newColor.G = Convert.ToInt32(li.AffectedColumnValue);
+                        break;
+                    case "B":
+                        newColor.B = Convert.ToInt32(li.AffectedColumnValue);
+                        break;
+                    case "A":
+                        newColor.A = Convert.ToInt32(li.AffectedColumnValue);
+                        break;
+                    default:
+                        throw new Exception(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                }
+            }
+            await MpDb.Instance.AddOrUpdate<MpColor>(newColor,fromClientGuid);
+            return newColor;
+        }
+
+        public async Task<object> DeserializeDbObject(string objStr) {
+            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             await Task.Delay(0);
             var dbLog = new MpColor() {
                 Id = Convert.ToInt32(objParts[0]),
@@ -129,10 +162,10 @@ namespace MonkeyPaste {
             return dbLog;
         }
 
-        public string SerializeDbObject(string parseToken = @"^(@!@") {
+        public string SerializeDbObject() {
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}",
-                parseToken,
+                ParseToken,
                 Id,
                 ColorGuid.ToString(),
                 R,

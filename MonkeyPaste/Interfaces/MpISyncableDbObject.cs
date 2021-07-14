@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace MonkeyPaste {
     public interface MpISyncableDbObject {
-        Task<object> DeserializeDbObject(string objStr, string parseToken = @"^(@!@");
-        string SerializeDbObject(string parseToken = @"^(@!@");
+        Task<object> DeserializeDbObject(string objStr);
+        string SerializeDbObject();
         Type GetDbObjectType();
 
         Dictionary<string, string> DbDiff(object drOrModel);

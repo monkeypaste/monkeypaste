@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public class MpDeviceEndpoint : MpISyncableDbObject {
         #region Properties
+        public const string ParseToken = @"$%#@";
+
         public string PublicIp4Address { get; set; }
         public int PublicConnectPortNum { get; set; }
         public int PublicSyncPortNum { get; set; }
@@ -93,9 +95,10 @@ namespace MonkeyPaste {
             return new MpDeviceEndpoint().DeserializeDbObject(str).Result as MpDeviceEndpoint;
         }
 
-        public string SerializeDbObject(string parseToken = @"^(@!@") {
+        public string SerializeDbObject() {
             return string.Format(
-                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}", 
+                @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}{0}", 
+                ParseToken,
                 PublicIp4Address, 
                 PublicConnectPortNum, 
                 PrivateIp4Address, 
@@ -111,8 +114,8 @@ namespace MonkeyPaste {
             return typeof(MpDeviceEndpoint);
         }
 
-        public async Task<object> DeserializeDbObject(string objStr,string parseToken= @"^(@!@") {
-            var epParts = objStr.Split(new string[] { parseToken }, StringSplitOptions.RemoveEmptyEntries);
+        public async Task<object> DeserializeDbObject(string objStr) {
+            var epParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             var ep = new MpDeviceEndpoint() {
                 PublicIp4Address = epParts[0],
                 PublicConnectPortNum = Convert.ToInt32(epParts[1]),

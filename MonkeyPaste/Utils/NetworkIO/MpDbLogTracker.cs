@@ -12,8 +12,7 @@ namespace MonkeyPaste {
             Guid sourceClientGuid = string.IsNullOrEmpty(clientGuid) ? Guid.Parse(MpPreferences.Instance.ThisClientGuidStr) : Guid.Parse(clientGuid);
             string tableName = dbModel.GetType().ToString();
             tableName = tableName.Substring(tableName.IndexOf(".") + 1);
-            var actionDateTime = DateTime.Now;   
-            
+            var actionDateTime = DateTime.Now;            
             
             Task.Run(async () => {
                 var oldItem = await MpDb.Instance.GetObjDbRow(tableName, objectGuid.ToString());
@@ -29,8 +28,6 @@ namespace MonkeyPaste {
                     }
                 }
             });
-
-            
         }
 
         public static void PrintDbLog() {

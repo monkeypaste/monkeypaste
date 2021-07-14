@@ -173,7 +173,7 @@ namespace MpWpfApp {
             return dt.Rows.Count == 0;
         }
 
-        public override void WriteToDatabase(string sourceClientGuid) {
+        public override void WriteToDatabase(string sourceClientGuid, bool ignoreTracking = false) {
             if (ColorGuid == Guid.Empty) {
                 ColorGuid = Guid.NewGuid();
             }
@@ -191,7 +191,7 @@ namespace MpWpfApp {
                         { "@g", G },
                         { "@b", B },
                         { "@a", A }
-                    }, ColorGuid.ToString(), sourceClientGuid,this);
+                    }, ColorGuid.ToString(), sourceClientGuid,this,ignoreTracking);
                 ColorId = MpDb.Instance.GetLastRowId("MpColor", "pk_MpColorId");
                 GetAllColors().Add(this);
             } else {
@@ -204,7 +204,7 @@ namespace MpWpfApp {
                         { "@b", B },
                         { "@a", A },
                         { "@cid", ColorId }
-                    }, ColorGuid.ToString(),sourceClientGuid,this);
+                    }, ColorGuid.ToString(),sourceClientGuid,this,ignoreTracking);
                 var c = _AllColorList.Where(x => x.ColorId == ColorId).FirstOrDefault();
                 if (c != null) {
                     _AllColorList[_AllColorList.IndexOf(c)] = this;
@@ -214,7 +214,9 @@ namespace MpWpfApp {
         public override void WriteToDatabase() {
             WriteToDatabase(Properties.Settings.Default.ThisClientGuid);      
         }
-
+        public void WriteToDatabase(bool isFirstLoad) {
+            WriteToDatabase(Properties.Settings.Default.ThisClientGuid, isFirstLoad);
+        }
         public override void DeleteFromDatabase(string sourceClientGuid) {
             if (ColorId <= 0) {
                 return;
@@ -230,8 +232,41 @@ namespace MpWpfApp {
             DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
         }
 
-        public async Task<object> DeserializeDbObject(string objStr, string parseToken = @"^(@!@") {
-            var objParts = objStr.Split(new string[] { parseToken }, StringSplitOptions.RemoveEmptyEntries);
+        public MpColor CreateFromLogs(string colorGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+            var cdr = MpDb.Instance.GetDbObjectByTableGuid("MpColor", colorGuid);
+            MpColor newColor = null;
+            if (cdr == null) {
+                newColor = new MpColor();
+            } else {
+                newColor = new MpColor(cdr);
+            }
+            foreach (var li in logs) {
+                switch (li.AffectedColumnName) {
+                    case "MpColorGuid":
+                        newColor.ColorGuid = Guid.Parse(li.AffectedColumnValue);
+                        break;
+                    case "R":
+                        newColor.R = Convert.ToInt32(li.AffectedColumnValue);
+                        break;
+                    case "G":
+                        newColor.G = Convert.ToInt32(li.AffectedColumnValue);
+                        break;
+                    case "B":
+                        newColor.B = Convert.ToInt32(li.AffectedColumnValue);
+                        break;
+                    case "A":
+                        newColor.A = Convert.ToInt32(li.AffectedColumnValue);
+                        break;
+                    default:
+                        throw new Exception(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                }
+            }
+            newColor.WriteToDatabase(fromClientGuid);
+            return newColor;
+        }
+
+        public async Task<object> DeserializeDbObject(string objStr) {
+            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             await Task.Delay(0);
             var dbLog = new MpColor() {
                 ColorId = Convert.ToInt32(objParts[0]),
@@ -244,10 +279,10 @@ namespace MpWpfApp {
             return dbLog;
         }
 
-        public string SerializeDbObject(string parseToken = @"^(@!@") {
+        public string SerializeDbObject() {
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}",
-                parseToken,
+                ParseToken,
                 ColorId,
                 ColorGuid.ToString(),
                 R,

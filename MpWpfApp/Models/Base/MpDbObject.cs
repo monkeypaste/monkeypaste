@@ -5,6 +5,7 @@ using System.Drawing;
 
 namespace MpWpfApp {
     public abstract class MpDbObject : MpObject {
+        public const string ParseToken = @"^(@!@";
         public string TableName = "Unknown";
         public Dictionary<string, object> columnData = new Dictionary<string, object>();
 
@@ -24,7 +25,7 @@ namespace MpWpfApp {
 
         public abstract void WriteToDatabase();
 
-        public virtual void WriteToDatabase(string sourceClientGuid) { }
+        public virtual void WriteToDatabase(string sourceClientGuid,bool ignoreTracking = false) { }
 
         public virtual void DeleteFromDatabase(string sourceClientGuid) { }
         

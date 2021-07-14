@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public interface MpISync {
         bool IsWpf();
-        Task RunOnMainThread(Action action);
-
 
         bool IsConnectedToNetwork();
         bool IsConnectedToInternet();
@@ -20,14 +18,14 @@ namespace MonkeyPaste {
 
         Task<DateTime> GetLastSyncForRemoteDevice(string otherDeviceGuid);
         Task<string> GetLocalLogFromSyncDate(DateTime fromDateTime);
-        Task<string> GetDbObjRequestFromRemoteLogStr(string dbLogMessageStr);
-        Task<string> GetDbObjResponseFromRequestStr(string dbObjReqStr);
-        Task<object> ProcessDbObjResponse(string dbObjRespStr);
-        Task CommitSync(object newObjs, string otherGuid, DateTime newSyncDt);
         Task<Dictionary<Guid, List<MpDbLog>>> PrepareRemoteLogForSyncing(string dbLogMessageStr);
+        Task PerformSync(
+            Dictionary<Guid, List<MpDbLog>> changeLookup,
+            DateTime newSyncDate,
+            string remoteClientGuid);
 
         MpIStringToSyncObjectTypeConverter GetTypeConverter();
 
-        string ConvertToJson(List<object> objList);
+        string GetDbFileAsBase64();
     }
 }

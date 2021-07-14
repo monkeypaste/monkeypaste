@@ -71,19 +71,19 @@ namespace MpWpfApp {
                 var green = new MpColor(0, 255, 0, 255) {
                     ColorGuid = Guid.Parse("fec9579b-a580-4b02-af2f-d1b275812392")
                 };
-                green.WriteToDatabase();
+                green.WriteToDatabase(true);
                 var blue = new MpColor(0, 0, 255, 255) {
                     ColorGuid = Guid.Parse("8b30650f-c616-4972-b4a7-a88d1022ae15")
                 };
-                blue.WriteToDatabase();
+                blue.WriteToDatabase(true);
                 var yellow = new MpColor(255, 255, 0, 255) {
                     ColorGuid = Guid.Parse("bb666db2-1762-4b18-a1da-dd678a458f7a")
                 };
-                yellow.WriteToDatabase();
+                yellow.WriteToDatabase(true);
                 var orange = new MpColor(255, 165, 0, 255) {
                     ColorGuid = Guid.Parse("2c5a7c6f-042c-4890-92e5-5ccf088ee698")
                 };
-                orange.WriteToDatabase();
+                orange.WriteToDatabase(true);
 
                 var t = new MpTag() {
                     TagGuid = Guid.Parse("310ba30b-c541-4914-bd13-684a5e00a2d3"),
@@ -92,7 +92,7 @@ namespace MpWpfApp {
                     TagColor = green,
                     TagSortIdx = 0
                 };
-                t.WriteToDatabase();
+                t.WriteToDatabase(true);
                 allTags.Add(t);
 
                 t = new MpTag() {
@@ -102,7 +102,7 @@ namespace MpWpfApp {
                     TagColor = blue,
                     TagSortIdx = 1
                 };
-                t.WriteToDatabase();
+                t.WriteToDatabase(true);
                 allTags.Add(t);
 
                 t = new MpTag() {
@@ -112,7 +112,7 @@ namespace MpWpfApp {
                     TagColor = yellow,
                     TagSortIdx = 2
                 };
-                t.WriteToDatabase();
+                t.WriteToDatabase(true);
                 allTags.Add(t);
 
                 t = new MpTag() {
@@ -122,7 +122,7 @@ namespace MpWpfApp {
                     TagColor = orange,
                     TagSortIdx = 3
                 };
-                t.WriteToDatabase();
+                t.WriteToDatabase(true);
                 allTags.Add(t);
             }
             //create tiles for all the tags

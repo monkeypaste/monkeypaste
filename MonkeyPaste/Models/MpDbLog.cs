@@ -77,8 +77,8 @@ namespace MonkeyPaste {
             return allLogs.Where(x => x.Id == DbLogId).FirstOrDefault();
         }
 
-        public async Task<object> DeserializeDbObject(string objStr, string parseToken = @"^(@!@") {
-            var objParts = objStr.Split(new string[] { parseToken }, StringSplitOptions.RemoveEmptyEntries);
+        public async Task<object> DeserializeDbObject(string objStr) {
+            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
 
             var dbLog = new MpDbLog() {
                 DbObjectGuid = System.Guid.Parse(objParts[0]),
@@ -89,13 +89,14 @@ namespace MonkeyPaste {
                 LogActionDateTime = DateTime.Parse(objParts[5]),
                 SourceClientGuid = System.Guid.Parse(objParts[6])
             };
+            await Task.Delay(1);
             return dbLog;
         }
 
-        public string SerializeDbObject(string parseToken = @"^(@!@") {
+        public string SerializeDbObject() {
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}",
-                parseToken,
+                ParseToken,
                 ObjectGuid,
                 DbTableName,
                 AffectedColumnName,
@@ -130,6 +131,14 @@ namespace MonkeyPaste {
             LogActionType = actionType;
             LogActionDateTime = actionDateTime;
             SourceClientGuid = sourceClientGuid;
-        }        
+        }
+
+        public override string ToString() {
+            string outStr = string.Empty;
+            foreach(var prop in GetType().GetProperties()) {
+                outStr += prop.Name + ": " + prop.GetValue(this) + ", ";
+            }
+            return outStr;
+        }
     }
 }

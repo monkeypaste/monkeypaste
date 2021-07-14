@@ -85,11 +85,11 @@ namespace MonkeyPaste {
             return await _connectionAsync.Table<T>().ToListAsync();
         }
 
-        public async Task AddItem<T>(T item, string sourceClientGuid = "") where T : new() {
+        public async Task AddItem<T>(T item, bool ignoreTracking = false, string sourceClientGuid = "") where T : new() {
             if (_connectionAsync == null) {
                 await Init();
             }
-            if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory) {
+            if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory && !ignoreTracking) {
                 if(string.IsNullOrEmpty((item as MpDbModelBase).Guid)) {
                     (item as MpDbModelBase).Guid = System.Guid.NewGuid().ToString();
                 }
@@ -101,23 +101,28 @@ namespace MonkeyPaste {
             OnItemAdded?.Invoke(this, item as MpDbModelBase);
         }
 
-        public async Task UpdateItem<T>(T item, string sourceClientGuid = "") where T : new() {
+        public async Task UpdateItem<T>(T item, bool ignoreTracking = false, string sourceClientGuid = "") where T : new() {
             if (_connectionAsync == null) {
                 await Init();
             }
-            MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Modify, item as MpDbModelBase,sourceClientGuid);
+            if (item is MpISyncableDbObject && item is not MpDbLog && item is not MpSyncHistory && !ignoreTracking) {                
+                MpDbLogTracker.TrackDbWrite(MpDbLogActionType.Modify, item as MpDbModelBase, sourceClientGuid);
+            }           
 
             await _connectionAsync.UpdateAsync(item);
             OnItemUpdated?.Invoke(this, item as MpDbModelBase);
         }
 
-        public async Task AddOrUpdate<T>(T item,  string sourceClientGuid = "") where T : new() {
-            if ((item as MpDbModelBase).Id == 0) {
-                await AddItem(item,sourceClientGuid);
+        public async Task AddOrUpdate<T>(T item,  string sourceClientGuid = "", bool ignoreTracking = false) where T : new() {
+            sourceClientGuid = string.IsNullOrEmpty(sourceClientGuid) ? MpPreferences.Instance.ThisClientGuidStr : sourceClientGuid;
+            if (string.IsNullOrEmpty((item as MpDbModelBase).Guid)) {
+                await AddItem(item,ignoreTracking, sourceClientGuid);
             } else {
-                await UpdateItem(item,sourceClientGuid);
+                await UpdateItem(item,ignoreTracking, sourceClientGuid);
             }
         }
+
+        
 
         public async Task DeleteItem<T>(T item, string sourceClientGuid = "") where T: new() {
             if (_connectionAsync == null) {
@@ -232,10 +237,10 @@ namespace MonkeyPaste {
             var orange = new MpColor(255 / 255, 165 / 255, 0, 255 / 255) {
                 ColorGuid = Guid.Parse("2c5a7c6f-042c-4890-92e5-5ccf088ee698")
             };
-            await AddItem<MpColor>(green);
-            await AddItem<MpColor>(blue);
-            await AddItem<MpColor>(yellow);
-            await AddItem<MpColor>(orange);
+            await AddItem<MpColor>(green,true);
+            await AddItem<MpColor>(blue, true);
+            await AddItem<MpColor>(yellow, true);
+            await AddItem<MpColor>(orange, true);
 
             await AddItem<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("310ba30b-c541-4914-bd13-684a5e00a2d3"),
@@ -243,14 +248,14 @@ namespace MonkeyPaste {
                 ColorId = green.Id,
                 TagColor = green,
                 TagSortIdx = 0
-            });
+            }, true);
             await AddItem<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("df388ecd-f717-4905-a35c-a8491da9c0e3"),
                 TagName = "All",
                 ColorId = blue.Id,
                 TagColor = blue,
                 TagSortIdx = 1
-            });
+            }, true);
 
             await AddItem<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("54b61353-b031-4029-9bda-07f7ca55c123"),
@@ -258,14 +263,14 @@ namespace MonkeyPaste {
                 ColorId = yellow.Id,
                 TagColor = yellow,
                 TagSortIdx = 2
-            });
+            }, true);
             await AddItem<MpTag>(new MpTag() {
                 TagGuid = Guid.Parse("a0567976-dba6-48fc-9a7d-cbd306a4eaf3"),
                 TagName = "Help",
                 ColorId = orange.Id,
                 TagColor = orange,
                 TagSortIdx = 3
-            });
+            }, true);
 
             MpConsole.WriteTraceLine(@"Create all default tables");
         }
@@ -275,9 +280,7 @@ namespace MonkeyPaste {
         public bool IsWpf() {
             return false;
         }
-        public async Task RunOnMainThread(Action action) {
-            await Device.InvokeOnMainThreadAsync(action);
-        }
+
         public bool IsConnectedToNetwork() {
             return MpHelpers.Instance.IsConnectedToNetwork();
         }
@@ -328,11 +331,6 @@ namespace MonkeyPaste {
             return dbMsgStr;
         }
 
-        public async Task<string> GetDbObjRequestFromRemoteLogStr(string dbLogMessageStr) {
-            await Task.Delay(1);
-            return null;
-        }
-
         public async Task<Dictionary<Guid, List<MpDbLog>>> PrepareRemoteLogForSyncing(string dbLogMessageStr) {
             var dbLogMessage = MpDbMessage.Parse(dbLogMessageStr, GetTypeConverter());
 
@@ -352,50 +350,49 @@ namespace MonkeyPaste {
 
             return remoteItemChangeLookup;
         }
-        public async Task<string> GetDbObjResponseFromRequestStr(string dbObjReqStr) {
-            MpConsole.WriteTraceLine(dbObjReqStr);
-            await Task.Delay(1);
-            return null;
-            //var ld = new List<object>();
-            //var cil = await GetItems<MpClip>();
-            //foreach(var c in cil) {
-            //    //MpApp app = await MpApp.GetAppById(c.AppId);
-            //    //app.Icon = await MpIcon.GetIconById(app.IconId);
-            //    //app.Icon.IconImage = await MpDbImage.GetDbImageById(app.Icon.IconImageId);
-            //    //c.App = app;
 
-            //    //var color = await MpColor.GetColorById(c.ColorId);
-            //    //if (color != null) {
-            //    //    c.ItemColor = color;
-            //    //}
-            //    ld.Add(c);
-            //}
-            //return ld;
-        }
+        public async Task PerformSync(
+            Dictionary<Guid, List<MpDbLog>> changeLookup,
+            DateTime newSyncDate,
+            string remoteClientGuid) {
+            // process leaf tables first
 
-        public async Task<object> ProcessDbObjResponse(string dbObjRespStr) {
-            MpConsole.WriteTraceLine(dbObjRespStr);
-            await Task.Delay(1);
-            return null;
-        }
+            var colorChanges = new List<MpColor>();
+            foreach(var ckvp in changeLookup) {
+                if(ckvp.Value == null || ckvp.Value.Count == 0) {
+                    continue;
+                }
+                if(ckvp.Value[0].DbTableName == "MpColor") {
+                    var color = await new MpColor().CreateFromLogs(ckvp.Key.ToString(), ckvp.Value,remoteClientGuid);
+                    colorChanges.Add(color);
+                } else {
+                    continue;
+                }
+            }
 
-        public async Task CommitSync(object newObjs, string otherGuid, DateTime newSyncDt) {
-            MpConsole.WriteTraceLine(@"Commit update");
-            await Task.Delay(1);
+            //process tags
+            var tagChanges = new List<MpTag>();
+            foreach (var ckvp in changeLookup) {
+                if (ckvp.Value == null || ckvp.Value.Count == 0) {
+                    continue;
+                }
+                if (ckvp.Value[0].DbTableName == "MpTag") {
+                    var tag = await new MpTag().CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                    tagChanges.Add(tag);
+                } else {
+                    continue;
+                }
+            }            
         }
 
         public MpIStringToSyncObjectTypeConverter GetTypeConverter() {
             return new MpXamStringToSyncObjectTypeConverter();
         }
 
-        public string ConvertToJson(List<object> objList) {
-            var sb = new StringBuilder();
-            foreach(var obj in objList) {
-                sb.Append(JsonConvert.SerializeObject(obj));
-            }
-            
-            return sb.ToString();
-        }       
+        public string GetDbFileAsBase64() {
+            var bytes = File.ReadAllBytes(DependencyService.Get<MpIDbFilePath>().DbFilePath());
+            return Convert.ToBase64String(bytes);
+        }
         #endregion
     }
 }

@@ -47,6 +47,14 @@ namespace MonkeyPaste {
         [ForeignKey(typeof(MpColor))]
         [Column("fk_MpColorId")]
         public int ColorId { get; set; }
+
+        [Ignore]
+        public string ColorGuid {
+            set {
+
+            }
+        }
+
         [ManyToOne]
         public MpColor TagColor { get; set; }
 
@@ -118,8 +126,39 @@ namespace MonkeyPaste {
             //    });
         }
 
-        public async Task<object> DeserializeDbObject(string objStr, string parseToken = @"^(@!@") {
-            var objParts = objStr.Split(new string[] { parseToken }, StringSplitOptions.RemoveEmptyEntries);
+        public async Task<MpTag> CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+            var cdr = await MpDb.Instance.GetObjDbRow("MpTag", tagGuid);
+            MpTag newTag = null;
+            if (cdr == null) {
+                newTag = new MpTag();
+            } else {
+                newTag = cdr as MpTag;
+            }
+            foreach (var li in logs) {
+                switch (li.AffectedColumnName) {
+                    case "MpTagGuid":
+                        newTag.TagGuid = System.Guid.Parse(li.AffectedColumnValue);
+                        break;
+                    case "TagName":
+                        newTag.TagName = li.AffectedColumnValue;
+                        break;
+                    case "SortIdx":
+                        newTag.TagSortIdx = Convert.ToInt32(li.AffectedColumnValue);
+                        break;
+                    case "fk_MpColorId":
+                        var color = await MpDb.Instance.GetObjDbRow("MpColor", li.AffectedColumnValue);
+                        newTag.ColorId = (color as MpColor).Id;
+                        break;
+                    default:
+                        throw new Exception(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                }
+            }
+            await MpDb.Instance.AddOrUpdate<MpTag>(newTag,fromClientGuid);
+            return newTag;
+        }
+
+        public async Task<object> DeserializeDbObject(string objStr) {
+            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             await Task.Delay(0);
             var dbLog = new MpTag() {
                 TagGuid = System.Guid.Parse(objParts[0]),
@@ -130,10 +169,10 @@ namespace MonkeyPaste {
             return dbLog;
         }
 
-        public string SerializeDbObject(string parseToken = @"^(@!@") {
+        public string SerializeDbObject() {
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}",
-                parseToken,
+                ParseToken,
                 TagGuid.ToString(),
                 TagName,
                 TagSortIdx,

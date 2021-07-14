@@ -15,13 +15,12 @@ using System.Xml.Linq;
 using Microsoft.Win32;
 using MonkeyPaste;
 using Newtonsoft.Json;
+using Xamarin.Forms;
 
 namespace MpWpfApp {
     public class MpDb : MonkeyPaste.MpISync {
         private static readonly Lazy<MpDb> _Lazy = new Lazy<MpDb>(() => new MpDb());
         public static MpDb Instance { get { return _Lazy.Value; } }
-
-        //private SQLiteConnection _connection;
 
         public MpClient Client { get; set; }
         public MpUser User { get; set; }
@@ -150,8 +149,8 @@ namespace MpWpfApp {
             }
             return conn;
         }
-        public int ExecuteWrite(string query, Dictionary<string, object> args, string dbObjectGuid = "", string sourceClientGuid = "", object dbObject = null) {
-            if(!string.IsNullOrEmpty(dbObjectGuid)) {
+        public int ExecuteWrite(string query, Dictionary<string, object> args, string dbObjectGuid = "", string sourceClientGuid = "", object dbObject = null, bool ignoreTracking = false) {
+            if(!string.IsNullOrEmpty(dbObjectGuid) && !ignoreTracking) {
                 //only track objects providing a guid
                 MpDbLogTracker.TrackDbWrite(query, args, dbObjectGuid, sourceClientGuid, dbObject);
             }
@@ -632,9 +631,6 @@ namespace MpWpfApp {
         public bool IsWpf() {
             return true;
         }
-        public async Task RunOnMainThread(Action action) {
-            await Application.Current.MainWindow.Dispatcher.InvokeAsync(action);
-        }
 
         public bool IsConnectedToNetwork() {
             return MpHelpers.Instance.IsConnectedToNetwork();
@@ -684,45 +680,11 @@ namespace MpWpfApp {
             return dbMsgStr;
         }
 
-        public async Task<string> GetDbObjRequestFromRemoteLogStr(string dbLogMessageStr) {
-            var dbLogMessage = MpDbMessage.Parse(dbLogMessageStr, GetTypeConverter());
-
-            var dbLogs = new List<MpDbLog>();
-            foreach (var sobj in dbLogMessage.DbObjects) {
-                if(sobj.ObjType == typeof(MpDbLog)) {
-
-                }
-            }
-            return null;
-        }
-
-        public async Task<string> GetDbObjResponseFromRequestStr(string dbObjReqStr) {
-            MpConsole.WriteTraceLine(dbObjReqStr);
-            await Task.Delay(1);
-            return null;
-            //var ld = new List<object>();
-            //foreach (var c in MpCopyItem.GetAllCopyItems(out int allItems)) {
-            //    //MpApp app = await MpApp.GetAppById(c.AppId);
-            //    //app.Icon = await MpIcon.GetIconById(app.IconId);
-            //    //app.Icon.IconImage = await MpDbImage.GetDbImageById(app.Icon.IconImageId);
-            //    //c.App = app;
-
-            //    //var color = await MpColor.GetColorById(c.ColorId);
-            //    //if (color != null) {
-            //    //    c.ItemColor = color;
-            //    //}
-            //    c.ItemFlowDocument = null;
-            //    ld.Add(c);
-            //}
-            //await Task.Delay(10);
-            //return ld;
-        }
-
         public async Task<Dictionary<Guid, List<MonkeyPaste.MpDbLog>>> PrepareRemoteLogForSyncing(string dbLogMessageStr) {
             var dbLogMessage = MpDbMessage.Parse(dbLogMessageStr, GetTypeConverter());
 
-            var remoteDbLogs = new List<MpDbLog>();
-            var dbLogWorker = new MpDbLog();
+            var remoteDbLogs = new List<MonkeyPaste.MpDbLog>();
+            var dbLogWorker = new MonkeyPaste.MpDbLog();
 
             //deserialize logs and put into guid buckets
             var remoteItemChangeLookup = new Dictionary<Guid, List<MonkeyPaste.MpDbLog>>();
@@ -738,28 +700,47 @@ namespace MpWpfApp {
             return remoteItemChangeLookup;
         }
 
-        public async Task<object> ProcessDbObjResponse(string dbObjRespStr) {
-            MpConsole.WriteTraceLine(dbObjRespStr);
-            await Task.Delay(1);
-            return null;
-        }
-        
-        public async Task CommitSync(object newObjs, string otherGuid, DateTime newSyncDt) {
-            MpConsole.WriteTraceLine(@"Commit update");
+        public async Task PerformSync(
+            Dictionary<Guid, List<MonkeyPaste.MpDbLog>> changeLookup,
+            DateTime newSyncDate,
+            string remoteClientGuid) {
+            // process leaf tables first
+
+            var colorChanges = new List<MpColor>();
+            foreach (var ckvp in changeLookup) {
+                if (ckvp.Value == null || ckvp.Value.Count == 0) {
+                    continue;
+                }
+                if (ckvp.Value[0].DbTableName == "MpColor") {
+                    var color = new MpColor().CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                    colorChanges.Add(color);
+                } else {
+                    continue;
+                }
+            }
+
+            //process tags
+            var tagChanges = new List<MpTag>();
+            foreach (var ckvp in changeLookup) {
+                if (ckvp.Value == null || ckvp.Value.Count == 0) {
+                    continue;
+                }
+                if (ckvp.Value[0].DbTableName == "MpTag") {
+                    var tag = new MpTag().CreateFromLogs(ckvp.Key.ToString(), ckvp.Value, remoteClientGuid);
+                    tagChanges.Add(tag);
+                } else {
+                    continue;
+                }
+            }
             await Task.Delay(1);
         }
 
         public MpIStringToSyncObjectTypeConverter GetTypeConverter() {
             return new MpWpfStringToDbObjectTypeConverter();
         }
-
-        public string ConvertToJson(List<object> objList) {
-            var sb = new StringBuilder();
-            foreach(var obj in objList) {
-                sb.Append(JsonConvert.SerializeObject(obj));
-            }
-            
-            return sb.ToString();
+        public string GetDbFileAsBase64() {
+            var bytes = File.ReadAllBytes(Properties.Settings.Default.DbPath);
+            return Convert.ToBase64String(bytes);
         }
         #endregion
     }

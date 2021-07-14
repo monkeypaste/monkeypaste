@@ -166,7 +166,7 @@ namespace MpWpfApp {
             Console.WriteLine("Tag link removed between tag " + TagId + " with copyitem " + ci.CopyItemId + " ignoring...");
         }
 
-        public override void WriteToDatabase(string sourceClientGuid) {
+        public override void WriteToDatabase(string sourceClientGuid, bool isFirstLoad = false) {
             if (TagGuid == Guid.Empty) {
                 TagGuid = Guid.NewGuid();
             }
@@ -192,7 +192,7 @@ namespace MpWpfApp {
                         { "@tn", TagName },
                         { "@cid", ColorId },
                         { "@si", TagSortIdx }
-                    }, TagGuid.ToString(),sourceClientGuid,this);
+                    }, TagGuid.ToString(),sourceClientGuid,this,isFirstLoad);
                 TagId = MpDb.Instance.GetLastRowId("MpTag", "pk_MpTagId");
             } else {
                 TagColor.WriteToDatabase();
@@ -205,11 +205,14 @@ namespace MpWpfApp {
                         { "@cid", ColorId },
                         { "@tid", TagId },
                         { "@si", TagSortIdx }
-                    }, TagGuid.ToString(),sourceClientGuid,this);
+                    }, TagGuid.ToString(),sourceClientGuid,this,isFirstLoad);
             }
         }
         public override void WriteToDatabase() {
             WriteToDatabase(Properties.Settings.Default.ThisClientGuid);
+        }
+        public void WriteToDatabase(bool isFirstLoad) {
+            WriteToDatabase(Properties.Settings.Default.ThisClientGuid,isFirstLoad);
         }
         public override void DeleteFromDatabase(string sourceClientGuid) {
             MpDb.Instance.ExecuteWrite(
@@ -235,8 +238,39 @@ namespace MpWpfApp {
             DeleteFromDatabase(Properties.Settings.Default.ThisClientGuid);
         }
 
-        public async Task<object> DeserializeDbObject(string objStr, string parseToken = @"^(@!@") {
-            var objParts = objStr.Split(new string[] { parseToken }, StringSplitOptions.RemoveEmptyEntries);
+        public MpTag CreateFromLogs(string tagGuid, List<MonkeyPaste.MpDbLog> logs, string fromClientGuid) {
+            var tdr = MpDb.Instance.GetDbObjectByTableGuid("MpTag", tagGuid);
+            MpTag newTag = null;
+            if (tdr == null) {
+                newTag = new MpTag();
+            } else {
+                newTag = new MpTag(tdr);
+            }
+            foreach (var li in logs) {
+                switch (li.AffectedColumnName) {
+                    case "MpTagGuid":
+                        newTag.TagGuid = System.Guid.Parse(li.AffectedColumnValue);
+                        break;
+                    case "TagName":
+                        newTag.TagName = li.AffectedColumnValue;
+                        break;
+                    case "SortIdx":
+                        newTag.TagSortIdx = Convert.ToInt32(li.AffectedColumnValue);
+                        break;
+                    case "fk_MpColorId":
+                        var cdr = MpDb.Instance.GetDbObjectByTableGuid("MpColor", li.AffectedColumnValue);
+                        newTag.ColorId = new MpColor(cdr).ColorId;
+                        break;
+                    default:
+                        throw new Exception(@"Unknown table-column: " + li.DbTableName + "-" + li.AffectedColumnName);
+                }
+            }
+            newTag.WriteToDatabase(fromClientGuid);
+            return newTag;
+        }
+
+        public async Task<object> DeserializeDbObject(string objStr) {
+            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
             await Task.Delay(0);
             var dbLog = new MpTag() {
                 TagGuid = System.Guid.Parse(objParts[0]),
@@ -247,10 +281,10 @@ namespace MpWpfApp {
             return dbLog;
         }
 
-        public string SerializeDbObject(string parseToken = @"^(@!@") {
+        public string SerializeDbObject() {
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}",
-                parseToken,
+                ParseToken,
                 TagGuid.ToString(),
                 TagName,
                 TagSortIdx,

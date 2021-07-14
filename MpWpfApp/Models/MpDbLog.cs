@@ -13,6 +13,7 @@ namespace MpWpfApp {
         private static List<MpDbLog> _AllDbLogList = null;
         public static int TotalDbLogCount = 0;
 
+
         public int DbLogId { get; set; }
         public Guid DbObjectGuid { get; set; }
         public string DbTableName { get; set; }
@@ -147,10 +148,10 @@ namespace MpWpfApp {
                 });
         }
 
-        public async Task<object> DeserializeDbObject(string objStr, string parseToken = @"^(@!@") {
+        public async Task<object> DeserializeDbObject(string objStr) {
             await Task.Delay(0);
 
-            var objParts = objStr.Split(new string[] { parseToken }, StringSplitOptions.RemoveEmptyEntries);
+            var objParts = objStr.Split(new string[] { ParseToken }, StringSplitOptions.RemoveEmptyEntries);
 
             var dbLog = new MpDbLog() {
                 DbObjectGuid = System.Guid.Parse(objParts[0]),
@@ -164,10 +165,10 @@ namespace MpWpfApp {
             return dbLog;
         }
 
-        public string SerializeDbObject(string parseToken = @"^(@!@") {
+        public string SerializeDbObject() {
             return string.Format(
                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}",
-                parseToken,
+                ParseToken,
                 DbObjectGuid.ToString(),
                 DbTableName,
                 AffectedColumnName,

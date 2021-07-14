@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 namespace MonkeyPaste {
     public enum MpSyncMesageType {
         None = 0,
+        DbFileRequest,
+        DbFileResponse,
         HandshakeRequest,
         HandshakeResponse,
         DbLogRequest,
@@ -16,7 +18,7 @@ namespace MonkeyPaste {
         FlipRequest, //swap A & B and return to RequestLog
         //FlipResponse,
         DisconnectRequest,
-        DisconnectResponse,
+        DisconnectResponse,        
         //error types
         ErrorBase, //only used to differentiate with normal msgs
         ErrorNotConnected,
@@ -24,7 +26,8 @@ namespace MonkeyPaste {
         ErrorInvalidAccessToken,
         ErrorInvalidData,
         ErrorRequestDenied,
-        ErrorOutOfMemory
+        ErrorOutOfMemory,
+        
     }
 
     public class MpStreamHeader : MpISyncableDbObject {
@@ -66,10 +69,10 @@ namespace MonkeyPaste {
             return header;
         }
 
-        public string SerializeDbObject(string parseToken = HeaderParseToken) {
+        public string SerializeDbObject() {
             //header string format: <MessageTypeId><FromGuid><ToGuid><SendDateTime><checksum>
             return string.Format(
-                 @"{1}{0}{2}{0}{3}{0}{4}{0}{5}",
+                 @"{0}{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}",
                  HeaderParseToken,
                  (int)MessageType,
                  FromGuid,
@@ -83,7 +86,7 @@ namespace MonkeyPaste {
         }
 
 
-        public Task<object> DeserializeDbObject(string objStr, string parseToken = "^(@!@") {
+        public Task<object> DeserializeDbObject(string objStr) {
             throw new NotImplementedException();
         }
 
@@ -117,6 +120,24 @@ namespace MonkeyPaste {
         }
 
         #region Sync Phase Message Builders
+        public static MpStreamMessage CreateDbFileRequest(MpDeviceEndpoint dep, string toGuid) {
+            var sm = new MpStreamMessage(
+                MpSyncMesageType.DbFileRequest,
+                dep.DeviceGuid,
+                toGuid,
+                @"DbRequest");
+            return sm;
+        }
+
+        public static MpStreamMessage CreateDbFileResponse(MpDeviceEndpoint dep, string toGuid, string dbBytesAsString) {
+            var sm = new MpStreamMessage(
+                MpSyncMesageType.DbFileResponse,
+                dep.DeviceGuid,
+                toGuid,
+                dbBytesAsString);
+            return sm;
+        }
+
         public static MpStreamMessage CreateHandshakeRequest(MpDeviceEndpoint dep) {
             var sm = new MpStreamMessage(
                 MpSyncMesageType.HandshakeRequest,
@@ -222,11 +243,11 @@ namespace MonkeyPaste {
             return (int)Header.MessageType > (int)MpSyncMesageType.ErrorBase;
         }
 
-        public string SerializeDbObject(string parseToken=HeaderContentParseToken) {
+        public string SerializeDbObject() {
             //format: <header><content><Eof>
             return string.Format(
-                @"{1}{0}{2}{0}{3}",
-                parseToken,
+                @"{0}{1}{0}{2}{0}{3}",
+                HeaderContentParseToken,
                 Header.SerializeDbObject(),
                 Content,
                 EofToken);
@@ -236,7 +257,7 @@ namespace MonkeyPaste {
             return typeof(MpStreamMessage);
         }
 
-        public Task<object> DeserializeDbObject(string objStr, string parseToken = "^(@!@") {
+        public Task<object> DeserializeDbObject(string objStr) {
             throw new NotImplementedException();
         }
 
